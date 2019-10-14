@@ -21,7 +21,7 @@
           "prompt": "Please send an image or music.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "All"
         },
         {

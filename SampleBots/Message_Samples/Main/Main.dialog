@@ -51,7 +51,7 @@
           "prompt": "What type of message would you like to send?",
           "maxTurnCount": 3,
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {

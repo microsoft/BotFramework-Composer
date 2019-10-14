@@ -21,7 +21,7 @@
           "property": "user.name",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {

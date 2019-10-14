@@ -62,7 +62,7 @@
           "invalidPrompt": "Please input yes/no.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "defaultLocale": "en-us",
           "style": "Auto",
           "choiceOptions": {

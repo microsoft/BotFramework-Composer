@@ -84,7 +84,7 @@
               "prompt": "Which list do you want to expand?",
               "maxTurnCount": 3,
               "alwaysPrompt": true,
-              "allowInterruptions": "never",
+              "allowInterruptions": "false",
               "outputFormat": "value",
               "choices": [
                 {
@@ -131,7 +131,7 @@
               "prompt": "Please enter the title of your item.",
               "maxTurnCount": 3,
               "alwaysPrompt": false,
-              "allowInterruptions": "never",
+              "allowInterruptions": "false",
               "outputFormat": "none"
             }
           ]

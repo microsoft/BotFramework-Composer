@@ -42,7 +42,7 @@
           "prompt": "2 * 2.2 equals?",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "float",
           "defaultLocale": "en-us"
         },

@@ -32,7 +32,7 @@
         {
           "$type": "Microsoft.TextInput",
           "outputFormat": "none",
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "property": "user.ans",
           "prompt": "[EmailCard]",
           "maxTurnCount": 2147483647,

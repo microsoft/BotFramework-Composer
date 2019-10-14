@@ -22,7 +22,7 @@
           "prompt": "Please select a value from below:",
           "maxTurnCount": "2147483647",
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {

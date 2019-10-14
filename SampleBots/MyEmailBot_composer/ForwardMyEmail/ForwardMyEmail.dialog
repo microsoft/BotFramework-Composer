@@ -23,7 +23,7 @@
         {
           "$type": "Microsoft.TextInput",
           "outputFormat": "none",
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "property": "user.fwContent",
           "prompt": "OK, Please Enter the Content of Your Email to Forward.",
           "maxTurnCount": 2147483647,
@@ -47,7 +47,7 @@
           "invalidPrompt": "Please input yes/no.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "defaultLocale": "en-us",
           "style": "Auto",
           "choiceOptions": {

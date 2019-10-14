@@ -29,7 +29,7 @@
           "prompt": "OK, please enter the title of your todo.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "always",
+          "allowInterruptions": "true",
           "outputFormat": "none"
         },
         {

@@ -38,7 +38,7 @@
           "prompt": "Please enter the content of your reminder.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "none"
         },
         {

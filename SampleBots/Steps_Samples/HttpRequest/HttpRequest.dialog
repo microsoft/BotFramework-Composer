@@ -21,7 +21,7 @@
           "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": false,
-          "allowInterruptions": "always",
+          "allowInterruptions": "true",
           "outputFormat": "none"
         },
         {
@@ -40,7 +40,7 @@
           "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "none"
         },
         {
@@ -90,7 +90,7 @@
           "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",          
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "none"
         },
         {

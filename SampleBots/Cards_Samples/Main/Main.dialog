@@ -23,7 +23,7 @@
           "prompt": "Which card would you like to display?",
           "maxTurnCount": "2147483647",
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {
