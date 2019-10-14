@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
-import { passServer } from 'lg-lsp-server';
+import { startLSPServer } from 'lg-lsp-server';
 
 const app: Express = express();
 
@@ -56,10 +56,9 @@ app.get('*', function(req, res, _next) {
 });
 
 const port = process.env.PORT || 5000;
-// app.listen(port, () => {
-//   // eslint-disable-next-line no-console
-//   console.log(`Server running on port ${port}`);
-// });
+const server = app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Server running on port ${port}`);
+});
 
-const server = app.listen(port);
-passServer(server);
+startLSPServer(server);
