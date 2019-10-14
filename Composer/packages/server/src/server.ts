@@ -13,10 +13,31 @@ const app: Express = express();
 
 const { login, authorize } = getAuthProvider();
 
+const CS_POLICIES = [
+  "default-src 'none';",
+  "script-src 'self';",
+  "style-src 'self' 'unsafe-inline';",
+  "font-src 'self' https:;",
+  "img-src 'self' data:;",
+  "base-uri 'none';",
+  "connect-src 'self';",
+  "frame-src 'self';",
+  "worker-src 'self';",
+  "form-action 'none';",
+  "frame-ancestors 'self';",
+  "manifest-src 'self';",
+  'upgrade-insecure-requests;',
+];
+
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+  if (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') {
+    res.header('Content-Security-Policy', CS_POLICIES.join(' '));
+  }
+
   next();
 });
 
