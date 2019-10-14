@@ -4,5 +4,6 @@ export const EditorConfig = {
     arrowNavigation: true,
     tabNavigation: true,
     keyboardNodeEditing: false,
+    keyboardOperationEditing: true,
   },
 };

@@ -3,7 +3,8 @@ import { LocalDiskStorage } from '../storage/localDiskStorage';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
 
-const subPath = 'settings/appsettings.json';
+// TODO: this causes tests to fail
+const subPath = 'ComposerDialogs/settings/appsettings.json';
 
 export class FileSettingManager implements ISettingManager {
   private basePath: string;

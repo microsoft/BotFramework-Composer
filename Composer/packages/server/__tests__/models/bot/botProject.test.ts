@@ -61,7 +61,7 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}.dialog`));
     } catch (err) {
       throw new Error(err);
     }
@@ -166,7 +166,7 @@ describe('lg operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lg');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toEqual(content);
     }
   });
@@ -193,9 +193,9 @@ describe('lg operation', () => {
 describe('lu operation', () => {
   afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/generated/luis.status.json`));
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/generated`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated/luis.status.json`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated`));
     } catch (err) {
       throw new Error(err);
     }
@@ -229,7 +229,7 @@ describe('lu operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lu');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
       expect(result.content).toEqual(content);
     }
   });
