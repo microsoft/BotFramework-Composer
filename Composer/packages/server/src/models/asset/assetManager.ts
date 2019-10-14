@@ -42,7 +42,7 @@ const runtimes: TemplateData = {
 
 // set a default runtime template.
 // when we have multiple runtimes this will be a parameter.
-const DEFAULT_RUNTIME: string = 'CSharp';
+const DEFAULT_RUNTIME = 'CSharp';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
