@@ -7,7 +7,7 @@ Like most event-driven architecture, events, triggers, and handlers are three ba
 Each dialog in Composer includes a set of event handlers that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passed through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
 
 ## Types of Event Handlers  
-There are several different types of event handlers available within Composer. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts event handlers in Composer and in what scenarios they will be used. You can refer to the [Defining Triggers]() article for detailed description of how to define each type of them. 
+There are several different types of event handlers available in Composer. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers in Composer and in what scenarios they will be used. You can refer to the [Defining Triggers and Events]() article for detailed instruction on how to define each type of them. 
 
 ### Handle Dialog Events  
 
