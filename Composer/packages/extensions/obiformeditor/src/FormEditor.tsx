@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
@@ -35,13 +35,14 @@ export interface FormEditorProps {
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const { data, schemas, memory, dialogs, shellApi } = props;
-  const type = getType(data);
+  const [localData, setLocalData] = useState(data);
+  const type = getType(localData);
 
   if (!type) {
     return (
       <div>
         Malformed data: missing $type.
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{JSON.stringify(localData, null, 2)}</pre>
       </div>
     );
   }
@@ -53,7 +54,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     return (
       <div>
         Malformed data: missing type defintion in schema.
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{JSON.stringify(localData, null, 2)}</pre>
       </div>
     );
   }
@@ -70,8 +71,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const dialogOptions = dialogs.map(f => ({ value: f.id, label: f.displayName }));
 
   const onChange = newValue => {
-    if (!isEqual(newValue.formData, data)) {
+    if (!isEqual(newValue.formData, localData)) {
       props.onChange(newValue.formData);
+      setLocalData(newValue.formData);
     }
   };
 
@@ -97,7 +99,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
         noValidate
         className="schemaForm"
         onChange={onChange}
-        formData={data}
+        formData={localData}
         onBlur={props.onBlur}
         schema={dialogSchema}
         uiSchema={dialogUiSchema}
