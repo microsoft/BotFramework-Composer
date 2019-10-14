@@ -75,7 +75,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }):
       css={css`
         display: inline-block;
         position: relative;
-        border-radius: 1px 1px 0 0;
+        border-radius: 2px 2px 0 0;
         ${nodeSelected && nodeBorderSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
         &:hover {
