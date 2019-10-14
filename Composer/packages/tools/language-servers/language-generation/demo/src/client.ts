@@ -89,7 +89,7 @@ const editor = monaco.editor.create(document.getElementById('container')!, {
 MonacoServices.install(editor);
 
 // create the web socket
-const url = createUrl('/sampleServer');
+const url = createUrl('/lgServer');
 const webSocket = createWebSocket(url);
 // listen when the web socket is opened
 listen({
@@ -104,7 +104,7 @@ listen({
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
   return new MonacoLanguageClient({
-    name: 'Sample Language Client',
+    name: 'LG Language Client',
     clientOptions: {
       // use a language id as a document selector
       documentSelector: ['botbuilderlg'],
@@ -126,7 +126,7 @@ function createLanguageClient(connection: MessageConnection): MonacoLanguageClie
 function createUrl(path: string): string {
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   // return normalizeUrl(`${protocol}://${location.host}${location.pathname}${path}`);
-  return normalizeUrl(`${protocol}://localhost:3000${location.pathname}${path}`);
+  return normalizeUrl(`${protocol}://localhost:5000${location.pathname}${path}`);
 }
 
 function createWebSocket(url: string): WebSocket {

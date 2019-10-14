@@ -2,25 +2,17 @@ import * as ws from 'ws';
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
-import * as express from 'express';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { launch } from './launch';
 
-export function startServer(port: number, path: string) {
-  // create the express application
-  const app = express();
-  // server the static content, i.e. index.html
-  app.use(express.static(__dirname));
-  // start the server
-  const server = app.listen(port);
-  // create the web socket
+export function startLSPServer(server: http.Server) {
   const wss = new ws.Server({
     noServer: true,
     perMessageDeflate: false,
   });
   server.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
     const pathname = request.url ? url.parse(request.url).pathname : undefined;
-    if (pathname === path) {
+    if (pathname === '/lgServer') {
       wss.handleUpgrade(request, socket, head, webSocket => {
         const socket: rpc.IWebSocket = {
           send: content =>
