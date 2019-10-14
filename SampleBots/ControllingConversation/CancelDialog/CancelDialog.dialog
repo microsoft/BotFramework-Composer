@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:49:45.210Z",
-    "updatedAt": "2019-07-16T18:48:58.963Z",
     "id": "122121"
   },
   "autoEndDialog": true,
@@ -11,8 +9,7 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "050101",
-        "updatedAt": "2019-07-22T07:46:06.571Z"
+        "id": "050101"
       },
       "actions": [
         {

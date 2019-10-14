@@ -13,8 +13,6 @@
           "$type": "Microsoft.SendActivity",
           "activity": "OK! Let's Start To Reply this Email. ",
           "$designer": {
-            "createdAt": "2019-08-08T09:27:21.602Z",
-            "updatedAt": "2019-08-08T09:27:21.608Z",
             "id": "512779"
           }
         },
@@ -23,8 +21,6 @@
           "property": "user.toSubject",
           "value": "concat('Re:',user.selectedEmail.subject)",
           "$designer": {
-            "createdAt": "2019-08-08T09:27:23.035Z",
-            "updatedAt": "2019-08-08T09:27:23.042Z",
             "id": "095079"
           }
         },
@@ -50,15 +46,11 @@
               "property": "user.toContent",
               "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))",
               "$designer": {
-                "createdAt": "2019-08-08T09:27:25.261Z",
-                "updatedAt": "2019-08-08T09:27:25.266Z",
                 "id": "093887"
               }
             }
           ],
           "$designer": {
-            "createdAt": "2019-08-08T09:27:26.878Z",
-            "updatedAt": "2019-08-08T09:27:26.893Z",
             "id": "087959"
           }
         },
@@ -80,8 +72,6 @@
             "includeNumbers": true
           },
           "$designer": {
-            "createdAt": "2019-08-08T09:27:29.943Z",
-            "updatedAt": "2019-08-08T09:27:29.952Z",
             "id": "674795"
           }
         },
@@ -93,16 +83,12 @@
               "$type": "Microsoft.BeginDialog",
               "dialog": "ReplyMyEmailThroughGraph",
               "$designer": {
-                "createdAt": "2019-08-08T09:28:23.500Z",
-                "updatedAt": "2019-08-08T09:28:23.513Z",
                 "id": "170908"
               }
             },
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "createdAt": "2019-08-08T09:28:24.961Z",
-                "updatedAt": "2019-08-08T09:28:26.422Z",
                 "id": "477196"
               },
               "activity": "[bfdactivity-477196]"
@@ -112,32 +98,24 @@
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "createdAt": "2019-08-08T09:28:27.116Z",
-                "updatedAt": "2019-08-08T09:28:27.837Z",
                 "id": "841334"
               },
               "activity": "[bfdactivity-841334]"
             }
           ],
           "$designer": {
-            "createdAt": "2019-08-08T09:27:31.135Z",
-            "updatedAt": "2019-08-08T09:27:31.142Z",
             "id": "426465"
           }
         }
       ],
        
       "$designer": {
-        "createdAt": "2019-08-08T07:01:10.603Z",
-        "updatedAt": "2019-08-08T07:01:10.610Z",
         "id": "976604"
       }
     }
   ],
   "$schema": "../../../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-08T07:01:09.525Z",
-    "updatedAt": "2019-08-08T07:01:09.531Z",
     "id": "724417"
   }
 }

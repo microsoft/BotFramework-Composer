@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-08-02T20:09:07.865Z",
-    "updatedAt": "2019-08-02T20:25:15.773Z",
     "id": "179150",
     "name": "Interrupt"
   },
@@ -13,8 +11,7 @@
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720",
-        "name": "Welcome user",
-        "updatedAt": "2019-08-02T20:09:41.562Z"
+        "name": "Welcome user"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
@@ -22,8 +19,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "753396",
-            "updatedAt": "2019-08-02T20:09:52.393Z"
+            "id": "753396"
           },
           "activity": "[bfdactivity-753396]"
         }
@@ -33,8 +29,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
-        "id": "629539",
-        "updatedAt": "2019-08-02T20:26:11.592Z"
+        "id": "629539"
       },
       "intent": "GetStarted",
       "actions": [
@@ -42,8 +37,7 @@
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "name": "Begin a Dialog",
-            "id": "190862",
-            "updatedAt": "2019-08-02T21:23:04.794Z"
+            "id": "190862"
           },
           "dialog": "GetProfile"
         }
@@ -53,8 +47,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
-        "id": "921175",
-        "updatedAt": "2019-08-02T20:26:16.856Z"
+        "id": "921175"
       },
       "intent": "ResetProfile",
       "actions": [
@@ -62,8 +55,7 @@
           "$type": "Microsoft.EditActions",
           "$designer": {
             "name": "Modify active dialog",
-            "id": "216094",
-            "updatedAt": "2019-08-06T13:56:16.000Z"
+            "id": "216094"
           },
           "changeType": "ReplaceSequence",
           "actions": [
@@ -71,8 +63,7 @@
               "$type": "Microsoft.DeleteProperty",
               "$designer": {
                 "name": "Delete a Property",
-                "id": "924743",
-                "updatedAt": "2019-08-06T13:55:57.740Z"
+                "id": "924743"
               },
               "property": "user.profile"
             },
@@ -80,8 +71,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "032735",
-                "updatedAt": "2019-08-06T13:56:20.686Z"
+                "id": "032735"
               },
               "activity": "[bfdactivity-032735]"
             }
@@ -93,8 +83,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
-        "id": "870441",
-        "updatedAt": "2019-08-02T20:26:22.051Z"
+        "id": "870441"
       },
       "intent": "Cancel",
       "actions": [
@@ -102,8 +91,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "650736",
-            "updatedAt": "2019-08-02T20:41:21.322Z"
+            "id": "650736"
           },
           "activity": "[bfdactivity-650736]"
         },
@@ -120,8 +108,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
-        "id": "171791",
-        "updatedAt": "2019-08-02T20:29:37.653Z"
+        "id": "171791"
       },
       "intent": "ShowProfile",
       "actions": [
@@ -129,8 +116,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "031899",
-            "updatedAt": "2019-08-02T21:57:46.320Z"
+            "id": "031899"
           },
           "activity": "[bfdactivity-031899]"
         },
@@ -138,8 +124,7 @@
           "$type": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
-            "id": "848138",
-            "updatedAt": "2019-08-06T00:33:52.643Z"
+            "id": "848138"
           },
           "condition": "user.profile != null && (user.profile.name != null || user.profile.age != null)",
           "actions": [
@@ -147,8 +132,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "309274",
-                "updatedAt": "2019-08-02T20:30:24.421Z"
+                "id": "309274"
               },
               "activity": "[bfdactivity-309274]"
             }
@@ -158,8 +142,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "912837",
-                "updatedAt": "2019-08-02T20:30:05.277Z"
+                "id": "912837"
               },
               "activity": "[bfdactivity-912837]"
             }
@@ -171,8 +154,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Handle an Intent",
-        "id": "160085",
-        "updatedAt": "2019-08-06T00:31:55.445Z"
+        "id": "160085"
       },
       "intent": "Help",
       "actions": [
@@ -180,8 +162,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "924700",
-            "updatedAt": "2019-08-06T00:32:51.666Z"
+            "id": "924700"
           },
           "activity": "[bfdactivity-924700]"
         }

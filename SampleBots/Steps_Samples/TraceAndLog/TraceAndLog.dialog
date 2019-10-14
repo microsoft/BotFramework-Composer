@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:51:23.522Z",
-    "updatedAt": "2019-07-16T19:50:46.367Z",
     "id": "714773",
     "description": "This is a bot that demonstrates use of the TraceActivity & LogAction concepts in Adaptive Dialogs."
   },
@@ -12,15 +10,12 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "044028",
-        "updatedAt": "2019-07-22T08:05:18.175Z"
+        "id": "044028"
       },
       "actions": [
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
-            "createdAt": "2019-07-16T19:58:15.911Z",
-            "updatedAt": "2019-07-16T19:58:19.512Z",
             "id": "107670"
           },
           "property": "user.name",
@@ -33,8 +28,6 @@
         {
           "$type": "Microsoft.TraceActivity",
           "$designer": {
-            "createdAt": "2019-07-16T19:58:20.503Z",
-            "updatedAt": "2019-07-16T19:58:24.020Z",
             "id": "774586"
           },
           "valueType": "memory"
@@ -42,8 +35,6 @@
         {
           "$type": "Microsoft.LogAction",
           "$designer": {
-            "createdAt": "2019-07-16T19:58:24.944Z",
-            "updatedAt": "2019-07-16T19:58:29.674Z",
             "id": "219510"
           },
           "text": "{user.name}",

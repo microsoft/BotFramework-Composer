@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-01T21:41:42.141Z",
-    "updatedAt": "2019-07-16T19:50:31.760Z",
     "id": "714288"
   },
   "autoEndDialog": false,
@@ -27,8 +25,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:55:56.379Z",
-        "updatedAt": "2019-07-16T19:56:03.854Z",
         "id": "563828"
       },
       "actions": [
@@ -42,8 +38,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:56:04.841Z",
-        "updatedAt": "2019-07-16T19:56:11.047Z",
         "id": "473201"
       },
       "actions": [
@@ -57,16 +51,13 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "644475",
-        "updatedAt": "2019-07-22T08:04:53.812Z"
+        "id": "644475"
       },
        
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T19:55:53.273Z",
-            "updatedAt": "2019-07-16T19:56:25.943Z",
             "id": "646692"
           },
           "condition": "user.name == null",
@@ -74,8 +65,6 @@
             {
               "$type": "Microsoft.TextInput",
               "$designer": {
-                "createdAt": "2019-07-01T21:42:01.159Z",
-                "updatedAt": "2019-07-16T19:56:29.324Z",
                 "id": "823146"
               },
               "property": "user.name",
@@ -90,8 +79,6 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-01T21:41:59.475Z",
-            "updatedAt": "2019-07-16T19:56:33.688Z",
             "id": "120128"
           },
           "activity": "[bfdactivity-120128]"

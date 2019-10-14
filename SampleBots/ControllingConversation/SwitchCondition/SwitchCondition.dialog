@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:49:45.210Z",
-    "updatedAt": "2019-07-16T18:48:58.963Z",
     "id": "122121"
   },
   "autoEndDialog": true,
@@ -11,15 +9,12 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "050101",
-        "updatedAt": "2019-07-22T07:46:06.571Z"
+        "id": "050101"
       },
       "actions": [
         {
           "$type": "Microsoft.ChoiceInput",
           "$designer": {
-            "createdAt": "2019-07-04T19:56:49.850Z",
-            "updatedAt": "2019-07-16T18:52:37.253Z",
             "id": "699003"
           },
           "prompt": "Who are your?",
@@ -56,16 +51,13 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "097130",
-            "updatedAt": "2019-07-16T18:52:41.766Z"
+            "id": "097130"
           },
           "activity": "[bfdactivity-097130]"
         },
         {
           "$type": "Microsoft.SwitchCondition",
           "$designer": {
-            "createdAt": "2019-07-16T18:52:43.605Z",
-            "updatedAt": "2019-07-16T18:52:45.887Z",
             "id": "088447"
           },
           "condition": "user.name",
@@ -76,8 +68,7 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "id": "040464",
-                    "updatedAt": "2019-07-16T18:52:50.794Z"
+                    "id": "040464"
                   },
                   "activity": "[bfdactivity-040464]"
                 }
@@ -89,8 +80,7 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "id": "230206",
-                    "updatedAt": "2019-07-16T18:52:55.816Z"
+                    "id": "230206"
                   },
                   "activity": "[bfdactivity-230206]"
                 }
@@ -102,8 +92,7 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "id": "604251",
-                    "updatedAt": "2019-07-16T18:53:01.222Z"
+                    "id": "604251"
                   },
                   "activity": "[bfdactivity-604251]"
                 }

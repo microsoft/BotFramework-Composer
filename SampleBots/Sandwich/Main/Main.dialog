@@ -15,8 +15,6 @@
       "intent": "OrderSandwich",
       "$comment": "**** This is the start of top-level intent events ****",
       "$designer": {
-        "createdAt": "2019-05-14T20:33:33.353Z",
-        "updatedAt": "2019-05-14T20:33:33.451Z",
         "id": "155376"
       }
     },
@@ -82,8 +80,6 @@
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-07-12T20:25:30.879Z",
-    "updatedAt": "2019-07-12T20:25:31.018Z",
     "id": "325231"
   }
 }

@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:49:41.680Z",
-    "updatedAt": "2019-07-16T18:48:54.243Z",
     "id": "607738"
   },
   "autoEndDialog": true,
@@ -11,15 +9,12 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "695225",
-        "updatedAt": "2019-07-22T07:45:52.118Z"
+        "id": "695225"
       },
       "actions": [
         {
           "$type": "Microsoft.ConfirmInput",
           "$designer": {
-            "createdAt": "2019-07-16T18:52:10.284Z",
-            "updatedAt": "2019-07-16T18:52:14.640Z",
             "id": "841600"
           },
           "property": "user.confirmed",
@@ -40,8 +35,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T18:52:16.346Z",
-            "updatedAt": "2019-07-16T18:52:18.539Z",
             "id": "365292"
           },
           "condition": "user.confirmed",
@@ -49,8 +42,6 @@
             {
               "$type": "Microsoft.RepeatDialog",
               "$designer": {
-                "createdAt": "2019-07-16T18:52:20.435Z",
-                "updatedAt": "2019-07-16T18:52:23.947Z",
                 "id": "221664"
               }
             }
@@ -59,8 +50,6 @@
             {
               "$type": "Microsoft.EndDialog",
               "$designer": {
-                "createdAt": "2019-07-16T18:52:25.645Z",
-                "updatedAt": "2019-07-16T18:52:28.521Z",
                 "id": "573415"
               }
             }

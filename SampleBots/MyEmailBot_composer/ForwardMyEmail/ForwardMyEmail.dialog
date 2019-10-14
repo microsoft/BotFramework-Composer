@@ -9,8 +9,6 @@
           "$type": "Microsoft.SendActivity",
           "activity": "OK! Let's Start To Forward this Email. ",
           "$designer": {
-            "createdAt": "2019-08-08T09:26:38.613Z",
-            "updatedAt": "2019-08-08T09:26:38.622Z",
             "id": "628158"
           }
         },
@@ -19,8 +17,6 @@
           "property": "user.fwSubject",
           "value": "concat('Fw:',user.focusedEmail.subject)",
           "$designer": {
-            "createdAt": "2019-08-08T09:26:39.987Z",
-            "updatedAt": "2019-08-08T09:26:39.993Z",
             "id": "059140"
           }
         },
@@ -33,8 +29,6 @@
           "maxTurnCount": 2147483647,
           "alwaysPrompt": false,
           "$designer": {
-            "createdAt": "2019-08-08T09:26:41.698Z",
-            "updatedAt": "2019-08-08T09:26:41.710Z",
             "id": "133886"
           }
         },
@@ -42,8 +36,6 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "FindMyContact",
           "$designer": {
-            "createdAt": "2019-08-08T09:26:43.165Z",
-            "updatedAt": "2019-08-08T09:26:43.172Z",
             "id": "637711"
           }
         },
@@ -70,8 +62,6 @@
             }
           ],
           "$designer": {
-            "createdAt": "2019-08-08T09:26:44.731Z",
-            "updatedAt": "2019-08-08T09:26:44.738Z",
             "id": "055891"
           }
         },
@@ -97,16 +87,12 @@
         }
       ],
       "$designer": {
-        "createdAt": "2019-08-08T06:53:45.695Z",
-        "updatedAt": "2019-08-08T06:53:45.714Z",
         "id": "983009"
       }
     }
   ],
   "$schema": "../../../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-08T06:35:06.765Z",
-    "updatedAt": "2019-08-08T06:35:06.775Z",
     "id": "262793"
   }
 }

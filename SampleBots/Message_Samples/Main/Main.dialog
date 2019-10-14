@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-06-28T06:31:58.726Z",
-    "updatedAt": "2019-07-16T19:33:30.401Z",
     "id": "937757"
   },
   "autoEndDialog": false,
@@ -11,16 +9,12 @@
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:35:20.436Z",
-        "updatedAt": "2019-07-16T19:35:25.861Z",
         "id": "807187"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-18T10:35:38.221Z",
-            "updatedAt": "2019-07-18T10:35:38.579Z",
             "id": "551445"
           },
           "activity": "[bfdactivity-551445]"
@@ -31,8 +25,7 @@
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Handle ConversationUpdate",
-        "id": "452701",
-        "updatedAt": "2019-07-18T10:34:46.562Z"
+        "id": "452701"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
@@ -40,8 +33,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "576166",
-            "updatedAt": "2019-07-18T10:34:54.027Z"
+            "id": "576166"
           },
           "activity": "[bfdactivity-576166]"
         }
@@ -53,8 +45,6 @@
         {
           "$type": "Microsoft.ChoiceInput",
           "$designer": {
-            "createdAt": "2019-07-16T19:33:40.769Z",
-            "updatedAt": "2019-07-16T19:33:46.468Z",
             "id": "289770"
           },
           "property": "user.choice",
@@ -96,8 +86,6 @@
         {
           "$type": "Microsoft.SwitchCondition",
           "$designer": {
-            "createdAt": "2019-07-16T19:33:48.266Z",
-            "updatedAt": "2019-07-16T19:33:52.059Z",
             "id": "981997"
           },
           "condition": "user.choice",
@@ -108,8 +96,6 @@
                 {
                   "$type": "Microsoft.BeginDialog",
                   "$designer": {
-                    "createdAt": "2019-07-16T19:33:53.985Z",
-                    "updatedAt": "2019-07-16T19:33:58.958Z",
                     "id": "256544"
                   },
                   "dialog": "SimpleText"
@@ -122,8 +108,6 @@
                 {
                   "$type": "Microsoft.BeginDialog",
                   "$designer": {
-                    "createdAt": "2019-07-16T19:34:01.452Z",
-                    "updatedAt": "2019-07-16T19:34:04.489Z",
                     "id": "598449"
                   },
                   "dialog": "TextWithMemory"
@@ -136,8 +120,6 @@
                 {
                   "$type": "Microsoft.BeginDialog",
                   "$designer": {
-                    "createdAt": "2019-07-16T19:34:07.118Z",
-                    "updatedAt": "2019-07-16T19:34:11.776Z",
                     "id": "791050"
                   },
                   "dialog": "TextWithLG"
@@ -150,8 +132,6 @@
                 {
                   "$type": "Microsoft.BeginDialog",
                   "$designer": {
-                    "createdAt": "2019-07-16T19:34:14.518Z",
-                    "updatedAt": "2019-07-16T19:34:20.351Z",
                     "id": "078497"
                   },
                   "dialog": "LGWithParam"
@@ -164,8 +144,6 @@
                 {
                   "$type": "Microsoft.BeginDialog",
                   "$designer": {
-                    "createdAt": "2019-07-16T19:34:22.754Z",
-                    "updatedAt": "2019-07-16T19:34:27.469Z",
                     "id": "349641"
                   },
                   "dialog": "LGComposition"
@@ -177,8 +155,6 @@
         {
           "$type": "Microsoft.RepeatDialog",
           "$designer": {
-            "createdAt": "2019-07-16T19:34:30.447Z",
-            "updatedAt": "2019-07-16T19:34:34.636Z",
             "id": "938048"
           }
         }

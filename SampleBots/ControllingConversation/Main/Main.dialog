@@ -1,10 +1,7 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-04T19:47:59.519Z",
-    "updatedAt": "2019-07-16T18:46:52.103Z",
     "id": "864790",
-
     "description": "This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs."
   },
   "autoEndDialog": false,
@@ -60,8 +57,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:02.069Z",
-        "updatedAt": "2019-07-16T18:47:06.232Z",
         "id": "139291"
       },
       "actions": [
@@ -75,8 +70,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:07.473Z",
-        "updatedAt": "2019-07-16T18:47:10.789Z",
         "id": "606805"
       },
       "actions": [
@@ -90,8 +83,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:12.071Z",
-        "updatedAt": "2019-07-16T18:47:15.570Z",
         "id": "175644"
       },
       "actions": [
@@ -105,8 +96,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:16.917Z",
-        "updatedAt": "2019-07-16T18:47:20.109Z",
         "id": "973338"
       },
       "actions": [
@@ -120,8 +109,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:21.301Z",
-        "updatedAt": "2019-07-16T18:47:24.658Z",
         "id": "329460"
       },
       "actions": [
@@ -135,8 +122,6 @@
     {
       "$type": "Microsoft.OnCancelDialog",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:25.995Z",
-        "updatedAt": "2019-07-16T18:47:29.138Z",
         "id": "132038"
       },
       "actions": [
@@ -152,8 +137,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:30.457Z",
-        "updatedAt": "2019-07-16T18:47:34.267Z",
         "id": "043417"
       },
       "actions": [
@@ -166,8 +149,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T18:47:35.642Z",
-        "updatedAt": "2019-07-16T18:47:38.774Z",
         "id": "294228"
       },
       "actions": [
@@ -181,16 +162,13 @@
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
-        "createdAt": "2019-07-04T19:53:46.534Z",
-        "updatedAt": "2019-07-16T18:47:46.616Z",
         "id": "094908"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "953339",
-            "updatedAt": "2019-07-04T19:53:52.311Z"
+            "id": "953339"
           },
           "activity": "[help]"
         }
@@ -200,8 +178,7 @@
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Handle ConversationUpdate",
-        "id": "791275",
-        "updatedAt": "2019-07-18T10:16:47.781Z"
+        "id": "791275"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
@@ -209,8 +186,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "859266",
-            "updatedAt": "2019-07-18T10:17:03.223Z"
+            "id": "859266"
           },
           "activity": "[help]"
         }

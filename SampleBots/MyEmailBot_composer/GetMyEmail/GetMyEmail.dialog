@@ -10,8 +10,6 @@
           "changeType": "Clear",
           "itemsProperty": "user.Emails",
           "$designer": {
-            "createdAt": "2019-08-08T09:26:57.785Z",
-            "updatedAt": "2019-08-08T09:26:57.791Z",
             "id": "179912"
           }
         },
@@ -40,16 +38,12 @@
         }
       ],
       "$designer": {
-        "createdAt": "2019-08-08T07:01:26.311Z",
-        "updatedAt": "2019-08-08T07:01:26.323Z",
         "id": "628228"
       }
     }
   ],
   "$schema": "../../../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-08T06:35:07.892Z",
-    "updatedAt": "2019-08-08T06:35:07.901Z",
     "id": "918913"
   }
 }

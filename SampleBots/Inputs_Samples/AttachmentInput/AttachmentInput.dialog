@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:48:00.744Z",
-    "updatedAt": "2019-07-16T19:28:23.545Z",
     "id": "042284"
   },
   "autoEndDialog": true,
@@ -11,15 +9,12 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "883342",
-        "updatedAt": "2019-07-22T07:50:42.820Z"
+        "id": "883342"
       },
       "actions": [
         {
           "$type": "Microsoft.AttachmentInput",
           "$designer": {
-            "createdAt": "2019-07-16T19:28:24.521Z",
-            "updatedAt": "2019-07-16T19:28:29.924Z",
             "id": "452587"
           },
           "property": "dialog.attachments",
@@ -32,8 +27,6 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-16T19:28:31.311Z",
-            "updatedAt": "2019-07-16T19:28:35.928Z",
             "id": "365176"
           },
           "activity": "[bfdactivity-365176]"

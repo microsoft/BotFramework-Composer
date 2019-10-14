@@ -33,8 +33,6 @@
       ],
       "$comment": "**** Start of slot mapping over conversation.order as frame ****",
       "$designer": {
-        "createdAt": "2019-08-08T16:30:52.572Z",
-        "updatedAt": "2019-08-08T16:30:52.583Z",
         "id": "846020"
       }
     },
@@ -66,8 +64,6 @@
         "recognizedIntent"
       ],
       "$designer": {
-        "createdAt": "2019-08-08T16:30:55.681Z",
-        "updatedAt": "2019-08-08T16:30:55.691Z",
         "id": "666381"
       }
     },
@@ -304,8 +300,6 @@
         "recognizedIntent"
       ],
       "$designer": {
-        "createdAt": "2019-08-08T16:31:04.354Z",
-        "updatedAt": "2019-08-08T16:31:04.365Z",
         "id": "740844"
       }
     },
@@ -338,8 +332,6 @@
   ],
   "$comment": "**** Primary ordering dialog ****",
   "$designer": {
-    "createdAt": "2019-08-08T16:30:49.214Z",
-    "updatedAt": "2019-08-08T16:30:49.233Z",
     "id": "413751"
   }
 }
