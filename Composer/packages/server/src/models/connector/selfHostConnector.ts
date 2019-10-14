@@ -1,5 +1,4 @@
 //eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
-///<reference path='../../../types/selfHostCommands.d.ts'/>.
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
@@ -14,8 +13,8 @@ export class SelfHostBotConnector implements IBotConnector {
       this.buildAsync = require('commands/build').handlerAsync;
     } else {
       // for testing
-      this.buildAsync = async _ => {
-        return 'done';
+      this.buildAsync = _ => {
+        return Promise.resolve('done');
       };
     }
   }

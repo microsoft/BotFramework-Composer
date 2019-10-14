@@ -41,11 +41,11 @@ export const Home = () => {
     navigate(BASEPATH);
   };
 
-  const onClickNewBotProject = async () => {
+  const onClickNewBotProject = () => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
   };
 
-  const onClickTemplate = async id => {
+  const onClickTemplate = id => {
     saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };

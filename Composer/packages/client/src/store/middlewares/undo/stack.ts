@@ -6,7 +6,7 @@ const PREFIX = 'undoStack';
 
 export default class UndoStack {
   private history: any[] = [];
-  private pointer: number = -1;
+  private pointer = -1;
   private _id: string;
   private _undo: ActionCreator;
   private _redo: ActionCreator;

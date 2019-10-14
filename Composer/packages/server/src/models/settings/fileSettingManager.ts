@@ -57,7 +57,7 @@ export class FileSettingManager implements ISettingManager {
       if (type === 'object') {
         if (Array.isArray(obj)) {
           const result: any[] = [];
-          (obj as any[]).forEach(x => result.push(this.obfuscateValues(x)));
+          obj.forEach(x => result.push(this.obfuscateValues(x)));
           return result;
         } else {
           const result: any = {};
