@@ -8,6 +8,14 @@ how to articles that don't need explaining here.
 # Controlling conversation flow
 Bot Framework Composer makes it easier than ever to control conversation flow between bots and users. Developers can now create branches, loops, and other conversation flow methods without writing any boilerplate code. This article will show to implement the aforementioned methods using the [ControllingConversation sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/ControllingConversation).
 
+| Method | Function |
+| Branch: If/Else | ask user for response to binary choice |
+| Branch: Switch  | ask use for response out of set |
+| Loop: For Each  | iterate array of objects  |
+| Loop: For Each Page  | iterates array of pages of arrays  | 
+| End Turn  | end current turn  |
+| Repeat Dialog | end current dialog | 
+
 ## Branch: If/Else
 If/Else branches are used when you want users to make a binary decision. The bot will take actions based on if the condition in the if/else branch evaluates to `True` or `False`.
 
@@ -118,6 +126,15 @@ If you want to repeat a dialog click the **+** arrow underneath the point you wa
 ![Repeat This Dialog](./media/controlling-conversation-flow/repeatdialog.gif)
 - (this way too fast gif needs fixing)
 
+## Replace Dialog
+
+## Begin Dialog
+
+## End Dialog
+
+## Conditionals using LG
+
+
 ## Further Reading
 [Prompts]()
 
@@ -131,4 +148,3 @@ handle unknown intent
 handle conversation update
 handle a dialog event
 -->
-
