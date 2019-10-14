@@ -12,6 +12,7 @@ context('breadcrumb', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.wait(1000);
       cy.getByText('ToDoBot.Main').click();
+      cy.wait(1000);
     });
   });
 
