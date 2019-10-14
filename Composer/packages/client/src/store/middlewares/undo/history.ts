@@ -12,8 +12,8 @@ interface History {
 class UndoHistory {
   private stacks: { [key: string]: UndoStack } = {};
   private history: History[] = [];
-  private pointer: number = -1;
-  private _limit: number = 5;
+  private pointer = -1;
+  private _limit = 5;
 
   public createStack(undo: ActionCreator, redo: ActionCreator) {
     const stack = new UndoStack(undo, redo);

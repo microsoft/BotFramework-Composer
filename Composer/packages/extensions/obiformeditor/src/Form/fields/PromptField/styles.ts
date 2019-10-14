@@ -64,7 +64,7 @@ export const settingsFieldInline = css`
   margin: 0;
 `;
 
-export const choiceItemContainer = (align: string = 'center') => css`
+export const choiceItemContainer = (align = 'center') => css`
   display: flex;
   align-items: ${align};
 `;

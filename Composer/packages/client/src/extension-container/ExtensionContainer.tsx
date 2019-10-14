@@ -103,6 +103,14 @@ const shellApi = {
   validateExpression: (expression: string) => {
     return apiClient.apiCall('isExpression', { expression });
   },
+
+  undo: () => {
+    return apiClient.apiCall('undo');
+  },
+
+  redo: () => {
+    return apiClient.apiCall('redo');
+  },
 };
 
 function ExtensionContainer() {

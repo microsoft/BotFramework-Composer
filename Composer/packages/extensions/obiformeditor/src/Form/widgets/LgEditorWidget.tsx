@@ -10,7 +10,7 @@ const LG_HELP =
 const getInitialTemplate = (fieldName: string, formData?: string): string => {
   let newTemplate = formData || '- ';
 
-  if (newTemplate.indexOf(`bfd${fieldName}-`) !== -1) {
+  if (newTemplate.includes(`bfd${fieldName}-`)) {
     return '';
   } else if (newTemplate && !newTemplate.startsWith('-')) {
     newTemplate = `-${newTemplate}`;

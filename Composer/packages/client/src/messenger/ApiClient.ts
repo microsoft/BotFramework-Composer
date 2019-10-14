@@ -42,10 +42,12 @@ class ApiClient {
   };
 
   public connect = (target: Window = window) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     target.addEventListener('message', messenger.receiveMessage, false);
   };
 
   public disconnect = (target: Window = window) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     target.removeEventListener('message', messenger.receiveMessage, false);
   };
 }
