@@ -19,14 +19,16 @@ const DateWidget = props => {
   const { date } = props;
 
   const timestamp = new Date(date);
+  const now = new Date();
 
-  const formattedDate = timestamp.getMonth() + 1 + '/' + timestamp.getDate() + '/' + timestamp.getFullYear();
+  const minutesAgo = parseInt((now.getTime() - timestamp.getTime()) / 60000);
 
-  return (
-    <span>
-      {formattedDate} (<TimeAgo date={date} />)
-    </span>
-  );
+  if (minutesAgo < 60) {
+    return <TimeAgo date={date} />;
+  } else {
+    const formattedDate = timestamp.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
+    return <span>{formattedDate}</span>;
+  }
 };
 
 export const RemotePublish = props => {
@@ -182,7 +184,7 @@ export const RemotePublish = props => {
     i.onload = () => i.parentNode && i.parentNode.removeChild(i);
     i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
       authSettings.MicrosoftAppId
-    }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
+    }& msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)} `;
     document.body.appendChild(i);
   };
 
