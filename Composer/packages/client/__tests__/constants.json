@@ -12,8 +12,7 @@
               {
                   "$type": "Microsoft.OnEvent",
                   "$designer": {
-                      "id": "335456",
-                      "updatedAt": "2019-07-22T08:10:44.402Z"
+                      "id": "335456"
                   },
                   "steps": []
               }
@@ -41,8 +40,7 @@
               {
                   "$type": "Microsoft.OnEvent",
                   "$designer": {
-                      "id": "480162",
-                      "updatedAt": "2019-07-22T08:10:50.068Z"
+                      "id": "480162"
                   },
                   "events": [
                       "beginDialog"

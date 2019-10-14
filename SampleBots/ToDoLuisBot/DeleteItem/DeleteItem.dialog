@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-16T20:14:51.731Z",
-    "updatedAt": "2019-07-16T20:15:19.525Z",
     "id": "735299"
   },
   "autoEndDialog": true,
@@ -74,31 +72,15 @@
               "choices": [
                 {
                   "value": "shopping",
-                  "synonyms": [
-                    "1",
-                    "first",
-                    "shopping",
-                    "first one"
-                  ]
+                  "synonyms": ["1", "first", "shopping", "first one"]
                 },
                 {
                   "value": "grocery",
-                  "synonyms": [
-                    "2",
-                    "second",
-                    "grocery",
-                    "second one"
-                  ]
+                  "synonyms": ["2", "second", "grocery", "second one"]
                 },
                 {
                   "value": "todo",
-                  "synonyms": [
-                    "3",
-                    "third",
-                    "todo",
-                    "third one",
-                    "to do"
-                  ]
+                  "synonyms": ["3", "third", "todo", "third one", "to do"]
                 }
               ],
               "appendChoices": true,

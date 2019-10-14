@@ -44,10 +44,7 @@
           "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "maxTurnCount": 3,
-          "validations": [
-            "int(turn.value) >= 1",
-            "int(turn.value) <= 150"
-          ],
+          "validations": ["int(turn.value) >= 1", "int(turn.value) <= 150"],
           "value": "@userAge",
           "defaultValue": "30",
           "alwaysPrompt": false,
@@ -164,8 +161,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "id": "372804",
-        "name": "GetProfileInputs",
-        "updatedAt": "2019-10-03T01:16:42.468Z"
+        "name": "GetProfileInputs"
       },
       "intent": "GetProfileInputs"
     }
