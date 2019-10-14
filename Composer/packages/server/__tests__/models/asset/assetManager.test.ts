@@ -25,6 +25,8 @@ describe('test assetManager', () => {
   it('test copyProjectTemplateTo', async () => {
     const assetManager = new AssetManager(mockAssetLibraryPath, mockRuntimeLibraryPath);
     await assetManager.getProjectTemplate();
+    await assetManager.getProjectRuntime();
+
     await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);
     // remove the saveas files
     try {
