@@ -184,7 +184,7 @@ export const RemotePublish = props => {
     i.onload = () => i.parentNode && i.parentNode.removeChild(i);
     i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
       authSettings.MicrosoftAppId
-    }& msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)} `;
+    }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)} `;
     document.body.appendChild(i);
   };
 

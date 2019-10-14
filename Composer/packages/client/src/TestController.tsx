@@ -48,7 +48,7 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { connectBot, getConnect, reloadBot, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
 
   useEffect(() => {
@@ -148,14 +148,15 @@ export const TestController: React.FC = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() =>
+            onClick={async () => {
+              await getConnect('');
               openInEmulator(
                 botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword
                   ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                   : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-              )
-            }
+              );
+            }}
           >
             {formatMessage('Test in Emulator')}
           </ActionButton>
