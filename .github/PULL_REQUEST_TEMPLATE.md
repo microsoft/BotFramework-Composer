@@ -1,16 +1,17 @@
 ## Description
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. 
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
 
-If this is a bug fix, please describe the root cause and analysis of this problem. 
+If this is a bug fix, please describe the root cause and analysis of this problem.
 
 ## Task Item
 
-Please include the link to the related work item, like fix [Something is not working](http://url.here)
+Please include a link to the related issue. [Ex. `Closes #<issue #>`](https://help.github.com/en/articles/closing-issues-using-keywords)
 
 ## Type of change
 
 Please delete options that are not relevant.
+
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Code refactor (non-breaking change which improve code quality, clean up, add tests, etc)
@@ -24,6 +25,6 @@ Please delete options that are not relevant.
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have functionally tested my change
 
-## Screenshots 
+## Screenshots
 
 Please include screenshots or gifs if your PR include UX changes.
