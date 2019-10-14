@@ -52,7 +52,7 @@ The screenshot below shows the definition of an intent handler that is configure
     <img alt="anatomy_event_handler" src="./media/events_triggers/anatomy_event_handler.png" style="max-width:300px;" />
 </p>
 
-This event will appear in the dialog as a node at the top of the editor. Actions within this event handler occur inside the context of the active dialog. These steps control the main functionality of a bot.
+This event will appear in the dialog as a node at the top of the editor. Actions within this event handler occur in the context of the active dialog. These steps control the main functionality of a bot.
 
 <p align="left">
     <img alt="cancel_handler" src="./media/events_triggers/cancel_handler.png" style="max-width:200px;" />
@@ -61,7 +61,7 @@ This event will appear in the dialog as a node at the top of the editor. Actions
 ## Defining Triggers with Recognizers 
 
 ### LUIS Recognizer
-Bot Composer enables developers to create language training data within the dialog editing interface since it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. The content is managed by [LUDown](https://github.com/microsoft/botbuilder-tools/tree/master/packages/Ludown), a command line tool that helps covert [.lu file(s)](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) into JSON files for language processing applications such as [LUIS](http://luis.ai/) and [QnA](https://www.qnamaker.ai/) knowledge base. 
+Bot Composer enables developers to create language training data in the dialog editing interface since it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. The content is managed by [LUDown](https://github.com/microsoft/botbuilder-tools/tree/master/packages/Ludown), a command line tool that helps covert [.lu file(s)](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) into JSON files for language processing applications such as [LUIS](http://luis.ai/) and [QnA](https://www.qnamaker.ai/) knowledge base. 
 
 To define triggers with LUIS recognizer you need to:
 1. In the dialog context, choose **LUIS** as recognizer type (by default)
@@ -97,7 +97,7 @@ When triggered, if LUIS is able to identify a city, the city name will be made a
 In the example below, a similar book-flight intent is defined. However, this will ONLY match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able match a much wider variety of messages.
 
 To define triggers with Regular Expression recognizer you need to: 
-1. In the dialog context, choose **Regular Expression** as recognizer type (by default)
+1. In the dialog context, choose **Regular Expression** as recognizer type
 2. In the dialog context, create Regular Expression **intents** and **pattern**.
 
     <p align="left">
@@ -115,6 +115,10 @@ To define triggers with Regular Expression recognizer you need to:
 [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
 
 [.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+
+[Regular Expressions](https://regexr.com/)
+
+[RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
 [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
