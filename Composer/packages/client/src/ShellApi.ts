@@ -116,6 +116,8 @@ export const ShellApi: React.FC = () => {
         });
       });
     });
+    apiClient.registerApi('undo', actions.undo);
+    apiClient.registerApi('redo', actions.redo);
 
     return () => {
       apiClient.disconnect();
