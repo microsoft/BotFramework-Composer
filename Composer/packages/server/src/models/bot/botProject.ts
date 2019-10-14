@@ -16,6 +16,8 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
+const DIALOGFOLDER = 'ComposerDialogs';
+
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
@@ -26,6 +28,7 @@ export class BotProject {
 
   public name: string;
   public dir: string;
+  public dataDir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
@@ -40,6 +43,7 @@ export class BotProject {
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
+    this.dataDir = Path.join(this.dir, DIALOGFOLDER);
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
@@ -73,6 +77,7 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
+      location: this.dir,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
@@ -355,7 +360,7 @@ export class BotProject {
   // create file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _createFile = async (relativePath: string, content: string) => {
-    const absolutePath = Path.resolve(this.dir, relativePath);
+    const absolutePath = Path.resolve(this.dataDir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
@@ -437,10 +442,12 @@ export class BotProject {
     const fileList: FileInfo[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
     for (const pattern of patterns) {
-      const paths = await this.fileStorage.glob(pattern, this.dir);
+      // load only from the data dir, otherwise may get "build" versions from deployment process
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
 
       for (const filePath of paths.sort()) {
-        const realFilePath: string = Path.join(this.dir, filePath);
+        const realFilePath: string = Path.join(root, filePath);
         // skip lg files for now
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
           const content: string = await this.fileStorage.readFile(realFilePath);

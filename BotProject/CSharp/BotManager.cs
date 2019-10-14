@@ -16,7 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
     public interface IBotManager
     {
@@ -71,7 +71,6 @@ namespace Microsoft.Bot.Builder.TestBot.Json
               .UseState(userState, conversationState)
               .UseLanguageGeneration(resourceExplorer)
               .UseDebugger(4712)
-              .Use(new RegisterClassMiddleware<IConfiguration>(Config))
               .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
               .UseResourceExplorer(resourceExplorer);
               
@@ -84,7 +83,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
         }
 
         public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null)
