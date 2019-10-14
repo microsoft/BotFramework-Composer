@@ -25,9 +25,13 @@ export const connectBot: ActionCreator = async (store, settings) => {
 };
 
 // return only the connect URL -- do not reload
-export const getConnect: ActionCreator = async store => {
+export const getConnect: ActionCreator = async (store, env) => {
   const state = store.getState();
-  const { botEnvironment } = state;
+  let { botEnvironment } = state;
+  // allow the environment to be overwritten for multi-environment setups
+  if (env) {
+    botEnvironment = env;
+  }
   const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
 
   try {

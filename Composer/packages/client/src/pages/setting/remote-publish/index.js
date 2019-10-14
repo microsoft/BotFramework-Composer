@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
+import TimeAgo from 'react-timeago';
 import {
   PrimaryButton,
   DefaultButton,
@@ -13,6 +14,20 @@ import {
 
 import { StoreContext } from './../../../store';
 import { styles } from './styles';
+
+const DateWidget = props => {
+  const { date } = props;
+
+  const timestamp = new Date(date);
+
+  const formattedDate = timestamp.getMonth() + 1 + '/' + timestamp.getDate() + '/' + timestamp.getFullYear();
+
+  return (
+    <span>
+      {formattedDate} (<TimeAgo date={date} />)
+    </span>
+  );
+};
 
 export const RemotePublish = props => {
   props;
@@ -110,7 +125,7 @@ export const RemotePublish = props => {
   };
 
   const openEmulator = async () => {
-    await actions.getConnect();
+    await actions.getConnect('production');
     openInEmulator(
       botEndpoint,
       settings.MicrosoftAppId && settings.MicrosoftAppPassword
@@ -182,7 +197,7 @@ export const RemotePublish = props => {
             </StackItem>
             <StackItem grow={1}>
               <h1 style={styles.h1}>In Testing</h1>
-              Current version published {publishVersions.integration.publishTimestamp}
+              Current version published <DateWidget date={publishVersions.integration.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
               <PrimaryButton text="Publish" onClick={confirmPublish} styles={styles.button} />
@@ -198,7 +213,7 @@ export const RemotePublish = props => {
             </StackItem>
             <StackItem grow={1}>
               <h1 style={styles.h1}>Published</h1>
-              Current version published {publishVersions.production.publishTimestamp}
+              Current version published <DateWidget date={publishVersions.production.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
               <PrimaryButton
@@ -222,7 +237,7 @@ export const RemotePublish = props => {
               <a href="#" onClick={confirmRollback}>
                 Rollback
               </a>
-              &nbsp;to last published {publishVersions.previousProduction.publishTimestamp}
+              &nbsp;to last published <DateWidget date={publishVersions.previousProduction.publishTimestamp} />
             </StackItem>
           </Stack>
         )}

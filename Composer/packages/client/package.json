@@ -59,6 +59,7 @@
     "react-dev-utils": "^7.0.3",
     "react-dom": "16.9.0",
     "react-frame-component": "^4.0.2",
+    "react-timeago": "^4.4.0",
     "resolve": "1.10.0",
     "style-loader": "0.23.1",
     "styled-components": "^4.1.3",

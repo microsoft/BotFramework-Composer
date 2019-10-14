@@ -21,7 +21,7 @@ const links = [
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
 
-if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h' || process.env.MOCK_ABS) {
+if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h' || process.env.MOCKHOSTED) {
   links.push({ key: '/setting/remote-publish', name: formatMessage('Publish') });
 }
 
