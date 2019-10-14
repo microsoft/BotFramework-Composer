@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { toLower } from 'lodash';
 
 import { CreationFlowStatus } from '../constants';
 
@@ -109,7 +110,7 @@ export function CreationFlow(props) {
   const getErrorMessage = name => {
     if (
       bots.findIndex(bot => {
-        return bot.name === name;
+        return toLower(bot.name) === toLower(name);
       }) >= 0
     ) {
       return 'duplication of name';
