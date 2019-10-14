@@ -1,6 +1,6 @@
 # Language Generation in Bot Composer
 
-Language Generation is the process to produce understandable human languages. With Language Generation, developers can extract the embedded strings from their code and resource files and manage them through a Language Generation runtime and file format. Language Generation enables customers to define multiple variations on a phrase, execute simple expressions based on context, refer to conversational memory, and over time will enable us to bring additional capabilities all leading to a more natural conversational experience. 
+Language Generation (LG) is the process to produce understandable human languages. With Language Generation, developers can extract the embedded strings from their code and resource files and manage them through a Language Generation runtime and file format. Language Generation enables customers to define multiple variations on a phrase, execute simple expressions based on context, refer to conversational memory, and over time will enable us to bring additional capabilities all leading to a more natural conversational experience. 
 
 <!-- At the core of Language Generation lies template expansion and entity substitution. Language Generation is achieved through: 
 
@@ -15,7 +15,7 @@ Below is an example of an `.lg` template
      - Good morning @{user.name}. It's nice to see you again.
      - Good day @{user.name}. What can I do for you today? -->
   
-Bot Composer natively supprt Language Generation to produce output activities such as a simple text string, multi-line response, or a complex object payload to construct a full blown [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). As a template used to create the outgoing message, it can include language generation rules, properties from memory, and other features. You can visit the [language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) article for more information. 
+Bot Composer natively supprt Language Generation to produce output activities such as a simple text string, multi-line response, or a complex object payload to construct a full blown [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). It is a templating system used to create the outgoing messages which include language generation rules, properties from memory, and other features. You can visit the [language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) article for more information. 
 
 <!-- Lg for ignite will include definition in lg in a more technology agnostic way. We are introducing a concept of structured template. Right now in lg you can do a simple response template, which is one-off variation, or you can do a conditional template, which has IF…ELSE, SWITH CASE…inside the template definition. In this [issue](https://github.com/microsoft/botbuilder-dotnet/issues/2325) introduces a structured lg template to define a full blown outgoing activity in a simple text format, which gives more clarity of the components parts that are defined and controlled in the template.  -->
 
@@ -54,11 +54,11 @@ Composer currently supports three different types of templates:
 
 ### Anatomy of an LG Template 
 An LG template usuaslly consists of two parts: 
-- name of the template, which is defined using "#" and   
-- a list of one-of variation text values defined using "-" or 
+- name of the template, which is defined using "#" AND   
+- a list of one-of variation text values defined using "-" OR 
 - a collection of conditions, each with a 
   - Condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
-  - List of one-of variation text values per condition or 
+  - List of one-of variation text values per condition OR 
 - a structure that contains 
   - Structure-name 
   - Properties 
