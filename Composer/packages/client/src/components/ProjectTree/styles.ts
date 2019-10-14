@@ -161,7 +161,3 @@ export const name = {
   },
   subComponentStyles: textFieldlabel,
 };
-
-export const constraint = {
-  subComponentStyles: textFieldlabel,
-};

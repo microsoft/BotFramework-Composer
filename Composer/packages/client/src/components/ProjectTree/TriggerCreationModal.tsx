@@ -16,7 +16,7 @@ import {
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, name, dialogWindow, constraint } from './styles';
+import { styles, dropdownStyles, name, dialogWindow } from './styles';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -50,7 +50,6 @@ const initialFormData: TriggerFormData = {
   errors: {},
   $type: intentTypeKey,
   name: '',
-  constraint: '',
   eventType: '',
 };
 
@@ -142,14 +141,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             onChange={updateForm('name')}
             errorMessage={formData.errors.name}
             data-testid={'triggerName'}
-          />
-          <TextField
-            styles={constraint}
-            label={formatMessage('Constraint')}
-            multiline
-            resizable={false}
-            onChange={updateForm('constraint')}
-            data-testid={'triggerConstraint'}
           />
         </Stack>
       </div>

@@ -19,7 +19,6 @@ export interface TriggerFormData {
   $type: string;
   eventType: string;
   name: string;
-  constraint: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -55,9 +54,6 @@ export function getFriendlyName(data) {
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const optionalAttributes: { constraint?: string; events?: string[] } = {};
-  if (data.constraint) {
-    optionalAttributes.constraint = data.constraint;
-  }
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
