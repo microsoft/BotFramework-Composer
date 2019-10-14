@@ -14,7 +14,7 @@ export class BotProjectService {
       return;
     }
 
-    if (!BotProjectService.recentBotProjects) {
+    if (BotProjectService.recentBotProjects.length === 0) {
       BotProjectService.recentBotProjects = Store.get('recentBotProjects');
     }
 
