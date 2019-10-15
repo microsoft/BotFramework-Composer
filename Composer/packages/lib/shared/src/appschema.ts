@@ -1392,134 +1392,24 @@ export const appschema: JSONSchema6 = {
         },
       ],
     },
-    'Microsoft.ILanguagePolicy': {
-      title: 'Microsoft Language Policy',
-      description: 'Union of components which implement the ILanguagePolicy interface',
-      $role: 'unionType',
-      oneOf: [
-        {
-          title: 'Microsoft.LanguagePolicy',
-          description: 'This represents a dialog which gathers a DateTime in a specified range',
-          $ref: '#/definitions/Microsoft.LanguagePolicy',
-        },
-        {
-          type: 'string',
-          // TODO -- what is a better title for this?
-          title: 'string',
-        },
-      ],
-    },
-    'Microsoft.IOnEvent': {
-      title: 'Microsoft IOnEvent',
-      description: 'Union of components which implement the IOnEvent interface',
-      $role: 'unionType',
-      oneOf: [
-        {
-          title: 'Microsoft.OnActivity',
-          description: 'This defines the actions to take when an custom activity is received',
-          $ref: '#/definitions/Microsoft.OnActivity',
-        },
-        {
-          title: 'Microsoft.OnBeginDialog',
-          description: 'This defines the actions to take when a dialog is started via BeginDialog()',
-          $ref: '#/definitions/Microsoft.OnBeginDialog',
-        },
-        {
-          title: 'Microsoft.OnConversationUpdateActivity',
-          description: 'This defines the actions to take when an ConversationUpdate activity is received',
-          $ref: '#/definitions/Microsoft.OnConversationUpdateActivity',
-        },
-        {
-          title: 'Microsoft.OnDialogEvent',
-          description: 'Defines a rule for an event which is triggered by some source',
-          $ref: '#/definitions/Microsoft.OnDialogEvent',
-        },
-        {
-          title: 'Microsoft.OnEndOfConversationActivity',
-          description: 'This defines the actions to take when an EndOfConversation Activity is received',
-          $ref: '#/definitions/Microsoft.OnEndOfConversationActivity',
-        },
-        {
-          title: 'Microsoft.OnEvent',
-          description: 'Defines a rule for an event which is triggered by some source',
-          $ref: '#/definitions/Microsoft.OnEvent',
-        },
-        {
-          title: 'Microsoft.OnEventActivity',
-          description: 'This defines the actions to take when an Event activity is received',
-          $ref: '#/definitions/Microsoft.OnEventActivity',
-        },
-        {
-          title: 'Microsoft.OnHandoffActivity',
-          description: 'This defines the actions to take when an Handoff activity is received',
-          $ref: '#/definitions/Microsoft.OnHandoffActivity',
-        },
-        {
-          title: 'Microsoft.OnIntent',
-          description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
-          $ref: '#/definitions/Microsoft.OnIntent',
-        },
-        {
-          title: 'Microsoft.OnInvokeActivity',
-          description: 'This defines the actions to take when an Invoke activity is received',
-          $ref: '#/definitions/Microsoft.OnInvokeActivity',
-        },
-        {
-          title: 'Microsoft.OnMessageActivity',
-          description:
-            'This defines the actions to take when an Message activity is received. NOTE: If this triggers it will override any Recognizer/Intent rule calculation',
-          $ref: '#/definitions/Microsoft.OnMessageActivity',
-        },
-        {
-          title: 'Microsoft.OnMessageDeleteActivity',
-          description: 'This defines the actions to take when an MessageDelete activity is received',
-          $ref: '#/definitions/Microsoft.OnMessageDeleteActivity',
-        },
-        {
-          title: 'Microsoft.OnMessageReactionActivity',
-          description: 'This defines the actions to take when a MessageReaction activity is received',
-          $ref: '#/definitions/Microsoft.OnMessageReactionActivity',
-        },
-        {
-          title: 'Microsoft.OnMessageUpdateActivity',
-          description: 'This defines the actions to take when an MessageUpdate ctivity is received',
-          $ref: '#/definitions/Microsoft.OnMessageUpdateActivity',
-        },
-        {
-          title: 'Microsoft.OnTypingActivity',
-          description: 'This defines the actions to take when a Typing activity is received',
-          $ref: '#/definitions/Microsoft.OnTypingActivity',
-        },
-        {
-          title: 'Microsoft.OnUnknownIntent',
-          description:
-            'This defines the actions to take when an utterence is not recognized (aka, the None Intent). NOTE: UnknownIntent will defer to any specific intent that fires in a parent dialog',
-          $ref: '#/definitions/Microsoft.OnUnknownIntent',
-        },
-      ],
-    },
     'Microsoft.IRecognizer': {
       title: 'Microsoft IRecognizer',
       description: 'Union of components which implement the IRecognizer interface',
       $role: 'unionType',
       oneOf: [
         {
-          type: 'string',
-        },
-        {
           title: 'Microsoft.LuisRecognizer',
           description: 'LUIS recognizer.',
           $ref: '#/definitions/Microsoft.LuisRecognizer',
         },
-        // {
-        //   title: 'Microsoft.MultiLanguageRecognizer',
-        //   description:
-        //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-        //   $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
-        // },
+        {
+          title: 'Microsoft.MultiLanguageRecognizer',
+          description: 'Configure one recognizer per language and the specify the language fallback policy.',
+          $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
+        },
         {
           title: 'Microsoft.RegexRecognizer',
-          description: 'A Recognizer that uses regex expressions to generate intents and entities.',
+          description: 'Use regular expressions to recognize intents and entities from user input.',
           $ref: '#/definitions/Microsoft.RegexRecognizer',
         },
         {
@@ -1528,48 +1418,162 @@ export const appschema: JSONSchema6 = {
         },
       ],
     },
-    'Microsoft.IRule': {
-      title: 'Microsoft IRule',
-      description: 'Union of components which implement the IRule interface',
+    'Microsoft.ITextTemplate': {
+      title: 'Microsoft TextTemplate',
+      description: 'Union of components which implement the TextTemplate',
       $role: 'unionType',
       oneOf: [
         {
+          title: 'Microsoft.TextTemplate',
+          description: 'Lg tempalte to evaluate to create text',
+          $ref: '#/definitions/Microsoft.TextTemplate',
+        },
+        {
+          type: 'string',
+          title: 'string',
+        },
+      ],
+    },
+    'Microsoft.ITriggerCondition': {
+      $role: 'unionType',
+      title: 'Microsoft Triggers',
+      description: 'Union of components which implement the OnCondition',
+      oneOf: [
+        {
+          title: 'Microsoft.OnActivity',
+          description: 'Actions to perform on receipt of a generic activity.',
+          $ref: '#/definitions/Microsoft.OnActivity',
+        },
+        {
+          title: 'Microsoft.OnBeginDialog',
+          description: 'Actions to perform when this dialog begins.',
+          $ref: '#/definitions/Microsoft.OnBeginDialog',
+        },
+        {
+          title: 'Microsoft.OnCancelDialog',
+          description: 'Actions to perform on cancel dialog event.',
+          $ref: '#/definitions/Microsoft.OnCancelDialog',
+        },
+        {
+          title: 'Microsoft.OnCondition',
+          description: 'Actions to perform when specified condition is true.',
+          $ref: '#/definitions/Microsoft.OnCondition',
+        },
+        {
           title: 'Microsoft.OnConversationUpdateActivity',
-          description: 'This defines the steps to take when a ConversationUpdate Activity is recieved',
+          description: "Actions to perform on receipt of an activity with type 'ConversationUpdate'.",
           $ref: '#/definitions/Microsoft.OnConversationUpdateActivity',
         },
         {
-          title: 'Microsoft.OnEvent',
-          description: 'This defines a rule for an event that is triggered by some source',
-          $ref: '#/definitions/Microsoft.OnEvent',
+          title: 'Microsoft.OnCustomEvent',
+          description:
+            "Actions to perform when a custom event is detected. Use 'Emit a custom event' action to raise a custom event.",
+          $ref: '#/definitions/Microsoft.OnCustomEvent',
+        },
+        {
+          title: 'Microsoft.OnDialogEvent',
+          description: 'Actions to perform when a specific dialog event occurs.',
+          $ref: '#/definitions/Microsoft.OnDialogEvent',
+        },
+        {
+          title: 'Microsoft.OnEndOfConversationActivity',
+          description: "Actions to perform on receipt of an activity with type 'EndOfConversation'.",
+          $ref: '#/definitions/Microsoft.OnEndOfConversationActivity',
+        },
+        {
+          title: 'Microsoft.OnError',
+          description: "Action to perform when an 'Error' dialog event occurs.",
+          $ref: '#/definitions/Microsoft.OnError',
+        },
+        {
+          title: 'Microsoft.OnEventActivity',
+          description: "Actions to perform on receipt of an activity with type 'Event'.",
+          $ref: '#/definitions/Microsoft.OnEventActivity',
+        },
+        {
+          title: 'Microsoft.OnHandoffActivity',
+          description: "Actions to perform on receipt of an activity with type 'HandOff'.",
+          $ref: '#/definitions/Microsoft.OnHandoffActivity',
         },
         {
           title: 'Microsoft.OnIntent',
-          description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
+          description: 'Actions to perform when specified intent is recognized.',
           $ref: '#/definitions/Microsoft.OnIntent',
         },
         {
-          title: 'Microsoft.Rule',
-          description: 'Defines a rule for an event which is triggered by some source',
-          $ref: '#/definitions/Microsoft.Rule',
+          title: 'Microsoft.OnInvokeActivity',
+          description: "Actions to perform on receipt of an activity with type 'Invoke'.",
+          $ref: '#/definitions/Microsoft.OnInvokeActivity',
+        },
+        {
+          title: 'Microsoft.OnMessageActivity',
+          description: "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
+          $ref: '#/definitions/Microsoft.OnMessageActivity',
+        },
+        {
+          title: 'Microsoft.OnMessageDeleteActivity',
+          description: "Actions to perform on receipt of an activity with type 'MessageDelete'.",
+          $ref: '#/definitions/Microsoft.OnMessageDeleteActivity',
+        },
+        {
+          title: 'Microsoft.OnMessageReactionActivity',
+          description: "Actions to perform on receipt of an activity with type 'MessageReaction'.",
+          $ref: '#/definitions/Microsoft.OnMessageReactionActivity',
+        },
+        {
+          title: 'Microsoft.OnMessageUpdateActivity',
+          description: "Actions to perform on receipt of an activity with type 'MessageUpdate'.",
+          $ref: '#/definitions/Microsoft.OnMessageUpdateActivity',
+        },
+        {
+          title: 'Microsoft.OnRepromptDialog',
+          description: "Actions to perform when 'RepromptDialog' event occurs.",
+          $ref: '#/definitions/Microsoft.OnRepromptDialog',
+        },
+        {
+          title: 'Microsoft.OnTypingActivity',
+          description: "Actions to perform on receipt of an activity with type 'Typing'.",
+          $ref: '#/definitions/Microsoft.OnTypingActivity',
         },
         {
           title: 'Microsoft.OnUnknownIntent',
-          description: 'Defines a sequence of actions to take if there is no other trigger or plan operating',
+          description:
+            "Action to perform when user input is unrecognized and if none of the 'on intent recognition' triggers match recognized intent.",
           $ref: '#/definitions/Microsoft.OnUnknownIntent',
         },
       ],
     },
-    'Microsoft.IRuleSelector': {
-      title: 'Microsoft IRuleSelector',
-      description: 'Union of components which implement the IRuleSelector interface',
+    'Microsoft.ITriggerSelector': {
       $role: 'unionType',
-    },
-    'Microsoft.ITextTemplate': {
-      title: 'Microsoft TextTemplate',
-      description: 'Union of components which implement the ITextTemplate interface',
-      $role: 'unionType',
-      type: 'string',
+      title: 'Selectors',
+      description: 'Union of components which are trigger selectors',
+      oneOf: [
+        {
+          title: 'Microsoft.ConditionalSelector',
+          description: 'Use a rule selector based on a condition',
+          $ref: '#/definitions/Microsoft.ConditionalSelector',
+        },
+        {
+          title: 'Microsoft.FirstSelector',
+          description: 'Selector for first true rule',
+          $ref: '#/definitions/Microsoft.FirstSelector',
+        },
+        {
+          title: 'Microsoft.MostSpecificSelector',
+          description: 'Select most specific true events with optional additional selector',
+          $ref: '#/definitions/Microsoft.MostSpecificSelector',
+        },
+        {
+          title: 'Microsoft.RandomSelector',
+          description: 'Select most specific true rule',
+          $ref: '#/definitions/Microsoft.RandomSelector',
+        },
+        {
+          title: 'Microsoft.TrueSelector',
+          description: 'Selector for all true events',
+          $ref: '#/definitions/Microsoft.TrueSelector',
+        },
+      ],
     },
     'Microsoft.IfCondition': {
       $role: 'unionType(Microsoft.IDialog)',
