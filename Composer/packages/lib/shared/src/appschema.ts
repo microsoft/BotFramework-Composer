@@ -328,38 +328,9 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.ChoiceInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'ChoiceInput Dialog',
-      description: 'This represents a dialog which gathers a choice responses',
+      title: 'Choice input dialog',
+      description: 'Collect information - Pick from a list of choices',
       type: 'object',
-      definitions: {
-        choice: {
-          type: 'object',
-          properties: {
-            value: {
-              type: 'string',
-              title: 'Value',
-              description: 'the value to return when selected.',
-            },
-            action: {
-              title: 'Action',
-              description: 'Card action for the choice',
-              type: 'object',
-              additionalProperties: true,
-            },
-            synonyms: {
-              type: 'array',
-              title: 'Synonyms',
-              description: 'the list of synonyms to recognize in addition to the value. This is optional.',
-              items: {
-                type: 'string',
-              },
-            },
-          },
-        },
-        cardAction: {
-          type: 'object',
-        },
-      },
       properties: {
         ...$properties(SDKTypes.ChoiceInput),
         id: {
@@ -453,6 +424,7 @@ export const appschema: JSONSchema6 = {
           description: 'Choice output format.',
           default: 'value',
         },
+        // TODO: support oneOf
         choices: {
           type: 'array',
           items: {
@@ -461,7 +433,7 @@ export const appschema: JSONSchema6 = {
               value: {
                 type: 'string',
                 title: 'Value',
-                description: 'the value to return when selected.',
+                description: 'Value to return when this choice is selected.',
               },
               // action: {
               //   title: 'Action',
@@ -471,7 +443,7 @@ export const appschema: JSONSchema6 = {
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
-                description: 'the list of synonyms to recognize in addition to the value. This is optional.',
+                description: 'List of synonyms to recognize in addition to the value (optional).',
                 items: {
                   type: 'string',
                 },
@@ -487,15 +459,15 @@ export const appschema: JSONSchema6 = {
         },
         defaultLocale: {
           type: 'string',
-          title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          title: 'Default locale',
+          description: 'Default locale.',
           default: 'en-us',
         },
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
-          title: 'List Style',
-          description: 'The kind of choice list style to generate',
+          title: 'List style',
+          description: 'Style to render choices.',
           default: 'Auto',
         },
         choiceOptions: {
@@ -503,26 +475,26 @@ export const appschema: JSONSchema6 = {
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Seperator',
+              title: 'Inline seperator',
               description: 'Character used to separate individual choices when there are more than 2 choices',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
-              title: 'Inline Or',
-              description: 'Separator inserted between the choices when their are only 2 choices',
+              title: 'Inline or',
+              description: 'Separator inserted between the choices when there are only 2 choices',
               default: ' or ',
             },
             inlineOrMore: {
               type: 'string',
-              title: 'Inline OrMore',
-              description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
+              title: 'Inline or more',
+              description: 'Separator inserted between the last 2 choices when there are more than 2 choices.',
               default: ', or ',
             },
             includeNumbers: {
               type: 'boolean',
-              title: 'Include Numbers',
-              description: 'If true, inline and list style choices will be prefixed with the index of the choice.',
+              title: 'Include numbers',
+              description: "If true, 'inline' and 'list' list style will be prefixed with the index of the choice.",
               default: true,
             },
           },
@@ -533,13 +505,13 @@ export const appschema: JSONSchema6 = {
           properties: {
             noValue: {
               type: 'boolean',
-              title: 'No Value',
+              title: 'No value',
               description: 'If true, the choices value field will NOT be search over',
               default: false,
             },
             // noAction: {
             //   type: 'boolean',
-            //   title: 'No Action',
+            //   title: 'No vction',
             //   description: 'If true, the the choices action.title field will NOT be searched over',
             //   default: false,
             // },
