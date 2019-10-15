@@ -6,14 +6,10 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.LanguageGeneration;
-using Microsoft.Bot.Builder.TestBot.Json;
-using Microsoft.Bot.Builder.ComposerBot.json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 

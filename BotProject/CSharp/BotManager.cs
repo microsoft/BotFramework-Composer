@@ -86,7 +86,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap);
         }
 
         public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null)
