@@ -1198,10 +1198,25 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.IActivityTemplate': {
       title: 'Microsoft ActivityTemplate',
-      // description: 'Union of components which implement the IActivityTemplate interface',
+      description: 'String used for language generation',
       $role: 'unionType',
       type: 'string',
-      description: 'String used for language generation',
+      //   oneOf: [
+      //     {
+      //       title: 'Microsoft.ActivityTemplate',
+      //       description: '',
+      //       $ref: '#/definitions/Microsoft.ActivityTemplate',
+      //     },
+      //     {
+      //       title: 'Microsoft.StaticActivityTemplate',
+      //       description: 'This allows you to define a static Activity object',
+      //       $ref: '#/definitions/Microsoft.StaticActivityTemplate',
+      //     },
+      //     {
+      //       type: 'string',
+      //       title: 'string',
+      //     },
+      //   ],
     },
     'Microsoft.IDialog': {
       title: 'Microsoft IDialog',
