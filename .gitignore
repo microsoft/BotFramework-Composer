@@ -389,8 +389,8 @@ typings/
 # Local sample bots
 SampleBots/Local*
 SampleBots/__Test*
-SampleBots/*/generated/
-SampleBots/*/settings
+SampleBots/*/*/generated
+SampleBots/*/*/settings
 
 #tmp.zip
 *.zip
