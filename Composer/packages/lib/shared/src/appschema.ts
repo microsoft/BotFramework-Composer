@@ -72,12 +72,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.AdaptiveDialog': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -132,12 +126,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.AgeEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -146,12 +134,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.AgeEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.AttachmentInput': {
@@ -253,12 +235,6 @@ export const appschema: JSONSchema6 = {
           default: 'first',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.BeginDialog': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -292,12 +268,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.CancelAllDialogs': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -317,12 +287,6 @@ export const appschema: JSONSchema6 = {
           title: 'Event value',
           description: 'Value to emit with the event (optional).',
           additionalProperties: true,
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -518,12 +482,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.ConditionalSelector': {
       $role: 'unionType(Microsoft.ITriggerSelector)',
@@ -544,12 +502,6 @@ export const appschema: JSONSchema6 = {
         ifFalse: {
           $type: 'Microsoft.ITriggerSelector',
           $ref: '#/definitions/Microsoft.ITriggerSelector',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -713,12 +665,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.ConfirmationEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -727,12 +673,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.ConfirmationEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.CurrencyEntityRecognizer': {
@@ -743,12 +683,6 @@ export const appschema: JSONSchema6 = {
       properties: {
         ...$properties(SDKTypes.CurrencyEntityRecognizer),
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.DateTimeEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -757,12 +691,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DateTimeEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.DateTimeInput': {
@@ -863,12 +791,6 @@ export const appschema: JSONSchema6 = {
           default: 'en-us',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.DebugBreak': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -877,12 +799,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DebugBreak),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.DeleteProperty': {
@@ -904,12 +820,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.DimensionEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -918,12 +828,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DimensionEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.EditActions': {
@@ -952,12 +856,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -999,12 +897,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.EmailEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -1013,12 +905,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.EmailEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.EmitEvent': {
@@ -1071,12 +957,6 @@ export const appschema: JSONSchema6 = {
           description: 'If true this event should propagate to parent dialogs',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.EndDialog': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -1097,12 +977,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.EndTurn': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -1115,12 +989,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
           title: 'Id',
           description: 'Optional dialog ID.',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -1265,12 +1133,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.ForeachPage': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -1314,12 +1176,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.GuidEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -1329,12 +1185,6 @@ export const appschema: JSONSchema6 = {
       properties: {
         ...$properties(SDKTypes.GuidEntityRecognizer),
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.HashtagEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -1343,12 +1193,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.HashtagEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.HttpRequest': {
@@ -1404,12 +1248,6 @@ export const appschema: JSONSchema6 = {
             'Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.',
           enum: ['None', 'Json', 'Activity', 'Activities'],
           default: 'Json',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -1812,12 +1650,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.InitProperty': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -1845,12 +1677,6 @@ export const appschema: JSONSchema6 = {
           enum: ['object', 'array'],
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.IpEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -1859,12 +1685,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.IpEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.LanguagePolicy': {
@@ -1907,12 +1727,6 @@ export const appschema: JSONSchema6 = {
           default: false,
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.LuisRecognizer': {
       $role: 'unionType(Microsoft.IRecognizer)',
@@ -1945,12 +1759,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.MentionEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     // 'Microsoft.MultiLanguageRecognizer': {
@@ -2009,12 +1817,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.NumberEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.NumberInput': {
@@ -2122,12 +1924,6 @@ export const appschema: JSONSchema6 = {
           default: 'en-us',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.NumberRangeEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -2136,12 +1932,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.NumberRangeEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.OAuthInput': {
@@ -2257,12 +2047,6 @@ export const appschema: JSONSchema6 = {
           default: '900000',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2292,12 +2076,6 @@ export const appschema: JSONSchema6 = {
           description: 'Activity type',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnBeginDialog': {
       title: 'OnBeginDialog',
@@ -2322,12 +2100,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnConversationUpdateActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2350,12 +2122,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2401,12 +2167,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnEndOfConversationActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2429,12 +2189,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2461,12 +2215,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnHandoffActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2489,12 +2237,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2534,12 +2276,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnInvokeActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2562,12 +2298,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2595,12 +2325,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnMessageDeleteActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2623,12 +2347,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2655,12 +2373,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnMessageUpdateActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2685,12 +2397,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OnTypingActivity': {
       $role: 'unionType(Microsoft.IOnEvent)',
@@ -2713,12 +2419,6 @@ export const appschema: JSONSchema6 = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2746,12 +2446,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.OrdinalEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -2760,12 +2454,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OrdinalEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.PercentageEntityRecognizer': {
@@ -2776,12 +2464,6 @@ export const appschema: JSONSchema6 = {
       properties: {
         ...$properties(SDKTypes.PercentageEntityRecognizer),
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.PhoneNumberEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -2790,12 +2472,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.PhoneNumberEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.QnAMakerDialog': {
@@ -2867,12 +2543,6 @@ export const appschema: JSONSchema6 = {
           description: 'Pattern expressed as regular expression.',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.RegexRecognizer': {
       $role: 'unionType(Microsoft.IRecognizer)',
@@ -2911,12 +2581,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.RepeatDialog': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -2929,12 +2593,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
           title: 'Id',
           description: 'Optional dialog ID.',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -2972,12 +2630,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.SendActivity': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -2996,12 +2648,6 @@ export const appschema: JSONSchema6 = {
           title: 'Activity',
           description: 'Activity to send to the user',
           $ref: '#/definitions/Microsoft.IActivityTemplate',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
         },
       },
     },
@@ -3029,12 +2675,6 @@ export const appschema: JSONSchema6 = {
           title: 'Value',
           description: 'Expression against memory to use to get the value.',
           examples: ['dialog.result'],
-          type: 'string',
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
           type: 'string',
         },
       },
@@ -3094,12 +2734,6 @@ export const appschema: JSONSchema6 = {
           },
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.TemperatureEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -3108,12 +2742,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.TemperatureEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.TextInput': {
@@ -3215,12 +2843,6 @@ export const appschema: JSONSchema6 = {
           default: 'none',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.TraceActivity': {
       $role: 'unionType(Microsoft.IDialog)',
@@ -3248,12 +2870,6 @@ export const appschema: JSONSchema6 = {
           pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
       },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
     },
     'Microsoft.UrlEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
@@ -3262,12 +2878,6 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.UrlEntityRecognizer),
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
   },
