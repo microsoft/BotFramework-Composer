@@ -2677,6 +2677,21 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
+    'Microsoft.StaticActivityTemplate': {
+      $role: 'unionType(Microsoft.IActivityTemplate)',
+      title: 'Microsoft Static Activity Template',
+      description: 'This allows you to define a static Activity object',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.StaticActivityTemplate),
+        activity: {
+          type: 'object',
+          title: 'Activity',
+          description: 'A static Activity to used',
+          additionalProperties: true,
+        },
+      },
+    },
     'Microsoft.SwitchCondition': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Switch Action',
