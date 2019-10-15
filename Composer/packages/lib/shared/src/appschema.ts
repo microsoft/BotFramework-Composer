@@ -2641,20 +2641,15 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.SendActivity': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Send Activity Action',
-      description: 'This is a action which sends an activity to the user',
+      title: 'Send an activity',
+      description: 'Respond with an activity.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.SendActivity),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         activity: {
           $type: 'Microsoft.IActivityTemplate',
           title: 'Activity',
-          description: 'Activity to send to the user',
+          description: 'Activity to send.',
           $ref: '#/definitions/Microsoft.IActivityTemplate',
         },
       },
