@@ -7,6 +7,7 @@
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
   "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
