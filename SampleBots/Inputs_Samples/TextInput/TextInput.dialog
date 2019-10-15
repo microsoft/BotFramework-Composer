@@ -18,7 +18,7 @@
             "id": "077848"
           },
           "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "prompt": "Hello, I'm Zoidberg. What is your name? (This can't be interrupted)",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
           "allowInterruptions": "false",
@@ -37,7 +37,7 @@
             "id": "025273"
           },
           "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name?",
+          "prompt": "Hello, I'm Zoidberg. What is your name? (This can be interrupted)",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
           "allowInterruptions": "true",

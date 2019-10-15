@@ -51,10 +51,10 @@ namespace Tests
             .SendConversationUpdate()
                 .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
             .Send("01")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+                .AssertReply("Hello, I'm Zoidberg. What is your name? (This can't be interrupted)")
             .Send("02")
                 .AssertReply("Hello 02, nice to talk to you!")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+                .AssertReply("Hello, I'm Zoidberg. What is your name? (This can be interrupted)")
             .Send("02")
                 .AssertReply("What is your age?")
             .StartTestAsync();
@@ -88,9 +88,6 @@ namespace Tests
                 .AssertReply("I need a yes or no. (1) Yes or (2) No")
             .Send("yes")
                 .AssertReply("confirmation: True")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("nope")
-                .AssertReply("confirmation: False")
             .StartTestAsync();
         }
 

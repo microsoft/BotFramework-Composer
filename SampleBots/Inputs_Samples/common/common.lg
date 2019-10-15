@@ -1,10 +1,4 @@
 # help
-[Activity
-    Text = {helpText()}
-	SuggestedActions = TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput|OAuthInput
-]
-
-# helpText
 -```Welcome to Input Sample Bot.
 I can show you examples on how to use actions, You can enter number 01-04
 01 - TextInput
@@ -16,11 +10,9 @@ I can show you examples on how to use actions, You can enter number 01-04
 07 - OAuthInput```
 
 # ShowImage(contentUrl, contentType)
--```
-You sent:
-[attachment=@{contentUrl}, @{contentType}]
-
-```
+[HeroCard
+    title = Here is the attachment
+    image = @{contentUrl}]
 
 # ShowEmailSummary(user)
 - IF: @{count(user.getGraphEmails.value) == 1}

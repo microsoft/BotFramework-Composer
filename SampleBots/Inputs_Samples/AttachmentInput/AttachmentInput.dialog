@@ -18,7 +18,7 @@
             "id": "452587"
           },
           "property": "dialog.attachments",
-          "prompt": "Please send an image or music.",
+          "prompt": "Please send an image.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "false",
