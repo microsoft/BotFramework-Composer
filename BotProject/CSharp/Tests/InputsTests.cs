@@ -49,7 +49,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
+                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput\r\n")
             .Send("01")
                 .AssertReply("Hello, I'm Zoidberg. What is your name? (This can't be interrupted)")
             .Send("02")
@@ -65,7 +65,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
+                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput\r\n")
             .Send("02")
                 .AssertReply("What is your age?")
             .Send("18")
@@ -81,7 +81,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
+                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput\r\n")
             .Send("03")
                 .AssertReply("yes or no (1) Yes or (2) No")
             .Send("asdasd")
@@ -96,7 +96,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
+                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput\r\n")
             .Send("04")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
@@ -109,7 +109,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput")
+                .AssertReply("Welcome to Input Sample Bot.\r\nI can show you examples on how to use actions, You can enter number 01-04\r\n01 - TextInput\r\n02 - NumberInput\r\n03 - ConfirmInput\r\n04 - ChoiceInput\r\n05 - AttachmentInput\r\n06 - DateTimeInput\r\n07 - OAuthInput\r\n")
             .Send("06")
                 .AssertReply("Please enter a date.")
             .Send("June 1st")
