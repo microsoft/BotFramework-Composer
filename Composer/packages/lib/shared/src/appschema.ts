@@ -957,16 +957,11 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EndTurn': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'End Turn',
+      title: 'End turn',
       description: 'End the current turn without ending the dialog.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.EndTurn),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
       },
     },
     'Microsoft.EntityRecognizers': {
