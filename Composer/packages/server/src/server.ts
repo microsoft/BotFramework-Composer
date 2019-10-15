@@ -4,16 +4,15 @@ import path from 'path';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import { attachLSPServer } from 'lg-lsp-server';
 
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
-import { startLSPServer } from 'lg-lsp-server';
 
 const app: Express = express();
 
 const { login, authorize } = getAuthProvider();
-
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
@@ -27,7 +26,6 @@ app.use(morgan('dev'));
 app.use(bodyParser({ limit: '50mb' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
   res.send('fortest');
 });
@@ -61,4 +59,4 @@ const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-startLSPServer(server);
+attachLSPServer(server, '/lgServer');

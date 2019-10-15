@@ -1,4 +1,4 @@
-import { startLSPServer } from 'lg-lsp-server';
+import { attachLSPServer } from 'lg-lsp-server';
 import * as express from 'express';
 
 // create the express application
@@ -8,4 +8,4 @@ app.use(express.static(__dirname));
 // start the server
 const server = app.listen(5000);
 
-startLSPServer(server);
+attachLSPServer(server, '/lgServer');

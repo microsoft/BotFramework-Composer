@@ -5,14 +5,14 @@ import * as net from 'net';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { launch } from './launch';
 
-export function startLSPServer(server: http.Server) {
+export function attachLSPServer(server: http.Server, path: string) {
   const wss = new ws.Server({
     noServer: true,
     perMessageDeflate: false,
   });
   server.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
     const pathname = request.url ? url.parse(request.url).pathname : undefined;
-    if (pathname === '/lgServer') {
+    if (pathname === path) {
       wss.handleUpgrade(request, socket, head, webSocket => {
         const socket: rpc.IWebSocket = {
           send: content =>
