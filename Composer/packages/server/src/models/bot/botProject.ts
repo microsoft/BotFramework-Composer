@@ -361,7 +361,7 @@ export class BotProject {
 
   // create a file with relativePath and content
   // relativePath is a path relative to root dir instead of dataDir
-  // dataDir is not aware at this
+  // dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
