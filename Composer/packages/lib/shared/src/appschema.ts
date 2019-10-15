@@ -263,35 +263,32 @@ export const appschema: JSONSchema6 = {
     'Microsoft.BeginDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Begin Dialog',
-      description: 'Action which begins another dialog (and when that dialog is done, it will return the caller).',
+      description: 'Begin another dialog.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.BeginDialog),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         dialog: {
           $type: 'Microsoft.IDialog',
-          title: 'Dialog',
-          description: 'This is the dialog to call.',
+          title: 'Dialog name',
+          description: 'Name of the dialog to call.',
+          examples: ['AddToDoDialog'],
+          // Composer override
           type: 'string',
         },
         options: {
           type: 'object',
-          title: 'Options binding',
-          description: 'Bindings to configure the options object to pass to the dialog.',
+          title: 'Options',
+          description: 'One or more options that are passed to the dialog that is called.',
           additionalProperties: {
             type: 'string',
             title: 'Options',
           },
         },
-        property: {
+        resultProperty: {
           $role: 'expression',
           title: 'Property',
-          description: 'The property to bind to the dialog and store the result in',
-          examples: ['user.name'],
+          description: 'Property to store any value returned by the dialog that is called.',
+          examples: ['dialog.userName'],
           type: 'string',
         },
       },
