@@ -827,26 +827,21 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EditActions': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'EditActions Action',
-      description: 'Edit current dialog with changeType and Actions',
+      title: 'Edit actions.',
+      description: 'Edit the current list of actions.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.EditActions),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         changeType: {
           type: 'string',
-          title: 'Change Type',
-          description: 'The change type to apply to current dialog',
+          title: 'Type of change',
+          description: 'Type of change to apply to the current actions.',
           enum: ['InsertActions', 'InsertActionsBeforeTags', 'AppendActions', 'EndSequence', 'ReplaceSequence'],
         },
         actions: {
           type: 'array',
           title: 'Actions',
-          description: 'Actions to execute',
+          description: 'Actions to apply.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
