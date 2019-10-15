@@ -32,13 +32,13 @@ export async function visitAdaptiveAction(input: any, visitor: (data: any) => Pr
   for (const childrenKey of childrenKeys) {
     const children = input[childrenKey];
     if (Array.isArray(children)) {
-      children.forEach(x => visitAdaptiveAction(x, visitor));
+      Promise.all(children.map(async x => await visitAdaptiveAction(x, visitor)));
     }
   }
 }
 
 function isLgActivity(activity: string) {
-  return activity && activity.indexOf('bfdactivity-') !== -1;
+  return activity && activity.includes('bfdactivity-');
 }
 
 export async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
