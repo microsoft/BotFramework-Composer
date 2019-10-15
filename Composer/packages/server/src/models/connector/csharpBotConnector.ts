@@ -1,4 +1,5 @@
 import fs from 'fs';
+import Path from 'path';
 
 import axios from 'axios';
 import archiver from 'archiver';
@@ -37,7 +38,7 @@ export class CSharpBotConnector implements IBotConnector {
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = currentProject.dir;
+    const dir = Path.join(currentProject.dataDir);
     const luisConfig = currentProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');

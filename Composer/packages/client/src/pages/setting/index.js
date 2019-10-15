@@ -15,7 +15,6 @@ import { TestController } from './../../TestController';
 
 const links = [
   { key: '/setting/dialog-settings', name: formatMessage('Dialog settings') },
-
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
@@ -23,6 +22,8 @@ const links = [
 
 if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h' || process.env.MOCKHOSTED) {
   links.push({ key: '/setting/remote-publish', name: formatMessage('Publish') });
+} else {
+  links.push({ key: '/setting/deployment', name: formatMessage('Deployment') });
 }
 
 export const SettingPage = () => {

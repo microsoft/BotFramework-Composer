@@ -19,6 +19,10 @@ export const KeyboardCommandTypes = {
     Cut: 'cut',
     Paste: 'paste',
   },
+  Operation: {
+    Redo: 'redo',
+    Undo: 'undo',
+  },
 };
 
 const findCommandAreaByValue = (() => {
@@ -40,6 +44,7 @@ const findCommandAreaByValue = (() => {
 export const KeyboardPrimaryTypes = {
   Cursor: 'Cursor',
   Node: 'Node',
+  Operation: 'Operation',
 };
 
 const BasicShortcuts = {
@@ -88,13 +93,26 @@ const KeyboardNodeEditingShortcuts = {
   'Mac.Meta.x': KeyboardCommandTypes.Node.Cut,
 };
 
-const { arrowNavigation, tabNavigation, keyboardNodeEditing } = EditorConfig.features;
+const KeyboardOperationEditingShortcuts = {
+  'Windows.Control.Z': KeyboardCommandTypes.Operation.Undo,
+  'Windows.Control.z': KeyboardCommandTypes.Operation.Undo,
+  'Windows.Control.Shift.Z': KeyboardCommandTypes.Operation.Redo,
+  'Windows.Control.Shift.z': KeyboardCommandTypes.Operation.Redo,
+
+  'Mac.Meta.Z': KeyboardCommandTypes.Operation.Undo,
+  'Mac.Meta.z': KeyboardCommandTypes.Operation.Undo,
+  'Mac.Meta.Shift.Z': KeyboardCommandTypes.Operation.Redo,
+  'Mac.Meta.Shift.z': KeyboardCommandTypes.Operation.Redo,
+};
+
+const { arrowNavigation, tabNavigation, keyboardNodeEditing, keyboardOperationEditing } = EditorConfig.features;
 
 const SupportedShortcuts = {
   ...BasicShortcuts,
   ...(arrowNavigation ? ArrowMoveShortcuts : null),
   ...(tabNavigation ? TabNavShortcuts : null),
   ...(keyboardNodeEditing ? KeyboardNodeEditingShortcuts : null),
+  ...(keyboardOperationEditing ? KeyboardOperationEditingShortcuts : null),
 };
 
 export function mapShortcutToKeyboardCommand(keyCode) {

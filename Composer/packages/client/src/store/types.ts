@@ -38,6 +38,7 @@ export interface BotSchemas {
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
+  location: string;
   botEnvironment: string;
   botEndpoint: string;
   /** the data path for FormEditor */
