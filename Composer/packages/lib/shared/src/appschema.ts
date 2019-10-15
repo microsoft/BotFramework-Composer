@@ -2694,27 +2694,22 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.SwitchCondition': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Switch Action',
-      description: 'Action which conditionally decides which action to execute next.',
+      title: 'Switch condition',
+      description: 'Execute different actions based on the value of a property.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.SwitchCondition),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         condition: {
           $role: 'expression',
           title: 'Condition',
-          description: 'Expression to evaluate to switch on.',
-          examples: ['user.age > 3'],
+          description: 'Property to evaluate.',
+          examples: ['user.favColor'],
           type: 'string',
         },
         cases: {
           type: 'array',
           title: 'Cases',
-          description: 'Cases to evaluate against condition',
+          description: 'Actions for each possible condition.',
           items: {
             type: 'object',
             required: ['value', 'case'],
@@ -2722,13 +2717,14 @@ export const appschema: JSONSchema6 = {
               value: {
                 $role: 'expression',
                 title: 'Value',
-                description: 'Value which must match the condition property',
+                description: 'Value.',
+                examples: ["'red'", 'dialog.colors.red'],
                 type: 'string',
               },
               actions: {
                 type: 'array',
                 title: 'Actions',
-                description: 'Actions to execute if case is equal to condition',
+                description: 'Actions to execute.',
                 items: {
                   $type: 'Microsoft.IDialog',
                   $ref: '#/definitions/Microsoft.IDialog',
@@ -2740,7 +2736,7 @@ export const appschema: JSONSchema6 = {
         default: {
           type: 'array',
           title: 'Default',
-          description: 'Action to execute if no case is equal to condition',
+          description: 'Actions to execute if none of the cases meet the condition.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
