@@ -6,7 +6,7 @@
     "id": "709692"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -14,7 +14,6 @@
         "id": "783343",
         "updatedAt": "2019-07-22T08:11:00.380Z"
       },
-       
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
@@ -51,5 +50,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

@@ -63,7 +63,6 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           fontSize: '14px',
           lineHeight: '19px',
           color: 'black',
-          position: 'relative',
         }}
       >
         <div css={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{header}</div>

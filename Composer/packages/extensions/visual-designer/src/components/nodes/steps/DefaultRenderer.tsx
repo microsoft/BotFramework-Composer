@@ -21,8 +21,6 @@ function makeLabel(data) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
       return `{${data.property || '?'}} = ${data.value || '?'}`;
-    case ObiTypes.SaveEntity:
-      return `{${data.property || '?'}} = ${data.entity || '?'}`;
     case ObiTypes.InitProperty:
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
@@ -45,10 +43,6 @@ const ContentKeyByTypes: {
   [ObiTypes.EditArray]: {
     label: 'changeType',
     details: 'arrayProperty',
-  },
-  [ObiTypes.SaveEntity]: {
-    label: 'entity',
-    details: 'property',
   },
   [ObiTypes.InitProperty]: {
     label: 'property',
@@ -112,9 +106,6 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.EmitEvent]: {
     label: 'eventName',
-  },
-  [ObiTypes.CodeStep]: {
-    text: 'Run custom code',
   },
   [ObiTypes.HttpRequest]: {
     label: 'url',

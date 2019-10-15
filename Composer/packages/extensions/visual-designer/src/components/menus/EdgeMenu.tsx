@@ -73,7 +73,20 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     >
       <IconMenu
         iconName="Add"
-        iconStyles={{ background: 'white', color: '#005CE6' }}
+        iconStyles={{
+          background: 'white',
+          color: '#005CE6',
+          selectors: {
+            ':focus': {
+              outline: 'none',
+              selectors: {
+                '::after': {
+                  outline: 'none !important',
+                },
+              },
+            },
+          },
+        }}
         iconSize={10}
         nodeSelected={nodeSelected}
         menuItems={buildEdgeMenuItemsFromClipboardContext(clipboarcContext, onClick)}

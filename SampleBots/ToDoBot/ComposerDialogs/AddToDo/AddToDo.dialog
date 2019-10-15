@@ -6,14 +6,14 @@
     "id": "808722"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "335456",
         "updatedAt": "2019-07-22T08:10:44.402Z"
-      },      
+      },
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
@@ -24,7 +24,7 @@
           },
           "property": "dialog.todo",
           "value": "@title"
-        },      
+        },
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
@@ -82,5 +82,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
