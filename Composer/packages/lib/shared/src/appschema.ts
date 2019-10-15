@@ -301,26 +301,21 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.CancelAllDialogs': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Cancel All Dialogs',
+      title: 'Cancel all dialogs',
       description:
-        'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
+        'Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.CancelAllDialogs),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         eventName: {
-          title: 'Event Name',
-          description: 'The name of event to emit',
+          title: 'Event name',
+          description: 'Name of the event to emit.',
           type: 'string',
         },
         eventValue: {
           type: 'object',
-          title: 'Event Value',
-          description: 'Optional value to emit along with the event',
+          title: 'Event value',
+          description: 'Value to emit with the event (optional).',
           additionalProperties: true,
         },
       },
