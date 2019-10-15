@@ -9,7 +9,7 @@ import { setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
 
-const renderTitle = (item: MicrosoftIRule) => {
+const renderTitle = (item: ITriggerCondition) => {
   const friendlyName = get(item, '$designer.name');
 
   if (friendlyName) {
@@ -28,12 +28,12 @@ export function RulesField(props: FieldProps) {
   const overrides = setOverridesOnField(props.formContext, 'RulesField');
 
   return (
-    <TableField<MicrosoftIRule>
+    <TableField<ITriggerCondition>
       {...props}
       {...overrides}
       dialogOptionsOpts={{ include: [DialogGroup.EVENTS], subMenu: false }}
       label={formatMessage('Add New Rule')}
-      navPrefix="events"
+      navPrefix="triggers"
       renderTitle={renderTitle}
     >
       {({ createNewItemAtIndex }) => (

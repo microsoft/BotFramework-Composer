@@ -15,13 +15,13 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     recognizer: {
       'ui:field': 'RecognizerField',
     },
-    events: {
+    triggers: {
       'ui:field': 'RulesField',
     },
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['property', 'outputBinding', 'recognizer', 'events', '*'],
+    'ui:order': ['property', 'outputBinding', 'recognizer', 'triggers', '*'],
     'ui:hidden': ['autoEndDialog', 'generator', ...globalHidden],
   },
   [SDKTypes.BeginDialog]: {
@@ -96,17 +96,10 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['events', 'constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
-  },
-  [SDKTypes.OnEndOfConversationActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
     'ui:order': ['constraint', '*', 'actions'],
     'ui:hidden': [...globalHidden],
   },
-  [SDKTypes.OnEvent]: {
+  [SDKTypes.OnEndOfConversationActivity]: {
     actions: {
       'ui:field': 'StepsField',
     },
