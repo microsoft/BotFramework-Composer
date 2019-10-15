@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { LgEditor } from 'code-editor';
+import debounce from 'lodash.debounce';
 
 import { FormContext } from '../types';
 
@@ -32,9 +33,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const lgId = `bfd${name}-${formContext.dialogId}`;
   const [errorMsg, setErrorMsg] = useState('');
 
-  const lgFileId = formContext.currentDialog.lgFile;
+  const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
-
   const template = lgFile
     ? lgFile.templates.find(template => {
         return template.Name === lgId;
@@ -55,7 +55,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     content += ['\n', '# ' + lgId, newTemplateBody].join('\n');
   }
 
-  const onChange = (data): void => {
+  const onChange = debounce((data): void => {
     // hit the lg api and replace it's Body with data
     if (formContext.dialogId) {
       formContext.shellApi
@@ -64,7 +64,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
         .catch(error => setErrorMsg(error));
       props.onChange(`[${lgId}]`);
     }
-  };
+  }, 200);
 
   return (
     <LgEditor
