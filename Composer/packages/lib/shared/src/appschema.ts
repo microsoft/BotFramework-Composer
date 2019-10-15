@@ -157,7 +157,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.AgeEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Age Entity Recognizer',
       description: 'Recognizer which recognizes age.',
       type: 'object',
@@ -983,7 +983,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.ConfirmationEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Confirmation Entity Recognizer',
       description: 'Recognizer which recognizes confirmation choices (yes/no).',
       type: 'object',
@@ -1022,7 +1022,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.CurrencyEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Currency Entity Recognizer',
       description: 'Recognizer which recognizes currency.',
       type: 'object',
@@ -1061,7 +1061,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.DateTimeEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'DateTime Entity Recognizer',
       description: 'Recognizer which recognizes dates and time fragments.',
       type: 'object',
@@ -1358,7 +1358,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.DimensionEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Dimension Entity Recognizer',
       description: 'Recognizer which recognizes dimension.',
       type: 'object',
@@ -1545,7 +1545,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.EmailEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Email Entity Recognizer',
       description: 'Recognizer which recognizes email.',
       type: 'object',
@@ -1788,9 +1788,9 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.EntityRecognizer': {
+    'Microsoft.EntityRecognizers': {
       $role: 'unionType',
-      title: 'Entity Recognizer',
+      title: 'Entity Recognizers',
       description: 'Union of components which derive from EntityRecognizer abstract class.',
       type: 'object',
       oneOf: [
@@ -1870,9 +1870,9 @@ export const appschema: JSONSchema6 = {
           $ref: '#/definitions/Microsoft.PhoneNumberEntityRecognizer',
         },
         {
-          title: 'Microsoft.RegexEntityRecognizer',
+          title: 'Microsoft.RegExEntityRecognizer',
           description: 'Recognizer which recognizes patterns of input based on regex.',
-          $ref: '#/definitions/Microsoft.RegexEntityRecognizer',
+          $ref: '#/definitions/Microsoft.RegExEntityRecognizer',
         },
         {
           title: 'Microsoft.TemperatureEntityRecognizer',
@@ -1886,7 +1886,6 @@ export const appschema: JSONSchema6 = {
         },
       ],
     },
-
     'Microsoft.Foreach': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Foreach Action',
@@ -2055,7 +2054,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.GuidEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Guid Entity Recognizer',
       description: 'Recognizer which recognizes guids.',
       type: 'object',
@@ -2094,7 +2093,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.HashtagEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Hashtag Entity Recognizer',
       description: 'Recognizer which recognizes Hashtags.',
       type: 'object',
@@ -2736,7 +2735,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.IpEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Ip Entity Recognizer',
       description: 'Recognizer which recognizes internet IP patterns (like 192.1.1.1).',
       type: 'object',
@@ -2928,7 +2927,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.MentionEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Mentions Entity Recognizer',
       description: 'Recognizer which recognizes @Mentions',
       type: 'object',
@@ -3023,7 +3022,7 @@ export const appschema: JSONSchema6 = {
     //   },
     // },
     'Microsoft.NumberEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Number Entity Recognizer',
       description: 'Recognizer which recognizes numbers.',
       type: 'object',
@@ -3214,7 +3213,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.NumberRangeEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'NumberRange Entity Recognizer',
       description: 'Recognizer which recognizes ranges of numbers (Example:2 to 5).',
       type: 'object',
@@ -4315,7 +4314,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OrdinalEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Ordinal Entity Recognizer',
       description: 'Recognizer which recognizes ordinals (example: first, second, 3rd).',
       type: 'object',
@@ -4354,7 +4353,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.PercentageEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Percentage Entity Recognizer',
       description: 'Recognizer which recognizes percentages.',
       type: 'object',
@@ -4393,7 +4392,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.PhoneNumberEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Phone Number Entity Recognizer',
       description: 'Recognizer which recognizes phone numbers.',
       type: 'object',
@@ -4507,7 +4506,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.RegexEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Regex Entity Recognizer',
       description: 'Recognizer which recognizes patterns of input based on regex.',
       type: 'object',
@@ -4977,7 +4976,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.TemperatureEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Temperature Entity Recognizer',
       description: 'Recognizer which recognizes temperatures.',
       type: 'object',
@@ -5218,7 +5217,7 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.UrlEntityRecognizer': {
-      $role: 'unionType(Microsoft.EntityRecognizer)',
+      $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Url Entity Recognizer',
       description: 'Recognizer which recognizes urls (example: http://bing.com)',
       type: 'object',
