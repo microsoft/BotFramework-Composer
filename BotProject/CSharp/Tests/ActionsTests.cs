@@ -135,13 +135,10 @@ namespace Tests
       .SendConversationUpdate()
           .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\r\n01 - Actions\r\n02 - EndTurn\r\n03 - IfCondiftion\r\n04 - EditArray, Foreach\r\n05 - EndDialog\r\n06 - HttpRequest\r\n07 - SwitchCondition\r\n08 - RepeatDialog\r\n09 - TraceAndLog\r\n10 - EditActions\r\n11 - ReplaceDialog\r\n12 - EmitEvent")
       .Send("08")
-          .AssertReply("Hello, what is your name?")
-      .Send("luhan")
-          .AssertReply("Hello luhan, nice to meet you!")
-      .Send("hi")
-           .AssertReply("Hello, what is your name?")
-      .Send("luhan")
-          .AssertReply("Hello luhan, nice to meet you!")
+          .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
+      .Send("Yes")
+          .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
+      .Send("No")
       .StartTestAsync();
     }
 

@@ -52,7 +52,6 @@
       "$designer": {
         "id": "917307"
       },
-       
       "actions": [
         {
           "$type": "Microsoft.IfCondition",

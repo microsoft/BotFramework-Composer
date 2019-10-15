@@ -3,7 +3,7 @@
   "$designer": {
     "id": "701087"
   },
-  "autoEndDialog": false,
+  "autoEndDialog": true,
   "triggers": [
     {
       "$type": "Microsoft.OnCustomEvent",

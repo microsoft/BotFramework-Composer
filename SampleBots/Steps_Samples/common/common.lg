@@ -1,10 +1,4 @@
 # help
-[Activity
-    Text = {helpText()}
-	SuggestedActions = Actions|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|Editactions|ReplaceDialog|EmitEvent
-]
-
-# helpText
 -```I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.
 01 - Actions
 02 - EndTurn
@@ -74,7 +68,7 @@
 -Potentially a successful demo
 
 # bfdactivity-120128
--Hello {user.name}, nice to talk to you!
+-Hello {user.name}, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.
 
 # bfdactivity-577618
 -Why did the chicken cross the road?

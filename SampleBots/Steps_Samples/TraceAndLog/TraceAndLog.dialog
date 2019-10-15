@@ -30,6 +30,7 @@
           "$designer": {
             "id": "774586"
           },
+          "value": "user.name",
           "valueType": "memory"
         },
         {
