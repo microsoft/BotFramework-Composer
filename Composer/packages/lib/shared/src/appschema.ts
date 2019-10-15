@@ -2618,35 +2618,24 @@ export const appschema: JSONSchema6 = {
     'Microsoft.ReplaceDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
-      title: 'Replace Dialog',
-      description: 'This is a action which replaces the current dialog with the target dialog',
+      title: 'Replace dialog',
+      description: 'Replace current dialog with another dialog.',
       properties: {
         ...$properties(SDKTypes.ReplaceDialog),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         dialog: {
           $type: 'Microsoft.IDialog',
           title: 'Dialog',
-          description: 'This is the dialog to switch to.',
+          description: 'Current dialog will be replaced by this dialog.',
           type: 'string',
         },
         options: {
           type: 'object',
-          title: 'Options binding',
-          description: 'Bindings to configure the options object to pass to the dialog.',
+          title: 'Options',
+          description: 'One or more options that are passed to the dialog that is called.',
           additionalProperties: {
             type: 'string',
             title: 'Options',
           },
-        },
-        property: {
-          $role: 'expression',
-          description: 'The property to bind to the dialog and store the result in',
-          examples: ['user.name'],
-          type: 'string',
         },
       },
     },
