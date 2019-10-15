@@ -47,10 +47,6 @@ module.exports = {
     'security/detect-pseudoRandomBytes': 'error',
     'security/detect-unsafe-regex': 'error',
   },
-  parserOptions: {
-    // temp fix for https://github.com/typescript-eslint/typescript-eslint/issues/864
-    createDefaultProgram: true,
-  },
   overrides: [
     {
       files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)'],

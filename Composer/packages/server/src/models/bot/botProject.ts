@@ -188,7 +188,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, content = '', dir = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<Dialog[]> => {
     const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
@@ -227,7 +227,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string, dir = ''): Promise<LGFile[]> => {
+  public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
@@ -274,7 +274,7 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir = ''): Promise<LUFile[]> => {
+  public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
@@ -357,10 +357,13 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  // create file in this project this function will gurantee the memory cache
-  // (this.files, all indexes) also gets updated
+  private defaultDir = (id: string) => Path.join(DIALOGFOLDER, id);
+
+  // create a file with relativePath and content
+  // relativePath is a path relative to root dir instead of dataDir
+  // dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
-    const absolutePath = Path.resolve(this.dataDir, relativePath);
+    const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
     await this.fileStorage.writeFile(absolutePath, content);
 
