@@ -1899,22 +1899,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnActivity',
-      description: 'This defines the actions to take when an custom activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On activity',
+      description: 'Actions to perform on receipt of a generic activity.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1922,28 +1922,76 @@ export const appschema: JSONSchema6 = {
         },
         type: {
           type: 'string',
-          title: 'Type',
-          description: 'Activity type',
+          title: 'Activity type',
+          description: 'The Activity.Type to match',
         },
       },
     },
     'Microsoft.OnBeginDialog': {
-      title: 'OnBeginDialog',
-      description: 'This defines the actions to take when a dialog is started via BeginDialog()',
-      $role: 'unionType(Microsoft.IOnEvent)',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On begin dialog',
+      description: 'Actions to perform when this dialog begins.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnBeginDialog),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
+      },
+    },
+    'Microsoft.OnCancelDialog': {
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On cancel dialog',
+      description: 'Actions to perform on cancel dialog event.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.OnCancelDialog),
+        condition: {
+          $role: 'expression',
+          title: 'Condition',
+          description: 'Condition (expression).',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        actions: {
+          type: 'array',
+          description: 'Sequence of actions to execute.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
+      },
+    },
+    'Microsoft.OnCondition': {
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On condition',
+      description: 'Actions to perform when specified condition is true.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.OnCondition),
+        condition: {
+          $role: 'expression',
+          title: 'Condition',
+          description: 'Condition (expression).',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        actions: {
+          type: 'array',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1952,89 +2000,149 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnConversationUpdateActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnConversationUpdateActivity',
-      description: 'This defines the actions to take when an ConversationUpdate activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On ConversationUpdate activity',
+      description: "Actions to perform on receipt of an activity with type 'ConversationUpdate'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnConversationUpdateActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
       },
+    },
+    'Microsoft.OnCustomEvent': {
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On custom event',
+      description:
+        "Actions to perform when a custom event is detected. Use 'Emit a custom event' action to raise a custom event.",
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.OnCustomEvent),
+        condition: {
+          $role: 'expression',
+          title: 'Condition',
+          description: 'Condition (expression).',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        actions: {
+          type: 'array',
+          description: 'Sequence of actions to execute.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
+        event: {
+          type: 'string',
+          title: 'Custom event name',
+          description: 'Name of the custom event.',
+        },
+      },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['actions', 'event', '$type'],
+        },
+      ],
     },
     'Microsoft.OnDialogEvent': {
-      title: 'Event Event',
-      description: 'Defines a rule for an event which is triggered by some source',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On dialog event',
+      description: 'Actions to perform when a specific dialog event occurs.',
       type: 'object',
-      $role: 'unionType(Microsoft.IOnEvent)',
       properties: {
         ...$properties(SDKTypes.OnDialogEvent),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
         },
-        events: {
-          type: 'array',
-          description: 'Events to trigger this rule for',
-          items: {
-            type: 'string',
-            enum: [
-              'beginDialog',
-              'consultDialog',
-              'cancelDialog',
-              'activityReceived',
-              'recognizedIntent',
-              'unknownIntent',
-              'actionsStarted',
-              'actionsSaved',
-              'actionsEnded',
-              'actionsResumed',
-            ],
-          },
+        event: {
+          type: 'string',
+          title: 'Dialog event name',
+          description: 'Name of dialog event.',
         },
       },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['actions', 'event', '$type'],
+        },
+      ],
     },
     'Microsoft.OnEndOfConversationActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnEndOfConversationActivity',
-      description: 'This defines the actions to take when an EndOfConversation Activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On EndOfConversation activity',
+      description: "Actions to perform on receipt of an activity with type 'EndOfConversation'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnEndOfConversationActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
+      },
+    },
+    'Microsoft.OnError': {
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Error',
+      description: "Action to perform when an 'Error' dialog event occurs.",
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.OnError),
+        condition: {
+          $role: 'expression',
+          title: 'Condition',
+          description: 'Condition (expression).',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        actions: {
+          type: 'array',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2043,22 +2151,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnEventActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnEventActivity',
-      description: 'This defines the actions to take when an Event activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Event activity',
+      description: "Actions to perform on receipt of an activity with type 'Event'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnEventActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2067,22 +2175,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnHandoffActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnHandoffActivity',
-      description: 'This defines the actions to take when an Handoff activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Handoff activity',
+      description: "Actions to perform on receipt of an activity with type 'HandOff'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnHandoffActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2091,22 +2199,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnIntent': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'Intent Event',
-      description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On intent recognition',
+      description: 'Actions to perform when specified intent is recognized.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnIntent),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2115,35 +2223,45 @@ export const appschema: JSONSchema6 = {
         intent: {
           type: 'string',
           title: 'Intent',
-          description: 'Intent name to trigger on',
+          description: 'Name of intent.',
         },
         entities: {
           type: 'array',
           title: 'Entities',
-          description: 'The entities required to trigger this rule',
+          description: 'Required entities.',
           items: {
             type: 'string',
           },
         },
       },
+      anyOf: [
+        {
+          title: 'Reference',
+          required: ['$copy'],
+        },
+        {
+          title: 'Type',
+          required: ['actions', 'intent', '$type'],
+        },
+      ],
     },
     'Microsoft.OnInvokeActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnInvokeActivity',
-      description: 'This defines the actions to take when an Invoke activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Invoke activity',
+      description: "Actions to perform on receipt of an activity with type 'Invoke'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnInvokeActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2152,23 +2270,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnMessageActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'OnMessageActivity',
-      description:
-        'This defines the actions to take when an Message activity is received. NOTE: If this triggers it will override any Recognizer/Intent rule calculation',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Message activity',
+      description: "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnMessageActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2177,22 +2294,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnMessageDeleteActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'MessageDeleteActivity',
-      description: 'This defines the actions to take when an MessageDelete activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On MessageDelete activity',
+      description: "Actions to perform on receipt of an activity with type 'MessageDelete'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnMessageDeleteActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2201,22 +2318,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnMessageReactionActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'MessageReactionActivity',
-      description: 'This defines the actions to take when a MessageReaction activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On MessageReaction activity',
+      description: "Actions to perform on receipt of an activity with type 'MessageReaction'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnMessageReactionActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2225,22 +2342,46 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnMessageUpdateActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'MessageUpdateActivity',
-      description: 'This defines the actions to take when an MessageUpdate ctivity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On MessageUpdate activity',
+      description: "Actions to perform on receipt of an activity with type 'MessageUpdate'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnMessageUpdateActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
+          items: {
+            $type: 'Microsoft.IDialog',
+            $ref: '#/definitions/Microsoft.IDialog',
+          },
+        },
+      },
+    },
+    'Microsoft.OnRepromptDialog': {
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On RepromptDialog',
+      description: "Actions to perform when 'RepromptDialog' event occurs.",
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.OnRepromptDialog),
+        condition: {
+          $role: 'expression',
+          title: 'Condition',
+          description: 'Condition (expression).',
+          examples: ['user.vip == true'],
+          type: 'string',
+        },
+        actions: {
+          type: 'array',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2249,22 +2390,22 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnTypingActivity': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'TypingActivity',
-      description: 'This defines the actions to take when a Typing activity is received',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
+      title: 'On Typing activity',
+      description: "Actions to perform on receipt of an activity with type 'Typing'.",
       type: 'object',
       properties: {
         ...$properties(SDKTypes.OnTypingActivity),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -2273,23 +2414,23 @@ export const appschema: JSONSchema6 = {
       },
     },
     'Microsoft.OnUnknownIntent': {
-      title: 'OnUnknownIntent',
+      title: 'On unknown intent',
       description:
-        'This defines the actions to take when an utterence is not recognized (aka, the None Intent). NOTE: UnknownIntent will defer to any specific intent that fires in a parent dialog',
-      $role: 'unionType(Microsoft.IOnEvent)',
+        "Action to perform when user input is unrecognized and if none of the 'on intent recognition' triggers match recognized intent.",
       type: 'object',
+      $role: 'unionType(Microsoft.ITriggerCondition)',
       properties: {
         ...$properties(SDKTypes.OnUnknownIntent),
-        constraint: {
+        condition: {
           $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
+          title: 'Condition',
+          description: 'Condition (expression).',
           examples: ['user.vip == true'],
           type: 'string',
         },
         actions: {
           type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
+          description: 'Sequence of actions to execute.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
