@@ -804,19 +804,14 @@ export const appschema: JSONSchema6 = {
     'Microsoft.DeleteProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Delete Property',
-      description: 'This is a action which allows you to remove a property from memory',
+      description: 'Delete a property and any value it holds.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DeleteProperty),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         property: {
           $role: 'expression',
           title: 'Property',
-          description: 'The Memory property path to delete',
+          description: 'Property to delete.',
           type: 'string',
         },
       },
