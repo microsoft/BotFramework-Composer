@@ -233,7 +233,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -405,7 +405,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -555,37 +555,9 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.ConfirmInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'ConfirmInput Dialog',
-      description: 'This represents a dialog which gathers a yes/no style responses',
+      title: 'Confirm input dialog',
+      description: 'Collect information - Ask for confirmation (yes or no).',
       type: 'object',
-      definitions: {
-        choice: {
-          type: 'object',
-          properties: {
-            value: {
-              type: 'string',
-              title: 'Value',
-              description: 'the value to return when selected.',
-            },
-            action: {
-              title: 'Action',
-              description: 'Card action for the choice',
-              type: 'object',
-            },
-            synonyms: {
-              type: 'array',
-              title: 'Synonyms',
-              description: 'The list of synonyms to recognize in addition to the value. This is optional.',
-              items: {
-                type: 'string',
-              },
-            },
-          },
-        },
-        CardAction: {
-          type: 'object',
-        },
-      },
       properties: {
         ...$properties(SDKTypes.ConfirmInput),
         id: {
@@ -660,7 +632,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -681,8 +653,8 @@ export const appschema: JSONSchema6 = {
         style: {
           type: 'string',
           enum: ['None', 'Auto', 'Inline', 'List', 'SuggestedAction', 'HeroCard'],
-          title: 'List Style',
-          description: 'The kind of choice list style to generate',
+          title: 'List style',
+          description: 'Style to render choices.',
           default: 'Auto',
         },
         choiceOptions: {
@@ -690,25 +662,25 @@ export const appschema: JSONSchema6 = {
           properties: {
             inlineSeparator: {
               type: 'string',
-              title: 'Inline Seperator',
+              title: 'Inline separator',
               description: 'Character used to separate individual choices when there are more than 2 choices',
               default: ', ',
             },
             inlineOr: {
               type: 'string',
-              title: 'Inline Or',
+              title: 'Inline or',
               description: 'Separator inserted between the choices when their are only 2 choices',
               default: ' or ',
             },
             inlineOrMore: {
               type: 'string',
-              title: 'Inline OrMore',
+              title: 'Inline or more',
               description: 'Separator inserted between the last 2 choices when their are more than 2 choices.',
               default: ', or ',
             },
             includeNumbers: {
               type: 'boolean',
-              title: 'Include Numbers',
+              title: 'Include numbers',
               description: 'If true, inline and list style choices will be prefixed with the index of the choice.',
               default: true,
             },
@@ -722,17 +694,17 @@ export const appschema: JSONSchema6 = {
               value: {
                 type: 'string',
                 title: 'Value',
-                description: 'the value to return when selected.',
+                description: 'Value to return when this choice is selected.',
               },
               // action: {
+              //   type: 'object',
               //   title: 'Action',
               //   description: 'Card action for the choice',
-              //   type: 'object',
               // },
               synonyms: {
                 type: 'array',
                 title: 'Synonyms',
-                description: 'The list of synonyms to recognize in addition to the value. This is optional.',
+                description: 'List of synonyms to recognize in addition to the value (optional)',
                 items: {
                   type: 'string',
                 },
@@ -872,7 +844,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -2129,7 +2101,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -2256,7 +2228,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
@@ -3228,7 +3200,7 @@ export const appschema: JSONSchema6 = {
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
-          description: "Collect information even if the specified  'property' is not empty.",
+          description: "Collect information even if the specified 'property' is not empty.",
           default: false,
           examples: [false],
         },
