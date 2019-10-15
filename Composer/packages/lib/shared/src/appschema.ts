@@ -525,6 +525,34 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
+    'Microsoft.ConditionalSelector': {
+      $role: 'unionType(Microsoft.ITriggerSelector)',
+      title: 'Condtional Trigger Selector',
+      description: 'Use a rule selector based on a condition',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.ConditionalSelector),
+        condition: {
+          $role: 'expression',
+          type: 'string',
+          description: 'String must contain an expression.',
+        },
+        ifTrue: {
+          $type: 'Microsoft.ITriggerSelector',
+          $ref: '#/definitions/Microsoft.ITriggerSelector',
+        },
+        ifFalse: {
+          $type: 'Microsoft.ITriggerSelector',
+          $ref: '#/definitions/Microsoft.ITriggerSelector',
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
     'Microsoft.ConfirmInput': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'ConfirmInput Dialog',
