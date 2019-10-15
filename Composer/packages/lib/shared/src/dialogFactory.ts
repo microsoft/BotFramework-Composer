@@ -79,12 +79,6 @@ export const needsDeepCopy = $type => {
 };
 
 export const deepCopyAction = async (data, lgApi) => {
-  // data.type is a SendActivity
-  // data.id is bound to copied SendActivity
-  // new id getDesignerId()
-  // data.activity references an LG template
-  // make new LG template based off of naming schema
-  // assign to data.activity
   if (!data || !data.$type) return {};
 
   // Deep copy the original data.
