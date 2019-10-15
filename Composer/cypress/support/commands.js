@@ -77,6 +77,5 @@ Cypress.Commands.add('addEventHandler', handler => {
     cy.get(`[data-testid="eventTypeDropDown"]`).click();
     cy.getByText('consultDialog').click();
   }
-  cy.get('input[data-testid="triggerName"]').type(`__TestTrigger`);
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });
