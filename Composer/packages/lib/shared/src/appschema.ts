@@ -1696,55 +1696,44 @@ export const appschema: JSONSchema6 = {
         ...$properties(SDKTypes.MentionEntityRecognizer),
       },
     },
-    // 'Microsoft.MultiLanguageRecognizer': {
-    //   $role: 'unionType(Microsoft.IRecognizer)',
-    //   title: 'Multi Language Recognizer',
-    //   description:
-    //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
-    //   type: 'object',
-    //   properties: {
-    //     ...$properties(SDKTypes.MultiLanguageRecognizer),
-    //     $copy: {
-    //       title: '$copy',
-    //       description: 'Copy the definition by id from a .dialog file.',
-    //       type: 'string',
-    //       pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-    //     },
-    //     $id: {
-    //       title: '$id',
-    //       description: 'Inline id for reuse of an inline definition',
-    //       type: 'string',
-    //       pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-    //     },
-    //     $designer: {
-    //       title: '$designer',
-    //       type: 'object',
-    //       description: 'Extra information for the Bot Framework Composer.',
-    //     },
-    //     languagePolicy: {
-    //       $type: 'Microsoft.ILanguagePolicy',
-    //       type: 'object',
-    //       title: 'Language Policy',
-    //       description: 'Defines languages to try per language.',
-    //       $ref: '#/definitions/Microsoft.ILanguagePolicy',
-    //     },
-    //     recognizers: {
-    //       type: 'object',
-    //       title: 'Recognizers',
-    //       description: 'Map of language -> IRecognizer',
-    //       additionalProperties: {
-    //         $type: 'Microsoft.IRecognizer',
-    //         $ref: '#/definitions/Microsoft.IRecognizer',
-    //       },
-    //     },
-    //   },
-    //   additionalProperties: false,
-    //   patternProperties: {
-    //     '^\\$': {
-    //       type: 'string',
-    //     },
-    //   },
-    // },
+    'Microsoft.MostSpecificSelector': {
+      $role: 'unionType(Microsoft.ITriggerSelector)',
+      title: 'Most Specific Trigger Selector',
+      description: 'Select most specific true events with optional additional selector',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.MostSpecificSelector),
+        selector: {
+          $type: 'Microsoft.ITriggerSelector',
+          $ref: '#/definitions/Microsoft.ITriggerSelector',
+        },
+      },
+    },
+    'Microsoft.MultiLanguageRecognizer': {
+      $role: 'unionType(Microsoft.IRecognizer)',
+      title: 'Multi-language recognizer',
+      description: 'Configure one recognizer per language and the specify the language fallback policy.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.MultiLanguageRecognizer),
+        languagePolicy: {
+          $type: 'Microsoft.LanguagePolicy',
+          type: 'object',
+          title: 'Language policy',
+          description: 'Defines fall back languages to try per user input language.',
+          $ref: '#/definitions/Microsoft.LanguagePolicy',
+        },
+        recognizers: {
+          type: 'object',
+          title: 'Recognizers',
+          description: 'Map of language -> IRecognizer',
+          additionalProperties: {
+            $type: 'Microsoft.IRecognizer',
+            $ref: '#/definitions/Microsoft.IRecognizer',
+          },
+        },
+      },
+    },
     'Microsoft.NumberEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Number Entity Recognizer',
