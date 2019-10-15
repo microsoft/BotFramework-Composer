@@ -49,7 +49,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to BFD controlling conversation flow. You can choose one of the following branching options to try:\r\n01 - IfCondition\r\n02 - SwitchCondition\r\n03 - ForeachStep\r\n04 - ForeachPageStep\r\n05 - Cancel\r\n06 - Endturn\r\n07 - RepeatDialog\r\nYou can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.\r\n")
+                .AssertReply(String.Format("Welcome to BFD controlling conversation flow. You can choose one of the following branching options to try:{0}01 - IfCondition{0}02 - SwitchCondition{0}03 - ForeachStep{0}04 - ForeachPageStep{0}05 - Cancel{0}06 - Endturn{0}07 - RepeatDialog{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.{0}", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, What's your age?")
             .Send("18")
