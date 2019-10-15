@@ -1,7 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
-import { visitAdaptiveAction, copyLgActivity } from './copyUtils';
+import { visitAdaptiveAction as walkAdaptiveAction, copyLgActivity } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -97,7 +97,7 @@ export const deepCopyAction = async (data, lgApi) => {
     }
   };
 
-  await visitAdaptiveAction(copy, async data => {
+  await walkAdaptiveAction(copy, async data => {
     overrideDesigner(data);
     await overrideContent(data);
   });
