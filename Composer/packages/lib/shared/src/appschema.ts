@@ -2609,15 +2609,10 @@ export const appschema: JSONSchema6 = {
     'Microsoft.RepeatDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
-      title: 'Repeat Dialog',
-      description: 'This is a action which repeats the current dialog with the same dialog.',
+      title: 'Repeat dialog',
+      description: 'Repeat current dialog.',
       properties: {
         ...$properties(SDKTypes.RepeatDialog),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
       },
     },
     'Microsoft.ReplaceDialog': {
