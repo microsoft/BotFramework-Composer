@@ -46,6 +46,7 @@ app.use(`${BASEURL}/api`, authorize, apiRouter);
 
 app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   if (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 });

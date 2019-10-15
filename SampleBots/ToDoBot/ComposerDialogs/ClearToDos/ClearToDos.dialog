@@ -4,14 +4,8 @@
     "id": "316336"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
-      "$designer": {
-        "id": "480162"
-      },
-       
       "actions": [
         {
           "$type": "Microsoft.EditArray",
@@ -49,5 +43,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
