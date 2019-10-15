@@ -1643,16 +1643,10 @@ export const appschema: JSONSchema6 = {
     'Microsoft.LanguagePolicy': {
       $role: 'unionType(Microsoft.ILanguagePolicy)',
       title: 'Language Policy',
-      description: 'This represents a dialog which gathers a DateTime in a specified range',
+      description: 'This represents a policy map for locales lookups to use for language',
       type: 'object',
-      additionalProperties: false,
       properties: {
         ...$properties(SDKTypes.LanguagePolicy),
-      },
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
       },
     },
     'Microsoft.LogAction': {
