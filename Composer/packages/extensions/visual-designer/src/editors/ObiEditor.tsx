@@ -201,11 +201,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const querySelectableElements = (): HTMLElement[] => {
-    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
-    return Array.from(items);
+  const querySelectableElements = (): NodeListOf<HTMLElement> => {
+    return document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
   };
-  const [selectableElements, setSelectableElements] = useState<HTMLElement[]>(querySelectableElements());
+  const [selectableElements, setSelectableElements] = useState<NodeListOf<HTMLElement>>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);

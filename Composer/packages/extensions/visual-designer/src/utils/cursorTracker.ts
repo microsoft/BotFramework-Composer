@@ -22,9 +22,9 @@ enum Axle {
  * @param assistAxle assist axle for calculating.
  * @param filterAttrs filtering elements
  */
-function locateNearestElement(
+function localeNearestElement(
   currentElement: HTMLElement,
-  elements: HTMLElement[],
+  elements: NodeListOf<HTMLElement>,
   boundRectKey: BoundRect,
   assistAxle: Axle,
   filterAttrs?: AttrNames[]
@@ -32,16 +32,15 @@ function locateNearestElement(
   let neareastElement: HTMLElement = currentElement;
   let minDistance = 10000;
   let distance = minDistance;
-  const elementCandidates =
-    filterAttrs && filterAttrs.length
-      ? elements.filter(el => filterAttrs.find(attr => !!el.getAttribute(attr)))
-      : elements;
+  const elementArr = Array.from(elements).filter(
+    element => !filterAttrs || (filterAttrs && filterAttrs.find(key => !!element.getAttribute(key)))
+  );
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
 
-  elementCandidates.forEach(element => {
+  elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
     if (boundRectKey === BoundRect.Top || boundRectKey === BoundRect.Left) {
       distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
@@ -71,145 +70,119 @@ function locateNearestElement(
   return neareastElement;
 }
 
-function isParentRect(parentRect, childRect) {
-  return (
-    parentRect.left < childRect.left &&
-    parentRect.right >= childRect.right &&
-    parentRect.top < childRect.top &&
-    parentRect.bottom > childRect.bottom
-  );
-}
-
-function findSelectableChild(element: HTMLElement, elementList: HTMLElement[]) {
-  const rect = element.getBoundingClientRect();
-  return elementList.find(el => {
-    const candidateRect = el.getBoundingClientRect();
-    return isParentRect(rect, candidateRect);
-  });
-}
-
-function findSelectableParent(element: HTMLElement, elementList: HTMLElement[]) {
-  const rect = element.getBoundingClientRect();
-  return elementList.find(el => {
-    const candidateRect = el.getBoundingClientRect();
-    return isParentRect(candidateRect, rect);
-  });
-}
-
-function handleTabMove(currentElement: HTMLElement, selectableElements: HTMLElement[], command: string) {
-  let nextElement: HTMLElement;
+function localeElementByTab(currentElement: HTMLElement, elements: NodeListOf<HTMLElement>, command: string) {
+  const elementArr = Array.from(elements);
+  const currentElementBounds = currentElement.getBoundingClientRect();
+  let bounds: ClientRect;
+  let selectedElement: HTMLElement = currentElement;
+  let selectedElementBounds: ClientRect;
+  let isInvolved = false;
+  const judgeElementRelation = (parentBounds, childBounds) => {
+    return (
+      parentBounds.left < childBounds.left &&
+      parentBounds.right >= childBounds.right &&
+      parentBounds.top < childBounds.top &&
+      parentBounds.bottom > childBounds.bottom
+    );
+  };
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
-    const selectableChild = findSelectableChild(currentElement, selectableElements);
-    if (selectableChild) {
-      // Tab to inner selectable element.
-      nextElement = selectableChild;
-    } else {
-      // Perform like presssing down arrow key.
-      nextElement = locateNearestElement(currentElement, selectableElements, BoundRect.Top, Axle.X, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-    }
-  } else if (command === KeyboardCommandTypes.Cursor.MovePrevious) {
-    const selectableParent = findSelectableParent(currentElement, selectableElements);
-    if (selectableParent) {
-      // Tab to parent.
-      nextElement = selectableParent;
-    } else {
-      // Perform like pressing up arrow key.
-      nextElement = locateNearestElement(currentElement, selectableElements, BoundRect.Bottom, Axle.X, [
-        AttrNames.NodeElement,
-        AttrNames.EdgeMenuElement,
-      ]);
-      // If prev element has child, tab to it before the element itself.
-      const selectableChildInNext = findSelectableChild(nextElement, selectableElements);
-      if (selectableChildInNext) {
-        nextElement = selectableChildInNext;
+    elementArr.forEach(element => {
+      bounds = element.getBoundingClientRect();
+      if (judgeElementRelation(currentElementBounds, bounds)) {
+        isInvolved = true;
+        selectedElement = element;
       }
+    });
+    if (!isInvolved) {
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
     }
   } else {
-    // By default, stay focus on the origin element.
-    nextElement = currentElement;
+    elementArr.forEach(element => {
+      bounds = element.getBoundingClientRect();
+      if (judgeElementRelation(bounds, currentElementBounds)) {
+        isInvolved = true;
+        selectedElement = element;
+      }
+    });
+    if (!isInvolved) {
+      selectedElement = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      selectedElementBounds = selectedElement.getBoundingClientRect();
+      elementArr.forEach(element => {
+        bounds = element.getBoundingClientRect();
+        if (judgeElementRelation(selectedElementBounds, bounds)) {
+          selectedElement = element;
+        }
+      });
+    }
   }
-
-  return nextElement;
+  return selectedElement;
 }
-
-function handleArrowkeyMove(currentElement: HTMLElement, selectableElements: HTMLElement[], command: string) {
-  let element: HTMLElement = currentElement;
-  let boundRect: BoundRect = BoundRect.Bottom;
-  let axle: Axle = Axle.X;
-  let filterAttrs: AttrNames[] = [];
-
-  switch (command) {
-    case KeyboardCommandTypes.Cursor.MoveDown:
-      boundRect = BoundRect.Top;
-      axle = Axle.X;
-      filterAttrs = [AttrNames.NodeElement];
-      break;
-    case KeyboardCommandTypes.Cursor.MoveUp:
-      boundRect = BoundRect.Bottom;
-      axle = Axle.X;
-      filterAttrs = [AttrNames.NodeElement];
-      break;
-    case KeyboardCommandTypes.Cursor.MoveLeft:
-      boundRect = BoundRect.Right;
-      axle = Axle.Y;
-      filterAttrs = [AttrNames.NodeElement];
-      break;
-    case KeyboardCommandTypes.Cursor.MoveRight:
-      boundRect = BoundRect.Left;
-      axle = Axle.Y;
-      filterAttrs = [AttrNames.NodeElement];
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveDown:
-      boundRect = BoundRect.Top;
-      axle = Axle.X;
-      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveUp:
-      boundRect = BoundRect.Bottom;
-      axle = Axle.X;
-      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
-      boundRect = BoundRect.Right;
-      axle = Axle.Y;
-      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-      break;
-    case KeyboardCommandTypes.Cursor.ShortMoveRight:
-      boundRect = BoundRect.Left;
-      axle = Axle.Y;
-      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-      break;
-    default:
-      return element;
-  }
-
-  element = locateNearestElement(currentElement, selectableElements, boundRect, axle, filterAttrs);
-  return element;
-}
-
 export function moveCursor(
-  selectableElements: HTMLElement[],
+  selectedElements: NodeListOf<HTMLElement>,
   id: string,
   command: string
 ): { [key: string]: string | undefined } {
-  const currentElement = selectableElements.find(
+  const currentElement = Array.from(selectedElements).find(
     element => element.dataset.selectedId === id || element.dataset.focusedId === id
   );
   if (!currentElement) return { selected: id, focused: undefined };
   let element: HTMLElement = currentElement;
   switch (command) {
-    case KeyboardCommandTypes.Cursor.MovePrevious:
-    case KeyboardCommandTypes.Cursor.MoveNext:
-      element = handleTabMove(currentElement, selectableElements, command);
+    case KeyboardCommandTypes.Cursor.MoveDown:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [AttrNames.NodeElement]);
       break;
-    default:
-      element = handleArrowkeyMove(currentElement, selectableElements, command);
+    case KeyboardCommandTypes.Cursor.MoveUp:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.MoveLeft:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
+        AttrNames.NodeElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.MoveRight:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [AttrNames.NodeElement]);
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveDown:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Top, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveUp:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Bottom, Axle.X, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Right, Axle.Y, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveRight:
+      element = localeNearestElement(currentElement, selectedElements, BoundRect.Left, Axle.Y, [
+        AttrNames.NodeElement,
+        AttrNames.EdgeMenuElement,
+      ]);
+      break;
+    case KeyboardCommandTypes.Cursor.MovePrevious:
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MovePrevious);
+      break;
+    case KeyboardCommandTypes.Cursor.MoveNext:
+      element = localeElementByTab(currentElement, selectedElements, KeyboardCommandTypes.Cursor.MoveNext);
       break;
   }
   element.scrollIntoView(true);
+  window.scrollBy(0, -10);
 
   return {
     selected: element.getAttribute(AttrNames.SelectedId) || id,
