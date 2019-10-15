@@ -75,7 +75,7 @@ export const appschema: JSONSchema6 = {
     'Microsoft.AdaptiveDialog': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Adaptive Dialog',
-      description: 'Configures a data driven dialog via a collection of actions/dialogs.',
+      description: 'Flexible, data driven dialog that can adapt to the conversation.',
       type: 'object',
       properties: {
         $type: {
@@ -106,73 +106,46 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
-        },
-        tags: {
-          type: 'array',
-          title: 'Tags',
-          description: 'Tags are optional strings that you can use to organize components',
-          examples: ['input', 'confirmation'],
-          items: {
-            type: 'string',
-          },
-        },
-        inputBindings: {
-          type: 'object',
-          title: 'Input Bindings',
-          description: 'This defines properties which be passed as arguments to this dialog',
-          examples: ['value.birthday'],
-          additionalProperties: {
-            type: 'string',
-          },
-        },
-        outputBinding: {
-          $role: 'memoryPath',
-          title: 'Output Property binding',
-          description: 'This is the property which the EndDialog(result) will be set to when EndDialog() is called',
-          examples: ['value.birthday'],
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+          description: 'Optional dialog ID.',
         },
         autoEndDialog: {
           type: 'boolean',
-          title: 'Auto End Dialog',
+          title: 'Auto end dialog',
           description:
-            'If this is true the dialog will automatically end when there are no more actions to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time.',
+            'If set to true the dialog will automatically end when there are no further actions.  If set to false, remember to manually end the dialog using EndDialog action.',
           default: 'true',
         },
         defaultResultProperty: {
           type: 'string',
-          title: 'Default Result Property',
-          description:
-            'Property path to the memory to return as the result of this dialog ending because AutoEndDialog is true and there are no more actions to execute.',
+          title: 'Default result property',
+          description: 'Value that will be passed back to the parent dialog.',
           default: 'dialog.result',
         },
         recognizer: {
           $type: 'Microsoft.IRecognizer',
           title: 'Recognizer',
-          description: 'Configured recognizer to generate intent and entites from user utterance',
+          description: 'Language Understanding recognizer that interprets user input into intent and entities.',
           $ref: '#/definitions/Microsoft.IRecognizer',
         },
-        generator: {
-          $type: 'Microsoft.ILanguageGenerator',
-          title: 'Language Generator',
-          description: 'Language generator to use for this dialog. (aka: LG file)',
-          $ref: '#/definitions/Microsoft.ILanguageGenerator',
-        },
-        // selector: {
-        //   $type: 'Microsoft.IEventSelector',
-        //   title: 'Selector',
-        //   description: 'Policy for how to select rule to execute next',
-        //   $ref: '#/definitions/Microsoft.IEventSelector',
+        // generator: {
+        //   $type: 'Microsoft.ILanguageGenerator',
+        //   title: 'Language Generator',
+        //   description: 'Language generator that generates bot responses.',
+        //   $ref: '#/definitions/Microsoft.ILanguageGenerator',
         // },
-        events: {
+        // selector: {
+        //   $type: 'Microsoft.ITriggerSelector',
+        //   title: 'Selector',
+        //   description: "Policy to determine which trigger is executed. Defaults to a 'best match' selector (optional).",
+        //   $ref: '#/definitions/Microsoft.ITriggerSelector',
+        // },
+        triggers: {
           type: 'array',
-          description: 'Events to use to evaluate conversation',
+          description: 'List of triggers defined for this dialog.',
+          title: 'Triggers',
           items: {
-            $type: 'Microsoft.IOnEvent',
-            $ref: '#/definitions/Microsoft.IOnEvent',
+            $type: 'Microsoft.ITriggerCondition',
+            $ref: '#/definitions/Microsoft.ITriggerCondition',
           },
         },
       },
