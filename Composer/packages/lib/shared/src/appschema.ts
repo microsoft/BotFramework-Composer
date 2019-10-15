@@ -164,8 +164,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -285,8 +284,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -338,8 +336,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -408,8 +405,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -649,8 +645,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -876,8 +871,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -996,8 +990,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1026,8 +1019,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1077,8 +1069,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1122,8 +1113,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1192,8 +1182,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1259,8 +1248,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1295,8 +1283,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1423,8 +1410,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1483,8 +1469,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -1572,8 +1557,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -2005,8 +1989,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -2060,8 +2043,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -2134,8 +2116,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -2278,8 +2259,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -2421,8 +2401,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3210,8 +3189,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3240,8 +3218,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3291,8 +3268,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3327,8 +3303,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3371,8 +3346,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
@@ -3458,8 +3432,7 @@ export const appschema: JSONSchema6 = {
         id: {
           type: 'string',
           title: 'Id',
-          description: '(Optional) id for the dialog',
-          examples: ['Dialog2'],
+          description: 'Optional dialog ID.',
         },
         tags: {
           type: 'array',
