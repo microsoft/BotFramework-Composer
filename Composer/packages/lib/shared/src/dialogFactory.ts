@@ -84,13 +84,12 @@ export const deepCopyAction = async (data, lgApi) => {
   // Deep copy the original data.
   const copy = JSON.parse(JSON.stringify(data));
 
-  // Copy the $designer part (if exists) or create new $designer part.
-  const overrideDesigner = data => {
+  const updateDesigner = data => {
     const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
     data.$designer = $designer;
   };
 
-  // Copy specific parts an Adaptive action cares.
+  // Copy raw LG activity.
   const overrideContent = async data => {
     if (data.$type === 'Microsoft.SendActivity') {
       data.activity = await copyLgActivity(data.activity, lgApi);
@@ -98,8 +97,10 @@ export const deepCopyAction = async (data, lgApi) => {
   };
 
   await walkAdaptiveAction(copy, async data => {
-    overrideDesigner(data);
-    await overrideContent(data);
+    updateDesigner(data);
+    if (needsDeepCopy(data.$type)) {
+      await overrideContent(data);
+    }
   });
 
   return copy;
