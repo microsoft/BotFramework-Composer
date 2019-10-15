@@ -1,14 +1,6 @@
 import { SDKTypes } from 'shared';
 
-export const ObiTypes = {
-  ...SDKTypes,
-
-  // TODO: are they outdated?
-  CodeStep: 'Microsoft.CodeStep',
-  QnARecognizer: 'Microsoft.QnARecognizer',
-  SaveEntity: 'Microsoft.SaveEntity',
-
-  // virtual
+const VirtualElementTypes = {
   RuleGroup: 'VisualSDK.RuleGroup',
   StepGroup: 'VisualSDK.StepGroup',
   ChoiceDiamond: 'VisualSDK.ChoiceDiamond',
@@ -20,4 +12,9 @@ export const ObiTypes = {
   UserAnswers: 'VisualSDK.UserAnswers',
   InvalidPromptBrick: 'VisualSDK.InvalidPromptBrick',
   ChoiceInputDetail: 'VisualSDK.ChoiceInputDetail',
+};
+
+export const ObiTypes = {
+  ...SDKTypes,
+  ...VirtualElementTypes,
 };
