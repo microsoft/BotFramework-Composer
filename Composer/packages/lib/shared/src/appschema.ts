@@ -1745,8 +1745,8 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.NumberInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'NumberInput Dialog',
-      description: 'This represents a dialog which gathers a decimal number in a specified range',
+      title: 'Number input dialog',
+      description: 'Collect information - Ask for a number.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.NumberInput),
