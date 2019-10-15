@@ -941,20 +941,16 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EndDialog': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'End Dialog',
-      description: 'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+      title: 'End dialog',
+      description: 'End this dialog.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.EndDialog),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
-        property: {
+        value: {
           $role: 'expression',
-          description: 'Specifies a path to memory should be returned as the result to the calling dialog.',
-          examples: ['dialog.name'],
+          title: 'Value',
+          description: 'Result value returned to the parent dialog.',
+          examples: ['dialog.userName', "'tomato'"],
           type: 'string',
         },
       },
