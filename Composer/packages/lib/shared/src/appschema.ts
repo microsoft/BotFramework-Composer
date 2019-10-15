@@ -1674,7 +1674,6 @@ export const appschema: JSONSchema6 = {
       title: 'LUIS Recognizer',
       description: 'LUIS recognizer.',
       type: 'object',
-      additionalProperties: false,
       properties: {
         ...$properties(SDKTypes.LuisRecognizer),
         applicationId: {
@@ -1684,11 +1683,6 @@ export const appschema: JSONSchema6 = {
           type: 'string',
         },
         endpointKey: {
-          type: 'string',
-        },
-      },
-      patternProperties: {
-        '^\\$': {
           type: 'string',
         },
       },
