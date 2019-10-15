@@ -60,7 +60,7 @@ export function createGroup(
   let position = 0;
   const result = dialogs
     .filter(dialog => {
-      return dialog.displayName.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+      return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
     })
     .reduce(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
@@ -124,7 +124,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       <TreeItem
         link={item}
         depth={nestingDepth}
-        isActive={createSelectedPath(item!.index) === selected}
+        isActive={createSelectedPath(item.index) === selected}
         onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
       />

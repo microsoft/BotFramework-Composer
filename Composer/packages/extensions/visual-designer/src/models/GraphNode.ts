@@ -6,7 +6,7 @@ import { Boundary } from './Boundary';
 class CoordPoint {
   x: number;
   y: number;
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }

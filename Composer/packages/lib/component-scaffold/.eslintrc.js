@@ -1,8 +1,7 @@
 module.exports = {
-  extends: [
-    '../../../.eslintrc.react.js',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-    'prettier/@typescript-eslint',
-  ],
+  extends: ['../../../.eslintrc.react.js'],
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
 };

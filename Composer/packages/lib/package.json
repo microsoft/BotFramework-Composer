@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build:code-editor": "cd code-editor && yarn build",
-    "build:shared-menus": "cd shared-menus && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn:build:code-editor\" \"yarn:build:shared-menus\""
+    "build:shared": "cd shared && yarn build",
+    "build:all": "concurrently --kill-others-on-fail \"yarn:build:code-editor\" \"yarn:build:shared\""
   },
   "author": "",
   "license": "ISC"

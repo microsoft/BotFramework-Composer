@@ -1,8 +1,7 @@
-import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared-menus';
+import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared';
 import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react';
-import nanoid from 'nanoid/generate';
 
 import { DialogInfo } from '../store/types';
 
@@ -53,19 +52,6 @@ export function getFriendlyName(data) {
   return data.$type;
 }
 
-export function getNewDesigner(name: string, description: string) {
-  const timestamp = new Date().toISOString();
-  return {
-    $designer: {
-      name,
-      description,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-      id: nanoid('1234567890', 6),
-    },
-  };
-}
-
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const optionalAttributes: { condition?: string; events?: string[] } = {};
@@ -75,6 +61,7 @@ export function insert(content, path: string, position: number | undefined, data
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
+
   const newStep = {
     $type: data.$type,
     ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),

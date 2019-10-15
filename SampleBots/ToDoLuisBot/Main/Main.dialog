@@ -6,6 +6,7 @@
     "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
   },
   "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
   "recognizer": "Main.lu",
   "generator": "common.lg",
   "triggers": [

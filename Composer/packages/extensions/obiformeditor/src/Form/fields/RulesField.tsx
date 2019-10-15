@@ -3,7 +3,7 @@ import formatMessage from 'format-message';
 import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
-import { createStepMenu, DialogGroup } from 'shared-menus';
+import { createStepMenu, DialogGroup } from 'shared';
 
 import { setOverridesOnField } from '../utils';
 

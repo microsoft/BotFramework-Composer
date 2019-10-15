@@ -1,6 +1,6 @@
 import formatMessage from 'format-message';
 
-import { SDKTypes } from './appschema';
+import { SDKTypes } from './viewUtils';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
