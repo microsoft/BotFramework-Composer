@@ -2537,7 +2537,19 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
-    'Microsoft.RegexEntityRecognizer': {
+    'Microsoft.RandomSelector': {
+      $role: 'unionType(Microsoft.ITriggerSelector)',
+      title: 'Random rule selector',
+      description: 'Select most specific true rule',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.RandomSelector),
+        seed: {
+          type: 'integer',
+        },
+      },
+    },
+    'Microsoft.RegExEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Regex Entity Recognizer',
       description: 'Recognizer which recognizes patterns of input based on regex.',
@@ -2558,38 +2570,38 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.RegexRecognizer': {
       $role: 'unionType(Microsoft.IRecognizer)',
-      title: 'Regex Recognizer',
-      description: 'Recognizer which uses regex expressions to generate intents and entities.',
+      title: 'Regex recognizer',
+      description: 'Use regular expressions to recognize intents and entities from user input.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.RegexRecognizer),
         intents: {
           type: 'array',
           title: 'RegEx patterns to intents',
-          description: 'Collection of patterns to match intents',
+          description: 'Collection of patterns to match for an intent.',
           items: {
             type: 'object',
             properties: {
               intent: {
                 type: 'string',
                 title: 'Intent',
-                description: 'The intent name',
+                description: 'The intent name.',
               },
               pattern: {
                 type: 'string',
                 title: 'Pattern',
-                description: 'The regular expression pattern for matching',
+                description: 'The regular expression pattern.',
               },
             },
           },
         },
         entities: {
           type: 'array',
-          title: 'Entity Recognizers',
-          description: 'Entity Recognizers to use',
+          title: 'Entity recognizers',
+          description: 'Collection of entity recognizers to use.',
           items: {
-            $type: 'Microsoft.EntityRecognizer',
-            $ref: '#/definitions/Microsoft.EntityRecognizer',
+            $type: 'Microsoft.EntityRecognizers',
+            $ref: '#/definitions/Microsoft.EntityRecognizers',
           },
         },
       },
