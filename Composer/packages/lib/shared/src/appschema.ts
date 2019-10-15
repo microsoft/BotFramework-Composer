@@ -894,20 +894,16 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.EmitEvent': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Emit Event Action',
-      description: 'This is a action which allows you to emit an event',
+      title: 'Emit a custom event',
+      description: 'Emit an event. Capture this event with a trigger.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.EmitEvent),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         eventName: {
           title: 'Event Name',
           description: 'The name of event to emit',
           type: 'string',
+          // TODO support anyOf
           // anyOf: [
           //   {
           //     enum: [
@@ -932,14 +928,14 @@ export const appschema: JSONSchema6 = {
         },
         eventValue: {
           type: 'object',
-          title: 'Event Value',
-          description: 'Optional value to emit along with the event',
+          title: 'Event value',
+          description: 'Value to emit with the event (optional).',
           additionalProperties: true,
         },
         bubbleEvent: {
           type: 'boolean',
-          title: 'Bubble Event',
-          description: 'If true this event should propagate to parent dialogs',
+          title: 'Bubble event',
+          description: 'If true this event is passed on to parent dialogs.',
         },
       },
     },
