@@ -1577,16 +1577,11 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.IfCondition': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'If Condition Action',
-      description: 'Action which conditionally decides which action to execute next.',
+      title: 'If condition',
+      description: 'Two-way branch the conversation flow based on a condition.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.IfCondition),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         condition: {
           $role: 'expression',
           title: 'Condition',
@@ -1596,8 +1591,8 @@ export const appschema: JSONSchema6 = {
         },
         actions: {
           type: 'array',
-          title: 'Actions: True Branch',
-          description: 'Action to execute if condition is true.',
+          title: 'Actions',
+          description: 'Actions to execute if condition is true.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1605,8 +1600,8 @@ export const appschema: JSONSchema6 = {
         },
         elseActions: {
           type: 'array',
-          title: 'Actions: False Branch',
-          description: 'Action to execute if condition is false.',
+          title: 'Else',
+          description: 'Actions to execute if condition is false.',
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
