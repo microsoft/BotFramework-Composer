@@ -12,17 +12,15 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Recognizers.Text;
 using Newtonsoft.Json;
 
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
-    public class TestBot : ActivityHandler
+    public class ComposerBot : ActivityHandler
     {
         private AdaptiveDialog rootDialog;
         private readonly ResourceExplorer resourceExplorer;
@@ -30,25 +28,19 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private DialogManager dialogManager;
         private ConversationState conversationState;
         private IStatePropertyAccessor<DialogState> dialogState;
-        private ISourceMap sourceMap;
+        private Source.IRegistry registry;
         private string rootDialogFile { get; set; }
+        private IBotTelemetryClient telemetryClient;
 
-        public TestBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap)
+        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry, IBotTelemetryClient telemetryClient)
         {
             this.conversationState = conversationState;
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
-            this.sourceMap = sourceMap;
+            this.registry = registry;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
-            // auto reload dialogs when file changes
-            this.resourceExplorer.Changed += (resources) =>
-            {
-                if (resources.Any(resource => resource.Id == ".dialog"))
-                {
-                    Task.Run(() => this.LoadRootDialogAsync());
-                }
-            };
+            this.telemetryClient = telemetryClient;
 
             LoadRootDialogAsync();
         }
@@ -56,12 +48,13 @@ namespace Microsoft.Bot.Builder.TestBot.Json
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, sourceMap);
+            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, registry);
             this.dialogManager = new DialogManager(rootDialog);
         }
 
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
+            this.telemetryClient.TrackTrace("Activity:" + turnContext.Activity.Text, Severity.Information, null);
             await this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
             await this.userState.SaveChangesAsync(turnContext, false, cancellationToken);
