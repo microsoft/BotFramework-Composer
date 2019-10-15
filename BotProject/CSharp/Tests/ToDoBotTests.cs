@@ -59,11 +59,11 @@ namespace Tests
             .Send("third")
                 .AssertReply("Successfully added a todo named third")
             .Send("show todos")
-                .AssertReply("Your most recent 3 tasks are\n* first\n* second\n* third\n")
+                .AssertReply("Your most recent 3 tasks are\r\n* first\n* second\n* third")
             .Send("delete todo named second")
                 .AssertReply("Successfully removed a todo named second")
             .Send("show todos")
-                .AssertReply("Your most recent 2 tasks are\n* first\n* third\n")
+                .AssertReply("Your most recent 2 tasks are\r\n* first\n* third")
             .StartTestAsync();
         }
 
