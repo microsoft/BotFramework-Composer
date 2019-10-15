@@ -31,7 +31,7 @@
 - IF: {count(user.todos) == 1}
   - Your most recent @{count(user.todos)} task is
 - ELSE:
-  - Your most recent @{count(user.todos)} task are
+  - Your most recent @{count(user.todos)} tasks are
 
 # help
 -I can add a todo, show todos, remove a todo, and clear all todos

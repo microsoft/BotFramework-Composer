@@ -181,7 +181,7 @@ namespace Tests
       .Send("11")
           .AssertReply("Hello, I'm Zoidberg. What is your name?")
       .Send("luhan")
-          .AssertReply("Hello luhan, nice to talk to you!")
+          .AssertReply("Hello luhan, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.")
       .Send("joke")
           .AssertReply("Why did the chicken cross the road?")
       .Send("Why?")
