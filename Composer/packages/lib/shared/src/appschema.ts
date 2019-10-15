@@ -2892,6 +2892,15 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
+    'Microsoft.TrueSelector': {
+      $role: 'unionType(Microsoft.ITriggerSelector)',
+      title: 'True Trigger Selector',
+      description: 'Selector for all true events',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.TrueSelector),
+      },
+    },
     'Microsoft.UrlEntityRecognizer': {
       $role: 'unionType(Microsoft.EntityRecognizers)',
       title: 'Url Entity Recognizer',
