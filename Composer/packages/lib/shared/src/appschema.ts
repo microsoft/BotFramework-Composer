@@ -1073,45 +1073,27 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.Foreach': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Foreach Action',
-      description: 'Action which executes actions per item in a collection.',
+      title: 'For each item',
+      description: 'Execute actions on each item in an a collection.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.Foreach),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
-        listProperty: {
+        itemsProperty: {
           $role: 'expression',
-          title: 'List Property',
-          description: 'Expression to evaluate.',
+          title: 'Items property',
+          description: 'Property that holds the array.',
           examples: ['user.todoList'],
           type: 'string',
         },
         actions: {
           type: 'array',
           title: 'Actions',
-          description: 'Actions to execute',
+          description:
+            "Actions to execute for each item. Use '$foreach.value' to access the value of each item. Use '$foreach.index' to access the index of each item.",
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-        indexProperty: {
-          $role: 'expression',
-          title: 'Index Property',
-          description: 'The memory path which refers to the index of the item',
-          default: 'dialog.index',
-          type: 'string',
-        },
-        valueProperty: {
-          $role: 'expression',
-          title: 'Value Property',
-          description: 'The memory path which refers to the value of the item',
-          default: 'dialog.value',
-          type: 'string',
         },
       },
     },
