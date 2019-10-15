@@ -395,5 +395,8 @@ SampleBots/*/*/settings
 #tmp.zip
 *.zip
 
+#DS_Store
+*.DS_Store
+
 # VsCode
 Composer/.vscode/
