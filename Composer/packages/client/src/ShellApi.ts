@@ -136,7 +136,7 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
