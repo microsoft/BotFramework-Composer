@@ -15,6 +15,7 @@ import { TestController } from './../../TestController';
 
 const links = [
   { key: '/setting/dialog-settings', name: formatMessage('Dialog settings') },
+  { key: '/setting/deployment', name: formatMessage('Deployment') },
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
