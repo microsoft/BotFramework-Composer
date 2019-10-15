@@ -149,7 +149,6 @@ export const TestController: React.FC = () => {
               iconName: 'OpenInNewTab',
             }}
             onClick={async () => {
-              await getConnect('');
               openInEmulator(
                 botEndpoint || 'http://localhost:3979/api/messages',
                 settings.MicrosoftAppId && settings.MicrosoftAppPassword

@@ -31,8 +31,7 @@ const DateWidget = props => {
   }
 };
 
-export const RemotePublish = props => {
-  props;
+export const RemotePublish = () => {
   const { state, actions } = useContext(StoreContext);
   const [dialogHidden, setDialogHidden] = useState(true);
   const [publishAction, setPublishAction] = useState('');
@@ -42,9 +41,10 @@ export const RemotePublish = props => {
     type: DialogType.normal,
     children: [],
   });
-  const { publishVersions, botEndpoint, settings, publishStatus } = state;
+  const { publishVersions, prodBotEndpoint, settings, publishStatus } = state;
 
   useEffect(() => {
+    actions.getConnect('production');
     actions.getPublishHistory();
   }, []);
 
@@ -126,10 +126,9 @@ export const RemotePublish = props => {
     actions.getPublishHistory();
   };
 
-  const openEmulator = async () => {
-    await actions.getConnect('production');
+  const openEmulator = () => {
     openInEmulator(
-      botEndpoint,
+      prodBotEndpoint,
       settings.MicrosoftAppId && settings.MicrosoftAppPassword
         ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
         : { MicrosoftAppPassword: '', MicrosoftAppId: '' }

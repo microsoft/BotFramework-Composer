@@ -37,9 +37,8 @@ export const getConnect: ActionCreator = async (store, env) => {
   try {
     const res = await axios.get(path);
     store.dispatch({
-      type: ActionTypes.CONNECT_BOT_SUCCESS,
+      type: ActionTypes.GET_ENDPOINT_SUCCESS,
       payload: {
-        status: 'connected',
         botEndpoint: res.data.botEndpoint,
       },
     });

@@ -99,6 +99,11 @@ const setBotStatus = (state, { status, botEndpoint }) => {
   return state;
 };
 
+const updateProdEndpoint = (state, { botEndpoint }) => {
+  state.prodBotEndpoint = botEndpoint;
+  return state;
+};
+
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -255,4 +260,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
+  [ActionTypes.GET_ENDPOINT_SUCCESS]: updateProdEndpoint,
 } as { [type in ActionTypes]: ReducerFunc });
