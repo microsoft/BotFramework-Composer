@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
     public class Program
     {

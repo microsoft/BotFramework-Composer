@@ -6,7 +6,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
     [Route("api/admin")]
     [ApiController]

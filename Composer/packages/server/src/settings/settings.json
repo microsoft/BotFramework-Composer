@@ -2,6 +2,7 @@
   "development": {
     "botRuntime": "http://localhost:3979",
     "assetsLibray": "./assets",
+    "runtimeFolder": "../../../BotProject/Templates",
     "defaultFolder": "../../../SampleBots"
   },
   "container": {
