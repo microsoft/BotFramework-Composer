@@ -152,7 +152,7 @@ export const textFieldlabel = {
   },
 };
 
-export const intentName = {
+export const intent = {
   fieldGroup: {
     width: 200,
   },

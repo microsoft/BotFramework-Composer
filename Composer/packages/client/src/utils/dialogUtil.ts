@@ -18,13 +18,13 @@ export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
   eventType: string;
-  intentName: string;
+  intent: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  intentName?: string;
   eventType?: string;
+  intent?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -58,8 +58,8 @@ export function insert(content, path: string, position: number | undefined, data
     optionalAttributes.events = [data.eventType];
   }
 
-  if (data.intentName) {
-    optionalAttributes.intent = data.intentName;
+  if (data.intent) {
+    optionalAttributes.intent = data.intent;
   }
 
   const newStep = {
