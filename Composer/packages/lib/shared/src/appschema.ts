@@ -2656,28 +2656,23 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.SetProperty': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Set Property Action',
-      description: 'This action allows you to set memory to the value of an expression',
+      title: 'Set property',
+      description: 'Set property to a value.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.SetProperty),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         property: {
           $role: 'expression',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'Property (named location to store information).',
           examples: ['user.age'],
           type: 'string',
         },
         value: {
           $role: 'expression',
           title: 'Value',
-          description: 'Expression against memory to use to get the value.',
-          examples: ['dialog.result'],
+          description: 'New value or expression.',
+          examples: ["'milk'", 'dialog.favColor', "dialog.favColor == 'red'"],
           type: 'string',
         },
       },
