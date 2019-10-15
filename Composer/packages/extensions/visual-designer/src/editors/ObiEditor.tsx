@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
@@ -44,19 +43,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
     setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
-  });
-
-  const querySelectableElements = (): HTMLElement[] => {
-    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
-    return Array.from(items);
-  };
-  const [selectableElements, setSelectableElements] = useState<HTMLElement[]>(querySelectableElements());
-
-  const nodeIndexGenerator = useRef(new NodeIndexGenerator());
-  const nodeItems = nodeIndexGenerator.current.getItemList();
-  const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
-    getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
-    selectedIds: [],
   });
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -165,10 +151,38 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       selectedIds: [],
     });
   };
+  const nodeIndexGenerator = useRef(new NodeIndexGenerator());
+  const nodeItems = nodeIndexGenerator.current.getItemList();
+  const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
+    getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
+    selectedIds: [],
+  });
+
+  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
+
   useEffect((): void => {
+    if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else {
+      setKeyBoardStatus('normal');
+    }
+
     // Notify container at every selection change.
     onSelect(selectionContext.selectedIds);
   }, [focusedId, selectionContext]);
+
+  useEffect(
+    (): void => {
+      selection.setItems(nodeIndexGenerator.current.getItemList());
+    }
+  );
+
+  useEffect((): void => {
+    resetSelectionData();
+    setSelectableElements(querySelectableElements());
+  }, [data, focusedEvent]);
 
   const selection = new Selection({
     onSelectionChanged: (): void => {
@@ -187,16 +201,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  useEffect(
-    (): void => {
-      selection.setItems(nodeIndexGenerator.current.getItemList());
-    }
-  );
-
-  useEffect((): void => {
-    resetSelectionData();
-    setSelectableElements(querySelectableElements());
-  }, [data, focusedEvent]);
+  const querySelectableElements = (): HTMLElement[] => {
+    const items: NodeListOf<HTMLElement> = document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
+    return Array.from(items);
+  };
+  const [selectableElements, setSelectableElements] = useState<HTMLElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -269,7 +278,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   return (
     <SelectionContext.Provider value={selectionContext}>
       <ClipboardContext.Provider value={clipboardContext}>
-        <KeyboardZone onCommand={handleKeyboardCommand}>
+        <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
           <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
             <div
               tabIndex={0}
