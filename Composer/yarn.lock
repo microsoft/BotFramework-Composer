@@ -1432,10 +1432,10 @@
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"@bfcomposer/monaco-editor@^0.17.4":
-  version "0.17.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.4.tgz#bc2d75c48fcbee1121ee4c168c508de81bcd2ee9"
-  integrity sha1-vC11xI/L7hEh7kwWjFCN6BvNLuk=
+"@bfcomposer/monaco-editor@^0.17.5":
+  version "0.17.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.5.tgz#ceefd34199784d3f2fb745191cafab13bc88a268"
+  integrity sha1-zu/TQZl4TT8vt0UZHK+rE7yIomg=
 
 "@bfcomposer/react-jsonschema-form@1.6.5":
   version "1.6.5"
@@ -1448,12 +1448,12 @@
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
 
-"@bfcomposer/react-monaco-editor@^0.30.4":
-  version "0.30.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.4.tgz#3b7a6c60011218d3bc51f7eca5673341376db728"
-  integrity sha1-O3psYAESGNO8UffspWczQTdttyg=
+"@bfcomposer/react-monaco-editor@^0.30.5":
+  version "0.30.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.5.tgz#f0936110d43b7cbc72dd4bdf2107cb9895ec84c3"
+  integrity sha1-8JNhENQ7fLxy3UvfIQfLmJXshMM=
   dependencies:
-    "@bfcomposer/monaco-editor" "^0.17.4"
+    "@bfcomposer/monaco-editor" "^0.17.5"
     "@types/react" "^16.9.2"
     prop-types "^15.7.2"
 
@@ -5045,9 +5045,9 @@ botbuilder-expression-parser@^4.5.9:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz":
-  version "4.6.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.6.tgz#2c699f475c05492239d83ab0863c8c85d369a284"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz":
+  version "4.6.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz#24367ee35e33efdae7a31e390ba7d19a7d9166da"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"

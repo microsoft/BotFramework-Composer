@@ -74,7 +74,7 @@ export const ShellApi: React.FC = () => {
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
-  const updateLgFile = useDebouncedFunc(actions.updateLgFile);
+  const updateLgFile = actions.updateLgFile;
   const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
