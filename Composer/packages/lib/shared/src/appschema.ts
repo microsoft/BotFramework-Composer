@@ -1149,54 +1149,48 @@ export const appschema: JSONSchema6 = {
     'Microsoft.HttpRequest': {
       $role: 'unionType(Microsoft.IDialog)',
       type: 'object',
-      title: 'Http Request',
-      description: 'This is a action which replaces the current dialog with the target dialog',
+      title: 'HTTP request',
+      description: 'Make a HTTP request.',
       properties: {
         ...$properties(SDKTypes.HttpRequest),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         method: {
           type: 'string',
-          title: 'Method',
-          description: 'The HTTP method to use',
-          enum: ['GET', 'POST'],
+          title: 'HTTP method',
+          description: 'HTTP method to use.',
+          enum: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
           examples: ['GET', 'POST'],
         },
         url: {
           type: 'string',
           title: 'Url',
-          description: 'The url to call. This may reference properties in memory as {property.name}.',
+          description: 'URL to call (supports data binding).',
           examples: ['https://contoso.com'],
         },
         body: {
           type: 'object',
           title: 'Body',
-          description: 'The body of the HTTP request. This may reference properties in memory as {property.name}.',
+          description: 'Body to include in the HTTP call (supports data binding).',
           additionalProperties: true,
         },
-        property: {
+        resultProperty: {
           $role: 'expression',
-          title: 'Property',
+          title: 'Result property',
           description:
-            'The property to store the result of the HTTP call in. The result will have 4 properties from the http response: statusCode|reasonPhrase|content|headers.  If the content is json it will be an deserialized object, otherwise it will be a string',
+            'Property to store the result of this action. The result includes 4 properties from the http response: statusCode, reasonPhrase, content and headers. If the content is json it will be a deserialized object.',
           examples: ['dialog.contosodata'],
           type: 'string',
         },
         headers: {
           type: 'object',
-          additionalProperties: true,
-          title: 'Http headers',
-          description:
-            'Additional headers to include with the HTTP request. This may reference properties in memory as {property.name}.',
+          additionProperties: true,
+          title: 'Headers',
+          description: 'One or more headers to include in the request (supports data binding).',
         },
         responseType: {
           type: 'string',
-          title: 'Response Type',
+          title: 'Response type',
           description:
-            'Describes how to parse the response from the http request. If Activity or Activities, then the they will be sent to the user.',
+            "Defines the type of HTTP response. Automatically calls the 'Send a response' action if set to 'Activity' or 'Activities'.",
           enum: ['None', 'Json', 'Activity', 'Activities'],
           default: 'Json',
         },
