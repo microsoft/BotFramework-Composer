@@ -872,16 +872,11 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.DebugBreak': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Debugger Break Action',
-      description: 'If debugger is attached, do a debugger break at this point',
+      title: 'Debugger break',
+      description: 'If debugger is attached, stop the execution at this point in the conversation.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DebugBreak),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
       },
       additionalProperties: false,
       patternProperties: {
