@@ -2853,6 +2853,20 @@ export const appschema: JSONSchema6 = {
         },
       },
     },
+    'Microsoft.TextTemplate': {
+      $role: 'unionType(Microsoft.ITextTemplate)',
+      title: 'Microsoft TextTemplate',
+      description: 'Lg tempalte to evaluate to create text',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.TextTemplate),
+        template: {
+          title: 'Template',
+          Description: 'Language Generator template to evaluate to create the text',
+          type: 'string',
+        },
+      },
+    },
     'Microsoft.TraceActivity': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Trace Activity Step',
