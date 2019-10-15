@@ -14,7 +14,6 @@ const KeyNameByModifierAttr = {
 const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface KeyboardZoneProps {
-  when: string;
   onCommand: (action, e: KeyboardEvent) => object | void;
 }
 
