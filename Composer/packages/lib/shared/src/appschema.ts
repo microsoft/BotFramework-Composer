@@ -2755,8 +2755,8 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.TextInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'TextInput Dialog',
-      description: 'This represents a dialog which gathers a text from the user',
+      title: 'Text input dialog',
+      description: 'Collection information - Ask for a word or sentence.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.TextInput),
