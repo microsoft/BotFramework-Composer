@@ -1219,75 +1219,74 @@ export const appschema: JSONSchema6 = {
       //   ],
     },
     'Microsoft.IDialog': {
-      title: 'Microsoft IDialog',
-      description: 'Union of components which implement the IDialog interface',
+      title: 'Microsoft Dialogs',
+      description: 'Union of components which implement the Dialog contract',
       $role: 'unionType',
       oneOf: [
         {
           title: 'Microsoft.AdaptiveDialog',
-          description: 'Configures a data driven dialog via a collection of actions/dialogs.',
+          description: 'Flexible, data driven dialog that can adapt to the conversation.',
           $ref: '#/definitions/Microsoft.AdaptiveDialog',
         },
         {
           title: 'Microsoft.AttachmentInput',
-          description: 'This represents a dialog which gathers an attachment such as image or music',
+          description: 'Collect information - Ask for a file or image.',
           $ref: '#/definitions/Microsoft.AttachmentInput',
         },
         {
           title: 'Microsoft.BeginDialog',
-          description: 'Action which begins another dialog (and when that dialog is done, it will return the caller).',
+          description: 'Begin another dialog.',
           $ref: '#/definitions/Microsoft.BeginDialog',
         },
         {
           title: 'Microsoft.CancelAllDialogs',
           description:
-            'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
+            'Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.',
           $ref: '#/definitions/Microsoft.CancelAllDialogs',
         },
         {
           title: 'Microsoft.ChoiceInput',
-          description: 'This represents a dialog which gathers a choice responses',
+          description: 'Collect information - Pick from a list of choices',
           $ref: '#/definitions/Microsoft.ChoiceInput',
         },
         {
           title: 'Microsoft.ConfirmInput',
-          description: 'This represents a dialog which gathers a yes/no style responses',
+          description: 'Collect information - Ask for confirmation (yes or no).',
           $ref: '#/definitions/Microsoft.ConfirmInput',
         },
         {
           title: 'Microsoft.DateTimeInput',
-          description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+          description: 'Collect information - Ask for date and/ or time',
           $ref: '#/definitions/Microsoft.DateTimeInput',
         },
         {
           title: 'Microsoft.DebugBreak',
-          description: 'If debugger is attached, do a debugger break at this point',
+          description: 'If debugger is attached, stop the execution at this point in the conversation.',
           $ref: '#/definitions/Microsoft.DebugBreak',
         },
         {
           title: 'Microsoft.DeleteProperty',
-          description: 'This is a action which allows you to remove a property from memory',
+          description: 'Delete a property and any value it holds.',
           $ref: '#/definitions/Microsoft.DeleteProperty',
         },
         {
           title: 'Microsoft.EditActions',
-          description: 'Edit current dialog with changeType and Actions',
+          description: 'Edit the current list of actions.',
           $ref: '#/definitions/Microsoft.EditActions',
         },
         {
           title: 'Microsoft.EditArray',
-          description: 'This is a action which allows you to modify an array in memory',
+          description: 'Modify an array in memory',
           $ref: '#/definitions/Microsoft.EditArray',
         },
         {
           title: 'Microsoft.EmitEvent',
-          description: 'This is a action which allows you to emit an event',
+          description: 'Emit an event. Capture this event with a trigger.',
           $ref: '#/definitions/Microsoft.EmitEvent',
         },
         {
           title: 'Microsoft.EndDialog',
-          description:
-            'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
+          description: 'End this dialog.',
           $ref: '#/definitions/Microsoft.EndDialog',
         },
         {
@@ -1297,83 +1296,83 @@ export const appschema: JSONSchema6 = {
         },
         {
           title: 'Microsoft.Foreach',
-          description: 'Action which executes actions per item in a collection.',
+          description: 'Execute actions on each item in an a collection.',
           $ref: '#/definitions/Microsoft.Foreach',
         },
         {
           title: 'Microsoft.ForeachPage',
-          description: 'Action which execute actions per item page in a collection.',
+          description: 'Execute actions on each page (collection of items) in an array.',
           $ref: '#/definitions/Microsoft.ForeachPage',
         },
         {
           title: 'Microsoft.HttpRequest',
-          description: 'This is a action which replaces the current dialog with the target dialog',
+          description: 'Make a HTTP request.',
           $ref: '#/definitions/Microsoft.HttpRequest',
         },
         {
           title: 'Microsoft.IfCondition',
-          description: 'Action which conditionally decides which action to execute next.',
+          description: 'Two-way branch the conversation flow based on a condition.',
           $ref: '#/definitions/Microsoft.IfCondition',
         },
         {
           title: 'Microsoft.InitProperty',
-          description: 'This action allows you to innitial a property to either an object or array',
+          description: 'Define and initialize a property to be an array or object.',
           $ref: '#/definitions/Microsoft.InitProperty',
         },
         {
           title: 'Microsoft.LogAction',
           description:
-            'This is a action which writes to console.log and optional creates a TraceActivity around a text binding',
+            'Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).',
           $ref: '#/definitions/Microsoft.LogAction',
         },
         {
           title: 'Microsoft.NumberInput',
-          description: 'This represents a dialog which gathers a decimal number in a specified range',
+          description: 'Collect information - Ask for a number.',
           $ref: '#/definitions/Microsoft.NumberInput',
         },
         {
           title: 'Microsoft.OAuthInput',
-          description: 'This represents a dialog which gathers an OAuth token from user',
+          description: 'Collect login information.',
           $ref: '#/definitions/Microsoft.OAuthInput',
         },
         {
           title: 'Microsoft.QnAMakerDialog',
-          description: 'This represents a dialog which is driven by a call to QnAMaker.ai knowledge base',
+          description: 'Dialog which uses QnAMAker knowledge base to answer questions.',
           $ref: '#/definitions/Microsoft.QnAMakerDialog',
         },
         {
           title: 'Microsoft.RepeatDialog',
-          description: 'This is a action which repeats the current dialog with the same dialog.',
+          description: 'Repeat current dialog.',
           $ref: '#/definitions/Microsoft.RepeatDialog',
         },
         {
           title: 'Microsoft.ReplaceDialog',
-          description: 'This is a action which replaces the current dialog with the target dialog',
+          description: 'Replace current dialog with another dialog.',
           $ref: '#/definitions/Microsoft.ReplaceDialog',
         },
         {
           title: 'Microsoft.SendActivity',
-          description: 'This is a action which sends an activity to the user',
+          description: 'Respond with an activity.',
           $ref: '#/definitions/Microsoft.SendActivity',
         },
         {
           title: 'Microsoft.SetProperty',
-          description: 'This action allows you to set memory to the value of an expression',
+          description: 'Set property to a value.',
           $ref: '#/definitions/Microsoft.SetProperty',
         },
         {
           title: 'Microsoft.SwitchCondition',
-          description: 'Action which conditionally decides which action to execute next.',
+          description: 'Execute different actions based on the value of a property.',
           $ref: '#/definitions/Microsoft.SwitchCondition',
         },
         {
           title: 'Microsoft.TextInput',
-          description: 'This represents a dialog which gathers a text from the user',
+          description: 'Collection information - Ask for a word or sentence.',
           $ref: '#/definitions/Microsoft.TextInput',
         },
         {
           title: 'Microsoft.TraceActivity',
-          description: 'This is a action which sends an TraceActivity to the transcript',
+          description: 'Send a trace activity to the transcript logger and/ or Bot Framework Emulator.',
           $ref: '#/definitions/Microsoft.TraceActivity',
         },
         {
