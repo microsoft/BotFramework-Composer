@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
@@ -28,6 +28,11 @@ export function RichEditor(props: RichEditorProps) {
     }
   );
 
+  const baseEditor = <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />;
+  // CodeRange editing require an non-controled/refresh component, so here make it memoed
+  const memoEditor = useMemo(() => {
+    return baseEditor;
+  }, []);
   const getHeight = () => {
     if (height === null || height === undefined) {
       return '100%';
@@ -50,7 +55,7 @@ export function RichEditor(props: RichEditorProps) {
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
       >
-        <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
+        {props.codeRange ? memoEditor : baseEditor}
       </div>
       {isInvalid && (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>
