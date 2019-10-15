@@ -1099,27 +1099,22 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.ForeachPage': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Foreach Page Action',
-      description: 'Action which execute actions per item page in a collection.',
+      title: 'For each page',
+      description: 'Execute actions on each page (collection of items) in an array.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.ForeachPage),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
-        listProperty: {
+        itemsProperty: {
           $role: 'expression',
-          title: 'List Property',
-          description: 'Expression to evaluate.',
+          title: 'Items property',
+          description: 'Property that holds the array.',
           examples: ['user.todoList'],
           type: 'string',
         },
         actions: {
           type: 'array',
           title: 'Actions',
-          description: 'Actions to execute',
+          description: "Actions to execute for each page. Use '$foreach.page' to access each page.",
           items: {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
@@ -1127,16 +1122,9 @@ export const appschema: JSONSchema6 = {
         },
         pageSize: {
           type: 'integer',
-          title: 'Page Size',
-          description: 'The page size',
+          title: 'Page size',
+          description: 'Number of items in each page.',
           default: 10,
-        },
-        valueProperty: {
-          $role: 'expression',
-          title: 'Value Property',
-          description: 'The memory path which refers to the value of the item',
-          default: 'dialog.value',
-          type: 'string',
         },
       },
     },
