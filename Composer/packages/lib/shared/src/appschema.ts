@@ -1,26 +1,16 @@
-import { JSONSchema6 } from 'json-schema';
+import { SDKTypes, OBISchema } from './types';
 
-import { SDKTypes } from './viewUtils';
-
-export const FIELDS_TO_HIDE = [
-  '$id',
-  '$type',
-  '$copy',
-  '$designer',
-  'inputBindings',
-  'outputBinding',
-  'selector',
-  'id',
-  'tags',
-];
+export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'selector', 'id', 'tags'];
 
 /** Types that can be represented by a sub tree in the graph */
 export const COMPOUND_TYPES = [
-  'Microsoft.AdaptiveDialog',
-  'Microsoft.OnEvent',
-  'Microsoft.OnIntent',
-  'Microsoft.OnUnknownIntent',
-  'Microsoft.OnConversationUpdateActivity',
+  SDKTypes.AdaptiveDialog,
+  SDKTypes.OnCondition,
+  SDKTypes.OnDialogEvent,
+  SDKTypes.OnCustomEvent,
+  SDKTypes.OnIntent,
+  SDKTypes.OnUnknownIntent,
+  SDKTypes.OnConversationUpdateActivity,
 ];
 
 const $properties = ($type: SDKTypes) => {
@@ -52,7 +42,7 @@ const $properties = ($type: SDKTypes) => {
   };
 };
 
-export const appschema: JSONSchema6 = {
+export const appschema: OBISchema = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
   $id: 'app.schema',
