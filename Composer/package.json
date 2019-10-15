@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "yarn build:dev",
-    "build:prod": "yarn build:lib && yarn build:extensions && yarn build:server && yarn build:client && yarn build:tools",
+    "build:prod": "yarn build:lib && yarn build:extensions && yarn build:tools && yarn build:server && yarn build:client ",
     "build:dev": "yarn build:lib && yarn build:extensions && yarn build:tools",
     "build:lib": "cd packages/lib && yarn build:all",
     "build:extensions": "cd packages/extensions && yarn build:all",
