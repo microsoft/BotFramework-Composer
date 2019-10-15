@@ -42,7 +42,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\r\n01 - Actions\r\n02 - EndTurn\r\n03 - IfCondiftion\r\n04 - EditArray, Foreach\r\n05 - EndDialog\r\n06 - HttpRequest\r\n07 - SwitchCondition\r\n08 - RepeatDialog\r\n09 - TraceAndLog\r\n10 - EditActions\r\n11 - ReplaceDialog\r\n12 - EmitEvent\r\n")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine))
       .Send("01")
           .AssertReply("Step 1")
           .AssertReply("Step 2")
