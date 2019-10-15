@@ -18,12 +18,12 @@ export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
   eventType: string;
-  name: string;
+  intentName: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  name?: string;
+  intentName?: string;
   eventType?: string;
 }
 
@@ -53,14 +53,18 @@ export function getFriendlyName(data) {
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
-  const optionalAttributes: { constraint?: string; events?: string[] } = {};
+  const optionalAttributes: { intent?: string; events?: string[] } = {};
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
 
+  if (data.intentName) {
+    optionalAttributes.intent = data.intentName;
+  }
+
   const newStep = {
     $type: data.$type,
-    ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),
+    ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;

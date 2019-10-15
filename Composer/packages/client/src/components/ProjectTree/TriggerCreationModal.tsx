@@ -16,7 +16,7 @@ import {
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, name, dialogWindow } from './styles';
+import { styles, dropdownStyles, intentName, dialogWindow } from './styles';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -24,9 +24,9 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { name, $type, eventType } = data;
-  if (!name || !isValidName(name)) {
-    errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+  const { intentName, $type, eventType } = data;
+  if (intentName && !isValidName(intentName)) {
+    errors.intentName = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if ($type === eventTypeKey && !eventType) {
@@ -49,7 +49,7 @@ interface TriggerCreationModalProps {
 const initialFormData: TriggerFormData = {
   errors: {},
   $type: intentTypeKey,
-  name: '',
+  intentName: '',
   eventType: '',
 };
 
@@ -98,6 +98,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
   );
   const showEventDropDown = formData.$type === eventTypeKey;
+  const showNameField = formData.$type === intentTypeKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -135,13 +136,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'eventTypeDropDown'}
             />
           )}
-          <TextField
-            label={formatMessage('What is the name of this trigger?')}
-            styles={name}
-            onChange={updateForm('name')}
-            errorMessage={formData.errors.name}
-            data-testid={'triggerName'}
-          />
+          {showNameField && (
+            <TextField
+              label={formatMessage('What is the name of this trigger?')}
+              styles={intentName}
+              onChange={updateForm('intentName')}
+              errorMessage={formData.errors.intentName}
+              data-testid={'triggerName'}
+            />
+          )}
         </Stack>
       </div>
       <DialogFooter>
