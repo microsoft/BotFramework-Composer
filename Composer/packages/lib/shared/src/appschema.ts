@@ -767,8 +767,8 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.DateTimeInput': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'DateTimeInput Dialog',
-      description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
+      title: 'Date/time input dialog',
+      description: 'Collect information - Ask for date and/ or time',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.DateTimeInput),
@@ -858,8 +858,8 @@ export const appschema: JSONSchema6 = {
         },
         defaultLocale: {
           type: 'string',
-          title: 'Default Locale',
-          description: 'The prompts default locale that should be recognized.',
+          title: 'Default locale',
+          description: 'Default locale.',
           default: 'en-us',
         },
       },
