@@ -1611,27 +1611,22 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.InitProperty': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Init Property Action',
-      description: 'This action allows you to innitial a property to either an object or array',
+      title: 'Initialize property',
+      description: 'Define and initialize a property to be an array or object.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.InitProperty),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         property: {
           $role: 'expression',
           title: 'Property',
-          description: 'The property to set the value of',
+          description: 'Property (named location to store information).',
           examples: ['user.age'],
           type: 'string',
         },
         type: {
           type: 'string',
           title: 'Type',
-          description: 'type of value to set the property to, object or array.',
+          description: 'Type of value.',
           enum: ['object', 'array'],
         },
       },
