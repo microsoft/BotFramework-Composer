@@ -1,5 +1,7 @@
 import { JSONSchema6 } from 'json-schema';
 
+import { SDKTypes } from './viewUtils';
+
 export const FIELDS_TO_HIDE = [
   '$id',
   '$type',
@@ -21,6 +23,35 @@ export const COMPOUND_TYPES = [
   'Microsoft.OnConversationUpdateActivity',
 ];
 
+const $properties = ($type: SDKTypes) => {
+  return {
+    $type: {
+      title: '$type',
+      description: 'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
+      type: 'string',
+      pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
+      const: $type,
+    },
+    $copy: {
+      title: '$copy',
+      description: 'Copy the definition by id from a .dialog file.',
+      type: 'string',
+      pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
+    },
+    $id: {
+      title: '$id',
+      description: 'Inline id for reuse of an inline definition',
+      type: 'string',
+      pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
+    },
+    $designer: {
+      title: '$designer',
+      type: 'object',
+      description: 'Extra information for the Bot Framework Composer.',
+    },
+  };
+};
+
 export const appschema: JSONSchema6 = {
   $schema:
     'https://raw.githubusercontent.com/Microsoft/botbuilder-tools/SchemaGen/packages/DialogSchema/src/dialogSchema.schema',
@@ -34,31 +65,7 @@ export const appschema: JSONSchema6 = {
       title: 'Microsoft ActivityTemplate',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ActivityTemplate',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
-        },
+        ...$properties(SDKTypes.ActivityTemplate),
         template: {
           title: 'Template',
           Description: 'Language Generator template to use to create the activity',
@@ -78,31 +85,7 @@ export const appschema: JSONSchema6 = {
       description: 'Flexible, data driven dialog that can adapt to the conversation.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.AdaptiveDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.AdaptiveDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -162,31 +145,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes age.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.AgeEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Designer.',
-        },
+        ...$properties(SDKTypes.AgeEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -201,31 +160,7 @@ export const appschema: JSONSchema6 = {
       description: 'This represents a dialog which gathers an attachment such as image or music',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.AttachmentInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.AttachmentInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -346,31 +281,7 @@ export const appschema: JSONSchema6 = {
       description: 'Action which begins another dialog (and when that dialog is done, it will return the caller).',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.BeginDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.BeginDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -423,31 +334,7 @@ export const appschema: JSONSchema6 = {
         'Command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.CancelAllDialogs',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.CancelAllDialogs),
         id: {
           type: 'string',
           title: 'Id',
@@ -517,31 +404,7 @@ export const appschema: JSONSchema6 = {
         },
       },
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ChoiceInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.ChoiceInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -782,31 +645,7 @@ export const appschema: JSONSchema6 = {
         },
       },
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ConfirmInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.ConfirmInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -988,31 +827,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes confirmation choices (yes/no).',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ConfirmationEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.ConfirmationEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -1027,31 +842,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes currency.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.CurrencyEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.CurrencyEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -1066,31 +857,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes dates and time fragments.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DateTimeEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.DateTimeEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -1105,31 +872,7 @@ export const appschema: JSONSchema6 = {
       description: 'This represents a dialog which gathers Date or Time or DateTime from the user',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DateTimeInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.DateTimeInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -1249,31 +992,7 @@ export const appschema: JSONSchema6 = {
       description: 'If debugger is attached, do a debugger break at this point',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DebugBreak',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.DebugBreak),
         id: {
           type: 'string',
           title: 'Id',
@@ -1303,31 +1022,7 @@ export const appschema: JSONSchema6 = {
       description: 'This is a action which allows you to remove a property from memory',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DeleteProperty',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.DeleteProperty),
         id: {
           type: 'string',
           title: 'Id',
@@ -1363,31 +1058,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes dimension.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.DimensionEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.DimensionEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -1402,31 +1073,7 @@ export const appschema: JSONSchema6 = {
       description: 'Edit current dialog with changeType and Actions',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EditActions',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EditActions),
         id: {
           type: 'string',
           title: 'Id',
@@ -1471,31 +1118,7 @@ export const appschema: JSONSchema6 = {
       description: 'This is a action which allows you to modify an array in memory',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EditArray',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EditArray),
         id: {
           type: 'string',
           title: 'Id',
@@ -1550,31 +1173,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes email.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EmailEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EmailEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -1589,31 +1188,7 @@ export const appschema: JSONSchema6 = {
       description: 'This is a action which allows you to emit an event',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EmitEvent',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EmitEvent),
         id: {
           type: 'string',
           title: 'Id',
@@ -1680,31 +1255,7 @@ export const appschema: JSONSchema6 = {
       description: 'Command which ends the current dialog, returning the resultProperty as the result of the dialog.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EndDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EndDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -1740,31 +1291,7 @@ export const appschema: JSONSchema6 = {
       description: 'End the current turn without ending the dialog.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.EndTurn',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.EndTurn),
         id: {
           type: 'string',
           title: 'Id',
@@ -1892,31 +1419,7 @@ export const appschema: JSONSchema6 = {
       description: 'Action which executes actions per item in a collection.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.Foreach',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.Foreach),
         id: {
           type: 'string',
           title: 'Id',
@@ -1976,31 +1479,7 @@ export const appschema: JSONSchema6 = {
       description: 'Action which execute actions per item page in a collection.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ForeachPage',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.ForeachPage),
         id: {
           type: 'string',
           title: 'Id',
@@ -2059,31 +1538,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes guids.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.GuidEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.GuidEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -2098,31 +1553,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes Hashtags.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.HashtagEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.HashtagEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -2137,31 +1568,7 @@ export const appschema: JSONSchema6 = {
       title: 'Http Request',
       description: 'This is a action which replaces the current dialog with the target dialog',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.HttpRequest',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.HttpRequest),
         id: {
           type: 'string',
           title: 'Id',
@@ -2594,31 +2001,7 @@ export const appschema: JSONSchema6 = {
       description: 'Action which conditionally decides which action to execute next.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.IfCondition',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.IfCondition),
         id: {
           type: 'string',
           title: 'Id',
@@ -2673,31 +2056,7 @@ export const appschema: JSONSchema6 = {
       description: 'This action allows you to innitial a property to either an object or array',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.InitProperty',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.InitProperty),
         id: {
           type: 'string',
           title: 'Id',
@@ -2740,31 +2099,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes internet IP patterns (like 192.1.1.1).',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.IpEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.IpEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -2780,31 +2115,7 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       additionalProperties: false,
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.LanguagePolicy',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.LanguagePolicy),
       },
       patternProperties: {
         '^\\$': {
@@ -2819,31 +2130,7 @@ export const appschema: JSONSchema6 = {
         'This is a action which writes to console.log and optional creates a TraceActivity around a text binding',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.LogAction',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.LogAction),
         id: {
           type: 'string',
           title: 'Id',
@@ -2885,31 +2172,7 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       additionalProperties: false,
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.LuisRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.LuisRecognizer),
         applicationId: {
           type: 'string',
         },
@@ -2932,31 +2195,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes @Mentions',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.MentionEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.MentionEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -2972,14 +2211,7 @@ export const appschema: JSONSchema6 = {
     //     'Recognizer which allows you to configure the recognizer per language, and to define the policy for using them',
     //   type: 'object',
     //   properties: {
-    //     $type: {
-    //       title: '$type',
-    //       description:
-    //         'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-    //       type: 'string',
-    //       pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-    //       const: 'Microsoft.MultiLanguageRecognizer',
-    //     },
+    //     ...$properties(SDKTypes.MultiLanguageRecognizer),
     //     $copy: {
     //       title: '$copy',
     //       description: 'Copy the definition by id from a .dialog file.',
@@ -3027,31 +2259,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes numbers.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.NumberEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.NumberEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -3066,31 +2274,7 @@ export const appschema: JSONSchema6 = {
       description: 'This represents a dialog which gathers a decimal number in a specified range',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.NumberInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.NumberInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -3218,31 +2402,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes ranges of numbers (Example:2 to 5).',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.NumberRangeEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.NumberRangeEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -3257,31 +2417,7 @@ export const appschema: JSONSchema6 = {
       description: 'This represents a dialog which gathers an OAuth token from user',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OAuthInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OAuthInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -3416,31 +2552,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an custom activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3475,31 +2587,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IOnEvent)',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnBeginDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnBeginDialog),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3529,31 +2617,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an ConversationUpdate activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnConversationUpdateActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnConversationUpdateActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3583,31 +2647,7 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       $role: 'unionType(Microsoft.IOnEvent)',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnDialogEvent',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnDialogEvent),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3656,85 +2696,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an EndOfConversation Activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnEndOfConversationActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
-        constraint: {
-          $role: 'expression',
-          title: 'Constraint',
-          description: 'Optional constraint to which must be met for this rule to fire',
-          examples: ['user.vip == true'],
-          type: 'string',
-        },
-        actions: {
-          type: 'array',
-          description: 'Sequence of actions or dialogs to execute',
-          items: {
-            $type: 'Microsoft.IDialog',
-            $ref: '#/definitions/Microsoft.IDialog',
-          },
-        },
-      },
-      additionalProperties: false,
-      patternProperties: {
-        '^\\$': {
-          type: 'string',
-        },
-      },
-    },
-    'Microsoft.OnEvent': {
-      $role: 'unionType(Microsoft.IOnEvent)',
-      title: 'Event Event',
-      description: 'Defines a rule for an event which is triggered by some source',
-      type: 'object',
-      properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnEvent',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnEndOfConversationActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3764,31 +2726,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an Event activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnEventActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnEventActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3818,31 +2756,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an Handoff activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnHandoffActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnHandoffActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3872,31 +2786,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an Intent is recognized (and optionally entities)',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnIntent',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnIntent),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3939,31 +2829,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an Invoke activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnInvokeActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnInvokeActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -3994,31 +2860,7 @@ export const appschema: JSONSchema6 = {
         'This defines the actions to take when an Message activity is received. NOTE: If this triggers it will override any Recognizer/Intent rule calculation',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnMessageActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnMessageActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4048,31 +2890,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an MessageDelete activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnMessageDeleteActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnMessageDeleteActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4102,31 +2920,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when a MessageReaction activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnMessageReactionActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnMessageReactionActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4156,31 +2950,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when an MessageUpdate ctivity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnMessageUpdateActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnMessageUpdateActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4210,31 +2980,7 @@ export const appschema: JSONSchema6 = {
       description: 'This defines the actions to take when a Typing activity is received',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnTypingActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnTypingActivity),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4265,31 +3011,7 @@ export const appschema: JSONSchema6 = {
       $role: 'unionType(Microsoft.IOnEvent)',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OnUnknownIntent',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OnUnknownIntent),
         constraint: {
           $role: 'expression',
           title: 'Constraint',
@@ -4319,31 +3041,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes ordinals (example: first, second, 3rd).',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.OrdinalEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.OrdinalEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -4358,31 +3056,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes percentages.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.PercentageEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.PercentageEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -4397,31 +3071,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes phone numbers.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.PhoneNumberEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.PhoneNumberEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -4437,31 +3087,7 @@ export const appschema: JSONSchema6 = {
       type: 'object',
       additionalProperties: false,
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.QnAMakerDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.QnAMakerDialog),
         endpoint: {
           type: 'object',
           title: 'Endpoint',
@@ -4511,31 +3137,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes patterns of input based on regex.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.RegexEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.RegExEntityRecognizer),
         name: {
           type: 'string',
           title: 'Name',
@@ -4560,31 +3162,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which uses regex expressions to generate intents and entities.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.RegexRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.RegexRecognizer),
         intents: {
           type: 'array',
           title: 'RegEx patterns to intents',
@@ -4628,31 +3206,7 @@ export const appschema: JSONSchema6 = {
       title: 'Repeat Dialog',
       description: 'This is a action which repeats the current dialog with the same dialog.',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.RepeatDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.RepeatDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -4682,31 +3236,7 @@ export const appschema: JSONSchema6 = {
       title: 'Replace Dialog',
       description: 'This is a action which replaces the current dialog with the target dialog',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.ReplaceDialog',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.ReplaceDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -4757,31 +3287,7 @@ export const appschema: JSONSchema6 = {
       description: 'This is a action which sends an activity to the user',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SendActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.SendActivity),
         id: {
           type: 'string',
           title: 'Id',
@@ -4817,31 +3323,7 @@ export const appschema: JSONSchema6 = {
       description: 'This action allows you to set memory to the value of an expression',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SetProperty',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.SetProperty),
         id: {
           type: 'string',
           title: 'Id',
@@ -4885,31 +3367,7 @@ export const appschema: JSONSchema6 = {
       description: 'Action which conditionally decides which action to execute next.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.SwitchCondition',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.SwitchCondition),
         id: {
           type: 'string',
           title: 'Id',
@@ -4981,31 +3439,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes temperatures.',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.TemperatureEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.TemperatureEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
@@ -5020,31 +3454,7 @@ export const appschema: JSONSchema6 = {
       description: 'This represents a dialog which gathers a text from the user',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.TextInput',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.TextInput),
         id: {
           type: 'string',
           title: 'Id',
@@ -5166,31 +3576,7 @@ export const appschema: JSONSchema6 = {
         "This is a debugging message that's used to track progress through the code by emitting events visible in the emulator.",
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.TraceActivity',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.TraceActivity),
         name: {
           type: 'string',
           title: 'Name',
@@ -5222,31 +3608,7 @@ export const appschema: JSONSchema6 = {
       description: 'Recognizer which recognizes urls (example: http://bing.com)',
       type: 'object',
       properties: {
-        $type: {
-          title: '$type',
-          description:
-            'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
-          type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-          const: 'Microsoft.UrlEntityRecognizer',
-        },
-        $copy: {
-          title: '$copy',
-          description: 'Copy the definition by id from a .dialog file.',
-          type: 'string',
-          pattern: '^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$',
-        },
-        $id: {
-          title: '$id',
-          description: 'Inline id for reuse of an inline definition',
-          type: 'string',
-          pattern: '^([a-zA-Z][a-zA-Z0-9.]*)$',
-        },
-        $designer: {
-          title: '$designer',
-          type: 'object',
-          description: 'Extra information for the Bot Framework Composer.',
-        },
+        ...$properties(SDKTypes.UrlEntityRecognizer),
       },
       additionalProperties: false,
       patternProperties: {
