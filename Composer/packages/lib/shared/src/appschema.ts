@@ -1062,6 +1062,15 @@ export const appschema: JSONSchema6 = {
         },
       ],
     },
+    'Microsoft.FirstSelector': {
+      $role: 'unionType(Microsoft.ITriggerSelector)',
+      title: 'First Trigger Selector',
+      description: 'Selector for first true rule',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.FirstSelector),
+      },
+    },
     'Microsoft.Foreach': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Foreach Action',
