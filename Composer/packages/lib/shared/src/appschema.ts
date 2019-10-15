@@ -1651,26 +1651,20 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.LogAction': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Log Action',
-      description:
-        'This is a action which writes to console.log and optional creates a TraceActivity around a text binding',
+      title: 'Log to console',
+      description: 'Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.LogAction),
-        id: {
-          type: 'string',
-          title: 'Id',
-          description: 'Optional dialog ID.',
-        },
         text: {
           type: 'string',
           title: 'Text',
-          description: 'LG Expression to write to the log',
+          description: 'Information to log.',
         },
         traceActivity: {
           type: 'boolean',
           title: 'Send Trace Activity',
-          description: 'Set to true to also create a TraceActivity with the log text',
+          description: 'If true, automatically sends a TraceActivity (view in Bot Framework Emulator).',
           default: false,
         },
       },
