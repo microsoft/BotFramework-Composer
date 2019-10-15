@@ -5,11 +5,12 @@
     "name": "GetProfile"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "name": "Handle an Event",
+        "name": "OnBeginDialog",
         "id": "151697"
       },
       "actions": [
@@ -19,9 +20,7 @@
             "name": "Prompt for text",
             "id": "362298"
           },
-          "outputFormat": "trim",
           "allowInterruptions": "true",
-          "property": "user.profile.name",
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "maxTurnCount": 3,
@@ -33,7 +32,7 @@
           "property": "user.profile.name",
           "defaultValue": "'Human'",
           "alwaysPrompt": false,
-          "allowInterruptions": "always",
+          "allowInterruptions": "true",
           "outputFormat": "trim"
         },
         {
@@ -46,10 +45,7 @@
           "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "maxTurnCount": 3,
-          "validations": [
-            "int(turn.value) >= 1",
-            "int(turn.value) <= 150"
-          ],
+          "validations": ["int(turn.value) >= 1", "int(turn.value) <= 150"],
           "value": "@userAge",
           "defaultValue": "30",
           "alwaysPrompt": false,
@@ -71,7 +67,7 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "Why",
         "id": "661298"
       },
       "actions": [
@@ -109,7 +105,7 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "name": "Handle an Intent",
+        "name": "NoValue",
         "id": "449648"
       },
       "actions": [
@@ -166,8 +162,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "id": "372804",
-        "name": "GetProfileInputs",
-        "updatedAt": "2019-10-03T01:16:42.468Z"
+        "name": "GetProfileInputs"
       },
       "intent": "GetProfileInputs"
     }
