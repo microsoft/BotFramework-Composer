@@ -182,7 +182,6 @@ export function moveCursor(
       break;
   }
   element.scrollIntoView(true);
-  window.scrollBy(0, -10);
 
   return {
     selected: element.getAttribute(AttrNames.SelectedId) || id,
