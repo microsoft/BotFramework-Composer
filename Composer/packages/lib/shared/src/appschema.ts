@@ -2869,28 +2869,26 @@ export const appschema: JSONSchema6 = {
     },
     'Microsoft.TraceActivity': {
       $role: 'unionType(Microsoft.IDialog)',
-      title: 'Trace Activity Step',
-      description:
-        "This is a debugging message that's used to track progress through the code by emitting events visible in the emulator.",
+      title: 'Send a TraceActivity',
+      description: 'Send a trace activity to the transcript logger and/ or Bot Framework Emulator.',
       type: 'object',
       properties: {
         ...$properties(SDKTypes.TraceActivity),
         name: {
           type: 'string',
           title: 'Name',
-          description: 'Name of the trace activity.',
+          description: 'Name of the trace activity',
         },
         valueType: {
           type: 'string',
-          title: 'Value Type',
-          description: 'Value type of the trace activity.',
+          title: 'Value type',
+          description: 'Type of value',
         },
         value: {
-          $role: 'memoryPath',
+          $role: 'expression',
           title: 'Value',
-          description: 'This is the property in memory that contains the value of the trace activity.',
+          description: 'Property that holds the value to send as trace activity.',
           type: 'string',
-          pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
         },
       },
     },
