@@ -225,13 +225,7 @@ export const RemotePublish = () => {
               Current version published <DateWidget date={publishVersions.production.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
-              <PrimaryButton
-                text="Open in Emulator"
-                onClick={openEmulator}
-                styles={styles.button}
-                style={{ marginBottom: '10px' }}
-              />
-              <DefaultButton onClick={openWebchat} text="Open in Web Chat" styles={styles.button} />
+              <PrimaryButton text="Open in Emulator" onClick={openEmulator} styles={styles.button} />
             </StackItem>
           </Stack>
         </div>
