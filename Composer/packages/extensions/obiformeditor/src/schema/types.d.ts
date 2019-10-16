@@ -85,8 +85,6 @@ interface InputDialog extends BaseSchema {
   maxTurnCount: number;
   /** Expressions to validate an input. */
   validations: MicrosoftIExpression[];
-  /** The expression that you evaluated for input. */
-  value: MicrosoftIExpression;
   /** Property that this input dialog is bound to */
   property: MicrosoftIExpression;
   /** Value to return if the value expression can't be evaluated. */
