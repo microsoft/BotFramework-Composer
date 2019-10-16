@@ -26,10 +26,16 @@ export interface Dialog {
   relativePath: string;
 }
 
+export interface CodeRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
+
 export interface LGTemplate {
   Name: string;
   Body: string;
   Parameters: string[];
+  Range: CodeRange;
 }
 
 export interface LGFile {

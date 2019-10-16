@@ -18,14 +18,13 @@ export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
   eventType: string;
-  name: string;
-  constraint: string;
+  intent: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  name?: string;
   eventType?: string;
+  intent?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -54,17 +53,18 @@ export function getFriendlyName(data) {
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
-  const optionalAttributes: { constraint?: string; events?: string[] } = {};
-  if (data.constraint) {
-    optionalAttributes.constraint = data.constraint;
-  }
+  const optionalAttributes: { intent?: string; events?: string[] } = {};
   if (data.eventType) {
     optionalAttributes.events = [data.eventType];
   }
 
+  if (data.intent) {
+    optionalAttributes.intent = data.intent;
+  }
+
   const newStep = {
     $type: data.$type,
-    ...seedNewDialog(data.$type, { name: data.name }, optionalAttributes),
+    ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
