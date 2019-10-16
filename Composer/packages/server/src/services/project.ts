@@ -51,22 +51,19 @@ export class BotProjectService {
     BotProjectService.updateRecentBotProjects('ADD', locationRef.path);
   };
 
-  private static updateRecentBotProjects(operation: string, absolutePath: string): void {
+  private static updateRecentBotProjects(operation: string, path: string): void {
     if (operation === 'ADD') {
-      this.addRecentProject(absolutePath);
+      this.addRecentProject();
     } else if (operation === 'DELETE') {
-      this.deleteRecentProject(absolutePath);
+      this.deleteRecentProject(path);
     }
   }
 
-  private static addRecentProject = (absolutePath: string): void => {
+  private static addRecentProject = (): void => {
     if (!BotProjectService.currentBotProject) {
       return;
     }
     const currDir = BotProjectService.currentBotProject.dir;
-    if (currDir !== absolutePath) {
-      throw new Error(`The opened project ${currDir} is not ${absolutePath} you are trying to open`);
-    }
     const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === Path.resolve(ref.path));
     if (idx > -1) {
       BotProjectService.recentBotProjects.splice(idx, 1);
@@ -76,8 +73,8 @@ export class BotProjectService {
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   };
 
-  private static deleteRecentProject = (absolutePath: string): void => {
-    const idx = BotProjectService.recentBotProjects.findIndex(ref => absolutePath === Path.resolve(ref.path));
+  private static deleteRecentProject = (path: string): void => {
+    const idx = BotProjectService.recentBotProjects.findIndex(ref => Path.resolve(path) === Path.resolve(ref.path));
     if (idx > -1) {
       BotProjectService.recentBotProjects.splice(idx, 1);
     } else {
