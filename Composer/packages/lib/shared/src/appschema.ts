@@ -245,10 +245,7 @@ export const appschema: OBISchema = {
           type: 'object',
           title: 'Options',
           description: 'One or more options that are passed to the dialog that is called.',
-          additionalProperties: {
-            type: 'string',
-            title: 'Options',
-          },
+          additionalProperties: true,
         },
         resultProperty: {
           $role: 'expression',
@@ -2606,10 +2603,7 @@ export const appschema: OBISchema = {
           type: 'object',
           title: 'Options',
           description: 'One or more options that are passed to the dialog that is called.',
-          additionalProperties: {
-            type: 'string',
-            title: 'Options',
-          },
+          additionalProperties: true,
         },
       },
     },
