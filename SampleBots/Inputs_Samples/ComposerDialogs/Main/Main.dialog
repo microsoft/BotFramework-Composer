@@ -2,64 +2,55 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "400830",
-
     "description": "This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs."
   },
   "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents":[
+    "intents": [
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "TextInput",
-        "pattern": "TextInput|01" 
+        "pattern": "TextInput|01"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "NumberInput",
-        "pattern": "NumberInput|02" 
+        "pattern": "NumberInput|02"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "ConfirmInput",
         "pattern": "ConfirmInput|03"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "ChoiceInput",
-        "pattern": "ChoiceInput|04" 
+        "pattern": "ChoiceInput|04"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "AttachmentInput",
-        "pattern": "AttachmentInput|05" 
+        "pattern": "AttachmentInput|05"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "DateTimeInput",
         "pattern": "DateTimeInput|06"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "OAuthInput",
-        "pattern": "OAuthInput|07" 
+        "pattern": "OAuthInput|07"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "cancel",
-        "pattern": "cancel" 
+        "pattern": "cancel"
       }
-    ] 
+    ]
   },
-  "generator": "common.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
@@ -197,5 +188,6 @@
       ]
     }
   ],
+  "generator": "common.lg",
   "$schema": "../../app.schema"
 }

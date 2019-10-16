@@ -5,14 +5,7 @@
 ]
 
 # helpText
--```Welcome to BFD controlling conversation flow. You can choose one of the following branching options to try:
-01 - IfCondition
-02 - SwitchCondition
-03 - ForeachStep
-04 - ForeachPageStep
-05 - Cancel
-06 - Endturn
-07 - RepeatDialog
+-```Welcome to BFD controlling conversation flow. You can choose from of below list try.
 You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accept an input.```
 
 # bfdactivity-953339

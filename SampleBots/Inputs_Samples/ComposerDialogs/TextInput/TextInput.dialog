@@ -4,7 +4,7 @@
     "id": "359753"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -30,27 +30,9 @@
             "id": "538962"
           },
           "activity": "[bfdactivity-538962]"
-        },
-        {
-          "$type": "Microsoft.TextInput",
-          "$designer": {
-            "id": "025273"
-          },
-          "property": "user.name",
-          "prompt": "Hello, I'm Zoidberg. What is your name? (This can be interrupted)",
-          "maxTurnCount": 2147483647,
-          "alwaysPrompt": true,
-          "allowInterruptions": "true",
-          "outputFormat": "none"
-        },
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "id": "118486"
-          },
-          "activity": "[bfdactivity-118486]"
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

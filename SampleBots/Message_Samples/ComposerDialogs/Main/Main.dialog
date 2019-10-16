@@ -4,7 +4,7 @@
     "id": "937757"
   },
   "autoEndDialog": false,
-  "generator": "common.lg",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnUnknownIntent",
@@ -161,5 +161,6 @@
       ]
     }
   ],
+  "generator": "common.lg",
   "$schema": "../../app.schema"
 }

@@ -4,84 +4,71 @@
     "id": "892616"
   },
   "autoEndDialog": false,
-  "generator": "common.lg",
+  "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "Actions",
-        "pattern": "Actions|01" 
+        "pattern": "Actions|01"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "EndTurn",
-        "pattern": "EndTurn|02" 
+        "pattern": "EndTurn|02"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "IfCondition",
         "pattern": "IfCondition|03"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "EditArray",
-        "pattern": "EditArray|04" 
+        "pattern": "EditArray|04"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "EndDialog",
-        "pattern": "EndDialog|05" 
+        "pattern": "EndDialog|05"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "HttpRequest",
         "pattern": "HttpRequest|06"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "SwitchCondition",
-        "pattern": "SwitchCondition|07" 
+        "pattern": "SwitchCondition|07"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "RepeatDialog",
-        "pattern": "RepeatDialog|08" 
+        "pattern": "RepeatDialog|08"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "TraceAndLog",
         "pattern": "TraceAndLog|trace|log|09"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "EditActions",
-        "pattern": "EditActions|10" 
+        "pattern": "EditActions|10"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "ReplaceDialog",
-        "pattern": "ReplaceDialog|11" 
+        "pattern": "ReplaceDialog|11"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "EmitEvent",
         "pattern": "EmitEvent|12"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
@@ -293,5 +280,6 @@
       ]
     }
   ],
+  "generator": "common.lg",
   "$schema": "../../app.schema"
 }
