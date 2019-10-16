@@ -18,7 +18,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Recognizers.Text;
 using Newtonsoft.Json;
-
+using Microsoft.Bot.Builder.AI.QnA;
 
 namespace Microsoft.Bot.Builder.ComposerBot.json
 {
@@ -41,6 +41,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             this.sourceMap = sourceMap;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
+            DeclarativeTypeLoader.AddComponent(new QnAMakerComponentRegistration());
             // auto reload dialogs when file changes
             this.resourceExplorer.Changed += (resources) =>
             {
@@ -48,8 +49,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 {
                     Task.Run(() => this.LoadRootDialogAsync());
                 }
-            };
-
+            };            
             LoadRootDialogAsync();
         }
 
