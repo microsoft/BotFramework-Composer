@@ -287,8 +287,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         });
         focused && onFocusSteps([focused], tab);
 
-        document.querySelector(`[${AttrNames.SelectedId}=${selected}]`) &&
-          (document.querySelector(`[${AttrNames.SelectedId}=${selected}]`) as Element).scrollIntoView(true);
+        document.querySelector(`[${AttrNames.SelectedId}="${selected}"]`) &&
+          (document.querySelector(`[${AttrNames.SelectedId}="${selected}"]`) as Element).scrollIntoView(true);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {

@@ -34,6 +34,7 @@ function locateNearestElement(
   filterAttrs?: AttrNames[]
 ): AbstractSelectorElement {
   let neareastElement: AbstractSelectorElement = currentElement;
+  const neareastElements: AbstractSelectorElement[] = [];
   let minDistance = 10000;
   let distance = minDistance;
   const elementCandidates =
@@ -45,33 +46,117 @@ function locateNearestElement(
   let assistMinDistance = 10000;
   let assistDistance;
 
-  elementCandidates.forEach(element => {
-    bounds = element.getBoundingClientRect();
-    if (boundRectKey === BoundRect.Top || boundRectKey === BoundRect.Left) {
-      distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
-    } else {
-      distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
+  if (assistAxle === Axle.X) {
+    // move up & down
+    // prompt element with exception tab:
+    // moveUp to bot_ask tab
+    // moveDown: stay focus on original element
+    if (currentElement.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS) {
+      if (boundRectKey === BoundRect.Bottom) {
+        return elementCandidates.find(
+          ele =>
+            ele.getAttribute(AttrNames.SelectedId) ===
+            `${currentElement.getAttribute(AttrNames.FocusedId)}${PromptTab.BOT_ASKS}`
+        ) as AbstractSelectorElement;
+      } else {
+        return currentElement;
+      }
     }
+    elementCandidates.forEach(element => {
+      bounds = element.getBoundingClientRect();
 
-    if (assistAxle === Axle.X) {
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
       );
+      if (boundRectKey === BoundRect.Top) {
+        distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
+      } else {
+        distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
+      }
       if (assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
         neareastElement = element;
         minDistance = distance;
       }
-    } else {
+    });
+
+    // If neareastElement is prompt node with exception tab and original node is not a prompt node, then stay focus on original element
+    if (
+      neareastElement.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS &&
+      !currentElement.getAttribute(AttrNames.Tab)
+    ) {
+      return currentElement;
+    }
+  } else {
+    // move left & right
+    let secondMinDistance = 1000;
+    let secondAssistMinDistance = 1000;
+    elementCandidates.forEach(element => {
+      bounds = element.getBoundingClientRect();
+
+      if (boundRectKey === BoundRect.Left) {
+        distance =
+          bounds[boundRectKey] +
+          bounds.width / 2 -
+          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
+      } else {
+        distance =
+          currentElementBounds[boundRectKey] -
+          currentElementBounds.width / 2 -
+          (bounds[boundRectKey] - bounds.width / 2);
+      }
       assistDistance = Math.abs(
         currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
       );
-      if (distance > 0 && distance <= minDistance && assistMinDistance >= assistDistance) {
-        neareastElement = element;
-        minDistance = distance;
-        assistMinDistance = assistDistance;
+      // find three element who is closer to the current element
+      if (distance > 0) {
+        if (distance <= minDistance && assistDistance <= assistMinDistance) {
+          neareastElements[0] = element;
+          minDistance = distance;
+          assistMinDistance = assistDistance;
+        } else {
+          if (distance <= secondMinDistance) {
+            neareastElements[1] = element;
+            secondMinDistance = distance;
+          }
+          if (assistDistance <= secondAssistMinDistance) {
+            neareastElements[2] = element;
+            secondAssistMinDistance = assistDistance;
+          }
+        }
       }
-    }
-  });
+    });
+
+    const currentElementIdArrs = currentElement.getAttribute(AttrNames.SelectedId).split('.');
+    let maxSamePath = 0;
+    let samePathCount = 0;
+    let samePath: string = currentElementIdArrs[0];
+    let eleSelectedId = '';
+
+    neareastElements.forEach(ele => {
+      samePath = currentElementIdArrs[0];
+      samePathCount = 0;
+      eleSelectedId = ele.getAttribute(AttrNames.SelectedId);
+      for (let i = 1; i < currentElementIdArrs.length; i++) {
+        if (eleSelectedId.includes(samePath)) {
+          samePath += `.${currentElementIdArrs[i]}`;
+          samePathCount++;
+        }
+      }
+
+      // If the element's selectedId includes the original element's or its selectedId has the most overlap with the original element and selectedId's length is not more than the original element's, it is the neareast element
+      // Else stay focus on the original element
+      if (
+        samePathCount > maxSamePath &&
+        !(ele.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS && !currentElement.getAttribute(AttrNames.Tab)) &&
+        (eleSelectedId.split('.').length <= currentElementIdArrs.length ||
+          eleSelectedId.includes(currentElementIdArrs.join('.')))
+      ) {
+        neareastElement = ele;
+        maxSamePath = samePathCount;
+      }
+    });
+  }
+
   return neareastElement;
 }
 
@@ -153,62 +238,51 @@ function handleArrowkeyMove(
   let axle: Axle = Axle.X;
   let filterAttrs: AttrNames[] = [];
 
-  if (
-    currentElement.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS &&
-    command === KeyboardCommandTypes.Cursor.MoveUp
-  ) {
-    element = selectableElements.find(
-      ele =>
-        ele.getAttribute(AttrNames.SelectedId) ===
-        `${currentElement.getAttribute(AttrNames.FocusedId)}${PromptTab.BOT_ASKS}`
-    ) as AbstractSelectorElement;
-  } else {
-    switch (command) {
-      case KeyboardCommandTypes.Cursor.MoveDown:
-        boundRect = BoundRect.Top;
-        axle = Axle.X;
-        filterAttrs = [AttrNames.NodeElement];
-        break;
-      case KeyboardCommandTypes.Cursor.MoveUp:
-        boundRect = BoundRect.Bottom;
-        axle = Axle.X;
-        filterAttrs = [AttrNames.NodeElement];
-        break;
-      case KeyboardCommandTypes.Cursor.MoveLeft:
-        boundRect = BoundRect.Right;
-        axle = Axle.Y;
-        filterAttrs = [AttrNames.NodeElement];
-        break;
-      case KeyboardCommandTypes.Cursor.MoveRight:
-        boundRect = BoundRect.Left;
-        axle = Axle.Y;
-        filterAttrs = [AttrNames.NodeElement];
-        break;
-      case KeyboardCommandTypes.Cursor.ShortMoveDown:
-        boundRect = BoundRect.Top;
-        axle = Axle.X;
-        filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-        break;
-      case KeyboardCommandTypes.Cursor.ShortMoveUp:
-        boundRect = BoundRect.Bottom;
-        axle = Axle.X;
-        filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-        break;
-      case KeyboardCommandTypes.Cursor.ShortMoveLeft:
-        boundRect = BoundRect.Right;
-        axle = Axle.Y;
-        filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-        break;
-      case KeyboardCommandTypes.Cursor.ShortMoveRight:
-        boundRect = BoundRect.Left;
-        axle = Axle.Y;
-        filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
-        break;
-      default:
-        return element;
-    }
-    element = locateNearestElement(currentElement, selectableElements, boundRect, axle, filterAttrs);
+  switch (command) {
+    case KeyboardCommandTypes.Cursor.MoveDown:
+      boundRect = BoundRect.Top;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveUp:
+      boundRect = BoundRect.Bottom;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveLeft:
+      boundRect = BoundRect.Right;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.MoveRight:
+      boundRect = BoundRect.Left;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveDown:
+      boundRect = BoundRect.Top;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveUp:
+      boundRect = BoundRect.Bottom;
+      axle = Axle.X;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveLeft:
+      boundRect = BoundRect.Right;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    case KeyboardCommandTypes.Cursor.ShortMoveRight:
+      boundRect = BoundRect.Left;
+      axle = Axle.Y;
+      filterAttrs = [AttrNames.NodeElement, AttrNames.EdgeMenuElement];
+      break;
+    default:
+      return element;
   }
+  element = locateNearestElement(currentElement, selectableElements, boundRect, axle, filterAttrs);
 
   return element;
 }
