@@ -13,7 +13,7 @@
 - [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/dialog.md)
 - [Triggers and Events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/events_and_triggers.md)
 - [Conversation flow using Memory model](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/memory-concept-draft.md)
-- Language generation
+- [Language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md)
 - Language understanding
 
 ### How to
@@ -25,11 +25,11 @@
    - Use simple text and LG
 - Asking for user input 
   - Use numbers, dates and time, confirmation, multiple choices 
-- Controlling conversation flow
+- [Controlling conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
 - Adding LUIS to your bot
 - Adding QnA to your bot
 - Sending cards 
-- Defining triggers and events (focus on LUIS)
+- [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-events-triggers.md)
 - Handling interruption 
 #### Test
 - Test in Emulator
