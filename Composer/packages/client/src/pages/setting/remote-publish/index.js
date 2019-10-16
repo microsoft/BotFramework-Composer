@@ -10,6 +10,8 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  Spinner,
+  SpinnerSize,
 } from 'office-ui-fabric-react';
 
 import { StoreContext } from './../../../store';
@@ -51,24 +53,30 @@ export const RemotePublish = () => {
   const publish = async () => {
     setPublishAction('publish');
 
-    // close the popup
-    closeConfirm();
-
-    // TODO: first publish editing -> integration
-    // ??/
+    // TODO???: first publish editing -> integration
 
     // publish integration -> prod
     await actions.publish();
   };
 
   useEffect(() => {
-    if (publishStatus === 'start' || publishStatus === 'inactive') {
+    if (publishStatus === 'inactive') {
       // noop
-      // the publish has started...
+    } else if (publishStatus === 'start') {
+      setDialogProps({
+        title: formatMessage('Publishing'),
+        subText: (
+          <Spinner
+            size={SpinnerSize.small}
+            label={formatMessage('Updating your bot')}
+            ariaLive="assertive"
+            labelPosition="left"
+          />
+        ),
+      });
     } else if (publishStatus === 'ok') {
       // reload publish history
       actions.getPublishHistory();
-
       if (publishAction === 'publish') {
         // display confirmation
         setDialogProps({
