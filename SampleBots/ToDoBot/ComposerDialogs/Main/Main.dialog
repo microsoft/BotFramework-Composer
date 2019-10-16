@@ -160,6 +160,9 @@
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677440"
+          },
           "activity": "ok."
         },
         {
@@ -178,6 +181,9 @@
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677448"
+          },
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
         }
       ]

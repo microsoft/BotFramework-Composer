@@ -159,8 +159,8 @@ async function createDialog(req: Request, res: Response) {
   if (currentProject !== undefined) {
     const content = JSON.stringify(req.body.content, null, 2) + '\n';
     //dir = id
-    const dialogs = await currentProject.createDialog(req.body.id, content, req.body.id);
-    const luFiles = await currentProject.createLuFile(req.body.id, '', req.body.id);
+    const dialogs = await currentProject.createDialog(req.body.id, content);
+    const luFiles = await currentProject.createLuFile(req.body.id, '');
     res.status(200).json({ dialogs, luFiles });
   } else {
     res.status(404).json({
