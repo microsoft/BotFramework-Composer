@@ -1,4 +1,4 @@
-import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -67,7 +67,10 @@ export const DialogSettings = () => {
     actions.setEditDialogSettings(on, absHosted ? slot : undefined);
   };
 
-  const slots = [{ key: 'production', text: 'Production' }, { key: 'integration', text: 'Integration' }];
+  const slots = [
+    { key: 'production', text: 'Currently published', checked: slot === 'production' },
+    { key: 'integration', text: 'In progress', checked: slot === 'integration' },
+  ];
 
   const changeSlot = (_, option) => {
     setSlot(option.key);
@@ -77,15 +80,20 @@ export const DialogSettings = () => {
   const hostedControl = () =>
     absHosted ? (
       <div className="hosted-controls">
-        <Toggle label="edit" inlineLabel onChange={changeEditing} defaultChecked={editing} />
-        <Dropdown label="slot:" options={slots} onChange={changeSlot} selectedKey={slot} className="slot-dropdown" />
+        <Toggle label="Show keys" inlineLabel onChange={changeEditing} defaultChecked={editing} />
+        <h2>Bot settings</h2>
+        <p>
+          Here goes copy that describes what this is and why this is hidden by default which is for security reasons.
+          And there should be a link to documentation if you dont understand why this is a big deal.
+        </p>
+        <ChoiceGroup options={slots} onChange={changeSlot} className="slot-choice" selectedKey={slot} />
       </div>
     ) : null;
 
   return botName ? (
-    <div>
+    <div className={absHosted ? 'hosted-settings' : undefined}>
       {hostedControl()}
-      <div>
+      <div className={absHosted ? 'hosted-code-mirror' : undefined}>
         <CodeMirror
           value={value}
           onBeforeChange={updateFormData}

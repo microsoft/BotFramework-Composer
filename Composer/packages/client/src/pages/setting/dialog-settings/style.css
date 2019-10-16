@@ -8,22 +8,25 @@
   overflow: hidden;
 }
 
-.CodeMirror-Hosted .CodeMirror {
-  top: 40px;
+.hosted-settings {
+  position: absolute;
+  top: 10px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 16px;
 }
 
 .hosted-controls {
-  display: flex;
+  margin-bottom: 18px;
 }
 
-.hosted-controls > * {
-  margin-right: 20px;
-}
-
-.slot-dropdown {
-  display: flex;
-}
-
-.slot-dropdown > *:first-child {
-  margin-right: 1ch;
+.hosted-code-mirror {
+  position: relative;
+  flex-grow: 1;
+  border: 1px solid #B3B0AD;
 }
