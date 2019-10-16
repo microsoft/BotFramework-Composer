@@ -53,10 +53,10 @@ export function getFriendlyName(data) {
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
-  const optionalAttributes: { intent?: string; triggers?: string[] } = {};
+  const optionalAttributes: { intent?: string; event?: string } = {};
 
   if (data.eventType) {
-    optionalAttributes.triggers = [data.eventType];
+    optionalAttributes.event = data.eventType;
   }
 
   if (data.intent) {
