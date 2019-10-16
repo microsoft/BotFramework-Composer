@@ -2042,16 +2042,6 @@ export const appschema: OBISchema = {
           description: 'Name of the custom event.',
         },
       },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['actions', 'event', '$type'],
-        },
-      ],
     },
     'Microsoft.OnDialogEvent': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
@@ -2228,16 +2218,6 @@ export const appschema: OBISchema = {
           },
         },
       },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['actions', 'intent', '$type'],
-        },
-      ],
     },
     'Microsoft.OnInvokeActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
