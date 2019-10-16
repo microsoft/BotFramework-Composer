@@ -1,23 +1,18 @@
 # help
--```
-    Welcome to Input Sample Bot.
-    I can show you examples on how to use actions, You can enter number 01-04
-    [Suggestions=TextInput|NumberInput|ConfirmInput|ChoiceInput|AttachmentInput|DateTimeInput|OAuthInput]
-	01 - TextInput
-	02 - NumberInput
-	03 - ConfirmInput
-	04 - ChoiceInput
-	05 - AttachmentInput
-	06 - DateTimeInput
-    07 - OAuthInput
-    ```
+-```Welcome to Input Sample Bot.
+I can show you examples on how to use actions, You can enter number 01-04
+01 - TextInput
+02 - NumberInput
+03 - ConfirmInput
+04 - ChoiceInput
+05 - AttachmentInput
+06 - DateTimeInput
+07 - OAuthInput```
 
 # ShowImage(contentUrl, contentType)
--```
-You sent:
-[attachment=@{contentUrl}, @{contentType}]
-
-```
+[HeroCard
+    title = Here is the attachment
+    image = @{contentUrl}]
 
 # ShowEmailSummary(user)
 - IF: @{count(user.getGraphEmails.value) == 1}

@@ -1,0 +1,21 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "122121"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "050101"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.CancelAllDialogs"
+        }
+      ]
+    }
+  ]
+}

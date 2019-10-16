@@ -311,9 +311,16 @@ export const ShellApi: React.FC = () => {
   function focusSteps({ subPaths = [], fragment }, event) {
     cleanData();
     let dataPath: string = subPaths[0];
-    if (event.source.name === FORM_EDITOR && focused && dataPath !== focused) {
-      dataPath = `${focused}.${dataPath}`;
+
+    if (event.source.name === FORM_EDITOR) {
+      // nothing focused yet, prepend the selected path
+      if (!focused && selected) {
+        dataPath = `${selected}.${dataPath}`;
+      } else if (focused !== dataPath) {
+        dataPath = `${focused}.${dataPath}`;
+      }
     }
+
     actions.focusTo(dataPath, fragment);
   }
 

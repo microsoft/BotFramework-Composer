@@ -54,7 +54,7 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
       }
       break;
 
-    case ObiTypes.OnEvent:
+    case ObiTypes.OnCondition:
       if (data.events && data.events.length) {
         trigger = formatMessage(
           `{event} {

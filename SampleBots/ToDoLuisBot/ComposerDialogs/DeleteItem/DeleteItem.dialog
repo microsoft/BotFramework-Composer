@@ -1,26 +1,21 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-16T20:14:51.731Z",
-    "updatedAt": "2019-10-09T22:39:25.134Z",
     "id": "735299"
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "833026",
-        "updatedAt": "2019-07-22T08:12:26.158Z"
+        "id": "833026"
       },
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-16T20:16:39.907Z",
-            "updatedAt": "2019-07-16T20:16:44.840Z",
             "id": "697543"
           },
           "property": "dialog.item",
@@ -29,8 +24,6 @@
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-16T20:16:30.172Z",
-            "updatedAt": "2019-07-16T20:16:33.564Z",
             "id": "440899"
           },
           "property": "dialog.listName",
@@ -39,8 +32,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:16:56.307Z",
-            "updatedAt": "2019-07-16T20:17:01.339Z",
             "id": "626333"
           },
           "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
@@ -48,8 +39,6 @@
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "createdAt": "2019-07-16T20:16:39.907Z",
-                "updatedAt": "2019-07-16T20:16:44.840Z",
                 "id": "697543"
               },
               "activity": "[bfdactivity-697543]"
@@ -57,8 +46,6 @@
             {
               "$type": "Microsoft.EndDialog",
               "$designer": {
-                "createdAt": "2019-07-16T20:16:46.405Z",
-                "updatedAt": "2019-07-16T20:16:49.342Z",
                 "id": "358588"
               }
             }
@@ -67,8 +54,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:16:51.644Z",
-            "updatedAt": "2019-07-16T20:16:54.024Z",
             "id": "082258"
           },
           "condition": "dialog.listName == null",
@@ -76,8 +61,6 @@
             {
               "$type": "Microsoft.ChoiceInput",
               "$designer": {
-                "createdAt": "2019-07-16T20:16:56.307Z",
-                "updatedAt": "2019-07-16T20:17:01.339Z",
                 "id": "626333"
               },
               "property": "dialog.listName",
@@ -89,31 +72,15 @@
               "choices": [
                 {
                   "value": "shopping",
-                  "synonyms": [
-                    "1",
-                    "first",
-                    "shopping",
-                    "first one"
-                  ]
+                  "synonyms": ["1", "first", "shopping", "first one"]
                 },
                 {
                   "value": "grocery",
-                  "synonyms": [
-                    "2",
-                    "second",
-                    "grocery",
-                    "second one"
-                  ]
+                  "synonyms": ["2", "second", "grocery", "second one"]
                 },
                 {
                   "value": "todo",
-                  "synonyms": [
-                    "3",
-                    "third",
-                    "todo",
-                    "third one",
-                    "to do"
-                  ]
+                  "synonyms": ["3", "third", "todo", "third one", "to do"]
                 }
               ],
               "appendChoices": true,
@@ -134,8 +101,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:17:03.891Z",
-            "updatedAt": "2019-07-16T20:17:06.170Z",
             "id": "297609"
           },
           "condition": "user.lists == null",
@@ -143,8 +108,6 @@
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
-                "createdAt": "2019-07-16T20:17:08.740Z",
-                "updatedAt": "2019-07-16T20:17:13.472Z",
                 "id": "238900"
               },
               "property": "user.lists",
@@ -155,8 +118,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:17:16.562Z",
-            "updatedAt": "2019-07-16T20:17:18.655Z",
             "id": "135758"
           },
           "condition": "dialog.item == null",
@@ -164,15 +125,13 @@
             {
               "$type": "Microsoft.TextInput",
               "$designer": {
-                "createdAt": "2019-07-16T20:17:22.572Z",
-                "updatedAt": "2019-07-16T20:17:25.422Z",
                 "id": "251880"
               },
               "property": "dialog.item",
               "prompt": "Please enter the title of your item.",
               "maxTurnCount": 3,
               "alwaysPrompt": false,
-              "allowInterruptions": "never",
+              "allowInterruptions": "false",
               "outputFormat": "none"
             }
           ]
@@ -180,8 +139,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-16T20:17:28.522Z",
-            "updatedAt": "2019-07-16T20:17:31.337Z",
             "id": "577484"
           },
           "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
@@ -189,8 +146,6 @@
             {
               "$type": "Microsoft.InitProperty",
               "$designer": {
-                "createdAt": "2019-07-16T20:17:34.605Z",
-                "updatedAt": "2019-07-16T20:17:39.938Z",
                 "id": "678664"
               },
               "property": "getProperty(user.lists, dialog.listName)",
@@ -201,19 +156,15 @@
         {
           "$type": "Microsoft.EditArray",
           "$designer": {
-            "createdAt": "2019-07-16T20:17:42.922Z",
-            "updatedAt": "2019-07-16T20:17:47.211Z",
             "id": "451376"
           },
           "changeType": "Remove",
-          "arrayProperty": "getProperty(user.lists, dialog.listName)",
+          "itemsProperty": "getProperty(user.lists, dialog.listName)",
           "value": "dialog.item"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-16T20:17:49.949Z",
-            "updatedAt": "2019-07-16T20:17:54.485Z",
             "id": "737534"
           },
           "activity": "[bfdactivity-737534]"

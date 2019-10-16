@@ -1,7 +1,7 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
@@ -17,15 +17,11 @@
               "text": "Please Log in to Your Email Account",
               "property": "user.token",
               "$designer": {
-                "createdAt": "2019-08-08T09:30:12.512Z",
-                "updatedAt": "2019-08-08T09:30:12.519Z",
                 "id": "986551"
               }
             }
           ],
           "$designer": {
-            "createdAt": "2019-08-08T09:30:14.677Z",
-            "updatedAt": "2019-08-08T09:30:14.693Z",
             "id": "673634"
           }
         },
@@ -38,8 +34,6 @@
           },
           "Property": "user.Info",
           "$designer": {
-            "createdAt": "2019-08-08T09:30:15.887Z",
-            "updatedAt": "2019-08-08T09:30:15.896Z",
             "id": "125222"
           }
         },
@@ -48,24 +42,18 @@
           "property": "user.Name",
           "value": "user.Info.displayName",
           "$designer": {
-            "createdAt": "2019-08-08T09:30:16.539Z",
-            "updatedAt": "2019-08-08T09:30:16.549Z",
             "id": "430037"
           }
         }
       ],
        
       "$designer": {
-        "createdAt": "2019-08-08T07:00:40.216Z",
-        "updatedAt": "2019-08-08T07:00:40.230Z",
         "id": "415911"
       }
     }
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-07T09:21:47.040Z",
-    "updatedAt": "2019-08-07T09:21:47.065Z",
     "id": "523542"
   }
 }

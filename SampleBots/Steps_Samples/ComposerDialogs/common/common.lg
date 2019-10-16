@@ -1,20 +1,17 @@
 # help
-- ```
-    I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.
-    [Suggestions=Actions|EndTurn|IfCondition|EditArray|EndDialog|HttpRequest|SwitchCondition|RepeatDialog|TraceAndLog|Editactions|ReplaceDialog|EmitEvent]
-	01 - Actions
-	02 - EndTurn
-	03 - IfCondiftion
-	04 - EditArray, Foreach
-	05 - EndDialog
-	06 - HttpRequest
-	07 - SwitchCondition
-	08 - RepeatDialog
-	09 - TraceAndLog
-	10 - EditActions
-	11 - ReplaceDialog
-	12 - EmitEvent
-    ```
+-```I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.
+01 - Actions
+02 - EndTurn
+03 - IfCondiftion
+04 - EditArray, Foreach
+05 - EndDialog
+06 - HttpRequest
+07 - SwitchCondition
+08 - RepeatDialog
+09 - TraceAndLog
+10 - EditActions
+11 - ReplaceDialog
+12 - EmitEvent```
 
 # bfdactivity-666135
 -Here are the index and values in the array.
@@ -71,7 +68,7 @@
 -Potentially a successful demo
 
 # bfdactivity-120128
--Hello {user.name}, nice to talk to you!
+-Hello {user.name}, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.
 
 # bfdactivity-577618
 -Why did the chicken cross the road?
