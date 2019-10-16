@@ -1172,7 +1172,7 @@ export const appschema: OBISchema = {
         },
         headers: {
           type: 'object',
-          additionProperties: true,
+          additionalProperties: true,
           title: 'Headers',
           description: 'One or more headers to include in the request (supports data binding).',
         },
