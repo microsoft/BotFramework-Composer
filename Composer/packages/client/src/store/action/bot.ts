@@ -39,6 +39,7 @@ export const getConnect: ActionCreator = async (store, env) => {
     store.dispatch({
       type: ActionTypes.GET_ENDPOINT_SUCCESS,
       payload: {
+        slot: env,
         botEndpoint: res.data.botEndpoint,
       },
     });

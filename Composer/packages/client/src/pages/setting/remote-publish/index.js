@@ -41,7 +41,7 @@ export const RemotePublish = () => {
     type: DialogType.normal,
     children: [],
   });
-  const { publishVersions, prodBotEndpoint, settings, publishStatus } = state;
+  const { publishVersions, remoteEndpoints, settings, publishStatus } = state;
 
   useEffect(() => {
     actions.getConnect('production');
@@ -128,7 +128,7 @@ export const RemotePublish = () => {
 
   const openEmulator = () => {
     openInEmulator(
-      prodBotEndpoint,
+      remoteEndpoints.production,
       settings.MicrosoftAppId && settings.MicrosoftAppPassword
         ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
         : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
