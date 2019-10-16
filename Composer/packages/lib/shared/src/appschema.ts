@@ -2079,18 +2079,22 @@ export const appschema: OBISchema = {
           type: 'string',
           title: 'Dialog event name',
           description: 'Name of dialog event.',
+          enum: [
+            'beginDialog',
+            'resumeDialog',
+            'repromptDialog',
+            'cancelDialog',
+            'endDialog',
+            'activityReceived',
+            'recognizedIntent',
+            'unknownIntent',
+            'actionsStarted',
+            'actionsSaved',
+            'actionsEnded',
+            'actionsResumed',
+          ],
         },
       },
-      anyOf: [
-        {
-          title: 'Reference',
-          required: ['$copy'],
-        },
-        {
-          title: 'Type',
-          required: ['actions', 'event', '$type'],
-        },
-      ],
     },
     'Microsoft.OnEndOfConversationActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
