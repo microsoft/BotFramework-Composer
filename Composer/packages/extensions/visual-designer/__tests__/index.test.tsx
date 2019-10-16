@@ -29,6 +29,7 @@ describe('<VisualDesigner />', () => {
         shellApi={{
           saveData: () => {},
         }}
+        teachingBubble={{}}
       />
     );
 

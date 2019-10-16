@@ -28,7 +28,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
@@ -48,7 +48,13 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   const activeEventData = queryNode(data, focusedEvent);
 
   const eventActions = activeEventData ? (
-    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+    <RuleEditor
+      key={focusedEvent}
+      id={focusedEvent}
+      data={activeEventData}
+      onEvent={onEvent}
+      addCoachMarkRef={addCoachMarkRef}
+    />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {

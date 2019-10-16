@@ -9,6 +9,7 @@ import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
+import onboardingStorage from '../../utils/onboardingStorage';
 
 import createReducer from './createReducer';
 
@@ -46,6 +47,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.settings = response.data.settings;
+  state.onboarding.complete = onboardingStorage.getComplete();
   refreshLocalStorage(response.data.botName, state.settings);
   mergeLocalStorage(response.data.botName, state.settings);
   return state;
@@ -239,6 +241,16 @@ const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   return state;
 };
 
+const onboardingAddCoachMarkRef: ReducerFunc = (state, { ref }) => {
+  state.onboarding.coachMarkRefs = { ...state.onboarding.coachMarkRefs, ...ref };
+  return state;
+};
+
+const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
+  state.onboarding.complete = complete;
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -277,4 +289,6 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
+  [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
+  [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
 } as { [type in ActionTypes]: ReducerFunc });

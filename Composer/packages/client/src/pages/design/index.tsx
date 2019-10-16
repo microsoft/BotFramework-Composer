@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
@@ -124,11 +124,14 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
+
+  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
     if (match) {
@@ -390,6 +393,7 @@ function DesignPage(props) {
                     css={visualEditor}
                     hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
+                    ref={addRef}
                   />
                   {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>
