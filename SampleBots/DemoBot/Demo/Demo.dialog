@@ -3,11 +3,14 @@
   "$designer": {
     "name": "Demo",
     "createdAt": "2019-10-16T20:24:58.958Z",
-    "updatedAt": "2019-10-16T20:24:59.564Z",
+    "updatedAt": "2019-10-16T21:04:40.875Z",
     "id": "807139"
   },
   "autoEndDialog": "true",
   "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer"
+  },
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
