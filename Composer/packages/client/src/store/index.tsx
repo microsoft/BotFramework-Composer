@@ -2,6 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
+import { isAbsHosted } from '../utils/envUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -40,6 +41,7 @@ const initialState: State = {
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
+  editDialogSettings: !isAbsHosted(),
   toStartBot: false,
   currentUser: {
     token: null,

@@ -203,6 +203,18 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
+const setEditDialogSettings: ReducerFunc = (state, editing = true) => {
+  state.editDialogSettings = editing;
+
+  return state;
+};
+
+const setDialogSettingsSlot: ReducerFunc = (state, slot = 'production') => {
+  state.botEnvironment = slot;
+
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -235,4 +247,6 @@ export const reducer = createReducer({
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
+  [ActionTypes.SET_EDIT_DIALOG_SETTINGS]: setEditDialogSettings,
+  [ActionTypes.SET_DIALOG_SETTINGS_SLOT]: setDialogSettingsSlot,
 } as { [type in ActionTypes]: ReducerFunc });

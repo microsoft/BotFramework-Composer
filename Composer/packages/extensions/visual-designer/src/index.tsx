@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
+import { SelfHostContext } from './store/SelfHostContext';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -53,7 +54,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
-
+  const hosted = window.parent!.document!.getElementById('VisualEditor')!.dataset.hosted === 'true';
   useEffect(() => {
     setContext({
       ...context,
@@ -65,22 +66,24 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   return (
     <NodeRendererContext.Provider value={context}>
-      <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-        <ObiEditor
-          key={dialogId}
-          path={dialogId}
-          data={data}
-          focusedSteps={focusedSteps}
-          onFocusSteps={onFocusSteps}
-          focusedEvent={focusedEvent}
-          onFocusEvent={onFocusEvent}
-          onOpen={(x, rest) => navTo(x, rest)}
-          onChange={x => saveData(x)}
-          onSelect={onSelect}
-          undo={undo}
-          redo={redo}
-        />
-      </div>
+      <SelfHostContext.Provider value={hosted}>
+        <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+          <ObiEditor
+            key={dialogId}
+            path={dialogId}
+            data={data}
+            focusedSteps={focusedSteps}
+            onFocusSteps={onFocusSteps}
+            focusedEvent={focusedEvent}
+            onFocusEvent={onFocusEvent}
+            onOpen={(x, rest) => navTo(x, rest)}
+            onChange={x => saveData(x)}
+            onSelect={onSelect}
+            undo={undo}
+            redo={redo}
+          />
+        </div>
+      </SelfHostContext.Provider>
     </NodeRendererContext.Provider>
   );
 };

@@ -7,3 +7,23 @@
   height: auto;
   overflow: hidden;
 }
+
+.CodeMirror-Hosted .CodeMirror {
+  top: 40px;
+}
+
+.hosted-controls {
+  display: flex;
+}
+
+.hosted-controls > * {
+  margin-right: 20px;
+}
+
+.slot-dropdown {
+  display: flex;
+}
+
+.slot-dropdown > *:first-child {
+  margin-right: 1ch;
+}
