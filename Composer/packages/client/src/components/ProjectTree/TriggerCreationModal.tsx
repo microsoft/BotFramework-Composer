@@ -16,7 +16,7 @@ import {
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, name, dialogWindow, constraint } from './styles';
+import { styles, dropdownStyles, intent, dialogWindow } from './styles';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -24,10 +24,7 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { name, $type, eventType } = data;
-  if (!name || !isValidName(name)) {
-    errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-  }
+  const { $type, eventType } = data;
 
   if ($type === eventTypeKey && !eventType) {
     errors.eventType = formatMessage('please select a event type');
@@ -49,8 +46,7 @@ interface TriggerCreationModalProps {
 const initialFormData: TriggerFormData = {
   errors: {},
   $type: intentTypeKey,
-  name: '',
-  constraint: '',
+  intent: '',
   eventType: '',
 };
 
@@ -60,8 +56,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, schemas } = state;
-
+  const { dialogs, schemas, luFiles } = state;
+  const luFile = luFiles.find(lu => lu.id === dialogId);
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
@@ -87,6 +83,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, eventType: option.key });
   };
 
+  const onSelectIntent = (e, option) => {
+    setFormData({ ...formData, intent: option.key });
+  };
+
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
@@ -98,7 +98,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       return { key: t, text: t };
     }
   );
+
+  const intents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
+
+  const intentOptions = intents.map(t => {
+    return { key: t.name, text: t.name };
+  });
   const showEventDropDown = formData.$type === eventTypeKey;
+  const showIntentDropDown = formData.$type === intentTypeKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -136,21 +143,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'eventTypeDropDown'}
             />
           )}
-          <TextField
-            label={formatMessage('What is the name of this trigger?')}
-            styles={name}
-            onChange={updateForm('name')}
-            errorMessage={formData.errors.name}
-            data-testid={'triggerName'}
-          />
-          <TextField
-            styles={constraint}
-            label={formatMessage('Constraint')}
-            multiline
-            resizable={false}
-            onChange={updateForm('constraint')}
-            data-testid={'triggerConstraint'}
-          />
+          {showIntentDropDown && (
+            <Dropdown
+              label={formatMessage('Which intent do you want to handle?')}
+              options={intentOptions}
+              styles={dropdownStyles}
+              onChange={onSelectIntent}
+              disabled={intentOptions.length === 0}
+              placeholder={intentOptions.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
+              errorMessage={formData.errors.intent}
+            />
+          )}
         </Stack>
       </div>
       <DialogFooter>
