@@ -419,7 +419,7 @@ module.exports = function(webpackEnv) {
           {},
           {
             inject: true,
-            filename: 'index.html',
+            filename: 'index.ejs',
             template: paths.appHtml,
             chunks: ['main'],
           },
@@ -427,15 +427,6 @@ module.exports = function(webpackEnv) {
             ? {
                 minify: {
                   removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
                 },
               }
             : undefined
@@ -447,7 +438,7 @@ module.exports = function(webpackEnv) {
           {},
           {
             inject: true,
-            filename: 'extensionContainer.html',
+            filename: 'extensionContainer.ejs',
             template: paths.extensionContainerHtml,
             chunks: ['extension'],
           },
@@ -455,15 +446,6 @@ module.exports = function(webpackEnv) {
             ? {
                 minify: {
                   removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
                 },
               }
             : undefined

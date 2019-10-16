@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import path from 'path';
+import crypto from 'crypto';
 
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
@@ -10,13 +11,13 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 
 const app: Express = express();
+app.set('view engine', 'ejs');
+app.set('view options', { delimiter: '?' });
 
 const { login, authorize } = getAuthProvider();
 
 const CS_POLICIES = [
   "default-src 'none';",
-  "script-src 'self';",
-  "style-src 'self' 'unsafe-inline';",
   "font-src 'self' https:;",
   "img-src 'self' data:;",
   "base-uri 'none';",
@@ -35,7 +36,14 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
   if (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') {
-    res.header('Content-Security-Policy', CS_POLICIES.join(' '));
+    req.__nonce__ = crypto.randomBytes(16).toString('base64');
+    res.header(
+      'Content-Security-Policy',
+      CS_POLICIES.concat([
+        `script-src 'self' 'nonce-${req.__nonce__}';`,
+        `style-src 'self' 'nonce-${req.__nonce__}';`,
+      ]).join(' ')
+    );
   }
 
   next();
@@ -72,8 +80,12 @@ app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   }
 });
 
-app.get('*', function(req, res, _next) {
-  res.sendFile(path.resolve(__dirname, './public/index.html'));
+app.get('/extensionContainer.html', function(req, res) {
+  res.render(path.resolve(__dirname, './public/extensionContainer.ejs'), { __nonce__: req.__nonce__ });
+});
+
+app.get('*', function(req, res) {
+  res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
 });
 
 const port = process.env.PORT || 5000;
