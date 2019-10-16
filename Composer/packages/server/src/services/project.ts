@@ -43,35 +43,55 @@ export class BotProjectService {
   public static openProject = async (locationRef: LocationRef) => {
     BotProjectService.initialize();
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
+      BotProjectService.updateRecentBotProjects('DELETE', locationRef.path);
       throw new Error(`file not exist ${locationRef.path}`);
     }
     BotProjectService.currentBotProject = new BotProject(locationRef);
     await BotProjectService.currentBotProject.index();
-    BotProjectService.updateRecentBotProjects();
+    BotProjectService.updateRecentBotProjects('ADD', locationRef.path);
   };
 
-  private static updateRecentBotProjects(): void {
+  private static updateRecentBotProjects(operation: string, absolutePath: string): void {
+    if (operation === 'ADD') {
+      this.addRecentProject(absolutePath);
+    } else if (operation === 'DELETE') {
+      this.deleteRecentProject(absolutePath);
+    }
+  }
+
+  private static addRecentProject = (absolutePath: string): void => {
     if (!BotProjectService.currentBotProject) {
       return;
     }
-
     const currDir = BotProjectService.currentBotProject.dir;
-    const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === ref.path);
+    if (currDir !== absolutePath) {
+      throw new Error(`The opened project ${currDir} is not ${absolutePath} you are trying to open`);
+    }
+    const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === Path.resolve(ref.path));
     if (idx > -1) {
       BotProjectService.recentBotProjects.splice(idx, 1);
     }
-
     const toSaveRecentProject = { storageId: 'default', path: currDir };
     BotProjectService.recentBotProjects.unshift(toSaveRecentProject);
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
-  }
+  };
+
+  private static deleteRecentProject = (absolutePath: string): void => {
+    const idx = BotProjectService.recentBotProjects.findIndex(ref => absolutePath === Path.resolve(ref.path));
+    if (idx > -1) {
+      BotProjectService.recentBotProjects.splice(idx, 1);
+    } else {
+      return;
+    }
+    Store.set('recentBotProjects', BotProjectService.recentBotProjects);
+  };
 
   public static saveProjectAs = async (locationRef: LocationRef) => {
     BotProjectService.initialize();
     if (typeof BotProjectService.currentBotProject !== 'undefined') {
       BotProjectService.currentBotProject = await BotProjectService.currentBotProject.copyTo(locationRef);
       await BotProjectService.currentBotProject.index();
-      BotProjectService.updateRecentBotProjects();
+      BotProjectService.updateRecentBotProjects('ADD', locationRef.path);
     }
   };
 }

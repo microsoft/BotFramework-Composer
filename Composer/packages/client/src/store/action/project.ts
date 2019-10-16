@@ -56,7 +56,7 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const openBotProject: ActionCreator = async (store, absolutePath) => {
+export const openBotProject = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -76,7 +76,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       navTo(store, 'Main');
       startBot(store, true);
     }
-    return response.data;
+    return true;
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -85,6 +85,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
         message: err.response.data.message,
       },
     });
+    return false;
   }
 };
 
