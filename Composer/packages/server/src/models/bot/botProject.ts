@@ -207,8 +207,10 @@ export class BotProject {
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
-
+    const absolutePath = `${this.dir}/${dialog.relativePath}`;
+    const DirPath = Path.dirname(absolutePath);
     await this._removeFile(dialog.relativePath);
+    this._removeEmptyFolder(DirPath);
     return this.dialogIndexer.getDialogs();
   };
 
@@ -292,7 +294,10 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+    const absolutePath = `${this.dir}/${luFile.relativePath}`;
+    const DirPath = Path.dirname(absolutePath);
     await this._removeFile(luFile.relativePath);
+    this._removeEmptyFolder(DirPath);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
@@ -356,6 +361,13 @@ export class BotProject {
   public async exists(): Promise<boolean> {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
+
+  private _removeEmptyFolder = async (folderPath: string) => {
+    const files = await this.fileStorage.readDir(folderPath);
+    if (files.length === 0) {
+      this.fileStorage.rmDir(folderPath);
+    }
+  };
 
   private defaultDir = (id: string) => Path.join(DIALOGFOLDER, id);
 
