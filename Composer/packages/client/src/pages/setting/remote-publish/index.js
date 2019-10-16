@@ -197,8 +197,8 @@ export const RemotePublish = () => {
               <Icon iconName="sync" styles={styles.icon} />
             </StackItem>
             <StackItem grow={1}>
-              <h1 style={styles.h1}>In Testing</h1>
-              Current version published <DateWidget date={publishVersions.integration.publishTimestamp} />
+              <h1 style={styles.h1}>In Test</h1>
+              Last tested <DateWidget date={publishVersions.integration.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
               <PrimaryButton text="Publish" onClick={confirmPublish} styles={styles.button} />
@@ -213,7 +213,7 @@ export const RemotePublish = () => {
               <Icon styles={styles.icon} iconName="Globe" />
             </StackItem>
             <StackItem grow={1}>
-              <h1 style={styles.h1}>Published</h1>
+              <h1 style={styles.h1}>In Production</h1>
               Current version published <DateWidget date={publishVersions.production.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
