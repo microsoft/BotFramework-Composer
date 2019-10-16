@@ -1,30 +1,26 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-08-02T21:23:09.609Z",
-    "updatedAt": "2019-10-03T01:16:00.266Z",
     "id": "622543",
     "name": "GetProfile"
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "GetProfile.lu",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "OnBeginDialog",
-        "id": "151697",
-        "updatedAt": "2019-10-03T01:16:08.941Z"
+        "id": "151697"
       },
       "actions": [
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
             "name": "Prompt for text",
-            "id": "362298",
-            "updatedAt": "2019-10-03T01:24:19.651Z"
+            "id": "362298"
           },
+          "allowInterruptions": "true",
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
           "maxTurnCount": 3,
@@ -36,24 +32,20 @@
           "property": "user.profile.name",
           "defaultValue": "'Human'",
           "alwaysPrompt": false,
-          "allowInterruptions": "always",
+          "allowInterruptions": "true",
           "outputFormat": "trim"
         },
         {
           "$type": "Microsoft.NumberInput",
           "$designer": {
             "name": "Prompt for a number",
-            "id": "005947",
-            "updatedAt": "2019-08-06T13:53:49.482Z"
+            "id": "005947"
           },
           "property": "user.profile.age",
           "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "maxTurnCount": 3,
-          "validations": [
-            "int(turn.value) >= 1",
-            "int(turn.value) <= 150"
-          ],
+          "validations": ["int(turn.value) >= 1", "int(turn.value) <= 150"],
           "value": "@userAge",
           "defaultValue": "30",
           "alwaysPrompt": false,
@@ -66,8 +58,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "296924",
-            "updatedAt": "2019-08-02T21:39:11.175Z"
+            "id": "296924"
           },
           "activity": "[bfdactivity-296924]"
         }
@@ -77,16 +68,14 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "Why",
-        "id": "661298",
-        "updatedAt": "2019-10-03T01:16:12.900Z"
+        "id": "661298"
       },
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
-            "id": "567494",
-            "updatedAt": "2019-08-02T21:43:47.008Z"
+            "id": "567494"
           },
           "condition": "exists(user.profile.name)",
           "actions": [
@@ -94,8 +83,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "907674",
-                "updatedAt": "2019-08-02T21:43:59.052Z"
+                "id": "907674"
               },
               "activity": "[bfdactivity-907674]"
             }
@@ -105,8 +93,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "558329",
-                "updatedAt": "2019-08-02T21:44:37.748Z"
+                "id": "558329"
               },
               "activity": "[bfdactivity-558329]"
             }
@@ -119,16 +106,14 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "name": "NoValue",
-        "id": "449648",
-        "updatedAt": "2019-10-03T01:16:18.662Z"
+        "id": "449648"
       },
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
-            "id": "015423",
-            "updatedAt": "2019-08-02T21:45:15.030Z"
+            "id": "015423"
           },
           "condition": "exists(user.profile.name)",
           "actions": [
@@ -136,8 +121,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "074631",
-                "updatedAt": "2019-08-02T21:47:18.206Z"
+                "id": "074631"
               },
               "activity": "[bfdactivity-074631]"
             },
@@ -145,8 +129,7 @@
               "$type": "Microsoft.SetProperty",
               "$designer": {
                 "name": "Set a Property",
-                "id": "960926",
-                "updatedAt": "2019-08-02T21:46:57.049Z"
+                "id": "960926"
               },
               "property": "user.profile.age",
               "value": "30"
@@ -157,8 +140,7 @@
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
-                "id": "758791",
-                "updatedAt": "2019-08-02T21:47:25.615Z"
+                "id": "758791"
               },
               "activity": "[bfdactivity-758791]"
             },
@@ -166,8 +148,7 @@
               "$type": "Microsoft.SetProperty",
               "$designer": {
                 "name": "Set a Property",
-                "id": "142109",
-                "updatedAt": "2019-08-02T21:47:07.649Z"
+                "id": "142109"
               },
               "property": "user.profile.name",
               "value": "'Human'"
@@ -181,8 +162,7 @@
       "$type": "Microsoft.OnIntent",
       "$designer": {
         "id": "372804",
-        "name": "GetProfileInputs",
-        "updatedAt": "2019-10-03T01:16:42.468Z"
+        "name": "GetProfileInputs"
       },
       "intent": "GetProfileInputs"
     }

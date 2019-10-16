@@ -2,7 +2,7 @@
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": false,
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
@@ -21,8 +21,6 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-08-08T09:31:13.918Z",
-            "updatedAt": "2019-08-08T09:31:15.028Z",
             "id": "275713"
           },
           "activity": "[bfdactivity-275713]"
@@ -30,8 +28,6 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-08-08T09:31:09.457Z",
-            "updatedAt": "2019-08-08T09:31:10.586Z",
             "id": "974289"
           },
           "activity": "[bfdactivity-974289]"
@@ -78,8 +74,6 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "createdAt": "2019-08-08T09:31:16.901Z",
-                    "updatedAt": "2019-08-08T09:31:17.993Z",
                     "id": "854426"
                   },
                   "activity": "[bfdactivity-854426]"
@@ -148,16 +142,12 @@
       ],
        
       "$designer": {
-        "createdAt": "2019-08-08T07:00:32.291Z",
-        "updatedAt": "2019-08-08T07:00:32.305Z",
         "id": "207872"
       }
     }
   ],
   "$schema": "../../../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-08T07:00:30.166Z",
-    "updatedAt": "2019-08-08T07:00:30.180Z",
     "id": "909525"
   }
 }

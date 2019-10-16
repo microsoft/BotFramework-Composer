@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import debounce from 'lodash.debounce';
@@ -32,7 +32,8 @@ const ObiFormEditor: React.FC<FormEditorProps> = props => {
     props.onChange(data, props.focusedSteps[0]);
   };
 
-  const debouncedOnChange = debounce(onChange, 750);
+  // only need to debounce the change handler when focusedSteps change
+  const debouncedOnChange = useMemo(() => debounce(onChange, 750), [props.focusedSteps[0]]);
   const key = get(props.data, '$designer.id', props.focusPath);
 
   return (
