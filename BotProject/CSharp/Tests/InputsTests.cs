@@ -54,7 +54,6 @@ namespace Tests
                 .AssertReply("Hello, I'm Zoidberg. What is your name? (This can't be interrupted)")
             .Send("02")
                 .AssertReply("Hello 02, nice to talk to you!")
-                .AssertReply("Hello, I'm Zoidberg. What is your name? (This can be interrupted)")
             .Send("02")
                 .AssertReply("What is your age?")
             .StartTestAsync();
