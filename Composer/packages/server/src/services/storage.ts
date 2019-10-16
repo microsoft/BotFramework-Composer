@@ -80,7 +80,7 @@ class StorageService {
 
   private isBotFolder = (path: string) => {
     // locate Main.dialog
-    const mainPath = Path.join(path, 'Main', 'Main.dialog');
+    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
     const isbot = fs.existsSync(mainPath);
     return isbot;
   };

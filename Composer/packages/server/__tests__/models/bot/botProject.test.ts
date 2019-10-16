@@ -61,7 +61,7 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/${dialogName}.dialog`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}/${dialogName}.dialog`));
     } catch (err) {
       throw new Error(err);
     }
@@ -132,7 +132,7 @@ describe('modify non exist files', () => {
 describe('lg operation', () => {
   afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
     } catch (err) {
       throw new Error(err);
     }
@@ -140,9 +140,8 @@ describe('lg operation', () => {
 
   it('should create lg file and update index', async () => {
     const id = 'root';
-    const dir = 'root';
     const content = '# hello \n - hello';
-    const lgFiles = await proj.createLgFile(id, content, dir);
+    const lgFiles = await proj.createLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(8);
@@ -150,7 +149,7 @@ describe('lg operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lg');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toEqual(content);
     }
   });
@@ -166,7 +165,7 @@ describe('lg operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lg');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toEqual(content);
     }
   });
@@ -193,9 +192,9 @@ describe('lg operation', () => {
 describe('lu operation', () => {
   afterAll(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/root`));
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/generated/luis.status.json`));
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/generated`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated/luis.status.json`));
+      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated`));
     } catch (err) {
       throw new Error(err);
     }
@@ -203,9 +202,8 @@ describe('lu operation', () => {
 
   it('should create lu file and update index', async () => {
     const id = 'root';
-    const dir = 'root';
     const content = '## hello \n - hello';
-    const luFiles = await proj.createLuFile(id, content, dir);
+    const luFiles = await proj.createLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(8);
@@ -213,7 +211,7 @@ describe('lu operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lu');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
       expect(result.content).toEqual(content);
     }
   });
@@ -229,7 +227,7 @@ describe('lu operation', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lu');
+      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
       expect(result.content).toEqual(content);
     }
   });

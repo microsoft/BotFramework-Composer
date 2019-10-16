@@ -15,6 +15,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
   focusedEvent,
   focusedSteps,
+  focusedTab,
   data: inputData,
   shellApi,
 }): JSX.Element => {
@@ -48,6 +49,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   const [context, setContext] = useState({
     focusedId,
     focusedEvent,
+    focusedTab,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
@@ -57,8 +59,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       ...context,
       focusedId,
       focusedEvent,
+      focusedTab,
     });
-  }, [focusedEvent, focusedSteps]);
+  }, [focusedEvent, focusedSteps, focusedTab]);
 
   return (
     <NodeRendererContext.Provider value={context}>
@@ -87,6 +90,7 @@ interface VisualDesignerProps {
   dialogId: string;
   focusedEvent: string;
   focusedSteps: string[];
+  focusedTab: string;
   shellApi: any;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }

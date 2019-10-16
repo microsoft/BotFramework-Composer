@@ -16,6 +16,8 @@ import { LUIndexer } from './indexers/luIndexer';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
+const DIALOGFOLDER = 'ComposerDialogs';
+
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
@@ -26,6 +28,7 @@ export class BotProject {
 
   public name: string;
   public dir: string;
+  public dataDir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public dialogIndexer: DialogIndexer;
@@ -40,6 +43,7 @@ export class BotProject {
   constructor(ref: LocationRef) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
+    this.dataDir = Path.join(this.dir, DIALOGFOLDER);
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
@@ -73,6 +77,7 @@ export class BotProject {
   public getIndexes = () => {
     return {
       botName: this.name,
+      location: this.dir,
       dialogs: this.dialogIndexer.getDialogs(),
       lgFiles: this.lgIndexer.getLgFiles(),
       luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
@@ -183,7 +188,7 @@ export class BotProject {
     return this.dialogIndexer.getDialogs();
   };
 
-  public createDialog = async (id: string, content = '', dir = ''): Promise<Dialog[]> => {
+  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<Dialog[]> => {
     const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
@@ -202,8 +207,8 @@ export class BotProject {
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
-
     await this._removeFile(dialog.relativePath);
+    this._cleanUp(dialog.relativePath);
     return this.dialogIndexer.getDialogs();
   };
 
@@ -222,7 +227,7 @@ export class BotProject {
     return this.lgIndexer.getLgFiles();
   };
 
-  public createLgFile = async (id: string, content: string, dir = ''): Promise<LGFile[]> => {
+  public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LGFile[]> => {
     const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
@@ -269,7 +274,7 @@ export class BotProject {
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir = ''): Promise<LUFile[]> => {
+  public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LUFile[]> => {
     const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
@@ -287,8 +292,11 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
+
     await this._removeFile(luFile.relativePath);
+
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
+    this._cleanUp(luFile.relativePath);
     return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
   };
 
@@ -352,8 +360,24 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  // create file in this project this function will gurantee the memory cache
-  // (this.files, all indexes) also gets updated
+  private _cleanUp = (relativePath: string) => {
+    const absolutePath = `${this.dir}/${relativePath}`;
+    const dirPath = Path.dirname(absolutePath);
+    this._removeEmptyFolder(dirPath);
+  };
+
+  private _removeEmptyFolder = async (folderPath: string) => {
+    const files = await this.fileStorage.readDir(folderPath);
+    if (files.length === 0) {
+      this.fileStorage.rmDir(folderPath);
+    }
+  };
+
+  private defaultDir = (id: string) => Path.join(DIALOGFOLDER, id);
+
+  // create a file with relativePath and content
+  // relativePath is a path relative to root dir instead of dataDir
+  // dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
@@ -437,10 +461,12 @@ export class BotProject {
     const fileList: FileInfo[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
     for (const pattern of patterns) {
-      const paths = await this.fileStorage.glob(pattern, this.dir);
+      // load only from the data dir, otherwise may get "build" versions from deployment process
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
 
       for (const filePath of paths.sort()) {
-        const realFilePath: string = Path.join(this.dir, filePath);
+        const realFilePath: string = Path.join(root, filePath);
         // skip lg files for now
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
           const content: string = await this.fileStorage.readFile(realFilePath);

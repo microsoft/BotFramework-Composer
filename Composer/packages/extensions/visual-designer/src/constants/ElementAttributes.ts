@@ -5,6 +5,7 @@ export enum AttrNames {
   EdgeMenuElement = 'data-is-edge-menu',
   FocusedId = 'data-focused-id',
   SelectedId = 'data-selected-id',
+  Tab = 'data-tab',
 
   // attrs for multi selection
   FocusableElement = 'data-is-focusable',
