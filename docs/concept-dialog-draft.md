@@ -19,23 +19,22 @@ There are two types of Dialogs in Bot Composer: main dialog and dhild dialog. Cr
 At bot runtime, the main dialog is called into action and becomes an active dialog, triggering event handlers with pre-defined actions in the main dialog. As the conversation flows, a child dialog can be called by a main dialog, and then vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a Dialog 
-In Bot Composer, each dialog is a dialog class that contains a set of event handlers (triggers) which can be triggered to handle different events. Currently, Bot Composer provides five different types of triggers ([Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md)) in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle ConversationUpdate`, `Handle an Event: BeginDialog`, and `Handle a Dialog Event`. Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. 
+In Bot Composer, each dialog is a dialog class that contains a set of event handlers. Triggers are event handlers which can be triggered to handle different events. Currently, Bot Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle ConversationUpdate`, `Handle an Event: BeginDialog`, and `Handle a Dialog Event`. Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. You can read the [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) concept article for more information on events and triggers in Composer. 
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
-Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: LUIS recognizer (by default) and Regular Expression Recognizer. A bot can have no recognizer. 
+Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: LUIS recognizer (by default) and Regular Expression Recognizer. You can ONLY choose one type of recognizer for each dialog. A dialog can have no recognizer. 
 
 ![recognizer](./media/dialog/recognizer.png)
-
 
 > [!NOTE]
 > **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you will design and model your dialog system.   
 
-Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Composer offers a wide range of action components such as `Send Messages` for sending messages and `Ask a Question` for prompts / asking questions. Users can also add branch and loop when design their dialog path using the `Flow` component, or use `Memory Manipulation` for setting properties and [memory use](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/using_memory.md). 
+Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Composer offers a wide range of action components such as `Send Messages` for sending messages and `Ask a Question` for prompts / asking questions. Users can also add branch and loop when design their dialog path using the `Flow` component, or use `Memory Manipulation` for setting properties and [memory use](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md). 
 
 ![actions](./media/dialog/actions.png)
 
-As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an anatomy of a Dialog in Bot Composer. The diagram is reproduced on the original [Anatomy: Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/anatomy-and-runtime-behavior.md#anatomy-adaptive-dialog) diagram with slight modifications to fit the context of Bot Composer. 
+As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an anatomy of a dialog in Bot Composer. The diagram is reproduced on the original [Anatomy: Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/anatomy-and-runtime-behavior.md#anatomy-adaptive-dialog) diagram with slight modifications to fit the context of Bot Composer. 
 
 <p align="left">
     <img alt="Open samples" src="./media/dialog/DialogAnatomy.png" style="max-width:780px;" />
@@ -47,6 +46,9 @@ As the bot takes actions and sends messages, the **language generator** is calle
 
 A Dialog acts like a piece of the bot's functionality such as [**GetProfile**](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Interrupt) to fulfill user's request. A bot will have a few dialogs or even dozens of hundres of individual dialogs and it is a big challenge to manage the dialog system and the conversation with user. Bot Composer offers a set of built-in action components to simplify sophisticated converesation modelling process so that users can build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
 
+![dialog_action](./media/dialog/dialog_action.png)
+
+
 | Dialog Action        | Description                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | Begin a Dialog       | An action which begins another dialog. When that dialog is completed, it will return the caller.                                 |
@@ -56,7 +58,7 @@ A Dialog acts like a piece of the bot's functionality such as [**GetProfile**](h
 | Repeat this Dialog   | An action which repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action which replaces the current dialog with the target dialog.                                                              |
 | Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
-
+We might need a how-to article documenting how to use each type of the dialog actions. 
 
 ## References 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)

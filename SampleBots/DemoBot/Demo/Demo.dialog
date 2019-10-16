@@ -1,0 +1,21 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "Demo",
+    "createdAt": "2019-10-16T20:24:58.958Z",
+    "updatedAt": "2019-10-16T20:24:59.564Z",
+    "id": "807139"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": []
+    }
+  ],
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
+}
