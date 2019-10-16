@@ -1,7 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
-import { visitAdaptiveAction as walkAdaptiveAction, copyLgActivity } from './copyUtils';
+import { copyAdaptiveAction } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -78,32 +78,15 @@ export const needsDeepCopy = $type => {
   return DEEP_COPY_TYPES.includes($type);
 };
 
+const updateDesigner = data => {
+  const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
+  data.$designer = $designer;
+};
+
+// TODO: lgApi should also be included in shared lib instead of pass it in
+//       since it's already used by Shell, Visual and Form.
 export const deepCopyAction = async (data, lgApi) => {
-  if (!data || !data.$type) return {};
-
-  // Deep copy the original data.
-  const copy = JSON.parse(JSON.stringify(data));
-
-  const updateDesigner = data => {
-    const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
-    data.$designer = $designer;
-  };
-
-  // Copy raw LG activity.
-  const overrideContent = async data => {
-    if (data.$type === 'Microsoft.SendActivity') {
-      data.activity = await copyLgActivity(data.activity, lgApi);
-    }
-  };
-
-  await walkAdaptiveAction(copy, async data => {
-    updateDesigner(data);
-    if (needsDeepCopy(data.$type)) {
-      await overrideContent(data);
-    }
-  });
-
-  return copy;
+  return await copyAdaptiveAction(data, { lgApi, needsDeepCopy, updateDesigner });
 };
 
 export const seedNewDialog = (

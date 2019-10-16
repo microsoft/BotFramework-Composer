@@ -19,7 +19,7 @@ const childrenMap = {
  * @param {any} input The input Adaptive Action which has $type field.
  * @param {function} visitor The callback function called on each action node.
  */
-export async function visitAdaptiveAction(input: any, visitor: (data: any) => Promise<any>) {
+async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<any>) {
   if (!input || !input.$type) return;
 
   await visitor(input);
@@ -32,7 +32,7 @@ export async function visitAdaptiveAction(input: any, visitor: (data: any) => Pr
   for (const childrenKey of childrenKeys) {
     const children = input[childrenKey];
     if (Array.isArray(children)) {
-      Promise.all(children.map(async x => await visitAdaptiveAction(x, visitor)));
+      Promise.all(children.map(async x => await walkAdaptiveAction(x, visitor)));
     }
   }
 }
@@ -41,7 +41,7 @@ function isLgActivity(activity: string) {
   return activity && activity.includes('bfdactivity-');
 }
 
-export async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
+async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
   if (!activity) return '';
   if (!isLgActivity(activity) || !lgApi) return activity;
 
@@ -59,4 +59,40 @@ export async function copyLgActivity(activity: string, lgApi: any): Promise<stri
 
   if (currentLg) return currentLg.Body;
   return activity;
+}
+
+async function overrideExternalReferences(data, externalApi) {
+  const { lgApi } = externalApi;
+
+  // Override specific fields different actions care.
+  switch (data.$type) {
+    case 'Microsoft.SendActivity':
+      data.activity = await copyLgActivity(data.activity, lgApi);
+      break;
+  }
+}
+
+export async function copyAdaptiveAction(data, externalApi) {
+  if (!data || !data.$type) return {};
+
+  const { lgApi, updateDesigner, needsDeepCopy } = externalApi;
+
+  // Deep copy the original data.
+  const copy = JSON.parse(JSON.stringify(data));
+
+  // Create copy handler for rewriting fields which need to be handled specially.
+  let copyHandler: (data) => any = updateDesigner;
+
+  if (needsDeepCopy(data.$type)) {
+    const advancedCopyHandler = async data => {
+      updateDesigner(data);
+      await overrideExternalReferences(data, { lgApi });
+    };
+    copyHandler = advancedCopyHandler;
+  }
+
+  // Walk action and rewrite needs copy fields
+  await walkAdaptiveAction(copy, copyHandler);
+
+  return copy;
 }
