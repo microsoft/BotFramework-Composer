@@ -152,16 +152,12 @@ export const textFieldlabel = {
   },
 };
 
-export const name = {
+export const intent = {
   fieldGroup: {
     width: 200,
   },
   root: {
     height: '90px',
   },
-  subComponentStyles: textFieldlabel,
-};
-
-export const constraint = {
   subComponentStyles: textFieldlabel,
 };

@@ -2,6 +2,7 @@ import { Boundary } from '../../models/Boundary';
 
 export interface NodeProps {
   id: string;
+  tab?: string;
   data: any;
   focused?: boolean;
   onEvent: (action, id, ...rest) => object | void;

@@ -72,6 +72,10 @@ const shellApi = {
     return apiClient.apiCall('updateLuFile', luFile);
   },
 
+  updateLgFile: (id: string, content: string) => {
+    return apiClient.apiCall('updateLgFile', { id, content });
+  },
+
   getLgTemplates: (id: string) => {
     return apiClient.apiCall('getLgTemplates', { id });
   },

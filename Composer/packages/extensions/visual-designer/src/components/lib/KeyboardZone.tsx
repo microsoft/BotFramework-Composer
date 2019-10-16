@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
+
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 const KeyNameByModifierAttr = {
