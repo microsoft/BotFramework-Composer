@@ -24,11 +24,7 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, eventType, intent } = data;
-
-  if ($type === intentTypeKey && !intent) {
-    errors.intent = formatMessage('please select a intent type');
-  }
+  const { $type, eventType } = data;
 
   if ($type === eventTypeKey && !eventType) {
     errors.eventType = formatMessage('please select a event type');
@@ -153,6 +149,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               options={intentOptions}
               styles={dropdownStyles}
               onChange={onSelectIntent}
+              disabled={intentOptions.length === 0}
+              placeholder={intentOptions.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
               errorMessage={formData.errors.intent}
             />
           )}
