@@ -3,14 +3,15 @@ import { JSONSchema6 } from 'json-schema';
 export interface OBISchema extends JSONSchema6 {
   $schema?: string;
   $role?: string;
-  $type?: string;
+  $type?: SDKTypes;
   $copy?: string;
-  description?: string;
-  definitions?: any;
   $id?: string;
   $designer?: {
+    id: string;
     [key: string]: any;
   };
+  description?: string;
+  definitions?: any;
   title?: string;
   __additional_property?: boolean;
 }
