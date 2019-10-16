@@ -48,6 +48,8 @@ A Dialog acts like a piece of the bot's functionality such as [**GetProfile**](h
 
 ![dialog_action](./media/dialog/dialog_action.png)
 
+We might need a how-to article documenting how to use each type of the dialog actions. 
+
 
 | Dialog Action        | Description                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -58,7 +60,7 @@ A Dialog acts like a piece of the bot's functionality such as [**GetProfile**](h
 | Repeat this Dialog   | An action which repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action which replaces the current dialog with the target dialog.                                                              |
 | Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
-We might need a how-to article documenting how to use each type of the dialog actions. 
+
 
 ## References 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
