@@ -88,6 +88,31 @@ function locateNearestElement(
     }
   } else {
     // move left & right
+    elementCandidates.forEach(element => {
+      bounds = element.getBoundingClientRect();
+
+      if (boundRectKey === BoundRect.Left) {
+        distance =
+          bounds[boundRectKey] +
+          bounds.width / 2 -
+          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
+      } else {
+        distance =
+          currentElementBounds[boundRectKey] -
+          currentElementBounds.width / 2 -
+          (bounds[boundRectKey] - bounds.width / 2);
+      }
+      assistDistance = Math.abs(
+        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
+      );
+      // find three element who is closer to the current element
+      if (distance > 0 && distance <= minDistance && assistDistance <= assistMinDistance) {
+        neareastElements[0] = element;
+        minDistance = distance;
+        assistMinDistance = assistDistance;
+      }
+    });
+
     let secondMinDistance = 1000;
     let secondAssistMinDistance = 1000;
     elementCandidates.forEach(element => {
@@ -109,23 +134,16 @@ function locateNearestElement(
       );
       // find three element who is closer to the current element
       if (distance > 0) {
-        if (distance <= minDistance && assistDistance <= assistMinDistance) {
-          neareastElements[0] = element;
-          minDistance = distance;
-          assistMinDistance = assistDistance;
-        } else {
-          if (distance <= secondMinDistance) {
-            neareastElements[1] = element;
-            secondMinDistance = distance;
-          }
-          if (assistDistance <= secondAssistMinDistance) {
-            neareastElements[2] = element;
-            secondAssistMinDistance = assistDistance;
-          }
+        if (distance <= secondMinDistance && distance > minDistance) {
+          neareastElements[1] = element;
+          secondMinDistance = distance;
+        }
+        if (assistDistance <= secondAssistMinDistance && assistDistance > assistMinDistance) {
+          neareastElements[2] = element;
+          secondAssistMinDistance = assistDistance;
         }
       }
     });
-
     const currentElementIdArrs = currentElement.getAttribute(AttrNames.SelectedId).split('.');
     let maxSamePath = 0;
     let samePathCount = 0;
@@ -143,12 +161,19 @@ function locateNearestElement(
         }
       }
 
+      // calculate switchCondition default branch length
+      let currentElementActionLength = currentElementIdArrs.length;
+      currentElementIdArrs.forEach(action => {
+        if (action.includes('default')) {
+          currentElementActionLength++;
+        }
+      });
       // If the element's selectedId includes the original element's or its selectedId has the most overlap with the original element and selectedId's length is not more than the original element's, it is the neareast element
       // Else stay focus on the original element
       if (
         samePathCount > maxSamePath &&
         !(ele.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS && !currentElement.getAttribute(AttrNames.Tab)) &&
-        (eleSelectedId.split('.').length <= currentElementIdArrs.length ||
+        (eleSelectedId.split('.').length <= currentElementActionLength ||
           eleSelectedId.includes(currentElementIdArrs.join('.')))
       ) {
         neareastElement = ele;
