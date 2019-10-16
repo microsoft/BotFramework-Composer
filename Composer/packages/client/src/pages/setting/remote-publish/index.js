@@ -143,10 +143,6 @@ export const RemotePublish = () => {
     );
   };
 
-  const openWebchat = () => {
-    alert('TODO: Open the web chat.');
-  };
-
   const confirmRollback = () => {
     setDialogProps({
       title: formatMessage('Confirm rollback'),
@@ -183,7 +179,7 @@ export const RemotePublish = () => {
     setDialogHidden(true);
   };
 
-  const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
+  const openInEmulator = (url, authSettings) => {
     // this creates a temporary hidden iframe to fire off the bfemulator protocol
     // and start up the emulator
     const i = document.createElement('iframe');
