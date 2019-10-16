@@ -2,11 +2,11 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:50:17.253Z",
-    "updatedAt": "2019-07-16T19:37:32.051Z",
+    "updatedAt": "2019-10-16T21:21:21.954Z",
     "id": "897725"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -26,5 +26,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

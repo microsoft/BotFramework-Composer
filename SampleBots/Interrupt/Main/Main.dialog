@@ -2,11 +2,13 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-08-02T20:09:07.865Z",
-    "updatedAt": "2019-08-02T20:25:15.773Z",
+    "updatedAt": "2019-10-16T21:37:26.799Z",
     "id": "179150",
     "name": "Interrupt"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "Main.lu",
   "generator": "common.lg",
   "events": [
     {
@@ -188,6 +190,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema",
-  "recognizer": "Main.lu"
+  "$schema": "../../app.schema"
 }

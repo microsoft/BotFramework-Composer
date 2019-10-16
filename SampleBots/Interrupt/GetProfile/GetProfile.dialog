@@ -2,11 +2,13 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-08-02T21:23:09.609Z",
-    "updatedAt": "2019-08-02T21:41:57.585Z",
+    "updatedAt": "2019-10-16T21:45:35.198Z",
     "id": "622543",
     "name": "GetProfile"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "GetProfile.lu",
   "events": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -175,6 +177,5 @@
       ]
     }
   ],
-  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
-  "recognizer": "GetProfile.lu"
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema"
 }
