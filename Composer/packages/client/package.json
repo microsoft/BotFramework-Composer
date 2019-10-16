@@ -71,7 +71,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "node --max-old-space-size=8192 scripts/build.js",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix"
