@@ -19,12 +19,14 @@ export interface TriggerFormData {
   $type: string;
   eventType: string;
   intent: string;
+  activityType: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
   eventType?: string;
   intent?: string;
+  activityType?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -34,6 +36,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
+export const activityTypeKey: string = SDKTypes.OnActivity;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -114,6 +117,38 @@ export function getTriggerTypes(): IDropdownOption[] {
     }),
   ];
   return triggerTypes;
+}
+
+export function getEventTypes(): IDropdownOption[] {
+  const eventTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return eventTypes;
+}
+
+export function getActivityTypes(): IDropdownOption[] {
+  const activityTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return activityTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

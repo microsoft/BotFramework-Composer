@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
+import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
-import { appschema } from 'shared';
 
 import {
   addNewTrigger,
@@ -13,11 +12,14 @@ import {
   TriggerFormDataErrors,
   eventTypeKey,
   intentTypeKey,
+  activityTypeKey,
+  getEventTypes,
+  getActivityTypes,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 import { DialogInfo } from '../../store/types';
 
-import { styles, dropdownStyles, intent, dialogWindow } from './styles';
+import { styles, dropdownStyles, dialogWindow } from './styles';
 
 const isValidName = name => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -25,10 +27,14 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, eventType } = data;
+  const { $type, eventType, activityType } = data;
 
   if ($type === eventTypeKey && !eventType) {
     errors.eventType = formatMessage('please select a event type');
+  }
+
+  if ($type === activityTypeKey && !activityType) {
+    errors.activityType = formatMessage('please select an activity type');
   }
 
   if (!$type) {
@@ -49,6 +55,7 @@ const initialFormData: TriggerFormData = {
   $type: intentTypeKey,
   intent: '',
   eventType: '',
+  activityType: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -59,7 +66,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
+<<<<<<< HEAD
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+=======
+>>>>>>> trigger align with the new schema
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -78,8 +88,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    delete formData.eventType;
-    setFormData({ ...formData, $type: option.key });
+    // delete formData.eventType;
+    // delete formData.activityType;
+    setFormData({ ...initialFormData, $type: option.key });
   };
 
   const onSelectEventType = (e, option) => {
@@ -90,16 +101,18 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, intent: option.key });
   };
 
-  const updateForm = field => (e, newValue) => {
-    setFormData({
-      ...formData,
-      [field]: newValue,
-    });
+  const onSelectActivityType = (e, option) => {
+    setFormData({ ...formData, activityType: option.key });
   };
 
+<<<<<<< HEAD
   const eventTypes = get(appschema, `definitions.['${eventTypeKey}'].properties.event.enum`, []).map(t => {
     return { key: t, text: t };
   });
+=======
+  const eventTypes: IDropdownOption[] = getEventTypes();
+  const activityTypes: IDropdownOption[] = getActivityTypes();
+>>>>>>> trigger align with the new schema
 
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
@@ -111,6 +124,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const showEventDropDown = formData.$type === eventTypeKey;
   const showIntentDropDown = formData.$type === intentTypeKey;
+  const showActivityDropDown = formData.$type === activityTypeKey;
+
   return (
     <Dialog
       hidden={!isOpen}
@@ -146,6 +161,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               onChange={onSelectEventType}
               errorMessage={formData.errors.eventType}
               data-testid={'eventTypeDropDown'}
+            />
+          )}
+          {showActivityDropDown && (
+            <Dropdown
+              placeholder="select an activity type"
+              label="Which activity?"
+              options={activityTypes}
+              styles={dropdownStyles}
+              onChange={onSelectActivityType}
+              errorMessage={formData.errors.activityType}
+              data-testid={'activityTypeDropDown'}
             />
           )}
           {showIntentDropDown && (

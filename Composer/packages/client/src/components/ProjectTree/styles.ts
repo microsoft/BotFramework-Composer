@@ -138,8 +138,9 @@ export const dropdownStyles = {
 
 export const dialogWindow = css`
   display: flex;
-  width: 400px;
   flex-direction: column;
+  width: 400px;
+  height: 250px;
 `;
 
 export const textFieldlabel = {
