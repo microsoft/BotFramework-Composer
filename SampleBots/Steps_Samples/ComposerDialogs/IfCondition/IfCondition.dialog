@@ -1,0 +1,47 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "708197"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "475044"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "719594"
+          },
+          "condition": "user.name == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "719594"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": "true",
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "485963"
+          },
+          "activity": "[bfdactivity-485963]"
+        }
+      ]
+    }
+  ]
+}

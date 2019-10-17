@@ -1,0 +1,46 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "equals(user.pages, 0)",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "113979"
+              },
+              "activity": "[bfdactivity-113979]"
+            },
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "id": "617347"
+              }
+            }
+          ],
+          "$designer": {
+            "id": "518803"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.pages - 1",
+          "property": "user.pages"
+        }
+      ],
+       
+      "$designer": {
+        "id": "735478"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "807751"
+  }
+}

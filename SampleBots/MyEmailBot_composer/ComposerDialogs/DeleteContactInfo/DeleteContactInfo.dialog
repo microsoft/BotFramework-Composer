@@ -1,0 +1,32 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "560547"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "987708"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.recipient",
+          "$designer": {
+            "id": "035784"
+          }
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "property": "user.emailAddr",
+          "$designer": {
+            "id": "551014"
+          }
+        }
+      ]
+    }
+  ]
+}

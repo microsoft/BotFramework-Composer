@@ -1,0 +1,75 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "3",
+          "property": "user.itemsPerPage"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "0",
+          "property": "user.pages"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "0",
+          "property": "user.sentPages"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.emailCount",
+          "value": "0"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.sentItemsCount",
+          "value": "0"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "itemsProperty": "user.emails"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "itemsProperty": "user.sentItems"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SignInToGraph",
+          "$designer": {
+            "id": "256471"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetMyEmailFromGraph",
+          "$designer": {
+            "id": "742302"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "GetSentItemsFromGraph",
+          "$designer": {
+            "id": "707323"
+          }
+        }
+      ],
+       
+      "$designer": {
+        "id": "779035"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "811347"
+  }
+}

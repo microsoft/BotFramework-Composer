@@ -85,8 +85,6 @@ interface InputDialog extends BaseSchema {
   maxTurnCount: number;
   /** Expressions to validate an input. */
   validations: MicrosoftIExpression[];
-  /** The expression that you evaluated for input. */
-  value: MicrosoftIExpression;
   /** Property that this input dialog is bound to */
   property: MicrosoftIExpression;
   /** Value to return if the value expression can't be evaluated. */
@@ -193,13 +191,7 @@ interface RuleBase extends BaseSchema {
   /** Optional constraint to which must be met for this rule to fire */
   constraint?: string;
   /** Sequence of steps or dialogs to execute */
-  steps: MicrosoftIDialog[];
-}
-
-/** Defines a rule for an event which is triggered by some source */
-interface OnEvent extends RuleBase {
-  /** Events to trigger this rule for */
-  events: DialogEvent[];
+  actions: MicrosoftIDialog[];
 }
 
 /** This defines the steps to take when an Intent is recognized (and optionally entities) */
@@ -210,13 +202,10 @@ interface OnIntent extends RuleBase {
   entities: string[];
 }
 
-/** Defines a rule for an event which is triggered by some source */
-interface Rule extends RuleBase {}
-
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
 interface OnUnknownIntent extends RuleBase {}
 
-type MicrosoftIRule = OnEvent | OnIntent | Rule | OnUnknownIntent;
+type ITriggerCondition = OnIntent | OnUnknownIntent;
 
 /**
  * Conversational Flow and Dialog Management
@@ -239,16 +228,18 @@ interface SwitchCondition extends BaseSchema {
   default?: MicrosoftIDialog[];
 }
 
-/** This configures a data driven dialog via a collection of steps/dialogs. */
+/** Flexible, data driven dialog that can adapt to the conversation. */
 interface MicrosoftAdaptiveDialog extends BaseSchema {
+  /** Optional dialog ID. */
+  id?: string;
   /** If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time. */
   autoEndDialog?: boolean;
+  /** Value that will be passed back to the parent dialog. */
+  defaultResultProperty?: string;
   /** Configured recognizer to generate intent and entites from user utterance. */
   recognizer?: MicrosoftIRecognizer;
-  /** Language generator to use for this dialog. (aka: LG file) */
-  generator?: string;
   /** This is the array of rules to use to evaluate conversation */
-  events: MicrosoftIRule[];
+  triggers: ITriggerCondition[];
 }
 
 /* Union of components which implement the IDialog interface */
@@ -256,6 +247,6 @@ type MicrosoftIDialog =
   | ChoiceInput
   | ConfirmInput
   | MicrosoftIRecognizer
-  | MicrosoftIRule
+  | ITriggerCondition
   | SwitchCondition
   | TextInput;

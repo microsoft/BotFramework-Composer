@@ -1,0 +1,98 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Start To Forward this Email. ",
+          "$designer": {
+            "id": "628158"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.fwSubject",
+          "value": "concat('Fw:',user.focusedEmail.subject)",
+          "$designer": {
+            "id": "059140"
+          }
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "false",
+          "property": "user.fwContent",
+          "prompt": "OK, Please Enter the Content of Your Email to Forward.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "id": "133886"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "FindMyContact",
+          "$designer": {
+            "id": "637711"
+          }
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.confirmed",
+          "prompt": "Are you Sure to Send this Email?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "confirmChoices": [
+            {
+              "action": {}
+            }
+          ],
+          "$designer": {
+            "id": "055891"
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.confirmed",
+          "actions": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "ForwardMyEmailThroughGraph"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "Your Email has been Sent Succsessfully. "
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            }
+          ]
+        }
+      ],
+      "$designer": {
+        "id": "983009"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "262793"
+  }
+}

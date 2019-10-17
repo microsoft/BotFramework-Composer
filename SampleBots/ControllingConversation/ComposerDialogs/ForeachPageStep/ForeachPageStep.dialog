@@ -1,0 +1,89 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "847208"
+  },
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "455902"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "400171"
+          },
+          "condition": "dialog.ids == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "879949"
+              },
+              "property": "dialog.ids",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "834603"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "10000+1000+100+10+1"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "048190"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "200*200"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "434590"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "888888/4"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "623448"
+          },
+          "activity": "[bfdactivity-623448]"
+        },
+        {
+          "$type": "Microsoft.ForeachPage",
+          "$designer": {
+            "id": "993283"
+          },
+          "pageSize": 10,
+          "itemsProperty": "dialog.ids",
+          "PageSize": "2",
+          "actions": [
+            {
+              "$type": "Microsoft.Foreach",
+              "itemsProperty": "dialog.foreach.page",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

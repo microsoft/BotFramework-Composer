@@ -9,7 +9,7 @@ import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRul
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
-  [ObiTypes.OnEvent]: EventRule,
+  [ObiTypes.OnCondition]: EventRule,
   [ObiTypes.OnIntent]: IntentRule,
   [ObiTypes.OnUnknownIntent]: UnknownIntentRule,
   [ObiTypes.OnConversationUpdateActivity]: ConversationUpdateActivityRule,

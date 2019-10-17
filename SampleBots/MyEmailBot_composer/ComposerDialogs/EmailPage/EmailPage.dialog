@@ -1,0 +1,102 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ShowEmailIntent",
+        "pattern": "(?i)show inbox email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SendEmailIntent",
+        "pattern": "(?i)send email" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SentItemsIntent",
+        "pattern": "(?i)show sent items"
+      }
+    ] 
+  },
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "false",
+          "property": "user.ans",
+          "prompt": "[EmailCard]",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "id": "227657"
+          }
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "id": "596431"
+          }
+        }
+      ],
+      "$designer": {
+        "id": "366453"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowMyEmail",
+          "$designer": {
+            "id": "641772"
+          }
+        }
+      ],
+      "intent": "ShowEmailIntent",
+      "$designer": {
+        "id": "794297"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowSentItems"
+        }
+      ],
+      "intent": "SentItemsIntent",
+      "$designer": {
+        "id": "541439"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SendMyEmail"
+        }
+      ],
+      "intent": "SendEmailIntent",
+      "$designer": {
+        "id": "024782"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "209219"
+  }
+}

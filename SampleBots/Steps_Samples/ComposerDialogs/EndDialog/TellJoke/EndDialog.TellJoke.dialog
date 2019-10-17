@@ -1,0 +1,62 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "323744"
+  },
+  "autoEndDialog": true,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ] 
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "241317"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.CancelAllDialogs"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "120822"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "150220"
+          },
+          "activity": "[bfdactivity-150220]"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "id": "889445"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "451180"
+          },
+          "activity": "[bfdactivity-451180]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

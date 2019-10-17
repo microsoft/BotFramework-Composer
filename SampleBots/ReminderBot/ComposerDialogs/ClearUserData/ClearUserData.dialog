@@ -1,0 +1,54 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "323094"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../BotProject/CSharp/Schemas/app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "258852"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "609169"
+          },
+          "property": "user.index"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "971431"
+          },
+          "property": "user.data"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "463745"
+          },
+          "property": "user.content"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "210405"
+          },
+          "property": "user.remindtime"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "716688"
+          },
+          "property": "user.requesttime"
+        }
+      ]
+    }
+  ]
+}

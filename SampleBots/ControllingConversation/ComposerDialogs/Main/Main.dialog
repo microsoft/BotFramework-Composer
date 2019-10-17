@@ -1,0 +1,191 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "864790",
+    "description": "This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs."
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "IfCondition",
+        "pattern": "(?i)IfCondition|01"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SwitchCondition",
+        "pattern": "SwitchCondition|02"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ForeachStep",
+        "pattern": "ForeachStep|03"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ForeachPageStep",
+        "pattern": "ForeachPageStep|04"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "Cancel",
+        "pattern": "Cancel|05"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndTurn",
+        "pattern": "EndTurn|06"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "RepeatDialog",
+        "pattern": "RepeatDialog|07"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "139291"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "IfCondition"
+        }
+      ],
+      "intent": "IfCondition"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "606805"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SwitchCondition"
+        }
+      ],
+      "intent": "SwitchCondition"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "175644"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ForeachStep"
+        }
+      ],
+      "intent": "ForeachStep"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "973338"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ForeachPageStep"
+        }
+      ],
+      "intent": "ForeachPageStep"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "329460"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "CancelDialog"
+        }
+      ],
+      "intent": "Cancel"
+    },
+    {
+      "$type": "Microsoft.OnCancelDialog",
+      "$designer": {
+        "id": "132038"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Canceled."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "043417"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.EndTurn"
+        }
+      ],
+      "intent": "EndTurn"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "294228"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "RepeatDialog"
+        }
+      ],
+      "intent": "RepeatDialog"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "094908"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "953339"
+          },
+          "activity": "[help]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "791275"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "859266"
+          },
+          "activity": "[help]"
+        }
+      ]
+    }
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
+}

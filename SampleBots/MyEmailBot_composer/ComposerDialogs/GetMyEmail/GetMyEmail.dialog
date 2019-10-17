@@ -1,0 +1,49 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "itemsProperty": "user.Emails",
+          "$designer": {
+            "id": "179912"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.emailCount",
+          "value": "count(user.getGraphEmails.value)"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.emails",
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.emails",
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+1]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.emails",
+          "value": "user.getGraphEmails.value[user.pages*user.itemsPerPage+2]"
+        }
+      ],
+      "$designer": {
+        "id": "628228"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "918913"
+  }
+}

@@ -1,7 +1,7 @@
 import { SDKTypes, PROMPT_TYPES } from 'shared';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
-const globalHidden = ['property', 'inputBindings', 'outputBinding', 'id', 'tags'];
+const globalHidden = ['property', 'id'];
 
 const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
   schemas[type] = {
@@ -10,25 +10,33 @@ const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
   return schemas;
 }, {});
 
+const triggerUiSchema = {
+  actions: {
+    'ui:field': 'StepsField',
+  },
+  'ui:order': ['condition', '*', 'actions'],
+  'ui:hidden': [...globalHidden],
+};
+
 export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.AdaptiveDialog]: {
     recognizer: {
       'ui:field': 'RecognizerField',
     },
-    events: {
+    triggers: {
       'ui:field': 'RulesField',
     },
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['property', 'outputBinding', 'recognizer', 'events', '*'],
+    'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['autoEndDialog', 'generator', ...globalHidden],
   },
   [SDKTypes.BeginDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
-    'ui:hidden': ['inputBindings', 'outputBinding'],
+    'ui:order': ['dialog', 'property', '*'],
   },
   [SDKTypes.ConditionalSelector]: {
     ifFalse: {
@@ -48,13 +56,13 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['listProperty', 'valueProperty', 'indexProperty', 'actions', '*'],
+    'ui:order': ['itemsProperty', 'actions', '*'],
   },
   [SDKTypes.ForeachPage]: {
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['listProperty', 'pageSize', 'valueProperty', 'actions', '*'],
+    'ui:order': ['itemsProperty', 'pageSize', 'actions', '*'],
   },
   [SDKTypes.HttpRequest]: {
     body: {
@@ -72,60 +80,31 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:hidden': [...globalHidden],
   },
   [SDKTypes.OnActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnBeginDialog]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnCondition]: {
+    ...triggerUiSchema,
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnCustomEvent]: {
+    ...triggerUiSchema,
   },
   [SDKTypes.OnDialogEvent]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['events', 'constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnEndOfConversationActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
-  },
-  [SDKTypes.OnEvent]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnEventActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnHandoffActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnIntent]: {
     intent: {
@@ -134,57 +113,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     actions: {
       'ui:field': 'StepsField',
     },
-    'ui:order': ['intent', 'constraint', 'entities', '*'],
+    'ui:order': ['intent', 'condition', 'entities', '*'],
     'ui:hidden': [...globalHidden],
   },
   [SDKTypes.OnInvokeActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnMessageActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnMessageDeleteActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnMessageReactionActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnMessageUpdateActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnTypingActivity]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.OnUnknownIntent]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:order': ['constraint', '*', 'actions'],
-    'ui:hidden': [...globalHidden],
+    ...triggerUiSchema,
   },
   [SDKTypes.MostSpecificSelector]: {
     selector: {

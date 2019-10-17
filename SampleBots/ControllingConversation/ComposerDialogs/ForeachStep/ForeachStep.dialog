@@ -1,0 +1,81 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "178401"
+  },
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "614429"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "810905"
+          },
+          "condition": "dialog.ids == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "931303"
+              },
+              "property": "dialog.ids",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "077820"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "10000+1000+100+10+1"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "453517"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "200*200"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "889145"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "888888/4"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "638869"
+          },
+          "activity": "[bfdactivity-638869]"
+        },
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "id": "299926"
+          },
+          "itemsProperty": "dialog.ids",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

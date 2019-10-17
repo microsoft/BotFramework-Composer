@@ -1,0 +1,166 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "937757"
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "807187"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "551445"
+          },
+          "activity": "[bfdactivity-551445]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "452701"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "576166"
+          },
+          "activity": "[bfdactivity-576166]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "289770"
+          },
+          "property": "user.choice",
+          "prompt": "What type of message would you like to send?",
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "Simple Text"
+            },
+            {
+              "value": "Text With Memory"
+            },
+            {
+              "value": "Text With LG"
+            },
+            {
+              "value": "LGWithParam"
+            },
+            {
+              "value": "LGComposition"
+            }
+          ],
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          }
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "981997"
+          },
+          "condition": "user.choice",
+          "cases": [
+            {
+              "value": "Simple Text",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "256544"
+                  },
+                  "dialog": "SimpleText"
+                }
+              ]
+            },
+            {
+              "value": "Text With Memory",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "598449"
+                  },
+                  "dialog": "TextWithMemory"
+                }
+              ]
+            },
+            {
+              "value": "Text With LG",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "791050"
+                  },
+                  "dialog": "TextWithLG"
+                }
+              ]
+            },
+            {
+              "value": "LGWithParam",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "078497"
+                  },
+                  "dialog": "LGWithParam"
+                }
+              ]
+            },
+            {
+              "value": "LGComposition",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "349641"
+                  },
+                  "dialog": "LGComposition"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "id": "938048"
+          }
+        }
+      ]
+    }
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
+}

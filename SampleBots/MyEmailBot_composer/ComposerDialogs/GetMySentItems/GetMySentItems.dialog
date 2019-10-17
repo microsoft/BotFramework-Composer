@@ -1,0 +1,50 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Clear",
+          "itemsProperty": "user.sentItems"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.sentItemsCount",
+          "value": "count(user.getGraphSentItems.value)",
+          "$designer": {
+            "id": "199137"
+          }
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+1]"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.sentItems",
+          "value": "user.getGraphSentItems.value[user.sentPages*user.itemsPerPage+2]"
+        }
+      ],
+       
+      "$designer": {
+        "id": "514550"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "196163"
+  }
+}

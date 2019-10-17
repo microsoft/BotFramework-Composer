@@ -1,0 +1,95 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "727878"
+  },
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "JokeIntent",
+        "pattern": "(?i)joke" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnCustomEvent",
+      "triggers": [
+        "cancelDialog"
+      ],
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "intent": "JokeIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EndDialog.TellJoke"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "917307"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "964165"
+          },
+          "condition": "user.name == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "543141"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": "true",
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "604381"
+          },
+          "activity": "[bfdactivity-604381]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "338063"
+          },
+          "activity": "[bfdactivity-338063]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

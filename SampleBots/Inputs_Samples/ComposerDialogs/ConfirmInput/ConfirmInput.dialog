@@ -1,0 +1,45 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "556076"
+  },
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "030235"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "647929"
+          },
+          "property": "user.confirmed",
+          "prompt": "yes or no",
+          "unrecognizedPrompt": "I need a yes or no.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "458458"
+          },
+          "activity": "[bfdactivity-458458]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

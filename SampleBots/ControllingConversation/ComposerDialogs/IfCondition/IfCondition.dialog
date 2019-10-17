@@ -1,0 +1,56 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "501534"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "057973"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "id": "260985"
+          },
+          "property": "user.age",
+          "prompt": "Hello, What's your age?",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": false,
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "463418"
+          },
+          "condition": "user.age >= 18",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "164444"
+              },
+              "activity": "[bfdactivity-164444]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "619321"
+              },
+              "activity": "[bfdactivity-619321]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

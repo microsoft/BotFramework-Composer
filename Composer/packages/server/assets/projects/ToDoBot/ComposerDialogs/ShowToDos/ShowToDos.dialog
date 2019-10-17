@@ -1,22 +1,46 @@
 {
-    "$schema": "../../app.schema",
-    "$type": "Microsoft.AdaptiveDialog",
-    "steps": [
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "709692"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "783343"
+      },
+
+      "actions": [
         {
-            "$type": "Microsoft.IfCondition",
-            "condition": "user.todos == null",
-            "steps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "You have no todos."
-                }
-            ],
-            "elseSteps": [
-                {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "[ShowTodo]"
-                }
-            ]
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "662084"
+          },
+          "condition": "user.todos == null",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "339580",
+                "name": "Send an Activity"
+              },
+              "activity": "[bfdactivity-339580]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "662084",
+                "name": "Send an Activity"
+              },
+              "activity": "[bfdactivity-662084]"
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

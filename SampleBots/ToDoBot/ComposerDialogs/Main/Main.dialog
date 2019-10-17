@@ -1,0 +1,169 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "288769",
+    "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "AddIntent",
+        "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ClearIntent",
+        "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "DeleteIntent",
+        "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ShowIntent",
+        "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HelpIntent",
+        "pattern": "(?i)help"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
+  },
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "157674"
+          },
+          "activity": "[bfdactivity-157674]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "064505"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AddToDo"
+        }
+      ],
+      "intent": "AddIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "114961"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteToDo",
+          "$designer": {
+            "id": "978613"
+          }
+        }
+      ],
+      "intent": "DeleteIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "088050"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ClearToDos"
+        }
+      ],
+      "intent": "ClearIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "633942"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "696707"
+          },
+          "activity": "[bfdactivity-696707]"
+        }
+      ],
+      "intent": "HelpIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "794124"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowToDos"
+        }
+      ],
+      "intent": "ShowIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "179728"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677440"
+          },
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "677447"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677448"
+          },
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

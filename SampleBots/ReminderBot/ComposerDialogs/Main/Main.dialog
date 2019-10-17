@@ -1,0 +1,137 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "899494",
+    "description": "ReminderBot"
+  },
+  "autoEndDialog": false,
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "134916"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "060246"
+          },
+          "activity": "[bfdactivity-060246]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "899834"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "306443"
+          },
+          "dialog": "AddReminder"
+        }
+      ],
+      "intent": "AddReminder"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "295024"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteReminder"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "583948"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "306443"
+          },
+          "dialog": "DeleteReminder"
+        }
+      ],
+      "intent": "DeleteAllReminders"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "622298"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "306443"
+          },
+          "dialog": "ShowReminder"
+        }
+      ],
+      "intent": "ShowReminder"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "597721"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "intent": "HelpIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "720611"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "146624"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.",
+          "$designer": {
+            "id": "618611"
+          }
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

@@ -1,0 +1,106 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "039096"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "851391"
+      },
+      "triggers": ["beginDialog"],
+      "actions": [
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.style",
+          "prompt": "Please select a value from below:",
+          "maxTurnCount": 3,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "Test1"
+            },
+            {
+              "value": "Test2"
+            },
+            {
+              "value": "Test3"
+            }
+          ],
+          "appendChoices": true,
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          },
+          "$designer": {
+            "id": "084631"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "160914"
+          },
+          "activity": "[bfdactivity-160914]"
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "448444"
+          },
+          "condition": "user.style",
+          "cases": [
+            {
+              "value": "Test1",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "576002"
+                  },
+                  "activity": "[bfdactivity-576002]"
+                }
+              ]
+            },
+            {
+              "value": "Test2",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "677412"
+                  },
+                  "activity": "[bfdactivity-677412]"
+                }
+              ]
+            },
+            {
+              "value": "Test3",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "700082"
+                  },
+                  "activity": "[bfdactivity-700082]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "042284"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "883342"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.AttachmentInput",
+          "$designer": {
+            "id": "452587"
+          },
+          "property": "dialog.attachments",
+          "prompt": "Please send an image.",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "All"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "365176"
+          },
+          "activity": "[bfdactivity-365176]"
+        }
+      ]
+    }
+  ]
+}
