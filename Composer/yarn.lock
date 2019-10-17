@@ -16079,6 +16079,11 @@ react-testing-library@^6.0.2:
     "@babel/runtime" "^7.4.2"
     dom-testing-library "^3.19.0"
 
+react-timeago@^4.4.0:
+  version "4.4.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-tools-daily/npm/react-timeago/-/react-timeago-4.4.0.tgz#4520dd9ba63551afc4d709819f52b14b9343ba2b"
+  integrity sha1-RSDdm6Y1Ua/E1wmBn1KxS5NDuis=
+
 react-transform-catch-errors@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-transform-catch-errors/-/react-transform-catch-errors-1.0.2.tgz#1b4d4a76e97271896fc16fe3086c793ec88a9eeb"
