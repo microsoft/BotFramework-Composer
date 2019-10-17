@@ -59,6 +59,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
+  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
@@ -94,14 +96,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       [field]: newValue,
     });
   };
+
   const eventTypes = get(appschema, `definitions.['${eventTypeKey}'].properties.event.enum`, []).map(t => {
     return { key: t, text: t };
   });
 
-  const intents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
+  const regexIntents = get(dialogFile, 'content.recognizer.intents');
+  const intents = [...get(luFile, 'parsedContent.LUISJsonStructure.intents', []), ...regexIntents];
 
   const intentOptions = intents.map(t => {
-    return { key: t.name, text: t.name };
+    return { key: t.name || t.intent, text: t.name || t.intent };
   });
 
   const showEventDropDown = formData.$type === eventTypeKey;
