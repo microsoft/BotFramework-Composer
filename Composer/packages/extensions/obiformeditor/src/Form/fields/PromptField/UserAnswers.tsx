@@ -54,17 +54,6 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
           />
         </div>
       )}
-      <div css={field}>
-        <TextWidget
-          onChange={onChange('value')}
-          schema={getSchema('value')}
-          id={idSchema.value.__id}
-          value={formData.value}
-          label={formatMessage('Value')}
-          formContext={props.formContext}
-          rawErrors={errorSchema.value && errorSchema.value.__errors}
-        />
-      </div>
       {getSchema('defaultLocale') && (
         <div css={field}>
           <TextWidget

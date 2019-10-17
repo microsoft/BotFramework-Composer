@@ -1,7 +1,7 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "autoEndDialog": true,
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "actions": [
@@ -33,19 +33,17 @@
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.emails"
+          "itemsProperty": "user.emails"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Clear",
-          "arrayProperty": "user.sentItems"
+          "itemsProperty": "user.sentItems"
         },
         {
           "$type": "Microsoft.BeginDialog",
           "dialog": "SignInToGraph",
           "$designer": {
-            "createdAt": "2019-08-08T09:27:15.645Z",
-            "updatedAt": "2019-08-08T09:27:15.652Z",
             "id": "256471"
           }
         },
@@ -53,8 +51,6 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "GetMyEmailFromGraph",
           "$designer": {
-            "createdAt": "2019-08-08T09:27:16.910Z",
-            "updatedAt": "2019-08-08T09:27:16.922Z",
             "id": "742302"
           }
         },
@@ -62,24 +58,18 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "GetSentItemsFromGraph",
           "$designer": {
-            "createdAt": "2019-08-08T09:27:18.030Z",
-            "updatedAt": "2019-08-08T09:27:18.038Z",
             "id": "707323"
           }
         }
       ],
        
       "$designer": {
-        "createdAt": "2019-08-08T07:01:13.154Z",
-        "updatedAt": "2019-08-08T07:01:13.171Z",
         "id": "779035"
       }
     }
   ],
   "$schema": "../../app.schema",
   "$designer": {
-    "createdAt": "2019-08-07T09:21:40.506Z",
-    "updatedAt": "2019-08-07T09:21:40.562Z",
     "id": "811347"
   }
 }

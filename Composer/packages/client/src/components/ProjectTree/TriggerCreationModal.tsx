@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, TextField, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
+import { appschema } from 'shared';
 
 import {
   addNewTrigger,
@@ -56,7 +57,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, schemas, luFiles } = state;
+  const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -93,17 +94,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       [field]: newValue,
     });
   };
-  const eventTypes = get(schemas, `sdk.content.definitions.['${eventTypeKey}'].properties.events.items.enum`, []).map(
-    t => {
-      return { key: t, text: t };
-    }
-  );
+  const eventTypes = get(appschema, `definitions.['${eventTypeKey}'].properties.event.enum`, []).map(t => {
+    return { key: t, text: t };
+  });
 
   const intents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
 
   const intentOptions = intents.map(t => {
     return { key: t.name, text: t.name };
   });
+
   const showEventDropDown = formData.$type === eventTypeKey;
   const showIntentDropDown = formData.$type === intentTypeKey;
   return (

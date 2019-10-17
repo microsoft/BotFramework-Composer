@@ -29,6 +29,6 @@ test('should parse ruleGroup and stepGroup when input TodoBotMain without recogn
   if (!result) throw new Error('transformRootDialog got null result.');
 
   expect(result.ruleGroup).toBeTruthy();
-  expect(result.ruleGroup.id).toEqual('events');
-  expect(result.ruleGroup.json.children.length === jsonWithoutRecognizer.events.length).toBeTruthy();
+  expect(result.ruleGroup.id).toEqual('triggers');
+  expect(result.ruleGroup.json.children.length === jsonWithoutRecognizer.triggers.length).toBeTruthy();
 });

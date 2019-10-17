@@ -2,8 +2,6 @@
   "$type": "Microsoft.AdaptiveDialog",
   "$id": "root",
   "$designer": {
-    "createdAt": "2019-07-01T10:00:39.032Z",
-    "updatedAt": "2019-10-09T22:39:34.873Z",
     "id": "948970",
     "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
   },
@@ -11,12 +9,10 @@
   "defaultResultProperty": "dialog.result",
   "recognizer": "Main.lu",
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-04T07:31:13.192Z",
-        "updatedAt": "2019-07-16T20:03:51.301Z",
         "id": "842277"
       },
       "constraint": "#AddToDo.score>0.6",
@@ -25,8 +21,6 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "AddItem",
           "$designer": {
-            "createdAt": "2019-09-05T08:31:25.267Z",
-            "updatedAt": "2019-09-05T08:31:25.279Z",
             "id": "618477"
           }
         }
@@ -36,8 +30,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-04T07:31:14.654Z",
-        "updatedAt": "2019-07-16T20:03:54.762Z",
         "id": "905057"
       },
       "actions": [
@@ -52,8 +44,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T20:03:55.674Z",
-        "updatedAt": "2019-07-16T20:03:58.931Z",
         "id": "735961"
       },
       "actions": [
@@ -68,16 +58,12 @@
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
-        "createdAt": "2019-07-04T19:37:38.354Z",
-        "updatedAt": "2019-07-16T20:04:06.035Z",
         "id": "265106"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-04T19:37:50.422Z",
-            "updatedAt": "2019-07-04T19:38:13.175Z",
             "id": "636903"
           },
           "activity": "[bfdactivity-636903]"
@@ -88,8 +74,7 @@
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Handle ConversationUpdate",
-        "id": "954390",
-        "updatedAt": "2019-08-02T03:17:42.774Z"
+        "id": "954390"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
@@ -97,8 +82,7 @@
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
-            "id": "452135",
-            "updatedAt": "2019-08-02T03:17:48.143Z"
+            "id": "452135"
           },
           "activity": "[bfdactivity-452135]"
         }
