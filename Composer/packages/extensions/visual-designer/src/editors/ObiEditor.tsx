@@ -39,13 +39,15 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, getLgTemplates, removeLgTemplate } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
+    NodeRendererContext
+  );
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
     setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
   });
 
-  const lgApi = { getLgTemplates, removeLgTemplate };
+  const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {

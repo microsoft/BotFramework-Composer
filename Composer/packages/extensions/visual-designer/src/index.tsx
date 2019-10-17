@@ -37,6 +37,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onFocusSteps,
     onSelect,
     saveData,
+    updateLgTemplate,
     getLgTemplates,
     removeLgTemplate,
     undo,
@@ -50,6 +51,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedId,
     focusedEvent,
     focusedTab,
+    updateLgTemplate: updateLgTemplate,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });

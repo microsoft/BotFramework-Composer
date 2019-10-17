@@ -107,6 +107,9 @@ export class VisualEditorDemo extends Component {
                     obiJson: json,
                   });
                 },
+                updateLgTemplate: ({ id, templateName, template }) => {
+                  return Promise.resolve('');
+                },
                 getLgTemplates: () => {
                   return Promise.resolve([{ Name: 'lg', Body: 'LgTemplate Placeholder.' }]);
                 },
