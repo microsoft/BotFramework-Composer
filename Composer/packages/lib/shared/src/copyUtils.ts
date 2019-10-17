@@ -1,4 +1,4 @@
-export const NestedFieldNames = {
+const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
   DefaultCase: 'default',
@@ -86,11 +86,10 @@ const needsOverride = data => !!(data && OverriderByType[data.$type]);
 export async function copyAdaptiveAction(data, externalApi) {
   if (!data || !data.$type) return {};
 
-  const { updateDesigner } = externalApi;
-
   // Deep copy the original data.
   const copy = JSON.parse(JSON.stringify(data));
 
+  const { updateDesigner } = externalApi;
   // Create copy handler for rewriting fields which need to be handled specially.
   const copyHandler = async data => {
     updateDesigner(data);
