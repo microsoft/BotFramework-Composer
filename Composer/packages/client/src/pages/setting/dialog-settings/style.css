@@ -10,7 +10,7 @@
 
 .hosted-settings {
   position: absolute;
-  top: 10px;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
@@ -18,15 +18,14 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 1rem;
 }
 
 .hosted-controls {
   margin-bottom: 18px;
 }
 
-.hosted-controls h2 {
+.hosted-controls h1 {
   margin-top: 0;
 }
 

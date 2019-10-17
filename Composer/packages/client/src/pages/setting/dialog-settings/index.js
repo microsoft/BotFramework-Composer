@@ -1,5 +1,6 @@
 import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -12,7 +13,6 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 import './style.css';
 
-import { ToolBarPortal } from './../toolBarPortal';
 import { StoreContext } from './../../../store';
 import { isAbsHosted } from './../../../utils/envUtil';
 import { obfuscate } from './../../../utils/objUtil';
@@ -39,8 +39,9 @@ const hostControlLabels = {
   integrationSlot: formatMessage('In proress'),
   botSettings: formatMessage('Bot settings'),
   botSettingDescription: formatMessage(
-    'Here goes copy that describes what this is and why this is hidden by default which is for security reasons.  And there should be a link to documentation if you dont understand why this is a big deal.'
+    'Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
   ),
+  learnMore: formatMessage('Learn more.'),
 };
 
 export const DialogSettings = () => {
@@ -89,22 +90,34 @@ export const DialogSettings = () => {
     actions.setDialogSettingsSlot(option.key, editing);
   };
 
-  const hostedControl = () =>
-    absHosted ? (
-      <div className="hosted-controls">
-        <ToolBarPortal>
-          <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-        </ToolBarPortal>
-        <h2>{hostControlLabels.botSettings}</h2>
-        <p>{hostControlLabels.botSettingDescription}</p>
+  const hostedControl = () => (
+    <div className="hosted-controls">
+      <h1>{hostControlLabels.botSettings}</h1>
+      <p>
+        {hostControlLabels.botSettingDescription}
+        &nbsp;
+        <Link href="//aka.ms/absh/docs/settings" target="_blank">
+          {hostControlLabels.learnMore}
+        </Link>
+      </p>
+      {absHosted ? (
         <ChoiceGroup options={slots} onChange={changeSlot} className="slot-choice" selectedKey={slot} />
+      ) : null}
+    </div>
+  );
+
+  const hostedToggle = () =>
+    absHosted ? (
+      <div className="hosted-toggle">
+        <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
       </div>
     ) : null;
 
   return botName ? (
-    <div className={absHosted ? 'hosted-settings' : undefined}>
+    <div className="hosted-settings">
       {hostedControl()}
-      <div className={absHosted ? 'hosted-code-mirror' : undefined}>
+      {hostedToggle()}
+      <div className="hosted-code-mirror">
         <CodeMirror
           value={value}
           onBeforeChange={updateFormData}
