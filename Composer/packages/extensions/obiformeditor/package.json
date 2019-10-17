@@ -34,7 +34,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "nanoid": "^2.0.1",
@@ -89,7 +89,7 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1"
+    "webpack-dev-server": "^3.8.2"
   },
   "author": "",
   "homepage": "https://github.com/Microsoft/BotFramework-Composer",

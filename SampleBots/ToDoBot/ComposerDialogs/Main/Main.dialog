@@ -1,8 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-04T08:14:01.139Z",
-    "updatedAt": "2019-08-01T23:45:38.308Z",
     "id": "288769",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
   },
@@ -44,12 +42,10 @@
     ]
   },
   "generator": "common.lg",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "createdAt": "2019-07-01T22:02:14.960Z",
-        "updatedAt": "2019-07-16T20:00:24.788Z",
         "id": "376720"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -57,8 +53,6 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-08-02T22:18:56.943Z",
-            "updatedAt": "2019-08-02T22:36:20.947Z",
             "id": "157674"
           },
           "activity": "[bfdactivity-157674]"
@@ -68,8 +62,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:59:32.772Z",
-        "updatedAt": "2019-07-16T19:59:36.277Z",
         "id": "064505"
       },
       "actions": [
@@ -83,8 +75,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:59:37.184Z",
-        "updatedAt": "2019-08-01T23:46:50.759Z",
         "id": "114961"
       },
       "actions": [
@@ -92,8 +82,6 @@
           "$type": "Microsoft.BeginDialog",
           "dialog": "DeleteToDo",
           "$designer": {
-            "createdAt": "2019-08-01T23:47:15.255Z",
-            "updatedAt": "2019-08-01T23:47:15.258Z",
             "id": "978613"
           }
         }
@@ -103,8 +91,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:59:41.352Z",
-        "updatedAt": "2019-07-16T19:59:44.427Z",
         "id": "088050"
       },
       "actions": [
@@ -118,16 +104,12 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T19:59:50.315Z",
-        "updatedAt": "2019-07-16T19:59:54.774Z",
         "id": "633942"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-08-01T23:44:56.704Z",
-            "updatedAt": "2019-08-01T23:44:57.629Z",
             "id": "696707"
           },
           "activity": "[bfdactivity-696707]"
@@ -138,8 +120,6 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T20:00:00.082Z",
-        "updatedAt": "2019-07-16T20:00:03.344Z",
         "id": "794124"
       },
       "actions": [
@@ -153,13 +133,14 @@
     {
       "$type": "Microsoft.OnIntent",
       "$designer": {
-        "createdAt": "2019-07-16T20:00:08.499Z",
-        "updatedAt": "2019-07-16T20:00:12.504Z",
         "id": "179728"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677440"
+          },
           "activity": "ok."
         },
         {
@@ -171,13 +152,14 @@
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
-        "createdAt": "2019-07-16T20:00:13.577Z",
-        "updatedAt": "2019-07-16T20:00:19.435Z",
         "id": "677447"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "677448"
+          },
           "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
         }
       ]

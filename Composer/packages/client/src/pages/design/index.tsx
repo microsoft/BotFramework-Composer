@@ -166,8 +166,8 @@ function DesignPage(props) {
       id: dialog.id,
       content: dialog.content,
     };
-    const index = get(dialog, 'content.events', []).length - 1;
-    actions.selectTo(`events[${index}]`);
+    const index = get(dialog, 'content.triggers', []).length - 1;
+    actions.selectTo(`triggers[${index}]`);
     actions.updateDialog(payload);
   };
 

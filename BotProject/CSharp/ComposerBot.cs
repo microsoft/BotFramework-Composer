@@ -12,11 +12,13 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
+using Microsoft.Bot.Builder.Dialogs.Debugging;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Recognizers.Text;
 using Newtonsoft.Json;
-
+using Microsoft.Bot.Builder.AI.QnA;
 
 namespace Microsoft.Bot.Builder.ComposerBot.json
 {
@@ -28,17 +30,18 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
         private DialogManager dialogManager;
         private ConversationState conversationState;
         private IStatePropertyAccessor<DialogState> dialogState;
-        private Source.IRegistry registry;
+        private ISourceMap sourceMap;
         private string rootDialogFile { get; set; }
 
-        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, Source.IRegistry registry)
+        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap)
         {
             this.conversationState = conversationState;
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
-            this.registry = registry;
+            this.sourceMap = sourceMap;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
+            DeclarativeTypeLoader.AddComponent(new QnAMakerComponentRegistration());
             // auto reload dialogs when file changes
             this.resourceExplorer.Changed += (resources) =>
             {
@@ -46,15 +49,14 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 {
                     Task.Run(() => this.LoadRootDialogAsync());
                 }
-            };
-
+            };            
             LoadRootDialogAsync();
         }
 
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, registry);
+            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, sourceMap);
             this.dialogManager = new DialogManager(rootDialog);
         }
 

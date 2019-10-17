@@ -7,7 +7,7 @@ import { get, debounce, isEmpty } from 'lodash';
 import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
-  const { file } = props;
+  const { file, codeRange } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState(get(file, 'content', ''));
@@ -41,6 +41,7 @@ export default function CodeEditor(props) {
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
+      codeRange={codeRange}
       errorMsg={errorMsg}
       value={content}
       onChange={_onChange}
@@ -51,4 +52,5 @@ export default function CodeEditor(props) {
 CodeEditor.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
+  codeRange: PropTypes.object,
 };

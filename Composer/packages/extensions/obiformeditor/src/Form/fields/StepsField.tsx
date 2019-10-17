@@ -23,7 +23,7 @@ export const StepsField: React.FC<BFDFieldProps> = props => {
       dialogOptionsOpts={{
         exclude: [DialogGroup.EVENTS, DialogGroup.ADVANCED_EVENTS, DialogGroup.SELECTOR, DialogGroup.OTHER],
       }}
-      navPrefix={`${formContext.focusedEvent}.${props.name}`}
+      navPrefix={props.name}
     >
       {({ createNewItemAtIndex }) => (
         <DefaultButton
