@@ -1,4 +1,4 @@
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -11,6 +11,7 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
 import './style.css';
 
+import { ToolBarPortal } from './../toolBarPortal';
 import { StoreContext } from './../../../store';
 import { isAbsHosted } from './../../../utils/envUtil';
 import { obfuscate } from './../../../utils/objUtil';
@@ -80,7 +81,9 @@ export const DialogSettings = () => {
   const hostedControl = () =>
     absHosted ? (
       <div className="hosted-controls">
-        <Toggle label="Show keys" inlineLabel onChange={changeEditing} defaultChecked={editing} />
+        <ToolBarPortal>
+          <Toggle label="Show keys" inlineLabel onChange={changeEditing} defaultChecked={editing} />
+        </ToolBarPortal>
         <h2>Bot settings</h2>
         <p>
           Here goes copy that describes what this is and why this is hidden by default which is for security reasons.

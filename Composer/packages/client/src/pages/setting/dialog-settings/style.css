@@ -25,8 +25,17 @@
   margin-bottom: 18px;
 }
 
+.hosted-controls h2 {
+  margin-top: 0;
+}
+
 .hosted-code-mirror {
   position: relative;
   flex-grow: 1;
   border: 1px solid #B3B0AD;
+}
+
+#toolbar-portal {
+  display: flex;
+  align-items: center;
 }

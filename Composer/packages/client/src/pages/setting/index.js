@@ -45,6 +45,11 @@ export const SettingPage = () => {
   const toolbarItems = [
     {
       type: 'element',
+      element: <div id="toolbar-portal" />,
+      align: 'left',
+    },
+    {
+      type: 'element',
       element: <TestController />,
       align: 'right',
     },
