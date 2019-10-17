@@ -41,7 +41,9 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
       'Content-Security-Policy',
       CS_POLICIES.concat([
         `script-src 'self' 'nonce-${req.__nonce__}';`,
-        `style-src 'self' 'nonce-${req.__nonce__}';`,
+        // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
+        "style-src 'self' 'unsafe-inline'",
+        // `style-src 'self' 'nonce-${req.__nonce__}';`,
       ]).join(' ')
     );
   }
