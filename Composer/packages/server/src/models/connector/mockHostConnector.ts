@@ -42,14 +42,15 @@ export class MockHostBotConnector implements IBotConnector {
   public sync = async (config: BotConfig) => {
     const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
     this.history.integration = MockHostBotConnector.createIntegrationVersion(user);
+    return Promise.resolve();
   };
 
   public getEditingStatus = async (): Promise<boolean> => {
-    return false;
+    return Promise.resolve(false);
   };
 
   public getPublishHistory = async (): Promise<IPublishHistory> => {
-    return this.history;
+    return Promise.resolve(this.history);
   };
 
   public publish = async (config: BotConfig, label?: string) => {
@@ -66,6 +67,7 @@ export class MockHostBotConnector implements IBotConnector {
 
       // can't rollback twice
       this.history.previousProduction = undefined;
+      return Promise.resolve();
     } else {
       throw new Error('Could not publish. Label not found.');
     }

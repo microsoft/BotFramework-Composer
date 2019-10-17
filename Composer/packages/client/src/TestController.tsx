@@ -149,11 +149,13 @@ export const TestController: React.FC = () => {
               iconName: 'OpenInNewTab',
             }}
             onClick={async () => {
-              openInEmulator(
-                botEndpoint || 'http://localhost:3979/api/messages',
-                settings.MicrosoftAppId && settings.MicrosoftAppPassword
-                  ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-                  : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+              return Promise.resolve(
+                openInEmulator(
+                  botEndpoint || 'http://localhost:3979/api/messages',
+                  settings.MicrosoftAppId && settings.MicrosoftAppPassword
+                    ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+                    : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+                )
               );
             }}
           >

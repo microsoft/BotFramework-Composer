@@ -10,7 +10,7 @@ import { IEnvironmentConfig, IEnvironment } from '.';
 export class MockHostedEnvironment implements IEnvironment {
   private settingManager: HostedSettingManager;
   private botConnector: MockHostBotConnector;
-  private defaultSlot: string = 'integration';
+  private defaultSlot = 'integration';
   private slots: string[] = ['integration', 'production'];
 
   constructor(_: IEnvironmentConfig) {

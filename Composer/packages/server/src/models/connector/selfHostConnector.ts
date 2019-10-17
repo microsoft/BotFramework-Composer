@@ -17,21 +17,21 @@ export class SelfHostBotConnector implements IBotConnector {
       this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
     } else {
       // for testing this class
-      this.buildAsync = async _ => {
-        return 'done';
+      this.buildAsync = async () => {
+        return Promise.resolve('done');
       };
-      this.publishAsync = async _ => {
-        return 'done';
+      this.publishAsync = async () => {
+        return Promise.resolve('done');
       };
-      this.getEditingStatusAsync = async _ => {
-        return { hasChanges: false };
+      this.getEditingStatusAsync = async () => {
+        return Promise.resolve({ hasChanges: false });
       };
-      this.getPublishHistoryAsync = async _ => {
-        return {
+      this.getPublishHistoryAsync = async () => {
+        return Promise.resolve({
           production: MockHostBotConnector.createPublishVersion(''),
           previousProduction: undefined,
           integration: MockHostBotConnector.createIntegrationVersion(''),
-        };
+        });
       };
     }
   }
