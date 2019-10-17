@@ -1,3 +1,4 @@
+import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
@@ -30,6 +31,16 @@ const cmOptions = {
   lint: true,
   tabSize: 2,
   smartIndent: true,
+};
+
+const hostControlLabels = {
+  showKeys: formatMessage('Show keys'),
+  productionSlot: formatMessage('Currently published'),
+  integrationSlot: formatMessage('In proress'),
+  botSettings: formatMessage('Bot settings'),
+  botSettingDescription: formatMessage(
+    'Here goes copy that describes what this is and why this is hidden by default which is for security reasons.  And there should be a link to documentation if you dont understand why this is a big deal.'
+  ),
 };
 
 export const DialogSettings = () => {
@@ -69,8 +80,8 @@ export const DialogSettings = () => {
   };
 
   const slots = [
-    { key: 'production', text: 'Currently published', checked: slot === 'production' },
-    { key: 'integration', text: 'In progress', checked: slot === 'integration' },
+    { key: 'production', text: hostControlLabels.productionSlot, checked: slot === 'production' },
+    { key: 'integration', text: hostControlLabels.integrationSlot, checked: slot === 'integration' },
   ];
 
   const changeSlot = (_, option) => {
@@ -82,13 +93,10 @@ export const DialogSettings = () => {
     absHosted ? (
       <div className="hosted-controls">
         <ToolBarPortal>
-          <Toggle label="Show keys" inlineLabel onChange={changeEditing} defaultChecked={editing} />
+          <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
         </ToolBarPortal>
-        <h2>Bot settings</h2>
-        <p>
-          Here goes copy that describes what this is and why this is hidden by default which is for security reasons.
-          And there should be a link to documentation if you dont understand why this is a big deal.
-        </p>
+        <h2>{hostControlLabels.botSettings}</h2>
+        <p>{hostControlLabels.botSettingDescription}</p>
         <ChoiceGroup options={slots} onChange={changeSlot} className="slot-choice" selectedKey={slot} />
       </div>
     ) : null;
@@ -106,6 +114,6 @@ export const DialogSettings = () => {
       </div>
     </div>
   ) : (
-    <div>Data Loading...</div>
+    <div>{formatMessage('Data loading...')}</div>
   );
 };
