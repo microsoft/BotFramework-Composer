@@ -125,7 +125,10 @@
     "Microsoft.OnEndOfConversationActivity": {
       "title": "Handle an Event: EndOfConversationActivity"
     },
-    "Microsoft.OnEvent": {
+    "Microsoft.OnCondition": {
+      "title": "Handle an condition"
+    },
+    "Microsoft.OnCustomEvent": {
       "title": "Handle an Event"
     },
     "Microsoft.OnEventActivity": {

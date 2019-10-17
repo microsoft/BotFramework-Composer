@@ -1,25 +1,20 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-03T06:50:17.253Z",
-    "updatedAt": "2019-07-16T19:37:32.051Z",
     "id": "897725"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "265236",
-        "updatedAt": "2019-07-22T07:54:30.409Z"
+        "id": "265236"
       },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-16T19:37:33.208Z",
-            "updatedAt": "2019-07-16T19:37:37.881Z",
             "id": "219943"
           },
           "activity": "[bfdactivity-219943]"

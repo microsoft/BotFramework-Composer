@@ -1,26 +1,21 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-07-08T07:49:25.845Z",
-    "updatedAt": "2019-07-16T19:39:35.169Z",
     "id": "871426"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "028243",
-        "updatedAt": "2019-07-22T08:01:24.349Z"
+        "id": "028243"
       },
        
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-08T07:49:28.221Z",
-            "updatedAt": "2019-07-16T19:39:52.002Z",
             "id": "633099"
           },
           "property": "user.content",
@@ -29,8 +24,6 @@
         {
           "$type": "Microsoft.SetProperty",
           "$designer": {
-            "createdAt": "2019-07-09T03:33:19.562Z",
-            "updatedAt": "2019-07-16T19:39:56.624Z",
             "id": "849308"
           },
           "property": "user.remindtime",
@@ -39,22 +32,18 @@
         {
           "$type": "Microsoft.TextInput",
           "$designer": {
-            "createdAt": "2019-07-09T08:34:23.221Z",
-            "updatedAt": "2019-07-16T19:40:00.854Z",
             "id": "661955"
           },
           "property": "user.content",
           "prompt": "Please enter the content of your reminder.",
           "maxTurnCount": 2147483647,
           "alwaysPrompt": false,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "none"
         },
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-09T08:42:33.616Z",
-            "updatedAt": "2019-07-16T19:40:04.756Z",
             "id": "530560"
           },
           "condition": "user.remindtime != null",
@@ -62,8 +51,6 @@
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
-                "createdAt": "2019-07-09T08:46:05.316Z",
-                "updatedAt": "2019-07-16T19:40:09.474Z",
                 "id": "570104"
               },
               "property": "user.requesttime",
@@ -74,8 +61,6 @@
             {
               "$type": "Microsoft.DateTimeInput",
               "$designer": {
-                "createdAt": "2019-07-16T19:40:11.984Z",
-                "updatedAt": "2019-07-16T19:40:16.187Z",
                 "id": "072656"
               },
               "property": "user.remindtime",
@@ -89,8 +74,6 @@
             {
               "$type": "Microsoft.SetProperty",
               "$designer": {
-                "createdAt": "2019-07-09T08:48:34.405Z",
-                "updatedAt": "2019-07-16T19:40:21.187Z",
                 "id": "353180"
               },
               "property": "user.requesttime",
@@ -101,8 +84,6 @@
         {
           "$type": "Microsoft.ConfirmInput",
           "$designer": {
-            "createdAt": "2019-07-09T08:54:11.872Z",
-            "updatedAt": "2019-07-16T19:40:32.754Z",
             "id": "929045"
           },
           "property": "user.confirmresult",
@@ -124,8 +105,6 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "createdAt": "2019-07-09T08:55:52.498Z",
-            "updatedAt": "2019-07-16T19:40:35.600Z",
             "id": "819123"
           },
           "condition": "user.confirmresult",
@@ -133,8 +112,6 @@
             {
               "$type": "Microsoft.HttpRequest",
               "$designer": {
-                "createdAt": "2019-07-09T08:57:23.002Z",
-                "updatedAt": "2019-07-16T19:40:41.413Z",
                 "id": "350238"
               },
               "method": "POST",
@@ -150,8 +127,6 @@
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "createdAt": "2019-07-09T10:46:15.059Z",
-                "updatedAt": "2019-07-16T19:40:48.733Z",
                 "id": "672824"
               },
               "activity": "[bfdactivity-672824]"
@@ -159,8 +134,6 @@
             {
               "$type": "Microsoft.BeginDialog",
               "$designer": {
-                "createdAt": "2019-07-10T03:06:07.410Z",
-                "updatedAt": "2019-07-16T19:40:54.901Z",
                 "id": "796324"
               },
               "dialog": "ClearUserData"
@@ -170,8 +143,6 @@
             {
               "$type": "Microsoft.BeginDialog",
               "$designer": {
-                "createdAt": "2019-07-10T03:01:31.427Z",
-                "updatedAt": "2019-07-16T19:41:00.947Z",
                 "id": "528148"
               },
               "dialog": "ClearUserData"
@@ -179,8 +150,6 @@
             {
               "$type": "Microsoft.RepeatDialog",
               "$designer": {
-                "createdAt": "2019-07-09T08:56:41.246Z",
-                "updatedAt": "2019-07-16T19:41:05.723Z",
                 "id": "046452"
               }
             }
@@ -189,8 +158,6 @@
         {
           "$type": "Microsoft.EndDialog",
           "$designer": {
-            "createdAt": "2019-07-10T07:59:01.872Z",
-            "updatedAt": "2019-07-16T19:41:12.967Z",
             "id": "951475"
           }
         }

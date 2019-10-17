@@ -57,7 +57,7 @@ function createDialogInfo(id: string, content: Partial<MicrosoftAdaptiveDialog> 
     isRoot: id === 'Main',
     content: {
       $type: 'Microsoft.AdaptiveDialog',
-      events: [],
+      triggers: [],
       ...content,
     },
     lgFile: '',
@@ -367,7 +367,7 @@ const Demo: React.FC = () => {
           memory={memoryFormData}
           onChange={debouncedOnChange}
           schemas={{ editor: editorSchemaFormData }}
-          shellApi={mockShellApi as ShellApi}
+          shellApi={mockShellApi}
           luFiles={luFiles}
           lgFiles={lgFiles}
           currentDialog={dialogFiles[0]}

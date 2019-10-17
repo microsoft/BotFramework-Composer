@@ -53,9 +53,10 @@ export function getFriendlyName(data) {
 
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
-  const optionalAttributes: { intent?: string; events?: string[] } = {};
+  const optionalAttributes: { intent?: string; event?: string } = {};
+
   if (data.eventType) {
-    optionalAttributes.events = [data.eventType];
+    optionalAttributes.event = data.eventType;
   }
 
   if (data.intent) {
@@ -79,23 +80,23 @@ export function insert(content, path: string, position: number | undefined, data
 export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
-  insert(dialogCopy.content, 'events', undefined, data);
+  insert(dialogCopy.content, 'triggers', undefined, data);
   return dialogCopy;
 }
 
 export function createSelectedPath(selected: number) {
-  return `events[${selected}]`;
+  return `triggers[${selected}]`;
 }
 
 export function createFocusedPath(selected: number, focused: number) {
-  return `events[${selected}].actions[${focused}]`;
+  return `triggers[${selected}].actions[${focused}]`;
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
   const content = dialogCopy.content;
-  content.events.splice(index, 1);
+  content.triggers.splice(index, 1);
   return content;
 }
 
