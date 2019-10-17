@@ -1,20 +1,17 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "createdAt": "2019-06-07T16:18:34.824Z",
-    "updatedAt": "2019-07-16T19:50:43.791Z",
     "id": "039096"
   },
   "autoEndDialog": true,
   "$schema": "../../app.schema",
-  "events": [
+  "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "851391",
-        "updatedAt": "2019-07-22T08:05:10.334Z"
+        "id": "851391"
       },
-      "events": ["beginDialog"],
+      "triggers": ["beginDialog"],
       "actions": [
         {
           "$type": "Microsoft.ChoiceInput",
@@ -22,7 +19,7 @@
           "prompt": "Please select a value from below:",
           "maxTurnCount": 3,
           "alwaysPrompt": true,
-          "allowInterruptions": "never",
+          "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {
@@ -48,16 +45,12 @@
             "noValue": false
           },
           "$designer": {
-            "createdAt": "2019-07-16T19:57:48.037Z",
-            "updatedAt": "2019-07-16T19:57:51.482Z",
             "id": "084631"
           }
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "createdAt": "2019-07-01T21:55:12.076Z",
-            "updatedAt": "2019-07-16T19:57:55.398Z",
             "id": "160914"
           },
           "activity": "[bfdactivity-160914]"
@@ -65,8 +58,6 @@
         {
           "$type": "Microsoft.SwitchCondition",
           "$designer": {
-            "createdAt": "2019-07-01T21:55:13.229Z",
-            "updatedAt": "2019-07-16T19:57:58.231Z",
             "id": "448444"
           },
           "condition": "user.style",
@@ -77,8 +68,6 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "createdAt": "2019-07-01T21:55:23.134Z",
-                    "updatedAt": "2019-07-16T19:58:02.619Z",
                     "id": "576002"
                   },
                   "activity": "[bfdactivity-576002]"
@@ -91,8 +80,6 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "createdAt": "2019-07-01T21:57:26.930Z",
-                    "updatedAt": "2019-07-16T19:58:07.532Z",
                     "id": "677412"
                   },
                   "activity": "[bfdactivity-677412]"
@@ -105,8 +92,6 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "createdAt": "2019-07-01T21:57:33.404Z",
-                    "updatedAt": "2019-07-16T19:58:11.985Z",
                     "id": "700082"
                   },
                   "activity": "[bfdactivity-700082]"
