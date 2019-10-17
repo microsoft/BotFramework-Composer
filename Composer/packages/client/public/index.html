@@ -24,21 +24,23 @@
     -->
     <title>BotFramework Composer</title>
 
-    <? if (__nonce__) { ?>
-      <script nonce="<?= __nonce__ ?>">
-        window.__nonce__ = "<?= __nonce__ ?>";
+    <% if (process.env.NODE_ENV === 'production') { %>
+      <? if (__nonce__) { ?>
+        <script nonce="<?= __nonce__ ?>">
+          window.__nonce__ = "<?= __nonce__ ?>";
 
-        window.FabricConfig = {
-          mergeStyles: {
-            cspSettings: { nonce: window.__nonce__ }
-          }
-        };
+          window.FabricConfig = {
+            mergeStyles: {
+              cspSettings: { nonce: window.__nonce__ }
+            }
+          };
 
-        window.CSPSettings = {
-          nonce:  window.__nonce__
-        };
-      </script>
-    <? } ?>
+          window.CSPSettings = {
+            nonce:  window.__nonce__
+          };
+        </script>
+      <? } ?>
+    <% } %>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
