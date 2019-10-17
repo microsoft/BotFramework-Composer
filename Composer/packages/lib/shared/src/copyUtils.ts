@@ -61,32 +61,24 @@ async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
   return activity;
 }
 
+const overrideLgActivity = async (data, { lgApi }) => {
+  data.activity = await copyLgActivity(data.activity, lgApi);
+};
+
+const overrideLgPrompt = async (data, { lgApi }) => {
+  data.prompt = await copyLgActivity(data.prompt, lgApi);
+};
+
 // TODO: use $type from SDKTypes (after solving circular import issue).
 const OverriderByType = {
-  'Microsoft.SendActivity': async (data, { lgApi }) => {
-    data.activity = await copyLgActivity(data.activity, lgApi);
-  },
-  'Microsoft.AttachmentInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.ConfirmInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.DateTimeInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.NumberInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.OAuthInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.TextInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
-  'Microsoft.ChoiceInput': async (data, { lgApi }) => {
-    data.prompt = await copyLgActivity(data.prompt, lgApi);
-  },
+  'Microsoft.SendActivity': overrideLgActivity,
+  'Microsoft.AttachmentInput': overrideLgPrompt,
+  'Microsoft.ConfirmInput': overrideLgPrompt,
+  'Microsoft.DateTimeInput': overrideLgPrompt,
+  'Microsoft.NumberInput': overrideLgPrompt,
+  'Microsoft.OAuthInput': overrideLgPrompt,
+  'Microsoft.TextInput': overrideLgPrompt,
+  'Microsoft.ChoiceInput': overrideLgPrompt,
 };
 
 const needsDeepCopy = data => !!(data && OverriderByType[data.$type]);
@@ -102,7 +94,7 @@ export async function copyAdaptiveAction(data, externalApi) {
   // Create copy handler for rewriting fields which need to be handled specially.
   let copyHandler: (data) => any = updateDesigner;
 
-  if (needsDeepCopy(data.$type)) {
+  if (needsDeepCopy(data)) {
     const advancedCopyHandler = async data => {
       updateDesigner(data);
       if (OverriderByType[data.$type]) {
