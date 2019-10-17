@@ -41,11 +41,11 @@ function isLgActivity(activity: string) {
   return activity && activity.includes('bfdactivity-');
 }
 
-async function copyLgActivity(activity: string, id: string, lgApi: any): Promise<string> {
+async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
   if (!activity) return '';
   if (!isLgActivity(activity) || !lgApi) return activity;
 
-  const { getLgTemplates, updateLgTemplate } = lgApi;
+  const { getLgTemplates } = lgApi;
   if (!getLgTemplates) return activity;
 
   let rawLg: any[] = [];
@@ -57,10 +57,7 @@ async function copyLgActivity(activity: string, id: string, lgApi: any): Promise
 
   const currentLg = rawLg.find(lg => `[${lg.Name}]` === activity);
 
-  if (currentLg) {
-    await updateLgTemplate('common', `bfdactivity-${id}`, currentLg.Body);
-    return `[bfdactivity-${id}]`;
-  }
+  if (currentLg) return currentLg.Body;
   return activity;
 }
 
@@ -70,7 +67,7 @@ async function overrideExternalReferences(data, externalApi) {
   // Override specific fields different actions care.
   switch (data.$type) {
     case 'Microsoft.SendActivity':
-      data.activity = await copyLgActivity(data.activity, data.$designer.id, lgApi);
+      data.activity = await copyLgActivity(data.activity, lgApi);
       break;
   }
 }
