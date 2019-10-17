@@ -101,8 +101,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     return { key: t, text: t };
   });
 
-  const regexIntents = get(dialogFile, 'content.recognizer.intents');
-  const intents = [...get(luFile, 'parsedContent.LUISJsonStructure.intents', []), ...regexIntents];
+  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+  const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
+  const intents = [...luisIntents, ...regexIntents];
 
   const intentOptions = intents.map(t => {
     return { key: t.name || t.intent, text: t.name || t.intent };
