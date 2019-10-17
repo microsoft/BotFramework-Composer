@@ -23,21 +23,24 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-    <? if (__nonce__) { ?>
-      <script nonce="<?= __nonce__ ?>">
-        window.__nonce__ = "<?= __nonce__ ?>";
 
-        window.FabricConfig = {
-          mergeStyles: {
-            cspSettings: { nonce: window.__nonce__ }
-          }
-        };
+    <% if (process.env.NODE_ENV === 'production') { %>
+      <? if (__nonce__) { ?>
+        <script nonce="<?= __nonce__ ?>">
+          window.__nonce__ = "<?= __nonce__ ?>";
 
-        window.CSPSettings = {
-          nonce:  window.__nonce__
-        };
-      </script>
-    <? } ?>
+          window.FabricConfig = {
+            mergeStyles: {
+              cspSettings: { nonce: window.__nonce__ }
+            }
+          };
+
+          window.CSPSettings = {
+            nonce:  window.__nonce__
+          };
+        </script>
+      <? } ?>
+    <% } %>
   </head>
   <style nonce="<?= __nonce__ ?>">
     html, body, #root {

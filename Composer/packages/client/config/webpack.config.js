@@ -419,7 +419,8 @@ module.exports = function(webpackEnv) {
           {},
           {
             inject: true,
-            filename: 'index.ejs',
+            // only emit ejs in production because the dev server cannot render ejs templates
+            filename: isEnvProduction ? 'index.ejs' : 'index.html',
             template: paths.appHtml,
             chunks: ['main'],
           },
@@ -438,7 +439,8 @@ module.exports = function(webpackEnv) {
           {},
           {
             inject: true,
-            filename: 'extensionContainer.ejs',
+            // only emit ejs in production because the dev server cannot render ejs templates
+            filename: isEnvProduction ? 'extensionContainer.ejs' : 'extensionContainer.html',
             template: paths.extensionContainerHtml,
             chunks: ['extension'],
           },
