@@ -73,11 +73,6 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-const DEEP_COPY_TYPES = ['Microsoft.SendActivity'];
-export const needsDeepCopy = $type => {
-  return DEEP_COPY_TYPES.includes($type);
-};
-
 const updateDesigner = data => {
   const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
   data.$designer = $designer;
@@ -86,7 +81,7 @@ const updateDesigner = data => {
 // TODO: lgApi should also be included in shared lib instead of pass it in
 //       since it's already used by Shell, Visual and Form.
 export const deepCopyAction = async (data, lgApi) => {
-  return await copyAdaptiveAction(data, { lgApi, needsDeepCopy, updateDesigner });
+  return await copyAdaptiveAction(data, { lgApi, updateDesigner });
 };
 
 export const seedNewDialog = (
