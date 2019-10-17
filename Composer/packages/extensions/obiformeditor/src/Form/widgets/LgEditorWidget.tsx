@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { LgEditor } from 'code-editor';
-import debounce from 'lodash.debounce';
 
 import { FormContext } from '../types';
 
@@ -35,49 +34,49 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
 
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
-  const template = lgFile
-    ? lgFile.templates.find(template => {
-        return template.Name === lgId;
-      })
-    : undefined;
+  const template = (lgFile &&
+    lgFile.templates.find(template => {
+      return template.Name === lgId;
+    })) || {
+    Name: lgId,
+    Body: getInitialTemplate(name, value),
+    Parameters: '',
+    Range: {
+      startLineNumber: 1,
+      endLineNumber: 1,
+    },
+  };
 
   // template body code range
-  const codeRange = template
-    ? {
-        startLineNumber: template.Range.startLineNumber + 1, // cut template name
-        endLineNumber: template.Range.endLineNumber,
+  const codeRange = {
+    startLineNumber: 2,
+    endLineNumber: template.Body.split('\n').length + 1,
+  };
+
+  const [localContent, setLocalContent] = useState(template.Body);
+  const content = `#${template.Name}\n${localContent}`;
+
+  const onChange = (newTemplate: string) => {
+    const body = newTemplate.slice(newTemplate.indexOf('\n') + 1);
+    if (formContext.dialogId) {
+      if (body) {
+        formContext.shellApi
+          .updateLgTemplate(lgFileId, lgId, body)
+          .then(() => setErrorMsg(''))
+          .catch(error => setErrorMsg(error));
+      } else {
+        formContext.shellApi.removeLgTemplate(lgFileId, lgId);
       }
-    : -1;
-
-  let content = lgFile ? lgFile.content : '';
-  if (!template) {
-    const newTemplateBody = getInitialTemplate(name, value || '-');
-    content += ['\n', '# ' + lgId, newTemplateBody].join('\n');
-  }
-
-  const [localContent, setLocalContent] = useState(content);
-
-  const onChange = useMemo(
-    () =>
-      debounce<(data: any) => void>(data => {
-        // hit the lg api and replace it's Body with data
-        if (formContext.dialogId) {
-          formContext.shellApi
-            .updateLgFile(lgFileId, data)
-            .then(() => setErrorMsg(''))
-            .catch(error => setErrorMsg(error));
-          props.onChange(`[${lgId}]`);
-        }
-        setLocalContent(data);
-      }, 200),
-    [lgFileId]
-  );
+      props.onChange(`[${lgId}]`);
+    }
+    setLocalContent(body);
+  };
 
   return (
     <LgEditor
       codeRange={codeRange}
       errorMsg={errorMsg}
-      value={localContent}
+      value={content}
       onChange={onChange}
       helpURL={LG_HELP}
       height={height}

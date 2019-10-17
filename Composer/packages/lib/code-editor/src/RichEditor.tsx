@@ -46,7 +46,7 @@ export function RichEditor(props: RichEditorProps) {
     return `${height}px`;
   };
 
-  let borderColor = NeutralColors.gray110;
+  let borderColor = NeutralColors.gray120;
 
   if (hovered) {
     borderColor = NeutralColors.gray160;
@@ -64,7 +64,7 @@ export function RichEditor(props: RichEditorProps) {
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor,
-          transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
+          transition: 'border-color 0.1s linear',
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
