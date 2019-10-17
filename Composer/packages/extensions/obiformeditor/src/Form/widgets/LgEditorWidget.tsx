@@ -1,6 +1,6 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LgEditor } from 'code-editor';
+import debounce from 'lodash.debounce';
 
 import { FormContext } from '../types';
 
@@ -29,11 +29,22 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const lgId = `bfd${name}-${formContext.dialogId}`;
   const [errorMsg, setErrorMsg] = useState('');
-
+  const lgId = `bfd${name}-${formContext.dialogId}`;
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
+
+  const updateLgTemplate = useMemo(
+    () =>
+      debounce((body: string) => {
+        formContext.shellApi
+          .updateLgTemplate(lgFileId, lgId, body)
+          .then(() => setErrorMsg(''))
+          .catch(error => setErrorMsg(error));
+      }, 500),
+    [lgId, lgFileId]
+  );
+
   const template = (lgFile &&
     lgFile.templates.find(template => {
       return template.Name === lgId;
@@ -60,11 +71,9 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     const body = newTemplate.slice(newTemplate.indexOf('\n') + 1);
     if (formContext.dialogId) {
       if (body) {
-        formContext.shellApi
-          .updateLgTemplate(lgFileId, lgId, body)
-          .then(() => setErrorMsg(''))
-          .catch(error => setErrorMsg(error));
+        updateLgTemplate(body);
       } else {
+        updateLgTemplate.flush();
         formContext.shellApi.removeLgTemplate(lgFileId, lgId);
       }
       props.onChange(`[${lgId}]`);
