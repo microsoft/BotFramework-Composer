@@ -41,11 +41,11 @@ function isLgActivity(activity: string) {
   return activity && (activity.includes('bfdactivity-') || activity.includes('bfdprompt-'));
 }
 
-async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
+async function copyLgActivity(activity: string, designerId: string, lgApi: any): Promise<string> {
   if (!activity) return '';
   if (!isLgActivity(activity) || !lgApi) return activity;
 
-  const { getLgTemplates } = lgApi;
+  const { getLgTemplates, updateLgTemplate } = lgApi;
   if (!getLgTemplates) return activity;
 
   let rawLg: any[] = [];
@@ -57,16 +57,22 @@ async function copyLgActivity(activity: string, lgApi: any): Promise<string> {
 
   const currentLg = rawLg.find(lg => `[${lg.Name}]` === activity);
 
-  if (currentLg) return currentLg.Body;
+  if (currentLg) {
+    // Create new lg activity.
+    const newLgContent = currentLg.Body;
+    const newLgId = `bfdactivity-${designerId}`;
+    await updateLgTemplate('common', newLgId, newLgContent);
+    return `[${newLgId}]`;
+  }
   return activity;
 }
 
 const overrideLgActivity = async (data, { lgApi }) => {
-  data.activity = await copyLgActivity(data.activity, lgApi);
+  data.activity = await copyLgActivity(data.activity, data.$designer.id, lgApi);
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  data.prompt = await copyLgActivity(data.prompt, lgApi);
+  data.prompt = await copyLgActivity(data.prompt, data.$designer.id, lgApi);
 };
 
 // TODO: use $type from SDKTypes (after solving circular import issue).
