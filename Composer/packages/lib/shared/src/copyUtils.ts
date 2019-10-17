@@ -81,7 +81,7 @@ const OverriderByType = {
   'Microsoft.ChoiceInput': overrideLgPrompt,
 };
 
-const needsDeepCopy = data => !!(data && OverriderByType[data.$type]);
+const needsOverride = data => !!(data && OverriderByType[data.$type]);
 
 export async function copyAdaptiveAction(data, externalApi) {
   if (!data || !data.$type) return {};
@@ -92,18 +92,13 @@ export async function copyAdaptiveAction(data, externalApi) {
   const copy = JSON.parse(JSON.stringify(data));
 
   // Create copy handler for rewriting fields which need to be handled specially.
-  let copyHandler: (data) => any = updateDesigner;
-
-  if (needsDeepCopy(data)) {
-    const advancedCopyHandler = async data => {
-      updateDesigner(data);
-      if (OverriderByType[data.$type]) {
-        const overrider = OverriderByType[data.$type];
-        await overrider(data, externalApi);
-      }
-    };
-    copyHandler = advancedCopyHandler;
-  }
+  const copyHandler = async data => {
+    updateDesigner(data);
+    if (needsOverride(data)) {
+      const overrider = OverriderByType[data.$type];
+      await overrider(data, externalApi);
+    }
+  };
 
   // Walk action and rewrite needs copy fields
   await walkAdaptiveAction(copy, copyHandler);
