@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
@@ -15,6 +15,7 @@ export interface RichEditorProps extends BaseEditorProps {
 export function RichEditor(props: RichEditorProps) {
   const { errorMsg, helpURL, placeholder, hidePlaceholder = false, height, ...rest } = props;
   const isInvalid = !!errorMsg;
+  const [hovered, setHovered] = useState(false);
 
   const errorHelp = formatMessage.rich(
     'This text cannot be saved because there are errors in the syntax. Refer to the syntax documentation <a>here</a>.',
@@ -45,15 +46,28 @@ export function RichEditor(props: RichEditorProps) {
     return `${height}px`;
   };
 
+  let borderColor = NeutralColors.gray110;
+
+  if (hovered) {
+    borderColor = NeutralColors.gray160;
+  }
+
+  if (isInvalid) {
+    borderColor = SharedColors.red20;
+  }
+
   return (
     <Fragment>
       <div
         style={{
           height: getHeight(),
-          border: '1px solid transparent',
-          borderColor: isInvalid ? SharedColors.red20 : NeutralColors.gray30,
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor,
           transition: `border-color 0.1s ${isInvalid ? 'ease-out' : 'ease-in'}`,
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         {props.codeRange ? memoEditor : baseEditor}
       </div>

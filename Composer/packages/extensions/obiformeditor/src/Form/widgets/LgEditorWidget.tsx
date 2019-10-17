@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useState } from 'react';
 import { LgEditor } from 'code-editor';
 import debounce from 'lodash.debounce';
@@ -55,22 +55,29 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     content += ['\n', '# ' + lgId, newTemplateBody].join('\n');
   }
 
-  const onChange = debounce((data): void => {
-    // hit the lg api and replace it's Body with data
-    if (formContext.dialogId) {
-      formContext.shellApi
-        .updateLgFile(lgFileId, data)
-        .then(() => setErrorMsg(''))
-        .catch(error => setErrorMsg(error));
-      props.onChange(`[${lgId}]`);
-    }
-  }, 200);
+  const [localContent, setLocalContent] = useState(content);
+
+  const onChange = useMemo(
+    () =>
+      debounce<(data: any) => void>(data => {
+        // hit the lg api and replace it's Body with data
+        if (formContext.dialogId) {
+          formContext.shellApi
+            .updateLgFile(lgFileId, data)
+            .then(() => setErrorMsg(''))
+            .catch(error => setErrorMsg(error));
+          props.onChange(`[${lgId}]`);
+        }
+        setLocalContent(data);
+      }, 200),
+    [lgFileId]
+  );
 
   return (
     <LgEditor
       codeRange={codeRange}
       errorMsg={errorMsg}
-      value={content}
+      value={localContent}
       onChange={onChange}
       helpURL={LG_HELP}
       height={height}
