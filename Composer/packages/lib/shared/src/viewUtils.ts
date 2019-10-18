@@ -23,6 +23,7 @@ export enum DialogGroup {
   LOG = 'LOG',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
+  DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
   OTHER = 'OTHER',
@@ -89,15 +90,20 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       SDKTypes.OnIntent,
       SDKTypes.OnUnknownIntent,
-      SDKTypes.OnConversationUpdateActivity,
-      SDKTypes.OnBeginDialog,
       SDKTypes.OnDialogEvent,
+      SDKTypes.OnActivity,
+      SDKTypes.OnCustomEvent,
     ],
+  },
+  [DialogGroup.DIALOG_EVENT_TYPES]: {
+    label: 'OnDialogEvents Types',
+    types: [SDKTypes.OnBeginDialog, SDKTypes.OnCancelDialog, SDKTypes.OnError, SDKTypes.OnRepromptDialog],
   },
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [
-      SDKTypes.OnActivity,
+      SDKTypes.OnConversationUpdateActivity,
+      SDKTypes.OnEndOfConversationActivity,
       SDKTypes.OnEventActivity,
       SDKTypes.OnHandoffActivity,
       SDKTypes.OnInvokeActivity,

@@ -6,6 +6,7 @@ import settings from '../../settings/settings';
 export interface IEnvironmentConfig {
   name: string;
   basePath: string;
+  adminEndpoint: string;
   endpoint: string;
 }
 
@@ -20,19 +21,22 @@ export interface IEnvironment {
 export const absHostedConfig: IEnvironmentConfig = {
   name: 'absh',
   basePath: '',
+  adminEndpoint: '',
   endpoint: '',
 };
 
 export const mockHostedConfig: IEnvironmentConfig = {
   name: 'mockhosted',
   basePath: '',
+  adminEndpoint: '',
   endpoint: '',
 };
 
 export const defaultConfig: IEnvironmentConfig = {
   name: 'default',
   basePath: '',
-  endpoint: settings.botRuntime,
+  adminEndpoint: settings.botAdminEndpoint,
+  endpoint: settings.botEndpoint,
 };
 
 export const currentConfig: IEnvironmentConfig = absHosted
