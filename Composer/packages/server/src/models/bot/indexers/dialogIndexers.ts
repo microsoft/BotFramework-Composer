@@ -29,21 +29,26 @@ export class DialogIndexer {
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
       if (has(value, '$type')) {
-        let target;
+        const targets: string[] = [];
+        // look for prompt field
+        if (has(value, 'prompt')) {
+          targets.push(value.prompt);
+        }
+        // look for unrecognizedPrompt field
+        if (has(value, 'unrecognizedPrompt')) {
+          targets.push(value.unrecognizedPrompt);
+        }
+        // look for other $type
         switch (value.$type) {
           case 'Microsoft.SendActivity':
-            target = value.activity;
+            targets.push(value.activity);
             break;
-          case 'Microsoft.TextInput':
-            target = value.prompt;
-            break;
-
           // if we want stop at some $type, do here
           case 'location':
             return true;
         }
 
-        if (target && typeof target === 'string') {
+        targets.forEach(target => {
           // match a template name
           // match a temlate func  e.g. `showDate()`
           // eslint-disable-next-line security/detect-unsafe-regex
@@ -53,7 +58,7 @@ export class DialogIndexer {
             const templateName = matchResult[1];
             templates.push(templateName);
           }
-        }
+        });
       }
       return false;
     };
