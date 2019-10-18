@@ -65,11 +65,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
-<<<<<<< HEAD
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
-=======
->>>>>>> trigger align with the new schema
-
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
@@ -98,14 +94,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, specifiedType: option.key });
   };
 
-<<<<<<< HEAD
-  const eventTypes = get(appschema, `definitions.['${eventTypeKey}'].properties.event.enum`, []).map(t => {
-    return { key: t, text: t };
-  });
-=======
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
->>>>>>> trigger align with the new schema
 
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
