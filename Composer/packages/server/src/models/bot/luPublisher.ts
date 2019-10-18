@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { runBuild } from 'lubuild';
 
 import { Path } from './../../utility/path';
