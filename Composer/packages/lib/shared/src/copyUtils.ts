@@ -61,8 +61,12 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
     // Create new lg activity.
     const newLgContent = currentLg.Body;
     const newLgId = `bfdactivity-${designerId}`;
-    await updateLgTemplate('common', newLgId, newLgContent);
-    return `[${newLgId}]`;
+    try {
+      await updateLgTemplate('common', newLgId, newLgContent);
+      return `[${newLgId}]`;
+    } catch (e) {
+      return newLgContent;
+    }
   }
   return activity;
 }
