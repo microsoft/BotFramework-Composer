@@ -82,6 +82,7 @@
     "cookie-parser": "^1.4.4",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
+    "ejs": "^2.7.1",
     "express": "^4.16.4",
     "form-data": "^2.3.3",
     "globby": "^9.1.0",
