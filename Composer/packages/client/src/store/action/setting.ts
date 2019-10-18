@@ -6,7 +6,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { SensitiveProperties } from '../../constants';
 
 import { BASEURL, ActionTypes } from './../../constants/index';
-import { BotEnvironments } from '../../utils/envUtil';
+import { BotEnvironments } from './../../utils/envUtil';
 
 export const setSettings: ActionCreator = async (
   { dispatch },

@@ -2,7 +2,7 @@
  * obfuscate object member values to '*****'
  * @param obj
  */
-export const obfuscate = (obj: Object | string | number | boolean) => {
+export const obfuscate = (obj: Record<string, any> | string | number | boolean) => {
   const OBFUSCATED_VALUE = '*****';
   if (typeof obj !== 'object') {
     return OBFUSCATED_VALUE;
