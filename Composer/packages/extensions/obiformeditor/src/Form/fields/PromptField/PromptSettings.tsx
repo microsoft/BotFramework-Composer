@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 
-import { TextWidget, SelectWidget, CheckboxWidget } from '../../widgets';
+import { TextWidget, CheckboxWidget } from '../../widgets';
 
 import { field, settingsFields, settingsFieldHalf, settingsFieldFull, settingsFieldInline } from './styles';
 import { PromptFieldChangeHandler, GetSchema } from './types';
@@ -15,11 +15,6 @@ interface PromptSettingsrops extends FieldProps<MicrosoftInputDialog> {
 
 export const PromptSettings: React.FC<PromptSettingsrops> = props => {
   const { formData, idSchema, getSchema, onChange, errorSchema } = props;
-
-  const interruptionOptions = (getSchema('allowInterruptions').enum || []).map(o => ({
-    label: o as string,
-    value: o as string,
-  }));
 
   return (
     <div css={settingsFields}>
@@ -46,7 +41,7 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
         />
       </div>
       <div css={[field, settingsFieldFull]}>
-        <SelectWidget
+        <TextWidget
           onChange={onChange('allowInterruptions')}
           schema={getSchema('allowInterruptions')}
           id={idSchema.allowInterruptions.__id}
@@ -54,7 +49,6 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
           label={formatMessage('Allow interruptions')}
           formContext={props.formContext}
           rawErrors={errorSchema.allowInterruptions && errorSchema.allowInterruptions.__errors}
-          options={{ enumOptions: interruptionOptions }}
         />
       </div>
       <div css={[field, settingsFieldFull, settingsFieldInline]}>

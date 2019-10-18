@@ -20,9 +20,11 @@ const settingLabels = {
   settings: formatMessage('Settings'),
 };
 
+const absHosted = isAbsHosted();
+
 const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings },
-  { key: '/setting/deployment', name: settingLabels.publish },
+  { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish },
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },

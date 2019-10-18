@@ -99,6 +99,11 @@ const setBotStatus = (state, { status, botEndpoint }) => {
   return state;
 };
 
+const updateRemoteEndpoint = (state, { slot, botEndpoint }) => {
+  state.remoteEndpoints[slot] = botEndpoint;
+  return state;
+};
+
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -215,6 +220,22 @@ const setDialogSettingsSlot: ReducerFunc = (state, slot = 'production') => {
   return state;
 };
 
+const setPublishVersions: ReducerFunc = (state, { versions } = {}) => {
+  state.publishVersions = versions;
+  return state;
+};
+
+const updatePublishStatus: ReducerFunc = (state, payload) => {
+  if (payload.versions) {
+    state.publishStatus = 'ok';
+  } else if (payload.error) {
+    state.publishStatus = payload.error;
+  } else if (payload.start === true) {
+    state.publishStatus = 'start';
+  }
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -249,4 +270,9 @@ export const reducer = createReducer({
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.SET_EDIT_DIALOG_SETTINGS]: setEditDialogSettings,
   [ActionTypes.SET_DIALOG_SETTINGS_SLOT]: setDialogSettingsSlot,
+  [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
+  [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
+  [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
+  [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
+  [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
 } as { [type in ActionTypes]: ReducerFunc });

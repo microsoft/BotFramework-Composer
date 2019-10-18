@@ -210,6 +210,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
@@ -361,6 +362,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
@@ -576,6 +578,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
@@ -764,6 +767,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
@@ -1814,6 +1818,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
@@ -2805,6 +2810,7 @@ export const appschema: OBISchema = {
           examples: [false],
         },
         allowInterruptions: {
+          $role: 'expression',
           type: 'string',
           title: 'Allow Interruptions',
           description:
