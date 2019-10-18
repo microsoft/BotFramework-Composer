@@ -27,14 +27,14 @@ const isValidName = name => {
 };
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, eventType, activityType } = data;
+  const { $type, specifiedType } = data;
 
-  if ($type === eventTypeKey && !eventType) {
-    errors.eventType = formatMessage('please select a event type');
+  if ($type === eventTypeKey && !specifiedType) {
+    errors.specifiedType = formatMessage('please select a event type');
   }
 
-  if ($type === activityTypeKey && !activityType) {
-    errors.activityType = formatMessage('please select an activity type');
+  if ($type === activityTypeKey && !specifiedType) {
+    errors.specifiedType = formatMessage('please select an activity type');
   }
 
   if (!$type) {
@@ -54,8 +54,7 @@ const initialFormData: TriggerFormData = {
   errors: {},
   $type: intentTypeKey,
   intent: '',
-  eventType: '',
-  activityType: '',
+  specifiedType: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -88,21 +87,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    // delete formData.eventType;
-    // delete formData.activityType;
     setFormData({ ...initialFormData, $type: option.key });
-  };
-
-  const onSelectEventType = (e, option) => {
-    setFormData({ ...formData, eventType: option.key });
   };
 
   const onSelectIntent = (e, option) => {
     setFormData({ ...formData, intent: option.key });
   };
 
-  const onSelectActivityType = (e, option) => {
-    setFormData({ ...formData, activityType: option.key });
+  const onSelectSpecifiedTypeType = (e, option) => {
+    setFormData({ ...formData, specifiedType: option.key });
   };
 
 <<<<<<< HEAD
@@ -122,8 +115,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     return { key: t.name || t.intent, text: t.name || t.intent };
   });
 
-  const showEventDropDown = formData.$type === eventTypeKey;
   const showIntentDropDown = formData.$type === intentTypeKey;
+  const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
 
   return (
@@ -158,19 +151,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               label="What is the event?"
               options={eventTypes}
               styles={dropdownStyles}
-              onChange={onSelectEventType}
-              errorMessage={formData.errors.eventType}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
               data-testid={'eventTypeDropDown'}
             />
           )}
           {showActivityDropDown && (
             <Dropdown
               placeholder="select an activity type"
-              label="Which activity?"
+              label="What is the activity?"
               options={activityTypes}
               styles={dropdownStyles}
-              onChange={onSelectActivityType}
-              errorMessage={formData.errors.activityType}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
               data-testid={'activityTypeDropDown'}
             />
           )}

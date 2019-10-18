@@ -17,16 +17,14 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
-  eventType: string;
   intent: string;
-  activityType: string;
+  specifiedType: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  eventType?: string;
   intent?: string;
-  activityType?: string;
+  specifiedType?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -57,11 +55,9 @@ export function getFriendlyName(data) {
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const optionalAttributes: { intent?: string; event?: string } = {};
-
-  if (data.eventType) {
-    optionalAttributes.event = data.eventType;
+  if (data.specifiedType) {
+    data.$type = data.specifiedType;
   }
-
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
