@@ -82,7 +82,7 @@ app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   }
 });
 
-app.get('/extensionContainer.html', function(req, res) {
+app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
   res.render(path.resolve(__dirname, './public/extensionContainer.ejs'), { __nonce__: req.__nonce__ });
 });
 
