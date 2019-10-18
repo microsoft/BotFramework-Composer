@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Builder.ComposerBot.json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,6 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-            TypeFactory.RegisterAdaptiveTypes();
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "ToDoBot"));
             resourceExplorer.AddFolder(path);
         }
@@ -59,11 +59,11 @@ namespace Tests
             .Send("third")
                 .AssertReply("Successfully added a todo named third")
             .Send("show todos")
-                .AssertReply("Your most recent 3 tasks are\n* first\n* second\n* third\n")
+                .AssertReply(String.Format("Your most recent 3 tasks are{0}* first\n* second\n* third", Environment.NewLine))
             .Send("delete todo named second")
                 .AssertReply("Successfully removed a todo named second")
             .Send("show todos")
-                .AssertReply("Your most recent 2 tasks are\n* first\n* third\n")
+                .AssertReply(String.Format("Your most recent 2 tasks are{0}* first\n* third", Environment.NewLine))
             .StartTestAsync();
         }
 
@@ -77,12 +77,13 @@ namespace Tests
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
-                .UseLanguageGeneration(resourceExplorer)
+                .UseAdaptiveDialogs()
+                .UseLanguageGeneration(resourceExplorer, "common.lg")
                 .UseResourceExplorer(resourceExplorer)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("Main.dialog");
-            var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
+            var dialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(resource, resourceExplorer, DebugSupport.SourceMap);
             DialogManager dm = new DialogManager(dialog);
 
             return new TestFlow(adapter, async (turnContext, cancellationToken) =>
