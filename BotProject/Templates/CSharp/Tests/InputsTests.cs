@@ -6,6 +6,7 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Builder.ComposerBot.json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,6 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-            TypeFactory.RegisterAdaptiveTypes();
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "Inputs_Samples"));
             resourceExplorer.AddFolder(path);
         }
@@ -49,12 +49,11 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use actions, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
+                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-04{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("01")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
+                .AssertReply("Hello, I'm Zoidberg. What is your name? (This can't be interrupted)")
             .Send("02")
                 .AssertReply("Hello 02, nice to talk to you!")
-                .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("02")
                 .AssertReply("What is your age?")
             .StartTestAsync();
@@ -65,7 +64,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use actions, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
+                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-04{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("02")
                 .AssertReply("What is your age?")
             .Send("18")
@@ -81,16 +80,13 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use actions, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
+                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-04{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("03")
                 .AssertReply("yes or no (1) Yes or (2) No")
             .Send("asdasd")
                 .AssertReply("I need a yes or no. (1) Yes or (2) No")
             .Send("yes")
                 .AssertReply("confirmation: True")
-                .AssertReply("yes or no (1) Yes or (2) No")
-            .Send("nope")
-                .AssertReply("confirmation: False")
             .StartTestAsync();
         }
 
@@ -99,8 +95,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use actions, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
-            .Send("04")
+                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-04{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine)).Send("04")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
                 .AssertReply("You select: Test1")
@@ -112,8 +107,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to Input Sample Bot.\nI can show you examples on how to use actions, You can enter number 01-04\n01 - TextInput\n02 - NumberInput\n03 - ConfirmInput\n04 - ChoiceInput\n05 - AttachmentInput\n06 - DateTimeInput\n07 - OAuthInput\n")
-            .Send("06")
+               .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-04{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine)).Send("06")
                 .AssertReply("Please enter a date.")
             .Send("June 1st")
                 .AssertReply("You entered: 2019-06-01")
@@ -130,12 +124,13 @@ namespace Tests
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
-                .UseLanguageGeneration(resourceExplorer)
+                .UseAdaptiveDialogs()
+                .UseLanguageGeneration(resourceExplorer, "common.lg")
                 .UseResourceExplorer(resourceExplorer)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("Main.dialog");
-            var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
+            var dialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(resource, resourceExplorer, DebugSupport.SourceMap);
             DialogManager dm = new DialogManager(dialog);
 
             return new TestFlow(adapter, async (turnContext, cancellationToken) =>
