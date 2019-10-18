@@ -60,7 +60,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
-  const hosted = window.parent && window.parent.document.getElementById('VisualEditor')!.dataset.hosted === 'true';
+  const openerIFrame = window.parent.document.getElementById('VisualEditor');
+  const hosted = openerIFrame && openerIFrame.dataset.hosted === 'true';
+
   useEffect(() => {
     setContext({
       ...context,
