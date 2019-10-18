@@ -1,6 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
+import { copyAdaptiveAction } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -43,8 +44,8 @@ export function getNewDesigner(name: string, description: string) {
 
 export const getDesignerId = (data?: DesignerData) => {
   const newDesigner: DesignerData = {
-    id: nanoid('1234567890', 6),
     ...data,
+    id: nanoid('1234567890', 6),
   };
 
   return newDesigner;
@@ -72,19 +73,15 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-const DEEP_COPY_TYPES = ['Microsoft.SendActivity'];
-export const needsDeepCopy = $type => {
-  return DEEP_COPY_TYPES.includes($type);
+const updateDesigner = data => {
+  const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
+  data.$designer = $designer;
 };
 
-export const deepCopy: any = (_data, _lgApi) => {
-  // data.type is a SendActivity
-  // data.id is bound to copied SendActivity
-  // new id getDesignerId()
-  // data.activity references an LG template
-  // make new LG template based off of naming schema
-  // assign to data.activity
-  return undefined;
+// TODO: lgApi should also be included in shared lib instead of pass it in
+//       since it's already used by Shell, Visual and Form.
+export const deepCopyAction = async (data, lgApi) => {
+  return await copyAdaptiveAction(data, { lgApi, updateDesigner });
 };
 
 export const seedNewDialog = (
