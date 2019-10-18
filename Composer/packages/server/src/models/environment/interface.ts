@@ -23,10 +23,20 @@ export const absHostedConfig: IEnvironmentConfig = {
   endpoint: '',
 };
 
+export const mockHostedConfig: IEnvironmentConfig = {
+  name: 'mockhosted',
+  basePath: '',
+  endpoint: '',
+};
+
 export const defaultConfig: IEnvironmentConfig = {
   name: 'default',
   basePath: '',
   endpoint: settings.botRuntime,
 };
 
-export const currentConfig: IEnvironmentConfig = absHosted ? absHostedConfig : defaultConfig;
+export const currentConfig: IEnvironmentConfig = absHosted
+  ? absHostedConfig
+  : process.env.MOCKHOSTED
+  ? mockHostedConfig
+  : defaultConfig;

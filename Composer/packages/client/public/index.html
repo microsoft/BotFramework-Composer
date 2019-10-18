@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="https://www.microsoft.com/favicon.ico" />
+    <link rel="shortcut icon" href="favicon.ico" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -23,6 +23,24 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>BotFramework Composer</title>
+
+    <% if (process.env.NODE_ENV === 'production') { %>
+      <? if (__nonce__) { ?>
+        <script nonce="<?= __nonce__ ?>">
+          window.__nonce__ = "<?= __nonce__ ?>";
+
+          window.FabricConfig = {
+            mergeStyles: {
+              cspSettings: { nonce: window.__nonce__ }
+            }
+          };
+
+          window.CSPSettings = {
+            nonce:  window.__nonce__
+          };
+        </script>
+      <? } ?>
+    <% } %>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -37,6 +37,9 @@ router.get('/storages/:storageId/blobs/:path(*)', StorageController.getBlob);
 router.get('/launcher/connect', BotConnectorController.connect);
 router.post('/launcher/sync', BotConnectorController.sync);
 router.get('/launcher/status', BotConnectorController.status);
+router.get('/launcher/publishHistory', BotConnectorController.getPublishHistory);
+router.post('/launcher/publish', BotConnectorController.publish);
+router.post('/launcher/publish/:label', BotConnectorController.publish);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
