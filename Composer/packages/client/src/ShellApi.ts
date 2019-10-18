@@ -75,7 +75,7 @@ export const ShellApi: React.FC = () => {
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
-  const updateLgTemplate = useDebouncedFunc(actions.updateLgTemplate);
+  const updateLgTemplate = actions.updateLgTemplate;
   const createLuFile = actions.createLuFile;
   const createLgFile = actions.createLgFile;
 
@@ -102,6 +102,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
@@ -244,7 +245,7 @@ export const ShellApi: React.FC = () => {
    *
    * @param {*} event
    */
-  async function updateLgTemplateHandler({ id, templateName, template }, event) {
+  function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
@@ -255,10 +256,22 @@ export const ShellApi: React.FC = () => {
     const content = updateTemplateInContent({ content: file.content, templateName, template });
     checkLgContent(content);
 
-    await updateLgTemplate({
+    return updateLgTemplate({
       file,
       templateName,
       template,
+    });
+  }
+
+  function removeLgTemplateHandler({ id, templateName }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!templateName) throw new Error(`templateName is missing or empty`);
+
+    return actions.removeLgTemplate({
+      file,
+      templateName,
     });
   }
 

@@ -1,4 +1,5 @@
-import { has, uniq } from 'lodash';
+import has from 'lodash.has';
+import uniq from 'lodash.uniq';
 
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
 import { DialogChecker } from '../dialogChecker';
