@@ -35,9 +35,9 @@ const cmOptions = {
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
-  productionSlot: formatMessage('Currently published'),
-  integrationSlot: formatMessage('In progress'),
-  botSettings: formatMessage('Bot settings'),
+  productionSlot: formatMessage('In production'),
+  integrationSlot: formatMessage('In test'),
+  botSettings: formatMessage('Settings'),
   botSettingDescription: formatMessage(
     'Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
   ),
