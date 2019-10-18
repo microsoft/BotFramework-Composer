@@ -41,7 +41,7 @@ const initialState: State = {
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
-  editDialogSettings: !isAbsHosted(),
+  editDialogSettings: false,
   toStartBot: false,
   currentUser: {
     token: null,

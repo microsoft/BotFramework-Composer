@@ -106,12 +106,11 @@ export const DialogSettings = () => {
     </div>
   );
 
-  const hostedToggle = () =>
-    absHosted ? (
-      <div className="hosted-toggle">
-        <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-      </div>
-    ) : null;
+  const hostedToggle = () => (
+    <div className="hosted-toggle">
+      <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
+    </div>
+  );
 
   return botName ? (
     <div className="hosted-settings">
