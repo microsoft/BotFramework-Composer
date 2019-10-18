@@ -17,14 +17,14 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
-  eventType: string;
   intent: string;
+  specifiedType: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  eventType?: string;
   intent?: string;
+  specifiedType?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -34,6 +34,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
+export const activityTypeKey: string = SDKTypes.OnActivity;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -54,11 +55,9 @@ export function getFriendlyName(data) {
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
   const optionalAttributes: { intent?: string; event?: string } = {};
-
-  if (data.eventType) {
-    optionalAttributes.event = data.eventType;
+  if (data.specifiedType) {
+    data.$type = data.specifiedType;
   }
-
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
@@ -114,6 +113,38 @@ export function getTriggerTypes(): IDropdownOption[] {
     }),
   ];
   return triggerTypes;
+}
+
+export function getEventTypes(): IDropdownOption[] {
+  const eventTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return eventTypes;
+}
+
+export function getActivityTypes(): IDropdownOption[] {
+  const activityTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return activityTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
