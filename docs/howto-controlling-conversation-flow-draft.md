@@ -1,150 +1,145 @@
-<!---
-Comments are from pieces written that may be useful in other
-how to articles that don't need explaining here.
-- mainly pertain to prompts/setting up properties
--->
-
-
 # Controlling conversation flow
-Bot Framework Composer makes it easier than ever to control conversation flow between bots and users. Developers can now create branches, loops, and other conversation flow methods without writing any boilerplate code. This article will show to implement the aforementioned methods using the [ControllingConversation sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/ControllingConversation).
+The conversations a bot has with its users are controlled by the content of its dialog system. Dialogs contain templates for messages the bot will send, along with instructions for the bot to carry out computational tasks. While some dialogs are linear - just one message after the other - more complex interactions will require dialogs that branch and loop based on what the user says and the choices they make.
 
-| Method | Function |
-| Branch: If/Else | ask user for response to binary choice |
-| Branch: Switch  | ask use for response out of set |
-| Loop: For Each  | iterate array of objects  |
-| Loop: For Each Page  | iterates array of pages of arrays  | 
-| End Turn  | end current turn  |
-| Repeat Dialog | end current dialog | 
+Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](memory article here) or an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) and choose the right path based on that decision:
 
+![flow menu](./existingdocs/Assets/flow-actions-menu.png "screenshot of the flow menu")
+
+* The `If/Else` action instructs the bot choose between one of two paths  based on a yes/or or true/false type value.
+
+* The `Switch` action instructs the bot to choose the path associated with a specific value - for example, a switch can be used to build a multiple-choice menu.
+
+* The `For Each` action instructs the bot to loop through a set of values stored in an array and carry out the same set of actions with each one. For very large lists, there is also a `For Each Page` action that can be used to step through the list one page at a time.
+
+
+## Conditional branching
 ## Branch: If/Else
-If/Else branches are used when you want users to make a binary decision. The bot will take actions based on if the condition in the if/else branch evaluates to `True` or `False`.
+The `If/Else` action creates a decision point for the bot, after which it will follow one of two possible branches. To create an `If/Else` branch click the **+** icon in your dialog, mouse over **Flow**, and click **Branch: If/Else**.
 
-Say you want to obtain a user's age and verify that their age is equal to or greater than 18. Add a number prompt (for information about how to add prompts click [here](link to prompt how to)) and set the property to `user.age`. 
+![Select If/Else Branch]()
 
-![Prompt for user age](./media/controlling-conversation-flow/ifelse-userage.png) 
+The decision is controlled by the `Condition` field, which should contain an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) which evaluates to true or false. In the screenshot below the bot is evaluating whether `user.age` is greater than or equal to 18.
 
-<!---You start by prompting the user for their age. Click the **+** button underneath the trigger in your dialog and mouse over **Ask a Question**. Click **Prompt for number** and set the name of the **property** to `user.age`.-->
+![If/Else Condition]()
 
-To add and if/else branch click the **+** under the number prompt and mouse over the **Flow** option. Select **Branch: If/Else**.
+Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evalutes to true, and one if the condition evaluates false. 
 
-![Select if/else](./media/controlling-conversation-flow/ifelse-flow-ifelse.png) 
-
-You should see a diamond shape with **True** and **False** branches. In the **Condition** box on the Branch pane on right add the expression `user.age >= 18`.
-
-![Prompt for user age](./media/controlling-conversation-flow/ifelse-age18.png) 
-
-Now you need to decide what you want the bot to do if the **True** condition is satisified and the user is 18 or older, or if the **False** condition if the user is under 18. In this sample the bot simply states if the user's age is satisfactory. To replicate this, click the **+** under each branch, mouse over **Send a Message** and then select **Send an Activity**.
-
-![Send message after confirmation](./media/controlling-conversation-flow/ifelse-sendmessage.png)
+![Add If/Else display messages]()
 
 ## Branch: Switch
-Switch is used for situations in which you want users to select one choice out a set of given options
+In a `Switch` result, the value of the Condition field is used to choose between any number of pre-set paths. Each path is tied to one possible value of the condition. To create a `Switch` branch click the **+** icon in your dialog, mouse over **Flow**, and click **Branch: Switch**.
 
-For example, you want to ask a user what their name is out of a set including *Susan*, *Nick*, and *Tom*. You first ask the user their name using a prompt with multichoice (Ask a Question > Prompt for multi-choice) and store that property as `user.name`.
+![Select Switch Branch]()
 
-![Multichoice prompt](./media/controlling-conversation-flow/switch-multichoice-prompt.png) 
+Each path is created by clicking the **Add New Case** button and entering matching value.
 
-After obtaining the choice from the user click the **+** button underneath the choice prompt (in the sample it is after a **Send an Actvity** that echos back the user's choice.) Mouse over **Flow** and select **Branch: Switch**.
+![Add New Case]()
 
-![Select Switch](./media/controlling-conversation-flow/switch-select-switch.png) 
+As each case is added, a new branch will appear in the flow which can then be customized with actions (Send a Message > Send a New Activity in the screenshot below). In addition to any cases created, there will always be a "default" branch which will be used if none of the other cases match.
 
- You should now see an empty **Branch: Switch** box and a diamond underneath with the word **default** next to it. Click on the box and you will see on the right pane a field labeled **Condition**. This is the condition the bot will going to evaluate on, and in this instance our condition is `user.name`.
+![Added Cases]()
 
- ![Set Condition](./media/controlling-conversation-flow/switch-username.png)
 
- Underneath the **Condition** field there is a button labeled **Add a New Case**. This is where you add the switch condition for the options in the multichoice prompt. Click **Add a New Case** and add one of the name choices (Susan is shown in the screenshot below). Repeat this for all name options.
+## Loops
+### Loop: For Each
+`For Each` action instructs the bot to loop through a set of values stored in an array and carry out the same set of actions with each one. To create a  `For Each` loop click the **+** icon in your dialog, mouse over **Flow**, and click **Loop: For Each**.
 
-![Add Case](./media/controlling-conversation-flow/switch-addcase.gif)
+![Select For Each Loop]()
 
-Once you've added a branch for a name you'll see a **Add a New Action for <name>** button where you can add the action the bot takes if that case is satified.
+ On the right you will see boxes for the three elements you need to run a `For Each` loop:
+ - **List Property**: the property that contains an array of elements.
+ - **Value Property**: the property that holds the currently active item.
+ - **Index Property**:  the numeric index of the item inside the array.
 
-![Add Case Action - right pane](./media/controlling-conversation-flow/switch-sendmessage-case.png)
+![For Each Loop Properties]()
 
-Alternatively, you can add actions for each case by clicking the **+** button next to the case.
+After setting the properties you then decide what action your bot should perform in the list. In this sample the bot sends the the result of the expression `{dialog.index}: {dialog.value}`. 
+<not sure what image to put here>
 
-![Add Case Action - dialog editor](./media/controlling-conversation-flow/switch-sendmessage-case-plus.png)
- Once you've added all of your cases and actions your Switch branch is ready. 
+Once the loop begins, it will repeat once for each item in the list of items. Note that it is not currently possible to end the loop before all items have been processed. If the bot needs to process only a subset of the items, use `If/Else` and `Switch` branches within the loop to create further conditional paths.
 
-## Loop: For Each
-**For Each** loops are used when you want the bot that iterates through items in a list and perform and action on each item.
-<!---
-To create a new list click the **+** arrow, mouse over **Memory manipulation**, and select **Initialize a Property**.
-<img>
-
-On the right side you will see boxes for Property and Type. Add the name of your property (`dialogs.list` in this sample) and set the **Type** to **array**.
-<img>
-
-Now you need to add items to the list. Click the **+** button, mouse over **Memory manipulation** and select **Edit an Array Property**.
-<img>
-
- On the right you will see **Change Type**, **Array Property**, **Result Property**, and **Value of the Item**. Set the change type to **Push** since you want to add items to the list, the **Array Property** to `dialogs.id` since this is the list you are iterating over, and the **Value of the Item** to what you want added to the list. **Value of the Item**.
- -->
-
-Say you have an array property in your dialog called `dialog.ids` that you want to iterate. Click the **+** button, mouse over **Flow** and select **Loop: For Each**. The image below shows how to add the for each loop in the **ForEachStep** dialog.
-
-![Select For Each Loop](./media/controlling-conversation-flow/foreach-select-foreach.png)
-
- On the right you will see boxes for the three elements you need to run a for each loop:
- - **List Property**: the list you want to iterate over. Set this to `dialog.id`.
- - **Value Property**: the memory path that refers to the item in the list. Set this to `dialog.value`.
- - **Index Property**: the memory path that refers to the index of an item in the list. Set this to `dialog.index`. 
-
-![Select For Each Loop](./media/controlling-conversation-flow/foreach-list-properties.png)
-
- After setting the properties you then decide what action your bot should perform in the list. In this sample the bot sends the the result of the expression `{dialog.index}: {dialog.value}`.
-
-![For Each Send Activity](./media/controlling-conversation-flow/foreach-sendactivity.png)
-
-## Loop: For Each Page
+### Loop: For Each Page
 **For Each Page** loops are useful for situations in which you want to loop through a large list one page at a time. Like **For Each** loops the bot iterates a list, but the difference is that **For Each Loops** executes actions per item page instead of per item in the list.
 
-Say you have a large list called `dialog.list` that you want to iterate by page. Click on the **+** button, mouse over **Flow** and click **Loop: For Each Page**. The image below shows how to add the for each loop in the **ForEachPageStep** dialog.
+To create a `For Each` loop click the **+** icon in your dialog, mouse over **Flow**, and click **Loop: For Each Page**.
 
-![Select For Each Page](./media/controlling-conversation-flow/foreachpage-select-foreachpage.png)
+![Select For Each Page]()
 
-On the right you will see the following:
-- **List Property**: the list to iterate over. In the sample this is set to `dialogs.ids`.
-- **Page Size**: the number of items in a page. The default value is 10.
-- **Value Property**: the memory path of item in list. In the sample this is set to `dialog.value`.
+On the right you will see the following properties to run a `For Each Page` loop:
+- **List Property**: the property that contains an arry of elements.
+- **Page Size**: the number of items per page. The default value is 10.
+- **Value Property**: the memory path of the current item in the array.
 
-![For Each Page Properties](./media/controlling-conversation-flow/foreachpage-setproperties.png)
+![For Each Page Propertes]()
 
+After setting the aforementioned properties your **For Each Page** loop is ready. As seen in the sample below, you can nest for **For Each** within your **For Each Page** loop, causing your bot to loop through all the items in one page and take an action before handling the next page. <!---Note in the screenshot below that the **For Each** loop iterates each `dialog.value` in the `dialog.page`, not the `dialog.list` that comprises the pages.-->
 
-After setting the aforementioned values your **For Each Page** loop is ready. As seen in the sample, you can nest for **For Each** within your **For Each Page** loop. This will cause your bot to loop through all the items in one page and take an action before handling the next page. Note in the screenshot below that the **For Each** loop iterates each `dialog.value` in the `dialog.page`, not the `dialog.list` that comprises the pages.
+![Nested For Each]()
 
-![Nested For Each](./media/controlling-conversation-flow/foreachpage-nested-foreach.png)
+## Using dialogs to control conversation
+### Child dialogs
+In addition to conditional branching and looping, it is also possible to compose multiple dialogs into a larger more complex interaction.
 
+Child dialogs can by called clicking the **+** arrow underneath the dialog, mousing over **Dialogs** and clicking `Begin a Dialog`.
 
-## Dialogs: End Turn
-If you want to end the current turn click the **+** arrow underneath the point you want to end the turn, mouse over **Dialogs**, and click **End Turn**.
+![Begin a Dialog]() 
 
-![End Turn](./media/controlling-conversation-flow/endturn.gif)
+When the child dialog begins, the parent dialog _pauses_ until the child dialog completes, then _resumes_ where it left off.
 
-## Dialogs: Repeat this Dialog
-If you want to repeat a dialog click the **+** arrow underneath the point you want to continue, mouse over **Dialogs**, and click **Repeat this Dialog**.
+It is possible to pass parameters into the child dialog. Parameters can be added to the `Begin a Dialog` action as name/value pairs - the value of each parameter can be a property in memory or an expression.
 
-![Repeat This Dialog](./media/controlling-conversation-flow/repeatdialog.gif)
-- (this way too fast gif needs fixing)
+![Begin Dialog properties](./existingdocs/Assets/begin-dialogs-properties.png)
 
-## Replace Dialog
+In the example above, the child dialog `menu` will be started, and will be passed 2 options:
 
-## Begin Dialog
+* the first will contain the value of the property `dialog.option1` and be available inside the menu dialog as `dialog.options.option1`
+* the second will contain the value of the property `user.preference` and will available inside the menu dialog as `dialog.options.option2`
 
-## End Dialog
+Note that it is not necessary to map memory properties that would otherwise be available automatically - that is, the `user` and `conversation` scopes will automatically be available for all dialogs.  However, values stored in the `turn` and `dialog` scope do need to be explicitly passed.
 
-## Conditionals using LG
+In addition to passing values into a child dialog, it is also possible to receive a return value from the child dialog.  This return value is specified as part of the `End Dialog` action, as [described below](#ending-dialogs).
 
+In addition to `Begin a Dialog`, there are a few other methods for launching a child dialog:
+
+`Replace this Dialog` works just like `Begin a Dialog`, with one major difference: the parent dialog *does not* resume when the child finishes. To replace a dialog click the **+** button, mouse over **Dialogs**, and select `Replace this Dialog`.
+
+![Select Replace this Dialog]() 
+
+`Repeat this Dialog` causes the current dialog to repeat from the beginning. Note that this does not reset any properties that may have been set during the course of the dialog's first run. To repeat a dialog click the **+** button, mouse over **Dialogs**, and select `Repeat this Dialog`.
+
+![Select Replace this Dialog]() 
+
+### Ending Dialogs
+Any dialog called will naturally end and return control to any parent dialog when it reaches the last action it the flow. It is not necessary to explicitly call `End Dialog`.
+
+It is sometimes desirable to end a dialog before it reaches the end of the flow - for example, you may want to end a dialog if a certain condition is met.
+
+Another reason to call the `End Dialog` action is to pass a return value back to the parent dialog. The return value of a dialog can be a property in memory or an expression, allowing developers to return complex values if necessary. To end a dialog click the **+** button, mouse over **Dialogs**, and select `End Dialog`.
+
+![Select End Dialog]()
+
+Imagine a child dialog used to collect a display name for a user profile. It asks the user a series of questions about their preferences, finally helping them enter a valid user name.  Rather than returning all of the information collected by the dialog, it can be configured to return only the user name value, as seen in the example below. The dialog's `end dialog` action is configured to return the value of `dialog.new_user_name` to the parent dialog.
+
+![End dialog properties](./existingdocs/Assets/end-dialog-properties.png)
+
+## Conditional versions of a message in LG
+In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the language generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
+
+For example, you can create a welcome message that is different depending on whether the `user.name` property is set or not. The message template could look something like this (image here instead of LG pane on right?):
+
+```
+- IF: @{user.name != null}
+    - Hello, {user.name}
+- ELSE:
+    - Hello, human!
+```
+
+Learn more about [using memory and expressions in LG](concept-memory-draft.md#memory-in-lg).
 
 ## Further Reading
-[Prompts]()
+[Adaptive Dialogs](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog)
 
-[Using Memory]()
+[Docs for the Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 
 ## Next
 TBD
-
-<!---
-handle unknown intent
-handle conversation update
-handle a dialog event
--->
