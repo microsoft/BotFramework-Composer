@@ -67,7 +67,7 @@ export class CSharpBotConnector implements IBotConnector {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
-      await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
+      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');
     }
