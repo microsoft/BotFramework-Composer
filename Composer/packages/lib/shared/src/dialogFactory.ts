@@ -27,7 +27,7 @@ const initialDialogShape = {
   },
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
-    constraint: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+    condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
   },
 };
 
