@@ -104,18 +104,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
-          copyNodes(data, e.actionIds).then(copiedActions => {
-            clipboardContext.setClipboardActions(copiedActions);
-          });
+          const copiedActions = copyNodes(data, e.actionIds);
+          clipboardContext.setClipboardActions(copiedActions);
         };
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
-          cutNodes(data, e.actionIds).then(({ dialog, cutData }) => {
-            clipboardContext.setClipboardActions(cutData);
-            onChange(dialog);
-            onFocusSteps([]);
-          });
+          const { dialog, cutData } = cutNodes(data, e.actionIds);
+          clipboardContext.setClipboardActions(cutData);
+          onChange(dialog);
+          onFocusSteps([]);
         };
         break;
       case NodeEventTypes.DeleteSelection:
