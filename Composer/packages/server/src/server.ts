@@ -22,7 +22,7 @@ const CS_POLICIES = [
   "img-src 'self' data:;",
   "base-uri 'none';",
   "connect-src 'self';",
-  "frame-src 'self';",
+  "frame-src 'self' bfemulator:;",
   "worker-src 'self';",
   "form-action 'none';",
   "frame-ancestors 'self';",
