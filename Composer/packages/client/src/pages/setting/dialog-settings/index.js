@@ -1,8 +1,11 @@
+import { RichEditor } from 'code-editor';
 import formatMessage from 'format-message';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
+/*
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import jsonlint from 'jsonlint-webpack';
 import 'codemirror/lib/codemirror.css';
@@ -11,27 +14,13 @@ import 'codemirror/theme/neat.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
+*/
+
 import './style.css';
 
 import { StoreContext } from './../../../store';
 import { isAbsHosted } from './../../../utils/envUtil';
 import { obfuscate } from './../../../utils/objUtil';
-
-window.jsonlint = jsonlint;
-
-const cmOptions = {
-  theme: 'neat',
-  mode: {
-    name: 'javascript',
-    json: true,
-    statementIndent: 2,
-  },
-  lineWrapping: true,
-  indentWithTabs: false,
-  lint: true,
-  tabSize: 2,
-  smartIndent: true,
-};
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -54,26 +43,11 @@ export const DialogSettings = () => {
   const [value, setValue] = useState(JSON.stringify(visibleSettings, null, 2));
   const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-  const options = { ...cmOptions, readOnly: !editing };
+  const [parseError, setParseError] = useState('');
 
   useEffect(() => {
     setValue(JSON.stringify(editing ? visibleSettings : obfuscate(visibleSettings), null, 2));
   }, [origSettings, editing]);
-
-  const updateFormData = (editor, data, newValue) => {
-    try {
-      setValue(newValue);
-      const result = JSON.parse(newValue);
-      try {
-        const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-        actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
-      } catch (err) {
-        console.error(err.message);
-      }
-    } catch (err) {
-      //Do Nothing
-    }
-  };
 
   const changeEditing = (_, on) => {
     setEditing(on);
@@ -109,19 +83,52 @@ export const DialogSettings = () => {
   const hostedToggle = () => (
     <div className="hosted-toggle">
       <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
+      {absHosted ? (
+        <DefaultButton disabled={!editing} text={formatMessage('Save')} onClick={() => handleChange(value, true)} />
+      ) : null}
     </div>
   );
+
+  const saveChangeResult = result => {
+    try {
+      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
+      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const handleChange = (value, commit) => {
+    setValue(value);
+    try {
+      const result = JSON.parse(value);
+      if (commit || !absHosted) {
+        saveChangeResult(result);
+      }
+    } catch (err) {
+      setParseError('invalid json');
+    }
+  };
+
+  const handleMount = monaco => {
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      validate: true,
+    });
+  };
 
   return botName ? (
     <div className="hosted-settings">
       {hostedControl()}
       {hostedToggle()}
       <div className="hosted-code-mirror">
-        <CodeMirror
+        <RichEditor
+          language="json"
+          onChange={x => handleChange(x, false)}
+          errorMsg={parseError}
+          editorWillMount={handleMount}
+          options={{ folding: true, readOnly: !editing }}
           value={value}
-          onBeforeChange={updateFormData}
-          options={options}
-          className={absHosted ? 'CodeMirror-Hosted' : undefined}
+          helpURL="https://www.json.org"
         />
       </div>
     </div>

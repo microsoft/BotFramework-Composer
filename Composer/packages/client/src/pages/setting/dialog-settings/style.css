@@ -32,10 +32,21 @@
 .hosted-code-mirror {
   position: relative;
   flex-grow: 1;
-  border: 1px solid #B3B0AD;
 }
 
 #toolbar-portal {
   display: flex;
   align-items: center;
+}
+
+.hosted-toggle {
+  display: flex;
+}
+
+.hosted-toggle > * {
+  margin-right: 2rem;
+}
+
+.slot-choice {
+  max-width: 40ch;
 }
