@@ -5,6 +5,7 @@ import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
 import { TextField, IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { IChoice } from 'shared';
 
 import { field, choiceItemContainer, choiceItemValue, choiceItemSynonyms } from '../styles';
 import { swap, remove } from '../../../utils';

@@ -4,7 +4,7 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { DefaultButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { createStepMenu, DialogGroup } from 'shared';
+import { createStepMenu, DialogGroup, MicrosoftIDialog, CaseCondition } from 'shared';
 
 import Modal from '../../Modal';
 import { swap } from '../utils';
