@@ -41,7 +41,7 @@ export const setSettings: ActionCreator = async (
   }
 };
 
-const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
+export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
   const suffix = slot ? `/${slot}` : '';
   const query = editing ? '' : '?obfuscate=true';
   const url = `${BASEURL}/projects/opened/settings${suffix}${query}`;
