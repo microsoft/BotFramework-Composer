@@ -1,6 +1,7 @@
-import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
-import { debounce, isEqual, get } from 'lodash';
+import React, { useEffect, useContext, useMemo, useState } from 'react';
 import { ShellData } from 'shared';
+import isEqual from 'lodash.isequal';
+import get from 'lodash.get';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
