@@ -29,6 +29,8 @@ Confirmation prompts are useful after you've asked the user a question, prompt o
 
 ![Select prompt for confirmation]()
 
+
+
 ### Prompt for multi-choice
 `Prompt for multi-choice` makes it easy to define a set of choices for users to choose from. To create a prompt with multiple choice options click the **+** button, mouse over **Ask a question** and select **Prompt for multi-choice**. 
 
@@ -56,6 +58,8 @@ Note that if you select the **Inline** list style you can scroll down and set **
 Users can upload images, videos, and other media after being prompted with a `Prompt for attachment`. To prompt a user for an attachment click the **+** button, mouse over **Ask a question** and select **Prompt for attachment**.
 
 ![Select prompt for attachment]()
+
+In the **AttachmentInput** dialog you will see the **Property** is set to dialog.attachments. The **Output Format** is set to `first`, meaning only the first attachment will be output. 
 
 ### Prompt for date
 Prompt users for their birthday, the date they want to take a flight, and other dates using the `Prompt for date`. To prompt a user for a date click the **+** button, mouse over **Ask a question** and select **Prompt for date**.
