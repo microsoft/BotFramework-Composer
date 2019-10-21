@@ -5,16 +5,6 @@ import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import React, { useState, useContext, useEffect } from 'react';
-/*
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import jsonlint from 'jsonlint-webpack';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/lint/lint.css';
-import 'codemirror/theme/neat.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/addon/lint/lint';
-import 'codemirror/addon/lint/json-lint';
-*/
 
 import './style.css';
 
