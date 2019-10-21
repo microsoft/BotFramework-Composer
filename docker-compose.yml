@@ -9,6 +9,7 @@ services:
       # - "9229:9229"
     volumes:
       - ./SampleBots:/SampleBots
+      - ./BotProject:/BotProject
     environment:
       - NODE_ENV=container
     # command:
