@@ -8,7 +8,7 @@ import { styles } from './styles';
 const instructions = {
   title: formatMessage('Deploy your bot to Azure'),
   description: formatMessage(
-    'For team members or customers to interact with ToDoBot, your bot needs to be deployed. In this version of Composer, this step is not yet automated, however, Composer can configure Azure Resources and generate a script to deploy your bot. You can use this script whenever you want to deploy an updated version of your bot.'
+    'For team members or customers to interact with this bot, your bot needs to be deployed. In this version of Composer, this step is not yet automated, however, Composer can configure Azure Resources and generate a script to deploy your bot. You can use this script whenever you want to deploy an updated version of your bot.'
   ),
   button1: formatMessage('Create Azure Resources'),
   button2: formatMessage('Deploy Bot to Azure'),

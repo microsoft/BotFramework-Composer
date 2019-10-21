@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';

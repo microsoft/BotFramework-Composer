@@ -8,11 +8,13 @@ import FormData from 'form-data';
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 
-import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
+  private adminEndpoint: string;
   private endpoint: string;
-  constructor(endpoint: string) {
+  constructor(adminEndpoint: string, endpoint: string) {
+    this.adminEndpoint = adminEndpoint;
     this.endpoint = endpoint;
   }
 
@@ -21,7 +23,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async (_: BotEnvironments, __: string) => {
     // confirm bot runtime is listening here
     try {
-      await axios.get(this.endpoint + '/api/admin');
+      await axios.get(this.adminEndpoint + '/api/admin');
     } catch (err) {
       throw new Error(err);
     }
@@ -65,7 +67,7 @@ export class CSharpBotConnector implements IBotConnector {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
-      await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
+      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');
     }
@@ -82,6 +84,28 @@ export class CSharpBotConnector implements IBotConnector {
 
       output.on('close', () => resolve(archive));
       archive.on('error', err => reject(err));
+    });
+  };
+
+  getEditingStatus = (): Promise<boolean> => {
+    return new Promise(resolve => {
+      resolve(true);
+    });
+  };
+
+  getPublishHistory = (): Promise<IPublishHistory> => {
+    return new Promise(resolve => {
+      resolve({
+        production: undefined,
+        previousProduction: undefined,
+        integration: undefined,
+      });
+    });
+  };
+
+  publish = (_: BotConfig, __: string): Promise<void> => {
+    return new Promise(resolve => {
+      resolve();
     });
   };
 }
