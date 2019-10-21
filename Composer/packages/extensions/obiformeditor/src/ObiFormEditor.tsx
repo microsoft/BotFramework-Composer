@@ -40,7 +40,7 @@ const ObiFormEditor: React.FC<FormEditorProps> = props => {
   };
 
   // only need to debounce the change handler when focusedSteps change
-  const debouncedOnChange = useMemo(() => debounce(onChange, 750), [props.focusedSteps[0]]);
+  const debouncedOnChange = useMemo(() => debounce(onChange, 500), [props.focusedSteps[0]]);
   const key = get(props.data, '$designer.id', props.focusPath);
 
   return (
