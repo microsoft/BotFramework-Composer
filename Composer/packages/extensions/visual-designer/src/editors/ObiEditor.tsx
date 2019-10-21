@@ -2,11 +2,11 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { has } from 'lodash';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { AttrNames } from '../constants/ElementAttributes';
-import { ObiTypes } from '../constants/ObiTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { ClipboardContext } from '../store/ClipboardContext';
@@ -69,12 +69,46 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          const cleanLgTemplate = (removedData: any): void => {
-            if (removedData && removedData.$type === ObiTypes.SendActivity) {
-              if (removedData.activity && removedData.activity.indexOf('[bfdactivity-') !== -1) {
-                removeLgTemplate('common', removedData.activity.slice(1, removedData.activity.length - 1));
-              }
+          const findLgTemplates = (value: any): string[] => {
+            const targets: string[] = [];
+            // look for *.prompt field
+            if (has(value, 'prompt')) {
+              targets.push(value.prompt);
             }
+            // look for *.unrecognizedPrompt field
+            if (has(value, 'unrecognizedPrompt')) {
+              targets.push(value.unrecognizedPrompt);
+            }
+
+            // look for other $type
+            switch (value.$type) {
+              case 'Microsoft.SendActivity':
+                targets.push(value.activity);
+                break;
+            }
+
+            const templates: string[] = [];
+            targets.forEach(target => {
+              // match a template name
+              // match a temlate func  e.g. `showDate()`
+              // eslint-disable-next-line security/detect-unsafe-regex
+              const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
+              let matchResult;
+              while ((matchResult = reg.exec(target)) !== null) {
+                const templateName = matchResult[1];
+                templates.push(templateName);
+              }
+            });
+
+            return templates;
+          };
+
+          const cleanLgTemplate = (removedData: any): void => {
+            const templates: string[] = findLgTemplates(removedData);
+            templates.forEach(template => {
+              const lgFileId = 'common';
+              removeLgTemplate(lgFileId, template);
+            });
           };
           onChange(deleteNode(data, e.id, cleanLgTemplate));
           onFocusSteps([]);
