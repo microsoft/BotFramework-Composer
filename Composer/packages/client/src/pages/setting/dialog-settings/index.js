@@ -46,19 +46,19 @@ const hostControlLabels = {
 
 export const DialogSettings = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings: origSettings, editDialogSettings, botEnvironment } = state;
+  const { botName, settings: origSettings, botEnvironment } = state;
   const absHosted = isAbsHosted();
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
   const [value, setValue] = useState(JSON.stringify(visibleSettings, null, 2));
-  const [editing, setEditing] = useState(editDialogSettings);
-  const [slot, setSlot] = useState(botEnvironment);
+  const [editing, setEditing] = useState(false);
+  const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
   const options = { ...cmOptions, readOnly: !editing };
 
   useEffect(() => {
     setValue(JSON.stringify(editing ? visibleSettings : obfuscate(visibleSettings), null, 2));
-  }, [origSettings, editDialogSettings]);
+  }, [origSettings, editing]);
 
   const updateFormData = (editor, data, newValue) => {
     try {

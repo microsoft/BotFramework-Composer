@@ -8,6 +8,7 @@ import * as lgUtil from './utils/lgUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import { isAbsHosted } from './utils/envUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath, navigateTo } from './utils/navigation';
 import { DialogInfo, LgFile, LuFile, BotSchemas } from './store/types';
@@ -28,6 +29,7 @@ export interface ShellData {
   dialogId: string;
   focusedEvent: string;
   focusedSteps: string[];
+  hosted: boolean;
   focusedTab?: string;
 }
 
@@ -181,6 +183,7 @@ export const ShellApi: React.FC = () => {
       focusedEvent: selected,
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      hosted: !!isAbsHosted(),
     };
   }
 

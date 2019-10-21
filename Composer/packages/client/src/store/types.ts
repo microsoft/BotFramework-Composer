@@ -62,7 +62,6 @@ export interface State {
   showCreateDialogModal: boolean;
   isEnvSettingUpdated: boolean;
   settings: DialogSetting;
-  editDialogSettings: boolean;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   toStartBot: boolean;
   currentUser: {

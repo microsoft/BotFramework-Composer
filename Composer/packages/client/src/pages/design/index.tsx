@@ -18,7 +18,6 @@ import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
-import { isAbsHosted } from '../../utils/envUtil';
 import undoHistory from '../../store/middlewares/undo/history';
 
 import NewDialogModal from './new-dialog-modal';
@@ -392,7 +391,6 @@ function DesignPage(props) {
                     id="VisualEditor"
                     key="VisualEditor"
                     name="VisualEditor"
-                    data-hosted={isAbsHosted()}
                     css={visualEditor}
                     hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}

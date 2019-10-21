@@ -41,10 +41,12 @@ export const setSettings: ActionCreator = async (
   }
 };
 
-export const setEditDialogSettings: ActionCreator = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
-  if (editing) {
-    // fetch the real settings for editing
-    const suffix = slot ? `/${slot}` : '';
+const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
+  const suffix = slot ? `/${slot}` : '';
+  const query = editing ? '' : '?obfuscate=true';
+  const url = `${BASEURL}/projects/opened/settings${suffix}${query}`;
+
+  try {
     const response = await axios.get(`${BASEURL}/projects/opened/settings${suffix}`);
     const settings = response.data;
     dispatch({
@@ -52,30 +54,6 @@ export const setEditDialogSettings: ActionCreator = async ({ dispatch }, editing
       payload: {
         settings,
       },
-    });
-  }
-  dispatch({
-    type: ActionTypes.SET_EDIT_DIALOG_SETTINGS,
-    payload: editing,
-  });
-};
-
-export const setDialogSettingsSlot: ActionCreator = async ({ dispatch }, slot: BotEnvironments, editing: boolean) => {
-  try {
-    const query = editing ? '' : '?obfuscate=true';
-    const response = await axios.get(`${BASEURL}/projects/opened/settings/${slot}${query}`, { responseType: 'json' });
-    const settings = response.data;
-
-    dispatch({
-      type: ActionTypes.SYNC_ENV_SETTING,
-      payload: {
-        settings,
-      },
-    });
-
-    dispatch({
-      type: ActionTypes.SET_DIALOG_SETTINGS_SLOT,
-      payload: slot,
     });
   } catch (err) {
     dispatch({
@@ -85,5 +63,12 @@ export const setDialogSettingsSlot: ActionCreator = async ({ dispatch }, slot: B
         summary: 'DLG SETTINGS ERROR',
       },
     });
+  }
+};
+
+export const setEditDialogSettings: ActionCreator = async (store, editing: boolean, slot?: BotEnvironments) => {
+  if (editing) {
+    // fetch the real settings for editing
+    await setDialogSettingsSlot(store, editing, slot);
   }
 };

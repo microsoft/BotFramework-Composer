@@ -25,6 +25,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   focusedTab,
   data: inputData,
   shellApi,
+  hosted,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -60,8 +61,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
   });
-  const openerIFrame = window.parent.document.getElementById('VisualEditor');
-  const hosted = !!(openerIFrame && openerIFrame.dataset.hosted === 'true');
 
   useEffect(() => {
     setContext({
@@ -105,6 +104,7 @@ interface VisualDesignerProps {
   focusedSteps: string[];
   focusedTab: string;
   shellApi: any;
+  hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 
