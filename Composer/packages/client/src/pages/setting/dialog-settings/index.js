@@ -87,7 +87,7 @@ export const DialogSettings = () => {
 
   const changeSlot = (_, option) => {
     setSlot(option.key);
-    actions.setDialogSettingsSlot(option.key, editing);
+    actions.setDialogSettingsSlot(editing, option.key);
   };
 
   const hostedControl = () => (
