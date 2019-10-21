@@ -45,7 +45,7 @@ const ObiFormEditor: React.FC<FormEditorProps> = props => {
 
   return (
     <CacheProvider value={emotionCache}>
-      <ErrorBoundary key={key} FallbackComponent={ErrorInfo}>
+      <ErrorBoundary key={`${props.botName}-${key}`} FallbackComponent={ErrorInfo}>
         <FormEditor {...props} onChange={debouncedOnChange} />
       </ErrorBoundary>
     </CacheProvider>
