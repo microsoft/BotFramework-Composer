@@ -142,7 +142,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   };
 
   return (
-    <div css={root} data-testid="ProjectTree">
+    <div className="ProjectTree" css={root} data-testid="ProjectTree">
       <SearchBox
         placeholder={formatMessage('Filter Dialogs')}
         styles={searchBox}
