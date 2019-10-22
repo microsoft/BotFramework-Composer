@@ -30,7 +30,7 @@ const initialState: State = {
   templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
-  schemas: {},
+  schemas: { editor: {} },
   luFiles: [],
   designPageLocation: {
     dialogId: '',

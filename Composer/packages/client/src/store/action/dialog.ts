@@ -1,8 +1,9 @@
 import axios from 'axios';
 import clonedeep from 'lodash.clonedeep';
 import { remove } from 'lodash';
+import { DialogInfo } from 'shared';
 
-import { ActionCreator, State, DialogInfo } from '../types';
+import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
 
 import { BASEURL, ActionTypes } from './../../constants/index';

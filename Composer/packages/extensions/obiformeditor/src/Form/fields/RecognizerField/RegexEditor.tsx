@@ -2,6 +2,7 @@ import React from 'react';
 import { toIdSchema } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { JSONSchema6 } from 'json-schema';
+import { MicrosoftIRecognizer } from 'shared';
 
 export default function RegexEditor(props: FieldProps<MicrosoftIRecognizer>) {
   if (!props.schema.oneOf) {

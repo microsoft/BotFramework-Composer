@@ -1,8 +1,8 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { IdSchema } from '@bfcomposer/react-jsonschema-form';
-import { JSONSchema6 } from 'json-schema';
 import get from 'lodash.get';
+import { IChoiceOption, OBISchema } from 'shared';
 
 import { field } from '../styles';
 import { TextWidget, CheckboxWidget } from '../../../widgets';
@@ -10,7 +10,7 @@ import { FormContext } from '../../../types';
 
 interface ChoiceOptionsProps {
   idSchema: IdSchema;
-  schema: JSONSchema6;
+  schema: OBISchema;
   formData: IChoiceOption;
   onChange: (field: keyof IChoiceOption) => (data: any) => void;
   formContext: FormContext;
@@ -19,7 +19,7 @@ interface ChoiceOptionsProps {
 export const ChoiceOptions: React.FC<ChoiceOptionsProps> = props => {
   const { schema, formData, onChange, idSchema, formContext } = props;
 
-  const optionSchema = (field: keyof IChoiceOption): JSONSchema6 => {
+  const optionSchema = (field: keyof IChoiceOption): OBISchema => {
     return get(schema, ['properties', field]);
   };
 

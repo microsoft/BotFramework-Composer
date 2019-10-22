@@ -9,6 +9,7 @@ import {
   Stack,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { DialogInfo } from 'shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
@@ -18,7 +19,6 @@ import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
-import { DialogInfo } from './store/types';
 
 const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
