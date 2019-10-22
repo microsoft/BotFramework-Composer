@@ -67,7 +67,17 @@ Prompt users for their birthday, the date they want to take a flight, and other 
 ![Select prompt for date]()
 
 ## Prompt validation and unrecognized responses 
-Prompts in the Bot Framework Composer come with methods to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized.
+Prompts in the Bot Framework Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. Here is a breakdown of the aforementioned components:
+
+Each prompt can be validated using a validation expression?
+
+- **Unrecognized Prompt**:  message to send to a user if their response was not recognized.
+- **Invalid Prompt**:  message to respond with when a user inputs an invalid data type, like a number instead of a word.
+- **Max Turn Count**: the maximum number of times a user can fail the prompt before the default value is assigned to property
+- **Value**: the expression used to validate the user response
+- **Default Value**: the value to return if the expression cannot be validated.
+- **Default Value Response**: message to send when max turn count has been hit and default value is selected
+
 
 
 
