@@ -32,7 +32,7 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.Info",
+          "resultProperty": "user.Info",
           "$designer": {
             "id": "125222"
           }
