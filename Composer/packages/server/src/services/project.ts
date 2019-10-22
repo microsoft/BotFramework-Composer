@@ -43,21 +43,13 @@ export class BotProjectService {
   public static openProject = async (locationRef: LocationRef) => {
     BotProjectService.initialize();
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
-      BotProjectService.updateRecentBotProjects('DELETE', locationRef.path);
+      BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file not exist ${locationRef.path}`);
     }
     BotProjectService.currentBotProject = new BotProject(locationRef);
     await BotProjectService.currentBotProject.index();
-    BotProjectService.updateRecentBotProjects('ADD', locationRef.path);
+    BotProjectService.addRecentProject();
   };
-
-  private static updateRecentBotProjects(operation: string, path: string): void {
-    if (operation === 'ADD') {
-      this.addRecentProject();
-    } else if (operation === 'DELETE') {
-      this.deleteRecentProject(path);
-    }
-  }
 
   private static addRecentProject = (): void => {
     if (!BotProjectService.currentBotProject) {
@@ -88,7 +80,7 @@ export class BotProjectService {
     if (typeof BotProjectService.currentBotProject !== 'undefined') {
       BotProjectService.currentBotProject = await BotProjectService.currentBotProject.copyTo(locationRef);
       await BotProjectService.currentBotProject.index();
-      BotProjectService.updateRecentBotProjects('ADD', locationRef.path);
+      BotProjectService.addRecentProject();
     }
   };
 }
