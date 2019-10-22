@@ -29,11 +29,6 @@ export function RichEditor(props: RichEditorProps) {
     }
   );
 
-  const baseEditor = <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />;
-  // CodeRange editing require an non-controled/refresh component, so here make it memoed
-  const memoEditor = useMemo(() => {
-    return baseEditor;
-  }, []);
   const getHeight = () => {
     if (height === null || height === undefined) {
       return '100%';
@@ -69,7 +64,7 @@ export function RichEditor(props: RichEditorProps) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {props.codeRange ? memoEditor : baseEditor}
+        <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
       {isInvalid && (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>

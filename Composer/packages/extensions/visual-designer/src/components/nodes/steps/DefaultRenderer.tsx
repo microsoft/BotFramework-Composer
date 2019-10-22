@@ -119,6 +119,9 @@ const ContentKeyByTypes: {
   [ObiTypes.EditActions]: {
     label: 'changeType',
   },
+  [ObiTypes.QnAMakerDialog]: {
+    label: 'hostname',
+  },
 };
 
 /**

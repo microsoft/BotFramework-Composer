@@ -68,7 +68,7 @@
             ],
             "status": "available"
           },
-          "property": "user.postResponse",
+          "resultProperty": "user.postResponse",
           "headers": {
             "test": "test",
             "test2": "test2"
@@ -100,7 +100,7 @@
           },
           "method": "GET",
           "url": "http://petstore.swagger.io/v2/pet/{user.id}",
-          "property": "user.getResponse"
+          "resultProperty": "user.getResponse"
         },
         {
           "$type": "Microsoft.SendActivity",
