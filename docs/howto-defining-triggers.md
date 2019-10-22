@@ -76,7 +76,7 @@ Configure a dialog to the`Begin a Dialog` activity.
 ### 1. Create a `Handle an Event: Activity` trigger
 In the dialog menu, click **New Trigger** and select `Handle an Event: Activity` from the drop-down menu. Select `Handle ConversationUpdate` activity and then click **submit**. 
 
-![events_triggers](./media/events_triggers/conversationUpdate.png)
+![events_triggers](./media/events_triggers/conversationupdate.png)
 
 ### 2. Add an action node to the trigger
 In the `Handle ConversationUpdate` trigger node, click the "+" sign to add the action node you want to include. For example, let's click **Send Messages** and then **Send an Activity** to send a welcome message. You can define response messages following the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) in the language generation editor. 
