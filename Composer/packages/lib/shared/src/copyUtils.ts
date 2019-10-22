@@ -37,11 +37,12 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
   }
 }
 
+const LgActivityRegex = /\[bfd.+-.+\]/;
 function isLgActivity(activity: string) {
-  return activity && (activity.includes('bfdactivity-') || activity.includes('bfdprompt-'));
+  return activity && LgActivityRegex.test(activity);
 }
 
-async function copyLgActivity(activity: string, designerId: string, lgApi: any): Promise<string> {
+async function copyLgActivity(activity: string, newLgId: string, lgApi: any): Promise<string> {
   if (!activity) return '';
   if (!isLgActivity(activity) || !lgApi) return activity;
 
@@ -60,7 +61,6 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
   if (currentLg) {
     // Create new lg activity.
     const newLgContent = currentLg.Body;
-    const newLgId = `bfdactivity-${designerId}`;
     try {
       await updateLgTemplate('common', newLgId, newLgContent);
       return `[${newLgId}]`;
@@ -72,11 +72,17 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
 }
 
 const overrideLgActivity = async (data, { lgApi }) => {
-  data.activity = await copyLgActivity(data.activity, data.$designer.id, lgApi);
+  data.activity = await copyLgActivity(data.activity, `bfdactivity-${data.$designer.id}`, lgApi);
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  data.prompt = await copyLgActivity(data.prompt, data.$designer.id, lgApi);
+  data.prompt = await copyLgActivity(data.prompt, `bfdprompt-${data.$designer.id}`, lgApi);
+  for (const promptFieldKey of ['unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse']) {
+    const existingActivity = data[promptFieldKey];
+    if (existingActivity) {
+      data[promptFieldKey] = await copyLgActivity(existingActivity, `bfd${promptFieldKey}-${data.$designer.id}`, lgApi);
+    }
+  }
 };
 
 // TODO: use $type from SDKTypes (after solving circular import issue).
