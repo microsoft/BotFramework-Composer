@@ -18,7 +18,7 @@ import { createSelectedPath, getFriendlyName } from '../../utils';
 import { addButton, groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
 
-export function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -31,7 +31,7 @@ export function createGroupItem(dialog: DialogInfo, currentId: string, position:
   };
 }
 
-export function createItem(trigger: ITrigger, index: number) {
+function createItem(trigger: ITrigger, index: number) {
   return {
     ...trigger,
     index,
@@ -39,7 +39,7 @@ export function createItem(trigger: ITrigger, index: number) {
   };
 }
 
-export function sortDialog(dialogs: DialogInfo[]) {
+function sortDialog(dialogs: DialogInfo[]) {
   const dialogsCopy = cloneDeep(dialogs);
   return dialogsCopy.sort((x, y) => {
     if (x.isRoot) {
@@ -52,11 +52,7 @@ export function sortDialog(dialogs: DialogInfo[]) {
   });
 }
 
-export function createGroup(
-  dialogs: DialogInfo[],
-  dialogId: string,
-  filter: string
-): { items: any[]; groups: IGroup[] } {
+function createGroup(dialogs: DialogInfo[], dialogId: string, filter: string): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
     .filter(dialog => {
@@ -146,7 +142,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   };
 
   return (
-    <div css={root} data-testid="ProjectTree">
+    <div className="ProjectTree" css={root} data-testid="ProjectTree">
       <SearchBox
         placeholder={formatMessage('Filter Dialogs')}
         styles={searchBox}

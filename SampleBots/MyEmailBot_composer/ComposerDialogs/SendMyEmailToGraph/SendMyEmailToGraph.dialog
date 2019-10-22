@@ -28,10 +28,9 @@
               ]
             }
           },
-          "Property": "user.response"
+          "resultProperty": "user.response"
         }
-      ],
-       
+      ],      
       "$designer": {
         "id": "424539"
       }
