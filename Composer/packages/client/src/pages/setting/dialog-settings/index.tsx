@@ -1,16 +1,15 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useContext, useEffect } from 'react';
 import { RichEditor } from 'code-editor';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import React, { useState, useContext, useEffect } from 'react';
+import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
-import './style.css';
+import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
 
-import { StoreContext } from './../../../store';
-import { isAbsHosted } from './../../../utils/envUtil';
-import { obfuscate } from './../../../utils/objUtil';
+import { StoreContext } from '../../../store';
+import { isAbsHosted } from '../../../utils/envUtil';
+import { obfuscate } from '../../../utils/objUtil';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -55,7 +54,7 @@ export const DialogSettings = () => {
   };
 
   const hostedControl = () => (
-    <div className="hosted-controls">
+    <div css={hostedControls}>
       <h1>{hostControlLabels.botSettings}</h1>
       <p>
         {hostControlLabels.botSettingDescription}
@@ -64,18 +63,16 @@ export const DialogSettings = () => {
           {hostControlLabels.learnMore}
         </Link>
       </p>
-      {absHosted ? (
-        <ChoiceGroup options={slots} onChange={changeSlot} className="slot-choice" selectedKey={slot} />
-      ) : null}
+      {absHosted ? <ChoiceGroup options={slots} onChange={changeSlot} css={slotChoice} selectedKey={slot} /> : null}
     </div>
   );
 
-  const hostedToggle = () => (
-    <div className="hosted-toggle">
+  const toggle = () => (
+    <div css={hostedToggle}>
       <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-      {absHosted ? (
+      {absHosted && (
         <DefaultButton disabled={!editing} text={formatMessage('Save')} onClick={() => handleChange(value, true)} />
-      ) : null}
+      )}
     </div>
   );
 
@@ -107,10 +104,10 @@ export const DialogSettings = () => {
   };
 
   return botName ? (
-    <div className="hosted-settings">
+    <div css={hostedSettings}>
       {hostedControl()}
-      {hostedToggle()}
-      <div className="hosted-code-mirror">
+      {toggle()}
+      <div css={settingsEditor}>
         <RichEditor
           language="json"
           onChange={x => handleChange(x, false)}
