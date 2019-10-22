@@ -121,7 +121,6 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.QnAMakerDialog]: {
     label: 'hostname',
-  },
 };
 
 /**
