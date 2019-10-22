@@ -188,6 +188,8 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
+  // TODO: 1. early return when dataPath is empty.
+  //       2. optimize dialogsMap clone, only clone changed dialog.
   const dialogsMapClone = cloneDeep(dialogsMap);
   const dialog = dialogsMapClone[dialogId];
 
