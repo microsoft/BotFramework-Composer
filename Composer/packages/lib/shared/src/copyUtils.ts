@@ -72,15 +72,16 @@ async function copyLgActivity(activity: string, newLgId: string, lgApi: any): Pr
 }
 
 const overrideLgActivity = async (data, { lgApi }) => {
-  data.activity = await copyLgActivity(data.activity, `bfdactivity-${data.$designer.id}`, lgApi);
+  const newLgId = `bfdactivity-${data.$designer.id}`;
+  data.activity = await copyLgActivity(data.activity, newLgId, lgApi);
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  data.prompt = await copyLgActivity(data.prompt, `bfdprompt-${data.$designer.id}`, lgApi);
-  for (const promptFieldKey of ['unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse']) {
+  for (const promptFieldKey of ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse']) {
     const existingActivity = data[promptFieldKey];
+    const newLgId = `bfd${promptFieldKey}-${data.$designer.id}`;
     if (existingActivity) {
-      data[promptFieldKey] = await copyLgActivity(existingActivity, `bfd${promptFieldKey}-${data.$designer.id}`, lgApi);
+      data[promptFieldKey] = await copyLgActivity(existingActivity, newLgId, lgApi);
     }
   }
 };
