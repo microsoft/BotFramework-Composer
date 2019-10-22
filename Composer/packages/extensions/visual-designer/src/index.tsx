@@ -84,7 +84,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
             focusedEvent={focusedEvent}
             onFocusEvent={onFocusEvent}
             onOpen={(x, rest) => navTo(x, rest)}
-            onChange={x => saveData(x)}
+            onChange={x => {
+              // NOTES: Visual Editor accepts and submits whole dialog file.
+              saveData(x, { dialogId, dataPath: '' });
+            }}
             onSelect={onSelect}
             undo={undo}
             redo={redo}
@@ -115,7 +118,7 @@ VisualDesigner.defaultProps = {
     onFocusEvent: (_eventId: string) => {},
     onFocusSteps: (_stepIds: string[], _fragment?: string) => {},
     onSelect: (_ids: string[]) => {},
-    saveData: () => {},
+    saveData: (_data, _location) => {},
   },
 };
 

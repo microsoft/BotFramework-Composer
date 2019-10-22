@@ -19,6 +19,7 @@ export interface FormEditorProps {
   data: FormData;
   currentDialog: DialogInfo;
   dialogs: DialogInfo[];
+  dialogId: string;
   focusPath: string;
   focusedEvent: string;
   focusedSteps: string[];
@@ -28,13 +29,13 @@ export interface FormEditorProps {
   luFiles: LuFile[];
   memory: FormMemory;
   onBlur?: () => void;
-  onChange: (newData: object, updatePath?: string) => void;
+  onChange: (newData: object, dataLocation?: { dialogId: string; dataPath: string }) => void;
   schemas: EditorSchema;
   shellApi: ShellApi;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, schemas, memory, dialogs, focusPath, shellApi } = props;
+  const { data, schemas, memory, dialogs, shellApi } = props;
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
 
@@ -72,7 +73,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, localData)) {
-      props.onChange(newValue.formData, focusPath);
+      props.onChange(newValue.formData);
       setLocalData(newValue.formData);
     }
   };
