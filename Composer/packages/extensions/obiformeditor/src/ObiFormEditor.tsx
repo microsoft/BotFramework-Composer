@@ -35,8 +35,9 @@ const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
 );
 
 const ObiFormEditor: React.FC<FormEditorProps> = props => {
-  const onChange = data => {
-    props.onChange(data, props.focusedSteps[0]);
+  const onChange = (data, dataPath) => {
+    //TODO: consider blocking updates on old data paths after navigated to a new data path.
+    props.onChange(data, dataPath);
   };
 
   // only need to debounce the change handler when focusedSteps change

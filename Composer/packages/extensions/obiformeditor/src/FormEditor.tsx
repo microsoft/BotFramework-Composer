@@ -34,7 +34,7 @@ export interface FormEditorProps {
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, schemas, memory, dialogs, shellApi } = props;
+  const { data, schemas, memory, dialogs, focusPath, shellApi } = props;
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
 
@@ -72,7 +72,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   const onChange = newValue => {
     if (!isEqual(newValue.formData, localData)) {
-      props.onChange(newValue.formData);
+      props.onChange(newValue.formData, focusPath);
       setLocalData(newValue.formData);
     }
   };
