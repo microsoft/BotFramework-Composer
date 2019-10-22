@@ -3,27 +3,29 @@ Each dialog in Composer includes a set of triggers (event handlers) that contain
 
 The table below lists the five different types of triggers provided in BF Composer and their descriptions. 
 
-| Trigger Type       | Description   |  
-| -------------------- |-------------- |
-| `Handle an Intent`       | To define the actions to take when an **Intent** is recognized (and optionally **entities**) |
-| `Handle Unknown Intent`       | To define the actions to taken when no intent is recognized  |
-| `Handle a Dialog Event`      | To define the actions to take when a dialog event such as `BeginDialog` is fired |
-| `Handle an Event: Activity`    | To define the actions to take when an activity event such as `ConversationUpdate` is fired |
-|`Handle a custom event` |  n/a  |
+| Trigger Type                | Description                                                                                       |
+| --------------------------- | ------------------------------------------------------------------------------------------------- |
+| `Handle an Intent`          | To define the actions to take when an **Intent** is recognized (and optionally **entities**)      |
+| `Handle Unknown Intent`     | To define the actions to taken when no intent is recognized                                       |
+| `Handle a Dialog Event`     | To define the actions to take when a dialog event such as `BeginDialog` is fired                  |
+| `Handle an Event: Activity` | To define the actions to take when an activity event such as `Handle ConversationUpdate` is fired |
+| `Handle a custom event`     | n/a                                                                                               |
 
 ## Defining `Handle an Intent`
 
-`Handle an Intent` defines the actions to take when an **Intent** is recognized (and optionally **entities**). Before defining a `Handle an Intent` trigger you need to select the dialog you want to define the trigger and follow the two steps: 
+`Handle an Intent` defines the actions to take when an **Intent** is recognized (and optionally **entities**). Before defining a `Handle an Intent` trigger you need to select a recognizer type and define intents in your selected dialog: 
 
-### Select a recognizer (LUIS / Regular Expression) type 
+### Select a recognizer type 
+On the right side of the dialog menu, select a recognizer type from the drop down menu. LUIS is the default recognizer type. 
 
 ![recognizer_type](./media/events_triggers/recognizer_type.png)
 
 ### Define an intent(s) in the language understanding inline editor 
+After you select the recognizer type, you can define intent(s) with corresponding utterances in the language understanding editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). If you are not familiar with language understanding in Composer, please read the [language understanding concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md). 
 
 ![LUIS_intent](./media/events_triggers/LUIS_intent.png) 
 
-After the recognizer is selected and the intents are defined, you can follow the following steps to create a `Handle an Intent` trigger and configure the trigger with pre-defined intents. 
+After the recognizer is selected and the intents are defined, you can follow the steps to create a `Handle an Intent` trigger and configure the trigger with pre-defined intents. 
 
 ### Create a `Handle an Intent` trigger
 On the left side of the Composer menu, click **New Trigger** and then select **Handle an Intent** from the drop-down menu. Select the intent you want to handle and click **submit**. 
@@ -31,7 +33,7 @@ On the left side of the Composer menu, click **New Trigger** and then select **H
 ![intent_configure](./media/events_triggers/intent_configure.png)
 
 ### Add an action(s) to the trigger 
-Under the `Handle an Intent` trigger node, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+Under the `Handle an Intent` trigger node, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation concept article](hhttps://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md). 
 
 ![add_action_node](./media/events_triggers/add_action_node.gif)  
 
@@ -46,7 +48,7 @@ On the left side of the Composer menu, click **New Trigger** and select **Handle
 ![unknown_intent](./media/events_triggers/unknown_intent.png)  
 
 ### Add an action(s) to the trigger
-Under the `Handle Unknown Intent` trigger node, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+Under the `Handle Unknown Intent` trigger, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
 
 ![unknown_intent](./media/events_triggers/unknown_intent.gif)  
 
