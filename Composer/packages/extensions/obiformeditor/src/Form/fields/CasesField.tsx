@@ -25,6 +25,7 @@ interface CaseItemProps {
 
 const CaseItem: React.FC<CaseItemProps> = props => {
   const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, onEdit } = props;
+  const [key, setKey] = useState(value);
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -60,6 +61,7 @@ const CaseItem: React.FC<CaseItemProps> = props => {
   };
 
   const handleBlur = () => {
+    setKey(value);
     if (!value) {
       onDelete(index);
     }
@@ -68,7 +70,7 @@ const CaseItem: React.FC<CaseItemProps> = props => {
   return (
     <div css={[arrayItem, field]}>
       <div css={arrayItemValue}>
-        <EditableField value={value} onChange={handleEdit} onBlur={handleBlur} />
+        <EditableField key={key} value={value} onChange={handleEdit} onBlur={handleBlur} />
       </div>
       <IconButton
         menuProps={{ items: contextItems }}
