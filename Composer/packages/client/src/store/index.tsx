@@ -17,6 +17,7 @@ const initialState: State = {
   location: '', // the path to the bot project
   botEnvironment: 'production',
   botEndpoint: '',
+  remoteEndpoints: {},
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
   templateProjects: [],
@@ -45,6 +46,9 @@ const initialState: State = {
     token: null,
     sessionExpired: false,
   },
+  publishVersions: {},
+  publishStatus: 'inactive',
+  lastPublishChange: null,
 };
 
 interface StoreContextValue {

@@ -6,7 +6,18 @@ export class HostedSettingManager extends FileSettingManager {
   }
 
   protected createDefaultSettings = (): any => {
-    return {};
+    return {
+      MicrosoftAppPassword: '',
+      MicrosoftAppId: '',
+      luis: {
+        name: '',
+        authoringKey: '',
+        endpointKey: '',
+        authoringRegion: 'westus',
+        defaultLanguage: 'en-us',
+        environment: 'composer',
+      },
+    };
   };
 
   protected validateSlot = (slot: string): void => {
