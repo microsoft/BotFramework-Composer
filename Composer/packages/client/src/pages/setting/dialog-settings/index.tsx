@@ -5,11 +5,11 @@ import { RichEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
-import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
-
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
 import { obfuscate } from '../../../utils/objUtil';
+
+import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
