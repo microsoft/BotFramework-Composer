@@ -22,7 +22,7 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "dialog.postResponse",
+          "resultProperty": "dialog.postResponse",
           "$designer": {
             "id": "071946"
           }
