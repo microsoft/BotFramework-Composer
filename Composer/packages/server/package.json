@@ -102,7 +102,6 @@
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
-    "rimraf": "^2.6.3",
-    "lg-lsp-server": "*"
+    "rimraf": "^2.6.3"
   }
 }

@@ -57,6 +57,7 @@ app.use(morgan('dev'));
 app.use(bodyParser({ limit: '50mb' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
   res.send('fortest');
 });
