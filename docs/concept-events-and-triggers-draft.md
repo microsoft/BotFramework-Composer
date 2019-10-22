@@ -11,7 +11,7 @@ There are several different types of event handlers available in Composer. They 
 
 ### Handle Dialog Events  
 
-The base type of event handlers are dialog event handlers. Almost all events start as dialog events which are related fo the "lifecycle" of the dialog. Currently, there are two dialog event handlers in the Composer menu: `Handle a Dialog Event` and `Handle an Event: BeginDialog`. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
+The base type of event handlers are dialog event handlers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently, there is one dialog event handler in the Composer menu: `Handle a Dialog Event`, under which there are four types of events to choose: `Handle an Event: BeginDialog`, `Handle an Event: CancelDialog`, `Handle a dialog error event`, `Handle an Event: RepromptDialog`. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
 
 Use dialog event handlers when you want to do things like:
 
@@ -20,8 +20,8 @@ Use dialog event handlers when you want to do things like:
     - Take automatic action on every message as it is received or sent
     - Evaluate the raw content of the incoming activity
 
-> [!NOTE]
-> Since `BeginDialog` event is the most common dialog event, `Handle an Event: BeginDialog` is desgined as a seperate dialog event handler to make it handy when users want to use it. 
+<!-- > [!NOTE]
+> Since `BeginDialog` event is the most common dialog event, `Handle an Event: BeginDialog` is desgined as a seperate dialog event handler to make it handy when users want to use it.  -->
 
 ### Handle Intent Events  
 
@@ -33,9 +33,14 @@ Use intent handlers when you want to do things like:
     - Recognize common interuptions like "help" or "cancel" and provide context-specific responses
     - Extract and use entity values as parameters to your dialog or a child dialog
 
-### Handle Specialized Events 
+### Handle Activity Events 
 
-There are some event handlers used to handle specialized events, such as `Handle ConversationUpdate`. This event handler tracks the event when a user first joins the chat and is usually used to send a greeting. This specialized option is provided to avoid handling an event with a complex condition attached. 
+There are some event handlers used to handle activities, such as  `Handle an Event: Activity`. The activities to be handled include `Handle ConversationUpdate`, which is a specialized event handler that tracks the event when a user first joins the chat and is usually used to send a greeting. When you build a new bot, the `Handle ConversationUpdate` event handler is initialized by default in the main dialog you create. This specialized option is provided to avoid handling an event with a complex condition attached. The screenshot below shows all the activity event handlers provided in Composer. 
+
+![activity_event_handler](./media/events_triggers/activity_event_handler.png)
+
+### Handle Custom Events 
+TBD
 
 ## Anatomy of an Event Handler
 
@@ -63,15 +68,11 @@ To define triggers with LUIS recognizer you need to:
 2. In the language understanding editor, create **intents** with sample utterances and follow the [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize the intent. 
 
-    <p align="left">
-        <img alt="LUIS_intent" src="./media/events_triggers/LUIS_intent.png" style="max-width:300px;" />
-    </p>
+![LUIS_intent](./media/events_triggers/LUIS_intent.png)
 
-3. Define `Handle an Intent` as `New Triggers`for each intent and configure each `Handle an Intent` trigger with specific intent. 
-   
-    <p align="left">
-        <img alt="BookFlight_configure" src="./media/events_triggers/BookFlight_configure.png" style="max-width:300px;" />
-    </p>
+3. Define `Handle an Intent` as `New Triggers` for each intent and configure each `Handle an Intent` trigger with specific intent. 
+
+![BookFlight_configure](./media/events_triggers/BookFlight_configure.png)
 
 In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
 
@@ -95,11 +96,9 @@ To define triggers with Regular Expression recognizer you need to:
 1. On the right side of the Composer menu, choose **Regular Expression** as recognizer type
 2. In the language understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern**. 
 
-    <p align="left">
-        <img alt="regular_expression_recognizer" src="./media/events_triggers/regular_expression_recognizer.png" style="max-width:300px;" />
-    </p>
+![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
 
-3. Define `Handle an Intent` as `New Triggers`for each intent and configure each `Handle an Intent` trigger with specific intent as shown in the last step of defining LUIS recognizer. 
+3. Define `Handle an Intent` as a`New Trigger` for each intent and configure each `Handle an Intent` trigger with specific intent as shown in the last step of defining LUIS recognizer. 
 
 ## References
 

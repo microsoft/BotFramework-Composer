@@ -159,7 +159,8 @@ To aid with contextual re-usability, templates can be parametrized. With this di
     - {user.name} [Greeting]
     
 #### Structured template  
-- Will update when structured template is available. 
+- [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg)
+- [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
  
 ### Common Expression Cheatsheet 
 
@@ -184,4 +185,4 @@ To aid with contextual re-usability, templates can be parametrized. With this di
 - [Common Expression Language prebuilt functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
 
 ## Next 
-- [Using memory](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/using_memory.md)
+- [Language Understanding in Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)

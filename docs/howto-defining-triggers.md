@@ -3,54 +3,21 @@ Each dialog in Composer includes a set of triggers/event handlers that contain i
 
 | Trigger Type       | Description   |  
 | -------------------- |-------------- |
-| `Handle ConversationUpdate`    |  handle specialized events such as sending a greeting |
-|`Handle an Event: BeginDialog` |  define the actions to take when a dialog is started via `BeginDialog()`|
-| `Handle a Dialog Event`      | define a rule for an event which is triggered by some source|
 | `Handle an Intent`       | define the actions to take when an **Intent** is recognized (and optionally **entities**) |
 | `Handle Unknown Intent`       | define the actions to taken when no intent is recognized  |
+| `Handle a Dialog Event`      | define a rule for an event which is triggered by some source|
+| `Handle an Event: Activity`    | define actions to handle an activity event such as `ConversationUpdate` |
+|`Handle a custom event` |    |
 
 ## Prerequisites 
-- Basic knowledge of events and triggers (events and triggers concept article)
 - Bot Framework Composer 
+- Basic knowledge of events and triggers ([events and triggers concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md))
 - LUIS authoring key ([where to find](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
-
-## Defining `Handle ConversationUpdate`
-
-`Handle ConversationUpdate` is a type of trigger to handle specialized events such as sending a greeting message when a bot runs. It is used to do something immediately when a bot starts and before any other events are triggered. The following steps show how to define a `Handle ConversationUpdate` trigger in the main dialog to send a "welcome" message right after the bot runs. 
-
-### 1. Create a `Handle ConversationUpdate` trigger
-In the dialog menu, click **New Trigger** and select **Handle ConversationUpdate** option from the drop-down menu. Define the name for the trigger such as **welcome** and then click **submit**. 
-
-![events_triggers](./media/events_triggers/conversationupdate1.gif)
-
-### 2. Add an action node to the trigger
-In the `Handle ConversationUpdate` trigger, click the "+" sign to add the action node you want to include. For example, let's click **Send Messages** and then **Send an Activity** to send a welcome message. You can define response messages following the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) in the language generation editor. 
-
-![events_triggers](./media/events_triggers/conversationupdate2.gif)
 
 ## Defining `Handle an Intent`
 `Handle an Intent` defines the actions to take when an **Intent** is recognized (and optionally **entities**). To create a `Handle an Intent` trigger, you need to define the intents in the dialog with either LUIS recognizer or RegEx recognizer (this must be done before creating a `Handle an Intent` trigger) Please refer to the [events and triggers concept]() article for steps to define an intent with LUIS recognizer and RegEx recognizer. 
-<!-- 
-### Defining an intent with LUIS recognizer (two steps)
-1. Set up the intent recognizer. On the right side of the Composer menu, select **LUIS**(default) as the Recognizer Type.
 
-![setup_LUIS_recognizer](./media/events_triggers/setup_LUIS_recognizer.png)
-
-2. Author intent and examples utterances following the [.LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-  
-![author_LUIS_intent](./media/events_triggers/author_LUIS_intent.gif)
-    
-### Defining an intent with RegEx recognizer (two steps)
-
-1. Set up the intent recognizer. On the right side of the Composer menu, select **Regular Expression** as the Recognizer Type.
-
-![setup_RegEx_recognizer](./media/events_triggers/setup_RegEx_recognizer.png)
-
-2. Author intent and pattern following [Regular Expression](https://regexr.com/)
-   
-![setup_LUIS_recognizer](./media/events_triggers/setup_LUIS_recognizer.png) -->
-
-Following the step to define the `Handle an Intent` trigger: 
+Following the steps to define a `Handle an Intent` trigger: 
 
 ### 1. Create a `Handle an Intent` trigger
 On the left side of the Composer, click **New Trigger** on the menu. Select **Handle an Intent** option from the drop-down menu. Define a name for the trigger and click **submit**. 
@@ -80,15 +47,29 @@ You need to:
 
 You can refer to the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Cards_Samples/ComposerDialogs) to learn more about how to define and use `Handle an Intent` to model your bot's converation. 
 
-## Defining `Handle an Event: BeginDialog`
-`Handle an Event: BeginDialog` defines the actions to take when a dialog is started via `BeginDialog()`. 
+## Defining `Handle a Dialog Event`
 
 Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. When you create a new child dialog, the `Handle an Event: BeginDialog` trigger is initialized by default. Like any other type of triggers, you can define actions to take in the `Handle an Event: BeginDialog` trigger.  
 
-## Defining `Handle a Dialog Event`
-`Handle a Dialog Event` defines a rule for an event which is triggered by some source. 
+## Defining `Handle an Event: Activity`
+
+`Handle an Event: Activity` is a type of trigger to handle activity events such as sending a greeting message when a bot runs. It is used to do something immediately when a bot starts and before any other events are triggered. The following steps show how to define a `Handle an Event: Activity` trigger to handle a `ConversationUpdate` activity in a dialog to send a "welcome" message. 
+
+### 1. Create a `Handle ConversationUpdate` trigger
+In the dialog menu, click **New Trigger** and select **Handle ConversationUpdate** option from the drop-down menu. Define the name for the trigger such as **welcome** and then click **submit**. 
+
+![events_triggers](./media/events_triggers/conversationupdate1.gif)
+
+### 2. Add an action node to the trigger
+In the `Handle ConversationUpdate` trigger, click the "+" sign to add the action node you want to include. For example, let's click **Send Messages** and then **Send an Activity** to send a welcome message. You can define response messages following the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) in the language generation editor. 
+
+![events_triggers](./media/events_triggers/conversationupdate2.gif)
+
+## Defining `Handle a Custom Event`
+TBD
 
 ## References
+- [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
 
 
 ## Next 
