@@ -2,7 +2,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { has } from 'lodash';
+import { has, get } from 'lodash';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -70,22 +70,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Delete:
         handler = e => {
           const findLgTemplates = (value: any): string[] => {
+            const targetNames = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt', 'activity'];
             const targets: string[] = [];
-            // look for *.prompt field
-            if (has(value, 'prompt')) {
-              targets.push(value.prompt);
-            }
-            // look for *.unrecognizedPrompt field
-            if (has(value, 'unrecognizedPrompt')) {
-              targets.push(value.unrecognizedPrompt);
-            }
 
-            // look for other $type
-            switch (value.$type) {
-              case 'Microsoft.SendActivity':
-                targets.push(value.activity);
-                break;
-            }
+            targetNames.forEach(name => {
+              if (has(value, name)) {
+                targets.push(get(value, name));
+              }
+            });
 
             const templates: string[] = [];
             targets.forEach(target => {
