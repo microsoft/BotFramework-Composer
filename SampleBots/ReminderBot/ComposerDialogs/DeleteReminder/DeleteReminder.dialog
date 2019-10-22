@@ -59,7 +59,7 @@
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/DeleteReminder?UID={turn.activity.from.id}&StartDate={user.requesttime}&EndDate={user.endtime}",
-              "property": "user.data",
+              "resultProperty": "user.data",
               "responseTypes": "json"
             }
           ],
@@ -85,7 +85,7 @@
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/DeleteReminder?UID={turn.activity.from.id}&Content={user.content}",
-              "property": "user.data",
+              "resultProperty": "user.data",
               "responseTypes": "json"
             }
           ]
