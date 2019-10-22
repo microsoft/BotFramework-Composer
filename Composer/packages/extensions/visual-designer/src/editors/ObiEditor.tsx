@@ -90,7 +90,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             const templates: string[] = [];
             targets.forEach(target => {
               // only match auto generated lg temapte name
-              const reg = /\[(bfd((?:activity)|(?:prompt))-\d{6})\]/g;
+              const reg = /\[(bfd((?:activity)|(?:prompt)|(?:unrecognizedPrompt))-\d{6})\]/g;
               let matchResult;
               while ((matchResult = reg.exec(target)) !== null) {
                 const templateName = matchResult[1];
