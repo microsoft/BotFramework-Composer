@@ -3,6 +3,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
+import { MicrosoftInputDialog } from 'shared';
 
 import { WidgetLabel } from '../../widgets/WidgetLabel';
 import { LgEditorWidget } from '../../widgets/LgEditorWidget';

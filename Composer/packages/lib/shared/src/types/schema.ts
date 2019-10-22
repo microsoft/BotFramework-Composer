@@ -1,21 +1,5 @@
 import { JSONSchema6 } from 'json-schema';
 
-export interface OBISchema extends JSONSchema6 {
-  $schema?: string;
-  $role?: string;
-  $type?: SDKTypes;
-  $copy?: string;
-  $id?: string;
-  $designer?: {
-    id: string;
-    [key: string]: any;
-  };
-  description?: string;
-  definitions?: any;
-  title?: string;
-  __additional_property?: boolean;
-}
-
 // All of the known SDK types. Update this list when we take a schema update.
 // To get this list copy the output of the following commands in a node repl from the project root:
 
@@ -112,4 +96,20 @@ export enum SDKTypes {
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
+}
+
+export interface OBISchema extends JSONSchema6 {
+  $schema?: string;
+  $role?: string;
+  $type?: SDKTypes;
+  $copy?: string;
+  $id?: string;
+  $designer?: {
+    id: string;
+    [key: string]: any;
+  };
+  description?: string;
+  definitions?: any;
+  title?: string;
+  __additional_property?: boolean;
 }
