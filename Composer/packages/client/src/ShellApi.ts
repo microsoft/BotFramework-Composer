@@ -186,23 +186,27 @@ export const ShellApi: React.FC = () => {
 
   // persist value change
   function handleValueChange({ newData, updatePath }, event) {
-    let dataPath = '';
-    if (event.source.name === FORM_EDITOR) {
-      dataPath = updatePath || focused || '';
+    let targetDialogId = dialogId;
+    let targetDataPath = getFocusPath(selected, focused);
+    if (event.source.name === FORM_EDITOR && updatePath) {
+      // TODO: 'focusPath' is generated in 'setDesignPageLocation', here is a leak.
+      //       Thus handleValueChange should be an action in reducer.
+      [targetDialogId, targetDataPath] = updatePath.split('#.');
     }
 
-    const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
+    const updatedDialog = setDialogData(dialogsMap, targetDialogId, targetDataPath, newData);
     const payload = {
-      id: dialogId,
+      id: targetDialogId,
       content: updatedDialog,
     };
-    dialogsMap[dialogId] = updatedDialog;
+    dialogsMap[targetDialogId] = updatedDialog;
+    //TODO: should this be async?
     updateDialog(payload);
 
     //make sure focusPath always valid
-    const data = getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
+    const data = getDialogData(dialogsMap, targetDialogId, targetDataPath);
     if (typeof data === 'undefined') {
-      actions.navTo(dialogId);
+      actions.navTo(targetDialogId);
     }
 
     return true;
