@@ -26,10 +26,10 @@ Entities are a collection of objects data extracted from an utterance such as pl
 
 ### Example 
 
-| Intent | Utterances  | Entity values | 
-| ---------------- | ---------------- | ---------------- | 
-| BookFlight | "Book me a flight to London" | "London" | 
-|            | "Fly me to London on the 31st" | "London", "31st" | 
+| Intent     | Utterances                                    | Entity values           |
+| ---------- | --------------------------------------------- | ----------------------- |
+| BookFlight | "Book me a flight to London"                  | "London"                |
+|            | "Fly me to London on the 31st"                | "London", "31st"        |
 |            | "I need a plane ticket next Sunday to London" | "next Sunday", "London" |
 
 An example JSON view of the query "book me a flight to London" in LUIS app.  
@@ -65,7 +65,7 @@ To author an LU template in Composer, you need to know
 - set up a dialog with specific recognizer (per dialog per recognizer)
 - author .lu file following the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) 
 - (for LUIS) publish 
-#### examples 
+#### Examples 
   - plain text uttarances 
   - plan text with labelled entity references 
   - entity reference with role attribution 
@@ -80,7 +80,7 @@ To author an LU template in Composer, you need to know
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 ## Next 
-
+[Memory in Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md)
 
 ## Questions
 1. User scenarios of LG and LU 

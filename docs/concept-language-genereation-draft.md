@@ -184,4 +184,4 @@ To aid with contextual re-usability, templates can be parametrized. With this di
 - [Common Expression Language prebuilt functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
 
 ## Next 
-- [Using memory](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/using_memory.md)
+- [Language Understanding in Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)
