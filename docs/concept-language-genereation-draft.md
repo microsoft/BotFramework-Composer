@@ -159,7 +159,8 @@ To aid with contextual re-usability, templates can be parametrized. With this di
     - {user.name} [Greeting]
     
 #### Structured template  
-- Will update when structured template is available. 
+- [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg)
+- [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
  
 ### Common Expression Cheatsheet 
 
