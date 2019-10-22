@@ -109,9 +109,6 @@ export function BaseEditor(props: BaseEditorProps) {
       editor.setHiddenAreas(hiddenRanges);
     }
   };
-  useEffect(() => {
-    updateEditorCodeRangeUI(editor);
-  }, [codeRange]);
 
   const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
     if (typeof props.editorDidMount === 'function') {
