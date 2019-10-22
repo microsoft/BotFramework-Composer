@@ -69,7 +69,6 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.RepeatDialog,
       SDKTypes.ReplaceDialog,
       SDKTypes.EditActions,
-      // SDKTypes.QnAMakerDialog,
     ],
   },
   [DialogGroup.CODE]: {
@@ -78,6 +77,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.HttpRequest,
       SDKTypes.EmitEvent,
       SDKTypes.OAuthInput,
+      SDKTypes.QnAMakerDialog,
       //  SDKTypes.CodeStep
     ],
   },
