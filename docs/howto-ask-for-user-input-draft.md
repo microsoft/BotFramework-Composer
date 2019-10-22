@@ -4,7 +4,7 @@ Bot Framework Composer makes it easier than ever to not only collect and validat
 ![Ask a question menu screenshot]()
 
 ## Prompt types
-Bot Framework Composer currently has six types of prompts you can utilize to collect user data along with validation for each type. For information about prompting for OAuth credentials read [Using OAuth](). 
+Bot Framework Composer currently has six types of prompts you can utilize to collect user data. For information about prompting for OAuth credentials read [Using OAuth](). 
 
 ### Prompt for text
 Prompt users for their name, favorite color, or any other text data using `Prompt for text`. To prompt a user for text click the **+** button, mouse over **Ask a question** and select **Prompt for text**. 
@@ -29,7 +29,7 @@ Confirmation prompts are useful after you've asked the user a question, prompt o
 
 ![Select prompt for confirmation]()
 
-
+As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **Initial Prompt** and the **Property** as `user.confirmed`.
 
 ### Prompt for multi-choice
 `Prompt for multi-choice` makes it easy to define a set of choices for users to choose from. To create a prompt with multiple choice options click the **+** button, mouse over **Ask a question** and select **Prompt for multi-choice**. 
@@ -50,7 +50,7 @@ Below the `Default Locale` box you set the values of the choice options by click
 
 ![Add multi-choice]()
 
-Note that if you select the **Inline** list style you can scroll down and set **Inline Separator** (character to separate between list items), **Inline Or** (separator for just two choices) and **Inline OrMore** (separator for last two items of a list longer than two).
+Note that if you select the **Inline** list style you can scroll down and set **Inline Separator** (character to separate between list items), **Inline Or** (separator for just two choices) and **Inline OrMore** (separator for last items of a list larger than two).
 
 ![choice options multi-choice]()
 
@@ -59,12 +59,17 @@ Users can upload images, videos, and other media after being prompted with a `Pr
 
 ![Select prompt for attachment]()
 
-In the **AttachmentInput** dialog you will see the **Property** is set to dialog.attachments. The **Output Format** is set to `first`, meaning only the first attachment will be output. 
+In the **AttachmentInput** dialog you will see the **Property** is set to `dialog.attachments`. The **Output Format** is set to `first`, meaning only the first attachment will be output. 
 
 ### Prompt for date
 Prompt users for their birthday, the date they want to take a flight, and other dates using the `Prompt for date`. To prompt a user for a date click the **+** button, mouse over **Ask a question** and select **Prompt for date**.
 
 ![Select prompt for date]()
+
+## Prompt validation and unrecognized responses 
+Prompts in the Bot Framework Composer come with methods to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized.
+
+
 
 ## Further Reading
 
