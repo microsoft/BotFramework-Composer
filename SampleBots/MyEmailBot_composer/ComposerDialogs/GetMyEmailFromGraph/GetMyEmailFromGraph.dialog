@@ -12,7 +12,7 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.getGraphEmails"
+          "resultProperty": "user.getGraphEmails"
         }
       ],
       "$designer": {

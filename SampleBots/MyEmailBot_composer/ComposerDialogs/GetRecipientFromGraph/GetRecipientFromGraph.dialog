@@ -12,10 +12,9 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.intentRecipient"
+          "resultProperty": "user.intentRecipient"
         }
-      ],
-       
+      ],       
       "$designer": {
         "id": "711391"
       }
