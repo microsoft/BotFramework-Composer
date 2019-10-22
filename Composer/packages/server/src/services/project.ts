@@ -48,14 +48,14 @@ export class BotProjectService {
     }
     BotProjectService.currentBotProject = new BotProject(locationRef);
     await BotProjectService.currentBotProject.index();
-    BotProjectService.addRecentProject();
+    BotProjectService.addRecentProject(locationRef.path);
   };
 
-  private static addRecentProject = (): void => {
+  private static addRecentProject = (path: string): void => {
     if (!BotProjectService.currentBotProject) {
       return;
     }
-    const currDir = BotProjectService.currentBotProject.dir;
+    const currDir = Path.resolve(path);
     const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === Path.resolve(ref.path));
     if (idx > -1) {
       BotProjectService.recentBotProjects.splice(idx, 1);
@@ -80,7 +80,7 @@ export class BotProjectService {
     if (typeof BotProjectService.currentBotProject !== 'undefined') {
       BotProjectService.currentBotProject = await BotProjectService.currentBotProject.copyTo(locationRef);
       await BotProjectService.currentBotProject.index();
-      BotProjectService.addRecentProject();
+      BotProjectService.addRecentProject(locationRef.path);
     }
   };
 }
