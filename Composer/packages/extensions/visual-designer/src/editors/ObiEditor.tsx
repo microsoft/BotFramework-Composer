@@ -93,12 +93,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             return templates;
           };
 
-          const cleanLgTemplate = (removedData: any): void => {
+          const cleanLgTemplate = async (removedData: any): Promise<void> => {
             const templates: string[] = findLgTemplates(removedData);
-            templates.forEach(template => {
-              const lgFileId = 'common';
-              removeLgTemplate(lgFileId, template);
-            });
+            const lgFileId = 'common';
+            for (const template of templates) {
+              await removeLgTemplate(lgFileId, template);
+            }
           };
           onChange(deleteNode(data, e.id, cleanLgTemplate));
           onFocusSteps([]);
