@@ -29,7 +29,7 @@
 - Adding LUIS to your bot
 - Adding QnA to your bot
 - Sending cards 
-- [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-events-triggers.md)
+- [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
 - Handling interruption 
 #### Test
 - Test in Emulator
