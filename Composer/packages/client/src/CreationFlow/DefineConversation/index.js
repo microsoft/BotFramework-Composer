@@ -35,7 +35,9 @@ export function DefineConversation(props) {
   // set the default path
   useEffect(() => {
     const index = currentStorageIndex.current;
-    updateForm('location')(null, storages[index].path);
+    if (storages[index]) {
+      updateForm('location')(null, storages[index].path);
+    }
   }, [storages]);
 
   const updateForm = field => (e, newValue) => {
