@@ -5,31 +5,36 @@ export function isLgActivity(activity: string) {
   return activity && TEMPLATE_PATTERN.test(activity);
 }
 
-export async function copyLgActivity(activity: string, newLgId: string, lgApi: any): Promise<string> {
-  if (!activity) return '';
-  if (!isLgActivity(activity) || !lgApi) return activity;
+export async function copyLgTemplate(
+  lgFileName: string,
+  templateNameToCopy: string,
+  newTemplateName: string,
+  lgApi: any
+): Promise<string> {
+  if (!templateNameToCopy) return '';
+  if (!isLgActivity(templateNameToCopy) || !lgApi) return templateNameToCopy;
 
   const { getLgTemplates, updateLgTemplate } = lgApi;
-  if (!getLgTemplates) return activity;
+  if (!getLgTemplates) return templateNameToCopy;
 
   let rawLg: any[] = [];
   try {
-    rawLg = await getLgTemplates('common', activity);
+    rawLg = await getLgTemplates(lgFileName, templateNameToCopy);
   } catch (error) {
-    return activity;
+    return templateNameToCopy;
   }
 
-  const currentLg = rawLg.find(lg => `[${lg.Name}]` === activity);
+  const currentLg = rawLg.find(lg => `[${lg.Name}]` === templateNameToCopy);
 
   if (currentLg) {
     // Create new lg activity.
     const newLgContent = currentLg.Body;
     try {
-      await updateLgTemplate('common', newLgId, newLgContent);
-      return `[${newLgId}]`;
+      await updateLgTemplate(lgFileName, newTemplateName, newLgContent);
+      return `[${newTemplateName}]`;
     } catch (e) {
       return newLgContent;
     }
   }
-  return activity;
+  return templateNameToCopy;
 }

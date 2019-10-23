@@ -1,4 +1,4 @@
-import { copyLgActivity, LG_FIELDS } from './lgUtils';
+import { copyLgTemplate, LG_FIELDS } from './lgUtils';
 
 const NestedFieldNames = {
   Actions: 'actions',
@@ -41,7 +41,7 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
 
 const overrideLgActivity = async (data, { lgApi }) => {
   const newLgId = `bfdactivity-${data.$designer.id}`;
-  data.activity = await copyLgActivity(data.activity, newLgId, lgApi);
+  data.activity = await copyLgTemplate('common', data.activity, newLgId, lgApi);
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
@@ -49,7 +49,7 @@ const overrideLgPrompt = async (data, { lgApi }) => {
     const existingActivity = data[promptFieldKey];
     const newLgId = `bfd${promptFieldKey}-${data.$designer.id}`;
     if (existingActivity) {
-      data[promptFieldKey] = await copyLgActivity(existingActivity, newLgId, lgApi);
+      data[promptFieldKey] = await copyLgTemplate('common', existingActivity, newLgId, lgApi);
     }
   }
 };

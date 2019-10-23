@@ -1,4 +1,4 @@
-import { isLgActivity, copyLgActivity } from '../src/lgUtils';
+import { isLgActivity, copyLgTemplate } from '../src/lgUtils';
 
 describe('lgUtils', () => {
   describe('#isLgActivity', () => {
@@ -34,30 +34,34 @@ describe('lgUtils', () => {
     };
 
     it('can skip invalid input params', async () => {
-      expect(await copyLgActivity('', 'newId', lgApi)).toEqual('');
-      expect(await copyLgActivity('wrong', 'newId', lgApi)).toEqual('wrong');
-      expect(await copyLgActivity('wrong', 'newId', null)).toEqual('wrong');
+      expect(await copyLgTemplate('common', '', 'newId', lgApi)).toEqual('');
+      expect(await copyLgTemplate('common', 'wrong', 'newId', lgApi)).toEqual('wrong');
+      expect(await copyLgTemplate('common', 'wrong', 'newId', null)).toEqual('wrong');
     });
 
     it('can copy existing template to a new template', async () => {
-      expect(await copyLgActivity('[bfdactivity-1234]', 'bfdactivity-5678', lgApi)).toEqual('[bfdactivity-5678]');
+      expect(await copyLgTemplate('common', '[bfdactivity-1234]', 'bfdactivity-5678', lgApi)).toEqual(
+        '[bfdactivity-5678]'
+      );
     });
 
     it('can handle non-existing template', async () => {
-      expect(await copyLgActivity('[bfdactivity-4321]', 'bfdactivity-5678', lgApi)).toEqual('[bfdactivity-4321]');
+      expect(await copyLgTemplate('common', '[bfdactivity-4321]', 'bfdactivity-5678', lgApi)).toEqual(
+        '[bfdactivity-4321]'
+      );
     });
 
     it('can recover from API error', async () => {
       // getLgTemplates error
       expect(
-        await copyLgActivity('[bfdactivity-1234]', 'bfdactivity-5678', {
+        await copyLgTemplate('common', '[bfdactivity-1234]', 'bfdactivity-5678', {
           ...lgApi,
           getLgTemplates: () => Promise.reject(),
         })
       ).toEqual('[bfdactivity-1234]');
 
       expect(
-        await copyLgActivity('[bfdactivity-1234]', 'bfdactivity-5678', {
+        await copyLgTemplate('common', '[bfdactivity-1234]', 'bfdactivity-5678', {
           ...lgApi,
           updateLgTemplate: () => Promise.reject(),
         })
