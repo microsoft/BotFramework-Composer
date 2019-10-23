@@ -57,7 +57,7 @@ context('breadcrumb', () => {
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Handle ConversationUpdate').click();
+      cy.getByText('Handle an Event: BeginDialog').click();
       cy.wait(500);
     });
 
