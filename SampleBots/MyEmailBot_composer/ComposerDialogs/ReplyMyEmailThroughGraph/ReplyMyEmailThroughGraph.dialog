@@ -15,7 +15,7 @@
           "body": {
             "comment": "{user.toContent}"
           },
-          "Property": "dialog.postResponse"
+          "resultProperty": "dialog.postResponse"
         }
       ],
        

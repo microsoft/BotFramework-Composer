@@ -27,7 +27,7 @@
               "connectionName": "Outlook",
               "title": "Log in",
               "text": "Please log in to your email account",
-              "property": "user.token"
+              "tokenProperty": "user.token"
             }
           ]
         },
@@ -41,7 +41,7 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "property": "user.getGraphEmails"
+          "resultProperty": "user.getGraphEmails"
         },
         {
           "$type": "Microsoft.SendActivity",
