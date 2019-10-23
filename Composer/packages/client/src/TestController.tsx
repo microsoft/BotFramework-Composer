@@ -17,6 +17,7 @@ import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } fr
 import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
 
 const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
@@ -36,8 +37,6 @@ const STATE = {
   RELOADING: 1,
   SUCCESS: 2,
 };
-
-const isAbsHosted = () => process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
