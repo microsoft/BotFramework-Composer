@@ -1,8 +1,8 @@
 export const LG_FIELDS = ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse'];
 
-const LgActivityRegex = /\[bfd.+-.+\]/;
+const TEMPLATE_PATTERN = /^\[(bfd.+-\d+)\]$/;
 export function isLgActivity(activity: string) {
-  return activity && LgActivityRegex.test(activity);
+  return activity && TEMPLATE_PATTERN.test(activity);
 }
 
 export async function copyLgActivity(activity: string, newLgId: string, lgApi: any): Promise<string> {

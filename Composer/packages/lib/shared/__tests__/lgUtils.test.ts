@@ -19,6 +19,7 @@ describe('lgUtils', () => {
       expect(isLgActivity('bfdactivity-1234')).toBeFalsy();
       expect(isLgActivity('[bfdactivity-1234')).toBeFalsy();
       expect(isLgActivity('bfdactivity-1234')).toBeFalsy();
+      expect(isLgActivity('[bfdactivity-abc]')).toBeFalsy();
 
       expect(isLgActivity('[abfdactivity-1234]')).toBeFalsy();
       expect(isLgActivity('[abfdactivity]')).toBeFalsy();
