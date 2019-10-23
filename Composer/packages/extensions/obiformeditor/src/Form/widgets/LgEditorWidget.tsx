@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import debounce from 'lodash.debounce';
+import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { FormContext } from '../types';
 
@@ -30,6 +31,7 @@ interface LgEditorWidgetProps {
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
   const [errorMsg, setErrorMsg] = useState('');
+  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
   const lgId = `bfd${name}-${formContext.dialogId}`;
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
@@ -68,17 +70,38 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const content = `#${template.Name}\n${localContent}`;
 
   const onChange = (newTemplate: string) => {
-    const body = newTemplate.slice(newTemplate.indexOf('\n') + 1);
+    const [, body] = newTemplate.split(`#${lgId}\n`);
+
     if (formContext.dialogId) {
       if (body) {
         updateLgTemplate(body);
+        props.onChange(`[${lgId}]`);
       } else {
         updateLgTemplate.flush();
         formContext.shellApi.removeLgTemplate(lgFileId, lgId);
+        props.onChange();
       }
-      props.onChange(`[${lgId}]`);
     }
     setLocalContent(body);
+  };
+
+  // useLayoutEffect so that the handler can be updated before the next render
+  useLayoutEffect(() => {
+    if (editor) {
+      const handler = editor.onKeyDown(e => {
+        if (!localContent && e.code === 'Backspace') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+      return () => {
+        handler.dispose();
+      };
+    }
+  }, [editor, localContent]);
+
+  const handleEditorMount = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
+    setEditor(editor);
   };
 
   return (
@@ -89,6 +112,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       onChange={onChange}
       helpURL={LG_HELP}
       height={height}
+      editorDidMount={handleEditorMount}
     />
   );
 };
