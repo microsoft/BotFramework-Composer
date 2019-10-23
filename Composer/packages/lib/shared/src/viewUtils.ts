@@ -68,7 +68,6 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.EndTurn,
       SDKTypes.RepeatDialog,
       SDKTypes.ReplaceDialog,
-      SDKTypes.EditActions,
     ],
   },
   [DialogGroup.CODE]: {
@@ -135,7 +134,7 @@ export const dialogGroups: DialogGroupsMap = {
 };
 
 export const createStepMenu = (
-  stepLabels,
+  stepLabels: DialogGroup[],
   subMenu = true,
   handleType: (e: any, item: IContextualMenuItem) => void,
   filter?: (x: SDKTypes) => boolean
@@ -144,11 +143,15 @@ export const createStepMenu = (
     const stepMenuItems = stepLabels.map(x => {
       const item = dialogGroups[x];
       const subMenu: IContextualMenuProps = {
-        items: item.types.filter(filter || (x => true)).map($type => ({
-          key: $type,
-          name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-          $type: $type,
-        })),
+        items: item.types.filter(filter || (() => true)).map($type => {
+          const conceptLabel = ConceptLabels[$type];
+
+          return {
+            key: $type,
+            name: conceptLabel && conceptLabel.title ? conceptLabel.title : $type,
+            $type: $type,
+          };
+        }),
         onItemClick: (e, item: IContextualMenuItem | undefined) => {
           if (item) {
             item = {
@@ -187,7 +190,8 @@ export const createStepMenu = (
     return stepMenuItems;
   } else {
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
-      const name = ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item;
+      const conceptLabel = ConceptLabels[item];
+      const name = conceptLabel && conceptLabel.title ? conceptLabel.title : item;
       const menuItem: IContextualMenuItem = {
         key: item,
         text: name,
