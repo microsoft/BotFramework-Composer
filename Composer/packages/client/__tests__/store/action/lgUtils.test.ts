@@ -1,4 +1,4 @@
-import { isLgActivity, copyLgTemplate } from '../src/lgUtils';
+import { isLgActivity, copyLgTemplate } from '../../../src/store/action/lgUtils';
 
 describe('lgUtils', () => {
   describe('#isLgActivity', () => {
@@ -36,7 +36,7 @@ describe('lgUtils', () => {
     it('can skip invalid input params', async () => {
       expect(await copyLgTemplate('common', '', 'newId', lgApi)).toEqual('');
       expect(await copyLgTemplate('common', 'wrong', 'newId', lgApi)).toEqual('wrong');
-      expect(await copyLgTemplate('common', 'wrong', 'newId', null)).toEqual('wrong');
+      expect(await copyLgTemplate('common', 'wrong', 'newId', null as any)).toEqual('wrong');
     });
 
     it('can copy existing template to a new template', async () => {

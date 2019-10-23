@@ -1,5 +1,3 @@
-import { copyLgTemplate, LG_FIELDS } from './lgUtils';
-
 const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
@@ -39,17 +37,18 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
   }
 }
 
-const overrideLgActivity = async (data, { lgApi }) => {
-  const newLgId = `bfdactivity-${data.$designer.id}`;
-  data.activity = await copyLgTemplate('common', data.activity, newLgId, lgApi);
+const overrideLgActivity = async (data, { copyLgActivity }) => {
+  const newLgId = `[bfdactivity-${data.$designer.id}]`;
+  data.activity = await copyLgActivity(data.activity, newLgId);
 };
 
-const overrideLgPrompt = async (data, { lgApi }) => {
+const LG_FIELDS = ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse'];
+const overrideLgPrompt = async (data, { copyLgActivity }) => {
   for (const promptFieldKey of LG_FIELDS) {
     const existingActivity = data[promptFieldKey];
-    const newLgId = `bfd${promptFieldKey}-${data.$designer.id}`;
+    const newLgId = `[bfd${promptFieldKey}-${data.$designer.id}]`;
     if (existingActivity) {
-      data[promptFieldKey] = await copyLgTemplate('common', existingActivity, newLgId, lgApi);
+      data[promptFieldKey] = await copyLgActivity(existingActivity, newLgId);
     }
   }
 };

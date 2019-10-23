@@ -1,30 +1,11 @@
 import { copyAdaptiveAction } from '../src/copyUtils';
 
 describe('copyAdaptiveAction', () => {
-  const lgTemplate = [
-    { Name: 'bfdactivity-1234', Body: '-hello' },
-    { Name: 'bfdprompt-1234', Body: '-prompt' },
-    { Name: 'bfdinvalidPrompt-1234', Body: '-invalid' },
-  ];
   const externalApi = {
     updateDesigner: data => {
       data.$designer = { id: '5678' };
     },
-    lgApi: {
-      getLgTemplates: (fileId, activityId) => {
-        return Promise.resolve(lgTemplate);
-      },
-      updateLgTemplate: (filedId, activityId, activityBody) => {
-        return Promise.resolve(true);
-      },
-    },
-  };
-  const externalApiWithFailure = {
-    ...externalApi,
-    lgApi: {
-      ...externalApi.lgApi,
-      updateLgTemplate: () => Promise.reject(),
-    },
+    copyLgActivity: (templateToCopy: string, newTemplateName: string) => Promise.resolve(newTemplateName),
   };
 
   it('should return {} when input is invalid', async () => {
@@ -57,12 +38,6 @@ describe('copyAdaptiveAction', () => {
       $designer: { id: '5678' },
       activity: '[bfdactivity-5678]',
     });
-
-    expect(await copyAdaptiveAction(sendActivity, externalApiWithFailure)).toEqual({
-      $type: 'Microsoft.SendActivity',
-      $designer: { id: '5678' },
-      activity: '-hello',
-    });
   });
 
   it('can copy TextInput', async () => {
@@ -91,19 +66,6 @@ describe('copyAdaptiveAction', () => {
       outputFormat: 'none',
       prompt: '[bfdprompt-5678]',
       invalidPrompt: '[bfdinvalidPrompt-5678]',
-    });
-
-    expect(await copyAdaptiveAction(promptText, externalApiWithFailure)).toEqual({
-      $type: 'Microsoft.TextInput',
-      $designer: {
-        id: '5678',
-      },
-      maxTurnCount: 3,
-      alwaysPrompt: false,
-      allowInterruptions: 'true',
-      outputFormat: 'none',
-      prompt: '-prompt',
-      invalidPrompt: '-invalid',
     });
   });
 });

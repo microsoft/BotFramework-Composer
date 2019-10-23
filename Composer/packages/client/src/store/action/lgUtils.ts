@@ -1,5 +1,3 @@
-export const LG_FIELDS = ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse'];
-
 const TEMPLATE_PATTERN = /^\[(bfd.+-\d+)\]$/;
 export function isLgActivity(activity: string) {
   return activity && TEMPLATE_PATTERN.test(activity);
