@@ -9,7 +9,10 @@ export async function copyLgTemplate(
   lgFileName: string,
   templateNameToCopy: string,
   newTemplateName: string,
-  lgApi: any
+  lgApi: {
+    getLgTemplates: (lgFileName: string, templateName: string) => Promise<any>;
+    updateLgTemplate: (lgFileName: string, newTemplateName: string, newContent: string) => Promise<any>;
+  }
 ): Promise<string> {
   if (!templateNameToCopy) return '';
   if (!isLgActivity(templateNameToCopy) || !lgApi) return templateNameToCopy;
