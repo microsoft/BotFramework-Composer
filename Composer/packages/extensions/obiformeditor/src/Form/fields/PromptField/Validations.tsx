@@ -26,6 +26,7 @@ interface ValidationItemProps {
 
 const ValidationItem: React.FC<ValidationItemProps> = props => {
   const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, formContext, onEdit, schema } = props;
+  const [key, setKey] = useState<string>(value);
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -61,6 +62,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
   };
 
   const handleBlur = () => {
+    setKey(value);
     if (!value) {
       onDelete(index);
     }
@@ -70,6 +72,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
     <div css={[validationItem, field]}>
       <div css={validationItemValue}>
         <ExpressionWidget
+          key={key}
           value={value}
           editable
           formContext={formContext}

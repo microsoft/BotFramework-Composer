@@ -2,7 +2,7 @@ import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { SDKTypes } from 'shared';
+import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from 'shared';
 
 import { TextWidget, SelectWidget } from '../../widgets';
 
@@ -60,7 +60,7 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
             onChange={onChange('defaultLocale')}
             schema={getSchema('defaultLocale')}
             id={idSchema.defaultLocale.__id}
-            value={(formData as ChoiceInput).defaultLocale}
+            value={((formData as unknown) as ChoiceInput).defaultLocale}
             label={formatMessage('Default locale')}
             formContext={props.formContext}
             rawErrors={errorSchema.defaultLocale && errorSchema.defaultLocale.__errors}
@@ -73,7 +73,7 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
             onChange={onChange('style')}
             schema={getSchema('style')}
             id={idSchema.style.__id}
-            value={(formData as ChoiceInput).style}
+            value={((formData as unknown) as ChoiceInput).style}
             label={formatMessage('List style')}
             formContext={props.formContext}
             rawErrors={errorSchema.style && errorSchema.style.__errors}
@@ -81,9 +81,11 @@ export const UserAnswers: React.FC<UserAnswersProps> = props => {
           />
         </div>
       )}
-      {formData.$type === SDKTypes.ChoiceInput && <ChoiceInputSettings {...props} formData={formData as ChoiceInput} />}
+      {formData.$type === SDKTypes.ChoiceInput && (
+        <ChoiceInputSettings {...props} formData={(formData as unknown) as ChoiceInput} />
+      )}
       {formData.$type === SDKTypes.ConfirmInput && (
-        <ConfirmInputSettings {...props} formData={formData as ConfirmInput} />
+        <ConfirmInputSettings {...props} formData={(formData as unknown) as ConfirmInput} />
       )}
     </>
   );

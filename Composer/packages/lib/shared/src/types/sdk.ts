@@ -16,21 +16,11 @@ type MicrosoftIActivityTemplate = string;
 
 type MicrosoftIExpression = string;
 
-interface IBaseDialog extends BaseSchema {
-  /** This is that will be passed in as InputProperty and also set as the OutputProperty */
-  property?: string;
-  /** This defines properties which be passed as arguments to this dialog */
-  inputProperties?: { [x: string]: string };
-  /** This is the property which the EndDialog(result) will be set to when EndDialog() is called */
-  outputProperty?: string;
-}
-
 interface OpenObject<T = string> {
   [x: string]: T;
 }
-type CardAction = OpenObject;
 
-interface IChoice {
+export interface IChoice {
   /** the value to return when selected. */
   value?: string;
   /** Card action for the choice */
@@ -41,7 +31,7 @@ interface IChoice {
 
 type IListStyle = 'None' | 'Auto' | 'Inline' | 'List' | 'SuggestedAction' | 'HeroCard';
 
-interface IChoiceOption {
+export interface IChoiceOption {
   /** Character used to separate individual choices when there are more than 2 choices */
   inlineSeparator?: string;
   /** Separator inserted between the choices when their are only 2 choices */
@@ -52,7 +42,7 @@ interface IChoiceOption {
   includeNumbers?: boolean;
 }
 
-interface IConfirmChoice {
+export interface IConfirmChoice {
   /** the value to return when selected. */
   value?: string;
   /** Card action for the choice */
@@ -61,7 +51,7 @@ interface IConfirmChoice {
   synonyms?: string[];
 }
 
-interface IRecognizerOption {
+export interface IRecognizerOption {
   /** If true, the choices value field will NOT be search over */
   noValue?: boolean;
 }
@@ -70,7 +60,7 @@ interface IRecognizerOption {
  * Inputs
  */
 
-interface InputDialog extends BaseSchema {
+export interface InputDialog extends BaseSchema {
   /** (Optional) id for the dialog */
   id: string;
   /** The message to send to as prompt for this input. */
@@ -96,13 +86,13 @@ interface InputDialog extends BaseSchema {
 }
 
 /** This represents a dialog which gathers an attachment such as image or music */
-interface AttachmentInput extends Partial<InputDialog> {
+export interface AttachmentInput extends Partial<InputDialog> {
   /** The attachment output format. */
   outputFormat?: 'all' | 'first';
 }
 
 /** This represents a dialog which gathers a choice responses */
-interface ChoiceInput extends Partial<InputDialog> {
+export interface ChoiceInput extends Partial<InputDialog> {
   /** The output format. */
   outputFormat?: 'value' | 'index';
   choices?: IChoice[];
@@ -117,7 +107,7 @@ interface ChoiceInput extends Partial<InputDialog> {
 }
 
 /** This represents a dialog which gathers a yes/no style responses */
-interface ConfirmInput extends Partial<InputDialog> {
+export interface ConfirmInput extends Partial<InputDialog> {
   outputFormat: undefined;
   /** The prompts default locale that should be recognized. */
   defaultLocale?: string;
@@ -127,12 +117,12 @@ interface ConfirmInput extends Partial<InputDialog> {
   confirmChoices?: IConfirmChoice[];
 }
 
-interface DateTimeInput extends Partial<InputDialog> {
+export interface DateTimeInput extends Partial<InputDialog> {
   outputFormat: undefined;
   /** The prompts default locale that should be recognized. */
   defaultLocale?: string;
 }
-interface NumberInput extends Partial<InputDialog> {
+export interface NumberInput extends Partial<InputDialog> {
   /** The output format. */
   outputFormat?: 'float' | 'integer';
   /** The prompts default locale that should be recognized. */
@@ -140,18 +130,24 @@ interface NumberInput extends Partial<InputDialog> {
 }
 
 /** This represents a dialog which gathers a text from the user */
-interface TextInput extends Partial<InputDialog> {
+export interface TextInput extends Partial<InputDialog> {
   /** The output format. */
   outputFormat?: 'none' | 'trim' | 'lowercase' | 'uppercase';
 }
 
-type MicrosoftInputDialog = AttachmentInput | ChoiceInput | ConfirmInput | DateTimeInput | NumberInput | TextInput;
+export type MicrosoftInputDialog =
+  | AttachmentInput
+  | ChoiceInput
+  | ConfirmInput
+  | DateTimeInput
+  | NumberInput
+  | TextInput;
 
 /**
  * Recognizers
  */
 
-interface LuisRecognizer extends BaseSchema {
+export interface LuisRecognizer extends BaseSchema {
   applicationId: string;
   endpoint: string;
   endpointKey: string;
@@ -163,18 +159,18 @@ interface IntentPattern {
   pattern: string;
 }
 
-interface RegexRecognizer extends BaseSchema {
+export interface RegexRecognizer extends BaseSchema {
   /** Pattern->Intents mappings */
   intents: IntentPattern[];
 }
 
-type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
+export type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
 
 /**
  * Rules
  */
 
-declare enum DialogEvent {
+export enum DialogEvent {
   beginDialog = 'beginDialog',
   consultDialog = 'consultDialog',
   cancelDialog = 'cancelDialog',
@@ -195,7 +191,7 @@ interface RuleBase extends BaseSchema {
 }
 
 /** This defines the steps to take when an Intent is recognized (and optionally entities) */
-interface OnIntent extends RuleBase {
+export interface OnIntent extends RuleBase {
   /** Intent name to trigger on */
   intent: string;
   /** The entities required to trigger this rule */
@@ -203,15 +199,15 @@ interface OnIntent extends RuleBase {
 }
 
 /** Defines a sequence of steps to take if there is no other trigger or plan operating */
-interface OnUnknownIntent extends RuleBase {}
+export interface OnUnknownIntent extends RuleBase {}
 
-type ITriggerCondition = OnIntent | OnUnknownIntent;
+export type ITriggerCondition = OnIntent | OnUnknownIntent;
 
 /**
  * Conversational Flow and Dialog Management
  */
 
-interface CaseCondition {
+export interface CaseCondition {
   /** Value which must match the condition property */
   value: string;
   /** Steps to execute if case is equal to condition */
@@ -219,7 +215,7 @@ interface CaseCondition {
 }
 
 /** Step which conditionally decides which step to execute next. */
-interface SwitchCondition extends BaseSchema {
+export interface SwitchCondition extends BaseSchema {
   /** Expression to evaluate to switch on. */
   condition?: string;
   /** Cases to evaluate against condition */
@@ -229,7 +225,7 @@ interface SwitchCondition extends BaseSchema {
 }
 
 /** Flexible, data driven dialog that can adapt to the conversation. */
-interface MicrosoftAdaptiveDialog extends BaseSchema {
+export interface MicrosoftAdaptiveDialog extends BaseSchema {
   /** Optional dialog ID. */
   id?: string;
   /** If this is true the dialog will automatically end when there are no more steps to run.  If this is false it is the responsbility of the author to call EndDialog at an appropriate time. */
@@ -243,7 +239,7 @@ interface MicrosoftAdaptiveDialog extends BaseSchema {
 }
 
 /* Union of components which implement the IDialog interface */
-type MicrosoftIDialog =
+export type MicrosoftIDialog =
   | ChoiceInput
   | ConfirmInput
   | MicrosoftIRecognizer

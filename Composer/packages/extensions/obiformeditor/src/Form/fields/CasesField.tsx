@@ -1,207 +1,172 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { DefaultButton, TextField, DirectionalHint, IContextualMenuItem, IconButton } from 'office-ui-fabric-react';
-import get from 'lodash.get';
+import { IContextualMenuItem, IconButton, TextField } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { createStepMenu, DialogGroup } from 'shared';
+import { CaseCondition } from 'shared';
+import cloneDeep from 'lodash.clonedeep';
 
-import Modal from '../../Modal';
-import { swap } from '../utils';
+import { swap, remove } from '../utils';
+import { BFDFieldProps } from '../types';
+import { ExpressionWidget } from '../widgets/ExpressionWidget';
 
-import { TableField } from './TableField';
-
-import './styles.css';
-
-interface CaseFormData {
-  oldValue?: string;
-  newValue?: string;
+import { arrayItem, arrayItemValue, field } from './styles';
+import { EditableField } from './EditableField';
+interface CaseItemProps {
+  index: number;
+  value: string;
+  hasMoveUp: boolean;
+  hasMoveDown: boolean;
+  onReorder: (a: number, b: number) => void;
+  onDelete: (idx: number) => void;
+  onEdit: (idx: number, value?: string) => void;
 }
 
-function CaseConditionActions(props) {
-  const { item, index, onEdit, onRemove, onMove, canMoveUp, canMoveDown } = props;
+const CaseItem: React.FC<CaseItemProps> = props => {
+  const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, onEdit } = props;
+  const [key, setKey] = useState(value);
 
-  const menuItems: IContextualMenuItem[] = [
-    {
-      key: 'edit',
-      text: formatMessage('Edit'),
-      iconProps: { iconName: 'Edit' },
-      onClick: () => onEdit(item.value),
-    },
+  // This needs to return true to dismiss the menu after a click.
+  const fabricMenuItemClickHandler = fn => e => {
+    fn(e);
+    return true;
+  };
+
+  const contextItems: IContextualMenuItem[] = [
     {
       key: 'moveUp',
-      text: formatMessage('Move Up'),
+      text: 'Move Up',
       iconProps: { iconName: 'CaretSolidUp' },
-      disabled: !canMoveUp,
-      onClick: () => {
-        onMove(item.value, index - 1);
-      },
+      disabled: !hasMoveUp,
+      onClick: fabricMenuItemClickHandler(() => onReorder(index, index - 1)),
     },
     {
       key: 'moveDown',
-      text: formatMessage('Move Down'),
+      text: 'Move Down',
       iconProps: { iconName: 'CaretSolidDown' },
-      disabled: !canMoveDown,
-      onClick: () => {
-        onMove(item.value, index + 1);
-      },
+      disabled: !hasMoveDown,
+      onClick: fabricMenuItemClickHandler(() => onReorder(index, index + 1)),
     },
     {
       key: 'remove',
-      text: formatMessage('Remove'),
+      text: 'Remove',
       iconProps: { iconName: 'Cancel' },
-      onClick: () => onRemove(item.value),
+      onClick: fabricMenuItemClickHandler(() => onDelete(index)),
     },
   ];
 
-  return (
-    <IconButton
-      menuProps={{ items: menuItems }}
-      menuIconProps={{ iconName: 'MoreVertical' }}
-      styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-    />
-  );
-}
+  const handleEdit = (_e: any, newVal?: string) => {
+    onEdit(index, newVal);
+  };
 
-export const CasesField: React.FC<FieldProps<CaseCondition[]>> = props => {
-  const { formData, schema } = props;
-  const [showModal, setShowModal] = useState(false);
-  const [caseFormData, setCaseFormData] = useState<CaseFormData>({});
-  const items = formData;
-  const newLabel = formatMessage('Add New Case');
-
-  const handleCaseUpdate = e => {
-    e.preventDefault();
-    const { oldValue, newValue } = caseFormData;
-
-    if (newValue) {
-      const existingCase = items.find(i => i.value === oldValue);
-
-      if (existingCase) {
-        props.onChange(
-          items.map(i => {
-            if (i.value === oldValue) {
-              return {
-                ...i,
-                value: newValue,
-              };
-            }
-            return i;
-          })
-        );
-      } else {
-        props.onChange([...(items || []), { value: newValue }]);
-      }
-
-      setShowModal(false);
-      setCaseFormData({});
+  const handleBlur = () => {
+    setKey(value);
+    if (!value) {
+      onDelete(index);
     }
   };
 
-  const handleStepsUpdate = (caseName: string) => (caseSteps: MicrosoftIDialog[]) => {
-    const updatedCases = items.map(i => {
-      if (i.value === caseName) {
-        return {
-          ...i,
-          actions: caseSteps,
-        };
+  return (
+    <div css={[arrayItem, field]}>
+      <div css={arrayItemValue}>
+        <EditableField key={key} value={value} onChange={handleEdit} onBlur={handleBlur} />
+      </div>
+      <IconButton
+        menuProps={{ items: contextItems }}
+        menuIconProps={{ iconName: 'MoreVertical' }}
+        ariaLabel={formatMessage('Item Actions')}
+        styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+      />
+    </div>
+  );
+};
+
+export const CasesField: React.FC<BFDFieldProps<CaseCondition[]>> = props => {
+  const { id, formData, schema, formContext } = props;
+  const [newBranch, setNewBranch] = useState<string>('');
+
+  const handleChange = (_e: any, newValue?: string) => {
+    setNewBranch(newValue || '');
+  };
+
+  const submitNewBranch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key.toLowerCase() === 'enter') {
+      e.preventDefault();
+
+      if (newBranch) {
+        props.onChange([...props.formData, { value: newBranch }]);
+        setNewBranch('');
       }
-
-      return i;
-    });
-
-    props.onChange(updatedCases);
+    }
   };
 
-  const handleItemEdit = (caseName: string) => {
-    setCaseFormData({ oldValue: caseName, newValue: caseName });
-    setShowModal(true);
+  const handleReorder = (aIdx: number, bIdx: number) => {
+    props.onChange(swap(props.formData, aIdx, bIdx));
   };
 
-  const handleRemoveItem = (caseName: string) => {
-    props.onChange(items.filter(i => i.value !== caseName));
+  const handleDelete = (idx: number) => {
+    props.onChange(remove(props.formData, idx));
   };
 
-  const handleMoveItem = (caseName: string, newPos: number) => {
-    const caseIdx = items.findIndex(i => i.value === caseName);
-    props.onChange(swap(items, caseIdx, newPos));
+  const handleEdit = (idx, val) => {
+    const casesCopy = cloneDeep(props.formData) || [];
+    casesCopy[idx].value = val;
+    props.onChange(casesCopy);
   };
 
   return (
-    <div className="CasesField">
-      {items.map((item: CaseCondition, itemIdx: number) => (
-        <div className="CasesFieldConditions" key={item.value}>
-          <TableField<MicrosoftIDialog>
-            {...props}
-            title={`Branch: ${item.value}`}
-            formData={item.actions}
-            navPrefix={`cases[${itemIdx}].actions`}
-            onChange={handleStepsUpdate(item.value)}
-          >
-            {({ createNewItemAtIndex }) => (
-              <DefaultButton
-                styles={{ root: { marginTop: '20px' } }}
-                menuProps={{
-                  items: createStepMenu(
-                    [
-                      DialogGroup.RESPONSE,
-                      DialogGroup.INPUT,
-                      DialogGroup.BRANCHING,
-                      DialogGroup.STEP,
-                      DialogGroup.MEMORY,
-                      DialogGroup.CODE,
-                      DialogGroup.LOG,
-                    ],
-                    true,
-                    createNewItemAtIndex()
-                  ),
-                  calloutProps: { calloutMaxHeight: 500 },
-                  directionalHint: DirectionalHint.bottomLeftEdge,
-                }}
-                type="button"
-              >
-                {formatMessage('Add New Action for { caseName }', { caseName: item.value })}
-              </DefaultButton>
-            )}
-          </TableField>
-          <div className="CasesFieldConditionsMenu">
-            <CaseConditionActions
-              item={item}
-              onEdit={handleItemEdit}
-              onRemove={handleRemoveItem}
-              onMove={handleMoveItem}
-              onNew={() => setShowModal(true)}
-              index={itemIdx}
-              canMoveUp={itemIdx > 0}
-              canMoveDown={itemIdx < items.length - 1}
+    <div>
+      <div css={field}>
+        <ExpressionWidget
+          label={formatMessage('Branches')}
+          id={id}
+          value={newBranch}
+          onChange={handleChange}
+          placeholder={formatMessage('Value')}
+          onKeyDown={submitNewBranch}
+          schema={schema}
+          formContext={formContext}
+          rawErrors={[]}
+        />
+      </div>
+      <div>
+        {formData.map((v, i) => (
+          <CaseItem
+            // need to use index + length to account for data changing
+            key={`${i}-${formData.length}`}
+            value={v.value}
+            index={i}
+            onReorder={handleReorder}
+            onDelete={handleDelete}
+            hasMoveDown={i !== props.formData.length - 1}
+            hasMoveUp={i !== 0}
+            onEdit={handleEdit}
+          />
+        ))}
+        <div css={[arrayItem, field]}>
+          <div css={arrayItemValue}>
+            <TextField
+              styles={{
+                root: { margin: '5px 0 7px -9px', cursor: 'default' },
+                fieldGroup: {
+                  borderColor: 'transparent',
+                  transition: 'border-color 0.1s linear',
+                  selectors: {
+                    ':hover': {
+                      borderColor: 'transparent',
+                    },
+                  },
+                },
+              }}
+              value={formatMessage('Default')}
+              onChange={() => {}}
+              autoComplete="off"
+              readOnly
             />
           </div>
         </div>
-      ))}
-      <DefaultButton type="button" styles={{ root: { marginTop: '20px' } }} onClick={() => setShowModal(true)}>
-        {newLabel}
-      </DefaultButton>
-      {showModal && (
-        <Modal onDismiss={() => setShowModal(false)}>
-          <form onSubmit={handleCaseUpdate}>
-            <TextField
-              label={get(schema, 'items.properties.value.title')}
-              description={get(schema, 'items.properties.value.description')}
-              value={caseFormData.newValue}
-              required
-              onChange={(e, val) => setCaseFormData({ ...caseFormData, newValue: val })}
-              componentRef={el => {
-                if (el) {
-                  el.focus();
-                }
-              }}
-            />
-            <DefaultButton type="submit" styles={{ root: { width: '100%', marginTop: '20px' } }}>
-              {newLabel}
-            </DefaultButton>
-          </form>
-        </Modal>
-      )}
+      </div>
     </div>
   );
 };

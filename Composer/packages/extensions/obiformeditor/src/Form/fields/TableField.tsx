@@ -14,7 +14,7 @@ import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { COMPOUND_TYPES } from 'shared';
+import { COMPOUND_TYPES, MicrosoftIDialog } from 'shared';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
@@ -162,12 +162,15 @@ export function TableField<T extends MicrosoftIDialog = MicrosoftIDialog>(props:
 
   const createNewItemAtIndex = (idx: number = items.length) => (_: any, item: IContextualMenuItem) => {
     onChange(insertAt(items, item.data, idx));
-    // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
-    if (COMPOUND_TYPES.includes(item.$type)) {
-      formContext.shellApi.onFocusEvent(`${navPrefix}[${idx}]`);
-    }
+    // wait until change can propogate before navigating
+    setTimeout(() => {
+      // @ts-ignore - IDialog could potentially be a string, so TS complains about $type
+      if (COMPOUND_TYPES.includes(item.$type)) {
+        formContext.shellApi.onFocusEvent(`${navPrefix}[${idx}]`);
+      }
 
-    formContext.shellApi.onFocusSteps([`${navPrefix}[${idx}]`]);
+      formContext.shellApi.onFocusSteps([`${navPrefix}[${idx}]`]);
+    }, 500);
     return true;
   };
 

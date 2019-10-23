@@ -1,5 +1,6 @@
 import React from 'react';
 import formatMessage from 'format-message';
+import { MicrosoftInputDialog } from 'shared';
 
 import { LgEditorWidget } from '../../widgets/LgEditorWidget';
 import { WidgetLabel } from '../../widgets/WidgetLabel';

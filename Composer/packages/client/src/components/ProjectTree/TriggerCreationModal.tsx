@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
+import { DialogInfo } from 'shared';
 
 import {
   addNewTrigger,
@@ -17,7 +18,6 @@ import {
   getActivityTypes,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
-import { DialogInfo } from '../../store/types';
 
 import { styles, dropdownStyles, dialogWindow } from './styles';
 

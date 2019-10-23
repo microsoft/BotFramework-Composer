@@ -121,7 +121,7 @@
                 "content": "{user.content}",
                 "reminderDateTime": "{user.requesttime}"
               },
-              "property": "user.postresult",
+              "resultProperty": "user.postresult",
               "responseTypes": "json"
             },
             {
