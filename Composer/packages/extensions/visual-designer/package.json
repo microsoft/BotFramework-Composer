@@ -15,7 +15,6 @@
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
-    "start": "nwb serve-react-demo --port 3002",
     "test": "jest --no-cache",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix"
@@ -49,7 +48,6 @@
     "babel-plugin-emotion": "^10.0.7",
     "jest": "^24.5.0",
     "json-loader": "^0.5.7",
-    "nwb": "0.23.x",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
