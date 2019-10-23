@@ -5,6 +5,7 @@ import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
 import { TextField, IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { IChoice } from 'shared';
 
 import { field, choiceItemContainer, choiceItemValue, choiceItemSynonyms } from '../styles';
 import { swap, remove } from '../../../utils';
@@ -32,6 +33,7 @@ interface ChoicesProps {
 
 const ChoiceItem: React.FC<ChoiceItemProps> = props => {
   const { choice, index, onEdit, hasMoveUp, hasMoveDown, onReorder, onDelete } = props;
+  const [key, setKey] = useState(`${choice.value}:${choice.synonyms ? choice.synonyms.join() : ''}`);
 
   const contextItems: IContextualMenuItem[] = [
     {
@@ -64,8 +66,15 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
     }
   };
 
+  const handleBlur = () => {
+    setKey(`${choice.value}:${choice.synonyms ? choice.synonyms.join() : ''}`);
+    if (!choice.value && (!choice.synonyms || !choice.synonyms.length)) {
+      onDelete(index);
+    }
+  };
+
   return (
-    <div css={choiceItemContainer()}>
+    <div css={choiceItemContainer()} key={key}>
       <div css={choiceItemValue}>
         <EditableField
           onChange={handleEdit('value')}
@@ -73,6 +82,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           styleOverrides={{
             root: { margin: '5px 0 7px 0' },
           }}
+          onBlur={handleBlur}
         />
       </div>
       <div css={choiceItemSynonyms}>
@@ -83,6 +93,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           styleOverrides={{
             root: { margin: '5px 0 7px 0' },
           }}
+          onBlur={handleBlur}
         />
       </div>
       <div>
@@ -184,8 +195,8 @@ export const Choices: React.FC<ChoicesProps> = props => {
               onEdit={handleEdit}
               onReorder={handleReorder}
               onDelete={handleDelete}
-              hasMoveDown={i > 0}
-              hasMoveUp={i !== formData.length - 1}
+              hasMoveDown={i !== formData.length - 1}
+              hasMoveUp={i !== 0}
             />
           ))}
       </div>
