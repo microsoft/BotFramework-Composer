@@ -197,11 +197,13 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
 }
 
 export async function pasteNodes(
-  inputDialog,
-  arrayPath,
-  arrayIndex,
-  newNodes,
-  externalApi: { copyLgTemplate: (from: string, to: string) => Promise<string> }
+  inputDialog: any,
+  arrayPath: string,
+  arrayIndex: number,
+  newNodes: any[],
+  externalApi: {
+    copyLgTemplate: (srcTemplateName: string, newTemplateName: string) => Promise<string>;
+  }
 ) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
