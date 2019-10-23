@@ -32,7 +32,7 @@ export async function walkAdaptiveAction(input: any, visitor: (data: any) => Pro
   for (const childrenKey of childrenKeys) {
     const children = input[childrenKey];
     if (Array.isArray(children)) {
-      Promise.all(children.map(async x => await walkAdaptiveAction(x, visitor)));
+      await Promise.all(children.map(async x => await walkAdaptiveAction(x, visitor)));
     }
   }
 }

@@ -20,4 +20,19 @@ describe('#walkAdaptiveAction', () => {
     await walkAdaptiveAction(action, counter);
     expect(actionCount).toEqual(4);
   });
+
+  it('can walk every child Adaptive Action node async', async () => {
+    let actionCount = 0;
+    const counter = () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          actionCount += 1;
+          resolve();
+        }, 10);
+      });
+    };
+
+    await walkAdaptiveAction(action, counter);
+    expect(actionCount).toEqual(4);
+  });
 });
