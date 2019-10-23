@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
 import { LuFile, ShellData } from 'shared';
 
+import { copyLgTemplate } from '../store/action/lgHandlers';
 import ApiClient from '../messenger/ApiClient';
 
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
-import { copyLgTemplate } from '../store/action/lgHandlers';
 
 initializeIcons(undefined, { disableWarnings: true });
 /**
