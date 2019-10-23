@@ -31,7 +31,8 @@ export async function copyLgTemplate(
     // Create new lg activity.
     const newLgContent = currentLg.Body;
     try {
-      await updateLgTemplate(lgFileName, newTemplateName, newLgContent);
+      const newTemplateId = (TEMPLATE_PATTERN.exec(newTemplateName) || [])[1];
+      await updateLgTemplate(lgFileName, newTemplateId, newLgContent);
       return newTemplateName;
     } catch (e) {
       return newLgContent;
