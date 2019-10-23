@@ -13,7 +13,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-
+import { CreationFlowStatus } from './constants';
 initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
@@ -166,7 +166,9 @@ export const App: React.FC = () => {
         <div css={rightPanel}>
           <ErrorBoundary>
             <RequireAuth>
-              <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
+              {creationFlowStatus !== CreationFlowStatus.CLOSE && (
+                <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
+              )}
               <Routes component={Content} />
             </RequireAuth>
           </ErrorBoundary>
