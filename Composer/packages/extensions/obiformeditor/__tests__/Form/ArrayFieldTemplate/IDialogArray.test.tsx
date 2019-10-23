@@ -62,27 +62,25 @@ describe('<IDialogArray />', () => {
 
     fireEvent.click(addBtn);
 
-    const responseMenu = await findByText(document.body, 'Send Messages');
+    const responseMenu = await findByText(document.body, 'Send a response');
     fireEvent.click(responseMenu);
-
-    const sendActivity = await findByText(document.body, 'Send an Activity');
-    fireEvent.click(sendActivity);
 
     expect(onAddClick.mock.calls[0][1]).toEqual({
       $type: 'Microsoft.SendActivity',
       $designer: {
         id: expect.any(String),
-        name: 'Send an Activity',
+        name: 'Send a response',
       },
       data: {
         $type: 'Microsoft.SendActivity',
         $designer: {
           id: expect.any(String),
-          name: 'Send an Activity',
+          name: 'Send a response',
         },
       },
       key: 'Microsoft.SendActivity',
-      name: 'Send an Activity',
+      name: 'Send a response',
+      onClick: expect.any(Function),
     });
   });
 });
