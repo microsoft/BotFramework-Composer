@@ -21,7 +21,7 @@
 - Docker
 - Yarn
 #### Develop
-- Sending messages (use updated terminology in BFD)
+- [Sending messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
    - Use simple text and LG
 - Asking for user input 
   - Use numbers, dates and time, confirmation, multiple choices 
