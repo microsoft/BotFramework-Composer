@@ -37,6 +37,8 @@ jobs:
       displayName: 'yarn install'
     - script: cd Composer && yarn build:prod
       displayName: 'yarn build:prod'
+      env:
+        NODE_OPTIONS: --max-old-space-size=2048
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
     - script: cd Composer && yarn test:coverage
@@ -70,6 +72,8 @@ jobs:
       displayName: 'yarn install'
     - script: cd Composer && yarn build:prod
       displayName: 'yarn build:prod'
+      env:
+        NODE_OPTIONS: --max-old-space-size=2048
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
       env:

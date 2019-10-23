@@ -30,6 +30,24 @@ const initialDialogShape = {
     $type: 'Microsoft.OnConversationUpdateActivity',
     condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
   },
+  'Microsoft.AttachmentInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.ChoiceInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.ConfirmInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.DateTimeInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.NumberInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.TextInput': {
+    allowInterruptions: 'false',
+  },
 };
 
 export function getNewDesigner(name: string, description: string) {
@@ -96,8 +114,8 @@ export const seedNewDialog = (
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
+    ...seedDefaults($type),
     ...(initialDialogShape[$type] || {}),
     ...optionalAttributes,
-    ...seedDefaults($type),
   };
 };
