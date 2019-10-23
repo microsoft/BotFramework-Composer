@@ -32,7 +32,7 @@ export async function copyLgTemplate(
     const newLgContent = currentLg.Body;
     try {
       await updateLgTemplate(lgFileName, newTemplateName, newLgContent);
-      return `[${newTemplateName}]`;
+      return newTemplateName;
     } catch (e) {
       return newLgContent;
     }
