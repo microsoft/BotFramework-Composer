@@ -1,4 +1,4 @@
-import { isLgActivity, copyLgTemplate } from '../../../src/store/action/lgUtils';
+import { isLgActivity, copyLgTemplate } from '../../../src/store/action/lgHandlers';
 
 describe('lgUtils', () => {
   describe('#isLgActivity', () => {

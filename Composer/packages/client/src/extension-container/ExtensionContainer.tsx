@@ -7,7 +7,7 @@ import ApiClient from '../messenger/ApiClient';
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
-import { copyLgTemplate } from '../store/action/lgUtils';
+import { copyLgTemplate } from '../store/action/lgHandlers';
 
 initializeIcons(undefined, { disableWarnings: true });
 /**
