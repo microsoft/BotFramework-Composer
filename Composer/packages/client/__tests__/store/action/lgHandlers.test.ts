@@ -1,6 +1,6 @@
 import { isLgActivity, copyLgTemplate } from '../../../src/store/action/lgHandlers';
 
-describe('lgUtils', () => {
+describe('lgHandlers', () => {
   describe('#isLgActivity', () => {
     it('can handle empty input', () => {
       expect(isLgActivity('')).toBeFalsy();
@@ -27,7 +27,7 @@ describe('lgUtils', () => {
     });
   });
 
-  describe('#copyLgActivity', () => {
+  describe('#copyLgTemplate', () => {
     const lgApi = {
       getLgTemplates: (id, activity) => Promise.resolve([{ Name: 'bfdactivity-1234', Body: 'Hello' }]),
       updateLgTemplate: (id, newId, newContent) => Promise.resolve(true),
