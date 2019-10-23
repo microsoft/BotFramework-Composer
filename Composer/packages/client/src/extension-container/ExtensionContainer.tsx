@@ -7,6 +7,7 @@ import ApiClient from '../messenger/ApiClient';
 import getEditor from './EditorMap';
 
 import './extensionContainer.css';
+import { copyLgTemplate } from '../store/action/lgUtils';
 
 initializeIcons(undefined, { disableWarnings: true });
 /**
@@ -92,6 +93,13 @@ const shellApi = {
       id,
       templateName,
       template: { Name: templateName, Body: template },
+    });
+  },
+
+  copyLgTemplate: (id: string, templateName: string, newTemplateName: string) => {
+    return copyLgTemplate(id, templateName, newTemplateName, {
+      getLgTemplates: shellApi.getLgTemplates,
+      updateLgTemplate: shellApi.updateLgTemplate,
     });
   },
 

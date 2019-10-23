@@ -196,7 +196,13 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, lgApi) {
+export async function pasteNodes(
+  inputDialog,
+  arrayPath,
+  arrayIndex,
+  newNodes,
+  externalApi: { copyLgTemplate: (from: string, to: string) => Promise<string> }
+) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -211,7 +217,7 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, l
   // Deep copy nodes with external resources
   const copiedNodes = await Promise.all(
     newNodes.map(async x => {
-      const node = await deepCopyAction(x, lgApi);
+      const node = await deepCopyAction(x, externalApi);
       return node;
     })
   );

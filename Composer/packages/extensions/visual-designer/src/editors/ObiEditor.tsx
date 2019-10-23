@@ -39,15 +39,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
-    NodeRendererContext
-  );
+  const { focusedId, focusedEvent, removeLgTemplate, copyLgTemplate } = useContext(NodeRendererContext);
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
     setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
   });
 
-  const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -83,7 +80,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardContext.clipboardActions, lgApi).then(dialog => {
+            // Bind 'common' as lg template file name to align with 'removeLgTemplate' usage.
+            const externalCopyApi = {
+              copyLgTemplate: (templateNameToCopy: string, newTemplateName: string) =>
+                copyLgTemplate('common', templateNameToCopy, newTemplateName),
+            };
+            pasteNodes(data, e.id, e.position, clipboardContext.clipboardActions, externalCopyApi).then(dialog => {
               onChange(dialog);
             });
           };
