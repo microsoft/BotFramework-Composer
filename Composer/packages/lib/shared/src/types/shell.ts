@@ -93,6 +93,7 @@ export interface ShellData {
   focusedSteps: string[];
   focusedTab?: string;
   focusPath: string;
+  hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
   schemas: BotSchemas;

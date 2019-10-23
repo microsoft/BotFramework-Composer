@@ -137,13 +137,14 @@ export const dialogGroups: DialogGroupsMap = {
 export const createStepMenu = (
   stepLabels,
   subMenu = true,
-  handleType: (e: any, item: IContextualMenuItem) => void
+  handleType: (e: any, item: IContextualMenuItem) => void,
+  filter?: (x: SDKTypes) => boolean
 ): IContextualMenuItem[] => {
   if (subMenu) {
     const stepMenuItems = stepLabels.map(x => {
       const item = dialogGroups[x];
       const subMenu: IContextualMenuProps = {
-        items: item.types.map($type => ({
+        items: item.types.filter(filter || (x => true)).map($type => ({
           key: $type,
           name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
           $type: $type,
