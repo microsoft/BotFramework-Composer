@@ -1,3 +1,5 @@
+import { copyLgActivity, LG_FIELDS } from './lgUtils';
+
 const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
@@ -37,47 +39,13 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
   }
 }
 
-const LgActivityRegex = /\[bfd.+-.+\]/;
-function isLgActivity(activity: string) {
-  return activity && LgActivityRegex.test(activity);
-}
-
-async function copyLgActivity(activity: string, newLgId: string, lgApi: any): Promise<string> {
-  if (!activity) return '';
-  if (!isLgActivity(activity) || !lgApi) return activity;
-
-  const { getLgTemplates, updateLgTemplate } = lgApi;
-  if (!getLgTemplates) return activity;
-
-  let rawLg: any[] = [];
-  try {
-    rawLg = await getLgTemplates('common', activity);
-  } catch (error) {
-    return activity;
-  }
-
-  const currentLg = rawLg.find(lg => `[${lg.Name}]` === activity);
-
-  if (currentLg) {
-    // Create new lg activity.
-    const newLgContent = currentLg.Body;
-    try {
-      await updateLgTemplate('common', newLgId, newLgContent);
-      return `[${newLgId}]`;
-    } catch (e) {
-      return newLgContent;
-    }
-  }
-  return activity;
-}
-
 const overrideLgActivity = async (data, { lgApi }) => {
   const newLgId = `bfdactivity-${data.$designer.id}`;
   data.activity = await copyLgActivity(data.activity, newLgId, lgApi);
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  for (const promptFieldKey of ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse']) {
+  for (const promptFieldKey of LG_FIELDS) {
     const existingActivity = data[promptFieldKey];
     const newLgId = `bfd${promptFieldKey}-${data.$designer.id}`;
     if (existingActivity) {
