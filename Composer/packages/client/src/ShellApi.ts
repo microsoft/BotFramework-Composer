@@ -10,6 +10,7 @@ import * as lgUtil from './utils/lgUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import { isAbsHosted } from './utils/envUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath, navigateTo } from './utils/navigation';
 
@@ -171,6 +172,7 @@ export const ShellApi: React.FC = () => {
       focusedEvent: selected,
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      hosted: !!isAbsHosted(),
     };
   }
 
