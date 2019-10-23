@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash.clonedeep';
+
 const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
@@ -70,8 +72,7 @@ const needsOverride = data => !!(data && OverriderByType[data.$type]);
 export async function copyAdaptiveAction(data, externalApi: { updateDesigner: Function; copyLgTemplate: Function }) {
   if (!data || !data.$type) return {};
 
-  // Deep copy the original data.
-  const copy = JSON.parse(JSON.stringify(data));
+  const copy = cloneDeep(data);
 
   const { updateDesigner } = externalApi;
   // Create copy handler for rewriting fields which need to be handled specially.
