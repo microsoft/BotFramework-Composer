@@ -2351,6 +2351,13 @@
   dependencies:
     "@types/lodash" "*"
 
+"@types/lodash.trimend@^4.5.6":
+  version "4.5.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/lodash.trimend/-/@types/lodash.trimend-4.5.6.tgz#aba6dccde869458e7076f4cee67ee1b22166b7f1"
+  integrity sha1-q6bczehpRY5wdvTO5n7hsiFmt/E=
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash.uniq@^4.5.6":
   version "4.5.6"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/lodash.uniq/-/@types/lodash.uniq-4.5.6.tgz#adb052f6c7eeb38b920c13166e7a972dd960b4c5"
@@ -2434,10 +2441,18 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.9.0", "@types/react@^16.9.2":
+"@types/react@*", "@types/react@16.9.0":
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.0.tgz#27434f16d889a335eb4626d1f1e67eda54039e5b"
   integrity sha512-eOct1hyZI9YZf/eqNlYu7jxA9qyTw1EGXruAJhHhBDBpc00W0C1vwlnh+hkOf7UFZkNK+UxnFBpwAZe3d7XJhQ==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@^16.9.2":
+  version "16.9.9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/react/-/@types/react-16.9.9.tgz#a62c6f40f04bc7681be5e20975503a64fe783c3a"
+  integrity sha1-pixvQPBLx2gb5eIJdVA6ZP54PDo=
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -10454,6 +10469,11 @@ lodash.topath@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.topath/-/lodash.topath-4.5.2.tgz#3616351f3bba61994a0931989660bd03254fd009"
   integrity sha1-NhY1Hzu6YZlKCTGYlmC9AyVP0Ak=
+
+lodash.trimend@^4.5.1:
+  version "4.5.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lodash.trimend/-/lodash.trimend-4.5.1.tgz#12804437286b98cad8996b79414e11300114082f"
+  integrity sha1-EoBENyhrmMrYmWt5QU4RMAEUCC8=
 
 lodash.unescape@4.0.1:
   version "4.0.1"
