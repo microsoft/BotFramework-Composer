@@ -15,6 +15,46 @@ interface TemplateData {
   };
 }
 const templates: TemplateData = {
+  CardsSamples: {
+    name: 'Cards Samples',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  ControllingConversation: {
+    name: 'Controlling Conversation',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  InputsSamples: {
+    name: 'Inputs Samples',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  Interrupt: {
+    name: 'Interrupt',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  MessageSamples: {
+    name: 'Message Samples',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  MyEmailBotComposer: {
+    name: 'MyEmailBot Composer',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  QnAMakerSample: {
+    name: 'QnAMaker Sample',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  ReminderBot: {
+    name: 'Reminder Bot',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  StepsSamples: {
+    name: 'Steps Samples',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
+  ToDoLuisBot: {
+    name: 'ToDoLuis Bot',
+    description: 'A bot that echoes and responds with whatever message the user entered',
+  },
   EchoBot: {
     name: 'Echo Bot',
     description: 'A bot that echoes and responds with whatever message the user entered',
@@ -58,7 +98,6 @@ export class AssetManager {
 
     // initialize the list of project tempaltes
     this.getProjectTemplate();
-
     // initialize the list of runtimes.
     this.getProjectRuntime();
   }

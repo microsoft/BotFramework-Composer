@@ -69,6 +69,9 @@ class JsonStore implements KVStore {
     this.ensureStore();
 
     this.data = JSON.parse(fs.readFileSync(this.filePath, 'utf-8'));
+    console.log('haah');
+    console.log(this.filePath);
+    console.log(this.data);
   }
 }
 
