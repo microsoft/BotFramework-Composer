@@ -1,7 +1,7 @@
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
-import { copyAdaptiveAction } from './copyUtils';
+import { copyAdaptiveAction } from './utils/copyUtils';
 
 interface DesignerAttributes {
   name: string;

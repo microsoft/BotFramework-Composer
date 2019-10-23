@@ -1,4 +1,4 @@
-import { copyAdaptiveAction } from '../src/copyUtils';
+import { copyAdaptiveAction } from '../src/utils/copyUtils';
 
 describe('copyAdaptiveAction', () => {
   const externalApi = {
