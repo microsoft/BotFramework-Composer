@@ -69,6 +69,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
+          // TODO: move the shared logic into shared lib as a generic destruction process
           const findLgTemplates = (value: any): string[] => {
             const targetNames = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt', 'activity'];
             const targets: string[] = [];
