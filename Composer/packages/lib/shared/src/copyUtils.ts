@@ -37,18 +37,18 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
   }
 }
 
-const overrideLgActivity = async (data, { copyLgActivity }) => {
+const overrideLgActivity = async (data, { copyLgTemplate }) => {
   const newLgId = `[bfdactivity-${data.$designer.id}]`;
-  data.activity = await copyLgActivity(data.activity, newLgId);
+  data.activity = await copyLgTemplate(data.activity, newLgId);
 };
 
 const LG_FIELDS = ['prompt', 'unrecognizedPrompt', 'invalidPrompt', 'defaultValueResponse'];
-const overrideLgPrompt = async (data, { copyLgActivity }) => {
+const overrideLgPrompt = async (data, { copyLgTemplate }) => {
   for (const promptFieldKey of LG_FIELDS) {
     const existingActivity = data[promptFieldKey];
     const newLgId = `[bfd${promptFieldKey}-${data.$designer.id}]`;
     if (existingActivity) {
-      data[promptFieldKey] = await copyLgActivity(existingActivity, newLgId);
+      data[promptFieldKey] = await copyLgTemplate(existingActivity, newLgId);
     }
   }
 };
@@ -67,7 +67,7 @@ const OverriderByType = {
 
 const needsOverride = data => !!(data && OverriderByType[data.$type]);
 
-export async function copyAdaptiveAction(data, externalApi) {
+export async function copyAdaptiveAction(data, externalApi: { updateDesigner: Function; copyLgTemplate: Function }) {
   if (!data || !data.$type) return {};
 
   // Deep copy the original data.

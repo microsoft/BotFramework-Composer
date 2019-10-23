@@ -5,7 +5,7 @@ describe('copyAdaptiveAction', () => {
     updateDesigner: data => {
       data.$designer = { id: '5678' };
     },
-    copyLgActivity: (templateToCopy: string, newTemplateName: string) => Promise.resolve(newTemplateName),
+    copyLgTemplate: (templateToCopy: string, newTemplateName: string) => Promise.resolve(newTemplateName),
   };
 
   it('should return {} when input is invalid', async () => {
