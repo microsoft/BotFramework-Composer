@@ -69,7 +69,7 @@
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}&StartDate={user.requesttime}&EndDate={user.endtime}",
-              "property": "user.data",
+              "resultProperty": "user.data",
               "responseTypes": "json"
             }
           ],
@@ -81,7 +81,7 @@
               },
               "method": "GET",
               "url": "http://bfdreminder.azurewebsites.net/api/GetReminders?UID={turn.Activity.From.Id}",
-              "property": "user.data",
+              "resultProperty": "user.data",
               "responseTypes": "json"
             }
           ]

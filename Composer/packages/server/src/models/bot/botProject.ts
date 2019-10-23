@@ -94,10 +94,10 @@ export class BotProject {
 
   public getEnvSettings = async (slot: string, obfuscate: boolean) => {
     const settings = await this.settingManager.get(slot, obfuscate);
-    if (settings && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
+    if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
-    if (settings && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
+    if (settings && oauthInput().MicrosoftAppPassword && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
     }
     return settings;

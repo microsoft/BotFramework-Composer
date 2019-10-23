@@ -167,7 +167,7 @@ export default function TableView(props) {
       // build usedIn map
       templates.forEach(template => {
         templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
-          if (dialog.lgTemplates.indexOf(template.Name) !== -1) {
+          if (dialog.lgTemplates.includes(template.Name)) {
             result.push(dialog.id);
           }
           return result;
