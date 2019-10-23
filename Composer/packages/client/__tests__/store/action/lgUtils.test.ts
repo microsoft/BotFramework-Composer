@@ -40,13 +40,13 @@ describe('lgUtils', () => {
     });
 
     it('can copy existing template to a new template', async () => {
-      expect(await copyLgTemplate('common', '[bfdactivity-1234]', 'bfdactivity-5678', lgApi)).toEqual(
+      expect(await copyLgTemplate('common', '[bfdactivity-1234]', '[bfdactivity-5678]', lgApi)).toEqual(
         '[bfdactivity-5678]'
       );
     });
 
     it('can handle non-existing template', async () => {
-      expect(await copyLgTemplate('common', '[bfdactivity-4321]', 'bfdactivity-5678', lgApi)).toEqual(
+      expect(await copyLgTemplate('common', '[bfdactivity-4321]', '[bfdactivity-5678]', lgApi)).toEqual(
         '[bfdactivity-4321]'
       );
     });
