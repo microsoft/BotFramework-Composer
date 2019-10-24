@@ -20,7 +20,7 @@ export const connectBot: ActionCreator = async (store, settings) => {
     });
     await reloadBot(store, settings);
   } catch (err) {
-    throw new Error(err.response.data.message);
+    throw err instanceof Error ? err : new Error(err.response.data.message);
   }
 };
 
