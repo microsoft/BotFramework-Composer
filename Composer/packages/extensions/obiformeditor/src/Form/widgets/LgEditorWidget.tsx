@@ -60,17 +60,35 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
+  const [localContent, setLocalContent] = useState(template.Body);
+  const templateContent = `# ${template.Name}\n${localContent}`;
+
+  // only do this once
+  const allContent = useMemo(() => {
+    if (!lgFile) {
+      return '';
+    }
+
+    return lgFile.templates.reduce((content, t) => {
+      if (t.Name === lgId) {
+        return content;
+      }
+
+      content += `# ${t.Name}\n-\n`;
+      return content;
+    }, '');
+  }, []);
+  const lineCount = useMemo(() => {
+    return allContent.split('\n').length;
+  }, [allContent]);
   // template body code range
   const codeRange = {
-    startLineNumber: 2,
-    endLineNumber: template.Body.split('\n').length + 1,
+    startLineNumber: lineCount + 2,
+    endLineNumber: lineCount + template.Body.split('\n').length + 1,
   };
 
-  const [localContent, setLocalContent] = useState(template.Body);
-  const content = `#${template.Name}\n${localContent}`;
-
   const onChange = (newTemplate: string) => {
-    const [, body] = newTemplate.split(`#${lgId}\n`);
+    const [, body] = newTemplate.split(`# ${lgId}\n`);
 
     if (formContext.dialogId) {
       if (body) {
@@ -89,14 +107,33 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   useLayoutEffect(() => {
     if (editor) {
       const keyDownHandler = editor.onKeyDown(e => {
+        const position = editor.getPosition();
+
         switch (e.keyCode) {
           case monacoEditor.KeyCode.Backspace:
-            if (!localContent) {
+            if (
+              !localContent ||
+              (position && position.lineNumber === codeRange.startLineNumber && position.column === 1)
+            ) {
               e.preventDefault();
               e.stopPropagation();
             }
 
             break;
+          case monacoEditor.KeyCode.Delete: {
+            const lines = localContent.split('\n');
+            // cursor would be on the column after the last character
+            const lastColumn = lines[lines.length - 1].length + 1;
+            if (
+              !localContent ||
+              (position && position.lineNumber === codeRange.endLineNumber && position.column === lastColumn)
+            ) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
+            break;
+          }
           case monacoEditor.KeyCode.KEY_A:
             if (e.ctrlKey || e.metaKey) {
               editor.setSelection({
@@ -117,7 +154,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
         keyDownHandler.dispose();
       };
     }
-  }, [editor, localContent]);
+  }, [editor, localContent, codeRange]);
 
   const handleEditorMount = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
     setEditor(editor);
@@ -127,7 +164,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     <LgEditor
       codeRange={codeRange}
       errorMsg={errorMsg}
-      value={content}
+      value={`${allContent}\n${templateContent}`}
       onChange={onChange}
       helpURL={LG_HELP}
       height={height}
