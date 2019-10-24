@@ -20,7 +20,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\SampleBots");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\MyBots");
 
         private static string getFolderPath(string path)
         {

@@ -387,10 +387,12 @@ typings/
 .next
 
 # Local sample bots
-SampleBots/Local*
-SampleBots/__Test*
-SampleBots/*/*/generated
-SampleBots/*/*/settings
+MyBots/*
+!.gitKeep
+#MyBots/Local*
+#MyBots/__Test*
+#MyBots/*/*/generated
+#MyBots/*/*/settings
 
 #tmp.zip
 *.zip

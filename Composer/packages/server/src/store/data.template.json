@@ -4,13 +4,13 @@
       "id": "default",
       "name": "This PC",
       "type": "LocalDisk",
-      "path": "../../../SampleBots"
+      "path": "../../../MyBots"
     }
   ],
   "recentBotProjects": [
     {
       "storageId": "default",
-      "path": "../../../SampleBots/ToDoBot"
+      "path": "../../../MyBots/ToDoBot"
     }
   ]
 }
