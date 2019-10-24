@@ -55,8 +55,8 @@ const shellApi = {
     return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
   },
 
-  onSelect: (ids: string[]) => {
-    return apiClient.apiCall('onSelect', { ids });
+  syncEditorState: editorState => {
+    return apiClient.apiCall('syncEditorState', { editorState });
   },
 
   shellNavigate: (shellPage, opts = {}) => {

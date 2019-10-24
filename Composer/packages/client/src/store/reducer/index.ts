@@ -224,6 +224,11 @@ const updatePublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const updateVisualEditorState: ReducerFunc = (state, { editorState }) => {
+  console.log('update visual state', state, editorState);
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -261,4 +266,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
+  [ActionTypes.EDITOR_SYNCSTATE_VISUAL]: updateVisualEditorState,
 } as { [type in ActionTypes]: ReducerFunc });

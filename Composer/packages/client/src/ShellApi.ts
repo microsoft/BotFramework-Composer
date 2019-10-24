@@ -52,10 +52,6 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states
-  // TODO: (leilei, ze) fix it when refactoring shell state management.
-  const [, forceUpdate] = useState();
-
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
@@ -93,7 +89,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
-    apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('syncEditorState', syncEditorState);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -329,8 +325,8 @@ export const ShellApi: React.FC = () => {
     actions.focusTo(dataPath, fragment);
   }
 
-  function onSelect(ids) {
-    forceUpdate(ids);
+  function syncEditorState({ editorState }) {
+    actions.syncVisualEditorState(editorState);
   }
 
   return null;

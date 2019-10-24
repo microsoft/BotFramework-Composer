@@ -8,3 +8,12 @@ export const resetVisualEditor: ActionCreator = ({ dispatch }, isReset) => {
     payload: { isReset },
   });
 };
+
+export const syncVisualEditorState: ActionCreator = ({ dispatch }, editorState) => {
+  dispatch({
+    type: ActionTypes.EDITOR_SYNCSTATE_VISUAL,
+    payload: {
+      editorState,
+    },
+  });
+};
