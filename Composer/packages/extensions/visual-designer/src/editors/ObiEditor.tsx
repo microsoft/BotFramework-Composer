@@ -223,17 +223,17 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       const selectedIndices = selection.getSelectedIndices();
       const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
 
-      if (selectedIds.length === 1) {
-        // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
-        onFocusSteps(selectedIds);
-      }
-
       // TODO (ze): retire local context in following refactoring PR.
       dispatch(setSelection(selectedIds));
       setSelectionContext({
         ...selectionContext,
         selectedIds,
       });
+
+      if (selectedIds.length === 1) {
+        // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
+        onFocusSteps(selectedIds);
+      }
     },
   });
 
