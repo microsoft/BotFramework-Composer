@@ -1,3 +1,4 @@
+# ![Microsoft Bot Framework Composer](./docs/Assets/gh-banner.png)
 
 # Microsoft Bot Framework Composer [PREVIEW]
 
