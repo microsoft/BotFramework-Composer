@@ -15,6 +15,7 @@
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
+    "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
     "test": "jest --no-cache",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix"
