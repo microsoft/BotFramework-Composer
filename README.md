@@ -27,7 +27,7 @@
   - Use numbers, dates and time, confirmation, multiple choices 
 - [Controlling conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
 - Adding LUIS to your bot
-- Adding QnA to your bot
+- [Adding QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-add-qna-maker-to-bot-draft.md)
 - Sending cards 
 - [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
 - Handling interruption 
