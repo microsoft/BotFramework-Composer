@@ -1,13 +1,10 @@
 # Events and Triggers
+Like most event-driven architecture, events, triggers, and handlers are three basic elements in Bot Framework Composer. An event is an abstract idea that indicates something has occurred. When a bot starts at runtime, its main dialog is activated and an event occurs. In order to respond to events, we define a trigger or a set of triggers to handle them. In Bot Framework Composer, triggers simply refer to event handlers.   
 
-This article is primarily reproduced from the original [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/triggers_and_events.md) article with some updated screenshots and coherent content. 
-
-Like most event-driven architecture, events, triggers, and handlers are three basic elements in Bot Composer. An event is an abstract idea which indicates that something has occurred. When a bot starts at runtime, its main dialog is activated and an event occurs. In order to respond to events, we define a trigger or a set of triggers to handle them. In Bot Composer, triggers simply refer to event handlers.   
-
-Each dialog in Composer includes a set of event handlers that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passed through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
+Each dialog includes a set of event handlers that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passes through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
 
 ## Types of Event Handlers  
-There are several different types of event handlers available in Composer. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers in Composer and in what scenarios they will be used. You can refer to the [Defining Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article for detailed instruction on how to define each type of them. 
+There are several different types of event handlers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers and in what scenarios they will be used. You can refer to the [Defining Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article for detailed instruction on how to define each type of them. 
 
 ### Handle Dialog Events  
 
