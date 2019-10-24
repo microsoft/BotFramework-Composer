@@ -88,14 +88,33 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   // useLayoutEffect so that the handler can be updated before the next render
   useLayoutEffect(() => {
     if (editor) {
-      const handler = editor.onKeyDown(e => {
-        if (!localContent && e.code === 'Backspace') {
-          e.preventDefault();
-          e.stopPropagation();
+      const keyDownHandler = editor.onKeyDown(e => {
+        switch (e.keyCode) {
+          case monacoEditor.KeyCode.Backspace:
+            if (!localContent) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
+            break;
+          case monacoEditor.KeyCode.KEY_A:
+            if (e.ctrlKey || e.metaKey) {
+              editor.setSelection({
+                ...codeRange,
+                startColumn: 1,
+                endColumn: Infinity,
+              });
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            break;
+          default:
+            return;
         }
       });
+
       return () => {
-        handler.dispose();
+        keyDownHandler.dispose();
       };
     }
   }, [editor, localContent]);
