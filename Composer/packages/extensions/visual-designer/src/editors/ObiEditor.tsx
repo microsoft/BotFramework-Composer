@@ -25,7 +25,7 @@ import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import setClipboard from '../actions/setClipboard';
-import setSelection from '../actions/setSelection';
+import setDragSelection from '../actions/setDragSelection';
 import clearSelectionState from '../actions/clearSelectionState';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
@@ -225,7 +225,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
 
       // TODO (ze): retire local context in following refactoring PR.
-      dispatch(setSelection(selectedIds));
+      dispatch(setDragSelection(selectedIds));
       setSelectionContext({
         ...selectionContext,
         selectedIds,

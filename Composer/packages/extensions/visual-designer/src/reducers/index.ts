@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
 import { SET_CLIPBOARD } from '../actions/setClipboard';
-import { SET_SELECTION } from '../actions/setSelection';
+import { SET_DRAGSELECTION } from '../actions/setDragSelection';
 import { SET_FOCUSSTATE } from '../actions/setFocusState';
 import { CLEAR_SELECTIONSTATE } from '../actions/clearSelectionState';
 import { StoreState } from '../store/store';
@@ -13,7 +13,7 @@ const globalReducer = (state: StoreState, { type, payload }) => {
         ...state,
         clipboardActions: cloneDeep(payload.actions) || [],
       };
-    case SET_SELECTION:
+    case SET_DRAGSELECTION:
       return {
         ...state,
         selectedIds: cloneDeep(payload.ids) || [],
