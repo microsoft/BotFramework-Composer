@@ -4,7 +4,7 @@ Add QnA Maker to your bot when you want to send a user question to your bot then
 
 ## Add QnA Maker integration
 
-![Add QnA Maker to bot as an integration](./media/integrations/qna-maker-begin-integration.png)
+![Add QnA Maker to bot as an integration](./media/integration/qna-maker-begin-integration.png)
 
 1. In the flow designer, select the event handler, **+**. This displays the action components list. 
 
@@ -18,7 +18,7 @@ Add QnA Maker to your bot when you want to send a user question to your bot then
 
 Review the QnA Maker settings panel when selecting the QnA Maker dialog. If you edit the settings from this panel, these settings are less secure because they are written to the dialog file. If you are not concerned with security of the file, you can edit the settings in the panel. They are saved to the dialog settings used in the browser session. 
 
-![Review Qna Maker settings](./media/integrations/qna-maker-review-settings.png)
+![Review Qna Maker settings](./media/integration/qna-maker-review-settings.png)
 
 The values for `KnowledgeBase id`, `Endpoint Key`, and `Hostname` as shown in the preceding screenshot are locations for the values in the `appsettings.json` file. Do not change these values in this panel. Changes made to this panel are saved to a file on disk. If you manage the Composer files with source control, the security settings saved in the panel will also be checked into source control.  
 
@@ -44,7 +44,7 @@ The following settings configure the bot's integration with QnA Maker.
 
 Securely editing the QnA Maker settings should be completed using **Settings**. These values are help in the browser session only.
 
-![Edit Qna Maker settings](./media/integrations/qna-maker-edit-settings.png)
+![Edit Qna Maker settings](./media/integration/qna-maker-edit-settings.png)
 
 1. Select the cog in the side menu. This provides the ability to edit the **Dialog settings**. 
 
