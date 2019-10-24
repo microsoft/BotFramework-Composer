@@ -225,7 +225,15 @@ const updatePublishStatus: ReducerFunc = (state, payload) => {
 };
 
 const updateVisualEditorState: ReducerFunc = (state, { editorState }) => {
-  console.log('update visual state', state, editorState);
+  const arrayHasElements = (arr: any): boolean => Array.isArray(arr) && arr.length > 0;
+  const isVisualEditorActive = ({ selectedIds, focusedIds }): boolean => {
+    return arrayHasElements(selectedIds) || arrayHasElements(focusedIds);
+  };
+
+  const visualEditorActive = isVisualEditorActive(editorState);
+  if (visualEditorActive !== state.visualEditorActive) {
+    state.visualEditorActive = visualEditorActive;
+  }
   return state;
 };
 

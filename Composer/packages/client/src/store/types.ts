@@ -67,6 +67,7 @@ export interface State {
   publishVersions: any;
   publishStatus: any;
   lastPublishChange: any;
+  visualEditorActive: boolean;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
