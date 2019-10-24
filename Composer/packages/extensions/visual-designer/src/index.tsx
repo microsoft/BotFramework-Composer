@@ -8,6 +8,8 @@ import formatMessage from 'format-message';
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
+import { StoreContext } from './store/StoreContext';
+import useStore from './store/useStore';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -73,28 +75,32 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     });
   }, [focusedEvent, focusedSteps, focusedTab]);
 
+  const { state, dispatch } = useStore();
+
   return (
     <CacheProvider value={emotionCache}>
-      <NodeRendererContext.Provider value={context}>
-        <SelfHostContext.Provider value={hosted}>
-          <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-            <ObiEditor
-              key={dialogId}
-              path={dialogId}
-              data={data}
-              focusedSteps={focusedSteps}
-              onFocusSteps={onFocusSteps}
-              focusedEvent={focusedEvent}
-              onFocusEvent={onFocusEvent}
-              onOpen={(x, rest) => navTo(x, rest)}
-              onChange={x => saveData(x)}
-              onSelect={onSelect}
-              undo={undo}
-              redo={redo}
-            />
-          </div>
-        </SelfHostContext.Provider>
-      </NodeRendererContext.Provider>
+      <StoreContext.Provider value={{ state, dispatch }}>
+        <NodeRendererContext.Provider value={context}>
+          <SelfHostContext.Provider value={hosted}>
+            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+              <ObiEditor
+                key={dialogId}
+                path={dialogId}
+                data={data}
+                focusedSteps={focusedSteps}
+                onFocusSteps={onFocusSteps}
+                focusedEvent={focusedEvent}
+                onFocusEvent={onFocusEvent}
+                onOpen={(x, rest) => navTo(x, rest)}
+                onChange={x => saveData(x)}
+                onSelect={onSelect}
+                undo={undo}
+                redo={redo}
+              />
+            </div>
+          </SelfHostContext.Provider>
+        </NodeRendererContext.Provider>
+      </StoreContext.Provider>
     </CacheProvider>
   );
 };
