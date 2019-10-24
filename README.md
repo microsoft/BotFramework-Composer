@@ -22,7 +22,6 @@
 #### Develop
 - [Send messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
 - Ask for user input 
-  - Use numbers, dates and time, confirmation, multiple choices 
 - [Manage conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
 - Add LUIS to your bot
 - [Add QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md)
