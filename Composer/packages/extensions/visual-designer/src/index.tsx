@@ -10,6 +10,7 @@ import { NodeRendererContext } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { StoreContext } from './store/StoreContext';
 import useStore from './store/useStore';
+import setFocusState from './actions/setFocusState';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -45,7 +46,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     navTo,
     onFocusEvent,
     onFocusSteps,
-    onSelect,
     saveData,
     updateLgTemplate,
     getLgTemplates,
@@ -77,6 +77,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const { state, dispatch } = useStore();
 
+  useEffect(() => {
+    if (!isEqual(focusedSteps, state.focusedIds)) {
+      // NOTES: This hook works like 'componentWillReceiveProps'. Syncs props to store.
+      // TODO: remove this hook after fully adapting store to Shell.
+      dispatch(setFocusState(focusedSteps));
+    }
+  }, [focusedSteps]);
+
   return (
     <CacheProvider value={emotionCache}>
       <StoreContext.Provider value={{ state, dispatch }}>
@@ -88,12 +96,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 path={dialogId}
                 data={data}
                 focusedSteps={focusedSteps}
-                onFocusSteps={onFocusSteps}
+                onFocusSteps={(ids: string[], fragmentId?: string) => {
+                  dispatch(setFocusState(ids));
+                  onFocusSteps(ids, fragmentId);
+                }}
                 focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onOpen={(x, rest) => navTo(x, rest)}
                 onChange={x => saveData(x)}
-                onSelect={onSelect}
                 undo={undo}
                 redo={redo}
               />

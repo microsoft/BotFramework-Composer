@@ -10,6 +10,7 @@ import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import { ClipboardContext } from '../store/ClipboardContext';
+import { StoreContext } from '../store/StoreContext';
 import {
   deleteNode,
   insert,
@@ -23,6 +24,8 @@ import { moveCursor } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
+import setClipboard from '../actions/setClipboard';
+import setSelection from '../actions/setSelection';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -33,18 +36,22 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onFocusSteps,
   onOpen,
   onChange,
-  onSelect,
   undo,
   redo,
 }): JSX.Element | null => {
   let divRef;
 
+  const { state, dispatch } = useContext(StoreContext);
   const { focusedId, focusedEvent, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
     NodeRendererContext
   );
   const [clipboardContext, setClipboardContext] = useState({
     clipboardActions: [],
-    setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
+    setClipboardActions: actions => {
+      // TODO (ze): retire local context in following refactoring PR.
+      dispatch(setClipboard(actions));
+      setClipboardContext({ ...clipboardContext, clipboardActions: actions });
+    },
   });
 
   const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
@@ -198,9 +205,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     } else {
       setKeyBoardStatus('normal');
     }
-
-    // Notify container at every selection change.
-    onSelect(selectionContext.selectedIds);
   }, [focusedId, selectionContext]);
 
   useEffect(
@@ -224,6 +228,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         onFocusSteps(selectedIds);
       }
 
+      // TODO (ze): retire local context in following refactoring PR.
+      dispatch(setSelection(selectedIds));
       setSelectionContext({
         ...selectionContext,
         selectedIds,
@@ -357,7 +363,6 @@ ObiEditor.defaultProps = {
   onFocusEvent: () => {},
   onOpen: () => {},
   onChange: () => {},
-  onSelect: () => {},
   undo: () => {},
   redo: () => {},
 };
@@ -367,12 +372,15 @@ interface ObiEditorProps {
   // Obi raw json
   data: any;
   focusedSteps: string[];
+  /**
+   * @param {string[]} stepIds A list of Adaptive action's id to be selected.
+   * @param {string} [fragment] Id of selected fragment in an action. Fragment means small elements.
+   */
   onFocusSteps: (stepIds: string[], fragment?: string) => any;
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
-  onSelect: (selection: any) => any;
   undo?: () => any;
   redo?: () => any;
 }
