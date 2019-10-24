@@ -18,9 +18,9 @@ Developers familiar with the Bot Framework SDK will notice differences between b
 | Dialog structure | Combination of waterfall, prompt, component dialogs | Combination of adaptive dialogs | Able to leverge Language Generation (LG) with adaptive dialogs, which in turn allows for makes 1. Developing bots with personality 2. Handle interruptions easily |
 | Development environment | Write code (boilerplate and custom logic) in IDE | Drag-and-drop UI in BF Composer IDE| Lower barrier to entry for developers as they don't need to write custom code |
 | Runtime environment | Devleop bot locally, run in Emulator after entering credentials | Click "start bot", once started "click test in emulator"| Less time setting up environment and less steps needed to start a bot |
-| Language Understanding (LU) | Add LUIS credentials and methods to bot code, train models in LUIS | In-app LU | No longer need to set up or maintain LU, as it is maintained within app |
+| Language Understanding (LU) | Add LUIS credentials and methods to bot code, train models in LUIS | In-app LU | No longer need to set up or maintain LU model as it is maintained within app |
 
-As mentioned above, a major difference between the current version of the Bot Framework SDK and Bot Framework Composer is that the apps created using the Composer uses the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a JSON specification shared by many tools provided by the Bot Framework. 
+As mentioned above, a major difference between the current version of the Bot Framework SDK and Bot Framework Composer is that the apps created using the Composer uses the Adaptive Dialog format, a JSON specification shared by many tools provided by the Bot Framework. You can find more information about Adaptive Dialog [here](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog).
 
 You can manage BF Composer assests, such as Dialogs, LU training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
 
@@ -53,7 +53,7 @@ Creating grammatically correct, data-driven responses that also use a consistent
 
 With Language Generation (LG), previously complex tasks can be quickly achieved:
 
-    * *images for each of these?*
+ <!--   * *images for each of these?* -->
 * Include dynamic elements in messages
 * Generate grammatically correct lists, pronouns, articles
 * Provide context-sensitive variation in messages
@@ -62,7 +62,7 @@ With Language Generation (LG), previously complex tasks can be quickly achieved:
 
 ## Unified toolset
 
-Under the hood, Bot Framework Composer harnesses the power of many components from the Bot Framework. When building in Composer, developers will have access to:
+Under the hood, Bot Framework Composer harnesses the power of many of the components from the Bot Framework SDK. When building bots in Composer, developers will have access to:
 
 * [Adaptive Dialogs](Yan's link, or link to adaptive?) and the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk)
 * Natural Language Understanding service from [LUIS](https://www.luis.ai/home)
@@ -70,7 +70,7 @@ Under the hood, Bot Framework Composer harnesses the power of many components fr
 * Built-in [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) and [expression library](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator)
 
-After using Bot Framework Composer, the resulting bot project will contain reusable assets in the form of JSON and Markdown files that can be bundled and packaged with a bot's source code. These files can be used with a wide variety of compatible tools from the Bot Framework library.
+After creating bots with Bot Framework Composer, the resulting bot project will contain reusable assets in the form of JSON and Markdown files that can be bundled and packaged with a bot's source code. These files can be used with a wide variety of compatible tools from the Bot Framework library.
 
 ## Further reading
 
