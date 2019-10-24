@@ -11,18 +11,20 @@ Bot Framework Composer enables teams to create bots that use the latest features
 ![BF Composer](./media/introduction/bf_composer.png)
 
 ## Advantage of developing bots BotFramework Composer
-Developers familiar with the Bot Framework SDK will notice differences between bots developed with Bot Framework SDK and Bot Framwork Composer. The table below details key differences in both structure and functionality of elements associated with each type of bot:
+Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framwork Composer. The table below details key differences in both structure and functionality of elements associated with each type of bot:
 
 | Differences | Bots developed with *BF SDK* | Bots developed with *BF Composer*| Advantages | 
 |---|---|---|---|
-| Dialog structure* | Combination of waterfall, prompt, component dialogs | Combination of adaptive dialogs | Able to leverge LG with adaptive dialogs, which in turn allows for makes 1. Developing bots with personality 2. Handle interruptions easily |
+| Dialog structure | Combination of waterfall, prompt, component dialogs | Combination of adaptive dialogs | Able to leverge Language Generation (LG) with adaptive dialogs, which in turn allows for makes 1. Developing bots with personality 2. Handle interruptions easily |
 | Development environment | Write code (boilerplate and custom logic) in IDE | Drag-and-drop UI in BF Composer IDE| Lower barrier to entry for developers as they don't need to write custom code |
-| Runtime environment | Devleop bot locally, run in Emulator after entering credentials | click "start bot", once started "click test in emulator"| Less time setting up environment, and less steps needed to start a bot |
-| Language Understanding (LU) | Add LUIS credentials and methods to bot code, train models in LUIS | In-app NLU | No longer need to set up or maintain NLU, as it is maintained within app |
+| Runtime environment | Devleop bot locally, run in Emulator after entering credentials | Click "start bot", once started "click test in emulator"| Less time setting up environment and less steps needed to start a bot |
+| Language Understanding (LU) | Add LUIS credentials and methods to bot code, train models in LUIS | In-app LU | No longer need to set up or maintain LU, as it is maintained within app |
 
-* A major difference to note is that the Composer app uses the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data, and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates.
+As mentioned above, a major difference between the current version of the Bot Framework SDK and Bot Framework Composer is that the apps created using the Composer uses the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a JSON specification shared by many tools provided by the Bot Framework. 
 
-Overall the Bot Framework Composer makes it simpler and quicker for both experienced and novice developers to create robust bots by visualizing dialogs, leveraging lamguage generation (LG) to simplify complex tasks (interruption, developing bots with character, etc), reducing the number of steps necessary to gets bots running, and keeping and training of the NLU components of your bot all within the Bot Framework Composer.
+You can manage BF Composer assests, such as Dialogs, LU training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
+
+Overall the Bot Framework Composer makes it simpler and quicker for both experienced and novice developers to create robust bots by visualizing dialogs, leveraging language generation (LG) to simplify complex tasks (interruption, developing bots with character, etc), reducing the number of steps necessary to gets bots running, and keeping and training of the NLU components of your bot all within the Bot Framework Composer.
 <!--
 ## Bot Runtime Executable
 - easier process
@@ -34,7 +36,7 @@ Overall the Bot Framework Composer makes it simpler and quicker for both experie
 
 ## Language understanding (LU)
 
-Language understanding is a core component of Bot Framework Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
+Language understanding is a core component of BF Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
 As dialogs are edited in the designer, developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
 
