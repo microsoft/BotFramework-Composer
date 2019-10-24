@@ -29,18 +29,18 @@ Most dialogs contain an event handler configured to respond to the `BeginDialog`
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
-Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: LUIS recognizer (by default) and Regular Expression Recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. 
+Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Framework Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular Expression Recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. 
 
 ![recognizer](./media/dialog/recognizer.png)
 
 > [!NOTE]
-> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you will design and model your dialog system.   
+> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you design and model your dialog system.   
 
-Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Composer offers a wide range of action components such as `Send Messages` for sending messages and `Ask a Question` for prompts / asking questions. Users can also add branch and loop when design their dialog path using the `Flow` component, or use `Memory Manipulation` for setting properties and [memory use](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md). 
+Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Framework Composer offers a wide range of action components such as `Send Messages` for sending messages and `Ask a Question` for prompts / asking questions. Users can also add branchs and loops when designing their dialog path using the `Flow` component, or use `Memory Manipulation` for setting properties and [memory use](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md). 
 
 ![actions](./media/dialog/actions.png)
 
-As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and send them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram is an anatomy of a dialog in Bot Composer. The diagram is reproduced on the original [Anatomy: Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/anatomy-and-runtime-behavior.md#anatomy-adaptive-dialog) diagram with slight modifications to fit the context of Bot Composer. 
+As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and sends them back to the user. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. The following diagram shows the anatomy of a dialog in Bot Composer. 
 
 <p align="left">
     <img alt="Open samples" src="./media/dialog/DialogAnatomy.png" style="max-width:780px;" />
@@ -60,12 +60,12 @@ Below is a list of all the Dialog actions provided in Composer.
 
 | Dialog Action        | Description                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Begin a Dialog       | An action which begins another dialog. When that dialog is completed, it will return the caller.                                 |
-| End Dialog           | A command which ends the current dialog, returning the `resultProperty` as the result of the dialog.                             |
-| Cancel All Dialogs   | A command to cancel all of the current dialogs by emitting an event which must be caught to prevent cancelation from propagating |
+| Begin a Dialog       | An action that begins another dialog. When that dialog is completed, it will return to the caller.                                 |
+| End Dialog           | A command that ends the current dialog, returning the `resultProperty` as the result of the dialog.                             |
+| Cancel All Dialogs   | A command to cancel all of the current dialogs by emitting an event that must be caught to prevent cancelation from propagating |
 | End Turn             | A command to end the current turn without ending the dialog.                                                                     |
-| Repeat this Dialog   | An action which repeats the current dialog with the same dialog.                                                                 |
-| Replace this Dialog  | An action which replaces the current dialog with the target dialog.                                                              |
+| Repeat this Dialog   | An action that repeats the current dialog with the same dialog.                                                                 |
+| Replace this Dialog  | An action that replaces the current dialog with the target dialog.                                                              |
 | Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
 
 ## References 
