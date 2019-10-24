@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useMemo, useState } from 'react';
+import React, { useEffect, useContext, useMemo } from 'react';
 import { ShellData } from 'shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';

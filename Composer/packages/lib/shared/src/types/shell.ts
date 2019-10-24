@@ -89,6 +89,7 @@ export interface ShellData {
   };
   dialogId: string;
   dialogs: DialogInfo[];
+  focusedId: string;
   focusedEvent: string;
   focusedSteps: string[];
   focusedTab?: string;
