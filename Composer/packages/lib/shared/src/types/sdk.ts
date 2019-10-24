@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-interface BaseSchema {
+export interface BaseSchema {
   /** Defines the valid properties for the component you are configuring (from a dialog .schema file) */
   $type: string;
   /** Inline id for reuse of an inline definition */
