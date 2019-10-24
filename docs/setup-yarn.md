@@ -19,17 +19,18 @@ After cloning the repo open a terminal and navigate to the Bot Framework Compose
 ```
 yarn install
 ```
-This command gets all dependent packages.
+  This command gets all dependent packages.
 
 ```
 yarn build
 ```
-This command build the Composer app. The build process can take few minutes.
+  This command builds the Composer app. The build process can take few minutes.
 
 ```
 yarn startall
 ```
-This command starts the Composer authoring application and the CSharp Bot runtime. 
+  This command starts the Composer authoring application and the CSharp Bot runtime. 
 
-
-To use Composer open a browser and navigate to http://localhost:3000 or http://localhost:5000. 
+## Open Composer in a browser
+To use Composer open a browser and navigate to http://localhost:3000 or http://localhost:5000.
+![browser gif]()
