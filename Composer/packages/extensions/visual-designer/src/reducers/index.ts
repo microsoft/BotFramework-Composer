@@ -22,6 +22,7 @@ const globalReducer = (state: StoreState, { type, payload }) => {
       return {
         ...state,
         focusedIds: cloneDeep(payload.ids) || [],
+        selectedIds: [],
       };
     case CLEAR_SELECTIONSTATE:
       if (!state.focusedIds.length && !state.selectedIds.length) {
