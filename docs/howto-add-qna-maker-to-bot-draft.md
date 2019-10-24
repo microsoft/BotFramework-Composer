@@ -8,11 +8,21 @@ Add QnA Maker to your bot when you want to send a user question to your bot then
 
 1. In the flow designer, select the event handler, **+**. This displays the action components list. 
 
-1. Select **Integrations**.
+1. Select **Integrations**, then **QnAMakerDialog** . This displays the list of settings. 
 
-1. Select **QnAMakerDialog** . This displays the list of settings you can edit or review. 
+    While you can edit settings in the panel, a security best practice is to edit security-related settings from the **Setting** menu. This menu writes the values to the `appsettings.json` file. This restricts settings to the browser session.
 
-    While you can edit settings in the panel, a security best practice is to edit settings from the **Setting** menu. This restricts settings to the browser session.
+    Security-related settings are referenced by the property location in `appsettings.json` file. 
+
+## Review settings
+
+Review the QnA Maker settings panel when selecting the QnA Maker dialog. If you edit the settings from this panel, these settings are less secure because they are written to the dialog file. If you are not concerned with security of the file, you can edit the settings in the panel. They are saved to the dialog settings used in the browser session. 
+
+![Review Qna Maker settings](./media/integrations/qna-maker-review-settings.png)
+
+The values for `KnowledgeBase id`, `Endpoint Key`, and `Hostname` as shown in the preceding screenshot are locations for the values in the `appsettings.json` file. Do not change these values in this panel. Changes made to this panel are saved to a file on disk. If you manage the Composer files with source control, the security settings saved in the panel will also be checked into source control.  
+
+Editing from the **Settings** menu of Composer saves the changes to the `appsettings.json` file which should be ignored by your source control software.
 
 ## Required and optional settings
 
@@ -40,9 +50,11 @@ Securely editing the QnA Maker settings should be completed using **Settings**. 
 
 1. Edit the values for the knowledge base ID, the endpoint key, and the host name. The endpoint key and host name are available from the QnA Maker portal's **Publish** page.  
 
-## Review settings
+## Knowledge base limits
 
-Review the QnA Maker settings panel when selecting the QnA Maker dialog. If you edit the settings from this panel, these settings are less secure because they are written to the dialog file. If you are not concerned with security of the file, you can edit the settings in the panel. They are saved to the dialog settings used in the browser session. 
+Composer allows for a bot to connect to one knowledge base with one or more dialog integrations. 
 
-![Review Qna Maker settings](./media/integrations/qna-maker-review-settings.png)
+If you need to connect to multiple knowledge bases, you can use a Composer integration for the first knowledge base, then use an other knowledge bases from within the code of the bot, instead of the flow designer. 
+
+A best practice is to merge all knowledge bases of a bot into a single knowledge base. 
 
