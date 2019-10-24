@@ -23,19 +23,13 @@ You create a dialog in the Bot Framework Composer to manage a conversation objec
 At runtime, the main dialog is called into action and becomes an active dialog, triggering event handlers with pre-defined actions in the main dialog. As the conversation flows, a child dialog can be called by a main dialog, and then vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a dialog 
-In Bot Framework Composer, each dialog is a dialog class that contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Bot Framework Composer provides five different types of triggers in a dialog: 
+A dialog contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Bot Framework Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`.
 
-- `Handle an Intent`
-- `Handle Unknown Intent`
-- `Handle a Dialog Event`
-- `Handle an Event: Activity`
-- `Handle a Custom Event`
-
-Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. You can read the [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) concept article for more information on events and triggers in Composer. 
+Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event are actions that should fire immediately every time the dialog starts. For more information, see [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md).
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
-Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: LUIS recognizer (by default) and Regular Expression Recognizer. You can ONLY choose one type of recognizer for each dialog. A dialog can have no recognizer. 
+Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Composer currently supports two types of recognizers: LUIS recognizer (by default) and Regular Expression Recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. 
 
 ![recognizer](./media/dialog/recognizer.png)
 
