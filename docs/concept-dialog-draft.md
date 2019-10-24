@@ -1,8 +1,10 @@
 # Dialogs 
 
-In Bot Framework Composer, dialogs are functional components offered in a visual interface. These Dialogs are based on [Adaptive Dialog](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme), which is a derivative of a Dialog and interacts with the rest of the SDK dialog system. 
+In Bot Framework Composer, dialogs are functional components offered in a visual interface and does not require you to write code. The dialog system supports building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs help users focus on conversation modeling rather than the mechanics of dialog management.
+
+[Note:] The dialog system in Bot Framework Composer is based on [Adaptive Dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
  
-The dialog authoring experience in Bot Framework Composer does not require you to write code. The dialog system supports building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs help users focus on conversation modeling rather than the mechanics of dialog management.  
+  
 
 ## Types of dialogs  
 There are two types of dialogs: 
