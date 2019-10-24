@@ -25,7 +25,10 @@ describe('<VisualDesigner />', () => {
         dialogId="SomeDialog"
         focusedEvent="events[0]"
         focusedSteps={['events[0].steps[0]']}
-        shellApi={{}}
+        focusedTab=""
+        shellApi={{
+          saveData: () => {},
+        }}
       />
     );
 

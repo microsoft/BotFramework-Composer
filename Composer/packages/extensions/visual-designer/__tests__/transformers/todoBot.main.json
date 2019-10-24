@@ -11,37 +11,37 @@
       "$type": "Microsoft.RegexRecognizer",
       "intents": [
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "AddIntent",
-            "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
+            "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
         },
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "ClearIntent",
-            "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)" 
+            "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
         },
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "DeleteIntent",
-            "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
+            "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
         },
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "ShowIntent",
-            "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)" 
+            "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)"
         },
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "HelpIntent",
-            "pattern": "(?i)help" 
+            "pattern": "(?i)help"
         },
         {
-  
+
             "$type": "Microsoft.IntentPattern",
             "intent": "CancelIntent",
             "pattern": "(?i)cancel|never mind"
@@ -49,7 +49,7 @@
     ]
     },
     "generator": "common.lg",
-    "events": [
+    "triggers": [
       {
         "$type": "Microsoft.OnConversationUpdateActivity",
         "$designer": {
@@ -190,4 +190,3 @@
     ],
     "$schema": "../../app.schema"
   }
-  

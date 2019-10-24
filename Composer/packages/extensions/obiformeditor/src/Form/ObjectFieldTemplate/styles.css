@@ -1,18 +1,37 @@
 .ObjectItem {
   display: flex;
 }
+
 .ObjectItem .ObjectItemField {
   flex: 1;
+  padding: 0px 18px;
+  margin: 10px 0;
 }
-.ObjectItem .ObjectItemField .BaseField {
-  margin-top: 10px;
-}
+
 .ObjectItem .ObjectItemContext {
   flex-basis: auto;
   margin-left: 15px;
   display: flex;
   align-items: flex-end;
 }
-.ObjectItem + .ObjectItem {
-  margin-top: 10px;
+
+.ObjectItem .ObjectItemContainer {
+  padding: 24px 0;
+  border-top: 1px solid #c8c6c4;
+  border-bottom: 1px solid #c8c6c4;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* override styles when next to other bordered sections */
+.RootFieldTitle + .ObjectItem .ObjectItemContainer,
+.ObjectItem .ObjectItemContainer + .ObjectItem .ObjectItemContainer,
+.ObjectItem .ObjectItemContainer + .RootFieldMetaData {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.ObjectItem .ObjectItemContainer .ObjectItemField {
+  margin: 0;
 }

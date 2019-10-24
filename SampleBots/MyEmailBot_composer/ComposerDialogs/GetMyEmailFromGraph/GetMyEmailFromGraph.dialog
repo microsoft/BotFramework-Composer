@@ -1,0 +1,27 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "events": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+          "method": "GET",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "resultProperty": "user.getGraphEmails"
+        }
+      ],
+      "$designer": {
+        "id": "897738"
+      }
+    }
+  ],
+  "$schema": "../../../app.schema",
+  "$designer": {
+    "id": "932164"
+  }
+}

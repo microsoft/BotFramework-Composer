@@ -1,0 +1,176 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "735299"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "833026"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "697543"
+          },
+          "property": "dialog.item",
+          "value": "@promptContentML"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "440899"
+          },
+          "property": "dialog.listName",
+          "value": "@ListType"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "626333"
+          },
+          "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "697543"
+              },
+              "activity": "[bfdactivity-697543]"
+            },
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "id": "358588"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "082258"
+          },
+          "condition": "dialog.listName == null",
+          "actions": [
+            {
+              "$type": "Microsoft.ChoiceInput",
+              "$designer": {
+                "id": "626333"
+              },
+              "property": "dialog.listName",
+              "prompt": "Which list do you want to remove?",
+              "maxTurnCount": 3,
+              "alwaysPrompt": true,
+              "allowInterruptions": false,
+              "outputFormat": "value",
+              "choices": [
+                {
+                  "value": "shopping",
+                  "synonyms": ["1", "first", "shopping", "first one"]
+                },
+                {
+                  "value": "grocery",
+                  "synonyms": ["2", "second", "grocery", "second one"]
+                },
+                {
+                  "value": "todo",
+                  "synonyms": ["3", "third", "todo", "third one", "to do"]
+                }
+              ],
+              "appendChoices": true,
+              "defaultLocale": "en-us",
+              "style": "SuggestedAction",
+              "choiceOptions": {
+                "inlineSeparator": ", ",
+                "inlineOr": " or ",
+                "inlineOrMore": ", or ",
+                "includeNumbers": true
+              },
+              "recognizerOptions": {
+                "noValue": false
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "297609"
+          },
+          "condition": "user.lists == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "238900"
+              },
+              "property": "user.lists",
+              "type": "object"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "135758"
+          },
+          "condition": "dialog.item == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "251880"
+              },
+              "property": "dialog.item",
+              "prompt": "Please enter the title of your item.",
+              "maxTurnCount": 3,
+              "alwaysPrompt": false,
+              "allowInterruptions": "false",
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "577484"
+          },
+          "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "678664"
+              },
+              "property": "getProperty(user.lists, dialog.listName)",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "451376"
+          },
+          "changeType": "Remove",
+          "itemsProperty": "getProperty(user.lists, dialog.listName)",
+          "value": "dialog.item"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "737534"
+          },
+          "activity": "[bfdactivity-737534]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

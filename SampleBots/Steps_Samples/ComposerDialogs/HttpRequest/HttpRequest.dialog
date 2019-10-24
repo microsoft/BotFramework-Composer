@@ -1,0 +1,115 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "351884"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "898827"
+      },       
+      "actions": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "738240"
+          },
+          "property": "user.petname",
+          "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "allowInterruptions": "true",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "229784"
+          },
+          "activity": "[bfdactivity-229784]"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "665408"
+          },
+          "property": "user.petid",
+          "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "845107"
+          },
+          "method": "POST",
+          "url": "http://petstore.swagger.io/v2/pet",
+          "body": {
+            "id": "{user.petid}",
+            "category": {
+              "id": 0,
+              "name": "string"
+            },
+            "name": "{user.petname}",
+            "photoUrls": [
+              "string"
+            ],
+            "tags": [
+              {
+                "id": 0,
+                "name": "string"
+              }
+            ],
+            "status": "available"
+          },
+          "resultProperty": "user.postResponse",
+          "headers": {
+            "test": "test",
+            "test2": "test2"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "200761"
+          },
+          "activity": "[bfdactivity-200761]"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "797897"
+          },
+          "property": "user.id",
+          "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",          
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "705959"
+          },
+          "method": "GET",
+          "url": "http://petstore.swagger.io/v2/pet/{user.id}",
+          "resultProperty": "user.getResponse"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "212615"
+          },
+          "activity": "[bfdactivity-212615]"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.token == null",
+          "actions": [
+            {
+              "$type": "Microsoft.OAuthInput",
+              "timeout": "900000",
+              "connectionName": "connection_t-hahan",
+              "title": "Log in",
+              "text": "Please Log in to Your Email Account",
+              "property": "user.token",
+              "$designer": {
+                "id": "986551"
+              }
+            }
+          ],
+          "$designer": {
+            "id": "673634"
+          }
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "method": "GET",
+          "url": "https://graph.microsoft.com/v1.0/me/",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "resultProperty": "user.Info",
+          "$designer": {
+            "id": "125222"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.Name",
+          "value": "user.Info.displayName",
+          "$designer": {
+            "id": "430037"
+          }
+        }
+      ],
+       
+      "$designer": {
+        "id": "415911"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "523542"
+  }
+}

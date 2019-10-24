@@ -1,0 +1,36 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "433224",
+    "description": "This bot accepts input from the user and echoes it back."
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "recognizer": "Main.lu",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "821845"
+      },
+      
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "003038"
+          },
+          "activity": "[bfdactivity-003038]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+    }
+  ]
+}

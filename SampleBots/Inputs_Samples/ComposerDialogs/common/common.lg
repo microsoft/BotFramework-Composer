@@ -1,0 +1,77 @@
+# help
+-```Welcome to Input Sample Bot.
+I can show you examples on how to use actions, You can enter number 01-04
+01 - TextInput
+02 - NumberInput
+03 - ConfirmInput
+04 - ChoiceInput
+05 - AttachmentInput
+06 - DateTimeInput
+07 - OAuthInput```
+
+# ShowImage(contentUrl, contentType)
+[HeroCard
+    title = Here is the attachment
+    image = @{contentUrl}]
+
+# ShowEmailSummary(user)
+- IF: @{count(user.getGraphEmails.value) == 1}
+  - You have {count(user.getGraphEmails.value)} email. This email is [ShowEmail(user.getGraphEmails.value[0])].
+- ELSEIF: @{count(user.getGraphEmails.value) >= 2}
+  - You have {count(user.getGraphEmails.value)} emails, the first email is [ShowEmail(user.getGraphEmails.value[0])].
+- ELSEIF: @{count(user.getGraphEmails.value) == 0}
+  - You don't have any email.
+- ELSE:
+  - You should not be here.
+
+# ShowEmail(email)
+- {email.subject}
+
+# bfdactivity-068558
+-[help]
+
+# bfdactivity-587377
+-[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
+
+# bfdactivity-004212
+-You select: {user.style}
+
+# bfdactivity-458458
+-confirmation: {user.confirmed}
+
+# bfdactivity-828009
+-You entered: {user.date[0].value}
+
+# bfdactivity-303304
+-Hello, your age is {user.age}!
+
+# bfdactivity-284482
+-2 * 2.2 equals {user.result}, that's right!
+
+# bfdactivity-172233
+-2 * 2.2 equals {user.result}, that's wrong!
+
+# bfdactivity-538962
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-118486
+-Hello {user.name}, nice to talk to you!
+
+# bfdactivity-509484
+-[help]
+
+# bfdactivity-991558
+-[ShowEmailSummary(user)]
+
+# Welcome
+-Welcome to input samples.
+
+# bfdactivity-365176
+-[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
+
+# bfdactivity-581197
+-[help]
+
+# bfdactivity-172545
+- Welcome to Input Sample Bot.
+

@@ -1,0 +1,206 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "937757",
+    "description": "This is a bot that demonstrates the ability to send different Cards to users."
+  },
+  "autoEndDialog": false,
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "359223"
+          },
+          "property": "user.choice",
+          "prompt": "Which card would you like to display?",
+          "maxTurnCount": "2147483647",
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "HeroCard"
+            },
+            {
+              "value": "ThumbnailCard"
+            },
+            {
+              "value": "SigninCard"
+            },
+            {
+              "value": "AnimationCard"
+            },
+            {
+              "value": "VideoCard"
+            },
+            {
+              "value": "AudioCard"
+            },
+            {
+              "value": "AdaptiveCard"
+            },
+            {
+              "value": "AllCards"
+            }
+          ],
+          "appendChoices": "true",
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false,
+            "noAction": false
+          }
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "condition": "user.choice",
+          "cases": [
+            {
+              "value": "HeroCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "159442"
+                  },
+                  "activity": "[bfdactivity-159442]"
+                }
+              ]
+            },
+            {
+              "value": "ThumbnailCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "762914"
+                  },
+                  "activity": "[bfdactivity-762914]"
+                }
+              ]
+            },
+            {
+              "value": "SigninCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "241579"
+                  },
+                  "activity": "[bfdactivity-241579]"
+                }
+              ]
+            },
+            {
+              "value": "AnimationCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "901582"
+                  },
+                  "activity": "[bfdactivity-901582]"
+                }
+              ]
+            },
+            {
+              "value": "VideoCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "553859"
+                  },
+                  "activity": "[bfdactivity-553859]"
+                }
+              ]
+            },
+            {
+              "value": "AudioCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "190928"
+                  },
+                  "activity": "[bfdactivity-190928]"
+                }
+              ]
+            },
+            {
+              "value": "AdaptiveCard",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "806895"
+                  },
+                  "activity": "[bfdactivity-806895]"
+                }
+              ]
+            },
+            {
+              "value": "AllCards",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send an Activity",
+                    "id": "997450"
+                  },
+                  "activity": "[bfdactivity-997450]"
+                }
+              ]
+            }
+          ],
+          "$designer": {
+            "id": "304837"
+          }
+        },
+        {
+          "$type": "Microsoft.RepeatDialog",
+          "$designer": {
+            "id": "831626"
+          }
+        }
+      ],
+      "$designer": {
+        "id": "392502"
+      }
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "729500"
+          },
+          "activity": "[bfdactivity-729500]"
+        }
+      ],
+      "$designer": {
+        "id": "109137"
+      }
+    }
+  ],
+  "$schema": "../../app.schema"
+}

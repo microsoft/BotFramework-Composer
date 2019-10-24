@@ -7,7 +7,6 @@ import {
   IContextualMenuItem,
   IButtonStyles,
   IButton,
-  createRef,
 } from 'office-ui-fabric-react';
 
 interface IconMenuProps {
@@ -15,7 +14,11 @@ interface IconMenuProps {
   dataTestId?: string;
   iconName: string;
   iconSize?: number;
-  iconStyles?: object;
+  iconStyles?: {
+    background?: string;
+    color?: string;
+    selectors?: { [key: string]: any };
+  };
   label?: string;
   menuItems: any[];
   menuWidth?: number;
@@ -39,7 +42,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = createRef<IButton>();
+  const buttonRef = useRef<IButton>();
 
   useEffect((): void => {
     if (nodeSelected) {
@@ -51,23 +54,38 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       return null;
     }
 
+    const { background, color, selectors } = iconStyles || {
+      background: undefined,
+      color: undefined,
+      selectors: undefined,
+    };
+
     const buttonStyles: IButtonStyles = {
       root: {
         minWidth: 0,
         padding: '0 4px',
+        margin: 0,
         alignSelf: 'stretch',
         height: 'auto',
         color: '#000000',
-        ...iconStyles,
+        background: background || 'transparent',
+        selectors,
+      },
+      rootHovered: {
+        background: background || 'transparent',
+      },
+      rootChecked: {
+        background: background || 'transparent',
       },
     };
 
     return (
       <IconButton
+        // @ts-ignore
         componentRef={buttonRef}
         data-testid="iconMenu"
         styles={buttonStyles}
-        menuIconProps={{ iconName, style: { fontSize: iconSize } }}
+        menuIconProps={{ iconName, style: { fontSize: iconSize, color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
         ariaLabel={label}
         {...rest}

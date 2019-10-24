@@ -1,0 +1,115 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteContactInfo",
+          "$designer": {
+            "id": "400733"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Find Your Recipient. ",
+          "$designer": {
+            "id": "076321"
+          }
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "outputFormat": "none",
+          "allowInterruptions": "false",
+          "property": "user.recipient",
+          "prompt": "Please Type any part of Name of Your Recipient, or, You Can Type the whole Email Address.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": false,
+          "$designer": {
+            "id": "789212"
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "not(contains(user.recipient, '@'))",
+          "actions": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "GetRecipientFromGraph",
+              "$designer": {
+                "id": "488020"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "806792"
+              },
+              "activity": "[bfdactivity-806792]"
+            },
+            {
+              "$type": "Microsoft.IfCondition",
+              "condition": "count(user.intentRecipient.value) != 1",
+              "actions": [
+                {
+                  "$type": "Microsoft.RepeatDialog",
+                  "$designer": {
+                    "id": "468938"
+                  }
+                }
+              ],
+              "$designer": {
+                "id": "644261"
+              }
+            },
+            {
+              "$type": "Microsoft.SetProperty",
+              "property": "user.emailAddr",
+              "value": "user.intentRecipient.value[0].emailAddresses[0].address",
+              "$designer": {
+                "id": "550113"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "993453"
+              },
+              "activity": "[bfdactivity-993453]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "property": "user.emailAddr",
+              "value": "user.recipient",
+              "$designer": {
+                "id": "913920"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "315212"
+              },
+              "activity": "[bfdactivity-315212]"
+            }
+          ],
+          "$designer": {
+            "id": "824184"
+          }
+        }
+      ],
+      "$designer": {
+        "id": "620051"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "469850"
+  }
+}

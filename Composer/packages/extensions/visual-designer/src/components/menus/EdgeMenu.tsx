@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup } from 'shared-menus';
+import { createStepMenu, DialogGroup, SDKTypes } from 'shared';
+import { IContextualMenu } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { ClipboardContext } from '../../store/ClipboardContext';
+import { SelectionContext } from '../../store/SelectionContext';
+import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
-import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
 
@@ -15,16 +18,51 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
-const declareElementAttributes = (id: string) => {
-  return {
-    [AttrNames.SelectableElement]: true,
-    [AttrNames.EdgeMenuElement]: true,
-    [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
-  };
+const buildEdgeMenuItemsFromClipboardContext = (
+  context,
+  onClick,
+  filter?: (t: SDKTypes) => boolean
+): IContextualMenu[] => {
+  const { clipboardActions } = context;
+  const menuItems = createStepMenu(
+    [
+      DialogGroup.RESPONSE,
+      DialogGroup.INPUT,
+      DialogGroup.BRANCHING,
+      DialogGroup.STEP,
+      DialogGroup.MEMORY,
+      DialogGroup.CODE,
+      DialogGroup.LOG,
+    ],
+    true,
+    (e, item) => onClick(item ? item.$type : null),
+    filter
+  );
+
+  if (clipboardActions.length) {
+    menuItems.unshift({
+      key: 'Paste',
+      name: 'Paste',
+      style: { color: 'lightblue' },
+      onClick: () => onClick('PASTE'),
+    });
+  }
+  return menuItems;
 };
+
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
+  const clipboarcContext = useContext(ClipboardContext);
+  const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
+  const declareElementAttributes = (id: string) => {
+    return {
+      [AttrNames.SelectableElement]: true,
+      [AttrNames.EdgeMenuElement]: true,
+      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
+    };
+  };
+
   return (
     <div
       style={{
@@ -42,21 +80,26 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     >
       <IconMenu
         iconName="Add"
-        iconStyles={{ background: 'white', color: '#005CE6' }}
+        iconStyles={{
+          background: 'white',
+          color: '#005CE6',
+          selectors: {
+            ':focus': {
+              outline: 'none',
+              selectors: {
+                '::after': {
+                  outline: 'none !important',
+                },
+              },
+            },
+          },
+        }}
         iconSize={10}
         nodeSelected={nodeSelected}
-        menuItems={createStepMenu(
-          [
-            DialogGroup.RESPONSE,
-            DialogGroup.INPUT,
-            DialogGroup.BRANCHING,
-            DialogGroup.STEP,
-            DialogGroup.MEMORY,
-            DialogGroup.CODE,
-            DialogGroup.LOG,
-          ],
-          true,
-          (e, item) => onClick(item ? item.$type : null)
+        menuItems={buildEdgeMenuItemsFromClipboardContext(
+          clipboarcContext,
+          onClick,
+          selfHosted ? x => x !== SDKTypes.LogAction : undefined
         )}
         label={formatMessage('Add')}
         {...rest}

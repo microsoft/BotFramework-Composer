@@ -1,0 +1,133 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "327317"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "515654"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "179183"
+          },
+          "property": "dialog.listName",
+          "value": "@ListType"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "049005"
+          },
+          "condition": "user.lists == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "198534"
+              },
+              "property": "user.lists",
+              "type": "object"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "488882"
+          },
+          "condition": "dialog.listName == null",
+          "actions": [
+            {
+              "$type": "Microsoft.ChoiceInput",
+              "$designer": {
+                "id": "288302"
+              },
+              "property": "dialog.listName",
+              "prompt": "Which list do you want to show?",
+              "maxTurnCount": 3,
+              "alwaysPrompt": true,
+              "allowInterruptions": false,
+              "outputFormat": "value",
+              "choices": [
+                {
+                  "value": "shopping",
+                  "synonyms": [
+                    "1",
+                    "first",
+                    "shopping",
+                    "first one"
+                  ]
+                },
+                {
+                  "value": "grocery",
+                  "synonyms": [
+                    "2",
+                    "second",
+                    "grocery",
+                    "second one"
+                  ]
+                },
+                {
+                  "value": "todo",
+                  "synonyms": [
+                    "3",
+                    "third",
+                    "todo",
+                    "third one",
+                    "to do"
+                  ]
+                }
+              ],
+              "appendChoices": true,
+              "defaultLocale": "en-us",
+              "style": "SuggestedAction",
+              "choiceOptions": {
+                "inlineSeparator": ", ",
+                "inlineOr": " or ",
+                "inlineOrMore": ", or ",
+                "includeNumbers": true
+              },
+              "recognizerOptions": {
+                "noValue": false
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "064151"
+          },
+          "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "896478"
+              },
+              "activity": "[bfdactivity-896478]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "064151"
+              },
+              "activity": "[bfdactivity-064151]"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

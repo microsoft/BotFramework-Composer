@@ -1,5 +1,5 @@
 export const ObiFieldNames = {
-  Events: 'events',
+  Events: 'triggers',
   Actions: 'actions',
   ElseActions: 'elseActions',
   Condition: 'condition',

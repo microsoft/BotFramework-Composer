@@ -2,6 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
+import { isAbsHosted } from '../utils/envUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -14,8 +15,10 @@ import { ActionType } from './action/types';
 const initialState: State = {
   dialogs: [],
   botName: '',
+  location: '', // the path to the bot project
   botEnvironment: 'production',
   botEndpoint: '',
+  remoteEndpoints: {},
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
   templateProjects: [],
@@ -27,7 +30,7 @@ const initialState: State = {
   templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
-  schemas: {},
+  schemas: { editor: {} },
   luFiles: [],
   designPageLocation: {
     dialogId: '',
@@ -44,6 +47,9 @@ const initialState: State = {
     token: null,
     sessionExpired: false,
   },
+  publishVersions: {},
+  publishStatus: 'inactive',
+  lastPublishChange: null,
 };
 
 interface StoreContextValue {

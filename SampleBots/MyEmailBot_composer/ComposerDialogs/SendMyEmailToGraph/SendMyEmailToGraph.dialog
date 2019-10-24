@@ -1,0 +1,43 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/v1.0/me/sendMail",
+          "method": "POST",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "body": {
+            "message": {
+              "subject": "{user.subject}",
+              "body": {
+                "contentType": "Text",
+                "content": "{user.sendContext}"
+              },
+              "toRecipients": [
+                {
+                  "emailAddress": {
+                    "address": "{user.emailAddr}"
+                  }
+                }
+              ]
+            }
+          },
+          "resultProperty": "user.response"
+        }
+      ],      
+      "$designer": {
+        "id": "424539"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "063791"
+  }
+}

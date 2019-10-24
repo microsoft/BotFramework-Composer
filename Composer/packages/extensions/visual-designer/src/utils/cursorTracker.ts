@@ -39,7 +39,6 @@ function localeNearestElement(
   let bounds: ClientRect;
   let assistMinDistance = 10000;
   let assistDistance;
-  const isInvolved = false;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
@@ -61,7 +60,7 @@ function localeNearestElement(
       assistDistance = Math.abs(
         currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
       );
-      if (distance > 0 && distance <= minDistance && assistMinDistance > assistDistance) {
+      if (distance > 0 && distance <= minDistance && assistMinDistance >= assistDistance) {
         neareastElement = element;
         minDistance = distance;
         assistMinDistance = assistDistance;
@@ -185,7 +184,8 @@ export function moveCursor(
   element.scrollIntoView(true);
 
   return {
-    selected: element.dataset.selectedId || id,
-    focused: element.dataset.focusedId,
+    selected: element.getAttribute(AttrNames.SelectedId) || id,
+    focused: element.getAttribute(AttrNames.FocusedId) || undefined,
+    tab: element.getAttribute(AttrNames.Tab) || '',
   };
 }

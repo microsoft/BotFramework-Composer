@@ -1,58 +1,37 @@
-import React from 'react';
-import { Customizer } from 'office-ui-fabric-react';
-import { FluentCustomizations } from '@uifabric/fluent-theme';
+import React, { useState } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
+import { appschema, ShellData, ShellApi } from 'shared';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
-import { appschema } from './schema/appschema';
-import { getMemoryOptions, getTimestamp } from './Form/utils';
-import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
-
-import './FormEditor.css';
+import { getMemoryOptions } from './Form/utils';
+import { FormMemory, FormData } from './types';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
 };
 
-export interface FormEditorProps {
-  data: FormData;
-  currentDialog: DialogInfo;
-  dialogs: DialogInfo[];
-  focusPath: string;
-  focusedEvent: string;
-  focusedSteps: string[];
-  isRoot: boolean;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
+export interface FormEditorProps extends ShellData {
   memory: FormMemory;
   onBlur?: () => void;
   onChange: (newData: object, updatePath?: string) => void;
-  schemas: EditorSchema;
   shellApi: ShellApi;
-}
-
-function updateDesigner(data) {
-  if (data && data.$designer) {
-    data.$designer.updatedAt = getTimestamp();
-  }
-
-  return data;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const { data, schemas, memory, dialogs, shellApi } = props;
-  const type = getType(data);
+  const [localData, setLocalData] = useState(data);
+  const type = getType(localData);
 
   if (!type) {
     return (
       <div>
         Malformed data: missing $type.
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{JSON.stringify(localData, null, 2)}</pre>
       </div>
     );
   }
@@ -64,7 +43,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     return (
       <div>
         Malformed data: missing type defintion in schema.
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre>{JSON.stringify(localData, null, 2)}</pre>
       </div>
     );
   }
@@ -81,8 +60,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const dialogOptions = dialogs.map(f => ({ value: f.id, label: f.displayName }));
 
   const onChange = newValue => {
-    if (!isEqual(newValue.formData, data)) {
-      props.onChange(updateDesigner(newValue.formData));
+    if (!isEqual(newValue.formData, localData)) {
+      props.onChange(newValue.formData);
+      setLocalData(newValue.formData);
     }
   };
 
@@ -93,43 +73,44 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const memoryOptions = getMemoryOptions(memory);
 
   return (
-    <Customizer {...FluentCustomizations}>
-      <div className="App">
-        {memoryOptions.length > 0 && (
-          <Dropdown
-            style={{ width: '300px', paddingBottom: '10px' }}
-            placeholder="Memory available to this Dialog"
-            options={memoryOptions}
-            onChange={onMemoryDropdownChange}
-            onFocus={() => {}}
-            selectedKey={null}
-          />
-        )}
-        <Form
-          noValidate
-          className="schemaForm"
-          onChange={onChange}
-          formData={data}
-          onBlur={props.onBlur}
-          schema={dialogSchema}
-          uiSchema={dialogUiSchema}
-          formContext={{
-            shellApi,
-            dialogOptions,
-            editorSchema: schemas.editor,
-            rootId: props.focusPath,
-            luFiles: props.luFiles,
-            lgFiles: props.lgFiles,
-            currentDialog: props.currentDialog,
-            dialogId: get(data, '$designer.id'),
-            isRoot: props.focusPath.endsWith('#'),
-          }}
-          idPrefix={props.focusPath}
-        >
-          <button style={{ display: 'none' }} />
-        </Form>
-      </div>
-    </Customizer>
+    <div>
+      {memoryOptions.length > 0 && (
+        <Dropdown
+          style={{ width: '300px', paddingBottom: '10px', paddingLeft: '18px', paddingTop: '18px' }}
+          placeholder="Memory available to this Dialog"
+          options={memoryOptions}
+          onChange={onMemoryDropdownChange}
+          onFocus={() => {}}
+          selectedKey={null}
+        />
+      )}
+      <Form
+        noValidate
+        className="schemaForm"
+        onChange={onChange}
+        formData={localData}
+        onBlur={props.onBlur}
+        schema={dialogSchema}
+        uiSchema={dialogUiSchema}
+        formContext={{
+          shellApi,
+          dialogOptions,
+          editorSchema: schemas.editor,
+          rootId: props.focusPath,
+          luFiles: props.luFiles,
+          lgFiles: props.lgFiles,
+          currentDialog: props.currentDialog,
+          dialogId: get(data, '$designer.id'),
+          isRoot: props.focusPath.endsWith('#'),
+          focusedEvent: props.focusedEvent,
+          focusedSteps: props.focusedSteps,
+          focusedTab: props.focusedTab,
+        }}
+        idPrefix={props.focusPath}
+      >
+        <button style={{ display: 'none' }} />
+      </Form>
+    </div>
   );
 };
 

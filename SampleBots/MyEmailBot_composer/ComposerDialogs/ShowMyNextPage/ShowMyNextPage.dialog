@@ -1,0 +1,24 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.pages + 1",
+          "property": "user.pages"
+        }
+      ],
+       
+      "$designer": {
+        "id": "576693"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "282607"
+  }
+}

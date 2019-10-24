@@ -1,11 +1,13 @@
 ﻿using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Bot.Builder.LanguageGeneration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,7 +18,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder.TestBot.Json
+namespace Microsoft.Bot.Builder.ComposerBot.json
 {
     public interface IBotManager
     {
@@ -69,11 +71,11 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             adapter
               .UseStorage(storage)
               .UseState(userState, conversationState)
-              .UseLanguageGeneration(resourceExplorer)
-              .UseDebugger(4712)
+              .UseAdaptiveDialogs()
+              .UseResourceExplorer(resourceExplorer)
+              .UseLanguageGeneration(resourceExplorer, "common.lg")
               .Use(new RegisterClassMiddleware<IConfiguration>(Config))
-              .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
-              .UseResourceExplorer(resourceExplorer);
+              .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
               
             adapter.OnTurnError = async (turnContext, exception) =>
             {
@@ -84,7 +86,7 @@ namespace Microsoft.Bot.Builder.TestBot.Json
             };
             CurrentAdapter = adapter;
 
-            CurrentBot = new TestBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceRegistry);
+            CurrentBot = new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap);
         }
 
         public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null)

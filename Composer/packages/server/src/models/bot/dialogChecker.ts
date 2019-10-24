@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import get from 'lodash.get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 const ExpressionParser = new ExpressionEngine();
@@ -58,7 +58,7 @@ export const DialogChecker: { [key: string]: CheckerFunc[] } = {
   'Microsoft.IfCondition': [IsExpression('condition')],
   'Microsoft.SwitchCondition': [IsExpression('condition')],
   'Microsoft.SetProperty': [IsExpression('property'), IsExpression('value')],
-  'Microsoft.ForeachPage': [IsExpression('listProperty')],
-  'Microsoft.Foreach': [IsExpression('listProperty')],
-  'Microsoft.EditArray': [IsExpression('arrayProperty'), EditArrayValueChecker],
+  'Microsoft.ForeachPage': [IsExpression('itemsProperty')],
+  'Microsoft.Foreach': [IsExpression('itemsProperty')],
+  'Microsoft.EditArray': [IsExpression('itemsProperty'), EditArrayValueChecker],
 };

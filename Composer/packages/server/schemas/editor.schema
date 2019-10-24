@@ -8,12 +8,16 @@
   },
   "SDKOverrides": {
     "Activity": {
-      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features. <a target=\"_blank\" href=\"https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md\"> Visit the Language Generation reference for more info.</a><br><br> For example, to define variations that will be chosen at random, write: <br> - hello <br> - hi",
-      "title": "Language Generation"
+      "description": "What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi",
+      "title": "Language Generation",
+      "helpLink": "https://aka.ms/lg-file-format",
+      "helpLinkText": "Visit the Language Generation reference for more info."
     },
     "Microsoft.AdaptiveDialog": {
-      "description": "This configures a data driven dialog via a collection of events and actions. <a href=\"https://aka.ms/botframework\" target=\"_blank\">Learn more</a>",
-      "title": "AdaptiveDialog"
+      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "title": "AdaptiveDialog",
+      "helpLink": "https://aka.ms/botframework",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.AttachmentInput": {
       "title": "Prompt for Attachment"
@@ -82,15 +86,19 @@
       "title": "Log to console"
     },
     "Microsoft.LuisRecognizer": {
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
-      "title": "Language Understanding"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
+      "title": "Language Understanding",
+      "helpLink": "https://www.luis.ai/home",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.MostSpecificSelector": {
       "title": "MostSpecificSelector"
     },
     "Microsoft.MultiLanguageRecognizer": {
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
-      "title": "Language Understanding"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
+      "title": "Language Understanding",
+      "helpLink": "https://www.luis.ai/home",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.NumberInput": {
       "title": "Prompt for a number"
@@ -107,7 +115,9 @@
     "Microsoft.OnConversationUpdateActivity": {
       "title": "Handle ConversationUpdate",
       "description":
-        "Handle the events fired when a user begins a new conversation with the bot. <a href=\"https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime\" target=\"_blank\">Learn more</a>"
+        "Handle the events fired when a user begins a new conversation with the bot.",
+      "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.OnDialogEvent": {
       "title": "Handle a Dialog Event"
@@ -115,7 +125,10 @@
     "Microsoft.OnEndOfConversationActivity": {
       "title": "Handle an Event: EndOfConversationActivity"
     },
-    "Microsoft.OnEvent": {
+    "Microsoft.OnCondition": {
+      "title": "Handle an condition"
+    },
+    "Microsoft.OnCustomEvent": {
       "title": "Handle an Event"
     },
     "Microsoft.OnEventActivity": {
@@ -189,8 +202,10 @@
       "title": "TrueSelector"
     },
     "Recognizer": {
-      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use. <a href=\"https://www.luis.ai/home\" target=\"_blank\">Learn more</a>",
-      "title": "Language Understanding"
+      "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
+      "title": "Language Understanding",
+      "helpLink": "https://www.luis.ai/home",
+      "helpLinkText": "Learn more"
     }
   }
 }

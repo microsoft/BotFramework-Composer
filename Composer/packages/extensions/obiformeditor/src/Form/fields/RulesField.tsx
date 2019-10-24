@@ -1,22 +1,22 @@
 import React from 'react';
 import formatMessage from 'format-message';
-import { PrimaryButton, DirectionalHint } from 'office-ui-fabric-react';
+import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
-import { createStepMenu, DialogGroup } from 'shared-menus';
+import { createStepMenu, DialogGroup, ITriggerCondition, OnIntent } from 'shared';
 
 import { setOverridesOnField } from '../utils';
 
 import { TableField } from './TableField';
 
-const renderTitle = (item: MicrosoftIRule) => {
+const renderTitle = (item: ITriggerCondition) => {
   const friendlyName = get(item, '$designer.name');
 
   if (friendlyName) {
     return friendlyName;
   }
 
-  const intentName = (item as OnIntent).intent;
+  const intentName = ((item as unknown) as OnIntent).intent;
   if (intentName) {
     return intentName;
   }
@@ -28,16 +28,16 @@ export function RulesField(props: FieldProps) {
   const overrides = setOverridesOnField(props.formContext, 'RulesField');
 
   return (
-    <TableField<MicrosoftIRule>
+    <TableField<ITriggerCondition>
       {...props}
       {...overrides}
       dialogOptionsOpts={{ include: [DialogGroup.EVENTS], subMenu: false }}
       label={formatMessage('Add New Rule')}
-      navPrefix="events"
+      navPrefix="triggers"
       renderTitle={renderTitle}
     >
       {({ createNewItemAtIndex }) => (
-        <PrimaryButton
+        <DefaultButton
           data-testid="RulesFieldAdd"
           styles={{ root: { marginTop: '20px' } }}
           menuProps={{
@@ -48,7 +48,7 @@ export function RulesField(props: FieldProps) {
           type="button"
         >
           {formatMessage('Add')}
-        </PrimaryButton>
+        </DefaultButton>
       )}
     </TableField>
   );

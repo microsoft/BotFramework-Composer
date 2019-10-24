@@ -1,13 +1,12 @@
-import { get, set, cloneDeep } from 'lodash';
-import { ConceptLabels, seedNewDialog, dialogGroups, DialogGroup } from 'shared-menus';
+import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared';
+import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import nanoid from 'nanoid/generate';
 import { IDropdownOption } from 'office-ui-fabric-react';
+import { DialogInfo } from 'shared';
 
-import { DialogInfo } from '../store/types';
-
-import { upperCaseName } from './fileUtil';
 import { getFocusPath } from './navigation';
+import { upperCaseName } from './fileUtil';
+
 const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
@@ -17,13 +16,14 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
-  name: string;
-  description: string;
+  intent: string;
+  specifiedType: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
-  name?: string;
+  intent?: string;
+  specifiedType?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -31,13 +31,17 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
+export const eventTypeKey: string = SDKTypes.OnDialogEvent;
+export const intentTypeKey: string = SDKTypes.OnIntent;
+export const activityTypeKey: string = SDKTypes.OnActivity;
+
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
     return get(data, '$designer.name');
   }
 
   if (get(data, 'intent')) {
-    return `#${get(data, 'intent')}`;
+    return `${get(data, 'intent')}`;
   }
 
   if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
@@ -47,18 +51,19 @@ export function getFriendlyName(data) {
   return data.$type;
 }
 
-export function getNewDesigner(name: string, description: string) {
-  const timestamp = new Date().toISOString();
-  return {
-    $designer: { name, description, createdAt: timestamp, updatedAt: timestamp, id: nanoid('1234567890', 6) },
-  };
-}
-
 export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
   const current = get(content, path, []);
+  const optionalAttributes: { intent?: string; event?: string } = {};
+  if (data.specifiedType) {
+    data.$type = data.specifiedType;
+  }
+  if (data.intent) {
+    optionalAttributes.intent = data.intent;
+  }
+
   const newStep = {
     $type: data.$type,
-    ...seedNewDialog(data.$type, { name: data.name, description: data.description }),
+    ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -73,32 +78,28 @@ export function insert(content, path: string, position: number | undefined, data
 export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
-  insert(dialogCopy.content, 'events', undefined, data);
+  insert(dialogCopy.content, 'triggers', undefined, data);
   return dialogCopy;
 }
 
 export function createSelectedPath(selected: number) {
-  return `events[${selected}]`;
+  return `triggers[${selected}]`;
 }
 
 export function createFocusedPath(selected: number, focused: number) {
-  return `events[${selected}].actions[${focused}]`;
+  return `triggers[${selected}].actions[${focused}]`;
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   const dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
   const content = dialogCopy.content;
-  content.events.splice(index, 1);
+  content.triggers.splice(index, 1);
   return content;
 }
 
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
-    {
-      key: '',
-      text: '',
-    },
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
@@ -111,6 +112,38 @@ export function getTriggerTypes(): IDropdownOption[] {
     }),
   ];
   return triggerTypes;
+}
+
+export function getEventTypes(): IDropdownOption[] {
+  const eventTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return eventTypes;
+}
+
+export function getActivityTypes(): IDropdownOption[] {
+  const activityTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return activityTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

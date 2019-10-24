@@ -1,0 +1,109 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents":[
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SignInIntent",
+        "pattern": "(?i)sign in" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HelpIntent",
+        "pattern": "(?i)help"
+      }
+    ]
+  },
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "[WelcomeCard]",
+          "property": "user.ans"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "isMatch(user.ans, '(?i)cancel')",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            },
+            {
+              "$type": "Microsoft.EndDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.RepeatDialog"
+        }
+      ],
+       
+      "$designer": {
+        "id": "279503"
+      }
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "$designer": {
+        "id": "418196"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Initialization",
+          "$designer": {
+            "id": "387348"
+          }
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EmailPage",
+          "$designer": {
+            "id": "216905"
+          }
+        }
+      ],
+      "intent": "SignInIntent",
+      "$designer": {
+        "id": "788831"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "036405"
+          },
+          "activity": "[bfdactivity-036405]"
+        }
+      ],
+      "intent": "HelpIntent",
+      "$designer": {
+        "id": "340813"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "648082"
+  }
+}

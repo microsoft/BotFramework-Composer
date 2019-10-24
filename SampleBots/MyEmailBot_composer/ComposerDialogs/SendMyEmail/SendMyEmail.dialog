@@ -1,0 +1,69 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteSendInfo"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Start To Write an Email. "
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "Please Enter the Subject of Your Email.",
+          "property": "user.subject"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "Get! Please Enter the Body of Your Email.",
+          "property": "user.sendContext"
+        },
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "FindMyContact"
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.confirmed",
+          "prompt": "Are you Sure to Send this Email?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.confirmed",
+          "actions": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "SendMyEmailToGraph"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "Your Email has been Sent Succsessfully. "
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "[MissionCancel]"
+            }
+          ]
+        }
+      ],
+       
+      "$designer": {
+        "id": "390168"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "416799"
+  }
+}

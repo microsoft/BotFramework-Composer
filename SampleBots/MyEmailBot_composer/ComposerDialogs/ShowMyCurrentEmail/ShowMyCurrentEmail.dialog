@@ -1,0 +1,75 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[ShowEmailCard(user.selectedEmail)]"
+        },
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "property": "user.showEmailChoice",
+          "choices": [
+            {
+              "value": "Reply This Email"
+            },
+            {
+              "value": "Forward This Email"
+            },
+            {
+              "value": "Go Back"
+            }
+          ],
+          "prompt": "What do you want to do now? ",
+          "style": "List",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "condition": "user.showEmailChoice",
+          "cases": [
+            {
+              "value": "Reply This Email",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ReplyMyEmail",
+                  "$designer": {
+                    "id": "461179"
+                  }
+                }
+              ]
+            },
+            {
+              "value": "Forward This Email",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "dialog": "ForwardMyEmail",
+                  "$designer": {
+                    "id": "682501"
+                  }
+                }
+              ]
+            },
+            {
+              "value": "Go Back"
+            }
+          ]
+        }
+      ],
+       
+      "$designer": {
+        "id": "264696"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "171340"
+  }
+}

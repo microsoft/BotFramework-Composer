@@ -1,0 +1,39 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "570040"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "064818"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "423305"
+          },
+          "activity": "[bfdactivity-423305]"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "id": "280288"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "448895"
+          },
+          "activity": "[bfdactivity-448895]"
+        }
+      ]
+    }
+  ]
+}

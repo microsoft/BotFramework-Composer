@@ -1,17 +1,20 @@
 import fs from 'fs';
+import Path from 'path';
 
 import axios from 'axios';
 import archiver from 'archiver';
 import FormData from 'form-data';
 
-import BotProjectService from '../../services/project';
+import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 
-import { BotEnvironments, BotStatus, IBotConnector } from './interface';
+import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
+  private adminEndpoint: string;
   private endpoint: string;
-  constructor(endpoint: string) {
+  constructor(adminEndpoint: string, endpoint: string) {
+    this.adminEndpoint = adminEndpoint;
     this.endpoint = endpoint;
   }
 
@@ -20,7 +23,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async (_: BotEnvironments, __: string) => {
     // confirm bot runtime is listening here
     try {
-      await axios.get(this.endpoint + '/api/admin');
+      await axios.get(this.adminEndpoint + '/api/admin');
     } catch (err) {
       throw new Error(err);
     }
@@ -33,22 +36,19 @@ export class CSharpBotConnector implements IBotConnector {
   sync = async (config: DialogSetting) => {
     // archive the project
     // send to bot runtime service
-    if (BotProjectService.currentBotProject === undefined) {
+    const currentProject = BotProjectService.getCurrentBotProject();
+    if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = BotProjectService.currentBotProject.dir;
-    const luisConfig = BotProjectService.currentBotProject.luPublisher.getLuisConfig();
+    const dir = Path.join(currentProject.dataDir);
+    const luisConfig = currentProject.luPublisher.getLuisConfig();
     await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
     form.append('file', content, 'bot.zip');
 
-    if (
-      luisConfig &&
-      luisConfig.authoringKey !== null &&
-      !(await BotProjectService.currentBotProject.checkLuisPublished())
-    ) {
+    if (luisConfig && luisConfig.authoringKey !== null && !currentProject.checkLuisPublished()) {
       throw new Error('Please publish your Luis models');
     }
 
@@ -59,12 +59,15 @@ export class CSharpBotConnector implements IBotConnector {
       );
     }
 
-    config = { ...(await BotProjectService.currentBotProject.settingManager.get()), ...config };
+    config = {
+      ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
+      ...config,
+    };
     if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
     try {
-      await axios.post(this.endpoint + '/api/admin', form, { headers: form.getHeaders() });
+      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');
     }
@@ -81,6 +84,28 @@ export class CSharpBotConnector implements IBotConnector {
 
       output.on('close', () => resolve(archive));
       archive.on('error', err => reject(err));
+    });
+  };
+
+  getEditingStatus = (): Promise<boolean> => {
+    return new Promise(resolve => {
+      resolve(true);
+    });
+  };
+
+  getPublishHistory = (): Promise<IPublishHistory> => {
+    return new Promise(resolve => {
+      resolve({
+        production: undefined,
+        previousProduction: undefined,
+        integration: undefined,
+      });
+    });
+  };
+
+  publish = (_: BotConfig, __: string): Promise<void> => {
+    return new Promise(resolve => {
+      resolve();
     });
   };
 }

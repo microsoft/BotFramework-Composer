@@ -6,12 +6,10 @@ using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.TestBot.Json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -34,7 +32,6 @@ namespace Tests
     public static void ClassInitialize(TestContext context)
     {
       TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-      TypeFactory.RegisterAdaptiveTypes();
       string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory));
     }
 
@@ -45,7 +42,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine))
       .Send("01")
           .AssertReply("Step 1")
           .AssertReply("Step 2")
@@ -60,7 +57,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine))
       .Send("02")
           .AssertReply("What's up?")
       .Send("Nothing")
@@ -73,8 +70,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("03")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("03")
           .AssertReply("Hello, I'm Zoidberg. What is your name?")
       .Send("Carlos")
           .AssertReply("Hello Carlos, nice to talk to you!")
@@ -86,8 +82,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("04")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("04")
           .AssertReply("Here are the index and values in the array.")
           .AssertReply("0: 11111")
           .AssertReply("1: 40000")
@@ -104,8 +99,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("05")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("05")
           .AssertReply("Hello, I'm Zoidberg. What is your name?")
       .Send("luhan")
           .AssertReply("Hello luhan, nice to talk to you!")
@@ -122,8 +116,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("07")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("07")
           .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
       .Send("Test1")
           .AssertReply("You select: Test1")
@@ -136,15 +129,11 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("08")
-          .AssertReply("Hello, what is your name?")
-      .Send("luhan")
-          .AssertReply("Hello luhan, nice to meet you!")
-      .Send("hi")
-           .AssertReply("Hello, what is your name?")
-      .Send("luhan")
-          .AssertReply("Hello luhan, nice to meet you!")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("08")
+          .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
+      .Send("Yes")
+          .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
+      .Send("No")
       .StartTestAsync();
     }
 
@@ -153,15 +142,12 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"), sendTrace: true)
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("09")
-          .AssertReply("Hello, what is your name?")
-      .Send("luhan")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("09")
+      .Send("luhan")          
           .AssertReply(activity =>
           {
             var trace = (Activity)activity;
             Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
-            Assert.AreEqual("memory", trace.ValueType, "value type should be memory");
           })
       .StartTestAsync();
     }
@@ -171,8 +157,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("10")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("10")
           .AssertReply("Hello, I'm Zoidberg. What is your name?")
       .Send("luhan")
           .AssertReply("Hello luhan, nice to talk to you!")
@@ -185,11 +170,10 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("11")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("11")
           .AssertReply("Hello, I'm Zoidberg. What is your name?")
       .Send("luhan")
-          .AssertReply("Hello luhan, nice to talk to you!")
+          .AssertReply("Hello luhan, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.")
       .Send("joke")
           .AssertReply("Why did the chicken cross the road?")
       .Send("Why?")
@@ -206,8 +190,7 @@ namespace Tests
     {
       await BuildTestFlow(getFolderPath("Steps_Samples"))
       .SendConversationUpdate()
-          .AssertReply("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n")
-      .Send("12")
+          .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine)).Send("12")
           .AssertReply("Say moo to get a response, say emit to emit a event.")
       .Send("moo")
           .AssertReply("Yippee ki-yay!")
@@ -228,12 +211,13 @@ namespace Tests
       adapter
           .UseStorage(storage)
           .UseState(userState, convoState)
-          .UseLanguageGeneration(resourceExplorer)
+          .UseAdaptiveDialogs()
+          .UseLanguageGeneration(resourceExplorer, "common.lg")
           .UseResourceExplorer(resourceExplorer)
           .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
       var resource = resourceExplorer.GetResource("Main.dialog");
-      var dialog = DeclarativeTypeLoader.Load<IDialog>(resource, resourceExplorer, DebugSupport.SourceRegistry);
+      var dialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(resource, resourceExplorer, DebugSupport.SourceMap);
       DialogManager dm = new DialogManager(dialog);
 
       return new TestFlow(adapter, async (turnContext, cancellationToken) =>

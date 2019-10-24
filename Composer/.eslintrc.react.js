@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-hooks', 'format-message'],
   settings: {
     react: {
-      version: 'detect',
+      version: '16.9.0',
     },
   },
   parserOptions: {
@@ -14,15 +14,17 @@ module.exports = {
     },
   },
   rules: {
-    'react/no-deprecated': 'warn',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'off',
-
-    'react/prop-types': 'warn',
-
     'format-message/literal-pattern': 'error',
     'format-message/no-invalid-pattern': 'error',
     'format-message/no-missing-params': ['error', { allowNonLiteral: false }],
+
+    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+
+    'react/display-name': 'off',
+    'react/no-danger': 'error',
+    'react/no-deprecated': 'warn',
+    'react/prop-types': 'warn',
   },
   overrides: [
     {
@@ -36,6 +38,7 @@ module.exports = {
       rules: {
         'react/display-name': 'off',
         'react/prop-types': 'off',
+        'react/no-danger': 'off',
       },
     },
   ],

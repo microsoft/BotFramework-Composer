@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
-import { dialogGroups, DialogGroup, DialogGroupItem } from 'shared-menus';
+import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from 'shared';
 
 import { FormMemory, MemoryScope } from '../types';
 
@@ -53,7 +53,7 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
 
   const handleClick = (e, item) => {
     if (onClick && item) {
-      onClick(e as any, item);
+      onClick(e, item);
     }
   };
 
@@ -63,6 +63,7 @@ export function buildDialogOptions(opts: DialogOptionsOpts = {}): IContextualMen
       text: dialog,
       data: {
         $type: dialog,
+        $designer: getDesignerId(),
       },
       onClick: subMenu ? undefined : handleClick,
     }));
@@ -157,10 +158,6 @@ export function useFormState<T extends object>(initialData?: T): [T, FormUpdater
   };
 
   return [formData, update];
-}
-
-export function getTimestamp(): string {
-  return new Date().toISOString();
 }
 
 export function sweepUndefinedFields(fields) {

@@ -1,0 +1,89 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "714288"
+  },
+  "autoEndDialog": false,
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "JokeIntent",
+        "pattern": "(?i)joke" 
+      },
+      {
+
+        "$type": "Microsoft.IntentPattern",
+        "intent": "FortuneTellerIntent",
+        "pattern": "(?i)fortune|future"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "563828"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ReplaceDialog",
+          "dialog": "TellJokeDialog"
+        }
+      ],
+      "intent": "JokeIntent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "473201"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ReplaceDialog",
+          "dialog": "FortuneTellerDialog"
+        }
+      ],
+      "intent": "FortuneTellerIntent"
+    },
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "644475"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "646692"
+          },
+          "condition": "user.name == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "823146"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 2147483647,
+              "alwaysPrompt": false,
+              "allowInterruptions": "true",
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "120128"
+          },
+          "activity": "[bfdactivity-120128]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

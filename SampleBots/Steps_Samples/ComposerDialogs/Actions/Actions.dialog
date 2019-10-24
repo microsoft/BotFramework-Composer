@@ -1,0 +1,87 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "126960"
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "218388"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "166131"
+          },
+          "activity": "[bfdactivity-522200]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "350559"
+          },
+          "activity": "[bfdactivity-350559]"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "309397"
+          },
+          "activity": "[bfdactivity-309397]"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "026341"
+          },
+          "property": "user.age",
+          "value": "9+9"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "643043"
+          },
+          "activity": "[bfdactivity-797905]"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "948500"
+          },
+          "property": "user.age"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "634904"
+          },
+          "condition": "user.age != null",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "166131"
+              },
+              "activity": "[bfdactivity-166131]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "643043"
+              },
+              "activity": "[bfdactivity-643043]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

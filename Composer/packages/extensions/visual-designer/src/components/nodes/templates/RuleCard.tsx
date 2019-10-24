@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { ConceptLabels } from 'shared-menus';
+import { ConceptLabels } from 'shared';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -10,6 +10,7 @@ import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
+import { CardProps } from '../nodeProps';
 
 import { IconCard } from './IconCard';
 
@@ -24,11 +25,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => {
-  const focusNode = () => {
-    return onEvent(NodeEventTypes.Focus, id);
-  };
-
+export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX.Element => {
   const openNode = () => {
     return onEvent(NodeEventTypes.Expand, id);
   };
@@ -57,7 +54,7 @@ export const RuleCard = ({ id, data, label, focused, onEvent }): JSX.Element => 
       }
       break;
 
-    case ObiTypes.OnEvent:
+    case ObiTypes.OnCondition:
       if (data.events && data.events.length) {
         trigger = formatMessage(
           `{event} {

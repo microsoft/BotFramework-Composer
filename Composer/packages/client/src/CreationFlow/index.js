@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { toLower } from 'lodash';
 
-import { CreationFlowStatus } from '../constants';
+import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
-import { Steps } from './../constants/index';
-import { SelectLocation } from './SelectLocation';
+import { OpenProject } from './OpenProject';
 import { StoreContext } from './../store';
-import { DialogInfo } from './../constants/index';
 import { StepWizard } from './StepWizard/StepWizard';
 import { navigateTo } from './../utils/navigation';
 
@@ -17,8 +16,16 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const { fetchTemplates, getAllProjects, openBotProject, createProject, saveProjectAs, saveTemplateId } = actions;
-  const { botName, templateId, templateProjects } = state;
+  const {
+    fetchTemplates,
+    getAllProjects,
+    openBotProject,
+    createProject,
+    saveProjectAs,
+    saveTemplateId,
+    fetchStorages,
+  } = actions;
+  const { templateId, templateProjects } = state;
 
   useEffect(() => {
     init();
@@ -34,6 +41,9 @@ export function CreationFlow(props) {
       fetchTemplates();
       await getAllBots();
     }
+
+    // load storage system list
+    fetchStorages();
 
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW:
@@ -64,7 +74,7 @@ export function CreationFlow(props) {
   };
 
   const handleCreateNew = async formData => {
-    await createProject(templateId || '', formData.name, formData.description);
+    await createProject(templateId || '', formData.name, formData.description, formData.location);
   };
 
   const handleSaveAs = async formData => {
@@ -98,7 +108,7 @@ export function CreationFlow(props) {
   const getErrorMessage = name => {
     if (
       bots.findIndex(bot => {
-        return bot.name === name;
+        return toLower(bot.name) === toLower(name);
       }) >= 0
     ) {
       return 'duplication of name';
@@ -108,17 +118,22 @@ export function CreationFlow(props) {
 
   const steps = {
     [Steps.CREATE]: {
-      ...DialogInfo.CREATE_NEW_BOT,
+      ...DialogCreationCopy.CREATE_NEW_BOT,
       children: <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />,
     },
     [Steps.LOCATION]: {
-      ...DialogInfo.SELECT_LOCATION,
-      children: <SelectLocation folders={bots} defaultKey={botName || ''} onOpen={openBot} onDismiss={handleDismiss} />,
+      ...DialogCreationCopy.SELECT_LOCATION,
+      children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} />,
     },
     [Steps.DEFINE]: {
-      ...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE,
+      ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
-        <DefineConversation onSubmit={handleSubmit} onGetErrorMessage={getErrorMessage} onDismiss={handleDismiss} />
+        <DefineConversation
+          onSubmit={handleSubmit}
+          onGetErrorMessage={getErrorMessage}
+          onDismiss={handleDismiss}
+          enableLocationBrowse={true}
+        />
       ),
     },
   };

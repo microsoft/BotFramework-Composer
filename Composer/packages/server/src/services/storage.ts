@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
@@ -76,6 +78,13 @@ class StorageService {
     }
   };
 
+  private isBotFolder = (path: string) => {
+    // locate Main.dialog
+    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
+    const isbot = fs.existsSync(mainPath);
+    return isbot;
+  };
+
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
     const children = (await storage.readDir(dirPath)).map(async childName => {
@@ -90,7 +99,7 @@ class StorageService {
         }
         return {
           name: childName,
-          type: childStat.isDir ? 'folder' : 'file',
+          type: childStat.isDir ? (this.isBotFolder(childAbsPath) ? 'bot' : 'folder') : 'file',
           path: childAbsPath,
           lastModified: childStat.lastModified, // just keep the previous interface
           size: childStat.size, // just keep the previous interface

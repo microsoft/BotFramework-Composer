@@ -1,0 +1,38 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "031360"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "309212"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.DateTimeInput",
+          "$designer": {
+            "id": "996821"
+          },
+          "property": "user.date",
+          "prompt": "Please enter a date.",
+          "invalidPrompt": "Please enter a date.",
+          "maxTurnCount": 2,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "828009"
+          },
+          "activity": "[bfdactivity-828009]"
+        }
+      ]
+    }
+  ]
+}

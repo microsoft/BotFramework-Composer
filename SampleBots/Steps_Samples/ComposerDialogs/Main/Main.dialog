@@ -1,0 +1,285 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "892616"
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "Actions",
+        "pattern": "Actions|01"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndTurn",
+        "pattern": "EndTurn|02"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "IfCondition",
+        "pattern": "IfCondition|03"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditArray",
+        "pattern": "EditArray|04"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EndDialog",
+        "pattern": "EndDialog|05"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "HttpRequest",
+        "pattern": "HttpRequest|06"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "SwitchCondition",
+        "pattern": "SwitchCondition|07"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "RepeatDialog",
+        "pattern": "RepeatDialog|08"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "TraceAndLog",
+        "pattern": "TraceAndLog|trace|log|09"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EditActions",
+        "pattern": "EditActions|10"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ReplaceDialog",
+        "pattern": "ReplaceDialog|11"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "EmitEvent",
+        "pattern": "EmitEvent|12"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "764307"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Actions",
+          "$designer": {
+            "id": "124654"
+          }
+        }
+      ],
+      "intent": "Actions"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "691722"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EndTurn"
+        }
+      ],
+      "intent": "EndTurn"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "343907"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "IfCondition"
+        }
+      ],
+      "intent": "IfCondition"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "608729"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EndDialog"
+        }
+      ],
+      "intent": "EndDialog"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "818726"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EditArray"
+        }
+      ],
+      "intent": "EditArray"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "894760"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "HttpRequest"
+        }
+      ],
+      "intent": "HttpRequest"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "273555"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "SwitchCondition"
+        }
+      ],
+      "intent": "SwitchCondition"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "277723"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "RepeatDialog"
+        }
+      ],
+      "intent": "RepeatDialog"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "226996"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "TraceAndLog"
+        }
+      ],
+      "intent": "TraceAndLog"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "602168"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EditActions"
+        }
+      ],
+      "intent": "EditActions"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "413376"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "Replace"
+        }
+      ],
+      "intent": "ReplaceDialog"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "173056"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "EmitEvent"
+        }
+      ],
+      "intent": "EmitEvent"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "242117"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.EndDialog"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "560915"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "347762"
+          },
+          "activity": "[bfdactivity-347762]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "640616"
+          },
+          "activity": "[bfdactivity-640616]"
+        }
+      ]
+    }
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
+}

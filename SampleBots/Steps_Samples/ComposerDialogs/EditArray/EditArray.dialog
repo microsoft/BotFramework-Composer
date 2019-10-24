@@ -1,0 +1,112 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "395991"
+  },
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "356862"
+      },
+       
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "356862"
+          },
+          "condition": "user.ids == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "384024"
+              },
+              "property": "user.ids",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "076427"
+          },
+          "changeType": "Push",
+          "itemsProperty": "user.ids",
+          "value": "10000+1000+100+10+1"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "162360"
+          },
+          "changeType": "Push",
+          "itemsProperty": "user.ids",
+          "value": "200*200"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "changeType": "Push",
+          "itemsProperty": "user.ids",
+          "value": "888888/4",
+          "$designer": {
+            "id": "393322"
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "666135"
+          },
+          "activity": "[bfdactivity-666135]"
+        },
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "id": "995811"
+          },
+          "itemsProperty": "user.ids",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "763672"
+          },
+          "activity": "[bfdactivity-763672]"
+        },
+        {
+          "$type": "Microsoft.ForeachPage",
+          "$designer": {
+            "id": "087387"
+          },
+          "pageSize": "2",
+          "itemsProperty": "user.ids",
+          "actions": [
+            {
+              "$type": "Microsoft.Foreach",
+              "itemsProperty": "dialog.foreach.page",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+                }
+              ],
+              "$designer": {
+                "id": "494428"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

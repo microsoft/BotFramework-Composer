@@ -1,0 +1,18 @@
+{
+  "$schema": "../../app.schema",
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "description": "<Fill in the description of your bot here>"
+  },
+  "generator": "common.lg",
+  "recognizer": "Main.lu",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
+  }
+  ]
+}

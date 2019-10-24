@@ -1,0 +1,192 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "479285"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "735800"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "048651"
+          },
+          "property": "dialog.item",
+          "value": "@promptContentML"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "557725"
+          },
+          "property": "dialog.listName",
+          "value": "@ListType"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "965232"
+          },
+          "condition": "dialog.listName != null && dialog.listName != \"shopping\" && dialog.listName != \"grocery\" && dialog.listName != \"todo\"",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "048651"
+              },
+              "activity": "[bfdactivity-048651]"
+            },
+            {
+              "$type": "Microsoft.EndDialog",
+              "$designer": {
+                "id": "272186"
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "739777"
+          },
+          "condition": "user.lists == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "312002"
+              },
+              "property": "user.lists",
+              "type": "object"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "431309"
+          },
+          "condition": "dialog.listName == null",
+          "actions": [
+            {
+              "$type": "Microsoft.ChoiceInput",
+              "$designer": {
+                "id": "739777"
+              },
+              "property": "dialog.listName",
+              "prompt": "Which list do you want to expand?",
+              "maxTurnCount": 3,
+              "alwaysPrompt": true,
+              "allowInterruptions": "false",
+              "outputFormat": "value",
+              "choices": [
+                {
+                  "value": "shopping",
+                  "synonyms": [
+                    "1",
+                    "first",
+                    "shopping",
+                    "first one"
+                  ]
+                },
+                {
+                  "value": "grocery",
+                  "synonyms": [
+                    "2",
+                    "second",
+                    "grocery",
+                    "second one"
+                  ]
+                },
+                {
+                  "value": "todo",
+                  "synonyms": [
+                    "3",
+                    "third",
+                    "todo",
+                    "third one",
+                    "to do"
+                  ]
+                }
+              ],
+              "appendChoices": true,
+              "defaultLocale": "en-us",
+              "style": "SuggestedAction",
+              "choiceOptions": {
+                "inlineSeparator": ", ",
+                "inlineOr": " or ",
+                "inlineOrMore": ", or ",
+                "includeNumbers": true
+              },
+              "recognizerOptions": {
+                "noValue": false
+              }
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "982253"
+          },
+          "condition": "dialog.item == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "957758"
+              },
+              "property": "dialog.item",
+              "prompt": "Please enter the title of your item.",
+              "maxTurnCount": 3,
+              "alwaysPrompt": false,
+              "allowInterruptions": "false",
+              "outputFormat": "none"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "075604"
+          },
+          "condition": "(dialog.listName == \"shopping\" && user.lists.shopping == null) || (dialog.listName == \"grocery\" && user.lists.grocery == null) || (dialog.listName == \"todo\" && user.lists.todo == null)",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "907210"
+              },
+              "property": "getProperty(user.lists, dialog.listName)",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "644924"
+          },
+          "changeType": "Push",
+          "itemsProperty": "getProperty(user.lists, dialog.listName)",
+          "value": "dialog.item"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "569973"
+          },
+          "activity": "[bfdactivity-569973]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}

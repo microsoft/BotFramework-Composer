@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { FC, ComponentClass, useContext } from 'react';
+import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
@@ -9,7 +9,7 @@ import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRul
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
-  [ObiTypes.OnEvent]: EventRule,
+  [ObiTypes.OnCondition]: EventRule,
   [ObiTypes.OnIntent]: IntentRule,
   [ObiTypes.OnUnknownIntent]: UnknownIntentRule,
   [ObiTypes.OnConversationUpdateActivity]: ConversationUpdateActivityRule,

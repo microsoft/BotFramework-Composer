@@ -8,7 +8,7 @@ trigger:
 
 jobs:
   - job: botproject
-    displayName: BotProject Build&Test
+    displayName: BotProject
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -25,7 +25,7 @@ jobs:
         command: 'test'
         projects: 'BotProject/CSharp/Tests/Tests.csproj'
   - job: test
-    displayName: Unit Tests
+    displayName: Composer
     pool:
       vmImage: ubuntu-16.04
     steps:
@@ -35,8 +35,10 @@ jobs:
         versionSpec: 10.15.3
     - script: cd Composer && yarn install
       displayName: 'yarn install'
-    - script: cd Composer && yarn build
-      displayName: 'yarn build'
+    - script: cd Composer && yarn build:prod
+      displayName: 'yarn build:prod'
+      env:
+        NODE_OPTIONS: --max-old-space-size=2048
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
     - script: cd Composer && yarn test:coverage
@@ -68,15 +70,18 @@ jobs:
         versionSpec: 10.15.3
     - script: cd Composer && yarn install
       displayName: 'yarn install'
-    - script: cd Composer && yarn build
-      displayName: 'yarn build'
+    - script: cd Composer && yarn build:prod
+      displayName: 'yarn build:prod'
+      env:
+        NODE_OPTIONS: --max-old-space-size=2048
     - script: cd Composer && yarn test:integration
       displayName: yarn test:integration
       env:
         CYPRESS_screenshotsFolder: $(Build.ArtifactStagingDirectory)/cypress/screenshots
         CYPRESS_COMPOSER_URL: http://localhost:5000
+      continueOnError: true
     - task: PublishBuildArtifacts@1
-      condition: failed()
+      condition: in(variables['Agent.JobStatus'], 'SucceededWithIssues', 'Failed')
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/cypress'
         artifactName: cypress
@@ -88,4 +93,8 @@ jobs:
         testResultsFiles: '**/cypress/results/results-*.xml'
         testRunTitle: E2E Tests
         mergeTestResults: true
+  - job: security
+    displayName: Security Analysis
+    steps:
+      - task: ComponentGovernanceComponentDetection@0
 

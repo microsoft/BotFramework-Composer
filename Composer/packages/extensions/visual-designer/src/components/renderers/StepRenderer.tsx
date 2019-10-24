@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { FC, ComponentClass } from 'react';
 
 import { ObiTypes } from '../../constants/ObiTypes';

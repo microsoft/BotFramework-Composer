@@ -1,20 +1,12 @@
-.RecognizerField {
-  display: flex;
-}
-.RecognizerField .ObjectFieldTemplate {
-  flex: 1;
-}
-.RecognizerField .BaseField {
-  flex: 1;
-}
-.RecognizerField .RecognizerFieldMenu {
-  flex-grow: 0;
-  margin-left: 20px;
-  margin-top: 30px;
-  padding-top: 4px;
-}
 .ToggleEditor .BaseField {
   margin-top: 5px;
+}
+.ToggleEditor .ToggleEditorContent {
+  margin: 0 -18px -26px -18px; /* offset ObjectFieldTemplate padding */
+}
+.ToggleEditor .ToggleEditorContent .ObjectItemContainer:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
 }
 .LuFileSelector {
   display: flex;

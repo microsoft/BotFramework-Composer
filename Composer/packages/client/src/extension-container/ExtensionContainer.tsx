@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
+import { LuFile, ShellData } from 'shared';
 
 import ApiClient from '../messenger/ApiClient';
-import { ShellData } from '../ShellApi';
-import { LuFile } from '../store/types';
 
 import getEditor from './EditorMap';
 
@@ -52,8 +51,12 @@ const shellApi = {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: (subPaths: string[]) => {
-    return apiClient.apiCall('onFocusSteps', { subPaths });
+  onFocusSteps: (subPaths: string[], fragment?: string) => {
+    return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
+  },
+
+  onSelect: (ids: string[]) => {
+    return apiClient.apiCall('onSelect', { ids });
   },
 
   shellNavigate: (shellPage, opts = {}) => {
@@ -66,6 +69,10 @@ const shellApi = {
 
   updateLuFile: (luFile: LuFile) => {
     return apiClient.apiCall('updateLuFile', luFile);
+  },
+
+  updateLgFile: (id: string, content: string) => {
+    return apiClient.apiCall('updateLgFile', { id, content });
   },
 
   getLgTemplates: (id: string) => {
@@ -95,6 +102,14 @@ const shellApi = {
   validateExpression: (expression: string) => {
     return apiClient.apiCall('isExpression', { expression });
   },
+
+  undo: () => {
+    return apiClient.apiCall('undo');
+  },
+
+  redo: () => {
+    return apiClient.apiCall('redo');
+  },
 };
 
 function ExtensionContainer() {
@@ -112,6 +127,16 @@ function ExtensionContainer() {
       if (callback) {
         callback(args.data);
       }
+    });
+
+    apiClient.registerApi('rpc', (method, ...params) => {
+      const handler = (window as any)[method];
+      let result;
+      if (handler) {
+        result = handler(...params);
+      }
+
+      return result;
     });
 
     shellApi.getState().then(result => {

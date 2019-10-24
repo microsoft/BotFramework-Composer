@@ -1,51 +1,75 @@
 module.exports = {
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  plugins: ['import', 'notice'],
+  extends: [
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'prettier/@typescript-eslint',
+  ],
+  plugins: ['import', 'notice', 'security'],
   env: {
     browser: true,
     es6: true,
     node: true,
   },
   rules: {
+    '@typescript-eslint/ban-ts-ignore': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+    '@typescript-eslint/no-use-before-define': 'warn',
+
     // eslint rules
     'no-dupe-class-members': 'off',
-    'no-undef': 'off', // ts compiler catches this
     'prefer-const': 'error',
     'no-var': 'error',
     'no-console': 'warn',
     'dot-notation': 'error',
     yoda: 'error',
-    eqeqeq: 'warn',
+    // eqeqeq: 'error',
 
     // plugin: import
     'import/first': 'error',
     'import/order': ['error', { 'newlines-between': 'always' }],
+
+    // security
+    'security/detect-buffer-noassert': 'error',
+    'security/detect-child-process': 'error',
+    'security/detect-disable-mustache-escape': 'error',
+    'security/detect-eval-with-expression': 'error',
+    'security/detect-new-buffer': 'error',
+    'security/detect-no-csrf-before-method-override': 'error',
+    'security/detect-non-literal-fs-filename': 'error',
+    'security/detect-non-literal-regexp': 'error',
+    'security/detect-non-literal-require': 'error',
+    'security/detect-object-injection': 'off',
+    'security/detect-possible-timing-attacks': 'error',
+    'security/detect-pseudoRandomBytes': 'error',
+    'security/detect-unsafe-regex': 'error',
   },
   overrides: [
-    {
-      files: ['**/*.+(ts|tsx)'],
-      parser: '@typescript-eslint/parser',
-      plugins: ['@typescript-eslint', 'prettier'],
-      rules: {
-        '@typescript-eslint/interface-name-prefix': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-        '@typescript-eslint/no-explicit-any': ['warn'],
-      },
-    },
-    {
-      files: ['**/*.+(js|jsx)'],
-      parser: 'babel-eslint',
-    },
     {
       files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)'],
       env: {
         jest: true,
       },
       rules: {
-        'typescript/class-name-casing': 'off',
-        'typescript/no-explicit-any': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
+
+        'security/detect-buffer-noassert': 'off',
+        'security/detect-child-process': 'off',
+        'security/detect-disable-mustache-escape': 'off',
+        'security/detect-eval-with-expression': 'off',
+        'security/detect-new-buffer': 'off',
+        'security/detect-no-csrf-before-method-override': 'off',
+        'security/detect-non-literal-fs-filename': 'off',
+        'security/detect-non-literal-regexp': 'off',
+        'security/detect-non-literal-require': 'off',
+        'security/detect-object-injection': 'off',
+        'security/detect-possible-timing-attacks': 'off',
+        'security/detect-pseudoRandomBytes': 'off',
+        'security/detect-unsafe-regex': 'off',
       },
     },
   ],

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ColorClassNames, FontClassNames } from '@uifabric/styling';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
@@ -7,15 +6,10 @@ import get from 'lodash.get';
 import classnames from 'classnames';
 
 import { FormContext } from '../types';
-import SectionSeparator from '../SectionSeparator';
 
 import { RootField } from './RootField';
 
 import './styles.css';
-
-const descriptionMarkup = (description: string): { __html: string } => {
-  return { __html: description };
-};
 
 interface BaseFieldProps<T> {
   children?: React.ReactNode;
@@ -37,12 +31,16 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
   let titleOverride = undefined;
   let descriptionOverride = undefined;
+  let helpLink = undefined;
+  let helpLinkText = undefined;
   let key = idSchema.__id;
 
   if (schema.title) {
     const SDKOverrides = fieldOverrides[`${schema.title}`];
     titleOverride = get(SDKOverrides, 'title');
     descriptionOverride = get(SDKOverrides, 'description');
+    helpLink = get(SDKOverrides, 'helpLink');
+    helpLinkText = get(SDKOverrides, 'helpLinkText');
   }
 
   // use dialogId as the key because the focusPath may not be enough
@@ -65,21 +63,31 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
 
     return descriptionOverride || description || uiSchema['ui:description'] || schema.description;
   };
+
   return isRootBaseField ? (
     <RootField {...props} key={key} id={key.replace(/\.|#/g, '')}>
       {children}
     </RootField>
   ) : (
     <div className={classnames('BaseField', className)} key={key} id={key.replace(/\.|#/g, '')}>
-      <SectionSeparator label={getTitle()}>
+      <div>
+        <h3 className="BaseFieldTitle">{getTitle()}</h3>
         {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-          <p
-            className={[ColorClassNames.neutralPrimaryAlt, FontClassNames.smallPlus].join(' ')}
-            dangerouslySetInnerHTML={descriptionMarkup(getDescription())}
-          />
+          <p className="BaseFieldDescription">
+            {getDescription()}
+            {helpLink && helpLinkText && (
+              <>
+                <br />
+                <br />
+                <a href={helpLink} target="_blank" rel="noopener noreferrer">
+                  {helpLinkText}
+                </a>
+              </>
+            )}
+          </p>
         )}
-        {children}
-      </SectionSeparator>
+      </div>
+      {children}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "name": "obieditortest",
+  "name": "obiformeditor",
   "version": "1.0.0",
   "description": "obieditortest React component",
   "main": "lib/index.js",
@@ -24,26 +24,27 @@
     "watch": "yarn build:ts --watch"
   },
   "dependencies": {
-    "@bfcomposer/react-jsonschema-form": "1.6.2",
-    "@uifabric/fluent-theme": "^0.16.2",
-    "@uifabric/styling": "^6.45.3",
-    "botbuilder-expression-parser": "^4.5.9",
+    "@bfcomposer/react-jsonschema-form": "1.6.5",
+    "@emotion/core": "^10.0.17",
+    "@uifabric/fluent-theme": "7.1.4",
+    "@uifabric/styling": "7.7.1",
     "classnames": "^2.2.6",
     "code-editor": "*",
     "format-message": "^6.2.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.1",
+    "lodash.merge": "^4.6.2",
     "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
     "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "^6.165.1",
+    "office-ui-fabric-react": "7.37.1",
     "react-error-boundary": "^1.2.5",
-    "shared-menus": "0.0.0"
+    "shared": "0.0.0"
   },
   "peerDependencies": {
     "react": "16.9.0",
-    "react-dom": "^16.8.4"
+    "react-dom": "16.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -51,6 +52,7 @@
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "@types/classnames": "^2.2.9",
     "@types/codemirror": "^0.0.74",
     "@types/jest": "^24.0.11",
     "@types/json-schema": "^7.0.3",
@@ -60,17 +62,16 @@
     "@types/lodash.isequal": "^4.5.5",
     "@types/lodash.merge": "^4.6.6",
     "@types/lodash.omit": "^4.5.6",
+    "@types/lodash.pick": "^4.4.6",
     "@types/lodash.startcase": "^4.4.6",
     "@types/nanoid": "^1.2.1",
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
-    "@typescript-eslint/eslint-plugin": "^1.10.2",
-    "@typescript-eslint/parser": "^1.10.2",
     "autoprefixer": "^9.5.1",
+    "botbuilder-expression-parser": "^4.5.9",
     "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",
-    "eslint-plugin-format-message": "^6.2.3",
     "html-webpack-plugin": "^3.2.0",
     "jest": "24.0.0",
     "jest-dom": "^3.1.3",
@@ -85,11 +86,10 @@
     "ts-jest": "^24.0.2",
     "ts-loader": "^5.3.3",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^3.5.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1"
+    "webpack-dev-server": "^3.8.2"
   },
   "author": "",
   "homepage": "https://github.com/Microsoft/BotFramework-Composer",

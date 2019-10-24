@@ -1,14 +1,17 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useContext } from 'react';
 import { Spinner, SpinnerSize, Dialog, DialogType, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import once from 'lodash.once';
 
 import { StoreContext } from '../../store';
+import { BoundAction } from '../../store/types';
 
 import { loading, dialog, consoleStyle } from './styles';
 
 // only attempt to login once
-const loginOnce = once((login: () => void) => {
+const loginOnce = once((login: BoundAction) => {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     login();
   }
@@ -59,9 +62,9 @@ export const RequireAuth: React.FC = props => {
   }
 
   return (
-    <>
+    <React.Fragment>
       {sessionExpiredDialog}
       {props.children}
-    </>
+    </React.Fragment>
   );
 };

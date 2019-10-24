@@ -1,0 +1,106 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "122121"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "050101"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "699003"
+          },
+          "prompt": "Who are your?",
+          "property": "user.name",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "Susan"
+            },
+            {
+              "value": "Nick"
+            },
+            {
+              "value": "Tom"
+            }
+          ],
+          "appendChoices": "true",
+          "defaultLocale": "en-us",
+          "style": "List",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false,
+            "noAction": false
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "097130"
+          },
+          "activity": "[bfdactivity-097130]"
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "088447"
+          },
+          "condition": "user.name",
+          "cases": [
+            {
+              "value": "Susan",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "040464"
+                  },
+                  "activity": "[bfdactivity-040464]"
+                }
+              ]
+            },
+            {
+              "value": "Nick",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "230206"
+                  },
+                  "activity": "[bfdactivity-230206]"
+                }
+              ]
+            },
+            {
+              "value": "Tom",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "604251"
+                  },
+                  "activity": "[bfdactivity-604251]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

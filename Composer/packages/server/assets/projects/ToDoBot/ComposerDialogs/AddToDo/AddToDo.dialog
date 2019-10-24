@@ -1,0 +1,71 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "808722"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "335456"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "201694"
+          },
+          "property": "dialog.todo",
+          "value": "@title"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "298897"
+          },
+          "property": "dialog.todo",
+          "prompt": "OK, please enter the title of your todo.",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "always",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "015420"
+          },
+          "condition": "user.todos == null",
+          "actions": [
+            {
+              "$type": "Microsoft.InitProperty",
+              "$designer": {
+                "id": "015420"
+              },
+              "property": "user.todos",
+              "type": "array"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "567087"
+          },
+          "changeType": "Push",
+          "itemsProperty": "user.todos",
+          "value": "dialog.todo"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "116673"
+          },
+          "activity": "[bfdactivity-116673]"
+        }
+      ]
+    }
+  ]
+}

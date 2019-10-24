@@ -1,39 +1,28 @@
 /// <reference types="Cypress" />
 
 context('Visual Designer', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.startFromTemplate('EmptyBot', 'VisualDesignerTest');
+    cy.openBot('ToDoBot');
+    cy.wait(100);
   });
 
-  //will remove skip after add trigger is ok
-  it('can add a rule from the visual designer', () => {
-    cy.addEventHandler('Handle a Dialog Event');
-    cy.wait(100);
+  beforeEach(() => {
+    // Return to Main.dialog
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.getByText('ToDoBot.Main').click();
+      cy.wait(100);
+    });
+  });
 
-    cy.withinEditor('VisualEditor', () => {
-      cy.contains('Handle a Dialog Event').should('exist');
+  it('can find Visual Designer default trigger in container', () => {
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.getByText('Handle ConversationUpdate').click();
+      cy.wait(500);
     });
 
-    cy.addEventHandler('Handle an Intent');
-    cy.wait(100);
-
     cy.withinEditor('VisualEditor', () => {
-      cy.contains('Handle an Intent').should('exist');
-    });
-
-    cy.addEventHandler('Handle Unknown Intent');
-    cy.wait(100);
-
-    cy.withinEditor('VisualEditor', () => {
-      cy.contains('Handle Unknown Intent').should('exist');
-    });
-
-    cy.addEventHandler('Handle ConversationUpdate');
-    cy.wait(100);
-
-    cy.withinEditor('VisualEditor', () => {
-      cy.contains('Handle ConversationUpdate').should('exist');
+      cy.getByText('Trigger').should('exist');
     });
   });
 });

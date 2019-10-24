@@ -5,61 +5,73 @@ import { Store } from '../store/store';
 import StorageService from './storage';
 import { Path } from './../utility/path';
 
-class BotProjectService {
-  public currentBotProject: BotProject | undefined = undefined;
-  public recentBotProjects: LocationRef[] = [];
+export class BotProjectService {
+  private static currentBotProject: BotProject | undefined = undefined;
+  private static recentBotProjects: LocationRef[] = [];
 
-  constructor() {
-    this.recentBotProjects = Store.get('recentBotProjects');
-    if (this.recentBotProjects.length > 0) {
-      this.currentBotProject = new BotProject(this.recentBotProjects[0]);
+  private static initialize() {
+    if (BotProjectService.currentBotProject) {
+      return;
+    }
+
+    if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
+      BotProjectService.recentBotProjects = Store.get('recentBotProjects');
+    }
+
+    if (BotProjectService.recentBotProjects.length > 0) {
+      BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
     }
   }
 
-  public getRecentBotProjects = () => {
-    return this.recentBotProjects.reduce((result: any[], item) => {
+  public static getCurrentBotProject(): BotProject | undefined {
+    BotProjectService.initialize();
+    return BotProjectService.currentBotProject;
+  }
+
+  public static getRecentBotProjects = () => {
+    BotProjectService.initialize();
+    return BotProjectService.recentBotProjects.reduce((result: any[], item) => {
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
-      if (name.indexOf('.botproj') === -1) {
+      if (!name.includes('.botproj')) {
         result.push({ name, ...item });
       }
       return result;
     }, []);
   };
 
-  public openProject = async (locationRef: LocationRef) => {
+  public static openProject = async (locationRef: LocationRef) => {
+    BotProjectService.initialize();
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
       throw new Error(`file not exist ${locationRef.path}`);
     }
-    this.currentBotProject = new BotProject(locationRef);
-    await this.currentBotProject.index();
-    this.updateRecentBotProjects();
+    BotProjectService.currentBotProject = new BotProject(locationRef);
+    await BotProjectService.currentBotProject.index();
+    BotProjectService.updateRecentBotProjects();
   };
 
-  private updateRecentBotProjects(): void {
-    if (!this.currentBotProject) {
+  private static updateRecentBotProjects(): void {
+    if (!BotProjectService.currentBotProject) {
       return;
     }
 
-    const currDir = this.currentBotProject.dir;
-    const idx = this.recentBotProjects.findIndex(ref => currDir === ref.path);
+    const currDir = BotProjectService.currentBotProject.dir;
+    const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === ref.path);
     if (idx > -1) {
-      this.recentBotProjects.splice(idx, 1);
+      BotProjectService.recentBotProjects.splice(idx, 1);
     }
 
     const toSaveRecentProject = { storageId: 'default', path: currDir };
-    this.recentBotProjects.unshift(toSaveRecentProject);
-    Store.set('recentBotProjects', this.recentBotProjects);
+    BotProjectService.recentBotProjects.unshift(toSaveRecentProject);
+    Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   }
 
-  public saveProjectAs = async (locationRef: LocationRef) => {
-    if (typeof this.currentBotProject !== 'undefined') {
-      this.currentBotProject = await this.currentBotProject.copyTo(locationRef);
-      await this.currentBotProject.index();
-      this.updateRecentBotProjects();
+  public static saveProjectAs = async (locationRef: LocationRef) => {
+    BotProjectService.initialize();
+    if (typeof BotProjectService.currentBotProject !== 'undefined') {
+      BotProjectService.currentBotProject = await BotProjectService.currentBotProject.copyTo(locationRef);
+      await BotProjectService.currentBotProject.index();
+      BotProjectService.updateRecentBotProjects();
     }
   };
 }
-
-const service = new BotProjectService();
-export default service;

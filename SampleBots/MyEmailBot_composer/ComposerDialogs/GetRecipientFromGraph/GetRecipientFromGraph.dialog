@@ -1,0 +1,27 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/v1.0/me/contacts?$filter=startswith(displayName,'{user.recipient}')or startswith(surname, '{user.recipient}')",
+          "method": "GET",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "resultProperty": "user.intentRecipient"
+        }
+      ],       
+      "$designer": {
+        "id": "711391"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "110753"
+  }
+}

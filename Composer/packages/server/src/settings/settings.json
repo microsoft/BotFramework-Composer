@@ -1,10 +1,12 @@
 {
   "development": {
-    "botRuntime": "http://localhost:3979",
+    "botAdminEndpoint": "http://localhost:3979",
+    "botEndpoint": "http://localhost:3979",
     "assetsLibray": "./assets",
+    "runtimeFolder": "../../../BotProject/Templates",
     "defaultFolder": "../../../SampleBots"
   },
   "container": {
-    "botRuntime": "http://botruntime:80"
+    "botAdminEndpoint": "http://botruntime:80"
   }
 }

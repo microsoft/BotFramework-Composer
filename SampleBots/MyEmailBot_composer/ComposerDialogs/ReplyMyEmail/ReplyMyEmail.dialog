@@ -1,0 +1,121 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteReplyInfo"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "OK! Let's Start To Reply this Email. ",
+          "$designer": {
+            "id": "512779"
+          }
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "property": "user.toSubject",
+          "value": "concat('Re:',user.selectedEmail.subject)",
+          "$designer": {
+            "id": "095079"
+          }
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "prompt": "OK, Please Enter the Content of Your Email to Reply.",
+          "property": "user.toContent"
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.addTime",
+          "prompt": "Do you Want to Add a Timestamp?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "alwaysPrompt": true
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.addTime",
+          "actions": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "property": "user.toContent",
+              "value": "concat(user.toContent,'      ', convertFromUTC(utcNow(), 'China Standard Time'))",
+              "$designer": {
+                "id": "093887"
+              }
+            }
+          ],
+          "$designer": {
+            "id": "087959"
+          }
+        },
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "property": "dialog.confirmed",
+          "prompt": "Are you Sure to Send this Email?",
+          "unrecognizedPrompt": "Please try again.",
+          "invalidPrompt": "Please input yes/no.",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "$designer": {
+            "id": "674795"
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "dialog.confirmed",
+          "actions": [
+            {
+              "$type": "Microsoft.BeginDialog",
+              "dialog": "ReplyMyEmailThroughGraph",
+              "$designer": {
+                "id": "170908"
+              }
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "477196"
+              },
+              "activity": "[bfdactivity-477196]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "841334"
+              },
+              "activity": "[bfdactivity-841334]"
+            }
+          ],
+          "$designer": {
+            "id": "426465"
+          }
+        }
+      ],
+       
+      "$designer": {
+        "id": "976604"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "724417"
+  }
+}

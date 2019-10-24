@@ -1,0 +1,31 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "url": "https://graph.microsoft.com/v1.0/me/messages/{user.selectedEmail.id}/reply",
+          "method": "POST",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "body": {
+            "comment": "{user.toContent}"
+          },
+          "resultProperty": "dialog.postResponse"
+        }
+      ],
+       
+      "$designer": {
+        "id": "714695"
+      }
+    }
+  ],
+  "$schema": "../../../app.schema",
+  "$designer": {
+    "id": "452646"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "400830",
+    "description": "This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs."
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RegexRecognizer",
+    "intents": [
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "TextInput",
+        "pattern": "TextInput|01"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "NumberInput",
+        "pattern": "NumberInput|02"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ConfirmInput",
+        "pattern": "ConfirmInput|03"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "ChoiceInput",
+        "pattern": "ChoiceInput|04"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "AttachmentInput",
+        "pattern": "AttachmentInput|05"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "DateTimeInput",
+        "pattern": "DateTimeInput|06"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "OAuthInput",
+        "pattern": "OAuthInput|07"
+      },
+      {
+        "$type": "Microsoft.IntentPattern",
+        "intent": "cancel",
+        "pattern": "cancel"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[help]"
+        }
+      ],
+      "$designer": {
+        "id": "690456"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "872701"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "TextInput"
+        }
+      ],
+      "intent": "TextInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "454567"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "NumberInput"
+        }
+      ],
+      "intent": "NumberInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "543817"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DateTimeInput"
+        }
+      ],
+      "intent": "DateTimeInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "034901"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ConfirmInput"
+        }
+      ],
+      "intent": "ConfirmInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "374825"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ChoiceInput"
+        }
+      ],
+      "intent": "ChoiceInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "832993"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AttachmentInput"
+        }
+      ],
+      "intent": "AttachmentInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "268314"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "OAuthInput"
+        }
+      ],
+      "intent": "OAuthInput"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "566255"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "068558"
+          },
+          "activity": "[bfdactivity-068558]"
+        }
+      ],
+      "intent": "CancelIntent"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "487768"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "581197"
+          },
+          "activity": "[bfdactivity-581197]"
+        }
+      ]
+    }
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
+}

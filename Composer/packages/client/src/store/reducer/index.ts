@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 
-import { ReducerFunc, DialogSetting } from '../types';
-import { getExtension, createSelectedPath } from '../../utils';
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
-import settingStorage from '../../utils/dialogSettingStorage';
+import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
+import { getExtension } from '../../utils';
+import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
 
@@ -14,6 +14,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
+  state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
@@ -98,6 +99,11 @@ const setBotStatus = (state, { status, botEndpoint }) => {
   return state;
 };
 
+const updateRemoteEndpoint = (state, { slot, botEndpoint }) => {
+  state.remoteEndpoints[slot] = botEndpoint;
+  return state;
+};
+
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -107,10 +113,12 @@ const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
   focusedStorageFolder.children = focusedStorageFolder.children.reduce((files, file) => {
     if (file.type === FileTypes.FOLDER) {
       files.push(file);
+    } else if (file.type === FileTypes.BOT) {
+      files.push(file);
     } else {
       const path = file.path;
       const extension = getExtension(path);
-      if (projectFiles.indexOf(extension) >= 0) {
+      if (projectFiles.includes(extension)) {
         files.push(file);
       }
     }
@@ -147,32 +155,24 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb }) => {
+const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb, promptTab }) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
     state.focusPath = dialogId + '#.' + focused;
+  } else if (selected) {
+    state.focusPath = dialogId + '#.' + selected;
   }
 
   //add current path to the breadcrumb
   breadcrumb.push({ dialogId, selected, focused });
 
-  //if use navigateto to design page, add events[0] for default select
-  if (!selected) {
-    selected = createSelectedPath(0);
-    breadcrumb = [...breadcrumb, { dialogId, selected, focused }];
-  }
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused };
+  state.designPageLocation = { dialogId, selected, focused, promptTab };
   return state;
 };
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
-  return state;
-};
-
-const updateEnvSetting: ReducerFunc = state => {
-  state.isEnvSettingUpdated = !state.isEnvSettingUpdated;
   return state;
 };
 
@@ -208,6 +208,22 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
+const setPublishVersions: ReducerFunc = (state, { versions } = {}) => {
+  state.publishVersions = versions;
+  return state;
+};
+
+const updatePublishStatus: ReducerFunc = (state, payload) => {
+  if (payload.versions) {
+    state.publishStatus = 'ok';
+  } else if (payload.error) {
+    state.publishStatus = payload.error;
+  } else if (payload.start === true) {
+    state.publishStatus = 'start';
+  }
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -236,9 +252,13 @@ export const reducer = createReducer({
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
-  [ActionTypes.UPDATE_ENV_SETTING]: updateEnvSetting,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
+  [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
+  [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
+  [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
+  [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
+  [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
 } as { [type in ActionTypes]: ReducerFunc });

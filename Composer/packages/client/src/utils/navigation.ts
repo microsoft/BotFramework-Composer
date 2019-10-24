@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { navigate, NavigateOptions } from '@reach/router';
 
-import { BreadcrumbItem } from '../store/types';
+import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
@@ -61,11 +61,11 @@ export function getUrlSearch(selected: string, focused: string): string {
   return result;
 }
 
-export function checkUrl(
-  currentUri: string,
-  { dialogId, selected, focused }: { dialogId: string; selected: string; focused: string }
-) {
-  const lastUri = `/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+export function checkUrl(currentUri: string, { dialogId, selected, focused, promptTab }: DesignPageLocation) {
+  let lastUri = `/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+  if (promptTab) {
+    lastUri += `#${promptTab}`;
+  }
   return lastUri === currentUri;
 }
 

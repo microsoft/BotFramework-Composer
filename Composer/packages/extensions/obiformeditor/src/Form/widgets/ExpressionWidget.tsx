@@ -1,8 +1,12 @@
 import React from 'react';
 import formatMessage from 'format-message';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react';
+import { JSONSchema6 } from 'json-schema';
 
 import { FormContext } from '../types';
+import { EditableField } from '../fields/EditableField';
+
+import { WidgetLabel } from './WidgetLabel';
 
 const getErrorMessage = () =>
   formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation <a>here</a>', {
@@ -21,13 +25,17 @@ const getErrorMessage = () =>
 
 interface ExpresionWidgetProps extends ITextFieldProps {
   formContext: FormContext;
-  rawErrors: string[];
+  rawErrors?: string[];
+  schema: JSONSchema6;
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
+  /** Set to true to display as inline text that is editable on hover */
+  editable?: boolean;
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext } = props;
+  const { rawErrors, formContext, schema, id, label, editable, ...rest } = props;
   const { shellApi } = formContext;
+  const { description } = schema;
 
   const onGetErrorMessage = async (value: string) => {
     if (!value) {
@@ -47,5 +55,12 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
-  return <TextField {...props} onGetErrorMessage={onGetErrorMessage} />;
+  const Field = editable ? EditableField : TextField;
+
+  return (
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
+    </>
+  );
 };

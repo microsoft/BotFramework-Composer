@@ -1,15 +1,12 @@
 import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
+import { ShellData, EditorSchema, ShellApi, OBISchema } from 'shared';
 
-import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
-
-export interface FormContext {
-  editorSchema: any;
+export interface FormContext
+  extends Pick<ShellData, 'luFiles' | 'lgFiles' | 'currentDialog' | 'focusedEvent' | 'focusedSteps' | 'focusedTab'> {
+  editorSchema: EditorSchema;
   shellApi: ShellApi;
   rootId: string;
-  luFiles: LuFile[];
-  lgFiles: LgFile[];
   dialogOptions: { value: string; label: string }[];
-  currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
 }
@@ -24,13 +21,16 @@ export interface BFDObjectFieldTemplateProps extends ObjectFieldTemplateProps {
   onChange: (any) => void;
 }
 
-export interface BFDFieldProps extends FieldProps {
+export interface BFDFieldProps<T = any> extends FieldProps<T> {
   formContext: FormContext;
 }
 
-export interface BFDWidgetProps extends WidgetProps {
+export interface BFDWidgetProps extends Partial<WidgetProps> {
+  id: string;
+  schema: OBISchema;
+  onChange: (data: any) => void;
   formContext: FormContext;
-  options: {
+  options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
   };

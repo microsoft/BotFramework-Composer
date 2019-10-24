@@ -1,11 +1,10 @@
 import React from 'react';
 import { TextField, SpinButton } from 'office-ui-fabric-react';
-import { Position } from 'office-ui-fabric-react/lib/utilities/positioning';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { BFDWidgetProps } from '../types';
 
 import { ExpressionWidget } from './ExpressionWidget';
+import { WidgetLabel } from './WidgetLabel';
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
@@ -27,7 +26,6 @@ export function TextWidget(props: BFDWidgetProps) {
     schema,
     id,
     disabled,
-    options,
     formContext,
     rawErrors,
   } = props;
@@ -39,14 +37,6 @@ export function TextWidget(props: BFDWidgetProps) {
     placeholderText = `ex. ${examples.join(', ')}`;
   }
 
-  const getLabel = (): string | undefined => {
-    if (options.label === false) {
-      return;
-    }
-
-    return options.label || label;
-  };
-
   if (type === 'integer' || type === 'number') {
     const updateValue = (step: number) => (value: string) => {
       // if the number is a float, we need to convert to a fixed decimal place
@@ -56,53 +46,64 @@ export function TextWidget(props: BFDWidgetProps) {
 
       onChange(newValue);
       // need to allow form data to propagate before flushing to state
-      setTimeout(() => onBlur(id, value));
+      setTimeout(() => onBlur && onBlur(id, value));
     };
 
     const step = type === 'integer' ? 1 : 0.1;
 
     return (
       <>
+        <WidgetLabel label={label} description={description} id={id} />
         <SpinButton
-          label={getLabel()}
-          labelPosition={Position.top}
           onDecrement={updateValue(-step)}
           onIncrement={updateValue(step)}
           onValidate={updateValue(0)}
           disabled={Boolean(schema.const) || readonly || disabled}
           step={step}
           value={value}
+          styles={{
+            labelWrapper: { display: 'none' },
+          }}
         />
-        {description && (
-          <span style={{ fontSize: '14px' }}>
-            <span style={{ margin: 0, color: NeutralColors.gray130, fontSize: '11px' }}>{description}</span>
-          </span>
-        )}
       </>
     );
   }
 
   const sharedProps = {
-    description,
     disabled,
     id,
     value,
-    label: getLabel(),
     autoComplete: 'off',
-    onBlur: () => onBlur(id, value),
+    onBlur: () => onBlur && onBlur(id, value),
     onChange: (_, newValue?: string) => onChange(newValue),
-    onFocus: () => onFocus(id, value),
+    onFocus: () => onFocus && onFocus(id, value),
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
   };
 
   if ($role === 'expression') {
-    return <ExpressionWidget {...sharedProps} formContext={formContext} rawErrors={rawErrors} />;
+    return (
+      <ExpressionWidget
+        {...sharedProps}
+        label={label}
+        schema={schema}
+        formContext={formContext}
+        rawErrors={rawErrors}
+      />
+    );
   }
 
-  return <TextField {...sharedProps} />;
+  return (
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <TextField {...sharedProps} />
+    </>
+  );
 }
 
 TextWidget.defaultProps = {
   schema: {},
+  options: {},
+  onBlur: () => {},
+  onFocus: () => {},
 };

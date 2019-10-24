@@ -1,19 +1,20 @@
 import { startCase, get } from 'lodash';
 import React from 'react';
-import { ColorClassNames, FontClassNames } from '@uifabric/styling';
+import { FontClassNames, FontWeights } from '@uifabric/styling';
 import classnames from 'classnames';
 import { JSONSchema6 } from 'json-schema';
+import { FontSizes } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
-import SectionSeparator from '../SectionSeparator';
 import { FormContext } from '../types';
 
-import { DesignerField } from './DesignerField';
+import { EditableField } from './EditableField';
 
 const overrideDefaults = {
-  collapsable: true,
-  defaultCollapsed: false,
   title: undefined,
   description: undefined,
+  helpLink: undefined,
+  helpLinkText: undefined,
 };
 
 interface RootFieldProps {
@@ -31,21 +32,19 @@ export const RootField: React.FC<RootFieldProps> = props => {
   const { title, name, description, schema, formData, formContext } = props;
   const { currentDialog, editorSchema, isRoot } = formContext;
 
-  const fieldOverrides = get(editorSchema, 'content.fieldTemplateOverrides.RootField', overrideDefaults);
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
 
-  const hasDesigner = !!get(schema, 'properties.$designer');
-
-  const handleDesignerChange = (newDesigner): void => {
+  const handleTitleChange = (e: any, newTitle?: string): void => {
     if (props.onChange) {
-      props.onChange({ ...formData, $designer: newDesigner });
+      props.onChange({ ...formData, $designer: { ...formData.$designer, name: newTitle } });
     }
   };
 
   const getTitle = (): string => {
     const dialogName = isRoot && currentDialog.displayName;
+    const designerName = formData && formData.$designer && formData.$designer.name;
 
-    return dialogName || sdkOverrides.title || title || schema.title || startCase(name);
+    return designerName || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
   const getDescription = (): string => {
@@ -54,23 +53,39 @@ export const RootField: React.FC<RootFieldProps> = props => {
 
   return (
     <div id={props.id} className="RootField">
-      <SectionSeparator
-        styles={{ marginTop: 0 }}
-        label={sdkOverrides.title === false ? null : getTitle()}
-        collapsable={fieldOverrides.collapsable}
-        defaultCollapsed={fieldOverrides.defaultCollapsed}
-      >
+      <div className="RootFieldTitle">
+        <EditableField
+          value={getTitle()}
+          onChange={handleTitleChange}
+          styleOverrides={{ field: { fontWeight: FontWeights.semibold } }}
+          fontSize={FontSizes.size20}
+        />
         {sdkOverrides.description !== false && (description || schema.description) && (
-          <p
-            className={classnames('RootFieldDescription', ColorClassNames.neutralPrimaryAlt, FontClassNames.medium)}
-            dangerouslySetInnerHTML={{ __html: getDescription() }}
-          />
+          <p className={classnames('RootFieldDescription', FontClassNames.smallPlus)}>
+            {getDescription()}
+            {sdkOverrides.helpLink && sdkOverrides.helpLinkText && (
+              <>
+                <br />
+                <br />
+                <a href={sdkOverrides.helpLink} target="_blank" rel="noopener noreferrer">
+                  {sdkOverrides.helpLinkText}
+                </a>
+              </>
+            )}
+          </p>
         )}
-        {hasDesigner && (
-          <DesignerField placeholder={getTitle()} data={get(formData, '$designer')} onChange={handleDesignerChange} />
-        )}
-      </SectionSeparator>
+      </div>
+
       {props.children}
+
+      <div className="RootFieldMetaData">
+        <div style={{ marginRight: '36px' }}>
+          <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
+            {formatMessage('ID number')}
+          </span>
+          <span style={{ minWidth: '75px', display: 'inline-block' }}>{get(formData, '$designer.id')}</span>
+        </div>
+      </div>
     </div>
   );
 };

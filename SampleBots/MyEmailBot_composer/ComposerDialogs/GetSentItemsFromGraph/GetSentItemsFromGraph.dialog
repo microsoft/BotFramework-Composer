@@ -1,0 +1,30 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.HttpRequest",
+          "method": "GET",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/sentitems/messages",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "resultProperty": "user.getGraphSentItems",
+          "$designer": {
+            "id": "956279"
+          }
+        }
+      ],      
+      "$designer": {
+        "id": "946561"
+      }
+    }
+  ],
+  "$schema": "../../app.schema",
+  "$designer": {
+    "id": "737408"
+  }
+}

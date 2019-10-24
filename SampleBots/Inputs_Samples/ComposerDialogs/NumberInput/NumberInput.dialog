@@ -1,0 +1,77 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "183119"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "272503"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "id": "416094"
+          },
+          "property": "user.age",
+          "prompt": "What is your age?",
+          "invalidPrompt": "Please input a number.",
+          "maxTurnCount": 2,
+          "alwaysPrompt": true,
+          "allowInterruptions": false,
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "303304"
+          },
+          "activity": "[bfdactivity-303304]"
+        },
+        {
+          "$type": "Microsoft.NumberInput",
+          "$designer": {
+            "id": "890316"
+          },
+          "property": "user.result",
+          "prompt": "2 * 2.2 equals?",
+          "maxTurnCount": 2147483647,
+          "alwaysPrompt": true,
+          "allowInterruptions": "false",
+          "outputFormat": "float",
+          "defaultLocale": "en-us"
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "622462"
+          },
+          "condition": "(user.result - 4.4) < 0.0000001",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "284482"
+              },
+              "activity": "[bfdactivity-284482]"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "172233"
+              },
+              "activity": "[bfdactivity-172233]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

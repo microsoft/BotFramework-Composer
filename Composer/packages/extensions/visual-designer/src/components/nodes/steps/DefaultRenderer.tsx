@@ -21,16 +21,14 @@ function makeLabel(data) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
       return `{${data.property || '?'}} = ${data.value || '?'}`;
-    case ObiTypes.SaveEntity:
-      return `{${data.property || '?'}} = ${data.entity || '?'}`;
     case ObiTypes.InitProperty:
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
-      return `${data.changeType} {${data.arrayProperty || '?'}}`;
+      return `${data.changeType} {${data.itemsProperty || '?'}}`;
     case ObiTypes.ForeachDetail:
-      return `Each {${data.valueProperty || '?'}} in {${data.listProperty || '?'}}`;
+      return `Each value in {${data.itemsProperty || '?'}}`;
     case ObiTypes.ForeachPageDetail:
-      return `Each page of ${data.pageSize || '?'} in {${data.listProperty || '?'}}`;
+      return `Each page of ${data.pageSize || '?'} in {${data.itemsProperty || '?'}}`;
 
     default:
       return '';
@@ -45,10 +43,6 @@ const ContentKeyByTypes: {
   [ObiTypes.EditArray]: {
     label: 'changeType',
     details: 'arrayProperty',
-  },
-  [ObiTypes.SaveEntity]: {
-    label: 'entity',
-    details: 'property',
   },
   [ObiTypes.InitProperty]: {
     label: 'property',
@@ -71,11 +65,11 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.ForeachDetail]: {
     header: 'Loop: For Each',
-    label: 'listProperty',
+    label: 'itemsProperty',
   },
   [ObiTypes.ForeachPageDetail]: {
     header: 'Loop: For Each Page',
-    label: 'listProperty',
+    label: 'itemsProperty',
   },
   [ObiTypes.TextInput]: {
     label: 'prompt',
@@ -104,29 +98,23 @@ const ContentKeyByTypes: {
   [ObiTypes.EndTurn]: {
     text: 'Wait for another message',
   },
-  [ObiTypes.RepeatDialog]: {
-    text: 'Repeat this dialog',
-  },
-  [ObiTypes.ReplaceDialog]: {
-    text: 'Replace this dialog',
-  },
   [ObiTypes.EmitEvent]: {
     label: 'eventName',
-  },
-  [ObiTypes.CodeStep]: {
-    text: 'Run custom code',
   },
   [ObiTypes.HttpRequest]: {
     label: 'url',
   },
   [ObiTypes.TraceActivity]: {
-    label: 'valueProperty',
+    label: 'name',
   },
   [ObiTypes.LogAction]: {
     label: 'text',
   },
   [ObiTypes.EditActions]: {
     label: 'changeType',
+  },
+  [ObiTypes.QnAMakerDialog]: {
+    label: 'hostname',
   },
 };
 
@@ -173,7 +161,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
         icon={icon}
         label={label}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, id);
+          onEvent(NodeEventTypes.Focus, { id });
         }}
       />
     );

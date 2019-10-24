@@ -2,6 +2,7 @@ import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import get from 'lodash.get';
 
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
@@ -25,6 +26,7 @@ export const LGPage = props => {
   const { state, actions } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
+  const [codeRange, setCodeRange] = useState(null);
 
   const subPath = props['*'];
   const isRoot = subPath === '';
@@ -96,6 +98,11 @@ export const LGPage = props => {
     }
   }
 
+  function onToggleEditMode() {
+    setEditMode(!editMode);
+    setCodeRange(null);
+  }
+
   async function onChange(newContent) {
     const payload = {
       id: lgFile.id,
@@ -113,7 +120,11 @@ export const LGPage = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewClickEdit() {
+  function onTableViewClickEdit(template) {
+    setCodeRange({
+      startLineNumber: get(template, 'ParseTree._start._line', 0),
+      endLineNumber: get(template, 'ParseTree._stop._line', 0),
+    });
     navigateTo(`/language-generation`);
     setEditMode(true);
   }
@@ -130,7 +141,7 @@ export const LGPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('Bot says')}..</div>
+        <div>{formatMessage('Bot Responses')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}
@@ -139,7 +150,7 @@ export const LGPage = props => {
             offText={formatMessage('Edit mode')}
             checked={editMode}
             disabled={!isRoot && editMode === false}
-            onChange={() => setEditMode(!editMode)}
+            onChange={onToggleEditMode}
           />
         </div>
       </div>
@@ -161,6 +172,9 @@ export const LGPage = props => {
                       },
                     },
                   },
+                  chevronButton: {
+                    backgroundColor: 'transparent',
+                  },
                 }}
                 selectedKey={isRoot ? '_all' : subPath}
                 groups={navLinks}
@@ -172,7 +186,7 @@ export const LGPage = props => {
         </div>
         <div css={contentEditor}>
           {editMode ? (
-            <CodeEditor file={lgFile} onChange={onChange} />
+            <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} />
           ) : (
             <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}

@@ -1,0 +1,37 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "condition": "user.sentPages == 0",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "activity": "This Is the First Page !"
+            },
+            {
+              "$type": "Microsoft.EndDialog"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "value": "user.sentPages - 1",
+          "property": "user.sentPages"
+        }
+      ],
+       
+      "$designer": {
+        "id": "589772"
+      }
+    }
+  ],
+  "$schema": "../../../../app.schema",
+  "$designer": {
+    "id": "501341"
+  }
+}

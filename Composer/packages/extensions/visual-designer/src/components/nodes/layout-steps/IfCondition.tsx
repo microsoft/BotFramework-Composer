@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { FunctionComponent, useEffect, useState, useMemo } from 'react';
+import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../../transformers/transformIfCondition';
 import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { GraphNode } from '../../../models/GraphNode';
-import { areBoundariesEqual } from '../../../models/Boundary';
+import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
@@ -14,7 +14,9 @@ import { Diamond } from '../templates/Diamond';
 import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 
-const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
+import { NodeMap, BoundaryMap } from './types';
+
+const calculateNodeMap = (path, data): NodeMap => {
   const result = transformIfCondtion(data, path);
   if (!result) return {};
 
@@ -27,8 +29,8 @@ const calculateNodeMap = (path, data): { [id: string]: GraphNode } => {
   };
 };
 
-const calculateLayout = (nodeMap, boundaryMap) => {
-  (Object.values(nodeMap) as GraphNode[])
+const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
+  Object.values(nodeMap)
     .filter(x => !!x)
     .forEach((x: GraphNode) => (x.boundary = boundaryMap[x.id] || x.boundary));
 
@@ -36,12 +38,12 @@ const calculateLayout = (nodeMap, boundaryMap) => {
 };
 
 export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
-  const [boundaryMap, setBoundaryMap] = useState({});
+  const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
   const accumulatedPatches = {};
 
-  const patchBoundary = (id, boundary) => {
+  const patchBoundary = (id, boundary?: Boundary) => {
     if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
       accumulatedPatches[id] = boundary;
       setBoundaryMap({
@@ -73,7 +75,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
       <OffsetContainer offset={choice.offset}>
         <Diamond
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, id);
+            onEvent(NodeEventTypes.Focus, { id });
           }}
         />
       </OffsetContainer>

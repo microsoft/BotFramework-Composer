@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { LuEditor } from 'code-editor';
-
-import { LuFile } from '../../../types';
+import { LuFile } from 'shared';
 
 interface InlineLuEditorProps {
   file: LuFile;
@@ -19,8 +18,8 @@ const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   };
 
   return (
-    <div style={{ height: '500px', paddingBottom: '19px' }}>
-      <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} />
+    <div style={{ margin: '10px 0', padding: '0 18px' }}>
+      <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} height={450} />
     </div>
   );
 };

@@ -1,0 +1,47 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "714773",
+    "description": "This is a bot that demonstrates use of the TraceActivity & LogAction concepts in Adaptive Dialogs."
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "044028"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "107670"
+          },
+          "property": "user.name",
+          "prompt": "Hello, what is your name?",
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.TraceActivity",
+          "$designer": {
+            "id": "774586"
+          },
+          "value": "user.name",
+          "valueType": "memory"
+        },
+        {
+          "$type": "Microsoft.LogAction",
+          "$designer": {
+            "id": "219510"
+          },
+          "text": "{user.name}",
+          "traceActivity": false
+        }
+      ]
+    }
+  ]
+}

@@ -4,8 +4,11 @@ import { IChoiceGroupOption } from 'office-ui-fabric-react';
 
 import { RadioWidgetProps } from '../types';
 
+import { WidgetLabel } from './WidgetLabel';
+
 export function RadioWidget(props: RadioWidgetProps) {
-  const { label, onChange, onBlur, onFocus, value, options, ...rest } = props;
+  const { label, onChange, onBlur, onFocus, value, options, id, schema } = props;
+  const { description } = schema;
 
   const choices = (options.enumOptions || []).map(o => ({
     key: o.value,
@@ -13,14 +16,16 @@ export function RadioWidget(props: RadioWidgetProps) {
   }));
 
   return (
-    <ChoiceGroup
-      {...rest}
-      label={label}
-      onBlur={() => onBlur(rest.id, value)}
-      onChange={(e, option?: IChoiceGroupOption) => onChange(option ? option.key : null)}
-      onFocus={() => onFocus(rest.id, value)}
-      options={choices}
-      selectedKey={value}
-    />
+    <>
+      <WidgetLabel label={label} description={description} id={id} />
+      <ChoiceGroup
+        id={id}
+        onBlur={() => onBlur && onBlur(id, value)}
+        onChange={(e, option?: IChoiceGroupOption) => onChange(option ? option.key : null)}
+        onFocus={() => onFocus && onFocus(id, value)}
+        options={choices}
+        selectedKey={value}
+      />
+    </>
   );
 }
