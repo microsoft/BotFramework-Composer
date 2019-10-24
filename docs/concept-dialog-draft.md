@@ -1,11 +1,15 @@
 # Dialogs 
 
-In Bot Composer, Dialogs are functional components offered in a visual interface. These Dialogs are based on [Adaptive Dialog](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme), which is a derivative of a Dialog and interacts with the rest of the SDK dialog system. 
+In Bot Framework Composer, dialogs are functional components offered in a visual interface. These Dialogs are based on [Adaptive Dialog](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme), which is a derivative of a Dialog and interacts with the rest of the SDK dialog system. 
  
-Bot Framework Composer provides a new dialog authoring experience that does not require writing code. The dialog system in the Bot Framework Composer support building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs as components in Bot Framework Composer will help users focus on the model of the conversation rather than the mechanics of dialog management.  
+The dialog authoring experience in Bot Framework Composer does not require you to write code. The dialog system supports building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs help users focus on conversation modeling rather than the mechanics of dialog management.  
 
-## Types of Dialogs  
-There are two types of Dialogs in Bot Composer: main dialog and dhild dialog. Creating a Dialog in Bot Composer is to define an conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** suffix with the name you define for the new bot. After the main dialog is created, you can create children dialogs when necessary. Each bot has one main dialog but can have multiple children dialogs or no child dialog. The following screenshot shows how to: 
+## Types of dialogs  
+There are two types of dialogs: 
+- main dialog
+- child dialog
+
+You create a dialog in the Bot Framework Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** extension. After the main dialog is created, you can create child dialogs as needed. Each bot has one main dialog but can have multiple child dialogs or no child dialog. The following screenshot shows how to: 
 - create a main dialog 
 - create a child dialog 
 - filter dialogs using **Filter Dialogs**
@@ -16,10 +20,18 @@ There are two types of Dialogs in Bot Composer: main dialog and dhild dialog. Cr
 
 <!-- ![dialogs](./media/dialog/dialogs.gif) -->
 
-At bot runtime, the main dialog is called into action and becomes an active dialog, triggering event handlers with pre-defined actions in the main dialog. As the conversation flows, a child dialog can be called by a main dialog, and then vice versa. Different child dialogs can be called with each other as well. 
+At runtime, the main dialog is called into action and becomes an active dialog, triggering event handlers with pre-defined actions in the main dialog. As the conversation flows, a child dialog can be called by a main dialog, and then vice versa. Different child dialogs can be called with each other as well. 
 
-## Anatomy of a Dialog 
-In Bot Composer, each dialog is a dialog class that contains a set of event handlers. Triggers are event handlers which can be triggered to handle different events. Currently, Bot Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`. Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. You can read the [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) concept article for more information on events and triggers in Composer. 
+## Anatomy of a dialog 
+In Bot Framework Composer, each dialog is a dialog class that contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Bot Framework Composer provides five different types of triggers in a dialog: 
+
+- `Handle an Intent`
+- `Handle Unknown Intent`
+- `Handle a Dialog Event`
+- `Handle an Event: Activity`
+- `Handle a Custom Event`
+
+Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event contain actions that should fire immediately every time the dialog starts. You can read the [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) concept article for more information on events and triggers in Composer. 
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
