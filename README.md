@@ -18,8 +18,7 @@
 
 ### How to
 #### Set up
-- Docker
-- Yarn
+- [Bot Framework Composer using Yarn](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/setup-yarn.md)
 #### Develop
 - [Sending messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
    - Use simple text and LG
