@@ -11,8 +11,8 @@ There are two types of dialogs:
 
 You create a dialog in the Bot Framework Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** extension. After the main dialog is created, you can create child dialogs as needed. Each bot has one main dialog but can have multiple child dialogs or no child dialog. The following screenshot shows how to: 
 - create a main dialog 
-- create a child dialog 
-- filter dialogs using **Filter Dialogs**
+- create child dialogs 
+- filter dialogs
 
 <p align="left">
     <img alt="dialogs" src="./media/dialog/test.gif" style="max-width:500px;" />
@@ -20,7 +20,7 @@ You create a dialog in the Bot Framework Composer to manage a conversation objec
 
 <!-- ![dialogs](./media/dialog/dialogs.gif) -->
 
-At runtime, the main dialog is called into action and becomes an active dialog, triggering event handlers with pre-defined actions in the main dialog. As the conversation flows, a child dialog can be called by a main dialog, and then vice versa. Different child dialogs can be called with each other as well. 
+At runtime, the main dialog is called into action and becomes the active dialog, triggering event handlers with pre-defined actions. As the conversation flows, a child dialog can be called by a main dialog, and vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a dialog 
 A dialog contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Bot Framework Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`.
