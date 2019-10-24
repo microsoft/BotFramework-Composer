@@ -11,6 +11,17 @@ assignees: ''
 ## Version
 What version of the Composer are you using? Paste the build SHA found on the about page.
 
+## Browser
+- [ ] Chrome
+- [ ] Safari
+- [ ] Firefox
+- [ ] Edge
+
+## OS 
+- [ ] macOS
+- [ ] Windows
+- [ ] Ubuntu
+
 ## Describe the bug
 Give a clear and concise description of what the bug is.
 
