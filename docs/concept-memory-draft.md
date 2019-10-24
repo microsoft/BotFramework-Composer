@@ -1,13 +1,12 @@
-# Memory in Bot Framework Composer
+# Conversation flow
 
-All bots built with Bot Framework Composer have a "memory" - a representation of everything that is currently in the bot's active mind. Developers can store and retrieve values in the bot memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot.
-Properties from memory can be used inside templates, and can also be used as part of a calculation.
+All bots built with Bot Framework Composer have a "memory" - a representation of everything that is currently in the bot's active mind. Developers can store and retrieve values in the bot's memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot. Properties from memory can be used inside templates, and can also be used as part of a calculation.
 
 The memory system makes it possible for bots built in Composer to do things like:
 
-* Store a user profile and user preferences
-* Remember things between sessions - like the last search query or a list of recently mentioned locations
-* Pass information between dialogs
+* store a user profile and user preferences
+* remember things between sessions - like the last search query or a list of recently mentioned locations
+* pass information between dialogs
 
 ## Anatomy of a property in memory
 
@@ -25,7 +24,7 @@ The scope of the property determines when the property is available, and how lon
 The bot's memory has two "permanent" scopes - a place to store information about individual users, and a place to store information about ongoing conversations:
 
 * **user** is associated with a specific user. Properties in the user scope are retained forever.
-* **conversation** is associated with the conversation id. Properties in the user scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in an MS Teams channel).
+* **conversation** is associated with the conversation id. Properties in the user scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in an Microsoft Teams channel).
 
 ### Storing temporary values during task handling
 The bot's memory also has two "ephemeral" scopes - a place to store temporary values that are only relevant while a task is being handled:
@@ -34,7 +33,7 @@ The bot's memory also has two "ephemeral" scopes - a place to store temporary va
 * **turn** is associated with a single turn. You can also think of this as the bot handling a single message from the user. Properties in the turn scope are discarded at the end of the turn.
 
 ## Set properties with prompts
-Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user with the **Initial Prompt**, as well as a **Property** in memory** where the user's response will be stored. Prompot responses can be formatted before being stored by selecting an option for **Output Format**.
+Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user with the **Initial Prompt**, as well as a **Property** in memory** where the user's response will be stored. Prompt responses can be formatted before being stored by selecting an option for **Output Format**.
 
 ![Prompt definition](./media/memory-concept/memory-text.png)
 
@@ -42,7 +41,7 @@ In the above example of a text prompt, the result of the prompt "Hello, what is 
 
 ## Set properties using memory actions
 
-Bot Framework provides a set of memory manipulation actions to create and modify properties in memory. Properties can be created on the fly in the Composer editor - the bot runtime will automatically manage the underlying data for you in the background.
+Bot Framework provides a set of memory manipulation actions to create and modify properties in memory. Properties can be created on the fly in the editor - the runtime will automatically manage the underlying data for you in the background.
 
 ![Memory manipulation menu](./existingdocs/Assets/memory-manipulation-menu.png)
 
