@@ -26,6 +26,7 @@ import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import setClipboard from '../actions/setClipboard';
 import setSelection from '../actions/setSelection';
+import clearSelectionState from '../actions/clearSelectionState';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -335,7 +336,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               }}
               onClick={e => {
                 e.stopPropagation();
-                dispatchEvent(NodeEventTypes.Focus, { id: '' });
+                dispatch(clearSelectionState());
               }}
             >
               <AdaptiveDialogEditor
