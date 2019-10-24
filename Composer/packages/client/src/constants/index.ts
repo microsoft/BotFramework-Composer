@@ -165,7 +165,7 @@ export const Steps = {
   NONE: 'NONE',
 };
 
-export const DialogInfo = {
+export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create from scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Designer, or start with a template.'),

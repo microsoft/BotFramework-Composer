@@ -1,5 +1,5 @@
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog } from 'shared';
+import { seedNewDialog, deepCopyAction } from 'shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -196,7 +196,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes) {
+export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, lgApi) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -208,6 +208,13 @@ export function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes) {
     return inputDialog;
   }
 
-  targetArray.currentData.splice(arrayIndex, 0, ...newNodes);
+  // Deep copy nodes with external resources
+  const copiedNodes = await Promise.all(
+    newNodes.map(async x => {
+      const node = await deepCopyAction(x, lgApi);
+      return node;
+    })
+  );
+  targetArray.currentData.splice(arrayIndex, 0, ...copiedNodes);
   return dialog;
 }

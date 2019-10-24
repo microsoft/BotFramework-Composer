@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     '@typescript-eslint/no-use-before-define': 'warn',
 
     // eslint rules

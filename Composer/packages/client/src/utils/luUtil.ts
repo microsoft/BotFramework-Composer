@@ -1,4 +1,4 @@
-import { LuFile, DialogInfo, LuDiagnostic } from '../store/types';
+import { LuFile, DialogInfo, LuDiagnostic } from 'shared';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
