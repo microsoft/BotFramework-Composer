@@ -20,6 +20,7 @@ describe('<VisualDesigner />', () => {
   it('should render the visual designer', async () => {
     const { getByTestId } = render(
       <VisualDesigner
+        hosted={false}
         data={{ content: '{"json": "some data"}' }}
         currentDialog={{ id: 'Main', displayName: 'Main', isRoot: false }}
         dialogId="SomeDialog"
