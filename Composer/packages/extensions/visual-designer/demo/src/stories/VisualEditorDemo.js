@@ -116,6 +116,9 @@ export class VisualEditorDemo extends Component {
                 removeLgTemplate: () => {
                   return Promise.resolve(true);
                 },
+                syncEditorState: state => {
+                  console.log('SyncState:', state);
+                },
               }}
             />
           </div>

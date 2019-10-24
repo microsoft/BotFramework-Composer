@@ -52,6 +52,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLgTemplate,
     undo,
     redo,
+    syncEditorState,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
@@ -84,6 +85,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       dispatch(setFocusState(focusedSteps));
     }
   }, [focusedSteps]);
+
+  useEffect(() => {
+    syncEditorState(state);
+  }, [state]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -137,6 +142,7 @@ VisualDesigner.defaultProps = {
     onFocusSteps: (_stepIds: string[], _fragment?: string) => {},
     onSelect: (_ids: string[]) => {},
     saveData: () => {},
+    syncState: state => {},
   },
 };
 
