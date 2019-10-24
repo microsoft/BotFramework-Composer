@@ -48,6 +48,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   });
 
   const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
+  // TODO: clean this long event dispatcher, migrate to redux-style
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
