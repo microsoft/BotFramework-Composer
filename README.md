@@ -20,15 +20,14 @@
 #### Set up
 - [Bot Framework Composer using Yarn](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/setup-yarn.md)
 #### Develop
-- [Sending messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
-- Asking for user input 
+- [Send messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
+- Ask for user input 
   - Use numbers, dates and time, confirmation, multiple choices 
-- [Controlling conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
-- Adding LUIS to your bot
-- [Adding QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md)
-- Sending cards 
+- [Manage conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
+- Add LUIS to your bot
+- [Add QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md)
+- Send cards 
 - [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
-- Handling interruption 
 #### Test
 - Test in Emulator
 #### Deploy
