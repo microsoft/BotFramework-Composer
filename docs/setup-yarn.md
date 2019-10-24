@@ -33,4 +33,5 @@ yarn startall
 
 ## Open Composer in a browser
 To use Composer open a browser and navigate to http://localhost:3000 or http://localhost:5000.
+
 ![browser gif]()
