@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import initialStore from './initialStore';
+import { initialStore } from './store';
 
 export const StoreContext = createContext({
   state: initialStore,

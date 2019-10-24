@@ -1,11 +1,11 @@
-import { useReducer } from 'react';
+import { useReducer, Dispatch } from 'react';
 
 import reducer from '../reducers';
 
-import initialState from './initialStore';
+import { initialStore, StoreState } from './store';
 
-const applyMiddleware = (fn, middleware?) => {
-  if (typeof fn !== 'function') return () => {};
+const applyMiddleware = (fn, middleware?): Dispatch<{ type: any; payload: any }> => {
+  if (typeof fn !== 'function') return action => {};
 
   if (typeof middleware === 'function') {
     return (...params) => {
@@ -16,10 +16,10 @@ const applyMiddleware = (fn, middleware?) => {
   return fn;
 };
 
-const useStore = (dispatchMiddleware?: (action: any) => void) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const useStore = (dispatchMiddleware?: (action: { type: any; payload: any }) => void) => {
+  const [state, dispatch] = useReducer(reducer, initialStore);
 
-  return { state, dispatch: applyMiddleware(dispatch, dispatchMiddleware) };
+  return { state: state as StoreState, dispatch: applyMiddleware(dispatch, dispatchMiddleware) };
 };
 
 export default useStore;
