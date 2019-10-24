@@ -47,7 +47,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: 'language-generation/',
       iconName: 'Robot',
-      labelName: 'Bot Says',
+      labelName: 'Bot Responses',
       activeIfUrlContains: 'language-generation',
       exact: false,
       underTest: !botLoaded,
@@ -55,7 +55,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: 'language-understanding/',
       iconName: 'People',
-      labelName: 'User Says',
+      labelName: 'User Input',
       activeIfUrlContains: 'language-understanding',
       exact: false,
       underTest: !botLoaded,
