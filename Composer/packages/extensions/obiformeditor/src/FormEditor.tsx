@@ -20,6 +20,7 @@ export interface FormEditorProps extends ShellData {
   onBlur?: () => void;
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
+  focusedId: string;
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {

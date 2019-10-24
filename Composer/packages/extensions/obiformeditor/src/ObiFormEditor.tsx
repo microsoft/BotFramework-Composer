@@ -36,11 +36,11 @@ const ErrorInfo: React.FC<FallbackProps> = ({ componentStack, error }) => (
 
 const ObiFormEditor: React.FC<FormEditorProps> = props => {
   const onChange = data => {
-    props.onChange(data, props.focusedSteps[0]);
+    props.onChange(data, props.focusedId);
   };
 
   // only need to debounce the change handler when focusedSteps change
-  const debouncedOnChange = useMemo(() => debounce(onChange, 500), [props.focusedSteps[0]]);
+  const debouncedOnChange = useMemo(() => debounce(onChange, 500), [props.focusedId]);
   const key = get(props.data, '$designer.id', props.focusPath);
 
   return (

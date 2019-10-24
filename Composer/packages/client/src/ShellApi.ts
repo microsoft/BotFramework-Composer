@@ -166,7 +166,8 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
-      focusedSteps: focused ? [focused] : selected ? [selected] : [],
+      focusedSteps: focused ? [focused] : [],
+      focusedId: focused || selected || '',
       focusedTab: promptTab,
       hosted: !!isAbsHosted(),
     };
