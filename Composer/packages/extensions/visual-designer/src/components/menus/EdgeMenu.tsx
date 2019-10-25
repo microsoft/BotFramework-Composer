@@ -44,6 +44,9 @@ const buildEdgeMenuItemsFromClipboardContext = (
     key: 'Paste',
     name: 'Paste',
     disabled: !enablePaste,
+    iconProps: {
+      iconName: 'Paste',
+    },
     style: { color: enablePaste ? '#0078D4' : '#BDBDBD', borderBottom: '1px solid #F3F2F1' },
     onClick: () => onClick('PASTE'),
   });
