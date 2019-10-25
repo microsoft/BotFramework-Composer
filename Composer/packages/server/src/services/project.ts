@@ -66,13 +66,11 @@ export class BotProjectService {
   };
 
   private static deleteRecentProject = (path: string): void => {
-    const idx = BotProjectService.recentBotProjects.findIndex(ref => Path.resolve(path) === Path.resolve(ref.path));
-    if (idx > -1) {
-      BotProjectService.recentBotProjects.splice(idx, 1);
-    } else {
-      return;
-    }
-    Store.set('recentBotProjects', BotProjectService.recentBotProjects);
+    const recentBotProjects = BotProjectService.recentBotProjects.filter(
+      ref => Path.resolve(path) !== Path.resolve(ref.path)
+    );
+    BotProjectService.recentBotProjects = recentBotProjects;
+    Store.set('recentBotProjects', recentBotProjects);
   };
 
   public static saveProjectAs = async (locationRef: LocationRef) => {

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
@@ -56,7 +57,7 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const openBotProject = async (store, absolutePath) => {
+export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -76,7 +77,7 @@ export const openBotProject = async (store, absolutePath) => {
       navTo(store, 'Main');
       startBot(store, true);
     }
-    return true;
+    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -85,7 +86,12 @@ export const openBotProject = async (store, absolutePath) => {
         message: err.response.data.message,
       },
     });
-    return false;
+    store.dispatch({
+      type: ActionTypes.REMOVE_RECENT_PROJECT,
+      payload: {
+        path: absolutePath,
+      },
+    });
   }
 };
 

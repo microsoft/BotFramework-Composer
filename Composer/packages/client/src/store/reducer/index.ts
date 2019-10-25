@@ -52,6 +52,14 @@ const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
+const removeRecentProject: ReducerFunc = (state, { path }) => {
+  const recentProjects = state.recentProjects;
+  const index = recentProjects.findIndex(p => p.path == path);
+  recentProjects.splice(index, 1);
+  state.recentProjects = recentProjects;
+  return state;
+};
+
 const updateDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   return state;
@@ -261,4 +269,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
+  [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
 } as { [type in ActionTypes]: ReducerFunc });

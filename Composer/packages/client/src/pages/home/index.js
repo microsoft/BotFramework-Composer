@@ -37,12 +37,7 @@ export const Home = () => {
   const botNumLimit = 4;
 
   const onClickRecentBotProject = async path => {
-    const success = await openBotProject(path);
-    if (success) {
-      navigate(BASEPATH);
-    } else {
-      fetchRecentProjects();
-    }
+    await openBotProject(path);
   };
 
   const onClickNewBotProject = () => {
