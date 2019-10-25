@@ -47,8 +47,8 @@ const templates: TemplateData = {
     name: 'Reminder Bot',
     description: 'A bot that echoes and responds with whatever message the user entered',
   },
-  StepsSamples: {
-    name: 'Steps Samples',
+  ActionsSamples: {
+    name: 'Actions Samples',
     description: 'A bot that echoes and responds with whatever message the user entered',
   },
   ToDoLuisBot: {
