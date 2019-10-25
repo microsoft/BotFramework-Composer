@@ -1,4 +1,4 @@
-import 'dotenv/config';
+// import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
 

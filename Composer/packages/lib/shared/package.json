@@ -32,6 +32,10 @@
     "@types/jest": "^24.0.11",
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.has": "^4.5.6",
+    "@types/lodash.trimend": "^4.5.6",
+    "@types/lodash.uniq": "^4.5.6",
     "autoprefixer": "^9.5.1",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",
@@ -54,6 +58,10 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "json-schema": "^0.2.5"
+    "json-schema": "^0.2.5",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "lodash.uniq": "^4.5.0",
+    "lodash.trimend": "^4.5.1"
   }
 }

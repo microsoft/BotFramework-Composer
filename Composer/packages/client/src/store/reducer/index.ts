@@ -1,11 +1,11 @@
 import { get, set } from 'lodash';
+import { dialogIndexer } from 'shared';
 
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
-import dialogPaser from '../../utils/dialogParser';
 
 import createReducer from './createReducer';
 
@@ -35,7 +35,7 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = dialogPaser.parseAll(response.data.dialogs);
+  state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
   state.location = response.data.location;
@@ -56,7 +56,7 @@ const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      const result = dialogPaser.parse(content);
+      const result = dialogIndexer.parse(content);
       return { ...dialog, ...result };
     }
     return dialog;
@@ -65,7 +65,7 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 };
 
 const removeDialog: ReducerFunc = (state, { response }) => {
-  state.dialogs = dialogPaser.parseAll(response.data.dialogs);
+  state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   return state;
 };
@@ -83,7 +83,7 @@ const createDialogCancel: ReducerFunc = state => {
 };
 
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = dialogPaser.parseAll(response.data.dialogs);
+  state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   state.showCreateDialogModal = false;
   delete state.onCreateDialogComplete;

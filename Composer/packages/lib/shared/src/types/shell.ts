@@ -1,4 +1,13 @@
+import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+
 import { MicrosoftAdaptiveDialog } from './sdk';
+
+export interface FileInfo {
+  name: string;
+  content: string;
+  path: string;
+  relativePath: string;
+}
 
 export interface ITrigger {
   id: string;
@@ -59,13 +68,15 @@ export interface LuFile {
     };
   };
   diagnostics: LuDiagnostic[];
+  [key: string]: any;
 }
 
 export interface LgFile {
   id: string;
   relativePath: string;
   content: string;
-  templates: [LgTemplate];
+  diagnostics: LGDiagnostic[];
+  templates: LgTemplate[];
 }
 
 export interface CodeRange {
@@ -76,7 +87,7 @@ export interface CodeRange {
 export interface LgTemplate {
   Name: string;
   Body: string;
-  Parameters: string;
+  Parameters: string[];
   Range: CodeRange;
 }
 
