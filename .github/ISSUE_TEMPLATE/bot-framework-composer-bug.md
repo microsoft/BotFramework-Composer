@@ -14,7 +14,7 @@ Complete the necessary portions of this template and delete the rest.
 Give a clear and concise description of what the bug is.
 
 ## Version
-What version of the Composer are you using? Paste the build SHA found on the about page.
+What version of the Composer are you using? Paste the build SHA found on the about page (`/about`).
 
 ## Browser
 What browser are you using?
