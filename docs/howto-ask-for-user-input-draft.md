@@ -1,7 +1,7 @@
 # Asking for user input
 Bot Framework Composer makes it easier than ever to not only collect and validate a variety of data types, and handle instances when users input invalid or unrecognized data. The [Messages_Samples bot](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) has examples of all of the prompt types and is referenced throughout this article. Below is a screenshot of the options in the **Ask a Question** menu:
 
-![Ask a Question menu screenshot]()
+![prompt menu](./media/ask-for-input/prompt-menu.png)
 
 ## Prompt types
 Bot Framework Composer currently has six types of prompts you can utilize to collect user data. For information about prompting for OAuth credentials read [Using OAuth](). 
@@ -11,7 +11,7 @@ Prompt users for their name, favorite color, or any other text data using `Promp
 
 ![Select prompt for text]()
 
-As seen in the **TextInput** dialog the user is prompted for their name and the result is stored in property as `user.name`. Change the **Output Format** if you want to trim the text (remove leading and trailing whitespace), make it lowercase, or make it uppercase.
+As seen in the **TextInput** dialog the user is prompted for their name in the **Bot Asks** section in the Propery panel, and the result is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
 
 ![Properties and format Text Prompt]()
 
@@ -20,23 +20,25 @@ Prompt users for their age and other numerical values using `Prompt for number`.
 
 ![Select prompt for number]()
 
-As seen in the **NumberInput** dialog the user is prompted for the results of `2*2.2` and their results is stored as a `user.result`. The **Output Format** is set to float (), but it can also be stored as an integer. 
+As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. Set the **Output Format** to either `float` or `integer`.  
 
 ![Properties and format Number Prompt]()
 
 ### Prompt for confirmation
-Confirmation prompts are useful after you've asked the user a question, prompt or otherwise, and want to confirm their choice. To create a confirmation prompt click the **+** button, mouse over **Ask a Question** and select **Prompt for confirmation**. 
+Confirmation prompts are useful after you've asked the user a question, prompt or otherwise, and want to confirm their choice. Unlike **Prompt for multi-choice** which allows bots to ask users for an answer out of a set, confirmation prompts ask the user to make a binary decision. To create a confirmation prompt click the **+** button, mouse over **Ask a Question** and select **Prompt for confirmation**. 
 
 ![Select prompt for confirmation]()
 
-As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **Initial Prompt** and the **Property** as `user.confirmed`.
+As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **Initial Prompt** and the **Property to fill** as `user.confirmed`.
+
+![]
 
 ### Prompt for multi-choice
 `Prompt for multi-choice` makes it easy to define a set of choices for users to choose from. To create a prompt with multiple choice options click the **+** button, mouse over **Ask a Question** and select **Prompt for multi-choice**. 
 
 ![Select prompt for multi-choice]()
 
-In the **ChoiceInput** dialog you will see the **Property** is set to `user.style`. The Output Format is set to **value** (the value of the list item) as opposed to index (index of the list item), and the **List Style** is set to **List**. The table below shows how the choices are displayed with each list option:
+In the **ChoiceInput** dialog you will see the **Property to fill** is set to `user.style`. The Output Format is set to **value** (the value of the list item) as opposed to index (index of the list item), and the **List Style** is set to **List**. The table below shows how the choices are displayed with each list option:
 
 <list option table>
 none
