@@ -141,7 +141,7 @@ export const LGPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('Bot says')}..</div>
+        <div>{formatMessage('Bot Responses')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}
