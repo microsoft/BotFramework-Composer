@@ -9,24 +9,37 @@ import { CreationFlowStatus, BASEPATH } from '../../constants';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import * as home from './styles';
-const linksLeft = [
+import { ItemContainer } from './itemContainer';
+import { RecentBotList } from './recentBotList';
+import { ExampleList } from './exampleList';
+
+const linksButtom = [
   {
-    to: 'https://github.com/microsoft/botframework-designer#get-started',
+    to: 'https://aka.ms/BF-Composer-Getting-Started',
     text: formatMessage('Getting Started'),
     css: home.linkInfo,
   },
   {
-    to: 'https://aka.ms/BotframeworkComposerGettingstarted',
+    to: 'https://aka.ms/BF-Composer-Build-First-Bot',
     text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
 ];
 
-const linksRight = [
+const ComingSoonLink = {
+  to: '/home',
+  text: formatMessage('Coming soon!'),
+  css: home.bluetitle,
+};
+
+const turtorials = [
   {
-    to: '/home',
-    text: formatMessage('Coming soon!'),
-    css: home.linkInfo,
+    title: formatMessage('Turtorial #1'),
+    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
+  },
+  {
+    title: formatMessage('Turtorial #2'),
+    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
   },
 ];
 
@@ -34,22 +47,9 @@ export const Home = () => {
   const { state, actions } = useContext(StoreContext);
   const { recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
-  const botNumLimit = 4;
+  const botNumLimit = 6;
 
-  const onClickRecentBotProject = async path => {
-    await openBotProject(path);
-    navigate(BASEPATH);
-  };
-
-  const onClickNewBotProject = () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
-  };
-
-  const onClickTemplate = id => {
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-  };
-
+  const addButton = <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />;
   const toolbarItems = [
     {
       type: 'action',
@@ -88,6 +88,26 @@ export const Home = () => {
     },
   ];
 
+  const onClickRecentBotProject = async path => {
+    await openBotProject(path);
+    navigate(BASEPATH);
+  };
+
+  const onClickNewBotProject = () => {
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
+  };
+
+  const onSelectionChanged = async item => {
+    if (item && item.path) {
+      await onClickRecentBotProject(item.path);
+    }
+  };
+
+  const onClickTemplate = id => {
+    saveTemplateId(id);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+  };
+
   useEffect(() => {
     fetchRecentProjects();
     fetchTemplates();
@@ -97,91 +117,79 @@ export const Home = () => {
     <div css={home.outline}>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
-        <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
-        <div css={home.introduction}>
-          <div css={home.introTitle}>
-            <div css={home.introTitleLeft}> {formatMessage(`Creating real conversations for real people.`)} </div>
-            <div css={home.linkLeft}>
-              {linksLeft.map(link => {
-                return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + link.text} target={'_blank'}>
-                    <div css={link.css}>{link.text}</div>
-                  </Link>
-                );
-              })}
-            </div>
+        <div css={home.leftPage}>
+          <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
+          <div css={home.introduction}>
+            {formatMessage(
+              'Bot Framework Composer is an integrated development environment(IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
+            )}
           </div>
-          <div css={home.introTitle}>
-            <div css={home.introTitleRight}> {formatMessage(`Videos`)} </div>
-            <div css={home.linkRight}>
-              {linksRight.map(link => {
-                return (
-                  <Link href={link.to} tabIndex={-1} key={'homePageRightLinks-' + link.text} target={'_blank'}>
-                    <div css={link.css}>{link.text}</div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div css={home.botArea}>
-          <div css={home.botTitle}>{formatMessage(`Start from scratch, or pick up where you left off...`)} </div>
-          <div css={home.botContainer}>
-            <div css={home.botContent}>
-              <div
-                css={home.action}
-                data-testid={'homePage-body-New'}
-                onClick={() => {
-                  onClickNewBotProject();
+          <div css={home.newBotContainer}>
+            <ItemContainer
+              title={addButton}
+              content={formatMessage('New')}
+              styles={home.newBotItem}
+              onClick={onClickNewBotProject}
+            />
+            {recentProjects.length > 0 ? (
+              <ItemContainer
+                title={''}
+                content={recentProjects[0].name}
+                styles={home.lastestBotItem}
+                onClick={async e => {
+                  await onClickRecentBotProject(recentProjects[0].path);
                 }}
-              >
-                <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />
-              </div>
-              <div css={home.actionName}> {formatMessage('New')} </div>
+              />
+            ) : null}
+          </div>
+          <div css={home.itemContainer}>
+            <div css={home.subtitle}>{formatMessage(`Recent Bots`)}</div>
+            <RecentBotList
+              recentProjects={recentProjects}
+              onSelectionChanged={async item => {
+                await onSelectionChanged(item);
+              }}
+            />
+          </div>
+          <div css={home.itemContainer}>
+            <div css={home.subtitle}>
+              {formatMessage(`Video turtorials: `)}
+              <Link href={ComingSoonLink.to} tabIndex={-1} key={ComingSoonLink.text} target={'_blank'}>
+                <div css={ComingSoonLink.css}>{ComingSoonLink.text}</div>
+              </Link>
             </div>
-            {recentProjects.map((item, index) => {
-              if (index >= botNumLimit) return null;
-              const { name, path } = item;
-              return (
-                <div css={home.botContent} key={'homePageBot-' + path}>
-                  <div
-                    css={home.action}
-                    onClick={() => {
-                      onClickRecentBotProject(path);
-                    }}
-                  >
-                    <IconButton styles={home.button()} iconProps={{ iconName: 'Robot' }} />
-                  </div>
-                  <div css={home.actionName}> {name} </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div css={home.templateArea}>
-          <div css={home.templateTitle}>{formatMessage(`Or start with a conversation template`)} </div>
-          <div css={home.templateContainer}>
-            {templateProjects.map(template => {
-              return (
-                <div
-                  css={home.templateContent}
-                  key={'homePageTemplate-' + template.id}
+            <div css={home.newBotContainer}>
+              {turtorials.map((item, index) => (
+                <ItemContainer
+                  key={index}
+                  title={item.title}
+                  content={item.content}
+                  styles={home.videoItem}
                   onClick={() => {
-                    onClickTemplate(template.id);
+                    console.log('Coming Soon!');
                   }}
-                  data-testid={`TemplateCopy-${template.id}`}
-                >
-                  <div css={home.templateText}>{template.name}</div>
-                  <div css={home.templateDescription}>{template.description}</div>
+                />
+              ))}
+              <div css={home.linkContainer}>
+                <div>
+                  {formatMessage(
+                    `Bot Framework provides the most comprehensive experience for building conversation applications.`
+                  )}
                 </div>
-              );
-            })}
+                {linksButtom.map(link => {
+                  return (
+                    <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + link.text} target={'_blank'}>
+                      <div css={link.css}>{link.text}</div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
-        <div css={home.footerContainer}>
-          <Link css={home.footer} href="/home" target={'_blank'}>
-            {formatMessage(`Learn More`)}
-          </Link>
+        <div css={home.rightPage}>
+          <div css={home.bluetitle}>{formatMessage(`Examples`)}</div>
+          <ExampleList examples={templateProjects} onClick={onClickTemplate} />
         </div>
       </div>
     </div>
