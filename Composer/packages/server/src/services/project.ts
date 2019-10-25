@@ -28,16 +28,23 @@ export class BotProjectService {
     return BotProjectService.currentBotProject;
   }
 
-  public static getRecentBotProjects = () => {
+  public static getRecentBotProjects = async () => {
     BotProjectService.initialize();
-    return BotProjectService.recentBotProjects.reduce((result: any[], item) => {
+    return await BotProjectService.recentBotProjects.reduce(async (accumP: Promise<any>, item) => {
+      const result = await accumP;
+      let dateModified = '';
+      try {
+        dateModified = await StorageService.getBlobDateModified(item.storageId, item.path);
+      } catch (err) {
+        throw err;
+      }
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
       if (!name.includes('.botproj')) {
-        result.push({ name, ...item });
+        result.push({ name, dateModified, ...item });
       }
       return result;
-    }, []);
+    }, Promise.resolve([]));
   };
 
   public static openProject = async (locationRef: LocationRef) => {

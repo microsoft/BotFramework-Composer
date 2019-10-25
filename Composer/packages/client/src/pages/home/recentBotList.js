@@ -14,6 +14,7 @@ import {
 import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
+import * as moment from 'moment';
 
 import { detailListContainer } from './styles';
 
@@ -48,11 +49,15 @@ export function RecentBotList(props) {
       isResizable: true,
       data: 'number',
       onRender: item => {
-        return <span>{item.dateModified}</span>;
+        return <span>{calculateTimeDiff(item.dateModified)}</span>;
       },
       isPadded: true,
     },
   ];
+
+  const calculateTimeDiff = time => {
+    return moment(time).toNow();
+  };
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
