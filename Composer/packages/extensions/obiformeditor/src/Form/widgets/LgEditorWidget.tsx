@@ -107,13 +107,15 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   useLayoutEffect(() => {
     if (editor) {
       const keyDownHandler = editor.onKeyDown(e => {
-        const position = editor.getPosition();
+        const { startLineNumber, endLineNumber, startColumn, endColumn, positionLineNumber, positionColumn } =
+          editor.getSelection() || {};
+        const isRangeSelected = endLineNumber !== startLineNumber || startColumn !== endColumn;
 
         switch (e.keyCode) {
           case monacoEditor.KeyCode.Backspace:
             if (
               !localContent ||
-              (position && position.lineNumber === codeRange.startLineNumber && position.column === 1)
+              (!isRangeSelected && positionLineNumber === codeRange.startLineNumber && positionColumn === 1)
             ) {
               e.preventDefault();
               e.stopPropagation();
@@ -126,7 +128,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
             const lastColumn = lines[lines.length - 1].length + 1;
             if (
               !localContent ||
-              (position && position.lineNumber === codeRange.endLineNumber && position.column === lastColumn)
+              (!isRangeSelected && positionLineNumber === codeRange.startLineNumber && positionColumn === lastColumn)
             ) {
               e.preventDefault();
               e.stopPropagation();
