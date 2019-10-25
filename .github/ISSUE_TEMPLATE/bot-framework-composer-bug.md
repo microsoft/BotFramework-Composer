@@ -8,15 +8,16 @@ assignees: ''
 
 ---
 
-## Version
-What version of the Composer are you using? Paste the build SHA found on the about page.
+Complete the necessary portions of this template and delete the rest.
 
 ## Describe the bug
 Give a clear and concise description of what the bug is.
 
+## Version
+What version of the Composer are you using? Paste the build SHA found on the about page.
+
 ## Browser
 What browser are you using?
-Complete the necessary portions of this template and delete the rest.
 
 - [ ] Chrome
 - [ ] Safari
@@ -25,7 +26,6 @@ Complete the necessary portions of this template and delete the rest.
 
 ## OS 
 What operating system are you using?
-Complete the necessary portions of this template and delete the rest.
 
 - [ ] macOS
 - [ ] Windows
