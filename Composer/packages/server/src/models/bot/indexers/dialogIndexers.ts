@@ -1,4 +1,5 @@
 import has from 'lodash.has';
+import get from 'lodash.get';
 import uniq from 'lodash.uniq';
 
 import { JsonWalk, VisitorFunc } from '../../../utility/jsonWalk';
@@ -29,15 +30,15 @@ export class DialogIndexer {
     const visitor: VisitorFunc = (path: string, value: any): boolean => {
       // it's a valid schema dialog node.
       if (has(value, '$type')) {
+        const targetNames = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt'];
         const targets: string[] = [];
-        // look for prompt field
-        if (has(value, 'prompt')) {
-          targets.push(value.prompt);
-        }
-        // look for unrecognizedPrompt field
-        if (has(value, 'unrecognizedPrompt')) {
-          targets.push(value.unrecognizedPrompt);
-        }
+
+        targetNames.forEach(name => {
+          if (has(value, name)) {
+            targets.push(get(value, name));
+          }
+        });
+
         // look for other $type
         switch (value.$type) {
           case 'Microsoft.SendActivity':

@@ -52,15 +52,15 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.BRANCHING]: {
-    label: 'Flow',
+    label: 'Create a condition',
     types: [SDKTypes.IfCondition, SDKTypes.SwitchCondition, SDKTypes.Foreach, SDKTypes.ForeachPage],
   },
   [DialogGroup.MEMORY]: {
-    label: 'Memory manipulation',
+    label: 'Manage properties',
     types: [SDKTypes.SetProperty, SDKTypes.InitProperty, SDKTypes.DeleteProperty, SDKTypes.EditArray],
   },
   [DialogGroup.STEP]: {
-    label: 'Dialogs',
+    label: 'Dialog management',
     types: [
       SDKTypes.BeginDialog,
       SDKTypes.EndDialog,
@@ -68,11 +68,10 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.EndTurn,
       SDKTypes.RepeatDialog,
       SDKTypes.ReplaceDialog,
-      SDKTypes.EditActions,
     ],
   },
   [DialogGroup.CODE]: {
-    label: 'Integrations',
+    label: 'Access external resources',
     types: [
       SDKTypes.HttpRequest,
       SDKTypes.EmitEvent,
@@ -82,7 +81,7 @@ export const dialogGroups: DialogGroupsMap = {
     ],
   },
   [DialogGroup.LOG]: {
-    label: 'Debugging',
+    label: 'Debugging options',
     types: [/* SDKTypes.DebugBreak, */ SDKTypes.LogAction, SDKTypes.TraceActivity],
   },
   [DialogGroup.EVENTS]: {
@@ -134,44 +133,67 @@ export const dialogGroups: DialogGroupsMap = {
   },
 };
 
+const menuItemHandler = (
+  handleType: (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
+    item: IContextualMenuItem
+  ) => void
+) => (
+  e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
+  item: IContextualMenuItem | undefined
+) => {
+  if (item) {
+    item = {
+      ...item,
+      $type: item.$type,
+      ...seedNewDialog(item.$type, {
+        name:
+          ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type,
+      }),
+      data: {
+        $type: item.$type, // used by the steps field to create the item
+        ...seedNewDialog(item.$type, {
+          name:
+            ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type,
+        }),
+      },
+    };
+    return handleType(e, item);
+  }
+};
+
 export const createStepMenu = (
-  stepLabels,
+  stepLabels: DialogGroup[],
   subMenu = true,
-  handleType: (e: any, item: IContextualMenuItem) => void
+  handleType: (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
+    item: IContextualMenuItem
+  ) => void,
+  filter?: (x: SDKTypes) => boolean
 ): IContextualMenuItem[] => {
   if (subMenu) {
     const stepMenuItems = stepLabels.map(x => {
       const item = dialogGroups[x];
+      if (item.types.length === 1) {
+        const conceptLabel = ConceptLabels[item.types[0]];
+        return {
+          key: item.types[0],
+          name: conceptLabel && conceptLabel.title ? conceptLabel.title : item.types[0],
+          $type: item.types[0],
+          onClick: menuItemHandler(handleType),
+        };
+      }
       const subMenu: IContextualMenuProps = {
-        items: item.types.map($type => ({
-          key: $type,
-          name: ConceptLabels[$type] && ConceptLabels[$type].title ? ConceptLabels[$type].title : $type,
-          $type: $type,
-        })),
-        onItemClick: (e, item: IContextualMenuItem | undefined) => {
-          if (item) {
-            item = {
-              ...item,
-              $type: item.$type,
-              ...seedNewDialog(item.$type, {
-                name:
-                  ConceptLabels[item.$type] && ConceptLabels[item.$type].title
-                    ? ConceptLabels[item.$type].title
-                    : item.$type,
-              }),
-              data: {
-                $type: item.$type, // used by the steps field to create the item
-                ...seedNewDialog(item.$type, {
-                  name:
-                    ConceptLabels[item.$type] && ConceptLabels[item.$type].title
-                      ? ConceptLabels[item.$type].title
-                      : item.$type,
-                }),
-              },
-            };
-            return handleType(e, item);
-          }
-        },
+        items: item.types.filter(filter || (() => true)).map($type => {
+          const conceptLabel = ConceptLabels[$type];
+
+          return {
+            key: $type,
+            name: conceptLabel && conceptLabel.title ? conceptLabel.title : $type,
+            $type: $type,
+          };
+        }),
+        onItemClick: menuItemHandler(handleType),
       };
 
       const menuItem: IContextualMenuItem = {
@@ -186,7 +208,8 @@ export const createStepMenu = (
     return stepMenuItems;
   } else {
     const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
-      const name = ConceptLabels[item] && ConceptLabels[item].title ? ConceptLabels[item].title : item;
+      const conceptLabel = ConceptLabels[item];
+      const name = conceptLabel && conceptLabel.title ? conceptLabel.title : item;
       const menuItem: IContextualMenuItem = {
         key: item,
         text: name,

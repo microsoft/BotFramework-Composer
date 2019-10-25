@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useContext } from 'react';
 import { Spinner, SpinnerSize, Dialog, DialogType, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
@@ -60,9 +62,9 @@ export const RequireAuth: React.FC = props => {
   }
 
   return (
-    <>
+    <React.Fragment>
       {sessionExpiredDialog}
       {props.children}
-    </>
+    </React.Fragment>
   );
 };
