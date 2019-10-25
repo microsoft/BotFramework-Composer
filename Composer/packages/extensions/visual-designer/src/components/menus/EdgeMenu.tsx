@@ -39,14 +39,15 @@ const buildEdgeMenuItemsFromClipboardContext = (
     filter
   );
 
-  if (clipboardActions.length) {
-    menuItems.unshift({
-      key: 'Paste',
-      name: 'Paste',
-      style: { color: 'lightblue' },
-      onClick: () => onClick('PASTE'),
-    });
-  }
+  const enablePaste = !!clipboardActions.length;
+  menuItems.unshift({
+    key: 'Paste',
+    name: 'Paste',
+    disabled: !enablePaste,
+    style: { color: enablePaste ? '#0078D4' : '#BDBDBD', borderBottom: '1px solid #F3F2F1' },
+    onClick: () => onClick('PASTE'),
+  });
+
   return menuItems;
 };
 
