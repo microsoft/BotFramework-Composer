@@ -4,14 +4,12 @@
     "id": "709692"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "783343"
       },
-
       "actions": [
         {
           "$type": "Microsoft.IfCondition",
@@ -42,5 +40,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }

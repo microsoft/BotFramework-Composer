@@ -11,7 +11,6 @@
       "$designer": {
         "id": "480162"
       },
-
       "actions": [
         {
           "$type": "Microsoft.EditArray",
@@ -49,5 +48,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
