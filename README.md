@@ -23,7 +23,7 @@
 - [Send messages](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md)
 - [Ask for user input](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-ask-for-user-input-draft.md)
 - [Manage conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
-- Add LUIS to your bot
+- [Add LUIS to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-adding-LUIS.md)
 - [Add QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md)
 - Send cards 
 - [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
