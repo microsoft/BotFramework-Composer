@@ -11,19 +11,23 @@ assignees: ''
 ## Version
 What version of the Composer are you using? Paste the build SHA found on the about page.
 
+## Describe the bug
+Give a clear and concise description of what the bug is.
+
 ## Browser
+Check what browser you are using, or add new if it's not in the list. 
+
 - [ ] Chrome
 - [ ] Safari
 - [ ] Firefox
 - [ ] Edge
 
 ## OS 
+Check what operating system you are using.
+
 - [ ] macOS
 - [ ] Windows
 - [ ] Ubuntu
-
-## Describe the bug
-Give a clear and concise description of what the bug is.
 
 ## To Reproduce
 Steps to reproduce the behavior:
@@ -36,7 +40,7 @@ Steps to reproduce the behavior:
 Give a clear and concise description of what you expected to happen.
 
 ## Screenshots
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots/gif/video to help explain your problem.
 
 ## Additional context
 Add any other context about the problem here.
