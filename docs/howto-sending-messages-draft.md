@@ -1,8 +1,8 @@
 # Sending messages to users
-The primary way a bot communicates with users is through message activites. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Composer and how to use them. We use the examples provided in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) throughout this article. 
+The primary way a bot communicates with users is through message activites. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use the examples provided in the [Message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) throughout this article. 
 
 ## User scenario
-When your bot receives messages from the user any **Intents** and **Entity values** will be extracted and passed on to the dialog's event handler, from there you can define actions of how your bot should respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
+When your bot receives messages from the user any **Intents** and **Entity** values will be extracted and passed on to the dialog's event handler, from there you can define actions of how your bot should respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
 
 Below is a screenshot of the **Send Messages** action component in Composer: 
 
