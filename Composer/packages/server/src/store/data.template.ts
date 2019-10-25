@@ -6,13 +6,13 @@ export default {
       id: 'default',
       name: 'This PC',
       type: 'LocalDisk',
-      path: path.resolve(__dirname, '../../../../../SampleBots'),
+      path: path.resolve(__dirname, '../../../../../MyBots'),
     },
   ],
   recentBotProjects: [
     {
       storageId: 'default',
-      path: path.resolve(__dirname, '../../../../../SampleBots/ToDoBot'),
+      path: path.resolve(__dirname, '../../../../../MyBots/ToDoBot'),
     },
   ],
 };
