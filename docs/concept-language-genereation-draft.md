@@ -1,36 +1,32 @@
-# Language Generation in Bot Composer
+# Language Generation
 
-Language Generation (LG) is the process to produce understandable human languages. With Language Generation, developers can extract the embedded strings from their code and resource files and manage them through a Language Generation runtime and file format. Language Generation enables customers to define multiple variations on a phrase, execute simple expressions based on context, refer to conversational memory, and over time will enable us to bring additional capabilities all leading to a more natural conversational experience. 
+Language Generation (LG) enables you to define multiple variations on a phrase, execute simple expressions based on context, and refer to conversational memory. At the core of language generation lies template expansion and entity substitution. You can provide one-of variation for expansion as well as conditionally expand a template. The output from language generation can be a simple text string or multi-line response or a complex object payload that a layer above language generation will use to construct a complete [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). Bot Framework Composer natively supprt language generation to produce output activities using the LG templating system. 
 
-Bot Composer natively supprt Language Generation to produce output activities such as a simple text string, multi-line response, or a complex object payload to construct a full blown [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). It is a templating system used to create the outgoing messages which include language generation rules, properties from memory, and other features. You can visit the [language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) article for more information. 
+You can use language generation to:
+- achieve a coherent personality, tone of voice for your bot
+- separate business logic from presentation
+- include variations and sophisticated composition based resolution for any of your bot's replies
+- construct speak .vs. display adaptations
+- construct cards, suggested actions and attachments.
 
-## Tamplate 
+Language generation is achieved through:
+- markdown based .lg file that describes the templates and their composition. See [here](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) for the .lg file format.
+- full access to current bots memory so you can data bind language to the state of memory.
+- parser and runtime libraries that help achieve runtime resolution. See [here](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md) for API-reference.
 
-### Characteristics
+## Tamplates 
 
-At the core of Language Generation lies template expansion and entity substitution. Templates in Composer have the following characteristics: 
+Templates are functions, which return one of the variations of the text, but fully resolve any other references to template for composition. You can define one more more text respose in template. For multiple responses, one response will be picked by random. You can also define one or more expressions so when it is a conditional template, those expressions control which particular collection of variations get picked. Tamplates can be parameterized, which means a template such as {greeting} can be called in two different places: one with the explicit value, and one with the implicit property. 
 
-- Template is function
-- One or more text response <!-- // if you have more than one, one is picked by random -->
-- One or more template references (composition)
-- One or more expressions 
-  - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
-  - Reference to a property 
-  <!-- {foo} -->
-- Templates can be parameterized
-
-Templates are functions, which return one of the variations of the text, but fully resolve any other references to template for composition. You can define one more more text respose in template. For multiple responses, one response will be picked by random. You can also define one or more expressions so when it is a conditional template, those expressions control which particular collection of variations get picked. Tamplates can be parameterized, which means a template such as {foo} which can be called in two different places: one with the explicit value, and one with the implicit property. 
-
-### Types 
-
+### Template types 
 Composer currently supports three different types of templates: 
 - Simple template 
 - Conditional template 
 - Strucutred template 
   - Speak .vs. display .vs. card .vs. suggested action .vs. input hint
 
-### Anatomy of an LG Template 
-An LG template usuaslly consists of two parts: 
+### Anatomy of a template 
+A template usuaslly consists of two parts: 
 - name of the template, which is defined using "#" AND   
 - a list of one-of variation text values defined using "-" OR 
 - a collection of conditions, each with a 
@@ -49,10 +45,13 @@ Below is an example of a simple `.lg` template with one-of variation text values
      - Good morning @{user.name}. It's nice to see you again.    
      - Good day @{user.name}. What can I do for you today?  
 
-## Import 
-- [description text](file/uri path)
+## External references 
+
+For organization purposes and to help with re-usability, you might want to break the language generation templates into separate files and refer them from one another. In order to help with this scenario, you can use markdown-style links to import templates defined in another file. For example, `[description text](file/uri path)`.
+
+Note: All templates defined in the target file will be pulled in, so ensure that your template names are unique across files being pulled in.
  
-## Defining LG template in Composer
+## Defining language template in Bot Framework Composer
 
 ### When to define
 
