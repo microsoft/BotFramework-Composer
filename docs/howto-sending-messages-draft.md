@@ -1,8 +1,8 @@
 # Sending messages to users
-The primary way a bot communicates with users is through message activites. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use the examples provided in the [Message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) throughout this article. 
+The primary way a bot communicates with users is through message activites. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use the examples provided in the [message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) throughout this article. 
 
 ## User scenario
-When your bot receives messages from the user any **Intents** and **Entity** values will be extracted and passed on to the dialog's event handler, from there you can define actions of how your bot should respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
+When your bot receives messages from the user, any **Intents** and **Entity** values in the message are extracted and passed on to the dialog's event handler. In the event handler you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
 
 Below is a screenshot of the **Send Messages** action component in Composer: 
 
@@ -11,7 +11,7 @@ Below is a screenshot of the **Send Messages** action component in Composer:
 > [!NOTE] All types of triggers have the **Send Messages** action component. The **Handle ConversationUpdate** trigger is one type of trigger used here for demo purposes. 
 
 ## What to know
-In BF Composer, all messages sending back to the user are composed in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in BF Composer, please read the [language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) concept article. 
+In BF Composer, all messages that are sent back to the user are composed in the language generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in BF Composer, please read the [language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) concept article. 
 
 The table below lists five different types of text messages provided in BF Composer and their respective descriptions. 
 
@@ -31,7 +31,7 @@ To define a simple text message, use a "-" before the text that your want your b
 
      - Here is a simple text message. 
 
-Below is a screenshot of the simple text message example in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
+Below is a screenshot of the simple text message example in the [messages sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
 
 ![simple_text](./media/send_messages/simple_text.png)
 
@@ -40,7 +40,7 @@ To define a text message with memory, you need to **Set a Property** first and t
 
      - {user.message} 
 
-> [!NOTE] If you are not familar with setting a property in Composer, please refer to the [Memory in Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md) article. If you are not familar with expression response format, please refer to the [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) article. 
+> [!NOTE] If you are not familar with setting a property in Composer, please refer to the [memory concepts](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md) introduced in the conversation flow article. If you are not familar with expression response format, please refer to the [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) article. 
 
 Below is a screenshot of the text with memory example in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
 
@@ -54,7 +54,7 @@ Text with LG means a reference to a pre-defined LG template to generate a text r
     - Hey, this is a text with LG
     - Hello, this is a text with LG 
 
-Below is a screenshot that shows the reference of the pre-defined template named **TextWithLG** in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
+Below is a screenshot that shows the reference of the pre-defined template named **TextWithLG** in the [message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
 
 ![text_LG](./media/send_messages/text_LG.png)
 
@@ -64,11 +64,11 @@ LG With Parameter means an LG template with pre-set property as parameter to gen
     # LGWithParam(user)
     - Hello {user.name}, nice to talk to you!
 
-Below is a screenshot of the LG with paramter example in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
+Below is a screenshot of the LG with parameter example in the [message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
 
 ![LG_parameter](./media/send_messages/LG_parameter.png)
 
-### LG Composition
+### Language Generation Composition
 LG composition means to compose new LG template using pre-defined LG templates. To define an LG Composition you need to define the component template(s) first and then use the pre-defined templates as building blocks to compose a new LG Template. For example, you can define a **Greeting** LG template and then compose a new template named **LGComposition(user)** using the **Greeting** template. 
 
     # Greeting
@@ -77,7 +77,7 @@ LG composition means to compose new LG template using pre-defined LG templates. 
     # LGComposition(user)
     - {user.name} [Greeting]
 
-Below is a screenshot of the text with LG Composition in the [Messages_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
+Below is a screenshot of the text with LG Composition in the [message sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs): 
 
 ![LG_composition](./media/send_messages/LG_composition.png)
 
