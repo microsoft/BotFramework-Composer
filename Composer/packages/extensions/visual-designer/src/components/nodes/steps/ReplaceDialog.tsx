@@ -20,7 +20,7 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
     const calleeDialog = typeof data.dialog === 'object' ? data.dialog.$ref : data.dialog;
     return (
       <span>
-        {formatMessage('Switch to')}
+        {formatMessage('Switch to ')}
         <span
           css={{
             cursor: 'pointer',
@@ -31,11 +31,6 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
             onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
           }}
         >
-          <FabricIcon
-            style={{ lineHeight: '12px', fontSize: '12px', paddingLeft: '5px', paddingRight: '5px' }}
-            iconName="OpenSource"
-            data-testid="OpenIcon"
-          />
           {calleeDialog}
         </span>
       </span>
