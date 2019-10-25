@@ -24,14 +24,14 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: '/home',
       iconName: 'Home',
-      labelName: 'Home',
+      labelName: formatMessage('Home'),
       activeIfUrlContains: 'home',
       exact: true,
     },
     {
       to: '/dialogs/Main',
       iconName: 'SplitObject',
-      labelName: 'Design Flow',
+      labelName: formatMessage('Design Flow'),
       activeIfUrlContains: 'dialogs',
       exact: false,
       underTest: !botLoaded,
@@ -39,7 +39,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: '/test-conversation',
       iconName: 'WaitListConfirm',
-      labelName: 'Test Conversation',
+      labelName: formatMessage('Test Conversation'),
       activeIfUrlContains: '',
       exact: false,
       underTest: true, // will delete
@@ -47,7 +47,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: 'language-generation/',
       iconName: 'Robot',
-      labelName: 'Bot Says',
+      labelName: formatMessage('Bot Responses'),
       activeIfUrlContains: 'language-generation',
       exact: false,
       underTest: !botLoaded,
@@ -55,7 +55,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: 'language-understanding/',
       iconName: 'People',
-      labelName: 'User Says',
+      labelName: formatMessage('User Input'),
       activeIfUrlContains: 'language-understanding',
       exact: false,
       underTest: !botLoaded,
@@ -63,7 +63,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: '/evaluate-performance',
       iconName: 'Chart',
-      labelName: 'Evaluate performance',
+      labelName: formatMessage('Evaluate performance'),
       activeIfUrlContains: '',
       exact: false,
       underTest: true, // will delete
@@ -71,7 +71,7 @@ const topLinks = (botLoaded: boolean) => {
     {
       to: '/setting/',
       iconName: 'Settings',
-      labelName: 'Settings',
+      labelName: formatMessage('Settings'),
       activeIfUrlContains: 'setting',
       exact: false,
       underTest: !botLoaded,
@@ -89,7 +89,7 @@ const bottomLinks = [
   {
     to: '/help',
     iconName: 'unknown',
-    labelName: 'Info',
+    labelName: formatMessage('Info'),
     activeIfUrlContains: '/help',
     exact: false,
     underTest: true, // will delete
@@ -97,7 +97,7 @@ const bottomLinks = [
   {
     to: '/about',
     iconName: 'info',
-    labelName: 'About',
+    labelName: formatMessage('About'),
     activeIfUrlContains: '/about',
     exact: false,
   },
