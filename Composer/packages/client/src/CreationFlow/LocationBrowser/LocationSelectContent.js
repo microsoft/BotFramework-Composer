@@ -21,7 +21,13 @@ export function LocationSelectContent(props) {
 
   useEffect(() => {
     const index = currentStorageIndex.current;
-    updateCurrentPath(storages[index].path, storages[index].id);
+    let path = '';
+    let id = '';
+    if (storages[index]) {
+      path = storages[index].path;
+      id = storages[index].id;
+    }
+    updateCurrentPath(path, id);
   }, [storages]);
 
   useEffect(() => {

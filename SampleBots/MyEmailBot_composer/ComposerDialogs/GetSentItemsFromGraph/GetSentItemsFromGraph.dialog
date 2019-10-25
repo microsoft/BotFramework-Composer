@@ -12,13 +12,12 @@
           "header": {
             "Authorization": "Bearer {user.token.token}"
           },
-          "Property": "user.getGraphSentItems",
+          "resultProperty": "user.getGraphSentItems",
           "$designer": {
             "id": "956279"
           }
         }
-      ],
-       
+      ],      
       "$designer": {
         "id": "946561"
       }

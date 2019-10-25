@@ -2,9 +2,9 @@ import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { MicrosoftIRecognizer, LuFile } from 'shared';
 
 import { BaseField } from '../BaseField';
-import { LuFile } from '../../../types';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';

@@ -2,6 +2,7 @@ import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
+import { isAbsHosted } from '../utils/envUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -29,7 +30,7 @@ const initialState: State = {
   templateId: '',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
-  schemas: {},
+  schemas: { editor: {} },
   luFiles: [],
   designPageLocation: {
     dialogId: '',

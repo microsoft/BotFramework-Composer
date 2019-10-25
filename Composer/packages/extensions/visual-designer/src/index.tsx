@@ -7,6 +7,7 @@ import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
+import { SelfHostContext } from './store/SelfHostContext';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -24,6 +25,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   focusedTab,
   data: inputData,
   shellApi,
+  hosted,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -74,22 +76,24 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={context}>
-        <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-          <ObiEditor
-            key={dialogId}
-            path={dialogId}
-            data={data}
-            focusedSteps={focusedSteps}
-            onFocusSteps={onFocusSteps}
-            focusedEvent={focusedEvent}
-            onFocusEvent={onFocusEvent}
-            onOpen={(x, rest) => navTo(x, rest)}
-            onChange={x => saveData(x)}
-            onSelect={onSelect}
-            undo={undo}
-            redo={redo}
-          />
-        </div>
+        <SelfHostContext.Provider value={hosted}>
+          <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+            <ObiEditor
+              key={dialogId}
+              path={dialogId}
+              data={data}
+              focusedSteps={focusedSteps}
+              onFocusSteps={onFocusSteps}
+              focusedEvent={focusedEvent}
+              onFocusEvent={onFocusEvent}
+              onOpen={(x, rest) => navTo(x, rest)}
+              onChange={x => saveData(x)}
+              onSelect={onSelect}
+              undo={undo}
+              redo={redo}
+            />
+          </div>
+        </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>
   );
@@ -102,6 +106,7 @@ interface VisualDesignerProps {
   focusedSteps: string[];
   focusedTab: string;
   shellApi: any;
+  hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 

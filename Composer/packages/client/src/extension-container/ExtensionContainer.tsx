@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
+import { LuFile, ShellData } from 'shared';
 
 import ApiClient from '../messenger/ApiClient';
-import { ShellData } from '../ShellApi';
-import { LuFile } from '../store/types';
 
 import getEditor from './EditorMap';
 
