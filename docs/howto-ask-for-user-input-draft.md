@@ -1,5 +1,5 @@
 # Asking for user input
-Bot Framework Composer makes it easier than ever to not only collect and validate a variety of data types, and handle instances when users input invalid or unrecognized data. The [Messages_Samples bot](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) has examples of all of the prompt types and is referenced throughout this article. Below is a screenshot of the options in the **Ask a Question** menu:
+Bot Framework Composer makes it easier than ever to collect and validate a variety of data types, and handle instances when users input invalid or unrecognized data. The [Messages_Samples bot](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) has examples of all of the prompt types and is referenced throughout this article. Below is a screenshot of the options in the **Ask a Question** menu:
 
 ![prompt menu](./media/ask-for-input/prompt-menu.png)
 
@@ -11,7 +11,9 @@ Prompt users for their name, favorite color, or any other text data using `Promp
 
 ![Select prompt for text](./media/ask-for-input/select-text-prompt.gif)
 
-As seen in the **TextInput** dialog the user is prompted for their name in the **Bot Asks** section in the Propery panel, and the result is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
+As seen in the **TextInput** dialog the user is prompted for their name in the **Bot Asks** section in the Propery panel.
+
+The user's response is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
 
 ![Properties and format Text Prompt]()
 
@@ -68,7 +70,7 @@ Prompt users for their birthday, the date they want to take a flight, and other 
 
 ![Select prompt for date](./media/ask-for-input/select-datetime-prompt.gif)
 
-## Prompt validation and unrecognized responses 
+## Prompt settings
 Prompts in the Bot Framework Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. Here is a breakdown of the aforementioned components:
 
 Each prompt can be validated using a validation expression?
@@ -79,6 +81,8 @@ Each prompt can be validated using a validation expression?
 - **Value**: the expression used to validate the user response
 - **Default Value**: the value to return if the expression cannot be validated.
 - **Default Value Response**: message to send when max turn count has been hit and default value is selected
+
+## Exceptions
 
 
 
