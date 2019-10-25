@@ -4,8 +4,8 @@ The Bot Framework Composer is designed to be a hosted web app. Currently, you ne
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/) version V10.x or v11.x (v12.x is incompatible with Composer)
-- [Yarn](https://yarnpkg.com/en/docs/install) version 6.11.x 
+- [Node.js](https://nodejs.org/en/) version []
+- [Yarn](https://yarnpkg.com/en/docs/install) version [] 
 - [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
 - [.NET Core SDK 2.2.109](https://dotnet.microsoft.com/download)
 
