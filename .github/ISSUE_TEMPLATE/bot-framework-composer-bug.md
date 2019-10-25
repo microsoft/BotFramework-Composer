@@ -15,7 +15,8 @@ What version of the Composer are you using? Paste the build SHA found on the abo
 Give a clear and concise description of what the bug is.
 
 ## Browser
-Check what browser you are using, or add new if it's not in the list. 
+What browser are you using?
+Complete the necessary portions of this template and delete the rest.
 
 - [ ] Chrome
 - [ ] Safari
@@ -23,7 +24,8 @@ Check what browser you are using, or add new if it's not in the list.
 - [ ] Edge
 
 ## OS 
-Check what operating system you are using.
+What operating system are you using?
+Complete the necessary portions of this template and delete the rest.
 
 - [ ] macOS
 - [ ] Windows
