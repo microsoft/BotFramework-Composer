@@ -1,11 +1,11 @@
 # Controlling conversation flow
 The conversations a bot has with its users are controlled by the content of its dialog. Dialogs contain templates for messages the bot will send, along with instructions for the bot to carry out tasks. While some dialogs are linear - just one message after the other - more complex interactions will require dialogs that branch and loop based on what the user says and the choices they make.
 
-Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](memory article here) or the result of an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language):
+Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](memory article here) or the result of an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language).
 
 ![flow menu](./existingdocs/Assets/flow-actions-menu.png "screenshot of the flow menu")
 
-* The `If/Else` action instructs the bot choose between one of two paths  based on a yes/or or true/false type value.
+* The `If/Else` action instructs the bot choose between one of two paths based on a yes/or or true/false type value.
 
 * The `Switch` action instructs the bot to choose the path associated with a specific value - for example, a switch can be used to build a multiple-choice menu.
 
@@ -18,7 +18,7 @@ The `If/Else` action creates a decision point for the bot, after which it will f
 
 ![Select If/Else Branch]()
 
-The decision is controlled by the `Condition` field, which should contain an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) which evaluates to true or false. In the screenshot below the bot is evaluating whether `user.age` is greater than or equal to 18.
+The decision is controlled by the `Condition` field, which should contain an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) that evaluates to true or false. In the screenshot below the bot is evaluating whether `user.age` is greater than or equal to 18.
 
 ![If/Else Condition]()
 
@@ -27,7 +27,7 @@ Once the condition has been set, the corresponding branches can be built. The ed
 ![Add If/Else display messages]()
 
 ## Branch: Switch
-In a `Switch` result, the value of the Condition field is used to choose between any number of pre-set paths. Each path is tied to one possible value of the condition. To create a `Switch` branch click the **+** icon in your dialog, mouse over **Flow**, and click **Branch: Switch**.
+In a `Switch` result, the value of the `Condition` field is used to choose between any number of pre-set paths. Each path is tied to one possible value of the condition. To create a `Switch` branch click the **+** icon in your dialog, mouse over **Flow**, and click **Branch: Switch**.
 
 ![Select Switch Branch]()
 
