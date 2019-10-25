@@ -30,6 +30,7 @@ context('breadcrumb', () => {
       .invoke('text')
       .should('contain', 'AddToDo');
 
+    cy.wait(1000);
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('__TestToDoBot.Main').click();
@@ -38,7 +39,7 @@ context('breadcrumb', () => {
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('contain', 'ToDoBot');
+      .should('contain', '__TestToDoBot');
   });
 
   it('can show event name in breadcrumb', () => {
