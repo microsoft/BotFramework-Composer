@@ -80,14 +80,11 @@
 - list
 
 # AllCards
-[AttachmentLayout=@{AttachmentLayoutType()}
-@{HeroCard()}
-@{ThumbnailCard()}
-@{SigninCard()}
-@{AnimationCard()}
-@{VideoCard()}
-@{AudioCard()}
-@{AdaptiveCard()}]
+[Activity
+    Attachments = {HeroCard()} | {ThumbnailCard()} | {SigninCard()} | {AnimationCard()} | {VideoCard()} | {AudioCard()} | {AdaptiveCard()}
+    AttachmentLayout = {AttachmentLayoutType()}
+]
+
 
 # help
 - ```
