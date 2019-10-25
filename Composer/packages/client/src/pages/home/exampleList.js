@@ -11,7 +11,6 @@ import { exampleListContainer, exampleListClass } from './styles';
 
 export function ExampleList(props) {
   const { onClick, examples } = props;
-  // for detail file list in open panel
 
   function _onRenderCell(item, index) {
     return (

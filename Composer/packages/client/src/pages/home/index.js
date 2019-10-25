@@ -26,7 +26,7 @@ const linksButtom = [
   },
 ];
 
-const ComingSoonLink = {
+const comingSoonLink = {
   to: '/home',
   text: formatMessage('Coming soon!'),
   css: home.bluetitle,
@@ -48,6 +48,26 @@ export const Home = () => {
   const { recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
   const botNumLimit = 6;
+
+  const onClickRecentBotProject = async path => {
+    await openBotProject(path);
+    navigate(BASEPATH);
+  };
+
+  const onClickNewBotProject = () => {
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
+  };
+
+  const onSelectionChanged = async item => {
+    if (item && item.path) {
+      await onClickRecentBotProject(item.path);
+    }
+  };
+
+  const onClickTemplate = id => {
+    saveTemplateId(id);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+  };
 
   const addButton = <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />;
   const toolbarItems = [
@@ -88,26 +108,6 @@ export const Home = () => {
     },
   ];
 
-  const onClickRecentBotProject = async path => {
-    await openBotProject(path);
-    navigate(BASEPATH);
-  };
-
-  const onClickNewBotProject = () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
-  };
-
-  const onSelectionChanged = async item => {
-    if (item && item.path) {
-      await onClickRecentBotProject(item.path);
-    }
-  };
-
-  const onClickTemplate = id => {
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
-  };
-
   useEffect(() => {
     fetchRecentProjects();
     fetchTemplates();
@@ -142,7 +142,7 @@ export const Home = () => {
               />
             ) : null}
           </div>
-          <div css={home.itemContainer}>
+          <div css={home.leftContainer}>
             <div css={home.subtitle}>{formatMessage(`Recent Bots`)}</div>
             <RecentBotList
               recentProjects={recentProjects}
@@ -151,11 +151,11 @@ export const Home = () => {
               }}
             />
           </div>
-          <div css={home.itemContainer}>
+          <div css={home.leftContainer}>
             <div css={home.subtitle}>
               {formatMessage(`Video turtorials: `)}
-              <Link href={ComingSoonLink.to} tabIndex={-1} key={ComingSoonLink.text} target={'_blank'}>
-                <div css={ComingSoonLink.css}>{ComingSoonLink.text}</div>
+              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
+                <div css={comingSoonLink.css}>{comingSoonLink.text}</div>
               </Link>
             </div>
             <div css={home.newBotContainer}>

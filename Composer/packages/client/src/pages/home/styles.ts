@@ -46,12 +46,49 @@ export const newBotContainer = css`
   margin-bottom: 20px;
 `;
 
-export const itemContainer = css`
+export const leftContainer = css`
   display: block;
   min-width: 535px;
   margin-top: 10px;
   margin-bottom: 10px;
 `;
+
+export const itemContainer = css`
+  box-shadow: 0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  min-height: 120px;
+  min-width: 150px;
+  height: 13vh;
+  width: 11vw;
+  margin-right: 30px;
+`;
+export const itemContainerTitle = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transform: translate(6%, 0%);
+  font-size: 20px;
+  font-weight: 600;
+`;
+
+export const itemContainerContent = css`
+  position: absolute;
+  font-weight: 600;
+  width: 90%;
+  max-height: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  transform: translate(10%, 30%);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box !important;
+`;
+
 export const subtitle = css`
   font-size: 18px;
   font-family: 'Segoe UI';
@@ -69,67 +106,16 @@ export const bluetitle = css`
   color: #0078d4;
 `;
 
-export const introTitle = css`
-  display: block;
-  height: 37px;
-  font-size: 24px;
-  line-height: 32px;
-  margin-left: 33px;
-  margin-top: 26px;
-`;
-
-export const introTitleRight = css`
-  display: block;
-  height: 37px;
-  font-size: 24px;
-  line-height: 32px;
-  margin-left: 33px;
-  margin-top: 26px;
-`;
-
-export const introLink = css`
-  display: block;
-  height: 79px;
-  width: 100%;
-`;
 export const linkContainer = css`
   width: 50%;
   margin-top: 10px;
+  font-weight: 600;
 `;
 
 export const linkInfo = css`
   color: #0078d4;
   margin-top: 10px;
   text-decoration: underline;
-`;
-
-export const linkLeft = css`
-  width: 100%;
-  color: #000000;
-`;
-
-export const linkRight = css`
-  width: 100%;
-  color: #000000;
-`;
-
-export const moreOptions = css`
-  color: #0078d4;
-  font-size: 14px;
-  margin-top: 15px;
-  margin-left: 63px;
-`;
-
-export const botArea = css`
-  display: block;
-  margin-top: 8px;
-`;
-
-export const botTitle = css`
-  font-size: 24px;
-  color: #000000;
-  line-height: 32px;
-  margin-left: 33px;
 `;
 
 export const botContainer = css`
@@ -140,75 +126,6 @@ export const botContainer = css`
   margin-right: 33px;
   margin-top: 24px;
 `;
-
-export const botContent = css`
-  margin-right: 40px;
-`;
-
-export const action = css`
-  height: 124px;
-  width: 200px;
-  background: #979797;
-  cursor: pointer;
-`;
-
-export const actionName = css`
-  font-size: 18px;
-  line-height: 32px;
-  color: #000000;
-`;
-
-export const templateArea = css`
-  display: block;
-  margin-top: 8px;
-`;
-
-export const templateTitle = css`
-  font-size: 24px;
-  color: #000000;
-  line-height: 32px;
-  margin-left: 33px;
-`;
-
-export const templateContainer = css`
-  display: flex;
-  flex-wrap: wrap;
-  line-height: 32px;
-  margin-left: 33px;
-  margin-right: 33px;
-`;
-
-export const templateContent = css`
-  display: block;
-  height: 242px;
-  width: 260px;
-  font-size: 24px;
-  line-height: 32px;
-  border-top: 10px solid #50e6ff;
-  background: #ebebeb;
-  margin-right: 60px;
-  margin-top: 24px;
-  cursor: pointer;
-`;
-
-export const templateText = css`
-  position: relative;
-  top: 60px;
-  left: 70px;
-`;
-
-export const templateDescription = css`
-  position: relative;
-  top: 75px;
-  left: 7px;
-  font-size: 15px;
-`;
-
-// export const footer = css`
-//   position: absolute;
-//   bottom: 0;
-//   margin-bottom:
-// `;
 
 export const button = () => {
   const normal: IButtonStyles = {
@@ -238,9 +155,16 @@ export const lastestBotItem = {
   content: { backgroundColor: '#F2F2F2' },
 };
 export const videoItem = {
-  title: { backgroundColor: '#F2F2F2' },
-  content: { border: '2px solid #F2F2F2', width: 'auto', fontSize: 'smaller', wordWrap: 'break-word' },
+  title: { backgroundColor: '#F2F2F2', color: '#A19F9D' },
+  content: {
+    border: '2px solid #F2F2F2',
+    width: 'auto',
+    fontSize: 'smaller',
+    wordWrap: 'break-word',
+    color: '#A19F9D',
+  },
 };
+
 export const detailListContainer = css`
   position: relative;
   min-height: 35vh;
@@ -265,10 +189,6 @@ export const loading = css`
 const theme: ITheme = getTheme();
 const { palette, semanticColors, fonts } = theme;
 export const exampleListClass = mergeStyleSets({
-  container: {
-    overflow: 'auto',
-    maxHeight: 500,
-  },
   itemCell: [
     getFocusStyle(theme, { inset: -1 }),
     {
@@ -307,12 +227,5 @@ export const exampleListClass = mergeStyleSets({
     fontSize: fonts.small.fontSize,
     color: palette.neutralTertiary,
     marginBottom: 10,
-  },
-  chevron: {
-    alignSelf: 'center',
-    marginLeft: 10,
-    color: palette.neutralTertiary,
-    fontSize: fonts.large.fontSize,
-    flexShrink: 0,
   },
 });
