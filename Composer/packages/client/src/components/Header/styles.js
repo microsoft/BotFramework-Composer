@@ -11,7 +11,7 @@ export const headerContainer = css`
 
 export const title = css`
   position: relative;
-  margin-left: 31px;
+  margin-left: 25px;
   font-weight: ${FontWeights.semibold};
   font-size: 16px;
   color: #fff;
