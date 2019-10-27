@@ -18,10 +18,11 @@ export const connectBot: ActionCreator = async (store, settings) => {
         botEndpoint: res.data.botEndpoint,
       },
     });
-    await reloadBot(store, settings);
   } catch (err) {
     throw new Error(err.response.data.message);
   }
+
+  await reloadBot(store, settings);
 };
 
 // return only the connect URL -- do not reload

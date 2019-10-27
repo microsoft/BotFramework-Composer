@@ -17,7 +17,7 @@ export interface DesignerData {
 const initialDialogShape = {
   'Microsoft.AdaptiveDialog': {
     $type: 'Microsoft.AdaptiveDialog',
-    events: [
+    triggers: [
       {
         $type: 'Microsoft.OnBeginDialog',
         $designer: {
