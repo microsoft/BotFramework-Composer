@@ -15,6 +15,12 @@ if ($PSVersionTable.PSVersion.Major -lt 6) {
 	Break
 }
 
+if ((dotnet --version) -lt 3) {
+	Write-Host "! dotnet core 3.0 is required, please refer following documents for help."
+	Write-Host "https://dotnet.microsoft.com/download/dotnet-core/3.0"
+	Break
+}
+
 # Get mandatory parameters
 if (-not $name) {
 	$name = Read-Host "? Bot Web App Name"
@@ -170,6 +176,11 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$tokenResponse = (az account get-access-token) | ConvertFrom-Json
 	$token = $tokenResponse.accessToken
+
+	if (-not $token) {
+		Write-Host "! Could not get valid Azure access token"
+		Break
+	}
 
 	Write-Host "Getting Luis accounts..."
 	$luisAccountEndpoint = "$luisEndpoint/luis/api/v2.0/azureaccounts"

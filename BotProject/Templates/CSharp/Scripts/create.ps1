@@ -124,6 +124,14 @@ if ($outputs)
 	# Log and convert to JSON
 	$outputs >> $logFile
 	$outputs = $outputs | ConvertFrom-Json
+	if ($outputs.properties.error) {
+		Write-Host "! Deployment failed. Review the log for more information." -ForegroundColor DarkRed
+		Write-Host "! Error: $($outputs.error.message)"  -ForegroundColor DarkRed
+		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
+		Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
+		Break
+	}
+
 	$outputs = $outputs.properties.outputs
 	$outputMap = @{}
 	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }
