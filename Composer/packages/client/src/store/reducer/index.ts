@@ -273,4 +273,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
+  [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
 } as { [type in ActionTypes]: ReducerFunc });
