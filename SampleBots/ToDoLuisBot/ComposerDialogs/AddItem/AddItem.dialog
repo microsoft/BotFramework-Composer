@@ -164,7 +164,7 @@
               "$designer": {
                 "id": "907210"
               },
-              "property": "getProperty(user.lists, dialog.listName)",
+              "property": "user.lists[dialog.listName]",
               "type": "array"
             }
           ]
@@ -175,7 +175,7 @@
             "id": "644924"
           },
           "changeType": "Push",
-          "itemsProperty": "getProperty(user.lists, dialog.listName)",
+          "itemsProperty": "user.lists[dialog.listName]",
           "value": "dialog.item"
         },
         {
