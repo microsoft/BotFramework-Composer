@@ -11,16 +11,17 @@ export const headerContainer = css`
 
 export const title = css`
   position: relative;
-  margin-left: 56px;
+  margin-left: 25px;
   font-weight: ${FontWeights.semibold};
   font-size: 16px;
   color: #fff;
+  bottom: 11px;
   &::after {
     content: '';
     position: absolute;
     top: 0px;
     right: -15px;
-    bottom: 0px;
+    bottom: 11px;
     width: 0px;
     height: 24px;
     border: none;
@@ -31,6 +32,7 @@ export const title = css`
 `;
 
 export const botName = css`
+  position: absolute;
   margin-left: 30px;
   font-size: 16px;
   color: #fff;

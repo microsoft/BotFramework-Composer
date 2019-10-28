@@ -17,6 +17,11 @@ export class DefaultSettingManager extends FileSettingManager {
         defaultLanguage: 'en-us',
         environment: 'composer',
       },
+      qna: {
+        knowledgebaseid: '',
+        endpointkey: '',
+        hostname: '',
+      },
     };
   };
 }
