@@ -38,7 +38,6 @@ export const Home = () => {
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
-    navigate(BASEPATH);
   };
 
   const onClickNewBotProject = () => {

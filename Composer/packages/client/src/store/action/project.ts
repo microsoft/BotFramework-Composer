@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { BASEURL, ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
@@ -76,13 +77,19 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       navTo(store, 'Main');
       startBot(store, true);
     }
-    return response.data;
+    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
         summary: 'Failed to open bot',
         message: err.response.data.message,
+      },
+    });
+    store.dispatch({
+      type: ActionTypes.REMOVE_RECENT_PROJECT,
+      payload: {
+        path: absolutePath,
       },
     });
   }
