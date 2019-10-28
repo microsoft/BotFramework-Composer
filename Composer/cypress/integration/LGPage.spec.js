@@ -7,7 +7,7 @@ context('check language generation page', () => {
   });
 
   it('can open language generation page', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonBot Says"]').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonBot Responses"]').click();
     // left nav tree
     cy.contains('ToDoBot.Main');
     cy.contains('All');
