@@ -13,11 +13,11 @@ Prompt users for their name, favorite color, and other text data using **Text in
 
 As seen in the **TextInput** dialog the user is prompted for their name in the **Prompt** box in the **Bot Asks** section in the Propery panel.
 
-![Text prompt bot says]
+![Text prompt bot says](./media/ask-for-input/text-bot-asks.gif)
 
 The user's response is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
 
-![Text prompt user says]()
+![Text prompt user says](./media/ask-for-input/text-user-answers.gif)
 
 ### Prompt for number
 Prompt users for their age and other numerical values using **Number input**. To prompt a user for a number click the **+** button under your trigger, mouse over **Ask a Question** and click **Number input**. 
@@ -26,7 +26,7 @@ Prompt users for their age and other numerical values using **Number input**. To
 
 As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. When using number prompts you can set the**Output Format** to either `float` or `integer`.  
 
-![number prompt dialog space]()
+![Number prompt dialog](./media/ask-for-input/number-dialog.png)
 
 ### Prompt for confirmation
 Confirmation prompts are useful after you've asked the user a question, prompt or otherwise, and want to confirm their choice. Unlike **Prompt for multi-choice** which allows bots to ask users for an answer out of a set, confirmation prompts ask the user to make a binary decision. To create a confirmation prompt click the **+** button under your trigger, mouse over **Ask a Question** and click **Confirmation**. 
@@ -42,23 +42,25 @@ As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **In
 
 ![Select prompt for multi-choice](./media/ask-for-input/select-multichoice-prompt.gif)
 
-In the **ChoiceInput** dialog you will see the **Property to fill** is set to `user.style`, the **locale** is set to `en-us`, and the **List style** is set to `Auto`. The locale sets the language the recognizer should expect from the user (US English in this sample). The **List style** sets the style for how the chocie options are displayed. The table below shows the differences in appearance for the three choices:
+In the **ChoiceInput** dialog you will see the **Property to fill** is set to `user.style`, the **Output Format** is set to `value` (meaning the value, not the index will be used) the **locale** is set to `en-us`, and the **List style** is set to `Auto`. The locale sets the language the recognizer should expect from the user (US English in this sample). The **List style** sets the style for how the chocie options are displayed. The table below shows the differences in appearance for the three choices:
 
 | List style | Appearance | Description |
 |---|---|---|
-| None | | displays none of the options |
-| Auto | | displays options with autoformatting, usually buttons |
-| Inline | | displays options using inline separators set in **User Answers** |
-| List | |  displays options as list, or a numbered list if **Include numbers** is checked |
-| Suggested Action | | displays options as Suggested Action buttons|
-| Hero Card | | displays Hero Card with options as buttons **within** card|
+| None | ![list none](./media/ask-for-input/multichoice-list-none.png)
+ | displays none of the options |
+| Auto | ![list auto](./media/ask-for-input/multichoice-list-auto.png)
+ | displays options with autoformatting, usually buttons |
+| Inline | ![list inline](./media/ask-for-input/multichoice-list-inline.png) | displays options using inline separators set in **User Answers** |
+| List | ![list list](./media/ask-for-input/multichoice-list-list.png)| displays options as list, or a numbered list if **Include numbers** is checked |
+| Suggested Action | ![list suggested action](./media/ask-for-input/multichoice-list-suggestedactions.png) | displays options as Suggested Action buttons|
+| Hero Card | ![list hero card](./media/ask-for-input/multichoice-list-herocard.png)| displays Hero Card with options as buttons **within** card|
 
 In the **User Answers** section in the Property panel you will also notice **Choice Options**, which can be used to add more choices and their synonyms. You'll also see three boxes related to inline separation, or how your bot separates the text of your choices:
   - **Inline separator** - character used to separate individual choices when there are more than two choices, usually `,`.
   - **Inline or** - separator used when there are only two choices, usually `or`.
   - **Inline or more** - separator between last two choices when there are more than two options, usually `, or`. 
 
-![Multichoice choice and inline options]()
+![Multichoice choice and inline options](./media/ask-for-input/choice-and-inline.png)
 
 You'll also see boxes for **Include numbers** which should be checked if you want your list of options to be numbered, and **Append choices**, which composes an output activitity containing the set of choices. Both of these are checked in the sample.
 
