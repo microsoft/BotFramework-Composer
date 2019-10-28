@@ -7,82 +7,95 @@ Bot Framework Composer makes it easier than ever to collect and validate a varie
 Bot Framework Composer currently has six types of prompts you can utilize to collect user data. For information about prompting for OAuth credentials read [Using OAuth](). 
 
 ### Prompt for text
-Prompt users for their name, favorite color, or any other text data using `Prompt for text`. To prompt a user for text click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for text**. 
+Prompt users for their name, favorite color, or any other text data using `Prompt for text`. To prompt a user for text click the **+** button under your trigger, mouse over **Ask a Question** and click **Text input**. 
 
 ![Select prompt for text](./media/ask-for-input/select-text-prompt.gif)
 
-As seen in the **TextInput** dialog the user is prompted for their name in the **Bot Asks** section in the Propery panel.
+As seen in the **TextInput** dialog the user is prompted for their name in the **Prompt** box in the **Bot Asks** section in the Propery panel.
+
+![Text prompt bot says]
 
 The user's response is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
 
-![Properties and format Text Prompt]()
+![Text prompt user says]()
 
 ### Prompt for number
-Prompt users for their age and other numerical values using `Prompt for number`. To prompt a user for a number click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for number**. 
+Prompt users for their age and other numerical values using `Prompt for number`. To prompt a user for a number click the **+** button under your trigger, mouse over **Ask a Question** and click **Number input**. 
 
 ![Select prompt for number](./media/ask-for-input/select-number-prompt.gif)
 
-As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. Set the **Output Format** to either `float` or `integer`.  
+As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. When using number prompts you can set the**Output Format** to either `float` or `integer`.  
 
-![Properties and format Number Prompt]()
+![number prompt dialog space]()
 
 ### Prompt for confirmation
-Confirmation prompts are useful after you've asked the user a question, prompt or otherwise, and want to confirm their choice. Unlike **Prompt for multi-choice** which allows bots to ask users for an answer out of a set, confirmation prompts ask the user to make a binary decision. To create a confirmation prompt click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for confirmation**. 
+Confirmation prompts are useful after you've asked the user a question, prompt or otherwise, and want to confirm their choice. Unlike **Prompt for multi-choice** which allows bots to ask users for an answer out of a set, confirmation prompts ask the user to make a binary decision. To create a confirmation prompt click the **+** button under your trigger, mouse over **Ask a Question** and click **Confirmation**. 
 
 ![Select prompt for confirmation](./media/ask-for-input/select-confirmation-prompt.gif)
 
-As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **Initial Prompt** and the **Property to fill** as `user.confirmed`.
-
-![]
-
-### Prompt for multi-choice
-`Prompt for multi-choice` makes it easy to define a set of choices for users to choose from. To create a prompt with multiple choice options click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for multi-choice**. 
+As seen in the ConfirmInput dialog the bot asks the user "yes or no" as the **Initial Prompt** and the **Property to fill** as `user.confirmed`. In the **User Answers** section in the Property panel you will notice **Confirm Operations**, which can be used to 
+  - add synonyms of yes and no?
+  - what is point of inline if there are only binary options? 
+  
+### Prompt for multiple choices
+`Prompt for multi-choice` makes it easy to define a set of choices for users to choose from. To create a prompt with multiple choice options click the **+** button under your trigger, mouse over **Ask a Question** and click **Multiple choice**. 
 
 ![Select prompt for multi-choice](./media/ask-for-input/select-multichoice-prompt.gif)
 
-In the **ChoiceInput** dialog you will see the **Property to fill** is set to `user.style`. The Output Format is set to **value** (the value of the list item) as opposed to index (index of the list item), and the **List Style** is set to **List**. The table below shows how the choices are displayed with each list option:
+In the **ChoiceInput** dialog you will see the **Property to fill** is set to `user.style`, the **locale** is set to `en-us`, and the **List style** is set to `Auto`. The locale sets the language the recognizer should expect from the user (US English in this sample). The **List style** sets the style for how the chocie options are displayed. The table below shows the differences in appearance for the three choices:
 
-<list option table>
-none
-auto
-inline
-list
-suggested action
-hero card
+| List style | Appearance | Description |
+|---|---|---|
+| None | | displays none of the options |
+| Auto | | displays options with autoformatting, usually buttons |
+| Inline | | displays options using inline separators set in **User Answers** |
+| List | |  displays options as list, or a numbered list if **Include numbers** is checked |
+| Suggested Action | | displays options as Suggested Action buttons|
+| Hero Card | | displays Hero Card with options as buttons **within** card|
 
-Below the `Default Locale` box you set the values of the choice options by clicking the **Add** button. You can also set synonyms that users can type that will also activate a specific choice. 
+In the **User Answers** section in the Property panel you will also notice **Choice Options**, which can be used to add more choices and their synonyms. You'll also see three boxes related to inline separation, or how your bot separates the text of your choices:
+  - **Inline separator** - character used to separate individual choices when there are more than two choices, usually `,`.
+  - **Inline or** - separator used when there are only two choices, usually `or`.
+  - **Inline or more** - separator between last two choices when there are more than two options, usually `, or`. 
 
-![Add multi-choice]()
+![Multichoice choice and inline options]()
 
-Note that if you select the **Inline** list style you can scroll down and set **Inline Separator** (character to separate between list items), **Inline Or** (separator for just two choices) and **Inline OrMore** (separator for last items of a list larger than two).
+You'll also see boxes for **Include numbers** which should be checked if you want your list of options to be numbered, and **Append choices**, which composes an output activitity containing the set of choices. Both of these are checked in the sample.
 
-![choice options multi-choice]()
-
-### Prompt for Attachment
-Users can upload images, videos, and other media after being prompted with a `Prompt for attachment`. To prompt a user for an attachment click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for attachment**.
+### Prompt for file or attachment
+Users can upload images, videos, and other media after being prompted with a `Prompt for attachment`. To prompt a user for an attachment click the **+** button under your trigger, mouse over **Ask a Question** and click **File or attachment**.
 
 ![Select prompt for attachment](./media/ask-for-input/select-attachment-prompt.gif)
 
-In the **AttachmentInput** dialog you will see the **Property** is set to `dialog.attachments`. The **Output Format** is set to `first`, meaning only the first attachment will be output. 
+In the **AttachmentInput** dialog you will see the **Property to fill** is set to `dialog.attachments`. You can set the **Output Format** to`first` (only the first attachment will be output) or `all` (all attachments will be output).  
 
-### Prompt for date
-Prompt users for their birthday, the date they want to take a flight, and other dates using the `Prompt for date`. To prompt a user for a date click the **+** button under your trigger, mouse over **Ask a Question** and click **Prompt for date**.
+### Prompt for date or time
+Prompt users for their birthday, the date they want to take a flight, and other dates using the `Prompt for date`. To prompt a user for a date click the **+** button under your trigger, mouse over **Ask a Question** and click **Date or time**.
 
 ![Select prompt for date](./media/ask-for-input/select-datetime-prompt.gif)
 
-## Prompt settings
-Prompts in the Bot Framework Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. Here is a breakdown of the aforementioned components:
+In the **DateTimeInput** dialog you will see the **Property to fill** is set to `user.date` and the **Default locale** is set to `en-us`.
 
-Each prompt can be validated using a validation expression?
+## Prompt settings
+Prompts in the Bot Framework Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. **Prompt Settings** can be found on the bottom of the Property panel and contain the following settings:
+
+- **Max Turn Count**: maximum number of re-prompt attempts before the default value is selected.
+- **Default Value**: the value to return if the expression cannot be validated.
+- **Allow interruptions**: boolean that determines whether parent should be able to interrupt child dialog
+- **Always prompt**: collect information even if specified property isn't empty. 
+
+![Prompt settings]()
+
+## Exceptions
 
 - **Unrecognized Prompt**:  message to send to a user if their response was not recognized.
 - **Invalid Prompt**:  message to respond with when a user inputs an invalid data type, like a number instead of a word.
 - **Max Turn Count**: the maximum number of times a user can fail the prompt before the default value is assigned to property
 - **Value**: the expression used to validate the user response
-- **Default Value**: the value to return if the expression cannot be validated.
 - **Default Value Response**: message to send when max turn count has been hit and default value is selected
 
-## Exceptions
+
+
 
 
 
