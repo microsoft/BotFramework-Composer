@@ -138,14 +138,8 @@ async function saveProjectAs(req: Request, res: Response) {
 }
 
 async function getRecentProjects(req: Request, res: Response) {
-  try {
-    const projects = await BotProjectService.getRecentBotProjects();
-    return res.status(200).json(projects);
-  } catch (e) {
-    return res.status(500).json({
-      message: e instanceof Error ? e.message : e,
-    });
-  }
+  const projects = await BotProjectService.getRecentBotProjects();
+  return res.status(200).json(projects);
 }
 
 async function updateDialog(req: Request, res: Response) {

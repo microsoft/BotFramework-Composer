@@ -28,23 +28,33 @@ export class BotProjectService {
     return BotProjectService.currentBotProject;
   }
 
-  public static getRecentBotProjects = async () => {
-    BotProjectService.initialize();
-    return await BotProjectService.recentBotProjects.reduce(async (accumP: Promise<any>, item) => {
-      const result = await accumP;
+  public static getProjectsDateModifiedDict = async (projects: LocationRef[]): Promise<any> => {
+    const dateModifiedDict: any = {};
+    const promises = projects.map(async project => {
       let dateModified = '';
       try {
-        dateModified = await StorageService.getBlobDateModified(item.storageId, item.path);
+        dateModified = await StorageService.getBlobDateModified(project.storageId, project.path);
+        dateModifiedDict[project.path] = dateModified;
       } catch (err) {
-        throw err;
+        console.error(err);
       }
+    });
+    await Promise.all(promises);
+    return dateModifiedDict;
+  };
+
+  public static getRecentBotProjects = async () => {
+    BotProjectService.initialize();
+    const dateModifiedDict = await BotProjectService.getProjectsDateModifiedDict(BotProjectService.recentBotProjects);
+    return BotProjectService.recentBotProjects.reduce((result: any[], item) => {
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
       if (!name.includes('.botproj')) {
+        const dateModified = dateModifiedDict[item.path] ? dateModifiedDict[item.path] : '';
         result.push({ name, dateModified, ...item });
       }
       return result;
-    }, Promise.resolve([]));
+    }, []);
   };
 
   public static openProject = async (locationRef: LocationRef) => {
