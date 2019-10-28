@@ -52,8 +52,8 @@ export class SelfHostBotConnector implements IBotConnector {
 
   public sync = async (config: BotConfig) => {
     const { targetEnvironment: env } = config;
-    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
-    const userEmail = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.upn] : undefined;
+    const user = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.name] : 'unknown_user';
+    const userEmail = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.upn] : undefined;
     const accessToken = config.user ? config.user.accessToken : undefined;
     await this.buildAsync({
       user,
@@ -82,8 +82,8 @@ export class SelfHostBotConnector implements IBotConnector {
   };
 
   public publish = async (config: BotConfig, label: string | undefined) => {
-    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
-    const userEmail = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.upn] : undefined;
+    const user = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.name] : 'unknown_user';
+    const userEmail = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.upn] : undefined;
     const accessToken = config.user ? config.user.accessToken : undefined;
     await this.publishAsync({
       //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
