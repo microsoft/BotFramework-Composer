@@ -53,7 +53,7 @@ Under the `Handle Unknown Intent` trigger, click the "+" sign to add the action 
 ![unknown_intent](./media/events_triggers/unknown_intent.gif)  
 
 ## Defining `Handle a Dialog Event`
-To define the actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a `Handle a Dialog Event` trigger and add `BeginDialog` activity to the trigger. 
+Define the actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a `Handle a Dialog Event` trigger and add `BeginDialog` activity to the trigger. 
 
 ### 1. Create a `Handle a Dialog Event` trigger
 On the left side of the Composer menu, click **New Trigger** and then select **Handle a Dialog Event** from the drop-down menu. Select the dialog event you want to handle and click **submit**. For example, let's choose `Handle a Dialog Event: BeginDialog`. 
