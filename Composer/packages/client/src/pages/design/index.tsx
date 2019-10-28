@@ -194,7 +194,7 @@ function DesignPage(props) {
     }
   };
 
-  const nodeOperationAvailable = !!visualEditorSelection.length;
+  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
   const toolbarItems = [
     {
