@@ -148,7 +148,7 @@
               "$designer": {
                 "id": "678664"
               },
-              "property": "getProperty(user.lists, dialog.listName)",
+              "property": "user.lists[dialog.listName]",
               "type": "array"
             }
           ]
@@ -159,7 +159,7 @@
             "id": "451376"
           },
           "changeType": "Remove",
-          "itemsProperty": "getProperty(user.lists, dialog.listName)",
+          "itemsProperty": "user.lists[dialog.listName]",
           "value": "dialog.item"
         },
         {
