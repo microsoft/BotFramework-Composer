@@ -4,7 +4,7 @@ import { toLower } from 'lodash';
 import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
-import { DefineConversation } from './DefineConversation/index';
+import DefineConversation from './DefineConversation/index';
 import { OpenProject } from './OpenProject';
 import { StoreContext } from './../store';
 import { StepWizard } from './StepWizard/StepWizard';
@@ -128,12 +128,7 @@ export function CreationFlow(props) {
     [Steps.DEFINE]: {
       ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
-        <DefineConversation
-          onSubmit={handleSubmit}
-          onGetErrorMessage={getErrorMessage}
-          onDismiss={handleDismiss}
-          enableLocationBrowse={true}
-        />
+        <DefineConversation onSubmit={handleSubmit} onGetErrorMessage={getErrorMessage} onDismiss={handleDismiss} />
       ),
     },
   };
