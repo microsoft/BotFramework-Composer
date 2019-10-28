@@ -52,10 +52,6 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states
-  // TODO: (leilei, ze) fix it when refactoring shell state management.
-  const [, forceUpdate] = useState();
-
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
@@ -330,9 +326,8 @@ export const ShellApi: React.FC = () => {
     actions.focusTo(dataPath, fragment);
   }
 
-  function onSelect(ids) {
-    console.log('onSelect', ids);
-    forceUpdate(ids);
+  function onSelect(ids: string[]) {
+    console.log('Place holder for `onSelect() implementation`');
   }
 
   return null;
