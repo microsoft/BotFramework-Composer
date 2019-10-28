@@ -1,6 +1,7 @@
 import clonedeep from 'lodash.clonedeep';
 import { remove } from 'lodash';
 import { DialogInfo } from 'shared';
+import debounce from 'lodash.debounce';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
@@ -10,6 +11,7 @@ import { navTo } from './navigation';
 import { Store } from './../types';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
+import { fetchProject } from './project';
 
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
@@ -95,8 +97,7 @@ export const createDialog = undoable(
   (store, { id, content }) => createDialogBase(store, { id, content })
 );
 
-export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
-  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
+export const debouncedUpdateDialog = debounce(async (store, id, content) => {
   try {
     await httpClient.put(`/projects/opened/dialogs/${id}`, { id, content });
   } catch (err) {
@@ -104,7 +105,14 @@ export const updateDialogBase: ActionCreator = async (store, { id, content }) =>
       message: err.response && err.response.data.message ? err.response.data.message : err,
       summary: 'UPDATE DIALOG ERROR',
     });
+    //if update dialog error, do a full refresh.
+    fetchProject(store);
   }
+}, 500);
+
+export const updateDialogBase: ActionCreator = (store, { id, content }) => {
+  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
+  debouncedUpdateDialog(store, id, content);
 };
 
 export const updateDialog: ActionCreator = undoable(
