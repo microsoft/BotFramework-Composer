@@ -322,12 +322,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
                 '&:focus': { outline: 'none' },
               }}
               ref={el => (divRef = el)}
-              onKeyUp={e => {
-                const keyString = e.key;
-                if (keyString === 'Delete' && focusedId) {
-                  dispatchEvent(NodeEventTypes.Delete, { id: focusedId });
-                }
-              }}
               onClick={e => {
                 e.stopPropagation();
                 dispatchEvent(NodeEventTypes.Focus, { id: '' });
