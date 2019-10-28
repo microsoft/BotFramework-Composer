@@ -4,8 +4,7 @@ Language Understanding (LU) is the process for a bot to understand language natu
 
 In Bot Framework Composer LU has the following characteristics:
 
-- LU content is authored in inline editor
-- LU content is authored in [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- LU content is authored in inline editor using [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - LU content is trainining data for recognizers 
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
 - Composer provides an all-up LU view in "User says"
