@@ -6,7 +6,7 @@
 ### QuickStart
 - Create your first bot 
 ### Samples 
-- Bot Framework Composer samples 
+- [Composer samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots) 
 ### Concepts 
 - [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog-draft.md)
 - [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
