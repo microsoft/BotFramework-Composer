@@ -6,7 +6,6 @@
 
 ### QuickStart
 - Create your first bot 
-  - Create Echo bot using the BF Composer template, test, and run
 ### Samples 
 - Bot Framework Composer samples 
 ### Concepts 
@@ -28,7 +27,7 @@
 - Send cards 
 - [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
 #### Test
-- Test in Emulator
+- [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Deploy
 - Deploy bots to Azure using az cli and ARM templates
 ### Resources
