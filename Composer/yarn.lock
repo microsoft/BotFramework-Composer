@@ -1432,10 +1432,10 @@
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"@bfcomposer/monaco-editor@^0.17.5":
-  version "0.17.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.17.5.tgz#ceefd34199784d3f2fb745191cafab13bc88a268"
-  integrity sha1-zu/TQZl4TT8vt0UZHK+rE7yIomg=
+"@bfcomposer/monaco-editor@0.18.4":
+  version "0.18.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.18.4.tgz#2263c2b836dac1098f94dfa476545b5fe5314513"
+  integrity sha1-ImPCuDbawQmPlN+kdlRbX+UxRRM=
 
 "@bfcomposer/react-jsonschema-form@1.6.5":
   version "1.6.5"
@@ -1448,13 +1448,13 @@
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
 
-"@bfcomposer/react-monaco-editor@^0.30.5":
-  version "0.30.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.5.tgz#f0936110d43b7cbc72dd4bdf2107cb9895ec84c3"
-  integrity sha1-8JNhENQ7fLxy3UvfIQfLmJXshMM=
+"@bfcomposer/react-monaco-editor@0.30.12":
+  version "0.30.12"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.12.tgz#426afb854d7965ca33f4657b925b395f5918174d"
+  integrity sha1-Qmr7hU15Zcoz9GV7kls5X1kYF00=
   dependencies:
-    "@bfcomposer/monaco-editor" "^0.17.5"
-    "@types/react" "^16.9.2"
+    "@bfcomposer/monaco-editor" "0.18.4"
+    "@types/react" "16.9.0"
     prop-types "^15.7.2"
 
 "@cnakazawa/watch@^1.0.3":
@@ -2434,7 +2434,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.9.0", "@types/react@^16.9.2":
+"@types/react@*", "@types/react@16.9.0":
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.0.tgz#27434f16d889a335eb4626d1f1e67eda54039e5b"
   integrity sha512-eOct1hyZI9YZf/eqNlYu7jxA9qyTw1EGXruAJhHhBDBpc00W0C1vwlnh+hkOf7UFZkNK+UxnFBpwAZe3d7XJhQ==
