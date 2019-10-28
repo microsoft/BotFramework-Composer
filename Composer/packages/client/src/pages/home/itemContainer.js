@@ -9,7 +9,9 @@ export const ItemContainer = ({ onClick, title, content, styles = {} }) => {
       css={itemContainer}
       onClick={async e => {
         e.preventDefault();
-        await onClick();
+        if (onClick) {
+          await onClick();
+        }
       }}
     >
       <div css={{ ...container, ...(styles.title ? styles.title : {}) }}>

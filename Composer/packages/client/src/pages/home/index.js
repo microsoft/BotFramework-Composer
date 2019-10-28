@@ -6,8 +6,8 @@ import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus, BASEPATH } from '../../constants';
+import { ToolBar } from '../../components/ToolBar/index';
 
-import { ToolBar } from './../../components/ToolBar/index';
 import * as home from './styles';
 import { ItemContainer } from './itemContainer';
 import { RecentBotList } from './recentBotList';
@@ -47,7 +47,6 @@ export const Home = () => {
   const { state, actions } = useContext(StoreContext);
   const { recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
-  const botNumLimit = 6;
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
@@ -124,12 +123,14 @@ export const Home = () => {
             )}
           </div>
           <div css={home.newBotContainer}>
-            <ItemContainer
-              title={addButton}
-              content={formatMessage('New')}
-              styles={home.newBotItem}
-              onClick={onClickNewBotProject}
-            />
+            <div data-testid={'homePage-body-New'}>
+              <ItemContainer
+                title={addButton}
+                content={formatMessage('New')}
+                styles={home.newBotItem}
+                onClick={onClickNewBotProject}
+              />
+            </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
                 title={''}
@@ -159,15 +160,7 @@ export const Home = () => {
             </div>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer
-                  key={index}
-                  title={item.title}
-                  content={item.content}
-                  styles={home.videoItem}
-                  onClick={() => {
-                    console.log('Coming Soon!');
-                  }}
-                />
+                <ItemContainer key={index} title={item.title} content={item.content} styles={home.videoItem} />
               ))}
               <div css={home.linkContainer}>
                 <div>

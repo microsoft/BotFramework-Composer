@@ -3,13 +3,13 @@ import { IButtonStyles } from 'office-ui-fabric-react';
 import { ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
 
 export const outline = css`
-  display: block;
-  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 export const page = css`
   display: flex;
-  height: 100%;
   overflow: auto;
 `;
 export const leftPage = css`
@@ -24,7 +24,6 @@ export const rightPage = css`
 export const title = css`
   display: block;
   font-size: 28px;
-  font-family: 'Segoe UI';
   line-height: 36px;
 `;
 
@@ -70,7 +69,7 @@ export const itemContainerTitle = css`
   height: 100%;
   display: flex;
   align-items: center;
-  transform: translate(6%, 0%);
+  transform: translate(10%, 0%);
   font-size: 20px;
   font-weight: 600;
 `;
@@ -91,7 +90,6 @@ export const itemContainerContent = css`
 
 export const subtitle = css`
   font-size: 18px;
-  font-family: 'Segoe UI';
   line-height: 24px;
   display: flex;
   font-weight: 600;
@@ -99,7 +97,6 @@ export const subtitle = css`
 
 export const bluetitle = css`
   font-size: 18px;
-  font-family: 'Segoe UI';
   line-height: 24px;
   display: flex;
   font-weight: 600;
@@ -131,6 +128,7 @@ export const button = () => {
   const normal: IButtonStyles = {
     root: {
       background: 'transparent',
+      padding: '0px',
     },
     rootHovered: {
       background: 'transparent',
