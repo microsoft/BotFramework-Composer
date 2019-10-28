@@ -388,7 +388,6 @@ typings/
 
 # Local sample bots
 MyBots/*
-!.gitKeep
 
 #tmp.zip
 *.zip

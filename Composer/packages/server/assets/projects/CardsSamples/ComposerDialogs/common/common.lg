@@ -1,4 +1,4 @@
- All cards can be defined and managed through .lg files.
+> All cards can be defined and managed through .lg files.
 > All cards use the chatdown notation - see here - https://github.com/Microsoft/botbuilder-tools/tree/master/packages/Chatdown#message-commands
 > Multi-line text are enclosed in ```
 > Multi-line text can include inline expressions enclosed in @{expression}.
