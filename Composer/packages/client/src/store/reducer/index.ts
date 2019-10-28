@@ -268,4 +268,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
+  [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
 } as { [type in ActionTypes]: ReducerFunc });
