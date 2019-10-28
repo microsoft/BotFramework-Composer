@@ -89,14 +89,15 @@ Prompts in the Bot Framework Composer come with components to validate prompt re
 ## Exceptions
 Exceptions are useful for situations where users fail to input data that is invalid and of the correct type. You will find the following **Exceptions** to the right of **User Answers** in the Property panel:
 
-![Prompt Exceptions](./media/ask-for-input/exceptions.png)
-
 - **Unrecognized Prompt**:  message to send to a user if their response was not recognized.
 - **Invalid Prompt**:  message to respond with when a user inputs an invalid data type, like a number instead of a date.
 - **Validation Rules**: [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) rules used to validate the user's response
 - **Default Value Response**: message to send when max turn count has been hit and default value is selecte
 
+![Prompt Exceptions](./media/ask-for-input/exceptions.png)
+
 ## Further Reading
+TBD
 
 ## Next
 Learn how to [manage conversation flow]() using conditionals and dialogs.
