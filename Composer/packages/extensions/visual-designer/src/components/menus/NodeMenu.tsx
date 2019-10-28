@@ -22,8 +22,27 @@ const declareElementAttributes = (id: string) => {
 export const NodeMenu = ({ id, onEvent }): JSX.Element => {
   const menuItems = [
     {
+      key: 'cut',
+      name: 'Cut',
+      iconProps: {
+        iconName: 'Cut',
+      },
+      onClick: () => onEvent(NodeEventTypes.CutSelection, { actionIds: [id] }),
+    },
+    {
+      key: 'copy',
+      name: 'Copy',
+      iconProps: {
+        iconName: 'Copy',
+      },
+      onClick: () => onEvent(NodeEventTypes.CopySelection, { actionIds: [id] }),
+    },
+    {
       key: 'delete',
       name: 'Delete',
+      iconProps: {
+        iconName: 'Cancel',
+      },
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
@@ -42,7 +61,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
         iconName="MoreVertical"
         iconSize={12}
         iconStyles={{
-          color: '#0078D4',
+          color: '#000000',
           selectors: {
             ':focus': {
               outline: 'none',
