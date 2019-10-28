@@ -7,7 +7,7 @@ context('check language understanding page', () => {
   });
 
   it('can open language understanding page', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
 
     // left nav tree
     cy.contains('ToDoLuisBot.Main');
