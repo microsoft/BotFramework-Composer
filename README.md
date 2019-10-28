@@ -2,7 +2,6 @@
 # Microsoft Bot Framework Composer
 ### Overview
 - [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro-draft.md)
-- Known Issues (TBD)
 
 ### QuickStart
 - Create your first bot 
@@ -29,8 +28,9 @@
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Deploy
-- Deploy bots to Azure using az cli and ARM templates
+- Deploy bots to Azure
 ### Resources
+- Known Issues (TBD)
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
 
 ## Related projects
