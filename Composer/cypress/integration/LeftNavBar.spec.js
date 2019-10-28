@@ -10,7 +10,7 @@ context('check Nav Expandion ', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonDesign Flow"]').should('exist');
     cy.get('[data-testid="LeftNav-CommandBarButtonBot Responses"]').click();
     cy.url().should('include', 'language-generation');
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
     cy.url().should('include', 'language-understanding');
     cy.get('[data-testid="LeftNav-CommandBarButtonSettings"]').click();
     cy.url().should('include', 'setting');
