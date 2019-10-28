@@ -8,9 +8,9 @@ Add QnA Maker to your bot when you want to send a user question to your bot then
 
 1. In the flow designer, select the event handler, **+**. This displays the action components list. 
 
-1. Select **Integrations**, then **QnAMakerDialog** . This displays the list of settings. 
+1. Select **Access external resources**, then **Connect to QnAKnowledgeBase** . This displays the list of settings. 
 
-    While you can edit settings in the panel, a security best practice is to edit security-related settings from the **Setting** menu. This menu writes the values to the `appsettings.json` file. This restricts settings to the browser session.
+    While you can edit settings in the panel, a security best practice is to edit security-related settings from the **Settings** menu. This menu writes the values to the `appsettings.json` file. This restricts settings to the browser session.
 
     Security-related settings are referenced by the property location in `appsettings.json` file. 
 
@@ -30,15 +30,15 @@ The following settings configure the bot's integration with QnA Maker.
 
 |Required|Setting|Information|
 |--|--|--|
-|Required|Knowledge base ID|QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, `12345678-MMMM-ZZZZ-AAAA-123456789012`.|
-|Required|Endpoint key|QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, `12345678-AAAA-BBBB-CCCC-123456789012`.|
-|Required|Hostname|QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, ``.|
+|Required|Knowledge base ID - **provided by appsettings.json** as `settings.qna.knowledgebaseid`|_You shouldn't need to provide this value._ QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, `12345678-MMMM-ZZZZ-AAAA-123456789012`.| 
+|Required|Endpoint key - **provided by appsettings.json** as `settings.qna.endpointkey`|_You shouldn't need to provide this value._ QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, `12345678-AAAA-BBBB-CCCC-123456789012`.|
+|Required|Hostname - **provided by appsettings.json**  as `settings.qna.hostname`|_You shouldn't need to provide this value._ QnA Maker portal's **Settings** for the knowledge base, after the knowledge base is published. For example, ``.|
 |Optional|Fallback answer|This answer is specific to this bot and is not pulled for the QnA Maker service's match for no answer. For example, `Answer not found in kb.`|
 |Required|Threshold|This answer is a floating point number such as `0.3` indicating 30% or better. |
 |Optional|Active learning card title|Text to display to user before providing follow-up prompts, for example: `Did you mean:`.|
 |Optional|Card no match text|Text to display as a card to the user at the end of the list of follow-up prompts to indicate none of the prompts match the user's need. For example: `None of the above.`|
 |Optional|Card no match response|Text to display as a card to the user as a response to the user selecting the card indicating none of the follow-up prompts matched the user's need. For example: `Thanks for the feedback.`|
-|Optional|Strict filter||
+|Optional|Strict filter|Provide expressions to find only those answers that contain the metadata.|
 
 ## Edit settings
 
@@ -52,8 +52,12 @@ Securely editing the QnA Maker settings should be completed using **Settings**. 
 
 ## Knowledge base limits
 
-Composer allows for a bot to connect to one knowledge base with one or more dialog integrations. 
+You can use Connect to a **QnAKnowledgeBase** Action to connect to only one knowledge base per dialog. 
 
-If you need to connect to multiple knowledge bases, you can use a Composer integration for the first knowledge base, then use an other knowledge bases from within the code of the bot, instead of the flow designer. 
+If your bot scenario requires you to connect to multiple knowledge bases, merge to create one knowledge base - merging existing knowledge bases and use **Connect to QnAKnowledgeBase** Action to build your dialog. 
 
-A best practice is to merge all knowledge bases of a bot into a single knowledge base. 
+If your scenario requires you to connect multiple knowledge bases and show the single answer, from the knowledge base with higher confidence score to the end user, use the **Send an HTTP request** Action to make two HTTP calls to two published knowledge bases, manipulate the response payload to compare the confidence scores and decide which answer should be shown to the end user. 
+
+## Bots with Language Understanding (LUIS) and QnA Maker
+
+Composer allows you to build bots that contain both QnA Maker and LUIS dialogs. A best practice is to set the confidence threshold for LUIS intent prediction and trigger QnA Maker through **Handle Unknown Intent** event. [This sample]() demonstrates the best practice to build a bot using QnA Maker and LUIS intents. 
