@@ -90,6 +90,7 @@ export interface ShellData {
   dialogId: string;
   dialogs: DialogInfo[];
   focusedEvent: string;
+  focusedActions: string[];
   focusedSteps: string[];
   focusedTab?: string;
   focusPath: string;

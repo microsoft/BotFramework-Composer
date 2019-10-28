@@ -170,6 +170,7 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
+      focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
       hosted: !!isAbsHosted(),
@@ -330,6 +331,7 @@ export const ShellApi: React.FC = () => {
   }
 
   function onSelect(ids) {
+    console.log('onSelect', ids);
     forceUpdate(ids);
   }
 
