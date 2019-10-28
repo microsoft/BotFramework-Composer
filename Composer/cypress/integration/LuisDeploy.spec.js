@@ -22,7 +22,7 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
 
     cy.route({
       method: 'POST',
