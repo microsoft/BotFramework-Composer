@@ -199,7 +199,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     }
 
     // Notify container at every selection change.
-    onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : [focusedId]);
+    onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
   }, [focusedId, selectionContext]);
 
   useEffect(
