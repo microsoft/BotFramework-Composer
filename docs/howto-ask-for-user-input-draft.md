@@ -13,11 +13,11 @@ Prompt users for their name, favorite color, and other text data using **Text in
 
 As seen in the **TextInput** dialog the user is prompted for their name in the **Prompt** box in the **Bot Asks** section in the Propery panel.
 
-![Text prompt bot says](./media/ask-for-input/text-bot-asks.gif)
+![Text prompt bot says](./media/ask-for-input/text-bot-asks.png)
 
 The user's response is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowerase. 
 
-![Text prompt user says](./media/ask-for-input/text-user-answers.gif)
+![Text prompt user says](./media/ask-for-input/text-user-answers.png)
 
 ### Prompt for number
 Prompt users for their age and other numerical values using **Number input**. To prompt a user for a number click the **+** button under your trigger, mouse over **Ask a Question** and click **Number input**. 
@@ -46,10 +46,8 @@ In the **ChoiceInput** dialog you will see the **Property to fill** is set to `u
 
 | List style | Appearance | Description |
 |---|---|---|
-| None | ![list none](./media/ask-for-input/multichoice-list-none.png)
- | displays none of the options |
-| Auto | ![list auto](./media/ask-for-input/multichoice-list-auto.png)
- | displays options with autoformatting, usually buttons |
+| None | ![list none](./media/ask-for-input/multichoice-list-none.png)| displays none of the options |
+| Auto | ![list auto](./media/ask-for-input/multichoice-list-auto.png)| displays options with autoformatting, usually buttons |
 | Inline | ![list inline](./media/ask-for-input/multichoice-list-inline.png) | displays options using inline separators set in **User Answers** |
 | List | ![list list](./media/ask-for-input/multichoice-list-list.png)| displays options as list, or a numbered list if **Include numbers** is checked |
 | Suggested Action | ![list suggested action](./media/ask-for-input/multichoice-list-suggestedactions.png) | displays options as Suggested Action buttons|
