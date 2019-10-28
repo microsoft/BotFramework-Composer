@@ -141,6 +141,14 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 		Break
 	}
 	
+	if ($?) {
+		Write-Host "lubuild succeeded"
+	}
+	else {
+		Write-Host "lubuild failed, please verify your luis models."
+		Break	
+	}
+
 	Set-Location -Path $projFolder
 
 	# change setting file in publish folder
