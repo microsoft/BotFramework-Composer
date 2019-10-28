@@ -1,8 +1,8 @@
 import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
 import get from 'lodash.get';
-import trimend from 'lodash.trimend';
 
 import { FileInfo, LgFile, LgTemplate } from './type';
+import { getBaseName } from './utils/help';
 
 const lgStaticChecker = new StaticChecker();
 
@@ -19,7 +19,7 @@ function index(files: FileInfo[]): LgFile[] {
         console.error(err);
       }
       lgFiles.push({
-        id: trimend(file.name, '.lg'),
+        id: getBaseName(file.name, '.lg'),
         relativePath: file.relativePath,
         content: file.content,
         templates,

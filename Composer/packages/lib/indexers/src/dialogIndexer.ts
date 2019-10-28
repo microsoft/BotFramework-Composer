@@ -1,10 +1,10 @@
 import has from 'lodash.has';
 import uniq from 'lodash.uniq';
-import trimend from 'lodash.trimend';
 
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { DialogChecker } from './utils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
+import { getBaseName } from './utils/help';
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
@@ -161,8 +161,8 @@ function parse(content) {
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
     luIntents: ExtractLuIntents(content),
-    luFile: trimend(luFile, '.lu'),
-    lgFile: trimend(lgFile, '.lg'),
+    luFile: getBaseName(luFile, '.lu'),
+    lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
   };
 }
@@ -173,7 +173,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
       try {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
-          const id = trimend(file.name, '.dialog');
+          const id = getBaseName(file.name, '.dialog');
           const isRoot = id === 'Main';
           const dialog = {
             id,

@@ -26,7 +26,6 @@
   "devDependencies": {
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.has": "^4.5.6",
-    "@types/lodash.trimend": "^4.5.6",
     "@types/lodash.uniq": "^4.5.6",
     "jest": "24.0.0",
     "jest-dom": "^3.1.3",
@@ -36,7 +35,6 @@
   "dependencies": {
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
-    "lodash.uniq": "^4.5.0",
-    "lodash.trimend": "^4.5.1"
+    "lodash.uniq": "^4.5.0"
   }
 }

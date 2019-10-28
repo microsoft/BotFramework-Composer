@@ -1,7 +1,7 @@
 import ludown from 'ludown';
-import trimend from 'lodash.trimend';
 
 import { FileInfo, LuFile, LuDiagnostic } from './type';
+import { getBaseName } from './utils/help';
 
 async function index(files: FileInfo[]) {
   if (files.length === 0) return [];
@@ -17,7 +17,7 @@ async function index(files: FileInfo[]) {
       }
       luFiles.push({
         diagnostics,
-        id: trimend(file.name, '.lu'),
+        id: getBaseName(file.name, '.lu'),
         relativePath: file.relativePath,
         content: file.content,
         parsedContent,
