@@ -81,7 +81,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           css={{
             fontWeight: 400,
             paddingLeft: '5px',
-            margin: '5px',
+            margin: '3px 5px',
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
