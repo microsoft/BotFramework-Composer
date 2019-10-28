@@ -47,11 +47,11 @@ const templates: TemplateData = {
     name: 'Actions-Sample',
     description: 'A sample bot that shows how to use Dialog actions.',
   },
-  ToDoSample: {
-    name: 'ToDo-Sample',
+  TodoSample: {
+    name: 'Todo-Sample',
     description: 'A sample bot that allows you add, list, remove to do items.',
   },
-  ToDoWithLUISSample: {
+  TodoWithLUISSample: {
     name: 'Todo-with-LUIS-Sample',
     description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
   },
