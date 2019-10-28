@@ -65,6 +65,10 @@ export default function DefineConversation(props) {
     });
   };
 
+  const updateLocation = path => {
+    updateForm('location')(null, path);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <DialogModal
@@ -74,7 +78,7 @@ export default function DefineConversation(props) {
         formData={formData}
         horizontal={true}
       />
-      <LocationSelectContent onChange={updateForm('location')} />
+      <LocationSelectContent onChange={updateLocation} />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
         <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
