@@ -93,7 +93,7 @@ namespace Tests
             {
                 if (dialog is AdaptiveDialog planningDialog)
                 {
-                    await dm.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+                    await dm.OnTurnAsync(turnContext, cancellationToken).ConfigureAwait(false);
                 }
             });
         }
