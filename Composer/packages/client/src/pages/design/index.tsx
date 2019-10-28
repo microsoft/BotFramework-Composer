@@ -19,6 +19,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
+import grayComposerIcon from '../../grayComposerIcon.svg';
 
 import NewDialogModal from './new-dialog-modal';
 import {
@@ -78,6 +79,7 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
           </Fragment>
         ) : (
           <div>
+            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
             {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
           </div>
         )}
