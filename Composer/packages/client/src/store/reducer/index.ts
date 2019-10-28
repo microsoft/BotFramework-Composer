@@ -232,6 +232,11 @@ const updatePublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
+  state.visualEditorSelection = selection;
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
@@ -270,4 +275,5 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
+  [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
 } as { [type in ActionTypes]: ReducerFunc });

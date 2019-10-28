@@ -327,7 +327,7 @@ export const ShellApi: React.FC = () => {
   }
 
   function onSelect(ids: string[]) {
-    console.log('Place holder for `onSelect() implementation`');
+    actions.setVisualEditorSelection(ids);
   }
 
   return null;

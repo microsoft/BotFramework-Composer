@@ -50,6 +50,7 @@ const initialState: State = {
   publishVersions: {},
   publishStatus: 'inactive',
   lastPublishChange: null,
+  visualEditorSelection: [],
 };
 
 interface StoreContextValue {
