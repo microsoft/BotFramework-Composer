@@ -53,7 +53,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     })) || {
     Name: lgId,
     Body: getInitialTemplate(name, value),
-    Parameters: '',
+    Parameters: [],
     Range: {
       startLineNumber: 1,
       endLineNumber: 1,
@@ -74,7 +74,9 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
         return content;
       }
 
-      content += `# ${t.Name}\n-\n`;
+      const params = t.Parameters.length ? `(${t.Parameters.join(', ')})` : '';
+
+      content += `# ${t.Name} ${params}\n-\n`;
       return content;
     }, '');
   }, []);
