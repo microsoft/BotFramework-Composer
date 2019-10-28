@@ -29,7 +29,7 @@ const Onboarding: React.FC = () => {
   const [currentSet, setCurrentSet] = useState<number>(onboardingState.getCurrentSet());
   const [currentStep, setCurrentStep] = useState<number>(onboardingState.getCurrentStep());
   const [minimized, updateMinimized] = useState<boolean>(!!~onboardingState.getCurrentStep());
-  const [stepSets, setStepSets] = useState<IStepSet[]>([]);
+  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets());
   const [teachingBubble, setTeachingBubble] = useState<any>({});
   const toggleMinimized = useCallback(() => updateMinimized(minimized => !minimized), [updateMinimized]);
 
@@ -40,7 +40,7 @@ const Onboarding: React.FC = () => {
         steps: stepSet.steps.filter(({ targetId }) => {
           if (!dialogs.length) {
             return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
-          } else if (dialogs[0].triggers.length) {
+          } else if (!dialogs[0].triggers.length) {
             return targetId !== 'action';
           }
           return true;
@@ -48,18 +48,7 @@ const Onboarding: React.FC = () => {
       }))
       .filter(({ steps }) => steps.length);
     setStepSets(sets);
-  }, []);
-
-  useEffect(() => {
-    if (!(complete || botName)) {
-      const project = recentProjects.find(({ name }) => name === 'ToDoBot');
-
-      if (~project) {
-        const { path } = project;
-        openBotProject(path, true);
-      }
-    }
-  }, [complete, recentProjects]);
+  }, [dialogs]);
 
   const nextSet = useCallback(() => {
     setCurrentSet(current => {

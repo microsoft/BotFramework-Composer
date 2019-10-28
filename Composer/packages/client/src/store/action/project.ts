@@ -60,7 +60,7 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const openBotProject: ActionCreator = async (store, absolutePath, withoutNav) => {
+export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -76,7 +76,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath, without
         response,
       },
     });
-    if (dialogs && dialogs.length > 0 && !withoutNav) {
+    if (dialogs && dialogs.length > 0) {
       navTo(store, 'Main');
       startBot(store, true);
     }

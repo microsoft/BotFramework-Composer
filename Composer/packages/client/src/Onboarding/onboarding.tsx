@@ -1,6 +1,14 @@
 import React from 'react';
 import formatMessage from 'format-message';
 
+export interface IComposerTeachingBubble {
+  children?: any;
+  footerContent?: any;
+  headline?: any;
+  primaryButtonProps?: any;
+  secondaryButtonProps?: any;
+}
+
 export interface IStep {
   hidden?: boolean;
   id: string;
@@ -27,7 +35,7 @@ export const stepSets = (): IStepSet[] => [
       {
         id: 'userInput',
         navigateTo: '/dialogs/Main?selected=triggers[0]',
-        targetId: 'navUserSays',
+        targetId: 'navUserInput',
       },
       {
         id: 'actions',
@@ -35,7 +43,7 @@ export const stepSets = (): IStepSet[] => [
         navigateTo: '/dialogs/Main?selected=triggers[0]',
         targetId: 'action',
       },
-      { id: 'botResponses', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'navBotSays' },
+      { id: 'botResponses', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'navBotResponses' },
     ],
     title: formatMessage('Learn the basics'),
   },
@@ -52,14 +60,6 @@ export const stepSets = (): IStepSet[] => [
     title: formatMessage('Test your bot'),
   },
 ];
-
-export interface IComposerTeachingBubble {
-  children?: any;
-  footerContent?: any;
-  headline?: any;
-  primaryButtonProps?: any;
-  secondaryButtonProps?: any;
-}
 
 export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubble => {
   switch (id) {
