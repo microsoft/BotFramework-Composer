@@ -140,7 +140,7 @@ Below is an example of SuggestedActions from the [Interrupt](https://github.com/
 
     - Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
 
-Below is an example of Thumbnail card from the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples/ComposerDialogs): 
+Below is an example of a Thumbnail card from the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples/ComposerDialogs): 
 
     # ThumbnailCard
     [ThumbnailCard
