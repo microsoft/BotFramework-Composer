@@ -45,6 +45,8 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       if (template && template.Body) {
         const [firstLine] = template.Body.split('\n');
         setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
+      } else {
+        setTemplateText('');
       }
     } else if (!templateId) {
       // fallback to str passed in

@@ -16,10 +16,6 @@ describe('test all reducer handlers', () => {
     expect(result.lgFiles).toBe('test lgFiles');
     expect(result.schemas).toBe('test schemas');
   });
-  it('test updateDialog reducer', () => {
-    const result = reducer({}, { type: ActionTypes.UPDATE_DIALOG, payload: { response: mockResponse } });
-    expect(result.dialogs).toBe('test dialogs');
-  });
   it('test createDialogSuccess reducer', () => {
     const result = reducer({}, { type: ActionTypes.CREATE_DIALOG_SUCCESS, payload: { response: mockResponse } });
     expect(result.dialogs).toBe('test dialogs');

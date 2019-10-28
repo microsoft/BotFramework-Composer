@@ -4,7 +4,6 @@ import { ExpressionEngine } from 'botbuilder-expression-parser';
 const ExpressionParser = new ExpressionEngine();
 
 interface CheckerFunc {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (node: { path: string; value: any }): string; // error msg
 }
 

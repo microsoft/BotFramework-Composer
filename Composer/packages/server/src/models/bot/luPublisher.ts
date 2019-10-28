@@ -1,10 +1,10 @@
 import isEqual from 'lodash.isequal';
 import { runBuild } from 'lubuild';
+import { LuFile } from 'shared';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { LUFile, ILuisConfig, LuisStatus, FileUpdateType } from './interface';
-
+import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 const GENERATEDFOLDER = 'ComposerDialogs/generated';
 const LU_STATUS_FILE = 'luis.status.json';
 const DEFAULT_STATUS = {
@@ -76,7 +76,7 @@ export class LuPublisher {
     await this.saveStatus();
   };
 
-  public publish = async (luFiles: LUFile[]) => {
+  public publish = async (luFiles: LuFile[]) => {
     const config = this._getConfig(luFiles);
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
@@ -91,14 +91,13 @@ export class LuPublisher {
       });
       await this.saveStatus();
     } catch (error) {
-      console.error(error);
       throw new Error('Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);
   };
 
-  public getUnpublisedFiles = (files: LUFile[]) => {
+  public getUnpublisedFiles = (files: LuFile[]) => {
     // unpublished means either
     // 1. there is no status tracking
     // 2. the status shows that lastPublishTime < lastUpdateTime
@@ -110,7 +109,7 @@ export class LuPublisher {
     });
   };
 
-  public checkLuisPublised = (files: LUFile[]) => {
+  public checkLuisPublised = (files: LuFile[]) => {
     const unpublished = this.getUnpublisedFiles(files);
     return unpublished.length === 0;
   };
@@ -161,7 +160,7 @@ export class LuPublisher {
     });
   };
 
-  private _getConfig = (luFiles: LUFile[]) => {
+  private _getConfig = (luFiles: LuFile[]) => {
     const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
