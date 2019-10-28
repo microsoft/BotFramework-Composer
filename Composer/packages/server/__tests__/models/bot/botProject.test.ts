@@ -1,10 +1,10 @@
 import fs from 'fs';
 
-import { seedNewDialog } from 'shared';
+import { seedNewDialog, DialogInfo } from 'shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
-import { LocationRef, FileInfo } from '../../../src/models/bot/interface';
+import { LocationRef } from '../../../src/models/bot/interface';
 
 jest.mock('azure-storage', () => {
   return {};
@@ -72,7 +72,7 @@ describe('createFromTemplate', () => {
     const newFile = dialogs.find((f: { id: string }) => f.id === dialogName);
 
     expect(newFile).not.toBeUndefined();
-    const fileContent = ((newFile as unknown) as FileInfo).content;
+    const fileContent = ((newFile as unknown) as DialogInfo).content;
     expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
   });
 });
