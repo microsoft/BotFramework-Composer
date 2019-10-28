@@ -128,7 +128,7 @@ Now you have completed the whole process of providing LU content as training dat
 
 The all-up view lists all LU content you have authored as well as some details such as which dialog you define the content and wether it is published or not.  
 
-![all_up_view](./media/language_understanding/all_up_view.png)The last step is to publish the content to LUIS. 
+![all_up_view](./media/language_understanding/all_up_view.png)
 
 Now the last step is to publish your LU content to LUIS. 
 
