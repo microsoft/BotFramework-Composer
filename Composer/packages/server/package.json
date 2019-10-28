@@ -103,6 +103,7 @@
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
     "rimraf": "^2.6.3",
-    "shared": "0.0.0"
+    "shared": "0.0.0",
+    "indexers": "0.0.0"
   }
 }

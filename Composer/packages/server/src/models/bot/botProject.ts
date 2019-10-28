@@ -1,7 +1,8 @@
 import fs from 'fs';
 
 import isEqual from 'lodash.isequal';
-import { FileInfo, DialogInfo, dialogIndexer, luIndexer, lgIndexer, LgFile, LuFile } from 'shared';
+import { FileInfo, DialogInfo, LgFile, LuFile } from 'shared';
+import { dialogIndexer, luIndexer, lgIndexer } from 'indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';

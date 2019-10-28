@@ -2,7 +2,7 @@ import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuil
 import get from 'lodash.get';
 import trimend from 'lodash.trimend';
 
-import { FileInfo, LgFile, LgTemplate } from '../types';
+import { FileInfo, LgFile, LgTemplate } from './type';
 
 const lgStaticChecker = new StaticChecker();
 

@@ -1,7 +1,7 @@
 import ludown from 'ludown';
 import trimend from 'lodash.trimend';
 
-import { FileInfo, LuFile, LuDiagnostic } from '../types';
+import { FileInfo, LuFile, LuDiagnostic } from './type';
 
 async function index(files: FileInfo[]) {
   if (files.length === 0) return [];
@@ -24,6 +24,7 @@ async function index(files: FileInfo[]) {
       });
     }
   }
+  return luFiles;
 }
 
 function parse(content: string): Promise<any> {

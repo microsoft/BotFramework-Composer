@@ -8,4 +8,3 @@ export * from './dialogFactory';
 export * from './promptTabs';
 export * from './appschema';
 export * from './types';
-export * from './indexers';

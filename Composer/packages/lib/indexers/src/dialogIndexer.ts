@@ -2,12 +2,11 @@ import has from 'lodash.has';
 import uniq from 'lodash.uniq';
 import trimend from 'lodash.trimend';
 
-import { ITrigger, MicrosoftAdaptiveDialog, DialogInfo, FileInfo } from '../types';
-
-import { DialogChecker } from './dialogChecker';
-import { JsonWalk, VisitorFunc } from './jsonWalk';
+import { ITrigger, DialogInfo, FileInfo } from './type';
+import { DialogChecker } from './utils/dialogChecker';
+import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 // find out all lg templates given dialog
-function ExtractLgTemplates(dialog: MicrosoftAdaptiveDialog): string[] {
+function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
   /**
    *
@@ -51,7 +50,7 @@ function ExtractLgTemplates(dialog: MicrosoftAdaptiveDialog): string[] {
   return uniq(templates);
 }
 // find out all lu intents given dialog
-function ExtractLuIntents(dialog: MicrosoftAdaptiveDialog): string[] {
+function ExtractLuIntents(dialog): string[] {
   const intents: string[] = [];
   /**    *
    * @param path , jsonPath string
@@ -70,7 +69,7 @@ function ExtractLuIntents(dialog: MicrosoftAdaptiveDialog): string[] {
   return uniq(intents);
 }
 // find out all triggers given dialog
-function ExtractTriggers(dialog: MicrosoftAdaptiveDialog): ITrigger[] {
+function ExtractTriggers(dialog): ITrigger[] {
   const trigers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
@@ -105,7 +104,7 @@ function ExtractTriggers(dialog: MicrosoftAdaptiveDialog): ITrigger[] {
   return trigers;
 }
 // find out all referred dialog
-function ExtractReferredDialogs(dialog: MicrosoftAdaptiveDialog): string[] {
+function ExtractReferredDialogs(dialog): string[] {
   const dialogs: string[] = [];
   /**    *
    * @param path , jsonPath string
@@ -124,7 +123,7 @@ function ExtractReferredDialogs(dialog: MicrosoftAdaptiveDialog): string[] {
   return uniq(dialogs);
 }
 // check all fields
-function CheckFields(dialog: MicrosoftAdaptiveDialog): string[] {
+function CheckFields(dialog): string[] {
   const errors: string[] = [];
   /**
    *

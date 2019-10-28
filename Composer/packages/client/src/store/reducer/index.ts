@@ -1,5 +1,5 @@
 import { get, set } from 'lodash';
-import { dialogIndexer } from 'shared';
+import { dialogIndexer } from 'indexers/lib/dialogIndexer';
 
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -268,5 +268,4 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
-  [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
 } as { [type in ActionTypes]: ReducerFunc });
