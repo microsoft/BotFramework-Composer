@@ -6,36 +6,33 @@ You can use language generation to:
 - achieve a coherent personality, tone of voice for your bot
 - separate business logic from presentation
 - include variations and sophisticated composition based resolution for any of your bot's replies
-- construct speak .vs. display adaptations
-- construct cards, suggested actions and attachments.
+- construct cards, suggested actions and attachments using the new [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md)
 
 Language generation is achieved through:
-- markdown based .lg file that describes the templates and their composition. See [here](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) for the .lg file format.
-- full access to current bots memory so you can data bind language to the state of memory.
+- markdown based [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) that describes the templates and their composition
+- full access to current bots' memory so you can data bind language to the state of memory
 - parser and runtime libraries that help achieve runtime resolution. See [here](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md) for API-reference.
 
 ## Tamplates 
 
-Templates are functions, which return one of the variations of the text, but fully resolve any other references to template for composition. You can define one more more text respose in template. For multiple responses, one response will be picked by random. You can also define one or more expressions so when it is a conditional template, those expressions control which particular collection of variations get picked. Tamplates can be parameterized, which means a template such as {greeting} can be called in two different places: one with the explicit value, and one with the implicit property. 
+Templates are functions, which return one of the variations of the text, but fully resolve any other references to template for composition. You can define one or more text respose in template. For multiple responses, one response will be picked by random. You can also define one or more expressions so when it is a conditional template, those expressions control which particular collection of variations get picked. Tamplates can be parameterized, which means a template such as {greeting} can be referenced and called in another template. 
 
 ### Template types 
 Composer currently supports three different types of templates: 
 - Simple template 
 - Conditional template 
-- Strucutred template 
-  - Speak .vs. display .vs. card .vs. suggested action .vs. input hint
+- Strucutred template (this is new and read more [here](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md))
 
 ### Anatomy of a template 
 A template usuaslly consists of two parts: 
 - name of the template, which is defined using "#" AND   
 - a list of one-of variation text values defined using "-" OR 
 - a collection of conditions, each with a 
-  - Condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
+  - condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
   - List of one-of variation text values per condition OR 
 - a structure that contains 
   - Structure-name 
   - Properties 
-  - (Optional) Comment inside the structure
 
 Below is an example of a simple `.lg` template with one-of variation text values.  
 
@@ -44,49 +41,48 @@ Below is an example of a simple `.lg` template with one-of variation text values
      - Hello @{user.name}, how are you?
      - Good morning @{user.name}. It's nice to see you again.    
      - Good day @{user.name}. What can I do for you today?  
-
+<!-- 
 ## External references 
 
 For organization purposes and to help with re-usability, you might want to break the language generation templates into separate files and refer them from one another. In order to help with this scenario, you can use markdown-style links to import templates defined in another file. For example, `[description text](file/uri path)`.
 
-Note: All templates defined in the target file will be pulled in, so ensure that your template names are unique across files being pulled in.
+Note: All templates defined in the target file will be pulled in, so ensure that your template names are unique across files being pulled in. -->
  
-## Defining language template in Bot Framework Composer
+## Defining LG template in Composer
 
 ### When to define
 
-When you want to define what your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define a LG template in the **Send an Activity** action. Click on the **Send an Activity** action node, you will see the inline LG editor where you can define the template. 
+When you want to determine how your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define an LG template in the **Send an Activity** action. Click on the **Send an Activity** action node, you will see the inline LG editor where you can define the template. 
 
   ![send_an_avtivity](./media/language_generation/send_an_activity.gif)
 
 ### What to know 
 
-To define an LG template in Composer, you need to know 
-  - Supported concepts of LG (template, import)
+To define an LG template in Composer, you will need to know 
+  - Supported concepts of LG
   - [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
   - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
   
 ### Where to define 
 
-In Bot Composer UI, there are two LG editors: an inline LG editor and an LG editor (**Bot says**) listing all templates defined in the bot. 
+In Composer, there are two LG editors: an inline LG editor and an LG editor (**Bot says**) listing all templates defined in the bot. 
 
-Thhe following screenshot is an inline LG editor which hoists the relevant templates content. 
+The following screenshot shows an inline LG editor which hoists the relevant templates content. 
 
   ![inline_editor](./media/language_generation/inline_editor.png)
 
-Click on the bot icon on the left side of the Composer menu, you will see the **Bot says** LG editor. It is a flat list of all templates defined in the bot. Click on **Edit Mode** on the upper right corner to start editing your LG template. 
+Click on the bot icon on the left side of the navigation pane, you will see the all-up LG editor listing all LG templates defined in the bot. Click on **Edit Mode** on the upper right corner to start editing your LG template. 
 
   ![bot_says](./media/language_generation/bot_says.png)
 
 ### How to define 
 
-Bot Composer currently supports definition of the following three types of templates: Simple template, Conditional template and Structured tempalte. 
+Bot Composer currently supports definition of the following three types of templates: Simple template, Conditional template and Structured tempalte. Let's go through each type of them. 
 
 #### Simple template  
 A simple template is defined to generate either a single line text response or a multi-line response. 
-- Define a single-line response
 
-To define a single-line response, use a "-" before a response text or an expression with returned property value. 
+- To define a single-line response you will need to use a "-" before a response text or an expression with returned property value. 
 
 This is an example of a single line text response from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples):  
 
@@ -96,19 +92,12 @@ This is an example of a single line expression response from the [Message_Sample
 
      - {user.message} 
 
-- Define a multi-line response 
-You use a pair of triple dots to wrap the multi-line responses. Here is an example from the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#Importing-external-references). 
+- To define a multi-line response you will need to use a pair of triple dots to wrap the multi-line responses. Here is an example response from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples). In a multi-line response the bot will pick an utterance by random. 
 
-      # MultiLineExample
-      - ```This is a multi-line list
-          - one
-          - two
-          ```
-      - ```This is a multi-line variation
-          - three
-          - four
-        ```
-      ```
+      # TextWithLG
+      - Hi, this is a text with LG
+      - Hey, this is a text with LG
+      - Hello, this is a text with LG
 
 #### Conditional template  
 For all conditional templates, all conditions are expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two conditional template examples from the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#Importing-external-references). 
@@ -133,33 +122,37 @@ For all conditional templates, all conditions are expressed using the [Common Ex
       - DEFAULT:
        - final output
 
-#### References to templates
-Variation text can include references to another named template to aid with composition and resolution of sophisticated responses. Reference to another named template are denoted using markdown link notation by enclosing the target template name in square brackets - [TemplateName]. [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples). 
-
-A TextWithLG template is defined in **Bot says**. 
-
-    - ```
-    # TextWithLG
-    Hi, this is a text with LG
-    Hey, this is a text with LG
-    Hello, this is a text with LG
-    ```
-A TextWithLG template is then referenced in LG inline editor. 
-
-      -[TextWithLG]
-
-#### Parameterization of templates 
-To aid with contextual re-usability, templates can be parametrized. With this different callers to the template can pass in different values for use in expansion resolution. Here is an example from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples). 
-
-    # Greeting
-    - nice to talk to you!
-
-    # LGComposition(user)
-    - {user.name} [Greeting]
-    
+  
 #### Structured template  
-- [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg)
-- [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
+Structured response template enables you to define a complex structure that supports all the benefits of LG (templating, composition, substitution) while leaving the interpretation of the structured response up to the caller of the LG library. It provides an easier way for users to define a full blown outgoing [activity](https://github.com/Microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md) in a simple text format. Composer currently support structured LG templates such as Cards, SuggestedActions and other [Chatdown](https://github.com/microsoft/botbuilder-tools/tree/master/packages/Chatdown) style constructs. 
+
+The definition of a [structured template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) is as follows: 
+
+    # TemplateName
+    > this is a comment
+    [Structure-name
+        Property1 = <plain text> .or. <plain text with template reference> .or. <expression> 
+        Property2 = list of values are denoted via '|'. e.g. a | b
+    > this is a comment about this specific property
+        Property3 = Nested structures are achieved through composition
+    ]
+
+Below is an example of SuggestedActions from the [Interrupt](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Interrupt/ComposerDialogs) sample. :
+
+    - Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
+
+Below is an example of Thumbnail card from the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples/ComposerDialogs): 
+
+    # ThumbnailCard
+    [ThumbnailCard
+        title = BotFramework Thumbnail Card
+        subtitle = Microsoft Bot Framework
+        text = Build and connect intelligent bots to interact with your users naturally wherever 
+        they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
+        image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
+        buttons = Get Started]
+
+For more information on Structured template, please read the [Structured Response Template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. For more examples of structured templates, please refer to [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg) and [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg). 
  
 ### Common Expression Cheatsheet 
 
@@ -174,7 +167,6 @@ To aid with contextual re-usability, templates can be parametrized. With this di
 | ()     | Used to denote parameters to a function or to a template. E.g {templateName(‘value1’, ‘value2’)} or to a prebuilt function {length(foo)} or {length(‘value1’)} |
 | ```    | Used in pair to denote multi-line segment.                                                                                                                     |
 
-
 ## References
 - [language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) 
 - [language generation](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/language-generation.md)
@@ -182,6 +174,10 @@ To aid with contextual re-usability, templates can be parametrized. With this di
 - [LG API reference](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md)
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Common Expression Language prebuilt functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
+- [Structured template original pr](https://github.com/microsoft/botbuilder-dotnet/issues/2325)
+- [Structured template example1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg)
+- [Structured template example2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
+- [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md)
 
 ## Next 
-- [Language Understanding in Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)
+- [Language Understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)
