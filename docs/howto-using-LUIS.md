@@ -1,4 +1,4 @@
-# Adding LUIS to bots in Composer 
+# Using LUIS for Language Understanding 
 Language Understanding Intelligent Service([LUIS](https://www.luis.ai/home)) is a cloud-based API service to build natural language into apps and bots. Adding LUIS to your bots enables them to understand the users' intents conversationally and contextually so that your bots can decide what to respond to the users. Bot Framework Composer provides tools to train and manage language understanding components and it's easier for developers to add LUIS when they develop bots with Composer. In this article, we will walk you through the steps to use LUIS when you develop your bots with Bot Framework Composer. To further explore how to use LUIS in Bot Composer, you may refer to the [LUIS Sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/ToDoLuisBot/ComposerDialogs). 
 
 ## Prerequisites 
@@ -74,7 +74,7 @@ To test your bot which you just added LUIS to, click the **Test in Emulator** bu
 - [LUIS.ai](https://www.luis.ai/home)
 - [Add natural language understanding to your bot](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-v4-luis?view=azure-bot-service-4.0&tabs=csharp)
 - [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) 
-- [Language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)
+- [Language Understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md)
 
 ## Next 
 TBD
