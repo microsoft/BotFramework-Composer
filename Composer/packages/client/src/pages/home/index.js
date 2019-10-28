@@ -2,10 +2,9 @@ import React, { useContext, useEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
-import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
-import { CreationFlowStatus, BASEPATH } from '../../constants';
+import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
 
 import * as home from './styles';

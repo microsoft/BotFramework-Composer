@@ -53,7 +53,6 @@ export const leftContainer = css`
 `;
 
 export const itemContainer = css`
-  box-shadow: 0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132);
   border-radius: 2px;
   position: relative;
   cursor: pointer;
@@ -64,6 +63,7 @@ export const itemContainer = css`
   width: 11vw;
   margin-right: 30px;
 `;
+
 export const itemContainerTitle = css`
   width: 100%;
   height: 100%;
@@ -145,10 +145,16 @@ export const button = () => {
 };
 
 export const newBotItem = {
+  container: {
+    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
+  },
   title: { backgroundColor: '#0078D4' },
   content: { backgroundColor: '#F2F2F2' },
 };
 export const lastestBotItem = {
+  container: {
+    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
+  },
   title: { backgroundColor: '#56CCF2' },
   content: { backgroundColor: '#F2F2F2' },
 };

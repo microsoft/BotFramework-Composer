@@ -7,6 +7,7 @@ export const ItemContainer = ({ onClick, title, content, styles = {} }) => {
   return (
     <div
       css={itemContainer}
+      style={styles.container}
       onClick={async e => {
         e.preventDefault();
         if (onClick) {
@@ -14,10 +15,10 @@ export const ItemContainer = ({ onClick, title, content, styles = {} }) => {
         }
       }}
     >
-      <div css={{ ...container, ...(styles.title ? styles.title : {}) }}>
+      <div css={styles.title ? { ...container, ...styles.title } : container}>
         <div css={itemContainerTitle}>{title}</div>
       </div>
-      <div css={{ ...container, ...(styles.content ? styles.content : {}) }}>
+      <div css={styles.content ? { ...container, ...styles.content } : container}>
         <div css={itemContainerContent}>{content}</div>
       </div>
     </div>
