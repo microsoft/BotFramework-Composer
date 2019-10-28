@@ -9,10 +9,5 @@ export default {
       path: path.resolve(__dirname, '../../../../../MyBots'),
     },
   ],
-  recentBotProjects: [
-    {
-      storageId: 'default',
-      path: path.resolve(__dirname, '../../../../../MyBots/ToDoBot'),
-    },
-  ],
+  recentBotProjects: [],
 };

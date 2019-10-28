@@ -10,7 +10,7 @@
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "335456"
-      },      
+      },
       "actions": [
         {
           "$type": "Microsoft.SetProperty",
