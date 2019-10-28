@@ -197,7 +197,7 @@ namespace Tests
       .Send("emit")
           .AssertReply("CustomEvent Fired.")
       .StartTestAsync();
-     }
+    }
 
     private TestFlow BuildTestFlow(string folderPath, bool sendTrace = false)
     {

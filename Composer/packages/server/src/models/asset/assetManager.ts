@@ -15,46 +15,6 @@ interface TemplateData {
   };
 }
 const templates: TemplateData = {
-  CardsSamples: {
-    name: 'Cards Samples',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  ControllingConversation: {
-    name: 'Controlling Conversation',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  InputsSamples: {
-    name: 'Inputs Samples',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  Interrupt: {
-    name: 'Interrupt',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  MessageSamples: {
-    name: 'Message Samples',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  MyEmailBotComposer: {
-    name: 'MyEmailBot Composer',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  QnAMakerSample: {
-    name: 'QnAMaker Sample',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  ReminderBot: {
-    name: 'Reminder Bot',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  ActionsSamples: {
-    name: 'Actions Samples',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
-  ToDoLuisBot: {
-    name: 'ToDoLuis Bot',
-    description: 'A bot that echoes and responds with whatever message the user entered',
-  },
   EchoBot: {
     name: 'Echo Bot',
     description: 'A bot that echoes and responds with whatever message the user entered',
@@ -66,6 +26,47 @@ const templates: TemplateData = {
   ToDoBot: {
     name: 'ToDo Bot',
     description: 'A bot that allows you add, list, remove to do items',
+  },
+  CardsSamples: {
+    name: 'Cards Samples',
+    description: 'This is a bot that demonstrates the ability to send different Cards to users.',
+  },
+  ControllingConversation: {
+    name: 'Controlling Conversation',
+    description: 'This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs.',
+  },
+  InputsSamples: {
+    name: 'Inputs Samples',
+    description:
+      'This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs.',
+  },
+  Interrupt: {
+    name: 'Interrupt',
+    description: 'to be added',
+  },
+  MessageSamples: {
+    name: 'Message Samples',
+    description: 'to be added',
+  },
+  MyEmailBotComposer: {
+    name: 'MyEmailBot Composer',
+    description: 'to be added',
+  },
+  QnAMakerSample: {
+    name: 'QnAMaker Sample',
+    description: 'to be added',
+  },
+  ReminderBot: {
+    name: 'Reminder Bot',
+    description: 'to be added',
+  },
+  ActionsSamples: {
+    name: 'Actions Samples',
+    description: 'to be added',
+  },
+  ToDoLuisBot: {
+    name: 'ToDoLuis Bot',
+    description: 'This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding',
   },
   SampleBot: {
     name: 'SampleBot',
