@@ -12,7 +12,8 @@ I can show you examples on how to use actions, You can enter number 01-04
 # ShowImage(contentUrl, contentType)
 [HeroCard
     title = Here is the attachment
-    image = @{contentUrl}]
+    image = @{contentUrl}
+]
 
 # ShowEmailSummary(user)
 - IF: @{count(user.getGraphEmails.value) == 1}
