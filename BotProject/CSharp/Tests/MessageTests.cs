@@ -32,7 +32,7 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "MessageSamples"));
+            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "RespondingWithTextSample"));
             resourceExplorer.AddFolder(path);
         }
 

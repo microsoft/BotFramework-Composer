@@ -23,50 +23,37 @@ const templates: TemplateData = {
     name: 'Empty Bot',
     description: 'The very basic bot template that is ready for your creativity',
   },
-  ToDoBot: {
-    name: 'ToDo Bot',
-    description: 'A bot that allows you add, list, remove to do items',
+  RespondingWithCardsSample: {
+    name: 'Responding-with-Cards-Sample',
+    description: 'A sample bot that uses Language Generation to create cards.',
   },
-  CardsSamples: {
-    name: 'Cards Samples',
-    description: 'This is a bot that demonstrates the ability to send different Cards to users.',
+  AskingQuestionsSample: {
+    name: 'Asking-Questions-Sample',
+    description: 'A sample bot that shows how to ask question and capture user input.',
   },
-  ControllingConversation: {
-    name: 'Controlling Conversation',
-    description: 'This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs.',
+  InterruptionSample: {
+    name: 'Interruption-Sample',
+    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
   },
-  InputsSamples: {
-    name: 'Inputs Samples',
-    description:
-      'This is a bot that demonstrates the different options to collect input from a user using Adaptive Dialogs.',
+  RespondingWithTextSample: {
+    name: 'Responding-with-Text-Sample',
+    description: 'A sample bot that uses Language Generation to create bot responses.',
   },
-  Interrupt: {
-    name: 'Interrupt',
-    description: 'to be added',
+  ControllingConversationFlowSample: {
+    name: 'Controlling-Conversation-Flow-Sample',
+    description: 'A sample bot that shows how to control the flow of a conversation.',
   },
-  MessageSamples: {
-    name: 'Message Samples',
-    description: 'to be added',
+  ActionsSample: {
+    name: 'Actions-Sample',
+    description: 'A sample bot that shows how to use Dialog actions.',
   },
-  MyEmailBotComposer: {
-    name: 'MyEmailBot Composer',
-    description: 'to be added',
+  ToDoSample: {
+    name: 'ToDo-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items.',
   },
-  QnAMakerSample: {
-    name: 'QnAMaker Sample',
-    description: 'to be added',
-  },
-  ReminderBot: {
-    name: 'Reminder Bot',
-    description: 'to be added',
-  },
-  ActionsSamples: {
-    name: 'Actions Samples',
-    description: 'to be added',
-  },
-  ToDoLuisBot: {
-    name: 'ToDoLuis Bot',
-    description: 'This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding',
+  ToDoWithLUISSample: {
+    name: 'Todo-with-LUIS-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
   },
   SampleBot: {
     name: 'SampleBot',
