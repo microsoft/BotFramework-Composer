@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { DialogFooter, PrimaryButton, DefaultButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 
 import { DialogModal } from '../../CreationFlow/DialogModal/index';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
+
+import { StoreContext } from './../../store';
+
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
 const validateForm = data => {
@@ -23,6 +26,17 @@ export default function DefineConversation(props) {
   const { onDismiss, onSubmit, onGetErrorMessage } = props;
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
+  const { state } = useContext(StoreContext);
+  const { storages } = state;
+  const currentStorageIndex = useRef(0);
+
+  useEffect(() => {
+    const index = currentStorageIndex.current;
+    if (storages[index]) {
+      updateForm('location')(null, storages[index].path);
+    }
+  }, [storages]);
+
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
