@@ -38,6 +38,10 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
 }
 
 const TEMPLATE_PATTERN = /^\[bfd(.+)-(\d+)\]$/;
+function isLgTemplate(template: string): boolean {
+  return TEMPLATE_PATTERN.test(template);
+}
+
 function parseLgTemplate(template: string) {
   const result = TEMPLATE_PATTERN.exec(template);
   if (result && result.length === 3) {
@@ -88,7 +92,12 @@ const overrideLgActivity = async (data, { lgApi }) => {
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  data.prompt = await copyLgActivity(data.prompt, data.$designer.id, lgApi);
+  const promptFields = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt'];
+  for (const field of promptFields) {
+    if (isLgTemplate(data[field])) {
+      data[field] = await copyLgActivity(data[field], data.$designer.id, lgApi);
+    }
+  }
 };
 
 // TODO: use $type from SDKTypes (after solving circular import issue).
