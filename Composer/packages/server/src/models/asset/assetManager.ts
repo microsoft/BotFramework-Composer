@@ -71,7 +71,6 @@ export class AssetManager {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
       for (const name of folders) {
-        if (!templates[name]) continue;
         const absPath = Path.join(path, name);
         if ((await this.templateStorage.stat(absPath)).isDir) {
           const base = { id: name, name: templates[name].name, description: templates[name].description };
