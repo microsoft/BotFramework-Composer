@@ -1,7 +1,8 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "name": "ToDoBotWithLUIS"
+    "name": "Sample",
+    "description": "Test"
   },
   "autoEndDialog": "true",
   "defaultResultProperty": "dialog.result",
@@ -197,7 +198,7 @@
           "maxTurnCount": 3,
           "property": "dialog.item",
           "alwaysPrompt": false,
-          "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !itemTitle",
+          "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@itemTitle",
           "outputFormat": "none"
         },
         {
@@ -316,7 +317,7 @@
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
-              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !listType",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@listType",
               "outputFormat": "value",
               "choices": [
                 {
@@ -379,7 +380,7 @@
               "maxTurnCount": 3,
               "property": "dialog.item",
               "alwaysPrompt": false,
-              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !itemTitle",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@itemTitle",
               "outputFormat": "none"
             },
             {
@@ -465,7 +466,7 @@
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
-              "allowInterruptions": "false",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#ViewCollection && !@listType",
               "outputFormat": "value",
               "choices": [
                 {
@@ -479,6 +480,9 @@
                 },
                 {
                   "value": "All"
+                },
+                {
+                  "value": "Cancel"
                 }
               ],
               "appendChoices": "true",
