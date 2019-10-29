@@ -3933,6 +3933,14 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
+botbuilder-expression-parser@^4.5.11:
+  version "4.5.11"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.11.tgz#fcce377a2b2c1a2c2345b2c77d9cf4289e171f9f"
+  integrity sha1-/M43eissGiwjRbLHfZz0KJ4XH58=
+  dependencies:
+    antlr4ts "0.5.0-alpha.1"
+    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz"
+
 botbuilder-expression-parser@^4.5.9:
   version "4.5.9"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
@@ -3941,12 +3949,19 @@ botbuilder-expression-parser@^4.5.9:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
 
-"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz":
-  version "4.5.9"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
+"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz":
+  version "4.5.11"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz#d15384417be9c0e17d46bf729fe707b81b66ef68"
   dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
+    jspath "^0.4.0"
+    lru-cache "^5.1.1"
+    moment "2.24.0"
+    moment-timezone "^0.5.25"
+    xml2js "^0.4.19"
+    xmldom "^0.1.27"
+    xpath "0.0.27"
 
 "botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz":
   version "4.5.9"
@@ -3962,15 +3977,29 @@ botbuilder-expression-parser@^4.5.9:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.12.tgz":
-  version "4.6.12"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.12.tgz#9be19953ecbc5eca84f7dacfbda55567d7d197d8"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz":
+  version "4.7.0-preview0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz#46ac6e53e44ba64ae56971ab8404c3f2f9ab239d"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
-    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz"
+    botframework-expressions "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz"
     lodash "^4.17.11"
     uuid "^3.3.3"
+
+"botframework-expressions@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz":
+  version "4.7.0-preview0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz#032f104222866c5dfbcf1e17b66a56cbf4a30707"
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
+    antlr4ts "0.5.0-alpha.1"
+    jspath "^0.4.0"
+    lodash "^4.17.15"
+    lru-cache "^5.1.1"
+    moment "2.24.0"
+    moment-timezone "^0.5.25"
+    xml2js "^0.4.19"
+    xmldom "^0.1.27"
+    xpath "0.0.27"
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -10475,7 +10504,7 @@ lodash@4.17.11, lodash@>=2.4.0, "lodash@>=3.5 <5", lodash@^4.16.4, lodash@^4.17.
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
-lodash@^4.17.14:
+lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -10601,10 +10630,26 @@ lru-memoizer@^1.12.0:
     username "^4.1.0"
     window-size "^1.1.1"
 
-ludown@^1.3.1, ludown@^1.3.3:
+ludown@^1.3.1:
   version "1.3.3"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/ludown/-/ludown-1.3.3.tgz#ca41e204eace2747de4c1f31f9d7e8ccb46ddde5"
   integrity sha1-ykHiBOrOJ0feTB8x+dfozLRt3eU=
+  dependencies:
+    chai "^4.1.2"
+    chalk "2.4.1"
+    commander "^2.15.1"
+    deep-equal "^1.0.1"
+    get-stdin "^6.0.0"
+    intercept-stdout "^0.1.2"
+    latest-version "^4.0.0"
+    mocha "^5.2.0"
+    node-fetch "^2.1.2"
+    semver "^5.5.1"
+
+ludown@^1.3.4:
+  version "1.3.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/ludown/-/ludown-1.3.4.tgz#1411e7f81a10b1e0901c69dc9b230d7f534b2145"
+  integrity sha1-FBHn+BoQseCQHGncmyMNf1NLIUU=
   dependencies:
     chai "^4.1.2"
     chalk "2.4.1"
