@@ -9,7 +9,7 @@ The table below lists the five different types of triggers provided in BF Compos
 | `Handle Unknown Intent`     | Trigger an action when no intent is recognized                                       |
 | `Handle a Dialog Event`     | Trigger an action when a dialog event such as `BeginDialog` is fired                  |
 | `Handle an Event: Activity` | Trigger an action to take when an activity event such as `Handle ConversationUpdate` is fired |
-| `Handle a custom event`     | Trigger a custom event such as 'Emit a custom event' action. |                                                                                      
+| `Handle a custom event`     | Handle a pre-defined custom event such as `Emit a custom event` action. |                                                                                      
 
 ## Defining `Handle an Intent`
 
@@ -74,7 +74,7 @@ Configure a dialog to the`Begin a Dialog` activity.
 `Handle an Event: Activity` is a type of trigger used to handle activity events such as a `Handle ConversationUpdate` activity. The following steps show how to define a `Handle an Event: Activity` trigger to handle a `ConversationUpdate` activity in a dialog to send a "welcome" message. 
 
 ### 1. Create a `Handle an Event: Activity` trigger
-In the dialog menu, click **New Trigger** and select `Handle an Event: Activity` from the drop-down menu. Select `Handle ConversationUpdate` activity and then click **submit**. 
+On the navigation pane on the left side, select Main dialog. Click **New Trigger** and select `Handle an Event: Activity` from the drop-down menu. Select `Handle ConversationUpdate` activity and then click **submit**. 
 
 ![events_triggers](./media/events_triggers/conversationupdate.png)
 
@@ -84,11 +84,36 @@ In the `Handle ConversationUpdate` trigger node, click the "+" sign to add the a
 ![events_triggers](./media/events_triggers/conversationupdate2.gif)
 
 ## Defining `Handle a Custom Event`
-TBD
+`Handle a custom event` is a type of trigger to handle a custom event such as `Emit a custom event` action. Bots can emit user-defined events using the "Emit a custom event" action which will trigger this handler. So when you define an `Emit a custom event` action, you need to define a `Handle a custom event` trigger to handle the pre-defined event. Here are the steps to define a `Handle a Custom Event` trigger. 
+
+### 1. Define an `Emit a custom event` event
+In your bot's authoring canvas, select the trigger you want to define an `Emit a custom event` action. For example, we select the `Handle ConversationUpdate` trigger and we want to define a `Emit a custom event` action after the `Send a response` action. Click on the "+" sign after the `Send a response`action node, select `Access external resources` and then click `Emit a custom event` action. 
+
+![emit_custom_event](./media/events_triggers/emit_custom_event.png)
+
+On the peroperty editor on the right side, you may define some properties of this event. Let's give this event a name such as "Greeting", set event values in the `Event value` section if necessary and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
+
+![event_property](./media/events_triggers/event_property.png)
+
+### 2. Create a `Handle a Custom Event` trigger to handle the pre-defined event
+Now let's create a `Handle a Custom Event` trigger to handle the `Emit a custom event` we defined in the previous section. On the navigation pane on the left side, click on **New Trigger** in the dialog you want to create the trigger and select `Handle a custom event` from the drop-down menu. Click **submit**. 
+
+![create_custom_event_handler](./media/events_triggers/create_custom_event_handler.png)
+
+Now you have an empty `Handle a Custom Event` trigger in the authoring canvas. On the property editor on the left, fill in the name of you pre-defined event in the `Custom event name` section. In this case, we fill in the name "Greeting". Please be noted that the name in the `Custom event name` section should be exactly the same as the name you created for the pre-defined action. 
+
+![event_name](./media/events_triggers/event_name.png)
+
+You can add any action to this trigger. Click the "+" sign under `Handle a Custom Event` and select `Send a response` action from the actions menu. Author your response for this action in the language generation inline editor as you want. 
+
+![ecustom_event_response](./media/events_triggers/custom_event_response.gif)
+
+Now you have completed defining the `Handle a Custom Event` trigger. When the `Emit a custom event` is fired, the `Handle a Custom Event` trigger will be triggered and send the response you defined. 
+
+![custom_handler](./media/events_triggers/custom_handler.gif)
 
 ## References
 - [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
-
 
 ## Next 
 [Language Generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md)
