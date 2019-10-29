@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { IButtonStyles } from 'office-ui-fabric-react';
+import { IIconStyles } from 'office-ui-fabric-react';
 import { ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
+import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 
 export const outline = css`
   display: flex;
@@ -43,9 +44,7 @@ export const introduction = css`
 export const newBotContainer = css`
   display: flex;
   flex-wrap: wrap;
-  margin-left: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 export const leftContainer = css`
@@ -57,38 +56,30 @@ export const leftContainer = css`
 
 export const itemContainer = css`
   border-radius: 2px;
-  position: relative;
   cursor: pointer;
   display: block;
-  min-height: 120px;
-  min-width: 150px;
-  height: 13vh;
+  min-width: 180px;
+  height: 130px;
   width: 11vw;
   margin-right: 30px;
 `;
 
 export const itemContainerTitle = css`
-  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  transform: translate(10%, 0%);
   font-size: 20px;
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
 `;
 
 export const itemContainerContent = css`
-  position: absolute;
   font-weight: 600;
-  width: 90%;
-  max-height: 55%;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  transform: translate(10%, 30%);
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  display: -webkit-box !important;
+  padding: 0.5rem 1rem;
 `;
 
 export const subtitle = css`
@@ -127,49 +118,59 @@ export const botContainer = css`
   margin-top: 24px;
 `;
 
-export const button = () => {
-  const normal: IButtonStyles = {
-    root: {
-      background: 'transparent',
-      padding: '0px',
-    },
-    rootHovered: {
-      background: 'transparent',
-    },
-    rootChecked: {
-      background: 'transparent',
-    },
-    icon: {
-      fontSize: '24px',
-      color: 'white',
-    },
-  };
-  return normal;
+export const button: IIconStyles = {
+  root: {
+    fontSize: '24px',
+    fontWeight: 600,
+    color: 'white',
+  },
+};
+
+const baseBotItem = {
+  container: css`
+    box-shadow: ${Depths.depth4};
+    transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
+
+    &:hover,
+    &:focus {
+      box-shadow: ${Depths.depth16};
+    }
+
+    &:active {
+      box-shadow: ${Depths.depth0};
+    }
+  `,
+  content: css`
+    background-color: #f2f2f2;
+  `,
 };
 
 export const newBotItem = {
-  container: {
-    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
-  },
-  title: { backgroundColor: '#0078D4' },
-  content: { backgroundColor: '#F2F2F2' },
+  ...baseBotItem,
+  title: css`
+    background-color: #0078d4;
+  `,
 };
+
 export const lastestBotItem = {
-  container: {
-    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
-  },
-  title: { backgroundColor: '#56CCF2' },
-  content: { backgroundColor: '#F2F2F2' },
+  ...baseBotItem,
+  title: css`
+    background-color: #56ccf2;
+  `,
 };
+
 export const videoItem = {
-  title: { backgroundColor: '#F2F2F2', color: '#A19F9D' },
-  content: {
-    border: '2px solid #F2F2F2',
-    width: 'auto',
-    fontSize: 'smaller',
-    wordWrap: 'break-word',
-    color: '#A19F9D',
-  },
+  title: css`
+    background-color: #f2f2f2;
+    color: #a19f9d;
+  `,
+  content: css`
+    border: 2px solid #f2f2f2;
+    width: auto;
+    font-size: smaller;
+    word-wrap: break-word;
+    color: #a19f9d;
+  `,
 };
 
 export const detailListContainer = css`

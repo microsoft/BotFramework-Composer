@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React, { useContext, useEffect } from 'react';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
+import { Icon } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -69,7 +69,7 @@ export const Home = props => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };
 
-  const addButton = <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />;
+  const addButton = <Icon styles={home.button} iconName="Add" />;
   const toolbarItems = [
     {
       type: 'action',
