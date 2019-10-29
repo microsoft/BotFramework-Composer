@@ -110,7 +110,7 @@ You can add any action to this trigger. Click the "+" sign under `Handle a Custo
 
 Now you have completed defining the `Handle a Custom Event` trigger. When the `Emit a custom event` is fired, the `Handle a Custom Event` trigger will be triggered and send the response you defined. 
 
-![custom_handler](./media/events_triggers/custom_handler.gif)
+![custom_handler](./media/events_triggers/custom_handler.png)
 
 ## References
 - [Events and Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
