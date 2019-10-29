@@ -18,8 +18,7 @@ class StorageService {
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
-    const conns: StorageConnection[] = Store.get('storageConnections');
-    const conn = conns.find(s => {
+    const conn = this.storageConnections.find(s => {
       return s.id === storageId;
     });
     if (conn === undefined) {
@@ -45,17 +44,12 @@ class StorageService {
   };
 
   public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
-    const connection = this.storageConnections.filter(c => c.id === storageId)[0];
-    const storageClient = StorageFactory.createStorageClient(connection);
+    const storageClient = this.getStorageClient(storageId);
     return await storageClient.exists(filePath);
   };
 
   public getBlobDateModified = async (storageId: string, filePath: string) => {
-    const connection = this.storageConnections.find(c => c.id === storageId);
-    if (connection === undefined) {
-      throw new Error(`no storage connection with id ${storageId}`);
-    }
-    const storageClient = StorageFactory.createStorageClient(connection);
+    const storageClient = this.getStorageClient(storageId);
     try {
       const stat = await storageClient.stat(filePath);
       return stat.lastModified;
@@ -67,11 +61,7 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string) => {
-    const connection = this.storageConnections.find(c => c.id === storageId);
-    if (connection === undefined) {
-      throw new Error(`no storage connection with id ${storageId}`);
-    }
-    const storageClient = StorageFactory.createStorageClient(connection);
+    const storageClient = this.getStorageClient(storageId);
     try {
       const stat = await storageClient.stat(filePath);
       if (stat.isFile) {
