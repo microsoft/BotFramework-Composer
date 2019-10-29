@@ -14,6 +14,21 @@
       },
       "actions": [
         {
+          "$type": "Microsoft.QnAMakerDialog",
+          "$designer": {
+            "id": "055736",
+            "name": "Connect to QnA Knowledgebase"
+          },
+          "knowledgeBaseId": "settings.qna.knowledgebaseid",
+          "endpointKey": "settings.qna.endpointkey",
+          "hostname": "settings.qna.hostname",
+          "noAnswer": "Sorry, I did not find an answer.",
+          "threshold": 0.3,
+          "activeLearningCardTitle": "Did you mean:",
+          "cardNoMatchText": "None of the above.",
+          "cardNoMatchResponse": "Thanks for the feedback."
+        },
+        {
           "$type": "Microsoft.SetProperty",
           "$designer": {
             "id": "048651"
