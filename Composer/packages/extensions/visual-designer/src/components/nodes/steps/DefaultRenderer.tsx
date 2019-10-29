@@ -116,6 +116,9 @@ const ContentKeyByTypes: {
   [ObiTypes.QnAMakerDialog]: {
     label: 'hostname',
   },
+  [ObiTypes.OAuthInput]: {
+    label: 'tokenProperty',
+  },
 };
 
 /**

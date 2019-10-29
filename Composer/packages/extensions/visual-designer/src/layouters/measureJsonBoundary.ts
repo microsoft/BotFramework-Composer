@@ -103,7 +103,6 @@ export function measureJsonBoundary(json): Boundary {
     case ObiTypes.ConfirmInput:
     case ObiTypes.DateTimeInput:
     case ObiTypes.NumberInput:
-    case ObiTypes.OAuthInput:
     case ObiTypes.TextInput:
       boundary = measureBaseInputBoundary(json);
       break;
