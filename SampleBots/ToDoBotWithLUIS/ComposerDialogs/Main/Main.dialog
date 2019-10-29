@@ -197,7 +197,7 @@
           "maxTurnCount": 3,
           "property": "dialog.item",
           "alwaysPrompt": false,
-          "allowInterruptions": "turn.recognized.score > 0.7 && !#AddToDo",
+          "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !itemTitle",
           "outputFormat": "none"
         },
         {
@@ -218,7 +218,7 @@
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
-              "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@listType",
               "outputFormat": "value",
               "choices": [
                 {
@@ -316,7 +316,7 @@
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
-              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !listType",
               "outputFormat": "value",
               "choices": [
                 {
@@ -379,7 +379,7 @@
               "maxTurnCount": 3,
               "property": "dialog.item",
               "alwaysPrompt": false,
-              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteToDo",
+              "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !itemTitle",
               "outputFormat": "none"
             },
             {
