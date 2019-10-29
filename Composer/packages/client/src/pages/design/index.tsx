@@ -112,7 +112,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -126,7 +126,6 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const [nodeOperationAvailable, setNodeOperationAvailability] = useState(false);
 
   useEffect(() => {
     if (match) {
@@ -197,15 +196,7 @@ function DesignPage(props) {
     }
   };
 
-  useEffect(() => {
-    // HACK: wait until visual editor finish rerender.
-    // TODO: (ze) expose visual editor store to Shell and (leilei) intercept store events.
-    setTimeout(() => {
-      VisualEditorAPI.hasElementSelected().then(selected => {
-        setNodeOperationAvailability(selected);
-      });
-    }, 100);
-  });
+  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
   const toolbarItems = [
     {
