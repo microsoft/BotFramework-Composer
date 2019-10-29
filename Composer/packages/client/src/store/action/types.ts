@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ActionTypes } from '../../constants';
 
 // Actions that have concrete types that should not be included in the generic type

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 

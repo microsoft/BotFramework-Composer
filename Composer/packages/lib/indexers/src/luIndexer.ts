@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import ludown from 'ludown';
 
 import { FileInfo, LuFile, LuDiagnostic } from './type';

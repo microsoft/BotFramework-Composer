@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { LgEditor } from 'code-editor';
 import debounce from 'lodash.debounce';

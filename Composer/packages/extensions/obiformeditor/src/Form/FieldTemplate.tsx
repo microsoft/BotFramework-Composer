@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import get from 'lodash.get';
 import { FieldTemplateProps } from '@bfcomposer/react-jsonschema-form';

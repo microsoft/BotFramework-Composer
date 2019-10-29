@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState } from 'react';
 import { DefaultButton } from 'office-ui-fabric-react';
 import { getUiOptions } from '@bfcomposer/react-jsonschema-form/lib/utils';

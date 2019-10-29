@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { JsonWalk, VisitorFunc } from '../../../server/src/utility/jsonWalk';
 
 const data = {

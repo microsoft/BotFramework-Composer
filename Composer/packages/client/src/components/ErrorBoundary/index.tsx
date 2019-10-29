@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-console */
 import React, { Component } from 'react';

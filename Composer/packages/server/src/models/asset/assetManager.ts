@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import find from 'lodash.find';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';

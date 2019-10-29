@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export function getExtension(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
   return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;

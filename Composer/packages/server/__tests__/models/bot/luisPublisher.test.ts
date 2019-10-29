@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { FileUpdateType } from '../../../src/models/bot/interface';
 import { Path } from '../../../src/utility/path';
 

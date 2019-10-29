@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { startCase, get } from 'lodash';
 import React from 'react';
 import { FontClassNames, FontWeights } from '@uifabric/styling';

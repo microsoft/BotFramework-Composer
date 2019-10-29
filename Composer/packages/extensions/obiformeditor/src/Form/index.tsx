@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import JSONForm, { UiSchema, Widget, FormProps as JSONFormProps } from '@bfcomposer/react-jsonschema-form';
 import { JSONSchema6 } from 'json-schema';

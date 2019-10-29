@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import rimraf from 'rimraf';
 
 import { Path } from '../../../src/utility/path';
