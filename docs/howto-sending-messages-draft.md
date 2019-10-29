@@ -4,11 +4,11 @@ The primary way a bot communicates with users is through message activites. Some
 ## User scenario
 When your bot receives messages from the user, any **Intents** and **Entity** values in the message are extracted and passed on to the dialog's event handler. In the event handler you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
 
-Below is a screenshot of the **Send Messages** action component in Composer: 
+Below is a screenshot of the **Send a response** action in Composer: 
 
-![message_menu](./media/send_messages/message_menu.png)
+![send_response](./media/send_messages/send_response.png)
 
-> [!NOTE] All types of triggers have the **Send Messages** action component. The **Handle ConversationUpdate** trigger is one type of trigger used here for demo purposes. 
+> [!NOTE] All types of triggers have the **Send a response** action component. The **Handle ConversationUpdate** trigger is one type of trigger used here for demo purposes. 
 
 ## What to know
 In BF Composer, all messages that are sent back to the user are composed in the language generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in BF Composer, please read the [language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) concept article. 
