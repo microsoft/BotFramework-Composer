@@ -53,8 +53,10 @@ As the bot takes actions and sends messages, the **language generator** is calle
 ## Use Dialogs
 
 ### Create a dialog 
+Coming soon.
 
 ### Add a dialog 
+Coming soon.
 
 ### Dialog actions
 
