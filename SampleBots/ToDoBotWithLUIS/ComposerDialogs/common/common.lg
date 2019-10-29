@@ -1,0 +1,192 @@
+
+# bfdactivity-037171
+[Activity
+    Text = Hi, nice to meet you! I'm the todo bot. Here are some things I can help with
+    @{Welcome-Actions()}
+]
+
+> Structured template
+# Welcome-Actions
+[Activity
+    SuggestedActions = Add todo | View Todo | Remove Todo | Cancel | Help
+]
+
+# Welcome-Suffix
+- How can I be of help today?
+- What can I do for you today?
+ 
+# Welcome-Prefix
+- Hi
+- Hello
+- Hiya
+
+# bfdactivity-113335
+[Activity
+    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
+    @{Welcome-Actions()}
+]
+
+
+# bfdactivity-728132
+- Cancelling all...
+
+
+# Help-prefix
+- Sure
+- You bet
+- Absolutely
+
+# Add-Todo-Text
+- ```
+@{Help-prefix()}, I have added **@{dialog.item}** to your todo list. 
+You have **@{count(user.lists)}** items in your Todo list.
+```
+
+
+
+# bfdactivity-167003
+- @{Welcome-Actions()}
+
+
+
+
+
+# bfdactivity-456012
+[Activity
+    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
+    @{Welcome-Actions()}
+]
+
+
+
+
+
+
+
+
+# bfdactivity-052697
+[Activity
+    Text = @{Items-readback()}
+    @{Welcome-Actions()}
+]
+
+# Items-Ordinality
+- IF: @{user.lists != null && count(user.lists) == 1}
+    - item
+- ELSE:
+    - items
+
+> This template uses a foreach prebuilt function to call a template. The template helps with putting together each item in a line prefixed with `-`
+> This way, clients that support multi-line markdown for text can render the items as a list. 
+# Items-readback
+- IF: @{user.lists != null && count(user.lists) != 0}
+    - ```
+You have @{count(user.lists)} @{Items-Ordinality()} in your collection.
+    - @{join(foreach(user.lists, item, todo-line(item)), '')}
+```
+- ELSE: 
+    - ```
+You do not have any Todos in your collection.
+```
+
+# todo-line (item)
+- ```
+- @{item}```
+
+
+
+
+
+
+# bfdprompt-069270
+[Activity
+    Text = Ok, what would you like to add to your todo list?
+    SuggestedActions = Help | Cancel
+]
+
+
+
+
+
+# bfdprompt-183920
+- Are you sure you want to cancel?
+
+
+# bfdactivity-143990
+- @{Welcome-Actions()}
+
+
+# bfdactivity-304360
+- Cancelling ...
+
+
+# bfdactivity-166578
+- @{Welcome-Actions()}
+
+
+# bfdactivity-470975
+- No worries. Let's get right back to where we were...
+
+
+# bfdactivity-457351
+- @{Welcome-Actions()}
+
+
+# bfdactivity-442831
+[Activity
+    Text = @{Add-Todo-Text()}
+    @{Welcome-Actions()}
+]
+
+
+# bfdactivity-955586
+- @{Items-readback()}
+
+
+# bfdprompt-064609
+[Activity
+    Text = Ok, give me the exact title of the todo you would like to delete..
+    SuggestedActions = Help | Cancel
+]
+
+
+# bfdactivity-824571
+[Activity
+    Text = @{Delete-Items-readback()}
+    @{Welcome-Actions()}
+]
+
+# Delete-Items-readback
+- IF: {turn.itemDeleted}
+    - ```I have removed **@{dialog.item}** from your todo list. 
+    You have **@{count(user.lists)}** items in your Todo list.
+ ```
+ - ELSE : 
+    - Sorry, I did not find **@{dialog.item}** in your todo list
+
+# bfdactivity-056974
+[Activity
+    Text = @{Delete-Items-readback()}
+    @{Welcome-Actions()}
+]
+
+
+# bfdactivity-302000
+- @{Items-readback()}
+
+
+
+
+
+# bfdactivity-084161
+[Activity
+    Text = @{Items-readback()}
+    @{Welcome-Actions()}
+]
+
+
+# bfdprompt-879447
+[Activity
+    Text = Ok, give me the exact title of the todo you would like to delete..
+    SuggestedActions = Help | Cancel
+]

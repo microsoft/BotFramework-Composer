@@ -1,0 +1,156 @@
+> Entity definitions 
+$ todoTitle : simple
+
+> Add a Phrase List with todo variations. Mark them as interchangeable.
+$ todoItem : PhraseList interchangeable
+   - todo
+   - todos
+   - to dos
+   - todo list
+   - todos list
+   - item list
+   - items collection
+   - collection
+   - list
+
+> Help intent and related utterances.
+# Help
+- What can I say? 
+- Who are you?
+- I need help
+- Not sure what I can do
+- What do you want me to say?
+- What can you do?
+- What can you help with?
+- help please
+- What are my options?
+- well, I do not know what my todo's title is
+- I do not know
+- can you please help?
+
+> Greeting intent and related utterances
+# Greeting
+- hi
+- hello
+- hiya
+- how are you? 
+- how do you do?
+
+> Cancel intent and related utterances
+# Cancel
+- cancel
+- cancel all
+- stop that
+- do not do it
+- abort
+- please stop what you are doing
+- I changed my mind
+- cancel add todo
+- cancel that
+- I do not want to add a todo
+- No todo for me
+- Cancel this
+- cancel delete todo
+- Let's just leave it as is
+- I do not wish to delete my todo anymore
+- Keep my todos as is
+- No todo for me
+
+> Add todo
+# AddToDo
+- Add todo
+- add a to do item
+- Please remind me to {todoTitle=buy milk}
+- Please remember that I need to {todoTitle=buy milk}
+- I need you to remember that {todoTitle=my wife's birthday is Jan 9th}
+- Add a todo named {todoTitle=send report over this weekend}
+- Add {todoTitle=get a new car} to the todo list
+- Add {todoTitle=write a spec} to the list
+- Add {todoTitle=finish this demo} to my todo list
+- add a todo item {todoTitle=vacuuming by october 3rd}
+- add {todoTitle=call my mother} to my todo list
+- add {todoTitle=due date august to peanut butter jelly bread milk} on todos list
+- add {todoTitle=go running} to my todos
+- add to my todos list {todoTitle=mail the insurance forms out by saturday}
+- can i add {todoTitle=shirts} on the todos list
+- could i add {todoTitle=medicine} to the todos list
+- would you add {todoTitle=heavy cream} to the todos list
+- add {todoTitle} to my todo list
+- add a to do that {todoTitle=purchase a nice sweater}
+- add a to do to {todoTitle=buy shoes}
+- add an task of {todoTitle=chores to do around the house}
+- add {todoTitle=go to whole foods} in my to do list
+- add {todoTitle=reading} to my to do list
+- add this thing in to do list
+- add to my to do list {todoTitle=pick up clothes}
+- add to my to do list {todoTitle=print papers for 10 copies this afternoon}
+- create to do
+- create to do that {todoTitle=read a book tonight}
+- create to do to {todoTitle=go running in the park}
+- put {todoTitle=hikes} on my to do list
+- remind me to {todoTitle = pick up dry cleaning}
+- new to do
+- add another one
+- add
+> Add patterns
+- Please remember [to] {todoTitle}
+- I need you to remember [that] {todoTitle}
+- Add a todo named {todoTitle}
+- Add {todoTitle} to the list
+- [Please] add {todoTitle} to the todo list
+- Add {todoTitle} to my todo
+- add {todoTitle} to my to do list
+- add {todoTitle} to my to dos
+- add a to do that buy {todoTitle}
+- add a to do that purchase {todoTitle}
+- add a to do that shop {todoTitle}
+- add a to do to {todoTitle}
+- add to do that {todoTitle}
+- add to do to {todoTitle}
+- create a to do to {todoTitle}
+- create to do to {todoTitle}
+- remind me to {todoTitle}
+
+# DeleteToDoDialog
+- Remove todo
+- Mark {todoTitle = buy milk} as complete
+- Flag {todoTitle = first one} as done
+- Remove {todoTitle = finish this demo} from the todo list
+- remove another one
+- remove
+- clear my todo named {todoTitle = get a new car}
+- I'm done with the first todo
+- I finished the las todo
+- Remove the first todo
+- Delete todo
+- Clear my todos
+- Delete all my todos
+- Remove all my todo
+- Forget the list
+- Purge the todo list
+> Add patterns
+- I did {todoTitle}
+- I completed {todoTitle}
+- Delete {todoTitle}
+- Mark {todoTitle} as complete
+- Remove {todoTitle} from my [todo] list
+- [Please] delete {todoTitle} from the list
+
+# ViewToDoDialog
+- show my todo
+- can you please show my todos?
+- please show my todo list
+- todo list please
+- I need to see my todo list
+- can you show me the list?
+- please show the list
+- what do i have on my todo?
+- what is on my list?
+- do i have anything left on my todo list?
+- I hope I do not have any todo left
+- do i have any tasks left?
+- hit me up with more items
+- view my todos
+- can you show my todo
+- see todo
+- I would like to see my todos list

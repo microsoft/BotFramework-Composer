@@ -1,0 +1,310 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "ToDoBotWithLUIS"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "Main.lu",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720",
+        "name": "WelcomeUser"
+      },
+      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "037171",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-037171]"
+        },
+        {
+          "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "id": "996241",
+            "name": "Initialize a Property"
+          },
+          "property": "user.lists",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "722893"
+      },
+      "condition": "#Cancel.Score > 0.8",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "113335",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-113335]"
+        }
+      ],
+      "intent": "Help"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "463265"
+      },
+      "condition": "#Cancel.Score > 0.8",
+      "actions": [
+        {
+          "$type": "Microsoft.ConfirmInput",
+          "$designer": {
+            "id": "183920",
+            "name": "Confirmation"
+          },
+          "prompt": "[bfdprompt-183920]",
+          "maxTurnCount": 3,
+          "property": "turn.cancelConfirmation",
+          "defaultValue": "false",
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          }
+        },
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "262862",
+            "name": "Branch: If/Else"
+          },
+          "condition": "turn.cancelConfirmation",
+          "actions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "304360",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-304360]"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "457351",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-457351]"
+            },
+            {
+              "$type": "Microsoft.CancelAllDialogs",
+              "$designer": {
+                "id": "897773",
+                "name": "Cancel all dialogs"
+              }
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "470975",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-470975]"
+            }
+          ]
+        }
+      ],
+      "intent": "Cancel"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "903332"
+      },
+      "condition": "#Greeting.Score > 0.8",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "456012",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-456012]"
+        }
+      ],
+      "intent": "Greeting"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "723797"
+      },
+      "intent": "AddToDo",
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "883364",
+            "name": "Set a Property"
+          },
+          "property": "dialog.item",
+          "value": "@todoTitle"
+        },
+        {
+          "$type": "Microsoft.TextInput",
+          "$designer": {
+            "id": "069270",
+            "name": "Text input"
+          },
+          "prompt": "[bfdprompt-069270]",
+          "maxTurnCount": 3,
+          "property": "dialog.item",
+          "alwaysPrompt": false,
+          "allowInterruptions": "turn.recognized.score > 0.7",
+          "outputFormat": "none"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "841587",
+            "name": "Edit an Array Property"
+          },
+          "changeType": "Push",
+          "itemsProperty": "user.lists",
+          "value": "dialog.item"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "442831",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-442831]"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "025665",
+            "name": "Delete a Property"
+          },
+          "property": "dialog.item"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "332735"
+      },
+      "intent": "DeleteToDoDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "111644",
+            "name": "Branch: If/Else"
+          },
+          "condition": "user.lists && count(user.lists) > 0",
+          "actions": [
+            {
+              "$type": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "067886",
+                "name": "Set a Property"
+              },
+              "property": "dialog.item",
+              "value": "@todoTitle"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "302000",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-302000]"
+            },
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "879447",
+                "name": "Text input"
+              },
+              "prompt": "[bfdprompt-879447]",
+              "maxTurnCount": 3,
+              "property": "dialog.item",
+              "alwaysPrompt": false,
+              "allowInterruptions": "turn.recognized.score > 0.7",
+              "outputFormat": "none"
+            },
+            {
+              "$type": "Microsoft.EditArray",
+              "$designer": {
+                "id": "204081",
+                "name": "Edit an Array Property"
+              },
+              "changeType": "Remove",
+              "itemsProperty": "user.lists",
+              "resultProperty": "turn.itemDeleted",
+              "value": "dialog.item"
+            },
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "056974",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-056974]"
+            },
+            {
+              "$type": "Microsoft.DeleteProperty",
+              "$designer": {
+                "id": "827965",
+                "name": "Delete a Property"
+              },
+              "property": "dialog.item"
+            }
+          ],
+          "elseActions": [
+            {
+              "$type": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "084161",
+                "name": "Send a response"
+              },
+              "activity": "[bfdactivity-084161]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "877754"
+      },
+      "intent": "ViewToDoDialog",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "052697",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-052697]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema",
+  "generator": "common.lg"
+}
