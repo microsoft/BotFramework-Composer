@@ -18,7 +18,7 @@ export function RichEditor(props: RichEditorProps) {
   const [hovered, setHovered] = useState(false);
 
   const errorHelp = formatMessage.rich(
-    'This text cannot be saved because there are errors in the syntax. Refer to the syntax documentation <a>here</a>.',
+    'This text has errors in the syntax. Refer to the syntax documentation <a>here</a>.',
     {
       // eslint-disable-next-line react/display-name
       a: ({ children }) => (
@@ -55,7 +55,7 @@ export function RichEditor(props: RichEditorProps) {
     <Fragment>
       <div
         style={{
-          height: getHeight(),
+          height: `calc(${getHeight()} - 40px)`,
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor,

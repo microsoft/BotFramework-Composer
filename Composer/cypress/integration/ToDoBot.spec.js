@@ -3,16 +3,16 @@
 context('ToDo Bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.openBot('ToDoBot');
+    cy.createBot('ToDoBot');
   });
 
   it('can open the main dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoBot.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(100);
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('ToDoBot.Main').should('exist');
+      cy.getByDisplayValue('__TestToDoBot').should('exist');
     });
   });
 
