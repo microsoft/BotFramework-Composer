@@ -12,7 +12,6 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
@@ -20,7 +19,7 @@ import { actionButton, formCell } from '../language-understanding/styles';
 
 export default function TableView(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles } = state;
+  const { dialogs } = state;
   const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
@@ -29,12 +28,6 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (isEmpty(lgFile)) return;
-
-    const errorFiles = checkErrors(lgFiles);
-    if (errorFiles.length !== 0) {
-      showErrors(errorFiles);
-      return;
-    }
 
     const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
       return {
@@ -56,27 +49,6 @@ export default function TableView(props) {
       setTemplates(dialogsTemplates);
     }
   }, [lgFile, activeDialog]);
-
-  function checkErrors(files) {
-    return files.filter(file => {
-      return lgUtil.isValid(file.diagnostics) === false;
-    });
-  }
-
-  async function showErrors(files) {
-    for (const file of files) {
-      const errorMsg = lgUtil.combineMessage(file.diagnostics);
-      const errorTitle = formatMessage('There was a problem parsing {fileId}.lg file.', { fileId: file.id });
-      const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
-        style: DialogStyle.Console,
-        confirmBtnText: formatMessage('Edit'),
-      });
-      if (confirmed === true) {
-        onClickEdit({ fileId: file.id });
-        break;
-      }
-    }
-  }
 
   const getTemplatesMoreButtons = (item, index) => {
     const buttons = [
