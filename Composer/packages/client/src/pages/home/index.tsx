@@ -11,9 +11,9 @@ import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
 
 import * as home from './styles';
-import { ItemContainer } from './itemContainer';
-import { RecentBotList } from './recentBotList';
-import { ExampleList } from './exampleList';
+import { ItemContainer } from './ItemContainer';
+import { RecentBotList } from './RecentBotList';
+import { ExampleList } from './ExampleList';
 
 const linksButtom = [
   {
@@ -36,12 +36,12 @@ const comingSoonLink = {
 
 const turtorials = [
   {
-    title: formatMessage('Turtorial #1'),
-    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
+    title: formatMessage('Tutorial #1'),
+    content: formatMessage('Coming soon...'),
   },
   {
-    title: formatMessage('Turtorial #2'),
-    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
+    title: formatMessage('Tutorial #2'),
+    content: formatMessage('Coming soon...'),
   },
 ];
 
@@ -155,9 +155,9 @@ export const Home = props => {
           </div>
           <div css={home.leftContainer}>
             <div css={home.subtitle}>
-              {formatMessage(`Video turtorials: `)}
+              {formatMessage('Video tutorials:')}&nbsp;
               <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
-                <div css={comingSoonLink.css}>{comingSoonLink.text}</div>
+                <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
               </Link>
             </div>
             <div css={home.newBotContainer}>
@@ -167,12 +167,18 @@ export const Home = props => {
               <div css={home.linkContainer}>
                 <div>
                   {formatMessage(
-                    `Bot Framework provides the most comprehensive experience for building conversation applications.`
+                    'Bot Framework provides the most comprehensive experience for building conversation applications.'
                   )}
                 </div>
                 {linksButtom.map(link => {
                   return (
-                    <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + link.text} target={'_blank'}>
+                    <Link
+                      href={link.to}
+                      tabIndex={-1}
+                      key={'homePageLeftLinks-' + link.text}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <div css={link.css}>{link.text}</div>
                     </Link>
                   );
