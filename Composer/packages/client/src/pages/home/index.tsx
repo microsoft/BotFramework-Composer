@@ -118,10 +118,10 @@ export const Home = props => {
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage}>
-          <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
+          <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
-              'Bot Framework Composer is an integrated development environment(IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
+              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
           </div>
           <div css={home.newBotContainer}>
@@ -145,7 +145,7 @@ export const Home = props => {
             ) : null}
           </div>
           <div css={home.leftContainer}>
-            <div css={home.subtitle}>{formatMessage(`Recent Bots`)}</div>
+            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
             <RecentBotList
               recentProjects={recentProjects}
               onSelectionChanged={async item => {
@@ -154,12 +154,12 @@ export const Home = props => {
             />
           </div>
           <div css={home.leftContainer}>
-            <div css={home.subtitle}>
+            <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
               <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
                 <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
               </Link>
-            </div>
+            </h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
                 <ItemContainer key={index} title={item.title} content={item.content} disabled />
@@ -188,7 +188,12 @@ export const Home = props => {
           </div>
         </div>
         <div css={home.rightPage}>
-          <div css={home.bluetitle}>{formatMessage(`Examples`)}</div>
+          <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
+          <p css={home.examplesDescription}>
+            {formatMessage(
+              "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
+            )}
+          </p>
           <ExampleList examples={templateProjects} onClick={onClickTemplate} />
         </div>
       </div>

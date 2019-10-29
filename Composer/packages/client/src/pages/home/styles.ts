@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { IIconStyles } from 'office-ui-fabric-react';
-import { ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
+import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 
 export const outline = css`
@@ -23,12 +23,16 @@ export const leftPage = css`
 export const rightPage = css`
   flex: 1;
   padding: 25px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const title = css`
   display: block;
   font-size: 28px;
   line-height: 36px;
+  font-weight: normal;
+  margin: 0;
 `;
 
 export const introduction = css`
@@ -39,6 +43,7 @@ export const introduction = css`
   max-width: 2000px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 18px;
 `;
 
 export const newBotContainer = css`
@@ -91,6 +96,7 @@ export const subtitle = css`
   line-height: 24px;
   display: flex;
   font-weight: 600;
+  margin: 0;
 `;
 
 export const bluetitle = css`
@@ -99,6 +105,11 @@ export const bluetitle = css`
   display: flex;
   font-weight: 600;
   color: #0078d4;
+  margin: 0;
+`;
+
+export const examplesDescription = css`
+  margin: 0;
 `;
 
 export const linkContainer = css`
@@ -190,54 +201,47 @@ export const exampleListContainer = css`
   border: 1px solid #979797;
   margin-top: 20px;
   position: relative;
-  height: 90%;
   min-width: 260px;
+  flex: 1;
 `;
 
 export const loading = css`
   height: 50vh;
   width: 600px;
 `;
+
 const theme: ITheme = getTheme();
-const { palette, semanticColors, fonts } = theme;
-export const exampleListClass = mergeStyleSets({
-  itemCell: [
-    getFocusStyle(theme, { inset: -1 }),
-    {
-      minHeight: 54,
-      padding: 10,
-      boxSizing: 'border-box',
-      borderBottom: `1px solid ${semanticColors.bodyDivider}`,
-      display: 'flex',
-      selectors: {
-        '&:hover': { background: palette.neutralLight },
-      },
-    },
-  ],
-  image: {
-    width: 50,
-    height: 50,
-    fontSize: 50,
-    backgroundColor: '#0078D4',
-    color: 'white',
-    margin: '5px',
-  },
-  itemContent: {
-    marginLeft: 10,
-    overflow: 'hidden',
-    flexGrow: 1,
-  },
-  itemName: [
-    fonts.xLarge,
-    {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-  ],
-  itemIndex: {
-    fontSize: fonts.small.fontSize,
-    color: palette.neutralTertiary,
-    marginBottom: 10,
-  },
-});
+const { palette, fonts } = theme;
+export const exampleListCell = css`
+  min-height: 54px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+
+  &:hover {
+    background: ${palette.neutralLight};
+  }
+`;
+
+export const exampleListCellIcon = css`
+  height: 51px;
+  width: 51px;
+  flex-basis: 51px;
+`;
+
+export const exampleListCellContent = css`
+  margin-left: 16px;
+  overflow: hidden;
+  flex: 1;
+`;
+
+export const exampleListCellName = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const exampleListCellDescription = css`
+  font-size: ${fonts.small.fontSize};
+  color: ${palette.neutralTertiary};
+`;

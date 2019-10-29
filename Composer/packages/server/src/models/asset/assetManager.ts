@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 import find from 'lodash.find';
+import { ProjectTemplate } from 'shared';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-
-import { IProjectTemplate } from './interface';
 
 interface TemplateData {
   [key: string]: {
@@ -90,8 +89,8 @@ export class AssetManager {
   public templateStorage: LocalDiskStorage;
   private assetsLibraryPath: string;
   private runtimesPath: string;
-  private projectTemplates: IProjectTemplate[] = [];
-  private runtimeTemplates: IProjectTemplate[] = [];
+  private projectTemplates: ProjectTemplate[] = [];
+  private runtimeTemplates: ProjectTemplate[] = [];
 
   constructor(assetsLibraryPath: string, runtimesPath: string) {
     this.assetsLibraryPath = assetsLibraryPath;
@@ -105,7 +104,7 @@ export class AssetManager {
     this.getProjectRuntime();
   }
 
-  public async getProjectTemplates() {
+  public async getProjectTemplates(): Promise<ProjectTemplate[]> {
     const path = this.assetsLibraryPath + '/projects';
     const output = [];
 

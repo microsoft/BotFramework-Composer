@@ -3,45 +3,59 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import React from 'react';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { List } from 'office-ui-fabric-react/lib/List';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { Fragment } from 'react';
+import { ProjectTemplate } from 'shared';
 
-import { exampleListContainer, exampleListClass } from './styles';
+import * as exampleIcons from '../../images/samples';
+
+import {
+  exampleListContainer,
+  exampleListCell,
+  exampleListCellIcon,
+  exampleListCellContent,
+  exampleListCellName,
+  exampleListCellDescription,
+} from './styles';
 
 interface ExampleListProps {
-  examples: any;
+  examples: ProjectTemplate[];
   onClick: (templateId: string) => void;
 }
+
+const resolveIcon = (exampleId: string): string => {
+  if (exampleIcons[exampleId]) {
+    return exampleIcons[exampleId];
+  }
+
+  return exampleIcons.DefaultIcon;
+};
 
 export const ExampleList: React.FC<ExampleListProps> = props => {
   const { onClick, examples } = props;
 
-  function _onRenderCell(item?: any, index?: number): React.ReactNode {
+  function _onRenderCell(item?: ProjectTemplate): React.ReactNode {
+    if (!item) {
+      return;
+    }
+
     return (
-      <div
-        className={exampleListClass.itemCell}
-        data-is-focusable={true}
-        key={item.id}
-        onClick={() => onClick(item.id)}
-      >
-        <FontIcon iconName="Robot" className={exampleListClass.image} />
-        <div className={exampleListClass.itemContent}>
-          <div className={exampleListClass.itemName}>{item.name}</div>
-          <div className={exampleListClass.itemIndex}>{item.description}</div>
+      <div css={exampleListCell} data-is-focusable={true} key={item.id} onClick={() => onClick(item.id)}>
+        <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
+        <div css={exampleListCellContent}>
+          <div css={exampleListCellName}>{item.name}</div>
+          <div css={exampleListCellDescription}>{item.description.slice(0, 60)}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <Fragment>
-      <div data-is-scrollable="true" css={exampleListContainer}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <List items={examples} onRenderCell={_onRenderCell} />
-        </ScrollablePane>
-      </div>
-    </Fragment>
+    <div data-is-scrollable="true" css={exampleListContainer}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <List items={examples} onRenderCell={_onRenderCell} />
+      </ScrollablePane>
+    </div>
   );
 };
