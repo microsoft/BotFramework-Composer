@@ -14,6 +14,13 @@ module.exports = {
     node: true,
   },
   rules: {
+    'notice/notice': [
+      'error',
+      {
+        mustMatch: 'Copyright \\(c\\) Microsoft Corporation',
+        templateFile: require.resolve('./license.js'),
+      },
+    ],
     '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
