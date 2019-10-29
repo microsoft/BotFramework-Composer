@@ -1,23 +1,26 @@
-/* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import { PropTypes } from 'prop-types';
 import { Fragment } from 'react';
 
 import { exampleListContainer, exampleListClass } from './styles';
 
-export function ExampleList(props) {
+interface ExampleListProps {
+  examples: any;
+  onClick: (templateId: string) => void;
+}
+
+export const ExampleList: React.FC<ExampleListProps> = props => {
   const { onClick, examples } = props;
 
-  function _onRenderCell(item, index) {
+  function _onRenderCell(item?: any, index?: number): React.ReactNode {
     return (
       <div
         className={exampleListClass.itemCell}
         data-is-focusable={true}
-        index={item.id}
+        key={item.id}
         onClick={() => onClick(item.id)}
       >
         <FontIcon iconName="Robot" className={exampleListClass.image} />
@@ -38,9 +41,4 @@ export function ExampleList(props) {
       </div>
     </Fragment>
   );
-}
-
-ExampleList.propTypes = {
-  examples: PropTypes.array,
-  onClick: PropTypes.func,
 };

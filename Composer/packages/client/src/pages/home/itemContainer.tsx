@@ -2,7 +2,13 @@ import React from 'react';
 
 import { itemContainer, itemContainerContent, itemContainerTitle } from './styles';
 
-export const ItemContainer = ({ onClick, title, content, styles = {} }) => {
+interface ItemContainerProps {
+  onClick: () => Promise<void>;
+  title: string;
+  content: string;
+  styles: any;
+}
+export const ItemContainer: React.FC<ItemContainerProps> = ({ onClick, title, content, styles = {} }) => {
   const container = { height: '50%', position: 'relative' };
   return (
     <div

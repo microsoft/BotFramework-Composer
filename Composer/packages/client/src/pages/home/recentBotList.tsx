@@ -5,20 +5,24 @@ import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { detailListContainer } from './styles';
 
-export function RecentBotList(props) {
+interface RecentBotListProps {
+  onSelectionChanged: (file: IObjectWithKey) => void;
+  recentProjects: any;
+}
+export function RecentBotList(props: RecentBotListProps): JSX.Element {
   const { onSelectionChanged, recentProjects } = props;
   // for detail file list in open panel
   const tableColums = [
@@ -55,7 +59,7 @@ export function RecentBotList(props) {
     },
   ];
 
-  const calculateTimeDiff = time => {
+  const calculateTimeDiff = (time: any) => {
     return moment(time).toNow();
   };
 
@@ -100,8 +104,3 @@ export function RecentBotList(props) {
     </Fragment>
   );
 }
-
-RecentBotList.propTypes = {
-  recentProjects: PropTypes.array,
-  onSelectionChanged: PropTypes.func,
-};
