@@ -8,3 +8,12 @@ export const resetVisualEditor: ActionCreator = ({ dispatch }, isReset) => {
     payload: { isReset },
   });
 };
+
+export const setVisualEditorSelection: ActionCreator = ({ dispatch }, selection) => {
+  dispatch({
+    type: ActionTypes.EDITOR_SELECTION_VISUAL,
+    payload: {
+      selection,
+    },
+  });
+};

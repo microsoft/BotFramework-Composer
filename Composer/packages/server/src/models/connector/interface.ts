@@ -10,7 +10,7 @@ export type BotEnvironments = 'production' | 'integration' | 'editing';
 
 export interface AuthenticatedToken {
   accessToken: string;
-  deocdedToken?: AuthenticatedUser;
+  decodedToken?: AuthenticatedUser;
 }
 
 export interface AuthenticatedUser {

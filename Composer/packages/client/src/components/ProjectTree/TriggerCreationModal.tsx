@@ -30,15 +30,15 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const { $type, specifiedType } = data;
 
   if ($type === eventTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('please select a event type');
+    errors.specifiedType = formatMessage('Please select a event type');
   }
 
   if ($type === activityTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('please select an activity type');
+    errors.specifiedType = formatMessage('Please select an activity type');
   }
 
   if (!$type) {
-    errors.$type = formatMessage('please select a trigger type');
+    errors.$type = formatMessage('Please select a trigger type');
   }
   return errors;
 };

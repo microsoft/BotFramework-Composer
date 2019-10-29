@@ -91,6 +91,8 @@ export const RemotePublish = () => {
             </Stack>
           ),
         });
+        setPublishAction('');
+        setDialogHidden(false);
       } else if (publishAction === 'rollback') {
         setDialogProps({
           title: formatMessage('Rollback successful'),
@@ -104,8 +106,9 @@ export const RemotePublish = () => {
             </Stack>
           ),
         });
+        setPublishAction('');
+        setDialogHidden(false);
       }
-      setDialogHidden(false);
     } else {
       // display confirmation
       setDialogProps({
@@ -155,7 +158,6 @@ export const RemotePublish = () => {
         </Stack>
       ),
     });
-
     setDialogHidden(false);
   };
 
@@ -171,7 +173,6 @@ export const RemotePublish = () => {
         </Stack>
       ),
     });
-
     setDialogHidden(false);
   };
 

@@ -8,7 +8,7 @@ services:
       # expose 9229 for debugging
       # - "9229:9229"
     volumes:
-      - ./SampleBots:/SampleBots
+      - ./MyBots:/MyBots
       - ./BotProject:/BotProject
     environment:
       - NODE_ENV=container
@@ -21,4 +21,4 @@ services:
     ports:
       - "3979:80"
     volumes:
-      - ./SampleBots:/app/SampleBots
+      - ./MyBots:/app/MyBots
