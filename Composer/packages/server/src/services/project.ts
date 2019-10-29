@@ -1,3 +1,5 @@
+import { merge, find } from 'lodash';
+
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
@@ -29,12 +31,12 @@ export class BotProjectService {
   }
 
   public static getProjectsDateModifiedDict = async (projects: LocationRef[]): Promise<any> => {
-    const dateModifiedDict: any = {};
+    const dateModifiedDict: any = [];
     const promises = projects.map(async project => {
       let dateModified = '';
       try {
         dateModified = await StorageService.getBlobDateModified(project.storageId, project.path);
-        dateModifiedDict[project.path] = dateModified;
+        dateModifiedDict.push({ dateModified, path: project.path });
       } catch (err) {
         console.error(err);
       }
@@ -46,15 +48,18 @@ export class BotProjectService {
   public static getRecentBotProjects = async () => {
     BotProjectService.initialize();
     const dateModifiedDict = await BotProjectService.getProjectsDateModifiedDict(BotProjectService.recentBotProjects);
-    return BotProjectService.recentBotProjects.reduce((result: any[], item) => {
+    const recentBots = BotProjectService.recentBotProjects.reduce((result: any[], item) => {
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
       if (!name.includes('.botproj')) {
-        const dateModified = dateModifiedDict[item.path] ? dateModifiedDict[item.path] : '';
-        result.push({ name, dateModified, ...item });
+        result.push({ name, ...item });
       }
       return result;
     }, []);
+
+    return recentBots.map((item: any) => {
+      return merge(item, find(dateModifiedDict, { path: item.path }));
+    });
   };
 
   public static openProject = async (locationRef: LocationRef) => {
