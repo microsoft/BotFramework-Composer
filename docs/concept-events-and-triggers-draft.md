@@ -36,8 +36,8 @@ There are some event handlers used to handle activities, such as  `Handle an Eve
 
 ![activity_event_handler](./media/events_triggers/activity_event_handler.png)
 
-### Handle custom events 
-`Handle custom events` is a type of trigger to handle a custom event such as 'Emit a custom event' action. Bots can emit user-defined events using the "Emit a custom event" action which will trigger this handler. 
+### Handle a custom event
+`Handle a custom event` is a type of trigger to handle a custom event such as 'Emit a custom event' action. Bots can emit user-defined events using the "Emit a custom event" action which will trigger this handler. 
 
 ## Anatomy of an event handler
 
