@@ -140,6 +140,7 @@ This template "#AllCards" is defined to display all cards when called.
 - [Adaptive cards](https://adaptivecards.io/)
 - [Using adaptive cards](https://github.com/microsoft/BotBuilder-Samples/tree/master/samples/csharp_dotnetcore/07.using-adaptive-cards)
 - [Adaptive cards for bot developers](https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots)
+- [Cards references](https://docs.microsoft.com/en-us/microsoftteams/platform/concepts/cards/cards-reference)
 
 ## Next
 TBD 
