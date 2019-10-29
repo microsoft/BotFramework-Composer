@@ -5,11 +5,11 @@ The table below lists the five different types of triggers provided in BF Compos
 
 | Trigger Type                | Description                                                                                       |
 | --------------------------- | ------------------------------------------------------------------------------------------------- |
-| `Handle an Intent`          | To define the actions to take when an **Intent** is recognized (and optionally **entities**)      |
-| `Handle Unknown Intent`     | To define the actions to taken when no intent is recognized                                       |
-| `Handle a Dialog Event`     | To define the actions to take when a dialog event such as `BeginDialog` is fired                  |
-| `Handle an Event: Activity` | To define the actions to take when an activity event such as `Handle ConversationUpdate` is fired |
-| `Handle a custom event`     | n/a                                                                                               |
+| `Handle an Intent`          | Trigger an action when an **Intent** is recognized (and optionally **entities**)      |
+| `Handle Unknown Intent`     | Trigger an action when no intent is recognized                                       |
+| `Handle a Dialog Event`     | Trigger an action when a dialog event such as `BeginDialog` is fired                  |
+| `Handle an Event: Activity` | Trigger an action to take when an activity event such as `Handle ConversationUpdate` is fired |
+| `Handle a custom event`     | Trigger a custom event such as 'Emit a custom event' action. |                                                                                      
 
 ## Defining `Handle an Intent`
 
