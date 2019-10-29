@@ -74,7 +74,6 @@ export function checkLgContent(content) {
 }
 
 export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
-  checkLgContent(content);
   try {
     const response = await axios.put(`${BASEURL}/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
@@ -91,7 +90,6 @@ export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content })
 };
 
 export const createLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
-  checkLgContent(content);
   try {
     const response = await axios.post(`${BASEURL}/projects/opened/lgFiles`, { id, content });
     dispatch({
@@ -126,8 +124,6 @@ export const removeLgFile: ActionCreator = async ({ dispatch }, { id }) => {
 export const updateLgTemplate: ActionCreator = async (store, { file, templateName, template }) => {
   parseLgTemplate(template);
   const newContent = updateTemplateInContent({ content: file.content, templateName, template });
-  checkLgContent(newContent);
-
   return await updateLgFile(store, { id: file.id, content: newContent });
 };
 

@@ -78,7 +78,7 @@
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.12.tgz",
+    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz",
     "cookie-parser": "^1.4.4",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
@@ -88,6 +88,7 @@
     "globby": "^9.1.0",
     "http-errors": "^1.7.2",
     "immer": "^2.1.4",
+    "indexers": "0.0.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.11",
@@ -103,7 +104,6 @@
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
     "rimraf": "^2.6.3",
-    "shared": "0.0.0",
-    "indexers": "0.0.0"
+    "shared": "0.0.0"
   }
 }
