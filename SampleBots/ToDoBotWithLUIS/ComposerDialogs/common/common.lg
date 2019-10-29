@@ -11,12 +11,6 @@
     @{Welcome-Actions()}
 ]
 
-# bfdactivity-728132
-- Cancelling all...
-
-# bfdactivity-167003
-- @{Welcome-Actions()}
-
 # bfdactivity-456012
 [Activity
     Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
@@ -38,50 +32,22 @@
 # bfdprompt-183920
 - Are you sure you want to cancel?
 
-# bfdactivity-143990
-- @{Welcome-Actions()}
-
 # bfdactivity-304360
-- Cancelling ...
-
-# bfdactivity-166578
-- @{Welcome-Actions()}
+[Activity
+    Text = Cancelling ...
+    SuggestedActions = @{Welcome-Actions()}
+]
 
 # bfdactivity-470975
 - No worries. Let's get right back to where we were...
 
-# bfdactivity-457351
-- @{Welcome-Actions()}
 
-# bfdactivity-442831
-[Activity
-    Text = @{Add-Todo-Text()}
-    @{Welcome-Actions()}
-]
-
-# bfdactivity-955586
-- @{Items-readback()}
-
-# bfdprompt-064609
-[Activity
-    Text = Ok, give me the exact title of the todo you would like to delete..
-    SuggestedActions = Help | Cancel
-]
-
-# bfdactivity-824571
-[Activity
-    Text = @{Delete-Items-readback()}
-    @{Welcome-Actions()}
-]
 
 # bfdactivity-056974
 [Activity
     Text = @{Delete-Items-readback()}
     @{Welcome-Actions()}
 ]
-
-# bfdactivity-302000
-- @{Items-readback()}
 
 # bfdactivity-084161
 [Activity
@@ -95,18 +61,6 @@
     SuggestedActions = Help | Cancel
 ]
 
-# bfdactivity-341682
-[Activity
-    Text = @{Add-Todo-Text()}
-    @{Welcome-Actions()}
-]
-
-# bfdactivity-785798
-[Activity
-    Text = @{Add-Todo-Text()}
-    @{Welcome-Actions()}
-]
-
 # bfdactivity-775572
 [Activity
     Text = @{Add-Todo-Text()}
@@ -118,6 +72,21 @@
 
 # bfdprompt-059540
 - What list would you like to see?
+
+# bfdactivity-212971
+- @{List-readback(user.taskLists, dialog.listType)}
+
+
+# bfdprompt-637111
+- Which list do you want to remove an item from?
+
+
+# bfdprompt-038757
+[Activity
+    Text = Ok, give me the exact title of the todo you would like to delete..
+    SuggestedActions = Help | Cancel
+]
+
 
 > Language generation templates.
 # Welcome-Actions
@@ -193,28 +162,3 @@ You do not have any items in your @{type} list.
 @{Help-prefix()}, I have added **@{dialog.item}** to your @{dialog.listType} list. 
 You have **@{count(user.taskLists[dialog.listType])}** items in your @{dialog.listType} list.
 ```
-
-# bfdactivity-846368
-[Activity
-    Text = @{Items-readback()}
-    @{Welcome-Actions()}
-]
-
-
-# bfdactivity-212971
-- @{List-readback(user.taskLists, dialog.listType)}
-
-
-# bfdprompt-932872
-- Which list do you want to remove an item from?
-
-
-# bfdprompt-637111
-- Which list do you want to remove an item from?
-
-
-# bfdprompt-038757
-[Activity
-    Text = Ok, give me the exact title of the todo you would like to delete..
-    SuggestedActions = Help | Cancel
-]

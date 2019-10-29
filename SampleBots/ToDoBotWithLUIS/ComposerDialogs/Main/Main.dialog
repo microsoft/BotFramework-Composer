@@ -26,15 +26,6 @@
         {
           "$type": "Microsoft.InitProperty",
           "$designer": {
-            "id": "996241",
-            "name": "Initialize a Property"
-          },
-          "property": "user.lists",
-          "type": "array"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
             "id": "200509",
             "name": "Initialize a Property"
           },
@@ -131,14 +122,6 @@
                 "name": "Send a response"
               },
               "activity": "[bfdactivity-304360]"
-            },
-            {
-              "$type": "Microsoft.SendActivity",
-              "$designer": {
-                "id": "457351",
-                "name": "Send a response"
-              },
-              "activity": "[bfdactivity-457351]"
             },
             {
               "$type": "Microsoft.CancelAllDialogs",
