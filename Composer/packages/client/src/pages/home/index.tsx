@@ -147,7 +147,7 @@ export const Home = props => {
                 title={''}
                 content={'ToDoBotWithLuis'}
                 styles={home.lastestBotItem}
-                onClick={async () => {
+                onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
               />
