@@ -34,6 +34,7 @@ export const Trigger = ({ data, onClick = () => {} }): JSX.Element => (
         iconColor: 'black',
       }}
       icon={ElementIcon.Flow}
+      iconSize={8}
       header={'Trigger'}
       label={getLabel(data)}
       onClick={onClick}

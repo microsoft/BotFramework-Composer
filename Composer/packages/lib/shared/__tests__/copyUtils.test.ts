@@ -1,7 +1,7 @@
 import { copyAdaptiveAction } from '../src/copyUtils';
 
 describe('copyAdaptiveAction', () => {
-  const lgTemplate = [{ Name: 'bfdactivity-1234', Body: '-hello' }];
+  const lgTemplate = [{ Name: 'bfdactivity-1234', Body: '-hello' }, { Name: 'bfdprompt-1234', Body: '-hi' }];
   const externalApi = {
     updateDesigner: data => {
       data.$designer = { id: '5678' };
@@ -72,7 +72,7 @@ describe('copyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdactivity-1234]',
+      prompt: '[bfdprompt-1234]',
     };
 
     expect(await copyAdaptiveAction(promptText, externalApi)).toEqual({
@@ -84,7 +84,7 @@ describe('copyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdactivity-5678]',
+      prompt: '[bfdprompt-5678]',
     });
 
     expect(await copyAdaptiveAction(promptText, externalApiWithFailure)).toEqual({
@@ -96,7 +96,7 @@ describe('copyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '-hello',
+      prompt: '-hi',
     });
   });
 });
