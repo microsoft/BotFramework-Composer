@@ -11,7 +11,7 @@ The table below lists the five different types of triggers provided in BF Compos
 | `Handle an Event: Activity` | Trigger an action to take when an activity event such as `Handle ConversationUpdate` is fired |
 | `Handle a custom event`     | Handle a pre-defined custom event such as `Emit a custom event` action. |                                                                                      
 
-## Defining `Handle an Intent`
+## Define `Handle an Intent`
 
 `Handle an Intent` defines the actions to take when an **Intent** is recognized (and optionally **entities**). Before defining a `Handle an Intent` trigger you need to select a recognizer type and define intents in your selected dialog: 
 
@@ -37,7 +37,7 @@ Under the `Handle an Intent` trigger node, click the "+" sign to add the action 
 
 ![add_action_node](./media/events_triggers/add_action_node.gif)  
 
-## Defining `Handle Unknown Intent`
+## Define `Handle Unknown Intent`
 `Handle Unknown Intent` defines the actions to take when an utterence is not recognized (the None Intent). Unlike `Handle an Intent` trigger, you do not need to define any intents before defining the `Handle Unknown Intent` trigger. Please note that an "UnknownIntent" will defer to any specific intent that fires in a parent dialog. 
 
 To define a `Handle Unknown Intent` trigger, follow the steps:
@@ -52,7 +52,7 @@ Under the `Handle Unknown Intent` trigger, click the "+" sign to add the action 
 
 ![unknown_intent](./media/events_triggers/unknown_intent.gif)  
 
-## Defining `Handle a Dialog Event`
+## Define `Handle a Dialog Event`
 Define the actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a `Handle a Dialog Event` trigger and add `BeginDialog` activity to the trigger. 
 
 ### 1. Create a `Handle a Dialog Event` trigger
@@ -69,7 +69,7 @@ Configure a dialog to the`Begin a Dialog` activity.
 
 ![configure_dialog](./media/events_triggers/configure_dialog.gif) 
 
-## Defining `Handle an Event: Activity`
+## Define `Handle an Event: Activity`
 
 `Handle an Event: Activity` is a type of trigger used to handle activity events such as a `Handle ConversationUpdate` activity. The following steps show how to define a `Handle an Event: Activity` trigger to handle a `ConversationUpdate` activity in a dialog to send a "welcome" message. 
 
@@ -83,7 +83,7 @@ In the `Handle ConversationUpdate` trigger node, click the "+" sign to add the a
 
 ![events_triggers](./media/events_triggers/conversationupdate2.gif)
 
-## Defining `Handle a Custom Event`
+## Define `Handle a Custom Event`
 `Handle a custom event` is a type of trigger to handle a custom event such as `Emit a custom event` action. Bots can emit user-defined events using the "Emit a custom event" action which will trigger this handler. So when you define an `Emit a custom event` action, you need to define a `Handle a custom event` trigger to handle the pre-defined event. Here are the steps to define a `Handle a Custom Event` trigger. 
 
 ### 1. Define an `Emit a custom event` event
