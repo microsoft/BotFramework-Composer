@@ -1,53 +1,17 @@
-import axios from 'axios';
 import clonedeep from 'lodash.clonedeep';
 import { remove } from 'lodash';
 import { DialogInfo } from 'shared';
+import debounce from 'lodash.debounce';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionTypes } from './../../constants/index';
 import { navTo } from './navigation';
-
-export const removeDialogBase: ActionCreator = async (store, id) => {
-  try {
-    const response = await axios.delete(`${BASEURL}/projects/opened/dialogs/${id}`);
-    store.dispatch({
-      type: ActionTypes.REMOVE_DIALOG_SUCCESS,
-      payload: {
-        response,
-      },
-    });
-    navTo(store, 'Main');
-  } catch (err) {
-    store.dispatch({ type: ActionTypes.REMOVE_DIALOG_FAILURE, payload: null, error: err });
-  }
-};
-
-export const createDialogBase: ActionCreator = async (store, { id, content }) => {
-  try {
-    const response = await axios.post(`${BASEURL}/projects/opened/dialogs`, { id, content });
-    const onCreateDialogComplete = store.getState().onCreateDialogComplete;
-    if (typeof onCreateDialogComplete === 'function') {
-      onCreateDialogComplete(id);
-    }
-    store.dispatch({
-      type: ActionTypes.CREATE_DIALOG_SUCCESS,
-      payload: {
-        response,
-      },
-    });
-    navTo(store, id);
-  } catch (err) {
-    store.dispatch({
-      type: ActionTypes.SET_ERROR,
-      payload: {
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: 'CREATE DIALOG ERROR',
-      },
-    });
-  }
-};
+import { Store } from './../types';
+import httpClient from './../../utils/httpUtil';
+import { setError } from './error';
+import { fetchProject } from './project';
 
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
@@ -71,10 +35,48 @@ const getDiff = (dialogs1: DialogInfo[], dialogs2: DialogInfo[]) => {
   }
 };
 
+export const removeDialogBase: ActionCreator = async (store, id) => {
+  try {
+    const response = await httpClient.delete(`/projects/opened/dialogs/${id}`);
+    store.dispatch({
+      type: ActionTypes.REMOVE_DIALOG,
+      payload: { response },
+    });
+    navTo(store, 'Main');
+  } catch (err) {
+    setError(store, {
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'DELETE DIALOG ERROR',
+    });
+  }
+};
+
+export const createDialogBase: ActionCreator = async (store, { id, content }) => {
+  try {
+    const response = await httpClient.post(`/projects/opened/dialogs`, { id, content });
+    const onCreateDialogComplete = store.getState().onCreateDialogComplete;
+    if (typeof onCreateDialogComplete === 'function') {
+      onCreateDialogComplete(id);
+    }
+    store.dispatch({
+      type: ActionTypes.CREATE_DIALOG_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    navTo(store, id);
+  } catch (err) {
+    setError(store, {
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'CREATE DIALOG ERROR',
+    });
+  }
+};
+
 export const removeDialog = undoable(
   removeDialogBase,
   pickDialog,
-  async (store, { dialogs }) => {
+  async (store: Store, { dialogs }) => {
     const target = getDiff(store.getState().dialogs, dialogs);
     if (target) {
       await createDialogBase(store, target);
@@ -86,7 +88,7 @@ export const removeDialog = undoable(
 export const createDialog = undoable(
   createDialogBase,
   pickDialog,
-  async (store, { dialogs }) => {
+  async (store: Store, { dialogs }) => {
     const target = getDiff(dialogs, store.getState().dialogs);
     if (target) {
       await removeDialogBase(store, target.id);
@@ -95,23 +97,22 @@ export const createDialog = undoable(
   (store, { id, content }) => createDialogBase(store, { id, content })
 );
 
-export const updateDialogBase: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const debouncedUpdateDialog = debounce(async (store, id, content) => {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/dialogs/${id}`, { id, content });
-    dispatch({
-      type: ActionTypes.UPDATE_DIALOG,
-      payload: {
-        response,
-      },
-    });
+    await httpClient.put(`/projects/opened/dialogs/${id}`, { id, content });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_DIALOG_FAILURE,
-      payload: {
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-      },
+    setError(store, {
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'UPDATE DIALOG ERROR',
     });
+    //if update dialog error, do a full refresh.
+    fetchProject(store);
   }
+}, 500);
+
+export const updateDialogBase: ActionCreator = (store, { id, content }) => {
+  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
+  debouncedUpdateDialog(store, id, content);
 };
 
 export const updateDialog: ActionCreator = undoable(

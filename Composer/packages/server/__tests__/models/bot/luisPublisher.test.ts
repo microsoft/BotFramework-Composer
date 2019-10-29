@@ -36,14 +36,24 @@ describe('get unpublishedFiles', () => {
         id: 'a',
         relativePath: 'bot1/a.lu',
         content: '',
-        parsedContent: {},
+        parsedContent: {
+          LUISJsonStructure: {
+            intents: [],
+            utterances: [],
+          },
+        },
       },
       {
         diagnostics: [],
         id: 'b',
         relativePath: 'bot1/b.lu',
         content: '',
-        parsedContent: {},
+        parsedContent: {
+          LUISJsonStructure: {
+            intents: [],
+            utterances: [],
+          },
+        },
       },
     ];
 
