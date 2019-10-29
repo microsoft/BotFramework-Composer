@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
-import { InitNodeSize } from '../constants/ElementSizes';
+import { InitNodeSize, LoopEdgeMarginLeft, IconBrickSize, ElementInterval } from '../constants/ElementSizes';
 import { AttrNames } from '../constants/ElementAttributes';
 
 enum BoundRect {
@@ -40,18 +40,30 @@ function localeNearestElement(
   );
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
-  let assistMinDistance = 10000;
   let assistDistance;
+
+  // x is the length of the botAsk node and the exception node on x-axis
+  // y is the length of the botAsk node and the exception node on y-axis
+  // minCot is the cot angle of x and y
+  const x = (IconBrickSize.width + InitNodeSize.width) / 2 + LoopEdgeMarginLeft;
+  const y = ElementInterval.y + InitNodeSize.height;
+  const minCot = x / y;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
-    if (boundRectKey === BoundRect.Top || boundRectKey === BoundRect.Left) {
-      distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
-    } else {
-      distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
-    }
 
     if (assistAxle === Axle.X) {
+      if (boundRectKey === BoundRect.Top) {
+        distance =
+          bounds[boundRectKey] +
+          bounds.height / 2 -
+          (currentElementBounds[boundRectKey] + currentElementBounds.height / 2);
+      } else {
+        distance =
+          currentElementBounds[boundRectKey] -
+          currentElementBounds.height / 2 -
+          (bounds[boundRectKey] - bounds.height / 2);
+      }
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
       );
@@ -60,13 +72,25 @@ function localeNearestElement(
         minDistance = distance;
       }
     } else {
+      if (boundRectKey === BoundRect.Left) {
+        distance =
+          bounds[boundRectKey] +
+          bounds.width / 2 -
+          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
+      } else {
+        distance =
+          currentElementBounds[boundRectKey] -
+          currentElementBounds.width / 2 -
+          (bounds[boundRectKey] - bounds.width / 2);
+      }
       assistDistance = Math.abs(
         currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
       );
-      if (distance > 0 && distance <= minDistance && assistMinDistance >= assistDistance) {
+
+      // Only when the neareast node and the current node's cot angle must bigger than minCot can we avoid move left or right to the wrong exception node
+      if (distance > 0 && distance / assistDistance > minCot && distance <= minDistance) {
         neareastElement = element;
         minDistance = distance;
-        assistMinDistance = assistDistance;
       }
     }
   });
