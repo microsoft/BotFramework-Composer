@@ -1,0 +1,17 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",      
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "[bfdactivity-003038]"
+        }
+      ]
+    }
+  ]
+}
