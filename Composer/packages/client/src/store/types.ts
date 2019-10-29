@@ -31,6 +31,19 @@ export interface BreadcrumbItem {
   focused: string;
 }
 
+export interface File {
+  name: string;
+  type: string;
+  path: string;
+  size?: number;
+  lastModified?: string;
+}
+
+export interface StorageFolder extends File {
+  parent: string;
+  children?: File[];
+}
+
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
@@ -43,7 +56,7 @@ export interface State {
   templateProjects: any[];
   recentProjects: any[];
   storages: any[];
-  focusedStorageFolder: any;
+  focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
   botLoadErrorMsg: string;
   creationFlowStatus: CreationFlowStatus;

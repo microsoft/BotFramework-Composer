@@ -1,7 +1,3 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
-/* eslint-disable react/display-name */
 /** @jsx jsx */
 import path from 'path';
 
@@ -19,17 +15,27 @@ import {
   SelectionMode,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Dropdown, Stack, StackItem } from 'office-ui-fabric-react';
+import { Dropdown, Stack, StackItem, IDropdownOption } from 'office-ui-fabric-react';
 
-import { FileTypes, SupportedFileTypes } from '../../constants/index';
+import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
+import { StorageFolder, File } from '../../store/types';
+import { getFileIconName, getFileEditDate, formatBytes } from '../../utils';
 
 import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
-export function FileSelector(props) {
+interface FileSelectorProps {
+  focusedStorageFolder: StorageFolder;
+  currentPath: string;
+  updateCurrentPath: (newPath?: string, storageId?: string) => void;
+  onSelectionChanged: (file: any) => void;
+  checkShowItem: (file: File) => boolean;
+  storageFileLoadingStatus: string;
+}
+
+export const FileSelector: React.FC<FileSelectorProps> = props => {
   const {
     onSelectionChanged,
     focusedStorageFolder,
@@ -120,21 +126,24 @@ export function FileSelector(props) {
 
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
-    const files = focusedStorageFolder.children.reduce((result, file) => {
-      const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
-      if (check(file)) {
-        result.push({
-          name: file.name,
-          value: file.name,
-          fileType: file.type,
-          iconName: getIconName(file),
-          dateModified: getFileEditDate(file),
-          fileSize: file.size ? formatBytes(file.size) : '',
-          filePath: file.path,
-        });
-      }
-      return result;
-    }, []);
+    const files = focusedStorageFolder.children.reduce(
+      (result, file) => {
+        const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
+        if (check(file)) {
+          result.push({
+            name: file.name,
+            value: file.name,
+            fileType: file.type,
+            iconName: getFileIconName(file),
+            dateModified: getFileEditDate(file),
+            fileSize: file.size ? formatBytes(file.size) : '',
+            filePath: file.path,
+          });
+        }
+        return result;
+      },
+      [] as any[]
+    );
     // add parent folder
     files.unshift({
       name: '..',
@@ -166,42 +175,6 @@ export function FileSelector(props) {
     },
   });
 
-  function getFileEditDate(file) {
-    if (file && file.lastModified) {
-      return new Date(file.lastModified).toLocaleDateString();
-    }
-
-    return '';
-  }
-
-  // todo: icon file is fixed for now, need to be updated when get it from
-  // designer.
-  function getIconName(file) {
-    const path = file.path;
-    let docType = file.type;
-    if (docType === FileTypes.FOLDER) {
-      return docType;
-    } else if (docType === FileTypes.BOT) {
-      return docType;
-    } else {
-      docType = path.substring(path.lastIndexOf('.') + 1, path.length);
-      if (SupportedFileTypes.includes(docType)) {
-        return docType;
-      }
-
-      return FileTypes.UNKNOW;
-    }
-  }
-
-  function formatBytes(bytes, decimals) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024,
-      dm = decimals <= 0 ? 0 : decimals || 2,
-      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-  }
-
   function getNavItemPath(array, separator, start, end) {
     if (end === 0) return array[0];
     if (!start) start = 0;
@@ -218,7 +191,7 @@ export function FileSelector(props) {
       let itemPath = getNavItemPath(pathItems, separator, 0, index);
 
       // put a leading / back on the path if it started as a unix style path
-      itemPath = currentPath[0] === '/' ? `/${itemPath}` : itemPath;
+      itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
       // add a trailing / if the last path is something like c:
       itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
 
@@ -230,8 +203,8 @@ export function FileSelector(props) {
     })
     .reverse();
 
-  const updateLocation = (e, item) => {
-    updateCurrentPath(item.key);
+  const updateLocation = (e, item?: IDropdownOption) => {
+    updateCurrentPath(item ? (item.key as string) : '');
   };
 
   return (
@@ -277,14 +250,4 @@ export function FileSelector(props) {
       )}
     </div>
   );
-}
-
-FileSelector.propTypes = {
-  saveAction: PropTypes.element,
-  focusedStorageFolder: PropTypes.object,
-  currentPath: PropTypes.string,
-  updateCurrentPath: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  checkShowItem: PropTypes.func,
-  storageFileLoadingStatus: PropTypes.string,
 };

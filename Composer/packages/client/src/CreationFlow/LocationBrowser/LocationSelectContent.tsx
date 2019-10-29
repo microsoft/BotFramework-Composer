@@ -18,7 +18,7 @@ export function LocationSelectContent(props) {
   const [currentPath, setCurrentPath] = useState('');
   const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
-  const updateCurrentPath = async (newPath, storageId) => {
+  const updateCurrentPath = async (newPath?: string, storageId?: string) => {
     if (!storageId) {
       storageId = currentStorageId;
     }
