@@ -42,7 +42,7 @@ const turtorials = [
   },
 ];
 
-export const Home = () => {
+export const Home = props => {
   const { state, actions } = useContext(StoreContext);
   const { recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
@@ -127,7 +127,7 @@ export const Home = () => {
                 title={addButton}
                 content={formatMessage('New')}
                 styles={home.newBotItem}
-                onClick={onClickNewBotProject}
+                onClick={async () => await onClickNewBotProject()}
               />
             </div>
             {recentProjects.length > 0 ? (
@@ -135,7 +135,7 @@ export const Home = () => {
                 title={''}
                 content={recentProjects[0].name}
                 styles={home.lastestBotItem}
-                onClick={async e => {
+                onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
               />
