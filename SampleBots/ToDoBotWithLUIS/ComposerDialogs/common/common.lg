@@ -103,6 +103,7 @@
 - Hello
 - Hiya
 
+> This template uses pre-built functions to construct a response.
 # Delete-Items-readback
 - IF: {turn.itemDeleted}
     - ```I have removed **@{dialog.item}** from your @{dialog.listType} list. 
@@ -117,8 +118,6 @@
 - ELSE:
     - items
 
-> This template uses a foreach prebuilt function to call a template. The template helps with putting together each item in a line prefixed with `-`
-> This way, clients that support multi-line markdown for text can render the items as a list. 
 # Items-readback
 - IF : {toLower(dialog.listType) == 'all' }
     - @{Show-all-lists()}
@@ -137,6 +136,8 @@
 @{List-readback (user.taskLists, 'todo')}
 ```
 
+> This template uses a foreach prebuilt function to call a template. The template helps with putting together each item in a line prefixed with `-`
+> This way, clients that support multi-line markdown for text can render the items as a list. 
 # List-readback (collection, type)
 - IF: @{collection != null && collection[type] != null && count(collection[type]) != 0}
     - ```
