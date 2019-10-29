@@ -133,6 +133,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['connectionName', '*'],
   },
+  [SDKTypes.QnAMakerDialog]: {
+    'ui:hidden': ['strictFilters'],
+  },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',

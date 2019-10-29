@@ -49,6 +49,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.ChoiceInput,
       SDKTypes.AttachmentInput,
       SDKTypes.DateTimeInput,
+      SDKTypes.OAuthInput,
     ],
   },
   [DialogGroup.BRANCHING]: {
