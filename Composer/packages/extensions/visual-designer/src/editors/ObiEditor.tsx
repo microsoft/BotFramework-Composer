@@ -199,7 +199,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     }
 
     // Notify container at every selection change.
-    onSelect(selectionContext.selectedIds);
+    onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
   }, [focusedId, selectionContext]);
 
   useEffect(
@@ -365,7 +365,7 @@ interface ObiEditorProps {
   onFocusEvent: (eventId: string) => any;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
-  onSelect: (selection: any) => any;
+  onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
 }

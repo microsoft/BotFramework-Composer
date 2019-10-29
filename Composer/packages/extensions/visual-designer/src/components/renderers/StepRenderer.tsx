@@ -17,7 +17,6 @@ const rendererByObiType = {
   [ObiTypes.ConfirmInput]: BaseInput,
   [ObiTypes.DateTimeInput]: BaseInput,
   [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.OAuthInput]: BaseInput,
   [ObiTypes.TextInput]: BaseInput,
   [ObiTypes.ChoiceInput]: BaseInput,
 };
