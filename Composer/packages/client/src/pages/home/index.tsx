@@ -127,7 +127,7 @@ export const Home = props => {
                 title={addButton}
                 content={formatMessage('New')}
                 styles={home.newBotItem}
-                onClick={async () => await onClickNewBotProject()}
+                onClick={onClickNewBotProject}
               />
             </div>
             {recentProjects.length > 0 ? (

@@ -3,7 +3,7 @@ import React from 'react';
 import { itemContainer, itemContainerContent, itemContainerTitle } from './styles';
 
 interface ItemContainerProps {
-  onClick?: () => Promise<void>;
+  onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
   content: string;
   styles: any;
