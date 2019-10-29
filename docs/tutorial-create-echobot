@@ -1,0 +1,11 @@
+# Create an Echo Bot
+
+Open Composer
+Click New
+Create from template > Echo Bot
+Echo.Main > Recognizer Type > None
+Start Bot
+Test in Emulator
+Type anything in Emulator to have it echo back
+
+
