@@ -9,14 +9,11 @@ Add QnA Maker to your bot when you want to send a user question to your bot then
 1. In the flow designer, select the event handler, **+**. This displays the action components list. 
 
 1. Select **Access external resources**, then **Connect to QnAKnowledgeBase** . This displays the list of settings. 
-
-    While you can edit settings in the panel, a security best practice is to edit security-related settings from the **Settings** menu. This menu writes the values to the `appsettings.json` file. This restricts settings to the browser session.
-
-    Security-related settings are referenced by the property location in `appsettings.json` file. 
+ 
 
 ## Review settings
 
-Review the QnA Maker settings panel when selecting the QnA Maker dialog. If you edit the settings from this panel, these settings are less secure because they are written to the dialog file. If you are not concerned with security of the file, you can edit the settings in the panel. They are saved to the dialog settings used in the browser session. 
+Review the QnA Maker settings panel when selecting the QnA Maker dialog. While you can edit settings in the panel, a security best practice is to edit security-related settings (such as the endpoint key, knowledge base ID and hostname) from the **Settings** menu. This menu writes the values to the `appsettings.json` file and persists the values in the browser session. If you edit the settings from the QnA Maker settings panel, these settings are less secure because they are written to the dialog file. 
 
 ![Review Qna Maker settings](./media/integration/qna-maker-review-settings.png)
 
@@ -38,11 +35,11 @@ The following settings configure the bot's integration with QnA Maker.
 |Optional|Active learning card title|Text to display to user before providing follow-up prompts, for example: `Did you mean:`.|
 |Optional|Card no match text|Text to display as a card to the user at the end of the list of follow-up prompts to indicate none of the prompts match the user's need. For example: `None of the above.`|
 |Optional|Card no match response|Text to display as a card to the user as a response to the user selecting the card indicating none of the follow-up prompts matched the user's need. For example: `Thanks for the feedback.`|
-|Optional|Strict filter|Provide expressions to find only those answers that contain the metadata.|
+
 
 ## Edit settings
 
-Securely editing the QnA Maker settings should be completed using **Settings**. These values are help in the browser session only.
+Securely editing the QnA Maker settings should be completed using **Settings**. These values are held in the browser session only.
 
 ![Edit Qna Maker settings](./media/integration/qna-maker-edit-settings.png)
 
@@ -52,11 +49,11 @@ Securely editing the QnA Maker settings should be completed using **Settings**. 
 
 ## Knowledge base limits
 
-You can use Connect to a **QnAKnowledgeBase** Action to connect to only one knowledge base per dialog. 
+You can use **Connect to a QnAKnowledgeBase** Action to connect to only one knowledge base per dialog. 
 
-If your bot scenario requires you to connect to multiple knowledge bases, merge to create one knowledge base - merging existing knowledge bases and use **Connect to QnAKnowledgeBase** Action to build your dialog. 
+If your knowledge bases are domain agnostic and your scenario does not require you to keep them as separate knowledge bases, you can merge them to create one knowledge base and use **Connect to QnAKnowledgeBase** Action to build your dialog. 
 
-If your scenario requires you to connect multiple knowledge bases and show the single answer, from the knowledge base with higher confidence score to the end user, use the **Send an HTTP request** Action to make two HTTP calls to two published knowledge bases, manipulate the response payload to compare the confidence scores and decide which answer should be shown to the end user. 
+If your knowledge bases have content from different domains and your scenario requires you to connect multiple knowledge bases and show the single answer from the knowledge base with higher confidence score to the end user, use the **Send an HTTP request** Action to make two HTTP calls to two published knowledge bases, manipulate the response payload to compare the confidence scores and decide which answer should be shown to the end user. 
 
 ## Bots with Language Understanding (LUIS) and QnA Maker
 
