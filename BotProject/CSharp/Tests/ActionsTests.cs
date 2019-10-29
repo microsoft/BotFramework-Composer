@@ -55,7 +55,7 @@ namespace Tests
     [TestMethod]
     public async Task Actions_02EndTurn()
     {
-      await BuildTestFlow(getFolderPath("ActionsSample"))
+    await BuildTestFlow(getFolderPath("ActionsSample"))
       .SendConversationUpdate()
           .AssertReply(String.Format("I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.{0}01 - Actions{0}02 - EndTurn{0}03 - IfCondiftion{0}04 - EditArray, Foreach{0}05 - EndDialog{0}06 - HttpRequest{0}07 - SwitchCondition{0}08 - RepeatDialog{0}09 - TraceAndLog{0}10 - EditActions{0}11 - ReplaceDialog{0}12 - EmitEvent{0}", Environment.NewLine))
       .Send("02")
@@ -146,8 +146,8 @@ namespace Tests
       .Send("luhan")
           .AssertReply(activity =>
           {
-            var trace = (Activity)activity;
-            Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
+              var trace = (Activity)activity;
+              Assert.AreEqual(ActivityTypes.Trace, trace.Type, "should be trace activity");
           })
       .StartTestAsync();
     }
@@ -222,10 +222,10 @@ namespace Tests
 
       return new TestFlow(adapter, async (turnContext, cancellationToken) =>
       {
-        if (dialog is AdaptiveDialog planningDialog)
-        {
-          await dm.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
-        }
+          if (dialog is AdaptiveDialog planningDialog)
+          {
+              await dm.OnTurnAsync(turnContext, cancellationToken).ConfigureAwait(false);
+          }
       });
     }
   }
