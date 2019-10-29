@@ -52,6 +52,12 @@ As the bot takes actions and sends messages, the **language generator** is calle
 
 ## Use Dialogs
 
+### Create a dialog 
+
+### Add a dialog 
+
+### Dialog actions
+
 A Dialog acts like a piece of the bot's functionality such as [**GetProfile**](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Interrupt) to fulfill user's request. A bot will have a few dialogs or even dozens of hundres of individual dialogs and it is a big challenge to manage the dialog system and the conversation with user. Bot Composer offers a set of built-in action components to simplify sophisticated converesation modelling process so that users can build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
 
 ![dialog_action](./media/dialog/dialog_action.png)
@@ -62,13 +68,13 @@ Below is a list of all the Dialog actions provided in Composer.
 
 | Dialog Action        | Description                                                                                                                      |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Begin a Dialog       | An action that begins another dialog. When that dialog is completed, it will return to the caller.                                 |
-| End Dialog           | A command that ends the current dialog, returning the `resultProperty` as the result of the dialog.                             |
-| Cancel All Dialogs   | A command to cancel all of the current dialogs by emitting an event that must be caught to prevent cancelation from propagating |
-| End Turn             | A command to end the current turn without ending the dialog.                                                                     |
+| Begin a new dialog       | An action that begins another dialog. When that dialog is completed, it will return to the caller.                                 |
+| End this dialog           | A command that ends the current dialog, returning the `resultProperty` as the result of the dialog.                             |
+| Cancel all dialogs   | A command to cancel all of the current dialogs by emitting an event that must be caught to prevent cancelation from propagating |
+| End Dialog turn        | A command to end the current turn without ending the dialog.                                                                     |
 | Repeat this Dialog   | An action that repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action that replaces the current dialog with the target dialog.                                                              |
-| Modify Active Dialog | A command to edit current dialog with `changeType` and Actions.                                                                  |
+
 
 ## References 
 [Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
