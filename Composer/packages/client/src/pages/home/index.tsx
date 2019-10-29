@@ -142,7 +142,16 @@ export const Home = props => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
               />
-            ) : null}
+            ) : (
+              <ItemContainer
+                title={''}
+                content={'ToDoBotWithLuis'}
+                styles={home.lastestBotItem}
+                onClick={() => {
+                  onClickTemplate('ToDoBotWithLuisSample');
+                }}
+              />
+            )}
           </div>
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
