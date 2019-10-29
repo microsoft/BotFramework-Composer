@@ -1,6 +1,8 @@
 import fs from 'fs';
 
 import isEqual from 'lodash.isequal';
+import { FileInfo, DialogInfo, LgFile, LuFile } from 'shared';
+import { dialogIndexer, luIndexer, lgIndexer } from 'indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -9,10 +11,7 @@ import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, FileInfo, LGFile, Dialog, LUFile, LuisStatus, FileUpdateType } from './interface';
-import { DialogIndexer } from './indexers/dialogIndexers';
-import { LGIndexer } from './indexers/lgIndexer';
-import { LUIndexer } from './indexers/luIndexer';
+import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
@@ -31,12 +30,16 @@ export class BotProject {
   public dataDir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
-  public dialogIndexer: DialogIndexer;
-  public lgIndexer: LGIndexer;
-  public luIndexer: LUIndexer;
+  public dialogs: DialogInfo[] = [];
+  public luFiles: LuFile[] = [];
+  public lgFiles: LgFile[] = [];
   public luPublisher: LuPublisher;
-  public defaultSDKSchema: { [key: string]: string };
-  public defaultEditorSchema: { [key: string]: string };
+  public defaultSDKSchema: {
+    [key: string]: string;
+  };
+  public defaultEditorSchema: {
+    [key: string]: string;
+  };
   public environment: IEnvironment;
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
@@ -54,33 +57,29 @@ export class BotProject {
     this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir });
     this.settingManager = this.environment.getSettingsManager();
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
-
-    this.dialogIndexer = new DialogIndexer(this.name);
-    this.lgIndexer = new LGIndexer();
-    this.luIndexer = new LUIndexer();
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogIndexer.index(this.files);
-    this.lgIndexer.index(this.files);
-    await this.luIndexer.index(this.files); // ludown parser is async
+    this.dialogs = dialogIndexer.index(this.files, this.name);
+    this.lgFiles = lgIndexer.index(this.files);
+    this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
     }
-    await this.luPublisher.loadStatus(this.luIndexer.getLuFiles().map(f => f.relativePath));
+    await this.luPublisher.loadStatus(this.luFiles.map(f => f.relativePath));
   };
 
   public getIndexes = () => {
     return {
       botName: this.name,
       location: this.dir,
-      dialogs: this.dialogIndexer.getDialogs(),
-      lgFiles: this.lgIndexer.getLgFiles(),
-      luFiles: this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status),
+      dialogs: this.dialogs,
+      lgFiles: this.lgFiles,
+      luFiles: this.mergeLuStatus(this.luFiles, this.luPublisher.status),
       schemas: this.getSchemas(),
       botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
@@ -94,10 +93,10 @@ export class BotProject {
 
   public getEnvSettings = async (slot: string, obfuscate: boolean) => {
     const settings = await this.settingManager.get(slot, obfuscate);
-    if (settings && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
+    if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
-    if (settings && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
+    if (settings && oauthInput().MicrosoftAppPassword && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
     }
     return settings;
@@ -114,8 +113,14 @@ export class BotProject {
     await this.luPublisher.setLuisConfig(config.luis);
   };
 
-  // merge the status managed by luPublisher to the LuFile structure to keep a unified interface
-  private mergeLuStatus = (luFiles: LUFile[], luStatus: { [key: string]: LuisStatus }) => {
+  // merge the status managed by luPublisher to the LuFile structure to keep a
+  // unified interface
+  private mergeLuStatus = (
+    luFiles: LuFile[],
+    luStatus: {
+      [key: string]: LuisStatus;
+    }
+  ) => {
     return luFiles.map(x => {
       if (!luStatus[x.relativePath]) {
         throw new Error(`No luis status for lu file ${x.relativePath}`);
@@ -156,14 +161,18 @@ export class BotProject {
     }
 
     return {
-      editor: { content: editorSchema },
-      sdk: { content: sdkSchema },
+      editor: {
+        content: editorSchema,
+      },
+      sdk: {
+        content: sdkSchema,
+      },
       diagnostics,
     };
   };
 
   public updateBotInfo = async (name: string, description: string) => {
-    const dialogs = this.dialogIndexer.getDialogs();
+    const dialogs = this.dialogs;
     const mainDialog = dialogs.find(item => item.isRoot);
     if (mainDialog !== undefined) {
       mainDialog.content.$designer = {
@@ -175,8 +184,8 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<Dialog[]> => {
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+  public updateDialog = async (id: string, dialogContent: any): Promise<DialogInfo[]> => {
+    const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
@@ -185,97 +194,97 @@ export class BotProject {
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
     await this._updateFile(relativePath, content);
 
-    return this.dialogIndexer.getDialogs();
+    return this.dialogs;
   };
 
-  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<Dialog[]> => {
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<DialogInfo[]> => {
+    const dialog = this.dialogs.find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
     const relativePath = Path.join(dir, `${id.trim()}.dialog`);
     await this._createFile(relativePath, content);
-    return this.dialogIndexer.getDialogs();
+    return this.dialogs;
   };
 
-  public removeDialog = async (id: string): Promise<Dialog[]> => {
+  public removeDialog = async (id: string): Promise<DialogInfo[]> => {
     if (id === 'Main') {
       throw new Error(`Main dialog can't be removed`);
     }
 
-    const dialog = this.dialogIndexer.getDialogs().find(d => d.id === id);
+    const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
     await this._removeFile(dialog.relativePath);
     this._cleanUp(dialog.relativePath);
-    return this.dialogIndexer.getDialogs();
+    return this.dialogs;
   };
 
-  public updateLgFile = async (id: string, content: string): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+  public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
+    const lgFile = this.lgFiles.find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
     const absolutePath = `${this.dir}/${lgFile.relativePath}`;
-    const diagnostics = this.lgIndexer.check(content, absolutePath);
-    if (this.lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+    const diagnostics = lgIndexer.check(content, absolutePath);
+    if (lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);
     }
     await this._updateFile(lgFile.relativePath, content);
-    return this.lgIndexer.getLgFiles();
+    return this.lgFiles;
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+  public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LgFile[]> => {
+    const lgFile = this.lgFiles.find(lg => lg.id === id);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     const absolutePath = `${this.dir}/${relativePath}`;
-    const diagnostics = this.lgIndexer.check(content, absolutePath);
-    if (this.lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = this.lgIndexer.combineMessage(diagnostics);
+    const diagnostics = lgIndexer.check(content, absolutePath);
+    if (lgIndexer.isValid(diagnostics) === false) {
+      const errorMsg = lgIndexer.combineMessage(diagnostics);
       throw new Error(errorMsg);
     }
     await this._createFile(relativePath, content);
-    return this.lgIndexer.getLgFiles();
+    return this.lgFiles;
   };
 
-  public removeLgFile = async (id: string): Promise<LGFile[]> => {
-    const lgFile = this.lgIndexer.getLgFiles().find(lg => lg.id === id);
+  public removeLgFile = async (id: string): Promise<LgFile[]> => {
+    const lgFile = this.lgFiles.find(lg => lg.id === id);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
     await this._removeFile(lgFile.relativePath);
-    return this.lgIndexer.getLgFiles();
+    return this.lgFiles;
   };
 
-  public updateLuFile = async (id: string, content: string): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+  public updateLuFile = async (id: string, content: string): Promise<LuFile[]> => {
+    const luFile = this.luFiles.find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
     let currentLufileParsedContentLUISJsonStructure = null;
     try {
-      currentLufileParsedContentLUISJsonStructure = await this.luIndexer.parse(content);
+      currentLufileParsedContentLUISJsonStructure = await luIndexer.parse(content);
     } catch (error) {
       throw new Error(`Update ${id}.lu Failed, ${error.text}`);
     }
 
     const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
     const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) return this.luIndexer.getLuFiles();
+    if (!isUpdate) return this.luFiles;
 
     await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
 
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+  public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LuFile[]> => {
+    const luFile = this.luFiles.find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
     }
@@ -284,11 +293,11 @@ export class BotProject {
     // TODO: validate before save
     await this._createFile(relativePath, content);
     await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status); // return a merged LUFile always
+    return this.mergeLuStatus(this.luFiles, this.luPublisher.status); // return a merged LUFile always
   };
 
-  public removeLuFile = async (id: string): Promise<LUFile[]> => {
-    const luFile = this.luIndexer.getLuFiles().find(lu => lu.id === id);
+  public removeLuFile = async (id: string): Promise<LuFile[]> => {
+    const luFile = this.luFiles.find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
@@ -297,12 +306,12 @@ export class BotProject {
 
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
     this._cleanUp(luFile.relativePath);
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
   public publishLuis = async (authoringKey: string) => {
     this.luPublisher.setAuthoringKey(authoringKey);
-    const referred = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const referred = this.luFiles.filter(this.isReferred);
     const unpublished = this.luPublisher.getUnpublisedFiles(referred);
 
     const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
@@ -323,11 +332,11 @@ export class BotProject {
     } catch (error) {
       throw error;
     }
-    return this.mergeLuStatus(this.luIndexer.getLuFiles(), this.luPublisher.status);
+    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
   public checkLuisPublished = () => {
-    const referredLuFiles = this.luIndexer.getLuFiles().filter(this.isReferred);
+    const referredLuFiles = this.luFiles.filter(this.isReferred);
     if (referredLuFiles.length <= 0) {
       return true;
     } else {
@@ -375,9 +384,8 @@ export class BotProject {
 
   private defaultDir = (id: string) => Path.join(DIALOGFOLDER, id);
 
-  // create a file with relativePath and content
-  // relativePath is a path relative to root dir instead of dataDir
-  // dataDir is not aware at this layer
+  // create a file with relativePath and content relativePath is a path relative
+  // to root dir instead of dataDir dataDir is not aware at this layer
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
@@ -430,13 +438,13 @@ export class BotProject {
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogIndexer.index(this.files);
+        this.dialogs = dialogIndexer.index(this.files, this.name);
         break;
       case '.lg':
-        this.lgIndexer.index(this.files);
+        this.lgFiles = lgIndexer.index(this.files);
         break;
       case '.lu':
-        await this.luIndexer.index(this.files); // ludown parser is async
+        this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -461,7 +469,8 @@ export class BotProject {
     const fileList: FileInfo[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
     for (const pattern of patterns) {
-      // load only from the data dir, otherwise may get "build" versions from deployment process
+      // load only from the data dir, otherwise may get "build" versions from
+      // deployment process
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(pattern, root);
 
@@ -485,9 +494,9 @@ export class BotProject {
 
   // check project stracture is valid or not, if not, try fix it.
   private _checkProjectStructure = async () => {
-    const dialogs: Dialog[] = this.dialogIndexer.getDialogs();
-    const luFiles: LUFile[] = this.luIndexer.getLuFiles();
-    const lgFiles: LGFile[] = this.lgIndexer.getLgFiles();
+    const dialogs: DialogInfo[] = this.dialogs;
+    const luFiles: LuFile[] = this.luFiles;
+    const lgFiles: LgFile[] = this.lgFiles;
 
     // ensure each dialog folder have a lu file, e.g.
     /**
@@ -498,7 +507,7 @@ export class BotProject {
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      const exist = luFiles.findIndex((luFile: LUFile) => luFile.relativePath === targetLuFilePath);
+      const exist = luFiles.findIndex((luFile: LuFile) => luFile.relativePath === targetLuFilePath);
       if (exist === -1) {
         await this._createFile(targetLuFilePath, '');
       }
@@ -514,8 +523,8 @@ export class BotProject {
      */
     for (const dialog of dialogs) {
       const { lgFile, luFile } = dialog;
-      const lgExist = lgFiles.findIndex((file: LGFile) => file.id === lgFile);
-      const luExist = luFiles.findIndex((file: LUFile) => file.id === luFile);
+      const lgExist = lgFiles.findIndex((file: LgFile) => file.id === lgFile);
+      const luExist = luFiles.findIndex((file: LuFile) => file.id === luFile);
 
       if (lgFile && lgExist === -1) {
         throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
@@ -526,28 +535,25 @@ export class BotProject {
     }
   };
 
-  private isEmpty = (LUFile: LUFile) => {
+  private isEmpty = (LUFile: LuFile) => {
     if (LUFile === undefined) return true;
     if (LUFile.content === undefined || LUFile.content === '') return true;
     if (LUFile.parsedContent === undefined) return true;
     if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
-    for (const key in LUFile.parsedContent.LUISJsonStructure) {
-      if (LUFile.parsedContent.LUISJsonStructure[key].length !== 0) {
-        return false;
-      }
-    }
+    if (LUFile.parsedContent.LUISJsonStructure.intents.length !== 0) return false;
+    if (LUFile.parsedContent.LUISJsonStructure.utterances.length !== 0) return false;
     return true;
   };
 
-  private isReferred = (LUFile: LUFile) => {
-    const dialogs = this.dialogIndexer.getDialogs();
+  private isReferred = (LUFile: LuFile) => {
+    const dialogs = this.dialogs;
     if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
       return true;
     }
     return false;
   };
 
-  private generateErrorMessage = (invalidLuFile: LUFile[]) => {
+  private generateErrorMessage = (invalidLuFile: LuFile[]) => {
     return invalidLuFile.reduce((msg, file) => {
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
         text += `\n ${diagnostic.text}`;

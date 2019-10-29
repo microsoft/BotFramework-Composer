@@ -17,7 +17,7 @@ export interface DesignerData {
 const initialDialogShape = {
   'Microsoft.AdaptiveDialog': {
     $type: 'Microsoft.AdaptiveDialog',
-    events: [
+    triggers: [
       {
         $type: 'Microsoft.OnBeginDialog',
         $designer: {
@@ -29,6 +29,24 @@ const initialDialogShape = {
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
     condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+  },
+  'Microsoft.AttachmentInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.ChoiceInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.ConfirmInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.DateTimeInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.NumberInput': {
+    allowInterruptions: 'false',
+  },
+  'Microsoft.TextInput': {
+    allowInterruptions: 'false',
   },
 };
 
@@ -95,8 +113,8 @@ export const seedNewDialog = (
       id: nanoid('1234567890', 6),
       ...designerAttributes,
     },
+    ...seedDefaults($type),
     ...(initialDialogShape[$type] || {}),
     ...optionalAttributes,
-    ...seedDefaults($type),
   };
 };

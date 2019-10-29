@@ -57,20 +57,20 @@ context('breadcrumb', () => {
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Handle ConversationUpdate').click();
+      cy.getByText('Handle an Event: BeginDialog').click();
       cy.wait(500);
     });
 
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.getByTestId('RuleEditor').within(() => {
-        cy.getByText('Send an Activity').click();
+        cy.getByText('Set a Property').click();
         cy.wait(500);
       });
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /ToDoBot.+Send an Activity/);
+      .should('match', /ToDoBot.+Set a Property/);
   });
 });

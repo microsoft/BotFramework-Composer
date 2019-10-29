@@ -46,7 +46,7 @@ export enum ActionTypes {
   CREATE_DIALOG_CANCEL = 'CREATE_DIALOG_CANCEL',
   CREATE_DIALOG_SUCCESS = 'CREATE_DIALOG_SUCCESS',
   CREATE_DIALOG_FAILURE = 'CREATE_DIALOG_FAILURE',
-  REMOVE_DIALOG_SUCCESS = 'REMOVE_DIALOG_SUCCESS',
+  REMOVE_DIALOG = 'REMOVE_DIALOG',
   REMOVE_DIALOG_FAILURE = 'REMOVE_DIALOG_FAILURE',
   UPDATE_LG_SUCCESS = 'UPDATE_LG_SUCCESS',
   UPDATE_LG_FAILURE = 'UPDATE_LG_FAILURE',
@@ -81,6 +81,7 @@ export enum ActionTypes {
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
+  REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
   USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
@@ -165,7 +166,7 @@ export const Steps = {
   NONE: 'NONE',
 };
 
-export const DialogInfo = {
+export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create from scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Designer, or start with a template.'),

@@ -130,7 +130,7 @@ export const LUPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('User says')}..</div>
+        <div>{formatMessage('User Input')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}

@@ -22,7 +22,7 @@ const CS_POLICIES = [
   "img-src 'self' data:;",
   "base-uri 'none';",
   "connect-src 'self';",
-  "frame-src 'self';",
+  "frame-src 'self' bfemulator:;",
   "worker-src 'self';",
   "form-action 'none';",
   "frame-ancestors 'self';",
@@ -82,7 +82,7 @@ app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   }
 });
 
-app.get('/extensionContainer.html', function(req, res) {
+app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
   res.render(path.resolve(__dirname, './public/extensionContainer.ejs'), { __nonce__: req.__nonce__ });
 });
 
@@ -93,5 +93,5 @@ app.get('*', function(req, res) {
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server running on port ${port}`);
+  console.log('Composer api now running.');
 });

@@ -28,11 +28,6 @@ export class BeginDialog extends React.Component<NodeProps, object> {
           onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
         }}
       >
-        <FabricIcon
-          style={{ lineHeight: '12px', fontSize: '12px', paddingLeft: '5px', paddingRight: '5px' }}
-          iconName="OpenSource"
-          data-testid="OpenIcon"
-        />
         {calleeDialog}
       </span>
     );

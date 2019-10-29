@@ -83,5 +83,12 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) => {
     );
   }
 
-  return <FabricIcon iconName={icon} />;
+  return (
+    <FabricIcon
+      iconName={icon}
+      css={{
+        fontSize: size,
+      }}
+    />
+  );
 };

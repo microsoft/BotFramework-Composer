@@ -4,6 +4,7 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
+import { DialogInfo } from 'shared';
 
 import {
   addNewTrigger,
@@ -17,7 +18,6 @@ import {
   getActivityTypes,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
-import { DialogInfo } from '../../store/types';
 
 import { styles, dropdownStyles, dialogWindow } from './styles';
 
@@ -30,15 +30,15 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const { $type, specifiedType } = data;
 
   if ($type === eventTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('please select a event type');
+    errors.specifiedType = formatMessage('Please select a event type');
   }
 
   if ($type === activityTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('please select an activity type');
+    errors.specifiedType = formatMessage('Please select an activity type');
   }
 
   if (!$type) {
-    errors.$type = formatMessage('please select a trigger type');
+    errors.$type = formatMessage('Please select a trigger type');
   }
   return errors;
 };

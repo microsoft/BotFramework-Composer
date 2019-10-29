@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { dialogIndexer } from 'indexers/lib/dialogIndexer';
 
 import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -9,20 +10,6 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
-
-const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
-  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
-  state.botName = response.data.botName;
-  state.location = response.data.location;
-  state.lgFiles = response.data.lgFiles;
-  state.schemas = response.data.schemas;
-  state.luFiles = response.data.luFiles;
-  state.settings = response.data.settings;
-  refreshLocalStorage(response.data.botName, state.settings);
-  mergeLocalStorage(response.data.botName, state.settings);
-  return state;
-};
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
@@ -47,13 +34,33 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
+const getProjectSuccess: ReducerFunc = (state, { response }) => {
+  state.dialogs = response.data.dialogs;
+  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
+  state.botName = response.data.botName;
+  state.location = response.data.location;
+  state.lgFiles = response.data.lgFiles;
+  state.schemas = response.data.schemas;
+  state.luFiles = response.data.luFiles;
+  state.settings = response.data.settings;
+  refreshLocalStorage(response.data.botName, state.settings);
+  mergeLocalStorage(response.data.botName, state.settings);
+  return state;
+};
+
 const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
   state.recentProjects = response.data;
   return state;
 };
 
-const updateDialog: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+const updateDialog: ReducerFunc = (state, { id, content }) => {
+  state.dialogs = state.dialogs.map(dialog => {
+    if (dialog.id === id) {
+      const result = dialogIndexer.parse(content);
+      return { ...dialog, ...result };
+    }
+    return dialog;
+  });
   return state;
 };
 
@@ -232,7 +239,7 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
-  [ActionTypes.REMOVE_DIALOG_SUCCESS]: removeDialog,
+  [ActionTypes.REMOVE_DIALOG]: removeDialog,
   [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
