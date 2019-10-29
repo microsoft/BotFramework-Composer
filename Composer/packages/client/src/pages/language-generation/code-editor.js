@@ -23,11 +23,9 @@ export default function CodeEditor(props) {
   // file.content assume to be load from server
   const _onChange = value => {
     setContent(value);
+    onChange(value);
     const diagnostics = lgUtil.check(value);
     setDiagnostics(diagnostics);
-    if (lgUtil.isValid(diagnostics) === true) {
-      onChange(value);
-    }
   };
 
   const isInvalid = !lgUtil.isValid(diagnostics);

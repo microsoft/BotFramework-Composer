@@ -3,7 +3,7 @@
 context('breadcrumb', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.openBot('ToDoBot');
+    cy.createBot('ToDoBot');
     cy.wait(100);
   });
 
@@ -11,7 +11,7 @@ context('breadcrumb', () => {
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.wait(1000);
-      cy.getByText('ToDoBot.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(1000);
     });
   });
@@ -20,7 +20,7 @@ context('breadcrumb', () => {
     // Should path = main dialog at first render
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('contain', 'ToDoBot.Main');
+      .should('contain', '__TestToDoBot.Main');
 
     // Click on AddToDo dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
@@ -29,16 +29,16 @@ context('breadcrumb', () => {
     cy.getByTestId('Breadcrumb')
       .invoke('text')
       .should('contain', 'AddToDo');
-
+    cy.wait(1000);
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ToDoBot.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(100);
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('contain', 'ToDoBot');
+      .should('contain', '__TestToDoBot');
   });
 
   it('can show event name in breadcrumb', () => {
@@ -57,7 +57,7 @@ context('breadcrumb', () => {
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Handle an Event: BeginDialog').click();
+      cy.getByText('Handle ConversationUpdate').click();
       cy.wait(500);
     });
 
