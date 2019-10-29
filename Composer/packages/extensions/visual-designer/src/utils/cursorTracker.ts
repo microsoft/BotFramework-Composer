@@ -48,21 +48,16 @@ function localeNearestElement(
   const x = (IconBrickSize.width + InitNodeSize.width) / 2 + LoopEdgeMarginLeft;
   const y = ElementInterval.y + InitNodeSize.height;
   const minCot = x / y;
+  let minAssistDistance = 10000;
 
   elementArr.forEach(element => {
     bounds = element.getBoundingClientRect();
 
     if (assistAxle === Axle.X) {
       if (boundRectKey === BoundRect.Top) {
-        distance =
-          bounds[boundRectKey] +
-          bounds.height / 2 -
-          (currentElementBounds[boundRectKey] + currentElementBounds.height / 2);
+        distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
       } else {
-        distance =
-          currentElementBounds[boundRectKey] -
-          currentElementBounds.height / 2 -
-          (bounds[boundRectKey] - bounds.height / 2);
+        distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
       }
       assistDistance = Math.abs(
         currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
@@ -88,9 +83,15 @@ function localeNearestElement(
       );
 
       // Only when the neareast node and the current node's cot angle must bigger than minCot can we avoid move left or right to the wrong exception node
-      if (distance > 0 && distance / assistDistance > minCot && distance <= minDistance) {
-        neareastElement = element;
-        minDistance = distance;
+      if (distance > 0 && (distance / assistDistance > minCot || distance > x) && distance <= minDistance) {
+        if (assistDistance > minAssistDistance && distance < minDistance) {
+          neareastElement = element;
+          minDistance = distance;
+        } else if (assistDistance <= minAssistDistance && distance <= minDistance) {
+          neareastElement = element;
+          minDistance = distance;
+          minAssistDistance = assistDistance;
+        }
       }
     }
   });
