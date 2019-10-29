@@ -242,9 +242,6 @@ export const ShellApi: React.FC = () => {
 
     parseLgTemplate(template);
 
-    const content = updateTemplateInContent({ content: file.content, templateName, template });
-    checkLgContent(content);
-
     return updateLgTemplate({
       file,
       templateName,

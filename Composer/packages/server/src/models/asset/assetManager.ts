@@ -23,9 +23,37 @@ const templates: TemplateData = {
     name: 'Empty Bot',
     description: 'The very basic bot template that is ready for your creativity',
   },
-  ToDoBot: {
-    name: 'ToDo Bot',
-    description: 'A bot that allows you add, list, remove to do items',
+  RespondingWithCardsSample: {
+    name: 'Responding-with-Cards-Sample',
+    description: 'A sample bot that uses Language Generation to create cards.',
+  },
+  AskingQuestionsSample: {
+    name: 'Asking-Questions-Sample',
+    description: 'A sample bot that shows how to ask question and capture user input.',
+  },
+  InterruptionSample: {
+    name: 'Interruption-Sample',
+    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
+  },
+  RespondingWithTextSample: {
+    name: 'Responding-with-Text-Sample',
+    description: 'A sample bot that uses Language Generation to create bot responses.',
+  },
+  ControllingConversationFlowSample: {
+    name: 'Controlling-Conversation-Flow-Sample',
+    description: 'A sample bot that shows how to control the flow of a conversation.',
+  },
+  ActionsSample: {
+    name: 'Actions-Sample',
+    description: 'A sample bot that shows how to use Dialog actions.',
+  },
+  TodoSample: {
+    name: 'Todo-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items.',
+  },
+  TodoWithLUISSample: {
+    name: 'Todo-with-LUIS-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
   },
   SampleBot: {
     name: 'SampleBot',
@@ -71,6 +99,7 @@ export class AssetManager {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
       for (const name of folders) {
+        if (!templates[name]) continue;
         const absPath = Path.join(path, name);
         if ((await this.templateStorage.stat(absPath)).isDir) {
           const base = { id: name, name: templates[name].name, description: templates[name].description };
