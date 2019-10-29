@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { merge, find } from 'lodash';
+
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
