@@ -10,15 +10,15 @@ In this article, we will cover different types of cards you can define in Compos
 
 The Bot Framework currently supports the following types of rich cards. The definition and use of each type of the cards is provided in the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples). 
 
-| Card type | Description |
-|------|------|
-| Hero Card | A card that typically contains a single large image, one or more buttons, and text. |
-| Thumbnail Card | A card that typically contains a single thumbnail image, one or more buttons, and text.| 
-| Signin Card | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process.| 
-| Animation Card | A card that can play animated GIFs or short videos. |
-| Voice Card | A card that can play a voice file. |
-| Audio Card | A card that can play an audio file. |
-| Adaptive Card | A customizable card that can contain any combination of text, speech, images, buttons, and input fields. |
+| Card type      | Description                                                                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hero Card      | A card that typically contains a single large image, one or more buttons, and text.                                                                                   |
+| Thumbnail Card | A card that typically contains a single thumbnail image, one or more buttons, and text.                                                                               |
+| Signin Card    | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process. |
+| Animation Card | A card that can play animated GIFs or short videos.                                                                                                                   |
+| Voice Card     | A card that can play a voice file.                                                                                                                                    |
+| Audio Card     | A card that can play an audio file.                                                                                                                                   |
+| Adaptive Card  | A customizable card that can contain any combination of text, speech, images, buttons, and input fields.                                                              |
 
 When processing events within rich cards, the _card action_ objects are used to specify what should happen when the user clicks a button or taps a section of the card. Each card action has a _type_ and _value_. To function correctly, an action type is assigned to each clickable item on the card. See details [here](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-add-media-attachments?view=azure-bot-service-4.0&tabs=csharp). 
 
@@ -36,16 +36,16 @@ A typical structured response template for cards consists of the following parts
         image = url of your image
         buttons = name of the button you want to show in the card]
 
-| Template Component    | Description                                                                                  |
-| ---------------- | -------------------------------------------------------------------------------------------- |
-| # CardTemplateName | Name of the structured card template starting with "#".  |
-| [   ] | A pair of square brackets to wrap the content of the structure.   |
-| CardStructure-name  | Name of the structure.|
-| title | A title of the defined template such as "BotFramework Hero Card". |
-| subtitle | A subtitle of the defined template such as "Microsoft Bot Framework". |
-| text |A brief description of the template. | 
-| image |The directory of your image. | 
-| buttons |Name of the button you want to show in the card. |
+| Template Component | Description                                                           |
+| ------------------ | --------------------------------------------------------------------- |
+| # CardTemplateName | Name of the structured card template starting with "#".               |
+| [   ]              | A pair of square brackets to wrap the content of the structure.       |
+| CardStructure-name | Name of the structure.                                                |
+| title              | A title of the defined template such as "BotFramework Hero Card".     |
+| subtitle           | A subtitle of the defined template such as "Microsoft Bot Framework". |
+| text               | A brief description of the template.                                  |
+| image              | The directory of your image.                                          |
+| buttons            | Name of the button you want to show in the card.                      |
 
 ## Define rich cards 
 Now, let's walk through the card examples in the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples) and learn how each type of the cards are defined and used. 
