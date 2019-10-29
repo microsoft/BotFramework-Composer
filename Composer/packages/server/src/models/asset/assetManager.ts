@@ -15,16 +15,31 @@ interface TemplateData {
   [key: string]: {
     name: string;
     description: string;
+    order?: number;
+    icon?: string;
   };
 }
+
 const templates: TemplateData = {
   EchoBot: {
     name: 'Echo Bot',
     description: 'A bot that echoes and responds with whatever message the user entered',
+    order: 1,
   },
   EmptyBot: {
     name: 'Empty Bot',
     description: 'The very basic bot template that is ready for your creativity',
+    order: 2,
+  },
+  TodoSample: {
+    name: 'Todo-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items.',
+    order: 3,
+  },
+  TodoWithLUISSample: {
+    name: 'Todo-with-LUIS-Sample',
+    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
+    order: 4,
   },
   RespondingWithCardsSample: {
     name: 'Responding-with-Cards-Sample',
@@ -92,13 +107,13 @@ export class AssetManager {
     this.templateStorage = new LocalDiskStorage();
 
     // initialize the list of project tempaltes
-    this.getProjectTemplate();
+    this.getProjectTemplates();
 
     // initialize the list of runtimes.
     this.getProjectRuntime();
   }
 
-  public async getProjectTemplate() {
+  public async getProjectTemplates() {
     const path = this.assetsLibraryPath + '/projects';
     const output = [];
 
@@ -106,17 +121,28 @@ export class AssetManager {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
       for (const name of folders) {
-        if (!templates[name]) continue;
+        const templateData = templates[name];
+        if (!templateData) continue;
         const absPath = Path.join(path, name);
         if ((await this.templateStorage.stat(absPath)).isDir) {
-          const base = { id: name, name: templates[name].name, description: templates[name].description };
+          const base = { id: name, ...templateData };
           this.projectTemplates.push({ ...base, path: absPath });
           output.push(base);
         }
       }
     }
 
-    return output;
+    return output.sort((a, b) => {
+      if (a.order && b.order) {
+        return a.order < b.order ? -1 : 1;
+      } else if (a.order) {
+        return -1;
+      } else if (b.order) {
+        return 1;
+      } else {
+        return a.name < b.name ? -1 : 1;
+      }
+    });
   }
 
   public async getProjectRuntime() {
