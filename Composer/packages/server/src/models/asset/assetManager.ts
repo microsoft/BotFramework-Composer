@@ -54,7 +54,7 @@ const templates: TemplateData = {
     name: 'Todo-Sample',
     description: 'A sample bot that allows you add, list, remove to do items.',
   },
-  TodoWithLUISSample: {
+  ToDoBotWithLuisSample: {
     name: 'Todo-with-LUIS-Sample',
     description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
   },
