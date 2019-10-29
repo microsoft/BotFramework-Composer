@@ -56,7 +56,7 @@ const shellApi = {
   },
 
   onSelect: (ids: string[]) => {
-    return apiClient.apiCall('onSelect', { ids });
+    return apiClient.apiCall('onSelect', ids);
   },
 
   shellNavigate: (shellPage, opts = {}) => {
