@@ -36,7 +36,7 @@ const templates: TemplateData = {
     description: 'A sample bot that allows you add, list, remove to do items.',
     order: 3,
   },
-  TodoWithLUISSample: {
+  ToDoBotWithLuisSample: {
     name: 'Todo-with-LUIS-Sample',
     description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
     order: 4,
@@ -64,14 +64,6 @@ const templates: TemplateData = {
   ActionsSample: {
     name: 'Actions-Sample',
     description: 'A sample bot that shows how to use Dialog actions.',
-  },
-  TodoSample: {
-    name: 'Todo-Sample',
-    description: 'A sample bot that allows you add, list, remove to do items.',
-  },
-  ToDoBotWithLuisSample: {
-    name: 'Todo-with-LUIS-Sample',
-    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
   },
   QnAMakerLUISSample: {
     name: 'QnAMaker-with-LUIS-Sample',
