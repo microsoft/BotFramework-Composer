@@ -124,7 +124,13 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
   }
 };
 
-export const createProject: ActionCreator = async (store, templateId, name, description, location) => {
+export const createProject: ActionCreator = async (
+  store,
+  templateId: string,
+  name: string,
+  description: string,
+  location: string
+) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {

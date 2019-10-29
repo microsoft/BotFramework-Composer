@@ -36,7 +36,6 @@ export function FileSelector(props) {
     checkShowItem,
     currentPath,
     updateCurrentPath,
-    storageExplorerStatus,
     storageFileLoadingStatus,
   } = props;
   // for detail file list in open panel
@@ -145,7 +144,7 @@ export function FileSelector(props) {
       filePath: focusedStorageFolder.parent,
     });
     return files;
-  }, [focusedStorageFolder, storageExplorerStatus]);
+  }, [focusedStorageFolder]);
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
@@ -283,7 +282,6 @@ export function FileSelector(props) {
 FileSelector.propTypes = {
   saveAction: PropTypes.element,
   focusedStorageFolder: PropTypes.object,
-  storageExplorerStatus: PropTypes.string,
   currentPath: PropTypes.string,
   updateCurrentPath: PropTypes.func,
   onSelectionChanged: PropTypes.func,
