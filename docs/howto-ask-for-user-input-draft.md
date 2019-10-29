@@ -1,10 +1,10 @@
 # Asking for user input
-Bot Framework Composer makes it easier than ever to collect and validate a variety of data types, and handle instances when users input invalid or unrecognized data. The [Asking-Questions-Sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) has examples of all of the prompt types and is referenced throughout this article. Below is a screenshot of the options in the **Ask a Question** menu:
+Bot Framework Composer makes it easier to collect and validate a variety of data types, and handle instances when users input invalid or unrecognized data. The [asking questions](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples/ComposerDialogs) sample has examples of all of the prompt types and is referenced throughout this article. Below is a screenshot of the options in the **Ask a Question** menu:
 
 ![prompt menu](./media/ask-for-input/prompt-menu.png)
 
 ## Prompt types
-Bot Framework Composer currently has six types of prompts you can utilize to collect user data. For information about prompting for OAuth credentials read [Using OAuth](). 
+Composer currently has six types of prompts you can utilize to collect user data. For information about prompting for OAuth credentials, see [Using OAuth](). 
 
 ### Prompt for text
 Prompt users for their name, favorite color, and other text data using **Text input**. To prompt a user for text click the **+** button under your trigger, mouse over **Ask a Question** and click **Text input**. 
@@ -77,7 +77,7 @@ Prompt users for their birthday, the date they want to take a flight, and other 
 In the **DateTimeInput** dialog you will see the **Property to fill** is set to `user.date` and the **Default locale** is set to `en-us`.
 
 ## Prompt settings
-Prompts in the Bot Framework Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. **Prompt Settings** can be found on the bottom of the Property panel and contain the following settings:
+Prompts in the Composer come with components to validate prompt responses and deal with instances where users supply a reponse that is invalid or unrecognized. **Prompt Settings** can be found on the bottom of the Property panel and contain the following settings:
 
 - **Max turn count**: maximum number of re-prompt attempts before the default value is selected.
 - **Default value**: the value to return if the expression cannot be validated.

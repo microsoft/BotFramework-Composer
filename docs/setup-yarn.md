@@ -4,10 +4,10 @@ The Bot Framework Composer is designed to be a hosted web app. Currently, you ne
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/) version []
-- [Yarn](https://yarnpkg.com/en/docs/install) version [] 
-- [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
-- [.NET Core SDK 2.2.109](https://dotnet.microsoft.com/download)
+- [Node.js](https://nodejs.org/dist/v12.13.0/): version 12.13.0
+- [Yarn](https://yarnpkg.com/en/docs/install): latest stable version
+- [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest): latest stable version
+- [.NET Core SDK 2.2](https://dotnet.microsoft.com/download/dotnet-core/2.2)
 
 ## Set up yarn for Composer
 To start, clone the Composer GitHub repository. 
@@ -32,6 +32,6 @@ yarn startall
   This command starts the Composer authoring application and the CSharp Bot runtime. 
 
 ## Open Composer in a browser
-To use Composer open a browser and navigate to http://localhost:3000 or http://localhost:5000.
+To use Composer open a browser and navigate to the address after the message `Compiled successfully`, as seen below where the address is https://localhost:3000.
 
-![browser gif]()
+![browser gif](./media/setup-yarn/composer-address.png)

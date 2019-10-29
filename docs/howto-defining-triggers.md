@@ -1,5 +1,5 @@
 # Defining Triggers 
-Each dialog in Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of event handlers available in the Composer menu. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of the triggers. If you are not familar with events and triggers in Bot Framework Composer, please read the [events and triggers concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md). 
+Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of event handlers available in the Composer menu. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of the triggers. If you are not familar with events and triggers in Composer, please read the [events and triggers concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md). 
 
 The table below lists the five different types of triggers provided in BF Composer and their descriptions. 
 
@@ -53,7 +53,7 @@ Under the `Handle Unknown Intent` trigger, click the "+" sign to add the action 
 ![unknown_intent](./media/events_triggers/unknown_intent.gif)  
 
 ## Defining `Handle a Dialog Event`
-To define the actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a `Handle a Dialog Event` trigger and add `BeginDialog` activity to the trigger. 
+Define the actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a `Handle a Dialog Event` trigger and add `BeginDialog` activity to the trigger. 
 
 ### 1. Create a `Handle a Dialog Event` trigger
 On the left side of the Composer menu, click **New Trigger** and then select **Handle a Dialog Event** from the drop-down menu. Select the dialog event you want to handle and click **submit**. For example, let's choose `Handle a Dialog Event: BeginDialog`. 

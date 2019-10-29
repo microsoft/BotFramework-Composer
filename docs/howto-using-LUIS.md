@@ -1,5 +1,5 @@
 # Using LUIS for Language Understanding 
-Language Understanding Intelligent Service([LUIS](https://www.luis.ai/home)) is a cloud-based API service to build natural language into apps and bots. Adding LUIS to your bots enables them to understand the users' intents conversationally and contextually so that your bots can decide what to respond to the users. Bot Framework Composer provides tools to train and manage language understanding components and it's easier for developers to add LUIS when they develop bots with Composer. In this article, we will walk you through the steps to use LUIS when you develop your bots with Bot Framework Composer. To further explore how to use LUIS in Bot Composer, you may refer to the [LUIS Sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/ToDoLuisBot/ComposerDialogs). 
+Language Understanding Intelligent Service ([LUIS](https://www.luis.ai/home)) is a cloud-based API service to build natural language into apps and bots. Adding LUIS to your bots enables them to understand the users' intents conversationally and contextually so that your bots can decide what to respond to the users. Bot Framework Composer provides tools to train and manage language understanding components and it's easier for developers to add LUIS when they develop bots with Composer. In this article, we will walk you through the steps to use LUIS when you develop your bots with Bot Framework Composer. To further explore how to use LUIS in Bot Composer, you may refer to the [LUIS Sample](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/ToDoLuisBot/ComposerDialogs). 
 
 ## Prerequisites 
 - Basic knowledge of language understanding (concept article [here](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md))
@@ -8,22 +8,22 @@ Language Understanding Intelligent Service([LUIS](https://www.luis.ai/home)) is 
 - LUIS authoring key (how to get [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
 
 ## How to add LUIS 
-When you want to decide how your bots should understand the intents in a user's input, you can add LUIS to enable your bot's ability to recognize the intents. In Bot Framework Composer, this happens when you define the `Handle an Intent` trigger, in which you define the actions to take when an **Intent** is recognized (and optionally **entities**). For more details please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) article. 
+To determine user's intent, in Composer you define the `Handle an Intent` trigger, and then specify the actions to take when an **Intent** is recognized (and optionally **entities**). For more details please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) article. 
 
-Bot Framework Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular Expression Recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of language understanding data authored in [.LU format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
+Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular Expression Recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of language understanding data authored in [.LU format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
 
 In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author language understanding tranining data, publish your LU data, and test them in Emulator. 
 
 ### Set LUIS as recognizer 
-In Bot Framework Composer, each dialog has one type of recognizer and may contain a set of language understanding trainining data. To add LUIS in your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. You need to do the following two things:
+In Composer, each dialog can have one type of recognizer and might contain a set of language understanding trainining data. To add LUIS to your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. You need to do the following two things:
 
 - select the dialog 
-- select LUIS as recognizer type (by default)
+- select LUIS as recognizer type
 
 ![luis_recognizer](./media/add_luis/luis_recognizer.png)
 
 ### Author LU 
-Compose your language understanding training data in the LU editor. The training data should follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) and is ususally composed of two parts: intents and example utterances. You can author as many intents as you wish to include in the specific dialog. The following screenshot shows two intent examples with relative utterances: **Greeting** and **CheckWeather**. 
+Compose your language understanding training data in the LU editor. The training data should follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) and is ususally composed of two parts: intents and example utterances. You can author as many intents as you wish to include in the specific dialog. The following screenshot shows **Greeting** and **CheckWeather** intents along with the related utterances.
 
 ![author_lu](./media/add_luis/author_lu.png)
 
@@ -57,7 +57,7 @@ Define the response message in the language generation editor in the [.lg file f
 You can add your desired action to each `Handle an Intent` trigger. 
 
 ### Publish 
-When you finish defining all the triggers and language understanding training data as needed, you can publish your LU training data from Bot Framework Composer to LUIS. 
+When you finish defining all the triggers and language understanding training data as needed, you can publish your LU model from Composer to LUIS. 
 
 Click **Start Bot** on the upper right corner of your Composer, fill in your LUIS authoring key and click **Publish**. 
 

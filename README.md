@@ -2,13 +2,11 @@
 # Microsoft Bot Framework Composer
 ### Overview
 - [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro-draft.md)
-- Known Issues (TBD)
 
 ### QuickStart
 - Create your first bot 
-  - Create Echo bot using the BF Composer template, test, and run
 ### Samples 
-- Bot Framework Composer samples 
+- [Composer samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots) 
 ### Concepts 
 - [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog-draft.md)
 - [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
@@ -25,13 +23,14 @@
 - [Manage conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-controlling-conversation-flow-draft.md)
 - [Add LUIS to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
 - [Add QnA to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md)
-- Send cards 
+- [Send cards](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-cards.md) 
 - [Defining triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md)
 #### Test
-- Test in Emulator
+- [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Deploy
-- Deploy bots to Azure using az cli and ARM templates
+- Deploy bots to Azure
 ### Resources
+- Known Issues (TBD)
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
 
 ## Related projects
