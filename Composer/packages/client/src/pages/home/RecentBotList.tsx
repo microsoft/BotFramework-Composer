@@ -17,7 +17,8 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import moment from 'moment';
+
+import { calculateTimeDiff } from '../../utils';
 
 import { detailListContainer } from './styles';
 
@@ -61,10 +62,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       isPadded: true,
     },
   ];
-
-  const calculateTimeDiff = (time: any) => {
-    return moment(time).toNow();
-  };
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (

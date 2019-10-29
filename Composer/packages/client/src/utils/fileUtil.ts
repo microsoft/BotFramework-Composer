@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import moment from 'moment';
+
 import { FileTypes, SupportedFileTypes } from '../constants';
 import { File } from '../store/types';
 
@@ -59,3 +61,7 @@ export function formatBytes(bytes?: number, decimals?: number) {
     i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+export const calculateTimeDiff = (time: any) => {
+  return moment(time).fromNow();
+};

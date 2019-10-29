@@ -22,7 +22,7 @@ import { Dropdown, Stack, StackItem, IDropdownOption } from 'office-ui-fabric-re
 import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../store/types';
-import { getFileIconName, getFileEditDate, formatBytes } from '../../utils';
+import { getFileIconName, getFileEditDate, formatBytes, calculateTimeDiff } from '../../utils';
 
 import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
@@ -118,7 +118,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       isResizable: true,
       data: 'number',
       onRender: item => {
-        return <span>{item.dateModified}</span>;
+        return <span>{calculateTimeDiff(item.lastModified)}</span>;
       },
       isPadded: true,
     },
@@ -135,7 +135,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
             value: file.name,
             fileType: file.type,
             iconName: getFileIconName(file),
-            dateModified: getFileEditDate(file),
+            lastModified: file.lastModified,
             fileSize: file.size ? formatBytes(file.size) : '',
             filePath: file.path,
           });
