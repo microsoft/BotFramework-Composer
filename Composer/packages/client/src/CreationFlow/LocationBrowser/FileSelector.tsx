@@ -211,7 +211,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     <div css={fileSelectorContainer}>
       {storageFileLoadingStatus === 'success' && (
         <Fragment>
-          <Stack horizontal gap="2rem" styles={wizardStyles.stackinput}>
+          <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
             <StackItem grow={0} styles={wizardStyles.halfstack}>
               <Dropdown
                 label={formatMessage('Location')}
