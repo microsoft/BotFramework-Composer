@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import azure from 'azure-storage';
 import minimatch from 'minimatch';
 

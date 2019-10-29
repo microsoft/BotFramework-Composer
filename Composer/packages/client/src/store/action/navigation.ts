@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';

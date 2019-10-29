@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,

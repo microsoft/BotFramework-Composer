@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum MemoryScope {
   user = 'user',
   conversation = 'conversation',

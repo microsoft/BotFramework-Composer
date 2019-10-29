@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 

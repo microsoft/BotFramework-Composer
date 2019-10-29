@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import querystring from 'querystring';
 
 import jwt, { GetPublicKeyOrSecret, TokenExpiredError } from 'jsonwebtoken';

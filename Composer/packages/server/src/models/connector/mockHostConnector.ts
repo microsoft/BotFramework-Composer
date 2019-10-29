@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 

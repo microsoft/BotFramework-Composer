@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export * from './bot';
 export * from './dialog';
 export * from './editors';

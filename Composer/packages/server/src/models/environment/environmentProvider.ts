@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { HostedEnvironment } from './hostedEnvironment';
 import { DefaultEnvironment } from './defaultEnvironment';
 import { MockHostedEnvironment } from './mockHostedEnvironment';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { get, set } from 'lodash';
 import { dialogIndexer } from 'indexers/lib/dialogIndexer';
 
