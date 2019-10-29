@@ -54,14 +54,18 @@ export const leftContainer = css`
   margin-bottom: 10px;
 `;
 
-export const itemContainer = css`
+export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
-  cursor: pointer;
+  cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
   min-width: 180px;
   height: 130px;
   width: 11vw;
   margin-right: 30px;
+`;
+
+export const itemContainer = css`
+  height: 50%;
 `;
 
 export const itemContainerTitle = css`
@@ -126,6 +130,20 @@ export const button: IIconStyles = {
   },
 };
 
+export const disabledItem = {
+  title: css`
+    background-color: #f2f2f2;
+    color: #a19f9d;
+  `,
+  content: css`
+    border: 2px solid #f2f2f2;
+    width: auto;
+    font-size: smaller;
+    word-wrap: break-word;
+    color: #a19f9d;
+  `,
+};
+
 const baseBotItem = {
   container: css`
     box-shadow: ${Depths.depth4};
@@ -156,20 +174,6 @@ export const lastestBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #56ccf2;
-  `,
-};
-
-export const videoItem = {
-  title: css`
-    background-color: #f2f2f2;
-    color: #a19f9d;
-  `,
-  content: css`
-    border: 2px solid #f2f2f2;
-    width: auto;
-    font-size: smaller;
-    word-wrap: break-word;
-    color: #a19f9d;
   `,
 };
 

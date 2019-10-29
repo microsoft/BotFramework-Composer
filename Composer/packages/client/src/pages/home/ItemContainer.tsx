@@ -2,27 +2,33 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css, SerializedStyles } from '@emotion/core';
+import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
 
-import { itemContainer, itemContainerContent, itemContainerTitle } from './styles';
+import { itemContainerWrapper, itemContainer, itemContainerContent, itemContainerTitle, disabledItem } from './styles';
 
 interface ItemContainerProps {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
   content: string;
-  styles: {
+  styles?: {
     container?: SerializedStyles;
     title?: SerializedStyles;
     content?: SerializedStyles;
   };
+  disabled?: boolean;
 }
 
-export const ItemContainer: React.FC<ItemContainerProps> = ({ onClick = undefined, title, content, styles = {} }) => {
-  const container = css({ height: '50%' });
+export const ItemContainer: React.FC<ItemContainerProps> = ({
+  onClick = undefined,
+  title,
+  content,
+  styles = {},
+  disabled,
+}) => {
   return (
     <div
-      css={[itemContainer, styles.container]}
+      css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
         e.preventDefault();
         if (onClick) {
@@ -30,10 +36,10 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({ onClick = undefine
         }
       }}
     >
-      <div css={[container, styles.title]}>
+      <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
         <div css={itemContainerTitle}>{title}</div>
       </div>
-      <div css={[container, styles.content]}>
+      <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
         <div css={itemContainerContent}>{content}</div>
       </div>
     </div>

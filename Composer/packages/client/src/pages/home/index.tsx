@@ -162,7 +162,7 @@ export const Home = props => {
             </div>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer key={index} title={item.title} content={item.content} styles={home.videoItem} />
+                <ItemContainer key={index} title={item.title} content={item.content} disabled />
               ))}
               <div css={home.linkContainer}>
                 <div>
