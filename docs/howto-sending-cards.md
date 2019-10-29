@@ -6,8 +6,6 @@ In this article, we will cover different types of cards you can define in Compos
 
 ## Card basics
 
-### Card types 
-
 The Bot Framework currently supports the following types of rich cards. The definition and use of each type of the cards is provided in the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples). 
 
 | Card type      | Description                                                                                                                                                           |
@@ -80,6 +78,7 @@ This example of hero card will enable your bot to send an image from a designate
         text = BotFramework Sign-in Card
         buttons = Sign-in]
 
+
 ### AnimationCard
 
     # AnimationCard
@@ -88,6 +87,7 @@ This example of hero card will enable your bot to send an image from a designate
         subtitle = Animation Card
         image = https://docs.microsoft.com/en-us/bot-framework/media/how-it-works/architecture-resize.png
         media = http://i.giphy.com/Ki55RUbOV5njy.gif]
+
 
 ### VoiceCard
 
@@ -100,6 +100,7 @@ This example of hero card will enable your bot to send an image from a designate
         media = http://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4
         buttons = Learn More]
 
+
 ### AudioCard
 
     # AudioCard
@@ -111,6 +112,7 @@ This example of hero card will enable your bot to send an image from a designate
         media = http://www.wavlist.com/movies/004/father.wav
         buttons = Read More]
 
+
 ### AdaptiveCard
 Adaptive cards is an open source toolset of Microsoft that helps apps and services exchage rich snippets of native UI. Card authors describe their content as a simple JSON object. That content can then be rendered natively inside a host application, automatically adapting to the look and feel of the host. For example, Contoso Bot can author an Adaptive Card through the Bot Framework, and when delivered to Cortana, it will look and feel like a Cortana card. When that same payload is sent to Microsoft Teams, it will look and feel like Microsoft Teams. As more host apps start to support Adaptive Cards, that same payload will automatically light up inside these applications, yet still feel entirely native to the app. Users win because everything feels familiar. Host apps win because they control the user experience. Card authors win because their content gets broader reach without any additional work. To learn more about adaptive cards please visit [here](https://adaptivecards.io/).
 
@@ -118,6 +120,7 @@ Adaptive cards is an open source toolset of Microsoft that helps apps and servic
     [Activity
         Attachments = {json(adaptivecardjson())}
     ]
+
 
 ### AllCards 
 This template "#AllCards" is defined to display all cards when called. 
