@@ -35,7 +35,7 @@
 # bfdactivity-304360
 [Activity
     Text = Cancelling ...
-    SuggestedActions = @{Welcome-Actions()}
+    @{Welcome-Actions()}
 ]
 
 # bfdactivity-470975
