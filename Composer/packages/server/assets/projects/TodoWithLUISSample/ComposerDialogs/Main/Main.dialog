@@ -1,0 +1,93 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$id": "root",
+  "$designer": {
+    "id": "948970",
+    "description": "This is a bot that demonstrates managing a ToDo list using LUIS & Language Understanding"
+  },
+  "autoEndDialog": false,
+  "defaultResultProperty": "dialog.result",
+  "recognizer": "Main.lu",
+  "generator": "common.lg",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "842277"
+      },
+      "constraint": "#AddToDo.score>0.6",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "AddItem",
+          "$designer": {
+            "id": "618477"
+          }
+        }
+      ],
+      "intent": "AddToDo"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "905057"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "DeleteItem"
+        }
+      ],
+      "intent": "DeleteToDo",
+      "constraint": "#DeleteToDo.score>0.6"
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "735961"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "ShowItems"
+        }
+      ],
+      "intent": "ShowToDo",
+      "constraint": "#ShowToDo.score>0.6"
+    },
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "265106"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "636903"
+          },
+          "activity": "[bfdactivity-636903]"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "name": "Handle ConversationUpdate",
+        "id": "954390"
+      },
+      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "name": "Send an Activity",
+            "id": "452135"
+          },
+          "activity": "[bfdactivity-452135]"
+        }
+      ]
+    }
+  ],
+  "$schema": "../../app.schema"
+}
