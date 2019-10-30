@@ -90,6 +90,7 @@ export const DialogSettings = () => {
 
   const handleChange = (value, commit) => {
     setValue(value);
+    setParseError('');
     try {
       const result = JSON.parse(value);
       if (commit || !absHosted) {
