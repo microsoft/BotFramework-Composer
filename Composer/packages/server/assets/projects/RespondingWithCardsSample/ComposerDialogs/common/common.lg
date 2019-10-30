@@ -13,6 +13,31 @@
     buttons = {cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
 ]
 
+# HeroCardWithMemory(name)
+[Herocard
+    title=@{TitleText(name)}
+    subtitle=@{SubText()}
+    text=@{DescriptionText()}
+    images=@{CardImages()}
+    buttons={cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+]
+
+# TitleText(name)
+- Hello, {name}
+
+# SubText
+- What is your favorite?
+- Don't they all look great?
+- sorry, some of them are repeats
+
+# DescriptionText
+- This is description for the hero card
+
+# CardImages
+- https://picsum.photos/200/200?image=100
+- https://picsum.photos/300/200?image=200
+- https://picsum.photos/200/200?image=400
+
 # cardActionTemplate(type, title, value)
 [CardAction
     Type = {if(type == null, 'imBack', type)}
@@ -315,18 +340,6 @@
 }
 ```
 
-
-
-
-
-
-
-# Welcome
-- Welcome to Card Samples Bot.
-
-# bfdactivity-355490
-- Welcome to Card Samples Bot.
-
 # bfdactivity-729500
 -Welcome to Card Samples Bot.
 
@@ -353,3 +366,11 @@
 
 # bfdactivity-997450
 -[AllCards]
+
+
+# bfdactivity-167246
+- [HeroCardWithMemory(user.name)]
+
+
+# bfdprompt-735465
+- What is your name?
