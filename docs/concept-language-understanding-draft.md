@@ -143,4 +143,4 @@ Any time you hit `Start Bot` (or `Restart Bot`), Composer will evaluate if your 
 - [Using LUIS for Language Understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
 
 ## Next 
-- TBD
+Learn how to [send messages to users](howto-sending-messages-draft.md)
