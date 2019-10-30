@@ -55,7 +55,7 @@ This event will appear in the dialog as a node at the top of the editor. Actions
     <img alt="cancel_handler" src="./media/events_triggers/cancel_handler.png" style="max-width:200px;" />
 </p>
 
-## Defining triggers with recognizers 
+## Define triggers with recognizers 
 
 ### LUIS Recognizer
 Bot Framework Composer enables developers to create language training data in the dialog editing surface because it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. The content is managed by [LUDown](https://github.com/microsoft/botbuilder-tools/tree/master/packages/Ludown), a command line tool that helps covert [.lu file(s)](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) into JSON files for language processing applications such as [LUIS](http://luis.ai/) and [QnA](https://www.qnamaker.ai/) knowledge base. 
@@ -112,4 +112,4 @@ To define triggers with Regular Expression recognizer you need to:
 [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
-[Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+[Language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
