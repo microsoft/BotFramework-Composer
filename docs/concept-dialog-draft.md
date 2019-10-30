@@ -10,7 +10,7 @@ There are two types of dialogs:
 - main dialog
 - child dialog
 
-You create a dialog in the Bot Framework Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** extension. After the main dialog is created, you can create child dialogs as needed. Each bot has one main dialog but can have multiple child dialogs or no child dialog. The following screenshot shows how to: 
+You create a dialog in the Bot Framework Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. The following screenshot shows how to: 
 - create a main dialog 
 - create child dialogs 
 - filter dialogs
