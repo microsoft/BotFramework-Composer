@@ -1,7 +1,7 @@
 # Controlling conversation flow
 The conversations a bot has with its users are controlled by the content of its dialog. Dialogs contain templates for messages the bot will send, along with instructions for the bot to carry out tasks. While some dialogs are linear - just one message after the other - more complex interactions will require dialogs that branch and loop based on what the user says and the choices they make.
 
-Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](memory article here) or the result of an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language).
+Bot Framework Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](./concept-memory.md) or the result of an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language).
 
 ![flow menu](./existingdocs/Assets/flow-actions-menu.png "screenshot of the flow menu")
 
@@ -142,4 +142,4 @@ Learn more about [using memory and expressions in LG](concept-memory-draft.md#me
 [Docs for the Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 
 ## Next
-TBD
+[Language Generation](./media/concept-language-genereation-draft.md)
