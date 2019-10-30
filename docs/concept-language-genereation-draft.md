@@ -6,7 +6,7 @@ You can use language generation to:
 - achieve a coherent personality, tone of voice for your bot
 - separate business logic from presentation
 - include variations and sophisticated composition based resolution for any of your bot's replies
-- construct cards, suggested actions and attachments using the new [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md)
+- construct cards, suggested actions and attachments using the new [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md)
 
 Language generation is achieved through:
 - markdown based [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) that describes the templates and their composition
