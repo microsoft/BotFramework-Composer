@@ -117,6 +117,7 @@ Below is a list of the dialog actions provided in Bot Framework Composer.
 | End this turn      | A command to end the current turn without ending the dialog.                                                                     |
 | Repeat this Dialog   | An action that repeats the current dialog with the same dialog.                                                                 |
 | Replace this Dialog  | An action that replaces the current dialog with the target dialog.                                                                      |
+
 With these dialog actions, we can easily build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
 
 ## References 
