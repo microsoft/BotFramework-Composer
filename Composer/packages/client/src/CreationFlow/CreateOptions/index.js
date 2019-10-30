@@ -26,7 +26,7 @@ export function CreateOptions(props) {
     const { checked, text, key, disabled } = props;
     return (
       <div key={key} css={templateItem(checked, disabled)}>
-        {text}
+        <div style={{ marginLeft: '5px' }}>{text}</div>
       </div>
     );
   }
