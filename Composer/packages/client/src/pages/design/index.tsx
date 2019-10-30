@@ -22,7 +22,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import grayComposerIcon from '../../grayComposerIcon.svg';
+import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
 import NewDialogModal from './new-dialog-modal';
 import {

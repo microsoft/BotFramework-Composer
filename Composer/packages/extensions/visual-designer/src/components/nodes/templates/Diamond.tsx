@@ -24,6 +24,7 @@ export const Diamond = ({ color = ObiColors.AzureGray2, onClick = () => {}, ...r
       width={DiamondSize.width}
       height={DiamondSize.height}
       viewBox="0 0 50 20"
+      style={{ display: 'block' }}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

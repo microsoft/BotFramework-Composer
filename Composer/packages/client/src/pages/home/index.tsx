@@ -2,18 +2,18 @@
 // Licensed under the MIT License.
 
 import React, { useContext, useEffect } from 'react';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
+import { Icon } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
 
 import * as home from './styles';
-import { ItemContainer } from './itemContainer';
-import { RecentBotList } from './recentBotList';
-import { ExampleList } from './exampleList';
+import { ItemContainer } from './ItemContainer';
+import { RecentBotList } from './RecentBotList';
+import { ExampleList } from './ExampleList';
 
 const linksButtom = [
   {
@@ -36,18 +36,18 @@ const comingSoonLink = {
 
 const turtorials = [
   {
-    title: formatMessage('Turtorial #1'),
-    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
+    title: formatMessage('Tutorial #1'),
+    content: formatMessage('Coming soon...'),
   },
   {
-    title: formatMessage('Turtorial #2'),
-    content: formatMessage('Lorem Ipsum dolor sit amet, consectetur'),
+    title: formatMessage('Tutorial #2'),
+    content: formatMessage('Coming soon...'),
   },
 ];
 
 export const Home = props => {
   const { state, actions } = useContext(StoreContext);
-  const { recentProjects, templateProjects } = state;
+  const { botName, recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
 
   const onClickRecentBotProject = async path => {
@@ -69,7 +69,7 @@ export const Home = props => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };
 
-  const addButton = <IconButton styles={home.button()} iconProps={{ iconName: 'Add' }} />;
+  const addButton = <Icon styles={home.button} iconName="Add" />;
   const toolbarItems = [
     {
       type: 'action',
@@ -82,6 +82,7 @@ export const Home = props => {
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
+      disabled: false,
     },
     {
       type: 'action',
@@ -94,6 +95,7 @@ export const Home = props => {
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
+      disabled: false,
     },
     {
       type: 'action',
@@ -105,6 +107,7 @@ export const Home = props => {
         onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
       },
       align: 'left',
+      disabled: botName ? false : true,
     },
   ];
 
@@ -118,10 +121,10 @@ export const Home = props => {
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage}>
-          <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
+          <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
-              'Bot Framework Composer is an integrated development environment(IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
+              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
           </div>
           <div css={home.newBotContainer}>
@@ -142,37 +145,54 @@ export const Home = props => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
               />
-            ) : null}
+            ) : (
+              <ItemContainer
+                title={''}
+                content={'ToDoBotWithLuis'}
+                styles={home.lastestBotItem}
+                onClick={() => {
+                  onClickTemplate('ToDoBotWithLuisSample');
+                }}
+              />
+            )}
           </div>
-          <div css={home.leftContainer}>
-            <div css={home.subtitle}>{formatMessage(`Recent Bots`)}</div>
-            <RecentBotList
-              recentProjects={recentProjects}
-              onSelectionChanged={async item => {
-                await onSelectionChanged(item);
-              }}
-            />
-          </div>
-          <div css={home.leftContainer}>
-            <div css={home.subtitle}>
-              {formatMessage(`Video turtorials: `)}
-              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
-                <div css={comingSoonLink.css}>{comingSoonLink.text}</div>
-              </Link>
+          {recentProjects.length > 0 && (
+            <div css={home.leftContainer}>
+              <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+              <RecentBotList
+                recentProjects={recentProjects}
+                onSelectionChanged={async item => {
+                  await onSelectionChanged(item);
+                }}
+              />
             </div>
+          )}
+          <div css={home.leftContainer}>
+            <h2 css={home.subtitle}>
+              {formatMessage('Video tutorials:')}&nbsp;
+              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
+                <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
+              </Link>
+            </h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer key={index} title={item.title} content={item.content} styles={home.videoItem} />
+                <ItemContainer key={index} title={item.title} content={item.content} disabled />
               ))}
               <div css={home.linkContainer}>
                 <div>
                   {formatMessage(
-                    `Bot Framework provides the most comprehensive experience for building conversation applications.`
+                    'Bot Framework provides the most comprehensive experience for building conversation applications.'
                   )}
                 </div>
                 {linksButtom.map(link => {
                   return (
-                    <Link href={link.to} tabIndex={-1} key={'homePageLeftLinks-' + link.text} target={'_blank'}>
+                    <Link
+                      href={link.to}
+                      tabIndex={-1}
+                      key={'homePageLeftLinks-' + link.text}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <div css={link.css}>{link.text}</div>
                     </Link>
                   );
@@ -182,7 +202,12 @@ export const Home = props => {
           </div>
         </div>
         <div css={home.rightPage}>
-          <div css={home.bluetitle}>{formatMessage(`Examples`)}</div>
+          <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
+          <p css={home.examplesDescription}>
+            {formatMessage(
+              "These examples bring together all of the best practices and supporting components we've identified through building of conversational experiences."
+            )}
+          </p>
           <ExampleList examples={templateProjects} onClick={onClickTemplate} />
         </div>
       </div>
