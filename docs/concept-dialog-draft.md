@@ -37,7 +37,7 @@ Event handlers contain a series of actions that the bot will undertake to fulfil
 
 ![actions](./media/dialog/actions.png)
 
-As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and sends them back to the user. Language generators can be used to create reusable components, variable messages, and dynamic messages that are grammatically correct. The following diagram shows the anatomy of a dialog in Bot Composer. 
+As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and sends them back to the user. Language generators can be used to create reusable components, variable messages, and dynamic messages that are grammatically correct. The following [diagram](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/Assets/adaptive-dialog-anatomy.png) shows the anatomy of a dialog in Bot Composer. 
 
 <p align="left">
     <img alt="Open samples" src="./media/dialog/DialogAnatomy.png" style="max-width:780px;" />
