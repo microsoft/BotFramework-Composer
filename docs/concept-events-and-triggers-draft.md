@@ -4,7 +4,7 @@ Like most event-driven architecture, events, triggers, and handlers are three ba
 Each dialog includes a set of event handlers that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passes through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
 
 ## Types of event handlers  
-There are several different types of event handlers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers and in what scenarios they will be used. You can refer to the [Defining Triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article for detailed instruction on how to define each type of them. 
+There are several different types of event handlers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers and in what scenarios they will be used. You can refer to the [defining triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article for detailed instruction on how to define each type of them. 
 
 ### Handle dialog events  
 
@@ -82,7 +82,7 @@ Extracted entities are passed along to any triggered actions or child dialogs us
 - i want to go to {city=los angeles}
 ```
 
-When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](using_memory.md) for later use.
+When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/using_memory.md) for later use.
 
 ### Regular expression recognizer 
 [Regular expressions](https://regexr.com/) are rigid patterns that can be used to match simple or sophisticated patterns in text. Bot Framework Composer exposes the ability to define intents via regular expressions, and also allows the regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, [Regular expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords.
