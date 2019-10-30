@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isLgTemplate, parseLgTemplate } from './lgUtils';
+import { isLgTemplate, parseLgTemplateString } from './lgUtils';
 
 const NestedFieldNames = {
   Actions: 'actions',
@@ -46,7 +46,7 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
   if (!activity) return '';
   if (!lgApi) return activity;
 
-  const lgTemplate = parseLgTemplate(activity);
+  const lgTemplate = parseLgTemplateString(activity);
   if (!lgTemplate) return activity;
 
   const { templateType } = lgTemplate;

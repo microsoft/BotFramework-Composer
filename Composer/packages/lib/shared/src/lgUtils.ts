@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const TEMPLATE_PATTERN = /^\[bfd(.+)-(\d+)\]$/;
+const TEMPLATE_PATTERN = /^\[(bfd(.+)-(\d+))\]$/;
 export function isLgTemplate(template: string): boolean {
   return TEMPLATE_PATTERN.test(template);
 }
 
-export function parseLgTemplate(template: string) {
-  const result = TEMPLATE_PATTERN.exec(template);
-  if (result && result.length === 3) {
+export function parseLgTemplateString(templateStr: string) {
+  const result = TEMPLATE_PATTERN.exec(templateStr);
+  if (result && result.length === 4) {
     return {
-      templateType: result[1],
-      templateId: result[2],
+      lgId: result[1],
+      templateType: result[2],
+      templateId: result[3],
     };
   }
   return null;
