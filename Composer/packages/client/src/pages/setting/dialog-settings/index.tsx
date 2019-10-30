@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { JsonEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
@@ -50,6 +50,23 @@ export const DialogSettings = () => {
     actions.setDialogSettingsSlot(editing, option.key);
   };
 
+  const saveChangeResult = result => {
+    try {
+      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
+      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
+  };
+
+  const handleChange = (result, commit) => {
+    setValue(result);
+    if (commit || !absHosted) {
+      saveChangeResult(result);
+    }
+  };
+
   const hostedControl = () => (
     <div css={hostedControls}>
       <h1>{hostControlLabels.botSettings}</h1>
@@ -72,22 +89,6 @@ export const DialogSettings = () => {
       )}
     </div>
   );
-
-  const saveChangeResult = result => {
-    try {
-      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleChange = (result, commit) => {
-    setValue(result);
-    if (commit || !absHosted) {
-      saveChangeResult(result);
-    }
-  };
 
   return botName ? (
     <div css={hostedSettings}>
