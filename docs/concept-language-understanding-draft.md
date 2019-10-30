@@ -143,4 +143,4 @@ Any time you hit `Start Bot` (or `Restart Bot`), Composer will evaluate if your 
 - [Using LUIS for Language Understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
 
 ## Next 
-TBD
+-[Language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md)
