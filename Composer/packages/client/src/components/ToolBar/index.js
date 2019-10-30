@@ -11,7 +11,13 @@ function itemList(action, index) {
     return <Fragment key={index}>{action.element}</Fragment>;
   } else {
     return (
-      <ActionButton key={index} css={actionButton} {...action.buttonProps} data-testid={action.dataTestid}>
+      <ActionButton
+        key={index}
+        css={actionButton}
+        {...action.buttonProps}
+        data-testid={action.dataTestid}
+        disabled={action.disabled}
+      >
         {action.text}
       </ActionButton>
     );
