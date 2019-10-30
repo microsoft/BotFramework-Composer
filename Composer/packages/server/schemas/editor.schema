@@ -20,70 +20,104 @@
       "helpLinkText": "Learn more"
     },
     "Microsoft.AttachmentInput": {
-      "title": "Prompt for Attachment"
+      "title": "Prompt for Attachment",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.BeginDialog": {
-      "title": "Begin a Dialog"
+      "title": "Begin a Dialog",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.CancelAllDialogs": {
-      "title": "Cancel All Dialogs"
+      "title": "Cancel All Dialogs",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.ChoiceInput": {
-      "title": "Prompt with multi-choice"
+      "title": "Prompt with multi-choice",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.ConditionalSelector": {
       "title": "ConditionalSelector"
     },
     "Microsoft.ConfirmInput": {
-      "title": "Prompt for confirmation"
+      "title": "Prompt for confirmation",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.DateTimeInput": {
-      "title": "Prompt for a date"
+      "title": "Prompt for a date",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.DebugBreak": {
       "title": "Debug Break"
     },
     "Microsoft.DeleteProperty": {
-      "title": "Delete a Property"
+      "title": "Delete a Property",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.EditActions": {
       "title": "Modify active dialog"
     },
     "Microsoft.EditArray": {
-      "title": "Edit an Array Property"
+      "title": "Edit an Array Property",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.EmitEvent": {
-      "title": "Emit a custom event"
+      "title": "Emit a custom event",
+      "helpLink": "https://aka.ms/bfc-custom-events",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.EndDialog": {
-      "title": "End Dialog"
+      "title": "End Dialog",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.EndTurn": {
-      "title": "End Turn"
+      "title": "End Turn",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
     },
     "Microsoft.Foreach": {
-      "title": "Loop: For Each"
+      "title": "Loop: For Each",
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.ForeachPage": {
-      "title": "Loop: For Each Page"
+      "title": "Loop: For Each Page",
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.HttpRequest": {
-      "title": "HTTP Request"
+      "title": "HTTP Request",
+      "helpLink": "https://aka.ms/bfc-using-http",
+      "helpLinkText": "Learn more" 
     },
     "Microsoft.IfCondition": {
-      "title": "Branch: If/Else"
+      "title": "Branch: If/Else",
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.InitProperty": {
-      "title": "Initialize Property"
+      "title": "Initialize Property",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
     "Microsoft.LogAction": {
-      "title": "Log to console"
+      "title": "Log to console",
+      "helpLink": "https://aka.ms/bfc-debugging-bots",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.LuisRecognizer": {
       "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
@@ -101,10 +135,13 @@
       "helpLinkText": "Learn more"
     },
     "Microsoft.NumberInput": {
-      "title": "Prompt for a number"
+      "title": "Prompt for a number",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.OAuthInput": {
-      "title": "OAuth Login"
+      "title": "OAuth Login",
+      "helpLink": "https://aka.ms/bfc-using-oathu"
     },
     "Microsoft.OnActivity": {
       "title": "Handle an Event: Activity"
@@ -162,7 +199,9 @@
       "title": "Handle Unknown Intent"
     },
     "Microsoft.QnAMakerDialog": {
-      "title": "QnAMakerDialog"
+      "title": "QnAMakerDialog",
+      "helpLink": "https://aka.ms/bfc-using-QnA",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.RandomSelector": {
       "title": "RandomSelector"
@@ -172,10 +211,14 @@
       "title": false
     },
     "Microsoft.RepeatDialog": {
-      "title": "Repeat this Dialog"
+      "title": "Repeat this Dialog",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.ReplaceDialog": {
-      "title": "Replace this Dialog"
+      "title": "Replace this Dialog",
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.Rule": {
       "title": "Rule"
@@ -184,19 +227,29 @@
       "title": "Save an Entity"
     },
     "Microsoft.SendActivity": {
-      "title": "Send an Activity"
+      "title": "Send an Activity",
+      "helpLink": "https://aka.ms/bfc-send-activity",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.SetProperty": {
-      "title": "Set a Property"
+      "title": "Set a Property",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.SwitchCondition": {
-      "title": "Branch: Switch"
+      "title": "Branch: Switch",
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.TextInput": {
-      "title": "Prompt for text"
+      "title": "Prompt for text",
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "helpLinkText": "Learn more" 
     },
     "Microsoft.TraceActivity": {
-      "title": "Emit a trace event"
+      "title": "Emit a trace event",
+      "helpLink": "https://aka.ms/bfc-debugging-bots",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.TrueSelector": {
       "title": "TrueSelector"
