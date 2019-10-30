@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect } from 'react';
@@ -87,6 +90,7 @@ export const DialogSettings = () => {
 
   const handleChange = (value, commit) => {
     setValue(value);
+    setParseError('');
     try {
       const result = JSON.parse(value);
       if (commit || !absHosted) {

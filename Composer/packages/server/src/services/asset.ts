@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import settings from '../settings/settings';
 import { AssetManager } from '../models/asset/assetManager';
 

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { GraphLayout } from '../models/GraphLayout';
 import { Boundary } from '../models/Boundary';
 import { InitNodeSize, ElementInterval, DiamondSize } from '../constants/ElementSizes';

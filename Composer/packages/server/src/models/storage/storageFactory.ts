@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { StorageConnection, IFileStorage } from './interface';
 import { LocalDiskStorage } from './localDiskStorage';
 import { AzureBlobStorage } from './azureBlobStorage';

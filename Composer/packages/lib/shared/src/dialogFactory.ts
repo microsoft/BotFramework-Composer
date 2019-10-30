@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';

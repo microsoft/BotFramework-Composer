@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';

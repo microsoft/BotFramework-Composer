@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import TimeAgo from 'react-timeago';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { keys } from 'lodash';
 
 import { ActionCreator } from '../../types';

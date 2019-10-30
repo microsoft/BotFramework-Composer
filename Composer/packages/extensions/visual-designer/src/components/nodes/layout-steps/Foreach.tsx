@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, useEffect, useState, FunctionComponent } from 'react';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { OverflowSet, IconButton, Icon } from 'office-ui-fabric-react';
 

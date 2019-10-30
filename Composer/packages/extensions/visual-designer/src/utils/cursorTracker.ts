@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { InitNodeSize } from '../constants/ElementSizes';
 import { AttrNames } from '../constants/ElementAttributes';

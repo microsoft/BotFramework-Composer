@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 declare namespace SelfHostCommands {
   export interface ARGV {
     user: string;

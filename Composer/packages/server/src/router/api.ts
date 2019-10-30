@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { ProjectController } from '../controllers/project';

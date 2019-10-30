@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import MonacoEditor, { MonacoEditorProps } from '@bfcomposer/react-monaco-editor';

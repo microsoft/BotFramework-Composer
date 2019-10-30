@@ -1,12 +1,15 @@
-import axios from 'axios';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { get } from 'lodash';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { SensitiveProperties } from '../../constants';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionTypes } from './../../constants/index';
 import { BotEnvironments } from './../../utils/envUtil';
+import httpClient from './../../utils/httpUtil';
 
 export const setSettings: ActionCreator = async (
   { dispatch },
@@ -29,7 +32,7 @@ export const setSettings: ActionCreator = async (
     }
     // set value to server
     const suffix = slot ? `/${slot}` : '';
-    await axios.post(`${BASEURL}/projects/opened/settings${suffix}`, { settings });
+    await httpClient.post(`/projects/opened/settings${suffix}`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
@@ -44,10 +47,10 @@ export const setSettings: ActionCreator = async (
 export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
   const suffix = slot ? `/${slot}` : '';
   const query = editing ? '' : '?obfuscate=true';
-  const url = `${BASEURL}/projects/opened/settings${suffix}${query}`;
+  const url = `/projects/opened/settings${suffix}${query}`;
 
   try {
-    const response = await axios.get(`${BASEURL}/projects/opened/settings${suffix}`);
+    const response = await httpClient.get(`/projects/opened/settings${suffix}`);
     const settings = response.data;
     dispatch({
       type: ActionTypes.SYNC_ENV_SETTING,

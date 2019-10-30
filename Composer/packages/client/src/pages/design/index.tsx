@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
@@ -19,7 +22,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import grayComposerIcon from '../../grayComposerIcon.svg';
+import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
 import NewDialogModal from './new-dialog-modal';
 import {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
 import { getDesignerId, DesignerData } from 'shared';
