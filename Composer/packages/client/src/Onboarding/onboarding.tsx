@@ -5,6 +5,7 @@ export interface IComposerTeachingBubble {
   children?: any;
   footerContent?: any;
   headline?: any;
+  onDismiss?: () => void;
   primaryButtonProps?: any;
   secondaryButtonProps?: any;
 }
@@ -19,16 +20,19 @@ export interface IStep {
 }
 
 export interface IStepSet {
+  id: string;
   steps: IStep[];
-  title: string;
+  title?: string;
 }
 
 export const stepSets = (): IStepSet[] => [
   {
+    id: 'setUpBot',
     steps: [{ id: 'setUpYourBot', navigateTo: '/home', targetId: 'project' }],
     title: formatMessage('Set up your bot'),
   },
   {
+    id: 'basics',
     steps: [
       { id: 'mainDialog', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'mainDialog' },
       { id: 'trigger', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'newTrigger' },
@@ -48,14 +52,17 @@ export const stepSets = (): IStepSet[] => [
     title: formatMessage('Learn the basics'),
   },
   {
+    id: 'welcomeMessage',
     steps: [{ id: 'welcomeMessage', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'newTrigger' }],
     title: formatMessage('Add welcome message'),
   },
   {
+    id: 'intent trigger',
     steps: [{ id: 'intentTrigger', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'newTrigger' }],
     title: formatMessage('Add an intent trigger'),
   },
   {
+    id: 'testBot',
     steps: [{ id: 'startBot', navigateTo: '/dialogs/Main?selected=triggers[0]', targetId: 'startBot' }],
     title: formatMessage('Test your bot'),
   },

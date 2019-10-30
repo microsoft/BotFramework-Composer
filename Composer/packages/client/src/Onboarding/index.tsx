@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { navigate } from '@reach/router';
+import { navigate, Location } from '@reach/router';
 import formatMessage from 'format-message';
 
 import { StoreContext } from '../store';
@@ -12,26 +12,48 @@ import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal';
 
 const Onboarding: React.FC = () => {
-  const didMountRef = useRef(false);
-  const showingDismissModal = useRef(false);
-
   const {
-    actions: { onboardingSetComplete, openBotProject },
+    actions: { onboardingSetComplete },
     state: {
       dialogs,
-      botName,
       onboarding: { complete },
-      recentProjects,
     },
   } = useContext(StoreContext);
 
-  const [currentCoachMark, setCurrentCoachMark] = useState<any>({});
-  const [currentSet, setCurrentSet] = useState<number>(onboardingState.getCurrentSet());
-  const [currentStep, setCurrentStep] = useState<number>(onboardingState.getCurrentStep());
-  const [minimized, updateMinimized] = useState<boolean>(!!~onboardingState.getCurrentStep());
+  const [currentSet, setCurrentSet] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [hideModal, setHideModal] = useState(true);
+  const [minimized, updateMinimized] = useState<boolean>(false);
   const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets());
   const [teachingBubble, setTeachingBubble] = useState<any>({});
-  const toggleMinimized = useCallback(() => updateMinimized(minimized => !minimized), [updateMinimized]);
+
+  useEffect(() => {
+    onboardingSetComplete(onboardingState.getComplete());
+  }, []);
+
+  useEffect(() => {
+    if (!complete) {
+      const current = stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
+      setCurrentSet(current);
+    } else {
+      setCurrentSet(0);
+      setCurrentStep(0);
+    }
+  }, [complete, stepSets]);
+
+  useEffect(() => {
+    const { steps } = stepSets[currentSet] || { steps: [] };
+    const coachMark = steps[currentStep] || {};
+    const { id, location, navigateTo, targetId } = coachMark;
+    !complete && navigateTo && navigate(navigateTo);
+
+    setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
+
+    setHideModal(currentSet === 0);
+    updateMinimized(!!~currentStep);
+
+    currentSet > -1 && currentSet < stepSets.length && onboardingState.setCurrentSet(stepSets[currentSet].id);
+  }, [currentSet, currentStep, setTeachingBubble]);
 
   useEffect(() => {
     const sets = defaultStepSets()
@@ -47,6 +69,7 @@ const Onboarding: React.FC = () => {
         }),
       }))
       .filter(({ steps }) => steps.length);
+
     setStepSets(sets);
   }, [dialogs]);
 
@@ -69,55 +92,28 @@ const Onboarding: React.FC = () => {
 
   const previousStep = useCallback(() => {
     setCurrentStep(current => (current > 0 ? current - 1 : current));
-  }, [setCurrentSet]);
+  }, [setCurrentStep]);
 
   const onComplete = useCallback(() => {
     onboardingSetComplete(true);
-    setCurrentStep(-1);
-    setCurrentSet(-1);
     onboardingState.set({ complete: true });
-  }, [onboardingSetComplete, setCurrentSet, setCurrentStep]);
+  }, [onboardingSetComplete]);
 
   const exit = useCallback(async () => {
-    if (!showingDismissModal.current) {
-      showingDismissModal.current = true;
-      const result = await OpenConfirmModal(
-        formatMessage('Leave Product Tour?'),
-        formatMessage(
-          'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.'
-        )
-      );
-      if (result) {
-        onComplete();
-      }
-      showingDismissModal.current = false;
+    const result = await OpenConfirmModal(
+      formatMessage('Leave Product Tour?'),
+      formatMessage(
+        'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.'
+      )
+    );
+    if (result) {
+      onComplete();
     }
   }, [onComplete]);
 
   const setMinimized = useCallback(minimized => updateMinimized(minimized), [updateMinimized]);
 
-  useEffect(() => {
-    const { steps } = stepSets[currentSet] || { steps: [] };
-    const coachMark = steps[currentStep] || {};
-    const { id, location, navigateTo, targetId } = coachMark;
-    navigateTo && navigate(navigateTo);
-
-    setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
-  }, [currentStep, setCurrentCoachMark]);
-
-  useEffect(() => {
-    updateMinimized(!!~currentStep);
-    onboardingState.setCurrentSet(currentSet);
-    onboardingState.setCurrentStep(currentStep);
-  }, [currentStep, currentSet]);
-
-  useEffect(() => {
-    if (complete && didMountRef.current) {
-      setCurrentStep(-1);
-      setCurrentSet(-1);
-    }
-    didMountRef.current = true;
-  }, [complete]);
+  const toggleMinimized = useCallback(() => updateMinimized(minimized => !minimized), [updateMinimized]);
 
   const value = {
     actions: {
@@ -131,9 +127,9 @@ const Onboarding: React.FC = () => {
     },
     state: {
       complete,
-      currentCoachMark,
       currentSet,
       currentStep,
+      hideModal,
       minimized,
       stepSets,
       teachingBubble,
@@ -144,6 +140,15 @@ const Onboarding: React.FC = () => {
     <OnboardingContext.Provider value={value}>
       <WelcomeModal />
       <TeachingBubbles />
+      <Location>
+        {({ location: { pathname } }) => {
+          setHideModal(pathname !== '/dialogs/Main');
+          if (pathname === '/dialogs/Main' && currentSet === 0) {
+            setCurrentStep(-1);
+          }
+          return null;
+        }}
+      </Location>
     </OnboardingContext.Provider>
   ) : null;
 };

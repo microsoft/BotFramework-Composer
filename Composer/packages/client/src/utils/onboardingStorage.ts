@@ -5,8 +5,7 @@ const DEFAULT_STATE = { complete: false };
 
 interface IOnboardingState {
   complete: boolean;
-  currentStep: number;
-  currentSet: number;
+  currentSet: string;
 }
 
 class OnboardingState {
@@ -26,14 +25,9 @@ class OnboardingState {
     return complete || defaultValue;
   }
 
-  getCurrentSet(defaultValue = -1) {
+  getCurrentSet(defaultValue = '') {
     const { currentSet } = this._all;
     return typeof currentSet !== 'undefined' ? currentSet : defaultValue;
-  }
-
-  getCurrentStep(defaultValue = -1) {
-    const { currentStep } = this._all;
-    return typeof currentStep !== 'undefined' ? currentStep : defaultValue;
   }
 
   set(state: Partial<IOnboardingState>) {
@@ -50,13 +44,8 @@ class OnboardingState {
     this.storage.set(KEY, this._all);
   }
 
-  setCurrentSet(currentSet: number) {
+  setCurrentSet(currentSet: string) {
     this._all = { ...this._all, currentSet };
-    this.storage.set(KEY, this._all);
-  }
-
-  setCurrentStep(currentStep: number) {
-    this._all = { ...this._all, currentStep };
     this.storage.set(KEY, this._all);
   }
 }

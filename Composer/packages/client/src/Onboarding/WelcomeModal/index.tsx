@@ -10,10 +10,10 @@ import { collapsedStyles, expandedStyles } from './style';
 const WelcomeModal = () => {
   const {
     actions: { exit },
-    state: { complete, minimized },
+    state: { complete, hideModal, minimized },
   } = useContext(OnboardingContext);
 
-  return !complete ? (
+  return !(complete || hideModal) ? (
     <Modal
       isOpen={true}
       onDismiss={exit}

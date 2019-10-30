@@ -14,10 +14,10 @@ interface OnboardingContext {
   };
   state: {
     complete: boolean;
-    currentCoachMark: any;
     currentSet: number;
     currentStep: number;
     minimized: boolean;
+    hideModal: boolean;
     stepSets: IStepSet[];
     teachingBubble: IStep & { setLength: number } | null;
   };
@@ -35,9 +35,9 @@ const OnboardingContext = createContext<OnboardingContext>({
   },
   state: {
     complete: true,
-    currentCoachMark: {},
     currentSet: -1,
     currentStep: -1,
+    hideModal: true,
     minimized: false,
     stepSets: [],
     teachingBubble: null,

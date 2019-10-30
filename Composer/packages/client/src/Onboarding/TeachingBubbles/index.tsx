@@ -26,12 +26,13 @@ const TeachingBubbles = () => {
 
   const {
     actions: { nextStep, previousStep },
-    state: { currentStep, teachingBubble },
+    state: { currentSet, currentStep, teachingBubble },
   } = useContext(OnboardingContext);
 
   const { id, location, setLength = 0, targetId = '' } = teachingBubble || {};
 
   const target = coachMarkRefs[targetId];
+
   if (!target) {
     return null;
   }
@@ -70,6 +71,10 @@ const TeachingBubbles = () => {
       onClick: previousStep,
       'data-testid': 'onboardingPrevious',
     };
+  }
+
+  if (currentSet === 0) {
+    teachingBubbleProps.onDismiss = nextStep;
   }
 
   if (setLength > 1) {

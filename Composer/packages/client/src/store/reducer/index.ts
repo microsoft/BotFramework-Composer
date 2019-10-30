@@ -47,7 +47,6 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.schemas = response.data.schemas;
   state.luFiles = response.data.luFiles;
   state.settings = response.data.settings;
-  state.onboarding.complete = onboardingStorage.getComplete();
   refreshLocalStorage(response.data.botName, state.settings);
   mergeLocalStorage(response.data.botName, state.settings);
   return state;
