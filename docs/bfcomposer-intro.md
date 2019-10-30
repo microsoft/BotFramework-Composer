@@ -78,4 +78,4 @@ After creating bots with Bot Framework Composer, the resulting bot project will 
 
 ## Next
 
-* Learn how to [create your first echo bot](./tutorial-create-echobot.md)
+* Learn how to [create an echo bot](./tutorial-create-echobot.md) using Composer
