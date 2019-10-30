@@ -142,4 +142,4 @@ Learn more about [using memory and expressions in LG](concept-memory-draft.md#me
 [Docs for the Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 
 ## Next
-[Language Generation](./docs/concept-language-genereation-draft.md)
+[Language Generation](./concept-language-genereation-draft.md)
