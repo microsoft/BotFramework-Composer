@@ -137,7 +137,7 @@ Any time you hit `Start Bot` (or `Restart Bot`), Composer will evaluate if your 
 
 ## References
 - [What is LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)
-- [language Understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
+- [Language Understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
 - [.lu File Format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Using LUIS for Language Understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
