@@ -1,4 +1,4 @@
-# Language Understanding (LU)
+# Language Understanding
 
 Language Understanding (LU) is the process for a bot to understand language naturally and contextually so a bot will decide what to do next in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to event hanlders which define how bots will respond with appropriate actions. 
 
