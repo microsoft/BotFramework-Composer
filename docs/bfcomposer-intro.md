@@ -1,15 +1,15 @@
 # Introduction to Bot Framework Composer
-Bot Framework Composer is an integrated development tool for developers and multi-disciplinary teams for building bots and other types of conversational software with the Microsoft Bot Framework. Within this tool, you'll find everything you need to build a sophisticated conversational experience:
+Bot Framework Composer is an integrated development tool for developers and multi-disciplinary teams for building bots and other types of conversational software with the Microsoft Bot Framework.
 
+![BF Composer](./media/introduction/overview.png)
+
+ Within this tool, you'll find everything you need to build a sophisticated conversational experience:
 * A visual dialog editor 
 * Tools to train and manage a language understanding component
 * A powerful language generation and templating system
 * A ready-to-use bot runtime executable
 
 Bot Framework Composer enables teams to create bots that use the latest features from the Bot Framework SDK. 
-
-![BF Composer]()
-> add image from devs docs
 
 ## Advantage of developing bots BotFramework Composer
 Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framwork Composer. The table below details key differences in both structure and functionality of elements associated with each type of bot:
