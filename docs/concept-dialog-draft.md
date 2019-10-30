@@ -45,7 +45,7 @@ As the bot takes actions and sends messages, the **language generator** is calle
 
 <!-- ![dialog anatomy](./media/dialog/DialogAnatomy.png) -->
 
-## Use Dialogs
+## Use dialogs
 
 ### Create a dialog 
 
