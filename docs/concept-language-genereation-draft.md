@@ -24,16 +24,17 @@ Composer currently supports three different types of templates:
 - Strucutred template (this is new and read more [here](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md))
 
 ### Anatomy of a template 
-An LG template usuaslly consists of a name of the template defined using "#" and one of the following parts:   
-- a list of one-of variation text values defined using "-" 
+A template usuaslly consists of two parts: 
+- name of the template, which is defined using "#" AND   
+- a list of one-of variation text values defined using "-" OR 
 - a collection of conditions, each with a 
   - condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
-  - List of one-of variation text values per condition 
+  - List of one-of variation text values per condition OR 
 - a structure that contains 
   - Structure-name 
   - Properties 
 
-Below is an example of a simple `.lg` template with one-of variation text values.  
+Below is an example of a simple [`.lg` template](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) with one-of variation text values.  
 
      > this is a comment 
      # nameTemplate            
@@ -51,9 +52,9 @@ Note: All templates defined in the target file will be pulled in, so ensure that
 
 ### When to define
 
-When you want to determine how your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define an LG template in the **Send an Activity** action. Click on the **Send an Activity** action node, you will see the inline LG editor where you can define the template. 
+When you want to determine how your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define an LG template in the `Send a response` action. Click on the `Send a response` action node, you will see the inline LG editor where you can define the template. 
 
-  ![send_an_avtivity](./media/language_generation/send_an_activity.gif)
+  ![send_response](./media/language_generation/send_response.gif)
 
 ### What to know 
 
@@ -64,7 +65,7 @@ To define an LG template in Composer, you will need to know
   
 ### Where to define 
 
-In Composer, there are two LG editors: an inline LG editor and an LG editor (**Bot says**) listing all templates defined in the bot. 
+In Composer, there are two LG editors: an inline LG editor and an LG editor (**Bot Responses**) listing all templates defined in the bot. 
 
 The following screenshot shows an inline LG editor which hoists the relevant templates content. 
 
@@ -72,7 +73,7 @@ The following screenshot shows an inline LG editor which hoists the relevant tem
 
 Click on the bot icon on the left side of the navigation pane, you will see the all-up LG editor listing all LG templates defined in the bot. Click on **Edit Mode** on the upper right corner to start editing your LG template. 
 
-  ![bot_says](./media/language_generation/bot_says.png)
+  ![bot_responses](./media/language_generation/bot_responses.png)
 
 ### How to define 
 
@@ -83,15 +84,15 @@ A simple template is defined to generate either a single line text response or a
 
 - To define a single-line response you will need to use a "-" before a response text or an expression with returned property value. 
 
-This is an example of a single line text response from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples):  
+This is an example of a single line text response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample):  
 
      - Here is a simple text message. 
 
-This is an example of a single line expression response from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples):  
+This is an example of a single line expression response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample):  
 
      - {user.message} 
 
-- To define a multi-line response you will need to use a pair of triple dots to wrap the multi-line responses. Here is an example response from the [Message_Samples](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Message_Samples). In a multi-line response the bot will pick an utterance by random. 
+- To define a multi-line response you will need to use a pair of triple dots to wrap the multi-line responses. Here is an example response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample). In a multi-line response the bot will pick an utterance by random. 
 
       # TextWithLG
       - Hi, this is a text with LG
@@ -140,7 +141,7 @@ Below is an example of SuggestedActions from the [Interrupt](https://github.com/
 
     - Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
 
-Below is an example of a Thumbnail card from the [Cards_Samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots/Cards_Samples/ComposerDialogs): 
+Below is an example of Thumbnail card from the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample): 
 
     # ThumbnailCard
     [ThumbnailCard
