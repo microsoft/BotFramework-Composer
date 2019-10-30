@@ -1,7 +1,7 @@
 
 # Microsoft Bot Framework Composer
 ### Overview
-- [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro-draft.md)
+- [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro.md)
 
 ### QuickStart
 - Create your first bot 
