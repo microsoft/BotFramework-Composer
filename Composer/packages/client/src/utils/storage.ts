@@ -3,37 +3,41 @@
 
 export class ClientStorage {
   private storage: Storage;
+  private prefix = 'composer';
 
-  constructor(storageLocation: Storage = window.localStorage) {
+  constructor(storageLocation: Storage = window.localStorage, prefix?: string) {
     this.storage = storageLocation;
+    if (prefix) {
+      this.prefix = prefix;
+    }
   }
 
-  set<T = any>(key: string, val: T): T | void {
+  public set<T = any>(key: string, val: T): T | void {
     if (val === undefined) {
-      return this.remove(key);
+      return this.remove(this._prefix(key));
     }
-    this.storage.setItem(key, this._serialize(val));
+    this.storage.setItem(this._prefix(key), this._serialize(val));
     return val;
   }
 
-  get<T = any>(key: string, def?: T): T {
-    const val = this._deserialize(this.storage.getItem(key));
+  public get<T = any>(key: string, def?: T): T {
+    const val = this._deserialize(this.storage.getItem(this._prefix(key)));
     return val === undefined ? def : val;
   }
 
-  has(key: string): boolean {
-    return this.get(key) !== undefined;
+  public has(key: string): boolean {
+    return this.get(this._prefix(key)) !== undefined;
   }
 
-  remove(key: string): void {
-    this.storage.removeItem(key);
+  public remove(key: string): void {
+    this.storage.removeItem(this._prefix(key));
   }
 
-  clear(): void {
+  public clear(): void {
     this.storage.clear();
   }
 
-  getAll(): { [key: string]: any } {
+  public getAll(): { [key: string]: any } {
     const ret = {};
     this._forEach((key, val) => {
       ret[key] = val;
@@ -41,20 +45,20 @@ export class ClientStorage {
     return ret;
   }
 
-  _forEach(callback: (key: string, val: any) => void) {
+  private _forEach(callback: (key: string, val: any) => void) {
     for (let i = 0; i < this.storage.length; i++) {
       const key = this.storage.key(i);
       if (key) {
-        callback(key, this.get(key));
+        callback(key.replace(`${this.prefix}:`, ''), this.get(key));
       }
     }
   }
 
-  _serialize(val: any): string {
+  private _serialize(val: any): string {
     return JSON.stringify(val);
   }
 
-  _deserialize(val: any): any {
+  private _deserialize(val: any): any {
     if (typeof val !== 'string') {
       return undefined;
     }
@@ -64,6 +68,10 @@ export class ClientStorage {
     } catch (error) {
       return val || undefined;
     }
+  }
+
+  private _prefix(key: string): string {
+    return `${this.prefix}:${key}`;
   }
 }
 

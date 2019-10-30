@@ -10,6 +10,8 @@ import { Store } from '../store/store';
 import StorageService from './storage';
 import { Path } from './../utility/path';
 
+const MAX_RECENT_BOTS = 7;
+
 export class BotProjectService {
   private static currentBotProject: BotProject | undefined = undefined;
   private static recentBotProjects: LocationRef[] = [];
@@ -87,6 +89,12 @@ export class BotProjectService {
     }
     const toSaveRecentProject = { storageId: 'default', path: currDir };
     BotProjectService.recentBotProjects.unshift(toSaveRecentProject);
+
+    // remove LRU bot project
+    if (BotProjectService.recentBotProjects.length > MAX_RECENT_BOTS) {
+      BotProjectService.recentBotProjects = BotProjectService.recentBotProjects.slice(0, MAX_RECENT_BOTS);
+    }
+
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   };
 
