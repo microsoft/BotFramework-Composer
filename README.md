@@ -4,7 +4,7 @@
 - [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/bfcomposer-intro.md)
 
 ### QuickStart
-- Create your first bot 
+- [Create your first bot](./docs/tutorial-create-echobot.md) 
 ### Samples 
 - [Composer samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots) 
 ### Concepts 
