@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import path from 'path';
 
@@ -22,7 +25,7 @@ import { Dropdown, Stack, StackItem, IDropdownOption } from 'office-ui-fabric-re
 import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../store/types';
-import { getFileIconName, getFileEditDate, formatBytes, calculateTimeDiff } from '../../utils';
+import { getFileIconName, formatBytes, calculateTimeDiff } from '../../utils';
 
 import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
