@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState } from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { RichEditor } from 'code-editor';

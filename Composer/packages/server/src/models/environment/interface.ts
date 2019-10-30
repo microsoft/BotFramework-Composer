@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ISettingManager } from '../settings';
 import { IBotConnector } from '../connector';
 import { absHosted } from '../../settings/env';

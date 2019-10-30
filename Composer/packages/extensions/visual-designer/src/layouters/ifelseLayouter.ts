@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ElementInterval } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';

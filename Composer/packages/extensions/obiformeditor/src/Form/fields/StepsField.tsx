@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { DialogGroup, createStepMenu, MicrosoftIDialog } from 'shared';
 import formatMessage from 'format-message';

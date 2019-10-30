@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { Label, DirectionalHint, IconButton, TooltipHost, TooltipDelay } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';

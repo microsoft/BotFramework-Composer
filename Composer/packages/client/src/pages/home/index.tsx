@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext, useEffect } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -139,7 +142,16 @@ export const Home = props => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
               />
-            ) : null}
+            ) : (
+              <ItemContainer
+                title={''}
+                content={'ToDoBotWithLuis'}
+                styles={home.lastestBotItem}
+                onClick={() => {
+                  onClickTemplate('ToDoBotWithLuisSample');
+                }}
+              />
+            )}
           </div>
           <div css={home.leftContainer}>
             <div css={home.subtitle}>{formatMessage(`Recent Bots`)}</div>

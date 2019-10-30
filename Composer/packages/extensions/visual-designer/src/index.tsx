@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useRef, useEffect } from 'react';
 import {
   OverflowSet,

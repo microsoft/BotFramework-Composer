@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 

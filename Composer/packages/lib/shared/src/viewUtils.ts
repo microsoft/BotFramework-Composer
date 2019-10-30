@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
 
 import { SDKTypes } from './types';
