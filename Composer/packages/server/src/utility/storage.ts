@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IFileStorage } from '../models/storage/interface';
 
 /**
@@ -21,8 +24,10 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
     const srcPath = `${srcDir}/${path}`;
     const dstPath = `${dstDir}/${path}`;
 
-    // eslint-disable-next-line no-console
-    console.log(`copying ${srcPath} to ${dstPath}`);
+    if (process.env.NODE_ENV !== 'test') {
+      // eslint-disable-next-line no-console
+      console.log(`copying ${srcPath} to ${dstPath}`);
+    }
 
     if ((await srcStorage.stat(srcPath)).isFile) {
       // copy files

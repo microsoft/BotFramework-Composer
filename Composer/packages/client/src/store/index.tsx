@@ -1,14 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash.once';
 
 import { prepareAxios } from '../utils/auth';
-import { isAbsHosted } from '../utils/envUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc } from './types';
+import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc, StorageFolder } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
 
@@ -23,7 +25,7 @@ const initialState: State = {
   recentProjects: [],
   templateProjects: [],
   storages: [],
-  focusedStorageFolder: {},
+  focusedStorageFolder: {} as StorageFolder,
   botStatus: BotStatus.unConnected,
   botLoadErrorMsg: '',
   creationFlowStatus: CreationFlowStatus.CLOSE,
@@ -50,6 +52,7 @@ const initialState: State = {
   publishVersions: {},
   publishStatus: 'inactive',
   lastPublishChange: null,
+  visualEditorSelection: [],
 };
 
 interface StoreContextValue {
@@ -85,7 +88,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
   };
 
   const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware);
-  // @ts-ignore some actions are not action creations and cannot be cast as such (e.g. textFromTemplates in lg.ts)
+  // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
   const boundActions = bindActions({ dispatch: interceptDispatch, getState }, actions);
   const value = {
     state: getState(),

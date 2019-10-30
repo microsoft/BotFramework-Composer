@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
@@ -92,7 +95,7 @@ export function DefineConversation(props) {
     <Fragment>
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
-        <Stack horizontal={enableLocationBrowse} gap="2rem" styles={wizardStyles.stackinput}>
+        <Stack horizontal={enableLocationBrowse} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}

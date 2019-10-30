@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ISettingManager } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import { IBotConnector } from '../connector';

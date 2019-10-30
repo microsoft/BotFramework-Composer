@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { AuthProvider, AuthProviderInit } from './types';
 import absh from './absh';
 

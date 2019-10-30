@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 
 export interface FileInfo {

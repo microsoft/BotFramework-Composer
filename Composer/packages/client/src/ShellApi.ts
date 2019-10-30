@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useEffect, useContext, useMemo, useState } from 'react';
 import { ShellData } from 'shared';
 import isEqual from 'lodash.isequal';
@@ -52,10 +55,6 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states
-  // TODO: (leilei, ze) fix it when refactoring shell state management.
-  const [, forceUpdate] = useState();
-
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
@@ -170,6 +169,7 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
+      focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
       hosted: !!isAbsHosted(),
@@ -326,8 +326,8 @@ export const ShellApi: React.FC = () => {
     actions.focusTo(dataPath, fragment);
   }
 
-  function onSelect(ids) {
-    forceUpdate(ids);
+  function onSelect(ids: string[]) {
+    actions.setVisualEditorSelection(ids);
   }
 
   return null;

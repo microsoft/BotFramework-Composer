@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 
 import { MicrosoftAdaptiveDialog } from './sdk';
@@ -101,6 +104,7 @@ export interface ShellData {
   dialogId: string;
   dialogs: DialogInfo[];
   focusedEvent: string;
+  focusedActions: string[];
   focusedSteps: string[];
   focusedTab?: string;
   focusPath: string;

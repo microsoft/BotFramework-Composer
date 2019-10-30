@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
@@ -21,7 +24,7 @@ const emotionCache = createCache({
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
   focusedEvent,
-  focusedSteps,
+  focusedActions,
   focusedTab,
   data: inputData,
   shellApi,
@@ -52,7 +55,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     redo,
   } = shellApi;
 
-  const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
+  const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const [context, setContext] = useState({
@@ -71,7 +74,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       focusedEvent,
       focusedTab,
     });
-  }, [focusedEvent, focusedSteps, focusedTab]);
+  }, [focusedEvent, focusedActions, focusedTab]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -82,7 +85,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               key={dialogId}
               path={dialogId}
               data={data}
-              focusedSteps={focusedSteps}
+              focusedSteps={focusedActions}
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
@@ -103,6 +106,7 @@ interface VisualDesignerProps {
   data: object;
   dialogId: string;
   focusedEvent: string;
+  focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
   shellApi: any;

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { PropTypes } from 'prop-types';
 import React, { Fragment, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';

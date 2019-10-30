@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import formatMessage from 'format-message';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
@@ -84,6 +87,7 @@ export enum ActionTypes {
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
+  EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
   USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
   USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
   USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',

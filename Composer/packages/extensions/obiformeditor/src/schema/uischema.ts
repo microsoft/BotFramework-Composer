@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { SDKTypes, PROMPT_TYPES } from 'shared';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
@@ -132,6 +135,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:widget': 'TextareaWidget',
     },
     'ui:order': ['connectionName', '*'],
+  },
+  [SDKTypes.QnAMakerDialog]: {
+    'ui:hidden': ['strictFilters'],
   },
   [SDKTypes.ReplaceDialog]: {
     dialog: {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { resolve } from 'path';
 
 import { ISettingManager } from '../settings';

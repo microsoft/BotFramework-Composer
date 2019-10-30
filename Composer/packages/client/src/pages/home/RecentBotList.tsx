@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
@@ -13,8 +16,8 @@ import {
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
-import { Fragment } from 'react';
-import moment from 'moment';
+
+import { calculateTimeDiff } from '../../utils';
 
 import { detailListContainer } from './styles';
 
@@ -59,10 +62,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     },
   ];
 
-  const calculateTimeDiff = (time: any) => {
-    return moment(time).toNow();
-  };
-
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
@@ -84,23 +83,21 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
   });
 
   return (
-    <Fragment>
-      <div data-is-scrollable="true" css={detailListContainer}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            items={recentProjects}
-            compact={false}
-            columns={tableColums}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            isHeaderVisible={true}
-            selection={selection}
-            selectionMode={SelectionMode.single}
-            checkboxVisibility={CheckboxVisibility.hidden}
-          />
-        </ScrollablePane>
-      </div>
-    </Fragment>
+    <div data-is-scrollable="true" css={detailListContainer}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <DetailsList
+          items={recentProjects}
+          compact={false}
+          columns={tableColums}
+          getKey={item => item.name}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          isHeaderVisible={true}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          checkboxVisibility={CheckboxVisibility.hidden}
+        />
+      </ScrollablePane>
+    </div>
   );
 }
