@@ -3,7 +3,7 @@
 In Bot Framework Composer, dialogs are functional components offered in a visual interface and does not require you to write code. The dialog system supports building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs help users focus on conversation modeling rather than the mechanics of dialog management.
 
 >[!NOTE]
-> The dialog system in Bot Framework Composer is based on [Adaptive Dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
+> The dialog system in Composer is based on [Adaptive Dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
  
 ## Types of dialogs  
 There are two types of dialogs: 
@@ -20,13 +20,13 @@ You create a dialog in the Bot Framework Composer to manage a conversation objec
 At runtime, the main dialog is called into action and becomes the active dialog, triggering event handlers with pre-defined actions. As the conversation flows, a child dialog can be called by a main dialog, and vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a dialog 
-A dialog contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Bot Framework Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`. 
+A dialog contains a set of event handlers. Triggers are event handlers that can be triggered to handle different events. Currently, Composer provides five different types of triggers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`. 
 
 Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event are actions that should execute immediately every time the dialog starts. For more information, see [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md).
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
-Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Bot Framework Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular Expression Recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. 
+Usually when a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **Intent** and any **entity values** the message includes. After processing the message, both the **Intent** and **entity values** are passed onto the dialog's event handlers. Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular Expression Recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. 
 
 ![recognizer](./media/dialog/recognizer.png)
 
@@ -37,7 +37,7 @@ Event handlers contain a series of actions that the bot will undertake to fulfil
 
 ![actions](./media/dialog/actions.png)
 
-As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and sends them back to the user. Language generators can be used to create reusable components, variable messages, and dynamic messages that are grammatically correct. The following [diagram](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/Assets/adaptive-dialog-anatomy.png) shows the anatomy of a dialog in Bot Composer. 
+As the bot takes actions and sends messages, the **language generator** is called into play. It generates messages from variables and templates and sends them back to the user. Language generators can be used to create reusable components, variable messages, and dynamic messages that are grammatically correct. The following [diagram](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/Assets/adaptive-dialog-anatomy.png) shows the anatomy of a dialog in Composer. 
 
 ![adaptive-dialog-anatomy](./media/dialog/adaptive-dialog-anatomy.png)
 
@@ -47,11 +47,11 @@ As the bot takes actions and sends messages, the **language generator** is calle
 
 When you create a bot you create the main dialog by default. To create a bot project, please follow the steps:
 
-1. On the left side of the Composer home screen, click `New` from the upper left corner. After you see the pop-up window, select "Create from scratch" and click `Submit`. 
+1. On the left side of the Composer home screen, click `+ New` from the upper left corner. After you see the pop-up window, select "Create from scratch" and click `Submit`. 
 
 ![create_new_bot](./media/dialog/create_new_bot.png) 
 
-Alternatively, on the home screen you can click the "+" sign in the `New` block under the "Start from scratch" section. 
+Alternatively, on the home screen you can click the `+` sign in the `New` block under the "Start from scratch" section. 
 
 ![create_new_bot2](./media/dialog/create_new_bot2.png)
 
