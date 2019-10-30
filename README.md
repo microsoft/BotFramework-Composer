@@ -8,7 +8,7 @@
 ### Samples 
 - [Composer samples](https://github.com/microsoft/BotFramework-Composer/tree/stable/SampleBots) 
 ### Concepts 
-- [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog-draft.md)
+- [Dialogs](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog.md)
 - [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md)
 - [Conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory.md)
 - [Language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md)
