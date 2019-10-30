@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { isLgTemplate, parseLgTemplate } from './lgUtils';
+
 const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
@@ -38,22 +40,6 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
       Promise.all(children.map(async x => await walkAdaptiveAction(x, visitor)));
     }
   }
-}
-
-const TEMPLATE_PATTERN = /^\[bfd(.+)-(\d+)\]$/;
-function isLgTemplate(template: string): boolean {
-  return TEMPLATE_PATTERN.test(template);
-}
-
-function parseLgTemplate(template: string) {
-  const result = TEMPLATE_PATTERN.exec(template);
-  if (result && result.length === 3) {
-    return {
-      templateType: result[1],
-      templateId: result[2],
-    };
-  }
-  return null;
 }
 
 async function copyLgActivity(activity: string, designerId: string, lgApi: any): Promise<string> {
