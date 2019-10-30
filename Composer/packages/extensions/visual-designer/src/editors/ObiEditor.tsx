@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { has, get } from 'lodash';
+import { parseLgTemplateString } from 'shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -85,13 +86,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
             const templates: string[] = [];
             targets.forEach(target => {
-              // only match auto generated lg temapte name
-              const reg = /\[(bfd((?:activity)|(?:prompt)|(?:unrecognizedPrompt)|(?:defaultValueResponse)|(?:invalidPrompt))-\d{6})\]/g;
-              let matchResult;
-              while ((matchResult = reg.exec(target)) !== null) {
-                const templateName = matchResult[1];
-                templates.push(templateName);
-              }
+              const lg = parseLgTemplateString(target);
+              lg && templates.push(lg.lgId);
             });
 
             return templates;
