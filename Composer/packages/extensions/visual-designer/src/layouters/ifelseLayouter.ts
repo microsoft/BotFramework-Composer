@@ -117,9 +117,9 @@ export function ifElseLayouter(
       {
         id: `edge/${rightNode.id}/right/choice->top}`,
         direction: 'x',
-        x: choiceNode.offset.x + choiceNode.boundary.width,
+        x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
-        length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.width - choiceNode.offset.x,
+        length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.axisX - choiceNode.offset.x,
         text: rightNodeText,
       },
       {
@@ -149,9 +149,9 @@ export function ifElseLayouter(
       {
         id: `edge/${choiceNode.id}/right/choice->border.right`,
         direction: 'x',
-        x: choiceNode.offset.x + choiceNode.boundary.width,
+        x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
-        length: containerBoundary.width - (choiceNode.offset.x + choiceNode.boundary.width),
+        length: containerBoundary.width - (choiceNode.offset.x + choiceNode.boundary.axisX),
       },
       {
         id: `edge/${choiceNode.id}/right/border.top->border.bottom`,
