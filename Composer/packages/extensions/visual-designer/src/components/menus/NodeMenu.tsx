@@ -22,22 +22,6 @@ const declareElementAttributes = (id: string) => {
 export const NodeMenu = ({ id, onEvent }): JSX.Element => {
   const menuItems = [
     {
-      key: 'cut',
-      name: 'Cut',
-      iconProps: {
-        iconName: 'Cut',
-      },
-      onClick: () => onEvent(NodeEventTypes.CutSelection, { actionIds: [id] }),
-    },
-    {
-      key: 'copy',
-      name: 'Copy',
-      iconProps: {
-        iconName: 'Copy',
-      },
-      onClick: () => onEvent(NodeEventTypes.CopySelection, { actionIds: [id] }),
-    },
-    {
       key: 'delete',
       name: 'Delete',
       iconProps: {
