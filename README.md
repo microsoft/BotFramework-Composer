@@ -28,7 +28,7 @@
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Deploy
-- Deploy bots to Azure
+- [Deploy bots to Azure](https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/10-24-2019-Hack.md)
 ### Resources
 - Known Issues (TBD)
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md)
