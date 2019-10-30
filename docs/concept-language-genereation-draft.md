@@ -100,7 +100,7 @@ This is an example of a single line expression response from the [RespondingWith
       - Hello, this is a text with LG
 
 #### Conditional template  
-For all conditional templates, all conditions are expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two conditional template examples from the [.LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#Importing-external-references). 
+For all conditional templates, all conditions are expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two conditional template examples from the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#Importing-external-references). 
 
 - IF...ELSE
 
@@ -137,7 +137,7 @@ The definition of a [structured template](https://github.com/microsoft/BotBuilde
         Property3 = Nested structures are achieved through composition
     ]
 
-Below is an example of SuggestedActions from the [Interrupt](https://github.com/microsoft/BotFramework-Composer/tree/master/SampleBots/Interrupt/ComposerDialogs) sample. :
+Below is an example of SuggestedActions from the [InterruptionSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/InterruptionSample):
 
     - Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
 
@@ -152,7 +152,7 @@ Below is an example of Thumbnail card from the [RespondingWithCardsSample](https
         image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
         buttons = Get Started]
 
-For more information on Structured template, please read the [Structured Response Template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. For more examples of structured templates, please refer to [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg) and [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg). 
+For more information on Structured template, please read the [structured Response Template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. For more examples of structured templates, please refer to [Example 1](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.LanguageGeneration.Tests/Examples/StructuredTemplate.lg) and [Example 2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg). 
  
 ### Common Expression Cheatsheet 
 
