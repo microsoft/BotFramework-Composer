@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isLgTemplateString, parseLgTemplateString } from './lgUtils';
+import { isLgTemplateString, parseLgTemplateString, buildLgId, toLgTemplateString } from './lgUtils';
 
 const NestedFieldNames = {
   Actions: 'actions',
@@ -65,10 +65,10 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
   if (currentLg) {
     // Create new lg activity.
     const newLgContent = currentLg.Body;
-    const newLgId = `bfd${templateType}-${designerId}`;
+    const newLgId = buildLgId(designerId, templateType);
     try {
       await updateLgTemplate('common', newLgId, newLgContent);
-      return `[${newLgId}]`;
+      return toLgTemplateString(newLgId);
     } catch (e) {
       return newLgContent;
     }

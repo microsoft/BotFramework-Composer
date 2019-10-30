@@ -17,3 +17,12 @@ export function parseLgTemplateString(templateStr: string) {
   }
   return null;
 }
+
+export function buildLgId(templateId: string, templateType = 'activity'): string {
+  const lgId = `bfd${templateType}-${templateId}`;
+  return lgId;
+}
+
+export function toLgTemplateString(lgId: string): string {
+  return `[${lgId}]`;
+}
