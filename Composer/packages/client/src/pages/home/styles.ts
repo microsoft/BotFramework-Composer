@@ -16,10 +16,14 @@ export const page = css`
   display: flex;
   overflow: auto;
 `;
+
 export const leftPage = css`
   flex: 50%;
   padding: 25px;
+  display: flex;
+  flex-direction: column;
 `;
+
 export const rightPage = css`
   flex: 1;
   padding: 25px;
@@ -53,10 +57,12 @@ export const newBotContainer = css`
 `;
 
 export const leftContainer = css`
-  display: block;
   min-width: 535px;
   margin-top: 10px;
   margin-bottom: 10px;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
@@ -190,11 +196,11 @@ export const lastestBotItem = {
 
 export const detailListContainer = css`
   position: relative;
-  min-height: 35vh;
   max-height: 40vh;
   padding-top: 10px;
   overflow: hidden;
   flex-grow: 1;
+  min-height: 250px;
 `;
 
 export const exampleListContainer = css`
@@ -203,6 +209,7 @@ export const exampleListContainer = css`
   position: relative;
   min-width: 260px;
   flex: 1;
+  min-height: 582px;
 `;
 
 export const loading = css`

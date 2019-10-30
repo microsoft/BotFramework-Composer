@@ -16,7 +16,6 @@ import {
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
-import { Fragment } from 'react';
 
 import { calculateTimeDiff } from '../../utils';
 
@@ -84,23 +83,21 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
   });
 
   return (
-    <Fragment>
-      <div data-is-scrollable="true" css={detailListContainer}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            items={recentProjects}
-            compact={false}
-            columns={tableColums}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            isHeaderVisible={true}
-            selection={selection}
-            selectionMode={SelectionMode.single}
-            checkboxVisibility={CheckboxVisibility.hidden}
-          />
-        </ScrollablePane>
-      </div>
-    </Fragment>
+    <div data-is-scrollable="true" css={detailListContainer}>
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <DetailsList
+          items={recentProjects}
+          compact={false}
+          columns={tableColums}
+          getKey={item => item.name}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          isHeaderVisible={true}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          checkboxVisibility={CheckboxVisibility.hidden}
+        />
+      </ScrollablePane>
+    </div>
   );
 }

@@ -153,15 +153,17 @@ export const Home = props => {
               />
             )}
           </div>
-          <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
-            <RecentBotList
-              recentProjects={recentProjects}
-              onSelectionChanged={async item => {
-                await onSelectionChanged(item);
-              }}
-            />
-          </div>
+          {recentProjects.length > 0 && (
+            <div css={home.leftContainer}>
+              <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
+              <RecentBotList
+                recentProjects={recentProjects}
+                onSelectionChanged={async item => {
+                  await onSelectionChanged(item);
+                }}
+              />
+            </div>
+          )}
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
