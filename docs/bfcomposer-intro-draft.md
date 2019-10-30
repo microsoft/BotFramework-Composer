@@ -8,7 +8,8 @@ Bot Framework Composer is an integrated development tool for developers and mult
 
 Bot Framework Composer enables teams to create bots that use the latest features from the Bot Framework SDK. 
 
-![BF Composer](./media/introduction/bf_composer.png)
+![BF Composer]()
+> add image from devs docs
 
 ## Advantage of developing bots BotFramework Composer
 Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framwork Composer. The table below details key differences in both structure and functionality of elements associated with each type of bot:
@@ -40,16 +41,15 @@ Language understanding is a core component of BF Composer, allowing developers a
 
 As dialogs are edited in the designer, developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
 
-![BF Composer NLU](./media/introduction/bf_composer_nlu.png)
+![BF Composer NLU]()
 
  Bot Framework Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
 
 ## Language Generation (LG)
 
 Creating grammatically correct, data-driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Bot Framework Composer's integrated [language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers - and the writers who work with them - to create replies with a great deal of flexibility.
-- **who are the writers in this instance?**
 
-![BF Composer LG](./media/introduction/bf_composer_lg.png)
+![BF Composer LG]()
 
 With Language Generation (LG), previously complex tasks can be quickly achieved:
 
@@ -66,8 +66,8 @@ Under the hood, Bot Framework Composer harnesses the power of many of the compon
 
 * [Adaptive Dialogs](Yan's link, or link to adaptive?) and the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk)
 * Natural Language Understanding service from [LUIS](https://www.luis.ai/home)
-- what about QnA?
 * Built-in [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) and [expression library](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
+* [QnA Maker](https://www.qnamaker.ai/) capabilities
 * [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator)
 
 After creating bots with Bot Framework Composer, the resulting bot project will contain reusable assets in the form of JSON and Markdown files that can be bundled and packaged with a bot's source code. These files can be used with a wide variety of compatible tools from the Bot Framework library.
