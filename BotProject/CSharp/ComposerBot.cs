@@ -12,7 +12,6 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.LanguageGeneration;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
@@ -49,7 +48,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 {
                     Task.Run(() => this.LoadRootDialogAsync());
                 }
-            };            
+            };
             LoadRootDialogAsync();
         }
 
