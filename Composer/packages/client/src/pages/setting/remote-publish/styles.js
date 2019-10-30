@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 module.exports.styles = {
   published: {
     backgroundColor: '#F2F2F2',

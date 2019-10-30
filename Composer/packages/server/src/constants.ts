@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const BASEURL = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
 
 export enum ClaimNames {

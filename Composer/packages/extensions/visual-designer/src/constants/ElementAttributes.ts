@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export enum AttrNames {
   // attrs for cursor move
   SelectableElement = 'data-is-selectable',

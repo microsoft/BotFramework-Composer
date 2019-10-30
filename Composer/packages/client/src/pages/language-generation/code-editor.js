@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';

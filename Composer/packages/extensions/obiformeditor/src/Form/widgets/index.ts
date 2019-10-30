@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ToggleWidget } from './ToggleWidget';
 
 export * from './CheckboxWidget';

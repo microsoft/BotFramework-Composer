@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { cloneDeep, get, set } from 'lodash';
 import { seedNewDialog, deepCopyAction } from 'shared';
 

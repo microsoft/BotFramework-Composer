@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react';
 import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';

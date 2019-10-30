@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { DialogGroup, getDialogGroupByType } from 'shared';
 
 import { NodeColors } from '../constants/ElementColors';

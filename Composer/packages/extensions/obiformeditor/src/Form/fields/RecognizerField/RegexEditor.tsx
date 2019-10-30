@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { toIdSchema } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';

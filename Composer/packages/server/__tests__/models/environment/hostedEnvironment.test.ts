@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { absHostedConfig } from '../../../src/models/environment';
 import { HostedEnvironment } from '../../../src/models/environment/hostedEnvironment';
 import { Path } from '../../../src/utility/path';

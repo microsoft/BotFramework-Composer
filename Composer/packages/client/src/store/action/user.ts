@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import jwtDecode from 'jwt-decode';
 
 import { ActionCreator } from '../types';

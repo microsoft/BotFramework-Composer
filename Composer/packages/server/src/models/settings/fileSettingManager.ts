@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Path } from '../../utility/path';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 

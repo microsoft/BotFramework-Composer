@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import formatMessage from 'format-message';
 
 formatMessage.setup({ missingTranslation: 'ignore' });

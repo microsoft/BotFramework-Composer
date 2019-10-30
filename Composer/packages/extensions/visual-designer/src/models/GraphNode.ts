@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
 import { IndexedNode } from './IndexedNode';

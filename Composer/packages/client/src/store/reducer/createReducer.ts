@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import producer from 'immer';
 
 import { State, ReducerFunc } from '../types';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { StorageConnection } from '../../../src/models/storage/interface';
 import { AzureBlobStorage } from '../../../src/models/storage/azureBlobStorage';
 

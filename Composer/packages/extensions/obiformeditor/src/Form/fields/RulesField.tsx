@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
