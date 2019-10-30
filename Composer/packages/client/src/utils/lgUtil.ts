@@ -1,22 +1,40 @@
-import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
+import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import { get } from 'lodash';
 
 const lgStaticChecker = new StaticChecker();
 
-const lgImportResolver = new ImportResolver();
+interface Template {
+  Name: string;
+  Parameters: string[];
+  Body: string;
+}
 
 export function isValid(diagnostics: Diagnostic[]): boolean {
   return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
 }
 
 export function check(content: string, id = ''): Diagnostic[] {
-  // @ts-ignore
-  return lgStaticChecker.checkText(content, id, lgImportResolver);
+  return lgStaticChecker.checkText(content, id);
 }
 
 export function parse(content: string, id = ''): LGTemplate[] {
   const resource = LGParser.parse(content, id);
   return get(resource, 'Templates', []);
+}
+
+export function updateTemplate(content: string, { Name, Parameters, Body }: Template): string {
+  const resource = LGParser.parse(content);
+  return resource.updateTemplate(Name, Parameters, Body).toString();
+}
+
+export function addTemplate(content: string, { Name, Parameters, Body }: Template): string {
+  const resource = LGParser.parse(content);
+  return resource.addTemplate(Name, Parameters, Body).toString();
+}
+
+export function removeTemplate(content: string, Name: string): string {
+  const resource = LGParser.parse(content);
+  return resource.deleteTemplate(Name).toString();
 }
 
 export function combineMessage(diagnostics: Diagnostic[]): string {

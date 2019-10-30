@@ -3,7 +3,7 @@ import { ShellData } from 'shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';
 
-import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
+import { parseLgTemplate } from '../src/store/action/lg';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
