@@ -41,7 +41,7 @@ Language understanding is a core component of BF Composer, allowing developers a
 
 As dialogs are edited in the designer, developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
 
-![BF Composer NLU]()
+![BF Composer NLU](./media/introduction/intro-nlu.png)
 
  Bot Framework Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
 
@@ -49,15 +49,13 @@ As dialogs are edited in the designer, developers can continuously add to their 
 
 Creating grammatically correct, data-driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Bot Framework Composer's integrated [language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers - and the writers who work with them - to create replies with a great deal of flexibility.
 
-![BF Composer LG]()
+![BF Composer LG](.//media/language_generation/bot_responses.png)
 
 With Language Generation (LG), previously complex tasks can be quickly achieved:
-
- <!--   * *images for each of these?* -->
 * Include dynamic elements in messages
 * Generate grammatically correct lists, pronouns, articles
 * Provide context-sensitive variation in messages
-* Create Adaptive Cards attachments
+* Create Adaptive Cards attachments, as seen above
 
 
 ## Unified toolset
