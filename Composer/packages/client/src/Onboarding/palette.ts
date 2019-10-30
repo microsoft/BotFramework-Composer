@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IPalette } from 'office-ui-fabric-react';
 
 export const primaryColor = '#50e6ff';

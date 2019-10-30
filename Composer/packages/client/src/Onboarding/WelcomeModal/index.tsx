@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext } from 'react';
 import { Modal } from 'office-ui-fabric-react';
 

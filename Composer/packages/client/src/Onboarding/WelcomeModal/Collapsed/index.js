@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext } from 'react';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react';

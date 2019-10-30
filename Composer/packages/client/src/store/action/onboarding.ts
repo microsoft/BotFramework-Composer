@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ActionCreator } from '../types';
 import OnboardingState from '../../utils/onboardingStorage';
 

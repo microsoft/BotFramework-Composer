@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useCallback, useContext } from 'react';
 import formatMessage from 'format-message';
 import { navigate } from '@reach/router';

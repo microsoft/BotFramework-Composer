@@ -9,7 +9,6 @@ import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
-import onboardingStorage from '../../utils/onboardingStorage';
 
 import createReducer from './createReducer';
 

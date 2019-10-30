@@ -11,7 +11,7 @@ import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
 
 import * as home from './styles';
-import { ItemContainer } from './ItemContainer';
+import { ItemContainer } from './itemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
 
@@ -77,7 +77,7 @@ export const Home = props => {
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
-  
+
   const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
 
   const toolbarItems = [

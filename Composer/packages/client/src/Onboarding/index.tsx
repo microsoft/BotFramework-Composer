@@ -1,4 +1,7 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { navigate, Location } from '@reach/router';
 import formatMessage from 'format-message';
 

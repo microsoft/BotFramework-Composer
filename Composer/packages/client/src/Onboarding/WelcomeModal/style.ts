@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IModalStyleProps, IModalStyles, IStyleFunctionOrObject } from 'office-ui-fabric-react';
 
 const primaryColor = '#50e6ff';
