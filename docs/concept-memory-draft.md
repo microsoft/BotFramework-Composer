@@ -160,4 +160,4 @@ Bot Framework provides a variety of shortcuts for referring to properties in mem
 
 ## Next
 
-* [link to next concept](next concept link) 
+* [Language Generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) 
