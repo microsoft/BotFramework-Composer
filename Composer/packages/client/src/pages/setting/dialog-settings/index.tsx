@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect } from 'react';
-import { RichEditor } from 'code-editor';
+import { RichEditor, JsonEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
@@ -35,7 +35,6 @@ export const DialogSettings = () => {
   const [value, setValue] = useState(JSON.stringify(visibleSettings, null, 2));
   const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-  const [parseError, setParseError] = useState('');
 
   useEffect(() => {
     setValue(JSON.stringify(editing ? visibleSettings : obfuscate(visibleSettings), null, 2));
@@ -88,23 +87,11 @@ export const DialogSettings = () => {
     }
   };
 
-  const handleChange = (value, commit) => {
-    setValue(value);
-    setParseError('');
-    try {
-      const result = JSON.parse(value);
-      if (commit || !absHosted) {
-        saveChangeResult(result);
-      }
-    } catch (err) {
-      setParseError('invalid json');
+  const handleChange = (result, commit) => {
+    setValue(result);
+    if (commit || !absHosted) {
+      saveChangeResult(result);
     }
-  };
-
-  const handleMount = monaco => {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-    });
   };
 
   return botName ? (
@@ -112,14 +99,10 @@ export const DialogSettings = () => {
       {hostedControl()}
       {toggle()}
       <div css={settingsEditor}>
-        <RichEditor
-          language="json"
+        <JsonEditor
           onChange={x => handleChange(x, false)}
-          errorMsg={parseError}
-          editorWillMount={handleMount}
-          options={{ folding: true, readOnly: !editing }}
-          value={value}
-          helpURL="https://www.json.org"
+          options={{ readOnly: !editing }}
+          value={editing ? visibleSettings : obfuscate(visibleSettings)}
         />
       </div>
     </div>
