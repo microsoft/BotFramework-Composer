@@ -33,7 +33,7 @@ Usually when a dialog is called into action, its **recognizer** will start to pr
 > [!NOTE]
 > **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you design and model your dialog system.   
 
-Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Framework Composer offers a wide range of action components such as `Send a response` for sending text messages and `Ask a Question` for prompts / asking questions. Users can also add branchs and loops when designing their dialog system using the `Create a condition` action, or use `Manage properties` for setting properties and memory use in [Conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md). 
+Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Bot Framework Composer offers a wide range of action components such as `Send a response` for sending text messages and `Ask a Question` for prompts / asking questions. Users can also add branchs and loops when designing their dialog system using the `Create a condition` action, or use `Manage properties` for setting properties and memory use in a [conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory-draft.md). 
 
 ![actions](./media/dialog/actions.png)
 
