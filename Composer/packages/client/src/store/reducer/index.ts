@@ -111,13 +111,13 @@ const updateLuTemplate: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const setBotStatus = (state, { status, botEndpoint }) => {
+const setBotStatus: ReducerFunc = (state, { status, botEndpoint }) => {
   state.botEndpoint = botEndpoint || state.botEndpoint;
   state.botStatus = status;
   return state;
 };
 
-const updateRemoteEndpoint = (state, { slot, botEndpoint }) => {
+const updateRemoteEndpoint: ReducerFunc = (state, { slot, botEndpoint }) => {
   state.remoteEndpoints[slot] = botEndpoint;
   return state;
 };
@@ -247,34 +247,48 @@ const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   return state;
 };
 
+const noOp: ReducerFunc = state => {
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_FAILURE]: noOp,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
+  [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
+  [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
   [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG]: removeDialog,
-  [ActionTypes.SET_BOT_STATUS_SUCCESS]: setBotStatus,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
+  [ActionTypes.GET_STORAGE_FAILURE]: noOp,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
+  [ActionTypes.UPDATE_LG_FAILURE]: noOp,
   [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.CREATE_LG_FAILURE]: noOp,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.REMOVE_LG_FAILURE]: noOp,
   [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
+  [ActionTypes.UPDATE_LU_FAILURE]: noOp,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.CREATE_LU_FAILURE]: noOp,
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.REMOVE_LU_FAILURE]: noOp,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
-  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
-  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
+  [ActionTypes.TO_START_BOT]: noOp,
+  [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
@@ -286,4 +300,4 @@ export const reducer = createReducer({
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
-} as { [type in ActionTypes]: ReducerFunc });
+});
