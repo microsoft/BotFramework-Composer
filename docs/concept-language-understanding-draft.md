@@ -129,7 +129,7 @@ The all-up view lists all LU content you have authored as well as some details, 
 
 Now the last step is to publish your LU content to LUIS. 
 
-Click `Start Bot` on the upper right corner of your Composer, fill in your LUIS authoring key and click `Publish`. If you do not have a LUIS account, you need to apply one first from [here](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS authoring key please read [here](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md). 
+Click `Start Bot` on the upper right corner of your Composer, fill in your LUIS authoring key and click `Publish`. If you do not have a LUIS account, you need to apply one first from [here](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS authoring key please read [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key). 
 
 ![publish_luis](./media/add_luis/publish_luis.png)
 
