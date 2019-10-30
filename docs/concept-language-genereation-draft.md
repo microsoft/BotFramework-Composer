@@ -24,12 +24,12 @@ Composer currently supports three different types of templates:
 - Strucutred template (this is new and read more [here](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md))
 
 ### Anatomy of a template 
-A template usuaslly consists of two parts: 
-- name of the template, which is defined using "#" AND   
-- a list of one-of variation text values defined using "-" OR 
+A template usuaslly consists of a name of the template with "#" and one of the following parts: 
+  
+- a list of one-of variation text values defined using "-" 
 - a collection of conditions, each with a 
   - condition expression which is expressed using the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and 
-  - List of one-of variation text values per condition OR 
+  - List of one-of variation text values per condition 
 - a structure that contains 
   - Structure-name 
   - Properties 
