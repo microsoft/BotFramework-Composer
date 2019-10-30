@@ -64,7 +64,7 @@ With Language Generation (LG), previously complex tasks can be quickly achieved:
 
 Under the hood, Bot Framework Composer harnesses the power of many of the components from the Bot Framework SDK. When building bots in Composer, developers will have access to:
 
-* [Adaptive Dialogs](Yan's link, or link to adaptive?) and the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk)
+* [Adaptive Dialogs](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) and the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk)
 * Natural Language Understanding service from [LUIS](https://www.luis.ai/home)
 * Built-in [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) and [expression library](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 * [QnA Maker](https://www.qnamaker.ai/) capabilities
@@ -78,4 +78,4 @@ After creating bots with Bot Framework Composer, the resulting bot project will 
 
 ## Next
 
-* [Dialogs](TBD)
+* Learn how to [create your first echo bot](./tutorial-create-echobot.md)
