@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { navigate, Location } from '@reach/router';
 import formatMessage from 'format-message';
 
@@ -14,7 +14,10 @@ import OnboardingContext from './context';
 import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal';
 
+const getCurrentSet = stepSets => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
+
 const Onboarding: React.FC = () => {
+  const didMount = useRef(false);
   const {
     actions: { onboardingSetComplete },
     state: {
@@ -23,11 +26,11 @@ const Onboarding: React.FC = () => {
     },
   } = useContext(StoreContext);
 
-  const [currentSet, setCurrentSet] = useState<number>(0);
+  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets());
+  const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [hideModal, setHideModal] = useState(true);
   const [minimized, updateMinimized] = useState<boolean>(false);
-  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets());
   const [teachingBubble, setTeachingBubble] = useState<any>({});
 
   useEffect(() => {
@@ -35,13 +38,11 @@ const Onboarding: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!complete) {
-      const current = stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
-      setCurrentSet(current);
-    } else {
+    if (didMount.current && complete) {
       setCurrentSet(0);
       setCurrentStep(0);
     }
+    didMount.current = true;
   }, [complete, stepSets]);
 
   useEffect(() => {

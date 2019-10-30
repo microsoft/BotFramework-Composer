@@ -11,7 +11,7 @@ import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
 
 import * as home from './styles';
-import { ItemContainer } from './itemContainer';
+import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
 
@@ -144,7 +144,6 @@ export const Home = props => {
                 content={formatMessage('New')}
                 styles={home.newBotItem}
                 onClick={onClickNewBotProject}
-                forwardedRef={addRef}
               />
             </div>
             {recentProjects.length > 0 ? (
@@ -155,6 +154,7 @@ export const Home = props => {
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
+                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
@@ -164,6 +164,7 @@ export const Home = props => {
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
+                forwardedRef={addRef}
               />
             )}
           </div>

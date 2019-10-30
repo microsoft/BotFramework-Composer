@@ -17,6 +17,7 @@ interface ItemContainerProps {
     content?: SerializedStyles;
   };
   disabled?: boolean;
+  forwardedRef?: any;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -25,6 +26,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   content,
   styles = {},
   disabled,
+  forwardedRef,
 }) => {
   return (
     <div
@@ -35,6 +37,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           await onClick();
         }
       }}
+      ref={forwardedRef}
     >
       <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
         <div css={itemContainerTitle}>{title}</div>
