@@ -1,21 +1,14 @@
 
 # bfdactivity-037171
-[Activity
-    Text = Hi, nice to meet you! I'm the todo bot. Here are some things I can help with
-    @{Welcome-Actions()}
-]
+- [Welcome-Message]
 
 # bfdactivity-113335
-[Activity
-    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
-    @{Welcome-Actions()}
-]
+- [Welcome-Message]
+
 
 # bfdactivity-456012
-[Activity
-    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
-    @{Welcome-Actions()}
-]
+- [Welcome-Message]
+
 
 # bfdactivity-052697
 [Activity
@@ -102,6 +95,12 @@
 - Hi
 - Hello
 - Hiya
+
+# Welcome-Message
+[Activity
+    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
+    @{Welcome-Actions()}
+]
 
 > This template uses pre-built functions to construct a response.
 # Delete-Items-readback
