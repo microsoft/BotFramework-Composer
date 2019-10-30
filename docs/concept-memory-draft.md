@@ -33,45 +33,58 @@ The bot's memory also has two "ephemeral" scopes - a place to store temporary va
 * **turn** is associated with a single turn. You can also think of this as the bot handling a single message from the user. Properties in the turn scope are discarded at the end of the turn.
 
 ## Set properties with prompts
-Collecting input from a user is done using **prompts**. Prompts define the question to pose to the user with the **Initial Prompt**, as well as a **Property** in memory** where the user's response will be stored. Prompt responses can be formatted before being stored by selecting an option for **Output Format**.
+Input is collected from user's with prompt types provided in the **Ask a question** sub-menu.
 
-![Prompt definition](./media/memory-concept/memory-text.png)
+![Ask a question submenu]()
+
+Prompts define the question to pose to the user and are set in the **Prompt** box under the **Bot Asks** tab in property panel on the left. 
+
+![Prompt Bot Asks]()
+
+Under the **User Answers** tab you'll see **Property to fill**, where the user's response will be stored. Prompt responses can be formatted before being stored by selecting an option for **Output Format**, and their locale can be set with **Default locale**.
+
+![Prompt User Answers]()
 
 In the above example of a text prompt, the result of the prompt "Hello, what is your name?" will be automatically stored as the `user.name` property. The result will be stored lowercase since the *lowercase* ouput format was selected.
 
-## Set properties using memory actions
+For more information about implementing text other prompts and read [asking users for input](./howto-ask-for-user-input.md). 
 
-Bot Framework provides a set of memory manipulation actions to create and modify properties in memory. Properties can be created on the fly in the editor - the runtime will automatically manage the underlying data for you in the background.
+## Manipulating properties using memory actions
 
-![Memory manipulation menu](./existingdocs/Assets/memory-manipulation-menu.png)
+Bot Framework provides a set of memory manipulation actions in the **Manage properties** sub-menu to create and modify properties in memory. Properties can be created on the fly in the editor - the runtime will automatically manage the underlying data for you in the background.
 
+![Memory manipulation menu]()
+### Set a Property
 Use **Set a Property** to set the value of a property.
 
 ![Delete Property](./media/memory-concept/memory-setproperty.png)
 
 For example, set `user.onboarded` to `true`. The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](#expressions). When storing simple values, it is not necessary to initialize the property.
 
+### Initialize a Property
 Use **Initialize a Property** to create new properties that are objects or arrays. This allows your bot to use sub-properties, or store multiple values inside the property. 
 
 ![Initialize Property](./media/memory-concept/memory-initializeproperty.png)
 
 It is important to note that before setting the value of a sub-property like `user.profile.age`, the `user.profile` must first be initialized. It is not necessary to further initialize `user.profile.age` unless `age` must also contain sub-values.
 
+### Edit an Array Property
 Use **Edit an Array Property** to add and remove items from an array. Items can be added or removed from the top or bottom of an array using push, pop and take. Items can also be removed from an array. 
 
 ![Edit Array Property](./media/memory-concept/memory-editarrayproperty.png)
 
 Note that it is possible to push the value of an existing property into another Array property - for example, push `turn.choice` onto `dialog.choices`.
 
+### Delete a Property
 Use **Delete a Property** to remove a property from memory.
 
 ![Delete Property](./media/memory-concept/memory-deleteproperty.png)
 
-## Set properties with dialogs
+## Manipulating properties with dialogs
 
-Dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to the parent.
+Dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to the parent. 
 
-For example, a child dialog might first **initialize an object property** called `dialog.profile`.  Then, using prompts, build a compound property representing a user profile.  Finally, the dialog returns the compound value to the parent dialog:
+For example, a child dialog might first **Initialize an object** property called `dialog.profile`.  Then, using prompts, build a compound property representing a user profile.  Finally, the dialog returns the compound value to the parent dialog:
 
 ![Sample Dialog](./media/memory-concept/memory-setwithdialog.png)
 
@@ -112,9 +125,9 @@ Bot Framework uses the [common expression language](https://github.com/microsoft
 
 When used in expressions, no special notation is necessary to refer to a property from memory.
 
-### Memory in Branching Actions
+### Memory in branching actions
 
-A bot can evaluate values from memory when making decisions inside a branching action like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
+A bot can evaluate values from memory when making decisions inside a [branching action](./howto-controlling-conversation-flow.md) like an `If/Else` or `Switch` action. The conditional expression that is tested in one of these branching actions is an [expression](#expressions) that, when evaluated, drives the decision.
 
 In the example below, the expression `user.profile.age > 13` will evaluate to either `True` or `False`, and the branch action will then execute the appropriate branch.
 
@@ -126,9 +139,9 @@ In this second example, the value of `turn.choice` is used to match against mult
 
 ### Memory in loops
 
-When using `For each` and `For each Page` actions, properties also come into play. The definition of a for loop requires three properties: one that holds the list of items to loop over, one that will be used to hold the currently selected item inside the loop, and one to hold the array index of the selected item. The bot manages the value and index properties automatically.
+When using `For each` and `For each Page` actions, properties also come into play. Both require an **Items property** that holds the array, and **For each page** loops also require a **Page size**, or number of items per page
 
-![foreach properties](./existingdocs/Assets/foreach-properties.png)
+![for eahc page properties]()
 
 ### Memory in LG
 
@@ -160,4 +173,4 @@ Bot Framework provides a variety of shortcuts for referring to properties in mem
 
 ## Next
 
-* [Language Generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) 
+* [Language Generation in Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) 
