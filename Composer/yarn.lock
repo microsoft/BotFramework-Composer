@@ -3977,9 +3977,9 @@ botbuilder-expression-parser@^4.5.9:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz":
-  version "4.7.0-preview0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz#46ac6e53e44ba64ae56971ab8404c3f2f9ab239d"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz":
+  version "4.7.0-preview2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz#2a3dd7d7991e0727fb88630501d2fb14d475537b"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botframework-expressions "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz"
