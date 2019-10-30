@@ -47,7 +47,7 @@ const turtorials = [
 
 export const Home = props => {
   const { state, actions } = useContext(StoreContext);
-  const { recentProjects, templateProjects } = state;
+  const { botName, recentProjects, templateProjects } = state;
   const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
 
   const onClickRecentBotProject = async path => {
@@ -82,6 +82,7 @@ export const Home = props => {
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
+      disabled: false,
     },
     {
       type: 'action',
@@ -94,6 +95,7 @@ export const Home = props => {
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
+      disabled: false,
     },
     {
       type: 'action',
@@ -105,6 +107,7 @@ export const Home = props => {
         onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
       },
       align: 'left',
+      disabled: botName ? false : true,
     },
   ];
 
