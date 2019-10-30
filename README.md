@@ -15,7 +15,7 @@ Bot Framework Composer is an integrated development tool for developers and mult
 
 Bot Framework Composer, an open source tool, enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the [Bot Framework SDK](https://github.com/microsoft/botframework). The Composer app reads and writes from the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a [declarative](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog/declarative) JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates. 
 
-## Get Started
+## Getting started
 
 - To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
 - To get started [deploy Bot Framework Composer](./docs/Deploying-Composer.md) on your local machine, [create your first bot](./docs/Create-Your-First-bot.md) and review the various [samples](./docs/samples.md).
@@ -34,8 +34,6 @@ Bot Framework Composer, an open source tool, enables teams working to create bot
 
 > Additional documentation for Composer [can be found here](./docs/README.md).
 
-
-
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
@@ -50,7 +48,17 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Reporting Security Issues
+### Issues and feature requests
+
+Please file issues and feature requests [here](https://github.com/microsoft/BotFramework-Composer/issues/issues). 
+
+Also, see current [known issues](https://github.com/microsoft/BotFramework-Composer/labels/known%20issue) for high impact bugs you may experience.
+
+### Submitting pull requests
+
+If you'd like to contribute pull requests to Composer, see the [contributing guide](./CONTRIBUTING.md) for helpful information on our development workflow.
+
+## Reporting security issues
 
 Security issues and bugs should be reported privately, via email, to the Microsoft Security
 Response Center (MSRC) at [secure@microsoft.com](mailto:secure@microsoft.com). You should
