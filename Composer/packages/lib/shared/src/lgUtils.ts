@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 const TEMPLATE_PATTERN = /^\[(bfd(.+)-(\d+))\]$/;
-export function isLgTemplate(template: string): boolean {
+export function isLgTemplateString(template: string): boolean {
   return TEMPLATE_PATTERN.test(template);
 }
 

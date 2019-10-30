@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { isLgTemplate, parseLgTemplateString } from './lgUtils';
+import { isLgTemplateString, parseLgTemplateString } from './lgUtils';
 
 const NestedFieldNames = {
   Actions: 'actions',
@@ -83,7 +83,7 @@ const overrideLgActivity = async (data, { lgApi }) => {
 const overrideLgPrompt = async (data, { lgApi }) => {
   const promptFields = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt'];
   for (const field of promptFields) {
-    if (isLgTemplate(data[field])) {
+    if (isLgTemplateString(data[field])) {
       data[field] = await copyLgActivity(data[field], data.$designer.id, lgApi);
     }
   }
