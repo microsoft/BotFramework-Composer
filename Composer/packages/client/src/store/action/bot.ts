@@ -1,19 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import axios from 'axios';
-
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants';
+import { ActionTypes } from './../../constants';
+import httpClient from './../../utils/httpUtil';
 
 export const connectBot: ActionCreator = async (store, settings) => {
   const state = store.getState();
   const { botEnvironment } = state;
-  const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
+  const path = `/launcher/connect?botEnvironment=${botEnvironment}`;
 
   try {
-    const res = await axios.get(path);
+    const res = await httpClient.get(path);
     store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
@@ -36,10 +35,10 @@ export const getConnect: ActionCreator = async (store, env) => {
   if (env) {
     botEnvironment = env;
   }
-  const path = `${BASEURL}/launcher/connect?botEnvironment=${botEnvironment}`;
+  const path = `/launcher/connect?botEnvironment=${botEnvironment}`;
 
   try {
-    const res = await axios.get(path);
+    const res = await httpClient.get(path);
     store.dispatch({
       type: ActionTypes.GET_ENDPOINT_SUCCESS,
       payload: {
@@ -54,11 +53,11 @@ export const getConnect: ActionCreator = async (store, env) => {
 
 export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings) => {
   const { botEnvironment } = getState();
-  const path = `${BASEURL}/launcher/sync`;
+  const path = `/launcher/sync`;
   try {
     const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';
 
-    await axios.post(path, { ...settings, targetEnvironment });
+    await httpClient.post(path, { ...settings, targetEnvironment });
     dispatch({
       type: ActionTypes.RELOAD_BOT_SUCCESS,
       payload: {
@@ -71,9 +70,9 @@ export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings)
 };
 
 export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
-  const path = `${BASEURL}/launcher/publishHistory`;
+  const path = `/launcher/publishHistory`;
   try {
-    const res = await axios.get(path);
+    const res = await httpClient.get(path);
     dispatch({
       type: ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS,
       payload: {
@@ -86,7 +85,7 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
 };
 
 export const publish: ActionCreator = async ({ dispatch }) => {
-  const path = `${BASEURL}/launcher/publish`;
+  const path = `/launcher/publish`;
 
   dispatch({
     type: ActionTypes.PUBLISH_BEGIN,
@@ -96,7 +95,7 @@ export const publish: ActionCreator = async ({ dispatch }) => {
   });
 
   try {
-    const res = await axios.post(path);
+    const res = await httpClient.post(path);
 
     // test for error
     dispatch({
@@ -116,7 +115,7 @@ export const publish: ActionCreator = async ({ dispatch }) => {
 };
 
 export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
-  const path = `${BASEURL}/launcher/publish/${version}`;
+  const path = `/launcher/publish/${version}`;
 
   dispatch({
     type: ActionTypes.PUBLISH_BEGIN,
@@ -126,7 +125,7 @@ export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
   });
 
   try {
-    const res = await axios.post(path);
+    const res = await httpClient.post(path);
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {
