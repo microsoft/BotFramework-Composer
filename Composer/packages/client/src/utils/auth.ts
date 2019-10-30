@@ -10,6 +10,7 @@ import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
 import { Store } from '../store/types';
 
 import storage from './storage';
+import httpClient from './httpUtil';
 
 export function isTokenExpired(token: string): boolean {
   try {
@@ -60,7 +61,7 @@ export function prepareAxios(store: Store) {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
-    axios.interceptors.request.use(config => {
+    httpClient.interceptors.request.use(config => {
       // only attach cancellation token to api requests
       if (config.url && config.url.includes('/api/')) {
         config.cancelToken = cancelSource.token;
@@ -73,7 +74,7 @@ export function prepareAxios(store: Store) {
       return config;
     });
 
-    axios.interceptors.response.use(
+    httpClient.interceptors.response.use(
       res => {
         return res;
       },
