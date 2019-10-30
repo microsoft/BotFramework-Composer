@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ActionTypes, FileTypes } from '../../../src/constants/index';
 import { reducer } from '../../../src/store/reducer/index';
 
@@ -28,10 +31,6 @@ describe('test all reducer handlers', () => {
     expect(result.lgFiles).toBe('test lgFiles');
   });
 
-  it('test setBotStatus reducer', () => {
-    const result = reducer({}, { type: ActionTypes.SET_BOT_STATUS_SUCCESS, payload: { status: 'mock status' } });
-    expect(result.botStatus).toBe('mock status');
-  });
   it('test getStorageFileSuccess reducer', () => {
     const mockStorageFile = {
       data: {

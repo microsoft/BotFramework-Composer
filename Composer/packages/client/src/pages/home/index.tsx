@@ -143,7 +143,9 @@ export const Home = props => {
                 title={addButton}
                 content={formatMessage('New')}
                 styles={home.newBotItem}
-                onClick={onClickNewBotProject}
+                onClick={() => {
+                  setCreationFlowStatus(CreationFlowStatus.NEW);
+                }}
               />
             </div>
             {recentProjects.length > 0 ? (

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getExtension, getBaseName, upperCaseName } from '../../src/utils';
 
 const files = ['a.text', 'a.b.text', 1];

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getDialogData, setDialogData } from '../../src/utils/dialogUtil';
 
 const dialogsMap = {
