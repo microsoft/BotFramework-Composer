@@ -1,4 +1,4 @@
-# Conversation flow
+# Conversation flow and memory
 
 All bots built with Bot Framework Composer have a "memory" - a representation of everything that is currently in the bot's active mind. Developers can store and retrieve values in the bot's memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot. Properties from memory can be used inside templates, and can also be used as part of a calculation.
 
