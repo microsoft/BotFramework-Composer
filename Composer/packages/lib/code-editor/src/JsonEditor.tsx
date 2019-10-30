@@ -5,15 +5,17 @@ import React, { useState, useEffect } from 'react';
 import { editor } from '@bfcomposer/monaco-editor';
 import { EditorWillMount } from '@bfcomposer/react-monaco-editor';
 
+import * as utils from './utils';
 import { RichEditor, RichEditorProps } from './RichEditor';
 
 interface JsonEditorProps extends Omit<RichEditorProps, 'language' | 'value' | 'errorMsg' | 'onChange'> {
   onChange: (jsonData: any) => void;
   value?: object;
+  obfuscate?: boolean;
 }
 
 export function JsonEditor(props: JsonEditorProps) {
-  const { options: additionalOptions, value: initialValue, onChange, editorWillMount, ...rest } = props;
+  const { options: additionalOptions, value: initialValue, onChange, editorWillMount, obfuscate, ...rest } = props;
   const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
   const [parseError, setParseError] = useState<string>('');
 
@@ -24,11 +26,9 @@ export function JsonEditor(props: JsonEditorProps) {
   };
 
   useEffect(() => {
-    const str = JSON.stringify(initialValue, null, 2);
-    if (str !== value) {
-      setValue(str);
-    }
-  }, [initialValue]);
+    const result = obfuscate ? utils.obfuscate(initialValue) : initialValue;
+    setValue(JSON.stringify(result, null, 2));
+  }, [obfuscate]);
 
   const handleChange = value => {
     setValue(value);

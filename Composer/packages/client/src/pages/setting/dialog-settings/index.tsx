@@ -4,13 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect } from 'react';
-import { RichEditor, JsonEditor } from 'code-editor';
+import { JsonEditor } from 'code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
-import { obfuscate } from '../../../utils/objUtil';
 
 import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
 
@@ -32,13 +31,9 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const [value, setValue] = useState(JSON.stringify(visibleSettings, null, 2));
+  const [value, setValue] = useState(visibleSettings);
   const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-
-  useEffect(() => {
-    setValue(JSON.stringify(editing ? visibleSettings : obfuscate(visibleSettings), null, 2));
-  }, [origSettings, editing]);
 
   const changeEditing = (_, on) => {
     setEditing(on);
@@ -102,7 +97,8 @@ export const DialogSettings = () => {
         <JsonEditor
           onChange={x => handleChange(x, false)}
           options={{ readOnly: !editing }}
-          value={editing ? visibleSettings : obfuscate(visibleSettings)}
+          value={visibleSettings}
+          obfuscate={!editing}
         />
       </div>
     </div>
