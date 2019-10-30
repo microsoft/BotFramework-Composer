@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { IButtonStyles } from 'office-ui-fabric-react';
-import { ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
+import { IIconStyles } from 'office-ui-fabric-react';
+import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
+import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 
 export const outline = css`
   display: flex;
@@ -15,19 +16,27 @@ export const page = css`
   display: flex;
   overflow: auto;
 `;
+
 export const leftPage = css`
   flex: 50%;
   padding: 25px;
+  display: flex;
+  flex-direction: column;
 `;
+
 export const rightPage = css`
   flex: 1;
   padding: 25px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const title = css`
   display: block;
   font-size: 28px;
   line-height: 36px;
+  font-weight: normal;
+  margin: 0;
 `;
 
 export const introduction = css`
@@ -38,57 +47,54 @@ export const introduction = css`
   max-width: 2000px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 18px;
 `;
 
 export const newBotContainer = css`
   display: flex;
   flex-wrap: wrap;
-  margin-left: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 `;
 
 export const leftContainer = css`
-  display: block;
   min-width: 535px;
   margin-top: 10px;
   margin-bottom: 10px;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
-export const itemContainer = css`
+export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
-  position: relative;
-  cursor: pointer;
+  cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
-  min-height: 120px;
-  min-width: 150px;
-  height: 13vh;
+  min-width: 180px;
+  height: 130px;
   width: 11vw;
   margin-right: 30px;
 `;
 
+export const itemContainer = css`
+  height: 50%;
+`;
+
 export const itemContainerTitle = css`
-  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  transform: translate(10%, 0%);
   font-size: 20px;
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
 `;
 
 export const itemContainerContent = css`
-  position: absolute;
   font-weight: 600;
-  width: 90%;
-  max-height: 55%;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  transform: translate(10%, 30%);
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  display: -webkit-box !important;
+  padding: 0.5rem 1rem;
 `;
 
 export const subtitle = css`
@@ -96,6 +102,7 @@ export const subtitle = css`
   line-height: 24px;
   display: flex;
   font-weight: 600;
+  margin: 0;
 `;
 
 export const bluetitle = css`
@@ -104,6 +111,11 @@ export const bluetitle = css`
   display: flex;
   font-weight: 600;
   color: #0078d4;
+  margin: 0;
+`;
+
+export const examplesDescription = css`
+  margin: 0;
 `;
 
 export const linkContainer = css`
@@ -127,112 +139,116 @@ export const botContainer = css`
   margin-top: 24px;
 `;
 
-export const button = () => {
-  const normal: IButtonStyles = {
-    root: {
-      background: 'transparent',
-      padding: '0px',
-    },
-    rootHovered: {
-      background: 'transparent',
-    },
-    rootChecked: {
-      background: 'transparent',
-    },
-    icon: {
-      fontSize: '24px',
-      color: 'white',
-    },
-  };
-  return normal;
+export const button: IIconStyles = {
+  root: {
+    fontSize: '24px',
+    fontWeight: 600,
+    color: 'white',
+  },
+};
+
+export const disabledItem = {
+  title: css`
+    background-color: #f2f2f2;
+    color: #a19f9d;
+  `,
+  content: css`
+    border: 2px solid #f2f2f2;
+    width: auto;
+    font-size: smaller;
+    word-wrap: break-word;
+    color: #a19f9d;
+  `,
+};
+
+const baseBotItem = {
+  container: css`
+    box-shadow: ${Depths.depth4};
+    transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
+
+    &:hover,
+    &:focus {
+      box-shadow: ${Depths.depth16};
+    }
+
+    &:active {
+      box-shadow: ${Depths.depth0};
+    }
+  `,
+  content: css`
+    background-color: #f2f2f2;
+  `,
 };
 
 export const newBotItem = {
-  container: {
-    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
-  },
-  title: { backgroundColor: '#0078D4' },
-  content: { backgroundColor: '#F2F2F2' },
+  ...baseBotItem,
+  title: css`
+    background-color: #0078d4;
+  `,
 };
+
 export const lastestBotItem = {
-  container: {
-    boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
-  },
-  title: { backgroundColor: '#56CCF2' },
-  content: { backgroundColor: '#F2F2F2' },
-};
-export const videoItem = {
-  title: { backgroundColor: '#F2F2F2', color: '#A19F9D' },
-  content: {
-    border: '2px solid #F2F2F2',
-    width: 'auto',
-    fontSize: 'smaller',
-    wordWrap: 'break-word',
-    color: '#A19F9D',
-  },
+  ...baseBotItem,
+  title: css`
+    background-color: #56ccf2;
+  `,
 };
 
 export const detailListContainer = css`
   position: relative;
-  min-height: 35vh;
   max-height: 40vh;
   padding-top: 10px;
   overflow: hidden;
   flex-grow: 1;
+  min-height: 250px;
 `;
 
 export const exampleListContainer = css`
   border: 1px solid #979797;
   margin-top: 20px;
   position: relative;
-  height: 90%;
   min-width: 260px;
+  flex: 1;
+  min-height: 582px;
 `;
 
 export const loading = css`
   height: 50vh;
   width: 600px;
 `;
+
 const theme: ITheme = getTheme();
-const { palette, semanticColors, fonts } = theme;
-export const exampleListClass = mergeStyleSets({
-  itemCell: [
-    getFocusStyle(theme, { inset: -1 }),
-    {
-      minHeight: 54,
-      padding: 10,
-      boxSizing: 'border-box',
-      borderBottom: `1px solid ${semanticColors.bodyDivider}`,
-      display: 'flex',
-      selectors: {
-        '&:hover': { background: palette.neutralLight },
-      },
-    },
-  ],
-  image: {
-    width: 50,
-    height: 50,
-    fontSize: 50,
-    backgroundColor: '#0078D4',
-    color: 'white',
-    margin: '5px',
-  },
-  itemContent: {
-    marginLeft: 10,
-    overflow: 'hidden',
-    flexGrow: 1,
-  },
-  itemName: [
-    fonts.xLarge,
-    {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
-  ],
-  itemIndex: {
-    fontSize: fonts.small.fontSize,
-    color: palette.neutralTertiary,
-    marginBottom: 10,
-  },
-});
+const { palette, fonts } = theme;
+export const exampleListCell = css`
+  min-height: 54px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+
+  &:hover {
+    background: ${palette.neutralLight};
+  }
+`;
+
+export const exampleListCellIcon = css`
+  height: 51px;
+  width: 51px;
+  flex-basis: 51px;
+`;
+
+export const exampleListCellContent = css`
+  margin-left: 16px;
+  overflow: hidden;
+  flex: 1;
+`;
+
+export const exampleListCellName = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const exampleListCellDescription = css`
+  font-size: ${fonts.small.fontSize};
+  color: ${palette.neutralTertiary};
+`;

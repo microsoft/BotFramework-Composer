@@ -95,7 +95,7 @@ export function DefineConversation(props) {
     <Fragment>
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
-        <Stack horizontal={enableLocationBrowse} gap="2rem" styles={wizardStyles.stackinput}>
+        <Stack horizontal={enableLocationBrowse} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}

@@ -8,7 +8,7 @@ export const InitNodeSize = {
 
 export const DiamondSize = {
   width: 30,
-  height: 17,
+  height: 12,
 };
 
 export const LoopIconSize = {

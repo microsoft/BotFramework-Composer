@@ -4,6 +4,7 @@
 import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontWeights } from '@uifabric/styling';
+import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const textFieldlabel = {
   root: [
@@ -13,9 +14,10 @@ export const textFieldlabel = {
   ],
 };
 
-export const dropdown = {
+export const dropdown: Partial<IDropdownStyles> = {
   subComponentStyles: {
     label: textFieldlabel,
+    panel: {},
   },
   // root: [
   //   {
@@ -32,7 +34,7 @@ export const backIcon = css`
   height: 20px;
   margin: 18px 0px 0px 3px;
   padding: 8px;
-  &: hover {
+  &:hover {
     background-color: rgb(244, 244, 244);
   }
 `;

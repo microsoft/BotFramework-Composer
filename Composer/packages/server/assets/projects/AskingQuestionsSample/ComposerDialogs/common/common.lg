@@ -31,9 +31,6 @@ I can show you examples on how to use actions, You can enter number 01-04
 # bfdactivity-068558
 -[help]
 
-# bfdactivity-587377
--[ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)]
-
 # bfdactivity-004212
 -You select: {user.style}
 
@@ -55,12 +52,6 @@ I can show you examples on how to use actions, You can enter number 01-04
 # bfdactivity-538962
 -Hello {user.name}, nice to talk to you!
 
-# bfdactivity-118486
--Hello {user.name}, nice to talk to you!
-
-# bfdactivity-509484
--[help]
-
 # bfdactivity-991558
 -[ShowEmailSummary(user)]
 
@@ -72,7 +63,4 @@ I can show you examples on how to use actions, You can enter number 01-04
 
 # bfdactivity-581197
 -[help]
-
-# bfdactivity-172545
-- Welcome to Input Sample Bot.
 
