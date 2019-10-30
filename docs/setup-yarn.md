@@ -26,7 +26,7 @@ yarn build
 ```
   This command builds the Composer app. The build process can take few minutes.
   
- If you are having trouble intalling or building Composer you can also run `yarn tableflip`, and then run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
+ If you are having trouble intalling or building Composer run `yarn tableflip`, and then run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
 
 ```
 yarn startall
