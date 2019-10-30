@@ -2,25 +2,9 @@
 // Licensed under the MIT License.
 
 import { useContext, useState, useEffect } from 'react';
+import { parseLgTemplateString } from 'shared';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
-
-// matches [bfd<someName>-123456]
-const TEMPLATE_PATTERN = /^\[(bfd.+-\d{6})\]$/;
-
-const getTemplateId = (str?: string): string | null => {
-  if (!str) {
-    return null;
-  }
-
-  const match = TEMPLATE_PATTERN.exec(str);
-
-  if (!match || !match[1]) {
-    return null;
-  }
-
-  return match[1];
-};
 
 export const useLgTemplate = (str?: string, dialogId?: string) => {
   const { getLgTemplates } = useContext(NodeRendererContext);
@@ -28,7 +12,8 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
   let cancelled = false;
 
   const updateTemplateText = async () => {
-    const templateId = getTemplateId(str);
+    const lg = parseLgTemplateString(str || '');
+    const templateId = lg ? lg.lgId : '';
 
     if (templateId && dialogId) {
       // this is an LG template, go get it's content
