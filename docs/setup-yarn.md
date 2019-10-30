@@ -1,6 +1,8 @@
 # Set up Bot Framework Composer using Yarn
 
-Bot Framework Composer is designed to be a hosted web app. Currently, you need to run Composer locally as a web app and can do so using Yarn. To set up and install Composer with docker you can read more [here](link to docker setup). 
+Bot Framework Composer is designed to be a hosted web app. Currently, you need to run Composer locally as a web app and can do so using Yarn. 
+
+<!---To set up and install Composer with docker you can read more [here](link to docker setup).-->
 
 ## Prerequisites
 
