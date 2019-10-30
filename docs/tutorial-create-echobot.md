@@ -28,7 +28,7 @@ After opening in a browser click the **New** button at the top of the homepage.
 
 7. Type anything in the Emulator to have the bot echo back your response.
 
-![test in emulator](./media/tutorial-echobot/.gif)
+![test in emulator](./media/tutorial-echobot/test-emulator.gif)
 
 You've successfully created an echo bot!  
 
