@@ -32,12 +32,18 @@ export function JsonEditor(props: JsonEditorProps) {
 
   const handleChange = value => {
     setValue(value);
-    try {
-      const data = JSON.parse(value);
-      onChange(data);
+
+    if (value) {
+      try {
+        const data = JSON.parse(value);
+        onChange(data);
+        setParseError('');
+      } catch (err) {
+        setParseError('invalid json');
+      }
+    } else {
+      onChange(undefined);
       setParseError('');
-    } catch (err) {
-      setParseError('invalid json');
     }
   };
 
