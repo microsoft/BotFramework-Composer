@@ -84,6 +84,7 @@ export interface State {
   publishStatus: any;
   lastPublishChange: any;
   visualEditorSelection: string[];
+  clipboardActions: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
