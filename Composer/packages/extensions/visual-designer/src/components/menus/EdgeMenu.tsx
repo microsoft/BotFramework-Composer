@@ -8,7 +8,7 @@ import { createStepMenu, DialogGroup, SDKTypes } from 'shared';
 import { IContextualMenu } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { ClipboardContext } from '../../store/ClipboardContext';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
@@ -42,7 +42,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
     filter
   );
 
-  const enablePaste = !!clipboardActions.length;
+  const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
   menuItems.unshift({
     key: 'Paste',
     name: 'Paste',
@@ -58,7 +58,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
 };
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
-  const clipboarcContext = useContext(ClipboardContext);
+  const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -104,7 +104,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         iconSize={10}
         nodeSelected={nodeSelected}
         menuItems={buildEdgeMenuItemsFromClipboardContext(
-          clipboarcContext,
+          nodeContext,
           onClick,
           selfHosted ? x => x !== SDKTypes.LogAction : undefined
         )}
