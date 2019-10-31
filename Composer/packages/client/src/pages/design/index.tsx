@@ -206,61 +206,61 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Undo'),
       buttonProps: {
-        disabled: !undoHistory.canUndo(),
         iconProps: {
           iconName: 'Undo',
         },
         onClick: () => actions.undo(),
       },
       align: 'left',
+      disabled: !undoHistory.canUndo(),
     },
     {
       type: 'action',
       text: formatMessage('Redo'),
       buttonProps: {
-        disabled: !undoHistory.canRedo(),
         iconProps: {
           iconName: 'Redo',
         },
         onClick: () => actions.redo(),
       },
       align: 'left',
+      disabled: !undoHistory.canRedo(),
     },
     {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Cut',
         },
         onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Copy',
         },
         onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Delete',
         },
         onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'element',
