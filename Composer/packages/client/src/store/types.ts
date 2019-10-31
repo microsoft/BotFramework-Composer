@@ -88,6 +88,7 @@ export interface State {
     coachMarkRefs: { [key: string]: any };
     complete: boolean;
   };
+  clipboardActions: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

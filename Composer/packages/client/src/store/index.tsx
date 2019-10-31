@@ -57,6 +57,7 @@ const initialState: State = {
     complete: true,
     coachMarkRefs: {},
   },
+  clipboardActions: [],
 };
 
 interface StoreContextValue {

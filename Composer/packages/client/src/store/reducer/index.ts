@@ -257,6 +257,11 @@ const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
   return state;
 };
 
+  const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
+  state.clipboardActions = clipboardActions;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -312,4 +317,5 @@ export const reducer = createReducer({
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
+  [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
 } as { [type in ActionTypes]: ReducerFunc });

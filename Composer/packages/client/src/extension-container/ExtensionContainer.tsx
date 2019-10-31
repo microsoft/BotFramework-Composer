@@ -62,6 +62,10 @@ const shellApi = {
     return apiClient.apiCall('onSelect', ids);
   },
 
+  onCopy: (actions: any[]) => {
+    return apiClient.apiCall('onCopy', actions);
+  },
+
   shellNavigate: (shellPage, opts = {}) => {
     return apiClient.apiCall('shellNavigate', { shellPage, opts });
   },

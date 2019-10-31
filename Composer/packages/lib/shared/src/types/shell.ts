@@ -108,6 +108,7 @@ export interface ShellData {
   focusedSteps: string[];
   focusedTab?: string;
   focusPath: string;
+  clipboardActions: any[];
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
