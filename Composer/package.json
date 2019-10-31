@@ -24,7 +24,7 @@
     "startall": "concurrently --kill-others-on-fail \"npm:start:*\" \"npm:runtime\"",
     "start:client": "cd packages/client && yarn start",
     "start:server": "cd packages/server && yarn start",
-    "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
+    "runtime": "cd ../BotProject/CSharp/ && dotnet clean && dotnet restore && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default --reporters=jest-junit",
     "test:integration": "start-server-and-test test:integration:start http://localhost:5000 test:integration:run",
