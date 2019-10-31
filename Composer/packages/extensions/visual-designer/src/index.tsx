@@ -76,8 +76,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       focusedId,
       focusedEvent,
       focusedTab,
+      clipboardActions,
     });
-  }, [focusedEvent, focusedActions, focusedTab]);
+  }, [focusedEvent, focusedActions, focusedTab, clipboardActions]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -113,7 +114,7 @@ interface VisualDesignerProps {
   focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
-  clipboardActions?: any[];
+  clipboardActions: any[];
   shellApi: any;
   hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
