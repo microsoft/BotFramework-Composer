@@ -90,7 +90,7 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
     const step = normalizeObiStep(data[StepsKey][0]);
     if (step.$type === ObiTypes.BeginDialog) {
       dialog = step.dialog;
-      summary = ConceptLabels[step.$type].title || step.$type;
+      summary = ConceptLabels[step.$type] ? ConceptLabels[step.$type].title : step.$type;
     } else {
       summary = formatMessage('1 action: {step}', { step: (ConceptLabels[step.$type] || {}).title || step.$type });
     }

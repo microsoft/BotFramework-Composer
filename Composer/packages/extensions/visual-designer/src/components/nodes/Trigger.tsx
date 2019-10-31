@@ -18,7 +18,7 @@ function getLabel(data: any): string {
 
   const labelOverrides = ConceptLabels[data.$type];
 
-  if (labelOverrides.title) {
+  if (labelOverrides && labelOverrides.title) {
     return labelOverrides.title;
   }
 
