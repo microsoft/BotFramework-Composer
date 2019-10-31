@@ -16,7 +16,7 @@ import { getUserAnswersTitle } from '../utils';
 
 import { ChoiceInput } from './ChoiceInput';
 
-export const UserAnswers: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const UserInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   if (data.$type === ObiTypes.ChoiceInputDetail) {
     return <ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} />;
   }
@@ -28,7 +28,7 @@ export const UserAnswers: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX
       header={getUserAnswersTitle(data._type)}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_ANSWERS });
+        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_INPUT });
       }}
     />
   );
