@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { IContextualMenuItem, IconButton, TextField } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { CaseCondition } from 'shared';
+import { CaseCondition } from '@bfc/shared';
 import cloneDeep from 'lodash.clonedeep';
 
 import { swap, remove } from '../utils';

@@ -1,5 +1,5 @@
 {
-  "name": "composer-root",
+  "name": "@bfc/root",
   "private": true,
   "resolutions": {
     "@types/react": "16.9.0"
@@ -35,8 +35,9 @@
     "test:integration:clean": "rimraf ../MyBots/__Test* packages/server/data.json && git checkout ../MyBots",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
-    "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:server\"",
-    "typecheck:server": "yarn workspace composer-api-server typecheck",
+    "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
+    "typecheck:server": "yarn workspace @bfc/server typecheck",
+    "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
   },
   "husky": {
