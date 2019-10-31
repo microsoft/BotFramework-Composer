@@ -15,12 +15,12 @@ import { Validations } from './Validations';
 import { field } from './styles';
 import { PromptFieldChangeHandler, GetSchema } from './types';
 
-interface ExceptionsProps extends FieldProps<MicrosoftInputDialog> {
+interface OtherProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
-export const Exceptions: React.FC<ExceptionsProps> = props => {
+export const Other: React.FC<OtherProps> = props => {
   const { onChange, getSchema, idSchema, formData } = props;
 
   return (
