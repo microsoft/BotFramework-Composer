@@ -193,7 +193,12 @@ const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
 };
-
+const getEnvSetting: ReducerFunc = (state, { settings }) => {
+  state.settings = settings;
+  refreshLocalStorage(state.botName, state.settings);
+  mergeLocalStorage(state.botName, state.settings);
+  return state;
+};
 const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
   const data = response && response.data;
 
@@ -290,6 +295,7 @@ export const reducer = createReducer({
   [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
+  [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,

@@ -1,8 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { set } from 'lodash';
+
 import { Path } from '../../utility/path';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
+
+import { SensitiveProperties } from './interface';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
 
@@ -52,7 +56,17 @@ export class FileSettingManager implements ISettingManager {
     if (!(await this.storage.exists(dir))) {
       await this.storage.mkDir(dir, { recursive: true });
     }
+    // remove sensitive values before saving to disk
+    this.filterOutSensitiveValue(settings);
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));
+  };
+
+  private filterOutSensitiveValue = (obj: any) => {
+    if (obj && typeof obj === 'object') {
+      SensitiveProperties.map(property => {
+        set(obj, property, '');
+      });
+    }
   };
 
   private obfuscateValues = (obj: any): any => {
