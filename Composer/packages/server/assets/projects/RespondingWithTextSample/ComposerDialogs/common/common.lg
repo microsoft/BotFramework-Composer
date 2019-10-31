@@ -2,10 +2,10 @@
 - nice to talk to you!
 
 # LGComposition(user)
-- {user.name} [Greeting]
+- @{user.name} @{Greeting()}
 
 # LGWithParam(user)
-- Hello {user.name}, nice to talk to you!
+- Hello @{user.name}, nice to talk to you!
 
 # TextWithLG
 - Hi, this is a text with LG
@@ -18,16 +18,15 @@
 ```
 
 # bfdactivity-823322
--[LGComposition(user)]
+-@{LGComposition(user)}
 
 # bfdactivity-176070
--[LGWithParam(user)]
+-@{LGWithParam(user)}
 
 # bfdactivity-219943
--Here is a simple text message.
+-@{TextWithLG()}
 
-# bfdactivity-105188
--[TextWithLG]
+
 
 # bfdactivity-822060
 -{user.message}
@@ -36,4 +35,77 @@
 -Welcome to the Message Samples. You can use this sample to explore different capabilities of sending messages to users.
 
 # bfdactivity-551445
--[help]
+-@{help()}
+
+
+# greetInAWeek
+- SWITCH: @{dayOfWeek(utcNow())}
+- CASE: @{0}
+    - Happy Sunday!
+-CASE: @{6}
+    - Happy Saturday!
+-DEFAULT:  
+    - Working day!
+
+
+
+
+# bfdactivity-739923
+- [TextWithLG]
+
+
+# bfdactivity-853358
+- @{multilineText()}
+
+
+
+
+# timeOfDayGreeting(timeOfDay)
+- IF: @{timeOfDay == 'morning'}
+    - good morning
+- ELSEIF: @{timeOfDay == 'afternoon'}
+    - good afternoon
+- ELSE: 
+    - good evening
+
+
+
+
+
+
+
+# StructuredText
+[Activity
+   Text = text from structured
+]
+
+# multilineText
+- ``` you have such alarms
+alarm1:  7:am
+alarm2: 9:pm
+```
+
+
+
+# bfdactivity-862531
+- @{StructuredText()}
+
+
+# bfdactivity-772457
+- @{multilineText()}
+
+
+# bfdactivity-458516
+- @{multilineText()}
+
+
+# bfdprompt-383595
+- what the time of day
+
+
+# bfdactivity-749181
+- @{timeOfDayGreeting(user.timeofday)}
+
+
+# bfdactivity-958316
+- @{greetInAWeek()}
