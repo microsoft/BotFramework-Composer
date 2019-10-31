@@ -10,18 +10,19 @@ import { MicrosoftInputDialog } from 'shared';
 
 import { WidgetLabel } from '../../widgets/WidgetLabel';
 import { LgEditorWidget } from '../../widgets/LgEditorWidget';
+import { TextWidget } from '../../widgets';
 
 import { Validations } from './Validations';
 import { field } from './styles';
 import { PromptFieldChangeHandler, GetSchema } from './types';
 
-interface ExceptionsProps extends FieldProps<MicrosoftInputDialog> {
+interface OtherProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
-export const Exceptions: React.FC<ExceptionsProps> = props => {
-  const { onChange, getSchema, idSchema, formData } = props;
+export const Other: React.FC<OtherProps> = props => {
+  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
 
   return (
     <React.Fragment>
@@ -53,6 +54,17 @@ export const Exceptions: React.FC<ExceptionsProps> = props => {
           value={formData.invalidPrompt}
           formContext={props.formContext}
           height={125}
+        />
+      </div>
+      <div css={field}>
+        <TextWidget
+          onChange={onChange('value')}
+          schema={getSchema('value')}
+          id={idSchema.value.__id}
+          value={formData.value}
+          label={formatMessage('Value')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.value && errorSchema.value.__errors}
         />
       </div>
       <div css={field}>

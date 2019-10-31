@@ -44,7 +44,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementRenderer
           id={userAnswersNode.id}
-          tab={PromptTab.USER_ANSWERS}
+          tab={PromptTab.USER_INPUT}
           data={userAnswersNode.data}
           onEvent={onEvent}
           onResize={onResize}
@@ -53,7 +53,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={brickNode.offset}>
         <ElementRenderer
           id={brickNode.id}
-          tab={PromptTab.EXCEPTIONS}
+          tab={PromptTab.OTHER}
           data={brickNode.data}
           onEvent={onEvent}
           onResize={onResize}
