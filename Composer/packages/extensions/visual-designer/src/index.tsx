@@ -26,6 +26,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   focusedEvent,
   focusedActions,
   focusedTab,
+  clipboardActions,
   data: inputData,
   shellApi,
   hosted,
@@ -47,6 +48,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onFocusEvent,
     onFocusSteps,
     onSelect,
+    onCopy,
     saveData,
     updateLgTemplate,
     getLgTemplates,
@@ -62,6 +64,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedId,
     focusedEvent,
     focusedTab,
+    clipboardActions: clipboardActions || [],
     updateLgTemplate: updateLgTemplate,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
@@ -73,8 +76,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       focusedId,
       focusedEvent,
       focusedTab,
+      clipboardActions,
     });
-  }, [focusedEvent, focusedActions, focusedTab]);
+  }, [focusedEvent, focusedActions, focusedTab, clipboardActions]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -89,6 +93,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
+              onClipboardChange={onCopy}
               onOpen={(x, rest) => navTo(x, rest)}
               onChange={x => saveData(x)}
               onSelect={onSelect}
@@ -109,6 +114,7 @@ interface VisualDesignerProps {
   focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
+  clipboardActions: any[];
   shellApi: any;
   hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
