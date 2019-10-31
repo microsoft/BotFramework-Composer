@@ -22,6 +22,10 @@
             "type": "bool",
             "defaultValue": true
         },
+        "deployAuthoringKey": {
+            "type": "bool",
+            "defaultValue": true
+        },
         "cosmosDbName": {
             "type": "string",
             "defaultValue": "[resourceGroup().name]"
@@ -38,6 +42,10 @@
             "metadata": {
                 "description": "The pricing tier of the Bot Service Registration. Acceptable values are F0 and S1."
             }
+        },
+        "luisAuthoringKey": {
+            "type": "string",
+            "defaultValue": ""
         },
         "newAppServicePlanName": {
             "type": "string",
@@ -251,7 +259,8 @@
             "kind": "LUIS.Authoring",
             "sku": {
                 "name": "[parameters('luisServiceAuthoringSku')]"
-            }
+            },
+            "condition": "[parameters('deployAuthoringKey')]"
         },
         {
             "comments": "Cognitive service endpoint key for all LUIS apps.",
@@ -292,7 +301,7 @@
             "type": "object",
             "value": {
                 "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]",
-                "authoringKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1]",
+                "authoringKey": "[if(parameters('deployAuthoringKey'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1, parameters('luisAuthoringKey'))]",
                 "region": "[parameters('luisServiceLocation')]"
             }
         }
