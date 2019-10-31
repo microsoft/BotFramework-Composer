@@ -1,7 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState } from 'react';
 import { LuEditor } from 'code-editor';
-
-import { LuFile } from '../../../types';
+import { LuFile } from 'shared';
 
 interface InlineLuEditorProps {
   file: LuFile;

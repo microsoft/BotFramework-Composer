@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable react/display-name */
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
@@ -48,7 +51,7 @@ export default function TableView(props) {
             name,
             phrases: [utterance.text],
             fileId: luFile.id,
-            used: luDialog.luIntents.indexOf(name) !== -1, // used by it's dialog or not
+            used: luDialog.luIntents.includes(name), // used by it's dialog or not
             state,
           });
         }

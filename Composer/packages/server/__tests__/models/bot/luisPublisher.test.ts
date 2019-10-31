@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { FileUpdateType } from '../../../src/models/bot/interface';
 import { Path } from '../../../src/utility/path';
 
@@ -36,14 +39,24 @@ describe('get unpublishedFiles', () => {
         id: 'a',
         relativePath: 'bot1/a.lu',
         content: '',
-        parsedContent: {},
+        parsedContent: {
+          LUISJsonStructure: {
+            intents: [],
+            utterances: [],
+          },
+        },
       },
       {
         diagnostics: [],
         id: 'b',
         relativePath: 'bot1/b.lu',
         content: '',
-        parsedContent: {},
+        parsedContent: {
+          LUISJsonStructure: {
+            intents: [],
+            utterances: [],
+          },
+        },
       },
     ];
 

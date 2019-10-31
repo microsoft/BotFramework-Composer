@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC, ComponentClass } from 'react';
@@ -17,7 +20,6 @@ const rendererByObiType = {
   [ObiTypes.ConfirmInput]: BaseInput,
   [ObiTypes.DateTimeInput]: BaseInput,
   [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.OAuthInput]: BaseInput,
   [ObiTypes.TextInput]: BaseInput,
   [ObiTypes.ChoiceInput]: BaseInput,
 };

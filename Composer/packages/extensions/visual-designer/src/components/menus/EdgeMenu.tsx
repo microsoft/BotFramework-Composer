@@ -1,12 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup } from 'shared';
+import { createStepMenu, DialogGroup, SDKTypes } from 'shared';
 import { IContextualMenu } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { ClipboardContext } from '../../store/ClipboardContext';
 import { SelectionContext } from '../../store/SelectionContext';
+import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 
@@ -17,7 +21,11 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
-const buildEdgeMenuItemsFromClipboardContext = (context, onClick): IContextualMenu[] => {
+const buildEdgeMenuItemsFromClipboardContext = (
+  context,
+  onClick,
+  filter?: (t: SDKTypes) => boolean
+): IContextualMenu[] => {
   const { clipboardActions } = context;
   const menuItems = createStepMenu(
     [
@@ -30,22 +38,28 @@ const buildEdgeMenuItemsFromClipboardContext = (context, onClick): IContextualMe
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.$type : null)
+    (e, item) => onClick(item ? item.$type : null),
+    filter
   );
 
-  if (clipboardActions.length) {
-    menuItems.unshift({
-      key: 'Paste',
-      name: 'Paste',
-      style: { color: 'lightblue' },
-      onClick: () => onClick('PASTE'),
-    });
-  }
+  const enablePaste = !!clipboardActions.length;
+  menuItems.unshift({
+    key: 'Paste',
+    name: 'Paste',
+    disabled: !enablePaste,
+    iconProps: {
+      iconName: 'Paste',
+    },
+    style: { color: enablePaste ? '#0078D4' : '#BDBDBD', borderBottom: '1px solid #F3F2F1' },
+    onClick: () => onClick('PASTE'),
+  });
+
   return menuItems;
 };
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
   const clipboarcContext = useContext(ClipboardContext);
+  const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
   const declareElementAttributes = (id: string) => {
@@ -89,7 +103,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         }}
         iconSize={10}
         nodeSelected={nodeSelected}
-        menuItems={buildEdgeMenuItemsFromClipboardContext(clipboarcContext, onClick)}
+        menuItems={buildEdgeMenuItemsFromClipboardContext(
+          clipboarcContext,
+          onClick,
+          selfHosted ? x => x !== SDKTypes.LogAction : undefined
+        )}
         label={formatMessage('Add')}
         {...rest}
       />

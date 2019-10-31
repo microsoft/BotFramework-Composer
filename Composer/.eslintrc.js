@@ -14,9 +14,17 @@ module.exports = {
     node: true,
   },
   rules: {
+    'notice/notice': [
+      'error',
+      {
+        mustMatch: 'Copyright \\(c\\) Microsoft Corporation',
+        templateFile: require.resolve('./license.js'),
+      },
+    ],
     '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     '@typescript-eslint/no-use-before-define': 'warn',
 
     // eslint rules
@@ -54,7 +62,9 @@ module.exports = {
         jest: true,
       },
       rules: {
+        '@typescript-eslint/ban-ts-ignore': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
+        '@typescript-eslint/unbound-method': 'off',
 
         'security/detect-buffer-noassert': 'off',
         'security/detect-child-process': 'off',

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -24,11 +27,11 @@ function makeLabel(data) {
     case ObiTypes.InitProperty:
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
-      return `${data.changeType} {${data.arrayProperty || '?'}}`;
+      return `${data.changeType} {${data.itemsProperty || '?'}}`;
     case ObiTypes.ForeachDetail:
-      return `Each {${data.valueProperty || '?'}} in {${data.listProperty || '?'}}`;
+      return `Each value in {${data.itemsProperty || '?'}}`;
     case ObiTypes.ForeachPageDetail:
-      return `Each page of ${data.pageSize || '?'} in {${data.listProperty || '?'}}`;
+      return `Each page of ${data.pageSize || '?'} in {${data.itemsProperty || '?'}}`;
 
     default:
       return '';
@@ -65,11 +68,11 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.ForeachDetail]: {
     header: 'Loop: For Each',
-    label: 'listProperty',
+    label: 'itemsProperty',
   },
   [ObiTypes.ForeachPageDetail]: {
     header: 'Loop: For Each Page',
-    label: 'listProperty',
+    label: 'itemsProperty',
   },
   [ObiTypes.TextInput]: {
     label: 'prompt',
@@ -98,12 +101,6 @@ const ContentKeyByTypes: {
   [ObiTypes.EndTurn]: {
     text: 'Wait for another message',
   },
-  [ObiTypes.RepeatDialog]: {
-    text: 'Repeat this dialog',
-  },
-  [ObiTypes.ReplaceDialog]: {
-    text: 'Replace this dialog',
-  },
   [ObiTypes.EmitEvent]: {
     label: 'eventName',
   },
@@ -111,13 +108,19 @@ const ContentKeyByTypes: {
     label: 'url',
   },
   [ObiTypes.TraceActivity]: {
-    label: 'valueProperty',
+    label: 'name',
   },
   [ObiTypes.LogAction]: {
     label: 'text',
   },
   [ObiTypes.EditActions]: {
     label: 'changeType',
+  },
+  [ObiTypes.QnAMakerDialog]: {
+    label: 'hostname',
+  },
+  [ObiTypes.OAuthInput]: {
+    label: 'tokenProperty',
   },
 };
 

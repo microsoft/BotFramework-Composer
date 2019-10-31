@@ -1,21 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
-import { JSONSchema6 } from 'json-schema';
+import { ShellData, EditorSchema, ShellApi, OBISchema } from 'shared';
 
-import { ShellApi, LuFile, LgFile, DialogInfo } from '../types';
-
-export interface FormContext {
-  editorSchema: any;
+export interface FormContext
+  extends Pick<ShellData, 'luFiles' | 'lgFiles' | 'currentDialog' | 'focusedEvent' | 'focusedSteps' | 'focusedTab'> {
+  editorSchema: EditorSchema;
   shellApi: ShellApi;
   rootId: string;
-  luFiles: LuFile[];
-  lgFiles: LgFile[];
   dialogOptions: { value: string; label: string }[];
-  currentDialog: DialogInfo;
   dialogId?: string;
   isRoot: boolean;
-  focusedEvent: string;
-  focusedSteps: string[];
-  focusedTab?: string;
 }
 
 interface EnumOption {
@@ -34,7 +30,7 @@ export interface BFDFieldProps<T = any> extends FieldProps<T> {
 
 export interface BFDWidgetProps extends Partial<WidgetProps> {
   id: string;
-  schema: JSONSchema6;
+  schema: OBISchema;
   onChange: (data: any) => void;
   formContext: FormContext;
   options?: {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ClaimNames } from '../../constants';
 import { ILuisConfig } from '../bot/interface';
 
@@ -10,7 +13,7 @@ export type BotEnvironments = 'production' | 'integration' | 'editing';
 
 export interface AuthenticatedToken {
   accessToken: string;
-  deocdedToken?: AuthenticatedUser;
+  decodedToken?: AuthenticatedUser;
 }
 
 export interface AuthenticatedUser {

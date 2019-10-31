@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Boundary } from './Boundary';
 import { GraphNode } from './GraphNode';
 import { EdgeData } from './EdgeData';

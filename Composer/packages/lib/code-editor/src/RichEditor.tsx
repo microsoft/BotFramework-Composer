@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment, useMemo, useState } from 'react';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
@@ -18,7 +21,7 @@ export function RichEditor(props: RichEditorProps) {
   const [hovered, setHovered] = useState(false);
 
   const errorHelp = formatMessage.rich(
-    'This text cannot be saved because there are errors in the syntax. Refer to the syntax documentation <a>here</a>.',
+    'This text has errors in the syntax. Refer to the syntax documentation <a>here</a>.',
     {
       // eslint-disable-next-line react/display-name
       a: ({ children }) => (
@@ -29,11 +32,6 @@ export function RichEditor(props: RichEditorProps) {
     }
   );
 
-  const baseEditor = <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />;
-  // CodeRange editing require an non-controled/refresh component, so here make it memoed
-  const memoEditor = useMemo(() => {
-    return baseEditor;
-  }, []);
   const getHeight = () => {
     if (height === null || height === undefined) {
       return '100%';
@@ -60,7 +58,7 @@ export function RichEditor(props: RichEditorProps) {
     <Fragment>
       <div
         style={{
-          height: getHeight(),
+          height: `calc(${getHeight()} - 40px)`,
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor,
@@ -69,7 +67,7 @@ export function RichEditor(props: RichEditorProps) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {props.codeRange ? memoEditor : baseEditor}
+        <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
       {isInvalid && (
         <div style={{ fontSize: '14px', color: SharedColors.red20 }}>

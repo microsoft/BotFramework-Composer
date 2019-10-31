@@ -1,13 +1,22 @@
-import axios from 'axios';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { get } from 'lodash';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { SensitiveProperties } from '../../constants';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionTypes } from './../../constants/index';
+import { BotEnvironments } from './../../utils/envUtil';
+import httpClient from './../../utils/httpUtil';
 
-export const setSettings: ActionCreator = async ({ dispatch }, botName: string, settings: DialogSetting) => {
+export const setSettings: ActionCreator = async (
+  { dispatch },
+  botName: string,
+  settings: DialogSetting,
+  slot?: BotEnvironments
+) => {
   try {
     // set value to store
     dispatch({
@@ -22,7 +31,8 @@ export const setSettings: ActionCreator = async ({ dispatch }, botName: string, 
       settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
     }
     // set value to server
-    await axios.post(`${BASEURL}/projects/opened/settings`, { settings });
+    const suffix = slot ? `/${slot}` : '';
+    await httpClient.post(`/projects/opened/settings${suffix}`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
@@ -31,5 +41,37 @@ export const setSettings: ActionCreator = async ({ dispatch }, botName: string, 
         summary: 'SYNC CONFIG ERROR',
       },
     });
+  }
+};
+
+export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
+  const suffix = slot ? `/${slot}` : '';
+  const query = editing ? '' : '?obfuscate=true';
+  const url = `/projects/opened/settings${suffix}${query}`;
+
+  try {
+    const response = await httpClient.get(`/projects/opened/settings${suffix}`);
+    const settings = response.data;
+    dispatch({
+      type: ActionTypes.SYNC_ENV_SETTING,
+      payload: {
+        settings,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: err.response && err.response.data.message ? err.reponse.data.message : err,
+        summary: 'DLG SETTINGS ERROR',
+      },
+    });
+  }
+};
+
+export const setEditDialogSettings: ActionCreator = async (store, editing: boolean, slot?: BotEnvironments) => {
+  if (editing) {
+    // fetch the real settings for editing
+    await setDialogSettingsSlot(store, editing, slot);
   }
 };

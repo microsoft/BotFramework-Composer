@@ -1,0 +1,56 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "295682"
+  },
+  "autoEndDialog": true,
+  "$schema": "../../app.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "823674"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "245482"
+          },
+          "condition": "user.token == null",
+          "actions": [
+            {
+              "$type": "Microsoft.OAuthInput",
+              "$designer": {
+                "id": "199270"
+              },
+              "connectionName": "Outlook",
+              "title": "Log in",
+              "text": "Please log in to your email account",
+              "tokenProperty": "user.token"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "518974"
+          },
+          "method": "GET",
+          "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
+          "header": {
+            "Authorization": "Bearer {user.token.token}"
+          },
+          "resultProperty": "user.getGraphEmails"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "991558"
+          },
+          "activity": "[bfdactivity-991558]"
+        }
+      ]
+    }
+  ]
+}

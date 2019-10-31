@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { FileSettingManager } from './fileSettingManager';
 
 export class DefaultSettingManager extends FileSettingManager {
@@ -16,6 +19,11 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
+      },
+      qna: {
+        knowledgebaseid: '',
+        endpointkey: '',
+        hostname: '',
       },
     };
   };

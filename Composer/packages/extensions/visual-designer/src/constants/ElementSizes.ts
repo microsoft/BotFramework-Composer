@@ -1,21 +1,24 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const InitNodeSize = {
-  width: 280,
-  height: 80,
+  width: 200,
+  height: 48,
 };
 
 export const DiamondSize = {
-  width: 50,
-  height: 20,
+  width: 30,
+  height: 12,
 };
 
 export const LoopIconSize = {
-  width: 24,
-  height: 24,
+  width: 16,
+  height: 16,
 };
 
 export const IconBrickSize = {
-  width: 24,
-  height: 24,
+  width: 16,
+  height: 16,
 };
 
 export const LoopEdgeMarginLeft = 20;

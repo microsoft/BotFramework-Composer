@@ -1,14 +1,15 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useEffect, useContext } from 'react';
 import { toLower } from 'lodash';
 
-import { CreationFlowStatus } from '../constants';
+import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
-import { Steps } from './../constants/index';
 import { OpenProject } from './OpenProject';
 import { StoreContext } from './../store';
-import { DialogInfo } from './../constants/index';
 import { StepWizard } from './StepWizard/StepWizard';
 import { navigateTo } from './../utils/navigation';
 
@@ -120,15 +121,15 @@ export function CreationFlow(props) {
 
   const steps = {
     [Steps.CREATE]: {
-      ...DialogInfo.CREATE_NEW_BOT,
+      ...DialogCreationCopy.CREATE_NEW_BOT,
       children: <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />,
     },
     [Steps.LOCATION]: {
-      ...DialogInfo.SELECT_LOCATION,
+      ...DialogCreationCopy.SELECT_LOCATION,
       children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} />,
     },
     [Steps.DEFINE]: {
-      ...DialogInfo.DEFINE_CONVERSATION_OBJECTIVE,
+      ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
         <DefineConversation
           onSubmit={handleSubmit}

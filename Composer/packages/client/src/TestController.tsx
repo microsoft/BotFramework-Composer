@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,
@@ -9,6 +12,7 @@ import {
   Stack,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
+import { DialogInfo } from 'shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
@@ -16,8 +20,8 @@ import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } fr
 import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
+import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
-import { DialogInfo } from './store/types';
 
 const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -36,8 +40,6 @@ const STATE = {
   RELOADING: 1,
   SUCCESS: 2,
 };
-
-const isAbsHosted = () => process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);

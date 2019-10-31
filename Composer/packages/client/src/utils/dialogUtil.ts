@@ -1,9 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared';
 import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react';
-
-import { DialogInfo } from '../store/types';
+import { DialogInfo } from 'shared';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';

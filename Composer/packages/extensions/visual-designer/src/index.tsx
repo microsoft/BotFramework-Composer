@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
@@ -7,6 +10,7 @@ import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
+import { SelfHostContext } from './store/SelfHostContext';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -20,10 +24,11 @@ const emotionCache = createCache({
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
   focusedEvent,
-  focusedSteps,
+  focusedActions,
   focusedTab,
   data: inputData,
   shellApi,
+  hosted,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -50,7 +55,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     redo,
   } = shellApi;
 
-  const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
+  const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const [context, setContext] = useState({
@@ -69,27 +74,29 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       focusedEvent,
       focusedTab,
     });
-  }, [focusedEvent, focusedSteps, focusedTab]);
+  }, [focusedEvent, focusedActions, focusedTab]);
 
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={context}>
-        <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-          <ObiEditor
-            key={dialogId}
-            path={dialogId}
-            data={data}
-            focusedSteps={focusedSteps}
-            onFocusSteps={onFocusSteps}
-            focusedEvent={focusedEvent}
-            onFocusEvent={onFocusEvent}
-            onOpen={(x, rest) => navTo(x, rest)}
-            onChange={x => saveData(x)}
-            onSelect={onSelect}
-            undo={undo}
-            redo={redo}
-          />
-        </div>
+        <SelfHostContext.Provider value={hosted}>
+          <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+            <ObiEditor
+              key={dialogId}
+              path={dialogId}
+              data={data}
+              focusedSteps={focusedActions}
+              onFocusSteps={onFocusSteps}
+              focusedEvent={focusedEvent}
+              onFocusEvent={onFocusEvent}
+              onOpen={(x, rest) => navTo(x, rest)}
+              onChange={x => saveData(x)}
+              onSelect={onSelect}
+              undo={undo}
+              redo={redo}
+            />
+          </div>
+        </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>
   );
@@ -99,9 +106,11 @@ interface VisualDesignerProps {
   data: object;
   dialogId: string;
   focusedEvent: string;
+  focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
   shellApi: any;
+  hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
 }
 

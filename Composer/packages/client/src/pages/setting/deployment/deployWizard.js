@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react';

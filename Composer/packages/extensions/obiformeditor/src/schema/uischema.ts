@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { SDKTypes, PROMPT_TYPES } from 'shared';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
@@ -11,11 +14,8 @@ const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
 }, {});
 
 const triggerUiSchema = {
-  actions: {
-    'ui:field': 'StepsField',
-  },
-  'ui:order': ['condition', '*', 'actions'],
-  'ui:hidden': [...globalHidden],
+  'ui:order': ['condition', '*'],
+  'ui:hidden': ['actions', ...globalHidden],
 };
 
 export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
@@ -23,14 +23,8 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     recognizer: {
       'ui:field': 'RecognizerField',
     },
-    triggers: {
-      'ui:field': 'RulesField',
-    },
-    actions: {
-      'ui:field': 'StepsField',
-    },
     'ui:order': ['recognizer', 'triggers', '*'],
-    'ui:hidden': ['autoEndDialog', 'generator', ...globalHidden],
+    'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],
   },
   [SDKTypes.BeginDialog]: {
     dialog: {
@@ -53,16 +47,12 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
   },
   [SDKTypes.Foreach]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
     'ui:order': ['itemsProperty', 'actions', '*'],
+    'ui:hidden': ['actions'],
   },
   [SDKTypes.ForeachPage]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
     'ui:order': ['itemsProperty', 'pageSize', 'actions', '*'],
+    'ui:hidden': ['actions'],
   },
   [SDKTypes.HttpRequest]: {
     body: {
@@ -71,13 +61,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   [SDKTypes.IfCondition]: {
-    actions: {
-      'ui:field': 'StepsField',
-    },
-    elseActions: {
-      'ui:field': 'StepsField',
-    },
-    'ui:hidden': [...globalHidden],
+    'ui:hidden': ['actions', 'elseActions', ...globalHidden],
   },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,
@@ -110,11 +94,8 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     intent: {
       'ui:widget': 'IntentWidget',
     },
-    actions: {
-      'ui:field': 'StepsField',
-    },
     'ui:order': ['intent', 'condition', 'entities', '*'],
-    'ui:hidden': [...globalHidden],
+    'ui:hidden': ['actions', ...globalHidden],
   },
   [SDKTypes.OnInvokeActivity]: {
     ...triggerUiSchema,
@@ -155,6 +136,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['connectionName', '*'],
   },
+  [SDKTypes.QnAMakerDialog]: {
+    'ui:hidden': ['strictFilters'],
+  },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
@@ -165,10 +149,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     cases: {
       'ui:field': 'CasesField',
     },
-    default: {
-      'ui:field': 'StepsField',
-    },
-    'ui:hidden': [...globalHidden],
+    'ui:hidden': ['default', ...globalHidden],
   },
   [SDKTypes.SendActivity]: {
     activity: {

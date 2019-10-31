@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import producer from 'immer';
 
 import { State, ReducerFunc } from '../types';
@@ -6,7 +9,9 @@ import { ActionType, GenericActionType } from '../action/types';
 import { ActionTypes } from './../../constants';
 
 type CreateReducerFunc = (
-  handlers: { [type in ActionTypes]: ReducerFunc }
+  handlers: {
+    [type in Exclude<ActionTypes, ActionTypes.UNDO | ActionTypes.REDO | ActionTypes.HISTORY_CLEAR>]: ReducerFunc
+  }
 ) => (state: State, action: ActionType) => State;
 
 const createReducer: CreateReducerFunc = handlers => {

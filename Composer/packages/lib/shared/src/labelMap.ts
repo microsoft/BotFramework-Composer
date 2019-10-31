@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import formatMessage from 'format-message';
 
 import { SDKTypes } from './types';
@@ -28,25 +31,25 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('AdaptiveDialog'),
   },
   [SDKTypes.AttachmentInput]: {
-    title: formatMessage('Prompt for Attachment'),
+    title: formatMessage('File or attachment'),
   },
   [SDKTypes.BeginDialog]: {
-    title: formatMessage('Begin a Dialog'),
+    title: formatMessage('Begin a new dialog'),
   },
   [SDKTypes.CancelAllDialogs]: {
-    title: formatMessage('Cancel All Dialogs'),
+    title: formatMessage('Cancel all dialogs'),
   },
   [SDKTypes.ChoiceInput]: {
-    title: formatMessage('Prompt with multi-choice'),
+    title: formatMessage('Multiple choice'),
   },
   [SDKTypes.ConditionalSelector]: {
     title: formatMessage('ConditionalSelector'),
   },
   [SDKTypes.ConfirmInput]: {
-    title: formatMessage('Prompt for confirmation'),
+    title: formatMessage('Confirmation'),
   },
   [SDKTypes.DateTimeInput]: {
-    title: formatMessage('Prompt for a date'),
+    title: formatMessage('Date or time'),
   },
   [SDKTypes.DebugBreak]: {
     title: formatMessage('Debug Break'),
@@ -55,7 +58,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Delete a Property'),
   },
   [SDKTypes.EditActions]: {
-    title: formatMessage('Modify active dialog'),
+    title: formatMessage('Modify this dialog'),
   },
   [SDKTypes.EditArray]: {
     title: formatMessage('Edit an Array Property'),
@@ -64,22 +67,22 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Emit a custom event'),
   },
   [SDKTypes.EndDialog]: {
-    title: formatMessage('End Dialog'),
+    title: formatMessage('End this dialog'),
   },
   [SDKTypes.EndTurn]: {
-    title: formatMessage('End Turn'),
+    title: formatMessage('End dialog turn'),
   },
   [SDKTypes.FirstSelector]: {
     title: formatMessage('FirstSelector'),
   },
   [SDKTypes.Foreach]: {
-    title: formatMessage('Loop: For Each'),
+    title: formatMessage('Loop: for each item'),
   },
   [SDKTypes.ForeachPage]: {
-    title: formatMessage('Loop: For Each Page'),
+    title: formatMessage('Loop: for each page (multiple items)'),
   },
   [SDKTypes.HttpRequest]: {
-    title: formatMessage('HTTP Request'),
+    title: formatMessage('Send an HTTP request'),
   },
   [SDKTypes.IfCondition]: {
     title: formatMessage('Branch: If/Else'),
@@ -109,7 +112,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Language Understanding'),
   },
   [SDKTypes.NumberInput]: {
-    title: formatMessage('Prompt for a number'),
+    title: formatMessage('Number input'),
   },
   [SDKTypes.OAuthInput]: {
     title: formatMessage('OAuth Login'),
@@ -177,7 +180,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Handle Unknown Intent'),
   },
   [SDKTypes.QnAMakerDialog]: {
-    title: formatMessage('QnAMakerDialog'),
+    title: formatMessage('Connect to QnA Knowledgebase'),
   },
   [SDKTypes.RandomSelector]: {
     title: formatMessage('RandomSelector'),
@@ -193,16 +196,16 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Replace this Dialog'),
   },
   [SDKTypes.SendActivity]: {
-    title: formatMessage('Send an Activity'),
+    title: formatMessage('Send a response'),
   },
   [SDKTypes.SetProperty]: {
     title: formatMessage('Set a Property'),
   },
   [SDKTypes.SwitchCondition]: {
-    title: formatMessage('Branch: Switch'),
+    title: formatMessage('Branch: Switch (multiple options)'),
   },
   [SDKTypes.TextInput]: {
-    title: formatMessage('Prompt for text'),
+    title: formatMessage('Text input'),
   },
   [SDKTypes.TraceActivity]: {
     title: formatMessage('Emit a trace event'),

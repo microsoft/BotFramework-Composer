@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Store, ActionHandlers, BoundActionHandlers } from '../types';
 
 export default function bindActions(store: Store, actions: ActionHandlers) {

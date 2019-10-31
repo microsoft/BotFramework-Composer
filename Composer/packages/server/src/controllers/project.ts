@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
@@ -137,16 +140,16 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 }
 
-function getRecentProjects(req: Request, res: Response) {
-  const projects = BotProjectService.getRecentBotProjects();
+async function getRecentProjects(req: Request, res: Response) {
+  const projects = await BotProjectService.getRecentBotProjects();
   return res.status(200).json(projects);
 }
 
 async function updateDialog(req: Request, res: Response) {
   const currentProject = BotProjectService.getCurrentBotProject();
   if (currentProject !== undefined) {
-    const dialogs = await currentProject.updateDialog(req.body.id, req.body.content);
-    res.status(200).json({ dialogs });
+    await currentProject.updateDialog(req.body.id, req.body.content);
+    res.send(204);
   } else {
     res.status(404).json({
       message: 'No such bot project opened',

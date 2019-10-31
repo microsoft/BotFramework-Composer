@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent } from 'react';
@@ -8,13 +11,13 @@ import { Icon } from '../../decorations/icon';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;
-const headerHeight = 40;
+const headerHeight = InitNodeSize.height / 2;
 const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
   width: boxWidth,
   height: boxHeight,
-  fontSize: '20px',
+  fontSize: '12px',
   cursor: 'pointer',
   overflow: 'hidden',
   backgroundColor: 'white',
@@ -27,6 +30,7 @@ interface NodeProps {
   corner?: any;
   label: any;
   icon?: string;
+  iconSize?: number;
   styles?: object;
   nodeColors: { [key: string]: any };
   onClick: () => void;
@@ -37,6 +41,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
   corner,
   label,
   icon,
+  iconSize,
   nodeColors,
   onClick,
   children = null,
@@ -60,13 +65,13 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           height: `${headerHeight}px`,
           backgroundColor: themeColor,
           fontFamily: 'Segoe UI',
-          fontSize: '14px',
-          lineHeight: '19px',
+          fontSize: '12px',
+          lineHeight: '14px',
           color: 'black',
         }}
       >
-        <div css={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{header}</div>
-        <div css={{ position: 'absolute', top: 10, right: 0 }}>{corner}</div>
+        <div css={{ padding: '4px 8px', fontSize: '12px', fontFamily: 'Segoe UI', lineHeight: '14px' }}>{header}</div>
+        <div css={{ position: 'absolute', top: 4, right: 0 }}>{corner}</div>
       </div>
       <div
         className="card__content"
@@ -79,7 +84,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           css={{
             fontWeight: 400,
             paddingLeft: '5px',
-            margin: '5px',
+            margin: '3px 5px',
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
@@ -89,15 +94,15 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           {icon && icon !== ElementIcon.None && (
             <div
               css={{
-                width: 30,
-                height: 30,
+                width: 16,
+                height: 16,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginRight: '5px',
               }}
             >
-              <Icon icon={icon} color={iconColor} size={30} />
+              <Icon icon={icon} color={iconColor} size={iconSize || 16} />
             </div>
           )}
           <div
@@ -107,7 +112,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
               overflow: 'hidden',
-              fontSize: '14px',
+              fontSize: '12px',
               lineHeight: '19px',
               fontFamily: 'Segoe UI',
             }}

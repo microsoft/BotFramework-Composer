@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
@@ -23,7 +26,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\SampleBots");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\server\assets\projects");
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 
@@ -32,7 +35,7 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "ControllingConversation"));
+            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "ControllingConversationFlowSample"));
             resourceExplorer.AddFolder(path);
         }
 
@@ -49,7 +52,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("Welcome to the Controlling Conversation sample. Choose from the list below to try.\nYou can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.")
+                .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, What's your age?")
             .Send("18")
@@ -105,7 +108,7 @@ namespace Tests
             {
                 if (dialog is AdaptiveDialog planningDialog)
                 {
-                    await dm.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+                    await dm.OnTurnAsync(turnContext, cancellationToken).ConfigureAwait(false);
                 }
             });
         }

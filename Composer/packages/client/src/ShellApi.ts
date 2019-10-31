@@ -1,5 +1,10 @@
-import React, { useEffect, useContext, useRef, useMemo, useState } from 'react';
-import { debounce, isEqual, get } from 'lodash';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import React, { useEffect, useContext, useMemo, useState } from 'react';
+import { ShellData } from 'shared';
+import isEqual from 'lodash.isequal';
+import get from 'lodash.get';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 
@@ -8,28 +13,14 @@ import * as lgUtil from './utils/lgUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
+import { isAbsHosted } from './utils/envUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath, navigateTo } from './utils/navigation';
-import { DialogInfo, LgFile, LuFile, BotSchemas } from './store/types';
 
 // this is the api interface provided by shell to extensions this is the single
 // place handles all incoming request from extensions, VisualDesigner or
 // FormEditor this is where all side effects (like directly calling api of
 // extensions) happened
-
-export interface ShellData {
-  data: any;
-  dialogs: DialogInfo[];
-  focusPath: string;
-  schemas: BotSchemas;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  currentDialog?: DialogInfo;
-  dialogId: string;
-  focusedEvent: string;
-  focusedSteps: string[];
-  focusedTab?: string;
-}
 
 const apiClient = new ApiClient();
 
@@ -40,8 +31,6 @@ const isEventSourceValid = event => {
   const sourceWindowName = event.source.name;
   return [VISUAL_EDITOR, FORM_EDITOR].includes(sourceWindowName);
 };
-
-const useDebouncedFunc = (fn, delay = 750) => useRef(debounce(fn, delay)).current;
 
 const FileChangeTypes = {
   CREATE: 'create',
@@ -66,12 +55,8 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states
-  // TODO: (leilei, ze) fix it when refactoring shell state management.
-  const [, forceUpdate] = useState();
-
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -169,8 +154,13 @@ export const ShellApi: React.FC = () => {
   function getState(sourceWindow?: string): ShellData {
     const currentDialog = dialogs.find(d => d.id === dialogId);
 
+    if (!currentDialog) {
+      return {} as ShellData;
+    }
+
     return {
       data: getData(sourceWindow),
+      botName,
       dialogs,
       focusPath,
       schemas,
@@ -179,8 +169,10 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
+      focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      hosted: !!isAbsHosted(),
     };
   }
 
@@ -252,9 +244,6 @@ export const ShellApi: React.FC = () => {
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
     parseLgTemplate(template);
-
-    const content = updateTemplateInContent({ content: file.content, templateName, template });
-    checkLgContent(content);
 
     return updateLgTemplate({
       file,
@@ -337,8 +326,8 @@ export const ShellApi: React.FC = () => {
     actions.focusTo(dataPath, fragment);
   }
 
-  function onSelect(ids) {
-    forceUpdate(ids);
+  function onSelect(ids: string[]) {
+    actions.setVisualEditorSelection(ids);
   }
 
   return null;

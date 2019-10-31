@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -130,7 +133,7 @@ export const LUPage = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('User says')}..</div>
+        <div>{formatMessage('User Input')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useEffect } from 'react';
 import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';

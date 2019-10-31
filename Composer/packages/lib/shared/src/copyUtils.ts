@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 const NestedFieldNames = {
   Actions: 'actions',
   ElseActions: 'elseActions',
@@ -37,14 +40,30 @@ async function walkAdaptiveAction(input: any, visitor: (data: any) => Promise<an
   }
 }
 
-function isLgActivity(activity: string) {
-  return activity && (activity.includes('bfdactivity-') || activity.includes('bfdprompt-'));
+const TEMPLATE_PATTERN = /^\[bfd(.+)-(\d+)\]$/;
+function isLgTemplate(template: string): boolean {
+  return TEMPLATE_PATTERN.test(template);
+}
+
+function parseLgTemplate(template: string) {
+  const result = TEMPLATE_PATTERN.exec(template);
+  if (result && result.length === 3) {
+    return {
+      templateType: result[1],
+      templateId: result[2],
+    };
+  }
+  return null;
 }
 
 async function copyLgActivity(activity: string, designerId: string, lgApi: any): Promise<string> {
   if (!activity) return '';
-  if (!isLgActivity(activity) || !lgApi) return activity;
+  if (!lgApi) return activity;
 
+  const lgTemplate = parseLgTemplate(activity);
+  if (!lgTemplate) return activity;
+
+  const { templateType } = lgTemplate;
   const { getLgTemplates, updateLgTemplate } = lgApi;
   if (!getLgTemplates) return activity;
 
@@ -60,7 +79,7 @@ async function copyLgActivity(activity: string, designerId: string, lgApi: any):
   if (currentLg) {
     // Create new lg activity.
     const newLgContent = currentLg.Body;
-    const newLgId = `bfdactivity-${designerId}`;
+    const newLgId = `bfd${templateType}-${designerId}`;
     try {
       await updateLgTemplate('common', newLgId, newLgContent);
       return `[${newLgId}]`;
@@ -76,7 +95,12 @@ const overrideLgActivity = async (data, { lgApi }) => {
 };
 
 const overrideLgPrompt = async (data, { lgApi }) => {
-  data.prompt = await copyLgActivity(data.prompt, data.$designer.id, lgApi);
+  const promptFields = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt'];
+  for (const field of promptFields) {
+    if (isLgTemplate(data[field])) {
+      data[field] = await copyLgActivity(data[field], data.$designer.id, lgApi);
+    }
+  }
 };
 
 // TODO: use $type from SDKTypes (after solving circular import issue).

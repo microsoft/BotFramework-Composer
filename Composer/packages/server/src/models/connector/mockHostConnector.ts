@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
 
@@ -40,7 +43,7 @@ export class MockHostBotConnector implements IBotConnector {
   };
 
   public sync = async (config: BotConfig) => {
-    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
+    const user = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.name] : 'unknown_user';
     this.history.integration = MockHostBotConnector.createIntegrationVersion(user);
     return Promise.resolve();
   };
@@ -54,7 +57,7 @@ export class MockHostBotConnector implements IBotConnector {
   };
 
   public publish = async (config: BotConfig, label?: string) => {
-    const user = config.user && config.user.deocdedToken ? config.user.deocdedToken[ClaimNames.name] : 'unknown_user';
+    const user = config.user && config.user.decodedToken ? config.user.decodedToken[ClaimNames.name] : 'unknown_user';
 
     if (!label) {
       // make a new mock and updatre history

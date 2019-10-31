@@ -1,8 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
+import { debouncedUpdateDialog } from './dialog';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
@@ -19,6 +23,8 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
   const currentUri = `/dialogs/${dialogId}`;
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
+  //if dialog change we should flush some debounced functions
+  debouncedUpdateDialog.flush();
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 

@@ -7,22 +7,11 @@ context('Luis Deploy', () => {
     cy.route('POST', '/api/launcher/sync', 'OK');
     cy.route('POST', 'api/projects/opened/settings', 'OK');
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.openBot('ToDoLuisBot');
-
-    // save as a new test bot to prevent changing original luisBot's publish settings and remove it after test
-    cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-    cy.getByText('Save as').click();
-
-    cy.get('input[data-testid="NewDialogName"]').type('__TestBot');
-    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
-
-    cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestBot.Main').should('exist');
-    });
+    cy.createBot('ToDoLuisBot');
   });
 
   it('can deploy luis success', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Says"]').click();
+    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
 
     cy.route({
       method: 'POST',

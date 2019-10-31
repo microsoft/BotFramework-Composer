@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // this is currently hard-coded here
 import FormEditor from 'composer-extensions/obiformeditor';
 import VisualDesigner from 'composer-extensions/visual-designer';

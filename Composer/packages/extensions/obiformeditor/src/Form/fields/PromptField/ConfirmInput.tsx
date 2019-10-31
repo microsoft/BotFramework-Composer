@@ -1,6 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
+import { ConfirmInput, IChoiceOption } from 'shared';
 
 import { PromptFieldChangeHandler, GetSchema } from './types';
 import { Choices } from './ChoiceInput/Choices';

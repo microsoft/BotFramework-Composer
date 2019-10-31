@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react';
@@ -5,6 +8,7 @@ import { Link } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
+import { isAbsHosted } from '../../utils/envUtil';
 
 import Routes from './router';
 import { Tree } from './../../components/Tree/index';
@@ -13,18 +17,21 @@ import { title, fileList, contentEditor, linkItem } from './styles';
 import { MainContent } from './../../components/MainContent/index';
 import { TestController } from './../../TestController';
 
+const settingLabels = {
+  title: formatMessage('Configuration'),
+  publish: formatMessage('Publish'),
+  settings: formatMessage('Settings'),
+};
+
+const absHosted = isAbsHosted();
+
 const links = [
-  { key: '/setting/dialog-settings', name: formatMessage('Dialog settings') },
+  { key: '/setting/dialog-settings', name: settingLabels.settings },
+  { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish },
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
-
-if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h' || process.env.MOCKHOSTED) {
-  links.push({ key: '/setting/remote-publish', name: formatMessage('Publish') });
-} else {
-  links.push({ key: '/setting/deployment', name: formatMessage('Deployment') });
-}
 
 export const SettingPage = () => {
   const [active, setActive] = useState();
@@ -63,7 +70,7 @@ export const SettingPage = () => {
           <div css={fileList}>
             <Tree variant="large">
               <div>
-                <div css={title}>{formatMessage('Settings')}</div>
+                <div css={title}>{settingLabels.title}</div>
                 <Nav
                   groups={[{ links }]}
                   onRenderLink={onRenderLink}

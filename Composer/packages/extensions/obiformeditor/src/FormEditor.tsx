@@ -1,35 +1,27 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
 import isEqual from 'lodash.isequal';
-import { appschema } from 'shared';
+import { appschema, ShellData, ShellApi } from 'shared';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMemoryOptions } from './Form/utils';
-import { DialogInfo, FormMemory, FormData, ShellApi, EditorSchema, LuFile, LgFile } from './types';
+import { FormMemory, FormData } from './types';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
 };
 
-export interface FormEditorProps {
-  data: FormData;
-  currentDialog: DialogInfo;
-  dialogs: DialogInfo[];
-  focusPath: string;
-  focusedEvent: string;
-  focusedSteps: string[];
-  focusedTab?: string;
-  isRoot: boolean;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
+export interface FormEditorProps extends ShellData {
   memory: FormMemory;
   onBlur?: () => void;
   onChange: (newData: object, updatePath?: string) => void;
-  schemas: EditorSchema;
   shellApi: ShellApi;
 }
 

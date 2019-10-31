@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { render } from 'react-testing-library';
 
@@ -5,8 +8,8 @@ import { ErrorBoundary } from '../../src/components/ErrorBoundary/index';
 
 const Store = React.createContext({
   actions: {
-    setError: err => {
-      console.log(err);
+    setError: () => {
+      // no-op
     },
   },
   state: {
@@ -16,11 +19,12 @@ const Store = React.createContext({
 
 const ProblemChild = () => {
   throw new Error();
+  // eslint-disable-next-line no-unreachable
   return <div>Error</div>;
 };
 
 describe('<ErrorBoundary/>', () => {
-  it('should just render the children if error not occur', async () => {
+  it('should just render the children if error not occur', () => {
     ErrorBoundary.contextType = Store;
     const { container, debug } = render(
       <ErrorBoundary>
@@ -31,7 +35,7 @@ describe('<ErrorBoundary/>', () => {
     expect(container).toHaveTextContent('test');
   });
 
-  it('all the components will not crash with ErrorBoundary even child compoent throw a error', async () => {
+  it('all the components will not crash with ErrorBoundary even child compoent throw a error', () => {
     ErrorBoundary.contextType = Store;
     const { container, debug } = render(
       <div>
@@ -45,7 +49,7 @@ describe('<ErrorBoundary/>', () => {
     expect(container).toHaveTextContent('will not crash');
   });
 
-  it('all components will crash without ErrorBoundary to catch a error', async () => {
+  it('all components will crash without ErrorBoundary to catch a error', () => {
     ErrorBoundary.contextType = Store;
     expect(() =>
       render(

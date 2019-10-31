@@ -1,12 +1,16 @@
-import axios from 'axios';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './bot';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
+import httpClient from './../../utils/httpUtil';
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
@@ -28,7 +32,7 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 
 export const fetchProject: ActionCreator = async store => {
   try {
-    const response = await axios.get(`${BASEURL}/projects/opened`);
+    const response = await httpClient.get(`/projects/opened`);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -44,7 +48,7 @@ export const fetchProject: ActionCreator = async store => {
 
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   try {
-    const response = await axios.get(`${BASEURL}/projects/recent`);
+    const response = await httpClient.get(`/projects/recent`);
     dispatch({
       type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
       payload: {
@@ -64,7 +68,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
-    const response = await axios.put(`${BASEURL}/projects/opened`, data);
+    const response = await httpClient.put(`/projects/opened`, data);
     const dialogs = response.data.dialogs;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -76,13 +80,19 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       navTo(store, 'Main');
       startBot(store, true);
     }
-    return response.data;
+    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
         summary: 'Failed to open bot',
         message: err.response.data.message,
+      },
+    });
+    store.dispatch({
+      type: ActionTypes.REMOVE_RECENT_PROJECT,
+      payload: {
+        path: absolutePath,
       },
     });
   }
@@ -97,7 +107,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
       name,
       description,
     };
-    const response = await axios.post(`${BASEURL}/projects/opened/project/saveAs`, data);
+    const response = await httpClient.post(`/projects/opened/project/saveAs`, data);
     const dialogs = response.data.dialogs;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -114,7 +124,13 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
   }
 };
 
-export const createProject: ActionCreator = async (store, templateId, name, description, location) => {
+export const createProject: ActionCreator = async (
+  store,
+  templateId: string,
+  name: string,
+  description: string,
+  location: string
+) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -125,7 +141,7 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
       description,
       location,
     };
-    const response = await axios.post(`${BASEURL}/projects`, data);
+    const response = await httpClient.post(`/projects`, data);
     const dialogs = response.data.dialogs;
     settingStorage.remove(name);
     store.dispatch({
@@ -145,7 +161,7 @@ export const createProject: ActionCreator = async (store, templateId, name, desc
 
 export const getAllProjects = async () => {
   try {
-    return (await axios.get(`${BASEURL}/projects`)).data.children;
+    return (await httpClient.get(`/projects`)).data.children;
   } catch (err) {
     return err;
   }

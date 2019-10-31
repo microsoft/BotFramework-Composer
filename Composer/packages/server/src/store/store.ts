@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 import path from 'path';
 
-import localInitData from './data.template.json';
+import localInitData from './data.template';
 import abhInitData from './abh-template.json';
 
 const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;

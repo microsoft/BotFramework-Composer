@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
@@ -37,6 +40,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
     >
       <IconMenu
         iconName="MoreVertical"
+        iconSize={12}
         iconStyles={{
           color: '#0078D4',
           selectors: {

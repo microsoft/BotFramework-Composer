@@ -1,5 +1,8 @@
-import { JSONSchema6 } from 'json-schema';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { MicrosoftInputDialog, ChoiceInput, ConfirmInput, OBISchema } from 'shared';
 
 export type InputDialogKeys = keyof MicrosoftInputDialog | keyof ChoiceInput | keyof ConfirmInput;
 export type PromptFieldChangeHandler = (field: InputDialogKeys) => (data: any) => void;
-export type GetSchema = (field: InputDialogKeys) => JSONSchema6;
+export type GetSchema = (field: InputDialogKeys) => OBISchema;

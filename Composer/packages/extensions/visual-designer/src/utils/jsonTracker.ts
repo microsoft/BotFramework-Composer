@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { cloneDeep, get, set } from 'lodash';
 import { seedNewDialog, deepCopyAction } from 'shared';
 
@@ -208,13 +211,16 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, l
     return inputDialog;
   }
 
-  // Deep copy nodes with external resources
-  const copiedNodes = await Promise.all(
-    newNodes.map(async x => {
-      const node = await deepCopyAction(x, lgApi);
-      return node;
-    })
-  );
+  // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
+  //        so we have to call them sequentially
+  // TODO: copy them parralleled via Promise.all() after optimizing lg api.
+  const copiedNodes: any[] = [];
+  for (const node of newNodes) {
+    // Deep copy nodes with external resources
+    const copy = await deepCopyAction(node, lgApi);
+    copiedNodes.push(copy);
+  }
+
   targetArray.currentData.splice(arrayIndex, 0, ...copiedNodes);
   return dialog;
 }

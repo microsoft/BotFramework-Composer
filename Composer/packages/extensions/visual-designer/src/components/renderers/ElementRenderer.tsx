@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
@@ -78,7 +81,6 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, ta
     <div
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
-        display: inline-block;
         position: relative;
         border-radius: 2px 2px 0 0;
         ${nodeSelected && nodeBorderSelectedStyle};

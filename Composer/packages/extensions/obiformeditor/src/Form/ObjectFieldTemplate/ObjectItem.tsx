@@ -1,10 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import classnames from 'classnames';
-import { JSONSchema6 } from 'json-schema';
-import { FIELDS_TO_HIDE } from 'shared';
+import { FIELDS_TO_HIDE, OBISchema } from 'shared';
 
 import './styles.css';
 
@@ -14,7 +16,7 @@ interface ObjectItemProps {
   onDropPropertyClick: (name: string) => (e) => void;
   onEdit: (e) => void;
   onAdd: (e) => void;
-  schema: JSONSchema6;
+  schema: OBISchema;
 }
 
 export default function ObjectItem(props: ObjectItemProps) {

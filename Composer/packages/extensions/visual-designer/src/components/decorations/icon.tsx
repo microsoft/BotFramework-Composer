@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Icon as FabricIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -83,5 +86,12 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) => {
     );
   }
 
-  return <FabricIcon iconName={icon} />;
+  return (
+    <FabricIcon
+      iconName={icon}
+      css={{
+        fontSize: size,
+      }}
+    />
+  );
 };

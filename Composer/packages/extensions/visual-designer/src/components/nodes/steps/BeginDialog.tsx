@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
@@ -28,11 +31,6 @@ export class BeginDialog extends React.Component<NodeProps, object> {
           onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
         }}
       >
-        <FabricIcon
-          style={{ lineHeight: '12px', fontSize: '12px', paddingLeft: '5px', paddingRight: '5px' }}
-          iconName="OpenSource"
-          data-testid="OpenIcon"
-        />
         {calleeDialog}
       </span>
     );
