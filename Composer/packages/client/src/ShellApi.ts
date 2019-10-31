@@ -93,6 +93,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('onCopy', onCopy);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -172,6 +173,7 @@ export const ShellApi: React.FC = () => {
       focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      clipboardActions: state.clipboardActions,
       hosted: !!isAbsHosted(),
     };
   }
@@ -328,6 +330,17 @@ export const ShellApi: React.FC = () => {
 
   function onSelect(ids: string[]) {
     actions.setVisualEditorSelection(ids);
+  }
+
+  function onCopy(copiedActions: any[]) {
+    actions.setVisualEditorClipboard(copiedActions);
+    // NOTES: fire a proactively state sync with VisualEditor
+    // TODO: revisit how states should be synced via ShellApi without url refresh.
+    const nextState: ShellData = {
+      ...getState(VISUAL_EDITOR),
+      clipboardActions: copiedActions,
+    };
+    apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
   return null;

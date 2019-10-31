@@ -252,6 +252,11 @@ const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   return state;
 };
 
+const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
+  state.clipboardActions = clipboardActions;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -306,4 +311,5 @@ export const reducer = createReducer({
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
+  [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
 });
