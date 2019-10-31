@@ -26,6 +26,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   focusedEvent,
   focusedActions,
   focusedTab,
+  clipboardActions,
   data: inputData,
   shellApi,
   hosted,
@@ -62,6 +63,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedId,
     focusedEvent,
     focusedTab,
+    clipboardActions: clipboardActions || [],
     updateLgTemplate: updateLgTemplate,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
@@ -109,6 +111,7 @@ interface VisualDesignerProps {
   focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
+  clipboardActions?: any[];
   shellApi: any;
   hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };
