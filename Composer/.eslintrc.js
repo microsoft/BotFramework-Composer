@@ -62,7 +62,9 @@ module.exports = {
         jest: true,
       },
       rules: {
+        '@typescript-eslint/ban-ts-ignore': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
+        '@typescript-eslint/unbound-method': 'off',
 
         'security/detect-buffer-noassert': 'off',
         'security/detect-child-process': 'off',

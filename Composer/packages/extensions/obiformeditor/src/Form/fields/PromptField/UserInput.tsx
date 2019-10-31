@@ -22,12 +22,12 @@ const getOptions = (enumSchema: JSONSchema6) => {
   return enumSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
-interface UserAnswersProps extends FieldProps<MicrosoftInputDialog> {
+interface UserInputProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
-export const UserAnswers: React.FC<UserAnswersProps> = props => {
+export const UserInput: React.FC<UserInputProps> = props => {
   const { onChange, getSchema, idSchema, formData, errorSchema } = props;
 
   return (

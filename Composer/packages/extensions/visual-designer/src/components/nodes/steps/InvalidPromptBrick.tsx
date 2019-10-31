@@ -11,5 +11,5 @@ import { IconBrick } from '../../decorations/IconBrick';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 
 export const InvalidPromptBrick: FC<NodeProps> = ({ id, onEvent }): JSX.Element => {
-  return <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.EXCEPTIONS })} />;
+  return <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />;
 };
