@@ -7,14 +7,12 @@
   "autoEndDialog": true,
   "generator": "common.lg",
   "$schema": "../../app.schema",
-  "recognizer": "Main.lu",
   "triggers": [
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "821845"
-      },
-      
+      },    
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
