@@ -46,6 +46,7 @@ const Onboarding: React.FC = () => {
     if (didMount.current && complete) {
       setCurrentSet(0);
       setCurrentStep(0);
+      setHideModal(true);
     }
     didMount.current = true;
   }, [complete, stepSets]);
@@ -58,7 +59,6 @@ const Onboarding: React.FC = () => {
 
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
-    setHideModal(currentSet === 0);
     updateMinimized(!!~currentStep);
 
     currentSet > -1 && currentSet < stepSets.length && onboardingState.setCurrentSet(stepSets[currentSet].id);

@@ -17,7 +17,7 @@ export interface IStep {
   hidden?: boolean;
   id: string;
   location?: string;
-  navigateTo: string;
+  navigateTo?: string;
   selector?: string;
   targetId?: string;
 }
@@ -31,7 +31,7 @@ export interface IStepSet {
 export const stepSets = (): IStepSet[] => [
   {
     id: 'setUpBot',
-    steps: [{ id: 'setUpYourBot', navigateTo: '/home', targetId: 'project' }],
+    steps: [{ id: 'setUpYourBot', targetId: 'project' }],
     title: formatMessage('Set up your bot'),
   },
   {
