@@ -48,6 +48,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onFocusEvent,
     onFocusSteps,
     onSelect,
+    onCopy,
     saveData,
     updateLgTemplate,
     getLgTemplates,
@@ -91,6 +92,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
+              onClipboardChange={onCopy}
               onOpen={(x, rest) => navTo(x, rest)}
               onChange={x => saveData(x)}
               onSelect={onSelect}
