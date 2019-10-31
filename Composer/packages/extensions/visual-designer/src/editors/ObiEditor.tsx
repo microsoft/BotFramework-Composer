@@ -12,7 +12,6 @@ import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/Keyboar
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { ClipboardContext } from '../store/ClipboardContext';
 import {
   deleteNode,
   insert,
@@ -42,14 +41,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
     NodeRendererContext
   );
-  const [clipboardContext, setClipboardContext] = useState({
-    clipboardActions: [],
-    setClipboardActions: actions => setClipboardContext({ ...clipboardContext, clipboardActions: actions }),
-  });
-
   const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
@@ -111,7 +105,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardContext.clipboardActions, lgApi).then(dialog => {
+            pasteNodes(data, e.id, e.position, clipboardActions, lgApi).then(dialog => {
               onChange(dialog);
             });
           };
@@ -133,15 +127,15 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.CopySelection:
         handler = e => {
           const copiedActions = copyNodes(data, e.actionIds);
-          clipboardContext.setClipboardActions(copiedActions);
+          return copiedActions;
         };
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
           const { dialog, cutData } = cutNodes(data, e.actionIds);
-          clipboardContext.setClipboardActions(cutData);
           onChange(dialog);
           onFocusSteps([]);
+          return cutData;
         };
         break;
       case NodeEventTypes.DeleteSelection:
@@ -275,7 +269,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           case KeyboardCommandTypes.Node.Paste:
             dispatchEvent(NodeEventTypes.AppendSelection, {
               target: focusedId,
-              actions: clipboardContext.clipboardActions,
+              actions: clipboardActions,
             });
             break;
         }
@@ -308,38 +302,36 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <ClipboardContext.Provider value={clipboardContext}>
-        <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
-          <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-            <div
-              tabIndex={0}
-              className="obi-editor-container"
-              data-testid="obi-editor-container"
-              css={{
-                width: '100%',
-                height: '100%',
-                padding: '48px 20px',
-                boxSizing: 'border-box',
-                '&:focus': { outline: 'none' },
+      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+          <div
+            tabIndex={0}
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '48px 20px',
+              boxSizing: 'border-box',
+              '&:focus': { outline: 'none' },
+            }}
+            ref={el => (divRef = el)}
+            onClick={e => {
+              e.stopPropagation();
+              dispatchEvent(NodeEventTypes.Focus, { id: '' });
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.focus({ preventScroll: true });
+                dispatchEvent(eventName, eventData);
               }}
-              ref={el => (divRef = el)}
-              onClick={e => {
-                e.stopPropagation();
-                dispatchEvent(NodeEventTypes.Focus, { id: '' });
-              }}
-            >
-              <AdaptiveDialogEditor
-                id={path}
-                data={data}
-                onEvent={(eventName, eventData) => {
-                  divRef.focus({ preventScroll: true });
-                  dispatchEvent(eventName, eventData);
-                }}
-              />
-            </div>
-          </MarqueeSelection>
-        </KeyboardZone>
-      </ClipboardContext.Provider>
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
     </SelectionContext.Provider>
   );
 };
