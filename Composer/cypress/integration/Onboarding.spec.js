@@ -7,23 +7,15 @@ context('onboarding', () => {
   });
 
   it('can walk through steps', () => {
-    const { complete: beginningOnboardingState } = JSON.parse(localStorage.getItem('OnboardingState')) || {};
-    expect(beginningOnboardingState).to.be.falsy;
+    cy.getByTestId('onboardingNext', { force: true }).click();
+
+    cy.getByTestId('toDoBotWithLuisSample').click();
+    cy.getByTestId('NewDialogName').type('__OnboardingTest{enter}');
+    cy.wait(2000);
 
     cy.getByTestId('onboardingNextSet', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
-
-    cy.getByTestId('onboardingNextSet', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
-    cy.getByTestId('onboardingNext', { force: true }).click();
-
-    cy.reload().then(() => {
-      const { complete, currentSet, currentStep } = JSON.parse(localStorage.getItem('OnboardingState'));
-      expect(complete).to.be.false;
-      expect(currentSet).to.equal(1);
-      expect(currentStep).to.equal(2);
-    });
-
     cy.getByTestId('onboardingNext', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
@@ -37,29 +29,6 @@ context('onboarding', () => {
     cy.getByTestId('onboardingNextSet', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
 
-    cy.getByTestId('onboardingDone', { force: true }).click().then(() => {
-      const { complete } = JSON.parse(localStorage.getItem('OnboardingState'));
-      expect(complete).to.be.true;
-    });
-  });
-  
-  it('can cancel onboarding', () => {
-    cy.get('.ms-Overlay').click();
-    cy.getByTestId('cancelPrompt').click();
-    cy.get('.ms-Overlay').click();
-    cy.getByTestId('confirmPrompt').click();
-    cy.getByTestId('LeftNav-CommandBarButtonHome').click().then(() => {
-      const { complete } = JSON.parse(localStorage.getItem('OnboardingState'));
-      expect(complete).to.be.true;
-    });
-  });
-
-  it('can start onboarding from settings', () => {
-    cy.get('.ms-Overlay').click();
-    cy.getByTestId('confirmPrompt').click();
-    cy.getByTestId('LeftNav-CommandBarButtonSettings').click();
-    cy.getByText('Onboarding').click();
-    cy.getByTestId('onboardingToggle').click();
-    cy.getByTestId('onboardingNextSet', { force: true }).click();
+    cy.getByTestId('onboardingDone', { force: true }).click();
   });
 });

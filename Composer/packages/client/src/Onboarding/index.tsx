@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { navigate, Location } from '@reach/router';
+import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 
 import { StoreContext } from '../store';
 import onboardingState from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal';
+import { useLocation } from '../utils/hooks';
 
 import { IStepSet, stepSets as defaultStepSets } from './onboarding';
 import OnboardingContext from './context';
@@ -32,6 +33,10 @@ const Onboarding: React.FC = () => {
   const [hideModal, setHideModal] = useState(true);
   const [minimized, updateMinimized] = useState<boolean>(false);
   const [teachingBubble, setTeachingBubble] = useState<any>({});
+
+  const {
+    location: { pathname },
+  } = useLocation();
 
   useEffect(() => {
     onboardingSetComplete(onboardingState.getComplete());
@@ -76,6 +81,13 @@ const Onboarding: React.FC = () => {
 
     setStepSets(sets);
   }, [dialogs]);
+
+  useEffect(() => {
+    setHideModal(pathname !== '/dialogs/Main');
+    if (currentSet === 0) {
+      setCurrentStep(pathname === '/home' ? 0 : -1);
+    }
+  }, [pathname]);
 
   const nextSet = useCallback(() => {
     setCurrentSet(current => {
@@ -144,15 +156,6 @@ const Onboarding: React.FC = () => {
     <OnboardingContext.Provider value={value}>
       <WelcomeModal />
       <TeachingBubbles />
-      <Location>
-        {({ location: { pathname } }) => {
-          setHideModal(pathname !== '/dialogs/Main');
-          if (pathname === '/dialogs/Main' && currentSet === 0) {
-            setCurrentStep(-1);
-          }
-          return null;
-        }}
-      </Location>
     </OnboardingContext.Provider>
   ) : null;
 };

@@ -27,6 +27,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   styles = {},
   disabled,
   forwardedRef,
+  ...rest
 }) => {
   return (
     <div
@@ -38,6 +39,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         }
       }}
       ref={forwardedRef}
+      {...rest}
     >
       <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
         <div css={itemContainerTitle}>{title}</div>

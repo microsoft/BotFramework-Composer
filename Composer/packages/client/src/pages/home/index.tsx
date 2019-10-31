@@ -61,10 +61,6 @@ export const Home = props => {
     await openBotProject(path);
   };
 
-  const onClickNewBotProject = () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
-  };
-
   const onSelectionChanged = async item => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
@@ -167,6 +163,7 @@ export const Home = props => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
                 forwardedRef={addRef}
+                data-testid="toDoBotWithLuisSample"
               />
             )}
           </div>
