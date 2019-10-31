@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { isTokenExpired } from '../../src/utils/auth';
 
 // token that expires on Sep 5, 2019 @ 14:00 PDT

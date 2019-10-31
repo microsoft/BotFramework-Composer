@@ -11,7 +11,8 @@
 09 - TraceAndLog
 10 - EditActions
 11 - ReplaceDialog
-12 - EmitEvent```
+12 - EmitEvent
+13 - QnAMaker```
 
 # bfdactivity-666135
 -Here are the index and values in the array.
@@ -21,9 +22,6 @@
 
 # bfdactivity-644042
 -Hello {user.name}, nice to talk to you!
-
-# bfdactivity-879639
--Say moo to get a response, say emit to emit a event.
 
 # bfdactivity-604381
 -Hello {user.name}, nice to talk to you!
@@ -76,17 +74,6 @@
 # bfdactivity-286023
 -To get to the other side!
 
-# bfdactivity-166189
--Step 1
-
-# bfdactivity-069635
--Step 2
-
-# bfdactivity-851726
--Step 3
-
-# bfdactivity-116995
--user.age is set to {user.age}
 
 # bfdactivity-166131
 -user.age is set to {user.age}
@@ -118,8 +105,8 @@
 # bfdactivity-700082
 -You select: 3
 
-# bfdactivity-347762 
--[help]
-
 # bfdactivity-640616
 -[help]
+
+# bfdactivity-576334
+- Say moo to get a response, say emit to emit a event.

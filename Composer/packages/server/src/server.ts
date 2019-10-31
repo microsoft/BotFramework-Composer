@@ -57,8 +57,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
 app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
 app.use(morgan('dev'));
 
-app.use(bodyParser({ limit: '50mb' }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
