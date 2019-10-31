@@ -4,7 +4,7 @@
 import formatMessage from 'format-message';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
-export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
+export const BASEURL = `${process.env.API_HOST || ''}/api`;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
