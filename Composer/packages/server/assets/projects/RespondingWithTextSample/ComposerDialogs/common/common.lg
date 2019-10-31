@@ -26,8 +26,6 @@
 # bfdactivity-219943
 -@{TextWithLG()}
 
-
-
 # bfdactivity-822060
 -{user.message}
 
@@ -36,7 +34,6 @@
 
 # bfdactivity-551445
 -@{help()}
-
 
 # greetInAWeek
 - SWITCH: @{dayOfWeek(utcNow())}
@@ -47,18 +44,11 @@
 -DEFAULT:  
     - Working day!
 
-
-
-
 # bfdactivity-739923
 - [TextWithLG]
 
-
 # bfdactivity-853358
 - @{multilineText()}
-
-
-
 
 # timeOfDayGreeting(timeOfDay)
 - IF: @{timeOfDay == 'morning'}
@@ -67,12 +57,6 @@
     - good afternoon
 - ELSE: 
     - good evening
-
-
-
-
-
-
 
 # StructuredText
 [Activity
@@ -85,27 +69,20 @@ alarm1:  7:am
 alarm2: 9:pm
 ```
 
-
-
 # bfdactivity-862531
 - @{StructuredText()}
-
 
 # bfdactivity-772457
 - @{multilineText()}
 
-
 # bfdactivity-458516
 - @{multilineText()}
-
 
 # bfdprompt-383595
 - what the time of day
 
-
 # bfdactivity-749181
 - @{timeOfDayGreeting(user.timeofday)}
-
 
 # bfdactivity-958316
 - @{greetInAWeek()}
