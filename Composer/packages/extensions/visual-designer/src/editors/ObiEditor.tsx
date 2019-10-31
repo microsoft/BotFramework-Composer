@@ -33,6 +33,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   data,
   onFocusEvent,
   onFocusSteps,
+  onClipboardChange,
   onOpen,
   onChange,
   onSelect,
@@ -127,7 +128,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.CopySelection:
         handler = e => {
           const copiedActions = copyNodes(data, e.actionIds);
-          return copiedActions;
+          onClipboardChange(copiedActions);
         };
         break;
       case NodeEventTypes.CutSelection:
@@ -135,7 +136,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           onChange(dialog);
           onFocusSteps([]);
-          return cutData;
+          onClipboardChange(cutData);
         };
         break;
       case NodeEventTypes.DeleteSelection:
@@ -343,6 +344,7 @@ ObiEditor.defaultProps = {
   onFocusSteps: () => {},
   focusedEvent: '',
   onFocusEvent: () => {},
+  onClipboardChange: () => {},
   onOpen: () => {},
   onChange: () => {},
   onSelect: () => {},
@@ -358,6 +360,7 @@ interface ObiEditorProps {
   onFocusSteps: (stepIds: string[], fragment?: string) => any;
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
+  onClipboardChange: (actions: any[]) => void;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
   onSelect: (ids: string[]) => any;
