@@ -66,11 +66,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     const buttonStyles: IButtonStyles = {
       root: {
         minWidth: 0,
-        padding: '0 4px',
+        padding: '0 8px',
         margin: 0,
         alignSelf: 'stretch',
         height: 'auto',
-        color: '#000000',
+        color: '#323130',
         background: background || 'transparent',
         selectors,
       },
