@@ -173,6 +173,7 @@ export const ShellApi: React.FC = () => {
       focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      clipboardActions: state.clipboardActions,
       hosted: !!isAbsHosted(),
     };
   }
