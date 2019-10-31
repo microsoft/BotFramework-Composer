@@ -32,7 +32,6 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   const content = hasNoSteps ? (
     <EdgeMenu
       onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
-      data-coach-mark="action"
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
     />

@@ -89,7 +89,6 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
                 y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
               }}
               css={{ zIndex: 100 }}
-              data-coach-mark="action"
             >
               <EdgeMenu
                 onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: idx + 1 })}

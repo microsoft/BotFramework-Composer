@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import OnboardingContext from '../context';
-import { StoreContext } from '../../store';
 import { getTeachingBubble } from '../onboarding';
+import { StoreContext } from '../../store';
 
 import { teachingBubbleStyles, teachingBubbleTheme } from './styles';
 
@@ -29,7 +29,7 @@ const TeachingBubbles = () => {
 
   const {
     actions: { nextStep, previousStep },
-    state: { currentSet, currentStep, teachingBubble },
+    state: { currentStep, teachingBubble },
   } = useContext(OnboardingContext);
 
   const { id, location, setLength = 0, targetId = '' } = teachingBubble || {};
@@ -50,7 +50,7 @@ const TeachingBubbles = () => {
   let position;
   const { x, y } = target;
 
-  if (x && y && location) {
+  if (typeof x !== 'undefined' && typeof y !== 'undefined' && location) {
     const { left, top } = coachMarkRefs[location].getBoundingClientRect();
     position = { x: left + x, y: top + y };
   }
@@ -74,10 +74,6 @@ const TeachingBubbles = () => {
       onClick: previousStep,
       'data-testid': 'onboardingPrevious',
     };
-  }
-
-  if (currentSet === 0) {
-    teachingBubbleProps.onDismiss = nextStep;
   }
 
   if (setLength > 1) {

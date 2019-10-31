@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
-import { getByTestId, getByTitle, render, findByTitle } from 'react-testing-library';
+import React from 'react';
+import { render } from 'react-testing-library';
 
 import OnboardingContext from '../../src/Onboarding/context';
 import { StoreContext } from '../../src/store';

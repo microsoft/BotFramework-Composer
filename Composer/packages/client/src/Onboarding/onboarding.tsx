@@ -8,7 +8,6 @@ export interface IComposerTeachingBubble {
   children?: any;
   footerContent?: any;
   headline?: any;
-  onDismiss?: () => void;
   primaryButtonProps?: any;
   secondaryButtonProps?: any;
 }

@@ -5,15 +5,15 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 
-import { StoreContext } from '../store';
 import onboardingState from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal';
+import { StoreContext } from '../store';
 import { useLocation } from '../utils/hooks';
 
-import { IStepSet, stepSets as defaultStepSets } from './onboarding';
 import OnboardingContext from './context';
 import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal';
+import { IStepSet, stepSets as defaultStepSets } from './onboarding';
 
 const getCurrentSet = stepSets => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
 
@@ -31,7 +31,7 @@ const Onboarding: React.FC = () => {
   const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [hideModal, setHideModal] = useState(true);
-  const [minimized, updateMinimized] = useState<boolean>(false);
+  const [minimized, setMinimized] = useState<boolean>(false);
   const [teachingBubble, setTeachingBubble] = useState<any>({});
 
   const {
@@ -49,7 +49,7 @@ const Onboarding: React.FC = () => {
       setHideModal(true);
     }
     didMount.current = true;
-  }, [complete, stepSets]);
+  }, [complete]);
 
   useEffect(() => {
     const { steps } = stepSets[currentSet] || { steps: [] };
@@ -59,7 +59,7 @@ const Onboarding: React.FC = () => {
 
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
-    updateMinimized(!!~currentStep);
+    setMinimized(!!~currentStep);
 
     currentSet > -1 && currentSet < stepSets.length && onboardingState.setCurrentSet(stepSets[currentSet].id);
   }, [currentSet, currentStep, setTeachingBubble]);
@@ -122,14 +122,13 @@ const Onboarding: React.FC = () => {
         'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.'
       )
     );
+
     if (result) {
       onComplete();
     }
   }, [onComplete]);
 
-  const setMinimized = useCallback(minimized => updateMinimized(minimized), [updateMinimized]);
-
-  const toggleMinimized = useCallback(() => updateMinimized(minimized => !minimized), [updateMinimized]);
+  const toggleMinimized = useCallback(() => setMinimized(minimized => !minimized), [setMinimized]);
 
   const value = {
     actions: {

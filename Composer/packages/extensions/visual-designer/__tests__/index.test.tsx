@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { cleanup, render, waitForElement } from 'react-testing-library';
 
@@ -29,7 +32,6 @@ describe('<VisualDesigner />', () => {
         shellApi={{
           saveData: () => {},
         }}
-        teachingBubble={{}}
       />
     );
 

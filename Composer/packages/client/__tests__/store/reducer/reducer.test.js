@@ -14,10 +14,7 @@ const mockResponse = {
 
 describe('test all reducer handlers', () => {
   it('test getProjectSuccess reducer', () => {
-    const result = reducer(
-      { onboarding: {} },
-      { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } }
-    );
+    const result = reducer({}, { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } });
     expect(result.dialogs).toBe('test dialogs');
     expect(result.lgFiles).toBe('test lgFiles');
     expect(result.schemas).toBe('test schemas');
