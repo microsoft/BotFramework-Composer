@@ -334,6 +334,13 @@ export const ShellApi: React.FC = () => {
 
   function onCopy(copiedActions: any[]) {
     actions.setVisualEditorClipboard(copiedActions);
+    // NOTES: fire a proactively state sync with VisualEditor
+    // TODO: revisit how states should be synced via ShellApi without url refresh.
+    const nextState: ShellData = {
+      ...getState(VISUAL_EDITOR),
+      clipboardActions: copiedActions,
+    };
+    apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
   return null;
