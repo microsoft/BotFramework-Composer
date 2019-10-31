@@ -93,6 +93,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('onCopy', onCopy);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -328,6 +329,10 @@ export const ShellApi: React.FC = () => {
 
   function onSelect(ids: string[]) {
     actions.setVisualEditorSelection(ids);
+  }
+
+  function onCopy(copiedActions: any[]) {
+    actions.setVisualEditorClipboard(copiedActions);
   }
 
   return null;
