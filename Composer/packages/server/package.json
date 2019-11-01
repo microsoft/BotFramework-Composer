@@ -16,20 +16,12 @@
   "author": "",
   "license": "ISC",
   "nodemonConfig": {
-    "ignore": [
-      "*.js",
-      "*.json",
-      ".git",
-      ".vscode",
-      "__tests__",
-      "node_modules",
-      "build"
-    ],
-    "exec": "yarn build && NODE_OPTIONS='--inspect=9229' yarn start",
+    "exec": "TS_NODE_FILES=true node --inspect=9229 -r ts-node/register src/server.ts",
     "watch": [
       "src"
     ],
-    "ext": "ts"
+    "ext": "ts",
+    "delay": 2
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
@@ -58,7 +50,8 @@
     "copy-webpack-plugin": "^5.0.2",
     "mock-fs": "^4.10.1",
     "nodemon": "^1.18.11",
-    "rimraf": "^2.6.3"
+    "rimraf": "^2.6.3",
+    "ts-node": "^8.4.1"
   },
   "dependencies": {
     "@azure/ms-rest-js": "^1.8.7",
