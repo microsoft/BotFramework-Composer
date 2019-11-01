@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./lib/",
     "noImplicitAny": false,
-    "module": "es6",
+    "module": "commonjs",
     "target": "es5",
     "jsx": "react",
     "sourceMap": true,
