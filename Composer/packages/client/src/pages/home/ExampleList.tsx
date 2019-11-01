@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { List } from 'office-ui-fabric-react/lib/List';
-import { ProjectTemplate } from 'shared';
+import { ProjectTemplate } from '@bfc/shared';
 
 import * as exampleIcons from '../../images/samples';
 

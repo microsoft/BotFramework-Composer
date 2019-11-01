@@ -1,5 +1,5 @@
 {
-  "name": "visual-designer",
+  "name": "@bfc/visual-designer",
   "version": "1.0.0",
   "description": "visual-designer React component",
   "main": "lib/index.js",
@@ -21,6 +21,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
+    "@bfc/shared": "*",
     "@emotion/core": "^10.0.7",
     "@types/react": "16.9.0",
     "classnames": "^2.2.6",
@@ -52,7 +53,6 @@
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
-    "shared": "0.0.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.3"
   },
