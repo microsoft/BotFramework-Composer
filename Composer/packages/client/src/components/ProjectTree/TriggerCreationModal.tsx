@@ -166,7 +166,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           )}
           {showMessageDropDown && (
             <Dropdown
-              placeholder={formatMessage('Select an message type')}
+              placeholder={formatMessage('Select a message type')}
               label={formatMessage('Which message type?')}
               options={messageTypes}
               styles={dropdownStyles}
