@@ -97,7 +97,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: (
           <div>
             {formatMessage(
-              'Trigger connects intent with bot responses. Think of trigger as one capability of your bot. So your bot collection of triggers.'
+              'Triggers connect intents with bot responses. Think of a trigger as one capability of your bot. So your bot is a collection of triggers.'
             )}
           </div>
         ),
@@ -123,7 +123,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
       return {
         children: (
           <div>
-            {formatMessage('Action defines ')}
+            {formatMessage('Actions define ')}
             <b>{formatMessage('how the bot responds ')}</b>
             {formatMessage('to a certain trigger.')}
           </div>
@@ -136,7 +136,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: (
           <div>
             {formatMessage(
-              'You can manage all bot responses here. Make good use of the templates to create sophisticated needs.'
+              'You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs.'
             )}
           </div>
         ),
@@ -148,12 +148,15 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: (
           <div>
             <div>
-              {formatMessage(
-                'Welcome message is triggered by the event called ConversationUpdate. You may customize or add a new one. To do this:'
-              )}
+              {formatMessage('The welcome message is triggered by the ')}
+              <i>{formatMessage('ConversationUpdate ')}</i>
+              {formatMessage('event. You may customize or add a new one. To do this:')}
             </div>
             <ol>
-              <li>{formatMessage('Create a new or go to the trigger: ConversationUpdate')}</li>
+              <li>
+                {formatMessage('Create a new or go to the trigger: ')}
+                <i>{formatMessage('ConversationUpdate')}</i>
+              </li>
               <li>{formatMessage('Select/add action: send an Activity')}</li>
               <li>{formatMessage('Edit the message in the right pane')}</li>
             </ol>
@@ -167,7 +170,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: (
           <div>
             {formatMessage(
-              'Click on + and select intent as the trigger type. Follow the wizard to define the intent and other trigger settings. Then add actions in the visual editor.'
+              'Click on the + and select intent as the trigger type. Follow the wizard to define the intent and other trigger settings. Then add actions in the visual editor.'
             )}
           </div>
         ),
@@ -181,7 +184,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             {formatMessage('Click on the ')}
             <b>{formatMessage('Start Bot ')}</b>
             {formatMessage('button. Then you can choose to ')}
-            <b>{formatMessage('Bot Framework Emulator. ')}</b>
+            <b>{formatMessage('Test in Bot Framework Emulator. ')}</b>
             {formatMessage('This will open your Emulator app.')}
           </div>
         ),
