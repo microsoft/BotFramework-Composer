@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+import { Diagnostic as LGDiagnostic } from '@bfcomposer/botbuilder-lg';
 
 import { MicrosoftAdaptiveDialog } from './sdk';
 
