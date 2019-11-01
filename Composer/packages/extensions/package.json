@@ -1,5 +1,5 @@
 {
-  "name": "composer-extensions",
+  "name": "@bfc/extensions",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

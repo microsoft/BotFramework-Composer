@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog, deepCopyAction } from 'shared';
+import { seedNewDialog, deepCopyAction } from '@bfc/shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
