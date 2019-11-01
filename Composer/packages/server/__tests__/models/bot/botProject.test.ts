@@ -91,7 +91,7 @@ describe('copyTo', () => {
   afterEach(() => {
     try {
       const deleteFolder = (path: string): void => {
-        let files = [];
+        let files: string[] = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
           files.forEach(function(file) {

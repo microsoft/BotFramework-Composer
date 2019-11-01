@@ -9,8 +9,6 @@ import settings from './settings.json';
 // section with a default value, and override the value for different environment
 // in later sections
 
-// eslint-disable-next-line no-console
-console.log(`process env NODE_ENV is ${process.env.NODE_ENV}`);
 const defaultSettings = settings.development;
 const environment = process.env.NODE_ENV || 'development';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
