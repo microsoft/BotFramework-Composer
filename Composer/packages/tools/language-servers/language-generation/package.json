@@ -4,6 +4,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc && yarn build:demo",
+    "build:client": "tsc --build tsconfig.build.json",
     "build:demo": "cd demo && webpack",
     "prepublishOnly": "npm run build",
     "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
