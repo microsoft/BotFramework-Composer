@@ -21,6 +21,7 @@ import {
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
+  regexRecognizerKey
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 
@@ -103,9 +104,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
 
+  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
+
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
-  const intents = [...luisIntents, ...regexIntents];
+  const intents = isRegEx ? regexIntents : luisIntents;
 
   const intentOptions = intents.map(t => {
     return { key: t.name || t.intent, text: t.name || t.intent };
