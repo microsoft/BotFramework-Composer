@@ -107,7 +107,7 @@ export function DefineConversation(props) {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} />}
+        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} allowOpeningBot={false} />}
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
