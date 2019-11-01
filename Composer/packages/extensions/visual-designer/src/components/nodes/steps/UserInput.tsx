@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup, PromptTab } from 'shared';
+import { DialogGroup, PromptTab } from '@bfc/shared';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { FormCard } from '../templates/FormCard';

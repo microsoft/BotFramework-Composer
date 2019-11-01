@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import find from 'lodash.find';
-import { ProjectTemplate } from 'shared';
+import { ProjectTemplate } from '@bfc/shared';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
