@@ -18,7 +18,7 @@ import {
   ActivityRenderer,
   ChoiceInput,
   BotAsks,
-  UserAnswers,
+  UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
@@ -32,7 +32,7 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
   [ObiTypes.BotAsks]: BotAsks,
-  [ObiTypes.UserAnswers]: UserAnswers,
+  [ObiTypes.UserAnswers]: UserInput,
   [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
 };
 const DEFAULT_RENDERER = DefaultRenderer;

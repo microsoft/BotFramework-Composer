@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 
-import { seedNewDialog, DialogInfo } from 'shared';
+import { seedNewDialog, DialogInfo } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';

@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { MicrosoftInputDialog } from 'shared';
+import { MicrosoftInputDialog } from '@bfc/shared';
 
 import { TextWidget, CheckboxWidget } from '../../widgets';
 

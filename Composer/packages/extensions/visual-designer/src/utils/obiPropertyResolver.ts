@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogGroup, getDialogGroupByType } from 'shared';
+import { DialogGroup, getDialogGroupByType } from '@bfc/shared';
 
 import { NodeColors } from '../constants/ElementColors';
 

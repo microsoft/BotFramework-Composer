@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { JsonEditor } from 'code-editor';
+import { JsonEditor } from '@bfc/code-editor';
 
 import './styles.css';
 

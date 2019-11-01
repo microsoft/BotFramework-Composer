@@ -4,7 +4,7 @@
 import React from 'react';
 import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
-import { ConfirmInput, IChoiceOption } from 'shared';
+import { ConfirmInput, IChoiceOption } from '@bfc/shared';
 
 import { PromptFieldChangeHandler, GetSchema } from './types';
 import { Choices } from './ChoiceInput/Choices';
