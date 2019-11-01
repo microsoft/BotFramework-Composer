@@ -103,7 +103,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
-  const intents = isRegEx ? [...regexIntents] : [...luisIntents];
+  const intents = isRegEx ? regexIntents : luisIntents;
 
   const intentOptions = intents.map(t => {
     return { key: t.name || t.intent, text: t.name || t.intent };
