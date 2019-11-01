@@ -24,6 +24,9 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
     {
       key: 'delete',
       name: 'Delete',
+      iconProps: {
+        iconName: 'Cancel',
+      },
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
@@ -42,7 +45,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
         iconName="MoreVertical"
         iconSize={12}
         iconStyles={{
-          color: '#0078D4',
+          color: '#000000',
           selectors: {
             ':focus': {
               outline: 'none',

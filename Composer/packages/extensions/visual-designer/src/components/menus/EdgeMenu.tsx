@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext } from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from 'shared';
-import { IContextualMenu } from 'office-ui-fabric-react';
+import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
+import { IContextualMenu, ContextualMenuItemType, FontIcon } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { ClipboardContext } from '../../store/ClipboardContext';
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
@@ -42,23 +44,56 @@ const buildEdgeMenuItemsFromClipboardContext = (
     filter
   );
 
-  const enablePaste = !!clipboardActions.length;
-  menuItems.unshift({
-    key: 'Paste',
-    name: 'Paste',
-    disabled: !enablePaste,
-    iconProps: {
-      iconName: 'Paste',
+  const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
+  menuItems.unshift(
+    {
+      key: 'Paste',
+      name: 'Paste',
+      disabled: !enablePaste,
+      onRender: () => {
+        return (
+          <button
+            disabled={!enablePaste}
+            css={css`
+              color: ${enablePaste ? '#0078D4' : '#BDBDBD'};
+              background: #fff;
+              width: 100%;
+              height: 36px;
+              line-height: 36px;
+              border-style: none;
+              text-align: left;
+              padding: 0 8px;
+              outline: none;
+              &:hover {
+                background: rgb(237, 235, 233);
+              }
+            `}
+            onClick={() => onClick('PASTE')}
+          >
+            <div>
+              <FontIcon
+                iconName="Paste"
+                css={css`
+                  margin-right: 4px;
+                `}
+              />
+              <span>Paste</span>
+            </div>
+          </button>
+        );
+      },
     },
-    style: { color: enablePaste ? '#0078D4' : '#BDBDBD', borderBottom: '1px solid #F3F2F1' },
-    onClick: () => onClick('PASTE'),
-  });
+    {
+      key: 'divider',
+      itemType: ContextualMenuItemType.Divider,
+    }
+  );
 
   return menuItems;
 };
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
-  const clipboarcContext = useContext(ClipboardContext);
+  const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -104,7 +139,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         iconSize={10}
         nodeSelected={nodeSelected}
         menuItems={buildEdgeMenuItemsFromClipboardContext(
-          clipboarcContext,
+          nodeContext,
           onClick,
           selfHosted ? x => x !== SDKTypes.LogAction : undefined
         )}

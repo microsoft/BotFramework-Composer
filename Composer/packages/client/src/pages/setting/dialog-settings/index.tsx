@@ -3,14 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect } from 'react';
-import { RichEditor } from 'code-editor';
+import { useState, useContext } from 'react';
+import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
-import { obfuscate } from '../../../utils/objUtil';
 
 import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
 
@@ -32,14 +31,9 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const [value, setValue] = useState(JSON.stringify(visibleSettings, null, 2));
+  const [value, setValue] = useState(visibleSettings);
   const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-  const [parseError, setParseError] = useState('');
-
-  useEffect(() => {
-    setValue(JSON.stringify(editing ? visibleSettings : obfuscate(visibleSettings), null, 2));
-  }, [origSettings, editing]);
 
   const changeEditing = (_, on) => {
     setEditing(on);
@@ -54,6 +48,23 @@ export const DialogSettings = () => {
   const changeSlot = (_, option) => {
     setSlot(option.key);
     actions.setDialogSettingsSlot(editing, option.key);
+  };
+
+  const saveChangeResult = result => {
+    try {
+      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
+      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err.message);
+    }
+  };
+
+  const handleChange = (result, commit) => {
+    setValue(result);
+    if (commit || !absHosted) {
+      saveChangeResult(result);
+    }
   };
 
   const hostedControl = () => (
@@ -79,46 +90,16 @@ export const DialogSettings = () => {
     </div>
   );
 
-  const saveChangeResult = result => {
-    try {
-      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const handleChange = (value, commit) => {
-    setValue(value);
-    try {
-      const result = JSON.parse(value);
-      if (commit || !absHosted) {
-        saveChangeResult(result);
-      }
-    } catch (err) {
-      setParseError('invalid json');
-    }
-  };
-
-  const handleMount = monaco => {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-    });
-  };
-
   return botName ? (
     <div css={hostedSettings}>
       {hostedControl()}
       {toggle()}
       <div css={settingsEditor}>
-        <RichEditor
-          language="json"
+        <JsonEditor
           onChange={x => handleChange(x, false)}
-          errorMsg={parseError}
-          editorWillMount={handleMount}
-          options={{ folding: true, readOnly: !editing }}
-          value={value}
-          helpURL="https://www.json.org"
+          options={{ readOnly: !editing }}
+          value={visibleSettings}
+          obfuscate={!editing}
         />
       </div>
     </div>
