@@ -21,7 +21,7 @@ describe('assetManager', () => {
     const assetManager = new AssetManager(mockAssetLibraryPath, mockRuntimeLibraryPath);
     const result = await assetManager.getProjectTemplates();
     expect(result.length).toBeGreaterThan(0);
-    expect(result[0].name).toBe('SampleBot');
+    expect(result[0].name).toBe('Sample Bot');
     expect(result[0].id).toBe('SampleBot');
   });
 

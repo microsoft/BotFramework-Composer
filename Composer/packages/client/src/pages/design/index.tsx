@@ -6,8 +6,8 @@ import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabri
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
-import { PromptTab } from 'shared';
-import { getNewDesigner, seedNewDialog } from 'shared';
+import { PromptTab } from '@bfc/shared';
+import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';

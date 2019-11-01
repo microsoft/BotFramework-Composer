@@ -5,7 +5,7 @@ import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from 'shared';
+import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 
 import { TextWidget, SelectWidget } from '../../widgets';
 
@@ -22,12 +22,12 @@ const getOptions = (enumSchema: JSONSchema6) => {
   return enumSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
-interface UserAnswersProps extends FieldProps<MicrosoftInputDialog> {
+interface UserInputProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
-export const UserAnswers: React.FC<UserAnswersProps> = props => {
+export const UserInput: React.FC<UserInputProps> = props => {
   const { onChange, getSchema, idSchema, formData, errorSchema } = props;
 
   return (

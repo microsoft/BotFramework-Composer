@@ -6,7 +6,7 @@ import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import classnames from 'classnames';
-import { FIELDS_TO_HIDE, OBISchema } from 'shared';
+import { FIELDS_TO_HIDE, OBISchema } from '@bfc/shared';
 
 import './styles.css';
 

@@ -29,10 +29,11 @@ interface RootFieldProps {
   onChange?: (data: any) => void;
   schema: JSONSchema6;
   title?: string;
+  showMetadata?: boolean;
 }
 
 export const RootField: React.FC<RootFieldProps> = props => {
-  const { title, name, description, schema, formData, formContext } = props;
+  const { title, name, description, schema, formData, formContext, showMetadata = false } = props;
   const { currentDialog, editorSchema, isRoot } = formContext;
 
   const sdkOverrides = get(editorSchema, ['content', 'SDKOverrides', formData.$type], overrideDefaults);
@@ -81,14 +82,16 @@ export const RootField: React.FC<RootFieldProps> = props => {
 
       {props.children}
 
-      <div className="RootFieldMetaData">
-        <div style={{ marginRight: '36px' }}>
-          <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
-            {formatMessage('ID number')}
-          </span>
-          <span style={{ minWidth: '75px', display: 'inline-block' }}>{get(formData, '$designer.id')}</span>
+      {showMetadata && (
+        <div className="RootFieldMetaData">
+          <div style={{ marginRight: '36px' }}>
+            <span style={{ marginRight: '8px', fontWeight: FontWeights.semibold as number }}>
+              {formatMessage('ID number')}
+            </span>
+            <span style={{ minWidth: '75px', display: 'inline-block' }}>{get(formData, '$designer.id')}</span>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

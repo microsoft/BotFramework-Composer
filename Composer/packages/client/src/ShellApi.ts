@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useContext, useMemo, useState } from 'react';
-import { ShellData } from 'shared';
+import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';
 
