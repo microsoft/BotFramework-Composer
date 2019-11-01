@@ -33,6 +33,8 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
       const value = get(localSetting, property);
       if (value) {
         set(settings, property, value);
+      } else {
+        set(settings, property, ''); // set those key back, because that were omit after persisited
       }
     }
   }
