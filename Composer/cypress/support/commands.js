@@ -90,7 +90,7 @@ Cypress.Commands.add('addEventHandler', handler => {
   });
   cy.get(`[data-testid="triggerTypeDropDown"]`).click();
   cy.getByText(handler).click();
-  if (handler === 'Handle a Dialog Event') {
+  if (handler === 'Dialog trigger') {
     cy.get(`[data-testid="eventTypeDropDown"]`).click();
     cy.getByText('consultDialog').click();
   }
