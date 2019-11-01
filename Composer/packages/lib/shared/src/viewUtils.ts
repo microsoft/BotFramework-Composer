@@ -26,6 +26,7 @@ export enum DialogGroup {
   LOG = 'LOG',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
+  MESSAGE_EVENTS = 'MESSAGE_EVENTS',
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
@@ -44,7 +45,7 @@ export const dialogGroups: DialogGroupsMap = {
     types: [SDKTypes.SendActivity],
   },
   [DialogGroup.INPUT]: {
-    label: 'Ask a Question',
+    label: 'Ask a question',
     types: [
       SDKTypes.TextInput,
       SDKTypes.NumberInput,
@@ -95,6 +96,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.OnUnknownIntent,
       SDKTypes.OnDialogEvent,
       SDKTypes.OnActivity,
+      SDKTypes.OnMessageActivity,
       SDKTypes.OnCustomEvent,
     ],
   },
@@ -116,6 +118,10 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.OnMessageUpdateActivity,
       SDKTypes.OnTypingActivity,
     ],
+  },
+  [DialogGroup.MESSAGE_EVENTS]: {
+    label: 'Message events',
+    types: [SDKTypes.OnMessageDeleteActivity, SDKTypes.OnMessageReactionActivity, SDKTypes.OnMessageUpdateActivity],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',

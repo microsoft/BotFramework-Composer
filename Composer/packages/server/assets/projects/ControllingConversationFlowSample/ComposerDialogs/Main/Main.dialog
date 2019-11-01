@@ -170,7 +170,7 @@
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Handle ConversationUpdate",
+        "name": "Conversation started (ConversationUpdate)",
         "id": "791275"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",

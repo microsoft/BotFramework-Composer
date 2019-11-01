@@ -143,13 +143,13 @@ export const PublishLuis = props => {
       <div css={dialogSubTitle}>
         {Text.LUISDEPLOY}{' '}
         <Link href={Links.LUIS} target="_blank">
-          {formatMessage('Where can I find this?')}
+          {formatMessage('Learn more.')}
         </Link>
       </div>
       <form onSubmit={handlePublish} css={dialogContent}>
         <Stack gap={20}>
           <TextField
-            label={formatMessage('Project Name')}
+            label={formatMessage('What is the name of your bot?')}
             onChange={updateForm('name')}
             defaultValue={formData.name}
             onRenderLabel={onRenderLabel(Tips.PROJECT_NAME)}
@@ -165,7 +165,7 @@ export const PublishLuis = props => {
             data-testid="EnvironmentInput"
           />
           <TextField
-            label={formatMessage('Authoring key')}
+            label={formatMessage('LUIS Primary key:')}
             onChange={updateForm('authoringKey')}
             defaultValue={formData.authoringKey}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
@@ -187,11 +187,7 @@ export const PublishLuis = props => {
         </Stack>
       </form>
       <DialogFooter>
-        <PrimaryButton
-          onClick={handlePublish}
-          text={formatMessage('Publish')}
-          disabled={workState === STATE.PUBLISHPENDING}
-        >
+        <PrimaryButton onClick={handlePublish} text={formatMessage('OK')} disabled={workState === STATE.PUBLISHPENDING}>
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} data-testid={'publish-LUIS-models-cancel'} />
