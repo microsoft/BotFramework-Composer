@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const InitNodeSize = {
   width: 200,
   height: 48,
@@ -5,7 +8,7 @@ export const InitNodeSize = {
 
 export const DiamondSize = {
   width: 30,
-  height: 17,
+  height: 12,
 };
 
 export const LoopIconSize = {

@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { PromptTab } from 'shared';
+import { PromptTab } from '@bfc/shared';
 
 import { baseInputLayouter } from '../../../layouters/baseInputLayouter';
 import { NodeProps } from '../nodeProps';
@@ -41,7 +44,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementRenderer
           id={userAnswersNode.id}
-          tab={PromptTab.USER_ANSWERS}
+          tab={PromptTab.USER_INPUT}
           data={userAnswersNode.data}
           onEvent={onEvent}
           onResize={onResize}
@@ -50,7 +53,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       <OffsetContainer offset={brickNode.offset}>
         <ElementRenderer
           id={brickNode.id}
-          tab={PromptTab.EXCEPTIONS}
+          tab={PromptTab.OTHER}
           data={brickNode.data}
           onEvent={onEvent}
           onResize={onResize}

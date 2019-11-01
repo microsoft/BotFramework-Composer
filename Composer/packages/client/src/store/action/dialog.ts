@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import clonedeep from 'lodash.clonedeep';
 import { remove } from 'lodash';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 import debounce from 'lodash.debounce';
 
 import { ActionCreator, State } from '../types';

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import path from 'path';
 
 export default {
@@ -6,13 +9,8 @@ export default {
       id: 'default',
       name: 'This PC',
       type: 'LocalDisk',
-      path: path.resolve(__dirname, '../../../../../SampleBots'),
+      path: path.resolve(__dirname, '../../../../../MyBots'),
     },
   ],
-  recentBotProjects: [
-    {
-      storageId: 'default',
-      path: path.resolve(__dirname, '../../../../../SampleBots/ToDoBot'),
-    },
-  ],
+  recentBotProjects: [],
 };

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { SDKTypes, OBISchema } from './types';
 
 export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'selector', 'id', 'tags'];
@@ -202,6 +205,13 @@ export const appschema: OBISchema = {
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
         },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
+        },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
@@ -353,6 +363,13 @@ export const appschema: OBISchema = {
           description: 'Expression to examine on each turn of the conversation as possible value to the property.',
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
+        },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
         },
         alwaysPrompt: {
           type: 'boolean',
@@ -570,6 +587,13 @@ export const appschema: OBISchema = {
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
         },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
+        },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
@@ -758,6 +782,13 @@ export const appschema: OBISchema = {
           description: 'Expression to examine on each turn of the conversation as possible value to the property.',
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
+        },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
         },
         alwaysPrompt: {
           type: 'boolean',
@@ -1810,6 +1841,13 @@ export const appschema: OBISchema = {
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
         },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
+        },
         alwaysPrompt: {
           type: 'boolean',
           title: 'Always prompt',
@@ -2801,6 +2839,13 @@ export const appschema: OBISchema = {
           description: 'Expression to examine on each turn of the conversation as possible value to the property.',
           examples: ['@userName', 'coalesce(@number, @partySize)'],
           type: 'string',
+        },
+        value: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Value',
+          description: 'Gets or sets a value expression which can be used to intialize the input prompt.',
+          examples: ['@userName'],
         },
         alwaysPrompt: {
           type: 'boolean',

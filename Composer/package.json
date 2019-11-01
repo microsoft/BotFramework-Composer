@@ -1,5 +1,5 @@
 {
-  "name": "composer-root",
+  "name": "@bfc/root",
   "private": true,
   "resolutions": {
     "@types/react": "16.9.0"
@@ -36,11 +36,12 @@
     "test:integration:start": "cd packages/server && node build/server.js",
     "test:integration:open": "cypress open",
     "test:integration:run": "yarn run test:integration:prereport && cypress run --reporter mocha-multi-reporters --reporter-options configFile=reporter-config.json --browser chrome",
-    "test:integration:clean": "rimraf ../SampleBots/__Test* packages/server/data.json && git checkout ../SampleBots",
+    "test:integration:clean": "rimraf ../MyBots/__Test* packages/server/data.json && git checkout ../MyBots",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
-    "typecheck": "concurrently --kill-others-on-fail \"yarn typecheck:server\"",
-    "typecheck:server": "yarn workspace composer-api-server typecheck",
+    "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
+    "typecheck:server": "yarn workspace @bfc/server typecheck",
+    "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build"
   },
   "husky": {
@@ -63,8 +64,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@emotion/babel-preset-css-prop": "^10.0.17",
-    "@typescript-eslint/eslint-plugin": "2.4.0",
-    "@typescript-eslint/parser": "2.4.0",
+    "@typescript-eslint/eslint-plugin": "2.6.0",
+    "@typescript-eslint/parser": "2.6.0",
     "babel-jest": "24.0.0",
     "concurrently": "^4.1.0",
     "cypress": "3.4.0",

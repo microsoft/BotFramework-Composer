@@ -1,9 +1,14 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import Messenger, { MessageType } from '../../src/messenger/Messenger';
 
 const messenger = new Messenger();
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 const mockWindow = new Window({ parsingMode: 'html' });
+// eslint-disable-next-line @typescript-eslint/unbound-method
 mockWindow.postMessage = jest.fn();
 
 describe('messenger', () => {

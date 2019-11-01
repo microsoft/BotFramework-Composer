@@ -1,10 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 
 import {
   addNewTrigger,

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 import { promisify } from 'util';
 

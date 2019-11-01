@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { cloneDeep } from 'lodash';
 import { navigate, NavigateOptions } from '@reach/router';
 

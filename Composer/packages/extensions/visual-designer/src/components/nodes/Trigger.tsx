@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 
-import { ConceptLabels } from 'shared';
+import { ConceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 
 import { ElementIcon } from '../../utils/obiPropertyResolver';

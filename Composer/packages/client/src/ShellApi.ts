@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useEffect, useContext, useMemo, useState } from 'react';
-import { ShellData } from 'shared';
+import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';
 
@@ -52,10 +55,6 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 };
 
 export const ShellApi: React.FC = () => {
-  // HACK: `onSelect` should actually change some states
-  // TODO: (leilei, ze) fix it when refactoring shell state management.
-  const [, forceUpdate] = useState();
-
   const { state, actions } = useContext(StoreContext);
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
@@ -94,6 +93,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
     apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('onCopy', onCopy);
     apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
     apiClient.registerApi('createDialog', () => {
@@ -170,8 +170,10 @@ export const ShellApi: React.FC = () => {
       currentDialog,
       dialogId,
       focusedEvent: selected,
+      focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      clipboardActions: state.clipboardActions,
       hosted: !!isAbsHosted(),
     };
   }
@@ -244,9 +246,6 @@ export const ShellApi: React.FC = () => {
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
     parseLgTemplate(template);
-
-    const content = updateTemplateInContent({ content: file.content, templateName, template });
-    checkLgContent(content);
 
     return updateLgTemplate({
       file,
@@ -329,8 +328,19 @@ export const ShellApi: React.FC = () => {
     actions.focusTo(dataPath, fragment);
   }
 
-  function onSelect(ids) {
-    forceUpdate(ids);
+  function onSelect(ids: string[]) {
+    actions.setVisualEditorSelection(ids);
+  }
+
+  function onCopy(copiedActions: any[]) {
+    actions.setVisualEditorClipboard(copiedActions);
+    // NOTES: fire a proactively state sync with VisualEditor
+    // TODO: revisit how states should be synced via ShellApi without url refresh.
+    const nextState: ShellData = {
+      ...getState(VISUAL_EDITOR),
+      clipboardActions: copiedActions,
+    };
+    apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
   return null;

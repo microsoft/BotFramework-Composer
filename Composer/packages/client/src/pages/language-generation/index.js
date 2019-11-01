@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
@@ -15,6 +18,7 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
+import * as lgUtil from '../../utils/lgUtil';
 
 import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
@@ -26,6 +30,7 @@ export const LGPage = props => {
   const { state, actions } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
+  const [fileValid, setFileValid] = useState(true);
   const [codeRange, setCodeRange] = useState(null);
 
   const subPath = props['*'];
@@ -90,6 +95,17 @@ export const LGPage = props => {
     }
   }, [subPath, dialogs]);
 
+  useEffect(() => {
+    const errorFiles = lgFiles.filter(file => {
+      return lgUtil.isValid(file.diagnostics) === false;
+    });
+    const hasError = errorFiles.length !== 0;
+    setFileValid(hasError === false);
+    if (hasError) {
+      setEditMode(true);
+    }
+  }, [lgFiles]);
+
   function onSelect(id) {
     if (id === '_all') {
       navigateTo('/language-generation');
@@ -149,7 +165,7 @@ export const LGPage = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             checked={editMode}
-            disabled={!isRoot && editMode === false}
+            disabled={(!isRoot && editMode === false) || fileValid === false}
             onChange={onToggleEditMode}
           />
         </div>

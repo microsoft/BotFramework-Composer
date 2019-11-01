@@ -24,6 +24,23 @@
 
 import 'cypress-testing-library/add-commands';
 
+Cypress.Commands.add('createBot', botName => {
+  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+  cy.wait(500);
+  cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
+    cy.getByText('New').click();
+  });
+  cy.wait(500);
+  cy.get('input[data-testid="Create from template"]').click({ force: true });
+  cy.wait(100);
+  cy.get(`[data-testid=${botName}]`).click();
+  cy.wait(100);
+  cy.get('button[data-testid="NextStepButton"]').click();
+  cy.wait(100);
+  cy.get('input[data-testid="NewDialogName"]').type(`__Test${botName}`);
+  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+});
+
 Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.get('[data-testid="homePage-ToolBar-Open"]').within(() => {
@@ -58,7 +75,7 @@ Cypress.Commands.add('startFromTemplate', (template, name) => {
 });
 
 Cypress.Commands.add('copyBot', (bot, name) => {
-  cy.openBot(bot);
+  cy.createBot(bot);
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.getByText('Save as').click();
 

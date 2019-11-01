@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 
-import { seedNewDialog, DialogInfo } from 'shared';
+import { seedNewDialog, DialogInfo } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -168,13 +171,6 @@ describe('lg operation', () => {
       expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toEqual(content);
     }
-  });
-
-  it('should throw error when lg content is invalid', async () => {
-    const id = 'root';
-    const content = '# hello \n hello3';
-
-    await expect(proj.updateLgFile(id, content)).rejects.toThrow();
   });
 
   it('should delete lg file and update index', async () => {

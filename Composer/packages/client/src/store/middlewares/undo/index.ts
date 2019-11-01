@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ActionTypes } from './../../../constants/index';
 import { Store, ActionCreator, State } from './../../types';
 import { ActionType } from './../../action/types';

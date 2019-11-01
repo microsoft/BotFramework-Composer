@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { GraphLayout } from '../models/GraphLayout';
 import { EdgeData } from '../models/EdgeData';
 import { ElementInterval, LoopEdgeMarginLeft } from '../constants/ElementSizes';

@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, DialogInfo, BotSchemas, LgFile, LuFile } from 'shared';
+import { PromptTab, DialogInfo, BotSchemas, LgFile, LuFile, ProjectTemplate } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -28,6 +31,19 @@ export interface BreadcrumbItem {
   focused: string;
 }
 
+export interface File {
+  name: string;
+  type: string;
+  path: string;
+  size?: number;
+  lastModified?: string;
+}
+
+export interface StorageFolder extends File {
+  parent: string;
+  children?: File[];
+}
+
 export interface State {
   dialogs: DialogInfo[];
   botName: string;
@@ -37,10 +53,10 @@ export interface State {
   remoteEndpoints: { [key: string]: string };
   /** the data path for FormEditor */
   focusPath: string;
-  templateProjects: any[];
+  templateProjects: ProjectTemplate[];
   recentProjects: any[];
   storages: any[];
-  focusedStorageFolder: any;
+  focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
   botLoadErrorMsg: string;
   creationFlowStatus: CreationFlowStatus;
@@ -67,6 +83,8 @@ export interface State {
   publishVersions: any;
   publishStatus: any;
   lastPublishChange: any;
+  visualEditorSelection: string[];
+  clipboardActions: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

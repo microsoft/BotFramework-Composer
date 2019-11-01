@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
-import { DialogGroup, createStepMenu, MicrosoftIDialog } from 'shared';
+import { DialogGroup, createStepMenu, MicrosoftIDialog } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
 

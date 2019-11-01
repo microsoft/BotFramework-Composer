@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IPivotStyles } from 'office-ui-fabric-react';
 import { css } from '@emotion/core';
 

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
@@ -15,7 +18,7 @@ import {
   ActivityRenderer,
   ChoiceInput,
   BotAsks,
-  UserAnswers,
+  UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
@@ -29,7 +32,7 @@ const rendererByObiType = {
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
   [ObiTypes.BotAsks]: BotAsks,
-  [ObiTypes.UserAnswers]: UserAnswers,
+  [ObiTypes.UserAnswers]: UserInput,
   [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
 };
 const DEFAULT_RENDERER = DefaultRenderer;

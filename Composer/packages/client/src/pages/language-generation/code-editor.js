@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgEditor } from 'code-editor';
+import { LgEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import * as lgUtil from '../../utils/lgUtil';
@@ -23,11 +26,9 @@ export default function CodeEditor(props) {
   // file.content assume to be load from server
   const _onChange = value => {
     setContent(value);
+    onChange(value);
     const diagnostics = lgUtil.check(value);
     setDiagnostics(diagnostics);
-    if (lgUtil.isValid(diagnostics) === true) {
-      onChange(value);
-    }
   };
 
   const isInvalid = !lgUtil.isValid(diagnostics);

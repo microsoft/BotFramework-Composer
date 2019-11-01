@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { HostedSettingManager } from '../../../src/models/settings/hostedSettingManager';
 import { Path } from '../../../src/utility/path';
 

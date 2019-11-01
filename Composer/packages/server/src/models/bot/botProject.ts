@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 
 import isEqual from 'lodash.isequal';
-import { FileInfo, DialogInfo, LgFile, LuFile } from 'shared';
-import { dialogIndexer, luIndexer, lgIndexer } from 'indexers';
+import { FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -226,12 +229,6 @@ export class BotProject {
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    const absolutePath = `${this.dir}/${lgFile.relativePath}`;
-    const diagnostics = lgIndexer.check(content, absolutePath);
-    if (lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = lgIndexer.combineMessage(diagnostics);
-      throw new Error(errorMsg);
-    }
     await this._updateFile(lgFile.relativePath, content);
     return this.lgFiles;
   };
@@ -242,12 +239,6 @@ export class BotProject {
       throw new Error(`${id} lg file already exist`);
     }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    const absolutePath = `${this.dir}/${relativePath}`;
-    const diagnostics = lgIndexer.check(content, absolutePath);
-    if (lgIndexer.isValid(diagnostics) === false) {
-      const errorMsg = lgIndexer.combineMessage(diagnostics);
-      throw new Error(errorMsg);
-    }
     await this._createFile(relativePath, content);
     return this.lgFiles;
   };

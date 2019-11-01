@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { FileSettingManager } from '../../../src/models/settings/fileSettingManager';
 import { Path } from '../../../src/utility/path';
 

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { BotEnvironments } from '../models/connector';
 import { EnvironmentProvider } from '../models/environment';
 

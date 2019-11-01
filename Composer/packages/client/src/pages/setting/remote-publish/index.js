@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import TimeAgo from 'react-timeago';
@@ -91,6 +94,8 @@ export const RemotePublish = () => {
             </Stack>
           ),
         });
+        setPublishAction('');
+        setDialogHidden(false);
       } else if (publishAction === 'rollback') {
         setDialogProps({
           title: formatMessage('Rollback successful'),
@@ -104,8 +109,9 @@ export const RemotePublish = () => {
             </Stack>
           ),
         });
+        setPublishAction('');
+        setDialogHidden(false);
       }
-      setDialogHidden(false);
     } else {
       // display confirmation
       setDialogProps({
@@ -155,7 +161,6 @@ export const RemotePublish = () => {
         </Stack>
       ),
     });
-
     setDialogHidden(false);
   };
 
@@ -171,7 +176,6 @@ export const RemotePublish = () => {
         </Stack>
       ),
     });
-
     setDialogHidden(false);
   };
 

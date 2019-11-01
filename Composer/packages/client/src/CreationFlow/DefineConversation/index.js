@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
@@ -25,20 +28,9 @@ const validateForm = data => {
 
 export function DefineConversation(props) {
   const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
-  const { state } = useContext(StoreContext);
-  const { storages } = state;
-  const currentStorageIndex = useRef(0);
 
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
-
-  // set the default path
-  useEffect(() => {
-    const index = currentStorageIndex.current;
-    if (storages[index]) {
-      updateForm('location')(null, storages[index].path);
-    }
-  }, [storages]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -92,7 +84,7 @@ export function DefineConversation(props) {
     <Fragment>
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
-        <Stack horizontal={enableLocationBrowse} gap="2rem" styles={wizardStyles.stackinput}>
+        <Stack horizontal={enableLocationBrowse} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}

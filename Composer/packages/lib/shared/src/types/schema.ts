@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { JSONSchema6 } from 'json-schema';
 
 // All of the known SDK types. Update this list when we take a schema update.
