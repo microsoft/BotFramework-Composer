@@ -4,7 +4,8 @@
 import { Request, Response } from 'express';
 
 import StorageService from '../services/storage';
-import { Path } from '../utility/path.js';
+import { Path } from '../utility/path';
+
 function getStorageConnections(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
