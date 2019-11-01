@@ -17,7 +17,7 @@ import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash.get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { COMPOUND_TYPES, MicrosoftIDialog } from 'shared';
+import { COMPOUND_TYPES, MicrosoftIDialog } from '@bfc/shared';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';

@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from 'shared';
+import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType, FontIcon } from 'office-ui-fabric-react';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import find from 'lodash.find';
-import { ProjectTemplate } from 'shared';
+import { ProjectTemplate } from '@bfc/shared';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
@@ -27,49 +27,49 @@ const templates: TemplateData = {
   },
   EmptyBot: {
     name: 'Empty Bot',
-    description: 'The very basic bot template that is ready for your creativity',
+    description: 'Basic bot template that is ready for your creativity',
     order: 2,
   },
   TodoSample: {
-    name: 'Todo-Sample',
+    name: 'Simple Todo',
     description: 'A sample bot that allows you add, list, remove to do items.',
     order: 3,
   },
   ToDoBotWithLuisSample: {
-    name: 'Todo-with-LUIS-Sample',
+    name: 'Todo with LUIS',
     description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
     order: 4,
   },
   RespondingWithCardsSample: {
-    name: 'Responding-with-Cards-Sample',
+    name: 'Responding with Cards',
     description: 'A sample bot that uses Language Generation to create cards.',
   },
   AskingQuestionsSample: {
-    name: 'Asking-Questions-Sample',
+    name: 'Asking Questions',
     description: 'A sample bot that shows how to ask question and capture user input.',
   },
   InterruptionSample: {
-    name: 'Interruption-Sample',
+    name: 'Interruptions',
     description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
-    name: 'Responding-with-Text-Sample',
+    name: 'Responding with Text',
     description: 'A sample bot that uses Language Generation to create bot responses.',
   },
   ControllingConversationFlowSample: {
-    name: 'Controlling-Conversation-Flow-Sample',
+    name: 'Controlling Conversation Flow',
     description: 'A sample bot that shows how to control the flow of a conversation.',
   },
   ActionsSample: {
-    name: 'Actions-Sample',
+    name: 'Dialog Actions',
     description: 'A sample bot that shows how to use Dialog actions.',
   },
   QnAMakerLUISSample: {
-    name: 'QnAMaker-with-LUIS-Sample',
-    description: 'A sample bot that demonstrates use of both QnAMaker & LUIS',
+    name: 'QnA Maker and LUIS',
+    description: 'A sample bot that demonstrates use of both QnA Maker & LUIS',
   },
   SampleBot: {
-    name: 'SampleBot',
+    name: 'Sample Bot',
     description: 'A sample bot used for testing',
   },
 };

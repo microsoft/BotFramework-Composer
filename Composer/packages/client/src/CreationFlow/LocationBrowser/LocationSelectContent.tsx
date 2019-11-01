@@ -25,6 +25,12 @@ export function LocationSelectContent(props) {
   const [currentPath, setCurrentPath] = useState(storage.get(NEW_BOT_LOCATION_KEY, ''));
   const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
+  useEffect(() => {
+    if (onChange) {
+      onChange(currentPath);
+    }
+  }, []);
+
   const updateCurrentPath = async (newPath?: string, storageId?: string) => {
     if (!storageId) {
       storageId = currentStorageId;
