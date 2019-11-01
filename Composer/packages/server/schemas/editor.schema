@@ -122,7 +122,7 @@
     "Microsoft.LuisRecognizer": {
       "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
       "title": "Language Understanding",
-      "helpLink": "https://www.luis.ai/home",
+      "helpLink": "https://aka.ms/BFC-Using-LU",
       "helpLinkText": "Learn more"
     },
     "Microsoft.MostSpecificSelector": {
@@ -131,7 +131,7 @@
     "Microsoft.MultiLanguageRecognizer": {
       "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
       "title": "Language Understanding",
-      "helpLink": "https://www.luis.ai/home",
+      "helpLink": "https://aka.ms/BFC-Using-LU",
       "helpLinkText": "Learn more"
     },
     "Microsoft.NumberInput": {
@@ -144,10 +144,10 @@
       "helpLink": "https://aka.ms/bfc-using-oauth"
     },
     "Microsoft.OnActivity": {
-      "title": "Handle an Event: Activity"
+      "title": "Activity trigger"
     },
     "Microsoft.OnBeginDialog": {
-      "title": "Handle an Event: BeginDialog"
+      "title": "Dialog started (BeginDialog)"
     },
     "Microsoft.OnConversationUpdateActivity": {
       "title": "Handle ConversationUpdate",
@@ -157,10 +157,10 @@
       "helpLinkText": "Learn more"
     },
     "Microsoft.OnDialogEvent": {
-      "title": "Handle a Dialog Event"
+      "title": "Dialog event"
     },
     "Microsoft.OnEndOfConversationActivity": {
-      "title": "Handle an Event: EndOfConversationActivity"
+      "title": "Conversation ended"
     },
     "Microsoft.OnCondition": {
       "title": "Handle an condition"
@@ -169,34 +169,34 @@
       "title": "Handle an Event"
     },
     "Microsoft.OnEventActivity": {
-      "title": "Handle an Event: EventActivity"
+      "title": "Event received"
     },
     "Microsoft.OnHandoffActivity": {
-      "title": "Handle an Event: HandoffActivity"
+      "title": "Handover to human"
     },
     "Microsoft.OnIntent": {
-      "title": "Handle an Intent"
+      "title": "Intent"
     },
     "Microsoft.OnInvokeActivity": {
-      "title": "Handle an Event: InvokeActivity"
+      "title": "Conversation invoked"
     },
     "Microsoft.OnMessageActivity": {
-      "title": "Handle an Event: MessageActivity"
+      "title": "Message received"
     },
     "Microsoft.OnMessageDeleteActivity": {
-      "title": "Handle an Event: MessageDeleteActivity"
+      "title": "Message deleted"
     },
     "Microsoft.OnMessageReactionActivity": {
-      "title": "Handle an Event: MessageReactionActivity"
+      "title": "Message reaction (thumbs up/down) "
     },
     "Microsoft.OnMessageUpdateActivity": {
-      "title": "Handle an Event: MessageUpdateActivity"
+      "title": "Message updated"
     },
     "Microsoft.OnTypingActivity": {
-      "title": "Handle an Event: TypingActivity"
+      "title": "User is typing"
     },
     "Microsoft.OnUnknownIntent": {
-      "title": "Handle Unknown Intent"
+      "title": "Unrecognized intent"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog",
@@ -257,7 +257,7 @@
     "Recognizer": {
       "description": "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use.",
       "title": "Language Understanding",
-      "helpLink": "https://www.luis.ai/home",
+      "helpLink": "https://aka.ms/BFC-Using-LU",
       "helpLinkText": "Learn more"
     }
   }

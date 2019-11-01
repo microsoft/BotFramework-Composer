@@ -55,13 +55,13 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Debug Break'),
   },
   [SDKTypes.DeleteProperty]: {
-    title: formatMessage('Delete a Property'),
+    title: formatMessage('Delete a property'),
   },
   [SDKTypes.EditActions]: {
     title: formatMessage('Modify this dialog'),
   },
   [SDKTypes.EditArray]: {
-    title: formatMessage('Edit an Array Property'),
+    title: formatMessage('Edit an Array property'),
   },
   [SDKTypes.EmitEvent]: {
     title: formatMessage('Emit a custom event'),
@@ -85,10 +85,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Send an HTTP request'),
   },
   [SDKTypes.IfCondition]: {
-    title: formatMessage('Branch: If/Else'),
+    title: formatMessage('Branch: if/else'),
   },
   [SDKTypes.InitProperty]: {
-    title: formatMessage('Initialize a Property'),
+    title: formatMessage('Initialize property'),
   },
   [SDKTypes.LanguagePolicy]: {
     title: formatMessage('LanguagePolicy'),
@@ -115,69 +115,69 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Number input'),
   },
   [SDKTypes.OAuthInput]: {
-    title: formatMessage('OAuth Login'),
+    title: formatMessage('OAuth login'),
   },
   [SDKTypes.OnActivity]: {
-    title: formatMessage('Handle an Event: Activity'),
+    title: formatMessage('Activity trigger'),
   },
   [SDKTypes.OnBeginDialog]: {
-    title: formatMessage('Handle an Event: BeginDialog'),
+    title: formatMessage('Dialog started (BeginDialog)'),
   },
   [SDKTypes.OnCancelDialog]: {
-    title: formatMessage('Handle an Event: CancelDialog'),
+    title: formatMessage('Dialog cancelled (CancelDialog)'),
   },
   [SDKTypes.OnCondition]: {
     title: formatMessage('Handle a Condition'),
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    title: formatMessage('Handle ConversationUpdate'),
+    title: formatMessage('Conversation started (ConversationUpdate)'),
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
   [SDKTypes.OnCustomEvent]: {
-    title: formatMessage('Handle a custom event'),
+    title: formatMessage('Custom trigger'),
   },
   [SDKTypes.OnDialogEvent]: {
-    title: formatMessage('Handle a Dialog Event'),
+    title: formatMessage('Dialog trigger'),
   },
   [SDKTypes.OnEndOfConversationActivity]: {
-    title: formatMessage('Handle an Event: EndOfConversationActivity'),
+    title: formatMessage('Conversation ended'),
   },
   [SDKTypes.OnError]: {
-    title: formatMessage('Handle a dialog error event'),
+    title: formatMessage('Error occurred'),
   },
   [SDKTypes.OnEventActivity]: {
-    title: formatMessage('Handle an Event: EventActivity'),
+    title: formatMessage('Event received'),
   },
   [SDKTypes.OnHandoffActivity]: {
-    title: formatMessage('Handle an Event: HandoffActivity'),
+    title: formatMessage('Handover to human'),
   },
   [SDKTypes.OnIntent]: {
-    title: formatMessage('Handle an Intent'),
+    title: formatMessage('Intent'),
   },
   [SDKTypes.OnInvokeActivity]: {
-    title: formatMessage('Handle an Event: InvokeActivity'),
+    title: formatMessage('Conversation invoked'),
   },
   [SDKTypes.OnMessageActivity]: {
-    title: formatMessage('Handle an Event: MessageActivity'),
+    title: formatMessage('Message activity trigger'),
   },
   [SDKTypes.OnMessageDeleteActivity]: {
-    title: formatMessage('Handle an Event: MessageDeleteActivity'),
+    title: formatMessage('Message deleted'),
   },
   [SDKTypes.OnMessageReactionActivity]: {
-    title: formatMessage('Handle an Event: MessageReactionActivity'),
+    title: formatMessage('Message reaction'),
   },
   [SDKTypes.OnMessageUpdateActivity]: {
-    title: formatMessage('Handle an Event: MessageUpdateActivity'),
+    title: formatMessage('Message updated'),
   },
   [SDKTypes.OnRepromptDialog]: {
-    title: formatMessage('Handle an Event: RepromptDialog'),
+    title: formatMessage('Re-prompt for input'),
   },
   [SDKTypes.OnTypingActivity]: {
-    title: formatMessage('Handle an Event: TypingActivity'),
+    title: formatMessage('User is typing'),
   },
   [SDKTypes.OnUnknownIntent]: {
-    title: formatMessage('Handle Unknown Intent'),
+    title: formatMessage('Unrecognized intent'),
   },
   [SDKTypes.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
@@ -190,19 +190,19 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: false,
   },
   [SDKTypes.RepeatDialog]: {
-    title: formatMessage('Repeat this Dialog'),
+    title: formatMessage('Repeat this dialog'),
   },
   [SDKTypes.ReplaceDialog]: {
-    title: formatMessage('Replace this Dialog'),
+    title: formatMessage('Replace this dialog'),
   },
   [SDKTypes.SendActivity]: {
     title: formatMessage('Send a response'),
   },
   [SDKTypes.SetProperty]: {
-    title: formatMessage('Set a Property'),
+    title: formatMessage('Set a property'),
   },
   [SDKTypes.SwitchCondition]: {
-    title: formatMessage('Branch: Switch (multiple options)'),
+    title: formatMessage('Branch: switch (multiple options)'),
   },
   [SDKTypes.TextInput]: {
     title: formatMessage('Text input'),
