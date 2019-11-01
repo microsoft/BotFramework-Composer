@@ -49,7 +49,7 @@
       "title": "End Turn"
     },
     "Microsoft.OnEvent": {
-      "title": "Handle an Event"
+      "title": "Event received"
     },
     "Microsoft.FirstSelector": {
       "title": "FirstSelector"
@@ -64,7 +64,7 @@
       "title": "Initialize Property"
     },
     "Microsoft.OnIntent": {
-      "title": "Handle an Intent"
+      "title": "Intent"
     },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"

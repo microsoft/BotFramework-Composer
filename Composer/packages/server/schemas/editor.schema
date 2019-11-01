@@ -187,7 +187,7 @@
       "title": "Message deleted"
     },
     "Microsoft.OnMessageReactionActivity": {
-      "title": "Message reaction (thumbs up/down) "
+      "title": "Message reaction"
     },
     "Microsoft.OnMessageUpdateActivity": {
       "title": "Message updated"
