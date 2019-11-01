@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
-import { ShellData, EditorSchema, ShellApi, OBISchema } from 'shared';
+import { ShellData, EditorSchema, ShellApi, OBISchema } from '@bfc/shared';
 
 export interface FormContext
   extends Pick<ShellData, 'luFiles' | 'lgFiles' | 'currentDialog' | 'focusedEvent' | 'focusedSteps' | 'focusedTab'> {

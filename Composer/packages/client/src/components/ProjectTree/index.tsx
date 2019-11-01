@@ -14,7 +14,7 @@ import {
 import React, { useMemo, useRef, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger } from 'shared';
+import { DialogInfo, ITrigger } from '@bfc/shared';
 
 import { createSelectedPath, getFriendlyName } from '../../utils';
 

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { ConceptLabels } from 'shared';
+import { ConceptLabels } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
