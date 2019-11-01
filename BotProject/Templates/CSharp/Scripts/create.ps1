@@ -118,7 +118,7 @@ if ($validation) {
 
 		if ($validation.error.details -and $validation.error.details[0].code -eq "CanNotCreateMultipleFreeAccounts")
 		{
-			Write-Host "! Only one free account is allowed for authoring. Please get your luis authoring key and retry with the following command:"
+			Write-Host "! Only one free account is allowed for authoring. You already have a luis authoring resource, please get your luis authoring key and retry with the following command:" -ForegroundColor DarkRed
 			Write-Host "pwsh ./Scripts/create.ps1 -name $name -environment $environment -location $location -appPassword $appPassword -luisAuthoringKey [YourLuisAuthoringKey]" -ForegroundColor Green
 		}
 
