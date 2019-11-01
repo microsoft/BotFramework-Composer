@@ -35,10 +35,7 @@ export class DefaultSettingManager extends FileSettingManager {
 
   private filterOutSensitiveValue = (obj: any) => {
     if (obj && typeof obj === 'object') {
-      // SensitiveProperties.map(property => {
-      //   set(obj, property, '');
-      // });
-      omit(obj, SensitiveProperties);
+      return omit(obj, SensitiveProperties);
     }
   };
 
@@ -51,8 +48,8 @@ export class DefaultSettingManager extends FileSettingManager {
       await this.storage.mkDir(dir, { recursive: true });
     }
     // remove sensitive values before saving to disk
-    this.filterOutSensitiveValue(settings);
+    const settingsWithoutSensitive = this.filterOutSensitiveValue(settings);
 
-    await this.storage.writeFile(path, JSON.stringify(settings, null, 2));
+    await this.storage.writeFile(path, JSON.stringify(settingsWithoutSensitive, null, 2));
   };
 }
