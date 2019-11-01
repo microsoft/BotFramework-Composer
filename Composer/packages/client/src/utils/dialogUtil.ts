@@ -37,6 +37,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
+export const messageTypeKey: string = SDKTypes.OnMessageActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 
 export function getFriendlyName(data) {
@@ -148,6 +149,22 @@ export function getActivityTypes(): IDropdownOption[] {
     }),
   ];
   return activityTypes;
+}
+
+export function getMessageTypes(): IDropdownOption[] {
+  const messageTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.MESSAGE_EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return messageTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
