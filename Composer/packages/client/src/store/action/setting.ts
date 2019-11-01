@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { get } from 'lodash';
-import { SensitiveProperties } from 'shared';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';

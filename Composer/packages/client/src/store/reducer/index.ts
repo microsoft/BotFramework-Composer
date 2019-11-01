@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { get, set } from 'lodash';
-import { dialogIndexer } from 'indexers/lib/dialogIndexer';
-import { SensitiveProperties } from 'shared';
+import { dialogIndexer } from '@bfc/indexers/lib/dialogIndexer';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';

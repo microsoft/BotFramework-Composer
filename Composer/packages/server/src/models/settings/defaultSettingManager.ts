@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { omit } from 'lodash';
-import { SensitiveProperties } from 'shared';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 
