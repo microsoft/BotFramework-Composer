@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { get } from 'lodash';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 
 import {
   addNewTrigger,
@@ -19,6 +19,7 @@ import {
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
+  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 
@@ -99,10 +100,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
-
+  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
-  const intents = [...luisIntents, ...regexIntents];
+  const intents = isRegEx ? regexIntents : luisIntents;
 
   const intentOptions = intents.map(t => {
     return { key: t.name || t.intent, text: t.name || t.intent };

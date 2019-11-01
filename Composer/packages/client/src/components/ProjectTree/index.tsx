@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger } from 'shared';
+import { DialogInfo, ITrigger } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';

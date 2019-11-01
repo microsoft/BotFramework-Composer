@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { useState } from 'react';
-import { LuEditor } from 'code-editor';
-import { LuFile } from 'shared';
+import { LuEditor } from '@bfc/code-editor';
+import { LuFile } from '@bfc/shared';
 
 interface InlineLuEditorProps {
   file: LuFile;
