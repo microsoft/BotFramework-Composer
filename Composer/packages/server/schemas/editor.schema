@@ -150,7 +150,7 @@
       "title": "Dialog started (BeginDialog)"
     },
     "Microsoft.OnConversationUpdateActivity": {
-      "title": "Handle ConversationUpdate",
+      "title": "Conversation started (ConversationUpdate)",
       "description":
         "Handle the events fired when a user begins a new conversation with the bot.",
       "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
