@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash.get';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { ExpressionEngine } from '@bfcomposer/botframework-expressions';
 
 const ExpressionParser = new ExpressionEngine();
 

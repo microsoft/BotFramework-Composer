@@ -27,8 +27,8 @@
     "ts-jest": "^24.0.2"
   },
   "dependencies": {
-    "botbuilder-expression-parser": "^4.5.11",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz",
+    "@bfcomposer/botframework-expressions":"4.7.1",
+    "@bfcomposer/botbuilder-lg": "4.7.1",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "lodash.uniq": "^4.5.0",

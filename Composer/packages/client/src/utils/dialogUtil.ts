@@ -3,7 +3,7 @@
 
 import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from '@bfc/shared';
 import { cloneDeep, get, set } from 'lodash';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { ExpressionEngine } from '@bfcomposer/botframework-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react';
 import { DialogInfo } from '@bfc/shared';
 
