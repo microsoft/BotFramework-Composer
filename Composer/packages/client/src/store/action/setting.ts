@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { get } from 'lodash';
+import { SensitiveProperties } from 'shared';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { SensitiveProperties } from '../../constants';
 
 import { ActionTypes } from './../../constants/index';
 import { BotEnvironments } from './../../utils/envUtil';

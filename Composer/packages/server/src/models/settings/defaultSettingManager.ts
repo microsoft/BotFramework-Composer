@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { set } from 'lodash';
+import { omit } from 'lodash';
+import { SensitiveProperties } from 'shared';
 
 import { Path } from '../../utility/path';
 
 import { FileSettingManager } from './fileSettingManager';
-import { SensitiveProperties } from './interface';
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string) {
@@ -35,9 +35,10 @@ export class DefaultSettingManager extends FileSettingManager {
 
   private filterOutSensitiveValue = (obj: any) => {
     if (obj && typeof obj === 'object') {
-      SensitiveProperties.map(property => {
-        set(obj, property, '');
-      });
+      // SensitiveProperties.map(property => {
+      //   set(obj, property, '');
+      // });
+      omit(obj, SensitiveProperties);
     }
   };
 

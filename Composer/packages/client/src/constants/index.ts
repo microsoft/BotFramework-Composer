@@ -206,4 +206,3 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
-export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey', 'qna.endpointkey'];

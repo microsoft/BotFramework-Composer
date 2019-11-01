@@ -3,8 +3,9 @@
 
 import { get, set } from 'lodash';
 import { dialogIndexer } from 'indexers/lib/dialogIndexer';
+import { SensitiveProperties } from 'shared';
 
-import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
+import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension } from '../../utils';
@@ -189,16 +190,19 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   state.designPageLocation = { dialogId, selected, focused, promptTab };
   return state;
 };
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
 };
+
 const getEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   refreshLocalStorage(state.botName, state.settings);
   mergeLocalStorage(state.botName, state.settings);
   return state;
 };
+
 const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
   const data = response && response.data;
 
