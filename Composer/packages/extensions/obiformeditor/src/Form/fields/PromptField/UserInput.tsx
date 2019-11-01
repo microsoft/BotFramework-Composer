@@ -5,7 +5,7 @@ import React from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from 'shared';
+import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 
 import { TextWidget, SelectWidget } from '../../widgets';
 

@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, useContext } from 'react';
-import { JsonEditor } from 'code-editor';
+import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
 
