@@ -4,7 +4,7 @@
 import React from 'react';
 import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
-import { ChoiceInput, IChoiceOption } from 'shared';
+import { ChoiceInput, IChoiceOption } from '@bfc/shared';
 
 import { PromptFieldChangeHandler, GetSchema } from '../types';
 import { CheckboxWidget } from '../../../widgets';
