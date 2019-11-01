@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { omit } from 'lodash';
-import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 
 import { FileSettingManager } from './fileSettingManager';
+import { SensitiveProperties } from './interface';
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string) {
