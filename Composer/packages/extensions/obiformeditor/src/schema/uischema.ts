@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes, PROMPT_TYPES } from 'shared';
+import { SDKTypes, PROMPT_TYPES } from '@bfc/shared';
 import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
 const globalHidden = ['property', 'id'];

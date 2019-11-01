@@ -53,6 +53,7 @@ const initialState: State = {
   publishStatus: 'inactive',
   lastPublishChange: null,
   visualEditorSelection: [],
+  clipboardActions: [],
 };
 
 interface StoreContextValue {

@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import formatMessage from 'format-message';
-import { DialogGroup, PromptTab } from 'shared';
+import { DialogGroup, PromptTab } from '@bfc/shared';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
