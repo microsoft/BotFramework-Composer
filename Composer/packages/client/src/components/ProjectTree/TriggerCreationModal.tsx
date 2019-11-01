@@ -21,7 +21,7 @@ import {
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
-  regexRecognizerKey
+  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 
