@@ -88,7 +88,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Branch: if/else'),
   },
   [SDKTypes.InitProperty]: {
-    title: formatMessage('Initialize property'),
+    title: formatMessage('Initialize a property'),
   },
   [SDKTypes.LanguagePolicy]: {
     title: formatMessage('LanguagePolicy'),
