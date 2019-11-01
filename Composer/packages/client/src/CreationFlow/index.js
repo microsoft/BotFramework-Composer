@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect, useContext } from 'react';
-import { toLower } from 'lodash';
+import { toLower, get } from 'lodash';
 
-import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
+import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
@@ -28,21 +28,33 @@ export function CreationFlow(props) {
     saveTemplateId,
     fetchStorages,
   } = actions;
-  const { templateId, templateProjects } = state;
+  const { templateId, templateProjects, focusedStorageFolder } = state;
+
+  useEffect(() => {
+    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
+
+    const botsInCurrentFolder = allFilesInFolder.filter(file => {
+      if (file.type === FileTypes.BOT) {
+        return file;
+      }
+    });
+
+    setBots(botsInCurrentFolder);
+  }, [focusedStorageFolder]);
 
   useEffect(() => {
     init();
   }, [creationFlowStatus]);
 
-  const getAllBots = async () => {
-    const data = await getAllProjects();
-    setBots(data);
-  };
+  // const getAllBots = async () => {
+  //   const data = await getAllProjects();
+  //   setBots(data);
+  // };
 
-  const init = async () => {
+  const init = () => {
     if (creationFlowStatus !== CreationFlowStatus.CLOSE) {
       fetchTemplates();
-      await getAllBots();
+      //await getAllBots();
     }
 
     // load storage system list
@@ -111,7 +123,9 @@ export function CreationFlow(props) {
   const getErrorMessage = name => {
     if (
       bots.findIndex(bot => {
-        return toLower(bot.name) === toLower(name);
+        const path = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}/${name}`;
+        console.log(bot.path, path);
+        return bot.path === path;
       }) >= 0
     ) {
       return 'duplication of name';
