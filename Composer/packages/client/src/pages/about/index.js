@@ -67,7 +67,7 @@ export const About = () => {
         </div>
         <div css={about.linkRow}>
           <Link
-            href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/help.md'}
+            href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
             tabIndex={-1}
             target={'_blank'}
           >
