@@ -171,24 +171,6 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "883364",
-            "name": "Set a Property"
-          },
-          "property": "dialog.item",
-          "value": "@itemTitle"
-        },
-        {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "637875",
-            "name": "Set a Property"
-          },
-          "property": "dialog.listType",
-          "value": "@listType"
-        },
-        {
           "$type": "Microsoft.TextInput",
           "$designer": {
             "id": "069270",
@@ -199,7 +181,8 @@
           "property": "dialog.item",
           "alwaysPrompt": false,
           "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@itemTitle",
-          "outputFormat": "none"
+          "outputFormat": "none",
+          "value": "@itemTitle"
         },
         {
           "$type": "Microsoft.IfCondition",
@@ -243,7 +226,8 @@
               },
               "recognizerOptions": {
                 "noValue": false
-              }
+              },
+              "value": "@listType"
             }
           ]
         },
@@ -291,15 +275,6 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "500317",
-            "name": "Set a Property"
-          },
-          "property": "dialog.listType",
-          "value": "@listType"
-        },
-        {
           "$type": "Microsoft.IfCondition",
           "$designer": {
             "id": "233783",
@@ -319,6 +294,7 @@
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@listType",
               "outputFormat": "value",
+              "value": "@listType",
               "choices": [
                 {
                   "value": "Shopping"
@@ -354,15 +330,6 @@
           "condition": "user.taskLists && user.taskLists[dialog.listType] && count(user.taskLists[dialog.listType]) > 0",
           "actions": [
             {
-              "$type": "Microsoft.SetProperty",
-              "$designer": {
-                "id": "734956",
-                "name": "Set a Property"
-              },
-              "property": "dialog.item",
-              "value": "@itemTitle"
-            },
-            {
               "$type": "Microsoft.SendActivity",
               "$designer": {
                 "id": "684852",
@@ -381,7 +348,8 @@
               "property": "dialog.item",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@itemTitle",
-              "outputFormat": "none"
+              "outputFormat": "none",
+              "value": "@itemTitle"
             },
             {
               "$type": "Microsoft.EditArray",
@@ -440,15 +408,6 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "352012",
-            "name": "Set a Property"
-          },
-          "property": "dialog.listType",
-          "value": "@listType"
-        },
-        {
           "$type": "Microsoft.IfCondition",
           "$designer": {
             "id": "380536",
@@ -468,6 +427,7 @@
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#ViewCollection && !@listType",
               "outputFormat": "value",
+              "value": "@listType",
               "choices": [
                 {
                   "value": "Todo"
