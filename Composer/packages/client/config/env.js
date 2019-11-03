@@ -89,6 +89,7 @@ function getClientEnvironment(publicUrl) {
         GIT_SHA: getGitSha()
           .toString()
           .replace('\n', ''),
+        SDK_PACKAGE_VERSON: '4.6.0-preview2', // TODO: change this when Composer supports custom schema/custom runtime
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
