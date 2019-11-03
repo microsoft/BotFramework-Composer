@@ -13,4 +13,4 @@ console.log(
  
 `
 );
-console.log(chalk.yellow('Compiling Typescript..'));
+console.log(chalk.yellow('Compiling TypeScript..'));
