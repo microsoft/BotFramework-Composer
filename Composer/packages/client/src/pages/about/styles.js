@@ -60,7 +60,6 @@ export const DiagnosticsInfoText = css`
 `;
 
 export const DiagnosticsInfoTextAlignLeft = css`
-  width: 50%;
   text-align: left;
 `;
 
