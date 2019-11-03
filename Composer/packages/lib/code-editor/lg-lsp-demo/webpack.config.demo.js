@@ -95,6 +95,9 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
+    alias: {
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+    },
   },
 
   output: {

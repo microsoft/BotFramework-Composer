@@ -58,6 +58,14 @@
   "dependencies": {
     "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
     "@bfcomposer/react-monaco-editor": "0.30.12",
-    "lodash.throttle": "^4.1.1"
+    "@types/node": "^12.12.5",
+    "lodash.throttle": "^4.1.1",
+    "monaco-editor-core": "^0.18.1",
+    "monaco-languageclient": "^0.10.2",
+    "net": "^1.0.2",
+    "normalize-url": "^4.5.0",
+    "reconnecting-websocket": "^4.2.0",
+    "vscode": "^1.1.36",
+    "vscode-ws-jsonrpc": "^0.1.1"
   }
 }

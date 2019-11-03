@@ -7,8 +7,8 @@ import {
   MonacoServices,
   createConnection,
 } from 'monaco-languageclient';
-import normalizeUrl = require('normalize-url');
-const ReconnectingWebSocket = require('reconnecting-websocket');
+import normalizeUrl from 'normalize-url';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 export function startSampleClient(editor) {
   // register Monaco languages
