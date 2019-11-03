@@ -13,17 +13,19 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "build": "yarn build:dev",
+    "build": "yarn build:prod",
     "build:prod": "yarn build:lib && yarn build:extensions && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:extensions",
-    "build:lib": "cd packages/lib && yarn build:all",
-    "build:extensions": "cd packages/extensions && yarn build:all",
-    "build:server": "cd packages/server && yarn build",
-    "build:client": "cd packages/client && yarn build",
-    "start": "concurrently --kill-others-on-fail \"npm:start:*\"",
-    "startall": "concurrently --kill-others-on-fail \"npm:start:*\" \"npm:runtime\"",
-    "start:client": "cd packages/client && yarn start",
-    "start:server": "cd packages/server && yarn start",
+    "build:lib": "yarn workspace @bfc/libs build:all",
+    "build:extensions": "yarn workspace @bfc/extensions build:all",
+    "build:server": "yarn workspace @bfc/server build",
+    "build:client": "yarn workspace @bfc/client build",
+    "start": "cross-env NODE_ENV=production PORT=3000 concurrently --kill-others-on-fail \"npm:start:server\"",
+    "startall": "concurrently --kill-others-on-fail \"npm:start\" \"npm:runtime\"",
+    "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
+    "start:client": "yarn workspace @bfc/client start",
+    "start:server": "yarn workspace @bfc/server start",
+    "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../BotProject/CSharp/ && dotnet clean && dotnet restore && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default --reporters=jest-junit",
@@ -92,5 +94,8 @@
     "start-server-and-test": "^1.9.0",
     "typescript": "3.6.4",
     "wsrun": "^3.6.4"
+  },
+  "dependencies": {
+    "cross-env": "^6.0.3"
   }
 }

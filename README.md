@@ -1,4 +1,4 @@
-# ![Microsoft Bot Framework Composer](./docs/Assets/gh-banner.png)
+# ![Microsoft Bot Framework Composer](./docs/media/gh-banner.png)
 
 # Microsoft Bot Framework Composer [PREVIEW]
 
@@ -16,25 +16,7 @@ Bot Framework Composer is an integrated development tool for developers and mult
 Bot Framework Composer, an open source tool, enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the [Bot Framework SDK](https://github.com/microsoft/botframework). The Composer app reads and writes from the [Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) format, a [declarative](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog/declarative) JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates. 
 
 ## Get Started
-
-- To get your self familiar with the Composer, read [Introduction to Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/master/docs/introduction_to_bfd.md#introduction-to-bot-framework-composer).
-- To get started [deploy Bot Framework Composer](./docs/Deploying-Composer.md) on your local machine, [create your first bot](./docs/Create-Your-First-bot.md) and review the various [samples](./docs/samples.md).
-
-
-## Documentation
-* [Introduction to Bot Framework Composer](./docs/introduction_to_bfd.md)
-* [Deploying Bot Framework Composer](./docs/Deploying-Composer.md)
-* [Create your first bot using Composer](./docs/Create-Your-First-Bot.md) 
-* [Triggers and Events](./docs/triggers_and_events.md)
-* [Using Memory](./docs/using_memory.md)
-* [Controlling Conversation Flow](./docs/controlling_conversation_flow.md)
-* [Testing and Debugging](./docs/testing_debugging.md)
-* [Learning from samples](./docs/samples.md)
-* [All About Interruption](./docs/all_about_interruption.md)
-
-> Additional documentation for Composer [can be found here](./docs/README.md).
-
-
+To learn about the Bot Framework Composer, read the [documentation](toc.md).
 
 ## Contributing
 
