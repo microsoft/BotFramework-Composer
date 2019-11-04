@@ -101,7 +101,7 @@ Now that our new bot has its first simple feature, let's launch it in the emulat
 
 1. Click the `Start Bot` button in the upper right hand corner of the screen.  This tells Composer to launch the bot's runtime (an external app powered by the Bot Framework SDK) and updates it with the latest content and settings from Composer.
 
-2. After a few seconds, a second link will appear next to the button thats `Test bot in emulator`.  Click this link to open Emulator and connect.
+2. After a few seconds, a second link will appear next to the button thats `Test in Emulator`.  Click this link to open Emulator and connect.
 
    ![start bot](../media/tutorial-weatherbot/01/start-bot.gif)
 
