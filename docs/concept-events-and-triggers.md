@@ -6,7 +6,7 @@ On the navigation pane, click **New Trigger** and you will see the trigger menu 
 ![trigger_menu](./media/dialog/trigger_menu.gif)
 
 ## Types of triggers 
-There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md). 
+There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](howto-defining-triggers.md). 
 
 ### Dialog trigger  
 The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog triggers in Composer: **Dialog started (BeginDialog)**, **Dialog cancelled (CancelDialog)**, **Error occurred** and **Re-prompt for input**. Most dialogs will include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
@@ -65,7 +65,7 @@ Follow the steps to define a trigger with LUIS recognizer:
 Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize the intent. 
 
 >[!NOTE]
-> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You may need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/howto-using-LUIS.md) article. 
+> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You may need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
 
 Below is a screenshot to show the previous two steps: 
 
@@ -86,7 +86,7 @@ Extracted entities are passed along to any triggered actions or child dialogs us
 - i want to go to {city=los angeles}
 ```
 
-When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/using_memory.md) for later use.
+When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
 
 ### Regular expression recognizer 
 [Regular expressions](https://regexr.com/) are rigid patterns that can be used to match simple or sophisticated patterns in a text. Composer exposes the ability to define intents using regular expressions and also allows the regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, [Regular Expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords.
@@ -99,7 +99,7 @@ Follow the steps to define triggers with [Regular Expressions](https://regexr.co
 
 ![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
 
-3. Define an **Intent** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-events-and-triggers.md#LUIS-recognizer). 
+3. Define an **Intent** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](concept-events-and-triggers.md#LUIS-recognizer). 
 
 ## Further reading
 
@@ -112,4 +112,4 @@ Follow the steps to define triggers with [Regular Expressions](https://regexr.co
 [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
-Learn[conversation flow and memory](./concept-memory.md)
+Learn [conversation flow and memory](./concept-memory.md)
