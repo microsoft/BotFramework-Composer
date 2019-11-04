@@ -112,4 +112,4 @@ Follow the steps to define triggers with [Regular Expressions](https://regexr.co
 [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
-[Conversation flow and memory](./concept-memory.md)
+Learn[conversation flow and memory](./concept-memory.md)
