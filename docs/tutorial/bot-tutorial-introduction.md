@@ -116,4 +116,4 @@ And the bot should immediately greet you with the message we just configured:
 We now have a working bot, and we're ready to add some more substantial functionality!
 
 ## Next steps
-- [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
+- [Add a dialog](./bot-tutorial-add-dialog.md)
