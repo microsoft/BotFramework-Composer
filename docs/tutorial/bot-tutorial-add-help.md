@@ -37,7 +37,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
 9. In the left hand explorer, click `+ New Trigger`
-10. In the resulting dialog box, select `Handle an Intent`, then choose the new `help` intent. Submit the dialog.
+10. In the resulting dialog box, select `Intent`, then choose the new `help` intent. Submit the dialog.
 
      ![](../media/tutorial-weatherbot/04/new-trigger.png) 
 
@@ -115,7 +115,7 @@ For now, let's add one more global function - a cancel command.
       `cancel`
 
 10. In the left hand explorer, click `+ New Trigger`
-11. In the resulting dialog box, select `Handle an Intent`, then choose the new `cancel` intent. Submit the dialog.
+11. In the resulting dialog box, select `Intent`, then choose the new `cancel` intent. Submit the dialog.
 12. In the flow editor, click the `+` button at the bottom of the empty flow.
 13. Choose `Dialog management >` and then select `Begin a new dialog`
 14. In the right hand property editor, select the `cancel` dialog.
