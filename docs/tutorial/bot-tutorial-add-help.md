@@ -114,7 +114,7 @@ For now, let's add one more global function - a cancel command.
 
       `cancel`
 
-10. In the left hand explorer, click `+ New Trigger'
+10. In the left hand explorer, click `+ New Trigger`
 11. In the resulting dialog box, select `Handle an Intent`, then choose the new `cancel` intent. Submit the dialog.
 12. In the flow editor, click the `+` button at the bottom of the empty flow.
 13. Choose `Dialog management >` and then select `Begin a new dialog`
