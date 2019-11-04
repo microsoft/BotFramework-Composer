@@ -26,6 +26,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
  current version of Composer is a web app that runs locally. Future releases will enable Composer to run as a centralized hosted web application. 
 
 ## Get Started
+
 - To learn about the Bot Framework Composer, read the [documentation][5].
 - To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
 - [Deploy Bot Framework Composer][2] on your local machine and [create your first bot][3].
@@ -47,7 +48,6 @@ $ yarn startall // start client and server at the same time
 The Bot Framework Composer is part of the [Bot Framework][20] platform:
 -	[Bot Framework SDK][21]
 -	[Bot Framework Emulator][22]
-
 
 ## Contributing
 
