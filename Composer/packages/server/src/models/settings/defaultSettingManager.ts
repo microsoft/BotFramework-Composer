@@ -6,7 +6,7 @@ import { omit } from 'lodash';
 import { Path } from '../../utility/path';
 
 import { FileSettingManager } from './fileSettingManager';
-import { SensitiveProperties } from './interface';
+import { SensitiveProperties } from '@bfc/shared';
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string) {
