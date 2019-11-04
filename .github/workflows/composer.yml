@@ -55,5 +55,6 @@ jobs:
       - name: E2E Tests
         run: yarn test:integration
         working-directory: Composer
+        continue-on-error: true
         env:
           CYPRESS_COMPOSER_URL: http://localhost:5000
