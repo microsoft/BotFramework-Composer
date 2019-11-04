@@ -254,8 +254,8 @@ export const ShellApi: React.FC = () => {
       template,
     });
 
-    const content = updateTemplateInContent({ content: file.content, templateName, template });
-    return checkLgContent(content);
+    const content = lgUtil.updateTemplate(file.content, templateName, template);
+    return lgUtil.checkLgContent(content);
   }
 
   function removeLgTemplateHandler({ id, templateName }, event) {

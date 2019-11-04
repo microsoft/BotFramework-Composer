@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
+import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import { get } from 'lodash';
 
 const lgStaticChecker = new StaticChecker();
+
+const lgImportResolver = ImportResolver.fileResolver;
 
 interface Template {
   Name: string;
@@ -17,12 +19,31 @@ export function isValid(diagnostics: Diagnostic[]): boolean {
 }
 
 export function check(content: string, id = ''): Diagnostic[] {
-  return lgStaticChecker.checkText(content, id);
+  return lgStaticChecker.checkText(content, id, lgImportResolver);
 }
 
 export function parse(content: string, id = ''): LGTemplate[] {
   const resource = LGParser.parse(content, id);
   return get(resource, 'Templates', []);
+}
+
+export function combineMessage(diagnostics: Diagnostic[]): string {
+  return diagnostics.reduce((msg, d) => {
+    const { Start, End } = d.Range;
+    const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+    msg += `${position} \n ${d.Message}\n`;
+    return msg;
+  }, '');
+}
+
+export function checkLgContent(content: string) {
+  // check lg content, make up error message
+  const diagnostics = check(content);
+  if (isValid(diagnostics) === false) {
+    const errorMsg = combineMessage(diagnostics);
+    throw new Error(errorMsg);
+  }
 }
 
 export function updateTemplate(content: string, templateName: string, { Name, Parameters, Body }: Template): string {
@@ -43,14 +64,4 @@ export function addTemplate(content: string, { Name, Parameters, Body }: Templat
 export function removeTemplate(content: string, templateName: string): string {
   const resource = LGParser.parse(content);
   return resource.deleteTemplate(templateName).toString();
-}
-
-export function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    const { Start, End } = d.Range;
-    const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-    msg += `${position} \n ${d.Message}\n`;
-    return msg;
-  }, '');
 }
