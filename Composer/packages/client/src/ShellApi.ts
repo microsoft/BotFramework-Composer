@@ -7,8 +7,6 @@ import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';
 
-import { parseLgTemplate } from '../src/store/action/lg';
-
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
 import { StoreContext } from './store';
@@ -246,7 +244,7 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
-    parseLgTemplate(template);
+    lgUtil.parseLgTemplate(template);
 
     await updateLgTemplate({
       file,

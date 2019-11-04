@@ -7,34 +7,6 @@ import { ActionCreator } from '../types';
 import { ActionTypes } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 
-export function textFromTemplates(templates) {
-  let text = '';
-
-  templates.forEach(template => {
-    if (template.Name && (template.Body !== null && template.Body !== undefined)) {
-      text += `# ${template.Name.trim()}`;
-      if (template.Parameters && template.Parameters.length > 0) {
-        text += '(' + template.Parameters.join(', ') + ')';
-      }
-      text += '\n';
-      text += `${template.Body.trim()}`;
-    }
-  });
-
-  return text;
-}
-/**
- *
- * @param {Name: string, ?Parameters: string[], Body: string} template
- */
-export function parseLgTemplate(template) {
-  const content = textFromTemplates([template]);
-
-  if (lgUtil.parse(content).length !== 1) {
-    throw new Error('Not a single template');
-  }
-}
-
 export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
     const response = await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, content });

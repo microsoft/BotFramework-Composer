@@ -65,3 +65,31 @@ export function removeTemplate(content: string, templateName: string): string {
   const resource = LGParser.parse(content);
   return resource.deleteTemplate(templateName).toString();
 }
+
+export function textFromTemplates(templates) {
+  let text = '';
+
+  templates.forEach(template => {
+    if (template.Name && (template.Body !== null && template.Body !== undefined)) {
+      text += `# ${template.Name.trim()}`;
+      if (template.Parameters && template.Parameters.length > 0) {
+        text += '(' + template.Parameters.join(', ') + ')';
+      }
+      text += '\n';
+      text += `${template.Body.trim()}`;
+    }
+  });
+
+  return text;
+}
+/**
+ *
+ * @param {Name: string, ?Parameters: string[], Body: string} template
+ */
+export function parseLgTemplate(template) {
+  const content = textFromTemplates([template]);
+
+  if (parse(content).length !== 1) {
+    throw new Error('Not a single template');
+  }
+}
