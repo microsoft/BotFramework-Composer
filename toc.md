@@ -23,7 +23,7 @@
 
 ### How to
 #### Set up
-- [Bot Framework Composer using Yarn](./docs/setup-yarn.md)
+- [Set up Composer using Yarn](./docs/setup-yarn.md)
 #### Develop
 - [Send messages](./docs/howto-sending-messages.md)
 - [Ask for user input](./docs/howto-ask-for-user-input.md)
