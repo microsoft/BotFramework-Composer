@@ -7,12 +7,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
           node-version: 12.13.0
-      - uses: actions/cache@preview
+      - name: Restore yarn cache
+        uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
@@ -35,12 +37,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
           node-version: 12.13.0
-      - uses: actions/cache@preview
+      - name: Restore yarn cache
+        uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
@@ -63,3 +67,23 @@ jobs:
         with:
           name: cypress
           path: Composer/cypress/screenshots
+
+  botproject:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Set Dotnet Version
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "2.1.1" # SDK Version to use.
+      - name: Build BotProject
+        run: dotnet build BotProject.csproj
+        working-directory: BotProject/CSharp
+      - name: Build Tests
+        run: dotnet build Tests.csproj
+        working-directory: BotProject/CSharp
+      - name: Test
+        run: dotnet test Tests.csproj
+        working-directory: BotProject/CSharp
