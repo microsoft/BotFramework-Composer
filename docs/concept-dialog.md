@@ -13,7 +13,7 @@ There are two types of dialogs in Composer: main dialog and child dialog. Below 
 
 ![main_child_dialog](./media/dialog/main_child_dialog.png)
 
-You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. Read [this section](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog.md#create-a-dialog) to create a dialog in Composer. 
+You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. Read the "Create a dialog" section to create a dialog in Composer. 
 
 At runtime, the main dialog is called into action and becomes the active dialog, triggering event handlers with pre-defined actions. As the conversation flows, a child dialog can be called by a main dialog, and vice versa. Different child dialogs can be called with each other as well. 
 
