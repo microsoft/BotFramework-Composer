@@ -27,11 +27,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Set Node Version
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.13.0
       - uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
@@ -50,11 +45,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Set Node Version
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.13.0
       - uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
@@ -73,11 +63,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Set Node Version
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.13.0
       - uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
