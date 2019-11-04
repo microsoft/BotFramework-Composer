@@ -15,7 +15,7 @@ jobs:
       - uses: actions/cache@preview
         with:
           path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, 'Composer/yarn.lock')) }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Yarn Install
@@ -24,5 +24,3 @@ jobs:
         run: cd Composer && yarn build
       - name: Yarn Test
         run: cd Composer && yarn test:coverage
-        env:
-          CI: true
