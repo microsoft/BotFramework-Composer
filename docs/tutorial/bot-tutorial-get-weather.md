@@ -21,8 +21,6 @@
 
 7. Next, click the `User Answers` tab in the property editor. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
 
-   ![](../media/tutorial-weatherbot/03/prompt-tabs.png)
-
 8. Here, we can specify what property in memory will be used to store the user's response. In `Property to fill`, enter the value:
 
       `user.zipcode`
@@ -32,8 +30,6 @@
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
 9. Click on the `Exceptions` tab in the property editor. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
-
-   ![](../media/tutorial-weatherbot/03/tab-exceptions.png)
 
 10. In the `Unrecognized Prompt` field, enter:
       
