@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import Path from 'path';
+
 import React, { useState, useEffect, useContext } from 'react';
-import { toLower, get } from 'lodash';
+import get from 'lodash.get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
@@ -19,15 +21,7 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const {
-    fetchTemplates,
-    getAllProjects,
-    openBotProject,
-    createProject,
-    saveProjectAs,
-    saveTemplateId,
-    fetchStorages,
-  } = actions;
+  const { fetchTemplates, openBotProject, createProject, saveProjectAs, saveTemplateId, fetchStorages } = actions;
   const { templateId, templateProjects, focusedStorageFolder } = state;
 
   useEffect(() => {
@@ -123,8 +117,7 @@ export function CreationFlow(props) {
   const getErrorMessage = name => {
     if (
       bots.findIndex(bot => {
-        const path = `${focusedStorageFolder.parent}/${focusedStorageFolder.name}/${name}`;
-        console.log(bot.path, path);
+        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
         return bot.path === path;
       }) >= 0
     ) {
