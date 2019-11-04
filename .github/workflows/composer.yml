@@ -4,24 +4,25 @@ on: [pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        cd Composer
-        yarn install
-        yarn build:dev
-        yarn test
-      env:
-        CI: true
+      - uses: actions/checkout@v1
+      - name: Set Node Version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+      - uses: actions/cache@preview
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, 'Composer/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: cd Composer && yarn install
+      - name: Yarn Build
+        run: cd Composer && yarn build
+      - name: Yarn Test
+        run: cd Composer && yarn test:coverage
+        env:
+          CI: true
