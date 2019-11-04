@@ -1,6 +1,6 @@
 import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-languageserver-types';
 
-import * as lg from 'botbuilder-lg';
+import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range {
   let range: Range;
@@ -37,19 +37,31 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   return range;
 }
 
-export function convertSeverity(severity: lg.DiagnosticSeverity): DiagnosticSeverity {
+export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSeverity {
   switch (severity) {
-    case lg.DiagnosticSeverity.Error:
+    case LGDiagnosticSeverity.Error:
       return DiagnosticSeverity.Error;
-    case lg.DiagnosticSeverity.Hint:
+    case LGDiagnosticSeverity.Hint:
       return DiagnosticSeverity.Hint;
-    case lg.DiagnosticSeverity.Information:
+    case LGDiagnosticSeverity.Information:
       return DiagnosticSeverity.Information;
-    case lg.DiagnosticSeverity.Warning:
+    case LGDiagnosticSeverity.Warning:
       return DiagnosticSeverity.Warning;
   }
 }
 
-export function getLGResources(document: TextDocument): lg.LGResource {
-  return lg.LGParser.parse(document.getText(), ' ');
+export function getLGResources(document: TextDocument): LGResource {
+  return LGParser.parse(document.getText(), ' ');
+}
+
+export function getTemplatePositionOffset(content: string, { Name, Body }): number {
+  const resource = LGParser.parse(content).updateTemplate(Name, Name, [], Body);
+  const template = resource.Templates.find(item => item.Name === Name);
+  const templateStartLine = template.ParseTree._start.line;
+  return templateStartLine;
+}
+
+export function updateTemplateInContent(content: string, { Name, Body }): string {
+  const resource = LGParser.parse(content);
+  return resource.updateTemplate(Name, Name, [], Body).toString();
 }

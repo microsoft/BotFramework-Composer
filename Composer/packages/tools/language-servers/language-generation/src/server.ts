@@ -14,7 +14,13 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
 import { buildInfunctionsMap } from './builtinFunctions';
-import { getRangeAtPosition, convertSeverity, getLGResources } from './utils';
+import {
+  getRangeAtPosition,
+  convertSeverity,
+  getLGResources,
+  updateTemplateInContent,
+  getTemplatePositionOffset,
+} from './utils';
 
 export function start(reader: MessageReader, writer: MessageWriter): LgServer {
   const connection = createConnection(reader, writer);
@@ -29,7 +35,11 @@ const InitializeDocumentsMethodName = 'initializeDocuments';
 interface LGDocument {
   uri: string;
   language: string;
-  text: string;
+  content: string;
+  template: {
+    Name: string;
+    Body: string;
+  };
 }
 
 export class LgServer {
@@ -70,8 +80,8 @@ export class LgServer {
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const { uri, language, text } = params;
-        this.LGDocuments.push({ uri, language, text });
+        const { uri, language, content, template } = params;
+        this.LGDocuments.push({ uri, language, content, template });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         this.doValidate(textDocument);
@@ -185,10 +195,13 @@ export class LgServer {
 
   protected doValidate(document: TextDocument): void {
     let text = document.getText();
-    const fullDocument = this.LGDocuments.find(item => item.uri === document.uri);
-    if (fullDocument) {
-      // concat new text for validate
-      text = fullDocument.text;
+    let lineOffset = 0;
+    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    if (LGDocument) {
+      // concat new content for validate
+      const { content, template } = LGDocument;
+      text = updateTemplateInContent(content, template);
+      lineOffset = getTemplatePositionOffset(content, template);
     }
 
     if (text.length === 0) {
@@ -203,8 +216,8 @@ export class LgServer {
       let diagnostic: Diagnostic = {
         severity: convertSeverity(diag.Severity),
         range: {
-          start: Position.create(diag.Range.Start.Line - 1, diag.Range.Start.Character),
-          end: Position.create(diag.Range.End.Line - 1, diag.Range.End.Character),
+          start: Position.create(diag.Range.Start.Line - 1 - lineOffset, diag.Range.Start.Character),
+          end: Position.create(diag.Range.End.Line - 1 - lineOffset, diag.Range.End.Character),
         },
         message: diag.Message,
         source: document.uri,

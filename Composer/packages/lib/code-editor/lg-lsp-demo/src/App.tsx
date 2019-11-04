@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import { startSampleClient } from '../../../../tools/language-servers/language-generation/src/startSampleClient';
 
-const text = `# Greeting1
+const content = `# Greeting1
 -Good morning
 
 # Greeting2
@@ -12,16 +12,19 @@ const text = `# Greeting1
 -Good evening
 `;
 
-const content = `# Greeting2
--Good afternoon
+const templateName = 'Greeting2';
+const templateBody = `-Good afternoon
 -[Greeting3]
 -[Greeting4]`;
 
 const file = {
   uri: 'inmemory://common.lg',
   language: 'botbuilderlg',
-  text,
   content,
+  template: {
+    Name: templateName,
+    Body: templateBody, // this value will fill in editor
+  },
 };
 
 export default function App() {

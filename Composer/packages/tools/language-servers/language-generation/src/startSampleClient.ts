@@ -70,9 +70,9 @@ export function registerLGLanguage() {
 
 export function createEditor(container, file) {
   // create Monaco editor
-  const { language, content, uri } = file;
+  const { language, template, uri } = file;
   return monaco.editor.create(container!, {
-    model: monaco.editor.createModel(content, language, monaco.Uri.parse(uri)),
+    model: monaco.editor.createModel(template.Body, language, monaco.Uri.parse(uri)),
     glyphMargin: true,
     lightbulb: {
       enabled: true,
@@ -107,14 +107,8 @@ export function startSampleClient(container, file) {
 }
 
 async function initializeDocuments(languageClient, file) {
-  const { uri, language, text } = file;
-  const profile = {
-    uri,
-    language,
-    text,
-  };
   await languageClient.onReady();
-  languageClient.sendRequest('initializeDocuments', profile);
+  languageClient.sendRequest('initializeDocuments', file);
 }
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {

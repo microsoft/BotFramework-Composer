@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@types/node": "^12.0.4",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz",
+    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
     "express": "^4.15.2",
     "monaco-editor-core": "0.17.0",
     "monaco-languageclient": "^0.10.0",
