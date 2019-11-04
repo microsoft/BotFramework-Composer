@@ -98,4 +98,4 @@ Now you have completed defining a **Custom trigger**. When **Emit a custom event
 - [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md)
 
 ## Next 
-Learn how to [control conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/howto-controlling-conversation-flow.md).
+Learn how to [control conversation flow](./howto-controlling-conversation-flow.md).
