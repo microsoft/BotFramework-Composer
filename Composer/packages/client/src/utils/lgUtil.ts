@@ -1,8 +1,10 @@
-import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import { get } from 'lodash';
 
 const lgStaticChecker = new StaticChecker();
-const lgImportResolver = new ImportResolver();
 
 interface Template {
   Name: string;
@@ -15,8 +17,7 @@ export function isValid(diagnostics: Diagnostic[]): boolean {
 }
 
 export function check(content: string, id = ''): Diagnostic[] {
-  // @ts-ignore
-  return lgStaticChecker.checkText(content, id, lgImportResolver);
+  return lgStaticChecker.checkText(content, id);
 }
 
 export function parse(content: string, id = ''): LGTemplate[] {

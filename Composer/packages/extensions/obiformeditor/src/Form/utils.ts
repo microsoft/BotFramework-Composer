@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   DropdownMenuItemType,
   IContextualMenuItem,
@@ -7,7 +10,7 @@ import {
 import { useState } from 'react';
 import merge from 'lodash.merge';
 import get from 'lodash.get';
-import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from 'shared';
+import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from '@bfc/shared';
 
 import { FormMemory, MemoryScope } from '../types';
 

@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 
-import composerIcon from '../../composerIcon.svg';
+import composerIcon from '../../images/composerIcon.svg';
 
 import { headerContainer, title, botName } from './styles';
 

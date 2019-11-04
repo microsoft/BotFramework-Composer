@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
@@ -35,7 +38,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-  if (process.env.NODE_ENV === 'production' || process.env.ENABLE_CSP === 'true') {
+  if (process.env.ENABLE_CSP === 'true') {
     req.__nonce__ = crypto.randomBytes(16).toString('base64');
     res.header(
       'Content-Security-Policy',
@@ -54,8 +57,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
 app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
 app.use(morgan('dev'));
 
-app.use(bodyParser({ limit: '50mb' }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
@@ -92,6 +94,8 @@ app.get('*', function(req, res) {
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log('Composer api now running.');
+  if (process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line no-console
+    console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+  }
 });

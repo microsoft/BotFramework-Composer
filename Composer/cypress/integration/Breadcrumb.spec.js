@@ -45,19 +45,19 @@ context('breadcrumb', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.getByText('AddToDo').click();
       cy.wait(100);
-      cy.getByText('Handle an Event: BeginDialog').click();
+      cy.getByText('Dialog started (BeginDialog)').click();
       cy.wait(100);
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /AddToDo.*Handle an Event.*/);
+      .should('match', /AddToDo.*Event received.*/);
   });
 
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Handle ConversationUpdate').click();
+      cy.getByText('Conversation started (ConversationUpdate)').click();
       cy.wait(500);
     });
 

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ObiTypes } from '../constants/ObiTypes';
 import { Boundary } from '../models/Boundary';
 import {
@@ -103,7 +106,6 @@ export function measureJsonBoundary(json): Boundary {
     case ObiTypes.ConfirmInput:
     case ObiTypes.DateTimeInput:
     case ObiTypes.NumberInput:
-    case ObiTypes.OAuthInput:
     case ObiTypes.TextInput:
       boundary = measureBaseInputBoundary(json);
       break;

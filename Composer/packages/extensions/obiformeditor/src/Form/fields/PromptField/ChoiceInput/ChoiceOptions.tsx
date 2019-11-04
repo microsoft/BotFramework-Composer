@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
-import { IChoiceOption, OBISchema } from 'shared';
+import { IChoiceOption, OBISchema } from '@bfc/shared';
 
 import { field } from '../styles';
 import { TextWidget, CheckboxWidget } from '../../../widgets';

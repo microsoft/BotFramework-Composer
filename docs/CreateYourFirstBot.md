@@ -63,7 +63,7 @@ To add the newly created dialog to the event, first, go back to the root dialog,
 
 
 ## Step 5: (Optional) Creating handlers for other types of events
-Besides recognized intents, you may want to handle other types of events, for example, when there are unrecognized intents or when a user joins the conversation. Creating handlers for these types of events is no different from creating intent handlers. You just need to select a different event type as shown below. For example, select **Handle ConversationUpdate** if you want to send a welcome message to the user when they first join the conversation (when a conversationUpdate event is trigged).
+Besides recognized intents, you may want to handle other types of events, for example, when there are unrecognized intents or when a user joins the conversation. Creating handlers for these types of events is no different from creating intent handlers. You just need to select a different event type as shown below. For example, select **Conversation started (ConversationUpdate)** if you want to send a welcome message to the user when they first join the conversation (when a conversationUpdate event is trigged).
 
 <img src = "Assets/OtherEventHandlers.png" alt = "Other event handler" width = 500></img>
 

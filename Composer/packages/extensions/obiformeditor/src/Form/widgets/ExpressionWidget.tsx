@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react';

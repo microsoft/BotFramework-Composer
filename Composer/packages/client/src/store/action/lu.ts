@@ -1,12 +1,14 @@
-import axios from 'axios';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants/index';
+import { ActionTypes } from './../../constants/index';
+import httpClient from './../../utils/httpUtil';
 
 export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
-    const response = await axios.put(`${BASEURL}/projects/opened/luFiles/${id}`, { id, content });
+    const response = await httpClient.put(`/projects/opened/luFiles/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_LU_SUCCESS,
       payload: { response },
@@ -23,7 +25,7 @@ export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content })
 
 export const createLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles`, { id, content });
+    const response = await httpClient.post(`/projects/opened/luFiles`, { id, content });
     dispatch({
       type: ActionTypes.CREATE_LU_SUCCCESS,
       payload: { response },
@@ -41,7 +43,7 @@ export const createLuFile: ActionCreator = async ({ dispatch }, { id, content })
 
 export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
   try {
-    const response = await axios.delete(`${BASEURL}/projects/opened/luFiles/${id}`);
+    const response = await httpClient.delete(`/projects/opened/luFiles/${id}`);
     dispatch({
       type: ActionTypes.REMOVE_LU_SUCCCESS,
       payload: { response },
@@ -57,7 +59,7 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
 
 export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey) => {
   try {
-    const response = await axios.post(`${BASEURL}/projects/opened/luFiles/publish`, { authoringKey });
+    const response = await httpClient.post(`/projects/opened/luFiles/publish`, { authoringKey });
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },

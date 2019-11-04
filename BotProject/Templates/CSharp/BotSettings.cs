@@ -1,4 +1,7 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+﻿// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Bot.Builder.Azure;
 using System;
 using System.Collections.Generic;

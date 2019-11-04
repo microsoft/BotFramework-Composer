@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { Toggle } from 'office-ui-fabric-react';
 import { WidgetProps } from '@bfcomposer/react-jsonschema-form';

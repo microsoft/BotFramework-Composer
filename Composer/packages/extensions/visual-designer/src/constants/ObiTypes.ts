@@ -1,4 +1,7 @@
-import { SDKTypes } from 'shared';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { SDKTypes } from '@bfc/shared';
 
 enum VirtualElementTypes {
   RuleGroup = 'VisualSDK.RuleGroup',

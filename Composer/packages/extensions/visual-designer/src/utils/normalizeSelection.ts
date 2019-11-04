@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const normalizeSelection = (selectedIds: string[]): string[] => {
   if (!Array.isArray(selectedIds)) return [];
   // events[0] < events[0].actions[0] < events[1] < events[1].actions[0]

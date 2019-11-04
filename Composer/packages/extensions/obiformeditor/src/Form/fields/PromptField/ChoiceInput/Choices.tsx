@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
@@ -5,7 +8,7 @@ import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
 import { TextField, IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { IChoice } from 'shared';
+import { IChoice } from '@bfc/shared';
 
 import { field, choiceItemContainer, choiceItemValue, choiceItemSynonyms } from '../styles';
 import { swap, remove } from '../../../utils';

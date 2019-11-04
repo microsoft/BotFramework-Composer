@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
@@ -137,8 +140,8 @@ async function saveProjectAs(req: Request, res: Response) {
   }
 }
 
-function getRecentProjects(req: Request, res: Response) {
-  const projects = BotProjectService.getRecentBotProjects();
+async function getRecentProjects(req: Request, res: Response) {
+  const projects = await BotProjectService.getRecentBotProjects();
   return res.status(200).json(projects);
 }
 

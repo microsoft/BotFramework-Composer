@@ -1,4 +1,7 @@
-import { DialogGroup } from 'shared';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { DialogGroup } from '@bfc/shared';
 
 const Colors = {
   // Neutral Colors

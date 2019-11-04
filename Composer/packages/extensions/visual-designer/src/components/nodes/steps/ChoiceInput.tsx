@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup, PromptTab } from 'shared';
+import { DialogGroup, PromptTab } from '@bfc/shared';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -75,7 +78,7 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
       icon={ElementIcon.User}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_ANSWERS });
+        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_INPUT });
       }}
       styles={{ width: boundary.width, height: boundary.height }}
     >

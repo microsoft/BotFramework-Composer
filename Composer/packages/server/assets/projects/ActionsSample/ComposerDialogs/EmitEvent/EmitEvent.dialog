@@ -4,6 +4,7 @@
     "id": "701087"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnCustomEvent",
@@ -23,64 +24,13 @@
       "$designer": {
         "id": "360314"
       },
-       
       "actions": [
-        {
-          "$type": "Microsoft.SendActivity",
-          "$designer": {
-            "id": "879639"
-          },
-          "activity": "[bfdactivity-879639]"
-        },
         {
           "$type": "Microsoft.BeginDialog",
           "$designer": {
             "id": "293316"
           },
-          "Dialog": {
-            "$type": "Microsoft.AdaptiveDialog",
-            "autoEndDialog": false,
-            "recognizer": {
-              "$type": "Microsoft.RegexRecognizer",
-              "intents": [
-                {
-
-                  "$type": "Microsoft.IntentPattern",
-                  "intent": "EmitEvent",
-                  "pattern": "emit" 
-                },
-                {
-  
-                  "$type": "Microsoft.IntentPattern",
-                  "intent": "CowboyIntent",
-                  "pattern": "moo"
-                }
-              ]
-            },
-            "triggers": [
-              {
-                "$type": "Microsoft.OnIntent",
-                "intent": "EmitEvent",
-                "actions": [
-                  {
-                    "$type": "Microsoft.EmitEvent",
-                    "EventName": "CustomEvent",
-                    "BubbleEvent": true
-                  }
-                ]
-              },
-              {
-                "$type": "Microsoft.OnIntent",
-                "intent": "CowboyIntent",
-                "actions": [
-                  {
-                    "$type": "Microsoft.SendActivity",
-                    "activity": "Yippee ki-yay!"
-                  }
-                ]
-              }
-            ]
-          }
+          "dialog": "EmitAnEvent"
         }
       ]
     }

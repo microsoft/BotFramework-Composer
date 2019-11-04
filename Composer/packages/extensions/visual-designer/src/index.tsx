@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
@@ -21,8 +24,9 @@ const emotionCache = createCache({
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
   focusedEvent,
-  focusedSteps,
+  focusedActions,
   focusedTab,
+  clipboardActions,
   data: inputData,
   shellApi,
   hosted,
@@ -44,6 +48,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onFocusEvent,
     onFocusSteps,
     onSelect,
+    onCopy,
     saveData,
     updateLgTemplate,
     getLgTemplates,
@@ -52,13 +57,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     redo,
   } = shellApi;
 
-  const focusedId = Array.isArray(focusedSteps) && focusedSteps[0] ? focusedSteps[0] : '';
+  const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const [context, setContext] = useState({
     focusedId,
     focusedEvent,
     focusedTab,
+    clipboardActions: clipboardActions || [],
     updateLgTemplate: updateLgTemplate,
     getLgTemplates: getLgTemplates,
     removeLgTemplate: removeLgTemplate,
@@ -70,8 +76,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       focusedId,
       focusedEvent,
       focusedTab,
+      clipboardActions,
     });
-  }, [focusedEvent, focusedSteps, focusedTab]);
+  }, [focusedEvent, focusedActions, focusedTab, clipboardActions]);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -82,10 +89,11 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               key={dialogId}
               path={dialogId}
               data={data}
-              focusedSteps={focusedSteps}
+              focusedSteps={focusedActions}
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
+              onClipboardChange={onCopy}
               onOpen={(x, rest) => navTo(x, rest)}
               onChange={x => saveData(x)}
               onSelect={onSelect}
@@ -103,8 +111,10 @@ interface VisualDesignerProps {
   data: object;
   dialogId: string;
   focusedEvent: string;
+  focusedActions: string[];
   focusedSteps: string[];
   focusedTab: string;
+  clipboardActions: any[];
   shellApi: any;
   hosted: boolean;
   currentDialog: { id: string; displayName: string; isRoot: boolean };

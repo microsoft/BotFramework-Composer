@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import formatMessage from 'format-message';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
-export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
+export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
@@ -32,22 +35,17 @@ export const UNDO_LIMIT = 10;
  */
 
 export enum ActionTypes {
-  INIT_PROJECT_STATE = 'INIT_PROJECT_STATE',
-  GET_PROJECT = 'GET_PROJECT',
   GET_PROJECT_SUCCESS = 'GET_PROJECT_SUCCESS',
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
   GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
   GET_TEMPLATE_PROJECTS_FAILURE = 'GET_TEMPLATE_PROJECTS_FAILURE',
-  UPDATE_DIALOG = 'UPDATE_DIALOG',
-  UPDATE_DIALOG_FAILURE = 'UPDATE_DIALOG_FAILURE',
   CREATE_DIALOG_BEGIN = 'CREATE_DIALOG_BEGIN',
   CREATE_DIALOG_CANCEL = 'CREATE_DIALOG_CANCEL',
   CREATE_DIALOG_SUCCESS = 'CREATE_DIALOG_SUCCESS',
-  CREATE_DIALOG_FAILURE = 'CREATE_DIALOG_FAILURE',
+  UPDATE_DIALOG = 'UPDATE_DIALOG',
   REMOVE_DIALOG = 'REMOVE_DIALOG',
-  REMOVE_DIALOG_FAILURE = 'REMOVE_DIALOG_FAILURE',
   UPDATE_LG_SUCCESS = 'UPDATE_LG_SUCCESS',
   UPDATE_LG_FAILURE = 'UPDATE_LG_FAILURE',
   CREATE_LG_SUCCCESS = 'CREATE_LG_SUCCCESS',
@@ -61,29 +59,22 @@ export enum ActionTypes {
   REMOVE_LU_SUCCCESS = 'REMOVE_LU_SUCCCESS',
   REMOVE_LU_FAILURE = 'REMOVE_LU_FAILURE',
   PUBLISH_LU_SUCCCESS = 'PUBLISH_LU_SUCCCESS',
-  PUBLISH_LU_FAILURE = 'PUBLISH_LU_FAILURE',
-  SET_BOT_STATUS_SUCCESS = 'SET_BOT_STATUS_SUCCESS',
-  SET_BOT_STATUS_FAILURE = 'SET_BOT_STATUS_FAILURE',
-  ADD_EDITOR = 'ADD_EDITOR',
-  SET_EDITOR = 'SET_EDITOR',
-  SET_STORAGE = 'SET_STORAGE',
   SAVE_TEMPLATE_ID = 'SAVE_TEMPLATE_ID',
   GET_STORAGE_SUCCESS = 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE = 'GET_STORAGE_FAILURE',
   SET_STORAGEFILE_FETCHING_STATUS = 'SET_STORAGEFILE_FETCHING_STATUS',
   GET_STORAGEFILE_SUCCESS = 'GET_STORAGEFILE_SUCCESS',
-  GET_STORAGEFILE_FAILURE = 'GET_STORAGEFILE_FAILURE',
   SET_CREATION_FLOW_STATUS = 'SET_CREATION_FLOW_STATUS',
   SET_DESIGN_PAGE_LOCATION = 'SET_DESIGN_PAGE_LOCATION',
   CONNECT_BOT_SUCCESS = 'CONNECT_BOT_SUCCESS',
-  CONNECT_BOT_FAILURE = 'CONNECT_BOT_FAILURE',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
-  RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
+  EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
+  EDITOR_CLIPBOARD = 'EDITOR_CLIPBOARD',
   USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS',
   USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE',
   USER_SESSION_EXPIRED = 'USER_SESSION_EXPIRED',
@@ -102,7 +93,7 @@ export const Tips = {
     (projectname-environment-LUfilename)`),
   ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
-  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
+  AUTHORING_KEY: formatMessage('A primary key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
@@ -110,12 +101,12 @@ export const Tips = {
 };
 
 export const Links = {
-  LUIS: 'https://www.luis.ai/applications',
+  LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
 };
 
 export const Text = {
   LUISDEPLOY: formatMessage(
-    `To use your language model, first publish the latest intents and examples to your LUIS instance.`
+    `Your bot is using LUIS for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
@@ -169,7 +160,7 @@ export const Steps = {
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create from scratch?'),
-    subText: formatMessage('You can create a new bot from scratch with Designer, or start with a template.'),
+    subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),

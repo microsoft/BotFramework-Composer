@@ -1,9 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import formatMessage from 'format-message';
 import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash.get';
-import { createStepMenu, DialogGroup, ITriggerCondition, OnIntent } from 'shared';
+import { createStepMenu, DialogGroup, ITriggerCondition, OnIntent } from '@bfc/shared';
 
 import { setOverridesOnField } from '../utils';
 

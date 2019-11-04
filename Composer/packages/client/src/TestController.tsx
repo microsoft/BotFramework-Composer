@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import {
   ActionButton,
@@ -9,7 +12,7 @@ import {
   Stack,
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';

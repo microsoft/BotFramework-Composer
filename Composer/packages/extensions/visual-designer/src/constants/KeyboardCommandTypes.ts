@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { EditorConfig } from '../editors/editorConfig';
 
 export const KeyboardCommandTypes = {

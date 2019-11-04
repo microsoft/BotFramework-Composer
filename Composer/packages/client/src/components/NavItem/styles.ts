@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { css } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';

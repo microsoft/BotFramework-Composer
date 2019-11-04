@@ -1,8 +1,11 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 
 import isEqual from 'lodash.isequal';
-import { FileInfo, DialogInfo, LgFile, LuFile } from 'shared';
-import { dialogIndexer, luIndexer, lgIndexer } from 'indexers';
+import { FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
