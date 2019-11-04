@@ -83,7 +83,7 @@ jobs:
         working-directory: BotProject/CSharp
       - name: Build Tests
         run: dotnet build Tests.csproj
-        working-directory: BotProject/CSharp
+        working-directory: BotProject/CSharp/Tests
       - name: Test
         run: dotnet test Tests.csproj
-        working-directory: BotProject/CSharp
+        working-directory: BotProject/CSharp/Tests
