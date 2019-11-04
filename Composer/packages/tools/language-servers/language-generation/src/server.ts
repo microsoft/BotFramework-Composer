@@ -23,10 +23,20 @@ export function start(reader: MessageReader, writer: MessageWriter): LgServer {
   return server;
 }
 
+// define init methods call from client
+const InitializeDocumentsMethodName = 'initializeDocuments';
+
+interface LGDocument {
+  uri: string;
+  language: string;
+  text: string;
+}
+
 export class LgServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
+  protected LGDocuments: LGDocument[] = []; // LG Documents Store
 
   constructor(protected readonly connection: IConnection) {
     this.documents.listen(this.connection);
@@ -57,6 +67,16 @@ export class LgServer {
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onHover(params => this.hover(params));
+
+    this.connection.onRequest((method, params) => {
+      if (InitializeDocumentsMethodName === method) {
+        const { uri, language, text } = params;
+        this.LGDocuments.push({ uri, language, text });
+        // run diagnostic
+        const textDocument = this.documents.get(uri);
+        this.doValidate(textDocument);
+      }
+    });
   }
 
   start() {
@@ -164,12 +184,18 @@ export class LgServer {
   }
 
   protected doValidate(document: TextDocument): void {
-    if (document.getText().length === 0) {
+    let text = document.getText();
+    const fullDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    if (fullDocument) {
+      // concat new text for validate
+      text = fullDocument.text;
+    }
+
+    if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
     }
 
-    let text = document.getText();
     const staticChercher = new lg.StaticChecker();
     const lgDiags = staticChercher.checkText(text, '', lg.ImportResolver.fileResolver);
     let diagnostics: Diagnostic[] = [];

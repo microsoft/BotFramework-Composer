@@ -1,24 +1,36 @@
 import React, { useEffect, useRef } from 'react';
 
-import {
-  createEditor,
-  startSampleClient,
-  registerLGLanguage,
-} from '../../../../tools/language-servers/language-generation/src/startSampleClient';
+import { startSampleClient } from '../../../../tools/language-servers/language-generation/src/startSampleClient';
 
-const content = `# Greeting
+const text = `# Greeting1
 -Good morning
--Good afternoon
--Good evening`;
 
-registerLGLanguage();
+# Greeting2
+-Good afternoon
+
+# Greeting3
+-Good evening
+`;
+
+const content = `# Greeting2
+-Good afternoon
+-[Greeting3]
+-[Greeting4]`;
+
+const file = {
+  uri: 'inmemory://common.lg',
+  language: 'botbuilderlg',
+  text,
+  content,
+};
 
 export default function App() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const editor = createEditor(containerRef.current);
-    startSampleClient(editor);
+    const container = containerRef.current;
+    const editor = startSampleClient(container, file);
+    // startSampleClient(editor);
   });
 
   return <div style={{ height: '99vh', width: '100%' }} ref={containerRef} />;

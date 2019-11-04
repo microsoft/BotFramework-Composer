@@ -68,16 +68,11 @@ export function registerLGLanguage() {
   });
 }
 
-export function createEditor(container) {
+export function createEditor(container, file) {
   // create Monaco editor
-  const value = `#ted11
-  - hello hello
-  - range
-  - great
-  - ted hello `;
-  console.log(container);
+  const { language, content, uri } = file;
   return monaco.editor.create(container!, {
-    model: monaco.editor.createModel(value, 'botbuilderlg', monaco.Uri.parse('inmemory://model.json')),
+    model: monaco.editor.createModel(content, language, monaco.Uri.parse(uri)),
     glyphMargin: true,
     lightbulb: {
       enabled: true,
@@ -86,14 +81,15 @@ export function createEditor(container) {
   });
 }
 
-export function startSampleClient(editor) {
+export function startSampleClient(container, file) {
+  registerLGLanguage();
+  const editor = createEditor(container, file);
   // install Monaco language client services
   MonacoServices.install(editor);
 
   // create the web socket
   // const url = createUrl('/lgServer');
   const url = 'ws://localhost:5000/lgServer';
-  console.log(url);
   const webSocket = createWebSocket(url);
   // listen when the web socket is opened
   listen({
@@ -101,10 +97,24 @@ export function startSampleClient(editor) {
     onConnection: connection => {
       // create and start the language client
       const languageClient = createLanguageClient(connection);
+      // send full content
+      initializeDocuments(languageClient, file);
       const disposable = languageClient.start();
       connection.onClose(() => disposable.dispose());
     },
   });
+  return editor;
+}
+
+async function initializeDocuments(languageClient, file) {
+  const { uri, language, text } = file;
+  const profile = {
+    uri,
+    language,
+    text,
+  };
+  await languageClient.onReady();
+  languageClient.sendRequest('initializeDocuments', profile);
 }
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
