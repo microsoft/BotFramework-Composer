@@ -77,7 +77,7 @@ jobs:
       - name: Set Dotnet Version
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "2.2" # SDK Version to use.
+          dotnet-version: "2.2.7" # SDK Version to use.
       - name: Build BotProject
         run: dotnet build BotProject.csproj
         working-directory: BotProject/CSharp
