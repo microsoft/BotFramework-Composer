@@ -41,7 +41,7 @@ Triggers contain a series of actions that the bot will undertake to fulfill a us
 ![action_menu](./media/dialog/action_menu.gif)
 
 ### Language generator
-As the bot takes actions and sends messages, the **language generator** is called into play. This allows messages sent by the bot to be composed from variables and templates. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. Read more in [language generation](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-language-genereation.md).
+As the bot takes actions and sends messages, the **language generator** is called into play. This allows messages sent by the bot to be composed from variables and templates. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. 
 
 With a single click from within Composer, developers can launch the bot runtime, and connect to their bot in the Bot Framework Emulator. Once tested in the emulator, the bot runtime can be connected to the Bot Framework Channel service, and from there... the world! 
 
