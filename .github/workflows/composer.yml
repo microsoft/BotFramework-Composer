@@ -20,16 +20,16 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: Yarn Install
+      - name: yarn install
         run: yarn install
         working-directory: Composer
-      - name: Build
+      - name: yarn build:dev
         run: yarn build:dev
         working-directory: Composer
-      - name: Lint
+      - name: yarn lint
         run: yarn lint
         working-directory: Composer
-      - name: Test
+      - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
 
@@ -50,13 +50,13 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: Yarn Install
+      - name: yarn install
         run: yarn install
         working-directory: Composer
-      - name: Build
+      - name: yarn build:prod
         run: yarn build:prod
         working-directory: Composer
-      - name: E2E Tests
+      - name: yarn test:integration
         run: yarn test:integration
         working-directory: Composer
         continue-on-error: true
@@ -69,7 +69,7 @@ jobs:
           path: Composer/cypress/screenshots
 
   botproject:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
@@ -77,14 +77,10 @@ jobs:
       - name: Set Dotnet Version
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "3.0.100" # SDK Version to use.
-      - run: dotnet --info
-      - name: Build BotProject
-        run: dotnet build BotProject.csproj
+          dotnet-version: "2.1.802" # SDK Version to use.
+      - name: dotnet build
+        run: dotnet build
         working-directory: BotProject/CSharp
-      - name: Build Tests
-        run: dotnet build Tests/Tests.csproj
-        working-directory: BotProject/CSharp
-      - name: Test
-        run: dotnet test Tests/Tests.csproj
+      - name: dotnet test
+        run: dotnet test
         working-directory: BotProject/CSharp
