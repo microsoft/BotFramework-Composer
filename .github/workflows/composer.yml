@@ -22,7 +22,7 @@ jobs:
         run: yarn install
         working-directory: Composer
       - name: Build
-        run: yarn build
+        run: yarn build:dev
         working-directory: Composer
       - name: Lint
         run: yarn lint
