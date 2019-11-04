@@ -10,7 +10,7 @@ import {
 import normalizeUrl = require('normalize-url');
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
-export function startSampleClient() {
+export function startSampleClient(editor) {
   // register Monaco languages
 
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
@@ -71,20 +71,20 @@ export function startSampleClient() {
     ],
   });
 
-  // create Monaco editor
-  const value = `#ted
-- hello hello
-- range
-- great 
-- ted hello `;
-  const editor = monaco.editor.create(document.getElementById('container')!, {
-    model: monaco.editor.createModel(value, 'botbuilderlg', monaco.Uri.parse('inmemory://model.json')),
-    glyphMargin: true,
-    lightbulb: {
-      enabled: true,
-    },
-    theme: 'lgtheme',
-  });
+  //   // create Monaco editor
+  //   const value = `#ted
+  // - hello hello
+  // - range
+  // - great
+  // - ted hello `;
+  //   const editor = monaco.editor.create(document.getElementById('container')!, {
+  //     model: monaco.editor.createModel(value, 'botbuilderlg', monaco.Uri.parse('inmemory://model.json')),
+  //     glyphMargin: true,
+  //     lightbulb: {
+  //       enabled: true,
+  //     },
+  //     theme: 'lgtheme',
+  //   });
 
   // install Monaco language client services
   MonacoServices.install(editor);

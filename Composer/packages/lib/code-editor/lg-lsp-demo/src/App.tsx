@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import { RichEditor } from '../../src';
-import { startSampleClient } from './client';
+
+import { startSampleClient } from '../../../../tools/language-servers/language-generation/src/startSampleClient';
 
 const content = `# Greeting
 -Good morning
