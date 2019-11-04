@@ -31,7 +31,7 @@ When a dialog is called into action, its **recognizer** will start to process th
 > **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It depends on how you design the dialog system.   
 
 ### Trigger
-The functionality of a dialog is contained within triggers (event handlers) - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interuptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer. 
+The functionality of a dialog is contained within triggers (event handlers) - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer. 
 
 ![trigger_menu](./media/dialog/trigger_menu.gif)
 
@@ -63,7 +63,7 @@ When your bot is created successfully you will see a **.Main** dialog in the dia
 ![main_dialog](./media/dialog/main_dialog.png)
 
 > [!NOTE]
-> As you will notice, after you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-events-and-triggers.md). 
+> As you will notice, after you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
 
 ## Add a dialog 
 After you create a bot you are also creating its main dialog by default. The main dialog is like the brain of our bot, controlling and managing the dialog system. Sometimes we find it useful to create a child dialog that contains a chunk of functionality so that our dialog system is organized and easily managed. Let's walk through a very simple example to show how to create a child dialog and wire it up with the main dialog. 
