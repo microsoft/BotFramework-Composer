@@ -40,15 +40,9 @@ export function CreationFlow(props) {
     init();
   }, [creationFlowStatus]);
 
-  // const getAllBots = async () => {
-  //   const data = await getAllProjects();
-  //   setBots(data);
-  // };
-
   const init = () => {
     if (creationFlowStatus !== CreationFlowStatus.CLOSE) {
       fetchTemplates();
-      //await getAllBots();
     }
 
     // load storage system list
