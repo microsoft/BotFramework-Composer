@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgEditor } from 'code-editor';
+import { LgEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import * as lgUtil from '../../utils/lgUtil';

@@ -1,5 +1,5 @@
 {
-  "name": "component-scaffold",
+  "name": "@bfc/component-scaffold",
   "version": "0.0.0",
   "description": "<description>",
   "main": "lib/index.js",

@@ -15,14 +15,12 @@ set PUBLIC_URL=/composer
 
 Commands:
 ```
-$ cd Composer // switch to Composer folder
-$ yarn install // install dependencies
-$ yarn build // build extensions and libs
-$ yarn start // start client and server at the same time
+$ cd Composer
+$ yarn install
+$ yarn build
+$ yarn startall
 ```
 then go to http://localhost:3000/, best experienced in Chrome
-
-If you want to test bot, you should have your bot runtime running for composer to connect to. Please refer to the [instructions](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp) here to start your runtime. Usually that only means, run `dotnet run` at that particular folder.
 
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
@@ -47,8 +45,10 @@ Composer is managed via yarn workspaces, producing such a folder layout.
     |- client       // composer main app
     |- server       // composer api server
     |- extensions
-      |- package.json      // put all extension as one package
-      |- sample-json-edior // sample extension package
+      |- package.json  // put all extension as one package
+      |- obiformeditor // dialog property editor
+    |- lib
+      |- shared        // shared code
 ```
 
 All extensions under `/extensions` folder will be eventually packed into one `extensions` package, then the `client` package will depends on this `extensions` package.

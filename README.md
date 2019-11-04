@@ -1,4 +1,4 @@
-# ![Microsoft Bot Framework Composer](./docs/Assets/gh-banner.png)
+# ![Microsoft Bot Framework Composer](./docs/media/gh-banner.png)
 
 # Microsoft Bot Framework Composer [PREVIEW]
 
@@ -19,19 +19,17 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
     <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-Composer-overview.png" style="max-width:700px;" />
 </p>
 
-
 ## Who should use this PREVIEW release?
 -	This preview is for developers looking to build conversation applications using the latest Bot Framework SDK preview features like Adaptive Dialogs, Language Understanding and Language Generation. 
 -	Composer and the Bot Framework Adaptive Dialog are in-preview and should not be used for production deployments. 
 -	We designed Composer to be a web app to allow developers to extend Composer as well as embed it within their own solutions. The
  current version of Composer is a web app that runs locally. Future releases will enable Composer to run as a centralized hosted web application. 
 
-
 ## Get Started
 
-- To get your-self familiar with the Composer, read [Introduction to Bot Framework Composer][1].
+- To learn about the Bot Framework Composer, read the [documentation][5].
+- To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
 - [Deploy Bot Framework Composer][2] on your local machine and [create your first bot][3].
-- [Learn how to use Composer to build bots][4].
 
 To build and run the Composer project locally. From the Composer folder, run the following commands
 ```
@@ -50,7 +48,6 @@ $ yarn startall // start client and server at the same time
 The Bot Framework Composer is part of the [Bot Framework][20] platform:
 -	[Bot Framework SDK][21]
 -	[Bot Framework Emulator][22]
-
 
 ## Contributing
 
@@ -80,6 +77,7 @@ the [Security TechCenter][103].
 [2]:./docs/setup-yarn.md
 [3]:./docs/tutorial-create-echobot.md
 [4]:https://aka.ms/BF-Composer-Docs
+[5]:./toc.md
 
 [10]:https://stackoverflow.com/questions/tagged/botframework?tab=Newest
 [11]:https://github.com/microsoft/BotFramework-Composer/issues/new?assignees=&labels=Type%3A+suggestion%2C+Needs-triage&template=bot-framework-composer-feature-request.md&title=

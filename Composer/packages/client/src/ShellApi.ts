@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useContext, useMemo, useState } from 'react';
-import { ShellData } from 'shared';
+import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';
 
@@ -239,7 +239,7 @@ export const ShellApi: React.FC = () => {
    *
    * @param {*} event
    */
-  function updateLgTemplateHandler({ id, templateName, template }, event) {
+  async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
@@ -247,11 +247,14 @@ export const ShellApi: React.FC = () => {
 
     parseLgTemplate(template);
 
-    return updateLgTemplate({
+    await updateLgTemplate({
       file,
       templateName,
       template,
     });
+
+    const content = updateTemplateInContent({ content: file.content, templateName, template });
+    return checkLgContent(content);
   }
 
   function removeLgTemplateHandler({ id, templateName }, event) {
