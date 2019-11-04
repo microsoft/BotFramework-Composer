@@ -84,7 +84,7 @@ export const removeLgFile: ActionCreator = async ({ dispatch }, { id }) => {
 };
 
 export const updateLgTemplate: ActionCreator = async (store, { file, templateName, template }) => {
-  const newContent = lgUtil.updateTemplate(file.content, template);
+  const newContent = lgUtil.updateTemplate(file.content, templateName, template);
   return await updateLgFile(store, { id: file.id, content: newContent });
 };
 

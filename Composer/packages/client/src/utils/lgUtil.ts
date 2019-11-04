@@ -25,9 +25,9 @@ export function parse(content: string, id = ''): LGTemplate[] {
   return get(resource, 'Templates', []);
 }
 
-export function updateTemplate(content: string, { Name, Parameters, Body }: Template): string {
+export function updateTemplate(content: string, templateName, { Name, Parameters, Body }: Template): string {
   const resource = LGParser.parse(content);
-  return resource.updateTemplate(Name, Parameters, Body).toString();
+  return resource.updateTemplate(templateName, Name, Parameters, Body).toString();
 }
 
 export function addTemplate(content: string, { Name, Parameters, Body }: Template): string {
