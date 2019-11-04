@@ -2,13 +2,13 @@
 Language Understanding Intelligent Service ([LUIS](https://www.luis.ai/home)) is a cloud-based API service to build natural language into apps and bots. Adding LUIS to your bots enables them to understand the users' intents conversationally and contextually so that your bots can decide what to respond to the users. Bot Framework Composer provides tools to train and manage language understanding components and it's easier for developers to add LUIS when they develop bots with Composer. In this article, we will walk you through the steps to use LUIS when you develop your bots with Composer. To further explore how to use LUIS in Bot Composer, you may refer to the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample). 
 
 ## Prerequisites 
-- Basic knowledge of language understanding (concept article [here](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding.md))
-- Basic knowledge of events and triggers (concept article [here](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md))
+- Basic knowledge of language understanding (concept article [here](./concept-language-understanding.md))
+- Basic knowledge of events and triggers (concept article [here](./concept-events-and-triggers.md))
 - LUIS account (apply [here](https://www.luis.ai/home))
 - LUIS authoring key (how to get [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
 
 ## How to add LUIS 
-To determine user's intent, in Composer you define the `Handle an Intent` trigger, and then specify the actions to take when an **Intent** is recognized (and optionally **entities**). For more details please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md) article. 
+To determine user's intent, in Composer you define the `Handle an Intent` trigger, and then specify the actions to take when an **Intent** is recognized (and optionally **entities**). For more details please read the [events and triggers](./concept-events-and-triggers.md) article. 
 
 Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of language understanding data authored in [.lu format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
 
@@ -89,9 +89,9 @@ To test your bot which you just added LUIS to, click the **Test in Emulator** bu
 ## References 
 - [LUIS.ai](https://www.luis.ai/home)
 - [Add natural language understanding to your bot](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-v4-luis?view=azure-bot-service-4.0&tabs=csharp)
-- [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md) 
-- [Language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding.md)
+- [Events and triggers](./concept-events-and-triggers.md) 
+- [Language understanding](./concept-language-understanding.md)
 
 ## Next 
-Learn [how to add a QnA Maker knowledge base to your bot](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/how-to-add-qna-to-bot.md). 
+Learn [how to add a QnA Maker knowledge base to your bot](./how-to-add-qna-to-bot.md). 
 

@@ -134,4 +134,4 @@ Now, say `cancel` - notice, the bot doesn't resume the weather dialog. Instead, 
 
 
 ## Next steps
-- [Add Language Generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/tutorial/bot-tutorial-lg.md)
+- [Add Language Generation](./docs/tutorial/bot-tutorial-lg.md)

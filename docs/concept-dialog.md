@@ -10,14 +10,14 @@ There are two types of dialogs in Composer:
 - main dialog
 - child dialog
 
-You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. Please read [this section](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-dialog.md#create-a-dialog) about how to create a dialog in Composer. 
+You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. Please read [this section](./concept-dialog.md#create-a-dialog) about how to create a dialog in Composer. 
 
 At runtime, the main dialog is called into action and becomes the active dialog, triggering event handlers with pre-defined actions. As the conversation flows, a child dialog can be called by a main dialog, and vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a dialog 
 A dialog contains a set of event handlers (triggers) to handle different events. Currently, Composer provides five different types of event handlers in a dialog: `Handle an Intent`, `Handle Unknown Intent`, `Handle a Dialog Event`, `Handle an Event: Activity`, and `Handle a Custom Event`.  
 
-Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event are actions that should execute immediately every time the dialog starts. For more information, please read [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md) article.
+Most dialogs contain an event handler configured to respond to the `BeginDialog` event. Inside the `BeginDialog` event are actions that should execute immediately every time the dialog starts. For more information, please read [events and triggers](./concept-events-and-triggers.md) article.
 
 ![event handlers](./media/dialog/eventhandlers.png)
 
@@ -28,7 +28,7 @@ Usually when a dialog is called into action, its **recognizer** will start to pr
 > [!NOTE]
 > **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It is a matter of how you design and model your dialog system.   
 
-Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Composer offers a wide range of action components such as `Send a response` for sending text messages and `Ask a Question` for prompts / asking questions. Users can also add branches and loops when designing their dialog system using the `Create a condition` action, or use `Manage properties` for setting properties and memory use in a [conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory.md). 
+Event handlers contain a series of actions that the bot will undertake to fulfill a user's request. Composer offers a wide range of action components such as `Send a response` for sending text messages and `Ask a Question` for prompts / asking questions. Users can also add branches and loops when designing their dialog system using the `Create a condition` action, or use `Manage properties` for setting properties and memory use in a [conversation flow](./concept-memory.md). 
 
 ![actions](./media/dialog/actions.png)
 
@@ -53,7 +53,7 @@ When your bot is created successfully you will see a **.Main** dialog in the dia
 ![main_dialog](./media/dialog/main_dialog.png)
 
 > [!NOTE]
-> As you may notice, after you create a bot a `Handle ConversationUpdate` trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) article and how to [define triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article. 
+> As you may notice, after you create a bot a `Handle ConversationUpdate` trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read the [events and triggers](./concept-events-and-triggers-draft.md) article and how to [define triggers](./howto-defining-triggers.md) article. 
 
 ## Add a dialog 
 
@@ -119,4 +119,4 @@ With these dialog actions, we can easily build a pluggable and extensible dialog
 [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme)
 
 ## Next 
-[Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md)
+[Events and triggers](./concept-events-and-triggers.md)

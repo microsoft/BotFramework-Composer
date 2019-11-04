@@ -139,7 +139,7 @@ Any time you hit `Start Bot` (or `Restart Bot`), Composer will evaluate if your 
 - [Language understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
 - [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
-- [Using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
+- [Using LUIS for language understanding](./howto-using-LUIS.md)
 
 ## Next 
 Learn how to [send messages to users](howto-sending-messages.md)
