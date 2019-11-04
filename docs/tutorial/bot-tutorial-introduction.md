@@ -58,7 +58,7 @@ You will notice that the new bot is pre-configured with one trigger in the left 
 
    ![dialog](../media/tutorial-weatherbot/01/new-flow.png)
 
-3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `property editor` on the right side of the screen, click on the name of the trigger ("Handle ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
+3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `property editor` on the right side of the screen, click on the name of the trigger ("ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
 
       `WelcomeTheUser`
 
