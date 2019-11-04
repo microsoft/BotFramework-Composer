@@ -3,7 +3,7 @@ name: Composer CI
 on: [pull_request]
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +21,56 @@ jobs:
       - name: Yarn Install
         run: yarn install
         working-directory: Composer
-      - name: Lint
-        run: yarn lint
+
+  build:
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/cache@preview
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: yarn install
         working-directory: Composer
       - name: Build
         run: yarn build
+        working-directory: Composer
+
+  lint:
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/cache@preview
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: yarn install
+        working-directory: Composer
+      - name: Build
+        run: yarn build
+        working-directory: Composer
+
+  test:
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/cache@preview
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: yarn install
         working-directory: Composer
       - name: Test
         run: yarn test:coverage
