@@ -85,4 +85,4 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
    ![](../media/tutorial-weatherbot/02/emulator-weather-draft.png)
 
 ## Next steps
-- [Get weather](./docs/tutorial/bot-tutorial-get-weather.md)
+- [Get weather](./bot-tutorial-get-weather.md)
