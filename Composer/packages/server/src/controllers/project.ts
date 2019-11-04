@@ -15,7 +15,7 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId } = req.body;
+  const { name, description, storageId, location } = req.body;
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
@@ -24,12 +24,11 @@ async function createProject(req: Request, res: Response) {
   let path = settings.development.defaultFolder;
   // however, if path is specified as part of post body, use that one.
   // this allows developer to specify a custom home for their bot.
-  if (req.body.location) {
+  if (location) {
     // validate that this path exists
-    // eslint-disable-next-line prettier/prettier
-    if (fs.existsSync(req.body.location) === true) {
-      // lgtm [js/path-injection]
-      path = req.body.location;
+    // prettier-ignore
+    if (fs.existsSync(location)) { // lgtm [js/path-injection]
+      path = location;
     }
   }
 
