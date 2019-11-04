@@ -26,7 +26,9 @@ async function createProject(req: Request, res: Response) {
   // this allows developer to specify a custom home for their bot.
   if (req.body.location) {
     // validate that this path exists
+    // eslint-disable-next-line prettier/prettier
     if (fs.existsSync(req.body.location) === true) {
+      // lgtm [js/path-injection]
       path = req.body.location;
     }
   }
