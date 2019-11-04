@@ -60,7 +60,6 @@ jobs:
           CYPRESS_COMPOSER_URL: http://localhost:5000
       - name: Archive E2E Failures
         uses: actions/upload-artifact@v1
-        if: failure()
         with:
           name: cypress
           path: Composer/cypress/screenshots
