@@ -29,5 +29,5 @@ After opening in a browser click the **Echo Bot** button at the top of the Examp
 You've successfully created an echo bot!  
 
 ## Next Steps
-Create a [weather bot](https://github.com/vishwacsena/composer-managed-lab) using Composer.
+Create a [weather bot](tutorial/bot-tutorial-introduction.md) using Composer.
 
