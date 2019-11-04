@@ -48,11 +48,11 @@ After creating your bot, Composer will load the new bot's `Main` dialog in the e
 
 Each dialog contains one or more `Triggers` that define the actions available to the bot while the dialog is active. Right now the dialog is empty, so the bot won't do anything.
 
-You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `Handle ConversationUpdate`. 
+You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `ConversationUpdate`. 
 
 > Triggers help your dialog capture events of interest and respond to them using actions.
 
-1. Click the `Handle ConversationUpdate` trigger in the left hand explorer.
+1. Click the `ConversationUpdate` trigger in the left hand explorer.
 
 2. You will see a new flow has been added to the dialog. 
 
