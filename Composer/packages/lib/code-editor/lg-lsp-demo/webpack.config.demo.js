@@ -5,10 +5,12 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.tsx'),
+  entry: {
+    main: path.resolve(__dirname, 'src/index.tsx'),
+    'editor.worker': 'monaco-editor-core/esm/vs/editor/editor.worker.js',
+  },
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
@@ -92,14 +94,23 @@ module.exports = {
       },
     ],
   },
+  target: 'web',
+  node: {
+    fs: 'empty',
+    child_process: 'empty',
+    net: 'empty',
+    crypto: 'empty',
+  },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
+    alias: {
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+    },
   },
 
   output: {
-    filename: '[name].[chunkhash:8].js',
-    chunkFilename: '[name].[chunkhash:8].js',
+    filename: '[name].bundle.js',
     path: path.resolve('./demo/dist'),
   },
 
@@ -110,10 +121,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunksSortMode: 'dependency',
       template: path.join(__dirname, 'index.html'),
-    }),
-    new MonacoWebpackPlugin({
-      // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['markdown', 'botbuilderlg', 'json'],
     }),
   ],
 };

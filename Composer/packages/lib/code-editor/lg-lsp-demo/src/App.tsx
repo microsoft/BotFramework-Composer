@@ -1,30 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { RichEditor } from '../../src';
-
-import { startSampleClient } from '../../../../tools/language-servers/language-generation/src/startSampleClient';
+import {
+  createEditor,
+  startSampleClient,
+  registerLGLanguage,
+} from '../../../../tools/language-servers/language-generation/src/startSampleClient';
 
 const content = `# Greeting
 -Good morning
 -Good afternoon
 -Good evening`;
 
-export default function App() {
-  const [value, setValue] = useState<string>(content);
+registerLGLanguage();
 
-  const editorDidMount = editor => {
-    console.log(editor);
+export default function App() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const editor = createEditor(containerRef.current);
     startSampleClient(editor);
-  };
-  return (
-    <div style={{ height: '99vh', width: '100%' }}>
-      <RichEditor
-        onChange={newVal => setValue(newVal)}
-        editorDidMount={editorDidMount}
-        value={value}
-        helpURL="https://dev.botframework.com"
-        height={500}
-      />
-    </div>
-  );
+  });
+
+  return <div style={{ height: '99vh', width: '100%' }} ref={containerRef} />;
 }

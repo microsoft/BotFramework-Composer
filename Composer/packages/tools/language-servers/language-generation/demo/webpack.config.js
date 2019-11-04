@@ -6,6 +6,7 @@ const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const common = {
   entry: {
@@ -40,6 +41,8 @@ const common = {
     crypto: 'empty',
   },
   resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
     alias: {
       vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
     },
