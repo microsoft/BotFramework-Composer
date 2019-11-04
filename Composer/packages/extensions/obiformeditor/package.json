@@ -1,5 +1,5 @@
 {
-  "name": "obiformeditor",
+  "name": "@bfc/obiformeditor",
   "version": "1.0.0",
   "description": "obieditortest React component",
   "main": "lib/index.js",
@@ -24,12 +24,13 @@
     "watch": "yarn build:ts --watch"
   },
   "dependencies": {
+    "@bfc/code-editor": "*",
+    "@bfc/shared": "*",
     "@bfcomposer/react-jsonschema-form": "1.6.5",
     "@emotion/core": "^10.0.17",
     "@uifabric/fluent-theme": "7.1.4",
     "@uifabric/styling": "7.7.1",
     "classnames": "^2.2.6",
-    "code-editor": "*",
     "format-message": "^6.2.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
@@ -39,8 +40,7 @@
     "lodash.pick": "^4.4.0",
     "nanoid": "^2.0.1",
     "office-ui-fabric-react": "7.37.1",
-    "react-error-boundary": "^1.2.5",
-    "shared": "0.0.0"
+    "react-error-boundary": "^1.2.5"
   },
   "peerDependencies": {
     "react": "16.9.0",

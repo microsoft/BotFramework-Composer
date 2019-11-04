@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
@@ -115,6 +118,9 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.QnAMakerDialog]: {
     label: 'hostname',
+  },
+  [ObiTypes.OAuthInput]: {
+    label: 'tokenProperty',
   },
 };
 

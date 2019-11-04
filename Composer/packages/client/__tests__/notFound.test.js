@@ -1,8 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as React from 'react';
 import { render } from 'react-testing-library';
 
 import { BASEPATH } from '../src/constants/index';
-
 import { NotFound } from '../src/components/NotFound';
 
 describe('<NotFound />', () => {
@@ -13,7 +15,7 @@ describe('<NotFound />', () => {
     await findByText(/404/);
   });
 
-  it('should render null on BASEPATH', async () => {
+  it('should render null on BASEPATH', () => {
     expect(NotFound({ uri: BASEPATH })).toBeNull();
   });
 });

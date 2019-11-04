@@ -1,12 +1,14 @@
-import axios from 'axios';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
 
-import { BASEURL, ActionTypes } from './../../constants';
+import { ActionTypes } from './../../constants';
+import httpClient from './../../utils/httpUtil';
 
 export const fetchStorages: ActionCreator = async ({ dispatch }) => {
   try {
-    const response = await axios.get(`${BASEURL}/storages`);
+    const response = await httpClient.get(`/storages`);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
@@ -21,7 +23,7 @@ export const fetchStorages: ActionCreator = async ({ dispatch }) => {
 
 export async function fetchTemplates({ dispatch }) {
   try {
-    const response = await axios.get(`${BASEURL}/assets/projectTemplates`);
+    const response = await httpClient.get(`/assets/projectTemplates`);
 
     dispatch({
       type: ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS,
@@ -39,7 +41,7 @@ export async function fetchTemplates({ dispatch }) {
 
 export const addNewStorage: ActionCreator = async ({ dispatch }, storageData) => {
   try {
-    const response = await axios.post(`${BASEURL}/storages`, storageData);
+    const response = await httpClient.post(`/storages`, storageData);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
@@ -54,7 +56,7 @@ export const addNewStorage: ActionCreator = async ({ dispatch }, storageData) =>
 // todo: enable this if we have more storage, currently we only have one.
 export const fetchStorageByName: ActionCreator = async ({ dispatch }, fileName) => {
   try {
-    const response = await axios.get(`${BASEURL}/storage/${fileName}`);
+    const response = await httpClient.get(`/storage/${fileName}`);
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
@@ -74,7 +76,7 @@ export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, pa
         status: 'pending',
       },
     });
-    const response = await axios.get(`${BASEURL}/storages/${id}/blobs/${path}`);
+    const response = await httpClient.get(`/storages/${id}/blobs/${path}`);
     dispatch({
       type: ActionTypes.GET_STORAGEFILE_SUCCESS,
       payload: {

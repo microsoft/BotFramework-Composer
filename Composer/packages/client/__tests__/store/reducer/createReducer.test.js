@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import createReducer from '../../../src/store/reducer/createReducer';
 
 jest.mock('../../../src/constants/index', () => {

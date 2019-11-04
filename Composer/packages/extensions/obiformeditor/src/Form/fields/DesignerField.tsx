@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
-import { getDesignerId, DesignerData } from 'shared';
+import { getDesignerId, DesignerData } from '@bfc/shared';
 import { TextField } from 'office-ui-fabric-react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import get from 'lodash.get';

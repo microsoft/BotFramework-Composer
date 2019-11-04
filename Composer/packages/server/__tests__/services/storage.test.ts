@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Path } from '../../src/utility/path';
 import StorageService from '../../src/services/storage';
 jest.mock('azure-storage', () => {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import startCase from 'lodash.startcase';
 import { JSONSchema6 } from 'json-schema';

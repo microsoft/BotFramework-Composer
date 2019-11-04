@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const DialogStyle = {

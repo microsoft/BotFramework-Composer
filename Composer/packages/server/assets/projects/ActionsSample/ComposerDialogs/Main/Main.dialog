@@ -1,7 +1,8 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "id": "892616"
+    "id": "892616",
+    "name": "Actions"
   },
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
@@ -67,6 +68,10 @@
         "$type": "Microsoft.IntentPattern",
         "intent": "EmitEvent",
         "pattern": "EmitEvent|12"
+      },
+      {
+        "intent": "QnAMaker",
+        "pattern": "QnAMaker|13"
       },
       {
         "$type": "Microsoft.IntentPattern",
@@ -258,14 +263,14 @@
           "$designer": {
             "id": "347762"
           },
-          "activity": "[bfdactivity-347762]"
+          "activity": "[bfdactivity-640616]"
         }
       ]
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Handle ConversationUpdate",
+        "name": "Conversation started (ConversationUpdate)",
         "id": "954390"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",

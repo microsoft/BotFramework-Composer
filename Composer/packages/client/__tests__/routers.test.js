@@ -1,4 +1,7 @@
-import * as React from 'react';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import React from 'react';
 import { render } from 'react-testing-library';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
@@ -20,7 +23,7 @@ const AppTest = () => (
 );
 
 describe('<Router/> router test', () => {
-  test('full app rendering/navigating', async () => {
+  test('full app rendering/navigating', () => {
     const {
       container,
       history: { navigate },
@@ -29,7 +32,7 @@ describe('<Router/> router test', () => {
     const appContainer = container;
     expect(appContainer.innerHTML).toMatch('Bot Framework Composer');
 
-    await navigate('/language-understanding');
+    navigate('/language-understanding');
     expect(appContainer.innerHTML).toMatch('Setting');
   });
 

@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
-import { createStepMenu, DialogGroup } from 'shared';
+import { createStepMenu, DialogGroup } from '@bfc/shared';
 
 import { IconMenu } from './IconMenu';
 

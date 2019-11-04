@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 type OnceSubscriberFn = (res: any, err: any) => any | Promise<any>;
 export type SubscriberFn = (args: any, event: MessageEvent) => any | Promise<any>;
 

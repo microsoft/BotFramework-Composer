@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 interface BaseSchema {
@@ -77,6 +80,8 @@ export interface InputDialog extends BaseSchema {
   validations: MicrosoftIExpression[];
   /** Property that this input dialog is bound to */
   property: MicrosoftIExpression;
+  /** Gets or sets a value expression which can be used to intialize the input prompt. */
+  value: MicrosoftIExpression;
   /** Value to return if the value expression can't be evaluated. */
   defaultValue: MicrosoftIExpression;
   /** If set to true this will always prompt the user regardless if you already have the value or not. */

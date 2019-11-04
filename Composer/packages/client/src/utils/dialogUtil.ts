@@ -1,8 +1,11 @@
-import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from 'shared';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from '@bfc/shared';
 import { cloneDeep, get, set } from 'lodash';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -34,6 +37,8 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
+export const messageTypeKey: string = SDKTypes.OnMessageActivity;
+export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -144,6 +149,22 @@ export function getActivityTypes(): IDropdownOption[] {
     }),
   ];
   return activityTypes;
+}
+
+export function getMessageTypes(): IDropdownOption[] {
+  const messageTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.MESSAGE_EVENTS].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return messageTypes;
 }
 
 export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { css } from '@emotion/core';
 
 export const outline = css`
@@ -57,7 +60,6 @@ export const DiagnosticsInfoText = css`
 `;
 
 export const DiagnosticsInfoTextAlignLeft = css`
-  width: 50%;
   text-align: left;
 `;
 

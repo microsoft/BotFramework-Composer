@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LuEditor } from 'code-editor';
+import { LuEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import * as luUtil from '../../utils/luUtil';

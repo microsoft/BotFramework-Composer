@@ -5,7 +5,7 @@
     "description": "This is a bot that demonstrates the ability to send different Cards to users."
   },
   "autoEndDialog": false,
-  "generator": "common.lg",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnUnknownIntent",
@@ -15,15 +15,18 @@
           "$designer": {
             "id": "359223"
           },
-          "property": "user.choice",
           "prompt": "Which card would you like to display?",
           "maxTurnCount": "2147483647",
+          "property": "user.choice",
           "alwaysPrompt": true,
           "allowInterruptions": "false",
           "outputFormat": "value",
           "choices": [
             {
               "value": "HeroCard"
+            },
+            {
+              "value": "HeroCardWithMemory"
             },
             {
               "value": "ThumbnailCard"
@@ -63,6 +66,9 @@
         },
         {
           "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "304837"
+          },
           "condition": "user.choice",
           "cases": [
             {
@@ -75,6 +81,32 @@
                     "id": "159442"
                   },
                   "activity": "[bfdactivity-159442]"
+                }
+              ]
+            },
+            {
+              "value": "HeroCardWithMemory",
+              "actions": [
+                {
+                  "$type": "Microsoft.TextInput",
+                  "$designer": {
+                    "id": "735465",
+                    "name": "Text input"
+                  },
+                  "prompt": "[bfdprompt-735465]",
+                  "maxTurnCount": 3,
+                  "property": "user.name",
+                  "alwaysPrompt": false,
+                  "allowInterruptions": "false",
+                  "outputFormat": "none"
+                },
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "167246",
+                    "name": "Send an Activity"
+                  },
+                  "activity": "[bfdactivity-167246]"
                 }
               ]
             },
@@ -169,10 +201,7 @@
                 }
               ]
             }
-          ],
-          "$designer": {
-            "id": "304837"
-          }
+          ]
         },
         {
           "$type": "Microsoft.RepeatDialog",
@@ -202,5 +231,6 @@
       }
     }
   ],
+  "generator": "common.lg",
   "$schema": "../../app.schema"
 }

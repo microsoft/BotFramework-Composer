@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import fs from 'fs';
 
-import { seedNewDialog, DialogInfo } from 'shared';
+import { seedNewDialog, DialogInfo } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -88,7 +91,7 @@ describe('copyTo', () => {
   afterEach(() => {
     try {
       const deleteFolder = (path: string): void => {
-        let files = [];
+        let files: string[] = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
           files.forEach(function(file) {

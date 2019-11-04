@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import rimraf from 'rimraf';
 
 import { Path } from '../../../src/utility/path';
@@ -13,18 +16,18 @@ const locationRef = {
   storageId: 'default',
   path: mockCopyToPath,
 };
-describe('test assetManager', () => {
-  it('test getProjectTemplate', async () => {
+describe('assetManager', () => {
+  it('getProjectTemplate', async () => {
     const assetManager = new AssetManager(mockAssetLibraryPath, mockRuntimeLibraryPath);
-    const result = await assetManager.getProjectTemplate();
+    const result = await assetManager.getProjectTemplates();
     expect(result.length).toBeGreaterThan(0);
-    expect(result[0].name).toBe('SampleBot');
+    expect(result[0].name).toBe('Sample Bot');
     expect(result[0].id).toBe('SampleBot');
   });
 
-  it('test copyProjectTemplateTo', async () => {
+  it('copyProjectTemplateTo', async () => {
     const assetManager = new AssetManager(mockAssetLibraryPath, mockRuntimeLibraryPath);
-    await assetManager.getProjectTemplate();
+    await assetManager.getProjectTemplates();
     await assetManager.getProjectRuntime();
 
     await expect(assetManager.copyProjectTemplateTo('SampleBot', locationRef)).resolves.toBe(locationRef);

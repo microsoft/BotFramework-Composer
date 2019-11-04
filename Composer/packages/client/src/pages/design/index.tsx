@@ -1,10 +1,13 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import { toLower, get } from 'lodash';
-import { PromptTab } from 'shared';
-import { getNewDesigner, seedNewDialog } from 'shared';
+import { PromptTab } from '@bfc/shared';
+import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -19,7 +22,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import grayComposerIcon from '../../grayComposerIcon.svg';
+import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
 import NewDialogModal from './new-dialog-modal';
 import {
@@ -112,7 +115,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -126,7 +129,6 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const [nodeOperationAvailable, setNodeOperationAvailability] = useState(false);
 
   useEffect(() => {
     if (match) {
@@ -197,76 +199,68 @@ function DesignPage(props) {
     }
   };
 
-  useEffect(() => {
-    // HACK: wait until visual editor finish rerender.
-    // TODO: (ze) expose visual editor store to Shell and (leilei) intercept store events.
-    setTimeout(() => {
-      VisualEditorAPI.hasElementSelected().then(selected => {
-        setNodeOperationAvailability(selected);
-      });
-    }, 100);
-  });
+  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
   const toolbarItems = [
     {
       type: 'action',
       text: formatMessage('Undo'),
       buttonProps: {
-        disabled: !undoHistory.canUndo(),
         iconProps: {
           iconName: 'Undo',
         },
         onClick: () => actions.undo(),
       },
       align: 'left',
+      disabled: !undoHistory.canUndo(),
     },
     {
       type: 'action',
       text: formatMessage('Redo'),
       buttonProps: {
-        disabled: !undoHistory.canRedo(),
         iconProps: {
           iconName: 'Redo',
         },
         onClick: () => actions.redo(),
       },
       align: 'left',
+      disabled: !undoHistory.canRedo(),
     },
     {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Cut',
         },
         onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Copy',
         },
         onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Delete',
         },
         onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'element',

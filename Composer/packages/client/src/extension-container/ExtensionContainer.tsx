@@ -1,6 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react';
-import { LuFile, ShellData } from 'shared';
+import { LuFile, ShellData } from '@bfc/shared';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -56,7 +59,11 @@ const shellApi = {
   },
 
   onSelect: (ids: string[]) => {
-    return apiClient.apiCall('onSelect', { ids });
+    return apiClient.apiCall('onSelect', ids);
+  },
+
+  onCopy: (actions: any[]) => {
+    return apiClient.apiCall('onCopy', actions);
   },
 
   shellNavigate: (shellPage, opts = {}) => {
