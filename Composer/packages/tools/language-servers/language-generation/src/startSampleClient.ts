@@ -7,12 +7,9 @@ import {
   MonacoServices,
   createConnection,
 } from 'monaco-languageclient';
-import normalizeUrl = require('normalize-url');
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
-export function startSampleClient() {
-  // register Monaco languages
-
+export function registerLGLanguage() {
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
     tokenizer: {
       root: [
@@ -47,7 +44,6 @@ export function startSampleClient() {
       ],
     },
   });
-
   monaco.languages.register({
     id: 'botbuilderlg',
     extensions: ['.lg'],
@@ -70,14 +66,17 @@ export function startSampleClient() {
       { token: 'inline-string', foreground: '00EA00' },
     ],
   });
+}
 
+export function createEditor(container) {
   // create Monaco editor
-  const value = `#ted
-- hello hello
-- range
-- great 
-- ted hello `;
-  const editor = monaco.editor.create(document.getElementById('container')!, {
+  const value = `#ted11
+  - hello hello
+  - range
+  - great
+  - ted hello `;
+  console.log(container);
+  return monaco.editor.create(container!, {
     model: monaco.editor.createModel(value, 'botbuilderlg', monaco.Uri.parse('inmemory://model.json')),
     glyphMargin: true,
     lightbulb: {
@@ -85,12 +84,16 @@ export function startSampleClient() {
     },
     theme: 'lgtheme',
   });
+}
 
+export function startSampleClient(editor) {
   // install Monaco language client services
   MonacoServices.install(editor);
 
   // create the web socket
-  const url = createUrl('/lgServer');
+  // const url = createUrl('/lgServer');
+  const url = 'ws://localhost:5000/lgServer';
+  console.log(url);
   const webSocket = createWebSocket(url);
   // listen when the web socket is opened
   listen({
@@ -125,11 +128,11 @@ function createLanguageClient(connection: MessageConnection): MonacoLanguageClie
   });
 }
 
-function createUrl(path: string): string {
-  const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  // return normalizeUrl(`${protocol}://${location.host}${location.pathname}${path}`);
-  return normalizeUrl(`${protocol}://localhost:5000${location.pathname}${path}`);
-}
+// function createUrl(path: string): string {
+//   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+//   // return normalizeUrl(`${protocol}://${location.host}${location.pathname}${path}`);
+//   return normalizeUrl(`${protocol}://localhost:5000${location.pathname}${path}`);
+// }
 
 function createWebSocket(url: string): WebSocket {
   const socketOptions = {
