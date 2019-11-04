@@ -134,4 +134,4 @@ Now, say `cancel` - notice, the bot doesn't resume the weather dialog. Instead, 
 
 
 ## Next steps
-- [Add Language Generation](./docs/tutorial/bot-tutorial-lg.md)
+- [Add Language Generation](./tutorial/bot-tutorial-lg.md)
