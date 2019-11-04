@@ -1,4 +1,4 @@
-name: Node CI
+name: Composer CI
 
 on: [pull_request]
 
@@ -19,8 +19,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Yarn Install
-        run: cd Composer && yarn install
-      - name: Yarn Build
-        run: cd Composer && yarn build
-      - name: Yarn Test
-        run: cd Composer && yarn test:coverage
+        run: yarn install
+        working-directory: Composer
+      - name: Lint
+        run: yarn lint
+        working-directory: Composer
+      - name: Build
+        run: yarn build
+        working-directory: Composer
+      - name: Test
+        run: yarn test:coverage
+        working-directory: Composer
