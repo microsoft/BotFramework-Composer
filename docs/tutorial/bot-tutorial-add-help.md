@@ -36,7 +36,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
-9. In the left hand explorer, click `+ New Trigger'
+9. In the left hand explorer, click `+ New Trigger`
 10. In the resulting dialog box, select `Handle an Intent`, then choose the new `help` intent. Submit the dialog.
 
      ![](../media/tutorial-weatherbot/04/new-trigger.png) 
