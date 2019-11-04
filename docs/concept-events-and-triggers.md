@@ -3,7 +3,7 @@
 In Bot Framework Composer, each dialog includes a set of event handlers (triggers) that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passes through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
 
 ## Types of event handlers  
-There are several different types of event handlers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers and in what scenarios they will be used. To learn how to define triggers and events, refer to the [define triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md) article. 
+There are several different types of event handlers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the concepts of event handlers and in what scenarios they will be used. To learn how to define triggers and events, refer to the [define triggers and events](./howto-defining-triggers.md) article. 
 
 ### Handle dialog events  
 
@@ -111,4 +111,4 @@ To define triggers with Regular Expression recognizer you need to:
 [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
-[Conversation flow](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-memory.md)
+[Conversation flow](./concept-memory.md)

@@ -13,7 +13,7 @@
     "packages/lib/*"
   ],
   "scripts": {
-    "build": "yarn build:prod",
+    "build": "node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:lib && yarn build:extensions && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:extensions",
     "build:lib": "yarn workspace @bfc/libs build:all",
@@ -21,12 +21,12 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "start": "cross-env NODE_ENV=production PORT=3000 concurrently --kill-others-on-fail \"npm:start:server\"",
-    "startall": "concurrently --kill-others-on-fail \"npm:start\" \"npm:runtime\"",
+    "startall": "concurrently --kill-others-on-fail \"npm:runtime\" \"npm:start\"",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
-    "runtime": "cd ../BotProject/CSharp/ && dotnet clean && dotnet restore && dotnet build && dotnet run",
+    "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default --reporters=jest-junit",
     "test:integration": "start-server-and-test test:integration:start http://localhost:5000 test:integration:run",
