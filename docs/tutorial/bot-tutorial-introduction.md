@@ -10,7 +10,7 @@ In this tutorial, you will build a weather bot using Bot Framework Composer. We'
 - Add multiple dialogs to help your bot fulfill more than one scenario 
 
 ## Prerequisites
-- [Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/setup-yarn.md)
+- [Bot Framework Composer](./docs/setup-yarn.md)
 - Cognitive Service Language Understanding authoring resource. To verify, click on Environment details tab in the integrated documentation pane. You should see non empty values for `LUIS authoring key 1` and `LUIS authoring key 2`.
 
 
@@ -116,4 +116,4 @@ And the bot should immediately greet you with the message we just configured:
 We now have a working bot, and we're ready to add some more substantial functionality!
 
 ## Next steps
-- [Add a dialog](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/tutorial/bot-tutorial-add-dialog.md)
+- [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
