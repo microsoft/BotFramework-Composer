@@ -9,7 +9,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
    ![](../media/tutorial-weatherbot/04/help-dialog.png)
 
-3. Click submit, and you'll land in the editor view for the new help dialog. 
+3. Click `Next`, and you'll land in the editor view for the new help dialog. 
 
    <a name="create-begin-dialog-trigger"></a>
 
