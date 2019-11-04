@@ -17,8 +17,11 @@ import {
   eventTypeKey,
   intentTypeKey,
   activityTypeKey,
+  messageTypeKey,
   getEventTypes,
   getActivityTypes,
+  getMessageTypes,
+  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 
@@ -99,10 +102,13 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
+  const messageTypes: IDropdownOption[] = getMessageTypes();
+
+  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
 
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const luisIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
-  const intents = [...luisIntents, ...regexIntents];
+  const intents = isRegEx ? regexIntents : luisIntents;
 
   const intentOptions = intents.map(t => {
     return { key: t.name || t.intent, text: t.name || t.intent };
@@ -111,6 +117,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const showIntentDropDown = formData.$type === intentTypeKey;
   const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
+  const showMessageDropDown = formData.$type === messageTypeKey;
 
   return (
     <Dialog
@@ -140,8 +147,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
           {showEventDropDown && (
             <Dropdown
-              placeholder="select a event type"
-              label="What is the event?"
+              placeholder={formatMessage('Select a event type')}
+              label={formatMessage('Which event?')}
               options={eventTypes}
               styles={dropdownStyles}
               onChange={onSelectSpecifiedTypeType}
@@ -151,13 +158,24 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           )}
           {showActivityDropDown && (
             <Dropdown
-              placeholder="select an activity type"
-              label="What is the activity?"
+              placeholder={formatMessage('Select an activity type')}
+              label={formatMessage('Which activity type')}
               options={activityTypes}
               styles={dropdownStyles}
               onChange={onSelectSpecifiedTypeType}
               errorMessage={formData.errors.specifiedType}
               data-testid={'activityTypeDropDown'}
+            />
+          )}
+          {showMessageDropDown && (
+            <Dropdown
+              placeholder={formatMessage('Select a message type')}
+              label={formatMessage('Which message type?')}
+              options={messageTypes}
+              styles={dropdownStyles}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
+              data-testid={'messageTypeDropDown'}
             />
           )}
           {showIntentDropDown && (
