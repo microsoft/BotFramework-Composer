@@ -66,7 +66,7 @@ function calculateElementVector(
 }
 
 // get the neareast element by caculating the venctor.
-function localeElementByVenctor(elements: ElementVector[], assistAxle: Axle): ElementVector {
+function locateElementByVenctor(elements: ElementVector[], assistAxle: Axle): ElementVector {
   let minElement: ElementVector = {
     distance: 1000,
     assistDistance: 1000,
@@ -115,7 +115,7 @@ function localeElementByVenctor(elements: ElementVector[], assistAxle: Axle): El
  * @param assistAxle assist axle for calculating.
  * @param filterAttrs filtering elements
  */
-function localeNearestElement(
+function locateNearestElement(
   currentElement: HTMLElement,
   elements: HTMLElement[],
   boundRectKey: BoundRect,
@@ -131,12 +131,12 @@ function localeNearestElement(
   );
   neareastElement = elementArr.find(
     element =>
-      element.getAttribute(AttrNames.SelectedId) === localeElementByVenctor(elementVectors, assistAxle).selectedId
+      element.getAttribute(AttrNames.SelectedId) === locateElementByVenctor(elementVectors, assistAxle).selectedId
   ) as HTMLElement;
   return neareastElement;
 }
 
-function localeElementByTab(currentElement: HTMLElement, elements: HTMLElement[], command: string) {
+function locateElementByTab(currentElement: HTMLElement, elements: HTMLElement[], command: string) {
   let elementArr = elements;
   const currentElementBounds = currentElement.getBoundingClientRect();
   let bounds: ClientRect;
@@ -161,7 +161,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: HTMLElement[]
     });
     if (!isInvolved) {
       elementArr = elements.filter(ele => !judgeElementRelation(ele.getBoundingClientRect(), currentElementBounds));
-      selectedElement = localeNearestElement(currentElement, elementArr, BoundRect.Top, Axle.X, [
+      selectedElement = locateNearestElement(currentElement, elementArr, BoundRect.Top, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -176,7 +176,7 @@ function localeElementByTab(currentElement: HTMLElement, elements: HTMLElement[]
     });
     if (!isInvolved) {
       elementArr = elements.filter(ele => !judgeElementRelation(ele.getBoundingClientRect(), currentElementBounds));
-      selectedElement = localeNearestElement(currentElement, elementArr, BoundRect.Bottom, Axle.X, [
+      selectedElement = locateNearestElement(currentElement, elementArr, BoundRect.Bottom, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
@@ -204,46 +204,46 @@ export function moveCursor(
   let element: HTMLElement = currentElement;
   switch (command) {
     case KeyboardCommandTypes.Cursor.MoveDown:
-      element = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [AttrNames.NodeElement]);
+      element = locateNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [AttrNames.NodeElement]);
       break;
     case KeyboardCommandTypes.Cursor.MoveUp:
-      element = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [AttrNames.NodeElement]);
+      element = locateNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [AttrNames.NodeElement]);
       break;
     case KeyboardCommandTypes.Cursor.MoveLeft:
-      element = localeNearestElement(currentElement, elements, BoundRect.Right, Axle.Y, [AttrNames.NodeElement]);
+      element = locateNearestElement(currentElement, elements, BoundRect.Right, Axle.Y, [AttrNames.NodeElement]);
       break;
     case KeyboardCommandTypes.Cursor.MoveRight:
-      element = localeNearestElement(currentElement, elements, BoundRect.Left, Axle.Y, [AttrNames.NodeElement]);
+      element = locateNearestElement(currentElement, elements, BoundRect.Left, Axle.Y, [AttrNames.NodeElement]);
       break;
     case KeyboardCommandTypes.Cursor.ShortMoveDown:
-      element = localeNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
+      element = locateNearestElement(currentElement, elements, BoundRect.Top, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
       break;
     case KeyboardCommandTypes.Cursor.ShortMoveUp:
-      element = localeNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
+      element = locateNearestElement(currentElement, elements, BoundRect.Bottom, Axle.X, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
       break;
     case KeyboardCommandTypes.Cursor.ShortMoveLeft:
-      element = localeNearestElement(currentElement, elements, BoundRect.Right, Axle.Y, [
+      element = locateNearestElement(currentElement, elements, BoundRect.Right, Axle.Y, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
       break;
     case KeyboardCommandTypes.Cursor.ShortMoveRight:
-      element = localeNearestElement(currentElement, elements, BoundRect.Left, Axle.Y, [
+      element = locateNearestElement(currentElement, elements, BoundRect.Left, Axle.Y, [
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
       break;
     case KeyboardCommandTypes.Cursor.MovePrevious:
-      element = localeElementByTab(currentElement, elements, KeyboardCommandTypes.Cursor.MovePrevious);
+      element = locateElementByTab(currentElement, elements, KeyboardCommandTypes.Cursor.MovePrevious);
       break;
     case KeyboardCommandTypes.Cursor.MoveNext:
-      element = localeElementByTab(currentElement, elements, KeyboardCommandTypes.Cursor.MoveNext);
+      element = locateElementByTab(currentElement, elements, KeyboardCommandTypes.Cursor.MoveNext);
       break;
   }
   element.scrollIntoView(true);
