@@ -95,7 +95,7 @@ Now you have completed defining a **Custom trigger**. When **Emit a custom event
 ![custom_event_response](./media/events_triggers/custom_event_response.png)
 
 ## References
-- [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md)
+- [Events and triggers](./concept-events-and-triggers.md)
 
 ## Next 
 Learn how to [control conversation flow](./howto-controlling-conversation-flow.md).
