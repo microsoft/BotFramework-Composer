@@ -3,7 +3,7 @@ name: Composer CI
 on: [pull_request]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +21,11 @@ jobs:
       - name: Yarn Install
         run: yarn install
         working-directory: Composer
-      - name: Lint
-        run: yarn lint
-        working-directory: Composer
       - name: Build
         run: yarn build
+        working-directory: Composer
+      - name: Lint
+        run: yarn lint
         working-directory: Composer
       - name: Test
         run: yarn test:coverage
