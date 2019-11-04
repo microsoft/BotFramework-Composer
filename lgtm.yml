@@ -1,0 +1,9 @@
+path_classifiers:
+  test:
+    # Classify all files in the top-level directories test/ and testsuites/ as test code.
+    - "**/__tests__/**"
+    - "**/*.test"
+    - "**/*.test.ts"
+    - "**/*.test.tsx"
+    - "**/*.test.js"
+    - "**/*.test.jsx"
