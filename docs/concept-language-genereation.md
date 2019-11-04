@@ -179,4 +179,4 @@ For more information on Structured template, please read the [structured respons
 - [Structured template example2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
 
 ## Next 
-- [Language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding.md)
+- [Language understanding](./concept-language-understanding.md)
