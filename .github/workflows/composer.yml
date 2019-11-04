@@ -30,3 +30,30 @@ jobs:
       - name: Test
         run: yarn test:coverage
         working-directory: Composer
+
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set Node Version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+      - uses: actions/cache@preview
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles(format('{0}{1}', github.workspace, '/Composer/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Yarn Install
+        run: yarn install
+        working-directory: Composer
+      - name: Build
+        run: yarn build:prod
+        working-directory: Composer
+      - name: E2E Tests
+        run: yarn test:integration
+        working-directory: Composer
+        env:
+          CYPRESS_COMPOSER_URL: http://localhost:5000
