@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "nodemonConfig": {
-    "exec": "TS_NODE_FILES=true node --inspect=9229 -r ts-node/register src/server.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9229 -r ts-node/register src/server.ts",
     "watch": [
       "src"
     ],
@@ -62,6 +62,7 @@
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
+    "cross-env": "^6.0.3",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
     "ejs": "^2.7.1",
