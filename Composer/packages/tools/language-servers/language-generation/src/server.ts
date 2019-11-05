@@ -10,9 +10,12 @@ import {
   Hover,
   Position,
   CompletionItemKind,
+  CompletionItem,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
+import get from 'lodash.get';
+
 import { buildInfunctionsMap } from './builtinFunctions';
 import {
   getRangeAtPosition,
@@ -84,7 +87,9 @@ export class LgServer {
         this.LGDocuments.push({ uri, language, content, template });
         // run diagnostic
         const textDocument = this.documents.get(uri);
-        this.doValidate(textDocument);
+        if (textDocument) {
+          this.doValidate(textDocument);
+        }
       }
     });
   }
@@ -93,7 +98,7 @@ export class LgServer {
     this.connection.listen();
   }
 
-  protected getLGDocument(document: TextDocument): LGDocument {
+  protected getLGDocument(document: TextDocument): LGDocument | undefined {
     const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
     return LGDocument;
   }
@@ -116,11 +121,10 @@ export class LgServer {
     const text = this.getLGDocumentContent(document);
     const lgResources = getLGResources(text);
     const templates = lgResources.Templates;
-    const hoverItemList = [];
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem: lg.LGTemplate = templates.find(u => u.Name === word);
-    if (matchItem !== undefined) {
+    const matchItem = templates.find(u => u.Name === word);
+    if (matchItem) {
       const hoveritem: Hover = { contents: [matchItem.Source, matchItem.Body] };
       return Promise.resolve(hoveritem);
     }
@@ -130,15 +134,19 @@ export class LgServer {
 
     if (buildInfunctionsMap.has(word)) {
       const functionEntity = buildInfunctionsMap.get(word);
+      if (!functionEntity) {
+        return Promise.resolve(null);
+      }
       const hoveritem: Hover = {
         contents: [
-          `Parameters: ${functionEntity.Params.join(', ')}`,
-          `Documentation: ${functionEntity.Introduction}`,
-          `ReturnType: ${functionEntity.Returntype.valueOf()}`,
+          `Parameters: ${get(functionEntity, 'Params', []).join(', ')}`,
+          `Documentation: ${get(functionEntity, 'Introduction', '')}`,
+          `ReturnType: ${get(functionEntity, 'Returntype', '').valueOf()}`,
         ],
       };
       return Promise.resolve(hoveritem);
     }
+    return Promise.resolve(null);
   }
 
   protected async resovleSchema(url: string): Promise<string> {
@@ -166,7 +174,7 @@ export class LgServer {
     const text = this.getLGDocumentContent(document);
     const lgResources = getLGResources(text);
     const templates = lgResources.Templates;
-    const completionList = [];
+    const completionList: CompletionItem[] = [];
     templates.forEach(template => {
       const item = {
         label: template.Name,

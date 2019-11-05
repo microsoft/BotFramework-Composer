@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build tsconfig.json",
     "build:demo": "cd demo && webpack",
     "prepublishOnly": "npm run build",
     "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
@@ -15,6 +15,7 @@
     "@types/node": "^12.0.4",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
     "express": "^4.15.2",
+    "lodash.get": "^4.4.2",
     "monaco-editor-core": "0.17.0",
     "monaco-languageclient": "^0.10.0",
     "normalize-url": "^2.0.1",
@@ -27,6 +28,7 @@
     "ws": "^5.0.0"
   },
   "devDependencies": {
+    "@types/lodash.get": "^4.4.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",

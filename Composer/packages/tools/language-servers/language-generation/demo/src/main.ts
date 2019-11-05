@@ -1,9 +1,9 @@
 (self as any).MonacoEnvironment = {
   getWorkerUrl: () => './editor.worker.bundle.js',
 };
-// import './client.ts';
-import { startSampleClient } from '../../src/startSampleClient';
-// import { startSampleClient } from '@bfc/lg-lsp';
+
+// import { startSampleClient } from '../../src/startSampleClient';
+import { startSampleClient } from '@bfc/lg-lsp/lib/startSampleClient';
 
 const container = document.getElementById('container');
 

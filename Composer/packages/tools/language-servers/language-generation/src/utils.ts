@@ -2,7 +2,9 @@ import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-langua
 
 import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 
-export function getRangeAtPosition(document: TextDocument, position: Position): Range {
+import get from 'lodash.get';
+
+export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
   let range: Range;
   const text = document.getText();
   const line = position.line;
@@ -57,7 +59,7 @@ export function getLGResources(content: string): LGResource {
 export function getTemplatePositionOffset(content: string, { Name, Body }): number {
   const resource = LGParser.parse(content).updateTemplate(Name, Name, [], Body);
   const template = resource.Templates.find(item => item.Name === Name);
-  const templateStartLine = template.ParseTree._start.line;
+  const templateStartLine = get(template, 'ParseTree._start.line', 0);
   return templateStartLine;
 }
 

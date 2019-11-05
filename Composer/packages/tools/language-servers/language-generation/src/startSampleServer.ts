@@ -1,5 +1,5 @@
 import { attachLSPServer } from './startServer';
-import * as express from 'express';
+import express from 'express';
 
 export function startSampleServer() {
   // create the express application
