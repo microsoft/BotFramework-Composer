@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - uses: a-b-r-o-w-n/update-base-branch-action@master
+      - uses: a-b-r-o-w-n/update-base-branch-action@v1
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           protected-branches: "stable"
