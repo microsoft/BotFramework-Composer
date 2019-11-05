@@ -5,5 +5,5 @@ import { DesignerData } from '../types';
 
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
-  copyLgTemplate: (lgTemplate: string) => Promise<string>;
+  copyLgTemplate: (nodeId: string, lgTemplate: string) => Promise<string>;
 }

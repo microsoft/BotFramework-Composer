@@ -8,9 +8,10 @@ import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
 export const copySendActivity = async (input: SendActivity, externalApi: ExternalApi): Promise<SendActivity> => {
   const copy: SendActivity = shallowCopyAdaptiveAction(input, externalApi);
+  const nodeId = copy.$designer ? copy.$designer.id : '';
 
   if (input.activity) {
-    copy.activity = await externalApi.copyLgTemplate(input.activity);
+    copy.activity = await externalApi.copyLgTemplate(nodeId, input.activity);
   }
 
   return copy;

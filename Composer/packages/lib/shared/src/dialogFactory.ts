@@ -89,7 +89,10 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-export const deepCopyAction = async (data, copyLgTemplate: (lgTemplateName: string) => Promise<string>) => {
+export const deepCopyAction = async (
+  data,
+  copyLgTemplate: (nodeId: string, lgTemplateName: string) => Promise<string>
+) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
     copyLgTemplate,

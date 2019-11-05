@@ -7,7 +7,7 @@ import { ExternalApi } from '../src/copyUtils/ExternalApi';
 describe('copyAdaptiveAction', () => {
   const externalApi: ExternalApi = {
     getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: x => Promise.resolve(x + '(copy)'),
+    copyLgTemplate: (id, x) => Promise.resolve(x + '(copy)'),
   };
 
   it('should return {} when input is invalid', async () => {
