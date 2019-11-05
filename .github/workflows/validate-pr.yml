@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - uses: ./.github/actions/check-stable-branch
+      - uses: a-b-r-o-w-n/update-base-branch-action
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          protected-branches: ["stable"]
+          default-branch: "master"
