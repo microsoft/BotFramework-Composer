@@ -6,9 +6,6 @@ import { InputDialog } from '../types';
 import { ExternalApi } from './ExternalApi';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
 export const copyInputDialog = async (input: InputDialog, externalApi: ExternalApi): Promise<InputDialog> => {
   const copy: InputDialog = shallowCopyAdaptiveAction(input, externalApi) as InputDialog;
 
