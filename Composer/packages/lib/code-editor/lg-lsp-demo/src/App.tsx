@@ -22,6 +22,7 @@ const template = {
 const file: LGLSPEditorFile = {
   uri: 'inmemory://common.lg',
   language: 'botbuilderlg',
+  inline: true,
   content,
   template,
 };

@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useRef } from 'react';
-
-import { startSampleClient } from '../../../tools/language-servers/language-generation/src/startSampleClient';
+import { startSampleClient } from '@bfc/lg-lsp/lib/startSampleClient';
 
 // setting for inline LG template editor
 export interface LGLSPEditorFile {
   uri: string;
   language: string;
   content: string;
-  template: {
+  inline?: boolean;
+  template?: {
     Name: string;
     Body: string;
   };
@@ -30,8 +30,7 @@ export function LgLSPEditor(props: LgLSPEditorProps) {
   const { file, height } = props;
   useEffect(() => {
     const container = containerRef.current;
-    const editor = startSampleClient(container, file);
-    // startSampleClient(editor);
+    startSampleClient(container, file);
   });
   const getHeight = () => {
     if (height === null || height === undefined) {

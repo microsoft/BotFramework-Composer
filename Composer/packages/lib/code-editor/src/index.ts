@@ -6,3 +6,4 @@ export * from './JsonEditor';
 export * from './LgEditor';
 export * from './LuEditor';
 export * from './RichEditor';
+export * from './LgLSPEditor';

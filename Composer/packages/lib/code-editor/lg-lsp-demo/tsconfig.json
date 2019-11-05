@@ -3,5 +3,10 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["./src/**/*", "../src/**/*"]
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
