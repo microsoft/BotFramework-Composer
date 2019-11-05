@@ -28,6 +28,7 @@ jobs:
         working-directory: Composer
       - name: yarn lint
         uses: gimenete/eslint-action@1.0
+        working-directory: Composer
       - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
