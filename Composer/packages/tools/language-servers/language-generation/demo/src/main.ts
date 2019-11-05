@@ -30,6 +30,7 @@ const template = {
 const file = {
   uri: 'inmemory://common2.lg',
   language: 'botbuilderlg',
+  inline: true,
   content,
   template,
 };
