@@ -1,5 +1,5 @@
 # Defining triggers 
-Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of event handlers available in the Composer menu. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of trigger. If you are not familiar with events and triggers in Composer, please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers-draft.md) concept article. 
+Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of event handlers available in the Composer menu. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of trigger. If you are not familiar with events and triggers in Composer, please read the [events and triggers](./concept-events-and-triggers-draft.md) concept article. 
 
 The table below lists the five different types of triggers provided in BF Composer and their descriptions. 
 
@@ -21,7 +21,7 @@ On the right side of the dialog menu, select a recognizer type from the drop dow
 ![recognizer_type](./media/events_triggers/recognizer_type.png)
 
 ### 2. Define an intent(s) in the language understanding inline editor 
-After you select the recognizer type, you can define intent(s) with corresponding utterances in the language understanding editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). If you are not familiar with language understanding in Composer, please read the [language understanding concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding-draft.md). 
+After you select the recognizer type, you can define intent(s) with corresponding utterances in the language understanding editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). If you are not familiar with language understanding in Composer, please read the [language understanding concept article](./concept-language-understanding-draft.md). 
 
 ![LUIS_intent](./media/events_triggers/LUIS_intent.png) 
 
@@ -33,7 +33,7 @@ On the left side of the Composer menu, click **New Trigger** and then select **H
 ![intent_configure](./media/events_triggers/intent_configure.png)
 
 ### 4. Add an action(s) to the trigger 
-Under the `Handle an Intent` trigger node, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation concept article](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md). 
+Under the `Handle an Intent` trigger node, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send Messages** and then **Send an Activity** to send a message authored in [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation concept article](.ocs/concept-language-genereation-draft.md). 
 
 ![add_action_node](./media/events_triggers/add_action_node.gif)  
 
@@ -113,7 +113,7 @@ Now you have completed defining the `Handle a Custom Event` trigger. When the `E
 ![custom_handler](./media/events_triggers/custom_handler.png)
 
 ## References
-- [Events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-events-and-triggers.md)
+- [Events and triggers](./concept-events-and-triggers.md)
 
 ## Next 
 Learn [how to test your bot in Emulator](). 

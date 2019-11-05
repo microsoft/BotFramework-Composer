@@ -152,4 +152,4 @@ The http request action is found under the `Access external resources >` menu in
    If you ask for the weather again, notice that the bot doesn't prompt for a zipcode the second time. Remember, this is because `user.zipcode` is already set. Had we checked `always prompt,` the bot would ask each time. Go back to step 10, check `Always prompt` and try again! Your bot will ask for a zipcode everytime you re-start the conversation in emulator.
 
 ## Next steps
-- [Add help and cancel command](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/tutorial/bot-tutorial-add-help.md)
+- [Add help and cancel command](./docs/tutorial/bot-tutorial-add-help.md)
