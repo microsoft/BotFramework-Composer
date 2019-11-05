@@ -257,7 +257,7 @@ const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
   return state;
 };
 
-  const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
+const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   state.clipboardActions = clipboardActions;
   return state;
 };
