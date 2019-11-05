@@ -12,5 +12,5 @@ jobs:
       - uses: a-b-r-o-w-n/update-base-branch-action
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          protected-branches: ["stable"]
+          protected-branches: "stable"
           default-branch: "master"
