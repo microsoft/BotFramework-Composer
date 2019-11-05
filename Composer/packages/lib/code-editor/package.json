@@ -13,6 +13,7 @@
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config lg-lsp-demo/webpack.config.demo.js",
+    "build:demo": "webpack --config lg-lsp-demo/webpack.config.demo.js",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",

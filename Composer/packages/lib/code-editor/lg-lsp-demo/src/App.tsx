@@ -12,19 +12,19 @@ const content = `# Greeting1
 -Good evening
 `;
 
-const templateName = 'Greeting2';
-const templateBody = `-Good afternoon
+// Body will fill in editor
+const template = {
+  Name: 'Greeting2',
+  Body: `-Good afternoon
 -[Greeting3]
--[Greeting4]`;
-
+-[Greeting4]`,
+};
+// setting for inline LG template editor
 const file = {
   uri: 'inmemory://common.lg',
   language: 'botbuilderlg',
   content,
-  template: {
-    Name: templateName,
-    Body: templateBody, // this value will fill in editor
-  },
+  template,
 };
 
 export default function App() {

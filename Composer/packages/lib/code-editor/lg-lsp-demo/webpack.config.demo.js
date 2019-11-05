@@ -111,7 +111,7 @@ module.exports = {
 
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve('./demo/dist'),
+    path: path.resolve('./lg-lsp-demo/dist'),
   },
 
   plugins: [
