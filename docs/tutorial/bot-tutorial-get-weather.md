@@ -2,8 +2,8 @@
 
 1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
 2. Click on the `BeginDialog` trigger underneath getWeather. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a `Number Input` to prompt the user for a `zipcode`.
-3. Click the "+" button in the flow and select `Ask a Question >`. You'll see a variety of options for asking for different types of input.
-4. Select `Text Input` from the sub-menu. 2 new nodes will appear in the flow!
+3. Click the "+" button in the flow and select `Ask a question`. You'll see a variety of options for asking for different types of input.
+4. Select `Text input` from the sub-menu. Two new nodes will appear in the flow!
 
    > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
 
@@ -19,9 +19,7 @@
 
    ![](../media/tutorial-weatherbot/03/zipcode-prompt.png)
 
-7. Next, click the `User Answers` tab in the property editor. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
-
-   ![](../media/tutorial-weatherbot/03/prompt-tabs.png)
+7. Next, click the `User Input` tab in the property editor. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
 
 8. Here, we can specify what property in memory will be used to store the user's response. In `Property to fill`, enter the value:
 
@@ -31,9 +29,7 @@
 
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
-9. Click on the `Exceptions` tab in the property editor. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
-
-   ![](../media/tutorial-weatherbot/03/tab-exceptions.png)
+9. Click on the `Others` tab in the property editor. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
 
 10. In the `Unrecognized Prompt` field, enter:
       
@@ -152,4 +148,4 @@ The http request action is found under the `Access external resources >` menu in
    If you ask for the weather again, notice that the bot doesn't prompt for a zipcode the second time. Remember, this is because `user.zipcode` is already set. Had we checked `always prompt,` the bot would ask each time. Go back to step 10, check `Always prompt` and try again! Your bot will ask for a zipcode everytime you re-start the conversation in emulator.
 
 ## Next steps
-- [Add help and cancel command](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/tutorial/bot-tutorial-add-help.md)
+- [Add help and cancel command](./bot-tutorial-add-help.md)

@@ -1,6 +1,6 @@
 # Sending responses with cards 
 
-A bot communicates with users through message activites which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance yor bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-sending-messages-draft.md) article. 
+A bot communicates with users through message activites which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance yor bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](./howto-sending-messages.md) article. 
 
 In this article, we will cover different types of cards you can define in Composer using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md). We use the examples provided in the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample) throughout this article. 
 
@@ -20,7 +20,7 @@ Composer currently supports the following types of rich cards. The definition an
 
 ## Structured response template 
 
-In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation-draft.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
+In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [language generation](./concept-language-genereation-draft.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
 
 A typical structured response template for cards consists of the following parts: 
 
@@ -134,12 +134,12 @@ This template "#AllCards" is defined to display all cards when the template is c
 ## References
 - [Bot Framework - Cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md)
 - [Add media to messages](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-add-media-attachments?view=azure-bot-service-4.0&tabs=csharp)
-- [Language generation](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-genereation.md) 
+- [Language generation](./concept-language-genereation.md) 
 - [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md)
 - [Adaptive cards overview](https://docs.microsoft.com/en-us/adaptive-cards/)
 - [Using adaptive cards](https://github.com/microsoft/BotBuilder-Samples/tree/master/samples/csharp_dotnetcore/07.using-adaptive-cards)
 - [Adaptive cards for bot developers](https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots)
 
 ## Next
-Learn [how to define triggers and events](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-defining-triggers.md). 
+Learn [how to define triggers and events](./howto-defining-triggers.md). 
 

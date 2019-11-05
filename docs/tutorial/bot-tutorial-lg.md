@@ -112,4 +112,4 @@ It's possible to combine these techniques to quickly create lots of variety in y
 ![](../media/tutorial-weatherbot/05/nice-weather.png)
 
 ## Next steps
-- [Use cards](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/tutorial/bot-tutorial-cards.md)
+- [Use cards](./bot-tutorial-cards.md)
