@@ -9,12 +9,10 @@ module.exports.regionOptions = [
   },
   {
     key: 'AustraliaEast',
-    text: 'AustraliaEast (Not support yet)',
-    disabled: true,
+    text: 'AustraliaEast',
   },
   {
     key: 'WestEurope',
-    text: 'WestEurope (Not support yet)',
-    disabled: true,
+    text: 'WestEurope',
   },
 ];
