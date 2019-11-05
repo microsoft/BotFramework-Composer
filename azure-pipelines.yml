@@ -41,7 +41,7 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=2048
     - script: cd Composer && yarn lint
       displayName: 'yarn lint'
-    - script: cd Composer && yarn test:coverage
+    - script: cd Composer && yarn test:coverage --reporters default --reports jest-junit
       displayName: 'yarn test:coverage'
       condition: succeededOrFailed()
     - task: PublishCodeCoverageResults@1
