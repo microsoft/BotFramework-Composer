@@ -2,17 +2,25 @@
 
 context('onboarding', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'), { enableOnboarding: true });
+    cy.visit(`${Cypress.env('COMPOSER_URL')}/home`, { enableOnboarding: true });
+    cy.wait(1000);
+    cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
+      cy.getByText('New').click();
+    });
+    cy.wait(5000);
+
+    cy.get('input[data-testid="Create from template"]').click({ force: true });
     cy.wait(100);
+    cy.get('[data-testid="TodoSample"]').click();
+    cy.wait(100);
+    cy.get('button[data-testid="NextStepButton"]').click();
+    cy.wait(100);
+    cy.get('input[data-testid="NewDialogName"]').type('__TestOnboarding');
+    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+    cy.wait(2000);
   });
 
   it('can walk through steps', () => {
-    cy.getByTestId('onboardingNext', { force: true }).click();
-
-    cy.getByTestId('toDoBotWithLuisSample').click();
-    cy.getByTestId('NewDialogName').type('__OnboardingTest{enter}');
-    cy.wait(2000);
-
     cy.getByTestId('onboardingNextSet', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();

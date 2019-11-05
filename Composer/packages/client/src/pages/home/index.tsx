@@ -163,7 +163,6 @@ export const Home = props => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
                 forwardedRef={addRef}
-                data-testid="toDoBotWithLuisSample"
               />
             )}
           </div>

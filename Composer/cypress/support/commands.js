@@ -22,7 +22,7 @@
 
 Cypress.Commands.overwrite("visit", (originalFn, url, { enableOnboarding } = {}) => {
   if (!enableOnboarding) {
-    cy.window().then(window => window.localStorage.setItem('OnboardingState', JSON.stringify({ complete: true })));
+    cy.window().then(window => window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true })));
   }
   originalFn(url);
  });
