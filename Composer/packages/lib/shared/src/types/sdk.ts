@@ -65,6 +65,11 @@ export interface IRecognizerOption {
   noValue?: boolean;
 }
 
+/** Respond with an activity. */
+export interface SendActivity extends BaseSchema {
+  activity?: MicrosoftIActivityTemplate;
+}
+
 /**
  * Inputs
  */
