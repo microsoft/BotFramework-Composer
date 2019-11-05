@@ -1,3 +1,4 @@
+[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=stable)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Astable)
 [![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=stable)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=stable)
 
 # Composer
