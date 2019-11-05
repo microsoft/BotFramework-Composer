@@ -4,7 +4,7 @@
     "id": "593555"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -29,5 +29,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "../../app.schema"
 }
