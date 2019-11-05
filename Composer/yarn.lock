@@ -3987,14 +3987,6 @@ botbuilder-expression-parser@^4.5.9:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
 
-"botbuilder-expression-parser@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz":
-  version "4.5.9"
-  uid "696643da5e1ff0bf20724999bc73a8e38acd9da7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
-  dependencies:
-    antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
-
 "botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz":
   version "4.5.11"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz#d15384417be9c0e17d46bf729fe707b81b66ef68"
@@ -4022,15 +4014,6 @@ botbuilder-expression-parser@^4.5.9:
     xml2js "^0.4.19"
     xmldom "^0.1.27"
     xpath "0.0.27"
-
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz":
-  version "4.6.8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz#24367ee35e33efdae7a31e390ba7d19a7d9166da"
-  dependencies:
-    antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
-    botbuilder-expression-parser "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/4.5.9.tgz"
-    lodash "^4.17.11"
 
 "botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz":
   version "4.7.0-preview0"

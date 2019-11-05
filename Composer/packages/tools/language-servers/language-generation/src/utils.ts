@@ -50,8 +50,8 @@ export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSever
   }
 }
 
-export function getLGResources(document: TextDocument): LGResource {
-  return LGParser.parse(document.getText(), ' ');
+export function getLGResources(content: string): LGResource {
+  return LGParser.parse(content, ' ');
 }
 
 export function getTemplatePositionOffset(content: string, { Name, Body }): number {

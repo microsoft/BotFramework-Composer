@@ -93,12 +93,28 @@ export class LgServer {
     this.connection.listen();
   }
 
+  protected getLGDocument(document: TextDocument): LGDocument {
+    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    return LGDocument;
+  }
+  protected getLGDocumentContent(document: TextDocument): string {
+    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    let text = document.getText();
+    if (LGDocument) {
+      // concat new content
+      const { content, template } = LGDocument;
+      text = updateTemplateInContent(content, template);
+    }
+    return text;
+  }
+
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgResources = getLGResources(document);
+    const text = this.getLGDocumentContent(document);
+    const lgResources = getLGResources(text);
     const templates = lgResources.Templates;
     const hoverItemList = [];
     const wordRange = getRangeAtPosition(document, params.position);
@@ -147,7 +163,8 @@ export class LgServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgResources = getLGResources(document);
+    const text = this.getLGDocumentContent(document);
+    const lgResources = getLGResources(text);
     const templates = lgResources.Templates;
     const completionList = [];
     templates.forEach(template => {
@@ -196,7 +213,7 @@ export class LgServer {
   protected doValidate(document: TextDocument): void {
     let text = document.getText();
     let lineOffset = 0;
-    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    const LGDocument = this.getLGDocument(document);
     if (LGDocument) {
       // concat new content for validate
       const { content, template } = LGDocument;
