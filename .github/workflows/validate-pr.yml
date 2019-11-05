@@ -14,3 +14,4 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           protected-branches: "stable"
           default-branch: "master"
+          update-branch: true
