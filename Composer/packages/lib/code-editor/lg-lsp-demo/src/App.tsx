@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-
-import { startSampleClient } from '../../../../tools/language-servers/language-generation/src/startSampleClient';
+import React from 'react';
+import { LgLSPEditor, LGLSPEditorFile } from '../../src/LgLSPEditor';
 
 const content = `# Greeting1
 -Good morning
@@ -20,7 +19,7 @@ const template = {
 -[Greeting4]`,
 };
 // setting for inline LG template editor
-const file = {
+const file: LGLSPEditorFile = {
   uri: 'inmemory://common.lg',
   language: 'botbuilderlg',
   content,
@@ -28,13 +27,5 @@ const file = {
 };
 
 export default function App() {
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const editor = startSampleClient(container, file);
-    // startSampleClient(editor);
-  });
-
-  return <div style={{ height: '99vh', width: '100%' }} ref={containerRef} />;
+  return <LgLSPEditor file={file} height={250} />;
 }

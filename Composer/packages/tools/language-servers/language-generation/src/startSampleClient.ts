@@ -89,7 +89,7 @@ export function startSampleClient(container, file) {
 
   // create the web socket
   // const url = createUrl('/lgServer');
-  const url = 'ws://localhost:5000/lgServer';
+  const url = 'ws://localhost:5002/lgServer';
   const webSocket = createWebSocket(url);
   // listen when the web socket is opened
   listen({

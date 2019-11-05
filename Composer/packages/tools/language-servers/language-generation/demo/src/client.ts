@@ -126,7 +126,7 @@ function createLanguageClient(connection: MessageConnection): MonacoLanguageClie
 function createUrl(path: string): string {
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   // return normalizeUrl(`${protocol}://${location.host}${location.pathname}${path}`);
-  return normalizeUrl(`${protocol}://localhost:5000${location.pathname}${path}`);
+  return normalizeUrl(`${protocol}://localhost:5002${location.pathname}${path}`);
 }
 
 function createWebSocket(url: string): WebSocket {
