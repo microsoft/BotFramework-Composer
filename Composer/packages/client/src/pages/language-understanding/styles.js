@@ -117,7 +117,6 @@ export const dialogSubTitle = css`
 export const dialogContent = css`
   margin-top: 20px;
   margin-bottom: 50px;
-  width: 70%;
 `;
 
 export const consoleStyle = css`

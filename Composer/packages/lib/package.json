@@ -1,5 +1,5 @@
 {
-  "name": "composer-libs",
+  "name": "@bfc/libs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
