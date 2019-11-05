@@ -225,15 +225,18 @@ export class LgServer {
     if (LGDocument) {
       // concat new content for validate
       const { content, template } = LGDocument;
-      text = updateTemplateInContent(content, template);
-      lineOffset = getTemplatePositionOffset(content, template);
+      const updatedTemplate = {
+        Name: template.Name,
+        Body: text,
+      };
+      text = updateTemplateInContent(content, updatedTemplate);
+      lineOffset = getTemplatePositionOffset(content, updatedTemplate);
     }
 
     if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
     }
-
     const staticChercher = new lg.StaticChecker();
     const lgDiags = staticChercher.checkText(text, '', lg.ImportResolver.fileResolver);
     let diagnostics: Diagnostic[] = [];

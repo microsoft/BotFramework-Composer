@@ -1,4 +1,4 @@
-import { attachLSPServer } from './startServer';
+import { attachLSPServer } from './attachWSToHTTPServer';
 import express from 'express';
 
 export function startSampleServer() {

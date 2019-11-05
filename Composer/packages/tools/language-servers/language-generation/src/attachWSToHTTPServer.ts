@@ -3,7 +3,7 @@ import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
 import * as rpc from 'vscode-ws-jsonrpc';
-import { launch } from './launch';
+import { launch } from './adapter';
 
 export function attachLSPServer(server: http.Server, path: string) {
   const wss = new ws.Server({

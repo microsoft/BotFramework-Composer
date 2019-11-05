@@ -1,4 +1,4 @@
-export * from './launch';
-export * from './startServer';
+export * from './adapter';
+export * from './attachWSToHTTPServer';
 export * from './startSampleClient';
 export * from './startSampleServer';

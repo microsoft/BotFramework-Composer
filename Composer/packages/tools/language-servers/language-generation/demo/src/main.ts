@@ -22,9 +22,7 @@ const content = `# Greeting1
 // Body will fill in editor
 const template = {
   Name: 'Greeting2',
-  Body: `-Good afternoon
--[Greeting3]
--[Greeting4]`,
+  Body: `-Good afternoon`,
 };
 // setting for inline LG template editor
 const file = {
