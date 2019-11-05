@@ -47,9 +47,9 @@
           "$designer": {
             "id": "289770"
           },
-          "property": "user.choice",
           "prompt": "What type of message would you like to send?",
           "maxTurnCount": 3,
+          "property": "user.choice",
           "alwaysPrompt": true,
           "allowInterruptions": "false",
           "outputFormat": "value",
@@ -68,6 +68,18 @@
             },
             {
               "value": "LGComposition"
+            },
+            {
+              "value": "Structured LG"
+            },
+            {
+              "value": "MultiLineText"
+            },
+            {
+              "value": "IfElseCondition"
+            },
+            {
+              "value": "SwitchCondition"
             }
           ],
           "appendChoices": true,
@@ -147,6 +159,58 @@
                     "id": "349641"
                   },
                   "dialog": "LGComposition"
+                }
+              ]
+            },
+            {
+              "value": "Structured LG",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "302012",
+                    "name": "Begin a new dialog"
+                  },
+                  "dialog": "StructuredLG"
+                }
+              ]
+            },
+            {
+              "value": "MultiLineText",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "053737",
+                    "name": "Begin a new dialog"
+                  },
+                  "dialog": "MultiLineText"
+                }
+              ]
+            },
+            {
+              "value": "IfElseCondition",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "542800",
+                    "name": "Begin a new dialog"
+                  },
+                  "dialog": "IfElseCondition"
+                }
+              ]
+            },
+            {
+              "value": "SwitchCondition",
+              "actions": [
+                {
+                  "$type": "Microsoft.BeginDialog",
+                  "$designer": {
+                    "id": "469376",
+                    "name": "Begin a new dialog"
+                  },
+                  "dialog": "SwitchCondition"
                 }
               ]
             }
