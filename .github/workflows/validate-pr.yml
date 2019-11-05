@@ -1,0 +1,16 @@
+name: Validate PR
+
+on: [pull_request]
+
+jobs:
+  check-stable-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - uses: a-b-r-o-w-n/update-base-branch-action@master
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          protected-branches: "stable"
+          default-branch: "master"
