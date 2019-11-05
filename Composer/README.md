@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=stable)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=stable)
+
 # Composer
 The web app that can edit bots in OBI format, and can use Bot Launcher to run bot.
 
