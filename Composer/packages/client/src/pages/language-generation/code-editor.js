@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgEditor } from '@bfc/code-editor';
+import { LgLSPEditor } from '@bfc/code-editor/lib';
 import { get, debounce, isEmpty } from 'lodash';
 
 import * as lgUtil from '../../utils/lgUtil';
@@ -34,17 +34,22 @@ export default function CodeEditor(props) {
   const isInvalid = !lgUtil.isValid(diagnostics);
   const errorMsg = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
 
+  const editorFile = {
+    uri: 'inmemory://common.lg',
+    language: 'botbuilderlg',
+    inline: false,
+    content,
+  };
+
   return (
-    <LgEditor
+    <LgLSPEditor
       options={{
         lineNumbers: 'on',
         minimap: 'on',
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
-      codeRange={codeRange}
-      errorMsg={errorMsg}
-      value={content}
+      file={editorFile}
       onChange={_onChange}
     />
   );
