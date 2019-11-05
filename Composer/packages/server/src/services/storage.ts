@@ -85,6 +85,10 @@ class StorageService {
     }
   };
 
+  public updateDefaultPath = (path: string) => {
+    Store.set(this.STORE_KEY, path);
+  };
+
   private isBotFolder = (path: string) => {
     // locate Main.dialog
     const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
