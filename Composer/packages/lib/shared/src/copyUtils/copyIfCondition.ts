@@ -5,12 +5,10 @@ import { IfCondition } from '../types';
 
 import { ExternalApi } from './ExternalApi';
 import { copyAdaptiveActionList } from './copyAdaptiveActionList';
+import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
 export const copyIfCondition = async (input: IfCondition, externalApi: ExternalApi): Promise<IfCondition> => {
-  const copy: IfCondition = {
-    ...input,
-    $designer: externalApi.getDesignerId(input.$designer),
-  };
+  const copy: IfCondition = shallowCopyAdaptiveAction(input, externalApi);
 
   if (Array.isArray(input.actions)) {
     copy.actions = await copyAdaptiveActionList(input.actions, externalApi);
