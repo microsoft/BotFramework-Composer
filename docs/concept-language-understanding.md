@@ -22,7 +22,7 @@ Intents are categories or classifications of user intentions. An intent has a tw
 To define intents in Composer, you will need to:
 
 - define intent(s) and example utterances in a dialog 
-- create a `Handle an Intent` trigger in the same dialog to wire up the pre-defined intents
+- create an **Intent** trigger in the same dialog to wire up the pre-defined intents
 
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
@@ -36,7 +36,7 @@ In Composer, utterances are always captured in a markdown list and followed by a
 
 You may have noticed that LU format is very similar to LG format but they are different. 
 
-- LU is for bots to understand user's input (primarily capture **Intent** and more)
+- LU is for bots to understand user's input (primarily capture **intent** and more)
 - LU is associated with recognizers (LUIS/Regular Expression)
 - LG is for bots to respond to users as outputs 
 - LG is associated with language generator 
@@ -95,7 +95,7 @@ Composer currently support two types of recognizers: LUIS (by default) and Regul
 
 ![select_dialog](./media/language_understanding/select_dialog.png)
 
-2. When you see the Language Understanding editor on the right side panel, select `LUIS` as its `Recognizer Type`. 
+2. When you see the Language Understanding editor on the right side panel, select **LUIS** as its **Recognizer Type**. 
 
 ![luis](./media/language_understanding/luis.png)
 
@@ -106,16 +106,16 @@ For example, let's define two intents: **Greeting** and **CheckWeather** with so
 
 ![intents](./media/language_understanding/intents.gif)
 
-#### Step three: Wire up LU with `Handle an Intent` trigger 
-After you define the intents with example utterances, you need to create `Handle an Intent` triggers in the dialog to wire up each intent. The `Handle an Intent` trigger defines the actions to take when an **Intent** is recognized. 
+#### Step three: Wire up LU with **Intent** trigger 
+After you define the intents with example utterances, you need to create **Intent** triggers in the dialog to wire up each intent. The **Intent** trigger defines the actions to take when an intent is recognized. 
 
-1. Go to your bot's navigation pane on the left side and select `New Trigger` in the dialog you wish you create the trigger. 
+1. Go to your bot's navigation pane on the left side and select **New Trigger** in the dialog you wish you create the trigger. 
 
 ![new_trigger](./media/language_understanding/new_trigger.png)
 
-2. In the `Create a trigger` pop-up window, select `Handle an Intent` as the type of trigger. Pick the intent you want to handle from the drop-down menu and then click `Submit`. 
+2. In the `Create a trigger` pop-up window, select **Intent** as the type of trigger. Pick the intent you want to handle from the drop-down menu and then click **Submit**. 
 
-![wireup_intent](./media/language_understanding/wireup_intent.gif)
+![wireup_intent](./media/language_understanding/wireup_intent.png)
 
 #### Step four: Publish LU (LUIS)
 Now you have completed the process of providing LU content as training data and you can view your LU content in an all-up view. Click "User Input" icon on the left side menu. 
@@ -128,11 +128,11 @@ The all-up view lists all LU content you have authored and some details such as 
 
 Now the last step is to publish your LU content to LUIS. 
 
-Click `Start Bot` on the upper right corner of your Composer, fill in your LUIS authoring key and click `Publish`. If you do not have a LUIS account, you need to apply one first from [here](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS authoring key please read [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key). 
+Click **Start Bot** on the upper right corner of your Composer, fill in your LUIS authoring key and click **Publish**. If you do not have a LUIS account, you need to apply one first from [here](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS authoring key please read [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key). 
 
 ![publish_luis](./media/add_luis/publish_luis.png)
 
-Any time you hit `Start Bot` (or `Restart Bot`), Composer will evaluate if your LU content has changed. If so Composer will automatically make required updates to your LUIS applications, train and publish them. If you go to your LUIS app website, you will find the newly published LU model. 
+Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if your LU content has changed. If so Composer will automatically make required updates to your LUIS applications, train and publish them. If you go to your LUIS app website, you will find the newly published LU model. 
 
 ## References
 - [What is LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)

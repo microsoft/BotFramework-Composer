@@ -1,5 +1,4 @@
 # Language generation
-
 Language generation (LG) enables you to define multiple variations on a phrase, execute simple expressions based on context, and refer to conversational memory. At the core of language generation lies template expansion and entity substitution. You can provide one-of variation for expansion as well as conditionally expand a template. The output from language generation can be a simple text string or multi-line response or a complex object payload that a layer above language generation will use to construct a complete [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). Bot Framework Composer natively supports language generation to produce output activities using the LG templating system. 
 
 You can use language generation to:
@@ -54,26 +53,22 @@ Note: All templates defined in the target file will be pulled in, so ensure that
 
 When you want to determine how your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define an LG template in the `Send a response` action. Click on the `Send a response` action node, you will see the inline LG editor where you can define the template. 
 
-  ![send_response](./media/language_generation/send_response.gif)
+![send_response](./media/language_generation/send_response.gif)
 
 ### What to know 
-
 To define an LG template in Composer, you will need to know 
   - Supported concepts of LG
   - [LG file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
   - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
   
 ### Where to define 
+In Composer, there are two LG editors: an inline LG editor and the **Bot Responses** LG editor that lists all templates. The following screenshot shows an inline LG editor which hosts the relevant templates content. Below is a screenshot of the inline LG editor where you author responses to users.  
 
-In Composer, there are two LG editors: an inline LG editor and the **Bot Responses** LG editor that lists all templates. 
+![inline_editor](./media/language_generation/inline_editor.png)
 
-The following screenshot shows an inline LG editor which hosts the relevant templates content. 
+On the navigation pane click **Bot Responses** item (or the bot icon when collapsed), you will see the all-up LG editor listing all LG templates defined in the bot. Toggle **Edit Mode** on the upper right corner to start editing your LG template. 
 
-  ![inline_editor](./media/language_generation/inline_editor.png)
-
-On the left side of the navigation pane click **Bot Responses** item (or the bot icon when collapsed), you will see the all-up LG editor listing all LG templates defined in the bot. Click **Edit Mode** on the upper right corner to start editing your LG template. 
-
-  ![bot_responses](./media/language_generation/bot_responses.png)
+![bot_responses](./media/language_generation/bot_responses.png)
 
 ### How to define 
 
@@ -170,7 +165,7 @@ For more information on Structured template, please read the [structured respons
 | ```    | Used in pair to denote multi-line segment.                                                                                                                     |
 
 ## References
-- [language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) 
+- [Language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) 
 - [lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [lg API reference](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
@@ -179,4 +174,4 @@ For more information on Structured template, please read the [structured respons
 - [Structured template example2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
 
 ## Next 
-- [Language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/concept-language-understanding.md)
+- [Language understanding](./concept-language-understanding.md)
