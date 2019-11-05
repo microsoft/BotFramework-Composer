@@ -48,17 +48,17 @@ After creating your bot, Composer will load the new bot's `Main` dialog in the e
 
 Each dialog contains one or more `Triggers` that define the actions available to the bot while the dialog is active. Right now the dialog is empty, so the bot won't do anything.
 
-You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `Handle ConversationUpdate`. 
+You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `ConversationUpdate`. 
 
 > Triggers help your dialog capture events of interest and respond to them using actions.
 
-1. Click the `Handle ConversationUpdate` trigger in the left hand explorer.
+1. Click the `ConversationUpdate` trigger in the left hand explorer.
 
 2. You will see a new flow has been added to the dialog. 
 
    ![dialog](../media/tutorial-weatherbot/01/new-flow.png)
 
-3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `property editor` on the right side of the screen, click on the name of the trigger ("Handle ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
+3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `property editor` on the right side of the screen, click on the name of the trigger ("ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
 
       `WelcomeTheUser`
 
@@ -116,4 +116,4 @@ And the bot should immediately greet you with the message we just configured:
 We now have a working bot, and we're ready to add some more substantial functionality!
 
 ## Next steps
-- [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
+- [Add a dialog](./bot-tutorial-add-dialog.md)
