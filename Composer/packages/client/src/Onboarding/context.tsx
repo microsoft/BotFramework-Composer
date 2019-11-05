@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
 import { IStep, IStepSet } from './onboarding';
 
