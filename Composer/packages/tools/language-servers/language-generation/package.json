@@ -23,7 +23,7 @@
     "monaco-editor-core": "^0.17.0",
     "monaco-languageclient": "^0.10.0",
     "ws": "^5.0.0",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.6.8.tgz"
+    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
