@@ -32,6 +32,12 @@ jobs:
       - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
+      - name: Publish coverage results
+        run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
+        working-directory: Composer
+        env:
+          COVERALLS_SERVICE_NAME: "Github Actions"
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
   e2e:
     runs-on: ubuntu-latest
