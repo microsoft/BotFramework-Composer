@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - uses: ./.github/actions/check-stable-branch
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
