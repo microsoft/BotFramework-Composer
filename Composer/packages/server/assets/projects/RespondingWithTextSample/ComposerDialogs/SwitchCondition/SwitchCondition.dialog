@@ -1,0 +1,27 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "SwitchCondition",
+    "id": "292826"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "958316",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-958316]"
+        }
+      ]
+    }
+  ]
+}

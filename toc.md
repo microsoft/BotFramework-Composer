@@ -17,13 +17,13 @@
 ### Concepts 
 - [Dialogs](./docs/concept-dialog.md)
 - [Events and triggers](./docs/concept-events-and-triggers.md)
-- [Conversation flow](./docs/concept-memory.md)
+- [Conversation flow and memory](./docs/concept-memory.md)
 - [Language generation](./docs/concept-language-genereation.md)
 - [Language understanding](./docs/concept-language-understanding.md)
 
 ### How to
 #### Set up
-- [Bot Framework Composer using Yarn](./docs/setup-yarn.md)
+- [Set up Composer using Yarn](./docs/setup-yarn.md)
 #### Develop
 - [Send messages](./docs/howto-sending-messages.md)
 - [Ask for user input](./docs/howto-ask-for-user-input.md)

@@ -18,7 +18,7 @@ npm install -g https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild
 
 2. The Deploy your bot to Azure page provides guidance on which scripts to execute to 1) create  all the resources requried for your bot; 2) deploy the bot you created to Azure.
 
-If you have not created resources yet, click on the *Create Azure Resources*, fill in the requried field (all of them) and clicn on Next. 
+If you have not created resources yet, click on the *Create Azure Resources*, fill in the requried field (all of them) and click on Next. 
 
 <p align="center">
     <img alt="Bot Framework Composer Home Page" src="./media/deployment/BFC-Deploy2.jpg" style="max-width:700px;" />
