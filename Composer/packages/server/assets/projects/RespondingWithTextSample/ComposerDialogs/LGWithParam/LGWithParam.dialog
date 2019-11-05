@@ -4,8 +4,7 @@
     "id": "519863"
   },
   "autoEndDialog": true,
-  "generator": "common.lg",
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -34,5 +33,7 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
 }
