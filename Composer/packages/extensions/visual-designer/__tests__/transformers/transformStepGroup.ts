@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { transformStepGroup } from '../../src/transformers/transformStepGroup';
 import { ObiTypes } from '../../src/constants/ObiTypes';
 
