@@ -43,16 +43,16 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    ![](../media/tutorial-weatherbot/07/luis-with-lu-content.png)
 
-3. Once you have done this, you need to re-configure the various `Handle an intent` triggers within that dialog. 
+3. Once you have done this, you need to re-configure the various `Intent` triggers within that dialog. 
 4. Click on `weather` trigger in the left navigation and choose `Weather` from the intent drop down
 
-   Update the title of the trigger to `Weather` instead of `Handle an intent`
+   Update the title of the trigger to `Weather` instead of `Intent`
 
    ![](../media/tutorial-weatherbot/07/weather-intent-selection.png)
 
 5. Click on `cancel` trigger in the left navigation and choose `Cancel` from the intent drop down
 
-   Update the title of the trigger to `Cancel` instead of `Handle an intent`
+   Update the title of the trigger to `Cancel` instead of `Intent`
 
 6. Given we are using LUIS which is a machine learning based intent classifier, we want to avoid low confidence results. To do this, 
 
@@ -66,7 +66,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
 7. Click on `help` trigger in the left navigation and choose `Help` from the intent drop down
 
-   Update the title of the trigger to `Help` instead of `Handle an intent`
+   Update the title of the trigger to `Help` instead of `Intent`
 
    Set the `Condition` property to this 
 
