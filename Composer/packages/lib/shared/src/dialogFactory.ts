@@ -89,15 +89,11 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-const updateDesigner = data => {
-  const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
-  data.$designer = $designer;
-};
-
-// TODO: lgApi should also be included in shared lib instead of pass it in
-//       since it's already used by Shell, Visual and Form.
-export const deepCopyAction = async (data, lgApi) => {
-  return await copyAdaptiveAction(data, { lgApi, updateDesigner });
+export const deepCopyAction = async (data, copyLgTemplate: (lgTemplateName: string) => Promise<string>) => {
+  return await copyAdaptiveAction(data, {
+    getDesignerId,
+    copyLgTemplate,
+  });
 };
 
 export const seedNewDialog = (
