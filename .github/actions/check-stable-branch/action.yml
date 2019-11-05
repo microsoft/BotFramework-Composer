@@ -1,0 +1,8 @@
+name: "Validate Pull Request"
+description: "Ensure that the base branch is not stable. Fail the build if it is."
+inputs:
+  repo-token:
+    description: "Token used to ionteract with the Github API."
+runs:
+  using: "node12"
+  main: "lib/check-stable-branch.js"

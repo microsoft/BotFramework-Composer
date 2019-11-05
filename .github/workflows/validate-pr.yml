@@ -1,0 +1,12 @@
+name: Validate PR
+
+on: [pull_request]
+
+jobs:
+  check-stable-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: ./actions/check-stable-branch
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
