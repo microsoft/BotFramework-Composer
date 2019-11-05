@@ -1,17 +1,17 @@
 {
-  "name": "lg-lsp-server",
+  "name": "@bfc/lg-lsp",
   "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc && yarn build:demo",
-    "build:client": "tsc --build tsconfig.build.json",
+    "build": "tsc",
     "build:demo": "cd demo && webpack",
     "prepublishOnly": "npm run build",
     "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
     "start:client": "cd demo && webpack-dev-server",
-    "start:server": "cd demo && ts-node ./src/server.ts"
+    "start:server": "cd demo && ts-node ./server.ts"
   },
   "dependencies": {
+    "@bfc/lg-lsp": "*",
     "@types/node": "^12.0.4",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
     "express": "^4.15.2",

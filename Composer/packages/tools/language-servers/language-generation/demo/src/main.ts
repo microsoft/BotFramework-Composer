@@ -3,6 +3,7 @@
 };
 // import './client.ts';
 import { startSampleClient } from '../../src/startSampleClient';
+// import { startSampleClient } from '@bfc/lg-lsp';
 
 const container = document.getElementById('container');
 

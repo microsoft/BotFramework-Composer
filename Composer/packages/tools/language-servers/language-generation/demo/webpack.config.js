@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const common = {
+  mode: 'development',
   entry: {
     main: path.resolve(client, 'main.ts'),
     'editor.worker': 'monaco-editor-core/esm/vs/editor/editor.worker.js',
@@ -38,6 +39,7 @@ const common = {
     fs: 'empty',
     child_process: 'empty',
     net: 'empty',
+    tls: 'empty',
     crypto: 'empty',
   },
   resolve: {

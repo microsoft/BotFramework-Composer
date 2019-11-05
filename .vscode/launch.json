@@ -6,7 +6,7 @@
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src/server.ts"
+        "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/server.ts"
       ],
       "runtimeArgs": [
         "--nolazy",
