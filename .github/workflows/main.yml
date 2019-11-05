@@ -32,7 +32,9 @@ jobs:
       - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
+      # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
       - name: Publish coverage results
+        if: secrets.COVERALLS_REPO_TOKEN
         run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
         working-directory: Composer
         env:
