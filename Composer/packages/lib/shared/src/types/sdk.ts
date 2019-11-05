@@ -3,7 +3,13 @@
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-interface BaseSchema {
+export interface DesignerData {
+  name?: string;
+  description?: string;
+  id: string;
+}
+
+export interface BaseSchema {
   /** Defines the valid properties for the component you are configuring (from a dialog .schema file) */
   $type: string;
   /** Inline id for reuse of an inline definition */
@@ -11,7 +17,7 @@ interface BaseSchema {
   /** Copy the definition by id from a .dialog file. */
   $copy?: string;
   /** Extra information for the Bot Framework Composer. */
-  $designer?: OpenObject;
+  $designer?: DesignerData;
 }
 
 /* Union of components which implement the IActivityTemplate interface */
@@ -227,6 +233,14 @@ export interface SwitchCondition extends BaseSchema {
   cases?: CaseCondition[];
   /** Step to execute if no case is equal to condition */
   default?: MicrosoftIDialog[];
+}
+
+/** Two-way branch the conversation flow based on a condition. */
+export interface IfCondition extends BaseSchema {
+  /** Expression to evaluate. */
+  condition?: string;
+  actions?: MicrosoftIDialog[];
+  elseActions?: MicrosoftIDialog[];
 }
 
 /** Flexible, data driven dialog that can adapt to the conversation. */

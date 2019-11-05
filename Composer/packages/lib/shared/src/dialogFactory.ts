@@ -3,18 +3,13 @@
 
 import nanoid from 'nanoid/generate';
 
+import { DesignerData } from './types/sdk';
 import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
 
 interface DesignerAttributes {
   name: string;
   description: string;
-}
-
-export interface DesignerData {
-  name?: string;
-  description?: string;
-  id: string;
 }
 
 const initialDialogShape = {
