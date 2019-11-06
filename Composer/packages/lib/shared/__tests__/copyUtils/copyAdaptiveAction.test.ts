@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { copyAdaptiveAction } from '../src/copyUtils';
-import { ExternalApi } from '../src/copyUtils/ExternalApi';
+import { copyAdaptiveAction } from '../../src/copyUtils';
+import { ExternalApi } from '../../src/copyUtils/ExternalApi';
 
 describe('copyAdaptiveAction', () => {
   const externalApi: ExternalApi = {
