@@ -1,15 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  LGParser,
-  StaticChecker,
-  DiagnosticSeverity,
-  ImportResolver,
-  Diagnostic,
-  LGTemplate,
-  LGResource,
-} from 'botbuilder-lg';
+import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import get from 'lodash.get';
 
 const lgStaticChecker = new StaticChecker();
