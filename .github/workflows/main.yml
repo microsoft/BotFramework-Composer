@@ -27,7 +27,7 @@ jobs:
         run: yarn build:dev
         working-directory: Composer
       - name: yarn lint
-        uses: a-b-r-o-w-n/eslint-action@wip
+        uses: a-b-r-o-w-n/eslint-action@v0
       - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
