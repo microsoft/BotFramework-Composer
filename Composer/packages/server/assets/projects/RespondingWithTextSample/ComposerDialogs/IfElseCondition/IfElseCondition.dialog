@@ -1,0 +1,63 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "IfElseCondition",
+    "id": "053246"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "383595",
+            "name": "Multiple choice"
+          },
+          "prompt": "[bfdprompt-383595]",
+          "maxTurnCount": 3,
+          "property": "user.timeofday",
+          "alwaysPrompt": false,
+          "allowInterruptions": "false",
+          "outputFormat": "value",
+          "choices": [
+            {
+              "value": "morning"
+            },
+            {
+              "value": "afternoon"
+            },
+            {
+              "value": "evening"
+            }
+          ],
+          "appendChoices": "true",
+          "defaultLocale": "en-us",
+          "style": "Auto",
+          "choiceOptions": {
+            "inlineSeparator": ", ",
+            "inlineOr": " or ",
+            "inlineOrMore": ", or ",
+            "includeNumbers": true
+          },
+          "recognizerOptions": {
+            "noValue": false
+          }
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "749181",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-749181]"
+        }
+      ]
+    }
+  ]
+}
