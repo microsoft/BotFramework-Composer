@@ -1,7 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-languageserver-types';
-
 import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
-
 import get from 'lodash.get';
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
@@ -11,8 +12,8 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   const character = position.character;
   const lineText = text.split('\n')[line];
   let lastIdx = -1;
-  let start: number = -1;
-  let end: number = -1;
+  let start = -1;
+  let end = -1;
   const regex = /[a-zA-Z0-9_/.]+/;
   for (let idx = 0; idx < lineText.length; idx++) {
     if (!regex.test(lineText[idx])) {

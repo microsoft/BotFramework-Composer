@@ -1,8 +1,13 @@
-import * as ws from 'ws';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
+
+import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
+
 import { launch } from './adapter';
 
 export function attachLSPServer(server: http.Server, path: string) {

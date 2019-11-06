@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as monaco from 'monaco-editor-core';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import {
@@ -7,6 +10,7 @@ import {
   MonacoServices,
   createConnection,
 } from 'monaco-languageclient';
+
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 export function registerLGLanguage() {

@@ -1,5 +1,9 @@
-import { attachLSPServer } from './attachWSToHTTPServer';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import express from 'express';
+
+import { attachLSPServer } from './attachWSToHTTPServer';
 
 export function startSampleServer() {
   // create the express application

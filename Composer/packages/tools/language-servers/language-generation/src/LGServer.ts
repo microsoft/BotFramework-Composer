@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from 'fs';
+
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
@@ -128,7 +132,7 @@ export class LgServer {
       const hoveritem: Hover = { contents: [matchItem.Source, matchItem.Body] };
       return Promise.resolve(hoveritem);
     }
-    if (word.indexOf('builtin.') == 0) {
+    if (word.startsWith('builtin.')) {
       word = word.substring('builtin.'.length);
     }
 
@@ -239,9 +243,9 @@ export class LgServer {
     }
     const staticChercher = new lg.StaticChecker();
     const lgDiags = staticChercher.checkText(text, '', lg.ImportResolver.fileResolver);
-    let diagnostics: Diagnostic[] = [];
+    const diagnostics: Diagnostic[] = [];
     lgDiags.forEach(diag => {
-      let diagnostic: Diagnostic = {
+      const diagnostic: Diagnostic = {
         severity: convertSeverity(diag.Severity),
         range: {
           start: Position.create(diag.Range.Start.Line - 1 - lineOffset, diag.Range.Start.Character),
