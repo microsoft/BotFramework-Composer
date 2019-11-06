@@ -261,6 +261,11 @@ export interface ForeachPage extends BaseSchema {
   actions?: MicrosoftIDialog[];
 }
 
+export interface EditActions extends BaseSchema {
+  changeType: 'InsertActions' | 'InsertActionsBeforeTags' | 'AppendActions' | 'EndSequence' | 'ReplaceSequence';
+  actions?: MicrosoftIDialog[];
+}
+
 /** Flexible, data driven dialog that can adapt to the conversation. */
 export interface MicrosoftAdaptiveDialog extends BaseSchema {
   /** Optional dialog ID. */
