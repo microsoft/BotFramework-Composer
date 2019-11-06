@@ -66,7 +66,7 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
 
    > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expression patterns can be much more complicated than this, but for now, this will do!
 
-6. Click "+ New Trigger" in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select `handle an intent` from the first dropdown, and then select our freshly created `weather` intent from the second dropdown.
+6. Click "+ New Trigger" in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select `Intent` from the first dropdown, and then select our freshly created `weather` intent from the second dropdown.
 
    ![](../media/tutorial-weatherbot/02/weather-trigger.gif)
 
