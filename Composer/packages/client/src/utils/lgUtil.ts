@@ -121,7 +121,7 @@ export function getTemplate(content: string, templateName: string): LGTemplate |
  * -[Greeting], I'm a fancy bot, [Bye] ---> ['Greeting', 'Bye']
  *
  */
-export function getTemplateNames(text: string): string[] {
+export function extractTemplateNames(text: string): string[] {
   const templateNames: string[] = [];
   // match a template name match a temlate func  e.g. `showDate()`
   // eslint-disable-next-line security/detect-unsafe-regex
@@ -147,7 +147,7 @@ export function removeTemplates(content: string, templateNames: string[]): strin
   return resource.toString();
 }
 
-export function textFromTemplates(templates) {
+export function textFromTemplates(templates: Template[]): string {
   let text = '';
 
   templates.forEach(template => {
@@ -163,11 +163,8 @@ export function textFromTemplates(templates) {
 
   return text;
 }
-/**
- *
- * @param {Name: string, ?Parameters: string[], Body: string} template
- */
-export function parseLgTemplate(template) {
+
+export function checkSingleLgTemplate(template: Template) {
   const content = textFromTemplates([template]);
 
   if (parse(content).length !== 1) {

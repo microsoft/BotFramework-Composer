@@ -245,7 +245,7 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
-    lgUtil.parseLgTemplate(template);
+    lgUtil.checkSingleLgTemplate(template);
 
     await updateLgTemplate({
       file,
