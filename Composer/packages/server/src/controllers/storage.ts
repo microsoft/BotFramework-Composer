@@ -15,8 +15,8 @@ function createStorageConnection(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
 
-function updateDefaultPath(req: Request, res: Response) {
-  StorageService.updateDefaultPath(Path.dirname(req.body.path));
+function updateCurrentPath(req: Request, res: Response) {
+  StorageService.updateCurrentPath(Path.dirname(req.body.path));
   res.status(200).json('success');
 }
 
@@ -39,5 +39,5 @@ export const StorageController = {
   getStorageConnections,
   createStorageConnection,
   getBlob,
-  updateDefaultPath,
+  updateCurrentPath,
 };

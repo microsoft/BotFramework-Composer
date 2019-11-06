@@ -32,7 +32,7 @@ router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 
 // storages
-router.put('/storages/defaultPath', StorageController.updateDefaultPath);
+router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs/:path(*)', StorageController.getBlob);

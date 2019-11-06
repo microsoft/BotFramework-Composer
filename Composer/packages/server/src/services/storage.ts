@@ -85,7 +85,7 @@ class StorageService {
     }
   };
 
-  public updateDefaultPath = (path: string) => {
+  public updateCurrentPath = (path: string) => {
     Store.set(this.STORE_KEY, path);
   };
 

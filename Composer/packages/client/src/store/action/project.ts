@@ -142,7 +142,7 @@ export const createProject: ActionCreator = async (
       location,
     };
     const response = await httpClient.post(`/projects`, data);
-    await httpClient.put(`/storages/defaultPath`, location);
+    await httpClient.put(`/storages/currentPath`, location);
     const dialogs = response.data.dialogs;
     settingStorage.remove(name);
     store.dispatch({
