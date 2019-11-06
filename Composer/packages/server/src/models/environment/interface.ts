@@ -4,7 +4,7 @@
 import { ISettingManager } from '../settings';
 import { IBotConnector } from '../connector';
 import { absHosted } from '../../settings/env';
-import settings from '../../settings/settings';
+import settings from '../../settings';
 
 export interface IEnvironmentConfig {
   name: string;
