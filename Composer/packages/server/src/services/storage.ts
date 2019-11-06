@@ -86,7 +86,8 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string) => {
-    Store.set(this.STORE_KEY, path);
+    this.storageConnections[0].path = path;
+    Store.set(this.STORE_KEY, this.storageConnections);
   };
 
   private isBotFolder = (path: string) => {

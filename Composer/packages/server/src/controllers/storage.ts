@@ -16,7 +16,7 @@ function createStorageConnection(req: Request, res: Response) {
 }
 
 function updateCurrentPath(req: Request, res: Response) {
-  StorageService.updateCurrentPath(Path.dirname(req.body.path));
+  StorageService.updateCurrentPath(req.body.path);
   res.status(200).json('success');
 }
 
