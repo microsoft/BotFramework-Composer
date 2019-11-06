@@ -93,3 +93,7 @@ export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, pa
     });
   }
 };
+
+export const updateCurrentPath: ActionCreator = async ({ dispatch }, path) => {
+  await httpClient.put(`/storages/currentPath`, path);
+};
