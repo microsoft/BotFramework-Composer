@@ -1,6 +1,6 @@
 name: Composer CI
 
-on: [push]
+on: [pull_request]
 
 jobs:
   ci:
@@ -40,6 +40,7 @@ jobs:
         env:
           COVERALLS_SERVICE_NAME: "Github Actions"
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_GIT_COMMIT: ${{ github.head_sha }}
 
   e2e:
     runs-on: ubuntu-latest
