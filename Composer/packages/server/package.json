@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "nodemonConfig": {
-    "exec": "TS_NODE_FILES=true node --inspect=9229 -r ts-node/register src/server.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9229 -r ts-node/register src/server.ts",
     "watch": [
       "src"
     ],
