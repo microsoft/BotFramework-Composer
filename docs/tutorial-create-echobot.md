@@ -22,7 +22,7 @@ After opening in a browser click the **Echo Bot** button at the top of the Examp
 
 ![start bot](./media/tutorial-echobot/start-bot.gif)
 
-5. Type anything in the Emulator to have the bot echo back your response.
+5. Type anything in Emulator to have the bot echo back your response.
 
 ![test in emulator](./media/tutorial-echobot/test-emulator.gif)
 
