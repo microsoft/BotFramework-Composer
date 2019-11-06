@@ -14,7 +14,7 @@ After opening in a browser click the **Echo Bot** button at the top of the Examp
 
 ![echo bot details](./media/tutorial-echobot/tutorial-echo-setup.png)
 
-3. You know will see your bot's main dialog. On the right in the Property panel click the dropdown under **Recognizer Type** and select `None`. Since this is a simple echo bot you don't need to use any [recognizers](./concept-events-and-triggers-draft.md#regular-expression-recognizer#regular-expression-recognizer) or [LUIS](https://aka.ms/what-is-luis) models.
+3. You now will see your bot's main dialog. On the right in the Property panel click the dropdown under **Recognizer Type** and select `None`. Since this is a simple echo bot you don't need to use any [recognizers](./concept-events-and-triggers-draft.md#regular-expression-recognizer#regular-expression-recognizer) or [LUIS](https://aka.ms/what-is-luis) models.
 
 ![set recognizer type](./media/tutorial-echobot/select-none-recognizer.gif)
 
