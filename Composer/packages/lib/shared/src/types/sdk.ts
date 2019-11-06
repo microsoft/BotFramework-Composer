@@ -248,6 +248,19 @@ export interface IfCondition extends BaseSchema {
   elseActions?: MicrosoftIDialog[];
 }
 
+/** Execute actions on each item in an a collection. */
+export interface Foreach extends BaseSchema {
+  itemsProperty?: string;
+  actions?: MicrosoftIDialog[];
+}
+
+/** Execute actions on each page (collection of items) in an array. */
+export interface ForeachPage extends BaseSchema {
+  itemsProperty?: string;
+  pageSize?: number;
+  actions?: MicrosoftIDialog[];
+}
+
 /** Flexible, data driven dialog that can adapt to the conversation. */
 export interface MicrosoftAdaptiveDialog extends BaseSchema {
   /** Optional dialog ID. */
