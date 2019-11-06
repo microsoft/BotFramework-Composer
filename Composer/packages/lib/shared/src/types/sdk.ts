@@ -262,7 +262,7 @@ export interface ForeachPage extends BaseSchema {
 }
 
 export interface EditActions extends BaseSchema {
-  changeType: 'InsertActions' | 'InsertActionsBeforeTags' | 'AppendActions' | 'EndSequence' | 'ReplaceSequence';
+  changeType: string;
   actions?: MicrosoftIDialog[];
 }
 
