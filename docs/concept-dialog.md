@@ -92,7 +92,7 @@ When the bot runs, the pattern of this simple design is as follows:
 
 - The main dialog `Greeting.Main` is called at bot runtime.
 - The **ConversationUpdate** trigger in the main dialog is activated and begins to execute the **Begin a new dialog** action which begins `Weather` dialog. 
-- When `Weather` dialog becomes active, **BeginDialog** in the child dialog is triggered and send the response "The weather dialog is called with success!" to users. 
+- When `Weather` dialog becomes active, the **BeginDialog** trigger in the child dialog is fired and send the response "The weather dialog is called with success!" to users. 
   
 You can test the result by clicking **Start** on the upper right corner and then click **Test in Emulator**. You should be able to see the following result in the emulator: 
 
@@ -101,7 +101,6 @@ You can test the result by clicking **Start** on the upper right corner and then
 ## Dialog actions 
 A bot will have a few dialogs or hundreds of individual dialogs and traditionally it's difficult to manage the dialog system and the conversation with user. In the previous "Add a dialog" section, we cover how to create a child dialog and wire it up to the dialog system using **Begin a new dialog** action. In fact, Composer provides more dialog actions to make it easier to manage the dialog system. You can access the different dialog actions by clicking the "+" node under a trigger and then select **Dialog management**.  
 
-<!-- We might need a how-to article documenting how to use each type of the dialog actions.  -->
 Below is a list of the dialog actions provided in Composer: 
 
 | Dialog Action       | Description                                                                                                                      |
