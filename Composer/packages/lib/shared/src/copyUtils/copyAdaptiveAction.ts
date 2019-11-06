@@ -9,6 +9,8 @@ import { copyInputDialog } from './copyInputDialog';
 import { copyIfCondition } from './copyIfCondition';
 import { copySwitchCondition } from './copySwitchCondition';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
+import { copyForeach } from './copyForeach';
+import { copyEditActions } from './copyEditActions';
 
 const CopyConstructorMap = {
   [SDKTypes.SendActivity]: copySendActivity,
@@ -20,6 +22,9 @@ const CopyConstructorMap = {
   [SDKTypes.TextInput]: copyInputDialog,
   [SDKTypes.IfCondition]: copyIfCondition,
   [SDKTypes.SwitchCondition]: copySwitchCondition,
+  [SDKTypes.Foreach]: copyForeach,
+  [SDKTypes.ForeachPage]: copyForeach,
+  [SDKTypes.EditActions]: copyEditActions,
 };
 
 const DEFAULT_COPIER = shallowCopyAdaptiveAction;

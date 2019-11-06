@@ -230,4 +230,96 @@ describe('copyAdaptiveAction', () => {
       ],
     });
   });
+
+  it('can copy EditActions', async () => {
+    const editActions = {
+      $type: 'Microsoft.EditActions',
+      changeType: 'InsertActions',
+      actions: [
+        {
+          $type: 'Microsoft.BeginDialog',
+          dialog: 'AddToDo',
+        },
+      ],
+    };
+
+    expect(await copyAdaptiveAction(editActions, externalApi)).toEqual({
+      $type: 'Microsoft.EditActions',
+      $designer: {
+        id: '5678',
+      },
+      changeType: 'InsertActions',
+      actions: [
+        {
+          $type: 'Microsoft.BeginDialog',
+          $designer: {
+            id: '5678',
+          },
+          dialog: 'AddToDo',
+        },
+      ],
+    });
+  });
+
+  it('can copy Foreach action', async () => {
+    const foreachInstance = {
+      $type: 'Microsoft.Foreach',
+      itemsProperty: 'name',
+      actions: [
+        {
+          $type: 'Microsoft.SendActivity',
+          activity: '[bfdactivity-1234]',
+        },
+      ],
+    };
+
+    expect(await copyAdaptiveAction(foreachInstance, externalApi)).toEqual({
+      $type: 'Microsoft.Foreach',
+      itemsProperty: 'name',
+      $designer: {
+        id: '5678',
+      },
+      actions: [
+        {
+          $type: 'Microsoft.SendActivity',
+          $designer: {
+            id: '5678',
+          },
+          activity: '[bfdactivity-1234](copy)',
+        },
+      ],
+    });
+  });
+
+  it('can copy ForeachPage action', async () => {
+    const foreachPageInstance = {
+      $type: 'Microsoft.Foreach',
+      itemsProperty: 'name',
+      pageSize: 10,
+      actions: [
+        {
+          $type: 'Microsoft.SendActivity',
+          activity: 'hello',
+        },
+      ],
+    };
+
+    expect(await copyAdaptiveAction(foreachPageInstance, externalApi)).toEqual({
+      $type: 'Microsoft.Foreach',
+      itemsProperty: 'name',
+      pageSize: 10,
+      $designer: {
+        id: '5678',
+      },
+      actions: [
+        {
+          $type: 'Microsoft.SendActivity',
+          $designer: {
+            id: '5678',
+          },
+          activity: 'hello(copy)',
+        },
+      ],
+    });
+  });
 });
