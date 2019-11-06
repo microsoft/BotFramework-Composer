@@ -1,8 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import { get } from 'lodash';
+import {
+  LGParser,
+  StaticChecker,
+  DiagnosticSeverity,
+  ImportResolver,
+  Diagnostic,
+  LGTemplate,
+  LGResource,
+} from 'botbuilder-lg';
+import get from 'lodash.get';
 
 const lgStaticChecker = new StaticChecker();
 
@@ -46,6 +54,19 @@ export function checkLgContent(content: string) {
   }
 }
 
+export function increaseNameUtilNotExist(templates: LGTemplate[], name: string): string {
+  // if duplicate, increse name with Copy1 Copy2 ...
+
+  let repeatIndex = 0;
+  let newName = name;
+
+  while (templates.findIndex(item => item.Name === newName) !== -1) {
+    repeatIndex += 1;
+    newName = name + repeatIndex.toString();
+  }
+  return newName;
+}
+
 export function updateTemplate(content: string, templateName: string, { Name, Parameters, Body }: Template): string {
   const resource = LGParser.parse(content);
   // add if not exist
@@ -61,9 +82,43 @@ export function addTemplate(content: string, { Name, Parameters, Body }: Templat
   return resource.addTemplate(Name, Parameters, Body).toString();
 }
 
+export function addTemplateAnyway(
+  content: string,
+  { Name = 'TemplateName', Parameters = [], Body = '-TemplateBody' }: Template
+): string {
+  const resource = LGParser.parse(content);
+  const newName = increaseNameUtilNotExist(resource.Templates, Name);
+
+  return resource.addTemplate(newName, Parameters, Body).toString();
+}
+
+export function copyTemplate(content: string, fromTemplateName: string, toTemplateName?: string): string {
+  const resource = LGParser.parse(content);
+  const fromTemplate = resource.Templates.find(t => t.Name === fromTemplateName);
+  if (!fromTemplate) {
+    return resource.toString();
+  }
+
+  let newName = toTemplateName;
+  if (!newName) {
+    const copyName = `${fromTemplate.Name}.Copy`;
+    newName = increaseNameUtilNotExist(resource.Templates, copyName);
+  }
+  const { Parameters, Body } = fromTemplate;
+  return resource.addTemplate(newName, Parameters, Body).toString();
+}
+
 export function removeTemplate(content: string, templateName: string): string {
   const resource = LGParser.parse(content);
   return resource.deleteTemplate(templateName).toString();
+}
+
+export function removeTemplates(content: string, templateNames: string[]): string {
+  let resource = LGParser.parse(content);
+  templateNames.forEach(templateName => {
+    resource = resource.deleteTemplate(templateName);
+  });
+  return resource.toString();
 }
 
 export function textFromTemplates(templates) {

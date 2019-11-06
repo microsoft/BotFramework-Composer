@@ -87,6 +87,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
     apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
@@ -265,6 +266,18 @@ export const ShellApi: React.FC = () => {
     return actions.removeLgTemplate({
       file,
       templateName,
+    });
+  }
+
+  function removeLgTemplatesHandler({ id, templateNames }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!templateNames) throw new Error(`templateName is missing or empty`);
+
+    return actions.removeLgTemplates({
+      file,
+      templateNames,
     });
   }
 

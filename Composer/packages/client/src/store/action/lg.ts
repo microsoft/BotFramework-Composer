@@ -69,3 +69,13 @@ export const removeLgTemplate: ActionCreator = async (store, { file, templateNam
   const newContent = lgUtil.removeTemplate(file.content, templateName);
   return await updateLgFile(store, { id: file.id, content: newContent });
 };
+
+export const removeLgTemplates: ActionCreator = async (store, { file, templateNames }) => {
+  const newContent = lgUtil.removeTemplates(file.content, templateNames);
+  return await updateLgFile(store, { id: file.id, content: newContent });
+};
+
+export const copyLgTemplate: ActionCreator = async (store, { file, fromTemplateName, toTemplateName }) => {
+  const newContent = lgUtil.copyTemplate(file.content, fromTemplateName, toTemplateName);
+  return await updateLgFile(store, { id: file.id, content: newContent });
+};
