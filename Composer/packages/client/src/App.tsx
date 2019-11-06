@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { forwardRef, useContext, useState } from 'react';
+import React, { forwardRef, useContext, useState, Fragment } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -17,6 +17,7 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
+
 initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
@@ -72,6 +73,14 @@ const topLinks = (botLoaded: boolean) => {
       underTest: true, // will delete
     },
     {
+      to: '/notifications',
+      iconName: 'Warning',
+      labelName: formatMessage('Notifications'),
+      activeIfUrlContains: '/notifications',
+      exact: true,
+      underTest: !botLoaded,
+    },
+    {
       to: '/setting/',
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
@@ -114,7 +123,7 @@ export const App: React.FC = () => {
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
-    <>
+    <Fragment>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -177,6 +186,6 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
       </div>
-    </>
+    </Fragment>
   );
 };

@@ -15,6 +15,7 @@ import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 import { resolveToBasePath } from './utils/fileUtil';
+import { Notifications } from './pages/notifications/index';
 
 const Routes = props => {
   const { actions } = useContext(StoreContext);
@@ -38,6 +39,7 @@ const Routes = props => {
               <SettingPage path="setting/*" />
               <LUPage path="language-understanding/*" />
               <LGPage path="language-generation/*" />
+              <Notifications path="notifications" />
               <Home path="home" />
               <About path="about" />
               <NotFound default />
