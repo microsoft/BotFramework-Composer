@@ -69,6 +69,7 @@ export enum ActionTypes {
   CONNECT_BOT_SUCCESS = 'CONNECT_BOT_SUCCESS',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
+  GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   TO_START_BOT = 'TO_START_BOT',
@@ -208,4 +209,3 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
-export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];
