@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { PromptTab } from 'shared';
+import { PromptTab } from '@bfc/shared';
 
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { InitNodeSize } from '../constants/ElementSizes';
-import { AttrNames, AbstractSelectorElement } from '../constants/ElementAttributes';
+import { AttrNames } from '../constants/ElementAttributes';
+import { AbstractSelectorElement } from '../models/SelectorElement';
 
 enum BoundRect {
   Top = 'top',
@@ -48,10 +49,10 @@ function locateNearestElement(
 
   if (assistAxle === Axle.X) {
     // move up & down
-    // prompt element with exception tab:
+    // prompt element with OTHER tab:
     // moveUp to bot_ask tab
     // moveDown: stay focus on original element
-    if (currentElement.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS) {
+    if (currentElement.getAttribute(AttrNames.Tab) === PromptTab.OTHER) {
       if (boundRectKey === BoundRect.Bottom) {
         return elementCandidates.find(
           ele =>
@@ -81,7 +82,7 @@ function locateNearestElement(
 
     // If neareastElement is prompt node with exception tab and original node is not a prompt node, then stay focus on original element
     if (
-      neareastElement.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS &&
+      neareastElement.getAttribute(AttrNames.Tab) === PromptTab.OTHER &&
       !currentElement.getAttribute(AttrNames.Tab)
     ) {
       return currentElement;
@@ -172,7 +173,7 @@ function locateNearestElement(
       // Else stay focus on the original element
       if (
         samePathCount > maxSamePath &&
-        !(ele.getAttribute(AttrNames.Tab) === PromptTab.EXCEPTIONS && !currentElement.getAttribute(AttrNames.Tab)) &&
+        !(ele.getAttribute(AttrNames.Tab) === PromptTab.OTHER && !currentElement.getAttribute(AttrNames.Tab)) &&
         (eleSelectedId.split('.').length <= currentElementActionLength ||
           eleSelectedId.includes(currentElementIdArrs.join('.')))
       ) {
@@ -194,9 +195,9 @@ function isParentRect(parentRect, childRect) {
   );
 }
 
-function findSelectableChild(element: AbstractSelectorElement, elementList: AbstractSelectorElement[]) {
+function findSelectableChildren(element: AbstractSelectorElement, elementList: AbstractSelectorElement[]) {
   const rect = element.getBoundingClientRect();
-  return elementList.find(el => {
+  return elementList.filter(el => {
     const candidateRect = el.getBoundingClientRect();
     return isParentRect(rect, candidateRect);
   });
@@ -217,10 +218,10 @@ function handleTabMove(
 ) {
   let nextElement: AbstractSelectorElement;
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
-    const selectableChild = findSelectableChild(currentElement, selectableElements);
-    if (selectableChild) {
+    const selectableChildren = findSelectableChildren(currentElement, selectableElements);
+    if (selectableChildren.length > 0) {
       // Tab to inner selectable element.
-      nextElement = selectableChild;
+      nextElement = selectableChildren[0];
     } else {
       // Perform like presssing down arrow key.
       nextElement = locateNearestElement(currentElement, selectableElements, BoundRect.Top, Axle.X, [
@@ -239,10 +240,10 @@ function handleTabMove(
         AttrNames.NodeElement,
         AttrNames.EdgeMenuElement,
       ]);
-      // If prev element has child, tab to it before the element itself.
-      const selectableChildInNext = findSelectableChild(nextElement, selectableElements);
-      if (selectableChildInNext) {
-        nextElement = selectableChildInNext;
+      // If prev element has children, tab to the last child before the element itself.
+      const selectableChildInNext = findSelectableChildren(nextElement, selectableElements);
+      if (selectableChildInNext.length > 0) {
+        nextElement = selectableChildInNext[selectableChildInNext.length - 1];
       }
     }
   } else {
@@ -337,4 +338,12 @@ export function moveCursor(
     focused: element.getAttribute(AttrNames.FocusedId) || undefined,
     tab: element.getAttribute(AttrNames.Tab) || '',
   };
+}
+
+export function querySelectableElements(): AbstractSelectorElement[] {
+  const items: AbstractSelectorElement[] = [];
+  Array.from(document.querySelectorAll(`[${AttrNames.SelectableElement}]`)).forEach(ele => {
+    items.push(new AbstractSelectorElement(ele as HTMLElement));
+  });
+  return items;
 }

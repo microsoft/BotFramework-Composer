@@ -9,7 +9,8 @@ import { has, get } from 'lodash';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
-import { AttrNames, AbstractSelectorElement } from '../constants/ElementAttributes';
+import { AttrNames } from '../constants/ElementAttributes';
+import { AbstractSelectorElement } from '../models/SelectorElement';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import {
@@ -21,7 +22,7 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
-import { moveCursor } from '../utils/cursorTracker';
+import { moveCursor, querySelectableElements } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
@@ -227,13 +228,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const querySelectableElements = (): AbstractSelectorElement[] => {
-    const items: AbstractSelectorElement[] = [];
-    Array.from(document.querySelectorAll(`[${AttrNames.SelectableElement}]`)).forEach(ele => {
-      items.push(new AbstractSelectorElement(ele as HTMLElement));
-    });
-    return items;
-  };
   const [selectableElements, setSelectableElements] = useState<AbstractSelectorElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
