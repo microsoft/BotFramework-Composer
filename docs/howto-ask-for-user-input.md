@@ -96,4 +96,4 @@ Composer simplified reprompting when users fail to input data that is invalid an
 ![Prompt Exceptions](./media/ask-for-input/other.png)
 
 ## Next
-Learn how to [manage conversation flow]() using conditionals and dialogs.
+Learn how to [manage conversation flow](./howto-controlling-conversation-flow.md) using conditionals and dialogs.
