@@ -84,7 +84,7 @@ After that, you will see an empty dialog you created on the navigation pane. Whe
 
 ![begin_dialog_action](./media/dialog/begin_dialog_action.png)
 
-Now in the property editor on the right side select the dialog you want to wire up from the drop-down menu. Let's select `Weather` dialog and then you will see the name of the new dialog appear in the **Begin a new dialog** action node. 
+Now in the properties panel on the right side select the dialog you want to wire up from the drop-down menu. Let's select `Weather` dialog and then you will see the name of the new dialog appear in the **Begin a new dialog** action node. 
 
 ![wire_up_dialog](./media/dialog/wire_up_dialog.gif)
 

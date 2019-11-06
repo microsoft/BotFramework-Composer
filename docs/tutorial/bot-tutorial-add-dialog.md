@@ -42,7 +42,7 @@ Composer created this new dialog with a `BeginDialog` trigger pre-configured.
 ## Wiring up dialogs
 You can break pieces of your conversation flow into `dialogs` and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
 
-1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `weatherBot.Main` from the explorer, find the `Language Understanding` section of the property editor. 
+1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `weatherBot.Main` from the explorer, find the `Language Understanding` section of the properties panel. 
 
    > Each dialog can have it's own `recognizer`, a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined `intents`. Different types of recognizers use different techniques to determine which intent, if any, to choose.
 
@@ -72,7 +72,7 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
 
 7. Click the "+" in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
 
-8. In the property editor for the new action, set the `dialog name` property to  our `getWeather` dialog.
+8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
 
 ## Let's test it out.
 

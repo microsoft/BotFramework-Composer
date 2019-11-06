@@ -14,7 +14,7 @@ Let's start by adding some variation to the welcome message.
 
    ![](../media/tutorial-weatherbot/05/lg-1.png)
 
-3. In the right hand property editor, replace the text with the following:
+3. In the right hand properties panel, replace the text with the following:
 
     ```
     -Hi! I'm a friendly bot that can help with the weather. Try saying WEATHER.

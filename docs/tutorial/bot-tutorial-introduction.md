@@ -58,7 +58,7 @@ You will notice that the new bot is pre-configured with one trigger in the left 
 
    ![dialog](../media/tutorial-weatherbot/01/new-flow.png)
 
-3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `property editor` on the right side of the screen, click on the name of the trigger ("ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
+3. To help keep the bot organized, let's rename this trigger to something that describes what it does. In the `properties panel` on the right side of the screen, click on the name of the trigger ("ConversationUpdate"). You'll be able to update the title there, and the change will be instantly reflected in the dialog and navigation on the left. Rename ths trigger to:
 
       `WelcomeTheUser`
 
@@ -89,7 +89,7 @@ Next, let's temporarily disable the recognizer for the main dialog. We will get 
 
 7. Click on `WeatherBot.Main` in the left pane to bring up the properties editor for the root dialog.
 
-6. In the property editor on the right hand side, click on `Recognizer type` and select `None`.
+6. In the properties panel on the right hand side, click on `Recognizer type` and select `None`.
 
    > Dialogs in Composer support two different recognizer types - LUIS, Regex. Unless you need intent classification or entity extraction, we can remove recognizer by setting it to `None`.
    

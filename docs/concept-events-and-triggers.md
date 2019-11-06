@@ -60,7 +60,7 @@ This event will appear in the dialog as a node at the top of the editor. Actions
 Composer enables developers to create language training data in the dialog editing surface because it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. 
 
 Follow the steps to define a trigger with LUIS recognizer:
-1. In the property editor of your selected dialog, choose **LUIS** as recognizer type.
+1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
 2. In the language understanding editor, create **intents** with sample utterances and follow [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 
 >[!NOTE]
@@ -93,7 +93,7 @@ When triggered, if LUIS is able to identify a city, the city name will be made a
 In the example below, a similar book-flight intent is defined. However, this will _only_ match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able match a much wider variety of messages.
 
 Follow the steps to define triggers with [Regular Expressions](https://regexr.com/) recognizer: 
-1. In the property editor of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
+1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
 2. In the language understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
 
 ![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)

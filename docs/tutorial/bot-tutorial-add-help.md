@@ -16,7 +16,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
    Composer created this new dialog with one `BeginDialog` trigger pre-configured. 
 
 4. With the `BeginDialog` trigger selected, use the `+` button at the bottom of the flow, choose `Send a response`
-5. In the property editor on the right side, set the text of the activity to:
+5. In the properties panel on the right side, set the text of the activity to:
 
       `I am a weather bot! I can tell you the current weather conditions. Just say WEATHER.`
 
@@ -46,7 +46,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
       ![](../media/tutorial-weatherbot/04/help-trigger-flow.png)
 
-13. In the right hand property editor, select the `help` dialog.
+13. In the right hand properties panel, select the `help` dialog.
 
       ![](../media/tutorial-weatherbot/04/help-props.png)
 
@@ -67,7 +67,7 @@ However, notice that once you start the weather dialog by saying weather, your b
 
 1. In Composer's left hand explorer, navigate back to the `getWeather` dialog. Make sure to highlight the `BeginDialog` trigger.
 2. Select the `Bot Asks` node in the flow that says `What is your zipcode?`
-3. In the right hand property editor, set `Allow Interruptions` to `true`
+3. In the right hand properties panel, set `Allow Interruptions` to `true`
    ![](../media/tutorial-weatherbot/04/interrupts.png)
 
    > This tells Bot Framework to consult the parent dialog's recognizer, which will allow the bot to respond to `help` at the prompt as well.
@@ -94,7 +94,7 @@ For now, let's add one more global function - a cancel command.
       `cancel`
 
 3. Use the `+` button at the bottom of the flow, choose `Send a response`
-4. In the property editor on the right side, set the text of the activity to:
+4. In the properties panel on the right side, set the text of the activity to:
 
       `Canceling!`
 
@@ -118,7 +118,7 @@ For now, let's add one more global function - a cancel command.
 11. In the resulting dialog box, select `Intent`, then choose the new `cancel` intent. Submit the dialog.
 12. In the flow editor, click the `+` button at the bottom of the empty flow.
 13. Choose `Dialog management >` and then select `Begin a new dialog`
-14. In the right hand property editor, select the `cancel` dialog.
+14. In the right hand properties panel, select the `cancel` dialog.
 
       ![](../media/tutorial-weatherbot/04/cancel-trigger.png) 
 

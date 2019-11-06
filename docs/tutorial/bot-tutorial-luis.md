@@ -6,7 +6,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
 ## Update recognizer
 
-1. Click on `WeatherBot.Main` in the left dialog navigation panel, go to the property editor for this dialog and locate the `Recognizer type` option and set it to `LUIS`
+1. Click on `WeatherBot.Main` in the left dialog navigation panel, go to the properties panel for this dialog and locate the `Recognizer type` option and set it to `LUIS`
 
    ![](../media/tutorial-weatherbot/07/luis-recognizer.png)
 

@@ -9,7 +9,7 @@
 
    ![](../media/tutorial-weatherbot/03/empty-prompt.png)
 
-5. Click on the `Bot Asks` node. This part of the prompt represents the message the bot will send to the user requesting information. In the property editor set the prompt to:
+5. Click on the `Bot Asks` node. This part of the prompt represents the message the bot will send to the user requesting information. In the properties panel set the prompt to:
 
       `What is your zipcode?`
 
@@ -19,7 +19,7 @@
 
    ![](../media/tutorial-weatherbot/03/zipcode-prompt.png)
 
-7. Next, click the `User Input` tab in the property editor. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
+7. Next, click the `User Input` tab in the properties panel. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
 
 8. Here, we can specify what property in memory will be used to store the user's response. In `Property to fill`, enter the value:
 
@@ -29,7 +29,7 @@
 
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
-9. Click on the `Others` tab in the property editor. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
+9. Click on the `Others` tab in the properties panel. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
 
 10. In the `Unrecognized Prompt` field, enter:
       
@@ -96,7 +96,7 @@ The http request action is found under the `Access external resources >` menu in
    After making an HTTP request, we need to test the status of the response. To do this, we'll use an If/Else branch.
 
 3. Use the '+' button, then choose `Create a condition`, then choose  `Branch: If/Else`
-4. In the property editor on the right, set the `condition` field to:
+4. In the properties panel on the right, set the `condition` field to:
 
       `dialog.api_response.statusCode == 200`
 

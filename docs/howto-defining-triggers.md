@@ -48,7 +48,7 @@ On dialog navigation pane, click **New Trigger** and select **Dialog started(Beg
 ![begin_new_dialog](./media/events_triggers/begin_new_dialog.gif)
 
 ### 2. Add dialog action(s) to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the property editor. This mean before you use this trigger you must define a dialog to be configured to this trigger.
+Under this trigger, click the "+" sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the properties panel. This mean before you use this trigger you must define a dialog to be configured to this trigger.
 
 ![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
 
@@ -73,7 +73,7 @@ In your bot's authoring canvas, select the trigger you want to define **Emit a c
 
 ![emit_custom_event](./media/events_triggers/emit_custom_event.gif)
 
-On the property editor on the right, you can define some properties of this event. Let's give this event a name "Greeting", leave `Event value` as is, and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
+On the properties panel on the right, you can define some properties of this event. Let's give this event a name "Greeting", leave `Event value` as is, and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
 
 ![emit_custom_event_property](./media/events_triggers/emit_custom_event_property.gif)
 
@@ -82,7 +82,7 @@ On the navigation pane on the left, click on **New Trigger** and select **Custom
 
 ![create_custom_trigger](./media/events_triggers/create_custom_trigger.png)
 
-On the property editor on the right, fill in the name of you pre-defined event in the `Custom event name` section. We fill in "Greeting" as we created in step 1. The name in the `Custom event name` section should match the name of the **Emit a custom event** you just created. 
+On the properties panel on the right, fill in the name of you pre-defined event in the `Custom event name` section. We fill in "Greeting" as we created in step 1. The name in the `Custom event name` section should match the name of the **Emit a custom event** you just created. 
 
 ![event_name_greeting](./media/events_triggers/event_name_greeting.png)
 

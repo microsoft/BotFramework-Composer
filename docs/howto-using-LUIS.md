@@ -21,7 +21,7 @@ In Composer, each dialog can have one type of recognizer and might contain a set
 
 ![select_dialog](./media/add_luis/select_dialog.png)
 
-2. On the property editor on the right side, select **LUIS** as recognizer type.
+2. On the properties panel on the right side, select **LUIS** as recognizer type.
 
 ![luis_recognizer](./media/add_luis/luis_recognizer.png)
 
