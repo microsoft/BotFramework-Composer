@@ -1,16 +1,16 @@
 # Defining triggers 
-Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of triggers in Composer. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of trigger. If you are not familiar with events and triggers in Composer, please read the [events and triggers](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-events-and-triggers.md) concept article. 
+Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of triggers in Composer. They all work in a similar manner and can be interchanged in some cases. In this article, we will walk you through how to define each type of trigger. If you are not familiar with events and triggers in Composer, please read the [events and triggers](concept-events-and-triggers.md) concept article. 
 
 The table below lists the six different types of triggers in Composer and their descriptions. 
 
-| Trigger Type                | Description                                                                                       |
-| --------------------------- | ------------------------------------------------------------------------------------------------- |
-| Intent  | Trigger an action when an **intent** is recognized (and optionally **entities**)      |
-| Unrecognized intent | Trigger an action when no intent is recognized    |
-| Dialog trigger | Trigger an action when a dialog event such as **BeginDialog** is fired|
-| Acvitity trigger | Trigger an action to take when an activity event such as when a new conversation starts|
-| Message activity trigger | Trigger an action to take when a message avtivity is fired. |
-| Custom trigger |Trigger a pre-defined custom event such as **Emit a custom event** . |                                                                                      
+| Trigger Type             | Description                                                                             |
+| ------------------------ | --------------------------------------------------------------------------------------- |
+| Intent                   | Trigger an action when an **intent** is recognized (and optionally **entities**)        |
+| Unrecognized intent      | Trigger an action when no intent is recognized                                          |
+| Dialog trigger           | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
+| Activity trigger         | Trigger an action to take when an activity event such as when a new conversation starts |
+| Message activity trigger | Trigger an action to take when a message activity is fired.                             |
+| Custom trigger           | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
 ## Intent
 In **Intent** trigger you define actions to take when an intent is recognized (and optionally entities). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane, click **New Trigger** and then select **Intent** from the drop-down menu. You will see the intent trigger menu as follows: 
 
@@ -22,7 +22,7 @@ If you have not defined any intents, the **Intent** trigger sub-menu will show "
 - create **Intent** triggers to handle pre-defined intents (one trigger handles one intent)
 - define actions in the trigger 
 
-You can find detailed instructions on how to define an **Intent** trigger with LUIS [here](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-events-and-triggers.md#LUIS-recognizer) and how to define an **Intent** trigger with Regular Expression [here](https://github.com/microsoft/BotFramework-Composer/blob/Ignite-2019-Content/docs/concept-events-and-triggers.md#Regular-expression-recognizer). 
+You can find detailed instructions on how to define an **Intent** trigger with LUIS [here](concept-events-and-triggers.md#LUIS-recognizer) and how to define an **Intent** trigger with Regular Expression [here](concept-events-and-triggers.md#Regular-expression-recognizer). 
 
 ## Unrecognized intent 
 **Unrecognized intent** defines actions to take when an intent is not recognized. For this trigger, you do not need to define any intents. Follow the steps to define an **Unrecognized intent** trigger:
@@ -40,7 +40,7 @@ Under the trigger, click the "+" sign to add the action node(s) you want to incl
 ![unrecognized_intent_response](./media/events_triggers/unrecognized_intent_response.gif)  
 
 ## Dialog trigger 
-This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **BeginDialog** trigger: 
+This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **BeginDialog** trigger: 
 
 ### 1. Create a **BeginDialog** trigger
 On dialog navigation pane, click **New Trigger** and select **Dialog started(BeginDialog)** from the drop-down menu. Click **Submit**. 
