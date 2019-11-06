@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { sequentialLayouter } from '../../src/layouters/sequentialLayouter';
 import { Boundary } from '../../src/models/Boundary';
 import { GraphNode } from '../../src/models/GraphNode';
