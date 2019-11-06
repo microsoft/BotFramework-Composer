@@ -17,7 +17,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
     "test": "jest --no-cache",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
