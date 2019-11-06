@@ -28,7 +28,7 @@ When a dialog is called into action, its **recognizer** will start to process th
 ![recognizer](./media/dialog/recognizer.png)
 
 > [!NOTE]
-> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an intent (or extracts entities) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It depends on how you design the dialog system.   
+> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an **intent** (or extracts **entities**) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It depends on how you design the dialog system.   
 
 ### Trigger
 The functionality of a dialog is contained within triggers (event handlers) - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer. 
@@ -66,17 +66,17 @@ When your bot is created successfully you will see a **.Main** dialog in the dia
 > As you will notice, after you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
 
 ## Add a dialog 
-After you create a bot you are also creating its main dialog by default. The main dialog is like the brain of our bot, controlling and managing the dialog system. Sometimes we find it useful to create a child dialog that contains a chunk of functionality so that our dialog system is organized and easily managed. Let's walk through a very simple example to show how to create a child dialog and wire it up with the main dialog. 
+After you create a bot you are also creating its main dialog by default. The main dialog is like the brain of our bot, controlling and managing the dialog system. Sometimes we find it useful to create a child dialog that contains a chunk of functionality so that our dialog system is organized and easily managed. Let's walk through a very simple example to show how to create a child dialog and wire it up to the main dialog. 
 
 1. Create a child dialog. Click **New Dialog** on the navigation pane. On the pop-up window give a name for the new dialog and optionally fill in the description and then click **Next**. 
 
 ![weather_dialog](./media/dialog/weather_dialog.png)
 
-After that, you will see an empty dialog you created on the navigation pane. When creating a child dialog you also create a **ConversationUpdate** trigger by default. The new dialog named `Weather` may look like this: 
+After that, you will see an empty dialog you created on the navigation pane. When creating a child dialog you also create a **Dialog started (BeginDialog)** trigger by default. The new dialog named `Weather` may look like this: 
 
 ![new_weather_dialog](./media/dialog/new_weather_dialog.png)
 
-2. Define an action in the `BeginDialog` trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the language generation editor put a sentence: "The weather dialog is called with success!"
+2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the language generation editor put a sentence: "The weather dialog is called with success!"
 
 ![send_response](./media/dialog/send_response.gif)
 
@@ -92,7 +92,7 @@ When the bot runs, the pattern of this simple design is as follows:
 
 - The main dialog `Greeting.Main` is called at bot runtime.
 - The **ConversationUpdate** trigger in the main dialog is activated and begins to execute the **Begin a new dialog** action which begins `Weather` dialog. 
-- When `Weather` dialog becomes active, **ConversationUpdate** in the child dialog is triggered and send the response "The weather dialog is called with success!" to users. 
+- When `Weather` dialog becomes active, **BeginDialog** in the child dialog is triggered and send the response "The weather dialog is called with success!" to users. 
   
 You can test the result by clicking **Start** on the upper right corner and then click **Test in Emulator**. You should be able to see the following result in the emulator: 
 
@@ -104,14 +104,14 @@ A bot will have a few dialogs or hundreds of individual dialogs and traditionall
 <!-- We might need a how-to article documenting how to use each type of the dialog actions.  -->
 Below is a list of the dialog actions provided in Composer: 
 
-| Dialog Action        | Description                                                                                                                      |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Begin a new dialog       | An action that begins another dialog. When that dialog is completed, it will return to the caller.                                 |
-| End this dialog           | A command that ends the current dialog, returning the `resultProperty` as the result of the dialog.    |
-| Cancel all dialogs   | A command to cancel all of the current dialogs by emitting an event that must be caught to prevent cancelation from propagating |
-| End this turn      | A command to end the current turn without ending the dialog.                                                                     |
-| Repeat this Dialog   | An action that repeats the current dialog with the same dialog.                                                                 |
-| Replace this Dialog  | An action that replaces the current dialog with the target dialog.                                                                      |
+| Dialog Action       | Description                                                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Begin a new dialog  | An action that begins another dialog. When that dialog is completed, it will return to the caller.                               |
+| End this dialog     | A command that ends the current dialog, returning the `resultProperty` as the result of the dialog.                              |
+| Cancel all dialogs  | A command to cancel all of the current dialogs by emitting an event that must be caught to prevent cancellation from propagating |
+| End this turn       | A command to end the current turn without ending the dialog.                                                                     |
+| Repeat this Dialog  | An action that repeats the current dialog with the same dialog.                                                                  |
+| Replace this Dialog | An action that replaces the current dialog with the target dialog.                                                               |
 
 With these dialog actions, we can easily build a pluggable and extensible dialog system without worrying about the mechanics of dialog management. 
 
