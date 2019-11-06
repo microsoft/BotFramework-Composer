@@ -18,7 +18,7 @@ Use dialog triggers when you want to:
 - Evaluate the raw content of the incoming activity
 
 ### Intent trigger  
-Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent** and **Unrecognized intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any congifured **Unrecognized intent** trigger will fire. This will only fire if no matching intent handler is found. **Unrecognized intent** handles any intent that is not handled by a trigger.   
+Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent** and **Unrecognized intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any configured **Unrecognized intent** trigger will fire. This will only fire if no matching intent handler is found. **Unrecognized intent** handles any intent that is not handled by a trigger.   
 
 Use intent triggers when you want to:
 - Trigger major features of your bot using natural language
@@ -42,7 +42,7 @@ Use **Message activity triggers** when you wan to:
 - Take actions when a message is reacted (on receipt of an activity with type `MessageReaction`). 
 
 ### Custom trigger
-Custom trigger is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using the **Emit a custom event** which will trigger this handler. 
+Custom trigger is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will trigger this handler. 
 
 ## Anatomy of a trigger
 The basic idea behind a trigger (event handler) is "When (_event_) happens, then do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request.
@@ -62,10 +62,9 @@ Composer enables developers to create language training data in the dialog editi
 Follow the steps to define a trigger with LUIS recognizer:
 1. In the property editor of your selected dialog, choose **LUIS** as recognizer type.
 2. In the language understanding editor, create **intents** with sample utterances and follow [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
-Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize the intent. 
 
 >[!NOTE]
-> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You may need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
+> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You will need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
 
 Below is a screenshot to show the previous two steps: 
 
