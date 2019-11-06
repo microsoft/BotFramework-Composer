@@ -22,7 +22,7 @@
             "type": "bool",
             "defaultValue": true
         },
-        "shouldDeployAuthoringResource": {
+        "shouldCreateAuthoringResource": {
             "type": "bool",
             "defaultValue": true
         },
@@ -260,7 +260,7 @@
             "sku": {
                 "name": "[parameters('luisServiceAuthoringSku')]"
             },
-            "condition": "[parameters('shouldDeployAuthoringResource')]"
+            "condition": "[parameters('shouldCreateAuthoringResource')]"
         },
         {
             "comments": "Cognitive service endpoint key for all LUIS apps.",
@@ -301,7 +301,7 @@
             "type": "object",
             "value": {
                 "endpointKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1]",
-                "authoringKey": "[if(parameters('shouldDeployAuthoringResource'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1, parameters('luisAuthoringKey'))]",
+                "authoringKey": "[if(parameters('shouldCreateAuthoringResource'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1, parameters('luisAuthoringKey'))]",
                 "region": "[parameters('luisServiceLocation')]"
             }
         }
