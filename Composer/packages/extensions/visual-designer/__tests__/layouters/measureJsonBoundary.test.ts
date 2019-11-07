@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Boundary } from '../../src/models/Boundary';
 import { measureJsonBoundary } from '../../src/layouters/measureJsonBoundary';
 import { ObiTypes } from '../../src/constants/ObiTypes';

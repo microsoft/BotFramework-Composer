@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { transformIfCondtion } from '../../src/transformers/transformIfCondition';
 import { ObiTypes } from '../../src/constants/ObiTypes';
 
