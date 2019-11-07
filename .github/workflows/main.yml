@@ -1,9 +1,16 @@
 name: Composer CI
 
-on: [push]
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - master
+      - stable
 
 jobs:
   ci:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -34,14 +41,16 @@ jobs:
         working-directory: Composer
       # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
       - name: Publish coverage results
-        if: env.COVERALLS_REPO_TOKEN != 0
+        if: env.COVERALLS_REPO_TOKEN && true
         run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
         working-directory: Composer
         env:
           COVERALLS_SERVICE_NAME: "Github Actions"
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_GIT_COMMIT: ${{ github.head_sha }}
 
   e2e:
+    name: E2E Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -77,6 +86,7 @@ jobs:
           path: Composer/cypress/screenshots
 
   botproject:
+    name: BotProject
     runs-on: windows-latest
     steps:
       - name: Checkout
