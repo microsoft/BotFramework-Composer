@@ -1,5 +1,10 @@
-import React from 'react';
-import { LgLSPEditor, LGLSPEditorFile } from '../../src/LgLSPEditor';
+import React, { useState } from 'react';
+
+import { LGLSPEditorFile } from '../../src/LSPEditors/LGLSPEditor';
+import { MonacoEditorCore } from '../../src/LSPEditors/MonacoEditorCore';
+import { BaseEditorCore } from '../../src/LSPEditors/BaseEditorCore';
+import { RichEditor } from '../../src/LSPEditors/RichEditor';
+import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
 
 const content = `# Greeting1
 -Good morning
@@ -27,6 +32,29 @@ const file: LGLSPEditorFile = {
   template,
 };
 
+// export interface LGLSPEditorProps extends RichEditorProps {
+//   fileInfo?: {
+//     id?: 'string';
+//     language?: 'string';
+//     inline?: boolean;
+//     content?: string;
+//   };
+// }
+
+const options = {
+  content,
+};
+
 export default function App() {
-  return <LgLSPEditor file={file} height={250} />;
+  const [value, setValue] = useState(content);
+
+  const onChange = value => {
+    setValue(value);
+  };
+
+  const props = {
+    value,
+    onChange,
+  };
+  return <LGLSPEditor {...props} />;
 }

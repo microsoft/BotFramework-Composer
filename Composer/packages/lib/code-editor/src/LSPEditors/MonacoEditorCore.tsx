@@ -3,10 +3,10 @@
 
 import * as monaco from 'monaco-editor-core';
 import React from 'react';
-// import { startSampleClient, registerLGLanguage } from '@bfc/lg-lsp/lib/startSampleClient';
+
+import { noop, processSize, assignDefined } from '../utils';
 
 import { MonacoEditorCoreProps } from './interface';
-import { noop, processSize, assignDefined } from './utils';
 
 const defaultProps: MonacoEditorCoreProps = {
   width: '100%',
@@ -39,7 +39,6 @@ export class MonacoEditorCore extends React.Component<MonacoEditorCoreProps> {
   componentDidUpdate(prevProps) {
     const props = assignDefined({}, defaultProps, this.props);
     const { value, language, theme, height, options, width } = props;
-
     const { editor } = this;
     if (!editor) return;
     const model = editor.getModel();
@@ -98,10 +97,9 @@ export class MonacoEditorCore extends React.Component<MonacoEditorCoreProps> {
     const { language, theme, options, overrideServices } = this.props;
     if (this.containerElement) {
       // Before initializing monaco editor
-      assignDefined(options, this.editorWillMount());
-      // this.editor = startSampleClient(this.containerElement, {});
-
-      this.editor = monaco.editor.create(
+      const extOptions = this.editorWillMount() || {};
+      assignDefined(options, extOptions);
+      const editor = monaco.editor.create(
         this.containerElement,
         {
           value,
@@ -111,15 +109,16 @@ export class MonacoEditorCore extends React.Component<MonacoEditorCoreProps> {
         },
         overrideServices
       );
+      this.editor = editor;
       // After initializing monaco editor
-      this.editorDidMount(this.editor, monaco);
+      this.editorDidMount(editor, monaco);
     }
   }
 
   editorWillMount() {
-    const { editorWillMount = noop } = this.props;
-    const options = editorWillMount(monaco);
-    return options || {};
+    if (typeof this.props.editorWillMount === 'function') {
+      return this.props.editorWillMount(monaco);
+    }
   }
 
   editorDidMount(editor, monaco) {

@@ -86,9 +86,8 @@ export function createEditor(container, file) {
   });
 }
 
-export function startSampleClient(container, file) {
-  registerLGLanguage();
-  const editor = createEditor(container, file);
+export function startSampleClient(editor) {
+  // const editor = createEditor(container, file);
   // install Monaco language client services
   MonacoServices.install(editor);
 
@@ -103,7 +102,7 @@ export function startSampleClient(container, file) {
       // create and start the language client
       const languageClient = createLanguageClient(connection);
       // send full content
-      initializeDocuments(languageClient, file);
+      // initializeDocuments(languageClient, file);
       const disposable = languageClient.start();
       connection.onClose(() => disposable.dispose());
     },
