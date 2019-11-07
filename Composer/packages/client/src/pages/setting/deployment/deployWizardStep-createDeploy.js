@@ -32,7 +32,7 @@ export const DeployWizardStepCreate = props => {
     location: location,
     secret: '',
     environment: '',
-    region: regionOptions[0].key,
+    region: regionOptions[0],
     errors: {},
   });
 
@@ -125,7 +125,7 @@ export const DeployWizardStepCreate = props => {
               errorMessage={formData.errors.secret}
               data-testid="appsecret"
               required
-              autoComplete={false}
+              autoComplete={'off'}
               maxLength={16}
             />
           </StackItem>
@@ -144,6 +144,7 @@ export const DeployWizardStepCreate = props => {
               label={formatMessage('Azure Region')}
               styles={styles.input}
               options={regionOptions}
+              defaultSelectedKey={regionOptions[0].key}
               onChange={updateForm('region')}
               errorMessage={formData.errors.region}
               data-testid="region"
