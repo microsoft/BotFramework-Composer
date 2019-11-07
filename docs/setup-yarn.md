@@ -19,7 +19,7 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 
 After cloning the repo open a terminal and navigate to the Bot Framework Composer folder. Navigate to the **Composer** folder and run the following commands:
 ```
-cd Composer 
+cd BotFramework-Composer 
 yarn install 
 ```
   This command gets all dependent packages.
