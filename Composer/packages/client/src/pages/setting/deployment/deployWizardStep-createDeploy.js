@@ -13,7 +13,6 @@ import {
   StackItem,
   TextField,
 } from 'office-ui-fabric-react';
-import { find } from 'lodash';
 
 import { StoreContext } from '../../../store';
 
@@ -24,7 +23,6 @@ import { styles } from './styles';
 import { regionOptions } from './luisRegions.js';
 
 export const DeployWizardStepCreate = props => {
-  const defaultRegion = 'WestUS';
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
   const { botName, location } = state;
@@ -34,7 +32,7 @@ export const DeployWizardStepCreate = props => {
     location: location,
     secret: '',
     environment: '',
-    region: find(regionOptions, { key: defaultRegion }),
+    region: regionOptions[0],
     errors: {},
   });
 
@@ -146,7 +144,7 @@ export const DeployWizardStepCreate = props => {
               label={formatMessage('Azure Region')}
               styles={styles.input}
               options={regionOptions}
-              defaultSelectedKey={defaultRegion}
+              defaultSelectedKey={regionOptions[0].key}
               onChange={updateForm('region')}
               errorMessage={formData.errors.region}
               data-testid="region"

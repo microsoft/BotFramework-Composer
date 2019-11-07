@@ -7,12 +7,4 @@ module.exports.regionOptions = [
     key: 'WestUS',
     text: 'WestUS',
   },
-  {
-    key: 'AustraliaEast',
-    text: 'AustraliaEast',
-  },
-  {
-    key: 'WestEurope',
-    text: 'WestEurope',
-  },
 ];
