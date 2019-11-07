@@ -3928,14 +3928,6 @@ botbuilder-expression-parser@^4.5.11:
     antlr4ts "0.5.0-alpha.1"
     botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz"
 
-botbuilder-expression-parser@^4.5.9:
-  version "4.5.9"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.9.tgz#696643da5e1ff0bf20724999bc73a8e38acd9da7"
-  integrity sha1-aWZD2l4f8L8gckmZvHOo44rNnac=
-  dependencies:
-    antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz"
-
 "botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz":
   version "4.5.11"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz#d15384417be9c0e17d46bf729fe707b81b66ef68"
@@ -3950,23 +3942,10 @@ botbuilder-expression-parser@^4.5.9:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz":
-  version "4.5.9"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.9.tgz#76c54ed691c4cdd5ab9bbe5bac69e0bc67588044"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
-    antlr4ts "0.5.0-alpha.1"
-    jspath "^0.4.0"
-    lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "0.0.27"
-
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz":
-  version "4.7.0-preview0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview0.tgz#46ac6e53e44ba64ae56971ab8404c3f2f9ab239d"
+"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz":
+  version "4.7.0-preview2"
+  uid "2a3dd7d7991e0727fb88630501d2fb14d475537b"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz#2a3dd7d7991e0727fb88630501d2fb14d475537b"
   dependencies:
     antlr4ts "0.5.0-alpha.1"
     botframework-expressions "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz"
