@@ -2,40 +2,25 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Bot.Builder.ApplicationInsights;
+using Microsoft.Bot.Builder.Azure;
+using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.Integration;
+using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Schema;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Debug;
-using System.Diagnostics;
-using System.IO;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
-using Microsoft.Bot.Builder.Azure;
-using Microsoft.AspNetCore.Http.Connections.Internal;
-using Microsoft.Bot.Builder.ApplicationInsights;
-using Microsoft.ApplicationInsights;
-using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class Startup
     {
@@ -118,8 +103,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 {
                     Console.WriteLine("The settings of TranscriptLoggerMiddleware is incomplete, please check following settings: settings.BlobStorage.ConnectionString, settings.BlobStorage.Container");
                 }
-
-
 
                 adapter.OnTurnError = async (turnContext, exception) =>
                 {
