@@ -41,8 +41,12 @@ jobs:
         working-directory: Composer
       # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
       - name: Publish coverage results
-        if: env.COVERALLS_REPO_TOKEN && true
-        run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
+        run: |
+          if [[ -z $COVERALLS_REPO_TOKEN ]]; then
+            echo "Coveralls token not found. Skipping."
+          else
+            cat coverage/lcov.info | ./node_modules/.bin/coveralls
+          fi
         working-directory: Composer
         env:
           COVERALLS_SERVICE_NAME: "Github Actions"
