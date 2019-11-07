@@ -7,9 +7,9 @@ import crypto from 'crypto';
 
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
-import morgan from 'morgan';
 
 import { getAuthProvider } from './router/auth';
+import morgan from 'morgan';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 
