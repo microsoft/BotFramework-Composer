@@ -72,11 +72,11 @@ if (-not $appId) {
 	}
 }
 
-$shouldDeployAuthoringResource = $true
+$shouldCreateAuthoringResource = $true
 
 # Use pre-exsisting luis authoring key
 if ($luisAuthoringKey) {
-	$shouldDeployAuthoringResource = $false
+	$shouldCreateAuthoringResource = $false
 }
 
 $resourceGroup = "$name-$environment"
@@ -94,7 +94,7 @@ Write-Host "> Validating Azure deployment ..."
 $validation = az group deployment validate `
 	--resource-group $resourcegroup `
 	--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldDeployAuthoringResource=$shouldDeployAuthoringResource luisAuthoringKey=$luisAuthoringKey `
+	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldCreateAuthoringResource=$shouldCreateAuthoringResource luisAuthoringKey=$luisAuthoringKey `
 	--output json
 
 if ($validation) {
@@ -107,7 +107,7 @@ if ($validation) {
 			--name $timestamp `
 			--resource-group $resourceGroup `
 			--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-			--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldDeployAuthoringResource=$shouldDeployAuthoringResource luisAuthoringKey=$luisAuthoringKey `
+			--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldCreateAuthoringResource=$shouldCreateAuthoringResource luisAuthoringKey=$luisAuthoringKey `
 			--output json
 	}
 	else {

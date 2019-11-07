@@ -1,0 +1,27 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "MultiLineText",
+    "id": "877352"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "458516",
+            "name": "Send a response"
+          },
+          "activity": "[bfdactivity-458516]"
+        }
+      ]
+    }
+  ]
+}

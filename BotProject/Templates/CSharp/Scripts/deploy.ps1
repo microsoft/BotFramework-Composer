@@ -192,14 +192,20 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	Write-Host "Getting Luis accounts..."
 	$luisAccountEndpoint = "$luisEndpoint/luis/api/v2.0/azureaccounts"
-	$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
-
 	$luisAccount = $null
-	foreach ($account in $luisAccounts) {
-		if ($account.AccountName -eq "$name-$environment-luis") {
-			$luisAccount = $account
-			break
+	try {
+		$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+
+		foreach ($account in $luisAccounts) {
+			if ($account.AccountName -eq "$name-$environment-luis") {
+				$luisAccount = $account
+				break
+			}
 		}
+	}
+	catch {
+		Write-Host "Return invalid status code while gettings luis accounts: $($_.Exception.Response.StatusCode.Value__), error message: $($_.Exception.Response)"
+		break
 	}
 
 	$luisAccountBody = $luisAccount | ConvertTo-Json
@@ -209,8 +215,14 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 		$luisAppId = $luisAppIds.Item($k)
 		Write-Host "Assigning to Luis app id: $luisAppId"
 		$luisAssignEndpoint = "$luisEndpoint/luis/api/v2.0/apps/$luisAppId/azureaccounts"
-		$response = Invoke-WebRequest -Method POST -ContentType application/json -Body $luisAccountBody -Uri $luisAssignEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
-		Write-Host $response
+		try {
+			$response = Invoke-WebRequest -Method POST -ContentType application/json -Body $luisAccountBody -Uri $luisAssignEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+			Write-Host $response
+		}
+		catch {
+			Write-Host "Return invalid status code while assigning key to luis apps: $($_.Exception.Response.StatusCode.Value__), error message: $($_.Exception.Response)"
+			exit
+		}
 	}
 }
 

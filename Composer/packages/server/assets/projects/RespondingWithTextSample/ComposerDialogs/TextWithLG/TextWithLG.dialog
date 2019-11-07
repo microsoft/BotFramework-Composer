@@ -4,8 +4,7 @@
     "id": "620760"
   },
   "autoEndDialog": true,
-  "generator": "common.lg",
-  "$schema": "../../app.schema",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -16,12 +15,14 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "105188",
-            "name": "Send an Activity"
+            "id": "739923",
+            "name": "Send a response"
           },
-          "activity": "[bfdactivity-105188]"
+          "activity": "[bfdactivity-739923]"
         }
       ]
     }
-  ]
+  ],
+  "generator": "common.lg",
+  "$schema": "../../app.schema"
 }
