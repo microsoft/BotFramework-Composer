@@ -48,3 +48,13 @@ export const notificationHeaderText = css`
   color: #323130;
   font-weight: bold;
 `;
+
+export const root = css`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+`;
+
+export const listRoot = css`
+  overflow-y: auto;
+`;

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn, FontIcon } from 'office-ui-fabric-react';
 
 import { INotification } from './types';
-import { notification, typeIcon } from './styles';
+import { notification, typeIcon, listRoot } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
@@ -77,13 +77,15 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
   const { items } = props;
 
   return (
-    <DetailsList
-      items={items}
-      columns={columns}
-      selectionMode={SelectionMode.none}
-      setKey="none"
-      layoutMode={DetailsListLayoutMode.justified}
-      isHeaderVisible={true}
-    />
+    <div css={listRoot}>
+      <DetailsList
+        items={items}
+        columns={columns}
+        selectionMode={SelectionMode.none}
+        setKey="none"
+        layoutMode={DetailsListLayoutMode.justified}
+        isHeaderVisible={true}
+      />
+    </div>
   );
 };

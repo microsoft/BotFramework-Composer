@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { Dropdown, IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
+import { useMemo } from 'react';
 
 import { notificationHeader, notificationHeaderText } from './styles';
 
@@ -18,10 +19,11 @@ export interface INotificationHeader {
 
 export const NotificationHeader: React.FC<INotificationHeader> = props => {
   const { onChange, items } = props;
-  const options = [{ key: '', text: 'All' }];
-  items.forEach(item => {
-    options.push({ key: item, text: item });
-  });
+  const options = useMemo(() => {
+    return items.map(item => {
+      return { key: item, text: item };
+    });
+  }, [items]);
 
   return (
     <div css={notificationHeader}>
