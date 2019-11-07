@@ -19,12 +19,12 @@ const icons = {
 const columns: IColumn[] = [
   {
     key: 'column1',
-    name: 'Icon',
+    name: '',
     className: notification.typeIconCell,
     iconClassName: notification.typeIconHeaderIcon,
     fieldName: 'icon',
-    minWidth: 16,
-    maxWidth: 16,
+    minWidth: 30,
+    maxWidth: 30,
     onRender: (item: INotification) => {
       return <FontIcon iconName={icons[item.type].iconName} css={typeIcon(icons[item.type])} />;
     },

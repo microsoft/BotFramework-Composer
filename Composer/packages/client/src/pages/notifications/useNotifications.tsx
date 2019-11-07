@@ -4,8 +4,11 @@
 import { useContext, useMemo, useState } from 'react';
 
 import { StoreContext } from '../../store';
+import { createSingleMessage } from '../../utils/lgUtil';
 
 import { INotification } from './types';
+
+const DiagnosticSeverity = ['Error', 'Warning', 'Information', 'Hint'];
 
 export default function useNotifications() {
   const { state } = useContext(StoreContext);
@@ -18,37 +21,33 @@ export default function useNotifications() {
     locations.add('All');
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
-        locations.add(dialog.id);
-        notifactions.push({
-          type: 'Error',
-          location: dialog.displayName,
-          message: diagnostic,
-        });
+        const location = dialog.displayName;
+        locations.add(location);
+        notifactions.push({ type: 'Error', location, message: diagnostic });
       });
     });
     luFiles.forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
-        locations.add(lufile.id);
-        notifactions.push({
-          type: 'Error',
-          location: `${lufile.id}.lu`,
-          message: diagnostic.text,
-        });
+        const location = `${lufile.id}.lu`;
+        locations.add(location);
+        notifactions.push({ type: 'Error', location, message: diagnostic.text });
       });
     });
     lgFiles.forEach(lgFiles => {
       lgFiles.diagnostics.map(diagnostic => {
-        locations.add(lgFiles.id);
+        const location = `${lgFiles.id}.lg`;
+        locations.add(location);
         notifactions.push({
-          type: 'Error',
-          location: `${lgFiles.id}.lg`,
-          message: diagnostic.Message,
+          type: DiagnosticSeverity[diagnostic.Severity],
+          location,
+          message: createSingleMessage(diagnostic),
         });
       });
     });
-    return { notifactions, locations };
+    return { notifactions, locations: [...locations] };
   }, [dialogs, luFiles, lgFiles]);
 
   const notifications: INotification[] = memorized.notifactions.filter(x => filter === 'All' || x.location === filter);
-  return { notifications, setFilter, locations: [...memorized.locations] };
+
+  return { notifications, setFilter, locations: memorized.locations };
 }
