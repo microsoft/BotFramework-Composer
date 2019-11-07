@@ -34,7 +34,7 @@ jobs:
         working-directory: Composer
       # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
       - name: Publish coverage results
-        if: env.COVERALLS_REPO_TOKEN
+        if: env.COVERALLS_REPO_TOKEN && true
         run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
         working-directory: Composer
         env:
