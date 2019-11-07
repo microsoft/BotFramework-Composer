@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
     "start": "node build/server.js",
     "start:dev": "nodemon",
@@ -51,6 +52,7 @@
     "mock-fs": "^4.10.1",
     "nodemon": "^1.18.11",
     "rimraf": "^2.6.3",
+    "source-map-explorer": "^2.1.0",
     "ts-node": "^8.4.1"
   },
   "dependencies": {
