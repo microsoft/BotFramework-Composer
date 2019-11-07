@@ -1,6 +1,9 @@
 name: Validate PR
 
-on: [pull_request]
+on:
+  pull_request:
+    branches-ignore:
+      - master
 
 jobs:
   check-stable-branch:
