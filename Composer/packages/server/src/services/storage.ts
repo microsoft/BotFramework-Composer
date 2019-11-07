@@ -18,6 +18,11 @@ class StorageService {
 
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
+    this.storageConnections.forEach(s => {
+      if (!fs.existsSync(s.defaultPath)) {
+        fs.mkdirSync(s.defaultPath);
+      }
+    });
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
@@ -41,7 +46,12 @@ class StorageService {
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
+      if (fs.existsSync(s.path)) {
+        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
+      } else {
+        temp.path = Path.resolve(s.defaultPath);
+      }
+      temp.defaultPath = Path.resolve(s.defaultPath);
       return temp;
     });
   };
