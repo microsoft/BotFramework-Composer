@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { textInputLayouter } from '../../src/layouters/textInputLayouter';
 
 describe('textInputLayouter', () => {
@@ -12,8 +15,8 @@ describe('textInputLayouter', () => {
 
     const nodeKeys = Object.keys(nodeMap);
     expect(nodeKeys.length).toEqual(6);
-    expect(nodeKeys.filter(x => x.indexOf('diamond') > -1).length).toEqual(2);
-    expect(nodeKeys.filter(x => x.indexOf('Prompt') > -1).length).toEqual(3);
+    expect(nodeKeys.filter(x => x.includes('diamond')).length).toEqual(2);
+    expect(nodeKeys.filter(x => x.includes('Prompt')).length).toEqual(3);
 
     expect(nodeMap.initPrompt).toBeTruthy();
     expect(nodeMap.propertyBox).toBeTruthy();
