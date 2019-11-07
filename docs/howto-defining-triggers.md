@@ -40,7 +40,7 @@ Under the trigger, click the "+" sign to add the action node(s) you want to incl
 ![unrecognized_intent_response](./media/events_triggers/unrecognized_intent_response.gif)  
 
 ## Dialog trigger 
-This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **BeginDialog** trigger: 
+This is a trigger type we use to define actions to take when a dialog event such as **BeginDialog** is fired. Most dialogs will include an event handler (trigger) configured to respond to the **BeginDialog** event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **BeginDialog** trigger: 
 
 ### 1. Create a **BeginDialog** trigger
 On dialog navigation pane, click **New Trigger** and select **Dialog started(BeginDialog)** from the drop-down menu. Click **Submit**. 
@@ -53,7 +53,7 @@ Under this trigger, click the "+" sign and mouse over the action menu. Click **D
 ![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
 
 ## Activity trigger 
-This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Conversation started (ConversationUpdate)** trigger to handle it. Follow the steps below to define a **Conversation started (ConversationUpdate)** trigger and send a welcome message: 
+This is a type of trigger used to handle activity events such as your bot receiving a **ConversationUpdate** Activity. This indicates a new conversation begins and you use a **Conversation started (ConversationUpdate)** trigger to handle it. Follow the steps below to define a **Conversation started (ConversationUpdate)** trigger and send a welcome message: 
 
 ### 1. Create a **ConversationUpdate** trigger
 On the navigation pane on the left side, click **New Trigger** in your selected dialog and choose **Activity trigger** and then **Conversation started (ConversationUpdate)** from the drop-down menu. Click **submit**. 
