@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { PromptTab } from '@bfc/shared';
+import { element } from 'prop-types';
 
+import { InitNodeSize, LoopEdgeMarginLeft, IconBrickSize, ElementInterval } from '../constants/ElementSizes';
 import { KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
-import { InitNodeSize } from '../constants/ElementSizes';
 import { AttrNames } from '../constants/ElementAttributes';
 import { AbstractSelectorElement } from '../models/SelectorElement';
 
@@ -19,6 +20,226 @@ enum Axle {
   Y,
 }
 
+interface ElementVector {
+  distance: number;
+  assistDistance: number;
+  selectedId: string;
+}
+
+// calculate vector between element and currentElement
+function calculateElementVector(
+  currentElement: AbstractSelectorElement,
+  elements: AbstractSelectorElement[],
+  boundRectKey: BoundRect,
+  assistAxle: Axle
+): ElementVector[] {
+  const currentElementBounds = currentElement.getBoundingClientRect();
+  const elementVectors: ElementVector[] = [];
+  elements.forEach(element => {
+    const bounds: ClientRect = element.getBoundingClientRect();
+    let distance: number;
+    let assistDistance: number;
+
+    if (assistAxle === Axle.X) {
+      if (boundRectKey === BoundRect.Top) {
+        distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
+      } else {
+        distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
+      }
+      assistDistance = Math.abs(
+        currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
+      );
+    } else {
+      if (boundRectKey === BoundRect.Left) {
+        distance =
+          bounds[boundRectKey] +
+          bounds.width / 2 -
+          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
+      } else {
+        distance =
+          currentElementBounds[boundRectKey] -
+          currentElementBounds.width / 2 -
+          (bounds[boundRectKey] - bounds.width / 2);
+      }
+      assistDistance = Math.abs(
+        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
+      );
+    }
+    elementVectors.push({
+      distance,
+      assistDistance,
+      selectedId: element.getAttribute(AttrNames.SelectedId),
+    });
+  });
+  return elementVectors;
+}
+
+function locateCandidateElementsByVenctor(elements: ElementVector[], assistAxle: Axle): ElementVector[] {
+  const candidates: ElementVector[] = [
+    {
+      distance: 1000,
+      assistDistance: 100000,
+      selectedId: '',
+    },
+    {
+      distance: 1000,
+      assistDistance: 1000,
+      selectedId: '',
+    },
+    {
+      distance: 1000,
+      assistDistance: 1000,
+      selectedId: '',
+    },
+  ];
+  if (assistAxle === Axle.X) {
+    elements.forEach(element => {
+      if (
+        element.assistDistance < InitNodeSize.width / 2 &&
+        element.distance > 0 &&
+        element.distance < candidates[0].distance
+      ) {
+        candidates[0] = element;
+      }
+    });
+  } else {
+    // x is the length of the botAsk node and the exception node on x-axis
+    const x = (IconBrickSize.width + InitNodeSize.width) / 2 + LoopEdgeMarginLeft;
+
+    elements.forEach(element => {
+      // find three element who is closer to the current element
+      if (
+        element.distance > 0 &&
+        (element.distance > x &&
+          element.distance / element.assistDistance > candidates[0].distance / candidates[0].assistDistance)
+      ) {
+        candidates[0] = element;
+      }
+    });
+    elements.forEach(element => {
+      // find three element who is closer to the current element
+      if (element.distance > 0) {
+        if (element.distance <= candidates[1].distance && element.distance <= candidates[0].distance) {
+          candidates[1] = element;
+        }
+        if (
+          element.assistDistance <= candidates[2].assistDistance &&
+          element.assistDistance <= candidates[0].assistDistance
+        ) {
+          candidates[2] = element;
+        }
+      }
+    });
+  }
+  return candidates;
+}
+
+function getActionLength(element: AbstractSelectorElement): number {
+  const arrs = element.getAttribute(AttrNames.SelectedId).split('.');
+  let length = arrs.length;
+
+  arrs.forEach(action => {
+    if (action.includes('default')) {
+      length++;
+    }
+  });
+  return length;
+}
+
+function locateNearestElementBySchema(
+  candidateElements: AbstractSelectorElement[],
+  currentElement: AbstractSelectorElement,
+  assistAxle: Axle,
+  boundRectKey: BoundRect
+): AbstractSelectorElement {
+  let neareastElement: AbstractSelectorElement = currentElement;
+
+  if (assistAxle === Axle.X) {
+    // prompt element with OTHER tab:
+    // moveUp to bot_ask tab
+    // moveDown: stay focus on original element
+    if (currentElement.getAttribute(AttrNames.Tab) === PromptTab.OTHER) {
+      if (boundRectKey === BoundRect.Bottom) {
+        neareastElement = candidateElements.find(
+          ele =>
+            ele.getAttribute(AttrNames.SelectedId) ===
+            `${currentElement.getAttribute(AttrNames.FocusedId)}${PromptTab.BOT_ASKS}`
+        ) as AbstractSelectorElement;
+      } else {
+        neareastElement = currentElement;
+      }
+    } else {
+      neareastElement = candidateElements[0];
+    }
+  } else {
+    const currentElementIdArrs = currentElement.getAttribute(AttrNames.SelectedId).split('.');
+    let maxSamePath = 0;
+    let samePathCount = 0;
+    let samePath: string = currentElementIdArrs[0];
+    let eleSelectedId = '';
+    let eleActionLength = 0;
+
+    candidateElements.forEach(ele => {
+      samePath = currentElementIdArrs[0];
+      samePathCount = 0;
+      eleSelectedId = ele.getAttribute(AttrNames.SelectedId);
+      eleActionLength = getActionLength(ele);
+      for (let i = 1; i < currentElementIdArrs.length; i++) {
+        if (eleSelectedId.includes(samePath)) {
+          samePath += `.${currentElementIdArrs[i]}`;
+          samePathCount++;
+        }
+      }
+
+      // If the element's selectedId includes the original element's or its selectedId has the most overlap with the original element and selectedId's length is not more than the original element's, it is the neareast element
+      // Else stay focus on the original element
+      if (!(ele.getAttribute(AttrNames.Tab) === PromptTab.OTHER && !currentElement.getAttribute(AttrNames.Tab))) {
+        if (samePathCount > maxSamePath) {
+          neareastElement = ele;
+          maxSamePath = samePathCount;
+        } else if (samePathCount === maxSamePath) {
+          if (
+            eleActionLength < getActionLength(neareastElement) ||
+            (eleActionLength > getActionLength(neareastElement) && eleActionLength <= getActionLength(currentElement))
+          ) {
+            neareastElement = ele;
+            maxSamePath = samePathCount;
+          } else {
+            const eleActionArr = eleSelectedId.split('.');
+            const nearElementActionArr = neareastElement.getAttribute(AttrNames.SelectedId).split('.');
+            const currentElementDifferentActionIndex = Number(
+              currentElementIdArrs[maxSamePath].substring(
+                currentElementIdArrs[maxSamePath].indexOf('[') + 1,
+                currentElementIdArrs[maxSamePath].indexOf(']')
+              )
+            );
+            const eleDifferentActionIndex = Number(
+              eleActionArr[maxSamePath].substring(
+                eleActionArr[maxSamePath].indexOf('[') + 1,
+                eleActionArr[maxSamePath].indexOf(']')
+              )
+            );
+            const neareastElementDifferentActionIndex = Number(
+              nearElementActionArr[maxSamePath].substring(
+                nearElementActionArr[maxSamePath].indexOf('[') + 1,
+                nearElementActionArr[maxSamePath].indexOf(']')
+              )
+            );
+
+            if (
+              Math.abs(currentElementDifferentActionIndex - eleDifferentActionIndex) <
+              Math.abs(currentElementDifferentActionIndex - neareastElementDifferentActionIndex)
+            ) {
+              neareastElement = ele;
+              maxSamePath = samePathCount;
+            }
+          }
+        }
+      }
+    });
+  }
+  return neareastElement;
+}
 /**
  *
  * @param currentElement current element
@@ -34,154 +255,20 @@ function locateNearestElement(
   assistAxle: Axle,
   filterAttrs?: AttrNames[]
 ): AbstractSelectorElement {
-  let neareastElement: AbstractSelectorElement = currentElement;
-  const neareastElements: AbstractSelectorElement[] = [];
-  let minDistance = 10000;
-  let distance = minDistance;
-  const elementCandidates =
-    filterAttrs && filterAttrs.length
-      ? elements.filter(el => filterAttrs.find(attr => !!el.getAttribute(attr)))
-      : elements;
-  const currentElementBounds = currentElement.getBoundingClientRect();
-  let bounds: ClientRect;
-  let assistMinDistance = 10000;
-  let assistDistance;
+  // Get elements that meet the filter criteria
+  const elementArr = elements.filter(
+    element => !filterAttrs || (filterAttrs && filterAttrs.find(key => !!element.getAttribute(key)))
+  );
 
-  if (assistAxle === Axle.X) {
-    // move up & down
-    // prompt element with OTHER tab:
-    // moveUp to bot_ask tab
-    // moveDown: stay focus on original element
-    if (currentElement.getAttribute(AttrNames.Tab) === PromptTab.OTHER) {
-      if (boundRectKey === BoundRect.Bottom) {
-        return elementCandidates.find(
-          ele =>
-            ele.getAttribute(AttrNames.SelectedId) ===
-            `${currentElement.getAttribute(AttrNames.FocusedId)}${PromptTab.BOT_ASKS}`
-        ) as AbstractSelectorElement;
-      } else {
-        return currentElement;
-      }
-    }
-    elementCandidates.forEach(element => {
-      bounds = element.getBoundingClientRect();
+  // Calculate element's vector and choose candidate elements by comparing  elements' position
+  const elementVectors = calculateElementVector(currentElement, elementArr, boundRectKey, assistAxle);
+  const candidateElementVenctors = locateCandidateElementsByVenctor(elementVectors, assistAxle);
+  const candidateElements = elementArr.filter(element =>
+    candidateElementVenctors.find(venctor => venctor.selectedId === element.getAttribute(AttrNames.SelectedId))
+  );
 
-      assistDistance = Math.abs(
-        currentElementBounds.left + currentElementBounds.width / 2 - (bounds.left + bounds.width / 2)
-      );
-      if (boundRectKey === BoundRect.Top) {
-        distance = bounds[boundRectKey] - currentElementBounds[boundRectKey];
-      } else {
-        distance = currentElementBounds[boundRectKey] - bounds[boundRectKey];
-      }
-      if (assistDistance < InitNodeSize.width / 2 && distance > 0 && distance < minDistance) {
-        neareastElement = element;
-        minDistance = distance;
-      }
-    });
-
-    // If neareastElement is prompt node with exception tab and original node is not a prompt node, then stay focus on original element
-    if (
-      neareastElement.getAttribute(AttrNames.Tab) === PromptTab.OTHER &&
-      !currentElement.getAttribute(AttrNames.Tab)
-    ) {
-      return currentElement;
-    }
-  } else {
-    // move left & right
-    elementCandidates.forEach(element => {
-      bounds = element.getBoundingClientRect();
-
-      if (boundRectKey === BoundRect.Left) {
-        distance =
-          bounds[boundRectKey] +
-          bounds.width / 2 -
-          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
-      } else {
-        distance =
-          currentElementBounds[boundRectKey] -
-          currentElementBounds.width / 2 -
-          (bounds[boundRectKey] - bounds.width / 2);
-      }
-      assistDistance = Math.abs(
-        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
-      );
-      // find three element who is closer to the current element
-      if (distance > 0 && distance <= minDistance && assistDistance <= assistMinDistance) {
-        neareastElements[0] = element;
-        minDistance = distance;
-        assistMinDistance = assistDistance;
-      }
-    });
-
-    let secondMinDistance = 1000;
-    let secondAssistMinDistance = 1000;
-    elementCandidates.forEach(element => {
-      bounds = element.getBoundingClientRect();
-
-      if (boundRectKey === BoundRect.Left) {
-        distance =
-          bounds[boundRectKey] +
-          bounds.width / 2 -
-          (currentElementBounds[boundRectKey] + currentElementBounds.width / 2);
-      } else {
-        distance =
-          currentElementBounds[boundRectKey] -
-          currentElementBounds.width / 2 -
-          (bounds[boundRectKey] - bounds.width / 2);
-      }
-      assistDistance = Math.abs(
-        currentElementBounds.top + currentElementBounds.height / 2 - (bounds.top + bounds.height / 2)
-      );
-      // find three element who is closer to the current element
-      if (distance > 0) {
-        if (distance <= secondMinDistance && distance > minDistance) {
-          neareastElements[1] = element;
-          secondMinDistance = distance;
-        }
-        if (assistDistance <= secondAssistMinDistance && assistDistance > assistMinDistance) {
-          neareastElements[2] = element;
-          secondAssistMinDistance = assistDistance;
-        }
-      }
-    });
-    const currentElementIdArrs = currentElement.getAttribute(AttrNames.SelectedId).split('.');
-    let maxSamePath = 0;
-    let samePathCount = 0;
-    let samePath: string = currentElementIdArrs[0];
-    let eleSelectedId = '';
-
-    neareastElements.forEach(ele => {
-      samePath = currentElementIdArrs[0];
-      samePathCount = 0;
-      eleSelectedId = ele.getAttribute(AttrNames.SelectedId);
-      for (let i = 1; i < currentElementIdArrs.length; i++) {
-        if (eleSelectedId.includes(samePath)) {
-          samePath += `.${currentElementIdArrs[i]}`;
-          samePathCount++;
-        }
-      }
-
-      // calculate switchCondition default branch length
-      let currentElementActionLength = currentElementIdArrs.length;
-      currentElementIdArrs.forEach(action => {
-        if (action.includes('default')) {
-          currentElementActionLength++;
-        }
-      });
-      // If the element's selectedId includes the original element's or its selectedId has the most overlap with the original element and selectedId's length is not more than the original element's, it is the neareast element
-      // Else stay focus on the original element
-      if (
-        samePathCount > maxSamePath &&
-        !(ele.getAttribute(AttrNames.Tab) === PromptTab.OTHER && !currentElement.getAttribute(AttrNames.Tab)) &&
-        (eleSelectedId.split('.').length <= currentElementActionLength ||
-          eleSelectedId.includes(currentElementIdArrs.join('.')))
-      ) {
-        neareastElement = ele;
-        maxSamePath = samePathCount;
-      }
-    });
-  }
+  // Choose the neareastElement by schema
+  const neareastElement = locateNearestElementBySchema(candidateElements, currentElement, assistAxle, boundRectKey);
 
   return neareastElement;
 }
@@ -323,6 +410,8 @@ export function moveCursor(
   );
   if (!currentElement) return { selected: id, focused: undefined };
   let element: AbstractSelectorElement = currentElement;
+
+  // tab move or arrow move
   switch (command) {
     case KeyboardCommandTypes.Cursor.MovePrevious:
     case KeyboardCommandTypes.Cursor.MoveNext:
