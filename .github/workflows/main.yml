@@ -1,6 +1,12 @@
 name: Composer CI
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, reopend, synchronize]
+  push:
+    branches:
+      - master
+      - stable
 
 jobs:
   ci:
