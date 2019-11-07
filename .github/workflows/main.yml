@@ -10,6 +10,7 @@ on:
 
 jobs:
   ci:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -49,6 +50,7 @@ jobs:
           COVERALLS_GIT_COMMIT: ${{ github.head_sha }}
 
   e2e:
+    name: E2E Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -84,6 +86,7 @@ jobs:
           path: Composer/cypress/screenshots
 
   botproject:
+    Name: BotProject
     runs-on: windows-latest
     steps:
       - name: Checkout
