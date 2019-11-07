@@ -86,7 +86,7 @@ jobs:
           path: Composer/cypress/screenshots
 
   botproject:
-    Name: BotProject
+    name: BotProject
     runs-on: windows-latest
     steps:
       - name: Checkout
