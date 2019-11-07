@@ -1,24 +1,19 @@
+/* eslint-disable prettier/prettier */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  createTheme,
-  IStyleFunctionOrObject,
-  ITeachingBubbleStyleProps,
-  ITeachingBubbleStyles,
-  ITheme,
-} from 'office-ui-fabric-react';
+import { createTheme, ITeachingBubbleStyles, ITheme } from 'office-ui-fabric-react';
 
 import { palette } from '../palette';
 
 export const teachingBubbleTheme: ITheme = createTheme({
   defaultFontStyle: {
-    color: '#333333',
+    color: palette.white,
   },
   palette,
 });
 
-export const teachingBubbleStyles: IStyleFunctionOrObject<ITeachingBubbleStyleProps, ITeachingBubbleStyles> = {
+export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
   footer: {
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',

@@ -2,60 +2,61 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme/lib/fluent/FluentColors';
 
-export const content = css`
+export const buttonStyle = css`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+`;
+
+export const contentStyle = css`
   padding: 15px;
+`;
 
-  .footer {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 20px;
-    min-height: 40px;
-  }
+export const headerStyle = css`
+  font-weight: bold;
+  padding-bottom: 10px;
+  text-align: center;
 
-  .header {
-    font-weight: bold;
-    padding-bottom: 10px;
-    text-align: center;
-
-    img {
-      height: 200px;
-      padding: 10px;
-    }
-
-    .buttons {
-      position: absolute;
-      right: 0px;
-      top: 0px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-    }
-
-    .title {
-      font-size: 24px;
-    }
-
-    .top {
-      position: relative;
-    }
+  img {
+    height: 200px;
+    padding: 10px;
   }
 `;
 
-export const status = css`
+export const footerStyle = css`
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  min-height: 40px;
+`;
+
+export const statusStyle = css`
   padding: 5px 0;
 
   i {
-    color: #0078d4;
+    color: ${SharedColors.cyanBlue10};
     padding-right: 10px;
   }
 
   i.completed {
-    color: #107c10;
+    color: ${SharedColors.green20};
   }
 
   span {
-    color: #767676;
+    color: ${NeutralColors.gray120};
   }
+`;
+
+export const subtitleStyle = css`
+  font-size: 16px;
+`;
+
+export const titleStyle = css`
+  font-size: 24px;
+`;
+
+export const topBarStyle = css`
+  position: relative;
 `;

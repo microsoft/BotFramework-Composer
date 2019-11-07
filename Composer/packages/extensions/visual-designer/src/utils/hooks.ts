@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
+import { debounce } from 'lodash';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
@@ -78,12 +79,9 @@ const getWindowDimensions = () => {
 
 export const useWindowDimensions = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const handleResize = useRef(debounce(() => setWindowDimensions(getWindowDimensions()), 200)).current;
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowDimensions(getWindowDimensions());
-    };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);

@@ -20,7 +20,7 @@ context('onboarding', () => {
     cy.wait(2000);
   });
 
-  it('can walk through steps', () => {
+  it('walk through product tour teaching bubbles', () => {
     cy.getByTestId('onboardingNextSet', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();
     cy.getByTestId('onboardingNext', { force: true }).click();

@@ -7,7 +7,11 @@ import { globalHistory } from '@reach/router';
 export const useLocation = () => {
   const { location, navigate } = globalHistory;
   const [state, setState] = useState({ location, navigate });
-  useEffect(() => globalHistory.listen(({ location }) => setState(state => ({ ...state, location }))), []);
+
+  useEffect(() => {
+    const removeListener = globalHistory.listen(({ location }) => setState(state => ({ ...state, location })));
+    return removeListener;
+  }, []);
 
   return state;
 };

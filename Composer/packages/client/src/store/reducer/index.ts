@@ -330,4 +330,4 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
-} as { [type in ActionTypes]: ReducerFunc });
+});

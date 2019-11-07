@@ -66,7 +66,7 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
         y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
       },
     });
-  }, []);
+  }, [width]);
 
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>

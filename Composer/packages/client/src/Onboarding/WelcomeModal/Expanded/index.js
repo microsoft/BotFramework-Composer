@@ -8,16 +8,25 @@ import { IconButton, PrimaryButton } from 'office-ui-fabric-react';
 
 import OnboardingContext from '../../context';
 
-import { content, status } from './styles';
+import {
+  buttonStyle,
+  contentStyle,
+  headerStyle,
+  footerStyle,
+  statusStyle,
+  subtitleStyle,
+  titleStyle,
+  topBarStyle,
+} from './styles';
 import welcomeImage from './welcome.png';
 
 const StepStatus = ({ isComplete, steps = 0, title }) => (
-  <div css={status}>
+  <div css={statusStyle}>
     <Icon className={isComplete && 'completed'} iconName={isComplete ? 'SkypeCircleCheck' : 'NavigateForward'} />
-    {`${title} `}
+    {title}
     {!!steps && (
       <span>
-        ({steps} {steps > 1 ? formatMessage('tips') : formatMessage('tip')})
+        &nbsp;({steps} {steps > 1 ? formatMessage('tips') : formatMessage('tip')})
       </span>
     )}
   </div>
@@ -30,17 +39,17 @@ const WelcomeModal = () => {
   } = useContext(OnboardingContext);
 
   return (
-    <div css={content}>
-      <div className="header">
-        <div className="top">
-          <div className="title">{formatMessage('Welcome!')}</div>
-          <div className="buttons">
+    <div css={contentStyle}>
+      <div css={headerStyle}>
+        <div css={topBarStyle}>
+          <div css={titleStyle}>{formatMessage('Welcome!')}</div>
+          <div css={buttonStyle}>
             <IconButton iconProps={{ iconName: 'ChromeMinimize' }} onClick={toggleMinimized} title="Collapse" />
             <IconButton iconProps={{ iconName: 'ChromeClose' }} onClick={exit} title="Close" />
           </div>
         </div>
         <img src={welcomeImage} alt="Welcome" />
-        <div className="subtitle">{formatMessage('Your bot creation journey on Composer')}</div>
+        <div css={subtitleStyle}>{formatMessage('Your bot creation journey on Composer')}</div>
       </div>
       <div>
         {stepSets.map(({ steps: { length }, title }, index) => (
@@ -52,9 +61,9 @@ const WelcomeModal = () => {
           />
         ))}
       </div>
-      <div className="footer">
+      <div css={footerStyle}>
         {!~currentStep && (
-          <div className="buttons">
+          <div>
             {currentSet + 1 < stepSets.length && (
               <PrimaryButton data-testid="onboardingNextSet" onClick={nextSet} text={stepSets[currentSet + 1].title} />
             )}

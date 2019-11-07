@@ -61,7 +61,9 @@ const Onboarding: React.FC = () => {
 
     setMinimized(!!~currentStep);
 
-    currentSet > -1 && currentSet < stepSets.length && onboardingState.setCurrentSet(stepSets[currentSet].id);
+    if (currentSet > -1 && currentSet < stepSets.length) {
+      onboardingState.setCurrentSet(stepSets[currentSet].id);
+    }
   }, [currentSet, currentStep, setTeachingBubble]);
 
   useEffect(() => {
