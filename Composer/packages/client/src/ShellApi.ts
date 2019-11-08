@@ -56,6 +56,7 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
+
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -105,6 +106,7 @@ export const ShellApi: React.FC = () => {
     });
     apiClient.registerApi('undo', actions.undo);
     apiClient.registerApi('redo', actions.redo);
+    apiClient.registerApi('addCoachMarkPosition', actions.onboardingAddCoachMarkRef);
 
     return () => {
       apiClient.disconnect();
