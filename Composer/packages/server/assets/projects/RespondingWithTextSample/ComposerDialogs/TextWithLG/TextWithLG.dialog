@@ -24,5 +24,5 @@
     }
   ],
   "generator": "common.lg",
-  "$schema": "../../app.schema"
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

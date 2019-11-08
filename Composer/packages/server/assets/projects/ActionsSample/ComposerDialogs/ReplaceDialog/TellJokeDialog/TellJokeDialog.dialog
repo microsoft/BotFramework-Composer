@@ -4,14 +4,13 @@
     "id": "873848"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "513313"
       },
-       
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
