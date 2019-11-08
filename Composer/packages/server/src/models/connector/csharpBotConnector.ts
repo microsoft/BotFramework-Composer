@@ -55,11 +55,8 @@ export class CSharpBotConnector implements IBotConnector {
       throw new Error('Please publish your Luis models');
     }
 
-    if (luisConfig) {
-      form.append(
-        'endpointKey',
-        luisConfig.endpointKey && luisConfig.endpointKey !== '' ? luisConfig.endpointKey : luisConfig.authoringKey
-      );
+    if (luisConfig && (luisConfig.endpointKey || luisConfig.authoringKey)) {
+      form.append('endpointKey', luisConfig.endpointKey || luisConfig.endpointKey);
     }
 
     config = {
