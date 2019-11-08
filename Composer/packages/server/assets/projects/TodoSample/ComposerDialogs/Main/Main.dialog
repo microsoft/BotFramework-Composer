@@ -48,7 +48,7 @@
       "$designer": {
         "id": "376720"
       },
-      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -165,5 +165,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

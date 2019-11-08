@@ -1,5 +1,5 @@
 {
-  "$schema": "../../app.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "description": "<Fill in the description of your bot here>"
@@ -13,6 +13,6 @@
         "id": "376720"
       },
       "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'"
-  }
+    }
   ]
 }
