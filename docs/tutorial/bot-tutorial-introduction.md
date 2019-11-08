@@ -93,7 +93,7 @@ Next, let's temporarily disable the recognizer for the main dialog. We will get 
 
    > Dialogs in Composer support two different recognizer types - LUIS, Regex. Unless you need intent classification or entity extraction, we can remove recognizer by setting it to `None`.
    
-   ![recognizer](../media/tutorial-weatherbot/01/recognizer-none.png)
+   ![recognizer](../media/tutorial-weatherbot/01/recognizer-none.gif)
 
 ## Start your bot and test it
 
