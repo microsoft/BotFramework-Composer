@@ -5,7 +5,6 @@ import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Match, Redirect } from '@reach/router';
 
 import DesignPage from './pages/design';
-import { Home } from './pages/home';
 import { About } from './pages/about';
 import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
@@ -14,6 +13,7 @@ import { StoreContext } from './store';
 import { resolveToBasePath } from './utils/fileUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
+const Home = React.lazy(() => import('./pages/home'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
