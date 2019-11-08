@@ -1,6 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/master/Composer/packages/server/schemas/sdk.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "EmitAnEvent",
     "description": "This is to emit an event.",

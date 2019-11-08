@@ -85,6 +85,6 @@
       "intent": "BuySurface"
     }
   ],
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/master/Composer/packages/server/schemas/sdk.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "generator": "common.lg"
 }
