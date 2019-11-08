@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';

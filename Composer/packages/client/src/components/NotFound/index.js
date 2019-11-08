@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 
 import { BASEPATH } from '../../constants';

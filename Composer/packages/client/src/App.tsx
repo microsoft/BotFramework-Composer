@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { forwardRef, useContext, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { forwardRef, useContext, useState, Fragment } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -116,7 +118,7 @@ export const App: React.FC = () => {
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
-    <>
+    <Fragment>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -180,6 +182,6 @@ export const App: React.FC = () => {
         </div>
         <Onboarding />
       </div>
-    </>
+    </Fragment>
   );
 };

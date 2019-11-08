@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useContext, useRef, useEffect, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { isEmpty, get } from 'lodash';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';

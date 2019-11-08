@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useCallback, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';

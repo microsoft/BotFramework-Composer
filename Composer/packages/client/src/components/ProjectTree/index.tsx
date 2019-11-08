@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import {
   ActionButton,
   GroupedList,
@@ -11,7 +14,6 @@ import {
   IIconProps,
   SearchBox,
 } from 'office-ui-fabric-react';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';

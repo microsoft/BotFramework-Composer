@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import {
   ActionButton,

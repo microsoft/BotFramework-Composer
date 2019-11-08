@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';

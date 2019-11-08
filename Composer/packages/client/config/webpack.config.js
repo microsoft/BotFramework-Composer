@@ -234,12 +234,7 @@ module.exports = function(webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/290
       // `web` extension prefixes have been added for better support
       // for React Native Web.
-      extensions: paths.moduleFileExtensions.map(ext => `.${ext}`).filter(ext => useTypeScript || !ext.includes('ts')),
-      alias: {
-        // Support React Native Web
-        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-        'react-native': 'react-native-web',
-      },
+      extensions: paths.moduleFileExtensions.map(ext => `.${ext}`),
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
         // guards against forgotten dependencies and such.
@@ -298,10 +293,18 @@ module.exports = function(webpackEnv) {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
-            // Process application JS with Babel.
-            // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.tsx?$/,
+              // include: paths.appSrc,
+              loader: require.resolve('ts-loader'),
+              options: PnpWebpackPlugin.tsLoaderOptions({
+                transpileOnly: isEnvDevelopment,
+              }),
+            },
+            // Process application JS with Babel.
+            // The preset includes JSX, Flow, and some ESnext features.
+            {
+              test: /\.(js|jsx)$/,
               include: paths.appSrc,
               loader: require.resolve('babel-loader'),
               options: {
@@ -330,7 +333,7 @@ module.exports = function(webpackEnv) {
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
-              test: /\.(js|mjs)$/,
+              test: /\.(js)$/,
               exclude: /@babel(?:\/|\\{1,2})runtime/,
               loader: require.resolve('babel-loader'),
               options: {
@@ -509,35 +512,6 @@ module.exports = function(webpackEnv) {
             // public/ and not a SPA route
             new RegExp('/[^/]+\\.[^/]+$'),
           ],
-        }),
-      // TypeScript type checking
-      useTypeScript &&
-        new ForkTsCheckerWebpackPlugin({
-          typescript: resolve.sync('typescript', {
-            basedir: paths.appNodeModules,
-          }),
-          async: false,
-          checkSyntacticErrors: true,
-          tsconfig: paths.appTsConfig,
-          compilerOptions: {
-            module: 'esnext',
-            moduleResolution: 'node',
-            resolveJsonModule: true,
-            isolatedModules: true,
-            noEmit: true,
-            jsx: 'preserve',
-          },
-          reportFiles: [
-            '**',
-            '!**/*.json',
-            '!**/__tests__/**',
-            '!**/?(*.)(spec|test).*',
-            '!**/src/setupProxy.*',
-            '!**/src/setupTests.*',
-          ],
-          watch: paths.appSrc,
-          silent: true,
-          formatter: typescriptFormatter,
         }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

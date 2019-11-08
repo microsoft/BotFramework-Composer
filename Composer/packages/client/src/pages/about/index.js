@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';

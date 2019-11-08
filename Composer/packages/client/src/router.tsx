@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useContext, useEffect, useRef, Suspense } from 'react';
 import { Router, Match, Redirect } from '@reach/router';
 

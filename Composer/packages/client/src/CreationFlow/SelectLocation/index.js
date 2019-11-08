@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, Fragment } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useContext, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
 

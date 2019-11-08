@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useContext, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useCallback, useContext, useState } from 'react';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
 import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
