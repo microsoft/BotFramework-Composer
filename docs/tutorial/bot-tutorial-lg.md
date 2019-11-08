@@ -1,4 +1,4 @@
-# Language generation
+# Language Generation
 
 Now that the bot can perform its basic tasks, it's time to work on the conversational UI. A good bot doesn't just do a task - it does it with style and personality.
 
