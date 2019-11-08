@@ -30,7 +30,7 @@
       "type": "node",
       "request": "attach",
       "name": "Server: Attach",
-      "port": 9229,
+      "port": 9228,
       "sourceMaps": true
     }
   ]
