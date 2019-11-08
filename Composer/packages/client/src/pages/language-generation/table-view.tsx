@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable react/display-name */
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useContext, useRef, useEffect, useState } from 'react';
-import { PropTypes } from 'prop-types';
 import { debounce, isEmpty } from 'lodash';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -14,35 +14,38 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { DialogInfo, LgFile } from '@bfc/shared';
+import { LGTemplate } from 'botbuilder-lg';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-export default function TableView(props) {
+interface TableViewProps {
+  file: LgFile;
+  activeDialog?: DialogInfo;
+  onClickEdit: (template: LGTemplate) => void;
+}
+
+const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs } = state;
   const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
-  const [templates, setTemplates] = useState([]);
+  const [templates, setTemplates] = useState<LGTemplate[]>([]);
   const listRef = useRef(null);
 
   useEffect(() => {
     if (isEmpty(lgFile)) return;
 
-    const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
-      return {
-        ...template,
-        index: templateIndex,
-      };
-    });
+    const allTemplates = lgUtil.parse(lgFile.content) as LGTemplate[];
 
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
-      const dialogsTemplates = [];
+      const dialogsTemplates: LGTemplate[] = [];
       activeDialog.lgTemplates.forEach(item => {
         const template = allTemplates.find(t => t.Name === item);
         if (template) {
@@ -141,7 +144,7 @@ export default function TableView(props) {
 
       // build usedIn map
       templates.forEach(template => {
-        templateUsedInDialogMap[template.Name] = dialogs.reduce((result, dialog) => {
+        templateUsedInDialogMap[template.Name] = dialogs.reduce<string[]>((result, dialog) => {
           if (dialog.lgTemplates.includes(template.Name)) {
             result.push(dialog.id);
           }
@@ -281,10 +284,6 @@ export default function TableView(props) {
       </ScrollablePane>
     </div>
   );
-}
-
-TableView.propTypes = {
-  file: PropTypes.object,
-  activeDialog: PropTypes.object,
-  onClickEdit: PropTypes.func,
 };
+
+export default TableView;
