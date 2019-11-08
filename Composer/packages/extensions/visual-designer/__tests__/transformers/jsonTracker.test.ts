@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { insert, deleteNode, queryNode } from '../../src/utils/jsonTracker';
 
 describe('queryNode', () => {
