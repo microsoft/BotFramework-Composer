@@ -179,3 +179,5 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     />
   );
 };
+
+export default LgEditorWidget;
