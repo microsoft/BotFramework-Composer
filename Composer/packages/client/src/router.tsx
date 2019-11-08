@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, useEffect, Suspense } from 'react';
+import React, { useContext, useEffect, useRef, Suspense } from 'react';
 import { Router, Match, Redirect } from '@reach/router';
 
-import DesignPage from './pages/design';
 import { About } from './pages/about';
 import { showDesign, data } from './styles';
 import { NotFound } from './components/NotFound';
@@ -14,6 +13,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
 const Home = React.lazy(() => import('./pages/home'));
+const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
@@ -22,6 +22,7 @@ const Routes = props => {
   const { actions } = useContext(StoreContext);
   const Content = props.component;
   const parentProps = props;
+  const shouldRenderDesignPage = useRef(false);
 
   useEffect(() => {
     actions.fetchProject();
@@ -29,26 +30,32 @@ const Routes = props => {
 
   return (
     <Match path={resolveToBasePath(BASEPATH, '/dialogs/:dialogId/*')} {...props}>
-      {({ match, navigate, location }) => (
-        <div css={data}>
-          <Content css={showDesign(match)}>
-            <DesignPage match={match} navigate={navigate} location={location} />
-          </Content>
-          {!match && (
+      {({ match, navigate, location }) => {
+        if (match) {
+          shouldRenderDesignPage.current = true;
+        }
+
+        return (
+          <div css={data}>
             <Suspense fallback={<LoadingSpinner />}>
-              <Router basepath={BASEPATH} {...parentProps}>
-                <Redirect from="/" to={resolveToBasePath(BASEPATH, 'dialogs/Main')} noThrow />
-                <SettingPage path="setting/*" />
-                <LUPage path="language-understanding/*" />
-                <LGPage path="language-generation/*" />
-                <Home path="home" />
-                <About path="about" />
-                <NotFound default />
-              </Router>
+              <Content css={showDesign(match)}>
+                {shouldRenderDesignPage.current && <DesignPage match={match} navigate={navigate} location={location} />}
+              </Content>
+              {!match && (
+                <Router basepath={BASEPATH} {...parentProps}>
+                  <Redirect from="/" to={resolveToBasePath(BASEPATH, 'dialogs/Main')} noThrow />
+                  <SettingPage path="setting/*" />
+                  <LUPage path="language-understanding/*" />
+                  <LGPage path="language-generation/*" />
+                  <Home path="home" />
+                  <About path="about" />
+                  <NotFound default />
+                </Router>
+              )}
             </Suspense>
-          )}
-        </div>
-      )}
+          </div>
+        );
+      }}
     </Match>
   );
 };
