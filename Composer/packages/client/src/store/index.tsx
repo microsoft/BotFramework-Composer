@@ -53,6 +53,10 @@ const initialState: State = {
   publishStatus: 'inactive',
   lastPublishChange: null,
   visualEditorSelection: [],
+  onboarding: {
+    complete: true,
+    coachMarkRefs: {},
+  },
   clipboardActions: [],
 };
 

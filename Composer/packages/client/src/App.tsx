@@ -17,6 +17,8 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
+import Onboarding from './Onboarding';
+
 initializeIcons(undefined, { disableWarnings: true });
 
 // eslint-disable-next-line react/display-name
@@ -176,6 +178,7 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
+        <Onboarding />
       </div>
     </>
   );
