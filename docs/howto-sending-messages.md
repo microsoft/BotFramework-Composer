@@ -71,7 +71,7 @@ Below is a screenshot of the LG with parameter example in the the [responding wi
 
 ![LG_parameter](./media/send_messages/LG_parameter.png)
 
-### Language generation composition
+### Language Generation composition
 LG composition means to compose new LG template using pre-defined LG templates. To define an LG Composition you need to define the component template(s) first and then use the pre-defined templates as building blocks to compose a new LG template. For example, you can define a **Greeting** LG template and then compose a new template named **LGComposition(user)** using the **Greeting** template. 
 
     # Greeting
@@ -87,7 +87,7 @@ Below is a screenshot of the text with LG Composition in the [responding with te
 
 ## References 
 - [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
-- [Language generation](./concept-language-generation.md)
+- [Language Generation](./concept-language-generation.md)
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
