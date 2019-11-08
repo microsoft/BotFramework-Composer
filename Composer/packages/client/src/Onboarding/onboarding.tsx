@@ -181,15 +181,15 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
       return {
         children: (
           <div>
-            {formatMessage('Click on the ')}
-            <b>{formatMessage('Start Bot ')}</b>
-            {formatMessage('button. Then you can choose to ')}
-            <b>{formatMessage('Test in Bot Framework Emulator. ')}</b>
-            {formatMessage('This will open your Emulator app.')}
+            {formatMessage(
+              "This will open your Emulator application. If you don't yet have the Bot Framework Emulator installed, you can download it "
+            )}
+            <a href="https://github.com/microsoft/BotFramework-Emulator/releases/latest">{formatMessage('here.')}</a>
           </div>
         ),
         headline: formatMessage('Test your bot'),
       };
+
     default:
       return {};
   }

@@ -7,12 +7,19 @@ import { palette } from '../palette';
 
 export const teachingBubbleTheme: ITheme = createTheme({
   defaultFontStyle: {
-    color: palette.white,
+    color: palette.themePrimary,
   },
   palette,
 });
 
 export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
+  bodyContent: {
+    selectors: {
+      a: {
+        color: palette.white,
+      },
+    },
+  },
   footer: {
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',

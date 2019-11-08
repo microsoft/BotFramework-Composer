@@ -4,10 +4,10 @@
 import { css } from '@emotion/core';
 import { IButtonStyles } from 'office-ui-fabric-react';
 
-import { palette, primaryColor } from '../../palette';
+import { palette } from '../../palette';
 
 export const content = css`
-  color: black;
+  color: ${palette.white};
   display: flex;
   padding: 10px;
 
@@ -16,16 +16,6 @@ export const content = css`
     margin-right: 40px;
   }
 `;
-
-export const modal = {
-  main: {
-    backgroundColor: primaryColor,
-    bottom: '30px',
-    paddingLeft: '15px',
-    position: 'absolute',
-    right: '20px',
-  },
-};
 
 export const buttonStyles: IButtonStyles = {
   icon: {

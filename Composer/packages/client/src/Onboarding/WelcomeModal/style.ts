@@ -3,11 +3,11 @@
 
 import { IModalStyleProps, IModalStyles, IStyleFunctionOrObject } from 'office-ui-fabric-react';
 
-const primaryColor = '#50e6ff';
+import { palette } from '../palette';
 
 export const collapsedStyles: IStyleFunctionOrObject<IModalStyleProps, IModalStyles> = {
   main: {
-    backgroundColor: primaryColor,
+    backgroundColor: palette.themePrimary,
     bottom: '30px',
     color: 'white',
     paddingLeft: '15px',
