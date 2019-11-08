@@ -37,7 +37,7 @@ Input is collected from user's with prompt types provided in the **Ask a questio
 
 ![Ask a question submenu](./media/memory/ask-a-question-menu.png)
 
-Prompts define the question to pose to the user and are set in the **Prompt** box under the **Bot Asks** tab in property panel on the left. 
+Prompts define the question to pose to the user and are set in the **Prompt** box under the **Bot Asks** tab in properties panel on the left. 
 
 ![Prompt Bot Asks](./media/memory/bot-asks.png)
 
