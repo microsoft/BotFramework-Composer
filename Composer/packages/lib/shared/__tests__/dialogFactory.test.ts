@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { seedDefaults, seedNewDialog } from '../src/dialogFactory';
 
 describe('DialogFactory', () => {

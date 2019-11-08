@@ -1,5 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "StructuredLG",
     "id": "716869"

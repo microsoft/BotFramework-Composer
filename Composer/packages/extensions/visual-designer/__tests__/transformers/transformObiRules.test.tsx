@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { transformObiRules } from '../../src/transformers/transformObiRules';
 
 test('should return safely when input null value', () => {
