@@ -188,7 +188,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             {formatMessage('This will open your Emulator app.')}
           </div>
         ),
-        headline: formatMessage('Add an intent trigger'),
+        headline: formatMessage('Test your bot'),
       };
     default:
       return {};

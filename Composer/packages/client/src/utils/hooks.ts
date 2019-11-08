@@ -8,10 +8,7 @@ export const useLocation = () => {
   const { location, navigate } = globalHistory;
   const [state, setState] = useState({ location, navigate });
 
-  useEffect(() => {
-    const removeListener = globalHistory.listen(({ location }) => setState(state => ({ ...state, location })));
-    return removeListener;
-  }, []);
+  useEffect(() => globalHistory.listen(({ location }) => setState(state => ({ ...state, location }))), []);
 
   return state;
 };

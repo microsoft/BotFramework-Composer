@@ -3,7 +3,7 @@
 
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import formatMessage from 'format-message';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import OnboardingContext from '../context';

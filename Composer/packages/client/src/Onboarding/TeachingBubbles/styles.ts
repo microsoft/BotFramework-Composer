@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
