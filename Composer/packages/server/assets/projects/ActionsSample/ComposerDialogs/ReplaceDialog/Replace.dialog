@@ -8,13 +8,11 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "JokeIntent",
-        "pattern": "(?i)joke" 
+        "pattern": "(?i)joke"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "FortuneTellerIntent",
         "pattern": "(?i)fortune|future"
@@ -85,5 +83,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

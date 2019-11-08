@@ -1,5 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "QnAMakerAction",
     "description": "An action to call QnA knowledge base.",
