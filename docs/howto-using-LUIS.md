@@ -90,7 +90,7 @@ To test your bot which you just added LUIS to, click the **Test in Emulator** bu
 - [LUIS.ai](https://www.luis.ai/home)
 - [Add natural language understanding to your bot](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-v4-luis?view=azure-bot-service-4.0&tabs=csharp)
 - [Events and triggers](./concept-events-and-triggers.md) 
-- [Language understanding](./concept-language-understanding.md)
+- [Language Understanding](./concept-language-understanding.md)
 
 ## Next 
 Learn [how to add a QnA Maker knowledge base to your bot](./how-to-add-qna-to-bot.md). 
