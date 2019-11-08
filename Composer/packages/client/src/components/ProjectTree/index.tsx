@@ -14,7 +14,7 @@ import {
   IIconProps,
   SearchBox,
 } from 'office-ui-fabric-react';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 

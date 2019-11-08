@@ -4,7 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useContext, useRef, useEffect, useState } from 'react';
-import { debounce, isEmpty } from 'lodash';
+import debounce from 'lodash.debounce';
+import isEmpty from 'lodash.isempty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 const lgStaticChecker = new StaticChecker();
 

@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { get, set } from 'lodash';
+import get from 'lodash.get';
+import set from 'lodash.set';
 import { dialogIndexer } from '@bfc/indexers/lib/dialogIndexer';
 import { SensitiveProperties } from '@bfc/shared';
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect, useContext } from 'react';
-import { toLower } from 'lodash';
+import toLower from 'lodash.tolower';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
 
