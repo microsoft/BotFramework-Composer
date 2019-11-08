@@ -35,7 +35,7 @@ const links = [
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
 
-export const SettingPage = () => {
+const SettingPage = () => {
   const [active, setActive] = useState();
 
   function onRenderLink(link) {
@@ -92,3 +92,5 @@ export const SettingPage = () => {
     </Fragment>
   );
 };
+
+export default SettingPage;
