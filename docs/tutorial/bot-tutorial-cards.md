@@ -1,6 +1,6 @@
 # Using cards
 
-You can use the language generation system to also render UI cards and button actions to user. 
+You can use the Language Generation system to also render UI cards and button actions to user. 
 
 Let's further refine the responses provided by the weather bot to include cards and button actions. 
 

@@ -117,7 +117,7 @@ Imagine a child dialog used to collect a display name for a user profile. It ask
 ![End dialog properties](./media/controlling-conversation-flow/end-this-dialog.png)
 
 ## Conditional versions of a message in LG
-In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the language generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
+In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the Language Generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
 
 For example, you can create a welcome message that is different depending on whether the `user.name` property is set or not. The message template could look something like this:
 

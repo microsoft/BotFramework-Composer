@@ -14,7 +14,7 @@ Below is a screenshot of the **Send a response** action in Composer. How to get 
 > [!NOTE] All types of triggers have the **Send a response** action component. The **ConversationUpdate** trigger is one type of trigger used here for demo purposes. 
 
 ## What to know
-In Composer, all messages that are sent back to the user are composed in the language generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) concept article. 
+In Composer, all messages that are sent back to the user are composed in the Language Generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) concept article. 
 
 The table below lists five different types of text messages provided in Composer and their respective descriptions. 
 
@@ -27,7 +27,7 @@ The table below lists five different types of text messages provided in Composer
 | LG composition    | An LG template composed with other pre-defined templates to generate a text response. |
 
 ## Define different text messages
-To send a message, you need to specify **Send a response** action and then in the the language generation editor you can author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+To send a message, you need to specify **Send a response** action and then in the the Language Generation editor you can author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
 
 ### Simple text
 To define a simple text message, use a "-" before the text that your want your bot to respond to users. 

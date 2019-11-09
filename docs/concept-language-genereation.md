@@ -1,5 +1,5 @@
 # Language Generation
-Language Generation (LG) enables you to define multiple variations on a phrase, execute simple expressions based on context, and refer to conversational memory. At the core of language generation lies template expansion and entity substitution. You can provide one-of variation for expansion as well as conditionally expand a template. The output from language generation can be a simple text string or multi-line response or a complex object payload that a layer above language generation will use to construct a complete [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). Bot Framework Composer natively supports language generation to produce output activities using the LG templating system. 
+Language Generation (LG) enables you to define multiple variations on a phrase, execute simple expressions based on context, and refer to conversational memory. At the core of Language Generation lies template expansion and entity substitution. You can provide one-of variation for expansion as well as conditionally expand a template. The output from language generation can be a simple text string or multi-line response or a complex object payload that a layer above language generation will use to construct a complete [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). Bot Framework Composer natively supports language generation to produce output activities using the LG templating system. 
 
 You can use Language Generation to:
 - achieve a coherent personality, tone of voice for your bot
@@ -42,7 +42,7 @@ Below is an example of a simple [`.lg` template](https://github.com/microsoft/Bo
 <!-- 
 ## External references 
 
-For organization purposes and to help with re-usability, you might want to break the language generation templates into separate files and refer them from one another. In order to help with this scenario, you can use markdown-style links to import templates defined in another file. For example, `[description text](file/uri path)`.
+For organization purposes and to help with re-usability, you might want to break the Language Generation templates into separate files and refer them from one another. In order to help with this scenario, you can use markdown-style links to import templates defined in another file. For example, `[description text](file/uri path)`.
 
 Note: All templates defined in the target file will be pulled in, so ensure that your template names are unique across files being pulled in. -->
  

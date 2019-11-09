@@ -61,7 +61,7 @@ Composer enables developers to create language training data in the dialog editi
 
 Follow the steps to define a trigger with LUIS recognizer:
 1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
-2. In the language understanding editor, create **intents** with sample utterances and follow [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
+2. In the Language Understanding editor, create **intents** with sample utterances and follow [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 
 >[!NOTE]
 > Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You will need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
@@ -94,7 +94,7 @@ In the example below, a similar book-flight intent is defined. However, this wil
 
 Follow the steps to define triggers with [Regular Expressions](https://regexr.com/) recognizer: 
 1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
-2. In the language understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
+2. In the Language Understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
 
 ![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
 

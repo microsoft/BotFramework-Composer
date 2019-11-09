@@ -146,9 +146,9 @@ When using **For each** and **For each page** loops, properties also come into p
 
 ### Memory in LG
 
-One of the most powerful features of the Bot Framework system is language generation - particularly when used alongside properties pulled from memory.
+One of the most powerful features of the Bot Framework system is Language Generation - particularly when used alongside properties pulled from memory.
 You can refer to properties in the text of any message - including prompts.
-Properties can also be referred to in LG templates and functions - [learn more about the full scope of language generation system in this section.](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+Properties can also be referred to in LG templates and functions - [learn more about the full scope of Language Generation system in this section.](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
 
 To use the value of a property from memory inside a message, wrap the property reference in curly brackets: `{user.profile.name}`
 

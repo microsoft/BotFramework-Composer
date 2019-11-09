@@ -18,7 +18,7 @@ In **Intent** trigger you define actions to take when an intent is recognized (a
 
 If you have not defined any intents, the **Intent** trigger sub-menu will show "No intents configured for this dialog" and there is no intent to configure. The basic steps to define an **Intent** trigger are as follows:
 - select a recognizer type in your selected dialog
-- define intent(s) in language understanding editor
+- define intent(s) in Language Understanding editor
 - create **Intent** triggers to handle pre-defined intents (one trigger handles one intent)
 - define actions in the trigger 
 
@@ -61,7 +61,7 @@ On the navigation pane on the left side, click **New Trigger** in your selected 
 ![conversationupdate](./media/events_triggers/conversationupdate.png)
 
 ### 2. Add an action node to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu then click **Send a response**. In the language generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+Under this trigger, click the "+" sign and mouse over the action menu then click **Send a response**. In the Language Generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
 
 ![welcome](./media/events_triggers/welcome.gif)
 
@@ -86,7 +86,7 @@ On the properties panel on the right, fill in the name of you pre-defined event 
 
 ![event_name_greeting](./media/events_triggers/event_name_greeting.png)
 
-You can add any action to this trigger. Under the trigger, click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the language generation editor as you want. 
+You can add any action to this trigger. Under the trigger, click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the Language Generation editor as you want. 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.gif)
 

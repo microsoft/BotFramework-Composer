@@ -36,7 +36,7 @@ Click the `Restart conversation` link in Emulator's top bar. You might see anoth
 
 Currently, the bot reports the weather in a very robotic manner: The weather is Clouds and it is 75&deg;.
 
-Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the language generation system: conditional messages, and parameterized messages.
+Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the Language Generation system: conditional messages, and parameterized messages.
 
 5. Navigate to the `Bot Says` tab by clicking the bot icon on the far left of the screen.
 

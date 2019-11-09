@@ -1,11 +1,11 @@
 # Build a weather bot
 In this tutorial, you will build a weather bot using Bot Framework Composer. We'll start simple and gradullay introduce sophistication. Here are the areas we'll cover: 
 
-- Create a new Bot
+- Create a new bot
 - Author a new dialog
 - Add global help, cancel handling
-- Use language generation to power your bot's responses
-- Use Adaptive cards
+- Use Language Generation to power your bot's responses
+- Use Adaptive Cards
 - Handling interruptions in the conversation flow
 - Add multiple dialogs to help your bot fulfill more than one scenario 
 

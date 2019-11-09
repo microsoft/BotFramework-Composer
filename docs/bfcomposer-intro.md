@@ -5,7 +5,7 @@ Bot Framework Composer is an integrated development tool for developers and mult
 
  Within this tool, you'll find everything you need to build a sophisticated conversational experience:
 * A visual dialog editor 
-* Tools to train and manage a language understanding component
+* Tools to train and manage a Language Understanding component
 * A powerful language generation and templating system
 * A ready-to-use bot runtime executable 
 

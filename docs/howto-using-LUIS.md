@@ -10,12 +10,12 @@ Language Understanding Intelligent Service ([LUIS](https://www.luis.ai/home)) is
 ## How to add LUIS 
 To determine user's intent, in Composer you define the **Intent** trigger, and then specify the actions to take when an intent is recognized (and optionally **entities**). For more details please read the [events and triggers](./concept-events-and-triggers.md) article. 
 
-Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of language understanding data authored in [.lu format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
+Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of Language Understanding data authored in [.lu format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
 
-In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author language understanding training data, publish your language understanding (LU) data, and test them in emulator. 
+In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author Language Understanding training data, publish your Language Understanding (LU) data, and test them in emulator. 
 
 ### Set LUIS as recognizer 
-In Composer, each dialog can have one type of recognizer and might contain a set of language understanding training data. To add LUIS to your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. You need to do the following two things:
+In Composer, each dialog can have one type of recognizer and might contain a set of Language Understanding training data. To add LUIS to your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. You need to do the following two things:
 
 1. On the left side navigation pane, select the dialog you want to set LUIS recognizer.
 
@@ -25,8 +25,8 @@ In Composer, each dialog can have one type of recognizer and might contain a set
 
 ![luis_recognizer](./media/add_luis/luis_recognizer.png)
 
-### Author language understanding (LU) content
-Compose your language understanding training data in the LU editor. The training data should follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) and is usually composed of two parts: intents and example utterances. You can author as many intents as you want to include in the specific dialog. The following screenshot shows **Greeting** and **CheckWeather** intents with the matching utterances.
+### Author Language Understanding content
+Compose your Language Understanding (LU) training data in the LU editor. The training data should follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) and is usually composed of two parts: intents and example utterances. You can author as many intents as you want to include in the specific dialog. The following screenshot shows **Greeting** and **CheckWeather** intents with the matching utterances.
 
 ![author_lu](./media/add_luis/author_lu.png)
 
@@ -64,14 +64,14 @@ To send a response message, please do the following three steps:
 
 ![send_response_message](./media/add_luis/send_response_message.png)
 
-The screenshot below shows how to author a response message "This is a Greeting intent!" in the language generation editor. 
+The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor. 
 
 ![greeting_message](./media/add_luis/greeting_message.png)
 
 You can add your desired action to each **Intent** trigger. 
 
 ### Publish 
-When you finish defining all the triggers and language understanding training data, you can publish your language understanding content from Composer to LUIS. 
+When you finish defining all the triggers and Language Understanding training data, you can publish your Language Understanding content from Composer to LUIS. 
 To publish the LU content, please do the following steps: 
 1. click **Start Bot** on the upper right corner of your Composer
 2. fill in your LUIS authoring key and 

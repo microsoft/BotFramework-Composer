@@ -17,7 +17,7 @@ Composer currently supports the following types of rich cards. The definition an
 | Adaptive Card  | A customizable card that can contain any combination of text, speech, images, buttons, and input fields.                                                              |
 
 ## Structured response template 
-In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [language generation](./concept-language-generation.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
+In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [Language Generation](./concept-language-generation.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
 
 A typical structured response template for cards consists of the following parts: 
 

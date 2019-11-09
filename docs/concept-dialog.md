@@ -76,7 +76,7 @@ After that, you will see an empty dialog you created on the navigation pane. Whe
 
 ![new_weather_dialog](./media/dialog/new_weather_dialog.png)
 
-2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the language generation editor put a sentence: "The weather dialog is called with success!"
+2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the Language Generation editor put a sentence: "The weather dialog is called with success!"
 
 ![send_response](./media/dialog/send_response.gif)
 
