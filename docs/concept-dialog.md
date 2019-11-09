@@ -1,37 +1,38 @@
 # Dialogs 
-Modern conversational software is comprised of many components, including programming code, custom business logic, cloud APIs, training data for language processing systems and perhaps most importantly, the actual content used in conversations with the bot's end users. With Bot Framework Composer, all of these pieces are integrated with one another into a single interface for constructing blocks of bot functionality called **Dialogs**. ([SDK Docs: Bot Framework Dialogs](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0))
+Modern conversational software is comprised of many components, including programming code, custom business logic, cloud APIs, training data for language processing systems and perhaps most importantly, the actual content used in conversations with the bot's end users. With Composer, all of these pieces are integrated with one another into a single interface for constructing blocks of bot functionality called **Dialogs**. ([SDK Docs: Bot Framework Dialogs](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0))
 
 Each dialog represents a piece of the bot's functionality. They contain instructions for how the bot will react to input. Simple bots will have a few dialogs. Complex bots may have dozens or hundreds of individual dialogs. 
 
 In Composer, dialogs are functional components offered in a visual interface and do not require you to write code. The dialog system supports building a pluggable and extensible model that integrates building blocks of bot functionality. Dialogs help users focus on conversation modeling rather than the mechanics of dialog management.
 
->[!NOTE]
-> The dialog system in Composer is based on [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
- 
 ## Types of dialogs  
 There are two types of dialogs in Composer: main dialog and child dialog. Below is a screenshot of a main dialog named `MyBot.Main` and two child dialogs named `Weather` and `Greeting`. 
 
 ![main_child_dialog](./media/dialog/main_child_dialog.png)
 
-You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog but can have multiple child dialogs or no child dialog. Read the "Create a dialog" section to create a dialog in Composer. 
+You create a dialog in Composer to manage a conversation objective. Main dialog is initialized by default when you create a new bot and it has a **.Main** file extension. Each bot has one main dialog and can have multiple child dialogs or no child dialogs. Read the [Add a dialog](./tutorial/bot-tutorial-add-dialog.md) section to create a dialog in Composer. 
 
 At runtime, the main dialog is called into action and becomes the active dialog, triggering event handlers with pre-defined actions. As the conversation flows, a child dialog can be called by a main dialog, and vice versa. Different child dialogs can be called with each other as well. 
 
 ## Anatomy of a dialog 
-The following [diagram](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/Assets/adaptive-dialog-anatomy.png) shows the anatomy of a dialog in Composer. Please note that dialogs in Composer are based on [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
+The following diagram shows the anatomy of a dialog in Composer. Note that dialogs in Composer are based on [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme). 
 
 ![adaptive-dialog-anatomy](./media/dialog/adaptive-dialog-anatomy.png)
 
 ### Recognizer
-When a dialog is called into action, its **recognizer** will start to process the message and try to extract the primary **intent** and any **entity values** the message includes. After processing the message, both the **intent** and **entity values** are passed onto the dialog's triggers (event handlers). Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can _only_ choose one type of recognizer for each dialog. A dialog can have no recognizer. Below is a screenshot of recognizers supported in Composer. 
+When a dialog is called into action its **recognizer** will start to process the message and try to extract the primary **intent** and any **entity values** the message includes. After processing the message, both the **intent** and **entity values** are passed onto the dialog's triggers. Composer currently supports two recognizers: the LUIS recognizer (default) and the Regular Expression recognizer. You can choose only one recognizer per dialog, and a dialog can have no recognizer choosing the `None` type. Below is a screenshot of recognizers supported in Composer. 
 
 ![recognizer](./media/dialog/recognizer.png)
 
-> [!NOTE]
-> **Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an **intent** (or extracts **entities**) from a given user utterance. **Recognizer** of a dialog is not always called into play when a dialog is called. It depends on how you design the dialog system.   
+---
+**NOTE**
+
+**Recognizers** provide the functionality of understanding and extracting meaningful pieces of information from a user's input. All recognizers emit events when the recognizer picks up an **intent** (or extracts **entities**) from a given user utterance. A **recognizer** of a dialog is not always called into play when a dialog is called. It depends on how you design the dialog system.
+
+---
 
 ### Trigger
-The functionality of a dialog is contained within triggers (event handlers) - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer. 
+The functionality of a dialog is contained within triggers - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer. 
 
 ![trigger_menu](./media/dialog/trigger_menu.gif)
 
@@ -43,16 +44,15 @@ Triggers contain a series of actions that the bot will undertake to fulfill a us
 ### Language generator
 As the bot takes actions and sends messages, the **language generator** is called into play. This allows messages sent by the bot to be composed from variables and templates. Language generators can be used to create reusable components, variable messages, macros, and dynamic messages that are grammatically correct. 
 
-With a single click from within Composer, developers can launch the bot runtime, and connect to their bot in the Bot Framework Emulator. Once tested in the emulator, the bot runtime can be connected to the Bot Framework Channel service, and from there... the world! 
-
+<!---With a single click from within Composer, developers can launch the bot runtime, and connect to their bot in the Bot Framework Emulator. Once tested in the emulator, the bot runtime can be connected to the Bot Framework Channel service, and from there... the world! -->
 ## Create a dialog 
 When you create a bot in Composer you also create its main dialog by default. Follow the steps to create a bot project and its main dialog:
 
-1. On the left side of the Composer home screen, click **+ New** from the upper left corner (or the big `+ ` sign under "Bot Framework Composer" in the middle part of the home screen). 
+1. On the left side of the Composer home screen, click **+ New** from the upper left corner (or the big **+ ** sign under "Bot Framework Composer" in the middle part of the home screen). 
 
 ![create_new_bot](./media/dialog/create_new_bot.png) 
 
-2. After you see the pop-up window, select `Create from scratch` and click **Submit**. 
+2. After you see the pop-up window, select **Create from scratch** and click **Submit**. 
 
 3. In the pop-up window give a name for your bot and optionally fill in a brief description and click **Next**. Leave the **Location** field as is at this time. 
 
@@ -63,7 +63,7 @@ When your bot is created successfully you will see a **.Main** dialog in the dia
 ![main_dialog](./media/dialog/main_dialog.png)
 
 > [!NOTE]
-> As you will notice, after you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
+> After you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
 
 ## Add a dialog 
 After you create a bot you are also creating its main dialog by default. The main dialog is like the brain of our bot, controlling and managing the dialog system. Sometimes we find it useful to create a child dialog that contains a chunk of functionality so that our dialog system is organized and easily managed. Let's walk through a very simple example to show how to create a child dialog and wire it up to the main dialog. 
@@ -76,7 +76,7 @@ After that, you will see an empty dialog you created on the navigation pane. Whe
 
 ![new_weather_dialog](./media/dialog/new_weather_dialog.png)
 
-2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the Language Generation editor put a sentence: "The weather dialog is called with success!"
+2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the Language Generation editor put a sentence: "The weather dialog is calle with success!"
 
 ![send_response](./media/dialog/send_response.gif)
 
