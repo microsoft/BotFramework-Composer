@@ -14,6 +14,6 @@ context('check Nav Expandion ', () => {
     cy.getByText('Cancel').should('exist');
     cy.getByText('Cancel').click();
     cy.get('[data-testid="homePage-body-New"]').click();
-    cy.getByText('Define conversation objective').should('exist');
+    cy.getByText('Create from scratch?').should('exist');
   });
 });
