@@ -38,7 +38,7 @@ Now when you say weather to your bot, you will not only see that your bot asks y
 
 Next up, let's change the weather report to also include a card.
 
-5. With the `getWeather` dialog selected and `BeginDialog` trigger selected, scroll down to the bottom, and click on the `Send a response` node that starts with `{DescribeWeather(dialog.weather)}...`
+5. With the `getWeather` dialog selected and `BeginDialog` trigger selected, scroll down to the bottom, and click on the **Send a response** node that starts with `{DescribeWeather(dialog.weather)}...`
 6. Instead of coming back with simple text response, let's have this action come back with a weather card. Replace the activity with this - 
     ```
     [ThumbnailCard

@@ -2,7 +2,7 @@
 
 1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
 2. Click on the `BeginDialog` trigger underneath getWeather. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a `Number Input` to prompt the user for a `zipcode`.
-3. Click the "+" button in the flow and select `Ask a question`. You'll see a variety of options for asking for different types of input.
+3. Click the **+** button in the flow and select `Ask a question`. You'll see a variety of options for asking for different types of input.
 4. Select `Text input` from the sub-menu. Two new nodes will appear in the flow!
 
    > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
@@ -69,7 +69,7 @@
 
 ## Add an HTTP request
 
-The http request action is found under the `Access external resources >` menu in the flow "+" button.
+The http request action is found under the `Access external resources >` menu in the flow **+** button.
 
 1. Select `Send an HTTP request` to add a the step to your flow.
 
@@ -100,7 +100,7 @@ The http request action is found under the `Access external resources >` menu in
 
       `dialog.api_response.statusCode == 200`
 
-5. In the `true` branch, use the "+" button, then select `Manage properties >`, then `Set a Property`
+5. In the `true` branch, use the **+** button, then select `Manage properties >`, then `Set a Property`
 
    Set Property to:
    
@@ -112,7 +112,7 @@ The http request action is found under the `Access external resources >` menu in
 
    ![](../media/tutorial-weatherbot/03/set-property-condition.png)
 
-6. Still in the `true` branch, use the "+" button, then select `Send a response`
+6. Still in the `true` branch, use the **+** button, then select **Send a response**
 
    Set the text of the message to:
    
@@ -120,13 +120,13 @@ The http request action is found under the `Access external resources >` menu in
 
    ![](../media/tutorial-weatherbot/03/ifelse.png)
 
-7. Now, in the `false` branch, use the "+" button, then select `Send a response`
+7. Now, in the `false` branch, use the **+** button, then select **Send a response**
 
    Set the text of the message to:
    
       `I got an error: {dialog.api_response.content.message}`
 
-8. To be safe, let's clean up the invalid value which otherwise would persist. Use the "+", select `Manage properties >`, then select `Delete a property`
+8. To be safe, let's clean up the invalid value which otherwise would persist. Use the **+**, select `Manage properties >`, then select `Delete a property`
 
    Set the property to:
 

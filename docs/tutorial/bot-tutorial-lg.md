@@ -10,7 +10,7 @@ Let's start by adding some variation to the welcome message.
 
    ![](../media/tutorial-weatherbot/05/nav1.png) 
 
-2. Select the `Send a response` node in the flow.
+2. Select the **Send a response** node in the flow.
 
    ![](../media/tutorial-weatherbot/05/lg-1.png)
 
@@ -92,7 +92,7 @@ Let's improve the language used when delivering the weather conditions. To do th
 
       ![](../media/tutorial-weatherbot/05/nav2.png)
 
-11. Scroll to the bottom, and click on the `Send a response` node that starts with `The weather is...`
+11. Scroll to the bottom, and click on the **Send a response** node that starts with `The weather is...`
 13. In the right hand property pane, replace the activity text with the following:
 
       `- {DescribeWeather(dialog.weather)} and the temp is {dialog.weather.temp}&deg;`

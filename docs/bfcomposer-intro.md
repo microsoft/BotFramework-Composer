@@ -20,7 +20,7 @@ A major difference between the current version of the Bot Framework SDK and Comp
 
 You can manage Composer assests, such as Dialogs, LU training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
 
-## Language Understanding (LU)
+## Language Understanding
 
 Language Understanding is a core component of Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
@@ -30,7 +30,7 @@ As dialogs are edited in Composer developers can continuously add to their bot's
 
  Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
 
-## Language Generation (LG)
+## Language Generation
 
 Creating grammatically correct, data-driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Composer's integrated [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers, and the writers who work with them, to create replies with a great deal of flexibility.
 

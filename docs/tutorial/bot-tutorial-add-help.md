@@ -9,13 +9,13 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
    ![](../media/tutorial-weatherbot/04/help-dialog.png)
 
-3. Click `Next`, and you'll land in the editor view for the new help dialog. 
+3. Click **Next**, and you'll land in the editor view for the new help dialog. 
 
    <a name="create-begin-dialog-trigger"></a>
 
    Composer created this new dialog with one `BeginDialog` trigger pre-configured. 
 
-4. With the `BeginDialog` trigger selected, use the `+` button at the bottom of the flow, choose `Send a response`
+4. With the `BeginDialog` trigger selected, use the `+` button at the bottom of the flow, choose **Send a response**
 5. In the properties panel on the right side, set the text of the activity to:
 
       `I am a weather bot! I can tell you the current weather conditions. Just say WEATHER.`
@@ -93,7 +93,7 @@ For now, let's add one more global function - a cancel command.
 
       `cancel`
 
-3. Use the `+` button at the bottom of the flow, choose `Send a response`
+3. Use the `+` button at the bottom of the flow, choose **Send a response**
 4. In the properties panel on the right side, set the text of the activity to:
 
       `Canceling!`

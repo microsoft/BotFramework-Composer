@@ -20,7 +20,7 @@ The first step in creating a bot with Bot Framework Composer is to create a new 
 
 ## Create Project
 
-1. From the home screen, select `New` from the upper left corner. You'll be presented with a dialog with options to either create an empty bot project from scratch, or to create one based on a template. For this workshop, make sure `Create from Scratch` selected and click `Next`
+1. From the home screen, select **New** from the upper left corner. You'll be presented with a dialog with options to either create an empty bot project from scratch, or to create one based on a template. For this workshop, make sure `Create from Scratch` selected and click **Next**
 
    ![create project](../media/tutorial-weatherbot/01/create-1.png)
 
@@ -38,7 +38,7 @@ The first step in creating a bot with Bot Framework Composer is to create a new 
 
    ![create bot](../media/tutorial-weatherbot/01/create-2.png)
 
-3. Click `Next`, and Composer will create the project for you!
+3. Click **Next**, and Composer will create the project for you!
 
 ## Give your bot something to say
 
@@ -65,17 +65,17 @@ You will notice that the new bot is pre-configured with one trigger in the left 
    ![trigger](../media/tutorial-weatherbot/01/rename-trigger.gif)
 
 Now, let's actually make the bot do something! 
-Inside the flow, you'll see that the teal `Trigger` box has a line below it that includes in a "+" button.
+Inside the flow, you'll see that the teal `Trigger` box has a line below it that includes in a **+** button.
 
-The "+" button can be used to add `Actions` to the conversation flow. You can use this to add actions to the end of a flow, or insert actions at an earlier point.
+The **+** button can be used to add `Actions` to the conversation flow. You can use this to add actions to the end of a flow, or insert actions at an earlier point.
 
 For now, let's instruct the bot to send a simple greeting.
 
-4. Click the "+" button and select the first menu item `Send a response`.
+4. Click the **+** button and select the first menu item **Send a response**.
 
    ![menu](../media/tutorial-weatherbot/01/add-send-activity.gif)
 
-5. Select the new `Send a response` action in the flow and it's properties will appear on the right hand side of the screen.  This action has only one main property - the text of the activity to send.
+5. Select the new **Send a response** action in the flow and it's properties will appear on the right hand side of the screen.  This action has only one main property - the text of the activity to send.
 
 6. Type a welcome message into this field. It is always a good idea to have your bot introduce itself and explain it's main features.  So let's make the welcome message something like:
 
@@ -99,7 +99,7 @@ Next, let's temporarily disable the recognizer for the main dialog. We will get 
 
 Now that our new bot has its first simple feature, let's launch it in the emulator and make sure everything works.
 
-1. Click the `Start Bot` button in the upper right hand corner of the screen.  This tells Composer to launch the bot's runtime (an external app powered by the Bot Framework SDK) and updates it with the latest content and settings from Composer.
+1. Click the **Start Bot** button in the upper right hand corner of the screen.  This tells Composer to launch the bot's runtime (an external app powered by the Bot Framework SDK) and updates it with the latest content and settings from Composer.
 
 2. After a few seconds, a second link will appear next to the button thats `Test bot in emulator`.  Click this link to open Emulator and connect.
 

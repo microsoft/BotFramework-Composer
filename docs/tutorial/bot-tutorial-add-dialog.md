@@ -25,13 +25,13 @@ First, we'll set up all the components and make sure they work together. Then, w
     
       `Get the current weather conditions`
 
-3. Click `Next`, and Composer will create the new dialog and open it in the editor.  
+3. Click **Next**, and Composer will create the new dialog and open it in the editor.  
 
    ![](../media/tutorial-weatherbot/02/create-getweather.png)
 
 Composer created this new dialog with a `BeginDialog` trigger pre-configured.
 
-3. For now, we'll just add a simple message to get things hooked up, then we'll come back to flesh out the feature. With `BeginDialog` trigger selected, click the "+" in the flow, and use the same `Send a response` action.  Set the text of the activity to:
+3. For now, we'll just add a simple message to get things hooked up, then we'll come back to flesh out the feature. With `BeginDialog` trigger selected, click the **+** in the flow, and use the same **Send a response** action.  Set the text of the activity to:
    
       `Let's check the weather`
 
@@ -52,7 +52,7 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
 
    ![](../media/tutorial-weatherbot/02/regexp-recognizer.gif)
 
-3.  Click the `Add` button. 2 new fields will appear: one labeled `intent` and one labeled `pattern`
+3.  Click the **Add** button. 2 new fields will appear: one labeled `intent` and one labeled `pattern`
 
    ![](../media/tutorial-weatherbot/02/weather-intent.png)
 
@@ -70,7 +70,7 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
 
    ![](../media/tutorial-weatherbot/02/weather-trigger.gif)
 
-7. Click the "+" in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
+7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
 
 8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
 
