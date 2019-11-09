@@ -36,7 +36,7 @@ The functionality of a dialog is contained within triggers (event handlers) - ru
 ![trigger_menu](./media/dialog/trigger_menu.gif)
 
 ### Action 
-Triggers contain a series of actions that the bot will undertake to fulfill a user's request. Actions are things like sending messages, making calculations, and performing computational tasks on behalf of the user. The path the bot follows through a dialog can branch and loop. The bot can ask questions, validate input, manipulate and store values in memory, and make decisions. Below is a screenshot of the action menu in Composer. Click the "+" sign below the trigger you can mouse over the action menu. 
+Triggers contain a series of actions that the bot will undertake to fulfill a user's request. Actions are things like sending messages, making calculations, and performing computational tasks on behalf of the user. The path the bot follows through a dialog can branch and loop. The bot can ask questions, validate input, manipulate and store values in memory, and make decisions. Below is a screenshot of the action menu in Composer. Click the **+** sign below the trigger you can mouse over the action menu. 
 
 ![action_menu](./media/dialog/action_menu.gif)
 
@@ -80,7 +80,7 @@ After that, you will see an empty dialog you created on the navigation pane. Whe
 
 ![send_response](./media/dialog/send_response.gif)
 
-3. Wire up the new dialog. Click the main dialog in navigation pane and select **ConversationUpdate**. In the authoring canvas, click the "+" sign under **ConversationUpdate** and select **Dialog management** and then **Begin a new dialog** which is a dialog action that begins another dialog. When that dialog is completed, it will return to the caller. 
+3. Wire up the new dialog. Click the main dialog in navigation pane and select **ConversationUpdate**. In the authoring canvas, click the **+** sign under **ConversationUpdate** and select **Dialog management** and then **Begin a new dialog** which is a dialog action that begins another dialog. When that dialog is completed, it will return to the caller. 
 
 ![begin_dialog_action](./media/dialog/begin_dialog_action.png)
 
@@ -99,7 +99,7 @@ You can test the result by clicking **Start** on the upper right corner and then
 ![test_emulator](./media/dialog/test_emulator.png)
 
 ## Dialog actions 
-A bot will have a few dialogs or hundreds of individual dialogs and traditionally it's difficult to manage the dialog system and the conversation with user. In the previous "Add a dialog" section, we cover how to create a child dialog and wire it up to the dialog system using **Begin a new dialog** action. In fact, Composer provides more dialog actions to make it easier to manage the dialog system. You can access the different dialog actions by clicking the "+" node under a trigger and then select **Dialog management**.  
+A bot will have a few dialogs or hundreds of individual dialogs and traditionally it's difficult to manage the dialog system and the conversation with user. In the previous "Add a dialog" section, we cover how to create a child dialog and wire it up to the dialog system using **Begin a new dialog** action. In fact, Composer provides more dialog actions to make it easier to manage the dialog system. You can access the different dialog actions by clicking the **+** node under a trigger and then select **Dialog management**.  
 
 Below is a list of the dialog actions provided in Composer: 
 

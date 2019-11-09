@@ -35,7 +35,7 @@ On the navigation pane, click **New Trigger** and then select **Unrecognized int
 After you click **Submit**, you will see an empty **Unrecognized intent** trigger in the authoring canvas. 
 
 ### 2. Add an action(s) to the trigger
-Under the trigger, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send a response** to send a message "This is an unrecognized intent trigger!" authored in [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). When this trigger is fired, the response message will be sent to the user. 
+Under the trigger, click the **+** sign to add the action node(s) you want to include. For example, you can click **Send a response** to send a message "This is an unrecognized intent trigger!" authored in [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). When this trigger is fired, the response message will be sent to the user. 
 
 ![unrecognized_intent_response](./media/events_triggers/unrecognized_intent_response.gif)  
 
@@ -48,7 +48,7 @@ On dialog navigation pane, click **New Trigger** and select **Dialog started(Beg
 ![begin_new_dialog](./media/events_triggers/begin_new_dialog.gif)
 
 ### 2. Add dialog action(s) to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the properties panel. Before you use this trigger you must define a dialog to be configured.
+Under this trigger, click the **+** sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the properties panel. Before you use this trigger you must define a dialog to be configured.
 
 ![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
 
@@ -61,7 +61,7 @@ On the navigation pane on the left side, click **New Trigger** in your selected 
 ![conversationupdate](./media/events_triggers/conversationupdate.png)
 
 ### 2. Add an action node to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu then click **Send a response**. In the Language Generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+Under this trigger, click the **+** sign and mouse over the action menu then click **Send a response**. In the Language Generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
 
 ![welcome](./media/events_triggers/welcome.gif)
 
@@ -69,7 +69,7 @@ Under this trigger, click the "+" sign and mouse over the action menu then click
 **Custom trigger** is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using the **Emit a custom event** which will trigger this handler. Follow the steps below to define a **Custom trigger**: 
 
 ### 1. Define **Emit a custom event**
-In your bot's authoring canvas, select the trigger you want to define **Emit a custom event**. Under this trigger, click the "+" sign and mouse over the action menu. Click **Access external resources** and then select **Emit a custom event**. 
+In your bot's authoring canvas, select the trigger you want to define **Emit a custom event**. Under this trigger, click the **+** sign and mouse over the action menu. Click **Access external resources** and then select **Emit a custom event**. 
 
 ![emit_custom_event](./media/events_triggers/emit_custom_event.gif)
 
@@ -86,7 +86,7 @@ On the properties panel on the right, fill in the name of you pre-defined event 
 
 ![event_name_greeting](./media/events_triggers/event_name_greeting.png)
 
-You can add any action to this trigger. Under the trigger, click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the Language Generation editor as you want. 
+You can add any action to this trigger. Under the trigger, click the **+** sign and select **Send a response** from the actions menu. Author your response for this action in the Language Generation editor as you want. 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.gif)
 
