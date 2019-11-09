@@ -5,7 +5,7 @@ In this quickstart we will walk you through how to create an echo bot using the 
 All of the prerequisites for creating an echo bot are included in [Set up Bot Framework Composer with Yarn](./setup-yarn.md).
 
 ## Creating an echo bot
-1. Follow the instructions in [setup Composer with Yarn](./setup-yarn.md) to get Composer running. 
+1. Follow the instructions in [Set up Bot Framework Composer with Yarn](./setup-yarn.md) to get Composer running. 
 After opening Composer in a browser click the **Echo Bot** button at the top of the Examples list on the homepage.
 
 ![homepage new button](./media/tutorial-echobot/echo-new.png)
