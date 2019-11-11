@@ -5,9 +5,9 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { LuEditor } from '@bfc/code-editor';
-import get from 'lodash.get';
-import debounce from 'lodash.debounce';
-import isEmpty from 'lodash.isempty';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isempty';
 
 import * as luUtil from '../../utils/luUtil';
 

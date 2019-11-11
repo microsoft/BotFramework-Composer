@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionCreator, DialogSetting } from '../types';

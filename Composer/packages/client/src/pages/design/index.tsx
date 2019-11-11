@@ -7,8 +7,8 @@ import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 
 import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import toLower from 'lodash.tolower';
-import get from 'lodash.get';
+import toLower from 'lodash/tolower';
+import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 

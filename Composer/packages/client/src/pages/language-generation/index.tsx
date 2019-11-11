@@ -7,7 +7,7 @@ import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } f
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { RouteComponentProps } from '@reach/router';
 import { CodeRange } from '@bfc/shared';
 

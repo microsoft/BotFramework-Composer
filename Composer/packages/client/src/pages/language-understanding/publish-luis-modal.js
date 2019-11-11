@@ -20,7 +20,7 @@ import {
 } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import keys from 'lodash.keys';
+import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 

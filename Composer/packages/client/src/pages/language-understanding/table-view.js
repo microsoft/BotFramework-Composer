@@ -6,8 +6,8 @@
 import { jsx } from '@emotion/core';
 import { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
-import isEmpty from 'lodash.isempty';
-import get from 'lodash.get';
+import isEmpty from 'lodash/isempty';
+import get from 'lodash/get';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react';

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 const ExpressionParser = new ExpressionEngine();

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import clonedeep from 'lodash.clonedeep';
-import remove from 'lodash.remove';
+import clonedeep from 'lodash/clonedeep';
+import remove from 'lodash/remove';
 import { DialogInfo } from '@bfc/shared';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';

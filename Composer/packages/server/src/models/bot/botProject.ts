@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isequal';
 import { FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
 import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
 

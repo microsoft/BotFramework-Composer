@@ -14,7 +14,7 @@ import formatMessage from 'format-message';
 import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
 import { DirectionalHint } from 'office-ui-fabric-react';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { COMPOUND_TYPES, MicrosoftIDialog } from '@bfc/shared';

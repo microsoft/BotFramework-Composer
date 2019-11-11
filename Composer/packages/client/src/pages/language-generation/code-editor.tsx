@@ -4,9 +4,9 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import get from 'lodash.get';
-import debounce from 'lodash.debounce';
-import isEmpty from 'lodash.isempty';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isempty';
 import { CodeRange } from '@bfc/shared';
 
 import * as lgUtil from '../../utils/lgUtil';

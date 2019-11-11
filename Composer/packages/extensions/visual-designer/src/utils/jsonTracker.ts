@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { cloneDeep, get, set } from 'lodash';
+import cloneDeep from 'lodash/clonedeep';
+import get from 'lodash/get';
+import set from 'lodash/set';
 import { seedNewDialog, deepCopyAction } from '@bfc/shared';
 
 import { getFriendlyName } from '../components/nodes/utils';

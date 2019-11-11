@@ -8,8 +8,8 @@ import {
   IDropdownOption,
 } from 'office-ui-fabric-react';
 import { useState } from 'react';
-import merge from 'lodash.merge';
-import get from 'lodash.get';
+import merge from 'lodash/merge';
+import get from 'lodash/get';
 import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from '@bfc/shared';
 
 import { FormMemory, MemoryScope } from '../types';

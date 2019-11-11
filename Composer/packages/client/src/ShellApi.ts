@@ -3,8 +3,8 @@
 
 import React, { useEffect, useContext, useMemo, useState } from 'react';
 import { ShellData } from '@bfc/shared';
-import isEqual from 'lodash.isequal';
-import get from 'lodash.get';
+import isEqual from 'lodash/isequal';
+import get from 'lodash/get';
 
 import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
 

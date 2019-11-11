@@ -5,7 +5,7 @@ import React, { useState, FormEvent } from 'react';
 import { TextField, PrimaryButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 import Modal from '../../Modal';
 

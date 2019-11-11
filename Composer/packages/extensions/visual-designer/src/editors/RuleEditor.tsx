@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, useRef } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isequal';
 
 import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';

@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useContext } from 'react';
 import { Spinner, SpinnerSize, Dialog, DialogType, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import once from 'lodash.once';
+import once from 'lodash/once';
 
 import { StoreContext } from '../../store';
 import { BoundAction } from '../../store/types';
