@@ -1,5 +1,6 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "id": "847208"
   },
@@ -67,9 +68,8 @@
           "$designer": {
             "id": "993283"
           },
-          "pageSize": 10,
+          "pageSize": 2,
           "itemsProperty": "dialog.ids",
-          "PageSize": "2",
           "actions": [
             {
               "$type": "Microsoft.Foreach",

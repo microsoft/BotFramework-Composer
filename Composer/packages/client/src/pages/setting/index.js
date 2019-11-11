@@ -21,6 +21,7 @@ const settingLabels = {
   title: formatMessage('Configuration'),
   publish: formatMessage('Publish'),
   settings: formatMessage('Settings'),
+  onboarding: formatMessage('Onboarding'),
 };
 
 const absHosted = isAbsHosted();
@@ -28,6 +29,7 @@ const absHosted = isAbsHosted();
 const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings },
   { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish },
+  { key: '/setting/onboarding-settings', name: settingLabels.onboarding },
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
