@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
     "noImplicitAny": false,
-    "module": "esnext",
+    "module": "commonjs",
     "target": "es5",
     "jsx": "react",
     "sourceMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowJs": true
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
   "exclude": [

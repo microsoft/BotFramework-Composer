@@ -66,4 +66,5 @@ NavItem.propTypes = {
   labelHide: PropTypes.bool,
   index: PropTypes.number,
   targetUrl: PropTypes.string,
+  underTest: PropTypes.bool,
 };
