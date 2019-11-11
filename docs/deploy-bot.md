@@ -3,7 +3,8 @@ Bot Framework Composer includes scripts and instructions on how to deploy bots c
 To deploy a bot, you will need to use Az CLI tool and Bot Framework LuBuild tools. 
 
 ## Prerequisites
-- To install **Az CLI**, follow [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) instructions 
+- To install **Az CLI**, follow [Install the Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) instructions
+- To install **PowerShell 6.0**, follow [Install PowerShell 6.0](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-6) instructions
 - To install **LuBuild**, run the following command 
 ```
 npm install -g https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz
