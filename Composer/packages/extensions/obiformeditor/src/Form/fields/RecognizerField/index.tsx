@@ -8,12 +8,12 @@ import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 
 import { MicrosoftIRecognizer, LuFile } from '@bfc/shared';
 
 import { BaseField } from '../BaseField';
+import { LoadingSpinner } from '../../../LoadingSpinner';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 
 import './styles.css';
-import { LoadingSpinner } from '../../../LoadingSpinner';
 
 const InlineLuEditor = React.lazy(() => import('./InlineLuEditor'));
 
