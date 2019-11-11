@@ -38,11 +38,11 @@ Currently, the bot reports the weather in a very robotic manner: The weather is 
 
 Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the Language Generation system: conditional messages, and parameterized messages.
 
-5. Navigate to the `Bot Says` tab by clicking the bot icon on the far left of the screen.
+5. Navigate to the **Bot Says** tab by clicking the bot icon on the far left of the screen.
 
    ![](../media/tutorial-weatherbot/05/botsays.png)
 
-6. Toggle the `Edit Mode` switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
+6. Toggle the **Edit Mode** switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
 
    > You'll notice that every message you created in the flow editor also appears here. They're linked, and any changes you make in this view will be reflected in the flow as well.
 
@@ -87,7 +87,7 @@ Let's improve the language used when delivering the weather conditions. To do th
     > This creates a new Language Generation template called `DescribeWeather`. This template receives weather data from our API as a parameter, and outputs a friendlier 
     description of the weather based on the raw data from the API.
 
-9. Navigate back to the flow designer by clicking on `Flow designer` in the left navigation bar.
+9. Navigate back to the flow designer by clicking on **Flow designer** in the left navigation bar.
 10. In Composer's explorer, click on the `getWeather` dialog, and make sure the `BeginDialog` trigger is highlighted.
 
       ![](../media/tutorial-weatherbot/05/nav2.png)
