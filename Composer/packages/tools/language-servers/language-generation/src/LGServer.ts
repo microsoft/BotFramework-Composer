@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
-import get from 'lodash.get';
+import { get } from 'lodash';
 
 import { buildInfunctionsMap } from './builtinFunctions';
 import {
@@ -28,13 +28,6 @@ import {
   updateTemplateInContent,
   getTemplatePositionOffset,
 } from './utils';
-
-export function start(reader: MessageReader, writer: MessageWriter): LgServer {
-  const connection = createConnection(reader, writer);
-  const server = new LgServer(connection);
-  server.start();
-  return server;
-}
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -48,7 +41,7 @@ interface LGDocument {
   };
 }
 
-export class LgServer {
+export class LGServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
@@ -269,4 +262,11 @@ export class LgServer {
       diagnostics,
     });
   }
+}
+
+export function start(reader: MessageReader, writer: MessageWriter): LGServer {
+  const connection = createConnection(reader, writer);
+  const server = new LGServer(connection);
+  server.start();
+  return server;
 }

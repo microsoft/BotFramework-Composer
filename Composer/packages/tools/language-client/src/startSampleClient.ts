@@ -58,12 +58,15 @@ function createWebSocket(url: string): WebSocket {
   return new ReconnectingWebSocket(url, [], socketOptions);
 }
 
+let monacoServiceInstance;
+
 export function startSampleClient(editor, lgServer, lgOption) {
   // install Monaco language client services
-  MonacoServices.install(editor);
+  if (!monacoServiceInstance) {
+    monacoServiceInstance = MonacoServices.install(editor);
+  }
 
   lgOption.uri = editor.getModel().uri._formatted;
-  console.log(lgOption);
 
   // create the web socket
   // const url = createUrl('/lgServer');

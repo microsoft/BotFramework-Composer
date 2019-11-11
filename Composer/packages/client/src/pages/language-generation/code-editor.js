@@ -4,29 +4,32 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import { LgLSPEditor } from '@bfc/code-editor/lib';
+import { LGLSPEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
-  const { file, codeRange } = props;
+  const { file, inlineTemplate } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-  const [content, setContent] = useState(get(file, 'content', ''));
+
+  const [content, setContent] = useState('');
 
   const fileId = file && file.id;
+  const inlineMode = !!inlineTemplate;
   useEffect(() => {
     // reset content with file.content's initial state
     if (isEmpty(file)) return;
-    setContent(file.content);
-  }, [fileId]);
+    const value = inlineTemplate ? get(inlineTemplate, 'Body', '') : get(file, 'content', '');
+    setContent(value);
+  }, [fileId, inlineTemplate]);
 
   // local content maybe invalid and should always sync real-time
   // file.content assume to be load from server
   const _onChange = value => {
     setContent(value);
-    onChange(value);
+    // onChange(value);
     const diagnostics = lgUtil.check(value);
     setDiagnostics(diagnostics);
   };
@@ -34,22 +37,27 @@ export default function CodeEditor(props) {
   const isInvalid = !lgUtil.isValid(diagnostics);
   const errorMsg = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
 
-  const editorFile = {
-    uri: 'inmemory://common.lg',
-    language: 'botbuilderlg',
+  const lgOption = {
     inline: false,
-    content,
+    content: get(file, 'content', ''),
   };
 
+  if (inlineMode) {
+    lgOption.template = inlineTemplate;
+    lgOption.inline = true;
+  }
+
   return (
-    <LgLSPEditor
+    <LGLSPEditor
       options={{
         lineNumbers: 'on',
         minimap: 'on',
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
-      file={editorFile}
+      value={content}
+      errorMsg={errorMsg}
+      lgOption={lgOption}
       onChange={_onChange}
     />
   );
@@ -58,5 +66,5 @@ export default function CodeEditor(props) {
 CodeEditor.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
-  codeRange: PropTypes.object,
+  inlineTemplate: PropTypes.object,
 };

@@ -31,7 +31,7 @@ export const LGPage = props => {
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [codeRange, setCodeRange] = useState(null);
+  const [inlineTemplate, setInlineTemplate] = useState(null);
 
   const subPath = props['*'];
   const isRoot = subPath === '';
@@ -116,7 +116,7 @@ export const LGPage = props => {
 
   function onToggleEditMode() {
     setEditMode(!editMode);
-    setCodeRange(null);
+    setInlineTemplate(null);
   }
 
   async function onChange(newContent) {
@@ -137,9 +137,9 @@ export const LGPage = props => {
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
   function onTableViewClickEdit(template) {
-    setCodeRange({
-      startLineNumber: get(template, 'ParseTree._start._line', 0),
-      endLineNumber: get(template, 'ParseTree._stop._line', 0),
+    setInlineTemplate({
+      Name: get(template, 'Name', ''),
+      Body: get(template, 'Body', ''),
     });
     navigateTo(`/language-generation`);
     setEditMode(true);
@@ -202,7 +202,7 @@ export const LGPage = props => {
         </div>
         <div css={contentEditor}>
           {editMode ? (
-            <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} />
+            <CodeEditor file={lgFile} inlineTemplate={inlineTemplate} onChange={onChange} />
           ) : (
             <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}

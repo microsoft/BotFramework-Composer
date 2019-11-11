@@ -11,6 +11,7 @@
     "packages/extensions/*",
     "packages/lib",
     "packages/lib/*",
+    "packages/tools/language-client",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
     "packages/tools/language-servers/*/*"
@@ -23,7 +24,7 @@
     "build:extensions": "cd packages/extensions && yarn build:all",
     "build:server": "cd packages/server && yarn build",
     "build:client": "cd packages/client && yarn build",
-    "build:tools": "cd packages/tools && yarn build",
+    "build:tools": "cd packages/tools && yarn build:all",
     "start": "concurrently --kill-others-on-fail \"npm:start:*\"",
     "startall": "concurrently --kill-others-on-fail \"npm:start:*\" \"npm:runtime\"",
     "start:client": "cd packages/client && yarn start",

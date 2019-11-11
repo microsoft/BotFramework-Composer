@@ -2,11 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-
-import {
-  startSampleClient,
-  registerLGLanguage,
-} from '../../../../tools/language-servers/language-generation/src/startSampleClient';
+import { startSampleClient, registerLGLanguage } from '@bfc/language-client';
+// import { startSampleClient, registerLGLanguage } from '../../../../tools/language-client/src/';
 
 import { RichEditor, RichEditorProps } from './RichEditor';
 
@@ -15,12 +12,29 @@ const LG_HELP =
 const placeholder = `> To learn more about the LG file format, read the documentation at
 > ${LG_HELP}`;
 
-export function LGLSPEditor(props: RichEditorProps) {
+export interface LGOption {
+  inline: boolean;
+  content: string;
+  template: {
+    Name: string;
+    Body: string;
+  };
+}
+
+export interface LGLSPEditorProps extends RichEditorProps {
+  lgOption?: LGOption;
+}
+
+export function LGLSPEditor(props: LGLSPEditorProps) {
   const options = {
     quickSuggestions: true,
     ...props.options,
   };
 
+  const { lgOption = {}, ...restProps } = props;
+  const lgServer = {
+    url: 'ws://localhost:5002/lgServer',
+  };
   const editorWillMount = monaco => {
     registerLGLanguage();
     if (typeof props.editorWillMount === 'function') {
@@ -28,8 +42,7 @@ export function LGLSPEditor(props: RichEditorProps) {
     }
   };
   const editorDidMount = (editor, monaco) => {
-    // window.editor = editor;
-    startSampleClient(editor, {});
+    startSampleClient(editor, lgServer, lgOption);
     if (typeof props.editorDidMount === 'function') {
       return props.editorDidMount(editor, monaco);
     }
@@ -39,7 +52,7 @@ export function LGLSPEditor(props: RichEditorProps) {
     <RichEditor
       placeholder={placeholder}
       helpURL={LG_HELP}
-      {...props}
+      {...restProps}
       theme={'lgtheme'}
       language={'botbuilderlg'}
       options={options}

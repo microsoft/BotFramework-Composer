@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { LgLSPEditor } from '@bfc/code-editor';
+import { LGLSPEditor } from '@bfc/code-editor';
 
 import { FormContext } from '../types';
 
@@ -45,14 +45,10 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const content = lgFile ? lgFile.content : '';
-  const editorFile = {
-    uri: 'inmemory://common.lg',
-    language: 'botbuilderlg',
-    inline: true,
-    content,
-    template,
-  };
+  console.log(template);
 
-  return <LgLSPEditor file={editorFile} height={height} />;
+  const onChange = () => {};
+  const content = lgFile ? lgFile.content : '';
+
+  return <LGLSPEditor onChange={onChange} value={content} height={height} />;
 };

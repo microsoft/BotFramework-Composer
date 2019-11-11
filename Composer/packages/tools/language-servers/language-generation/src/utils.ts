@@ -3,7 +3,7 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-languageserver-types';
 import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
-import get from 'lodash.get';
+import { get } from 'lodash';
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
   let range: Range;

@@ -4,8 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "yarn build:language-servers",
-        "build:language-servers": "cd language-servers && yarn build"
+        "build:language-client": "cd language-client && yarn build",
+        "build:language-servers": "cd language-servers && yarn build",
+        "build:all": "concurrently --kill-others-on-fail \"yarn:build:language-client\" \"yarn:build:language-servers\""
     },
     "author": "",
     "license": "ISC"

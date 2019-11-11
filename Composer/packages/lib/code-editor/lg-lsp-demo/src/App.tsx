@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-import { LGLSPEditorFile } from '../../src/LSPEditors/LGLSPEditor';
+import React, { useState, Fragment } from 'react';
+import { editor } from 'monaco-editor-core';
+
 import { MonacoEditorCore } from '../../src/LSPEditors/MonacoEditorCore';
 import { BaseEditorCore } from '../../src/LSPEditors/BaseEditorCore';
 import { RichEditor } from '../../src/LSPEditors/RichEditor';
@@ -23,30 +26,15 @@ const template = {
 -[Greeting3]
 -[Greeting4]`,
 };
-// setting for inline LG template editor
-const file: LGLSPEditorFile = {
-  uri: 'inmemory://common.lg',
-  language: 'botbuilderlg',
+
+const lgOption = {
   inline: true,
   content,
   template,
 };
 
-// export interface LGLSPEditorProps extends RichEditorProps {
-//   fileInfo?: {
-//     id?: 'string';
-//     language?: 'string';
-//     inline?: boolean;
-//     content?: string;
-//   };
-// }
-
-const options = {
-  content,
-};
-
-export default function App() {
-  const [value, setValue] = useState(content);
+function LGEditor() {
+  const [value, setValue] = useState(template.Body);
 
   const onChange = value => {
     setValue(value);
@@ -55,6 +43,39 @@ export default function App() {
   const props = {
     value,
     onChange,
+    lgOption,
   };
   return <LGLSPEditor {...props} />;
+}
+
+export default function App() {
+  const editor0 = <LGEditor />;
+  const [editors, setEditors] = useState([editor0]);
+
+  const increaseEditorInstance = () => {
+    const img = [...editors];
+    const newEditor = <LGEditor />;
+    img.push(newEditor);
+    setEditors(img);
+  };
+  const decreaseEditorInstance = () => {
+    const img = [...editors];
+    img.pop();
+    setEditors(img);
+  };
+
+  const doms = editors.map((editor, index) => {
+    return (
+      <div style={{ width: '500px', height: '300px', float: 'left' }} key={index}>
+        {editor}
+      </div>
+    );
+  });
+  return (
+    <Fragment>
+      <button onClick={increaseEditorInstance}>add</button>
+      <button onClick={decreaseEditorInstance}>remove</button>
+      <div>{doms}</div>
+    </Fragment>
+  );
 }

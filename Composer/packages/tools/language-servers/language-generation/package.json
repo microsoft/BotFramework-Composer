@@ -1,15 +1,14 @@
 {
-  "name": "@bfc/lg-lsp",
+  "name": "@bfc/lg-languageserver",
   "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "build:demo": "cd demo && webpack",
+    "build:demo": "cd demo && tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
     "start": "cd demo && ts-node ./server.ts"
   },
   "dependencies": {
-    "@bfc/lg-lsp": "*",
     "@types/node": "^12.0.4",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
     "request-light": "^0.2.2",

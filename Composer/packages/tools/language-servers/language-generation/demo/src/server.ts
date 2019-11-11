@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-const express = require('express');
+import { attachLSPServer } from '../../src/attachWSToHTTPServer';
 
-import { attachLSPServer } from '../src/attachWSToHTTPServer';
+const express = require('express');
 
 // create the express application
 const app = express();

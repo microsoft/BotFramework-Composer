@@ -2,11 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "LSP Server",
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/server.ts"
+        "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src/server.ts"
       ],
       "runtimeArgs": [
         "--nolazy",
