@@ -3,7 +3,7 @@
 
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import formatMessage from 'format-message';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import OnboardingContext from '../context';
@@ -31,7 +31,7 @@ const TeachingBubbles = () => {
 
   const {
     actions: { nextStep, previousStep },
-    state: { currentStep, teachingBubble },
+    state: { currentSet, currentStep, teachingBubble },
   } = useContext(OnboardingContext);
 
   // Since some of the teaching bubbles are positioned with (x, y) coordinates relative
@@ -87,6 +87,10 @@ const TeachingBubbles = () => {
 
   if (setLength > 1) {
     teachingBubbleProps.footerContent = `${currentStep + 1} ${formatMessage('of')} ${setLength}`;
+  }
+
+  if (currentSet === 0) {
+    teachingBubbleProps.onDismiss = nextStep;
   }
 
   return target ? (
