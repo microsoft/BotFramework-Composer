@@ -46,12 +46,12 @@ class StorageService {
   public getStorageConnections = (): StorageConnection[] => {
     return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
+      // if the last accessed path exist
       if (fs.existsSync(s.path)) {
         temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       } else {
         temp.path = Path.resolve(s.defaultPath);
       }
-      temp.defaultPath = Path.resolve(s.defaultPath);
       return temp;
     });
   };

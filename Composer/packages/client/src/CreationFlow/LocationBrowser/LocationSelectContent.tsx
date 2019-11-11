@@ -19,9 +19,6 @@ export function LocationSelectContent(props) {
 
   const { fetchFolderItemsByPath } = actions;
   const currentStorageIndex = useRef(0);
-  // const location =
-  //   get(storages, 'storages[currentStorageIndex.current].path', '') ||
-  //   get(storages, 'storages[currentStorageIndex.current].defaultPath', '');
   const [currentPath, setCurrentPath] = useState('');
   const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
 
@@ -49,7 +46,7 @@ export function LocationSelectContent(props) {
     let path = currentPath;
     let id = '';
     if (storages[index]) {
-      path = storages[index].path || storages[index].defaultPath;
+      path = storages[index].path;
       id = storages[index].id;
     }
     updateCurrentPath(path, id);
