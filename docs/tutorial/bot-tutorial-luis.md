@@ -10,7 +10,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    ![](../media/tutorial-weatherbot/07/luis-recognizer.png)
 
-2. To work with LUIS recognizer, you can provide content in the [***.lu file foramt***][2] that is highly similar to Language Generation format. 
+2. To work with LUIS recognizer, you can provide content in the [***.lu file foramt***](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) that is highly similar to Language Generation format. 
 
    With this, intents are denoted using the markdown section notation - e.g. `# intentName` and utterances are provided as a list. 
 
