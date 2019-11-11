@@ -5,7 +5,6 @@ export interface StorageConnection {
   id: string;
   type: 'LocalDisk' | 'AzureBlobStorage';
   path: string;
-  defaultPath: string;
   [key: string]: string;
 }
 
