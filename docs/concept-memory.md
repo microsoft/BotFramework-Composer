@@ -174,4 +174,4 @@ Bot Framework provides a variety of shortcuts for referring to properties in mem
 
 ## Next
 
-* [Language Generation in Bot Framework Composer](./concept-language-genereation.md) 
+* [Language Generation in Bot Framework Composer](./concept-language-generation.md) 

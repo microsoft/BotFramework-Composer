@@ -130,7 +130,7 @@ This template "#AllCards" is defined to display all cards when the template is c
 ## References
 - [Bot Framework - Cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md)
 - [Add media to messages](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-add-media-attachments?view=azure-bot-service-4.0&tabs=csharp)
-- [Language Generation](./concept-language-genereation.md) 
+- [Language Generation](./concept-language-generation.md) 
 - [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md)
 - [Adaptive Cards overview](https://docs.microsoft.com/en-us/adaptive-cards/)
 - [Adaptive Cards Sample](https://github.com/microsoft/BotBuilder-Samples/tree/master/samples/csharp_dotnetcore/07.using-adaptive-cards)
