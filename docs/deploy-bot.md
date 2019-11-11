@@ -38,14 +38,14 @@ The *Deploy your bot to Azure* page provides guidance on which scripts to execut
 3. Open a CLI window, paste the scripts copied from step #2 and execute it. Note that it will take more than 5 minutes for the provisioning process to complete. When the process completes with success, you should be able to see the following in the terminal. Click **Next** in the wizard. 
 
 <p align="center">
-    <img alt="Bot Framework Composer Home Page" src="./media/deployment/create_resource_done.jpg" style="max-width:700px;" />
+    <img alt="Bot Framework Composer Home Page" src="./media/deployment/create_resource_done.png" style="max-width:700px;" />
 </p>
 
 ### Deploy bot to Azure 
 4. Now you have created required resources, you should proceed to deploy your bot to Azure. Copy the scripts in the new pop-up window, paste and execute it in the terminal. When the process completes with success, you should be able to see the following in the terminal. Click **Done** in the wizard. 
 
 <p align="center">
-    <img alt="Bot Framework Composer Home Page" src="./media/deployment/publish_success_terminal.jpg" style="max-width:700px;" />
+    <img alt="Bot Framework Composer Home Page" src="./media/deployment/publish_success_terminal.png" style="max-width:700px;" />
 </p>
 
 5. Open the Azure portal, find your newly created bot and test it in Web Chat. You can also connect the emulator to your bot for testing and debugging.
