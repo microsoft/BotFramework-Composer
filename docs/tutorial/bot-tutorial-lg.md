@@ -30,7 +30,7 @@ Let's start by adding some variation to the welcome message.
 
 You'll see the bot greet you with one of the three variants we listed. 
 
-Click the `Restart conversation` link in Emulator's top bar. You might see another variant! If you see the same response, click `Restart conversation` again! 
+Click the **Restart conversation** link in Emulator's top bar. You might see another variant! If you see the same response, click **Restart conversation** again! 
 
 ---
 
