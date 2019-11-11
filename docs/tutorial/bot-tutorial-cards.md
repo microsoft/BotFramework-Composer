@@ -10,7 +10,7 @@ Suggested actions help guide user by providing them most frequently used set of 
 
 First, let's go ahead and update `prompt for zipcode` to include suggested actions for help and cancel actions.
 
-1. In Composer, click on `getWeather`, then make sure to highlight the `beginDialog` trigger.
+1. In Composer, click on `getWeather`, then make sure to highlight the `BeginDialog` trigger.
 
    ![](../media/tutorial-weatherbot/06/getWeather-beginDialog.png)
 
@@ -27,8 +27,6 @@ First, let's go ahead and update `prompt for zipcode` to include suggested actio
     ```
 
 4. Click **Restart Bot** and open it in the emulator.
-
----
 
 Now when you say weather to your bot, you will not only see that your bot asks you for zipcode but also presents help and cancel button as suggested actions.
 
