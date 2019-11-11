@@ -5,7 +5,7 @@ module.exports = {
     return {
       ImportDeclaration(node) {
         if (isOfficeUiFullImport(node.source.value)) {
-          context.report({ node, message: 'Import components from es6 modules' });
+          context.report({ node, message: 'Import components from /lib directory' });
         }
       },
     };
