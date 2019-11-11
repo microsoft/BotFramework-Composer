@@ -1,5 +1,5 @@
 # Create an echo bot using Bot Framework Composer
-In this quickstart we will walk you through how to create an echo bot using the Bot Framework Composer **Echo Bot** template and then test it.
+In this quickstart we will walk you through how to create an echo bot using the Bot Framework Composer **Echo Bot** template, and then test your bot in the Emulator.
 
 ## Prerequisites
 All of the prerequisites for creating an echo bot are included in [Set up Bot Framework Composer with Yarn](./setup-yarn.md).
