@@ -6,21 +6,12 @@
     "build": "tsc --build tsconfig.json",
     "build:demo": "cd demo && webpack",
     "prepublishOnly": "npm run build",
-    "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
-    "start:client": "cd demo && webpack-dev-server",
-    "start:server": "cd demo && ts-node ./server.ts"
+    "start": "cd demo && ts-node ./server.ts"
   },
   "dependencies": {
     "@bfc/lg-lsp": "*",
     "@types/node": "^12.0.4",
-    "@types/ws": "^6.0.3",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
-    "express": "^4.15.2",
-    "lodash.get": "^4.4.2",
-    "monaco-editor-core": "0.17.0",
-    "monaco-languageclient": "^0.10.0",
-    "normalize-url": "^2.0.1",
-    "reconnecting-websocket": "^3.2.2",
     "request-light": "^0.2.2",
     "vscode": "^1.1.34",
     "vscode-json-languageservice": "^3.3.1",
@@ -29,19 +20,7 @@
     "ws": "^5.0.0"
   },
   "devDependencies": {
-    "@types/lodash.get": "^4.4.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
-    "html-webpack-plugin": "^3.2.0",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^1.0.0",
-    "ts-loader": "^6.1.0",
     "ts-node": "^8.3.0",
-    "typescript": "^3.6.3",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
-    "webpack-dev-server": "^3.8.0",
-    "webpack-merge": "^4.2.2"
+    "typescript": "^3.6.3"
   }
 }

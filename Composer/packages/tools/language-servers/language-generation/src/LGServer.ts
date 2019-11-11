@@ -41,7 +41,6 @@ const InitializeDocumentsMethodName = 'initializeDocuments';
 
 interface LGDocument {
   uri: string;
-  language: string;
   content: string;
   template: {
     Name: string;
@@ -87,8 +86,8 @@ export class LgServer {
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const { uri, language, content, template } = params;
-        this.LGDocuments.push({ uri, language, content, template });
+        const { uri, content, template } = params;
+        this.LGDocuments.push({ uri, content, template });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {

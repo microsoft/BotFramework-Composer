@@ -1,5 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from './adapter';
-export * from './attachWSToHTTPServer';
+export * from './language-registers';
+export * from './startSampleClient';
