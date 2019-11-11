@@ -42,7 +42,6 @@ With Language Generation, previously complex tasks can be quickly achieved, like
 * Providing context-sensitive variation in messages
 * Creating Adaptive Cards attachments, as seen above
 
-
 ## Unified toolset
 
 Under the hood, Composer harnesses the power of many of the components from the Bot Framework SDK. When building bots in Composer, developers will have access to:
