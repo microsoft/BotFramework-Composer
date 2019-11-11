@@ -3,7 +3,7 @@
 
 import React, { Suspense } from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import get from 'lodash/get';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';

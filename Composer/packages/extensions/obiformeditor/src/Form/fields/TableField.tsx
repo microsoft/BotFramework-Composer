@@ -2,22 +2,19 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import {
-  ContextualMenuItemType,
-  DetailsList,
-  IContextualMenuItem,
-  SelectionMode,
-  DetailsListLayoutMode,
-  IconButton,
-} from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
-import { DirectionalHint } from 'office-ui-fabric-react';
 import get from 'lodash/get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { COMPOUND_TYPES, MicrosoftIDialog } from '@bfc/shared';
+import { DetailsList, SelectionMode, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import {
+  ContextualMenuItemType,
+  IContextualMenuItem,
+  DirectionalHint,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';

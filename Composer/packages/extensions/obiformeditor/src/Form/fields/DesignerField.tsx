@@ -4,7 +4,7 @@
 import React, { useEffect } from 'react';
 import formatMessage from 'format-message';
 import { getDesignerId, DesignerData } from '@bfc/shared';
-import { TextField } from 'office-ui-fabric-react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
 

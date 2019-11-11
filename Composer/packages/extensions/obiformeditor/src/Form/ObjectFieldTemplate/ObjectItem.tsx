@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-ui-fabric-react';
+import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import classnames from 'classnames';

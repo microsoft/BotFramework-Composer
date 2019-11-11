@@ -5,7 +5,8 @@
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { Dialog, DialogFooter, PrimaryButton, DialogType } from 'office-ui-fabric-react';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { consoleStyle, dialog } from './styles';
 

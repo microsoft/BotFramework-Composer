@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
-import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react';
+import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 

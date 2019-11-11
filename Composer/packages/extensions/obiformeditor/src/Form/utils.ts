@@ -1,12 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  DropdownMenuItemType,
-  IContextualMenuItem,
-  ContextualMenuItemType,
-  IDropdownOption,
-} from 'office-ui-fabric-react';
+import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState } from 'react';
 import merge from 'lodash/merge';
 import get from 'lodash/get';

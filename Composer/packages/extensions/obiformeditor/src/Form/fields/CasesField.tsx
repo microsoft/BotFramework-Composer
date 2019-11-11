@@ -5,7 +5,9 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
-import { IContextualMenuItem, IconButton, TextField } from 'office-ui-fabric-react';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { CaseCondition } from '@bfc/shared';
 import cloneDeep from 'lodash/clonedeep';

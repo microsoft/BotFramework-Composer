@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react';
+import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import get from 'lodash/get';
 import formatMessage from 'format-message';
 import { LuFile, DialogInfo, RegexRecognizer } from '@bfc/shared';

@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { useState, FormEvent } from 'react';
-import { TextField, PrimaryButton } from 'office-ui-fabric-react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
 import get from 'lodash/get';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState } from 'react';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { getUiOptions } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
