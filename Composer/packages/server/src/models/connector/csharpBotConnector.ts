@@ -63,9 +63,15 @@ export class CSharpBotConnector implements IBotConnector {
       ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
       ...config,
     };
+
     if (config.MicrosoftAppPassword) {
       form.append('microsoftAppPassword', config.MicrosoftAppPassword);
     }
+
+    if (config.qna) {
+      form.append('qnaEndpointKey', config.qna.endpointkey || '');
+    }
+
     try {
       await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
     } catch (err) {
