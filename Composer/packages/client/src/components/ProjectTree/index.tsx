@@ -5,15 +5,15 @@
 import { jsx } from '@emotion/core';
 import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import {
-  ActionButton,
   GroupedList,
   IGroup,
   IGroupHeaderProps,
   IGroupRenderProps,
   IGroupedList,
-  IIconProps,
-  SearchBox,
-} from 'office-ui-fabric-react';
+} from 'office-ui-fabric-react/lib/GroupedList';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/clonedeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';

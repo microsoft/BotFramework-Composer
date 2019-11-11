@@ -5,7 +5,10 @@
 import { jsx } from '@emotion/core';
 import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, ChoiceGroup, Icon } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
 import { choiceGroup, templateItem, optionRoot, optionIcon, placeholder } from './styles';
 

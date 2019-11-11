@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/clonedeep';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogInfo } from '@bfc/shared';
 
 import { getFocusPath } from './navigation';

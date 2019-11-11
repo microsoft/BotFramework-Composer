@@ -4,7 +4,7 @@
 import React, { useContext } from 'react';
 import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IconButton, PrimaryButton } from 'office-ui-fabric-react';
+import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import OnboardingContext from '../../context';
 

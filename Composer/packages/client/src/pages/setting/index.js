@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
-import { Nav } from 'office-ui-fabric-react';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Link } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';

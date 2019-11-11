@@ -3,7 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { OverflowSet, IconButton, Icon } from 'office-ui-fabric-react';
+import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { moreButton, overflowSet, moreMenu, navItem, itemText } from './styles';
 

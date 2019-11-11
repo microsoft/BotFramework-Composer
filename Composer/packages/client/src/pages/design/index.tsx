@@ -4,7 +4,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import toLower from 'lodash/tolower';

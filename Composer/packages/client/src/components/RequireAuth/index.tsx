@@ -4,7 +4,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useState, useContext } from 'react';
-import { Spinner, SpinnerSize, Dialog, DialogType, DialogFooter, PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import formatMessage from 'format-message';
 import once from 'lodash/once';
 

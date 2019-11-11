@@ -4,9 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useContext } from 'react';
-import { Dialog, DialogType } from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, IDropdownOption } from 'office-ui-fabric-react';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';

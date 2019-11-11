@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
 
-import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
