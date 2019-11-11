@@ -15,7 +15,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
    Composer created this new dialog with one `BeginDialog` trigger pre-configured. 
 
-4. With the `BeginDialog` trigger selected, use the `+` button at the bottom of the flow, choose **Send a response**
+4. With the `BeginDialog` trigger selected, use the **+** button at the bottom of the flow, choose **Send a response**
 5. In the properties panel on the right side, set the text of the activity to:
 
       `I am a weather bot! I can tell you the current weather conditions. Just say WEATHER.`
@@ -36,12 +36,12 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
-9. In the left hand explorer, click `+ New Trigger`
+9. In the left hand explorer, click **+ New Trigger**
 10. In the resulting dialog box, select **Intent**, then choose the new `help` intent. Submit the dialog.
 
      ![](../media/tutorial-weatherbot/04/new-trigger.png) 
 
-11. In the flow editor, click the `+` button at the bottom of the empty flow.
+11. In the flow editor, click the **+** button at the bottom of the empty flow.
 12. Choose `Dialogs management >` and then select `Begin a new dialog`
 
       ![](../media/tutorial-weatherbot/04/help-trigger-flow.png)
@@ -93,12 +93,12 @@ For now, let's add one more global function - a cancel command.
 
       `cancel`
 
-3. Use the `+` button at the bottom of the flow, choose **Send a response**
+3. Use the **+** button at the bottom of the flow, choose **Send a response**
 4. In the properties panel on the right side, set the text of the activity to:
 
       `Canceling!`
 
-5. Use the `+` button again, this time choose `Dialog management >`, then `Cancel all dialogs`
+5. Use the **+** button again, this time choose `Dialog management >`, then `Cancel all dialogs`
 
       > When triggered, this will cause the bot to cancel any active dialogs, and send the user back to the main dialog.
 
@@ -114,9 +114,9 @@ For now, let's add one more global function - a cancel command.
 
       `cancel`
 
-10. In the left hand explorer, click `+ New Trigger`
+10. In the left hand explorer, click **+ New Trigger**
 11. In the resulting dialog box, select **Intent**, then choose the new `cancel` intent. Submit the dialog.
-12. In the flow editor, click the `+` button at the bottom of the empty flow.
+12. In the flow editor, click the **+** button at the bottom of the empty flow.
 13. Choose `Dialog management >` and then select `Begin a new dialog`
 14. In the right hand properties panel, select the `cancel` dialog.
 

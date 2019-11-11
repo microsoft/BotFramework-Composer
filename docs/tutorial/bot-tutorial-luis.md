@@ -120,7 +120,7 @@ Let's get this wired up.
 
      ![](../media/tutorial-weatherbot/07/back-at-zipcode-prompt.png)
 
-12. Let's insert an action **before** the prompt by clicking on [+] -> `Manage Properties` -> `Set a property`
+12. Let's insert an action **before** the prompt by clicking on **+** -> `Manage Properties` -> `Set a property`
 13. Since the prompt itself is trying to set the zipcode in the `user.zipcode`, let's set that proeperty to the `@zipcode` entity. 
 
       Set `Property` to 
