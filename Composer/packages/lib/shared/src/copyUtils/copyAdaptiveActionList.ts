@@ -12,7 +12,7 @@ export async function copyAdaptiveActionList(
 ): Promise<MicrosoftIDialog[]> {
   if (!Array.isArray(actions)) return [];
 
-  const results: any[] = [];
+  const results: MicrosoftIDialog[] = [];
   for (const action of actions) {
     const copy = await copyAdaptiveAction(action, externalApi);
     results.push(copy);
