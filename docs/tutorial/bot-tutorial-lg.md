@@ -105,9 +105,7 @@ Let's improve the language used when delivering the weather conditions. To do th
 
 ---
 
-Now, when you say `weather`, the bot will send you a message that sounds much more human than it did before!
-
-It's possible to combine these techniques to quickly create lots of variety in your messages!
+Now, when you say `weather`, the bot will send you a message that sounds much more human than it did before. It's possible to combine these techniques to quickly create lots of variety in your messages!
 
 ![](../media/tutorial-weatherbot/05/nice-weather.png)
 
