@@ -15,7 +15,7 @@ export default function useNotifications() {
   const [filter, setFilter] = useState('All');
   const { dialogs, luFiles, lgFiles } = state;
 
-  const memorized = useMemo(() => {
+  const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     const locations = new Set<string>();
     locations.add('All');
@@ -47,7 +47,7 @@ export default function useNotifications() {
     return { notifactions, locations: [...locations] };
   }, [dialogs, luFiles, lgFiles]);
 
-  const notifications: INotification[] = memorized.notifactions.filter(x => filter === 'All' || x.location === filter);
+  const notifications: INotification[] = memoized.notifactions.filter(x => filter === 'All' || x.location === filter);
 
-  return { notifications, setFilter, locations: memorized.locations };
+  return { notifications, setFilter, locations: memoized.locations };
 }

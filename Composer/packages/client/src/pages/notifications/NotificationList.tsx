@@ -5,20 +5,15 @@ import * as React from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn, FontIcon } from 'office-ui-fabric-react';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot } from './styles';
+import { notification, typeIcon, listRoot, icons } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
 }
 
-const icons = {
-  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
-  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
-};
-
 const columns: IColumn[] = [
   {
-    key: 'column1',
+    key: 'Icon',
     name: '',
     className: notification.typeIconCell,
     iconClassName: notification.typeIconHeaderIcon,
@@ -30,7 +25,7 @@ const columns: IColumn[] = [
     },
   },
   {
-    key: 'column2',
+    key: 'Notification Type',
     name: 'Type',
     fieldName: 'type',
     minWidth: 70,
@@ -44,7 +39,7 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'column3',
+    key: 'Notification Location',
     name: 'Location',
     fieldName: 'location',
     minWidth: 70,
@@ -57,7 +52,7 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'column4',
+    key: 'Notification Detail',
     name: 'Message',
     fieldName: 'message',
     minWidth: 70,

@@ -2,41 +2,50 @@
 // Licensed under the MIT License.
 
 import React, { useCallback, useContext, useState } from 'react';
-import { Link } from '@reach/router';
-import { PropTypes } from 'prop-types';
+import { Link, LinkGetProps } from '@reach/router';
 import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../store';
 
 import { link, outer, commandBarButton } from './styles';
 
-export const NavItem = props => {
+/**
+ * @param to The string URI to link to. Supports relative and absolute URIs.
+ * @param exact The uri is exactly the same as the anchor’s href.
+ * @param iconName The link's icon.
+ * @param labelName The link's text.
+ * @param disabled If true, the Link will be unavailable.
+ */
+export interface INavItemProps {
+  to: string;
+  exact: boolean;
+  iconName: string;
+  labelName: string;
+  disabled: boolean;
+}
+
+export const NavItem: React.FC<INavItemProps> = props => {
   const {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
 
-  const { to, exact, iconName, labelName, targetUrl, underTest } = props;
+  const { to, exact, iconName, labelName, disabled } = props;
   const [active, setActive] = useState(false);
 
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
-  const isPartial = (targetUrl, currentUrl) => {
-    const urlPaths = currentUrl.split('/');
-    return urlPaths.indexOf(targetUrl) !== -1;
-  };
-
   return (
-    <FocusZone allowFocusRoot={true} disabled={underTest}>
+    <FocusZone allowFocusRoot={true} disabled={disabled}>
       <Link
         to={to}
-        css={link(active, underTest)}
-        getProps={({ isCurrent, location }) => {
-          const isActive = exact ? isCurrent : isPartial(targetUrl, location.pathname);
+        css={link(active, disabled)}
+        getProps={(props: LinkGetProps) => {
+          const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
           setActive(isActive);
+          return {};
         }}
         data-testid={'LeftNav-CommandBarButton' + labelName}
-        disabled={underTest}
-        aria-disabled={underTest}
+        aria-disabled={disabled}
         aria-label={labelName}
         ref={addRef}
       >
@@ -47,20 +56,11 @@ export const NavItem = props => {
             }}
             text={labelName}
             styles={commandBarButton(active)}
-            disabled={underTest}
+            disabled={disabled}
             ariaHidden
           />
         </div>
       </Link>
     </FocusZone>
   );
-};
-NavItem.propTypes = {
-  to: PropTypes.string,
-  iconName: PropTypes.string,
-  labelName: PropTypes.string,
-  exact: PropTypes.bool,
-  labelHide: PropTypes.bool,
-  index: PropTypes.number,
-  targetUrl: PropTypes.string,
 };

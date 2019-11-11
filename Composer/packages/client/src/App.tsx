@@ -30,64 +30,57 @@ const topLinks = (botLoaded: boolean) => {
       to: '/home',
       iconName: 'Home',
       labelName: formatMessage('Home'),
-      activeIfUrlContains: 'home',
       exact: true,
+      disabled: false,
     },
     {
       to: '/dialogs/Main',
       iconName: 'SplitObject',
       labelName: formatMessage('Design Flow'),
-      activeIfUrlContains: 'dialogs',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: '/test-conversation',
       iconName: 'WaitListConfirm',
       labelName: formatMessage('Test Conversation'),
-      activeIfUrlContains: '',
       exact: false,
-      underTest: true, // will delete
+      disabled: true, // will delete
     },
     {
       to: 'language-generation/',
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
-      activeIfUrlContains: 'language-generation',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: 'language-understanding/',
       iconName: 'People',
       labelName: formatMessage('User Input'),
-      activeIfUrlContains: 'language-understanding',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: '/evaluate-performance',
       iconName: 'Chart',
       labelName: formatMessage('Evaluate performance'),
-      activeIfUrlContains: '',
       exact: false,
-      underTest: true, // will delete
+      disabled: true,
     },
     {
       to: '/notifications',
       iconName: 'Warning',
       labelName: formatMessage('Notifications'),
-      activeIfUrlContains: '/notifications',
       exact: true,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: '/setting/',
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
-      activeIfUrlContains: 'setting',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
   ];
 
@@ -103,16 +96,15 @@ const bottomLinks = [
     to: '/help',
     iconName: 'unknown',
     labelName: formatMessage('Info'),
-    activeIfUrlContains: '/help',
-    exact: false,
-    underTest: true, // will delete
+    exact: true,
+    disabled: true,
   },
   {
     to: '/about',
     iconName: 'info',
     labelName: formatMessage('About'),
-    activeIfUrlContains: '/about',
-    exact: false,
+    exact: true,
+    disabled: false,
   },
 ];
 
@@ -148,11 +140,8 @@ export const App: React.FC = () => {
                   to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  labelHide={!sideBarExpand}
-                  index={index}
                   exact={link.exact}
-                  targetUrl={link.activeIfUrlContains}
-                  underTest={link.underTest}
+                  disabled={link.disabled}
                 />
               );
             })}
@@ -166,11 +155,8 @@ export const App: React.FC = () => {
                   to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  labelHide={!sideBarExpand}
-                  index={index}
                   exact={link.exact}
-                  targetUrl={link.activeIfUrlContains}
-                  underTest={link.underTest}
+                  disabled={link.disabled}
                 />
               );
             })}

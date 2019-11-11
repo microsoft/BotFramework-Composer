@@ -3,6 +3,12 @@
 
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
+import { IDropdownStyles } from 'office-ui-fabric-react';
+
+export const icons = {
+  Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
+  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
+};
 
 export const notification = mergeStyleSets({
   typeIconHeaderIcon: {
@@ -23,6 +29,10 @@ export const notification = mergeStyleSets({
     },
   },
 });
+
+export const dropdownStyles: Partial<IDropdownStyles> = {
+  dropdown: { width: 180, marginLeft: 'auto' },
+};
 
 export const typeIcon = icon => css`
   vertical-align: middle;
