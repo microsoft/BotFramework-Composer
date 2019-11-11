@@ -6,7 +6,7 @@ Composer includes the Bot Framework Language Generation library, a set of powerf
 
 Let's start by adding some variation to the welcome message.
 
-1. In Composer, click on `weatherBot.Main`, then make sure to highlight the `WelcomeTheUser` trigger.
+1. In Composer, click on `weatherBot.Main` and highlight the `WelcomeTheUser` trigger.
 
    ![](../media/tutorial-weatherbot/05/nav1.png) 
 
@@ -24,7 +24,7 @@ Let's start by adding some variation to the welcome message.
 
     > Each tick mark indicates a variation in the message. The bot will choose one of the responses randomly at runtime!
 
-4. Click `Reload Bot` and open it in the emulator.
+4. Click **Restart Bot** and open it in the emulator.
 
 ---
 
