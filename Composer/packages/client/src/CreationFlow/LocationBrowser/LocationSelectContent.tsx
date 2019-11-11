@@ -18,7 +18,7 @@ const NEW_BOT_LOCATION_KEY = 'newBotLocation';
 export function LocationSelectContent(props) {
   const { state, actions } = useContext(StoreContext);
   const { storages, focusedStorageFolder, storageFileLoadingStatus } = state;
-  const { onOpen, onChange } = props;
+  const { onOpen, onChange, allowOpeningBot = true } = props;
 
   const { fetchFolderItemsByPath } = actions;
   const currentStorageIndex = useRef(0);
@@ -68,22 +68,17 @@ export function LocationSelectContent(props) {
       const path = item.filePath;
       if (type === FileTypes.FOLDER) {
         updateCurrentPath(path, storageId);
-      } else if (type === FileTypes.BOT) {
+      } else if (type === FileTypes.BOT && allowOpeningBot) {
         onOpen(path, storageId);
       }
     }
   };
 
   const checkShowItem = item => {
-    // this is a file->open browser
-    if (onOpen) {
-      if (item.type === 'bot' || item.type === 'folder') {
-        return true;
-      }
-      return false;
-    } else {
-      return item.type === 'folder';
+    if (item.type === 'bot' || item.type === 'folder') {
+      return true;
     }
+    return false;
   };
 
   return (
