@@ -17,6 +17,7 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
+import Onboarding from './Onboarding';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -185,6 +186,7 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
+        <Onboarding />
       </div>
     </Fragment>
   );

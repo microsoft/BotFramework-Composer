@@ -19,8 +19,13 @@
 // 'optional'}, (subject, options) => { ... })
 //
 //
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.overwrite("visit", (originalFn, url, { enableOnboarding } = {}) => {
+  if (!enableOnboarding) {
+    cy.window().then(window => window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true })));
+  }
+  originalFn(url);
+ });
 
 import 'cypress-testing-library/add-commands';
 

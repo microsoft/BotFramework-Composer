@@ -258,6 +258,16 @@ const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   return state;
 };
 
+const onboardingAddCoachMarkRef: ReducerFunc = (state, { ref }) => {
+  state.onboarding.coachMarkRefs = { ...state.onboarding.coachMarkRefs, ...ref };
+  return state;
+};
+
+const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
+  state.onboarding.complete = complete;
+  return state;
+};
+
 const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   state.clipboardActions = clipboardActions;
   return state;
@@ -317,5 +327,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
+  [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
+  [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
 });
