@@ -40,7 +40,7 @@
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.1.0"
   },
   "dependencies": {
     "json-schema": "^0.2.5"

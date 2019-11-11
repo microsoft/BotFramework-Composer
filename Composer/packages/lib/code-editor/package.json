@@ -46,7 +46,7 @@
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "style-loader": "^0.23.1",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^24.1.0",
     "ts-loader": "^5.3.3",
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",
