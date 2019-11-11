@@ -1,18 +1,18 @@
 /// <reference types="Cypress" />
 
 context('ToDo Bot', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('ToDoBot');
+    cy.createBot('TodoSample');
   });
 
   it('can open the main dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestToDoBot.Main').click();
+      cy.getByText('__TestTodoSample.Main').click();
       cy.wait(100);
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('__TestToDoBot').should('exist');
+      cy.getByDisplayValue('__TestTodoSample').should('exist');
     });
   });
 

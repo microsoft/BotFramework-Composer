@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
+import debounce from 'lodash.debounce';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
@@ -66,4 +67,24 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
   });
 
   return templateText;
+};
+
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+};
+
+export const useWindowDimensions = () => {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const handleResize = useRef(debounce(() => setWindowDimensions(getWindowDimensions()), 200)).current;
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
 };

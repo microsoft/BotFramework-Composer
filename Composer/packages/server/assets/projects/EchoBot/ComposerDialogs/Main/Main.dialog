@@ -6,13 +6,13 @@
   },
   "autoEndDialog": true,
   "generator": "common.lg",
-  "$schema": "../../app.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "821845"
-      },    
+      },
       "actions": [
         {
           "$type": "Microsoft.SendActivity",

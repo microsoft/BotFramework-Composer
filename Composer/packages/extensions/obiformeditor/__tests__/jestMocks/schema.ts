@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { JSONSchema6 } from 'json-schema';
 import merge from 'lodash.merge';
 

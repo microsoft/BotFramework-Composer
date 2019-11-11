@@ -4,7 +4,7 @@
     "name": "Sample",
     "description": "Test"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "recognizer": "Main.lu",
   "triggers": [
@@ -480,6 +480,6 @@
       "intent": "ViewCollection"
     }
   ],
-  "$schema": "../../app.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "generator": "common.lg"
 }

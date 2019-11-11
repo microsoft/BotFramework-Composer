@@ -3,13 +3,13 @@
 context('check language generation page', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('ToDoBot');
+    cy.createBot('TodoSample');
   });
 
   it('can open language generation page', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonBot Responses"]').click();
     // left nav tree
-    cy.contains('ToDoBot.Main');
+    cy.contains('TodoSample.Main');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -24,7 +24,7 @@ context('check language generation page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.get('.dialogNavTree button[title="__TestToDoBot.Main"]').click();
+    cy.get('.dialogNavTree button[title="__TestTodoSample.Main"]').click();
     cy.wait(300);
 
     // dialog filter, edit mode button is disabled.
