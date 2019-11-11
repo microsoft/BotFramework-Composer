@@ -44,6 +44,9 @@ function LGEditor() {
     value,
     onChange,
     lgOption,
+    languageServer: {
+      url: 'ws://localhost:5000/lgServer',
+    },
   };
   return <LGLSPEditor {...props} />;
 }

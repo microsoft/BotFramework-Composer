@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import { attachLSPServer } from '@bfc/lg-languageserver';
 
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
@@ -93,7 +94,8 @@ app.get('*', function(req, res) {
 });
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log('Composer api now running.');
 });
+attachLSPServer(server, '/lgServer');

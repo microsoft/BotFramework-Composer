@@ -58,6 +58,9 @@ export default function CodeEditor(props) {
       value={content}
       errorMsg={errorMsg}
       lgOption={lgOption}
+      languageServer={{
+        url: 'ws://localhost:5000/lgServer',
+      }}
       onChange={_onChange}
     />
   );

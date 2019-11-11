@@ -5,6 +5,8 @@ import React from 'react';
 import { startSampleClient, registerLGLanguage } from '@bfc/language-client';
 // import { startSampleClient, registerLGLanguage } from '../../../../tools/language-client/src/';
 
+import { assignDefined } from '../utils';
+
 import { RichEditor, RichEditorProps } from './RichEditor';
 
 const LG_HELP =
@@ -23,7 +25,14 @@ export interface LGOption {
 
 export interface LGLSPEditorProps extends RichEditorProps {
   lgOption?: LGOption;
+  languageServer?: {
+    url: string;
+  };
 }
+
+const defaultLGServer = {
+  url: 'ws://localhost:5000/lgServer',
+};
 
 export function LGLSPEditor(props: LGLSPEditorProps) {
   const options = {
@@ -31,10 +40,8 @@ export function LGLSPEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption = {}, ...restProps } = props;
-  const lgServer = {
-    url: 'ws://localhost:5002/lgServer',
-  };
+  const { lgOption = {}, languageServer = {}, ...restProps } = props;
+  const lgServer = assignDefined(languageServer, defaultLGServer);
   const editorWillMount = monaco => {
     registerLGLanguage();
     if (typeof props.editorWillMount === 'function') {
