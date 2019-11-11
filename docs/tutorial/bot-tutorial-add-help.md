@@ -50,7 +50,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
       ![](../media/tutorial-weatherbot/04/help-props.png)
 
-14. Click `Reload bot` and open it in the emulator.
+14. Click **Restart Bot** and open it in the emulator.
 
 ----
 
@@ -72,7 +72,7 @@ However, notice that once you start the weather dialog by saying weather, your b
 
    > This tells Bot Framework to consult the parent dialog's recognizer, which will allow the bot to respond to `help` at the prompt as well.
 
-4. Hit `Reload Bot` and open it in the emulator.
+4. Hit **Restart Bot** and open it in the emulator.
 
 ---
 
@@ -122,7 +122,7 @@ For now, let's add one more global function - a cancel command.
 
       ![](../media/tutorial-weatherbot/04/cancel-trigger.png) 
 
-15. Click `Reload bot` and open it in the emulator.
+15. Click **Restart Bot** and open it in the emulator.
 
 ---
 

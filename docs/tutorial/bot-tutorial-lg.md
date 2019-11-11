@@ -24,7 +24,7 @@ Let's start by adding some variation to the welcome message.
 
     > Each tick mark indicates a variation in the message. The bot will choose one of the responses randomly at runtime!
 
-4. Click `Reload Bot` and open it in the emulator.
+4. Click **Restart Bot** and open it in the emulator.
 
 ---
 
@@ -38,7 +38,7 @@ Currently, the bot reports the weather in a very robotic manner: The weather is 
 
 Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the Language Generation system: conditional messages, and parameterized messages.
 
-5. Navigate to the `Bot Says` tab by clicking the bot icon on the far left of the screen.
+5. Navigate to the **Bot Says** tab by clicking the bot icon on the far left of the screen.
 
    ![](../media/tutorial-weatherbot/05/botsays.png)
 
@@ -101,7 +101,7 @@ Let's improve the language used when delivering the weather conditions. To do th
 
       ![](../media/tutorial-weatherbot/05/lg-2.png)
 
-14. Click `Reload bot` and open it in the emulator.
+14. Click **Restart Bot** and open it in the emulator.
 
 ---
 

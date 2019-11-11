@@ -26,7 +26,7 @@ First, let's go ahead and update `prompt for zipcode` to include suggested actio
     ]
     ```
 
-4. Click `Reload Bot` and open it in the emulator.
+4. Click **Restart Bot** and open it in the emulator.
 
 ---
 
@@ -48,7 +48,7 @@ Next up, let's change the weather report to also include a card.
     ]
     ```
 
-7. Click `Reload Bot` and open it in the emulator.
+7. Click **Restart Bot** and open it in the emulator.
 
 ---
 
