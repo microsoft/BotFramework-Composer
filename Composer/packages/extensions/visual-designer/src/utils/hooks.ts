@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useState, useEffect, useRef } from 'react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
