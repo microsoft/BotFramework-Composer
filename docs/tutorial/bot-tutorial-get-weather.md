@@ -25,7 +25,7 @@
 
       `user.zipcode`
 
-   For `Output Format`, select `trim`. This ensures leading and trailing spaces in user input are trimmed before the value is assigned to `user.zipcode`
+   For **Output Format**, select `trim`. This ensures leading and trailing spaces in user input are trimmed before the value is assigned to `user.zipcode`
 
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
@@ -79,7 +79,7 @@ The http request action is found under the **Access external resources** menu in
 
    Set the method to `GET`
 
-   Set the url to:    
+   Set the URL to:    
 
       `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode={user.zipcode}`
 
@@ -91,7 +91,7 @@ The http request action is found under the **Access external resources** menu in
 
    This will cause the bot to make an HTTP request to the url specified. The reference to `{user.zipcode}` will be replaced by a live value from the bot's memory.
 
-   > HTTP action sets the following information in the `Result property`: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
+   > HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
    After making an HTTP request, we need to test the status of the response. To do this, we'll use an If/Else branch.
 
