@@ -11,11 +11,12 @@ import {
   IIconProps,
   SearchBox,
 } from 'office-ui-fabric-react';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { cloneDeep } from 'lodash';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 
+import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
 
 import { addButton, groupListStyle, root, searchBox } from './styles';
@@ -92,9 +93,15 @@ const addIconProps: IIconProps = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = props => {
+  const {
+    actions: { onboardingAddCoachMarkRef },
+  } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
   const [filter, setFilter] = useState('');
+
+  const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
+  const addNewTriggerRef = useCallback(newTrigger => onboardingAddCoachMarkRef({ newTrigger }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
@@ -107,14 +114,16 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       onSelect(props.group!.key);
     };
     return (
-      <TreeItem
-        link={props.group!.data}
-        depth={0}
-        isActive={!props.group!.isCollapsed}
-        isSubItemActive={!!selected}
-        onSelect={toggleCollapse}
-        onDelete={onDeleteDialog}
-      />
+      <span ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+        <TreeItem
+          link={props.group!.data}
+          depth={0}
+          isActive={!props.group!.isCollapsed}
+          isSubItemActive={!!selected}
+          onSelect={toggleCollapse}
+          onDelete={onDeleteDialog}
+        />
+      </span>
     );
   };
 
@@ -133,7 +142,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const onRenderShowAll = () => {
     return (
       <ActionButton css={addButton(1)} iconProps={addIconProps} onClick={openNewTriggerModal}>
-        {formatMessage('New Trigger ..')}
+        <span ref={addNewTriggerRef}>{formatMessage('New Trigger ..')}</span>
       </ActionButton>
     );
   };

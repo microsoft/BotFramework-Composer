@@ -1,16 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
 import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
 
+import { StoreContext } from '../../store';
+
 import { link, outer, commandBarButton } from './styles';
 
 export const NavItem = props => {
+  const {
+    actions: { onboardingAddCoachMarkRef },
+  } = useContext(StoreContext);
+
   const { to, exact, iconName, labelName, targetUrl, underTest } = props;
   const [active, setActive] = useState(false);
+
+  const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   const isPartial = (targetUrl, currentUrl) => {
     const urlPaths = currentUrl.split('/');
@@ -30,6 +38,7 @@ export const NavItem = props => {
         disabled={underTest}
         aria-disabled={underTest}
         aria-label={labelName}
+        ref={addRef}
       >
         <div css={outer} aria-hidden="true">
           <CommandBarButton

@@ -6,15 +6,13 @@
   "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
-    "intents":[
+    "intents": [
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "JokeIntent",
-        "pattern": "(?i)joke" 
+        "pattern": "(?i)joke"
       },
       {
-
         "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
@@ -24,9 +22,7 @@
   "triggers": [
     {
       "$type": "Microsoft.OnCustomEvent",
-      "triggers": [
-        "cancelDialog"
-      ],
+      "event": "cancelDialog",
       "actions": [
         {
           "$type": "Microsoft.SendActivity",
@@ -91,5 +87,5 @@
       ]
     }
   ],
-  "$schema": "../../app.schema"
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

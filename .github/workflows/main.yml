@@ -7,6 +7,8 @@ on:
     branches:
       - master
       - stable
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   ci:
@@ -41,13 +43,16 @@ jobs:
         working-directory: Composer
       # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
       - name: Publish coverage results
-        if: env.COVERALLS_REPO_TOKEN && true
-        run: cat coverage/lcov.info | ./node_modules/.bin/coveralls
+        run: |
+          if [[ -z $COVERALLS_REPO_TOKEN ]]; then
+            echo "Coveralls token not found. Skipping."
+          else
+            cat coverage/lcov.info | ./node_modules/.bin/coveralls
+          fi
         working-directory: Composer
         env:
           COVERALLS_SERVICE_NAME: "Github Actions"
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          COVERALLS_GIT_COMMIT: ${{ github.head_sha }}
 
   e2e:
     name: E2E Tests
@@ -76,11 +81,11 @@ jobs:
       - name: yarn test:integration
         run: yarn test:integration
         working-directory: Composer
-        continue-on-error: true
         env:
           CYPRESS_COMPOSER_URL: http://localhost:5000
       - name: Archive E2E Failures
         uses: actions/upload-artifact@v1
+        if: failure()
         with:
           name: cypress
           path: Composer/cypress/screenshots

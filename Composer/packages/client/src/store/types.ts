@@ -84,6 +84,10 @@ export interface State {
   publishStatus: any;
   lastPublishChange: any;
   visualEditorSelection: string[];
+  onboarding: {
+    coachMarkRefs: { [key: string]: any };
+    complete: boolean;
+  };
   clipboardActions: any[];
 }
 

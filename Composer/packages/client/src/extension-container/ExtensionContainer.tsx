@@ -117,6 +117,10 @@ const shellApi = {
   redo: () => {
     return apiClient.apiCall('redo');
   },
+
+  addCoachMarkRef: (target: any) => {
+    return apiClient.apiCall('addCoachMarkPosition', target);
+  },
 };
 
 function ExtensionContainer() {
