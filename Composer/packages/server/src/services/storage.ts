@@ -19,9 +19,7 @@ class StorageService {
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
     this.storageConnections.forEach(s => {
-      if (!fs.existsSync(s.defaultPath)) {
-        fs.mkdirSync(s.defaultPath);
-      }
+      this.createFolderRecurively(s.defaultPath);
     });
   }
 
@@ -133,6 +131,13 @@ class StorageService {
     // filter no access permission folder, witch value is null in children array
     const result = await Promise.all(children);
     return result.filter(item => !!item);
+  };
+
+  private createFolderRecurively = (path: string) => {
+    if (!fs.existsSync(path)) {
+      this.createFolderRecurively(Path.dirname(path));
+      fs.mkdirSync(path);
+    }
   };
 }
 
