@@ -40,7 +40,7 @@ Composer created this new dialog with a `BeginDialog` trigger pre-configured.
    ![](../media/tutorial-weatherbot/02/getweather-draft.png)
 
 ## Wiring up dialogs
-You can break pieces of your conversation flow into `dialogs` and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
+You can break pieces of your conversation flow into dialogs and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
 
 1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `WeatherBot.Main` from the explorer, find the **Language Understanding** section of the properties panel. 
 
@@ -52,7 +52,7 @@ You can break pieces of your conversation flow into `dialogs` and can chain them
 
    ![](../media/tutorial-weatherbot/02/regexp-recognizer.gif)
 
-3.  Click the **Add** button. 2 new fields will appear: one labeled **Intent** and one labeled **Pattern**
+3.  Click the **Add** button. Two new fields will appear: **Intent** and **Pattern**
 
    ![](../media/tutorial-weatherbot/02/weather-intent.png)
 
