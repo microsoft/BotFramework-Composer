@@ -73,6 +73,7 @@
     "cypress-testing-library": "^3.0.1",
     "eslint": "^5.15.1",
     "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-emotion": "^10.0.14",
     "eslint-plugin-format-message": "^6.2.3",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
