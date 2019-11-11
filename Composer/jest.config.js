@@ -1,15 +1,13 @@
 module.exports = {
   collectCoverageFrom: [
-    'packages/**/*.{js,jsx,ts,tsx}',
+    '**/src/**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
     '!**/demo/**',
     '!**/extensions/**/dist/**',
-    '!**/extensions/**/es/**',
     '!**/extensions/**/lib/**',
     '!packages/lib/**/lib/**',
-    '!packages/lib/**/es/**',
     '!**/coverage/**',
     '!**/jest/**',
     '!**/jestMocks/**',
@@ -21,9 +19,10 @@ module.exports = {
     '!**/gulpfile.js',
     '!**/style.js',
     '!**/styles.js',
+    '!**/styles.ts',
     '!cypress/',
   ],
-  coverageReporters: ['json', 'lcov', 'text-summary', 'cobertura'],
+  coverageReporters: ['lcov', 'text-summary'],
   coverageThreshold: {
     global: {
       statements: 20,

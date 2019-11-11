@@ -4,7 +4,7 @@
     "id": "295682"
   },
   "autoEndDialog": true,
-  "$schema": "../../app.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -38,7 +38,7 @@
           },
           "method": "GET",
           "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
-          "header": {
+          "headers": {
             "Authorization": "Bearer {user.token.token}"
           },
           "resultProperty": "user.getGraphEmails"

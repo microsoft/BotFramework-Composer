@@ -44,6 +44,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const data = dataCache.current;
   const {
+    addCoachMarkRef,
     navTo,
     onFocusEvent,
     onFocusSteps,
@@ -99,6 +100,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               onSelect={onSelect}
               undo={undo}
               redo={redo}
+              addCoachMarkRef={addCoachMarkRef}
             />
           </div>
         </SelfHostContext.Provider>
@@ -131,6 +133,7 @@ VisualDesigner.defaultProps = {
     onFocusSteps: (_stepIds: string[], _fragment?: string) => {},
     onSelect: (_ids: string[]) => {},
     saveData: () => {},
+    addCoachMarkRef: (_: any) => {},
   },
 };
 

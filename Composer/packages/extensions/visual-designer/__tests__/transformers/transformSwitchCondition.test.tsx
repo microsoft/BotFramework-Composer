@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { transformSwitchCondition } from '../../src/transformers/transformSwitchCondition';
 import { ObiTypes } from '../../src/constants/ObiTypes';
 
