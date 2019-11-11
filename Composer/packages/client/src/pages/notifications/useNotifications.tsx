@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { StoreContext } from '../../store';
 import { createSingleMessage } from '../../utils/lgUtil';
@@ -10,15 +10,13 @@ import { INotification } from './types';
 
 const DiagnosticSeverity = ['Error', 'Warning', 'Information', 'Hint'];
 
-export default function useNotifications() {
+export default function useNotifications(filter: string) {
   const { state } = useContext(StoreContext);
-  const [filter, setFilter] = useState('All');
   const { dialogs, luFiles, lgFiles } = state;
 
   const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     const locations = new Set<string>();
-    locations.add('All');
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
         const location = dialog.displayName;
@@ -44,10 +42,12 @@ export default function useNotifications() {
         });
       });
     });
-    return { notifactions, locations: [...locations] };
+    return { notifactions, locations: Array.from(locations) };
   }, [dialogs, luFiles, lgFiles]);
 
-  const notifications: INotification[] = memoized.notifactions.filter(x => filter === 'All' || x.location === filter);
+  const notifications: INotification[] = !filter
+    ? memoized.notifactions
+    : memoized.notifactions.filter(x => x.location === filter);
 
-  return { notifications, setFilter, locations: memoized.locations };
+  return { notifications, locations: memoized.locations };
 }

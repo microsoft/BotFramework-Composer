@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
@@ -10,7 +10,8 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 
 export const Notifications = props => {
-  const { notifications, setFilter, locations } = useNotifications();
+  const [filter, setFilter] = useState('');
+  const { notifications, locations } = useNotifications(filter);
   return (
     <div css={root}>
       <ToolBar />
