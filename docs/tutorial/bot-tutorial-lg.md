@@ -6,7 +6,7 @@ Composer includes the Bot Framework Language Generation library, a set of powerf
 
 Let's start by adding some variation to the welcome message.
 
-1. In Composer, click on `weatherBot.Main`, then make sure to highlight the `WelcomeTheUser` trigger.
+1. In Composer, click on `weatherBot.Main` and highlight the `WelcomeTheUser` trigger.
 
    ![](../media/tutorial-weatherbot/05/nav1.png) 
 
@@ -42,7 +42,7 @@ Let's improve the language used when delivering the weather conditions. To do th
 
    ![](../media/tutorial-weatherbot/05/botsays.png)
 
-6. Toggle the `Edit Mode` switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
+6. Toggle the **Edit Mode** switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
 
    > You'll notice that every message you created in the flow editor also appears here. They're linked, and any changes you make in this view will be reflected in the flow as well.
 
@@ -87,7 +87,7 @@ Let's improve the language used when delivering the weather conditions. To do th
     > This creates a new Language Generation template called `DescribeWeather`. This template receives weather data from our API as a parameter, and outputs a friendlier 
     description of the weather based on the raw data from the API.
 
-9. Navigate back to the flow designer by clicking on `Flow designer` in the left navigation bar.
+9. Navigate back to the flow designer by clicking on **Flow designer** in the left navigation bar.
 10. In Composer's explorer, click on the `getWeather` dialog, and make sure the `BeginDialog` trigger is highlighted.
 
       ![](../media/tutorial-weatherbot/05/nav2.png)

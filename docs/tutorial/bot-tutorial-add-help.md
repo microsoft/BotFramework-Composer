@@ -42,7 +42,7 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
      ![](../media/tutorial-weatherbot/04/new-trigger.png) 
 
 11. In the flow editor, click the **+** button at the bottom of the empty flow.
-12. Choose `Dialogs management >` and then select `Begin a new dialog`
+12. Choose **Dialog management** and then select **Begin a new dialog**
 
       ![](../media/tutorial-weatherbot/04/help-trigger-flow.png)
 
@@ -67,14 +67,12 @@ However, notice that once you start the weather dialog by saying weather, your b
 
 1. In Composer's left hand explorer, navigate back to the `getWeather` dialog. Make sure to highlight the `BeginDialog` trigger.
 2. Select the **Bot Asks** node in the flow that says `What is your zipcode?`
-3. In the right hand properties panel, set `Allow Interruptions` to `true`
+3. In the right hand properties panel, set **Allow Interruptions** to `true`
    ![](../media/tutorial-weatherbot/04/interrupts.png)
 
    > This tells Bot Framework to consult the parent dialog's recognizer, which will allow the bot to respond to `help` at the prompt as well.
 
 4. Hit **Restart Bot** and open it in the emulator.
-
----
 
 Say `weather` to your bot.  It will ask for a zipcode.
 
@@ -84,7 +82,6 @@ Now say `help`. It'll provide the global help response, even though that intent 
 
 For now, let's add one more global function - a cancel command.
 
----
 
 ## Global cancel
 
@@ -98,14 +95,14 @@ For now, let's add one more global function - a cancel command.
 
       `Canceling!`
 
-5. Use the **+** button again, this time choose `Dialog management >`, then `Cancel all dialogs`
+5. Use the **+** button again, this time choose **Dialog management**, then **Cancel all dialogs**
 
       > When triggered, this will cause the bot to cancel any active dialogs, and send the user back to the main dialog.
 
       ![](../media/tutorial-weatherbot/04/cancel-flow.png) 
 
 6. In the left hand explorer, click on `weatherBot.Main` at the top of the list.
-7. In the right hand property pane, find the "Language Understanding" section and click the "Add" button at the bottom. This will reveal 2 new fields, allowing you to define a new intent.
+7. In the right hand property pane, find the **Language Understanding** section and click the **Add** button at the bottom. This will reveal two new fields, allowing you to define a new intent.
 8. Set the **Intent** field to:
 
       `cancel`
@@ -117,14 +114,12 @@ For now, let's add one more global function - a cancel command.
 10. In the left hand explorer, click **+ New Trigger**
 11. In the resulting dialog box, select **Intent**, then choose the new `cancel` intent. Submit the dialog.
 12. In the flow editor, click the **+** button at the bottom of the empty flow.
-13. Choose `Dialog management >` and then select `Begin a new dialog`
+13. Choose **Dialog management** and then select **Begin a new dialog**
 14. In the right hand properties panel, select the `cancel` dialog.
 
       ![](../media/tutorial-weatherbot/04/cancel-trigger.png) 
 
 15. Click **Restart Bot** and open it in the emulator.
-
----
 
 Say `weather` to your bot.  It will ask for a zipcode.
 
