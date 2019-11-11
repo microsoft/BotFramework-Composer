@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { SDKTypes } from '../types/schema';
+import { MicrosoftIDialog } from '../types';
 
 import { ExternalApi } from './ExternalApi';
 import { copySendActivity } from './copySendActivity';
@@ -29,7 +30,11 @@ const CopyConstructorMap = {
 
 const DEFAULT_COPIER = shallowCopyAdaptiveAction;
 
-export async function copyAdaptiveAction(data, externalApi: ExternalApi) {
+export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: ExternalApi): Promise<MicrosoftIDialog> {
+  if (typeof data === 'string') {
+    return data;
+  }
+
   if (!data || !data.$type) return {};
 
   const copier = CopyConstructorMap[data.$type] || DEFAULT_COPIER;
