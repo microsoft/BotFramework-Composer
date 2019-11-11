@@ -61,6 +61,7 @@
     "@babel/preset-env": "7.3.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@bfc/eslint-plugin-bfcomposer": "*",
     "@emotion/babel-preset-css-prop": "^10.0.17",
     "@typescript-eslint/eslint-plugin": "2.6.0",
     "@typescript-eslint/parser": "2.6.0",

@@ -6,6 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint',
+    'plugin:@bfc/bfcomposer/recommended',
   ],
   plugins: ['import', 'notice', 'security', 'lodash'],
   env: {
