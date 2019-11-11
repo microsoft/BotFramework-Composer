@@ -1,22 +1,22 @@
 # Add a dialog
 
-When building features of a bot with Composer, it is sometimes useful to create a new `dialog` to contain a chunk of functionality. This helps keep the dialog system organized, and also allows sub-dialogs to be combined into larger, more complex dialogs. 
+When building features of a bot with Composer, it is sometimes useful to create a new **dialog** to contain a chunk of functionality. This helps keep the dialog system organized, and also allows sub-dialogs to be combined into larger, more complex dialogs. 
 
-Remember - each dialog contains one or more triggers that launch associated actions. They can have their own dedicated language model. Dialogs can call other dialogs and can pass values back and forth.
+Each dialog contains one or more triggers that launch associated actions. They can have their own dedicated language model. Dialogs can call other dialogs and can pass values back and forth.
 
 ## What are we building?
 
 The main feature of this bot is reporting on the current weather conditions.
 
 To do this, we'll create a dialog that 
-- prompts user to enter a zipcode (to use as location for weather lookup)
+- prompts the user to enter a zipcode to use as location for weather lookup
 - calls an external API to retrieve the weather data for a specific zipcode.
 
 First, we'll set up all the components and make sure they work together. Then, we'll flesh out the functionality.
 
 ## Create a new dialog
 
-1. Click the `+ New Dialog` button in the left hand explorer. A dialog will appear and ask for a `name` and `description`
+1. Click the **+ New Dialog** button in the left hand explorer. A dialog will appear and ask for a **Name** and **Description**
 2. Give this new dialog the name:
     
       `getWeather`
@@ -42,13 +42,13 @@ Composer created this new dialog with a `BeginDialog` trigger pre-configured.
 ## Wiring up dialogs
 You can break pieces of your conversation flow into `dialogs` and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
 
-1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `weatherBot.Main` from the explorer, find the `Language Understanding` section of the properties panel. 
+1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `WeatherBot.Main` from the explorer, find the **Language Understanding** section of the properties panel. 
 
-   > Each dialog can have it's own `recognizer`, a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined `intents`. Different types of recognizers use different techniques to determine which intent, if any, to choose.
+   > Each dialog can have it's own **recognizer**, a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined **intents**. Different types of recognizers use different techniques to determine which intent, if any, to choose.
 
-   > For now, we're going to use the `Regular Expression` recognizer, which uses pattern matching. Later, we'll use more sophisticated natural language understanding technology from `LUIS`.
+   > For now, we're going to use the **Regular Expression** recognizer, which uses pattern matching. Later, we'll use more sophisticated natural language understanding technology from **LUIS**.
 
-2. Under the `Recognizer Type`, select `Regular Expression`
+2. Under the **Recognizer Type**, select `Regular Expression`
 
    ![](../media/tutorial-weatherbot/02/regexp-recognizer.gif)
 
