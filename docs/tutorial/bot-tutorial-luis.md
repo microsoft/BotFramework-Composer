@@ -43,16 +43,16 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    ![](../media/tutorial-weatherbot/07/luis-with-lu-content.png)
 
-3. Once you have done this, you need to re-configure the various `Intent` triggers within that dialog. 
+3. Once you have done this, you need to re-configure the various **Intent** triggers within that dialog. 
 4. Click on `weather` trigger in the left navigation and choose `Weather` from the intent drop down
 
-   Update the title of the trigger to `Weather` instead of `Intent`
+   Update the title of the trigger to `Weather` instead of **Intent**
 
    ![](../media/tutorial-weatherbot/07/weather-intent-selection.png)
 
 5. Click on `cancel` trigger in the left navigation and choose `Cancel` from the intent drop down
 
-   Update the title of the trigger to `Cancel` instead of `Intent`
+   Update the title of the trigger to `Cancel` instead of **Intent**
 
 6. Given we are using LUIS which is a machine learning based intent classifier, we want to avoid low confidence results. To do this, 
 
@@ -66,7 +66,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
 7. Click on `help` trigger in the left navigation and choose `Help` from the intent drop down
 
-   Update the title of the trigger to `Help` instead of `Intent`
+   Update the title of the trigger to `Help` instead of **Intent**
 
    Set the `Condition` property to this 
 
@@ -74,7 +74,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    > This says do not fire the cancel trigger if the confidence score returned by LUIS is lower than or equal to 0.5
 
-7. Click on `Restart bot`
+7. Click on **Restart Bot**
 
    Composer has now detected that you have LU information specified and it needs to create/ update corresponding LUIS applications. 
 
@@ -83,7 +83,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
    ![](../media/tutorial-weatherbot/07/luis-key.png)
 
 8. Click `Publish`. This should take a minute or two to complete. Composer will render progress at the top right corner of the screen.
-9. Click on `Test in Emulator` and talk to the bot. 
+9. Click on **Test in Emulator** and talk to the bot. 
 
 ---
 
@@ -133,7 +133,7 @@ Let's get this wired up.
 
       ![](../media/tutorial-weatherbot/07/set-property-zipcode.png)
 
-14. Click on `Restart bot`, wait for the LUIS application to be updated (since you added a new entity) and then click on `Test in Emulator`
+14. Click on **Restart Bot**, wait for the LUIS application to be updated (since you added a new entity) and then click on **Test in Emulator**
 
 ---
 

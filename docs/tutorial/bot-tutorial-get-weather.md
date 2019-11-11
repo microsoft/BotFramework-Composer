@@ -1,25 +1,25 @@
 # Get weather report
 
 1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
-2. Click on the `BeginDialog` trigger underneath getWeather. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a `Number Input` to prompt the user for a `zipcode`.
-3. Click the **+** button in the flow and select `Ask a question`. You'll see a variety of options for asking for different types of input.
-4. Select `Text input` from the sub-menu. Two new nodes will appear in the flow!
+2. Click on the `BeginDialog` trigger underneath getWeather. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a **Number Input** to prompt the user for a `zipcode`.
+3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input.
+4. Select **Number Input** from the sub-menu. Two new nodes will appear in the flow!
 
    > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
 
    ![](../media/tutorial-weatherbot/03/empty-prompt.png)
 
-5. Click on the `Bot Asks` node. This part of the prompt represents the message the bot will send to the user requesting information. In the properties panel set the prompt to:
+5. Click on the **Bot Asks** node. This part of the prompt represents the message the bot will send to the user requesting information. In the properties panel set the prompt to:
 
       `What is your zipcode?`
 
-6. Set the `Default value` property (next to Max turn count) to `'98052'` (include the quotes). 
+6. Set the **Default value** property (next to Max turn count) to `'98052'` (include the quotes). 
 
-   > By default prompts are configured to ask the user for information `Max turn count` number of times (defaults to 3). When this happens, the prompt will stop and set the `Default value` to the `Property` and move forward with the conversaiton. 
+   > By default prompts are configured to ask the user for information `Max turn count` number of times (defaults to 3). When this happens, the prompt will stop and set the **Default value** to the `Property` and move forward with the conversaiton. 
 
    ![](../media/tutorial-weatherbot/03/zipcode-prompt.png)
 
-7. Next, click the `User Input` tab in the properties panel. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
+7. Next, click the **User Input** tab in the properties panel. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
 
 8. Here, we can specify what property in memory will be used to store the user's response. In `Property to fill`, enter the value:
 
@@ -29,17 +29,17 @@
 
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
-9. Click on the `Others` tab in the properties panel. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
+9. Click on the **Others** tab in the properties panel. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
 
-10. In the `Unrecognized Prompt` field, enter:
+10. In the **Unrecognized Prompt** field, enter:
       
       `- Sorry, I do not understand '{this.value}'. Please specify a zipcode in the form 12345`
 
-    In the `Invalid Prompt` field, also enter:
+    In the **Invalid Prompt** field, also enter:
 
       `- Sorry, '{this.value}' is not valid. I'm looking for a 5 digit number as zipcode. Please specify a zipcode in the form 12345`
 
-11. In `Validation Rules`, type:
+11. In **Validation Rules**, type:
 
     > validation rule 1 says we need a five characters
 
@@ -69,9 +69,9 @@
 
 ## Add an HTTP request
 
-The http request action is found under the `Access external resources >` menu in the flow **+** button.
+The http request action is found under the **Access external resources** menu in the flow **+** button.
 
-1. Select `Send an HTTP request` to add a the step to your flow.
+1. Select **Send an HTTP request** to add a the step to your flow.
 
    ![](../media/tutorial-weatherbot/03/http-step.png)
 
@@ -83,7 +83,7 @@ The http request action is found under the `Access external resources >` menu in
 
       `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode={user.zipcode}`
 
-   Set the Result property to:
+   Set the **Result property** to:
 
       `dialog.api_response`
 
@@ -91,22 +91,22 @@ The http request action is found under the `Access external resources >` menu in
 
    This will cause the bot to make an HTTP request to the url specified. The reference to `{user.zipcode}` will be replaced by a live value from the bot's memory.
 
-   > HTTP action sets the following information in the `Result property`: statusCode, reasonPhrase, content, headers. Setting the `Result property` to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
+   > HTTP action sets the following information in the `Result property`: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
    After making an HTTP request, we need to test the status of the response. To do this, we'll use an If/Else branch.
 
-3. Use the '+' button, then choose `Create a condition`, then choose  `Branch: If/Else`
-4. In the properties panel on the right, set the `condition` field to:
+3. Use the '+' button, then choose **Create a condition**, then choose  **Branch: If/Else**
+4. In the properties panel on the right, set the **Condition** field to:
 
       `dialog.api_response.statusCode == 200`
 
-5. In the `true` branch, use the **+** button, then select `Manage properties >`, then `Set a Property`
+5. In the `true` branch click the **+** button, select **Manage properties**, and then **Set a Property**
 
-   Set Property to:
+   Set **Property** to:
    
       `dialog.weather`
 
-   Set Value to:
+   Set **Value** to:
 
       `dialog.api_response.content`
 
@@ -126,7 +126,7 @@ The http request action is found under the `Access external resources >` menu in
    
       `I got an error: {dialog.api_response.content.message}`
 
-8. To be safe, let's clean up the invalid value which otherwise would persist. Use the **+**, select `Manage properties >`, then select `Delete a property`
+8. To be safe, let's clean up the invalid value which otherwise would persist. Use the **+**, select **Manage properties**, then select **Delete a property**
 
    Set the property to:
 
@@ -137,7 +137,7 @@ The http request action is found under the `Access external resources >` menu in
 
 ## Test in Emulator
 
-1. Restart the bot again, and open it in emulator.
+1. Restart the bot again, and open it in the emulator.
 
    ![](../media/tutorial-weatherbot/02/restart-bot.gif)
 
@@ -145,7 +145,7 @@ The http request action is found under the `Access external resources >` menu in
 
    ![](../media/tutorial-weatherbot/03/basic-weather.gif)
 
-   If you ask for the weather again, notice that the bot doesn't prompt for a zipcode the second time. Remember, this is because `user.zipcode` is already set. Had we checked `always prompt,` the bot would ask each time. Go back to step 10, check `Always prompt` and try again! Your bot will ask for a zipcode everytime you re-start the conversation in emulator.
+   If you ask for the weather again, notice that the bot doesn't prompt for a zipcode the second time. Remember, this is because `user.zipcode` is already set. Had we checked **Always prompt** the bot would ask each time. Go back to step 10, check `Always prompt` and try again! Your bot will ask for a zipcode everytime you re-start the conversation in emulator.
 
 ## Next steps
 - [Add help and cancel command](./bot-tutorial-add-help.md)

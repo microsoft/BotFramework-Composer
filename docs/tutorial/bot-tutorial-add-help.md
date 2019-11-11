@@ -2,7 +2,7 @@
 
 With even a simple bot, it is a good practice to provide a help command. You'll also want to provide a way for users to back out. 
 
-1. Click `+ New Dialog` in the left hand explorer. You'll see a popup window.
+1. Click **+ New Dialog** in the left hand explorer. You'll see a popup window.
 2. Give this new dialog the name:
 
       `help`
@@ -26,18 +26,18 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
 
 6. In the left hand explorer, click on `weatherBot.Main` at the top of the list.
 7. In the right hand property pane, find the "Language Understanding" section and click the "Add" button at the bottom. This will reveal 2 new fields, allowing you to define a new intent.
-8. Set the `Intent` field to:
+8. Set the **Intent** field to:
 
       `help`
 
-      Set the `Pattern` field to: 
+      Set the **Pattern** field to: 
 
       `help`
 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
 9. In the left hand explorer, click `+ New Trigger`
-10. In the resulting dialog box, select `Intent`, then choose the new `help` intent. Submit the dialog.
+10. In the resulting dialog box, select **Intent**, then choose the new `help` intent. Submit the dialog.
 
      ![](../media/tutorial-weatherbot/04/new-trigger.png) 
 
@@ -66,7 +66,7 @@ However, notice that once you start the weather dialog by saying weather, your b
 ## Allowing interruptions
 
 1. In Composer's left hand explorer, navigate back to the `getWeather` dialog. Make sure to highlight the `BeginDialog` trigger.
-2. Select the `Bot Asks` node in the flow that says `What is your zipcode?`
+2. Select the **Bot Asks** node in the flow that says `What is your zipcode?`
 3. In the right hand properties panel, set `Allow Interruptions` to `true`
    ![](../media/tutorial-weatherbot/04/interrupts.png)
 
@@ -88,7 +88,7 @@ For now, let's add one more global function - a cancel command.
 
 ## Global cancel
 
-1. In Composer's left hand explorer, click the `+ New Dialog` button again. 
+1. In Composer's left hand explorer, click the **+ New Dialog** button again. 
 2. Give this new dialog the name:
 
       `cancel`
@@ -106,16 +106,16 @@ For now, let's add one more global function - a cancel command.
 
 6. In the left hand explorer, click on `weatherBot.Main` at the top of the list.
 7. In the right hand property pane, find the "Language Understanding" section and click the "Add" button at the bottom. This will reveal 2 new fields, allowing you to define a new intent.
-8. Set the `Intent` field to:
+8. Set the **Intent** field to:
 
       `cancel`
 
-9. Set the `Pattern` field to:
+9. Set the **Pattern** field to:
 
       `cancel`
 
 10. In the left hand explorer, click `+ New Trigger`
-11. In the resulting dialog box, select `Intent`, then choose the new `cancel` intent. Submit the dialog.
+11. In the resulting dialog box, select **Intent**, then choose the new `cancel` intent. Submit the dialog.
 12. In the flow editor, click the `+` button at the bottom of the empty flow.
 13. Choose `Dialog management >` and then select `Begin a new dialog`
 14. In the right hand properties panel, select the `cancel` dialog.
