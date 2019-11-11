@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import get from 'lodash/get';
@@ -27,7 +29,7 @@ export const ChoiceOptions: React.FC<ChoiceOptionsProps> = props => {
   };
 
   return (
-    <>
+    <Fragment>
       <div css={field}>
         <TextWidget
           onChange={onChange('inlineSeparator')}
@@ -68,6 +70,6 @@ export const ChoiceOptions: React.FC<ChoiceOptionsProps> = props => {
           formContext={formContext}
         />
       </div>
-    </>
+    </Fragment>
   );
 };
