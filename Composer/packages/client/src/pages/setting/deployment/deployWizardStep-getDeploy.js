@@ -25,7 +25,7 @@ export const DeployWizardStep3 = props => {
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
-            label={formatMessage('Create Resources Script')}
+            label={formatMessage('Deploy Bot Script')}
             styles={styles.input}
             value={scriptValue}
             readOnly={true}
