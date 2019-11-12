@@ -19,22 +19,9 @@ const content = `# Greeting1
 -Good evening
 `;
 
-// Body will fill in editor
-const template = {
-  Name: 'Greeting2',
-  Body: `-Good afternoon
--[Greeting3]
--[Greeting4]`,
-};
-
-const lgOption = {
-  inline: true,
-  content,
-  template,
-};
-
 function LGEditor() {
-  const [value, setValue] = useState(template.Body);
+  // const [value, setValue] = useState(template.Body);
+  const [value, setValue] = useState(content);
 
   const onChange = value => {
     setValue(value);
@@ -43,7 +30,9 @@ function LGEditor() {
   const props = {
     value,
     onChange,
-    lgOption,
+    languageServer: {
+      url: 'ws://localhost:5002/lgServer',
+    },
   };
   return <LGLSPEditor {...props} />;
 }
