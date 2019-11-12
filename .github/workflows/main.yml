@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: yarn install
-        run: yarn
+        run: yarn --force
         working-directory: Composer
       - name: yarn build:dev
         run: yarn build:dev
@@ -73,7 +73,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: yarn install
-        run: yarn
+        run: yarn --force
         working-directory: Composer
       - name: yarn build:prod
         run: yarn build:prod
