@@ -79,11 +79,13 @@ jobs:
         run: yarn build:prod
         working-directory: Composer
       - name: yarn test:integration
+        continue-on-error: true
         run: yarn test:integration
         working-directory: Composer
         env:
           CYPRESS_COMPOSER_URL: http://localhost:5000
       - name: Archive E2E Failures
+        continue-on-error: true
         uses: actions/upload-artifact@v1
         if: failure()
         with:

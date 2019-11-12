@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect, useContext } from 'react';
-import toLower from 'lodash/tolower';
+import Path from 'path';
 
-import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
+import React, { useState, useEffect, useContext } from 'react';
+import get from 'lodash/get';
+
+import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
@@ -19,30 +21,28 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const {
-    fetchTemplates,
-    getAllProjects,
-    openBotProject,
-    createProject,
-    saveProjectAs,
-    saveTemplateId,
-    fetchStorages,
-  } = actions;
-  const { templateId, templateProjects } = state;
+  const { fetchTemplates, openBotProject, createProject, saveProjectAs, saveTemplateId, fetchStorages } = actions;
+  const { templateId, templateProjects, focusedStorageFolder } = state;
+
+  useEffect(() => {
+    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
+
+    const botsInCurrentFolder = allFilesInFolder.filter(file => {
+      if (file.type === FileTypes.BOT) {
+        return file;
+      }
+    });
+
+    setBots(botsInCurrentFolder);
+  }, [focusedStorageFolder]);
 
   useEffect(() => {
     init();
   }, [creationFlowStatus]);
 
-  const getAllBots = async () => {
-    const data = await getAllProjects();
-    setBots(data);
-  };
-
-  const init = async () => {
+  const init = () => {
     if (creationFlowStatus !== CreationFlowStatus.CLOSE) {
       fetchTemplates();
-      await getAllBots();
     }
 
     // load storage system list
@@ -111,7 +111,8 @@ export function CreationFlow(props) {
   const getErrorMessage = name => {
     if (
       bots.findIndex(bot => {
-        return toLower(bot.name) === toLower(name);
+        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
+        return bot.path === path;
       }) >= 0
     ) {
       return 'duplication of name';
