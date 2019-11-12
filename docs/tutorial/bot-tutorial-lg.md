@@ -1,4 +1,4 @@
-# Language generation
+# Language Generation
 
 Now that the bot can perform its basic tasks, it's time to work on the conversational UI. A good bot doesn't just do a task - it does it with style and personality.
 
@@ -6,15 +6,15 @@ Composer includes the Bot Framework Language Generation library, a set of powerf
 
 Let's start by adding some variation to the welcome message.
 
-1. In Composer, click on `weatherBot.Main`, then make sure to highlight the `WelcomeTheUser` trigger.
+1. In Composer, click on `weatherBot.Main` and highlight the `WelcomeTheUser` trigger.
 
    ![](../media/tutorial-weatherbot/05/nav1.png) 
 
-2. Select the `Send a response` node in the flow.
+2. Select the **Send a response** node in the flow.
 
    ![](../media/tutorial-weatherbot/05/lg-1.png)
 
-3. In the right hand property editor, replace the text with the following:
+3. In the right hand properties panel, replace the text with the following:
 
     ```
     -Hi! I'm a friendly bot that can help with the weather. Try saying WEATHER.
@@ -24,25 +24,25 @@ Let's start by adding some variation to the welcome message.
 
     > Each tick mark indicates a variation in the message. The bot will choose one of the responses randomly at runtime!
 
-4. Click `Reload Bot` and open it in the emulator.
+4. Click **Restart Bot** and open it in the emulator.
 
 ---
 
 You'll see the bot greet you with one of the three variants we listed. 
 
-Click the `Restart conversation` link in Emulator's top bar. You might see another variant! If you see the same response, click `Restart conversation` again! 
+Click the **Restart conversation** link in Emulator's top bar. You might see another variant! If you see the same response, click **Restart conversation** again! 
 
 ---
 
 Currently, the bot reports the weather in a very robotic manner: The weather is Clouds and it is 75&deg;.
 
-Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the language generation system: conditional messages, and parameterized messages.
+Let's improve the language used when delivering the weather conditions. To do this, we'll use 2 features of the Language Generation system: conditional messages, and parameterized messages.
 
-5. Navigate to the `Bot Says` tab by clicking the bot icon on the far left of the screen.
+5. Navigate to the **Bot Says** tab by clicking the bot icon on the far left of the screen.
 
    ![](../media/tutorial-weatherbot/05/botsays.png)
 
-6. Toggle the `Edit Mode` switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
+6. Toggle the **Edit Mode** switch in the upper right hand corner so that it turns blue.  This will enable a syntax-highlighted LG editor in the main pane.
 
    > You'll notice that every message you created in the flow editor also appears here. They're linked, and any changes you make in this view will be reflected in the flow as well.
 
@@ -87,12 +87,12 @@ Let's improve the language used when delivering the weather conditions. To do th
     > This creates a new Language Generation template called `DescribeWeather`. This template receives weather data from our API as a parameter, and outputs a friendlier 
     description of the weather based on the raw data from the API.
 
-9. Navigate back to the flow designer by clicking on `Flow designer` in the left navigation bar.
+9. Navigate back to the flow designer by clicking on **Flow designer** in the left navigation bar.
 10. In Composer's explorer, click on the `getWeather` dialog, and make sure the `BeginDialog` trigger is highlighted.
 
       ![](../media/tutorial-weatherbot/05/nav2.png)
 
-11. Scroll to the bottom, and click on the `Send a response` node that starts with `The weather is...`
+11. Scroll to the bottom, and click on the **Send a response** node that starts with `The weather is...`
 13. In the right hand property pane, replace the activity text with the following:
 
       `- {DescribeWeather(dialog.weather)} and the temp is {dialog.weather.temp}&deg;`
@@ -101,13 +101,11 @@ Let's improve the language used when delivering the weather conditions. To do th
 
       ![](../media/tutorial-weatherbot/05/lg-2.png)
 
-14. Click `Reload bot` and open it in the emulator.
+14. Click **Restart Bot** and open it in the emulator.
 
 ---
 
-Now, when you say `weather`, the bot will send you a message that sounds much more human than it did before!
-
-It's possible to combine these techniques to quickly create lots of variety in your messages!
+Now, when you say `weather`, the bot will send you a message that sounds much more human than it did before. It's possible to combine these techniques to quickly create lots of variety in your messages!
 
 ![](../media/tutorial-weatherbot/05/nice-weather.png)
 
