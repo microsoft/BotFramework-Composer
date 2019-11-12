@@ -152,7 +152,7 @@ const LUPage = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          <Tree variant="large" extraCss={projectTree}>
+          <Tree variant="large" css={projectTree}>
             <div css={projectWrapper}>
               <Nav
                 onLinkClick={(ev, item) => {

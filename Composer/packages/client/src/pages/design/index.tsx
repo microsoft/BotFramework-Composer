@@ -386,7 +386,7 @@ function DesignPage(props) {
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
-          <Conversation extraCss={editorContainer}>
+          <Conversation css={editorContainer}>
             <Fragment>
               <div css={editorWrapper}>
                 <div css={visualPanel}>

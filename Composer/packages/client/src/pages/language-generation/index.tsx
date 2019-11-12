@@ -181,7 +181,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          <Tree variant="large" extraCss={projectTree}>
+          <Tree variant="large" css={projectTree}>
             <div css={projectWrapper}>
               <Nav
                 onLinkClick={(ev, item) => {

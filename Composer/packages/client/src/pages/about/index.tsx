@@ -6,10 +6,11 @@ import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
+import { RouteComponentProps } from '@reach/router';
 
 import * as about from './styles';
 
-export const About = () => {
+export const About: React.FC<RouteComponentProps> = () => {
   return (
     <div css={about.outline}>
       <div css={about.content}>
