@@ -157,7 +157,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     });
     return files;
   }, [focusedStorageFolder]);
-
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
