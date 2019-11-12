@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 using Microsoft.Bot.Builder.BotFramework;
@@ -28,7 +28,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
         IBotFrameworkHttpAdapter CurrentAdapter { get; }
         IBot CurrentBot { get; }
 
-        void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null);
+        void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null, string qnaKey = null);
     }
 
     public class BotManager : IBotManager
@@ -92,7 +92,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             CurrentBot = new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap);
         }
 
-        public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null)
+        public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null, string qnaEndpointKey = null)
         {
             lock (locker)
             {
@@ -102,12 +102,12 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 // extract to bot folder
                 var extractPath = ExtractFile(downloadPath, GenNewBotDir());
 
-                RetrieveSettingsFile(extractPath, endpointKey, appPwd);
+                RetrieveSettingsFile(extractPath, endpointKey, appPwd, qnaEndpointKey);
                 SetCurrent(extractPath);
             }
         }
 
-        public void RetrieveSettingsFile(string extractPath, string endpointKey, string appPwd)
+        public void RetrieveSettingsFile(string extractPath, string endpointKey, string appPwd, string qnaEndpointKey)
         {
             var settingsPaths = Directory.GetFiles(extractPath, "appsettings.json", SearchOption.AllDirectories);
             if (settingsPaths.Length == 0)
@@ -146,6 +146,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             {
                 AddOAuthConfig(appPwd);
             }
+
+            if (!String.IsNullOrEmpty(qnaEndpointKey))
+            {
+                AddQnaConfig(qnaEndpointKey);
+            }
         }
 
         public void AddLuisConfig(string extractPath, LuConfigFile luconfigFile, string endpointKey)
@@ -182,6 +187,18 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             else
             {
                 this.Config["MicrosoftAppPassword"] = appPwd;
+            }
+        }
+
+        private void AddQnaConfig(string qnaKey)
+        {
+            if (string.IsNullOrEmpty(qnaKey))
+            {
+                this.Config["qna:endpointKey"] = string.Empty;
+            }
+            else
+            {
+                this.Config["qna:endpointKey"] = qnaKey;
             }
         }
 
