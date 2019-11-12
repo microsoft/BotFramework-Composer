@@ -41,8 +41,13 @@ const TableView: React.FC<TableViewProps> = props => {
 
   useEffect(() => {
     if (isEmpty(lgFile)) return;
-
-    const allTemplates = lgUtil.parse(lgFile.content) as LGTemplate[];
+    let allTemplates: LGTemplate[] = [];
+    try {
+      allTemplates = lgUtil.parse(lgFile.content);
+      // mute lg file invalid cause page crash, setState is async, this component may render at first
+    } catch (error) {
+      console.error(error);
+    }
 
     if (!activeDialog) {
       setTemplates(allTemplates);

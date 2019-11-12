@@ -21,7 +21,7 @@ const CollapsedWelcomeModal = () => {
     <div css={content}>
       <div>{formatMessage('Welcome')}</div>
       <IconButton
-        iconProps={{ iconName: 'BackToWindow' }}
+        iconProps={{ iconName: 'FullScreen' }}
         onClick={toggleMinimized}
         styles={buttonStyles}
         title="Expand"
