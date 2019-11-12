@@ -94,6 +94,14 @@ const shellApi = {
     return apiClient.apiCall('removeLgTemplate', { id, templateName });
   },
 
+  removeLgTemplates: (id: string, templateNames: string[]) => {
+    return apiClient.apiCall('removeLgTemplates', { id, templateNames });
+  },
+
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName: string) => {
+    return apiClient.apiCall('copyLgTemplate', { id, fromTemplateName, toTemplateName });
+  },
+
   updateLgTemplate: (id: string, templateName: string, template: string) => {
     return apiClient.apiCall('updateLgTemplate', {
       id,
@@ -116,6 +124,10 @@ const shellApi = {
 
   redo: () => {
     return apiClient.apiCall('redo');
+  },
+
+  addCoachMarkRef: (target: any) => {
+    return apiClient.apiCall('addCoachMarkPosition', target);
   },
 };
 

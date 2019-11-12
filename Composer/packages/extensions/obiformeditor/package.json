@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
@@ -68,7 +68,7 @@
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "autoprefixer": "^9.5.1",
-    "botbuilder-expression-parser": "^4.5.9",
+    "botbuilder-expression-parser": "^4.5.11",
     "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",

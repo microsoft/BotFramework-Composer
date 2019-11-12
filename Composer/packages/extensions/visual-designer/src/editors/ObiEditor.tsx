@@ -39,13 +39,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onSelect,
   undo,
   redo,
+  addCoachMarkRef,
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplates } = useContext(
     NodeRendererContext
   );
-  const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
+  const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -93,11 +94,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
 
           const cleanLgTemplate = async (removedData: any): Promise<void> => {
-            const templates: string[] = findLgTemplates(removedData);
+            const templateNames: string[] = findLgTemplates(removedData);
             const lgFileId = 'common';
-            for (const template of templates) {
-              await removeLgTemplate(lgFileId, template);
-            }
+            await removeLgTemplates(lgFileId, templateNames);
           };
           onChange(deleteNode(data, e.id, cleanLgTemplate));
           onFocusSteps([]);
@@ -329,6 +328,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
                 divRef.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
               }}
+              addCoachMarkRef={addCoachMarkRef}
             />
           </div>
         </MarqueeSelection>
@@ -350,6 +350,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   undo: () => {},
   redo: () => {},
+  addCoachMarkRef: () => {},
 };
 
 interface ObiEditorProps {
@@ -366,4 +367,5 @@ interface ObiEditorProps {
   onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
+  addCoachMarkRef?: (_: any) => void;
 }

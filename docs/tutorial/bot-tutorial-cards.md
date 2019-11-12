@@ -59,4 +59,4 @@ Go through the bot flow, say `weather` followed by a zip code. Notice now the bo
 ---
 
 ## Next steps
-- [Add LUIS](./docs/tutorial/bot-tutorial-luis.md)
+- [Add LUIS](./bot-tutorial-luis.md)

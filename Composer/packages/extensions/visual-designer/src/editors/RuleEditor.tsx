@@ -29,7 +29,7 @@ const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
  * `Rule` means a single element stored in the array `AdaptiveDialog.rules`.
  * Usually, a Rule may contain a series of steps.
  */
-export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
+export const RuleEditor = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element => {
   const outlineCache = useRef();
   const outlineVersion = useRef(0);
 
@@ -66,6 +66,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         data={stepGroup.data}
         onEvent={onEvent}
         trigger={<Trigger data={data} />}
+        addCoachMarkRef={addCoachMarkRef}
       />
     </div>
   );

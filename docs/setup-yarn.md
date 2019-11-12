@@ -20,7 +20,7 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 After cloning the repo open a terminal and navigate to the Bot Framework Composer folder. Navigate to the **Composer** folder and run the following commands:
 ```
 cd Composer 
-yarn install 
+yarn 
 ```
   This command gets all dependent packages.
 
@@ -39,4 +39,4 @@ yarn startall
 ## Open Composer in a browser
 To use Composer open a browser and navigate to the address after the message `Compiled successfully`, as seen below where the address is http://localhost:3000.
 
-![browser gif](./media/setup-yarn/composer-address.png)
+![browser address](./media/setup-yarn/address.png)

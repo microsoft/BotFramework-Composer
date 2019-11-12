@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { transformForeach } from '../../src/transformers/transformForeach';
 import { ObiTypes } from '../../src/constants/ObiTypes';
 

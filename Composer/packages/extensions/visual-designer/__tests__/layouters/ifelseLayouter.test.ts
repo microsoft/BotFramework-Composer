@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ifElseLayouter } from '../../src/layouters/ifelseLayouter';
 import { Boundary } from '../../src/models/Boundary';
 import { GraphNode } from '../../src/models/GraphNode';

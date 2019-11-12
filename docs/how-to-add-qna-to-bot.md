@@ -57,4 +57,4 @@ If your knowledge bases have content from different domains and your scenario re
 
 ## Bots with Language Understanding (LUIS) and QnA Maker
 
-Composer allows you to build bots that contain both QnA Maker and LUIS dialogs. A best practice is to set the confidence threshold for LUIS intent prediction and trigger QnA Maker through **Handle Unknown Intent** event. [This sample]() demonstrates the best practice to build a bot using QnA Maker and LUIS intents. 
+Composer allows you to build bots that contain both QnA Maker and LUIS dialogs. A best practice is to set the confidence threshold for LUIS intent prediction and trigger QnA Maker through **Intent** event. [This sample]() demonstrates the best practice to build a bot using QnA Maker and LUIS intents. 

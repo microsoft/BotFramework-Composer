@@ -20,7 +20,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.6.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.6.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.6.0-preview2" />
