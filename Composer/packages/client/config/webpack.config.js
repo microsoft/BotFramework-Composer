@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
-const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -19,8 +18,6 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 const getClientEnvironment = require('./env');
@@ -28,9 +25,6 @@ const paths = require('./paths');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
-
-// Check if TypeScript is setup
-const useTypeScript = fs.existsSync(paths.appTsConfig);
 
 // style files regexes
 const cssRegex = /\.css$/;
