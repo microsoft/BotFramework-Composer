@@ -225,7 +225,7 @@ export default function TableView(props) {
 
   function onCopyTemplate(index) {
     const Name = templates[index].Name;
-    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${Name}.Copy`);
+    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${Name}_Copy`);
     const payload = {
       file: lgFile,
       fromTemplateName: Name,

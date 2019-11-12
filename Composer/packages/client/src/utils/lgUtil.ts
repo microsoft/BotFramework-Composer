@@ -113,7 +113,7 @@ export function copyTemplateAnyway(content: string, fromTemplateName: string, to
 
   let newName = toTemplateName;
   if (!newName) {
-    const copyName = `${fromTemplate.Name}.Copy`;
+    const copyName = `${fromTemplate.Name}_Copy`;
     newName = increaseNameUtilNotExist(resource.Templates, copyName);
   }
   const { Parameters, Body } = fromTemplate;
