@@ -4014,15 +4014,6 @@ botbuilder-expression-parser@^4.5.11:
     lodash "^4.17.11"
     uuid "^3.3.3"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz":
-  version "4.7.0-preview2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz#2a3dd7d7991e0727fb88630501d2fb14d475537b"
-  dependencies:
-    antlr4ts "0.5.0-alpha.1"
-    botframework-expressions "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz"
-    lodash "^4.17.11"
-    uuid "^3.3.3"
-
 "botframework-expressions@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz":
   version "4.7.0-preview0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz#032f104222866c5dfbcf1e17b66a56cbf4a30707"
@@ -11395,15 +11386,10 @@ negotiator@0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
 
-neo-async@^2.5.0, neo-async@^2.6.0:
+neo-async@^2.5.0, neo-async@^2.6.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
-
-neo-async@^2.6.1:
-  version "2.6.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
-  integrity sha1-rCetpmFn+ohJpq3dg39rGJrSCBw=
 
 net@^1.0.2:
   version "1.0.2"
@@ -15482,18 +15468,18 @@ ts-loader@^6.0.3:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-node@^8.4.1:
-  version "8.4.1"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.4.1.tgz#270b0dba16e8723c9fa4f9b4775d3810fd994b4f"
-  integrity sha512-5LpRN+mTiCs7lI5EtbXmF/HfMeCjzt7DH9CZwtkr6SywStrNQC723wG+aOWFiLNn7zT3kD/RnFqi3ZUfr4l5Qw==
+ts-loader@^6.1.0:
+  version "6.2.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/ts-loader/-/ts-loader-6.2.1.tgz#67939d5772e8a8c6bdaf6277ca023a4812da02ef"
+  integrity sha1-Z5OdV3LoqMa9r2J3ygI6SBLaAu8=
   dependencies:
-    arg "^4.1.0"
-    diff "^4.0.1"
-    make-error "^1.1.1"
-    source-map-support "^0.5.6"
-    yn "^3.0.0"
+    chalk "^2.3.0"
+    enhanced-resolve "^4.0.0"
+    loader-utils "^1.0.2"
+    micromatch "^4.0.0"
+    semver "^6.0.0"
 
-ts-node@^8.3.0:
+ts-node@^8.3.0, ts-node@^8.4.1:
   version "8.4.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.4.1.tgz#270b0dba16e8723c9fa4f9b4775d3810fd994b4f"
   integrity sha512-5LpRN+mTiCs7lI5EtbXmF/HfMeCjzt7DH9CZwtkr6SywStrNQC723wG+aOWFiLNn7zT3kD/RnFqi3ZUfr4l5Qw==

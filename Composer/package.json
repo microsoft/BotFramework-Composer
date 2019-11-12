@@ -11,6 +11,7 @@
     "packages/extensions/*",
     "packages/lib",
     "packages/lib/*",
+    "packages/tools",
     "packages/tools/language-client",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",

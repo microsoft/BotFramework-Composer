@@ -1,13 +1,13 @@
 {
-    "name": "composer-tools",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "build:language-client": "cd language-client && yarn build",
-        "build:language-servers": "cd language-servers && yarn build",
-        "build:all": "concurrently --kill-others-on-fail \"yarn:build:language-client\" \"yarn:build:language-servers\""
-    },
-    "author": "",
-    "license": "ISC"
+  "name": "@bfc/tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:language-client": "cd language-client && yarn build",
+    "build:language-servers": "cd language-servers && yarn build",
+    "build:all": "concurrently --kill-others-on-fail \"yarn:build:language-client\" \"yarn:build:language-servers\""
+  },
+  "author": "",
+  "license": "ISC"
 }

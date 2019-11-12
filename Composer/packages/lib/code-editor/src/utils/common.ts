@@ -9,13 +9,14 @@ export function processSize(size) {
 export function noop() {}
 
 export function assignDefined(target, ...sources) {
+  const copyTarget = { ...target };
   for (const source of sources) {
     for (const key of Object.keys(source)) {
       const val = source[key];
       if (val !== undefined) {
-        target[key] = val;
+        copyTarget[key] = val;
       }
     }
   }
-  return target;
+  return copyTarget;
 }

@@ -28,13 +28,14 @@ const template = {
 };
 
 const lgOption = {
-  inline: true,
+  inline: false,
   content,
   template,
 };
 
 function LGEditor() {
-  const [value, setValue] = useState(template.Body);
+  // const [value, setValue] = useState(template.Body);
+  const [value, setValue] = useState(content);
 
   const onChange = value => {
     setValue(value);
@@ -45,7 +46,7 @@ function LGEditor() {
     onChange,
     lgOption,
     languageServer: {
-      url: 'ws://localhost:5000/lgServer',
+      url: 'ws://localhost:5002/lgServer',
     },
   };
   return <LGLSPEditor {...props} />;

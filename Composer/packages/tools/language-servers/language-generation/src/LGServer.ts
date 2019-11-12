@@ -15,6 +15,7 @@ import {
   Position,
   CompletionItemKind,
   CompletionItem,
+  Range,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
@@ -162,6 +163,66 @@ export class LGServer {
     }
   }
 
+  private removeParamFormat(params: string): string {
+    const paramArr: string[] = params.split(',');
+    const resultArr: string[] = [];
+    paramArr.forEach(element => {
+      resultArr.push(element.trim().split(':')[0]);
+    });
+    return resultArr.join(' ,');
+  }
+
+  private matchedStates(params: TextDocumentPositionParams): { matched: boolean; state: string } | null {
+    const state: string[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return null;
+    const position = params.position;
+    const range = Range.create(position.line, 0, position.line, position.character);
+    const lineContent = document.getText(range);
+    let flag = false;
+    let finalState = '';
+    if (!lineContent.trim().startsWith('-')) {
+      return { matched: flag, state: finalState };
+    }
+
+    //if the line starts with '-', will try to match
+    flag = true;
+    //initilize the state to plaintext
+    state.push('PlainText');
+    let i = 0;
+    while (i < lineContent.length) {
+      const char = lineContent.charAt(i);
+      if (char === `'`) {
+        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'double') {
+          state.push('single');
+        } else {
+          state.pop();
+        }
+      }
+
+      if (char === `"`) {
+        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'single') {
+          state.push('double');
+        } else {
+          state.pop();
+        }
+      }
+
+      if (char === '{' && i >= 1 && state[state.length - 1] !== 'single' && state[state.length - 1] !== 'double') {
+        if (lineContent.charAt(i - 1) === '@') {
+          state.push('expression');
+        }
+      }
+
+      if (char === '}' && state[state.length - 1] === 'expression') {
+        state.pop();
+      }
+      i = i + 1;
+    }
+    finalState = state[state.length - 1];
+    return { matched: flag, state: finalState };
+  }
+
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -186,24 +247,27 @@ export class LGServer {
       const item = {
         label: key,
         kind: CompletionItemKind.Function,
-        insertText: key + '(' + value.Params.toString() + ')',
+        insertText: key + '(' + this.removeParamFormat(value.Params.toString()) + ')',
         documentation: value.Introduction,
       };
       completionList.push(item);
     });
 
-    return Promise.resolve({ isIncomplete: true, items: completionList });
+    const match = this.matchedStates(params);
+    if (match && match.matched && match.state === 'expression') {
+      return Promise.resolve({ isIncomplete: true, items: completionList });
+    } else {
+      return Promise.resolve(null);
+    }
   }
 
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
-    this.pendingValidationRequests.set(
-      document.uri,
+    document.uri,
       setTimeout(() => {
         this.pendingValidationRequests.delete(document.uri);
         this.doValidate(document);
-      })
-    );
+      });
   }
 
   protected cleanPendingValidation(document: TextDocument): void {

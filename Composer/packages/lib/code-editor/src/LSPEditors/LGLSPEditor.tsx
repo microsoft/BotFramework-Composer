@@ -41,7 +41,7 @@ export function LGLSPEditor(props: LGLSPEditorProps) {
   };
 
   const { lgOption = {}, languageServer = {}, ...restProps } = props;
-  const lgServer = assignDefined(languageServer, defaultLGServer);
+  const lgServer = assignDefined(defaultLGServer, languageServer);
   const editorWillMount = monaco => {
     registerLGLanguage();
     if (typeof props.editorWillMount === 'function') {
