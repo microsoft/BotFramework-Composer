@@ -32,7 +32,7 @@ First, click on the settings tab in Composer, and add update the `Dialog setting
 
 ![screenshot: configure an oauth setting in composer](Assets/oauth-settings.png)
 
-Then, add the `OAuth Login` action to your dialog.  In the property editor view of that step, set the `Connection Name` to the name of your connection setting in Azure. This value must match exactly.
+Then, add the `OAuth Login` action to your dialog.  In the properties panel view of that step, set the `Connection Name` to the name of your connection setting in Azure. This value must match exactly.
 
 ![screenshot: configure an oauth setting in composer](Assets/oauth-properties.png)
 
