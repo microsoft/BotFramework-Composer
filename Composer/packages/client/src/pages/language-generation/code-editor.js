@@ -66,10 +66,17 @@ export default function CodeEditor(props) {
 
     let diagnostics = [];
     if (inlineMode) {
+      const content = get(file, 'content', '');
+      const templateName = get(template, 'Name');
+      const newContent = lgUtil.updateTemplate(content, templateName, {
+        Name: templateName,
+        Body: value,
+      });
+      diagnostics = lgUtil.check(newContent);
       updateLgTemplate(value);
     } else {
       diagnostics = lgUtil.check(value);
-      // updateLgFile(value);
+      updateLgFile(value);
     }
     setDiagnostics(diagnostics);
   };

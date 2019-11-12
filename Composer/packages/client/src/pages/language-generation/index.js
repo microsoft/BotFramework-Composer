@@ -147,7 +147,7 @@ export const LGPage = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             checked={editMode}
-            disabled={(!isRoot && editMode === false) || (codeRange === null && fileValid === false)}
+            disabled={(!isRoot && editMode === false) || fileValid === false}
             onChange={onToggleEditMode}
           />
         </div>
