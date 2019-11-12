@@ -1,0 +1,7 @@
+path_classifiers:
+  test:
+    - "**/*.test"
+    - "**/*.test.ts"
+    - "**/*.test.tsx"
+    - "**/*.test.js"
+    - "**/*.test.jsx"

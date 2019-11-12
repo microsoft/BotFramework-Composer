@@ -56,6 +56,7 @@ const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
 
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
+
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -105,6 +106,7 @@ export const ShellApi: React.FC = () => {
     });
     apiClient.registerApi('undo', actions.undo);
     apiClient.registerApi('redo', actions.redo);
+    apiClient.registerApi('addCoachMarkPosition', actions.onboardingAddCoachMarkRef);
 
     return () => {
       apiClient.disconnect();
@@ -239,7 +241,7 @@ export const ShellApi: React.FC = () => {
    *
    * @param {*} event
    */
-  function updateLgTemplateHandler({ id, templateName, template }, event) {
+  async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
@@ -247,11 +249,14 @@ export const ShellApi: React.FC = () => {
 
     parseLgTemplate(template);
 
-    return updateLgTemplate({
+    await updateLgTemplate({
       file,
       templateName,
       template,
     });
+
+    const content = updateTemplateInContent({ content: file.content, templateName, template });
+    return checkLgContent(content);
   }
 
   function removeLgTemplateHandler({ id, templateName }, event) {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { render, fireEvent, cleanup } from 'react-testing-library';
 
@@ -32,7 +35,7 @@ describe('<RuleCard />', () => {
         );
       });
 
-      it(`shouldn't render openIcon`, async () => {
+      it(`shouldn't render openIcon`, () => {
         const { findByTestId } = renderResult;
         expect(findByTestId('OpenIcon')).rejects.toThrow();
       });

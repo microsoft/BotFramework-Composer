@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react';
@@ -48,14 +48,17 @@ const turtorials = [
 export const Home = props => {
   const { state, actions } = useContext(StoreContext);
   const { botName, recentProjects, templateProjects } = state;
-  const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
+  const {
+    openBotProject,
+    setCreationFlowStatus,
+    fetchTemplates,
+    saveTemplateId,
+    fetchRecentProjects,
+    onboardingAddCoachMarkRef,
+  } = actions;
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
-  };
-
-  const onClickNewBotProject = () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
   };
 
   const onSelectionChanged = async item => {
@@ -70,6 +73,9 @@ export const Home = props => {
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
+
+  const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
+
   const toolbarItems = [
     {
       type: 'action',
@@ -146,6 +152,7 @@ export const Home = props => {
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
+                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
@@ -155,6 +162,7 @@ export const Home = props => {
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
+                forwardedRef={addRef}
               />
             )}
           </div>

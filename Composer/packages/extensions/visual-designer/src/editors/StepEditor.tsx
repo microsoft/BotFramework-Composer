@@ -3,17 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
 import { Edge } from '../components/lib/EdgeComponents';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
+import { ElementInterval, TriggerSize, TerminatorSize, InitNodeSize } from '../constants/ElementSizes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
+import { useWindowDimensions } from '../utils/hooks';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -24,7 +25,7 @@ const TailSize = {
   height: TerminatorSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
+export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
@@ -55,6 +56,17 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
     ) * 2;
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
   const editorAxisX = editorWidth / 2;
+
+  const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    addCoachMarkRef({
+      action: {
+        x: (width + editorWidth) / 2,
+        y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
+      },
+    });
+  }, [width]);
 
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>

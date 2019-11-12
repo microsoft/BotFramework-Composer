@@ -1,11 +1,12 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "EmitAnEvent",
     "description": "This is to emit an event.",
     "id": "645228"
   },
-  "autoEndDialog": "false",
+  "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",

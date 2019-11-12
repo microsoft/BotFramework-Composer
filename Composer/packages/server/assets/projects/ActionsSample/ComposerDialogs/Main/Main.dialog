@@ -270,7 +270,7 @@
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Handle ConversationUpdate",
+        "name": "Conversation started (ConversationUpdate)",
         "id": "954390"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -286,5 +286,5 @@
     }
   ],
   "generator": "common.lg",
-  "$schema": "../../app.schema"
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

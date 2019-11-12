@@ -19,8 +19,13 @@
 // 'optional'}, (subject, options) => { ... })
 //
 //
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.overwrite("visit", (originalFn, url, { enableOnboarding } = {}) => {
+  if (!enableOnboarding) {
+    cy.window().then(window => window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true })));
+  }
+  originalFn(url);
+ });
 
 import 'cypress-testing-library/add-commands';
 
@@ -90,7 +95,7 @@ Cypress.Commands.add('addEventHandler', handler => {
   });
   cy.get(`[data-testid="triggerTypeDropDown"]`).click();
   cy.getByText(handler).click();
-  if (handler === 'Handle a Dialog Event') {
+  if (handler === 'Dialog trigger') {
     cy.get(`[data-testid="eventTypeDropDown"]`).click();
     cy.getByText('consultDialog').click();
   }
