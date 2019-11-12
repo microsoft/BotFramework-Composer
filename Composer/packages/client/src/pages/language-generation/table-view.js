@@ -25,6 +25,7 @@ export default function TableView(props) {
   const { dialogs } = state;
   const { file: lgFile, activeDialog, onClickEdit } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
+  const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState([]);
   const listRef = useRef(null);
@@ -207,15 +208,7 @@ export default function TableView(props) {
   }
 
   function onCreateNewTemplate() {
-    const copyName = 'TemplateName';
-
-    // if duplicate, increse name with TemplateName1 TemplateName2 ...
-    let repeatIndex = 0;
-    let newName = copyName;
-    while (templates.findIndex(item => item.Name === newName) !== -1) {
-      repeatIndex += 1;
-      newName = copyName + repeatIndex.toString();
-    }
+    const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
       file: lgFile,
       template: {
@@ -236,26 +229,14 @@ export default function TableView(props) {
   }
 
   function onCopyTemplate(index) {
-    const newItems = [...templates];
-    const copyName = `${newItems[index].Name}.Copy`;
-
-    // if duplicate, increse name with Copy1 Copy2 ...
-    let repeatIndex = 0;
-    let newName = copyName;
-
-    while (templates.findIndex(item => item.Name === newName) !== -1) {
-      repeatIndex += 1;
-      newName = copyName + repeatIndex.toString();
-    }
-
+    const Name = templates[index].Name;
+    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${Name}_Copy`);
     const payload = {
       file: lgFile,
-      template: {
-        Name: newName,
-        Body: newItems[index].Body,
-      },
+      fromTemplateName: Name,
+      toTemplateName: resolvedName,
     };
-    createLgTemplate(payload);
+    copyLgTemplate(payload);
   }
 
   return (
