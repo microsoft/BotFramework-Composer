@@ -16,3 +16,5 @@ jobs:
         run: npm install && npm run build
       - name: Validate PR Style
         uses: ./.github/actions/conventional-pr
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
