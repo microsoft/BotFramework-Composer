@@ -6,11 +6,11 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
 ## Update recognizer
 
-1. Click on `WeatherBot.Main` in the left dialog navigation panel, go to the property editor for this dialog and locate the `Recognizer type` option and set it to `LUIS`
+1. Click on `WeatherBot.Main` in the left dialog navigation panel, go to the properties panel for this dialog and locate the **Recognizer Type** option and set it to `LUIS`
 
    ![](../media/tutorial-weatherbot/07/luis-recognizer.png)
 
-2. To work with LUIS recognizer, you can provide content in the [***.lu file foramt***][2] that is highly similar to language generation format. 
+2. To work with LUIS recognizer, you can provide content in the [***.lu file foramt***](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) that is highly similar to Language Generation format. 
 
    With this, intents are denoted using the markdown section notation - e.g. `# intentName` and utterances are provided as a list. 
 
@@ -43,20 +43,20 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    ![](../media/tutorial-weatherbot/07/luis-with-lu-content.png)
 
-3. Once you have done this, you need to re-configure the various `Intent` triggers within that dialog. 
+3. Once you have done this, you need to re-configure the various **Intent** triggers within that dialog. 
 4. Click on `weather` trigger in the left navigation and choose `Weather` from the intent drop down
 
-   Update the title of the trigger to `Weather` instead of `Intent`
+   Update the title of the trigger to `Weather` instead of **Intent**
 
    ![](../media/tutorial-weatherbot/07/weather-intent-selection.png)
 
 5. Click on `cancel` trigger in the left navigation and choose `Cancel` from the intent drop down
 
-   Update the title of the trigger to `Cancel` instead of `Intent`
+   Update the title of the trigger to `Cancel` instead of **Intent**
 
 6. Given we are using LUIS which is a machine learning based intent classifier, we want to avoid low confidence results. To do this, 
 
-   Set the `Condition` property to this 
+   Set the **Condition** property to this 
 
       `#Cancel.Score >= 0.8`
 
@@ -66,7 +66,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
 7. Click on `help` trigger in the left navigation and choose `Help` from the intent drop down
 
-   Update the title of the trigger to `Help` instead of `Intent`
+   Update the title of the trigger to `Help` instead of **Intent**
 
    Set the `Condition` property to this 
 
@@ -74,7 +74,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
 
    > This says do not fire the cancel trigger if the confidence score returned by LUIS is lower than or equal to 0.5
 
-7. Click on `Restart bot`
+7. Click on **Restart Bot**
 
    Composer has now detected that you have LU information specified and it needs to create/ update corresponding LUIS applications. 
 
@@ -83,7 +83,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
    ![](../media/tutorial-weatherbot/07/luis-key.png)
 
 8. Click `Publish`. This should take a minute or two to complete. Composer will render progress at the top right corner of the screen.
-9. Click on `Test in Emulator` and talk to the bot. 
+9. Click on **Test in Emulator** and talk to the bot. 
 
 ---
 
@@ -106,7 +106,7 @@ As an example, the user could say "How is the weather in 98052?" and instead of 
 
 Let's get this wired up. 
 
-10. Step one is to add a regex entity extractor to the LUIS app. To do this, click on `WeatherBot.Main` and on the right side, **add** the following entity definition at the end of the LU content - 
+10. Step one is to add a regex entity extractor to the LUIS app. To do this, click on `WeatherBot.Main` and on the right side, add the following entity definition at the end of the LU content - 
 
     ```
     > regex zipcode entity. Any time LUIS sees a five digit number, it will flag it as 'zipcode' entity. 
@@ -120,20 +120,20 @@ Let's get this wired up.
 
      ![](../media/tutorial-weatherbot/07/back-at-zipcode-prompt.png)
 
-12. Let's insert an action **before** the prompt by clicking on [+] -> `Manage Properties` -> `Set a property`
+12. Let's insert an action **before** the prompt by clicking on **+**, musing over **Manage Properties** and selecting **Set a property**
 13. Since the prompt itself is trying to set the zipcode in the `user.zipcode`, let's set that proeperty to the `@zipcode` entity. 
 
-      Set `Property` to 
+      Set **Property** to 
 
       `user.zipcode`
 
-      Set `Value` to
+      Set **Value** to
 
       `@zipcode`
 
       ![](../media/tutorial-weatherbot/07/set-property-zipcode.png)
 
-14. Click on `Restart bot`, wait for the LUIS application to be updated (since you added a new entity) and then click on `Test in Emulator`
+14. Click on **Restart Bot**, wait for the LUIS application to be updated (since you added a new entity) and then click on **Test in Emulator**
 
 ---
 

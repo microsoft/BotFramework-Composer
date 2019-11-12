@@ -5,7 +5,7 @@ Bot Framework Composer is an integrated development environment (IDE) for buildi
 
 * A visual dialog Composer
 * Tools to train and manage a language understanding (NLU) component
-* A powerful language generation and templating system
+* A powerful Language Generation and templating system
 * A ready-to-use bot runtime executable
 
 Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the latest features from the Bot Framework SDK **in a visual manner**. The Composer app reads and writes from the Adaptive Dialog format, a JSON specification shared by many tools provided by the Bot Framework. Dialogs, NLU training data and message templates are treated like normal developer assets - files that can be committed to source control and deployed alongside code updates.
@@ -30,13 +30,13 @@ With a single click from within Composer, developers can launch the **bot runtim
 
 ## The Natural Place for Natural Language
 
-language understanding is a core component of Bot Framework Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
+Language Understanding is a core component of Bot Framework Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
 As dialogs are edited in the flow designer, developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances. Bot Framework Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
 
 ## Bots with character
 
-Creating grammatically correct, data driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers! Bot Framework Composer's integrated language generation system allows developers - and the writers who work with them - to create replies with a great deal of flexibility.
+Creating grammatically correct, data driven responses that also use a consistent tone and convey a clear brand voice has always been a challenge for bot developers! Bot Framework Composer's integrated Language Generation system allows developers - and the writers who work with them - to create replies with a great deal of flexibility.
 
 With Language Generation (LG), previously complex tasks can be quickly achieved:
 
