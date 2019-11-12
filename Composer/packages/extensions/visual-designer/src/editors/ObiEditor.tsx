@@ -44,10 +44,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplates } = useContext(
     NodeRendererContext
   );
-  const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
+  const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -95,11 +95,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
 
           const cleanLgTemplate = async (removedData: any): Promise<void> => {
-            const templates: string[] = findLgTemplates(removedData);
+            const templateNames: string[] = findLgTemplates(removedData);
             const lgFileId = 'common';
-            for (const template of templates) {
-              await removeLgTemplate(lgFileId, template);
-            }
+            await removeLgTemplates(lgFileId, templateNames);
           };
           onChange(deleteNode(data, e.id, cleanLgTemplate));
           onFocusSteps([]);

@@ -54,6 +54,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     updateLgTemplate,
     getLgTemplates,
     removeLgTemplate,
+    removeLgTemplates,
     undo,
     redo,
   } = shellApi;
@@ -66,9 +67,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
-    updateLgTemplate: updateLgTemplate,
-    getLgTemplates: getLgTemplates,
-    removeLgTemplate: removeLgTemplate,
+    updateLgTemplate,
+    getLgTemplates,
+    removeLgTemplate,
+    removeLgTemplates,
   });
 
   useEffect(() => {
