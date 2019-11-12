@@ -1,0 +1,18 @@
+name: Pull Request Validation
+
+on: pull_request
+
+jobs:
+  conventional-pr:
+    name: Conventional PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Prepare Action
+      working-directory: .github/actions/conventional-pr
+      run: npm install && npm run build
+    - name: Validate PR Style
+      uses: .github/actions/conventional-pr
