@@ -7,7 +7,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import get from 'lodash.get';
 
-import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -27,7 +26,7 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
 export const LGPage = props => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
@@ -119,23 +118,6 @@ export const LGPage = props => {
     setInlineTemplate(null);
   }
 
-  async function onChange(newContent) {
-    const payload = {
-      id: lgFile.id,
-      content: newContent,
-    };
-
-    try {
-      await actions.updateLgFile(payload);
-    } catch (error) {
-      OpenAlertModal('Save Failed', error.message, {
-        style: DialogStyle.Console,
-      });
-    }
-  }
-
-  // #TODO: get line number from lg parser, then deep link to code editor this
-  // Line
   function onTableViewClickEdit(template) {
     setInlineTemplate({
       Name: get(template, 'Name', ''),
@@ -202,7 +184,7 @@ export const LGPage = props => {
         </div>
         <div css={contentEditor}>
           {editMode ? (
-            <CodeEditor file={lgFile} inlineTemplate={inlineTemplate} onChange={onChange} />
+            <CodeEditor file={lgFile} template={inlineTemplate} />
           ) : (
             <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}

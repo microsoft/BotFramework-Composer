@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, Fragment } from 'react';
-import { editor } from 'monaco-editor-core';
 
-import { MonacoEditorCore } from '../../src/LSPEditors/MonacoEditorCore';
-import { BaseEditorCore } from '../../src/LSPEditors/BaseEditorCore';
-import { RichEditor } from '../../src/LSPEditors/RichEditor';
 import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
 
 const content = `# Greeting1

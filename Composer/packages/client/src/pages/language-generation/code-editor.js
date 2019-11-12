@@ -2,40 +2,77 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { PropTypes } from 'prop-types';
 import { LGLSPEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
+import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
 export default function CodeEditor(props) {
-  const { file, inlineTemplate } = props;
-  const onChange = debounce(props.onChange, 500);
+  const { actions } = useContext(StoreContext);
+  const { file, template } = props;
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-
   const [content, setContent] = useState('');
-
+  const [errorMsg, setErrorMsg] = useState('');
   const fileId = file && file.id;
-  const inlineMode = !!inlineTemplate;
+  const inlineMode = !!template;
   useEffect(() => {
     // reset content with file.content's initial state
     if (isEmpty(file)) return;
-    const value = inlineTemplate ? get(inlineTemplate, 'Body', '') : get(file, 'content', '');
+    const value = template ? get(template, 'Body', '') : get(file, 'content', '');
     setContent(value);
-  }, [fileId, inlineTemplate]);
+  }, [fileId, template]);
 
-  // local content maybe invalid and should always sync real-time
-  // file.content assume to be load from server
+  useEffect(() => {
+    const isInvalid = !lgUtil.isValid(diagnostics);
+    const text = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
+    setErrorMsg(text);
+  }, [diagnostics]);
+
+  const updateLgTemplate = useMemo(
+    () =>
+      debounce(body => {
+        const templateName = get(template, 'Name');
+        if (!templateName) return;
+        const payload = {
+          file,
+          templateName,
+          template: {
+            Name: templateName,
+            Body: body,
+          },
+        };
+        actions.updateLgTemplate(payload);
+      }, 500),
+    [file, template]
+  );
+
+  const updateLgFile = useMemo(
+    () =>
+      debounce(content => {
+        const payload = {
+          id: fileId,
+          content,
+        };
+        actions.updateLgFile(payload);
+      }, 500),
+    [fileId]
+  );
+
   const _onChange = value => {
     setContent(value);
-    // onChange(value);
-    const diagnostics = lgUtil.check(value);
+
+    let diagnostics = [];
+    if (inlineMode) {
+      updateLgTemplate(value);
+    } else {
+      diagnostics = lgUtil.check(value);
+      // updateLgFile(value);
+    }
     setDiagnostics(diagnostics);
   };
-
-  const isInvalid = !lgUtil.isValid(diagnostics);
-  const errorMsg = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
 
   const lgOption = {
     inline: false,
@@ -43,7 +80,7 @@ export default function CodeEditor(props) {
   };
 
   if (inlineMode) {
-    lgOption.template = inlineTemplate;
+    lgOption.template = template;
     lgOption.inline = true;
   }
 
@@ -60,7 +97,7 @@ export default function CodeEditor(props) {
       errorMsg={errorMsg}
       lgOption={lgOption}
       languageServer={{
-        url: 'ws://localhost:5000/lgServer',
+        url: 'ws://localhost:5002/lgServer',
       }}
       onChange={_onChange}
     />
@@ -70,5 +107,5 @@ export default function CodeEditor(props) {
 CodeEditor.propTypes = {
   file: PropTypes.object,
   onChange: PropTypes.func,
-  inlineTemplate: PropTypes.object,
+  template: PropTypes.object,
 };

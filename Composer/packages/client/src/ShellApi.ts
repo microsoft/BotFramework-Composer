@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useContext, useMemo, useState } from 'react';
+import React, { useEffect, useContext, useMemo } from 'react';
 import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash.isequal';
 import get from 'lodash.get';

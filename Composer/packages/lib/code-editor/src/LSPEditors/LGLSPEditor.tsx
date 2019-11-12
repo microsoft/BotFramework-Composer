@@ -31,7 +31,7 @@ export interface LGLSPEditorProps extends RichEditorProps {
 }
 
 const defaultLGServer = {
-  url: 'ws://localhost:5000/lgServer',
+  url: 'ws://localhost:5002/lgServer',
 };
 
 export function LGLSPEditor(props: LGLSPEditorProps) {
