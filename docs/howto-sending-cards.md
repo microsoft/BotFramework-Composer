@@ -1,26 +1,23 @@
 # Sending responses with cards 
-
-A bot communicates with users through message activites which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance yor bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](./howto-sending-messages.md) article. 
+A bot communicates with users through message activities which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance your bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](./howto-sending-messages.md) article. 
 
 In this article, we will cover different types of cards you can define in Composer using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md). We use the examples provided in the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample) throughout this article. 
 
 ## Card types
-
 Composer currently supports the following types of rich cards. The definition and use of each type of the cards is provided in the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample). 
 
-| Card type | Description |
-|------|------|
-| Hero Card | A card that typically contains a single large image, one or more buttons, and simple text. |
-| Thumbnail Card | A card that typically contains a single thumbnail image, one or more buttons, and simple text.| 
-| Signin Card | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process.| 
-| Animation Card | A card that can play animated GIFs or short videos. |
-| Voice Card | A card that can play a voice file. |
-| Audio Card | A card that can play an audio file. |
-| Adaptive Card | A customizable card that can contain any combination of text, speech, images, buttons, and input fields. |
+| Card type      | Description                                                                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hero Card      | A card that typically contains a single large image, one or more buttons, and simple text.                                                                            |
+| Thumbnail Card | A card that typically contains a single thumbnail image, one or more buttons, and simple text.                                                                        |
+| Signin Card    | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process. |
+| Animation Card | A card that can play animated GIFs or short videos.                                                                                                                   |
+| Voice Card     | A card that can play a voice file.                                                                                                                                    |
+| Audio Card     | A card that can play an audio file.                                                                                                                                   |
+| Adaptive Card  | A customizable card that can contain any combination of text, speech, images, buttons, and input fields.                                                              |
 
 ## Structured response template 
-
-In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [language generation](./concept-language-genereation-draft.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
+In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [Language Generation](./concept-language-generation.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
 
 A typical structured response template for cards consists of the following parts: 
 
@@ -32,16 +29,16 @@ A typical structured response template for cards consists of the following parts
         image = url of your image
         buttons = name of the button you want to show in the card]
 
-| Template Component    | Description                                                                                  |
-| ---------------- | -------------------------------------------------------------------------------------------- |
-| # CardTemplateName | Name of the structured card template starting with "#".  |
-| [   ] | A pair of square brackets to wrap the content of the structure.   |
-| CardStructure-name  | Name of the structure.|
-| title | A title of the defined template such as "BotFramework Hero Card". |
-| subtitle | A subtitle of the defined template such as "Microsoft Bot Framework". |
-| text |A brief description of the template. | 
-| image |The url of your image. | 
-| buttons |Name of the button you want to show in the card. |
+| Template Component | Description                                                           |
+| ------------------ | --------------------------------------------------------------------- |
+| # CardTemplateName | Name of the structured card template starting with "#".               |
+| [   ]              | A pair of square brackets to wrap the content of the structure.       |
+| CardStructure-name | Name of the structure.                                                |
+| title              | A title of the defined template such as "BotFramework Hero Card".     |
+| subtitle           | A subtitle of the defined template such as "Microsoft Bot Framework". |
+| text               | A brief description of the template.                                  |
+| image              | The url of your image.                                                |
+| buttons            | Name of the button you want to show in the card.                      |
 
 ## Define rich cards 
 Now, let's walk through the card examples in the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample) and learn how each type of the cards are defined and used. 
@@ -101,7 +98,6 @@ Video cards contain video content in video format such as `.mp4`. Typically this
         buttons = Learn More]
 
 ### AudioCard
-
 Audio cards contain audio content in audio format such as `.mp3`  and `.wav`. Audio cards follow all shared rules defined for [Media cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md#Media-cards). An AudioCard is defined using structured template as follows: 
 
     # AudioCard
@@ -114,7 +110,7 @@ Audio cards contain audio content in audio format such as `.mp3`  and `.wav`. Au
         buttons = Read More]
 
 ### AdaptiveCard
-Adaptive cards is an open source toolset of Microsoft that helps apps and services exchage rich snippets of native UI. Card authors describe their content as a simple JSON object. That content can then be rendered natively inside a host application, automatically adapting to the look and feel of the host. To get an overview of adaptive cards please visit [here](https://docs.microsoft.com/en-us/adaptive-cards/). An AdaptiveCard is defined using structured template as follows: 
+Adaptive cards is an open source toolset of Microsoft that helps apps and services exchange rich snippets of native UI. Card authors describe their content as a simple JSON object. That content can then be rendered natively inside a host application, automatically adapting to the look and feel of the host. To get an overview of adaptive cards please visit [here](https://docs.microsoft.com/en-us/adaptive-cards/). An AdaptiveCard is defined using structured template as follows: 
 
     # AdaptiveCard
     [Activity
@@ -134,11 +130,11 @@ This template "#AllCards" is defined to display all cards when the template is c
 ## References
 - [Bot Framework - Cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md)
 - [Add media to messages](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-add-media-attachments?view=azure-bot-service-4.0&tabs=csharp)
-- [Language generation](./concept-language-genereation.md) 
+- [Language Generation](./concept-language-generation.md) 
 - [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md)
-- [Adaptive cards overview](https://docs.microsoft.com/en-us/adaptive-cards/)
-- [Using adaptive cards](https://github.com/microsoft/BotBuilder-Samples/tree/master/samples/csharp_dotnetcore/07.using-adaptive-cards)
-- [Adaptive cards for bot developers](https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots)
+- [Adaptive Cards overview](https://docs.microsoft.com/en-us/adaptive-cards/)
+- [Adaptive Cards Sample](https://github.com/microsoft/BotBuilder-Samples/tree/master/samples/csharp_dotnetcore/07.using-adaptive-cards)
+- [Adaptive Cards for bot developers](https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots)
 
 ## Next
 Learn [how to define triggers and events](./howto-defining-triggers.md). 

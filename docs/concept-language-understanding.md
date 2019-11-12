@@ -1,28 +1,25 @@
-# Language understanding
-
-Language understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to hanlders which define how bots will respond with appropriate actions. 
+# Language Understanding
+Language Understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers (handlers) which define how bots will respond with appropriate actions. 
 
 In Bot Framework Composer LU has the following characteristics:
 
 - LU content is authored in inline editor using [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-- LU content is trainining data for recognizers 
+- LU content is training data for recognizers 
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
 - Composer provides an all-up LU view in "User Responses"
 
 ## Core LU concepts in Composer 
-Before we talk about the LU authoring experience in Composer, it is important to cover some core LU concepts and how they manifest in Composer. 
-
 ### Intents  
 Intents are categories or classifications of user intentions. An intent has a twofold meaning in Composer. On the one hand, an intent is a purpose or goal expressed in a user's utterance. By providing different example utterances, you can train your bot's understanding for specific intents. On the other hand, an intent represents an action that the user wants to take. When an intent is captured, its matching action will execute. The basic idea of how intents work in Composer is as follows: 
 
 - You set up recognizers and author LU content as training data. 
-- Based on the LU content your bot will capture some intent on user's input. 
+- Based on the LU content your bot will capture some intent based on user's input. 
 - When an intent is identified, an associated trigger causes an action to execute. 
 
 To define intents in Composer, you will need to:
 
 - define intent(s) and example utterances in a dialog 
-- create an **Intent** trigger in the same dialog to wire up the pre-defined intents
+- create an **Intent** trigger to handle the pre-defined intents
 
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
@@ -46,13 +43,13 @@ Entities are a collection of objects data extracted from an utterance such as pl
 
 ### Example 
 
-| Intent     | Utterances                                    | Entity values (can be varied)          |
-| ---------- | --------------------------------------------- | ----------------------- |
-| BookFlight | "Book me a flight to London"                  | "London"                |
-|            | "Fly me to London on the 31st"                | "London", "31st"        |
-|            | "I need a plane ticket next Sunday to London" | "next Sunday", "London" |
+| Intent     | Utterances                                    | Entity values (can be varied) |
+| ---------- | --------------------------------------------- | ----------------------------- |
+| BookFlight | "Book me a flight to London"                  | "London"                      |
+|            | "Fly me to London on the 31st"                | "London", "31st"              |
+|            | "I need a plane ticket next Sunday to London" | "next Sunday", "London"       |
 
-An example JSON view of the query "book me a flight to London" in LUIS app.  
+An example JSON view of the query "book me a flight to London" in LUIS app looks like this:
 
 ```json
    {
@@ -72,7 +69,7 @@ An example JSON view of the query "book me a flight to London" in LUIS app.
 
 ## Author LU content in Composer 
 ### User scenario 
-To enable your bot understand user's input contextually and conversationally so that your bot can decide how to respond to different user inputs, you should author LU as training data. 
+To enable your bot to understand user's input contextually and conversationally so that your bot can decide how to respond to different user inputs, you should author LU as training data. 
 
 ### What to know
 To author proper LU content in Composer, you need to know 
@@ -81,11 +78,11 @@ To author proper LU content in Composer, you need to know
   - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 ### How to author 
-To create custom the LU content, follow these steps:
+To create the LU content, follow these steps:
 
 - set up a **Recognizer** for a specific dialog (per dialog per recognizer)
 - author LU content as training data in [.lu format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-- wire up the LU content with specific dialog 
+- create **Intent** triggers to wire up the LU content 
 - publish LU content (for LUIS) 
 
 #### Step one: Set up a recognizer for specific dialog 
@@ -107,7 +104,7 @@ For example, let's define two intents: **Greeting** and **CheckWeather** with so
 ![intents](./media/language_understanding/intents.gif)
 
 #### Step three: Wire up LU with **Intent** trigger 
-After you define the intents with example utterances, you need to create **Intent** triggers in the dialog to wire up each intent. The **Intent** trigger defines the actions to take when an intent is recognized. 
+After you define the intents with example utterances, you need to create **Intent** triggers in the dialog to handle each intent. In the **Intent** trigger you can define the actions to take when an intent is recognized. 
 
 1. Go to your bot's navigation pane on the left side and select **New Trigger** in the dialog you wish you create the trigger. 
 
@@ -136,7 +133,7 @@ Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if y
 
 ## References
 - [What is LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)
-- [Language understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
+- [Language Understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
 - [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
