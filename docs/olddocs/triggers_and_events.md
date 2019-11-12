@@ -37,7 +37,7 @@ The basic form of an event handler is "When (EVENT) happens, then do (ACTIONS)".
 
 The screenshot below shows the definition of an intent handler that is configured to fire whenever the "cancel" intent is detected. It is possible to add a secondary constraint to the event - this expression, if specified, must evaluate to true for the event to fire.
 
-![Event definition in the property editor](./Assets/event-properties.png)
+![Event definition in the properties panel](./Assets/event-properties.png)
 
 This event will appear in the dialog as a node at the top of the editor, like the one shown below. Inside the node is a summary of the actions that will occur when the handler is activated.
 
