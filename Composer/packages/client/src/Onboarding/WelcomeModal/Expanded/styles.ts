@@ -36,16 +36,16 @@ export const statusStyle = css`
   padding: 5px 0;
 
   i {
-    color: ${SharedColors.cyanBlue10};
+    color: ${NeutralColors.gray150};
     padding-right: 10px;
   }
 
   i.completed {
-    color: ${SharedColors.green20};
+    color: ${SharedColors.cyanBlue10};
   }
 
   span {
-    color: ${NeutralColors.gray120};
+    color: ${NeutralColors.gray130};
   }
 `;
 
