@@ -14,6 +14,7 @@ jobs:
   ci:
     name: Unit Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -57,6 +58,7 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -95,6 +97,8 @@ jobs:
   botproject:
     name: BotProject
     runs-on: windows-latest
+    timeout-minutes: 20
+
     steps:
       - name: Checkout
         uses: actions/checkout@v1
