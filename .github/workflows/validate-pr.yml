@@ -15,7 +15,7 @@ jobs:
         uses: actions/cache@preview
         with:
           path: ./.github/actions/conventional-pr/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./.github/actions/conventional-pr/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('.github/actions/conventional-pr/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Prepare Action
