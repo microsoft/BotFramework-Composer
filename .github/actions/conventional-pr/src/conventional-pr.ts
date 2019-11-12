@@ -56,7 +56,7 @@ async function run() {
     }
 
     const titleErrors = validateTitle(pr.title);
-    const bodyErrors = validateTitle(pr.body);
+    const bodyErrors = validateBody(pr.body);
 
     if (titleErrors.length) {
       core.setFailed(titleErrors.join('\n'));
