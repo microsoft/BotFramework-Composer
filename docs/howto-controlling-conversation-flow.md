@@ -21,7 +21,7 @@ The decision is controlled by the **Condition** field, which should contain an [
 
 ![If/Else Condition](./media/controlling-conversation-flow/if-else-condition.png)
 
-Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evalutes to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `reu` or `false`. 
+Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evaluates to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `reu` or `false`. 
 
 ![Add If/Else display messages](./media/controlling-conversation-flow/if-else-send-response.png)
 
@@ -30,7 +30,7 @@ In a **Branch: Switch** result, the value of the `Condition` field is used to ch
 
 ![Select Switch Branch](./media/controlling-conversation-flow/select-switch.png)
 
-Like **Branch:If/Else** you set the **Condition** to evaluate in the property panel on the right. Underneath at you can create **Branches** in your switch condition by entering the value and clicking `Enter`. As each case is added, a new branch will appear in the flow which can then be customized with actions. See below how the `Nick` and `Tom` branches are added both in the property panel on th right and in the authoring canvas.
+Like **Branch:If/Else** you set the **Condition** to evaluate in the property panel on the right. Underneath at you can create **Branches** in your switch condition by entering the value and clicking `Enter`. As each case is added, a new branch will appear in the flow which can then be customized with actions. See below how the `Nick` and `Tom` branches are added both in the property panel on the right and in the authoring canvas.
 
 ![Add new switch branch](./media/controlling-conversation-flow/switch-add-branches.gif)
 
@@ -117,7 +117,7 @@ Imagine a child dialog used to collect a display name for a user profile. It ask
 ![End dialog properties](./media/controlling-conversation-flow/end-this-dialog.png)
 
 ## Conditional versions of a message in LG
-In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the language generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
+In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the Language Generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
 
 For example, you can create a welcome message that is different depending on whether the `user.name` property is set or not. The message template could look something like this:
 
@@ -128,7 +128,7 @@ For example, you can create a welcome message that is different depending on whe
     - Hello, human!
 ```
 
-Learn more about [using memory and expressions in LG](concept-memory-draft.md#memory-in-lg).
+Learn more about [using memory and expressions in LG](concept-memory.md#memory-in-lg).
 
 ## Further Reading
 [Adaptive dialogs](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog)
@@ -136,4 +136,4 @@ Learn more about [using memory and expressions in LG](concept-memory-draft.md#me
 [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 
 ## Next
-[Language Generation](./concept-language-genereation-draft.md)
+[Language Generation](./concept-language-generation.md)

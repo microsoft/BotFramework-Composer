@@ -32,13 +32,18 @@ export default function TableView(props) {
 
   useEffect(() => {
     if (isEmpty(lgFile)) return;
-
-    const allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
-      return {
-        ...template,
-        index: templateIndex,
-      };
-    });
+    let allTemplates = [];
+    try {
+      allTemplates = lgUtil.parse(lgFile.content).map((template, templateIndex) => {
+        return {
+          ...template,
+          index: templateIndex,
+        };
+      });
+      // mute lg file invalid cause page crash, setState is async, this component may render at first
+    } catch (error) {
+      console.error(error);
+    }
 
     if (!activeDialog) {
       setTemplates(allTemplates);
