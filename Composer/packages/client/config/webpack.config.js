@@ -295,7 +295,7 @@ module.exports = function(webpackEnv) {
             },
             {
               test: /\.tsx?$/,
-              // include: paths.appSrc,
+              include: paths.appSrc,
               loader: require.resolve('ts-loader'),
               options: PnpWebpackPlugin.tsLoaderOptions({
                 transpileOnly: isEnvDevelopment,
