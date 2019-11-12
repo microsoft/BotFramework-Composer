@@ -1,4 +1,3 @@
-/*eslint @typescript-eslint/no-use-before-define: ["error", { "functions": false }]*/
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -69,80 +68,12 @@ export const ShellApi: React.FC = () => {
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
 
-  useEffect(() => {
-    apiClient.connect();
-
-    apiClient.registerApi('getState', (_, event) => {
-      if (!event.source) {
-        return {};
-      }
-
-      const source = event.source as Window;
-
-      return getState(source.name);
-    });
-    apiClient.registerApi('saveData', handleValueChange);
-    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
-    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
-    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
-    apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
-    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
-    apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
-    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
-    apiClient.registerApi('navTo', navTo);
-    apiClient.registerApi('onFocusEvent', focusEvent);
-    apiClient.registerApi('onFocusSteps', focusSteps);
-    apiClient.registerApi('onSelect', onSelect);
-    apiClient.registerApi('onCopy', onCopy);
-    apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
-    apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
-    apiClient.registerApi('createDialog', () => {
-      return new Promise(resolve => {
-        actions.createDialogBegin((newDialog: string | null) => {
-          resolve(newDialog);
-        });
-      });
-    });
-    apiClient.registerApi('undo', actions.undo);
-    apiClient.registerApi('redo', actions.redo);
-    apiClient.registerApi('addCoachMarkPosition', actions.onboardingAddCoachMarkRef);
-
-    return () => {
-      apiClient.disconnect();
-    };
-  }); // this is intented to reconstruct everytime store is refresh
-
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
       result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
-
-  useEffect(() => {
-    if (window.frames[VISUAL_EDITOR]) {
-      const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
-    }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
-
-  useEffect(() => {
-    if (window.frames[FORM_EDITOR]) {
-      const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
-
-  useEffect(() => {
-    const schemaError = get(schemas, 'diagnostics', []);
-    if (schemaError.length !== 0) {
-      const title = `StaticValidationError`;
-      const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
-    }
-  }, [schemas]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow?: string) {
@@ -373,6 +304,74 @@ export const ShellApi: React.FC = () => {
     };
     apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
+
+  useEffect(() => {
+    apiClient.connect();
+
+    apiClient.registerApi('getState', (_, event) => {
+      if (!event.source) {
+        return {};
+      }
+
+      const source = event.source as Window;
+
+      return getState(source.name);
+    });
+    apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
+    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
+    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
+    apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
+    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
+    apiClient.registerApi('navTo', navTo);
+    apiClient.registerApi('onFocusEvent', focusEvent);
+    apiClient.registerApi('onFocusSteps', focusSteps);
+    apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('onCopy', onCopy);
+    apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
+    apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
+    apiClient.registerApi('createDialog', () => {
+      return new Promise(resolve => {
+        actions.createDialogBegin((newDialog: string | null) => {
+          resolve(newDialog);
+        });
+      });
+    });
+    apiClient.registerApi('undo', actions.undo);
+    apiClient.registerApi('redo', actions.redo);
+    apiClient.registerApi('addCoachMarkPosition', actions.onboardingAddCoachMarkRef);
+
+    return () => {
+      apiClient.disconnect();
+    };
+  }); // this is intented to reconstruct everytime store is refresh
+
+  useEffect(() => {
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
+      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
+    }
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+
+  useEffect(() => {
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
+      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
+    }
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+
+  useEffect(() => {
+    const schemaError = get(schemas, 'diagnostics', []);
+    if (schemaError.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = schemaError.join('\n');
+      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
+    }
+  }, [schemas]);
 
   return null;
 };
