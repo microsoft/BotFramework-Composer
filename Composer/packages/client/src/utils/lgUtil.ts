@@ -1,6 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/**
+ * lgUtil.ts is a single place use lg-parser handle lg file operation.
+ * it's designed have no state, input text file, output text file.
+ *
+ */
+
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import get from 'lodash.get';
 
@@ -69,11 +75,13 @@ export function updateTemplate(content: string, templateName: string, { Name, Pa
   }
 }
 
+// if Name exist, throw error.
 export function addTemplate(content: string, { Name, Parameters, Body }: Template): string {
   const resource = LGParser.parse(content);
   return resource.addTemplate(Name, Parameters, Body).toString();
 }
 
+// if Name exist, add it anyway, with name like `${Name}1` `${Name}2`
 export function addTemplateAnyway(
   content: string,
   { Name = 'TemplateName', Parameters = [], Body = '-TemplateBody' }: Template
@@ -84,6 +92,7 @@ export function addTemplateAnyway(
   return resource.addTemplate(newName, Parameters, Body).toString();
 }
 
+// if toTemplateName exist, throw error.
 export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): string {
   const resource = LGParser.parse(content);
   const fromTemplate = resource.Templates.find(t => t.Name === fromTemplateName);
@@ -94,6 +103,7 @@ export function copyTemplate(content: string, fromTemplateName: string, toTempla
   return resource.addTemplate(toTemplateName, Parameters, Body).toString();
 }
 
+// if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
 export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): string {
   const resource = LGParser.parse(content);
   const fromTemplate = resource.Templates.find(t => t.Name === fromTemplateName);
