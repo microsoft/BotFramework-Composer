@@ -12,7 +12,6 @@ import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
   DefaultRenderer,
-  Recognizer,
   BeginDialog,
   ReplaceDialog,
   ActivityRenderer,
@@ -26,8 +25,6 @@ import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.ConditionNode]: DefaultRenderer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
-  [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.ReplaceDialog]: ReplaceDialog,
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,

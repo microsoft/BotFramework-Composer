@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
+import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import {
   ActionButton,
   PrimaryButton,
@@ -50,8 +50,10 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
+
+  const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
 
   useEffect(() => {
     toStartBot && handleClick();
@@ -172,12 +174,14 @@ export const TestController: React.FC = () => {
             labelPosition="left"
           />
         )}
-        <PrimaryButton
-          css={botButton}
-          text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
-          onClick={handleClick}
-          id={'publishAndConnect'}
-        />
+        <span ref={addRef}>
+          <PrimaryButton
+            css={botButton}
+            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
+            onClick={handleClick}
+            id={'publishAndConnect'}
+          />
+        </span>
         <Callout
           role="alertdialog"
           ariaLabelledBy="callout-label-id"

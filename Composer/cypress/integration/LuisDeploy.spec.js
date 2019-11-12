@@ -7,7 +7,7 @@ context('Luis Deploy', () => {
     cy.route('POST', '/api/launcher/sync', 'OK');
     cy.route('POST', 'api/projects/opened/settings', 'OK');
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('ToDoLuisBot');
+    cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can deploy luis success', () => {
@@ -33,7 +33,7 @@ context('Luis Deploy', () => {
       .type('0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
     cy.wait(1000);
-    cy.getByText('Publish').click();
+    cy.getByText('OK').click();
     cy.wait(1000);
     cy.getByText('Restart Bot').should('exist');
     cy.getByText('Test in Emulator').should('exist');
@@ -49,6 +49,6 @@ context('Luis Deploy', () => {
     cy.getByText('Try again').click();
     cy.wait(1000);
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
-    cy.getByText('Publish').click();
+    cy.getByText('OK').click();
   });
 });

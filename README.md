@@ -71,7 +71,17 @@ This project has adopted the [Microsoft Open Source Code of Conduct][100].
 For more information see the [Code of Conduct FAQ][101] or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Reporting Security Issues
+### Issues and feature requests
+
+Please file issues and feature requests [here](https://github.com/microsoft/BotFramework-Composer/issues/issues). 
+
+Also, see current [known issues](https://github.com/microsoft/BotFramework-Composer/labels/known%20issue) for high impact bugs you may experience.
+
+### Submitting pull requests
+
+If you'd like to contribute pull requests to Composer, see the [contributing guide](./CONTRIBUTING.md) for helpful information on our development workflow.
+
+## Reporting security issues
 
 Security issues and bugs should be reported privately, via email, to the Microsoft Security
 Response Center (MSRC) at [secure@microsoft.com](mailto:secure@microsoft.com). You should
