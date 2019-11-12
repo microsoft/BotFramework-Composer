@@ -55,6 +55,7 @@ export default function CodeEditor(props) {
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
+      hidePlaceholder={inlineMode}
       value={content}
       errorMsg={errorMsg}
       lgOption={lgOption}

@@ -1,10 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { LGLSPEditor } from '@bfc/code-editor';
+import get from 'lodash.get';
+import debounce from 'lodash.debounce';
 
 import { FormContext } from '../types';
+
+const LG_HELP =
+  'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 
 const getInitialTemplate = (fieldName: string, formData?: string): string => {
   let newTemplate = formData || '- ';
@@ -28,9 +33,21 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
+  const [errorMsg, setErrorMsg] = useState('');
   const lgId = `bfd${name}-${formContext.dialogId}`;
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
+
+  const updateLgTemplate = useMemo(
+    () =>
+      debounce((body: string) => {
+        formContext.shellApi
+          .updateLgTemplate(lgFileId, lgId, body)
+          .then(() => setErrorMsg(''))
+          .catch(error => setErrorMsg(error));
+      }, 500),
+    [lgId, lgFileId]
+  );
 
   const template = (lgFile &&
     lgFile.templates.find(template => {
@@ -45,10 +62,30 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  console.log(template);
+  const [localValue, setLocalValue] = useState(template.Body);
+  const lgOption = {
+    inline: true,
+    content: get(lgFile, 'content', ''),
+    template,
+  };
 
-  const onChange = () => {};
-  const content = lgFile ? lgFile.content : '';
+  const onChange = value => {
+    setLocalValue(value);
+    updateLgTemplate(value);
+  };
 
-  return <LGLSPEditor onChange={onChange} value={content} height={height} />;
+  return (
+    <LGLSPEditor
+      onChange={onChange}
+      value={localValue}
+      lgOption={lgOption}
+      errorMsg={errorMsg}
+      hidePlaceholder={true}
+      helpURL={LG_HELP}
+      languageServer={{
+        url: 'ws://localhost:5000/lgServer',
+      }}
+      height={height}
+    />
+  );
 };
