@@ -27,7 +27,7 @@ const CS_POLICIES = [
   "img-src 'self' data:;",
   "base-uri 'none';",
   "connect-src 'self';",
-  "frame-src 'self' bfemulator:;",
+  "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
   "worker-src 'self';",
   "form-action 'none';",
   "frame-ancestors 'self';",
