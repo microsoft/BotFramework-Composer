@@ -22,7 +22,6 @@ const prQuery = `
       pullRequest(number: $prNumber) {
         title
         body
-        isDraft
       }
     }
   }
@@ -48,10 +47,6 @@ async function run() {
 
     if (!pr) {
       core.setFailed('Not in a Pull Request context.');
-      return;
-    }
-
-    if (pr.isDraft) {
       return;
     }
 
