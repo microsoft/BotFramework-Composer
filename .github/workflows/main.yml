@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: yarn install
-        run: yarn install
+        run: yarn
         working-directory: Composer
       - name: yarn build:dev
         run: yarn build:dev
@@ -73,7 +73,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: yarn install
-        run: yarn install
+        run: yarn
         working-directory: Composer
       - name: yarn build:prod
         run: yarn build:prod
@@ -101,7 +101,7 @@ jobs:
       - name: Set Dotnet Version
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "2.1.802" # SDK Version to use.
+          dotnet-version: "3.0.100" # SDK Version to use.
       - name: dotnet build
         run: dotnet build
         working-directory: BotProject/CSharp
