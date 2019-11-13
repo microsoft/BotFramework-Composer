@@ -12,7 +12,6 @@ const common = {
   mode: 'development',
   entry: {
     main: path.resolve(client, 'main.ts'),
-    'editor.worker': 'monaco-editor-core/esm/vs/editor/editor.worker.js',
   },
   output: {
     filename: '[name].bundle.js',
@@ -34,14 +33,7 @@ const common = {
   devServer: {
     contentBase: './dist',
   },
-  target: 'web',
-  node: {
-    fs: 'empty',
-    child_process: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    crypto: 'empty',
-  },
+
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],

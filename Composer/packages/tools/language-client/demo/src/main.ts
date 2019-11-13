@@ -3,7 +3,7 @@
 
 import { startSampleClient, registerLGLanguage } from '../../src/index';
 
-const container = document.getElementById('container');
+const container: HTMLElement = document.getElementById('container') || document.body;
 
 const content = `# Greeting1
 -Good morning
@@ -15,31 +15,19 @@ const content = `# Greeting1
 -Good evening
 `;
 
-// const template = {
-//   Name: 'Greeting2',
-//   Body: `-Good afternoon
-// -[Greeting3]
-// -[Greeting4]`,
-// };
-
 const lgServer = {
-  url: 'ws://localhost:5002/lgServer',
+  url: 'ws://localhost:5000/lgServer',
 };
-
-// const lgOption = {
-//   inline: true,
-//   content,
-//   template,
-// };
 
 registerLGLanguage();
 
-const editor = monaco.editor.create(container!, {
+const editor = monaco.editor.create(container, {
   value: content,
   glyphMargin: true,
   lightbulb: {
     enabled: true,
   },
+  language: 'botbuilderlg',
   theme: 'lgtheme',
 });
 

@@ -1,23 +1,23 @@
 {
-    "compilerOptions": {
-        "outDir": "./lib/",
-        "noImplicitAny": false,
-        "module": "commonjs",
-        "target": "es6",
-        "sourceMap": true,
-        "declaration": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "strict": true,
-        "baseUrl": "./",
-        "noUnusedLocals": true,
-        "resolveJsonModule": true
-    },
-    "include": [
-        "./src/**/*",
-        "./__tests__/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ],
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "noImplicitAny": false,
+    "module": "es6",
+    "target": "es5",
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "baseUrl": "./",
+    "noUnusedLocals": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src/**/*",
+    "./__tests__/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
 }
