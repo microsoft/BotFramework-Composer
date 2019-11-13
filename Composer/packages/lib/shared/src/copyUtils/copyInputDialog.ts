@@ -11,19 +11,19 @@ export const copyInputDialog = async (input: InputDialog, externalApi: ExternalA
   const nodeId = copy.$designer ? copy.$designer.id : '';
 
   if (input.prompt) {
-    copy.prompt = await externalApi.copyLgTemplate(nodeId, input.prompt);
+    copy.prompt = await externalApi.copyLgTemplate(input.prompt, nodeId);
   }
 
   if (input.unrecognizedPrompt) {
-    copy.unrecognizedPrompt = await externalApi.copyLgTemplate(nodeId, input.unrecognizedPrompt);
+    copy.unrecognizedPrompt = await externalApi.copyLgTemplate(input.unrecognizedPrompt, nodeId);
   }
 
   if (input.invalidPrompt) {
-    copy.invalidPrompt = await externalApi.copyLgTemplate(nodeId, input.invalidPrompt);
+    copy.invalidPrompt = await externalApi.copyLgTemplate(input.invalidPrompt, nodeId);
   }
 
   if (input.defaultValueResponse) {
-    copy.defaultValue = await externalApi.copyLgTemplate(nodeId, input.defaultValueResponse);
+    copy.defaultValue = await externalApi.copyLgTemplate(input.defaultValueResponse, nodeId);
   }
 
   return copy;

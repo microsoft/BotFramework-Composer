@@ -91,11 +91,11 @@ export const seedDefaults = (type: string) => {
 
 export const deepCopyAction = async (
   data,
-  copyLgTemplate: (nodeId: string, lgTemplateName: string) => Promise<string>
+  copyLgTemplateToNewNode: (lgTemplateName: string, newNodeId: string) => Promise<string>
 ) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
-    copyLgTemplate,
+    copyLgTemplate: copyLgTemplateToNewNode,
   });
 };
 

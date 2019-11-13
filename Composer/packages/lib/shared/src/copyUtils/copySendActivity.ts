@@ -11,7 +11,7 @@ export const copySendActivity = async (input: SendActivity, externalApi: Externa
   const nodeId = copy.$designer ? copy.$designer.id : '';
 
   if (input.activity) {
-    copy.activity = await externalApi.copyLgTemplate(nodeId, input.activity);
+    copy.activity = await externalApi.copyLgTemplate(input.activity, nodeId);
   }
 
   return copy;
