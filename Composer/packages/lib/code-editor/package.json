@@ -12,8 +12,8 @@
     "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
-    "start": "webpack-dev-server --config lg-lsp-demo/webpack.config.demo.js",
-    "build:demo": "webpack --config lg-lsp-demo/webpack.config.demo.js",
+    "start": "webpack-dev-server --config demo/webpack.config.demo.js",
+    "build:demo": "webpack --config demo/webpack.config.demo.js",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
@@ -57,8 +57,8 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "@bfc/lg-languageserver": "*",
     "@bfc/language-client": "*",
+    "@bfc/lg-languageserver": "*",
     "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
     "@bfcomposer/react-monaco-editor": "0.30.12",
     "@types/node": "^12.12.5",

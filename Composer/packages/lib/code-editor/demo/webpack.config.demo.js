@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.tsx'),
@@ -95,6 +94,9 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
+    alias: {
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+    },
   },
 
   output: {
@@ -110,10 +112,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunksSortMode: 'dependency',
       template: path.join(__dirname, 'index.html'),
-    }),
-    new MonacoWebpackPlugin({
-      // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['markdown', 'botbuilderlg', 'json'],
     }),
   ],
 };

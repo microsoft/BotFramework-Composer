@@ -104,7 +104,7 @@ export default function CodeEditor(props) {
       errorMsg={errorMsg}
       lgOption={lgOption}
       languageServer={{
-        url: 'ws://localhost:5002/lgServer',
+        url: 'ws://localhost:5000/lgServer',
       }}
       onChange={_onChange}
     />

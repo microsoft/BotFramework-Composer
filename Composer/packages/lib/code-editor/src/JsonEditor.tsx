@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import '@bfcomposer/monaco-editor/esm/vs/language/json/monaco.contribution';
 
 import React, { useState, useEffect } from 'react';
 import { editor } from '@bfcomposer/monaco-editor';

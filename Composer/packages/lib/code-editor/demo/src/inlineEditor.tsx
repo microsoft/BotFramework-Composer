@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
+import { LGLSPEditor } from '../../src';
 
 const content = `# Greeting1
 -Good morning
@@ -41,7 +41,7 @@ export default function App() {
     onChange,
     lgOption,
     languageServer: {
-      url: 'ws://localhost:5002/lgServer',
+      url: 'ws://localhost:5000/lgServer',
     },
   };
   return <LGLSPEditor {...props} />;
