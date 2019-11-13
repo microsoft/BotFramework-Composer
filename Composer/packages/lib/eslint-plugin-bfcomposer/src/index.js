@@ -3,7 +3,7 @@ const path = require('path');
 
 const map = require('lodash/map');
 const reduce = require('lodash/reduce');
-const zipObject = require('lodash/zipobject');
+const zipObject = require('lodash/zipObject');
 
 const ruleNames = map(fs.readdirSync(path.resolve(__dirname, 'rules')), f => f.replace(/\.js$/, ''));
 const allRules = zipObject(ruleNames, map(ruleNames, r => require(`./rules/${r}`)));
