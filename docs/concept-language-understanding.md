@@ -6,7 +6,7 @@ In Bot Framework Composer LU has the following characteristics:
 - LU content is authored in inline editor using [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - LU content is training data for recognizers 
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
-- Composer provides an all-up LU view in "User Responses"
+- Composer provides an all-up LU view in **User Responses**
 
 ## Core LU concepts in Composer 
 ### Intents  
@@ -18,8 +18,8 @@ Intents are categories or classifications of user intentions. An intent has a tw
 
 To define intents in Composer, you will need to:
 
-- define intent(s) and example utterances in a dialog 
-- create an **Intent** trigger to handle the pre-defined intents
+- specify intent(s) and example utterances in [.lu file format](https://github.com/microsoft/botbuilder-tools/edit/master/packages/Ludown/docs/lu-file-format.md) 
+- create an **Intent** trigger to handle each pre-defined intent
 
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
@@ -39,30 +39,66 @@ You may have noticed that LU format is very similar to LG format but they are di
 - LG is associated with language generator 
 
 ### Entities
-Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include several entities or no entity, while an utterance usually represents one intent. In Composer, all LU entities are defined and managed inline. 
+Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include several entities or no entity, while an utterance usually represents one intent. In Composer, all entities are defined and managed inline. Entity in [.lu file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) is denoted using {\<entityName\>=\<labelled value\>} notation as follows: 
+
+    # BookFlight
+    - book a flight to {toCity=seattle}
+    - book a flight from {fromCity=new york} to {toCity=seattle}
 
 ### Example 
+To better understand intents, entities and utterances, we provide some examples in the table below. All the three utterances share the same intent _BookFlight_ and with different entities. There are different types of entities, see details [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
 
-| Intent     | Utterances                                    | Entity values (can be varied) |
-| ---------- | --------------------------------------------- | ----------------------------- |
-| BookFlight | "Book me a flight to London"                  | "London"                      |
-|            | "Fly me to London on the 31st"                | "London", "31st"              |
-|            | "I need a plane ticket next Sunday to London" | "next Sunday", "London"       |
+| Intent     | Utterances                                    | Entity          |
+| ---------- | --------------------------------------------- | ----------------------- |
+| BookFlight | "Book me a flight to London"                  | "London"                |
+|            | "Fly me to London on the 31st"                | "London", "31st"        |
+|            | "I need a plane ticket next Sunday to London" | "next Sunday", "London" |
 
-An example JSON view of the query "book me a flight to London" in LUIS app looks like this:
+Below is a similar definition of a _BookFlight_ intent with entity specification `{city=name}` and a set of example utterances. We use this example to show how they are manifested in Composer. Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@city`. 
+
+```
+# BookFlight
+- book a flight to {city=austin}
+- travel to {city=new york}
+- i want to go to {city=los angeles}
+```
+
+After publishing, LUIS is able to identify a city as entity and the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
+
+Based on the training data above, the JSON view of the query "book me a flight to London" in LUIS app looks like this: 
 
 ```json
-   {
+{
   "query": "book me a flight to london",
   "prediction": {
     "normalizedQuery": "book me a flight to london",
     "topIntent": "BookFlight",
     "intents": {
       "BookFlight": {
-        "score": 0.9023853
+        "score": 0.9345866
       }
     },
-    "entities": {}
+    "entities": {
+      "city": [
+        "london"
+      ],
+      "$instance": {
+        "city": [
+          {
+            "type": "city",
+            "text": "london",
+            "startIndex": 20,
+            "length": 6,
+            "score": 0.834206,
+            "modelTypeId": 1,
+            "modelType": "Entity Extractor",
+            "recognitionSources": [
+              "model"
+            ]
+          }
+        ]
+      }
+    }
   }
 }
 ```
@@ -137,6 +173,7 @@ Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if y
 - [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
+- [Extract data from utterance text with intents and entities](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-data-extraction?tabs=V2)
 
 ## Next 
 Learn how to [send messages to users](howto-sending-messages.md)
