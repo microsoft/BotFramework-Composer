@@ -62,8 +62,10 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@bfc/eslint-plugin-bfcomposer": "*",
+    "@cypress/webpack-preprocessor": "^4.1.1",
     "@emotion/babel-preset-css-prop": "^10.0.17",
     "@testing-library/cypress": "^5.0.2",
+    "@types/testing-library__cypress": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "2.6.0",
     "@typescript-eslint/parser": "2.6.0",
     "babel-jest": "24.0.0",
@@ -97,6 +99,7 @@
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.0",
+    "ts-loader": "^6.2.1",
     "typescript": "3.6.4",
     "wsrun": "^3.6.4"
   },
