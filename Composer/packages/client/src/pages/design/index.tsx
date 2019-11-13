@@ -9,7 +9,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import toLower from 'lodash/tolower';
+import toLower from 'lodash/toLower';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';

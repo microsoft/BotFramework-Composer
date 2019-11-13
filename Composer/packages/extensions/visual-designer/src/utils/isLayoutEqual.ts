@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import isEqual from 'lodash/isequal';
+import isEqual from 'lodash/isEqual';
 
 import { outlineObiJson } from './outlineObiJson';
 

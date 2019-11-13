@@ -3,7 +3,7 @@
 
 import React, { useEffect, useContext, useMemo } from 'react';
 import { ShellData } from '@bfc/shared';
-import isEqual from 'lodash/isequal';
+import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
 import { isExpression } from './utils';

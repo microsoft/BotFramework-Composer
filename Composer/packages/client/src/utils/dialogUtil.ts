@@ -4,7 +4,7 @@
 import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import cloneDeep from 'lodash/clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogInfo } from '@bfc/shared';

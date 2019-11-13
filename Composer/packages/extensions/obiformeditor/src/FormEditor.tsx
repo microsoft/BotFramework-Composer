@@ -6,7 +6,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash/merge';
 import get from 'lodash/get';
-import isEqual from 'lodash/isequal';
+import isEqual from 'lodash/isEqual';
 import { appschema, ShellData, ShellApi } from '@bfc/shared';
 
 import Form from './Form';

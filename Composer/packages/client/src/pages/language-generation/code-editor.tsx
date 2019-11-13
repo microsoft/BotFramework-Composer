@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
-import isEmpty from 'lodash/isempty';
+import isEmpty from 'lodash/isEmpty';
 import { CodeRange } from '@bfc/shared';
 
 import * as lgUtil from '../../utils/lgUtil';

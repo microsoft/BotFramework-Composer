@@ -10,7 +10,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { CaseCondition } from '@bfc/shared';
-import cloneDeep from 'lodash/clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { swap, remove } from '../utils';
 import { BFDFieldProps } from '../types';

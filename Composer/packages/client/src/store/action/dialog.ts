@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import clonedeep from 'lodash/clonedeep';
+import clonedeep from 'lodash/cloneDeep';
 import reject from 'lodash/reject';
 import { DialogInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
