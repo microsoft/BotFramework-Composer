@@ -11,7 +11,7 @@ export const copySwitchCondition = async (
   input: SwitchCondition,
   externalApi: ExternalApi
 ): Promise<SwitchCondition> => {
-  const copy: SwitchCondition = shallowCopyAdaptiveAction(input, externalApi);
+  const copy = shallowCopyAdaptiveAction(input, externalApi);
 
   if (Array.isArray(input.default)) {
     copy.default = await copyAdaptiveActionList(input.default, externalApi);

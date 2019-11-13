@@ -8,7 +8,7 @@ import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 import { copyAdaptiveActionList } from './copyAdaptiveActionList';
 
 export const copyEditActions = async (input: EditActions, externalApi: ExternalApi): Promise<EditActions> => {
-  const copy: EditActions = shallowCopyAdaptiveAction(input, externalApi) as EditActions;
+  const copy = shallowCopyAdaptiveAction(input, externalApi);
 
   if (Array.isArray(input.actions)) {
     copy.actions = await copyAdaptiveActionList(input.actions, externalApi);

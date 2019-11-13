@@ -7,7 +7,7 @@ import { ExternalApi } from './ExternalApi';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
 export const copyInputDialog = async (input: InputDialog, externalApi: ExternalApi): Promise<InputDialog> => {
-  const copy: InputDialog = shallowCopyAdaptiveAction(input, externalApi) as InputDialog;
+  const copy = shallowCopyAdaptiveAction(input, externalApi);
   const nodeId = copy.$designer ? copy.$designer.id : '';
 
   if (input.prompt) {
