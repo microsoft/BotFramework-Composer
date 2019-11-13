@@ -33,7 +33,7 @@ export const DeployWizardStep2 = props => {
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
             label={formatMessage('Create Resources Script')}
-            styles={styles.input}
+            styles={styles.textarea}
             value={scriptValue}
             readOnly={true}
             multiline={true}

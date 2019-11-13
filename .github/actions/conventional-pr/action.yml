@@ -1,0 +1,8 @@
+name: Conventional Pull Request
+description: Lints pull request title and body to ensure they conform to Composer style guide
+runs:
+  using: "node12"
+  main: "lib/conventional-pr.js"
+branding:
+  icon: "briefcase"
+  color: "purple"
