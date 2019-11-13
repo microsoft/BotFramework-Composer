@@ -13,7 +13,7 @@ import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 import { copyForeach } from './copyForeach';
 import { copyEditActions } from './copyEditActions';
 
-const CopyConstructorMap = {
+export const CopyConstructorMap = {
   [SDKTypes.SendActivity]: copySendActivity,
   [SDKTypes.AttachmentInput]: copyInputDialog,
   [SDKTypes.ChoiceInput]: copyInputDialog,
@@ -26,9 +26,8 @@ const CopyConstructorMap = {
   [SDKTypes.Foreach]: copyForeach,
   [SDKTypes.ForeachPage]: copyForeach,
   [SDKTypes.EditActions]: copyEditActions,
+  default: shallowCopyAdaptiveAction,
 };
-
-const DEFAULT_COPIER = shallowCopyAdaptiveAction;
 
 export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: ExternalApi): Promise<MicrosoftIDialog> {
   if (typeof data === 'string') {
@@ -37,7 +36,7 @@ export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: Ex
 
   if (!data || !data.$type) return {};
 
-  const copier = CopyConstructorMap[data.$type] || DEFAULT_COPIER;
+  const copier = CopyConstructorMap[data.$type] || CopyConstructorMap.default;
 
   return await copier(data, externalApi);
 }
