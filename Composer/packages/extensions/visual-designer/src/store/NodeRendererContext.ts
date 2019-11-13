@@ -14,6 +14,7 @@ export const NodeRendererContext = React.createContext({
   focusedTab: '',
   clipboardActions: [] as any[],
   getLgTemplates: (_id: string, _templateName: string) => Promise.resolve([] as LgTemplate[]),
+  copyLgTemplate: (_id: string, _fromTemplateName: string, _toTemplateName: string) => Promise.resolve(''),
   removeLgTemplate: (_id: string, _templateName: string) => Promise.resolve(),
   removeLgTemplates: (_id: string, _templateNames: string[]) => Promise.resolve(),
   updateLgTemplate: (_id: string, _templateName: string, _template: string) => Promise.resolve('' as string),

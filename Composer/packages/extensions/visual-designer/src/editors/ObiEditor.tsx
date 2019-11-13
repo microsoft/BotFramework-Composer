@@ -43,10 +43,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplates } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates } = useContext(
     NodeRendererContext
   );
-  const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -105,7 +104,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardActions, lgApi).then(dialog => {
+            pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplate).then(dialog => {
               onChange(dialog);
             });
           };
