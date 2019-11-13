@@ -36,7 +36,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const [errorMsg, setErrorMsg] = useState('');
   const lgId = `bfd${name}-${formContext.dialogId}`;
   const lgFileId = formContext.currentDialog.lgFile || 'common';
-  const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
+  const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useMemo(
     () =>
@@ -50,6 +50,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   );
 
   const template = (lgFile &&
+    lgFile.templates &&
     lgFile.templates.find(template => {
       return template.Name === lgId;
     })) || {
