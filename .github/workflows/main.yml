@@ -82,12 +82,12 @@ jobs:
         continue-on-error: true
         run: yarn test:integration
         working-directory: Composer
+        continue-on-error: true
         env:
           CYPRESS_COMPOSER_URL: http://localhost:5000
       - name: Archive E2E Failures
         continue-on-error: true
         uses: actions/upload-artifact@v1
-        if: failure()
         with:
           name: cypress
           path: Composer/cypress/screenshots

@@ -2,7 +2,7 @@
 context('check Nav Expandion ', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('TodoSample');
+    cy.createBot('ToDoBot');
   });
 
   it('can expand left Nav Bar', () => {

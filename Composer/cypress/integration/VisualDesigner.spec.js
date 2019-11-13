@@ -3,14 +3,14 @@
 context('Visual Designer', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('TodoSample');
+    cy.createBot('ToDoBot');
     cy.wait(100);
   });
 
   beforeEach(() => {
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestTodoSample.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(100);
     });
   });

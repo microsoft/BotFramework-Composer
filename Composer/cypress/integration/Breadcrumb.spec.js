@@ -1,16 +1,17 @@
 /// <reference types="Cypress" />
 
 context('breadcrumb', () => {
+  before(() => {
+    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.createBot('ToDoBot');
+    cy.wait(100);
+  });
 
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('TodoSample');
-    cy.wait(100);
-    
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.wait(1000);
-      cy.getByText('__TestTodoSample.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(1000);
     });
   });
@@ -19,7 +20,7 @@ context('breadcrumb', () => {
     // Should path = main dialog at first render
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('contain', '__TestTodoSample.Main');
+      .should('contain', '__TestToDoBot.Main');
 
     // Click on AddToDo dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
@@ -31,13 +32,13 @@ context('breadcrumb', () => {
     cy.wait(1000);
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestTodoSample.Main').click();
+      cy.getByText('__TestToDoBot.Main').click();
       cy.wait(100);
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('contain', '__TestTodoSample');
+      .should('contain', '__TestToDoBot');
   });
 
   it('can show event name in breadcrumb', () => {
@@ -50,7 +51,7 @@ context('breadcrumb', () => {
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /AddToDo.*Dialog started (BeginDialog)*/);
+      .should('match', /AddToDo.*Event received.*/);
   });
 
   it('can show action name in breadcrumb', () => {
@@ -63,13 +64,13 @@ context('breadcrumb', () => {
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.getByTestId('RuleEditor').within(() => {
-        cy.getByText('Send a response').click();
+        cy.getByText('Set a Property').click();
         cy.wait(500);
       });
     });
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /__TestTodoSample.Main.*Conversation started \(ConversationUpdate\).*Send a response/);
+      .should('match', /ToDoBot.+Set a Property/);
   });
 });
