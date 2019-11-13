@@ -1,4 +1,5 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('breadcrumb', () => {
   beforeEach(() => {
@@ -7,46 +8,52 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.debug();
       cy.findByText('__TestTodoSample.Main').click();
     });
   });
+
+  function hasBreadcrumbItems(cy: Cypress.cy, items: (string | RegExp)[]) {
+    cy.findByTestId('Breadcrumb')
+      .get('li')
+      .should($li => {
+        items.forEach((item, idx) => {
+          expect($li.eq(idx)).to.contain(item);
+        });
+      });
+  }
 
   it('can show dialog name in breadcrumb', () => {
     // Should path = main dialog at first render
-    cy.findByTestId('Breadcrumb').should('contain', '__TestTodoSample.Main');
+    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
 
     // Click on AddToDo dialog
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('AddToDo').click();
     });
-    cy.findByTestId('Breadcrumb')
-      .invoke('text')
-      .should('contain', 'AddToDo');
+    hasBreadcrumbItems(cy, ['AddToDo']);
+
     // Return to Main.dialog
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample.Main').click();
     });
 
-    cy.findByTestId('Breadcrumb')
-      .invoke('text')
-      .should('contain', '__TestTodoSample');
+    hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
   it('can show event name in breadcrumb', () => {
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('AddToDo').click();
       cy.findByText('Dialog started (BeginDialog)').click();
+      cy.wait(100);
     });
 
-    cy.findByTestId('Breadcrumb')
-      .invoke('text')
-      .should('match', /AddToDo.*Dialog started (BeginDialog)*/);
+    hasBreadcrumbItems(cy, ['AddToDo', 'Dialog started (BeginDialog)']);
   });
 
   it('can show action name in breadcrumb', () => {
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('Conversation started (ConversationUpdate)').click();
+      cy.wait(100);
     });
 
     // Click on an action
@@ -56,8 +63,6 @@ context('breadcrumb', () => {
       });
     });
 
-    cy.findByTestId('Breadcrumb')
-      .invoke('text')
-      .should('match', /__TestTodoSample.Main.*Conversation started \(ConversationUpdate\).*Send a response/);
+    hasBreadcrumbItems(cy, ['__TestTodoSample.Main', 'Conversation started (ConversationUpdate)', 'Send a response']);
   });
 });
