@@ -3,12 +3,9 @@
 
 import { copyForeach } from '../../src/copyUtils/copyForeach';
 
-describe('#copyForeach', () => {
-  const externalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x),
-  };
+import { externalApiStub as externalApi } from './externalApiStub';
 
+describe('#copyForeach', () => {
   it('can copy Foreach action', async () => {
     const foreachInstance = {
       $type: 'Microsoft.Foreach',

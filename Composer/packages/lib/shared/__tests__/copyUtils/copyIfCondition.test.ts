@@ -3,12 +3,9 @@
 
 import { copyIfCondition } from '../../src/copyUtils/copyIfCondition';
 
-describe('#copyIfCondition', () => {
-  const externalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x),
-  };
+import { externalApiStub as externalApi } from './externalApiStub';
 
+describe('#copyIfCondition', () => {
   it('can copy normal input', async () => {
     const ifCondition = {
       $type: 'Microsoft.IfCondition',

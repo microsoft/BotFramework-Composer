@@ -2,16 +2,12 @@
 // Licensed under the MIT License.
 
 import { copyAdaptiveAction } from '../../src/copyUtils';
-import { ExternalApi } from '../../src/copyUtils/ExternalApi';
 import { CopyConstructorMap } from '../../src/copyUtils/copyAdaptiveAction';
 import { SDKTypes } from '../../src';
 
-describe('copyAdaptiveAction', () => {
-  const externalApi: ExternalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x + '(copy)'),
-  };
+import { externalApiStub as externalApi } from './externalApiStub';
 
+describe('copyAdaptiveAction', () => {
   it('should return {} when input is invalid', async () => {
     expect(await copyAdaptiveAction('hello', externalApi)).toEqual('hello');
 

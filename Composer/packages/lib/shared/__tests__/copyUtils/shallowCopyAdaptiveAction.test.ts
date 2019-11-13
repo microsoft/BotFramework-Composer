@@ -2,14 +2,10 @@
 // Licensed under the MIT License
 
 import { shallowCopyAdaptiveAction } from '../../src/copyUtils/shallowCopyAdaptiveAction';
-import { ExternalApi } from '../../src/copyUtils/ExternalApi';
+
+import { externalApiStub as externalApi } from './externalApiStub';
 
 describe('shallowCopyAdaptiveAction', () => {
-  const externalApi: ExternalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x + '(copy)'),
-  };
-
   it('can copy BeginDialog', () => {
     const beginDialog = {
       $type: 'Microsoft.BeginDialog',

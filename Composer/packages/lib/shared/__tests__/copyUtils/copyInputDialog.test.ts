@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { ExternalApi } from '../../src/copyUtils/ExternalApi';
 import { copyInputDialog } from '../../src/copyUtils/copyInputDialog';
+import { ExternalApi } from '../../src/copyUtils/ExternalApi';
+
+import { externalApiStub as externalApi } from './externalApiStub';
 
 describe('shallowCopyAdaptiveAction', () => {
-  const externalApi: ExternalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x + '(copy)'),
+  const externalApiWithLgCopy: ExternalApi = {
+    ...externalApi,
+    copyLgTemplate: (templateName, newNodeId) => Promise.resolve(templateName + '(copy)'),
   };
 
   it('can copy TextInput', async () => {
@@ -25,7 +27,7 @@ describe('shallowCopyAdaptiveAction', () => {
       invalidPrompt: '[bfdinvalidPrompt-1234]',
     };
 
-    expect(await copyInputDialog(promptText as any, externalApi)).toEqual({
+    expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
       $type: 'Microsoft.TextInput',
       $designer: {
         id: '5678',

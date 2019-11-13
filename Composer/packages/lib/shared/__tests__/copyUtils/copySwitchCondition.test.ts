@@ -3,12 +3,9 @@
 
 import { copySwitchCondition } from '../../src/copyUtils/copySwitchCondition';
 
-describe('#copySwitchCondition', () => {
-  const externalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x),
-  };
+import { externalApiStub as externalApi } from './externalApiStub';
 
+describe('#copySwitchCondition', () => {
   it('can copy cases and default in input', async () => {
     const switchCondition = {
       $type: 'Microsoft.SwitchCondition',

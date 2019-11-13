@@ -3,12 +3,9 @@
 
 import { copyEditActions } from '../../src/copyUtils/copyEditActions';
 
-describe('#copyEditActions', () => {
-  const externalApi = {
-    getDesignerId: () => ({ id: '5678' }),
-    copyLgTemplate: (id, x) => Promise.resolve(x),
-  };
+import { externalApiStub as externalApi } from './externalApiStub';
 
+describe('#copyEditActions', () => {
   it('can copy EditActions', async () => {
     const editActions = {
       $type: 'Microsoft.EditActions',
