@@ -3,7 +3,7 @@ Language Understanding (LU) is used by the bot to understand language naturally 
 
 In Bot Framework Composer LU has the following characteristics:
 
-- LU content is authored in inline editor using [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- LU content is authored in inline editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - LU content is training data for recognizers 
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
 - Composer provides an all-up LU view in **User Responses**
@@ -39,7 +39,7 @@ You may have noticed that LU format is very similar to LG format but they are di
 - LG is associated with language generator 
 
 ### Entities
-Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include several entities or no entity, while an utterance usually represents one intent. In Composer, all entities are defined and managed inline. Entity in [.lu file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) is denoted using {\<entityName\>=\<labelled value\>} notation as follows: 
+Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include several entities or no entity, while an utterance usually represents one intent. In Composer, all entities are defined and managed inline. Entity in the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) is denoted using {\<entityName\>=\<labelled value\>} notation as follows: 
 
     # BookFlight
     - book a flight to {toCity=seattle}
@@ -63,7 +63,7 @@ Below is a similar definition of a _BookFlight_ intent with entity specification
 - i want to go to {city=los angeles}
 ```
 
-After publishing, LUIS is able to identify a city as entity and the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
+After publishing, LUIS will be able to identify a city as entity and the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
 
 Based on the training data above, the JSON view of the query "book me a flight to London" in LUIS app looks like this: 
 
