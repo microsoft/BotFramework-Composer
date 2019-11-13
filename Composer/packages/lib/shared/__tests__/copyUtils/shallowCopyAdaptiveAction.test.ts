@@ -2,8 +2,7 @@
 // Licensed under the MIT License
 
 import { shallowCopyAdaptiveAction } from '../../src/copyUtils/shallowCopyAdaptiveAction';
-
-import { externalApiStub as externalApi } from './externalApiStub';
+import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 
 describe('shallowCopyAdaptiveAction', () => {
   it('can copy BeginDialog', () => {

@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { copyIfCondition } from '../../src/copyUtils/copyIfCondition';
-
-import { externalApiStub as externalApi } from './externalApiStub';
+import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 
 describe('#copyIfCondition', () => {
   it('can copy normal input', async () => {

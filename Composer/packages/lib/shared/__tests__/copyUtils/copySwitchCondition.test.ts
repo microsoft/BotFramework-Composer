@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { copySwitchCondition } from '../../src/copyUtils/copySwitchCondition';
-
-import { externalApiStub as externalApi } from './externalApiStub';
+import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 
 describe('#copySwitchCondition', () => {
   it('can copy cases and default in input', async () => {

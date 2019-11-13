@@ -3,9 +3,8 @@
 
 import { copyAdaptiveAction } from '../../src/copyUtils';
 import { CopyConstructorMap } from '../../src/copyUtils/copyAdaptiveAction';
+import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 import { SDKTypes } from '../../src';
-
-import { externalApiStub as externalApi } from './externalApiStub';
 
 describe('copyAdaptiveAction', () => {
   it('should return {} when input is invalid', async () => {
