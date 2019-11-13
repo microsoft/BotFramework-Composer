@@ -28,7 +28,7 @@ import { TestController } from './../../TestController';
 export const LGPage = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [fileValid, setFileValid] = useState(true);
   const [inlineTemplate, setInlineTemplate] = useState(null);
 

@@ -41,7 +41,8 @@ export default function App() {
     onChange,
     lgOption,
     languageServer: {
-      url: 'ws://localhost:5000/lgServer',
+      port: 5000,
+      path: '/lgServer',
     },
   };
   return <LGLSPEditor {...props} />;

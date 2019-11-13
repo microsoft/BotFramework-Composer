@@ -84,9 +84,7 @@ export default function App() {
   const props = {
     value,
     onChange,
-    languageServer: {
-      url: 'ws://localhost:5000/lgServer',
-    },
+    languageServer: 'localhost:5000/lgServer',
   };
   return <LGLSPEditor {...props} />;
 }

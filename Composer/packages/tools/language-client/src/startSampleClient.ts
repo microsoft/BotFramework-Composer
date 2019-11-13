@@ -10,6 +10,7 @@ import {
   createConnection,
 } from 'monaco-languageclient';
 
+const normalizeUrl = require('normalize-url');
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 async function initializeDocuments(languageClient, lgOption) {
@@ -40,11 +41,15 @@ function createLanguageClient(connection: MessageConnection): MonacoLanguageClie
   });
 }
 
-// function createUrl(path: string): string {
-//   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-//   // return normalizeUrl(`${protocol}://${location.host}${location.pathname}${path}`);
-//   return normalizeUrl(`${protocol}://localhost:5000${location.pathname}${path}`);
-// }
+function createUrl(server: { [key: string]: string } | string): string {
+  if (typeof server === 'string') {
+    return normalizeUrl(server).replace(/^http/, 'ws');
+  }
+  const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
+  const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+  const endHost = host || `${hostname}:${port}`;
+  return normalizeUrl(`${protocol}://${endHost}/${path}`);
+}
 
 function createWebSocket(url: string): WebSocket {
   const socketOptions = {
@@ -69,8 +74,7 @@ export function startSampleClient(editor, lgServer, lgOption) {
   lgOption.uri = editor.getModel().uri._formatted;
 
   // create the web socket
-  // const url = createUrl('/lgServer');
-  const { url } = lgServer;
+  const url = createUrl(lgServer);
   const webSocket = createWebSocket(url);
   // listen when the web socket is opened
   listen({

@@ -83,7 +83,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
-        url: 'ws://localhost:5000/lgServer',
+        port: 5000,
+        path: '/lgServer',
       }}
       height={height}
     />

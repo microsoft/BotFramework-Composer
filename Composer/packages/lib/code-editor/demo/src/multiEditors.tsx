@@ -27,7 +27,8 @@ function LGEditor() {
     value,
     onChange,
     languageServer: {
-      url: 'ws://localhost:5000/lgServer',
+      host: 'localhost:5000',
+      path: '/lgServer',
     },
   };
   return <LGLSPEditor {...props} />;

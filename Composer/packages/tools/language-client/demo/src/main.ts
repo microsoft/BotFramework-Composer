@@ -17,8 +17,11 @@ const content = `# Greeting1
 -Good evening
 `;
 
+// const lgServer = 'ws://localhost:5000/lgServer';
+
 const lgServer = {
-  url: 'ws://localhost:5000/lgServer',
+  host: 'localhost:5000',
+  path: '/lgServer',
 };
 
 const editor = monaco.editor.create(container, {

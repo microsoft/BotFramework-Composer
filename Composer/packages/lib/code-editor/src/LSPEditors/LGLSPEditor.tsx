@@ -5,8 +5,6 @@ import React from 'react';
 import '@bfc/language-client/lib/languages/lg.monaco.contribution';
 import { startSampleClient } from '@bfc/language-client';
 
-import { assignDefined } from '../utils';
-
 import { RichEditor, RichEditorProps } from './RichEditor';
 
 const LG_HELP =
@@ -25,13 +23,18 @@ export interface LGOption {
 
 export interface LGLSPEditorProps extends RichEditorProps {
   lgOption?: LGOption;
-  languageServer?: {
-    url: string;
-  };
+  languageServer?:
+    | {
+        host?: string;
+        hostname?: string;
+        port?: number;
+        path?: string;
+      }
+    | string;
 }
 
 const defaultLGServer = {
-  url: 'ws://localhost:5002/lgServer',
+  path: '/lgServer',
 };
 
 export function LGLSPEditor(props: LGLSPEditorProps) {
@@ -40,8 +43,8 @@ export function LGLSPEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption = {}, languageServer = {}, ...restProps } = props;
-  const lgServer = assignDefined(defaultLGServer, languageServer);
+  const { lgOption = {}, languageServer, ...restProps } = props;
+  const lgServer = languageServer || defaultLGServer;
   const editorWillMount = monaco => {
     if (typeof props.editorWillMount === 'function') {
       return props.editorWillMount(monaco);
