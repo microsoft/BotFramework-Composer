@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class Program
     {
@@ -36,7 +35,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 config
                     .AddEnvironmentVariables()
                     .AddCommandLine(args);
-
             }).UseStartup<Startup>()
             .Build();
     }

@@ -29,7 +29,7 @@ then go to http://localhost:3000/, best experienced in Chrome
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ## Documentation
-The documentation for Composer [can be found here](/blob/master/docs/).
+The documentation for Composer [can be found here](/toc.md).
 
 ## Extension Framework
 Composer is built on top of an extension framework, which allows anyone to provide an extension as the editor of certain type of bot assets.
