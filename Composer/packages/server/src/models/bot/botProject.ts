@@ -182,7 +182,7 @@ export class BotProject {
         ...mainDialog.content.$designer,
         name,
         description,
-      };
+      } as any;
       await this.updateDialog('Main', mainDialog.content);
     }
   };
