@@ -17,20 +17,20 @@ context.skip('SwitchCondition', () => {
       cy.wait(100);
       cy.getByText(/UnknownIntent/).click({ force: true });
       cy.wait(100);
-      cy.getByTestId('StepGroupAdd').click({ force: true });
-      cy.getByText('Flow').click({ force: true });
-      cy.getByText('Branch: Switch').click({ force: true });
-      cy.getByTestId('SwitchConditionDiamond').click({ force: true });
+      cy.findByTestId('StepGroupAdd').click({ force: true });
+      cy.findByText('Flow').click({ force: true });
+      cy.findByText('Branch: Switch').click({ force: true });
+      cy.findByTestId('SwitchConditionDiamond').click({ force: true });
     });
 
     // Add case and add/delete/edit steps
     cy.withinEditor('FormEditor', () => {
       // Edit condition
-      cy.getByLabelText('Condition').type('user.age >= 21');
+      cy.findByLabelText('Condition').type('user.age >= 21');
 
       // Add new case
-      cy.getByText('Add New Case').click({ force: true });
-      cy.getByLabelText('Value')
+      cy.findByText('Add New Case').click({ force: true });
+      cy.findByLabelText('Value')
         .type('Case1')
         .type('{enter}');
 
@@ -39,33 +39,33 @@ context.skip('SwitchCondition', () => {
       // Send activity
       // Use { force: true } can disable error checking like dom not visible or width and height '0 * 0' pixels.
       // So if a button is in a popup window, using { force: true } to button click can make the tests more stable.
-      cy.getByText('Add New Action for Case1').click({ force: true });
-      cy.getByText('Send Messages').click({ force: true });
-      cy.getByText('Send an Activity').click({ force: true });
+      cy.findByText('Add New Action for Case1').click({ force: true });
+      cy.findByText('Send Messages').click({ force: true });
+      cy.findByText('Send an Activity').click({ force: true });
       cy.wait(300);
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Branch: Switch').click({ force: true });
+      cy.findByText('Branch: Switch').click({ force: true });
     });
     cy.withinEditor('FormEditor', () => {
       // Edit array
-      cy.getByText('Add New Action for Case1').click({ force: true });
-      cy.getByText('Memory manipulation').click({ force: true });
-      cy.getByText('Edit an Array Property').click({ force: true });
+      cy.findByText('Add New Action for Case1').click({ force: true });
+      cy.findByText('Memory manipulation').click({ force: true });
+      cy.findByText('Edit an Array Property').click({ force: true });
       cy.wait(300);
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Branch: Switch').click({ force: true });
+      cy.findByText('Branch: Switch').click({ force: true });
     });
     cy.withinEditor('FormEditor', () => {
       // Log step
-      cy.getByText('Add New Action for Case1').click({ force: true });
-      cy.getByText('Debugging').click({ force: true });
-      cy.getByText('Log to console').click({ force: true });
+      cy.findByText('Add New Action for Case1').click({ force: true });
+      cy.findByText('Debugging').click({ force: true });
+      cy.findByText('Log to console').click({ force: true });
       cy.wait(300);
     });
     cy.withinEditor('VisualEditor', () => {
-      cy.getByText('Branch: Switch').click({ force: true });
+      cy.findByText('Branch: Switch').click({ force: true });
     });
     cy.withinEditor('FormEditor', () => {
       cy.get('[data-automationid="DetailsRow"]')
@@ -112,9 +112,9 @@ context.skip('SwitchCondition', () => {
         .should('contain.text', 'Send an Activity');
 
       // Add another new case
-      cy.getByText('Add New Case').click({ force: true });
+      cy.findByText('Add New Case').click({ force: true });
       cy.wait(100);
-      cy.getByLabelText('Value')
+      cy.findByLabelText('Value')
         .type('Case2')
         .type('{enter}');
 

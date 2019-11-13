@@ -20,12 +20,14 @@
 //
 //
 
-Cypress.Commands.overwrite("visit", (originalFn, url, { enableOnboarding } = {}) => {
+Cypress.Commands.overwrite('visit', (originalFn, url, { enableOnboarding } = {}) => {
   if (!enableOnboarding) {
-    cy.window().then(window => window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true })));
+    cy.window().then(window =>
+      window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true }))
+    );
   }
   originalFn(url);
- });
+});
 
 import 'cypress-testing-library/add-commands';
 
@@ -33,7 +35,7 @@ Cypress.Commands.add('createBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.wait(500);
   cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
-    cy.getByText('New').click();
+    cy.findByText('New').click();
   });
   cy.wait(500);
   cy.get('input[data-testid="Create from template"]').click({ force: true });
@@ -49,7 +51,7 @@ Cypress.Commands.add('createBot', botName => {
 Cypress.Commands.add('openBot', botName => {
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
   cy.get('[data-testid="homePage-ToolBar-Open"]').within(() => {
-    cy.getByText('Open').click();
+    cy.findByText('Open').click();
   });
   cy.get('[data-testid="SelectLocation"]').within(() => {
     cy.get(`[aria-label="${botName}"]`).click({ force: true });
@@ -82,7 +84,7 @@ Cypress.Commands.add('startFromTemplate', (template, name) => {
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.createBot(bot);
   cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-  cy.getByText('Save as').click();
+  cy.findByText('Save as').click();
 
   cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
   cy.get('input[data-testid="NewDialogName"]').type('{enter}');
@@ -97,7 +99,7 @@ Cypress.Commands.add('addEventHandler', handler => {
   cy.getByText(handler).click();
   if (handler === 'Dialog trigger') {
     cy.get(`[data-testid="eventTypeDropDown"]`).click();
-    cy.getByText('consultDialog').click();
+    cy.findByText('consultDialog').click();
   }
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });

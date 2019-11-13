@@ -7,7 +7,7 @@ context('Creating a new bot', () => {
     cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
     cy.wait(5000);
     cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
-      cy.getByText('New').click();
+      cy.findByText('New').click();
     });
     cy.wait(5000);
   });
@@ -20,7 +20,7 @@ context('Creating a new bot', () => {
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewProject.Main').should('exist');
+      cy.findByText('__TestNewProject.Main').should('exist');
     });
   });
 
@@ -34,11 +34,11 @@ context('Creating a new bot', () => {
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewProject.Main').should('exist');
-      cy.getByText('AddToDo').should('exist');
-      cy.getByText('ClearToDos').should('exist');
-      cy.getByText('DeleteToDo').should('exist');
-      cy.getByText('ShowToDos').should('exist');
+      cy.findByText('__TestNewProject.Main').should('exist');
+      cy.findByText('AddToDo').should('exist');
+      cy.findByText('ClearToDos').should('exist');
+      cy.findByText('DeleteToDo').should('exist');
+      cy.findByText('ShowToDos').should('exist');
     });
   });
 });

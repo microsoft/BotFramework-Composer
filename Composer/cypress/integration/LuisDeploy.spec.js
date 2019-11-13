@@ -19,7 +19,7 @@ context('Luis Deploy', () => {
       status: 200,
       response: 'fixture:luPublish/success',
     });
-    cy.getByText('Start Bot').click();
+    cy.findByText('Start Bot').click();
     cy.wait(5000);
     // clear its settings before
     cy.get('[data-testid="ProjectNameInput"]')
@@ -33,10 +33,10 @@ context('Luis Deploy', () => {
       .type('0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
     cy.wait(1000);
-    cy.getByText('OK').click();
+    cy.findByText('OK').click();
     cy.wait(1000);
-    cy.getByText('Restart Bot').should('exist');
-    cy.getByText('Test in Emulator').should('exist');
+    cy.findByText('Restart Bot').should('exist');
+    cy.findByText('Test in Emulator').should('exist');
 
     cy.route({
       method: 'POST',
@@ -44,11 +44,11 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/error',
     });
-    cy.getByText('Restart Bot').click();
+    cy.findByText('Restart Bot').click();
     cy.wait(1000);
-    cy.getByText('Try again').click();
+    cy.findByText('Try again').click();
     cy.wait(1000);
     cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
-    cy.getByText('OK').click();
+    cy.findByText('OK').click();
   });
 });

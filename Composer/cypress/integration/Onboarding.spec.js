@@ -5,7 +5,7 @@ context('onboarding', () => {
     cy.visit(`${Cypress.env('COMPOSER_URL')}/home`, { enableOnboarding: true });
     cy.wait(1000);
     cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
-      cy.getByText('New').click();
+      cy.findByText('New').click();
     });
     cy.wait(5000);
 

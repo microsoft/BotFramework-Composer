@@ -8,11 +8,11 @@ context('Creating a new Dialog', () => {
   });
 
   it('can create a new dialog from project tree', () => {
-    cy.getByText('New Dialog ..').click();
+    cy.findByText('New Dialog ..').click();
     cy.get('input[data-testid="NewDialogName"]').type('__TestNewDialog2');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestNewDialog2').should('exist');
+      cy.findByText('__TestNewDialog2').should('exist');
     });
   });
 });
