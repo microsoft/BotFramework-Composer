@@ -33,6 +33,8 @@ import {
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
+const allowedCompletionStates = ['plaintext', 'expression'];
+
 interface LGDocument {
   uri: string;
   content: string;
@@ -254,7 +256,7 @@ export class LGServer {
     });
 
     const match = this.matchedStates(params);
-    if (match && match.matched && match.state === 'expression') {
+    if (match && match.matched && allowedCompletionStates.includes(match.state.toLowerCase())) {
       return Promise.resolve({ isIncomplete: true, items: completionList });
     } else {
       return Promise.resolve(null);
