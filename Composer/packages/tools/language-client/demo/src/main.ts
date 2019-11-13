@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import * as monaco from 'monaco-editor-core';
 
-import { startSampleClient, registerLGLanguage } from '../../src/index';
+import '../../src/languages/lg.monaco.contribution';
+import { startSampleClient } from '../../src/index';
 
 const container: HTMLElement = document.getElementById('container') || document.body;
 
@@ -18,8 +20,6 @@ const content = `# Greeting1
 const lgServer = {
   url: 'ws://localhost:5000/lgServer',
 };
-
-registerLGLanguage();
 
 const editor = monaco.editor.create(container, {
   value: content,

@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { startSampleClient, registerLGLanguage } from '@bfc/language-client';
-// import { startSampleClient, registerLGLanguage } from '../../../../tools/language-client/src/';
+import '@bfc/language-client/lib/languages/lg.monaco.contribution';
+import { startSampleClient } from '@bfc/language-client';
 
 import { assignDefined } from '../utils';
 
@@ -43,7 +43,6 @@ export function LGLSPEditor(props: LGLSPEditorProps) {
   const { lgOption = {}, languageServer = {}, ...restProps } = props;
   const lgServer = assignDefined(defaultLGServer, languageServer);
   const editorWillMount = monaco => {
-    registerLGLanguage();
     if (typeof props.editorWillMount === 'function') {
       return props.editorWillMount(monaco);
     }
