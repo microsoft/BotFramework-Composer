@@ -1,22 +1,13 @@
-﻿// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Bot.Builder.Azure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class BotSettings
     {
-        public BotSettings()
-        {
-
-        }
-
         public BlobStorageConfiguration BlobStorage { get; set; }
 
         public string MicrosoftAppId { get; set; }
@@ -29,12 +20,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
         public class BlobStorageConfiguration
         {
-            public BlobStorageConfiguration()
-            {
-
-            }
-
             public string ConnectionString { get; set; }
+
             public string Container { get; set; }
         }
     }

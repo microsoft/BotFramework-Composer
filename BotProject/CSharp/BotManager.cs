@@ -1,18 +1,6 @@
-// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Bot.Connector.Authentication;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Bot.Builder.LanguageGeneration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,19 +8,23 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Debugging;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
+using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
-    public interface IBotManager
-    {
-        IBotFrameworkHttpAdapter CurrentAdapter { get; }
-        IBot CurrentBot { get; }
-
-        void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null, string qnaKey = null);
-    }
-
     public class BotManager : IBotManager
     {
+        private static readonly object Locker = new object();
+
         public BotManager(IConfiguration config)
         {
             Config = config;
@@ -55,7 +47,27 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
         private string WorkDir { get; }
 
-        private static readonly object locker = new object();
+        public static string ConvertPath(string relativePath)
+        {
+            var curDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            return Path.Combine(curDir, relativePath);
+        }
+
+        public static void EnsureDirExists(string dirPath)
+        {
+            var dirInfo = new DirectoryInfo(dirPath);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+        }
+
+        public static void CleanDir(string dirPath)
+        {
+            var dir = new DirectoryInfo(dirPath);
+            dir.GetFiles().ToList().ForEach(f => f.Delete());
+            dir.GetDirectories().ToList().ForEach(d => d.Delete(true));
+        }
 
         public void SetCurrent(string botDir)
         {
@@ -79,7 +91,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
               .UseLanguageGeneration(resourceExplorer, "common.lg")
               .Use(new RegisterClassMiddleware<IConfiguration>(Config))
               .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
-              
+
             adapter.OnTurnError = async (turnContext, exception) =>
             {
                 await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
@@ -94,7 +106,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
         public void SetCurrent(Stream fileStream, string endpointKey = null, string appPwd = null, string qnaEndpointKey = null)
         {
-            lock (locker)
+            lock (Locker)
             {
                 // download file as tmp.zip
                 var downloadPath = SaveFile(fileStream, "tmp.zip").GetAwaiter().GetResult();
@@ -136,27 +148,27 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 }
             }
 
-            if (!String.IsNullOrEmpty(endpointKey))
+            if (!string.IsNullOrEmpty(endpointKey))
             {
-                var luconfigFile = JsonConvert.DeserializeObject<LuConfigFile>(settings["luis"].ToString());
+                var luconfigFile = JsonConvert.DeserializeObject<LuisConfig>(settings["luis"].ToString());
                 AddLuisConfig(extractPath, luconfigFile, endpointKey);
             }
 
-            if (!String.IsNullOrEmpty(appPwd))
+            if (!string.IsNullOrEmpty(appPwd))
             {
                 AddOAuthConfig(appPwd);
             }
 
-            if (!String.IsNullOrEmpty(qnaEndpointKey))
+            if (!string.IsNullOrEmpty(qnaEndpointKey))
             {
                 AddQnaConfig(qnaEndpointKey);
             }
         }
 
-        public void AddLuisConfig(string extractPath, LuConfigFile luconfigFile, string endpointKey)
+        public void AddLuisConfig(string extractPath, LuisConfig luisConfig, string endpointKey)
         {
-            var settingsName = $"luis.settings.{luconfigFile.Environment}.{ luconfigFile.AuthoringRegion}.json";
-            var luisEndpoint = $"https://{luconfigFile.AuthoringRegion}.api.cognitive.microsoft.com";
+            var settingsName = $"luis.settings.{luisConfig.Environment}.{luisConfig.AuthoringRegion}.json";
+            var luisEndpoint = $"https://{luisConfig.AuthoringRegion}.api.cognitive.microsoft.com";
             this.Config["luis:endpoint"] = luisEndpoint;
 
             // No luis settings
@@ -168,11 +180,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
             var luisPath = luisPaths[0];
 
-            var luisConfig = JsonConvert.DeserializeObject<LuisCustomConfig>(File.ReadAllText(luisPath));
+            var luisConfigJson = JsonConvert.DeserializeObject<LuisCustomConfig>(File.ReadAllText(luisPath));
 
-            luisConfig.Luis.Add("endpointKey", endpointKey);
+            luisConfigJson.Luis.Add("endpointKey", endpointKey);
 
-            foreach (var item in luisConfig.Luis)
+            foreach (var item in luisConfigJson.Luis)
             {
                 this.Config[$"luis:{item.Key}"] = item.Value;
             }
@@ -216,6 +228,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
             {
                 await fileStream.CopyToAsync(outStream);
             }
+
             return filePath;
         }
 
@@ -228,28 +241,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
             ZipFile.ExtractToDirectory(filePath, finalDstPath);
             return finalDstPath;
-        }
-
-        public static string ConvertPath(string relativePath)
-        {
-            var curDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            return Path.Combine(curDir, relativePath);
-        }
-
-        public static void EnsureDirExists(string dirPath)
-        {
-            var dirInfo = new DirectoryInfo(dirPath);
-            if (!dirInfo.Exists)
-            {
-                dirInfo.Create();
-            }
-        }
-
-        public static void CleanDir(string dirPath)
-        {
-            var dir = new DirectoryInfo(dirPath);
-            dir.GetFiles().ToList().ForEach(f => f.Delete());
-            dir.GetDirectories().ToList().ForEach(d => d.Delete(true));
         }
     }
 }

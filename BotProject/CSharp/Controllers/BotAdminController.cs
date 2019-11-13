@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
@@ -6,25 +6,24 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     [Route("api/admin")]
     [ApiController]
     public class BotAdminController : ControllerBase
     {
-        private readonly IBotManager BotManager;
+        private readonly BotManager botManager;
 
-        public BotAdminController(IBotManager botManager)
+        public BotAdminController(BotManager botManager)
         {
-            BotManager = botManager;
+            this.botManager = botManager;
         }
 
-        [HttpGet] 
+        [HttpGet]
         public IActionResult GetAsync()
         {
             return Ok();
         }
-
 
         [HttpPost]
         public IActionResult PostAsync(IFormFile file, [FromForm]string endpointKey = null, [FromForm]string microsoftAppPassword = null, [FromForm]string qnaEndpointKey = null)
@@ -34,8 +33,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 return BadRequest();
             }
 
-            BotManager.SetCurrent(file.OpenReadStream(), endpointKey, microsoftAppPassword, qnaEndpointKey);
-                
+            botManager.SetCurrent(file.OpenReadStream(), endpointKey, microsoftAppPassword, qnaEndpointKey);
+
             return Ok();
         }
     }

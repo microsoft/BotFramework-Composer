@@ -1,6 +1,6 @@
 # Using cards
 
-You can use the language generation system to also render UI cards and button actions to user. 
+You can use the Language Generation system to also render UI cards and button actions to user. 
 
 Let's further refine the responses provided by the weather bot to include cards and button actions. 
 
@@ -10,7 +10,7 @@ Suggested actions help guide user by providing them most frequently used set of 
 
 First, let's go ahead and update `prompt for zipcode` to include suggested actions for help and cancel actions.
 
-1. In Composer, click on `getWeather`, then make sure to highlight the `beginDialog` trigger.
+1. In Composer, click on `getWeather`, then make sure to highlight the `BeginDialog` trigger.
 
    ![](../media/tutorial-weatherbot/06/getWeather-beginDialog.png)
 
@@ -26,9 +26,7 @@ First, let's go ahead and update `prompt for zipcode` to include suggested actio
     ]
     ```
 
-4. Click `Reload Bot` and open it in the emulator.
-
----
+4. Click **Restart Bot** and open it in the emulator.
 
 Now when you say weather to your bot, you will not only see that your bot asks you for zipcode but also presents help and cancel button as suggested actions.
 
@@ -38,7 +36,7 @@ Now when you say weather to your bot, you will not only see that your bot asks y
 
 Next up, let's change the weather report to also include a card.
 
-5. With the `getWeather` dialog selected and `BeginDialog` trigger selected, scroll down to the bottom, and click on the `Send a response` node that starts with `{DescribeWeather(dialog.weather)}...`
+5. With the `getWeather` dialog selected and `BeginDialog` trigger selected, scroll down to the bottom, and click on the **Send a response** node that starts with `{DescribeWeather(dialog.weather)}...`
 6. Instead of coming back with simple text response, let's have this action come back with a weather card. Replace the activity with this - 
     ```
     [ThumbnailCard
@@ -48,7 +46,7 @@ Next up, let's change the weather report to also include a card.
     ]
     ```
 
-7. Click `Reload Bot` and open it in the emulator.
+7. Click **Restart Bot** and open it in the emulator.
 
 ---
 
