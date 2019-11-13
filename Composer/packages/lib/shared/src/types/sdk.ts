@@ -287,4 +287,8 @@ export type MicrosoftIDialog =
   | MicrosoftIRecognizer
   | ITriggerCondition
   | SwitchCondition
-  | TextInput;
+  | TextInput
+  | SendActivity
+  | IfCondition
+  | Foreach
+  | ForeachPage;
