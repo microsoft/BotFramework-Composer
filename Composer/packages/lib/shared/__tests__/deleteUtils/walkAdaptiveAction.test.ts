@@ -7,11 +7,12 @@ describe('walkAdaptiveAction', () => {
   it('can walk single action', () => {
     const action = {
       $type: 'Microsoft.SendActivity',
-      prompt: 'hello',
+      activity: 'hello',
     };
     const spy = jest.fn();
     walkAdaptiveAction(action, x => spy(x));
 
+    expect(spy).toBeCalledTimes(1);
     expect(spy).toBeCalledWith(action);
   });
 });
