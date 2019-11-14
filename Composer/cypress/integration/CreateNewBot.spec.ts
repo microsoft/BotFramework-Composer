@@ -1,4 +1,5 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('Creating a new bot', () => {
   beforeEach(() => {
