@@ -55,7 +55,7 @@
     "lodash.set": "^4.3.2",
     "lodash.startcase": "^4.4.0",
     "mini-css-extract-plugin": "0.5.0",
-    "nanoid": "^2.0.1",
+    "nanoid": "^2.1.6",
     "office-ui-fabric-react": "7.37.1",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.2.1",
