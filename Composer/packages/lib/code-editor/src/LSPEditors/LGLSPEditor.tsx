@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import '@bfc/language-client/lib/languages/lg.monaco.contribution';
-import { startSampleClient } from '@bfc/language-client';
+import { startSampleClient, registerLGLanguage } from '@bfc/language-client';
 
-import { RichEditor, RichEditorProps } from './RichEditor';
+import { RichEditor, RichEditorProps } from '../RichEditor';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
@@ -46,6 +45,7 @@ export function LGLSPEditor(props: LGLSPEditorProps) {
   const { lgOption = {}, languageServer, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
   const editorWillMount = monaco => {
+    registerLGLanguage(monaco);
     if (typeof props.editorWillMount === 'function') {
       return props.editorWillMount(monaco);
     }
