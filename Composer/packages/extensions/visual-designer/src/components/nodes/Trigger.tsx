@@ -11,7 +11,10 @@ import { TriggerSize } from '../../constants/ElementSizes';
 
 function getLabel(data: any): string {
   const labelOverrides = ConceptLabels[data.$type];
-  return labelOverrides.subtitle || labelOverrides.title || data.$type;
+  if (labelOverrides) {
+    return labelOverrides.subtitle || labelOverrides.title;
+  }
+  return data.$type;
 }
 
 function getName(data: any): string {
