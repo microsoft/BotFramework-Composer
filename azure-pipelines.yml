@@ -10,12 +10,20 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+
 steps:
   - task: NodeTool@0
     displayName: "Use Node 12.13.0"
     inputs:
       versionSpec: 12.13.0
-  - script: yarn
+  - task: CacheBeta@1
+    inputs:
+      key: yarn | $(Agent.OS) | Composer/yarn.lock
+      path: $(YARN_CACHE_FOLDER)
+    displayName: Cache Yarn packages
+  - script: yarn --frozen-lockfile
     displayName: "yarn install"
     workingDirectory: Composer
   - script: yarn build
