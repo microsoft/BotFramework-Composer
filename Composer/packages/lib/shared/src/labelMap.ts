@@ -11,6 +11,7 @@ formatMessage.setup({
 
 interface LabelOverride {
   title?: string | false;
+  subtitle?: string | false;
   description?: string | false;
 }
 
@@ -166,6 +167,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.OnMessageReactionActivity]: {
     title: formatMessage('Message reaction'),
+    subtitle: formatMessage('Message reaction (thumbs up/down)'),
   },
   [SDKTypes.OnMessageUpdateActivity]: {
     title: formatMessage('Message updated'),
