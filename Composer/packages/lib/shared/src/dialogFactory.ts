@@ -5,7 +5,8 @@ import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
-import { deleteAdaptiveAction } from './deleteUtils';
+import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
+import { MicrosoftIDialog } from './types';
 
 interface DesignerAttributes {
   name: string;
@@ -106,8 +107,12 @@ export const deepCopyAction = async (data, lgApi) => {
   return await copyAdaptiveAction(data, { lgApi, updateDesigner });
 };
 
-export const deleteAction = (data, deleteLgTemplates: (templates: string[]) => any) => {
+export const deleteAction = (data: MicrosoftIDialog, deleteLgTemplates: (templates: string[]) => any) => {
   return deleteAdaptiveAction(data, deleteLgTemplates);
+};
+
+export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveActionList(inputs, deleteLgTemplates);
 };
 
 export const seedNewDialog = (
