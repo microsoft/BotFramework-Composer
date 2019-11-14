@@ -18,8 +18,8 @@ steps:
   - script: yarn
     displayName: "yarn install"
     workingDirectory: Composer
-  - script: yarn build:prod
-    displayName: "yarn build:prod"
+  - script: yarn build
+    displayName: "yarn build"
     workingDirectory: Composer
   - script: yarn test:integration --record --parallel
     displayName: yarn test:integration
