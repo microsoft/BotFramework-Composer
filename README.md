@@ -46,8 +46,8 @@ $ yarn startall // start client and server at the same time
 
 ## Support and Feedback
 
-- [As a question on stack overflow][10]
-- [Request few feature][11]
+- [Ask a question on Stack Overflow][10]
+- [Request a new feature][11]
 - [File an issue][12]
 
 ## Related project
