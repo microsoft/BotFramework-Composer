@@ -21,7 +21,7 @@ steps:
   - script: yarn build
     displayName: "yarn build"
     workingDirectory: Composer
-  - script: yarn test:integration --record --parallel
+  - script: yarn test:integration --record --parallel --spec "cypress/integration/*.spec.ts"
     displayName: yarn test:integration
     workingDirectory: Composer
     continueOnError: true
