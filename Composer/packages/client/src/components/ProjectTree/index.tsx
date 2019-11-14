@@ -1,18 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import {
-  ActionButton,
   GroupedList,
   IGroup,
   IGroupHeaderProps,
   IGroupRenderProps,
   IGroupedList,
-  IIconProps,
-  SearchBox,
-} from 'office-ui-fabric-react';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { cloneDeep } from 'lodash';
+} from 'office-ui-fabric-react/lib/GroupedList';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
+import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 

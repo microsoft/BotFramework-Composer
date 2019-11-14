@@ -1,19 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { Dropdown, ResponsiveMode, IDropdownOption, Spinner, SpinnerSize } from 'office-ui-fabric-react';
+import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MicrosoftIRecognizer, LuFile } from '@bfc/shared';
 
 import { BaseField } from '../BaseField';
+import { LoadingSpinner } from '../../../LoadingSpinner';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
-import InlineLuEditor from './InlineLuEditor';
 
 import './styles.css';
+
+const InlineLuEditor = React.lazy(() => import('./InlineLuEditor'));
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData } = props;
@@ -147,7 +150,11 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
                   });
               };
 
-              return <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />;
+              return (
+                <Suspense fallback={<LoadingSpinner />}>
+                  <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />
+                </Suspense>
+              );
             }
             if (isRegex) {
               return <RegexEditor {...props} />;
