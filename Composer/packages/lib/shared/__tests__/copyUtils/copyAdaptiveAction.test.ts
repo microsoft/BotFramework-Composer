@@ -1,10 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { copyAdaptiveAction } from '../../src/copyUtils';
-import { CopyConstructorMap } from '../../src/copyUtils/copyAdaptiveAction';
 import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 import { SDKTypes } from '../../src';
+import CopyConstructorMap from '../../src/copyUtils/CopyConstructorMap';
+import { copyAdaptiveAction } from '../../src/copyUtils';
+
+// NOTES: Cannot use SDKTypes here. `jest.mock` has to have zero dependency.
+jest.mock('../../src/copyUtils/CopyConstructorMap', () => ({
+  'Microsoft.SendActivity': jest.fn(),
+  'Microsoft.IfCondition': jest.fn(),
+  'Microsoft.SwitchCondition': jest.fn(),
+  'Microsoft.EditActions': jest.fn(),
+  'Microsoft.ChoiceInput': jest.fn(),
+  'Microsoft.Foreach': jest.fn(),
+  default: jest.fn(),
+}));
 
 describe('copyAdaptiveAction', () => {
   it('should return {} when input is invalid', async () => {
@@ -15,46 +26,26 @@ describe('copyAdaptiveAction', () => {
     expect(await copyAdaptiveAction({ name: 'hi' } as any, externalApi)).toEqual({});
   });
 
-  describe('should call certain handler in CopyConstructorMap', () => {
-    let originCopyConstructorMap = {};
-    beforeAll(() => {
-      originCopyConstructorMap = { ...CopyConstructorMap };
+  const registeredTypes = [
+    SDKTypes.SendActivity,
+    SDKTypes.IfCondition,
+    SDKTypes.SwitchCondition,
+    SDKTypes.EditActions,
+    SDKTypes.ChoiceInput,
+    SDKTypes.Foreach,
+  ];
+  for (const $type of registeredTypes) {
+    it(`should invoke registered handler for ${$type}`, async () => {
+      await copyAdaptiveAction({ $type }, externalApi);
+      expect(CopyConstructorMap[$type]).toHaveReturnedTimes(1);
     });
+  }
 
-    beforeEach(() => {
-      Object.keys(CopyConstructorMap).forEach(key => {
-        CopyConstructorMap[key] = jest.fn();
-      });
-    });
+  it('should invoke default handler for other types', async () => {
+    await copyAdaptiveAction({ $type: SDKTypes.BeginDialog }, externalApi);
+    expect(CopyConstructorMap.default).toHaveReturnedTimes(1);
 
-    afterAll(() => {
-      Object.keys(CopyConstructorMap).forEach(key => {
-        CopyConstructorMap[key] = originCopyConstructorMap[key];
-      });
-    });
-
-    it('when handler registered', async () => {
-      const registeredUniqueTypes = [
-        SDKTypes.SendActivity,
-        SDKTypes.IfCondition,
-        SDKTypes.SwitchCondition,
-        SDKTypes.EditActions,
-        SDKTypes.ChoiceInput,
-        SDKTypes.Foreach,
-      ];
-
-      for (const $type of registeredUniqueTypes) {
-        await copyAdaptiveAction({ $type }, externalApi);
-        expect(CopyConstructorMap[$type]).toHaveBeenCalled();
-      }
-    });
-
-    it('when handler not registered', async () => {
-      await copyAdaptiveAction({ $type: SDKTypes.BeginDialog }, externalApi);
-      expect(CopyConstructorMap.default).toHaveReturnedTimes(1);
-
-      await copyAdaptiveAction({ $type: SDKTypes.HttpRequest }, externalApi);
-      expect(CopyConstructorMap.default).toHaveReturnedTimes(2);
-    });
+    await copyAdaptiveAction({ $type: SDKTypes.HttpRequest }, externalApi);
+    expect(CopyConstructorMap.default).toHaveReturnedTimes(2);
   });
 });
