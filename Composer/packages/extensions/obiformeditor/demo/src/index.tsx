@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PrimaryButton, DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';

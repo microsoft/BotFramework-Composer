@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Icon as FabricIcon } from 'office-ui-fabric-react';
+import { Icon as FabricIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { Icon } from '../../decorations/icon';

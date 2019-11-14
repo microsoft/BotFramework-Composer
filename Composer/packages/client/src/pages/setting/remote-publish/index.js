@@ -4,18 +4,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import TimeAgo from 'react-timeago';
-import {
-  PrimaryButton,
-  DefaultButton,
-  Icon,
-  Stack,
-  StackItem,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  Spinner,
-  SpinnerSize,
-} from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { StoreContext } from './../../../store';
 import { styles } from './styles';

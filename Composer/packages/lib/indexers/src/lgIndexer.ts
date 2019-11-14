@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { LGParser, StaticChecker, DiagnosticSeverity, Diagnostic } from 'botbuilder-lg';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 import { FileInfo, LgFile, LgTemplate } from './type';
 import { getBaseName } from './utils/help';
