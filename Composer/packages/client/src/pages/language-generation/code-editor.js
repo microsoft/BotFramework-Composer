@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { PropTypes } from 'prop-types';
-import { LGLSPEditor } from '@bfc/code-editor/lib/LSPEditors/LGLSPEditor';
+import { LgEditor } from '@bfc/code-editor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import { StoreContext } from '../../store';
@@ -92,7 +92,7 @@ export default function CodeEditor(props) {
   }
 
   return (
-    <LGLSPEditor
+    <LgEditor
       options={{
         lineNumbers: 'on',
         minimap: 'on',

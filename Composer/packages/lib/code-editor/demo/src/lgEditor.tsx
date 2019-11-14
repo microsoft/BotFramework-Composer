@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
+import { LgEditor } from '../../src';
 // import { LGLSPEditor } from '@bfc/code-editor';
 
 const content = `# Hello
@@ -86,5 +86,5 @@ export default function App() {
     onChange,
     languageServer: 'localhost:5000/lgServer',
   };
-  return <LGLSPEditor {...props} />;
+  return <LgEditor {...props} />;
 }

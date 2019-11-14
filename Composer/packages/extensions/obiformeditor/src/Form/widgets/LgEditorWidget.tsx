@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useMemo } from 'react';
-import { LGLSPEditor } from '@bfc/code-editor/lib/LSPEditors/LGLSPEditor';
+import { LgEditor } from '@bfc/code-editor';
 import get from 'lodash.get';
 import debounce from 'lodash.debounce';
 
@@ -76,7 +76,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   };
 
   return (
-    <LGLSPEditor
+    <LgEditor
       onChange={onChange}
       value={localValue}
       lgOption={lgOption}
