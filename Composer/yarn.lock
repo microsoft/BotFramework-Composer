@@ -2916,7 +2916,7 @@
   dependencies:
     "@types/estree" "*"
 
-"@types/testing-library__cypress@^5.0.0", "@types/testing-library__cypress@^5.0.1":
+"@types/testing-library__cypress@^5.0.0":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@types/testing-library__cypress/-/testing-library__cypress-5.0.1.tgz#d05a264eb5d5a45659699a4e0309a7cebe57b344"
   integrity sha512-z2JKxVTh3PDeLbATRofwDUImEwuytsBeu8Si6YLzxwc2HK4xGIDs50HFlwYD9MPlclGDQRm0QL7ynnaIjRtCGg==
