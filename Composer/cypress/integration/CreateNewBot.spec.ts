@@ -5,36 +5,32 @@ context('Creating a new bot', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.wait(1000);
-    cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-    cy.wait(5000);
-    cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
+    cy.findByTestId('LeftNav-CommandBarButtonHome').click();
+    cy.findByTestId('homePage-ToolBar-New').within(() => {
       cy.findByText('New').click();
     });
-    cy.wait(5000);
+    cy.wait(1000);
   });
 
   it('can create a new bot', () => {
-    cy.get('input[data-testid="Create from scratch"]').click();
+    cy.findByTestId('Create from scratch').click();
+    cy.findByTestId('NextStepButton').click();
+    cy.findByTestId('NewDialogName').type('__TestNewProject');
+    cy.findByTestId('NewDialogName').type('{enter}');
     cy.wait(100);
-    cy.get('button[data-testid="NextStepButton"]').click();
-    cy.wait(100);
-    cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
-    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject.Main').should('exist');
     });
   });
 
   it('can create a bot from the ToDo template', () => {
-    cy.get('input[data-testid="Create from template"]').click({ force: true });
+    cy.findByTestId('Create from template').click();
+    cy.findByTestId('TodoSample').click();
+    cy.findByTestId('NextStepButton').click();
+    cy.findByTestId('NewDialogName').type('__TestNewProject');
+    cy.findByTestId('NewDialogName').type('{enter}');
     cy.wait(100);
-    cy.get('[data-testid="TodoSample"]').click();
-    cy.wait(100);
-    cy.get('button[data-testid="NextStepButton"]').click();
-    cy.wait(100);
-    cy.get('input[data-testid="NewDialogName"]').type('__TestNewProject');
-    cy.get('input[data-testid="NewDialogName"]').type('{enter}');
-    cy.get('[data-testid="ProjectTree"]').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject.Main').should('exist');
       cy.findByText('AddToDo').should('exist');
       cy.findByText('ClearToDos').should('exist');
