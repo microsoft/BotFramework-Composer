@@ -33,6 +33,7 @@ jobs:
           restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
       - script: yarn --frozen-lockfile
         displayName: "yarn install"
+        workingDirectory: Composer
       - script: yarn build
         displayName: "yarn build"
         workingDirectory: Composer
