@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { has, get } from 'lodash';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -47,6 +46,19 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     NodeRendererContext
   );
   const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
+
+  const deleteLgTemplates = (lgTemplates: string[]) => {
+    const lgPattern = /\[(bfd\w+-\d+)\]/;
+    const normalizedLgTemplates = lgTemplates
+      .map(x => {
+        const matches = lgPattern.exec(x);
+        if (matches && matches.length === 2) return matches[1];
+        return '';
+      })
+      .filter(x => !!x);
+    return removeLgTemplates('common', normalizedLgTemplates);
+  };
+
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -68,7 +80,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id, (lgTemplates: string[]) => removeLgTemplates('common', lgTemplates)));
+          onChange(deleteNode(data, e.id, deleteLgTemplates));
           onFocusSteps([]);
         };
         break;
@@ -110,9 +122,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
-          const dialog = deleteNodes(data, e.actionIds, (lgTemplates: string[]) =>
-            removeLgTemplates('common', lgTemplates)
-          );
+          const dialog = deleteNodes(data, e.actionIds, deleteLgTemplates);
           onChange(dialog);
           onFocusSteps([]);
         };
