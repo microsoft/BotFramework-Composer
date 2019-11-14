@@ -28,6 +28,8 @@ export const walkAdaptiveAction = (input, visit: (action: MicrosoftIDialog) => v
 
   if (WalkerMap[input.$type]) {
     WalkerMap[input.$type](input, visit);
+  } else {
+    visit(input);
   }
   return;
 };
