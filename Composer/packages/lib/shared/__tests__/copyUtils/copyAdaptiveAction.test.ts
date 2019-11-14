@@ -45,12 +45,7 @@ describe('copyAdaptiveAction', () => {
 
       for (const $type of registeredUniqueTypes) {
         await copyAdaptiveAction({ $type }, externalApi);
-        expect(CopyConstructorMap[$type]).toHaveBeenCalledTimes(1);
-      }
-
-      for (const $type of registeredUniqueTypes) {
-        await copyAdaptiveAction({ $type }, externalApi);
-        expect(CopyConstructorMap[$type]).toHaveBeenCalledTimes(2);
+        expect(CopyConstructorMap[$type]).toHaveBeenCalled();
       }
     });
 
