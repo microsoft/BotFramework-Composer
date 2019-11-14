@@ -7,6 +7,9 @@ pr:
     include:
       - '*'
 
+strategy:
+  parallel: 4
+
 pool:
   vmImage: ubuntu-latest
 
@@ -25,13 +28,20 @@ steps:
       restoreKeys: |
         yarn | $(Agent.OS)
     displayName: Cache Yarn packages
+  - task: CacheBeta@1
+    inputs:
+      key: cypress | $(Agent.OS) | Composer/yarn.lock
+      path: /home/vsts/.cache/Cypress
+      restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
+    displayName: Cache Cypress binary
   - script: yarn --frozen-lockfile
     displayName: "yarn install"
     workingDirectory: Composer
   - script: yarn build
     displayName: "yarn build"
     workingDirectory: Composer
-  - script: yarn test:integration
+  - script: |
+      npx start-server-and-test start 3000 'cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI" --spec "cypress/integration/*.spec.ts"'
     displayName: yarn test:integration
     workingDirectory: Composer
     continueOnError: true
