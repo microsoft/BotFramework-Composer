@@ -24,6 +24,8 @@ describe('shallowCopyAdaptiveAction', () => {
       outputFormat: 'none',
       prompt: '[bfdprompt-1234]',
       invalidPrompt: '[bfdinvalidPrompt-1234]',
+      unrecognizedPrompt: '[bfdunrecognizedPrompt-1234]',
+      defaultValueResponse: '[bfddefaultValueResponse-1234]',
     };
 
     expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
@@ -37,6 +39,8 @@ describe('shallowCopyAdaptiveAction', () => {
       outputFormat: 'none',
       prompt: '[bfdprompt-1234](copy)',
       invalidPrompt: '[bfdinvalidPrompt-1234](copy)',
+      unrecognizedPrompt: '[bfdunrecognizedPrompt-1234](copy)',
+      defaultValueResponse: '[bfddefaultValueResponse-1234](copy)',
     });
   });
 });

@@ -23,7 +23,7 @@ export const copyInputDialog = async (input: InputDialog, externalApi: ExternalA
   }
 
   if (input.defaultValueResponse) {
-    copy.defaultValue = await externalApi.copyLgTemplate(input.defaultValueResponse, nodeId);
+    copy.defaultValueResponse = await externalApi.copyLgTemplate(input.defaultValueResponse, nodeId);
   }
 
   return copy;
