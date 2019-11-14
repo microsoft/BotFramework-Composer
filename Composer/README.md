@@ -1,3 +1,7 @@
+[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=stable)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Astable)
+[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=stable)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=stable)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/microsoft/BotFramework-Composer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/microsoft/BotFramework-Composer/alerts/)
+
 # Composer
 The web app that can edit bots in OBI format, and can use Bot Launcher to run bot.
 
@@ -25,7 +29,7 @@ then go to http://localhost:3000/, best experienced in Chrome
 If you run into the issue of `There appears to be trouble with your network connection. Retrying...` when running `yarn install`, plese run `yarn install --network-timeout 1000000` instead to bypass the issue.
 
 ## Documentation
-The documentation for Composer [can be found here](/blob/master/docs/).
+The documentation for Composer [can be found here](/toc.md).
 
 ## Extension Framework
 Composer is built on top of an extension framework, which allows anyone to provide an extension as the editor of certain type of bot assets.

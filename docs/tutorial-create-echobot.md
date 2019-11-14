@@ -1,12 +1,12 @@
 # Create an echo bot using Bot Framework Composer
-In this quickstart will walk you through how to create a simple echo bot using the Bot Framework Composer **Echo Bot** template and then test it.
+In this quickstart we will walk you through how to create an echo bot using the Bot Framework Composer **Echo Bot** template, and then test your bot in the Emulator.
 
 ## Prerequisites
-All of the prerequisites for creating an echo bot are included in [setup Composer with Yarn](./setup-yarn.md).
+All of the prerequisites for creating an echo bot are included in [Set up Bot Framework Composer with Yarn](./setup-yarn.md).
 
 ## Creating an echo bot
-1. Follow the instructions in [setup Composer with Yarn](./setup-yarn.md) to get Composer running. 
-After opening in a browser click the **Echo Bot** button at the top of the Examples list on the homepage.
+1. Follow the instructions in [Set up Bot Framework Composer with Yarn](./setup-yarn.md) to get Composer running. 
+After opening Composer in a browser click the **Echo Bot** button at the top of the Examples list on the homepage.
 
 ![homepage new button](./media/tutorial-echobot/echo-new.png)
 
@@ -14,11 +14,11 @@ After opening in a browser click the **Echo Bot** button at the top of the Examp
 
 ![echo bot details](./media/tutorial-echobot/tutorial-echo-setup.png)
 
-3. You will now see your bot's main dialog. In the Property panel on the right click the dropdown under **Recognizer Type** and select `None`. Since this is a simple echo bot you don't need to use any [recognizers](./concept-events-and-triggers-draft.md#regular-expression-recognizer#regular-expression-recognizer) or [LUIS](https://aka.ms/what-is-luis) models.
+3. You will now see your bot's main dialog. In the properties panel on the right click the dropdown under **Recognizer Type** and select `None`. Since this is a simple echo bot you don't need to use any [recognizers](./concept-events-and-triggers-draft.md#regular-expression-recognizer#regular-expression-recognizer) or [LUIS models](https://aka.ms/what-is-luis).
 
 ![set recognizer type](./media/tutorial-echobot/select-none-recognizer.gif)
 
-4. You're now ready to start and test your bot. Click **Start Bot** in the top right. You will then see the **Test in Emulator** button show up. Click that and Bot Framework Emulator should start.
+4. You're now ready to start and test your bot. Click **Start Bot** in the top right. You will then see the **Test in Emulator** button show up. Click **Test in Emulator** and Bot Framework Emulator should start.
 
 ![start bot](./media/tutorial-echobot/start-bot.gif)
 
