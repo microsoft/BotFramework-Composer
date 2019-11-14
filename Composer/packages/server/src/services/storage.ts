@@ -18,9 +18,7 @@ class StorageService {
 
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
-    this.storageConnections.forEach(s => {
-      this.createFolderRecurively(s.defaultPath);
-    });
+    this.createDefaultBotFolders();
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
@@ -48,6 +46,7 @@ class StorageService {
       if (fs.existsSync(s.path)) {
         temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       } else {
+        this.createDefaultBotFolders();
         temp.path = Path.resolve(s.defaultPath);
       }
       return temp;
@@ -96,6 +95,12 @@ class StorageService {
   public updateCurrentPath = (path: string) => {
     this.storageConnections[0].path = path;
     Store.set(this.STORE_KEY, this.storageConnections);
+  };
+
+  private createDefaultBotFolders = () => {
+    this.storageConnections.forEach(s => {
+      this.createFolderRecurively(s.defaultPath);
+    });
   };
 
   private isBotFolder = (path: string) => {
