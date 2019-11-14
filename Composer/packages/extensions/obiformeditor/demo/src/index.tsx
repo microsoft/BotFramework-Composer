@@ -149,12 +149,8 @@ function getDefaultMemory() {
 const mockShellApi = [
   'getState',
   'getData',
-  'getDialogs',
   'saveData',
   'navTo',
-  'navDown',
-  'focusTo',
-  'shellNavigate',
   'updateLuFile',
   'updateLgFile',
   'createLuFile',

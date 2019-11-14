@@ -8,13 +8,24 @@ interface LgTemplate {
   Body: string;
 }
 
-export const NodeRendererContext = React.createContext({
+interface NodeRendererContextValue {
+  focusedId?: string;
+  focusedEvent?: string;
+  focusedTab?: string;
+  clipboardActions: any[];
+  getLgTemplates: (_id: string, _templateName: string) => Promise<LgTemplate[]>;
+  removeLgTemplate: (_id: string, _templateName: string) => Promise<void>;
+  removeLgTemplates: (_id: string, _templateNames: string[]) => Promise<void>;
+  updateLgTemplate: (_id: string, _templateName: string, _template: string) => Promise<void>;
+}
+
+export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
   focusedId: '',
   focusedEvent: '',
   focusedTab: '',
-  clipboardActions: [] as any[],
-  getLgTemplates: (_id: string, _templateName: string) => Promise.resolve([] as LgTemplate[]),
-  removeLgTemplate: (_id: string, _templateName: string) => Promise.resolve(),
-  removeLgTemplates: (_id: string, _templateNames: string[]) => Promise.resolve(),
-  updateLgTemplate: (_id: string, _templateName: string, _template: string) => Promise.resolve('' as string),
+  clipboardActions: [],
+  getLgTemplates: () => Promise.resolve([]),
+  removeLgTemplate: () => Promise.resolve(),
+  removeLgTemplates: () => Promise.resolve(),
+  updateLgTemplate: () => Promise.resolve(),
 });

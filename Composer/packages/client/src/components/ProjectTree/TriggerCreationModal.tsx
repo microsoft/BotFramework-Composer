@@ -31,10 +31,6 @@ import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow } from './styles';
 
-const isValidName = name => {
-  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  return nameRegex.test(name);
-};
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $type, specifiedType } = data;

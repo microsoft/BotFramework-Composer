@@ -7,6 +7,7 @@ import createCache from '@emotion/cache';
 import React, { useRef, useState, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
+import { ShellData, ShellApi } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
@@ -97,7 +98,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
               onClipboardChange={onCopy}
-              onOpen={(x, rest) => navTo(x, rest)}
+              onOpen={x => navTo(x)}
               onChange={x => saveData(x)}
               onSelect={onSelect}
               undo={undo}
@@ -111,32 +112,24 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps {
-  data: object;
-  dialogId: string;
-  focusedEvent: string;
-  focusedActions: string[];
-  focusedSteps: string[];
-  focusedTab: string;
-  clipboardActions: any[];
-  shellApi: any;
-  hosted: boolean;
-  currentDialog: { id: string; displayName: string; isRoot: boolean };
+interface VisualDesignerProps extends ShellData {
+  onChange: (newData: object, updatePath?: string) => void;
+  shellApi: ShellApi;
 }
 
 VisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
-  data: {},
-  shellApi: {
+  data: { $type: '' },
+  shellApi: ({
     navTo: () => {},
-    onFocusEvent: (_eventId: string) => {},
-    onFocusSteps: (_stepIds: string[], _fragment?: string) => {},
-    onSelect: (_ids: string[]) => {},
+    onFocusEvent: () => {},
+    onFocusSteps: () => {},
+    onSelect: () => {},
     saveData: () => {},
-    addCoachMarkRef: (_: any) => {},
-  },
+    addCoachMarkRef: () => {},
+  } as unknown) as ShellApi,
 };
 
 export default VisualDesigner;
