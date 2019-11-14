@@ -70,6 +70,6 @@ context('breadcrumb', () => {
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /__TestTodoSample.Main.*Greeting \(ConversationUpdate)\.*Send a response/);
+      .should('match', /__TestTodoSample.Main.*Greeting \(ConversationUpdate\).*Send a response/);
   });
 });
