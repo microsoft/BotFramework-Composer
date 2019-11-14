@@ -256,7 +256,8 @@ export class LGServer {
     });
 
     const match = this.matchedStates(params);
-    if (match && match.matched && allowedCompletionStates.includes(match.state.toLowerCase())) {
+    // TODO: more precise match
+    if (match && match.matched && match.state && allowedCompletionStates.includes(match.state.toLowerCase())) {
       return Promise.resolve({ isIncomplete: true, items: completionList });
     } else {
       return Promise.resolve(null);
