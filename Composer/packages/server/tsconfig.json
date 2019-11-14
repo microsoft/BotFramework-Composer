@@ -1,23 +1,10 @@
 {
-  /* Options used for linting (tests included) */
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "declaration": false,
     "outDir": "./build/",
-    "noImplicitAny": false,
-    "module": "commonjs",
-    "target": "es6",
     "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true
+    "target": "es6"
   },
-  "exclude": [
-    "node_modules",
-  ],
-  "include": [
-    "src/**/*.ts",
-    "__tests__/**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts", "__tests__/**/*.test.ts"]
 }

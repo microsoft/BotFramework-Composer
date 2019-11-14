@@ -42,8 +42,6 @@ export function BaseEditor(props: BaseEditorProps) {
     options.folding = false;
   }
   const containerRef = useRef<HTMLDivElement>(null);
-  // editor.setHiddenAreas is an internal api, not included in <monacoEditor.editor.IStandaloneCodeEditor>, so here mark it <any>
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | any>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
 
   const updateRect = throttle(() => {
@@ -117,7 +115,6 @@ export function BaseEditor(props: BaseEditorProps) {
     if (typeof props.editorDidMount === 'function') {
       props.editorDidMount(editor, monaco);
     }
-    setEditor(editor);
     updateEditorCodeRangeUI(editor);
   };
 
