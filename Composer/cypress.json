@@ -4,8 +4,8 @@
     "**/examples/*",
     "*.hot-update.js"
   ],
-  "video": true,
-  "videoUploadOnPasses": true,
+  "video": false,
+  "videoUploadOnPasses": false,
   "viewportWidth": 1600,
   "viewportHeight": 1200,
   "defaultCommandTimeout": 8000,
