@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { ObiTypes } from '../../src/constants/ObiTypes';
 
 test("ObiTypes shoudn't contain duplicate values", () => {

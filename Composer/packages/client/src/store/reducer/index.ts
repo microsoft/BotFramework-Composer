@@ -3,8 +3,9 @@
 
 import { get, set } from 'lodash';
 import { dialogIndexer } from '@bfc/indexers/lib/dialogIndexer';
+import { SensitiveProperties } from '@bfc/shared';
 
-import { ActionTypes, FileTypes, SensitiveProperties } from '../../constants';
+import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension } from '../../utils';
@@ -32,6 +33,8 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
       const value = get(localSetting, property);
       if (value) {
         set(settings, property, value);
+      } else {
+        set(settings, property, ''); // set those key back, because that were omit after persisited
       }
     }
   }
@@ -189,8 +192,16 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   state.designPageLocation = { dialogId, selected, focused, promptTab };
   return state;
 };
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
+  return state;
+};
+
+const getEnvSetting: ReducerFunc = (state, { settings }) => {
+  state.settings = settings;
+  refreshLocalStorage(state.botName, state.settings);
+  mergeLocalStorage(state.botName, state.settings);
   return state;
 };
 
@@ -247,6 +258,16 @@ const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   return state;
 };
 
+const onboardingAddCoachMarkRef: ReducerFunc = (state, { ref }) => {
+  state.onboarding.coachMarkRefs = { ...state.onboarding.coachMarkRefs, ...ref };
+  return state;
+};
+
+const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
+  state.onboarding.complete = complete;
+  return state;
+};
+
 const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   state.clipboardActions = clipboardActions;
   return state;
@@ -295,6 +316,7 @@ export const reducer = createReducer({
   [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
+  [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
@@ -305,5 +327,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
+  [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
+  [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
 });

@@ -1,13 +1,12 @@
 // eslint-disable-next-line
 const path = require('path');
 module.exports = {
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
     '\\.(jpg|jpeg|png|svg|gif)$': '<rootDir>/__tests__/jestMocks/styleMock.js',
     '\\.(s)?css$': '<rootDir>/__tests__/jestMocks/styleMock.js',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/'],
+  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '/testUtils/'],
   transform: {
     '^.+\\.(j|t)sx?$': 'babel-jest',
   },

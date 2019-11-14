@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { render, fireEvent, findByText, RenderResult } from 'react-testing-library';
 

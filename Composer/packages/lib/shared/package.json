@@ -13,7 +13,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
@@ -30,6 +30,7 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@types/jest": "^24.0.11",
+    "@types/nanoid": "^2.1.0",
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "autoprefixer": "^9.5.1",
@@ -54,6 +55,7 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
-    "json-schema": "^0.2.5"
+    "json-schema": "^0.2.5",
+    "nanoid": "^2.1.6"
   }
 }
