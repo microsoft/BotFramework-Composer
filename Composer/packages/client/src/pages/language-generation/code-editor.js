@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { PropTypes } from 'prop-types';
-import { LGLSPEditor } from '@bfc/code-editor';
+import { LGLSPEditor } from '@bfc/code-editor/lib/LSPEditors/LGLSPEditor';
 import { get, debounce, isEmpty } from 'lodash';
 
 import { StoreContext } from '../../store';
@@ -53,12 +53,12 @@ export default function CodeEditor(props) {
     () =>
       debounce(content => {
         const payload = {
-          id: fileId,
+          id: file.id,
           content,
         };
         actions.updateLgFile(payload);
       }, 500),
-    [fileId]
+    [file]
   );
 
   const _onChange = value => {

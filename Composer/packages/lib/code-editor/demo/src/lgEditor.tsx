@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { LGLSPEditor } from '../../src';
+import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
 // import { LGLSPEditor } from '@bfc/code-editor';
 
 const content = `# Hello

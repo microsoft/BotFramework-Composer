@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useMemo } from 'react';
-import { LGLSPEditor } from '@bfc/code-editor';
+import { LGLSPEditor } from '@bfc/code-editor/lib/LSPEditors/LGLSPEditor';
 import get from 'lodash.get';
 import debounce from 'lodash.debounce';
 
