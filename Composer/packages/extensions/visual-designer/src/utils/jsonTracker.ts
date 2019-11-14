@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog, deepCopyAction } from '@bfc/shared';
+import { seedNewDialog, deepCopyAction, deleteAction, deleteActions } from '@bfc/shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -96,7 +96,7 @@ export function queryNode(inputDialog, path) {
   return target.currentData;
 }
 
-export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {
+export function deleteNode(inputDialog, path, deleteLgTemplates: (lgTempaltes: string[]) => any) {
   const dialog = cloneDeep(inputDialog);
   const target = locateNode(dialog, path);
   if (!target) return dialog;
@@ -112,15 +112,12 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
     delete parentData[currentKey];
   }
 
-  // invoke callback handler
-  if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
-    callbackOnRemovedData(deletedData);
-  }
+  deleteAction(deletedData, deleteLgTemplates);
 
   return dialog;
 }
 
-export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedData?: (removedData: any) => any) {
+export function deleteNodes(inputDialog, nodeIds: string[], deleteLgTemplates: (lgTempaltes: string[]) => any) {
   const dialog = cloneDeep(inputDialog);
 
   const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
@@ -146,10 +143,7 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedDat
     }
   });
 
-  // invoke callback handler
-  if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
-    deletedNodes.forEach(x => callbackOnRemovedData(x));
-  }
+  deleteActions(deletedNodes, deleteLgTemplates);
 
   return dialog;
 }
@@ -178,7 +172,8 @@ export function copyNodes(inputDialog, nodeIds: string[]): any[] {
 
 export function cutNodes(inputDialog, nodeIds: string[]) {
   const nodesData = copyNodes(inputDialog, nodeIds);
-  const newDialog = deleteNodes(inputDialog, nodeIds);
+  // TODO: revisit how does cut/paste work with undo/redo #1212
+  const newDialog = deleteNodes(inputDialog, nodeIds, () => {});
 
   return { dialog: newDialog, cutData: nodesData };
 }
