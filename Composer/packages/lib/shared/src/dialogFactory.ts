@@ -5,6 +5,7 @@ import nanoid from 'nanoid/generate';
 
 import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
+import { deleteAdaptiveAction } from './deleteUtils';
 
 interface DesignerAttributes {
   name: string;
@@ -103,6 +104,10 @@ const updateDesigner = data => {
 //       since it's already used by Shell, Visual and Form.
 export const deepCopyAction = async (data, lgApi) => {
   return await copyAdaptiveAction(data, { lgApi, updateDesigner });
+};
+
+export const deleteAction = (data, deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveAction(data, deleteLgTemplates);
 };
 
 export const seedNewDialog = (
