@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState } from 'react';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';

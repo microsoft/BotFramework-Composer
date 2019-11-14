@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { useMemo } from 'react';
 
 import { notificationHeader, notificationHeaderText, dropdownStyles } from './styles';
+
 const createOptions = (items: string[]): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [{ key: 'Show All Locations', text: 'All', data: '', isSelected: true }];
   items.forEach(item => {

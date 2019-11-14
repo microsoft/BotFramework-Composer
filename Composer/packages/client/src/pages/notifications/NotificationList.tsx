@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn, FontIcon } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { INotification } from './types';
 import { notification, typeIcon, listRoot, icons } from './styles';
