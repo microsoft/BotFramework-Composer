@@ -10,7 +10,6 @@ import { has, get } from 'lodash';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { AttrNames } from '../constants/ElementAttributes';
-import { AbstractSelectorElement } from '../models/SelectorElement';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
 import {
@@ -22,7 +21,7 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
-import { moveCursor, querySelectableElements } from '../utils/cursorTracker';
+import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker/index';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
@@ -228,7 +227,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const [selectableElements, setSelectableElements] = useState<AbstractSelectorElement[]>(querySelectableElements());
+  const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
