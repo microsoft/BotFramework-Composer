@@ -21,29 +21,25 @@ function getName(data: any): string {
   return getLabel(data);
 }
 
-const LINE_HEIGHT = 24;
-
-const nameTextStyle: any = {
+const titleStyle: any = {
   whiteSpace: 'nowrap',
   color: '#333333',
   fontFamily: 'Segoe UI',
   fontSize: '18px',
-  lineHeight: LINE_HEIGHT + 'px',
+  lineHeight: '24px',
 };
 
-const lableTextStyle: any = {
+const subtitleStyle: any = {
   whiteSpace: 'nowrap',
   color: '#BDBDBD',
   fontFamily: 'Segoe UI',
-  fontSize: '18px',
-  lineHeight: LINE_HEIGHT + 'px',
+  fontSize: '10px',
+  lineHeight: '14px',
 };
 
 export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
   const name = getName(data);
-  const label = `(${getLabel(data)})`;
-  const withLineBreak: boolean = name.length + label.length > 35;
-  const containerHeight = withLineBreak ? LINE_HEIGHT * 2 : LINE_HEIGHT;
+  const label = getLabel(data);
 
   return (
     <div
@@ -58,15 +54,17 @@ export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
         boxSizing: 'border-box',
       }}
     >
-      <div className="Trigger--Icon" style={{ height: containerHeight + 'px' }}>
-        <Icon iconName="Flow" style={{ lineHeight: LINE_HEIGHT + 'px', marginRight: '5px' }} />
-      </div>
       <div
         className="Trigger--Content"
-        css={{ wordBreak: withLineBreak ? 'break-all' : 'initial', height: containerHeight + 'px' }}
+        css={{ wordBreak: 'break-all', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
-        <span css={nameTextStyle}>{name}</span>
-        <span css={lableTextStyle}>{label}</span>
+        <div className="Trigger--Title" css={titleStyle}>
+          <Icon iconName="Flow" style={{ lineHeight: '24px', marginRight: '5px' }} />
+          <span>{name}</span>
+        </div>
+        <div className="Trigger--Subtitle" css={subtitleStyle}>
+          {label}
+        </div>
       </div>
     </div>
   );
