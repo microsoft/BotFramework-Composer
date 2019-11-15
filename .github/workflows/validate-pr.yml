@@ -1,6 +1,8 @@
 name: Pull Request Validation
 
-on: pull_request
+on:
+  pull_request:
+    types: [opened, reopened, edited]
 
 jobs:
   conventional-pr:
