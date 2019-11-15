@@ -1,11 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower, get } from 'lodash';
+import toLower from 'lodash/toLower';
+import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
@@ -381,7 +386,7 @@ function DesignPage(props) {
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
-          <Conversation extraCss={editorContainer}>
+          <Conversation css={editorContainer}>
             <Fragment>
               <div css={editorWrapper}>
                 <div css={visualPanel}>

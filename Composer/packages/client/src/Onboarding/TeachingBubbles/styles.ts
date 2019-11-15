@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createTheme, ITeachingBubbleStyles, ITheme } from 'office-ui-fabric-react';
+import { createTheme, ITheme } from 'office-ui-fabric-react/lib/Styling';
+import { ITeachingBubbleStyles } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 import { palette } from '../palette';
 

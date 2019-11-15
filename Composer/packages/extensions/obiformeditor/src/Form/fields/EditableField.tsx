@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react';
+import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyles } from '@uifabric/styling';
 

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';

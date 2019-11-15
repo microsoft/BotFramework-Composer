@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { merge, find } from 'lodash';
+import merge from 'lodash/merge';
+import find from 'lodash/find';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
