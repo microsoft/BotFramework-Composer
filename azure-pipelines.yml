@@ -10,97 +10,43 @@ pr:
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
-jobs:
-  - job: build
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - task: NodeTool@0
-        displayName: "Use Node 12.13.0"
-        inputs:
-          versionSpec: 12.13.0
-      - task: CacheBeta@1
-        inputs:
-          key: yarn | $(Agent.OS) | Composer/yarn.lock
-          path: $(YARN_CACHE_FOLDER)
-          restoreKeys: |
-            yarn | $(Agent.OS)
-        displayName: Cache Yarn packages
-      - task: CacheBeta@1
-        displayName: Cache Cypress
-        inputs:
-          key: cypress | $(Agent.OS) | Composer/yarn.lock
-          path: /home/vsts/.cache/Cypress
-          restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
-      - script: yarn
-        displayName: "yarn install"
-        workingDirectory: Composer
-      - script: yarn build
-        displayName: "yarn build"
-        workingDirectory: Composer
-      - task: CacheBeta@1
-        displayName: Cache @bfc
-        inputs:
-          key: bfc | $(Agent.OS) | $(Build.BuildId)
-          path: Composer/node_modules/@bfc
-      - task: CacheBeta@1
-        displayName: Cache Build
-        inputs:
-          key: build | $(Agent.OS) | $(Build.BuildId)
-          path: Composer/packages/server/build
+strategy:
+  parallel: 4
 
-  - job: e2e
-    dependsOn: build
-    strategy:
-      parallel: 4
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-      - task: NodeTool@0
-        displayName: "Use Node 12.13.0"
-        inputs:
-          versionSpec: 12.13.0
-      - task: CacheBeta@1
-        displayName: Cache Yarn packages
-        inputs:
-          key: yarn | $(Agent.OS) | Composer/yarn.lock
-          path: $(YARN_CACHE_FOLDER)
-          restoreKeys: |
-            yarn | $(Agent.OS)
-      - task: CacheBeta@1
-        displayName: Cache Cypress binary
-        inputs:
-          key: cypress | $(Agent.OS) | Composer/yarn.lock
-          path: /home/vsts/.cache/Cypress
-          restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
-      - task: CacheBeta@1
-        displayName: Cache Build
-        inputs:
-          key: build | $(Agent.OS) | $(Build.BuildId)
-          path: Composer/packages/server/build
-          cacheHitVar: BUILD_CACHE_RESTORED
-      - task: CacheBeta@1
-        displayName: Cache @bfc
-        inputs:
-          key: bfc | $(Agent.OS) | $(Build.BuildId)
-          path: Composer/node_modules/@bfc
-          cacheHitVar: BUILD_CACHE_RESTORED
-      - script: ls -la Composer/packages/server/build/public/static/**/*
-      - script: yarn
-        displayName: "yarn install"
-        workingDirectory: Composer
-      - script: yarn build
-        displayName: "yarn build"
-        workingDirectory: Composer
-        condition: ne(variables.BUILD_CACHE_RESTORED, 'true')
-      - script: |
-          npx start-server-and-test start 3000 'cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"'
-        displayName: yarn test:integration
-        workingDirectory: Composer
-        continueOnError: true
-        env:
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-          CYPRESS_VIDEO: true
-          CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
-          # avoid warnings about terminal
-          TERM: xterm
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    displayName: "Use Node 12.13.0"
+    inputs:
+      versionSpec: 12.13.0
+  - task: CacheBeta@1
+    displayName: Cache Yarn packages
+    inputs:
+      key: yarn | $(Agent.OS) | Composer/yarn.lock
+      path: $(YARN_CACHE_FOLDER)
+      restoreKeys: yarn | $(Agent.OS)
+  - task: CacheBeta@1
+    displayName: Cache Cypress binary
+    inputs:
+      key: cypress | $(Agent.OS) | Composer/yarn.lock
+      path: /home/vsts/.cache/Cypress
+      restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
+  - script: yarn
+    displayName: "yarn install"
+    workingDirectory: Composer
+  - script: yarn build
+    displayName: "yarn build"
+    workingDirectory: Composer
+  - script: |
+      npx start-server-and-test start 3000 'cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"'
+    displayName: yarn test:integration
+    workingDirectory: Composer
+    continueOnError: true
+    env:
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      CYPRESS_VIDEO: true
+      CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+      # avoid warnings about terminal
+      TERM: xterm
