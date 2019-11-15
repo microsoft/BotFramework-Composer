@@ -39,6 +39,11 @@ jobs:
         displayName: "yarn build"
         workingDirectory: Composer
       - task: CacheBeta@1
+        displayName: Cache @bfc
+        inputs:
+          key: bfc | $(Agent.OS) | $(Build.BuildId)
+          path: Composer/node_modules/@bfc
+      - task: CacheBeta@1
         displayName: Cache Build
         inputs:
           key: build | $(Agent.OS) | $(Build.BuildId)
@@ -73,6 +78,12 @@ jobs:
         inputs:
           key: build | $(Agent.OS) | $(Build.BuildId)
           path: Composer/packages/server/build
+          cacheHitVar: BUILD_CACHE_RESTORED
+      - task: CacheBeta@1
+        displayName: Cache @bfc
+        inputs:
+          key: bfc | $(Agent.OS) | $(Build.BuildId)
+          path: Composer/node_modules/@bfc
           cacheHitVar: BUILD_CACHE_RESTORED
       - script: ls -la Composer/packages/server/build/public/static/**/*
       - script: yarn
