@@ -3,22 +3,21 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { LgEditor } from '@bfc/code-editor';
+import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { CodeRange } from '@bfc/shared';
+import { LGTemplate, Diagnostic } from 'botbuilder-lg';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
 interface CodeEditorProps {
-  file: object;
-  onChange: (value: string) => void;
-  codeRange: Partial<CodeRange>;
+  file: { [key: string]: any };
+  template: LGTemplate | null;
 }
 
-export default function CodeEditor(props) {
+export default function CodeEditor(props: CodeEditorProps) {
   const { actions } = useContext(StoreContext);
   const { file, template } = props;
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
@@ -72,10 +71,10 @@ export default function CodeEditor(props) {
   const _onChange = value => {
     setContent(value);
 
-    let diagnostics: lgUtil.Diagnostic[] = [];
+    let diagnostics: Diagnostic[] = [];
     if (inlineMode) {
       const content = get(file, 'content', '');
-      const templateName = get(template, 'Name');
+      const templateName = get(template, 'Name', '');
       const newContent = lgUtil.updateTemplate(content, templateName, {
         Name: templateName,
         Body: value,
@@ -89,10 +88,10 @@ export default function CodeEditor(props) {
     setDiagnostics(diagnostics);
   };
 
-  const lgOption = {
+  const lgOption: LGOption = {
     inline: inlineMode,
     content: get(file, 'content', ''),
-    template,
+    template: template ? template : undefined,
   };
 
   return (

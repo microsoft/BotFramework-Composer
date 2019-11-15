@@ -14,8 +14,6 @@ const lgStaticChecker = new StaticChecker();
 
 const lgImportResolver = ImportResolver.fileResolver;
 
-export { Diagnostic };
-
 interface Template {
   Name: string;
   Parameters?: string[];
@@ -67,7 +65,11 @@ export function increaseNameUtilNotExist(templates: LGTemplate[], name: string):
   return newName;
 }
 
-export function updateTemplate(content: string, templateName: string, { Name, Parameters, Body }: Template): string {
+export function updateTemplate(
+  content: string,
+  templateName: string,
+  { Name, Parameters = [], Body }: Template
+): string {
   const resource = LGParser.parse(content);
   // add if not exist
   if (resource.Templates.findIndex(t => t.Name === templateName) === -1) {
@@ -78,7 +80,7 @@ export function updateTemplate(content: string, templateName: string, { Name, Pa
 }
 
 // if Name exist, throw error.
-export function addTemplate(content: string, { Name, Parameters, Body }: Template): string {
+export function addTemplate(content: string, { Name, Parameters = [], Body }: Template): string {
   const resource = LGParser.parse(content);
   return resource.addTemplate(Name, Parameters, Body).toString();
 }

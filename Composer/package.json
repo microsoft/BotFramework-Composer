@@ -14,8 +14,7 @@
     "packages/tools",
     "packages/tools/language-client",
     "packages/tools/language-servers",
-    "packages/tools/language-servers/*",
-    "packages/tools/language-servers/*/*"
+    "packages/tools/language-servers/*"
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod",

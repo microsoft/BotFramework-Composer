@@ -7,7 +7,7 @@ import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } f
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import get from 'lodash/get';
+import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -35,7 +35,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [inlineTemplate, setInlineTemplate] = useState(null);
+  const [inlineTemplate, setInlineTemplate] = useState<null | LGTemplate>(null);
 
   const subPath = props['*'];
   const isRoot = subPath === '';
@@ -124,11 +124,8 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewClickEdit(template) {
-    setInlineTemplate({
-      Name: get(template, 'Name', ''),
-      Body: get(template, 'Body', ''),
-    });
+  function onTableViewClickEdit(template: LGTemplate) {
+    setInlineTemplate(template);
     navigateTo(`/language-generation`);
     setEditMode(true);
   }
