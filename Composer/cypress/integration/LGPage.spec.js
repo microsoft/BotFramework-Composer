@@ -24,7 +24,7 @@ context('check language generation page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.get('.dialogNavTree button[title="__TestTodoSample.Main"]').click();
+    cy.get('.dialogNavTree a[title="__TestTodoSample.Main"]').click();
     cy.wait(300);
 
     // dialog filter, edit mode button is disabled.

@@ -18,6 +18,15 @@ context('onboarding', () => {
     cy.get('input[data-testid="NewDialogName"]').type('__TestOnboarding');
     cy.get('input[data-testid="NewDialogName"]').type('{enter}');
     cy.wait(2000);
+
+    //enable onboarding setting
+    cy.visitPage("Settings");
+    cy.wait(2000);
+    cy.get('[data-testid="ProjectTree"]').within(() => {
+      cy.get('[title="Onboarding"]').click();
+    });
+    cy.get('button[data-testid="onboardingToggle"]').click();
+    cy.visitPage("Design Flow");
   });
 
   it('walk through product tour teaching bubbles', () => {
