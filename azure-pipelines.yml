@@ -27,6 +27,7 @@ jobs:
             yarn | $(Agent.OS)
         displayName: Cache Yarn packages
       - task: CacheBeta@1
+        displayName: Cache Cypress
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn.lock
           path: /home/vsts/.cache/Cypress
@@ -38,6 +39,7 @@ jobs:
         displayName: "yarn build"
         workingDirectory: Composer
       - task: CacheBeta@1
+        displayName: Cache Build
         inputs:
           key: build | $(Agent.OS) | $(Build.BuildId)
           path: Composer/packages/server/build
@@ -54,23 +56,25 @@ jobs:
         inputs:
           versionSpec: 12.13.0
       - task: CacheBeta@1
+        displayName: Cache Yarn packages
         inputs:
           key: yarn | $(Agent.OS) | Composer/yarn.lock
           path: $(YARN_CACHE_FOLDER)
           restoreKeys: |
             yarn | $(Agent.OS)
-        displayName: Cache Yarn packages
       - task: CacheBeta@1
+        displayName: Cache Cypress binary
         inputs:
           key: cypress | $(Agent.OS) | Composer/yarn.lock
           path: /home/vsts/.cache/Cypress
           restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
-        displayName: Cache Cypress binary
       - task: CacheBeta@1
+        displayName: Cache Build
         inputs:
           key: build | $(Agent.OS) | $(Build.BuildId)
           path: Composer/packages/server/build
           cacheHitVar: BUILD_CACHE_RESTORED
+      - script: ls -la Composer/packages/server/build
       - script: yarn --frozen-lockfile
         displayName: "yarn install"
         workingDirectory: Composer
