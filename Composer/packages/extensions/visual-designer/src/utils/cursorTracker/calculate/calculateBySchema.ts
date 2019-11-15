@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { PromptTab } from '@bfc/shared';
-import { directive } from '@babel/types';
 
 import { SelectorElement, Direction } from '../type';
 function parseSelector(path: string): null | string[] {
@@ -19,7 +18,7 @@ function parseSelector(path: string): null | string[] {
   const normalizedSelectors = selectors.reduce(
     (result, selector) => {
       // e.g. actions[0]
-      const parseResult = /(\w+)\[(\-\d+|\d+)\]/.exec(selector);
+      const parseResult = /(\w+)\[(-\d+|\d+)\]/.exec(selector);
 
       if (parseResult) {
         const [, objSelector, arraySelector] = parseResult;
