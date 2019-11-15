@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from '@bfc/shared';
-import { cloneDeep, get, set } from 'lodash';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import cloneDeep from 'lodash/cloneDeep';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogInfo } from '@bfc/shared';
 
 import { getFocusPath } from './navigation';

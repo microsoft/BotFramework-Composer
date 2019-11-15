@@ -3,7 +3,8 @@
 
 import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DefaultButton, Stack } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 import { DeployWizard } from './deployWizard.js';
 import { styles } from './styles';

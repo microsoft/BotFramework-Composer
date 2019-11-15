@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IPivotStyles } from 'office-ui-fabric-react';
+import { IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
 import { css } from '@emotion/core';
 
 export const tabs: Partial<IPivotStyles> = {

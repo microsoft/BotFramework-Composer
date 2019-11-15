@@ -4,7 +4,8 @@
 /* eslint-disable react/prop-types */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DialogFooter, DefaultButton } from 'office-ui-fabric-react';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
