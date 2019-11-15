@@ -32,7 +32,7 @@ jobs:
           key: cypress | $(Agent.OS) | Composer/yarn.lock
           path: /home/vsts/.cache/Cypress
           restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
-      - script: yarn --frozen-lockfile
+      - script: yarn
         displayName: "yarn install"
         workingDirectory: Composer
       - script: yarn build
@@ -74,8 +74,8 @@ jobs:
           key: build | $(Agent.OS) | $(Build.BuildId)
           path: Composer/packages/server/build
           cacheHitVar: BUILD_CACHE_RESTORED
-      - script: ls -la Composer/packages/server/build
-      - script: yarn --frozen-lockfile
+      - script: ls -la Composer/packages/server/build/public/static/**/*
+      - script: yarn
         displayName: "yarn install"
         workingDirectory: Composer
       - script: yarn build
