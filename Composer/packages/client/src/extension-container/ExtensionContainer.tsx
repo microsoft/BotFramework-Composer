@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { initializeIcons } from 'office-ui-fabric-react';
+import { initializeIcons } from '@uifabric/icons';
 import { LuFile, ShellData } from '@bfc/shared';
 
 import ApiClient from '../messenger/ApiClient';

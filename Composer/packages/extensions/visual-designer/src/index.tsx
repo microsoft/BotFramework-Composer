@@ -5,7 +5,7 @@
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import React, { useRef, useState, useEffect } from 'react';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 
 import { ObiEditor } from './editors/ObiEditor';

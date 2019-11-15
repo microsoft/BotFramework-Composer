@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { set } from 'lodash';
+import set from 'lodash/set';
 
 import storage from './storage';
 

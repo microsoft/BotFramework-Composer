@@ -7,7 +7,8 @@ import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
-import { IContextualMenu, ContextualMenuItemType, FontIcon } from 'office-ui-fabric-react';
+import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';

@@ -1,21 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment, useState } from 'react';
 import formatMessage from 'format-message';
-import { Nav } from 'office-ui-fabric-react';
-import { Link } from '@reach/router';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { Link, RouteComponentProps } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
 import { isAbsHosted } from '../../utils/envUtil';
+import { Tree } from '../../components/Tree/index';
+import { Conversation } from '../../components/Conversation/index';
+import { MainContent } from '../../components/MainContent/index';
+import { TestController } from '../../TestController';
 
 import Routes from './router';
-import { Tree } from './../../components/Tree/index';
-import { Conversation } from './../../components/Conversation/index';
 import { title, fileList, contentEditor, linkItem } from './styles';
-import { MainContent } from './../../components/MainContent/index';
-import { TestController } from './../../TestController';
 
 const settingLabels = {
   title: formatMessage('Configuration'),
@@ -27,15 +29,15 @@ const settingLabels = {
 const absHosted = isAbsHosted();
 
 const links = [
-  { key: '/setting/dialog-settings', name: settingLabels.settings },
-  { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish },
-  { key: '/setting/onboarding-settings', name: settingLabels.onboarding },
+  { key: '/setting/dialog-settings', name: settingLabels.settings, url: '' },
+  { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
+  { key: '/setting/onboarding-settings', name: settingLabels.onboarding, url: '' },
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
 ];
 
-export const SettingPage = () => {
+const SettingPage: React.FC<RouteComponentProps> = () => {
   const [active, setActive] = useState();
 
   function onRenderLink(link) {
@@ -44,10 +46,11 @@ export const SettingPage = () => {
         to={link.key}
         css={linkItem(link.disabled)}
         tabIndex={-1}
-        getProps={({ isCurrent }) => {
-          if (isCurrent && active !== link.key) {
+        getProps={linkProps => {
+          if (linkProps.isCurrent && active !== link.key) {
             setActive(link.key);
           }
+          return {};
         }}
         onClick={() => {}}
       >
@@ -78,13 +81,15 @@ export const SettingPage = () => {
                   onRenderLink={onRenderLink}
                   selectedKey={active}
                   onLinkClick={(e, item) => {
-                    navigateTo(item.key);
+                    if (item && item.key) {
+                      navigateTo(item.key);
+                    }
                   }}
                 />
               </div>
             </Tree>
           </div>
-          <Conversation extraCss={contentEditor}>
+          <Conversation css={contentEditor}>
             <Routes />
           </Conversation>
         </Fragment>
@@ -92,3 +97,5 @@ export const SettingPage = () => {
     </Fragment>
   );
 };
+
+export default SettingPage;
