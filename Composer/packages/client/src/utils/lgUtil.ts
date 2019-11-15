@@ -14,9 +14,11 @@ const lgStaticChecker = new StaticChecker();
 
 const lgImportResolver = ImportResolver.fileResolver;
 
+export { Diagnostic };
+
 interface Template {
   Name: string;
-  Parameters: string[];
+  Parameters?: string[];
   Body: string;
 }
 

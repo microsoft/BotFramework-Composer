@@ -41,7 +41,7 @@ export default function CodeEditor(props) {
 
   const updateLgTemplate = useMemo(
     () =>
-      debounce(body => {
+      debounce((body: string) => {
         const templateName = get(template, 'Name');
         if (!templateName) return;
         const payload = {
@@ -59,7 +59,7 @@ export default function CodeEditor(props) {
 
   const updateLgFile = useMemo(
     () =>
-      debounce(content => {
+      debounce((content: string) => {
         const payload = {
           id: file.id,
           content,
@@ -72,7 +72,7 @@ export default function CodeEditor(props) {
   const _onChange = value => {
     setContent(value);
 
-    let diagnostics = [];
+    let diagnostics: lgUtil.Diagnostic[] = [];
     if (inlineMode) {
       const content = get(file, 'content', '');
       const templateName = get(template, 'Name');
@@ -90,14 +90,10 @@ export default function CodeEditor(props) {
   };
 
   const lgOption = {
-    inline: false,
+    inline: inlineMode,
     content: get(file, 'content', ''),
+    template,
   };
-
-  if (inlineMode) {
-    lgOption.template = template;
-    lgOption.inline = true;
-  }
 
   return (
     <LgEditor

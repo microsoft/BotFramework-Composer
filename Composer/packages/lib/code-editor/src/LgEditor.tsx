@@ -14,7 +14,7 @@ const placeholder = `> To learn more about the LG file format, read the document
 export interface LGOption {
   inline: boolean;
   content: string;
-  template: {
+  template?: {
     Name: string;
     Body: string;
   };
