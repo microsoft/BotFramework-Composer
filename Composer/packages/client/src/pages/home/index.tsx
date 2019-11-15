@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useCallback, useContext, useEffect } from 'react';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
-import { Icon } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -45,7 +48,7 @@ const turtorials = [
   },
 ];
 
-export const Home = props => {
+const Home: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, recentProjects, templateProjects } = state;
   const {
@@ -224,3 +227,5 @@ export const Home = props => {
     </div>
   );
 };
+
+export default Home;

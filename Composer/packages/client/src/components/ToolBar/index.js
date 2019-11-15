@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment } from 'react';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Toggle } from 'office-ui-fabric-react';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { WidgetProps } from '@bfcomposer/react-jsonschema-form';
 
 import { WidgetLabel } from './WidgetLabel';
