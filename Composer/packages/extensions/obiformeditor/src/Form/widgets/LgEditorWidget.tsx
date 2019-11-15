@@ -3,8 +3,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import get from 'lodash.get';
-import debounce from 'lodash.debounce';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
 
