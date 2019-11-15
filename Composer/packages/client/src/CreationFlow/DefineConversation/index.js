@@ -3,7 +3,10 @@
 
 import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';

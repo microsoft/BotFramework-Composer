@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';

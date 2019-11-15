@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { forwardRef, useContext, useState, Fragment } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -17,10 +19,11 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
-import Onboarding from './Onboarding';
+import { LoadingSpinner } from './components/LoadingSpinner';
 
 initializeIcons(undefined, { disableWarnings: true });
 
+const Onboarding = React.lazy(() => import('./Onboarding'));
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
@@ -172,7 +175,7 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
-        <Onboarding />
+        <Suspense fallback={<LoadingSpinner />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
       </div>
     </Fragment>
   );

@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { ChoiceGroup } from 'office-ui-fabric-react';
-import { IChoiceGroupOption } from 'office-ui-fabric-react';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 
 import { RadioWidgetProps } from '../types';
 

@@ -45,7 +45,7 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
         <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
         <div css={exampleListCellContent}>
           <div css={exampleListCellName}>{item.name}</div>
-          <div css={exampleListCellDescription}>{item.description.slice(0, 60)}</div>
+          <div css={exampleListCellDescription}>{item.description}</div>
         </div>
       </div>
     );
