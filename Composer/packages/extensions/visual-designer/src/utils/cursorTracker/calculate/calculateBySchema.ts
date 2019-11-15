@@ -58,6 +58,11 @@ export function filterPromptElementsBySchema(
         candidateElements = elements.filter(ele => ele.tab !== PromptTab.OTHER);
       }
       break;
+    case Direction.Left:
+      if (currentElement.tab === PromptTab.OTHER) {
+        candidateElements = elements.filter(ele => ele.tab === PromptTab.USER_INPUT);
+      }
+      break;
     case Direction.Right:
       if (!currentElement.tab) {
         candidateElements = elements.filter(ele => ele.tab !== PromptTab.OTHER);
@@ -77,11 +82,13 @@ function handleNextMoveFilter(currentElement: SelectorElement, elements: Selecto
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     const condition1 =
       eleSelectors.length === currentElementSelectors.length &&
+      eleSelectors.slice(0, eleSelectors.length - 2).join('.') ===
+        currentElementSelectors.slice(0, currentElementSelectors.length - 2).join('.') &&
       Number(eleSelectors[eleSelectors.length - 1]) - 1 <=
         Number(currentElementSelectors[currentElementSelectors.length - 1]);
     const condition2 =
       eleSelectors.length > currentElementSelectors.length &&
-      ele.selectedId.includes(currentElement.selectedId) &&
+      eleSelectors.join('.').includes(currentElementSelectors.join('.')) &&
       Number(eleSelectors[eleSelectors.length - 1]) === 0;
     const condition3 =
       eleSelectors.length < currentElementSelectors.length &&
@@ -96,6 +103,8 @@ function handlePrevMoveFilter(currentElement: SelectorElement, elements: Selecto
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     const condition1 =
       eleSelectors.length === currentElementSelectors.length &&
+      eleSelectors.slice(0, eleSelectors.length - 2).join('.') ===
+        currentElementSelectors.slice(0, currentElementSelectors.length - 2).join('.') &&
       Number(eleSelectors[eleSelectors.length - 1]) + 1 >=
         Number(currentElementSelectors[currentElementSelectors.length - 1]);
     const condition2 =
@@ -104,7 +113,7 @@ function handlePrevMoveFilter(currentElement: SelectorElement, elements: Selecto
         Number(currentElementSelectors[currentElementSelectors.length - 1]);
     const condition3 =
       eleSelectors.length < currentElementSelectors.length &&
-      currentElement.selectedId.includes(ele.selectedId) &&
+      currentElementSelectors.join('.').includes(eleSelectors.join('.')) &&
       Number(currentElementSelectors[currentElementSelectors.length - 1]) === 0;
     return condition1 || condition2 || condition3;
   });

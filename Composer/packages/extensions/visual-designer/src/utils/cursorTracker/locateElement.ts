@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SelectorElement, Direction } from '../type';
-
-import { filterElementsByVector, sortElementsByVector } from './calculateByVector';
-import { filterPromptElementsBySchema, filterElementBySchema } from './calculateBySchema';
+import { SelectorElement, Direction } from './type';
+import { filterElementsByVector, sortElementsByVector } from './calculate/calculateByVector';
+import { filterPromptElementsBySchema, filterElementBySchema } from './calculate/calculateBySchema';
 /**
  *
  * @param currentElement current element

@@ -3,7 +3,7 @@
 
 import { KeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
 
-import { locateNearestElement } from './calculate/index';
+import { locateNearestElement } from './locateElement';
 import { SelectorElement, Direction } from './type';
 
 export function handleArrowkeyMove(

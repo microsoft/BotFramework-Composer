@@ -3,7 +3,7 @@
 import { KeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
 
 import { SelectorElement, Direction } from './type';
-import { locateNearestElement } from './calculate/index';
+import { locateNearestElement } from './locateElement';
 
 function isParentRect(parentRect, childRect) {
   return (

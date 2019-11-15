@@ -82,9 +82,7 @@ export function sortElementsByVector(
 ): SelectorElement[] {
   const { assistAxle, boundRectKey } = transformDirectionToVectorAttrs(direction);
   const elementVectors = calculateElementVector(currentElement, elements, boundRectKey, assistAxle);
-  const candidates = elementVectors.sort(
-    (ele1, ele2) => ele2.distance / ele2.assistDistance - ele1.distance / ele1.assistDistance
-  );
+  const candidates = elementVectors.sort((ele1, ele2) => ele1.distance - ele2.distance);
 
   return transformVectorToElement(candidates, elements);
 }

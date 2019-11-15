@@ -22,10 +22,11 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
-import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker/index';
+import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
+import { scrollNodeIntoView } from '../utils/nodeOperation';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -280,9 +281,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           selectedIds: [selected as string],
         });
         focused && onFocusSteps([focused], tab);
-
-        document.querySelector(`[${AttrNames.SelectedId}="${selected}"]`) &&
-          (document.querySelector(`[${AttrNames.SelectedId}="${selected}"]`) as Element).scrollIntoView(true);
+        scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
