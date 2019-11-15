@@ -7,47 +7,39 @@ pr:
     include:
       - '*'
 
-variables:
-  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+stages:
+  - stage: build
+    jobs:
+      - job: buildAndPush
+        displayName: Display and Push Docker Image
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'bfc-docker-registry'
+              repository: 'composer'
+              command: 'buildAndPush'
+              Dockerfile: 'Composer/Dockerfile.ci'
+              buildContext: 'Composer/'
 
-strategy:
-  parallel: 4
+  # - stage: e2e
+  #   jobs:
+  #     - job: e2e
+  #       strategy:
+  #         parallel: 4
+  #       pool:
+  #         vmImage: ubuntu-latest
 
-pool:
-  vmImage: ubuntu-latest
+  #       steps:
 
-steps:
-  - task: NodeTool@0
-    displayName: "Use Node 12.13.0"
-    inputs:
-      versionSpec: 12.13.0
-  - task: CacheBeta@1
-    displayName: Cache Yarn packages
-    inputs:
-      key: yarn | $(Agent.OS) | Composer/yarn.lock
-      path: $(YARN_CACHE_FOLDER)
-      restoreKeys: yarn | $(Agent.OS)
-  - task: CacheBeta@1
-    displayName: Cache Cypress binary
-    inputs:
-      key: cypress | $(Agent.OS) | Composer/yarn.lock
-      path: /home/vsts/.cache/Cypress
-      restoreKeys: cypress | $(Agent.OS) | Composer/yarn.lock
-  - script: yarn
-    displayName: "yarn install"
-    workingDirectory: Composer
-  - script: yarn build
-    displayName: "yarn build"
-    workingDirectory: Composer
-  - script: |
-      yarn start &
-      npx cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"
-    displayName: yarn test:integration
-    workingDirectory: Composer
-    continueOnError: true
-    env:
-      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      CYPRESS_VIDEO: true
-      CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
-      # avoid warnings about terminal
-      TERM: xterm
+  #         - script: |
+  #             yarn start &
+  #             npx cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"
+  #           displayName: yarn test:integration
+  #           workingDirectory: Composer
+  #           continueOnError: true
+  #           env:
+  #             CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  #             CYPRESS_VIDEO: true
+  #             CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+  #             # avoid warnings about terminal
+  #             TERM: xterm
