@@ -3,7 +3,7 @@
 
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
-import { IDropdownStyles } from 'office-ui-fabric-react';
+import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const icons = {
   Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
