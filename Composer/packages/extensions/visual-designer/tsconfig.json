@@ -1,17 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "./lib/",
-    "allowJs": true,
     "noImplicitAny": false,
-    "module": "es6",
+    "module": "esnext",
     "target": "es5",
     "jsx": "react",
     "sourceMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
-    "noUnusedLocals": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowJs": false
   },
   "include": [
     "./src/**/*",

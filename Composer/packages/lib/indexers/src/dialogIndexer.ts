@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import has from 'lodash.has';
-import uniq from 'lodash.uniq';
+import has from 'lodash/has';
+import uniq from 'lodash/uniq';
 
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { DialogChecker } from './utils/dialogChecker';

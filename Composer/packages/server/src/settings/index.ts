@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 import settings from './settings.json';
 

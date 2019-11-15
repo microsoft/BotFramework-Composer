@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 export const link = (active, underTest) => css`
   display: block;

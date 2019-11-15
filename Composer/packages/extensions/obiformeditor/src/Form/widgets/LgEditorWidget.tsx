@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { FormContext } from '../types';
@@ -179,3 +179,5 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     />
   );
 };
+
+export default LgEditorWidget;

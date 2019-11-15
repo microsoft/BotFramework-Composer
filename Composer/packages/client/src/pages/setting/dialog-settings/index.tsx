@@ -6,7 +6,10 @@ import { jsx } from '@emotion/core';
 import { useState, useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
