@@ -18,7 +18,7 @@ class StorageService {
 
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
-    this.createDefaultBotFolders();
+    this.ensureDefaultBotFoldersExist();
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
@@ -40,17 +40,18 @@ class StorageService {
   };
 
   public getStorageConnections = (): StorageConnection[] => {
-    return this.storageConnections.map(s => {
+    const connections = this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
       // if the last accessed path exist
       if (fs.existsSync(s.path)) {
         temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       } else {
-        this.createDefaultBotFolders();
         temp.path = Path.resolve(s.defaultPath);
       }
       return temp;
     });
+    this.ensureDefaultBotFoldersExist();
+    return connections;
   };
 
   public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
@@ -97,7 +98,7 @@ class StorageService {
     Store.set(this.STORE_KEY, this.storageConnections);
   };
 
-  private createDefaultBotFolders = () => {
+  private ensureDefaultBotFoldersExist = () => {
     this.storageConnections.forEach(s => {
       this.createFolderRecurively(s.defaultPath);
     });
