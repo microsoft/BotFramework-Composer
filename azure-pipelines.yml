@@ -40,7 +40,8 @@ steps:
     displayName: "yarn build"
     workingDirectory: Composer
   - script: |
-      npx start-server-and-test start 3000 'cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"'
+      yarn start &
+      npx cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"
     displayName: yarn test:integration
     workingDirectory: Composer
     continueOnError: true
