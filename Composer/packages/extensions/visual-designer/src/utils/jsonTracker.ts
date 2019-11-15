@@ -5,7 +5,6 @@ import { seedNewDialog, deepCopyAction, deleteAction, deleteActions } from '@bfc
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyAction } from '@bfc/shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
