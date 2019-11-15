@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { ChoiceInput, IChoiceOption } from '@bfc/shared';
@@ -27,7 +29,7 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
   };
 
   return (
-    <>
+    <Fragment>
       <Choices
         formData={formData.choices}
         schema={getSchema('choices')}
@@ -52,6 +54,6 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
           formContext={formContext}
         />
       </div>
-    </>
+    </Fragment>
   );
 };

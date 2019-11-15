@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IPalette } from 'office-ui-fabric-react';
+import { IPalette } from 'office-ui-fabric-react/lib/Styling';
 
 export const palette: Partial<IPalette> = {
   themePrimary: '#5c2e91',

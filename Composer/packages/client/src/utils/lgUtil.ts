@@ -8,7 +8,7 @@
  */
 
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 const lgStaticChecker = new StaticChecker();
 

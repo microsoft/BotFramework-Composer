@@ -3,7 +3,7 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { ITeachingBubbleProps } from 'office-ui-fabric-react';
+import { ITeachingBubbleProps } from 'office-ui-fabric-react/lib/TeachingBubble';
 
 export interface IComposerTeachingBubble extends ITeachingBubbleProps {
   children?: any;

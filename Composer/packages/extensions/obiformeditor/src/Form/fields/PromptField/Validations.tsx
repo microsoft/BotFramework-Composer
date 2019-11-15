@@ -6,7 +6,8 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 import { swap, remove } from '../../utils';

@@ -13,6 +13,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+    
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+    
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.6.0" />
@@ -26,6 +34,10 @@
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.6.0" />
     <PackageReference Include="Microsoft.Bot.Connector" Version="4.6.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ComposerDialogs\" />

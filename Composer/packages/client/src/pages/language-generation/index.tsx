@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import get from 'lodash.get';
+import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
+import get from 'lodash/get';
+import { RouteComponentProps } from '@reach/router';
 
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -19,13 +23,14 @@ import { projectContainer, projectTree, projectWrapper } from '../design/styles'
 import { navigateTo } from '../../utils';
 import * as lgUtil from '../../utils/lgUtil';
 
-import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
-export const LGPage = props => {
+const CodeEditor = React.lazy(() => import('./code-editor'));
+
+const LGPage: React.FC<RouteComponentProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
@@ -40,32 +45,30 @@ export const LGPage = props => {
   // file.
   const lgFile = lgFiles.length ? lgFiles[0] : null;
 
-  const navLinks = useMemo(() => {
-    const subLinks = dialogs.reduce((result, file) => {
-      if (result.length === 0) {
-        result = [
-          {
-            links: [],
-          },
-        ];
-      }
-      const item = {
-        id: file.id,
-        key: file.id,
-        name: file.displayName,
-      };
-
-      if (file.isRoot) {
-        result[0] = {
-          ...result[0],
-          ...item,
-          isExpanded: true,
+  const navLinks = useMemo<INavLinkGroup[]>(() => {
+    const subLinks = dialogs.reduce<INavLink>(
+      (result, file) => {
+        const item = {
+          id: file.id,
+          key: file.id,
+          name: file.displayName,
+          url: file.id,
         };
-      } else {
-        result[0].links.push(item);
-      }
-      return result;
-    }, []);
+
+        if (file.isRoot) {
+          result = {
+            ...result,
+            ...item,
+            isExpanded: true,
+          };
+        } else {
+          result.links = result.links || [];
+          result.links.push(item);
+        }
+        return result;
+      },
+      {} as INavLink
+    );
 
     return [
       {
@@ -74,8 +77,9 @@ export const LGPage = props => {
             id: '_all',
             key: '_all',
             name: 'All',
+            url: '',
             isExpanded: true,
-            links: subLinks,
+            links: [subLinks],
           },
         ],
       },
@@ -118,6 +122,8 @@ export const LGPage = props => {
     setInlineTemplate(null);
   }
 
+  // #TODO: get line number from lg parser, then deep link to code editor this
+  // Line
   function onTableViewClickEdit(template) {
     setInlineTemplate({
       Name: get(template, 'Name', ''),
@@ -154,12 +160,14 @@ export const LGPage = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          <Tree variant="large" extraCss={projectTree}>
+          <Tree variant="large" css={projectTree}>
             <div css={projectWrapper}>
               <Nav
                 onLinkClick={(ev, item) => {
-                  onSelect(item.id);
-                  ev.preventDefault();
+                  if (ev && item) {
+                    onSelect(item.id);
+                    ev.preventDefault();
+                  }
                 }}
                 styles={{
                   root: {
@@ -182,14 +190,20 @@ export const LGPage = props => {
             </div>
           </Tree>
         </div>
-        <div css={contentEditor}>
-          {editMode ? (
-            <CodeEditor file={lgFile} template={inlineTemplate} />
-          ) : (
-            <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
-          )}
-        </div>
+        {lgFile && (
+          <div css={contentEditor}>
+            {editMode ? (
+              <Suspense fallback={<LoadingSpinner />}>
+                <CodeEditor file={lgFile} template={inlineTemplate} />
+              </Suspense>
+            ) : (
+              <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
+            )}
+          </div>
+        )}
       </div>
     </Fragment>
   );
 };
+
+export default LGPage;

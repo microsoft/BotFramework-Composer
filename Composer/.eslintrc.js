@@ -6,8 +6,9 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:@typescript-eslint/eslint-recommended',
     'prettier/@typescript-eslint',
+    'plugin:@bfc/bfcomposer/recommended',
   ],
-  plugins: ['import', 'notice', 'security'],
+  plugins: ['import', 'notice', 'security', 'lodash'],
   env: {
     browser: true,
     es6: true,
@@ -21,6 +22,8 @@ module.exports = {
         templateFile: require.resolve('./license.js'),
       },
     ],
+
+    // typescript
     '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
@@ -54,6 +57,27 @@ module.exports = {
     'security/detect-possible-timing-attacks': 'error',
     'security/detect-pseudoRandomBytes': 'error',
     'security/detect-unsafe-regex': 'error',
+
+    // lodash
+    'lodash/callback-binding': 'error',
+    'lodash/collection-method-value': 'error',
+    'lodash/collection-return': 'error',
+    'lodash/no-double-unwrap': 'error',
+    'lodash/no-extra-args': 'error',
+    'lodash/no-unbound-this': 'error',
+    'lodash/unwrap': 'error',
+    'lodash/identity-shorthand': 'error',
+    'lodash/import-scope': ['error', 'method'],
+    'lodash/matches-prop-shorthand': 'error',
+    'lodash/matches-shorthand': 'error',
+    'lodash/path-style': 'error',
+    'lodash/prefer-compact': 'error',
+    'lodash/prefer-flat-map': 'error',
+    'lodash/prefer-immutable-method': 'error',
+    'lodash/prefer-map': 'error',
+    'lodash/prefer-reject': 'error',
+    'lodash/preferred-alias': 'error',
+    'lodash/prop-shorthand': 'error',
   },
   overrides: [
     {

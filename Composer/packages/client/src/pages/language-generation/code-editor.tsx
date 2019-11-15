@@ -3,12 +3,20 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext } from 'react';
-import { PropTypes } from 'prop-types';
 import { LgEditor } from '@bfc/code-editor';
-import { get, debounce, isEmpty } from 'lodash';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
+import { CodeRange } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
+
+interface CodeEditorProps {
+  file: object;
+  onChange: (value: string) => void;
+  codeRange: Partial<CodeRange>;
+}
 
 export default function CodeEditor(props) {
   const { actions } = useContext(StoreContext);
@@ -93,6 +101,9 @@ export default function CodeEditor(props) {
 
   return (
     <LgEditor
+      // typescript is unable to reconcile 'on' as part of a union type
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       options={{
         lineNumbers: 'on',
         minimap: 'on',
@@ -111,9 +122,3 @@ export default function CodeEditor(props) {
     />
   );
 }
-
-CodeEditor.propTypes = {
-  file: PropTypes.object,
-  onChange: PropTypes.func,
-  template: PropTypes.object,
-};

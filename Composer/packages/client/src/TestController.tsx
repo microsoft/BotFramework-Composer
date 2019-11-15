@@ -1,16 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
-import {
-  ActionButton,
-  PrimaryButton,
-  Spinner,
-  SpinnerSize,
-  Callout,
-  DefaultButton,
-  Stack,
-} from 'office-ui-fabric-react';
+import { ActionButton, PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { DialogInfo } from '@bfc/shared';
 
