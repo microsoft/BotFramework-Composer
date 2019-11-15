@@ -21,6 +21,7 @@ COPY packages/extensions/visual-designer/package.json ./packages/extensions/visu
 RUN yarn install
 
 COPY . .
+ENV NODE_OPTIONS "--max-old-space-size=2048"
 RUN yarn build:prod
 
 CMD ["yarn", "start"]
