@@ -50,7 +50,7 @@ const Routes = props => {
                   <SettingPage path="setting/*" />
                   <LUPage path="language-understanding/*" />
                   <LGPage path="language-generation/*" />
-
+                  <Notifications path="notifications" />
                   <Home path="home" />
                   <About path="about" />
                   <NotFound default />

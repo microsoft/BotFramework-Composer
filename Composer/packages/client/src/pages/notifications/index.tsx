@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
+import { RouteComponentProps } from '@reach/router';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
@@ -11,7 +12,7 @@ import { NotificationList } from './NotificationList';
 import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 
-export const Notifications = props => {
+const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
   const { notifications, locations } = useNotifications(filter);
   return (
@@ -22,3 +23,5 @@ export const Notifications = props => {
     </div>
   );
 };
+
+export default Notifications;
