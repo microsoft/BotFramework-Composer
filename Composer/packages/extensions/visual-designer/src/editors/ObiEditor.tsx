@@ -22,10 +22,11 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
-import { moveCursor } from '../utils/cursorTracker';
+import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
+import { scrollNodeIntoView } from '../utils/nodeOperation';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -239,10 +240,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const querySelectableElements = (): NodeListOf<HTMLElement> => {
-    return document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
-  };
-  const [selectableElements, setSelectableElements] = useState<NodeListOf<HTMLElement>>(querySelectableElements());
+  const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -294,6 +292,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           selectedIds: [selected as string],
         });
         focused && onFocusSteps([focused], tab);
+        scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
