@@ -101,3 +101,7 @@ Cypress.Commands.add('addEventHandler', handler => {
   }
   cy.get(`[data-testid="triggerFormSubmit"]`).click();
 });
+
+Cypress.Commands.add('visitPage', (page) => {
+  cy.get(`[data-testid="LeftNav-CommandBarButton${page}"]`).click();
+});
