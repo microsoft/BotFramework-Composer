@@ -83,7 +83,7 @@ export class VisualEditorDemo extends Component {
               data={obiJson}
               dialogId={selectedFile}
               focusedEvent={focusedEvent}
-              focusedSteps={focusedSteps}
+              focusedActions={focusedSteps}
               focusedTab={focusedTab}
               clipboardActions={clipboardActions}
               shellApi={{
