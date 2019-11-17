@@ -21,7 +21,7 @@
         "${workspaceFolder}/Composer/node_modules/ts-node/register"
       ],
       "sourceMaps": true,
-      "cwd": "${workspaceRoot}",
+      "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src",
       "protocol": "inspector",
     },
     {

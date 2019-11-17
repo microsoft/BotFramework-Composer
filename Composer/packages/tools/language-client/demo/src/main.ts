@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 import * as monaco from 'monaco-editor-core';
 
-import '../../src/languages/lg.monaco.contribution';
-import { startSampleClient } from '../../src/index';
+import { startSampleClient, registerLGLanguage } from '../../src/index';
 
 const container: HTMLElement = document.getElementById('container') || document.body;
 
@@ -24,6 +23,8 @@ const lgServer = {
   path: '/lgServer',
 };
 
+registerLGLanguage(monaco);
+
 const editor = monaco.editor.create(container, {
   value: content,
   glyphMargin: true,
@@ -33,5 +34,4 @@ const editor = monaco.editor.create(container, {
   language: 'botbuilderlg',
   theme: 'lgtheme',
 });
-
 startSampleClient(editor, lgServer, {});

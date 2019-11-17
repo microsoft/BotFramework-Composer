@@ -5,8 +5,7 @@ import * as fs from 'fs';
 
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
-import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
-import { IConnection, TextDocuments, createConnection } from 'vscode-languageserver';
+import { IConnection, TextDocuments } from 'vscode-languageserver';
 import {
   TextDocument,
   Diagnostic,
@@ -19,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import { buildInfunctionsMap } from './builtinFunctions';
 import {
@@ -329,11 +328,4 @@ export class LGServer {
       diagnostics,
     });
   }
-}
-
-export function start(reader: MessageReader, writer: MessageWriter): LGServer {
-  const connection = createConnection(reader, writer);
-  const server = new LGServer(connection);
-  server.start();
-  return server;
 }

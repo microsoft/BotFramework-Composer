@@ -53,8 +53,8 @@
   "dependencies": {
     "@azure/ms-rest-js": "^1.8.7",
     "@bfc/indexers": "*",
-    "@bfc/shared": "*",
     "@bfc/lg-languageserver": "*",
+    "@bfc/shared": "*",
     "archiver": "^3.0.0",
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
@@ -76,6 +76,9 @@
     "lubuild": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz",
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "vscode-languageserver": "^5.3.0-next",
+    "vscode-ws-jsonrpc": "^0.1.1",
+    "ws": "^5.0.0"
   }
 }
