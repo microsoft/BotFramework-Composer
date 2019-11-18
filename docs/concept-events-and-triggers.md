@@ -50,11 +50,11 @@ Activity trigger is used to handle activities such as when a user joins and the 
 
 Use **Activity triggers** when you want to: 
 - Take actions when a user begins a new conversation with the bot
-- Take actions on receipt of an activity with type 'EndOfConversation'
-- Take actions on receipt of an activity with type 'Event'
-- Take actions on receipt of an activity with type 'HandOff'
-- Take actions on receipt of an activity with type 'Invoke'
-- Take actions on receipt of an activity with type 'Typing'
+- Take actions on receipt of an activity with type `EndOfConversation`
+- Take actions on receipt of an activity with type `Event`
+- Take actions on receipt of an activity with type `HandOff`
+- Take actions on receipt of an activity with type `Invoke`
+- Take actions on receipt of an activity with type `Typing`
 
 Use **Message activity triggers** when you want to:
 - Take actions when a message is updated (on receipt of an activity with type `MessageUpdate`)
