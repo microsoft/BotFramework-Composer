@@ -10,19 +10,19 @@ export const copyInputDialog = async (input: InputDialog, externalApi: ExternalA
   const copy = shallowCopyAdaptiveAction(input, externalApi);
   const nodeId = copy.$designer ? copy.$designer.id : '';
 
-  if (input.prompt) {
+  if (input.prompt !== undefined) {
     copy.prompt = await externalApi.copyLgTemplate(input.prompt, nodeId);
   }
 
-  if (input.unrecognizedPrompt) {
+  if (input.unrecognizedPrompt !== undefined) {
     copy.unrecognizedPrompt = await externalApi.copyLgTemplate(input.unrecognizedPrompt, nodeId);
   }
 
-  if (input.invalidPrompt) {
+  if (input.invalidPrompt !== undefined) {
     copy.invalidPrompt = await externalApi.copyLgTemplate(input.invalidPrompt, nodeId);
   }
 
-  if (input.defaultValueResponse) {
+  if (input.defaultValueResponse !== undefined) {
     copy.defaultValueResponse = await externalApi.copyLgTemplate(input.defaultValueResponse, nodeId);
   }
 

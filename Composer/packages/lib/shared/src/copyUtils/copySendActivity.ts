@@ -10,7 +10,7 @@ export const copySendActivity = async (input: SendActivity, externalApi: Externa
   const copy = shallowCopyAdaptiveAction(input, externalApi);
   const nodeId = copy.$designer ? copy.$designer.id : '';
 
-  if (input.activity) {
+  if (input.activity !== undefined) {
     copy.activity = await externalApi.copyLgTemplate(input.activity, nodeId);
   }
 
