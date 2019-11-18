@@ -7,73 +7,37 @@ pr:
     include:
       - '*'
 
-variables:
-  containerRegistry: 'bfc-docker-registry'
-  dockerRepository: 'composer'
-  latestImage: bfctest.azurecr.io/composer:latest
-  buildImage: bfctest.azurecr.io/composer:$(Build.BuildId)
+strategy:
+  parallel: 4
 
-stages:
-  - stage: build
-    jobs:
-      - job: buildAndPush
-        displayName: Build and Push Docker Image
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-          - task: Docker@2
-            displayName: Docker Login
-            inputs:
-              containerRegistry: $(containerRegistry)
-              command: 'login'
-          - script: docker pull $(latestImage) || true
-            displayName: Pull latest image
-          - task: Docker@2
-            displayName: Build Image
-            inputs:
-              containerRegistry: $(containerRegistry)
-              repository: $(dockerRepository)
-              command: 'build'
-              Dockerfile: 'Composer/Dockerfile.ci'
-              buildContext: 'Composer/'
-              tags: |
-                $(Build.BuildId)
-                latest
-              arguments: --cache-from $(latestImage)
-          - task: Docker@2
-            displayName: Push Image
-            inputs:
-              containerRegistry: $(containerRegistry)
-              repository: $(dockerRepository)
-              command: 'push'
-              tags: |
-                $(Build.BuildId)
-                latest
+pool:
+  vmImage: ubuntu-latest
 
-  - stage: e2e
-    jobs:
-      - job: e2e
-        strategy:
-          parallel: 4
-        pool:
-          vmImage: ubuntu-latest
-
-        steps:
-          - task: Docker@2
-            displayName: Docker Login
-            inputs:
-              containerRegistry: $(containerRegistry)
-              command: 'login'
-          - script: docker pull $(buildImage)
-            displayName: Pull Build Image
-          - script: |
-              docker run
-              -e BUILD_BUILDNUMBER=$(Build.BuildNumber)
-              -e CYPRESS_RECORD_KEY=$(CYPRESS_RECORD_KEY)
-              -e CYPRESS_VIDEO=true
-              -e CYPRESS_VIDEO_UPLOAD_ON_PASSES=true
-              -e TERM=xterm
-              $(buildImage)
-            displayName: yarn test:integration
-            workingDirectory: Composer
-            continueOnError: true
+steps:
+  - task: NodeTool@0
+    displayName: "Use Node 12.13.0"
+    inputs:
+      versionSpec: 12.13.0
+  - task: CacheBeta@1
+    inputs:
+      key: yarn | $(Agent.OS) | Composer/yarn.lock
+      path: $(YARN_CACHE_FOLDER)
+      restoreKeys: |
+        yarn | $(Agent.OS)
+    displayName: Cache Yarn packages
+  - script: yarn --frozen-lock-file
+    displayName: yarn install
+    workingDirectory: Composer
+  - script: yarn build
+    displayName: yarn build
+    workingDirectory: Composer
+  - script: ./scripts/e2e.sh
+    displayName: yarn test:integration
+    workingDirectory: Composer
+    continueOnError: true
+    env:
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+      CYPRESS_VIDEO: true
+      CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+      # avoid warnings about terminal
+      TERM: xterm
