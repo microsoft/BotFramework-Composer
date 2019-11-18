@@ -14,16 +14,26 @@ stages:
         displayName: Build and Push Docker Image
         steps:
           - task: Docker@2
+            displayName: Build Image
             inputs:
               containerRegistry: 'bfc-docker-registry'
               repository: 'composer'
-              command: 'buildAndPush'
+              command: 'build'
               Dockerfile: 'Composer/Dockerfile.ci'
               buildContext: 'Composer/'
               tags: |
                 $(Build.BuildId)
                 latest
               arguments: --cache-from bfctest.azurecr.io/composer:latest
+          - task: Docker@2
+            displayName: Push Image
+            inputs:
+              containerRegistry: 'bfc-docker-registry'
+              repository: 'composer'
+              command: 'push'
+              tags: |
+                $(Build.BuildId)
+                latest
 
   # - stage: e2e
   #   jobs:
