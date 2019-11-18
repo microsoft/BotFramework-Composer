@@ -13,6 +13,11 @@ stages:
       - job: buildAndPush
         displayName: Build and Push Docker Image
         steps:
+          - task: Docker@2
+            displayName: Docker Login
+            inputs:
+              containerRegistry: 'bfc-docker-registry'
+              command: 'login'
           - script: docker pull bfctest.azurecr.io/composer:latest || true
             displayName: Pull latest image
           - task: Docker@2
