@@ -1,4 +1,4 @@
-FROM node:10-alpine as build
+FROM node:12-alpine as build
 WORKDIR /src/Composer
 
 # yes, docker copy is really this stupid, https://github.com/moby/moby/issues/15858
@@ -24,7 +24,7 @@ COPY . .
 RUN yarn build:prod
 
 # use a multi-stage build to reduce the final image size
-FROM node:10-alpine
+FROM node:12-alpine
 
 WORKDIR /app/Composer/server
 COPY --from=build /src/Composer/.npmrc .

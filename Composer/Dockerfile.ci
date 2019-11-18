@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:12-alpine
 WORKDIR /src/Composer
 
 # yes, docker copy is really this stupid, https://github.com/moby/moby/issues/15858
