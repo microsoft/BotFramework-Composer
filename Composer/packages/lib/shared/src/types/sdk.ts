@@ -3,7 +3,13 @@
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-interface BaseSchema {
+export interface DesignerData {
+  name?: string;
+  description?: string;
+  id: string;
+}
+
+export interface BaseSchema {
   /** Defines the valid properties for the component you are configuring (from a dialog .schema file) */
   $type: string;
   /** Inline id for reuse of an inline definition */
@@ -11,7 +17,7 @@ interface BaseSchema {
   /** Copy the definition by id from a .dialog file. */
   $copy?: string;
   /** Extra information for the Bot Framework Composer. */
-  $designer?: OpenObject;
+  $designer?: DesignerData;
 }
 
 /* Union of components which implement the IActivityTemplate interface */
@@ -57,6 +63,11 @@ export interface IConfirmChoice {
 export interface IRecognizerOption {
   /** If true, the choices value field will NOT be search over */
   noValue?: boolean;
+}
+
+/** Respond with an activity. */
+export interface SendActivity extends BaseSchema {
+  activity?: MicrosoftIActivityTemplate;
 }
 
 /**
@@ -229,6 +240,32 @@ export interface SwitchCondition extends BaseSchema {
   default?: MicrosoftIDialog[];
 }
 
+/** Two-way branch the conversation flow based on a condition. */
+export interface IfCondition extends BaseSchema {
+  /** Expression to evaluate. */
+  condition?: string;
+  actions?: MicrosoftIDialog[];
+  elseActions?: MicrosoftIDialog[];
+}
+
+/** Execute actions on each item in an a collection. */
+export interface Foreach extends BaseSchema {
+  itemsProperty?: string;
+  actions?: MicrosoftIDialog[];
+}
+
+/** Execute actions on each page (collection of items) in an array. */
+export interface ForeachPage extends BaseSchema {
+  itemsProperty?: string;
+  pageSize?: number;
+  actions?: MicrosoftIDialog[];
+}
+
+export interface EditActions extends BaseSchema {
+  changeType: string;
+  actions?: MicrosoftIDialog[];
+}
+
 /** Flexible, data driven dialog that can adapt to the conversation. */
 export interface MicrosoftAdaptiveDialog extends BaseSchema {
   /** Optional dialog ID. */
@@ -250,4 +287,8 @@ export type MicrosoftIDialog =
   | MicrosoftIRecognizer
   | ITriggerCondition
   | SwitchCondition
-  | TextInput;
+  | TextInput
+  | SendActivity
+  | IfCondition
+  | Foreach
+  | ForeachPage;
