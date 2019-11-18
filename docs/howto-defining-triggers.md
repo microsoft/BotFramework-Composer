@@ -75,7 +75,7 @@ Follow the steps to define triggers with [Regular Expressions](https://regexr.co
 
 ![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
 
-3. Define an **Intent** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](concept-events-and-triggers.md#LUIS-recognizer). 
+3. Define an **Intent** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](howto-defining-triggers.md#LUIS-recognizer). 
 
 ## Unrecognized intent 
 **Unrecognized intent** defines actions to take when an intent is not recognized. For this trigger, you do not need to define any intents. Follow the steps to define an **Unrecognized intent** trigger:
