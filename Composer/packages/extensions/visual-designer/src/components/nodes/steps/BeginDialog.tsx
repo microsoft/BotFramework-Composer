@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { Icon as FabricIcon } from 'office-ui-fabric-react';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';

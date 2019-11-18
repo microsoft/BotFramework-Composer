@@ -6,7 +6,9 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
-import { TextField, IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { IChoice } from '@bfc/shared';
 

@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IModalStyleProps, IModalStyles, IStyleFunctionOrObject } from 'office-ui-fabric-react';
+import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 
 import { palette } from '../palette';
 
-export const collapsedStyles: IStyleFunctionOrObject<IModalStyleProps, IModalStyles> = {
+export const collapsedStyles: Partial<IModalStyles> = {
   main: {
     backgroundColor: palette.themePrimary,
     bottom: '30px',
@@ -16,7 +16,7 @@ export const collapsedStyles: IStyleFunctionOrObject<IModalStyleProps, IModalSty
   },
 };
 
-export const expandedStyles: IStyleFunctionOrObject<IModalStyleProps, IModalStyles> = {
+export const expandedStyles: Partial<IModalStyles> = {
   main: {
     bottom: '30px',
     padding: '15px',

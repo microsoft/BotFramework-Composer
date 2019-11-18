@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { PropTypes } from 'prop-types';
 
 import { container } from './styles';
 
 export const Tree = props => (
-  <div css={[container(props.variant), props.extraCss]} data-testid="ProjectTree">
+  <div css={container(props.variant)} data-testid="ProjectTree" {...props}>
     {props.children}
   </div>
 );

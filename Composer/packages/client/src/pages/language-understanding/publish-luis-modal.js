@@ -1,24 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, Fragment } from 'react';
-import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  TextField,
-  Spinner,
-  SpinnerSize,
-  Link,
-  Stack,
-  IconButton,
-  TooltipHost,
-} from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useContext, Fragment } from 'react';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys } from 'lodash';
+import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 

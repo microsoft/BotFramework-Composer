@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useContext, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useCallback, useContext, useState } from 'react';
 import { Link } from '@reach/router';
 import { PropTypes } from 'prop-types';
-import { CommandBarButton, FocusZone } from 'office-ui-fabric-react';
+import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 
 import { StoreContext } from '../../store';
 
@@ -63,4 +66,5 @@ NavItem.propTypes = {
   labelHide: PropTypes.bool,
   index: PropTypes.number,
   targetUrl: PropTypes.string,
+  underTest: PropTypes.bool,
 };

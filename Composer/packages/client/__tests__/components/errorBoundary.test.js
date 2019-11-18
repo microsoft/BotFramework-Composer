@@ -24,20 +24,31 @@ const ProblemChild = () => {
 };
 
 describe('<ErrorBoundary/>', () => {
+  let consoleErrorStub, consoleLogStub;
+
+  beforeEach(() => {
+    consoleErrorStub = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleLogStub = jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorStub.mockRestore();
+    consoleLogStub.mockRestore();
+  });
+
   it('should just render the children if error not occur', () => {
     ErrorBoundary.contextType = Store;
-    const { container, debug } = render(
+    const { container } = render(
       <ErrorBoundary>
         <div>test</div>
       </ErrorBoundary>
     );
-    debug();
     expect(container).toHaveTextContent('test');
   });
 
   it('all the components will not crash with ErrorBoundary even child compoent throw a error', () => {
     ErrorBoundary.contextType = Store;
-    const { container, debug } = render(
+    const { container } = render(
       <div>
         <ErrorBoundary>
           <ProblemChild />
@@ -45,7 +56,6 @@ describe('<ErrorBoundary/>', () => {
         <div> will not crash</div>
       </div>
     );
-    debug();
     expect(container).toHaveTextContent('will not crash');
   });
 

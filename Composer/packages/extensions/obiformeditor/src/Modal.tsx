@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Modal as FabricModal, IconButton } from 'office-ui-fabric-react';
+import { Modal as FabricModal } from 'office-ui-fabric-react/lib/Modal';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 interface ModalProps {

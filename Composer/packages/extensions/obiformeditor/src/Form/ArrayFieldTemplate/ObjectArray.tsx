@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 
