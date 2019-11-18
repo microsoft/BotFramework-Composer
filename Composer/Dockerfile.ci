@@ -25,4 +25,4 @@ ENV NODE_OPTIONS "--max-old-space-size=4096"
 COPY . .
 RUN yarn build:prod
 
-CMD ["yarn", "start"]
+CMD ["./scripts/e2e.sh"]
