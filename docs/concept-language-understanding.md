@@ -1,5 +1,5 @@
 # Language Understanding
-Language Understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers (handlers) which define how bots will respond with appropriate actions. 
+Language Understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers which define how bots will respond with appropriate actions. 
 
 In Bot Framework Composer LU has the following characteristics:
 
@@ -34,7 +34,7 @@ To define and use intents in Composer, you will need to:
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
 
-In Composer, utterances are always captured in a markdown list and followed by an intent. For example, the **Greeting** intent with some example utterances are shown in the [_Intents_ section](concept-language-understanding.md#intents). 
+In Composer, utterances are always captured in a markdown list and followed by an intent. For example, the **Greeting** intent with some example utterances are shown in the above section [here](concept-language-understanding.md#intents). 
 
 You may have noticed that LU format is very similar to LG format but they are different. 
 
