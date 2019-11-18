@@ -5,6 +5,22 @@ On the navigation pane, click **New Trigger** and you will see the trigger menu 
 
 ![trigger_menu](./media/dialog/trigger_menu.gif)
 
+## Anatomy of a trigger
+The basic idea behind a trigger (event handler) is "When (_event_) happens, then do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request. 
+
+Every trigger contains the following components:
+- A trigger name that can be changed in the property panel 
+- Possible **Condition** (specified using [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), must evaluate to be "true" for the event to fire
+- Actions will fire when the event is triggered
+
+The screenshot below shows the definition of an **Intent** trigger that is configured to fire whenever the "cancel" intent is detected. It is possible to add a condition to the event - this expression (follows [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)), if specified, must evaluate to be "true" for the event to fire. 
+
+![anatomy_trigger](./media/events_triggers/anatomy_trigger.png)
+
+This event will appear in the dialog as a node at the top of the editor. Actions within this trigger occur in the context of the active dialog. These steps control the main functionality of a bot.
+
+![cancel_trigger](./media/events_triggers/cancel_trigger.png)
+
 ## Types of triggers 
 There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](howto-defining-triggers.md). 
 
@@ -44,72 +60,11 @@ Use **Message activity triggers** when you wan to:
 ### Custom trigger
 Custom trigger is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will trigger this handler. 
 
-## Anatomy of a trigger
-The basic idea behind a trigger (event handler) is "When (_event_) happens, then do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request.
-
-The screenshot below shows the definition of an intent trigger that is configured to fire whenever the "cancel" intent is detected. It is possible to add a secondary constraint to the event - this expression, if specified, must evaluate to be "true" for the event to fire. 
-
-![anatomy_trigger](./media/events_triggers/anatomy_trigger.png)
-
-This event will appear in the dialog as a node at the top of the editor. Actions within this trigger occur in the context of the active dialog. These steps control the main functionality of a bot.
-
-![cancel_trigger](./media/events_triggers/cancel_trigger.png)
-
-## Define triggers with recognizers 
-### LUIS Recognizer
-Composer enables developers to create language training data in the dialog editing surface because it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. 
-
-Follow the steps to define a trigger with LUIS recognizer:
-1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
-2. In the Language Understanding editor, create **intents** with sample utterances and follow [.lu format file](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
-
->[!NOTE]
-> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You will need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
-
-Below is a screenshot to show the previous two steps: 
-
-![LUIS_intent](./media/events_triggers/LUIS_intent.png)
-
-3. Select **Intent** from the trigger menu and pick any pre-defined intent you want this trigger to handle. Each **Intent** trigger handles one pre-defined intent. 
-
-![BookFlight_configure](./media/events_triggers/BookFlight_configure.png) 
-
-#### LUIS for entity extraction
-In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. Entities are a collection of objects data extracted from an utterance such as places, time, and people. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
-
-Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@[Entity Name]`. For example, given an intent definition like below:
-
-```
-# book-flight
-- book a flight to {city=austin}
-- travel to {city=new york}
-- i want to go to {city=los angeles}
-```
-
-When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. More details about intents and entities used for language understanding can be found [here](concept-language-understanding.md).
-
-### Regular expression recognizer 
-[Regular expressions](https://regexr.com/) are rigid patterns that can be used to match simple or sophisticated patterns in a text. Composer exposes the ability to define intents using regular expressions and also allows the regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, [Regular Expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords. 
-
-In the example below, a similar book-flight intent is defined. However, this will _only_ match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able match a much wider variety of messages.
-
-Follow the steps to define triggers with [Regular Expressions](https://regexr.com/) recognizer: 
-1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
-2. In the Language Understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
-
-![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
-
-3. Define an **Intent** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](concept-events-and-triggers.md#LUIS-recognizer). 
-
 ## Further reading
-
-[Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
-
-[.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-
-[Regular Expressions](https://regexr.com/)
-
-[RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
+- [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
+- [.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
 ## Next 
-Learn [conversation flow and memory](./concept-memory.md)
+- Learn [conversation flow and memory](./concept-memory.md)
+- Learn [how to define triggers](howto-defining-triggers.md)
