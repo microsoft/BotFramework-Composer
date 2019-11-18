@@ -38,7 +38,6 @@ stages:
             workingDirectory: Composer
           - script: tar czf $(Build.ArtifactStagingDirectory)/$(archiveName) ./Composer
             displayName: Create TAR Archive
-            workingDirectory: Composer
           - task: PublishBuildArtifacts@1
             displayName: Publish TAR Archive
             inputs:
