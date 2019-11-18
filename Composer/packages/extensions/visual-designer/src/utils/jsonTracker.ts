@@ -201,7 +201,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, lgApi) {
+export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, copyLgTemplate) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -219,7 +219,7 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, l
   const copiedNodes: any[] = [];
   for (const node of newNodes) {
     // Deep copy nodes with external resources
-    const copy = await deepCopyAction(node, lgApi);
+    const copy = await deepCopyAction(node, copyLgTemplate);
     copiedNodes.push(copy);
   }
 

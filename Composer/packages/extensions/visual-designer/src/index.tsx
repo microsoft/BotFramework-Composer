@@ -53,6 +53,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     saveData,
     updateLgTemplate,
     getLgTemplates,
+    copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
     undo,
@@ -69,6 +70,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
     getLgTemplates,
+    copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
   });
