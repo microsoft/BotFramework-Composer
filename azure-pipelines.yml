@@ -17,6 +17,8 @@ stages:
     jobs:
       - job: buildAndPush
         displayName: Build and Push Docker Image
+        pool:
+          vmImage: ubuntu-latest
         steps:
           - task: Docker@2
             displayName: Docker Login
