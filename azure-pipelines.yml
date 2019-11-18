@@ -11,7 +11,7 @@ stages:
   - stage: build
     jobs:
       - job: buildAndPush
-        displayName: Display and Push Docker Image
+        displayName: Build and Push Docker Image
         steps:
           - task: Docker@2
             inputs:
@@ -20,6 +20,10 @@ stages:
               command: 'buildAndPush'
               Dockerfile: 'Composer/Dockerfile.ci'
               buildContext: 'Composer/'
+              tags: |
+                $(Build.BuildId)
+                latest
+              arguments: --cache-from bfctest.azurecr.io/composer:latest
 
   # - stage: e2e
   #   jobs:
