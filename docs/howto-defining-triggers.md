@@ -143,7 +143,7 @@ You can add any action to this trigger. Under the trigger, click the **+** sign 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.gif)
 
-Now you have completed defining a **Custom trigger**. When **Emit a custom event** is fired, the **Custom trigger** will handle this event and send the response you have defined. 
+Now you have completed defining a **Custom trigger**. When **Emit a custom event** is fired, a matching **Custom trigger** in any level of dialogs will catch it and trigger corresponding actions you have defined, for example, in this case the bot will send a response to the user. 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.png)
 
