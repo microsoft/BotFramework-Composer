@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   preset: 'ts-jest/presets/js-with-babel',
-  testPathIgnorePatterns: ['/node_modules/'],
+  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/'],
   watchPathIgnorePatterns: ['<rootDir>/__tests__/mocks'],
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
