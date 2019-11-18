@@ -7,6 +7,11 @@ pr:
     include:
       - '*'
 
+variables:
+  containerRegistry: 'bfc-docker-registry'
+  dockerRepository: 'composer'
+  latestImage: bfctest.azurecr.io/composer:latest
+
 stages:
   - stage: build
     jobs:
@@ -16,27 +21,27 @@ stages:
           - task: Docker@2
             displayName: Docker Login
             inputs:
-              containerRegistry: 'bfc-docker-registry'
+              containerRegistry: $(containerRegistry)
               command: 'login'
-          - script: docker pull bfctest.azurecr.io/composer:latest || true
+          - script: docker pull $(latestImage) || true
             displayName: Pull latest image
           - task: Docker@2
             displayName: Build Image
             inputs:
-              containerRegistry: 'bfc-docker-registry'
-              repository: 'composer'
+              containerRegistry: $(containerRegistry)
+              repository: $(dockerRepository)
               command: 'build'
               Dockerfile: 'Composer/Dockerfile.ci'
               buildContext: 'Composer/'
               tags: |
                 $(Build.BuildId)
                 latest
-              arguments: --cache-from bfctest.azurecr.io/composer:latest
+              arguments: --cache-from $(latestImage)
           - task: Docker@2
             displayName: Push Image
             inputs:
-              containerRegistry: 'bfc-docker-registry'
-              repository: 'composer'
+              containerRegistry: $(containerRegistry)
+              repository: $(dockerRepository)
               command: 'push'
               tags: |
                 $(Build.BuildId)
