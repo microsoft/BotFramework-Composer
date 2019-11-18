@@ -10,9 +10,11 @@ import { useMemo } from 'react';
 import { notificationHeader, notificationHeaderText, dropdownStyles } from './styles';
 
 const createOptions = (items: string[]): IDropdownOption[] => {
-  const defaultOptions: IDropdownOption[] = [{ key: formatMessage('Show All Locations'), text: formatMessage('All'), data: '', isSelected: true }];
+  const defaultOptions: IDropdownOption[] = [
+    { key: formatMessage('Show All Locations'), text: formatMessage('All'), data: '', isSelected: true },
+  ];
   items.forEach(item => {
-    return defaultOptions.push({ key: formatMessage(item), text: formatMessage(item), data: item });
+    return defaultOptions.push({ key: item, text: item, data: item });
   });
   return defaultOptions;
 };
@@ -37,6 +39,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
         }}
         options={options}
         styles={dropdownStyles}
+        data-testid="notifications-dropdown"
       />
     </div>
   );

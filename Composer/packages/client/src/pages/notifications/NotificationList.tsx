@@ -74,7 +74,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
   const { items } = props;
 
   return (
-    <div css={listRoot}>
+    <div css={listRoot} data-testid="notifications-table-view">
       <DetailsList
         items={items}
         columns={columns}

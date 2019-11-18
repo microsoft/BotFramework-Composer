@@ -16,7 +16,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
   const { notifications, locations } = useNotifications(filter);
   return (
-    <div css={root}>
+    <div css={root} data-testid="notifications-page">
       <ToolBar />
       <NotificationHeader items={locations} onChange={setFilter} />
       <NotificationList items={notifications} />

@@ -8,7 +8,7 @@ import { createSingleMessage } from '../../utils/lgUtil';
 
 import { INotification } from './types';
 
-const DiagnosticSeverity = ['Error', 'Warning', 'Information', 'Hint'];
+const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export default function useNotifications(filter: string) {
   const { state } = useContext(StoreContext);
