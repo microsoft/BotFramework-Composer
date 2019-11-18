@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { deleteAction, deleteActions } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -80,7 +81,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id, deleteLgTemplates));
+          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
           onFocusSteps([]);
         };
         break;
@@ -122,7 +123,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
-          const dialog = deleteNodes(data, e.actionIds, deleteLgTemplates);
+          const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
           onChange(dialog);
           onFocusSteps([]);
         };
