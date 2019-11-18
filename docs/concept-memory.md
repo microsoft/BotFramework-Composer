@@ -20,7 +20,7 @@ Here are a couple of examples:
 
 The scope of the property determines when the property is available, and how long the value will be retained.
 
-### Storing information about users and ongoing converations
+### Storing information about users and ongoing conversations
 The bot's memory has two "permanent" scopes - a place to store information about individual users, and a place to store information about ongoing conversations:
 
 * **user** is associated with a specific user. Properties in the user scope are retained forever.
