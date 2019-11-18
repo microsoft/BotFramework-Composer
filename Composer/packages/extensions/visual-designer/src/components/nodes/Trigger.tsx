@@ -5,7 +5,7 @@
 
 import { ConceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
-import { Icon } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { TriggerSize } from '../../constants/ElementSizes';
 
