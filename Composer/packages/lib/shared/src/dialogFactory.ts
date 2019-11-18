@@ -12,6 +12,14 @@ interface DesignerAttributes {
   description: string;
 }
 
+const initialInputDialog = {
+  allowInterruptions: 'false',
+  prompt: '',
+  unrecognizedPrompt: '',
+  invalidPrompt: '',
+  defaultValueResponse: '',
+};
+
 const initialDialogShape = {
   'Microsoft.AdaptiveDialog': {
     $type: 'Microsoft.AdaptiveDialog',
@@ -28,24 +36,15 @@ const initialDialogShape = {
     $type: 'Microsoft.OnConversationUpdateActivity',
     condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
   },
-  'Microsoft.AttachmentInput': {
-    allowInterruptions: 'false',
+  'Microsoft.SendActivity': {
+    activity: '',
   },
-  'Microsoft.ChoiceInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.ConfirmInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.DateTimeInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.NumberInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.TextInput': {
-    allowInterruptions: 'false',
-  },
+  'Microsoft.AttachmentInput': initialInputDialog,
+  'Microsoft.ChoiceInput': initialInputDialog,
+  'Microsoft.ConfirmInput': initialInputDialog,
+  'Microsoft.DateTimeInput': initialInputDialog,
+  'Microsoft.NumberInput': initialInputDialog,
+  'Microsoft.TextInput': initialInputDialog,
 };
 
 export function getNewDesigner(name: string, description: string) {
