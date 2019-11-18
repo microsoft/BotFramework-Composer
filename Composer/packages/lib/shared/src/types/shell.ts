@@ -126,6 +126,7 @@ export interface ShellApi {
   updateLuFile: (id: string, content: string) => Promise<void>;
   updateLgFile: (id: string, content: string) => Promise<void>;
   getLgTemplates: (id: string) => Promise<LgTemplate[]>;
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<string>;
   createLgTemplate: (id: string, template: LgTemplate, position: number) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;

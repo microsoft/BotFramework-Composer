@@ -44,9 +44,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplates } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates } = useContext(
     NodeRendererContext
   );
+
   const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
@@ -89,7 +90,19 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardActions, lgApi).then(dialog => {
+            // TODO: clean this along with node deletion.
+            const copyLgTemplateToNewNode = async (lgTemplateName: string, newNodeId: string) => {
+              const matches = /\[(bfd\w+-(\d+))\]/.exec(lgTemplateName);
+              if (Array.isArray(matches) && matches.length === 3) {
+                const originLgId = matches[1];
+                const originNodeId = matches[2];
+                const newLgId = originLgId.replace(originNodeId, newNodeId);
+                await copyLgTemplate('common', originLgId, newLgId);
+                return `[${newLgId}]`;
+              }
+              return lgTemplateName;
+            };
+            pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
               onChange(dialog);
             });
           };
