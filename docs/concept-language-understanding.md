@@ -8,7 +8,7 @@ In Bot Framework Composer LU has the following characteristics:
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
 - Composer provides an all-up LU view in **User Responses**
 
-## Core language understanding concepts in Composer 
+## Core LU concepts in Composer 
 ### Intents  
 Intents are categories or classifications of user intentions. An intent represents an action the user wants to perform. The intent is a purpose or goal expressed in a user's input, such as booking a flight, paying a bill, or finding a news article. You define and name intents that correspond to these actions. A travel app may define an intent named "BookFlight."
 
