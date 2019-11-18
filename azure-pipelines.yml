@@ -7,37 +7,60 @@ pr:
     include:
       - '*'
 
-strategy:
-  parallel: 4
+variables:
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+  archiveName: composer-$(Build.BuildId).tar.gz
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+  - stage: build
+    jobs:
+      - job: build
+        displayName: Build
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: NodeTool@0
+            displayName: "Use Node 12.13.0"
+            inputs:
+              versionSpec: 12.13.0
+          - task: CacheBeta@1
+            inputs:
+              key: yarn | $(Agent.OS) | Composer/yarn.lock
+              path: $(YARN_CACHE_FOLDER)
+              restoreKeys: |
+                yarn | $(Agent.OS)
+            displayName: Cache Yarn packages
+          - script: yarn --frozen-lock-file
+            displayName: yarn install
+            workingDirectory: Composer
+          - script: yarn build
+            displayName: yarn build
+            workingDirectory: Composer
+          - script: tar czf $(Build.ArtifactStagingDirectory)/$(archiveName) ./Composer
+            displayName: Create TAR Archive
+            workingDirectory: Composer
+          - task: PublishBuildArtifacts@1
+            displayName: Publish TAR Archive
+            inputs:
+              pathToPublish: $(Build.ArtifactStagingDirectory)/$(archiveName)
+              ArtifactName: $(archiveName)
 
-steps:
-  - task: NodeTool@0
-    displayName: "Use Node 12.13.0"
-    inputs:
-      versionSpec: 12.13.0
-  - task: CacheBeta@1
-    inputs:
-      key: yarn | $(Agent.OS) | Composer/yarn.lock
-      path: $(YARN_CACHE_FOLDER)
-      restoreKeys: |
-        yarn | $(Agent.OS)
-    displayName: Cache Yarn packages
-  - script: yarn --frozen-lock-file
-    displayName: yarn install
-    workingDirectory: Composer
-  - script: yarn build
-    displayName: yarn build
-    workingDirectory: Composer
-  - script: ./scripts/e2e.sh
-    displayName: yarn test:integration
-    workingDirectory: Composer
-    continueOnError: true
-    env:
-      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      CYPRESS_VIDEO: true
-      CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
-      # avoid warnings about terminal
-      TERM: xterm
+  - stage: e2e
+    jobs:
+      - job: e2e
+        displayName: End-to-End Tests
+        strategy:
+          parallel: 1
+        pool:
+          vmImage: ubuntu-latest
+
+        steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: Download Build Archive
+            inputs:
+              downloadPath: $(System.ArtifactsDirectory)
+              artifactName: $(archiveName)
+              buildType: current
+          - script: tar -xf $(archiveName)
+            displayName: Extract Build Archive
+          - script: ls -la Composer/packages/server/build/public/static/js
