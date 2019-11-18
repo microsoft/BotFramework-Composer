@@ -8,28 +8,33 @@ In Bot Framework Composer LU has the following characteristics:
 - Composer currently supports LU technologies such as LUIS and Regular Expression 
 - Composer provides an all-up LU view in **User Responses**
 
-## Core LU concepts in Composer 
+## Core language understanding concepts in Composer 
 ### Intents  
-Intents are categories or classifications of user intentions. An intent has a twofold meaning in Composer. On the one hand, an intent is a purpose or goal expressed in a user's utterance. By providing different example utterances, you can train your bot's understanding for specific intents. On the other hand, an intent represents an action that the user wants to take. When an intent is captured, its matching action will execute. The basic idea of how intents work in Composer is as follows: 
+Intents are categories or classifications of user intentions. An intent represents an action the user wants to perform. The intent is a purpose or goal expressed in a user's input, such as booking a flight, paying a bill, or finding a news article. You define and name intents that correspond to these actions. A travel app may define an intent named "BookFlight."
 
-- You set up recognizers and author LU content as training data. 
-- Based on the LU content your bot will capture some intent based on user's input. 
-- When an intent is identified, an associated trigger causes an action to execute. 
-
-To define intents in Composer, you will need to:
-
-- specify intent(s) and example utterances in [.lu file format](https://github.com/microsoft/botbuilder-tools/edit/master/packages/Ludown/docs/lu-file-format.md) 
-- create an **Intent** trigger to handle each pre-defined intent
-
-### Utterances 
-Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
-
-In Composer, utterances are always captured in a markdown list and followed by an intent. For example, a **Greeting** intent with some example utterances may look like this: 
+Here's a simple .lu file that captures a simple **Greeting** intent with a list of example utterances that capture different ways users will express this intent. You can use - or + or * to denote lists. Numbered lists are not supported. 
 
     # Greeting 
     - Hi 
     - Hello 
     - How are you? 
+
+`#<intent-name>` describes a new intent definition section. Each line after the intent definition are example utterances that describe that intent. You can stitch together multiple intent definitions in a language understanding editor in Composer. Each section is identified by `#<intent-name>` notation. Blank lines are skipped when parsing the file. 
+
+To define and use intents in Composer, you will need to:
+
+- setup **LUIS** as recognizer type 
+- specify intent(s) and example utterances in [.lu file format](https://github.com/microsoft/botbuilder-tools/edit/master/packages/Ludown/docs/lu-file-format.md) as mentioned above
+- create an **Intent** trigger to handle each pre-defined intent
+- publish the training data to LUIS 
+
+> [!NOTE]
+> Besides **LUIS**, you can also define intents using Regular Expression. See details [here](concept-events-and-triggers.md#regular-expression-recognizer). 
+
+### Utterances 
+Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
+
+In Composer, utterances are always captured in a markdown list and followed by an intent. For example, the **Greeting** intent with some example utterances are shown in the [_Intents_ section](concept-language-understanding.md#intents). 
 
 You may have noticed that LU format is very similar to LG format but they are different. 
 
@@ -44,6 +49,16 @@ Entities are a collection of objects data extracted from an utterance such as pl
     # BookFlight
     - book a flight to {toCity=seattle}
     - book a flight from {fromCity=new york} to {toCity=seattle}
+
+The example above shows the definition of a `BookFlight` intent with two example utterances and two entity definitions: `toCity` and `fromCity`. When triggered, if LUIS is able to identify a destination city, the city name will be made available as `@toCity` within the triggered actions or a departure city with `@fromCity` as available entity values. The entity values can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
+
+Composer supports the following [LUIS entity types](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/luis-concept-entity-types):
+
+- [Simple](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Simple-entity)
+- [Prebuilt](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Prebuilt-entity)
+- [List](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#List-entity)
+- [RegEx](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#RegEx-entity)
+- [Composite](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Composite-entity)
 
 ### Example 
 To better understand intents, entities and utterances, we provide some examples in the table below. All the three utterances share the same intent _BookFlight_ and with different entities. There are different types of entities, see details [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
