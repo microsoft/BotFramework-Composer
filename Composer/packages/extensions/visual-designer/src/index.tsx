@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 
@@ -63,7 +63,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
-  const [context, setContext] = useState({
+  const nodeContext = {
     focusedId,
     focusedEvent,
     focusedTab,
@@ -73,21 +73,11 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
-  });
-
-  useEffect(() => {
-    setContext({
-      ...context,
-      focusedId,
-      focusedEvent,
-      focusedTab,
-      clipboardActions,
-    });
-  }, [focusedEvent, focusedActions, focusedTab, clipboardActions]);
+  };
 
   return (
     <CacheProvider value={emotionCache}>
-      <NodeRendererContext.Provider value={context}>
+      <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
           <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
             <ObiEditor
