@@ -51,6 +51,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   );
 
   const template = (lgFile &&
+    lgFile.templates &&
     lgFile.templates.find(template => {
       return template.Name === lgId;
     })) || {
@@ -68,7 +69,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
 
   // only do this once
   const allContent = useMemo(() => {
-    if (!lgFile) {
+    if (!lgFile || !lgFile.templates) {
       return '';
     }
 
