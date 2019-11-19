@@ -58,12 +58,13 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
+  const iconProps = editable ? {} : { iconName: 'ReturnKey', style: { color: '#0078D4', opacity: 0.6 } };
   const Field = editable ? EditableField : TextField;
 
   return (
     <>
       <WidgetLabel label={label} description={description} id={id} />
-      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
+      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" iconProps={iconProps} />
     </>
   );
 };
