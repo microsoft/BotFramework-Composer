@@ -30,6 +30,11 @@ stages:
               restoreKeys: |
                 yarn | $(Agent.OS)
             displayName: Cache Yarn packages
+          - task: CacheBeta@1
+            displayName: Cache Cypress binary
+            inputs:
+              key: cypress | $(Agent.OS) | Composer/yarn.lock
+              path: /home/vsts/.cache/Cypress
           - script: yarn --frozen-lock-file
             displayName: yarn install
             workingDirectory: Composer
@@ -62,6 +67,11 @@ stages:
               buildType: current
           - script: tar -xf $(Build.ArtifactStagingDirectory)/$(archiveName) -C .
             displayName: Extract Build Archive
+          - task: CacheBeta@1
+            displayName: Restore Cypress binary
+            inputs:
+              key: cypress | $(Agent.OS) | Composer/yarn.lock
+              path: /home/vsts/.cache/Cypress
           - script: ./scripts/e2e.sh
             displayName: Run E2E Tests
             workingDirectory: Composer
