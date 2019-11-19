@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { registerLGLanguage } from '@bfc/language-client';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import {
   MonacoLanguageClient,
@@ -12,6 +11,7 @@ import {
   createConnection,
 } from 'monaco-languageclient';
 
+import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket } from './utils/lspUtil';
 import { RichEditor, RichEditorProps } from './RichEditor';
 
