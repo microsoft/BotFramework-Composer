@@ -1,29 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// *********************************************** This example commands.js
-// shows you how to create various custom commands and overwrite existing
-// commands.
-//
-// For more comprehensive examples of custom commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command -- Cypress.Commands.add("login", (email,
-// password) => { ... })
-//
-//
-// -- This is a child command -- Cypress.Commands.add("drag", { prevSubject:
-// 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command -- Cypress.Commands.add("dismiss", { prevSubject:
-// 'optional'}, (subject, options) => { ... })
-//
-//
-
-import 'cypress-testing-library/add-commands';
+import '@testing-library/cypress/add-commands';
 
 Cypress.Commands.overwrite('visit', (originalFn, url, { enableOnboarding } = {}) => {
   if (!enableOnboarding) {
@@ -35,24 +13,24 @@ Cypress.Commands.overwrite('visit', (originalFn, url, { enableOnboarding } = {})
 });
 
 Cypress.Commands.add('createBot', botName => {
-  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-  cy.get('[data-testid="homePage-ToolBar-New"]').within(() => {
+  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
+  cy.findByTestId('homePage-ToolBar-New').within(() => {
     cy.findByText('New').click();
   });
-  cy.get('input[data-testid="Create from template"]').click({ force: true });
-  cy.get(`[data-testid=${botName}]`).click();
+  cy.findByTestId('Create from template').click({ force: true });
+  cy.findByTestId(`${botName}`).click();
   cy.get('button[data-testid="NextStepButton"]').click();
-  cy.get('input[data-testid="NewDialogName"]').type(`__Test${botName}`);
-  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.findByTestId('NewDialogName').type(`__Test${botName}`);
+  cy.findByTestId('NewDialogName').type('{enter}');
   cy.wait(1000);
 });
 
 Cypress.Commands.add('openBot', botName => {
-  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
-  cy.get('[data-testid="homePage-ToolBar-Open"]').within(() => {
+  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
+  cy.findByTestId('homePage-ToolBar-Open').within(() => {
     cy.findByText('Open').click();
   });
-  cy.get('[data-testid="SelectLocation"]').within(() => {
+  cy.findByTestId('SelectLocation').within(() => {
     cy.get(`[aria-label="${botName}"]`).click({ force: true });
     cy.wait(500);
   });
@@ -66,43 +44,43 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
 });
 
 Cypress.Commands.add('openDialog', dialogName => {
-  cy.get('[data-testid="ProjectTree"]').within(() => {
+  cy.findByTestId('ProjectTree').within(() => {
     cy.findByText(dialogName).click();
     cy.wait(500);
   });
 });
 
 Cypress.Commands.add('startFromTemplate', (template, name) => {
-  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
   cy.findByTestId(`TemplateCopy-${template}`).click();
-  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
-  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.findByTestId('NewDialogName').type(`__Test${name}`);
+  cy.findByTestId('NewDialogName').type('{enter}');
   cy.wait(1000);
 });
 
 Cypress.Commands.add('copyBot', (bot, name) => {
   cy.createBot(bot);
-  cy.get('[data-testid="LeftNav-CommandBarButtonHome"]').click();
+  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
   cy.findByText('Save as').click();
 
-  cy.get('input[data-testid="NewDialogName"]').type(`__Test${name}`);
-  cy.get('input[data-testid="NewDialogName"]').type('{enter}');
+  cy.findByTestId('NewDialogName').type(`__Test${name}`);
+  cy.findByTestId('NewDialogName').type('{enter}');
   cy.wait(1000);
 });
 
 Cypress.Commands.add('addEventHandler', handler => {
-  cy.get('[data-testid="ProjectTree"]').within(() => {
+  cy.findByTestId('ProjectTree').within(() => {
     cy.findByText(/New Trigger ../).click();
   });
-  cy.get(`[data-testid="triggerTypeDropDown"]`).click();
+  cy.findByTestId('triggerTypeDropDown').click();
   cy.findByText(handler).click();
   if (handler === 'Dialog trigger') {
-    cy.get(`[data-testid="eventTypeDropDown"]`).click();
+    cy.findByTestId('eventTypeDropDown').click();
     cy.findByText('consultDialog').click();
   }
-  cy.get(`[data-testid="triggerFormSubmit"]`).click();
+  cy.findByTestId('triggerFormSubmit').click();
 });
 
-Cypress.Commands.add('visitPage', (page) => {
-  cy.get(`[data-testid="LeftNav-CommandBarButton${page}"]`).click();
+Cypress.Commands.add('visitPage', page => {
+  cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
 });

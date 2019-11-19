@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/// <reference types="cypress" />
+
 declare namespace Cypress {
-  interface Chainable<Subject = any> {
+  interface Chainable {
     /**
      * Creates a bot based on template id
      * @example cy.createBot('TodoSample')
