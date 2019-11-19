@@ -8,55 +8,55 @@ context('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample.Main').click();
       cy.wait(100);
     });
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('__TestTodoSample').should('exist');
+      cy.findByDisplayValue('__TestTodoSample').should('exist');
     });
   });
 
   it('can open the AddToDo dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('AddToDo').click();
+      cy.findByText('AddToDo').click();
       cy.wait(100);
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('AddToDo').should('exist');
+      cy.findByDisplayValue('AddToDo').should('exist');
     });
   });
 
   it('can open the ClearToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ClearToDos').click();
+      cy.findByText('ClearToDos').click();
       cy.wait(100);
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('ClearToDos').should('exist');
+      cy.findByDisplayValue('ClearToDos').should('exist');
     });
   });
 
   it('can open the DeleteToDo dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('DeleteToDo').click();
+      cy.findByText('DeleteToDo').click();
       cy.wait(100);
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('DeleteToDo').should('exist');
+      cy.findByDisplayValue('DeleteToDo').should('exist');
     });
   });
 
   it('can open the ShowToDos dialog', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('ShowToDos').click();
+      cy.findByText('ShowToDos').click();
       cy.wait(100);
     });
 
     cy.withinEditor('FormEditor', () => {
-      cy.getByDisplayValue('ShowToDos').should('exist');
+      cy.findByDisplayValue('ShowToDos').should('exist');
     });
   });
 });
