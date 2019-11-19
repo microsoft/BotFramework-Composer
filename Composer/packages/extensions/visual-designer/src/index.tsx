@@ -62,7 +62,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
   const nodeContext = {
     focusedId,
     focusedEvent,
