@@ -60,7 +60,7 @@ stages:
               downloadPath: $(System.ArtifactsDirectory)
               artifactName: composer
               buildType: current
-          - script: ls -lah .
-          - script: tar -xf $(archiveName)
+          - script: ls -lah $(System.ArtifactsDirectory)
+          - script: tar -xf $(Build.ArtifactStagingDirectory)/composer/$(archiveName) -C .
             displayName: Extract Build Archive
           - script: ls -la Composer/packages/server/build/public/static/js
