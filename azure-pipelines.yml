@@ -64,4 +64,5 @@ stages:
             displayName: Extract Build Archive
           - script: ./scripts/e2e.sh
             displayName: Run E2E Tests
+            workingDirectory: Composer
             continueOnError: true
