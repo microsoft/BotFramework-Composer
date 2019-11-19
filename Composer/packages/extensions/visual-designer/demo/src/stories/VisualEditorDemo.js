@@ -121,7 +121,7 @@ export class VisualEditorDemo extends Component {
                 getLgTemplates: () => {
                   return Promise.resolve([{ Name: 'lg', Body: 'LgTemplate Placeholder.' }]);
                 },
-                removeLgTemplate: () => {
+                removeLgTemplates: () => {
                   return Promise.resolve(true);
                 },
               }}
