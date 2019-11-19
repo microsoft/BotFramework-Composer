@@ -5,8 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import has from 'lodash/has';
-import get from 'lodash/get';
+import { deleteAction, deleteActions } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -48,6 +47,19 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates } = useContext(
     NodeRendererContext
   );
+
+  const deleteLgTemplates = (lgTemplates: string[]) => {
+    const lgPattern = /\[(bfd\w+-\d+)\]/;
+    const normalizedLgTemplates = lgTemplates
+      .map(x => {
+        const matches = lgPattern.exec(x);
+        if (matches && matches.length === 2) return matches[1];
+        return '';
+      })
+      .filter(x => !!x);
+    return removeLgTemplates('common', normalizedLgTemplates);
+  };
+
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -69,37 +81,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          // TODO: move the shared logic into shared lib as a generic destruction process
-          const findLgTemplates = (value: any): string[] => {
-            const targetNames = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt', 'activity'];
-            const targets: string[] = [];
-
-            targetNames.forEach(name => {
-              if (has(value, name)) {
-                targets.push(get(value, name));
-              }
-            });
-
-            const templates: string[] = [];
-            targets.forEach(target => {
-              // only match auto generated lg temapte name
-              const reg = /\[(bfd((?:activity)|(?:prompt)|(?:unrecognizedPrompt)|(?:defaultValueResponse)|(?:invalidPrompt))-\d{6})\]/g;
-              let matchResult;
-              while ((matchResult = reg.exec(target)) !== null) {
-                const templateName = matchResult[1];
-                templates.push(templateName);
-              }
-            });
-
-            return templates;
-          };
-
-          const cleanLgTemplate = async (removedData: any): Promise<void> => {
-            const templateNames: string[] = findLgTemplates(removedData);
-            const lgFileId = 'common';
-            await removeLgTemplates(lgFileId, templateNames);
-          };
-          onChange(deleteNode(data, e.id, cleanLgTemplate));
+          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
           onFocusSteps([]);
         };
         break;
@@ -153,7 +135,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
-          const dialog = deleteNodes(data, e.actionIds);
+          const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
           onChange(dialog);
           onFocusSteps([]);
         };

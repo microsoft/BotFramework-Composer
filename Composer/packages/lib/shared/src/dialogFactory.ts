@@ -6,6 +6,8 @@ import nanoid from 'nanoid/generate';
 import { DesignerData } from './types/sdk';
 import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
+import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
+import { MicrosoftIDialog } from './types';
 
 interface DesignerAttributes {
   name: string;
@@ -96,6 +98,14 @@ export const deepCopyAction = async (
     getDesignerId,
     copyLgTemplate: copyLgTemplateToNewNode,
   });
+};
+
+export const deleteAction = (data: MicrosoftIDialog, deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveAction(data, deleteLgTemplates);
+};
+
+export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveActionList(inputs, deleteLgTemplates);
 };
 
 export const seedNewDialog = (
