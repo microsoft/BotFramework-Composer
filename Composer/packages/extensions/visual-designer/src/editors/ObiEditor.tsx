@@ -267,7 +267,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
-        const currentSelectedId = selectionContext.selectedIds[0] || focusedId;
+        const currentSelectedId = selectionContext.selectedIds[0] || focusedId || '';
         const { selected, focused, tab } = moveCursor(selectableElements, currentSelectedId, command);
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,

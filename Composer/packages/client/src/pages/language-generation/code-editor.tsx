@@ -7,17 +7,17 @@ import { LgEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { CodeRange } from '@bfc/shared';
+import { CodeRange, LgFile } from '@bfc/shared';
 
 import * as lgUtil from '../../utils/lgUtil';
 
 interface CodeEditorProps {
-  file: object;
+  file: LgFile;
   onChange: (value: string) => void;
-  codeRange: Partial<CodeRange>;
+  codeRange?: Partial<CodeRange> | null;
 }
 
-export default function CodeEditor(props) {
+export default function CodeEditor(props: CodeEditorProps) {
   const { file, codeRange } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
@@ -53,7 +53,7 @@ export default function CodeEditor(props) {
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
-      codeRange={codeRange}
+      codeRange={codeRange || -1}
       errorMsg={errorMsg}
       value={content}
       onChange={_onChange}
