@@ -21,6 +21,7 @@ const getFloat = (value: string, step: number) => {
 export function TextWidget(props: BFDWidgetProps) {
   const {
     label,
+    minValue,
     onBlur,
     onChange,
     onFocus,
@@ -47,12 +48,12 @@ export function TextWidget(props: BFDWidgetProps) {
       // in order to avoid floating point math rounding errors (ex. 1.2000000001)
       // ex. if step = 0.01, we fix to 2 decimals
       const newValue = type === 'integer' ? getInt(value, step) : getFloat(value, step);
-
-      onChange(newValue);
-      // need to allow form data to propagate before flushing to state
-      setTimeout(() => onBlur && onBlur(id, value));
+      if (typeof minValue === 'number' && newValue >= minValue) {
+        onChange(newValue);
+        // need to allow form data to propagate before flushing to state
+        setTimeout(() => onBlur && onBlur(id, value));
+      }
     };
-
     const step = type === 'integer' ? 1 : 0.1;
 
     return (

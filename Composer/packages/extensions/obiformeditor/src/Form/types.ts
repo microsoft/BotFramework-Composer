@@ -33,6 +33,7 @@ export interface BFDWidgetProps extends Partial<WidgetProps> {
   schema: OBISchema;
   onChange: (data: any) => void;
   formContext: FormContext;
+  minValue?: string | number;
   options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
