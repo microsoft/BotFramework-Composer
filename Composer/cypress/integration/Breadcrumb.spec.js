@@ -6,7 +6,7 @@ context('breadcrumb', () => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
     cy.wait(100);
-    
+
     // Return to Main.dialog
     cy.get('[data-testid="ProjectTree"]').within(() => {
       cy.wait(1000);
@@ -56,7 +56,7 @@ context('breadcrumb', () => {
   it('can show action name in breadcrumb', () => {
     cy.wait(100);
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Conversation started (ConversationUpdate)').click();
+      cy.getByText('Greeting (ConversationUpdate)').click();
       cy.wait(500);
     });
 
@@ -70,6 +70,6 @@ context('breadcrumb', () => {
 
     cy.getByTestId('Breadcrumb')
       .invoke('text')
-      .should('match', /__TestTodoSample.Main.*Conversation started \(ConversationUpdate\).*Send a response/);
+      .should('match', /__TestTodoSample.Main.*Greeting \(ConversationUpdate\).*Send a response/);
   });
 });

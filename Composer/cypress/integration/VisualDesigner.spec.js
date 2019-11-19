@@ -17,7 +17,7 @@ context('Visual Designer', () => {
 
   it('can find Visual Designer default trigger in container', () => {
     cy.get('[data-testid="ProjectTree"]').within(() => {
-      cy.getByText('Conversation started (ConversationUpdate)').click();
+      cy.getByText('Greeting (ConversationUpdate)').click();
       cy.wait(500);
     });
 

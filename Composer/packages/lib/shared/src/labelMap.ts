@@ -131,7 +131,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Handle a Condition'),
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    title: formatMessage('Conversation started (ConversationUpdate)'),
+    title: formatMessage('Greeting (ConversationUpdate)'),
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
