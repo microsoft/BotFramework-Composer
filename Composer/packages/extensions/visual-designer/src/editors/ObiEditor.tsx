@@ -48,8 +48,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     NodeRendererContext
   );
 
-  const lgApi = { getLgTemplates, removeLgTemplates, updateLgTemplate };
-
   const deleteLgTemplates = (lgTemplates: string[]) => {
     const lgPattern = /\[(bfd\w+-\d+)\]/;
     const normalizedLgTemplates = lgTemplates
