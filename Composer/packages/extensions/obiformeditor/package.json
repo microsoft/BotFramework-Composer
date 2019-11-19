@@ -28,6 +28,7 @@
     "@bfc/shared": "*",
     "@bfcomposer/react-jsonschema-form": "1.6.5",
     "@emotion/core": "^10.0.17",
+    "@types/vscode": "^1.40.0",
     "@uifabric/fluent-theme": "7.1.4",
     "@uifabric/styling": "7.7.1",
     "classnames": "^2.2.6",

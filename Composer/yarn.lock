@@ -2488,6 +2488,11 @@
     "@types/unist" "*"
     "@types/vfile-message" "*"
 
+"@types/vscode@^1.40.0":
+  version "1.40.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/vscode/-/@types/vscode-1.40.0.tgz#47d19e9e32da512c986f579fe6afbc8d3e6e0c55"
+  integrity sha1-R9GenjLaUSyYb1ef5q+8jT5uDFU=
+
 "@types/webpack-sources@*":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@types/webpack-sources/-/webpack-sources-0.1.5.tgz#be47c10f783d3d6efe1471ff7f042611bd464a92"
@@ -13143,7 +13148,7 @@ querystring@0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
-querystringify@^2.0.0, querystringify@^2.1.1:
+querystringify@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
   integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
@@ -14353,14 +14358,6 @@ source-map-resolve@^0.5.0, source-map-resolve@^0.5.2:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.5.0, source-map-support@~0.5.12:
-  version "0.5.16"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/source-map-support/-/source-map-support-0.5.16.tgz#0ae069e7fe3ba7538c64c98515e35339eac5a042"
-  integrity sha1-CuBp5/47p1OMZMmFFeNTOerFoEI=
-  dependencies:
-    buffer-from "^1.0.0"
-    source-map "^0.6.0"
-
 source-map-support@^0.5.6:
   version "0.5.12"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.12.tgz#b4f3b10d51857a5af0138d3ce8003b201613d599"
@@ -14373,6 +14370,14 @@ source-map-support@~0.5.10:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.11.tgz#efac2ce0800355d026326a0ca23e162aeac9a4e2"
   integrity sha512-//sajEx/fGL3iw6fltKMdPvy8kL3kJ2O3iuYlRoT3k9Kb4BjOoZ+BZzaNHeuaruSt+Kf3Zk9tnfAQg9/AJqUVQ==
+  dependencies:
+    buffer-from "^1.0.0"
+    source-map "^0.6.0"
+
+source-map-support@~0.5.12:
+  version "0.5.16"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/source-map-support/-/source-map-support-0.5.16.tgz#0ae069e7fe3ba7538c64c98515e35339eac5a042"
+  integrity sha1-CuBp5/47p1OMZMmFFeNTOerFoEI=
   dependencies:
     buffer-from "^1.0.0"
     source-map "^0.6.0"
@@ -15601,14 +15606,6 @@ url-parse@^1.4.3:
     querystringify "^2.0.0"
     requires-port "^1.0.0"
 
-url-parse@^1.4.4:
-  version "1.4.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha1-qKg1NejACjFuQDpdtKwbm4U64ng=
-  dependencies:
-    querystringify "^2.1.1"
-    requires-port "^1.0.0"
-
 url-to-options@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/url-to-options/-/url-to-options-1.0.1.tgz#1505a03a289a48cbd7a434efbaeec5055f5633a9"
@@ -15797,14 +15794,6 @@ vscode-nls@^4.0.0:
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/vscode-nls/-/vscode-nls-4.1.1.tgz#f9916b64e4947b20322defb1e676a495861f133c"
   integrity sha1-+ZFrZOSUeyAyLe+x5naklYYfEzw=
 
-vscode-test@^0.4.1:
-  version "0.4.3"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/vscode-test/-/vscode-test-0.4.3.tgz#461ebf25fc4bc93d77d982aed556658a2e2b90b8"
-  integrity sha1-Rh6/JfxLyT132YKu1VZlii4rkLg=
-  dependencies:
-    http-proxy-agent "^2.1.0"
-    https-proxy-agent "^2.2.1"
-
 vscode-textbuffer@^1.0.0:
   version "1.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/vscode-textbuffer/-/vscode-textbuffer-1.0.0.tgz#1faee638c8e0e4131c8d5c353993a1874acda086"
@@ -15821,19 +15810,6 @@ vscode-ws-jsonrpc@^0.1.1:
   integrity sha1-Fj/wVmJjW0/RYe0TLhEs7E2D8SY=
   dependencies:
     vscode-jsonrpc "^4.1.0-next"
-
-vscode@^1.1.36:
-  version "1.1.36"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/vscode/-/vscode-1.1.36.tgz#5e1a0d1bf4977d0c7bc5159a9a13d5b104d4b1b6"
-  integrity sha1-XhoNG/SXfQx7xRWamhPVsQTUsbY=
-  dependencies:
-    glob "^7.1.2"
-    mocha "^5.2.0"
-    request "^2.88.0"
-    semver "^5.4.1"
-    source-map-support "^0.5.0"
-    url-parse "^1.4.4"
-    vscode-test "^0.4.1"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"
