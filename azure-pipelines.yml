@@ -49,7 +49,7 @@ stages:
       - job: e2e
         displayName: End-to-End Tests
         strategy:
-          parallel: 1
+          parallel: 4
         pool:
           vmImage: ubuntu-latest
 
@@ -62,4 +62,6 @@ stages:
               buildType: current
           - script: tar -xf $(Build.ArtifactStagingDirectory)/$(archiveName) -C .
             displayName: Extract Build Archive
-          - script: ls -la Composer/packages/server/build/public/static/js
+          - script: ./scripts/e2e.sh
+            displayName: Run E2E Tests
+            continueOnError: true
