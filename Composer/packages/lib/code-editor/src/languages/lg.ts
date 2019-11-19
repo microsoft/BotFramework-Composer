@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase, no-useless-escape */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
