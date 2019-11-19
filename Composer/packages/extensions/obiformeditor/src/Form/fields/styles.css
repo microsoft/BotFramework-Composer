@@ -54,3 +54,7 @@
 a {
   color: black;
 }
+
+input::placeholder {
+  font-style: italic;
+}
