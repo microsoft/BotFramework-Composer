@@ -6,7 +6,6 @@ import path from 'path';
 
 import { jsx } from '@emotion/core';
 import { Fragment, useEffect, useState, useContext, useRef } from 'react';
-import get from 'lodash.get';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
