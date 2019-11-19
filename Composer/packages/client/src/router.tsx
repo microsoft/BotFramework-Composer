@@ -19,6 +19,7 @@ const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
+const Notifications = React.lazy(() => import('./pages/notifications'));
 
 const Routes = props => {
   const { actions } = useContext(StoreContext);
@@ -49,6 +50,7 @@ const Routes = props => {
                   <SettingPage path="setting/*" />
                   <LUPage path="language-understanding/*" />
                   <LGPage path="language-generation/*" />
+                  <Notifications path="notifications" />
                   <Home path="home" />
                   <About path="about" />
                   <NotFound default />

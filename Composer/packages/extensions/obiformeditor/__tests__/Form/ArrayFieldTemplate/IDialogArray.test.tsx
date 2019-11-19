@@ -74,12 +74,14 @@ describe('<IDialogArray />', () => {
         id: expect.any(String),
         name: 'Send a response',
       },
+      activity: '',
       data: {
         $type: 'Microsoft.SendActivity',
         $designer: {
           id: expect.any(String),
           name: 'Send a response',
         },
+        activity: '',
       },
       key: 'Microsoft.SendActivity',
       name: 'Send a response',
