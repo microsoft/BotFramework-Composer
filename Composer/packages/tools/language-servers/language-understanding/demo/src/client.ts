@@ -111,13 +111,13 @@ monaco.languages.setMonarchTokensProvider('botbuilderlg', {
 });
 
 monaco.languages.register({
-  id: 'botbuilderlg',
-  extensions: ['.lg'],
-  aliases: ['LG', 'language-generation'],
-  mimetypes: ['application/lg'],
+  id: 'botframeworklu',
+  extensions: ['.lu'],
+  aliases: ['LU', 'language-understanding'],
+  mimetypes: ['application/lu'],
 });
 
-monaco.editor.defineTheme('lgtheme', {
+monaco.editor.defineTheme('lutheme', {
   base: 'vs',
   inherit: false,
   colors: {},
@@ -139,19 +139,19 @@ const value = `#ted
 - great 
 - ted hello `;
 const editor = monaco.editor.create(document.getElementById('container')!, {
-  model: monaco.editor.createModel(value, 'botbuilderlg', monaco.Uri.parse('inmemory://model.json')),
+  model: monaco.editor.createModel(value, 'botframeworklu', monaco.Uri.parse('inmemory://model.json')),
   glyphMargin: true,
   lightbulb: {
     enabled: true,
   },
-  theme: 'lgtheme',
+  theme: 'lutheme',
 });
 
 // install Monaco language client services
 MonacoServices.install(editor);
 
 // create the web socket
-const url = createUrl('/lgServer');
+const url = createUrl('/luServer');
 const webSocket = createWebSocket(url);
 // listen when the web socket is opened
 listen({
@@ -166,10 +166,10 @@ listen({
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
   return new MonacoLanguageClient({
-    name: 'LG Language Client',
+    name: 'LU Language Client',
     clientOptions: {
       // use a language id as a document selector
-      documentSelector: ['botbuilderlg'],
+      documentSelector: ['botframeworklu'],
       // disable the default error handler
       errorHandler: {
         error: () => ErrorAction.Continue,

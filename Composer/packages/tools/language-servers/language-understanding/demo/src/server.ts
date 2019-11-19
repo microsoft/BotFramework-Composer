@@ -1,4 +1,4 @@
-import { attachLSPServer } from 'lu-lsp-server';
+import { attachLSPServer } from '../../src/startServer';
 import * as express from 'express';
 
 // create the express application

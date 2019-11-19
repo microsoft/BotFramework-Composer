@@ -3,7 +3,6 @@ import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
 import { IConnection, TextDocuments, createConnection } from 'vscode-languageserver';
-import { LUParser } from '@microsoft/bf-lu';
 import {
   TextDocument,
   Diagnostic,
@@ -15,6 +14,9 @@ import {
   DiagnosticSeverity,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+
+const parseFile = require('@microsoft/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
+const validateLUISBlob = require('@microsoft/bf-lu/lib/parser/luis/luisValidator');
 
 export function start(reader: MessageReader, writer: MessageWriter): LuServer {
   const connection = createConnection(reader, writer);
@@ -87,13 +89,53 @@ export class LuServer {
     }
   }
 
-  private removeParamFormat(params: string): string {
-    const paramArr: string[] = params.split(',');
-    const resultArr: string[] = [];
-    paramArr.forEach(element => {
-      resultArr.push(element.trim().split(':')[0]);
-    });
-    return resultArr.join(' ,');
+  private async validateLuBody(content: string): Promise<{ parsedContent: any; errors: any }> {
+    let errors: Diagnostic[] = [];
+    let parsedContent: any;
+    try {
+      parsedContent = await parseFile(content, false, 'en-us');
+      if (parsedContent !== undefined) {
+        try {
+          validateLUISBlob(parsedContent.LUISJsonStructure);
+        } catch (e) {
+          e.text.split('\n').forEach(msg => {
+            const matched = msg.match(/line\s(\d+:\d+)/g);
+            const positions: Position[] = [];
+            matched.forEach(element => {
+              let { row, col } = element.match(/(?<row>\d+):(?<col>\d+)/).groups;
+              positions.push(Position.create(parseInt(row) - 1, parseInt(col)));
+            });
+
+            //some errors only have a position, by default, we set the end postion as {start.row, start.col + 1}
+            if (positions.length == 1) {
+              positions.push(Position.create(positions[0].line, positions[0].character + 1));
+            }
+
+            const range = Range.create(positions[0], positions[1]);
+            const diagnostic: Diagnostic = Diagnostic.create(range, msg, DiagnosticSeverity.Error);
+            errors.push(diagnostic);
+          });
+        }
+      }
+    } catch (e) {
+      e.text.split('\n').forEach(msg => {
+        const matched = msg.match(/line\s(\d+:\d+)/g);
+        const positions: Position[] = [];
+        matched.forEach(element => {
+          let { row, col } = element.match(/(?<row>\d+):(?<col>\d+)/).groups;
+          positions.push(Position.create(parseInt(row) - 1, parseInt(col)));
+        });
+
+        if (positions.length == 1) {
+          positions.push(Position.create(positions[0].line, positions[0].character + 1));
+        }
+        const range = Range.create(positions[0], positions[1]);
+        const diagnostic: Diagnostic = Diagnostic.create(range, msg, DiagnosticSeverity.Error);
+        errors.push(diagnostic);
+      });
+    }
+
+    return Promise.resolve({ parsedContent, errors });
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -126,22 +168,11 @@ export class LuServer {
       return;
     }
 
-    const luParser = new LUParser();
-    let diagnostics: Diagnostic[] = [];
     const text = document.getText();
-    let fileContent: string;
-    let errors: any = [];
-    ({ fileContent, errors } = luParser.getFileContent(text));
-    errors.forEach(error => {
-      const diagnostic = {
-        range: error.Range,
-        message: error.Message,
-        serverity: DiagnosticSeverity.Error,
-      };
-      diagnostics.push(diagnostic);
+    this.validateLuBody(text).then(result => {
+      const diagnostics: Diagnostic[] = result.errors;
+      this.sendDiagnostics(document, diagnostics);
     });
-
-    this.sendDiagnostics(document, diagnostics);
   }
 
   protected cleanDiagnostics(document: TextDocument): void {
