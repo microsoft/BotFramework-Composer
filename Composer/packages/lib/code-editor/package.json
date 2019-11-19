@@ -52,9 +52,9 @@
     "ts-jest": "^24.1.0",
     "ts-loader": "^5.3.3",
     "url-loader": "^1.1.2",
-    "webpack": "^4.30.0",
+    "webpack": "4.41.2",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.8.2"
+    "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
     "@bfc/lg-languageserver": "*",
