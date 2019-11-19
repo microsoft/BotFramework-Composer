@@ -38,10 +38,11 @@ stages:
             workingDirectory: Composer
           - script: tar czf $(Build.ArtifactStagingDirectory)/$(archiveName) ./Composer
             displayName: Create TAR Archive
-          - task: PublishBuildArtifacts@1
+          - task: PublishPipelineArtifact@1
             displayName: Publish TAR Archive
             inputs:
-              pathToPublish: $(Build.ArtifactStagingDirectory)
+              targetPath: $(Build.ArtifactStagingDirectory)/$(archiveName)
+              artifactName: composer
 
   - stage: e2e
     jobs:
@@ -53,12 +54,13 @@ stages:
           vmImage: ubuntu-latest
 
         steps:
-          - task: DownloadBuildArtifacts@0
+          - task: DownloadPipelineArtifact@2
             displayName: Download Build Archive
             inputs:
               downloadPath: $(System.ArtifactsDirectory)
-              artifactName: $(archiveName)
+              artifactName: composer
               buildType: current
+          - script: ls -lah .
           - script: tar -xf $(archiveName)
             displayName: Extract Build Archive
           - script: ls -la Composer/packages/server/build/public/static/js
