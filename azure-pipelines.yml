@@ -41,7 +41,7 @@ stages:
           - task: PublishBuildArtifacts@1
             displayName: Publish TAR Archive
             inputs:
-              pathToPublish: $(Build.ArtifactStagingDirectory)/$(archiveName)
+              pathToPublish: $(Build.ArtifactStagingDirectory)
               ArtifactName: $(archiveName)
 
   - stage: e2e
