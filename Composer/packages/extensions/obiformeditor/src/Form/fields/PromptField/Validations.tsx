@@ -136,6 +136,8 @@ export const Validations: React.FC<ValidationsProps> = props => {
     props.onChange(validationsCopy);
   };
 
+  const iconProps = { iconName: 'ReturnKey', style: { color: '#0078D4', opacity: 0.6 } };
+
   return (
     <div>
       <div css={field}>
@@ -149,6 +151,7 @@ export const Validations: React.FC<ValidationsProps> = props => {
           schema={schema}
           formContext={formContext}
           rawErrors={[]}
+          iconProps={iconProps}
         />
       </div>
       <div>

@@ -53,7 +53,7 @@ export const PromptField: React.FC<BFDFieldProps> = props => {
           <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
             <BotAsks {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('User Answers')} itemKey={PromptTab.USER_INPUT}>
+          <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
             <UserInput {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
           <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>

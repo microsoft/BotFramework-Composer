@@ -36,7 +36,7 @@ interface ExpresionWidgetProps extends ITextFieldProps {
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, editable, ...rest } = props;
+  const { rawErrors, formContext, schema, id, label, editable, iconProps, ...rest } = props;
   const { shellApi } = formContext;
   const { description } = schema;
 
@@ -58,7 +58,6 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     return '';
   };
 
-  const iconProps = editable ? {} : { iconName: 'ReturnKey', style: { color: '#0078D4', opacity: 0.6 } };
   const Field = editable ? EditableField : TextField;
 
   return (
