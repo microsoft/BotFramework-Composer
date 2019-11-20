@@ -47,19 +47,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./Composer/coverage/lcov.info
-      # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
-      # - name: Publish coverage results
-      #   run: |
-      #     if [[ -z $COVERALLS_REPO_TOKEN ]]; then
-      #       echo "Coveralls token not found. Skipping."
-      #     else
-      #       cat coverage/lcov.info | ./node_modules/.bin/coveralls
-      #     fi
-      #   working-directory: Composer
-      #   env:
-      #     COVERALLS_SERVICE_NAME: "Github Actions"
-      #     COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      #     COVERALLS_GIT_BRANCH: ${{ github.ref }}
 
   botproject:
     name: BotProject
