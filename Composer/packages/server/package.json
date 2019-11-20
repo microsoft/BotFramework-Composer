@@ -54,6 +54,7 @@
     "@azure/ms-rest-js": "^1.8.7",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
+    "@bfcomposer/lubuild": "1.0.7-preview",
     "archiver": "^3.0.0",
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
@@ -72,7 +73,6 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.15",
-    "lubuild": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz",
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1"
