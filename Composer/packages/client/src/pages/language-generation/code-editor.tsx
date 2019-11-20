@@ -7,14 +7,14 @@ import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { LGTemplate, Diagnostic } from 'botbuilder-lg';
+import { Diagnostic } from 'botbuilder-lg';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
 interface CodeEditorProps {
   file: { [key: string]: any };
-  template: LGTemplate | null;
+  template: lgUtil.Template | null;
 }
 
 export default function CodeEditor(props: CodeEditorProps) {

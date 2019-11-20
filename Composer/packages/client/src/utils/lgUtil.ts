@@ -14,7 +14,7 @@ const lgStaticChecker = new StaticChecker();
 
 const lgImportResolver = ImportResolver.fileResolver;
 
-interface Template {
+export interface Template {
   Name: string;
   Parameters?: string[];
   Body: string;

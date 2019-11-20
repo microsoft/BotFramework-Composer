@@ -36,7 +36,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [inlineTemplate, setInlineTemplate] = useState<null | LGTemplate>(null);
+  const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
 
   const subPath = props['*'];
   const isRoot = subPath === '';
