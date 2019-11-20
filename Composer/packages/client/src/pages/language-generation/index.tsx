@@ -9,6 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
+import get from 'lodash/get';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
@@ -125,7 +126,10 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
   function onTableViewClickEdit(template: LGTemplate) {
-    setInlineTemplate(template);
+    setInlineTemplate({
+      Name: get(template, 'Name', ''),
+      Body: get(template, 'Body', ''),
+    });
     navigateTo(`/language-generation`);
     setEditMode(true);
   }
