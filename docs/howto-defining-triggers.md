@@ -53,10 +53,10 @@ Under this trigger, click the **+** sign and mouse over the action menu. Click *
 ![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
 
 ## Activity trigger 
-This is a type of trigger used to handle activity events such as your bot receiving a **ConversationUpdate** Activity. This indicates a new conversation begins and you use a **Conversation started (ConversationUpdate)** trigger to handle it. Follow the steps below to define a **Conversation started (ConversationUpdate)** trigger and send a welcome message: 
+This is a type of trigger used to handle activity events such as your bot receiving a **ConversationUpdate** Activity. This indicates a new conversation begins and you use a **Greeting (ConversationUpdate)** trigger to handle it. Follow the steps below to define a **Greeting (ConversationUpdate)** trigger and send a welcome message: 
 
 ### 1. Create a **ConversationUpdate** trigger
-On the navigation pane on the left side, click **New Trigger** in your selected dialog and choose **Activity trigger** and then **Conversation started (ConversationUpdate)** from the drop-down menu. Click **submit**. 
+On the navigation pane on the left side, click **New Trigger** in your selected dialog and choose **Activity trigger** and then **Greeting (ConversationUpdate)** from the drop-down menu. Click **submit**. 
 
 ![conversationupdate](./media/events_triggers/conversationupdate.png)
 

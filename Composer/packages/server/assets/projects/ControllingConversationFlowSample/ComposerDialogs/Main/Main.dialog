@@ -170,7 +170,7 @@
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Conversation started (ConversationUpdate)",
+        "name": "Greeting (ConversationUpdate)",
         "id": "791275"
       },
       "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",

@@ -6,10 +6,9 @@ import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, LuFile, DialogInfo, ShellApi } from '@bfc/shared';
 
 import Example from '../../src';
-import { ShellApi, LuFile, DialogInfo } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -163,6 +162,8 @@ const mockShellApi = [
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',
+  'onFocusSteps',
+  'onFocusEvent',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {
