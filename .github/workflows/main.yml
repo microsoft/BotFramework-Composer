@@ -54,6 +54,7 @@ jobs:
         env:
           COVERALLS_SERVICE_NAME: "Github Actions"
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_GIT_BRANCH: ${{ github.ref }}
 
   botproject:
     name: BotProject
