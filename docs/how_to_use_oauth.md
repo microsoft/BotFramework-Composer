@@ -2,7 +2,7 @@
 
 If your bot needs to access external resources using permissions granted by the end user, it will need to use the `OAuth Login` action within the Integrations menu, along with a an Oauth configuration that lives in the Azure Bot Service channel registration.  (It is not necessary to deploy your bot to Azure for this to work.)
 
-![screenshot: oauth login step](Assets/oauth_login.png)
+![oauth-menu](./media/integration/oauth-menu.png)
 
 ## Create the Azure Bot Service registration
 
