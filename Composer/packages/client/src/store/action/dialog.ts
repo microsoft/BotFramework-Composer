@@ -67,7 +67,6 @@ export const createDialogBase: ActionCreator = async (store, { id, content }) =>
         response,
       },
     });
-    navTo(store, id);
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,
