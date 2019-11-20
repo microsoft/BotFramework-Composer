@@ -9,10 +9,20 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { IChoice } from '@bfc/shared';
 
-import { field, choiceItemContainer, choiceItemValue, choiceItemSynonyms } from '../styles';
+import {
+  field,
+  choiceField,
+  choiceItem,
+  choiceItemContainer,
+  choiceItemLabel,
+  choiceItemValue,
+  choiceItemValueLabel,
+  choiceItemSynonyms,
+  choiceItemSynonymsLabel,
+} from '../styles';
 import { swap, remove } from '../../../utils';
 // import { FormContext } from '../../../types';
 import { WidgetLabel } from '../../../widgets/WidgetLabel';
@@ -79,13 +89,20 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
   };
 
   return (
-    <div css={choiceItemContainer()} key={key}>
+    <div css={[choiceItemContainer(), choiceItem]} key={key}>
       <div css={choiceItemValue}>
         <EditableField
           onChange={handleEdit('value')}
           value={choice.value}
           styleOverrides={{
-            root: { margin: '5px 0 7px 0' },
+            root: { margin: '7px 0 7px 0' },
+            field: {
+              selectors: {
+                '::placeholder': {
+                  fontStyle: 'italic',
+                },
+              },
+            },
           }}
           onBlur={handleBlur}
         />
@@ -96,8 +113,16 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           value={choice.synonyms && choice.synonyms.join(', ')}
           placeholder={formatMessage('Add multiple comma-separated synonyms')}
           styleOverrides={{
-            root: { margin: '5px 0 7px 0' },
+            root: { margin: '7px 0 7px 0' },
+            field: {
+              selectors: {
+                '::placeholder': {
+                  fontStyle: 'italic',
+                },
+              },
+            },
           }}
+          transparentBorder
           onBlur={handleBlur}
         />
       </div>
@@ -158,39 +183,18 @@ export const Choices: React.FC<ChoicesProps> = props => {
 
   return (
     <React.Fragment>
-      <div css={field}>
-        <div>
-          <WidgetLabel
-            label={label}
-            description={formatMessage(
-              "A list of options to present to the user. Synonyms can be used to allow for variation in a user's response."
-            )}
-            id={id}
-          />
-          <div css={choiceItemContainer('flex-start')} onKeyDown={handleKeyDown}>
-            <div css={choiceItemValue}>
-              <TextField
-                id={id}
-                value={newChoice ? newChoice.value : ''}
-                onChange={handleNewChoiceEdit('value')}
-                placeholder={formatMessage('Add new option here')}
-                autoComplete="off"
-                errorMessage={errorMsg}
-              />
-            </div>
-            <div css={choiceItemSynonyms}>
-              <TextField
-                id={`${id}-synonyms`}
-                value={newChoice ? (newChoice.synonyms || []).join(', ') : ''}
-                onChange={handleNewChoiceEdit('synonyms')}
-                placeholder={formatMessage('Add multiple synonyms with comma')}
-                autoComplete="off"
-              />
-            </div>
-          </div>
-        </div>
+      <WidgetLabel
+        label={label}
+        description={formatMessage(
+          "A list of options to present to the user. Synonyms can be used to allow for variation in a user's response."
+        )}
+        id={id}
+      />
+      <div css={[choiceItemContainer('flex-start'), choiceItemLabel]}>
+        <div css={[choiceItemValue, choiceItemValueLabel]}>{formatMessage('Choice Name')}</div>
+        <div css={[choiceItemSynonyms, choiceItemSynonymsLabel]}>{formatMessage('Synonyms (Optional)')}</div>
       </div>
-      <div css={field}>
+      <div css={choiceField}>
         {formData &&
           formData.map((c, i) => (
             <ChoiceItem
@@ -204,6 +208,68 @@ export const Choices: React.FC<ChoicesProps> = props => {
               hasMoveUp={i !== 0}
             />
           ))}
+      </div>
+      <div css={field}>
+        <div css={choiceItemContainer('flex-start')} onKeyDown={handleKeyDown}>
+          <div css={choiceItemValue}>
+            <TextField
+              id={id}
+              value={newChoice ? newChoice.value : ''}
+              onChange={handleNewChoiceEdit('value')}
+              placeholder={formatMessage('Add new option here')}
+              autoComplete="off"
+              errorMessage={errorMsg}
+              styles={{
+                field: {
+                  selectors: {
+                    '::placeholder': {
+                      fontStyle: 'italic',
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+          <div css={choiceItemSynonyms}>
+            <TextField
+              id={`${id}-synonyms`}
+              value={newChoice ? (newChoice.synonyms || []).join(', ') : ''}
+              onChange={handleNewChoiceEdit('synonyms')}
+              placeholder={formatMessage('Add multiple comma-separated synonyms ')}
+              autoComplete="off"
+              iconProps={{
+                iconName: 'ReturnKey',
+                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+              }}
+              styles={{
+                field: {
+                  selectors: {
+                    '::placeholder': {
+                      fontStyle: 'italic',
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+          <div>
+            <IconButton
+              disabled={true}
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              ariaLabel={formatMessage('Item Actions')}
+              styles={{
+                menuIcon: {
+                  backgroundColor: NeutralColors.white,
+                  color: NeutralColors.gray130,
+                  fontSize: FontSizes.size16,
+                },
+                rootDisabled: {
+                  backgroundColor: NeutralColors.white,
+                },
+              }}
+            />
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { JSONSchema6 } from 'json-schema';
 
 import { FormContext } from '../types';
@@ -33,6 +33,8 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
   /** Set to true to display as inline text that is editable on hover */
   editable?: boolean;
+  styles?: Partial<ITextFieldStyles>;
+  styleOverrides?: Partial<ITextFieldStyles>;
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
@@ -62,7 +64,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
+      {label && <WidgetLabel label={label} description={description} id={id} />}
       <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
     </>
   );

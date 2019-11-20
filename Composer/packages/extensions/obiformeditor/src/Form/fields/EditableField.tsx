@@ -11,10 +11,11 @@ interface EditableFieldProps extends ITextFieldProps {
   styleOverrides?: Partial<ITextFieldStyles>;
   placeholder?: string;
   fontSize?: string;
+  transparentBorder?: boolean;
 }
 
 export const EditableField: React.FC<EditableFieldProps> = props => {
-  const { styleOverrides = {}, placeholder, fontSize, onChange, onBlur, value, ...rest } = props;
+  const { styleOverrides = {}, placeholder, fontSize, onChange, onBlur, value, transparentBorder, ...rest } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
   const [localValue, setLocalValue] = useState<string | undefined>(value);
@@ -41,7 +42,7 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
   let borderColor: string | undefined = undefined;
 
   if (!editing) {
-    borderColor = localValue ? 'transparent' : NeutralColors.gray30;
+    borderColor = localValue || transparentBorder ? 'transparent' : NeutralColors.gray30;
   }
 
   return (
