@@ -10883,7 +10883,7 @@ lru-memoizer@^1.12.0:
 
 "lubuild@https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz":
   version "1.0.3-preview"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz#7165f67d737dff6d07a79caaca0b477a78d58c47"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/lubuild/-/1.0.3-preview.tgz#0d3fe11b72231e121bf2596ac38978e81be990d8"
   dependencies:
     "@azure/ms-rest-js" "1.7.0"
     async-file "^2.0.2"
