@@ -19,9 +19,8 @@ Cypress.Commands.add('createBot', botName => {
   });
   cy.findByTestId('Create from template').click({ force: true });
   cy.findByTestId(`${botName}`).click();
-  cy.get('button[data-testid="NextStepButton"]').click();
-  cy.findByTestId('NewDialogName').type(`__Test${botName}`);
-  cy.findByTestId('NewDialogName').type('{enter}');
+  cy.findByTestId('NextStepButton').click();
+  cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName}{enter}`);
   cy.wait(1000);
 });
 
