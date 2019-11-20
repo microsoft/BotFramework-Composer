@@ -265,11 +265,10 @@ export class LGServer {
 
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
-    document.uri,
-      setTimeout(() => {
-        this.pendingValidationRequests.delete(document.uri);
-        this.doValidate(document);
-      });
+    setTimeout(() => {
+      this.pendingValidationRequests.delete(document.uri);
+      this.doValidate(document);
+    });
   }
 
   protected cleanPendingValidation(document: TextDocument): void {

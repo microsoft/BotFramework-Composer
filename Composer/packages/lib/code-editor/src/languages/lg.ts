@@ -45,8 +45,6 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/[^\()]/, 'template-name'],
       ],
       template_body: [
-        //pop
-        [/[/s/S]*$/, '@pop'],
         //comments
         [/^\s*>/, { token: 'comments', next: '@comments' }],
         //template name
@@ -61,6 +59,8 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/\[/, { token: 'template-ref', next: 'template_ref' }],
         //expression
         [/@\{/, { token: 'expression', next: '@expression' }],
+        //pop
+        [/.*/, '@pop'],
       ],
 
       template_ref: [
@@ -94,7 +94,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
         [/^\s*>[\s\S]*$/, 'comments'],
-        [/(=|\|)([a_zA-Z0-9@ ]|\@)*\{/, { token: 'expression', next: '@expression' }],
+        [/(=|\|)([a_zA-Z0-9\s]|\@)*\{/, { token: 'expression', next: '@expression' }],
         [/^\s*@\{/, { token: 'expression', next: '@expression' }],
         [/=\s*[\s\S]+\s*$/, { token: 'structure-property' }],
         [/\s*[a-zA-Z0-9_-]+\s*$/, { token: 'structure-name' }],

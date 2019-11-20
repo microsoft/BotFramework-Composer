@@ -3,7 +3,6 @@
 
 import React, { useState, Fragment } from 'react';
 
-import { LGLSPEditor } from '../../src/LSPEditors/LGLSPEditor';
 import { LgEditor } from '../../src';
 import { JsonEditor } from '../../src';
 // import { LGLSPEditor } from '@bfc/code-editor';
