@@ -24,7 +24,7 @@ COPY . .
 RUN yarn build:prod
 
 # use a multi-stage build to reduce the final image size
-FROM node:10-alpine
+FROM node:12-alpine
 
 WORKDIR /app/Composer/server
 COPY --from=build /src/Composer/.npmrc .
