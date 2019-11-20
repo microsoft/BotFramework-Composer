@@ -4,20 +4,16 @@
 context('Creating a new bot', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.wait(1000);
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-ToolBar-New').within(() => {
       cy.findByText('New').click();
     });
-    cy.wait(1000);
   });
 
   it('can create a new bot', () => {
     cy.findByTestId('Create from scratch').click();
     cy.findByTestId('NextStepButton').click();
-    cy.findByTestId('NewDialogName').type('__TestNewProject');
-    cy.findByTestId('NewDialogName').type('{enter}');
-    cy.wait(100);
+    cy.findByTestId('NewDialogName').type('{selectall}__TestNewProject{enter}');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject.Main').should('exist');
     });
@@ -27,9 +23,7 @@ context('Creating a new bot', () => {
     cy.findByTestId('Create from template').click();
     cy.findByTestId('TodoSample').click();
     cy.findByTestId('NextStepButton').click();
-    cy.findByTestId('NewDialogName').type('__TestNewProject');
-    cy.findByTestId('NewDialogName').type('{enter}');
-    cy.wait(100);
+    cy.findByTestId('NewDialogName').type('{selectall}__TestNewProject{enter}');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject.Main').should('exist');
       cy.findByText('AddToDo').should('exist');
