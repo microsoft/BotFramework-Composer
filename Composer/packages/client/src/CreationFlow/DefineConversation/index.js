@@ -1,19 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import get from 'lodash/get';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
-import { FileTypes } from '../../constants';
 
-import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -22,7 +19,7 @@ const validateForm = data => {
   const errors = {};
   const { name } = data;
 
-  if (name && !nameRegex.test(name)) {
+  if (!name || !nameRegex.test(name)) {
     errors.name = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
@@ -32,34 +29,10 @@ const validateForm = data => {
 };
 
 export function DefineConversation(props) {
-  const { state } = useContext(StoreContext);
   const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
-  const { templateId, focusedStorageFolder } = state;
+
   const [formData, setFormData] = useState({ errors: {} });
-  const [location, setLocation] = useState('');
   const [disable, setDisable] = useState(false);
-
-  useEffect(() => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
-
-    const botsInCurrentFolder = allFilesInFolder.filter(file => {
-      if (file.type === FileTypes.BOT) {
-        return file;
-      }
-    });
-    let i = 0;
-    let defaultName = `${templateId}-${i}`;
-
-    while (
-      botsInCurrentFolder.findIndex(bot => {
-        return bot.name === defaultName;
-      }) > -1
-    ) {
-      i = i + 1;
-      defaultName = `${templateId}-${i}`;
-    }
-    updateForm('defaultName')(null, defaultName);
-  }, [templateId, focusedStorageFolder]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -81,12 +54,9 @@ export function DefineConversation(props) {
       return;
     }
 
-    onSubmit(
-      {
-        ...formData,
-      },
-      location
-    );
+    onSubmit({
+      ...formData,
+    });
   };
 
   //disable the next button if the text has errors.
@@ -107,6 +77,11 @@ export function DefineConversation(props) {
     }
   };
 
+  // // update the path in the form and toggle the location picker.
+  const updateLocation = path => {
+    updateForm('location')(null, path);
+  };
+
   return (
     <Fragment>
       <form onSubmit={handleSubmit}>
@@ -115,7 +90,7 @@ export function DefineConversation(props) {
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}
-              value={formData.name || formData.defaultName}
+              value={formData.name}
               styles={name}
               onChange={updateForm('name')}
               errorMessage={formData.errors.name}
@@ -134,7 +109,7 @@ export function DefineConversation(props) {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && <LocationSelectContent onChange={setLocation} allowOpeningBot={false} />}
+        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} allowOpeningBot={false} />}
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
