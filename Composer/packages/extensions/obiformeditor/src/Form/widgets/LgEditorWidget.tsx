@@ -56,11 +56,6 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     })) || {
     Name: lgId,
     Body: getInitialTemplate(name, value),
-    Parameters: [],
-    Range: {
-      startLineNumber: 1,
-      endLineNumber: 1,
-    },
   };
 
   const [localValue, setLocalValue] = useState(template.Body);
@@ -70,9 +65,18 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     template,
   };
 
-  const onChange = value => {
-    setLocalValue(value);
-    updateLgTemplate(value);
+  const onChange = (body: string) => {
+    setLocalValue(body);
+    if (formContext.dialogId) {
+      if (body) {
+        updateLgTemplate(body);
+        props.onChange(`[${lgId}]`);
+      } else {
+        updateLgTemplate.flush();
+        formContext.shellApi.removeLgTemplate(lgFileId, lgId);
+        props.onChange();
+      }
+    }
   };
 
   return (
