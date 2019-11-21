@@ -4,9 +4,11 @@
 import fs from 'fs';
 import path from 'path';
 
+import set from 'lodash/set';
+import get from 'lodash/get';
+
 import localInitData from './data.template';
 import abhInitData from './abh-template.json';
-
 const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
 const dataStorePath =
   isHostedInAzure && process.env.HOME
@@ -15,9 +17,19 @@ const dataStorePath =
 
 const initData = isHostedInAzure ? abhInitData : localInitData;
 
-// create data.json if not exits
+// create data.json if not exist
 if (!fs.existsSync(dataStorePath)) {
   fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+  if (isHostedInAzure) {
+    // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
+    // always find the file, add one more io to kick the  virtual file system
+    fs.appendFileSync(dataStorePath, ' ');
+  }
+} else {
+  //merge data.json if exists
+  const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
+  set(userData, 'storageConnections[0].defaultPath', get(initData, 'storageConnections[0].defaultPath', ''));
+  fs.writeFileSync(dataStorePath, JSON.stringify(userData, null, 2) + '\n');
   if (isHostedInAzure) {
     // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
     // always find the file, add one more io to kick the  virtual file system
