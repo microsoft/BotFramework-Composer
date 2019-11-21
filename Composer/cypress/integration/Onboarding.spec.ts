@@ -9,17 +9,14 @@ context('Onboarding', () => {
     cy.findByTestId('homePage-ToolBar-New').within(() => {
       cy.findByText('New').click();
     });
-    // cy.wait(5000);
 
     cy.findByTestId('Create from template').click({ force: true });
     cy.findByTestId('TodoSample').click();
     cy.findByTestId('NextStepButton').click();
     cy.findByTestId('NewDialogName').type('{selectall}__TestOnboarding{enter}');
-    // cy.wait(2000);
 
     //enable onboarding setting
     cy.visitPage('Settings');
-    // cy.wait(2000);
     cy.findByText('Onboarding').click();
     cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design Flow');
