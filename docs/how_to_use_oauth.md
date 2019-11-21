@@ -24,13 +24,13 @@ This will open a new settings pane, where you can configure the OAuth connection
 
 Note the `Name` of your connection - you will need to enter this value in Composer exactly as it is displayed in this setting.
 
-To fill in the values of `Client id`, `Client secret`, and optionally `Scopes`, follow these steps: 
+You fill in the values of `Client id`, `Client secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow these steps: 
 
 - Go to [Github developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the Github OAuth App registration website. Fill in the values as instructed in the following: 
 
-`Application name`: a name you would like to give to your OAuth application, e.g. `Composer`
- `Homepage URL`: the full URL to your application homepage, e.g. `http://microsoft.com`
- `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
+  `Application name`: a name you would like to give to your OAuth application, e.g. `Composer`
+   `Homepage URL`: the full URL to your application homepage, e.g. `http://microsoft.com`
+   `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
  
 - Click `Registration application`. Then you will see the application as the following: 
 
