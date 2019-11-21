@@ -34,7 +34,7 @@ You should fill in the values of `Client ID`, `Client Secret`, and optionally `S
    
    `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/). 
  
-- Click `Registration application`. Then you will see the `Client ID`, `Client Secret` values generated in the application webpage as the following: 
+- Click `Register application`. Then you will see the `Client ID`, `Client Secret` values generated in the application webpage as the following: 
 
 ![oauth-app-credentials](./media/integration/oauth-app-credentials.png)
 
