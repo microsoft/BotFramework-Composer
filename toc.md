@@ -32,6 +32,8 @@
 - [Add QnA to your bot](./docs/how-to-add-qna-to-bot.md)
 - [Send cards](./docs/howto-sending-cards.md) 
 - [Define triggers and events](./docs/howto-defining-triggers.md)
+- [Use OAuth](./docs/how_to_use_oauth.md)
+
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Publish
