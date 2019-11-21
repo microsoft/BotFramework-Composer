@@ -14,6 +14,12 @@ declare namespace Cypress {
     createBot(botId: string, botName?: string): void;
 
     /**
+     * Visits a page from the left nav bar using the page's testid
+     * @example visitPage('Bot Responses');
+     */
+    visitPage(page: string): void;
+
+    /**
      * Invokes callback inside editor context
      * @example cy.withinEditor('VisualEditor', () => {
      *    cy.findByText('SomeText');
