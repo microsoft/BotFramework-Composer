@@ -24,7 +24,7 @@ This will open a new settings pane, where you can configure the OAuth connection
 
 Note the `Name` of your connection - you will need to enter this value in Composer exactly as it is displayed in this setting.
 
-You should fill in the values of `Client id`, `Client secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow the steps to get these values: 
+You should fill in the values of `Client ID`, `Client Secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow the steps to get these values: 
 
 - Go to [Github developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the Github OAuth App registration website. Fill in the values as instructed in the following: 
 
@@ -34,11 +34,11 @@ You should fill in the values of `Client id`, `Client secret`, and optionally `S
    
    `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/). 
  
-- Click `Registration application`. Then you will see the application as the following: 
+- Click `Registration application`. Then you will see the `Client ID`, `Client Secret` values generated in the application webpage as the following: 
 
 ![oauth-app-credentials](./media/integration/oauth-app-credentials.png)
 
-- Copy `Client ID` and `Client Secret` and paste the values to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and Github. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant. Save this setting.  
+- Copy the `Client ID` and `Client Secret` values and paste them to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and Github. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant. Save this setting.  
 
 Now, with the  `Name` , `Client ID`, `Client Secret`, and `Scopes` of your new OAuth connection setting in Azure, you are ready to configure your bot.
 
