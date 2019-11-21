@@ -1,5 +1,5 @@
-const parseFile = require('@microsoft/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
-const validateLUISBlob = require('@microsoft/bf-lu/lib/parser/luis/luisValidator');
+const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
+const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
 
 import {
   TextDocument,
@@ -27,7 +27,6 @@ async function LuSyntaxCheck(content: string): Promise<{ parsedContent: any; err
       });
 
       const range = Range.create(positions[0], positions[1]);
-      console.log(range);
       const diagnostic: Diagnostic = Diagnostic.create(range, msg, DiagnosticSeverity.Error);
       errors.push(diagnostic);
     });
@@ -63,10 +62,31 @@ async function LuSemanticCheck(content: string): Promise<any> {
   return Promise.resolve(errors);
 }
 
-let luFile = `# Greeting
-- hi {commPreference}
-$commPreference:simple
-$commPreference:phraseList
-- m&m,mars,mints,spearmings,payday,jelly,kit kat,kitkat,twix`;
+async function extractLUISContent(text: string): Promise<any> {
+  let parsedContent: any;
+  try {
+    parsedContent = await parseFile(text, false, 'en-us');
+  } catch (e) {
+    // nothong to do in catch block
+  }
 
-LuSemanticCheck(luFile);
+  if (parsedContent !== undefined) {
+    return Promise.resolve(parsedContent.LUISJsonStructure);
+  } else {
+    return undefined;
+  }
+}
+
+let luFile = `@ simple ma
+@ simple na
+
+# hi
+- ni { ma = "ok"}`;
+
+extractLUISContent(luFile)
+  .then(luisJson => {
+    console.log(luisJson);
+  })
+  .catch(e => {
+    console.log('error');
+  });

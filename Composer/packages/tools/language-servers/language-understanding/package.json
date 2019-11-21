@@ -24,7 +24,7 @@
         "monaco-languageclient": "^0.10.0",
         "ws": "^5.0.0",
         "@microsoft/bf-cli-command": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz",
-        "@microsoft/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-1.0.1.tgz"
+        "@bfcomposer/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.0.5.tgz"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^3.0.0",
