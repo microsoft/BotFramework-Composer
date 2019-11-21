@@ -12,15 +12,15 @@ Cypress.Commands.overwrite('visit', (originalFn, url, { enableOnboarding } = {})
   originalFn(url);
 });
 
-Cypress.Commands.add('createBot', botName => {
+Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
   cy.findByTestId('LeftNav-CommandBarButtonHome').click();
   cy.findByTestId('homePage-ToolBar-New').within(() => {
     cy.findByText('New').click();
   });
   cy.findByTestId('Create from template').click({ force: true });
-  cy.findByTestId(`${botName}`).click();
+  cy.findByTestId(`${bobotId}`).click();
   cy.findByTestId('NextStepButton').click();
-  cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName}{enter}`);
+  cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName || bobotId}{enter}`);
   cy.wait(1000);
 });
 
@@ -52,16 +52,6 @@ Cypress.Commands.add('openDialog', dialogName => {
 Cypress.Commands.add('startFromTemplate', (template, name) => {
   cy.findByTestId('LeftNav-CommandBarButtonHome').click();
   cy.findByTestId(`TemplateCopy-${template}`).click();
-  cy.findByTestId('NewDialogName').type(`__Test${name}`);
-  cy.findByTestId('NewDialogName').type('{enter}');
-  cy.wait(1000);
-});
-
-Cypress.Commands.add('copyBot', (bot, name) => {
-  cy.createBot(bot);
-  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
-  cy.findByText('Save as').click();
-
   cy.findByTestId('NewDialogName').type(`__Test${name}`);
   cy.findByTestId('NewDialogName').type('{enter}');
   cy.wait(1000);

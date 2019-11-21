@@ -6,10 +6,13 @@
 declare namespace Cypress {
   interface Chainable {
     /**
-     * Creates a bot based on template id
-     * @example cy.createBot('TodoSample')
+     * Creates a bot based on template id.
+     * If botName not provided, names the bot __Test${botId},
+     * otherwise, __Test&{botName}.
+     * @example cy.createBot('TodoSample', 'NewBotName')
      */
-    createBot(botName: string): void;
+    createBot(botId: string, botName?: string): void;
+
     /**
      * Invokes callback inside editor context
      * @example cy.withinEditor('VisualEditor', () => {
