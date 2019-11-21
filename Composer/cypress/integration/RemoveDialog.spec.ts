@@ -1,9 +1,10 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('RemoveDialog', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('ToDoBotWithLuisSample', 'ToDoBotWithLuisSampleSpec');
+    cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can remove dialog', () => {
