@@ -29,8 +29,10 @@ You fill in the values of `Client id`, `Client secret`, and optionally `Scopes` 
 - Go to [Github developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the Github OAuth App registration website. Fill in the values as instructed in the following: 
 
   `Application name`: a name you would like to give to your OAuth application, e.g. `Composer`
+   
    `Homepage URL`: the full URL to your application homepage, e.g. `http://microsoft.com`
-   `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)
+   
+   `Authorization callback URL`: the callback URL of your application, e.g. `https://token.botframework.com/.auth/web/redirect`. read more [here](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/). 
  
 - Click `Registration application`. Then you will see the application as the following: 
 
