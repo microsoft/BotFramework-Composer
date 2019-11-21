@@ -3,15 +3,6 @@
 
 import '@testing-library/cypress/add-commands';
 
-Cypress.Commands.overwrite('visit', (originalFn, url, { enableOnboarding } = {}) => {
-  if (!enableOnboarding) {
-    cy.window().then(window =>
-      window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: true }))
-    );
-  }
-  originalFn(url);
-});
-
 Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
   cy.findByTestId('LeftNav-CommandBarButtonHome').click();
   cy.findByTestId('homePage-ToolBar-New').within(() => {
