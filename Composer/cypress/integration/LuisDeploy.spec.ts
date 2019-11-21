@@ -1,4 +1,5 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('Luis Deploy', () => {
   beforeEach(() => {
@@ -11,7 +12,7 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
 
     cy.route({
       method: 'POST',
@@ -20,21 +21,19 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/success',
     });
     cy.findByText('Start Bot').click();
-    cy.wait(5000);
+
     // clear its settings before
-    cy.get('[data-testid="ProjectNameInput"]')
+    cy.findByTestId('ProjectNameInput')
       .clear()
       .type('MyProject');
-    cy.get('[data-testid="EnvironmentInput"]')
+    cy.findByTestId('EnvironmentInput')
       .clear()
       .type('composer');
-    cy.get('[data-testid="AuthoringKeyInput"]')
+    cy.findByTestId('AuthoringKeyInput')
       .clear()
       .type('0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
-    cy.wait(1000);
     cy.findByText('OK').click();
-    cy.wait(1000);
     cy.findByText('Restart Bot').should('exist');
     cy.findByText('Test in Emulator').should('exist');
 
@@ -45,10 +44,8 @@ context('Luis Deploy', () => {
       response: 'fixture:luPublish/error',
     });
     cy.findByText('Restart Bot').click();
-    cy.wait(1000);
     cy.findByText('Try again').click();
-    cy.wait(1000);
-    cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
+    cy.findByTestId('AuthoringKeyInput').type('no-id');
     cy.findByText('OK').click();
   });
 });
