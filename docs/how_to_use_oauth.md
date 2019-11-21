@@ -24,7 +24,7 @@ This will open a new settings pane, where you can configure the OAuth connection
 
 Note the `Name` of your connection - you will need to enter this value in Composer exactly as it is displayed in this setting.
 
-You fill in the values of `Client id`, `Client secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow the steps to get these values: 
+You should fill in the values of `Client id`, `Client secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow the steps to get these values: 
 
 - Go to [Github developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the Github OAuth App registration website. Fill in the values as instructed in the following: 
 
