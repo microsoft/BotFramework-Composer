@@ -1,4 +1,5 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('Luis Deploy', () => {
   beforeEach(() => {
@@ -11,7 +12,7 @@ context('Luis Deploy', () => {
   });
 
   it('can deploy luis success', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
 
     cy.route({
       method: 'POST',
@@ -19,24 +20,22 @@ context('Luis Deploy', () => {
       status: 200,
       response: 'fixture:luPublish/success',
     });
-    cy.getByText('Start Bot').click();
-    cy.wait(5000);
+    cy.findByText('Start Bot').click();
+
     // clear its settings before
-    cy.get('[data-testid="ProjectNameInput"]')
+    cy.findByTestId('ProjectNameInput')
       .clear()
       .type('MyProject');
-    cy.get('[data-testid="EnvironmentInput"]')
+    cy.findByTestId('EnvironmentInput')
       .clear()
       .type('composer');
-    cy.get('[data-testid="AuthoringKeyInput"]')
+    cy.findByTestId('AuthoringKeyInput')
       .clear()
       .type('0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
-    cy.wait(1000);
-    cy.getByText('OK').click();
-    cy.wait(1000);
-    cy.getByText('Restart Bot').should('exist');
-    cy.getByText('Test in Emulator').should('exist');
+    cy.findByText('OK').click();
+    cy.findByText('Restart Bot').should('exist');
+    cy.findByText('Test in Emulator').should('exist');
 
     cy.route({
       method: 'POST',
@@ -44,11 +43,9 @@ context('Luis Deploy', () => {
       status: 400,
       response: 'fixture:luPublish/error',
     });
-    cy.getByText('Restart Bot').click();
-    cy.wait(1000);
-    cy.getByText('Try again').click();
-    cy.wait(1000);
-    cy.get('[data-testid="AuthoringKeyInput"]').type('no-id');
-    cy.getByText('OK').click();
+    cy.findByText('Restart Bot').click();
+    cy.findByText('Try again').click();
+    cy.findByTestId('AuthoringKeyInput').type('no-id');
+    cy.findByText('OK').click();
   });
 });
