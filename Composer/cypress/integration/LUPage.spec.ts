@@ -1,13 +1,14 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-context('check language understanding page', () => {
+context('LU Page', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can open language understanding page', () => {
-    cy.get('[data-testid="LeftNav-CommandBarButtonUser Input"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
 
     // left nav tree
     cy.contains('ToDoBotWithLuisSample.Main');
@@ -19,18 +20,23 @@ context('check language understanding page', () => {
     cy.get('@switchButton').should('be.disabled');
 
     // by default is table view
-    cy.get('[data-testid="LUEditor"] [data-testid="table-view"]').should('exist');
+    cy.findByTestId('LUEditor')
+      .findByTestId('table-view')
+      .should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.get('.dialogNavTree button[title="__TestToDoBotWithLuisSample.Main"]').click({ multiple: true });
-    cy.wait(300);
 
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.get('[data-testid="LUEditor"] .monaco-editor').should('exist');
+    cy.findByTestId('LUEditor')
+      .get('.monaco-editor')
+      .should('exist');
 
     // back to all table view
     cy.get('.dialogNavTree button[title="All"]').click();
-    cy.get('[data-testid="LUEditor"] [data-testid="table-view"]').should('exist');
+    cy.findByTestId('LUEditor')
+      .findByTestId('table-view')
+      .should('exist');
   });
 });
