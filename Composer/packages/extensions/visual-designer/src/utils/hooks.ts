@@ -37,7 +37,7 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
         setTemplateText(str || '');
       }
 
-      const templates = getLgTemplates ? await getLgTemplates('common', `${templateId}`) : [];
+      const templates = getLgTemplates ? await getLgTemplates('common') : [];
       const [template] = templates.filter(template => {
         return template.Name === templateId;
       });

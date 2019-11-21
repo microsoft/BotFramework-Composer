@@ -32,7 +32,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
-  codeRange?: ICodeRange | -1;
+  codeRange?: Partial<ICodeRange> | -1;
 }
 
 export function BaseEditor(props: BaseEditorProps) {
@@ -42,8 +42,6 @@ export function BaseEditor(props: BaseEditorProps) {
     options.folding = false;
   }
   const containerRef = useRef<HTMLDivElement>(null);
-  // editor.setHiddenAreas is an internal api, not included in <monacoEditor.editor.IStandaloneCodeEditor>, so here mark it <any>
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | any>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
 
   const updateRect = throttle(() => {
@@ -93,10 +91,10 @@ export function BaseEditor(props: BaseEditorProps) {
       const hiddenRanges = [
         {
           startLineNumber: 1,
-          endLineNumber: codeRange.startLineNumber - 1,
+          endLineNumber: (codeRange.startLineNumber || 1) - 1,
         },
         {
-          startLineNumber: codeRange.endLineNumber + 1,
+          startLineNumber: (codeRange.endLineNumber || 1) + 1,
           endLineNumber: lineCount,
         },
       ];
@@ -117,7 +115,6 @@ export function BaseEditor(props: BaseEditorProps) {
     if (typeof props.editorDidMount === 'function') {
       props.editorDidMount(editor, monaco);
     }
-    setEditor(editor);
     updateEditorCodeRangeUI(editor);
   };
 
