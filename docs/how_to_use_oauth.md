@@ -10,7 +10,7 @@ If you've already got an Azure Bot Service channel registration, you can skip to
 
 If you don't, follow [these instructions to create a registration in the Azure portal](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-quickstart-registration?view=azure-bot-service-3.0).
 
-Make sure you note the `app ID` and `app password` that is generated during this process. You'll need it in this [step](how-to_use_oath.md#Configure-the-OAuth-Connection-Settings-in-Composer).
+Make sure you note the `app ID` and `app password` that is generated during this process. You'll need it in this [step](#configure-the-oauth-connection-settings-in-azure).
 
 ## Configure the OAuth Connection Settings in Azure
 
