@@ -1,5 +1,5 @@
 # Sending an HTTP request and using OAuth 
-In this topic, we will walk you through the steps to send an HTTP request and using OAuth for authorization of the access. It is helpful to read [here](./tutorial/bot-tutorial-get-weather.md#add-an-http-request) first about sending an HTTP request without OAuth.
+In this topic, we will walk you through the steps to send an HTTP request and using OAuth for authorization of the access. It is helpful to read [here](./tutorial/bot-tutorial-get-weather.md#add-an-http-request) about sending an HTTP request without OAuth.
 
 ## Prerequisites
 - [Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/tree/master)
