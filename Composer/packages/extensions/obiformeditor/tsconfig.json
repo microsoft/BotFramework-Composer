@@ -1,20 +1,8 @@
 {
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./lib/",
-    "noImplicitAny": false,
     "module": "esnext",
-    "target": "es5",
-    "jsx": "react",
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "noUnusedLocals": true,
-    "allowJs": false
   },
-  "include": ["./src/**/*", "./__tests__/**/*"],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["./src/**/*", "./__tests__/**/*"]
 }
