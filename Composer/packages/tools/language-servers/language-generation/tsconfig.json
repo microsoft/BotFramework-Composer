@@ -1,23 +1,10 @@
 {
+  "extends": "../../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./lib/",
-    "noImplicitAny": false,
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "baseUrl": "./",
-    "noUnusedLocals": true,
-    "resolveJsonModule": true
+    "outDir": "lib"
   },
   "include": [
     "./src/**/*",
     "./__tests__/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  ]
 }
