@@ -19,7 +19,7 @@ const getType = (data: FormData): string | undefined => {
 };
 
 export interface FormEditorProps extends ShellData {
-  memory: FormMemory;
+  memory?: FormMemory;
   onBlur?: () => void;
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
