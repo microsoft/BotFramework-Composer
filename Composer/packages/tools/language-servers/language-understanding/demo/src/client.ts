@@ -64,7 +64,7 @@ const editor = monaco.editor.create(document.getElementById('container')!, {
 });
 
 // install Monaco language client services
-MonacoServices.install(editor, {});
+MonacoServices.install(editor);
 
 // create the web socket
 const url = createUrl('/luServer');
@@ -75,7 +75,6 @@ listen({
   onConnection: connection => {
     // create and start the language client
     const languageClient = createLanguageClient(connection);
-    ``;
     const disposable = languageClient.start();
     connection.onClose(() => disposable.dispose());
   },
