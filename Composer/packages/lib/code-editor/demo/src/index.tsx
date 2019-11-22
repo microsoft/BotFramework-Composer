@@ -10,5 +10,6 @@ import App from './lgEditor';
 // import App from './lgJsonEditor';
 // import App from './inlineEditor';
 // import App from './multiEditors';
+// import App from './richEditor';
 
 ReactDOM.render(<App />, document.getElementById('demo'));

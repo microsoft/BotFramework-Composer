@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 
-// import { JsonEditor } from '@bfc/code-editor';
 import { JsonEditor } from '../../src';
 
 const content = {

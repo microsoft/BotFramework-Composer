@@ -4,7 +4,6 @@
 import React, { useState } from 'react';
 
 import { LgEditor } from '../../src';
-// import { LGLSPEditor } from '@bfc/code-editor';
 
 const content = `# Hello
 -[Welcome(time)] {name}

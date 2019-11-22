@@ -5,7 +5,6 @@ import React, { useState, Fragment } from 'react';
 
 import { LgEditor } from '../../src';
 import { JsonEditor } from '../../src';
-// import { LGLSPEditor } from '@bfc/code-editor';
 
 const jsonContent = {
   'ComposerDialogs/AddToDo/AddToDo.lu': {

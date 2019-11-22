@@ -3,7 +3,7 @@
 
 import React, { useState, Fragment } from 'react';
 
-import { LGLSPEditor } from '../../src';
+import { LgEditor } from '../../src';
 
 const content = `# Greeting1
 -Good morning
@@ -16,7 +16,6 @@ const content = `# Greeting1
 `;
 
 function LGEditor() {
-  // const [value, setValue] = useState(template.Body);
   const [value, setValue] = useState(content);
 
   const onChange = value => {
@@ -31,7 +30,7 @@ function LGEditor() {
       path: '/lgServer',
     },
   };
-  return <LGLSPEditor {...props} />;
+  return <LgEditor {...props} />;
 }
 
 export default function App() {
