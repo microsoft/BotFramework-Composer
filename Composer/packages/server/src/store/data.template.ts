@@ -1,19 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
 import os from 'os';
 import fs from 'fs';
-let defaultPath = process.env.DEFAULT_PATH ? path.resolve(process.env.DEFAULT_PATH) : process.env.DEFAULT_PATH;
+
+import { Path } from '../utility/path';
+let defaultPath = process.env.DEFAULT_PATH ? Path.resolve(process.env.DEFAULT_PATH) : process.env.DEFAULT_PATH;
+console.log(process.env.DEFAULT_PATH);
+console.log(defaultPath);
 if (!defaultPath) {
-  console.log(`The default path is set to ${path.join(os.homedir(), 'Documents', 'Composer')}`);
-  defaultPath = path.join(os.homedir(), 'Documents', 'Composer');
+  console.log(`The default path is set to ${Path.join(os.homedir(), 'Documents', 'Composer')}`);
+  defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
 } else if (!fs.existsSync(defaultPath)) {
   console.log(
-    `The default path ${defaultPath} does not exist. We set it to ${path.join(os.homedir(), 'Documents', 'Composer')}`
+    `The default path ${defaultPath} does not exist. We set it to ${Path.join(os.homedir(), 'Documents', 'Composer')}`
   );
-  defaultPath = path.join(os.homedir(), 'Documents', 'Composer');
+  defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
 }
+console.log(defaultPath);
 export default {
   storageConnections: [
     {
