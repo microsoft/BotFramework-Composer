@@ -5,9 +5,8 @@ import os from 'os';
 import fs from 'fs';
 
 import { Path } from '../utility/path';
+
 let defaultPath = process.env.DEFAULT_PATH ? Path.resolve(process.env.DEFAULT_PATH) : process.env.DEFAULT_PATH;
-console.log(process.env.DEFAULT_PATH);
-console.log(defaultPath);
 if (!defaultPath) {
   console.log(`The default path is set to ${Path.join(os.homedir(), 'Documents', 'Composer')}`);
   defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
@@ -17,7 +16,6 @@ if (!defaultPath) {
   );
   defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
 }
-console.log(defaultPath);
 export default {
   storageConnections: [
     {
