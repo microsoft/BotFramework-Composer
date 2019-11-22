@@ -19,3 +19,5 @@ export const EntityTypesObj = {
     'datetime',
   ],
 };
+
+export type currentLineState = 'ml_entity' | 'intent' | 'utterance' | 'others';

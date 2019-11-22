@@ -7,14 +7,14 @@ import {
   TextDocument,
   Diagnostic,
   CompletionList,
-  Hover,
   Position,
   CompletionItemKind,
   Range,
   DiagnosticSeverity,
+  TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
-import { EntityTypesObj } from './entityEnum';
+import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import { EntityTypesObj, currentLineState } from './entityEnum';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
@@ -60,19 +60,39 @@ export class LuServer {
       };
     });
     this.connection.onCompletion(params => this.completion(params));
-    this.connection.onHover(params => this.hover(params));
+    //this.connection.onHover(params => this.hover(params));
+    this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
   }
 
   start() {
     this.connection.listen();
   }
 
-  protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
+  protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
+    console.log('sssssss');
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
+
+    const edits: TextEdit[] = [];
+    if (params.ch == '\n') {
+      console.log(',,,,,,');
+      const pos = params.position;
+      const newPos = Position.create(pos.line + 1, 0);
+      const item: TextEdit = TextEdit.insert(newPos, '-');
+      edits.push(item);
+    }
+
+    return Promise.resolve(edits);
   }
+
+  // protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
+  //   const document = this.documents.get(params.textDocument.uri);
+  //   if (!document) {
+  //     return Promise.resolve(null);
+  //   }
+  // }
 
   protected async resovleSchema(url: string): Promise<string> {
     const uri = URI.parse(url);
@@ -106,18 +126,19 @@ export class LuServer {
         }
       }
     } catch (e) {
+      console.log(e);
       e.text.split('\n').forEach(msg => {
         const matched = msg.match(/line\s(\d+:\d+)/g);
         const positions: Position[] = [];
-        matched.forEach(element => {
-          let { row, col } = element.match(/(?<row>\d+):(?<col>\d+)/).groups;
-          positions.push(Position.create(parseInt(row) - 1, parseInt(col)));
-        });
+        // matched.forEach(element => {
+        //   let { row, col } = element.match(/(?<row>\d+):(?<col>\d+)/).groups;
+        //   positions.push(Position.create(parseInt(row) - 1, parseInt(col)));
+        // });
 
-        if (positions.length == 1) {
-          positions.push(Position.create(positions[0].line, positions[0].character + 1));
-        }
-        const range = Range.create(positions[0], positions[1]);
+        // if (positions.length == 1) {
+        //   positions.push(Position.create(positions[0].line, positions[0].character + 1));
+        // }
+        const range = Range.create(Position.create(0, 0), Position.create(0, 1));
         const diagnostic: Diagnostic = Diagnostic.create(range, msg, DiagnosticSeverity.Error);
         errors.push(diagnostic);
       });
@@ -171,10 +192,6 @@ export class LuServer {
     return regexPrebuiltEntifyDef.test(lineContent);
   }
 
-  private isListEntityMode(params: TextDocumentPositionParams): boolean {
-    return false;
-  }
-
   private isEntityName(params: TextDocumentPositionParams): boolean {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
@@ -218,108 +235,106 @@ export class LuServer {
       });
     }
 
-    if (this.isPrebuiltEntity(params)) {
-      const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
-      prebuiltTypes.forEach(entity => {
-        const item = {
-          label: entity,
-          kind: CompletionItemKind.Keyword,
-          insertText: ` ${entity}`,
-          documentation: `Prebuilt enitity: ${entity}`,
-        };
+    // if (this.isPrebuiltEntity(params)) {
+    //   const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
+    //   prebuiltTypes.forEach(entity => {
+    //     const item = {
+    //       label: entity,
+    //       kind: CompletionItemKind.Keyword,
+    //       insertText: ` ${entity}`,
+    //       documentation: `Prebuilt enitity: ${entity}`,
+    //     };
 
-        completionList.push(item);
-      });
-    }
+    //     completionList.push(item);
+    //   });
+    // }
 
-    if (this.isRegexEntity(params)) {
-      const item = {
-        label: 'RegExp Entity',
-        kind: CompletionItemKind.Keyword,
-        insertText: ` //`,
-        documentation: `regex enitity`,
-      };
+    // if (this.isRegexEntity(params)) {
+    //   const item = {
+    //     label: 'RegExp Entity',
+    //     kind: CompletionItemKind.Keyword,
+    //     insertText: ` //`,
+    //     documentation: `regex enitity`,
+    //   };
 
-      completionList.push(item);
-    }
+    //   completionList.push(item);
+    // }
 
-    if (this.isEntityName(params)) {
-      const item = {
-        label: 'hasRoles?',
-        kind: CompletionItemKind.Keyword,
-        insertText: ` hasrole `,
-        documentation: `Entity name hasRole?`,
-      };
+    // if (this.isEntityName(params)) {
+    //   const item = {
+    //     label: 'hasRoles?',
+    //     kind: CompletionItemKind.Keyword,
+    //     insertText: ` hasrole `,
+    //     documentation: `Entity name hasRole?`,
+    //   };
 
-      completionList.push(item);
-      const item2 = {
-        label: 'useFeature?',
-        kind: CompletionItemKind.Keyword,
-        insertText: ` usesFeature `,
-        documentation: `Entity name useFeature?`,
-      };
+    //   completionList.push(item);
+    //   const item2 = {
+    //     label: 'useFeature?',
+    //     kind: CompletionItemKind.Keyword,
+    //     insertText: ` usesFeature `,
+    //     documentation: `Entity name useFeature?`,
+    //   };
 
-      completionList.push(item2);
-    }
+    //   completionList.push(item2);
+    // }
 
-    // completion for entities and patterns
-    const entitiesList: string[] = [];
-    const regexList: string[] = [];
-    const pattenAnyList: string[] = [];
-    const prebuiltList: string[] = [];
-    const closedList: string[] = [];
+    // // completion for entities and patterns
+    // const entitiesList: string[] = [];
+    // const regexList: string[] = [];
+    // const pattenAnyList: string[] = [];
+    // const prebuiltList: string[] = [];
+    // const closedList: string[] = [];
 
-    const luisJson = await this.extractLUISContent(text);
+    // const luisJson = await this.extractLUISContent(text);
 
-    if (luisJson !== undefined) {
-      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-        luisJson.entities.forEach(entity => {
-          entitiesList.push(entity.name);
-        });
-      }
+    // if (luisJson !== undefined) {
+    //   if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
+    //     luisJson.entities.forEach(entity => {
+    //       entitiesList.push(entity.name);
+    //     });
+    //   }
 
-      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-        luisJson.regex_entities.forEach(entity => {
-          regexList.push(entity.name);
-        });
-      }
+    //   if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
+    //     luisJson.regex_entities.forEach(entity => {
+    //       regexList.push(entity.name);
+    //     });
+    //   }
 
-      if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-        luisJson.patternAnyEntities.forEach(entity => {
-          pattenAnyList.push(entity.name);
-        });
-      }
+    //   if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
+    //     luisJson.patternAnyEntities.forEach(entity => {
+    //       pattenAnyList.push(entity.name);
+    //     });
+    //   }
 
-      if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-        luisJson.prebuiltEntities.forEach(entity => {
-          prebuiltList.push(entity.name);
-        });
-      }
+    //   if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
+    //     luisJson.prebuiltEntities.forEach(entity => {
+    //       prebuiltList.push(entity.name);
+    //     });
+    //   }
 
-      if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.closedLists.forEach(entity => {
-          closedList.push(entity.name);
-        });
-      }
+    //   if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
+    //     luisJson.closedLists.forEach(entity => {
+    //       closedList.push(entity.name);
+    //     });
+    //   }
 
-      // auto suggest pattern
-      if (this.matchedEnterPattern(params)) {
-        entitiesList.forEach(name => {
-          const item = {
-            label: `Entity: ${name}`,
-            kind: CompletionItemKind.Property,
-            insertText: ` ${name} =`,
-            documentation: `pattern suggestion for entity: ${name}`,
-          };
+    //   // auto suggest pattern
+    //   if (this.matchedEnterPattern(params)) {
+    //     entitiesList.forEach(name => {
+    //       const item = {
+    //         label: `Entity: ${name}`,
+    //         kind: CompletionItemKind.Property,
+    //         insertText: ` ${name} =`,
+    //         documentation: `pattern suggestion for entity: ${name}`,
+    //       };
 
-          completionList.push(item);
-        });
-      }
+    //       completionList.push(item);
+    //     });
+    //   }
+    // }
 
-      // features suggestions
-    }
-
-    return Promise.resolve({ isIncomplete: true, items: completionList });
+    return Promise.resolve({ isIncomplete: false, items: completionList });
   }
 
   protected validate(document: TextDocument): void {
