@@ -123,7 +123,7 @@ export class LGServer {
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.Name === word);
     if (matchItem) {
-      const hoveritem: Hover = { contents: [matchItem.Source, matchItem.Body] };
+      const hoveritem: Hover = { contents: [matchItem.Body] };
       return Promise.resolve(hoveritem);
     }
     if (word.startsWith('builtin.')) {
