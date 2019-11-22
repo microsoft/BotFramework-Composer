@@ -6,6 +6,7 @@
 import { ConceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
 import {
   triggerContainerStyle,
@@ -24,10 +25,7 @@ function getLabel(data: any): string {
 }
 
 function getName(data: any): string {
-  if (data && data.$designer && data.$designer.name) {
-    return data.$designer.name;
-  }
-  return getLabel(data);
+  return get(data, '$designer.name', getLabel(data));
 }
 
 export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
