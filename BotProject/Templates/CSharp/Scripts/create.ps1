@@ -4,6 +4,7 @@ Param(
 	[string] $appId,
 	[string] $appPassword,
 	[string] $environment,
+	[string] $luisAuthoringKey,
 	[string] $projDir = $(Get-Location),
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "create_log.txt")
 )
@@ -71,6 +72,13 @@ if (-not $appId) {
 	}
 }
 
+$shouldCreateAuthoringResource = $true
+
+# Use pre-exsisting luis authoring key
+if ($luisAuthoringKey) {
+	$shouldCreateAuthoringResource = $false
+}
+
 $resourceGroup = "$name-$environment"
 $servicePlanName = "$name-$environment"
 
@@ -86,7 +94,7 @@ Write-Host "> Validating Azure deployment ..."
 $validation = az group deployment validate `
 	--resource-group $resourcegroup `
 	--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name `
+	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldCreateAuthoringResource=$shouldCreateAuthoringResource luisAuthoringKey=$luisAuthoringKey `
 	--output json
 
 if ($validation) {
@@ -99,7 +107,7 @@ if ($validation) {
 			--name $timestamp `
 			--resource-group $resourceGroup `
 			--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
-			--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name `
+			--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldCreateAuthoringResource=$shouldCreateAuthoringResource luisAuthoringKey=$luisAuthoringKey `
 			--output json
 	}
 	else {
@@ -107,6 +115,13 @@ if ($validation) {
 		Write-Host "! Error: $($validation.error.message)"  -ForegroundColor DarkRed
 		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
 		Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
+
+		if ($validation.error.details -and $validation.error.details[0].code -eq "CanNotCreateMultipleFreeAccounts")
+		{
+			Write-Host "! The subscription is exceeding the maximum number of allowed LuisAuthoringAccounts. You already have a luis authoring resource created, please get your luis authoring key and retry with the following command:" -ForegroundColor DarkRed
+			Write-Host "pwsh ./Scripts/create.ps1 -name $name -environment $environment -location $location -appPassword $appPassword -luisAuthoringKey [YourLuisAuthoringKey]" -ForegroundColor Green
+		}
+
 		Break
 	}
 }
@@ -124,6 +139,15 @@ if ($outputs)
 	# Log and convert to JSON
 	$outputs >> $logFile
 	$outputs = $outputs | ConvertFrom-Json
+	if ($outputs.properties.error) {
+		Write-Host "! Deployment failed. Review the log for more information." -ForegroundColor DarkRed
+		Write-Host "! Error: $($outputs.error.message)"  -ForegroundColor DarkRed
+		Write-Host "! Log: $($logFile)" -ForegroundColor DarkRed
+		Write-Host "+ To delete this resource group, run 'az group delete -g $($resourceGroup) --no-wait'" -ForegroundColor Magenta
+		
+		Break
+	}
+
 	$outputs = $outputs.properties.outputs
 	$outputMap = @{}
 	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }

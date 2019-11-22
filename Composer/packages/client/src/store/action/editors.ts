@@ -20,3 +20,12 @@ export const setVisualEditorSelection: ActionCreator = ({ dispatch }, selection)
     },
   });
 };
+
+export const setVisualEditorClipboard: ActionCreator = ({ dispatch }, clipboardActions) => {
+  dispatch({
+    type: ActionTypes.EDITOR_CLIPBOARD,
+    payload: {
+      clipboardActions,
+    },
+  });
+};

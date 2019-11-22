@@ -4,7 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, DialogInfo, BotSchemas, LgFile, LuFile, ProjectTemplate } from 'shared';
+import { PromptTab, DialogInfo, BotSchemas, LgFile, LuFile, ProjectTemplate } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -84,6 +84,11 @@ export interface State {
   publishStatus: any;
   lastPublishChange: any;
   visualEditorSelection: string[];
+  onboarding: {
+    coachMarkRefs: { [key: string]: any };
+    complete: boolean;
+  };
+  clipboardActions: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

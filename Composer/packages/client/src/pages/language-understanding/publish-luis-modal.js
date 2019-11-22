@@ -1,24 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, Fragment } from 'react';
-import {
-  Dialog,
-  DialogType,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  TextField,
-  Spinner,
-  SpinnerSize,
-  Link,
-  Stack,
-  IconButton,
-  TooltipHost,
-} from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useState, useContext, Fragment } from 'react';
+import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
-import { keys } from 'lodash';
+import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 
@@ -143,13 +139,13 @@ export const PublishLuis = props => {
       <div css={dialogSubTitle}>
         {Text.LUISDEPLOY}{' '}
         <Link href={Links.LUIS} target="_blank">
-          {formatMessage('Where can I find this?')}
+          {formatMessage('Learn more.')}
         </Link>
       </div>
       <form onSubmit={handlePublish} css={dialogContent}>
         <Stack gap={20}>
           <TextField
-            label={formatMessage('Project Name')}
+            label={formatMessage('What is the name of your bot?')}
             onChange={updateForm('name')}
             defaultValue={formData.name}
             onRenderLabel={onRenderLabel(Tips.PROJECT_NAME)}
@@ -165,7 +161,7 @@ export const PublishLuis = props => {
             data-testid="EnvironmentInput"
           />
           <TextField
-            label={formatMessage('Authoring key')}
+            label={formatMessage('LUIS Primary key:')}
             onChange={updateForm('authoringKey')}
             defaultValue={formData.authoringKey}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
@@ -187,11 +183,7 @@ export const PublishLuis = props => {
         </Stack>
       </form>
       <DialogFooter>
-        <PrimaryButton
-          onClick={handlePublish}
-          text={formatMessage('Publish')}
-          disabled={workState === STATE.PUBLISHPENDING}
-        >
+        <PrimaryButton onClick={handlePublish} text={formatMessage('OK')} disabled={workState === STATE.PUBLISHPENDING}>
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} data-testid={'publish-LUIS-models-cancel'} />

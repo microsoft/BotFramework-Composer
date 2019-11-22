@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { initializeIcons } from 'office-ui-fabric-react';
-import { LuFile, ShellData } from 'shared';
+import { initializeIcons } from '@uifabric/icons';
+import { ShellData, ShellApi } from '@bfc/shared';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -29,8 +29,8 @@ const apiClient = new ApiClient();
 
 const subEditorCallbacks = {};
 
-const shellApi = {
-  getState: (): Promise<ShellData> => {
+const shellApi: ShellApi = {
+  getState: () => {
     return apiClient.apiCall('getState', {});
   },
 
@@ -38,59 +38,59 @@ const shellApi = {
     return apiClient.apiCall('saveData', { newData, updatePath });
   },
 
-  navTo: (path: string, rest) => {
+  navTo: (path, rest) => {
     return apiClient.apiCall('navTo', { path, rest });
   },
 
-  navDown: (subPath: string) => {
-    return apiClient.apiCall('navDown', { subPath: subPath });
-  },
-
-  focusTo: (subPath: string) => {
-    return apiClient.apiCall('focusTo', { subPath: subPath });
-  },
-
-  onFocusEvent: (subPath: string) => {
+  onFocusEvent: subPath => {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: (subPaths: string[], fragment?: string) => {
+  onFocusSteps: (subPaths, fragment) => {
     return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
   },
 
-  onSelect: (ids: string[]) => {
+  onSelect: ids => {
     return apiClient.apiCall('onSelect', ids);
   },
 
-  shellNavigate: (shellPage, opts = {}) => {
-    return apiClient.apiCall('shellNavigate', { shellPage, opts });
+  onCopy: actions => {
+    return apiClient.apiCall('onCopy', actions);
   },
 
-  createLuFile: (id: string) => {
+  createLuFile: id => {
     return apiClient.apiCall('createLuFile', { id });
   },
 
-  updateLuFile: (luFile: LuFile) => {
+  updateLuFile: luFile => {
     return apiClient.apiCall('updateLuFile', luFile);
   },
 
-  updateLgFile: (id: string, content: string) => {
+  updateLgFile: (id, content) => {
     return apiClient.apiCall('updateLgFile', { id, content });
   },
 
-  getLgTemplates: (id: string) => {
+  getLgTemplates: id => {
     return apiClient.apiCall('getLgTemplates', { id });
   },
 
-  createLgTemplate: (id: string, template: string, position?: number) => {
+  createLgTemplate: (id, template, position) => {
     return apiClient.apiCall('createLgTemplate', { id, template, position });
   },
 
-  removeLgTemplate: (id: string, templateName: string) => {
+  removeLgTemplate: (id, templateName) => {
     return apiClient.apiCall('removeLgTemplate', { id, templateName });
   },
 
-  updateLgTemplate: (id: string, templateName: string, template: string) => {
+  removeLgTemplates: (id, templateNames) => {
+    return apiClient.apiCall('removeLgTemplates', { id, templateNames });
+  },
+
+  copyLgTemplate: (id, fromTemplateName, toTemplateName) => {
+    return apiClient.apiCall('copyLgTemplate', { id, fromTemplateName, toTemplateName });
+  },
+
+  updateLgTemplate: (id, templateName, template) => {
     return apiClient.apiCall('updateLgTemplate', {
       id,
       templateName,
@@ -102,7 +102,7 @@ const shellApi = {
     return apiClient.apiCall('createDialog');
   },
 
-  validateExpression: (expression: string) => {
+  validateExpression: expression => {
     return apiClient.apiCall('isExpression', { expression });
   },
 
@@ -112,6 +112,10 @@ const shellApi = {
 
   redo: () => {
     return apiClient.apiCall('redo');
+  },
+
+  addCoachMarkRef: target => {
+    return apiClient.apiCall('addCoachMarkPosition', target);
   },
 };
 

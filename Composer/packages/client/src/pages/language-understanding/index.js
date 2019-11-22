@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, Fragment, useEffect, useState, useMemo } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
@@ -16,14 +18,16 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
-import CodeEditor from './code-editor';
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
 
-export const LUPage = props => {
+const CodeEditor = React.lazy(() => import('./code-editor'));
+
+const LUPage = props => {
   const { state, actions } = useContext(StoreContext);
   const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
@@ -148,7 +152,7 @@ export const LUPage = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          <Tree variant="large" extraCss={projectTree}>
+          <Tree variant="large" css={projectTree}>
             <div css={projectWrapper}>
               <Nav
                 onLinkClick={(ev, item) => {
@@ -178,7 +182,9 @@ export const LUPage = props => {
         </div>
         <div css={contentEditor}>
           {editMode ? (
-            <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
+            <Suspense fallback={<LoadingSpinner />}>
+              <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
+            </Suspense>
           ) : (
             <TableView file={luFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}
@@ -187,3 +193,5 @@ export const LUPage = props => {
     </Fragment>
   );
 };
+
+export default LUPage;

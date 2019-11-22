@@ -51,3 +51,9 @@ Here's what I know about you -
 
 # bfdactivity-032735
 - I've reset your profile. \n \[Suggestions=Get started]
+
+# bfdinvalidPrompt-362298
+- Sorry, '{this.value}' does not work. I'm looking for 2-150 characters. What is your name? \n \[Suggestions=Why? | No name | Cancel | Reset profile\]
+
+# bfdinvalidPrompt-005947
+- Sorry, {this.value} does not work. I'm looking for a value between 1-150. What is your age?  \n \[Suggestions=Why? | Reset profile | Cancel | No age\]

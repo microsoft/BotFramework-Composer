@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useContext, useMemo, useState } from 'react';
-import { ShellData } from 'shared';
-import isEqual from 'lodash.isequal';
-import get from 'lodash.get';
-
-import { parseLgTemplate, checkLgContent, updateTemplateInContent } from '../src/store/action/lg';
+import React, { useEffect, useContext, useMemo } from 'react';
+import { ShellData } from '@bfc/shared';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -15,7 +13,7 @@ import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { isAbsHosted } from './utils/envUtil';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
-import { getFocusPath, navigateTo } from './utils/navigation';
+import { getFocusPath } from './utils/navigation';
 
 // this is the api interface provided by shell to extensions this is the single
 // place handles all incoming request from extensions, VisualDesigner or
@@ -44,18 +42,9 @@ const FileTargetTypes = {
   LG: 'lg',
 };
 
-const shellNavigator = (shellPage: string, opts: { id?: string } = {}) => {
-  switch (shellPage) {
-    case 'lu':
-      navigateTo(`/language-understanding/${opts.id}`);
-      return;
-    default:
-      return;
-  }
-};
-
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
+
   const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -69,76 +58,12 @@ export const ShellApi: React.FC = () => {
   const { LG, LU } = FileTargetTypes;
   const { CREATE, UPDATE } = FileChangeTypes;
 
-  useEffect(() => {
-    apiClient.connect();
-
-    apiClient.registerApi('getState', (_, event) => {
-      if (!event.source) {
-        return {};
-      }
-
-      const source = event.source as Window;
-
-      return getState(source.name);
-    });
-    apiClient.registerApi('saveData', handleValueChange);
-    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
-    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
-    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
-    apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
-    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
-    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
-    apiClient.registerApi('navTo', navTo);
-    apiClient.registerApi('onFocusEvent', focusEvent);
-    apiClient.registerApi('onFocusSteps', focusSteps);
-    apiClient.registerApi('onSelect', onSelect);
-    apiClient.registerApi('shellNavigate', ({ shellPage, opts }) => shellNavigator(shellPage, opts));
-    apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
-    apiClient.registerApi('createDialog', () => {
-      return new Promise(resolve => {
-        actions.createDialogBegin((newDialog: string | null) => {
-          resolve(newDialog);
-        });
-      });
-    });
-    apiClient.registerApi('undo', actions.undo);
-    apiClient.registerApi('redo', actions.redo);
-
-    return () => {
-      apiClient.disconnect();
-    };
-  }); // this is intented to reconstruct everytime store is refresh
-
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
       result[dialog.id] = dialog.content;
       return result;
     }, {});
   }, [dialogs]);
-
-  useEffect(() => {
-    if (window.frames[VISUAL_EDITOR]) {
-      const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
-    }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
-
-  useEffect(() => {
-    if (window.frames[FORM_EDITOR]) {
-      const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
-
-  useEffect(() => {
-    const schemaError = get(schemas, 'diagnostics', []);
-    if (schemaError.length !== 0) {
-      const title = `StaticValidationError`;
-      const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
-    }
-  }, [schemas]);
 
   // api to return the data should be showed in this window
   function getData(sourceWindow?: string) {
@@ -172,6 +97,7 @@ export const ShellApi: React.FC = () => {
       focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],
       focusedTab: promptTab,
+      clipboardActions: state.clipboardActions,
       hosted: !!isAbsHosted(),
     };
   }
@@ -237,18 +163,34 @@ export const ShellApi: React.FC = () => {
    *
    * @param {*} event
    */
-  function updateLgTemplateHandler({ id, templateName, template }, event) {
+  async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
-    parseLgTemplate(template);
+    lgUtil.checkSingleLgTemplate(template);
 
-    return updateLgTemplate({
+    await updateLgTemplate({
       file,
       templateName,
       template,
+    });
+
+    const content = lgUtil.updateTemplate(file.content, templateName, template);
+    return lgUtil.checkLgContent(content);
+  }
+
+  function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
+
+    return actions.copyLgTemplate({
+      file,
+      fromTemplateName,
+      toTemplateName,
     });
   }
 
@@ -261,6 +203,18 @@ export const ShellApi: React.FC = () => {
     return actions.removeLgTemplate({
       file,
       templateName,
+    });
+  }
+
+  function removeLgTemplatesHandler({ id, templateNames }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+    if (!templateNames) throw new Error(`templateName is missing or empty`);
+
+    return actions.removeLgTemplates({
+      file,
+      templateNames,
     });
   }
 
@@ -329,6 +283,84 @@ export const ShellApi: React.FC = () => {
   function onSelect(ids: string[]) {
     actions.setVisualEditorSelection(ids);
   }
+
+  function onCopy(copiedActions: any[]) {
+    actions.setVisualEditorClipboard(copiedActions);
+    // NOTES: fire a proactively state sync with VisualEditor
+    // TODO: revisit how states should be synced via ShellApi without url refresh.
+    const nextState: ShellData = {
+      ...getState(VISUAL_EDITOR),
+      clipboardActions: copiedActions,
+    };
+    apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
+  }
+
+  useEffect(() => {
+    apiClient.connect();
+
+    apiClient.registerApi('getState', (_, event) => {
+      if (!event.source) {
+        return {};
+      }
+
+      const source = event.source as Window;
+
+      return getState(source.name);
+    });
+    apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
+    apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
+    apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('createLgFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
+    apiClient.registerApi('updateLgTemplate', updateLgTemplateHandler);
+    apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
+    apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
+    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
+    apiClient.registerApi('navTo', navTo);
+    apiClient.registerApi('onFocusEvent', focusEvent);
+    apiClient.registerApi('onFocusSteps', focusSteps);
+    apiClient.registerApi('onSelect', onSelect);
+    apiClient.registerApi('onCopy', onCopy);
+    apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
+    apiClient.registerApi('createDialog', () => {
+      return new Promise(resolve => {
+        actions.createDialogBegin((newDialog: string | null) => {
+          resolve(newDialog);
+        });
+      });
+    });
+    apiClient.registerApi('undo', actions.undo);
+    apiClient.registerApi('redo', actions.redo);
+    apiClient.registerApi('addCoachMarkPosition', actions.onboardingAddCoachMarkRef);
+
+    return () => {
+      apiClient.disconnect();
+    };
+  }); // this is intented to reconstruct everytime store is refresh
+
+  useEffect(() => {
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
+      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
+    }
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+
+  useEffect(() => {
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
+      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
+    }
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+
+  useEffect(() => {
+    const schemaError = get(schemas, 'diagnostics', []);
+    if (schemaError.length !== 0) {
+      const title = `StaticValidationError`;
+      const subTitle = schemaError.join('\n');
+      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
+    }
+  }, [schemas]);
 
   return null;
 };

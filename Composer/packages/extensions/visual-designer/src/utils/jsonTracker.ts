@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { cloneDeep, get, set } from 'lodash';
-import { seedNewDialog, deepCopyAction } from 'shared';
+import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
+import set from 'lodash/set';
+import { seedNewDialog, deepCopyAction } from '@bfc/shared';
 
 import { getFriendlyName } from '../components/nodes/utils';
 
@@ -199,7 +201,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, lgApi) {
+export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, copyLgTemplate) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -217,7 +219,7 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, l
   const copiedNodes: any[] = [];
   for (const node of newNodes) {
     // Deep copy nodes with external resources
-    const copy = await deepCopyAction(node, lgApi);
+    const copy = await deepCopyAction(node, copyLgTemplate);
     copiedNodes.push(copy);
   }
 

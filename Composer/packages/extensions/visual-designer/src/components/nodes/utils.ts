@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import get from 'lodash.get';
-import { ConceptLabels } from 'shared';
+import get from 'lodash/get';
+import { ConceptLabels } from '@bfc/shared';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 

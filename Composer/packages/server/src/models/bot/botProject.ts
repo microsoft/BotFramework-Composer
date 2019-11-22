@@ -3,9 +3,9 @@
 
 import fs from 'fs';
 
-import isEqual from 'lodash.isequal';
-import { FileInfo, DialogInfo, LgFile, LuFile } from 'shared';
-import { dialogIndexer, luIndexer, lgIndexer } from 'indexers';
+import isEqual from 'lodash/isEqual';
+import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
+import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -177,12 +177,22 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogs;
     const mainDialog = dialogs.find(item => item.isRoot);
-    if (mainDialog !== undefined) {
-      mainDialog.content.$designer = {
-        ...mainDialog.content.$designer,
-        name,
-        description,
-      };
+
+    if (mainDialog && mainDialog.content) {
+      const oldDesigner = mainDialog.content.$designer;
+
+      let newDesigner;
+      if (oldDesigner && oldDesigner.id) {
+        newDesigner = {
+          ...oldDesigner,
+          name,
+          description,
+        };
+      } else {
+        newDesigner = getNewDesigner(name, description);
+      }
+
+      mainDialog.content.$designer = newDesigner;
       await this.updateDialog('Main', mainDialog.content);
     }
   };

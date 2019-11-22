@@ -3,10 +3,11 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { DirectionalHint, DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DirectionalHint } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import get from 'lodash.get';
-import { createStepMenu, DialogGroup, ITriggerCondition, OnIntent } from 'shared';
+import get from 'lodash/get';
+import { createStepMenu, DialogGroup, ITriggerCondition, OnIntent } from '@bfc/shared';
 
 import { setOverridesOnField } from '../utils';
 

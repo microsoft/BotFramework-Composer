@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
+import {
+  IContextualMenuItem,
+  IContextualMenuProps,
+} from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
 
 import { SDKTypes } from './types';
 import { ConceptLabels } from './labelMap';
@@ -26,6 +29,7 @@ export enum DialogGroup {
   LOG = 'LOG',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
+  MESSAGE_EVENTS = 'MESSAGE_EVENTS',
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
@@ -44,7 +48,7 @@ export const dialogGroups: DialogGroupsMap = {
     types: [SDKTypes.SendActivity],
   },
   [DialogGroup.INPUT]: {
-    label: 'Ask a Question',
+    label: 'Ask a question',
     types: [
       SDKTypes.TextInput,
       SDKTypes.NumberInput,
@@ -95,6 +99,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.OnUnknownIntent,
       SDKTypes.OnDialogEvent,
       SDKTypes.OnActivity,
+      SDKTypes.OnMessageActivity,
       SDKTypes.OnCustomEvent,
     ],
   },
@@ -110,12 +115,12 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.OnEventActivity,
       SDKTypes.OnHandoffActivity,
       SDKTypes.OnInvokeActivity,
-      SDKTypes.OnMessageActivity,
-      SDKTypes.OnMessageDeleteActivity,
-      SDKTypes.OnMessageReactionActivity,
-      SDKTypes.OnMessageUpdateActivity,
       SDKTypes.OnTypingActivity,
     ],
+  },
+  [DialogGroup.MESSAGE_EVENTS]: {
+    label: 'Message events',
+    types: [SDKTypes.OnMessageDeleteActivity, SDKTypes.OnMessageReactionActivity, SDKTypes.OnMessageUpdateActivity],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',

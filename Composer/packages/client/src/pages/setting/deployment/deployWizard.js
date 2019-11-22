@@ -3,7 +3,7 @@
 
 import React, { Fragment, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { DeployWizardStepCreate } from './deployWizardStep-createDeploy';
 import { DeployWizardStepDeploy } from './deployWizardStep-deployOnly';

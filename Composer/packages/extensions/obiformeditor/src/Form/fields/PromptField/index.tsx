@@ -6,17 +6,17 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
-import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react';
-import get from 'lodash.get';
-import { PromptTab } from 'shared';
+import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import get from 'lodash/get';
+import { PromptTab } from '@bfc/shared';
 
 import { BaseField } from '../BaseField';
 import { BFDFieldProps } from '../../types';
 
 import { tabs, tabsContainer, settingsContainer } from './styles';
 import { BotAsks } from './BotAsks';
-import { UserAnswers } from './UserAnswers';
-import { Exceptions } from './Exceptions';
+import { UserInput } from './UserInput';
+import { Other } from './Other';
 import { PromptSettings } from './PromptSettings';
 import { GetSchema, PromptFieldChangeHandler } from './types';
 
@@ -53,11 +53,11 @@ export const PromptField: React.FC<BFDFieldProps> = props => {
           <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
             <BotAsks {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('User Answers')} itemKey={PromptTab.USER_ANSWERS}>
-            <UserAnswers {...props} onChange={updateField} getSchema={getSchema} />
+          <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
+            <UserInput {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
-          <PivotItem headerText={formatMessage('Exceptions')} itemKey={PromptTab.EXCEPTIONS}>
-            <Exceptions {...props} onChange={updateField} getSchema={getSchema} />
+          <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
+            <Other {...props} onChange={updateField} getSchema={getSchema} />
           </PivotItem>
         </Pivot>
       </div>

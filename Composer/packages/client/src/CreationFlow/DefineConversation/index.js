@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useContext, useEffect, useRef, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
-import { DialogFooter, PrimaryButton, DefaultButton, Stack, StackItem, TextField } from 'office-ui-fabric-react';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
 
-import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -28,20 +30,9 @@ const validateForm = data => {
 
 export function DefineConversation(props) {
   const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
-  const { state } = useContext(StoreContext);
-  const { storages } = state;
-  const currentStorageIndex = useRef(0);
 
   const [formData, setFormData] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
-
-  // set the default path
-  useEffect(() => {
-    const index = currentStorageIndex.current;
-    if (storages[index]) {
-      updateForm('location')(null, storages[index].path);
-    }
-  }, [storages]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -118,7 +109,7 @@ export function DefineConversation(props) {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} />}
+        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} allowOpeningBot={false} />}
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

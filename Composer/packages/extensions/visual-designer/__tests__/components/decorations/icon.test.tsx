@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { render } from 'react-testing-library';
 
@@ -11,13 +14,13 @@ describe('<Icon />', () => {
     iconColor = '#EBEBEB';
   });
 
-  it('renders icon component with invalid icon', async () => {
+  it('renders icon component with invalid icon', () => {
     icon = 'invalidIcon';
     const { findByRole } = render(<Icon icon={icon} color={iconColor} />);
     expect(findByRole('icon')).resolves.toBe({});
   });
 
-  it('renders icon component with valid icon', async () => {
+  it('renders icon component with valid icon', () => {
     icon = iconList[0];
     const { findByRole } = render(<Icon icon={icon} color={iconColor} />);
     expect(findByRole('icon')).resolves.toBeTruthy();

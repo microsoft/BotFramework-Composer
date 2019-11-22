@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { List } from 'office-ui-fabric-react/lib/List';
-import { ProjectTemplate } from 'shared';
+import { ProjectTemplate } from '@bfc/shared';
 
 import * as exampleIcons from '../../images/samples';
 
@@ -45,7 +45,7 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
         <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
         <div css={exampleListCellContent}>
           <div css={exampleListCellName}>{item.name}</div>
-          <div css={exampleListCellDescription}>{item.description.slice(0, 60)}</div>
+          <div css={exampleListCellDescription}>{item.description}</div>
         </div>
       </div>
     );

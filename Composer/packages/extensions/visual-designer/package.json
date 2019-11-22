@@ -1,5 +1,5 @@
 {
-  "name": "visual-designer",
+  "name": "@bfc/visual-designer",
   "version": "1.0.0",
   "description": "visual-designer React component",
   "main": "lib/index.js",
@@ -17,10 +17,11 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
     "test": "jest --no-cache",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
+    "@bfc/shared": "*",
     "@emotion/core": "^10.0.7",
     "@types/react": "16.9.0",
     "classnames": "^2.2.6",
@@ -29,7 +30,7 @@
     "dagre": "^0.8.4",
     "dagre-d3": "^0.6.3",
     "format-message": "^6.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "office-ui-fabric-react": "7.37.1",
     "prop-types": "^15.7.2",
     "source-map-loader": "^0.2.4"
@@ -45,6 +46,7 @@
     "@babel/preset-env": "7.3.0",
     "@babel/preset-react": "7.0.0",
     "@types/jest": "^24.0.11",
+    "@types/lodash": "^4.14.146",
     "babel-jest": "24.0.0",
     "babel-plugin-emotion": "^10.0.7",
     "jest": "^24.5.0",
@@ -52,8 +54,7 @@
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
-    "shared": "0.0.0",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^24.1.0",
     "ts-loader": "^6.0.3"
   },
   "author": "",

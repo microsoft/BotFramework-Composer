@@ -1,13 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower, get } from 'lodash';
-import { PromptTab } from 'shared';
-import { getNewDesigner, seedNewDialog } from 'shared';
+import toLower from 'lodash/toLower';
+import get from 'lodash/get';
+import { PromptTab } from '@bfc/shared';
+import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -124,11 +129,14 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
+
+  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
     if (match) {
@@ -206,61 +214,61 @@ function DesignPage(props) {
       type: 'action',
       text: formatMessage('Undo'),
       buttonProps: {
-        disabled: !undoHistory.canUndo(),
         iconProps: {
           iconName: 'Undo',
         },
         onClick: () => actions.undo(),
       },
       align: 'left',
+      disabled: !undoHistory.canUndo(),
     },
     {
       type: 'action',
       text: formatMessage('Redo'),
       buttonProps: {
-        disabled: !undoHistory.canRedo(),
         iconProps: {
           iconName: 'Redo',
         },
         onClick: () => actions.redo(),
       },
       align: 'left',
+      disabled: !undoHistory.canRedo(),
     },
     {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Cut',
         },
         onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Copy',
         },
         onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
-        disabled: !nodeOperationAvailable,
         iconProps: {
           iconName: 'Delete',
         },
         onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'element',
@@ -378,7 +386,7 @@ function DesignPage(props) {
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
-          <Conversation extraCss={editorContainer}>
+          <Conversation css={editorContainer}>
             <Fragment>
               <div css={editorWrapper}>
                 <div css={visualPanel}>
@@ -390,6 +398,7 @@ function DesignPage(props) {
                     css={visualEditor}
                     hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
+                    ref={addRef}
                   />
                   {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>

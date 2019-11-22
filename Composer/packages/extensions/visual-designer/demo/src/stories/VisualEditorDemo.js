@@ -21,6 +21,7 @@ export class VisualEditorDemo extends Component {
     focusedEvent: 'events[0]',
     focusedSteps: [],
     focusedTab: '',
+    clipboardActions: [],
   };
 
   constructor(props) {
@@ -43,7 +44,7 @@ export class VisualEditorDemo extends Component {
   }
 
   render() {
-    const { selectedFile, obiJson, focusedEvent, focusedSteps, focusedTab } = this.state;
+    const { selectedFile, obiJson, focusedEvent, focusedSteps, focusedTab, clipboardActions } = this.state;
 
     return (
       <div className="ve-container">
@@ -82,8 +83,9 @@ export class VisualEditorDemo extends Component {
               data={obiJson}
               dialogId={selectedFile}
               focusedEvent={focusedEvent}
-              focusedSteps={focusedSteps}
+              focusedActions={focusedSteps}
               focusedTab={focusedTab}
+              clipboardActions={clipboardActions}
               shellApi={{
                 navTo: e => {
                   console.log('navTo', e);
@@ -102,6 +104,12 @@ export class VisualEditorDemo extends Component {
                     focusedTab: tabName,
                   });
                 },
+                onCopy: actions => {
+                  console.log('onCopy', actions);
+                  this.setState({
+                    clipboardActions: actions,
+                  });
+                },
                 saveData: json => {
                   this.setState({
                     obiJson: json,
@@ -113,7 +121,7 @@ export class VisualEditorDemo extends Component {
                 getLgTemplates: () => {
                   return Promise.resolve([{ Name: 'lg', Body: 'LgTemplate Placeholder.' }]);
                 },
-                removeLgTemplate: () => {
+                removeLgTemplates: () => {
                   return Promise.resolve(true);
                 },
               }}

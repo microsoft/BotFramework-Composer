@@ -12,13 +12,12 @@ import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
   DefaultRenderer,
-  Recognizer,
   BeginDialog,
   ReplaceDialog,
   ActivityRenderer,
   ChoiceInput,
   BotAsks,
-  UserAnswers,
+  UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
@@ -26,13 +25,11 @@ import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.ConditionNode]: DefaultRenderer,
-  [ObiTypes.LuisRecognizer]: Recognizer,
-  [ObiTypes.RegexRecognizer]: Recognizer,
   [ObiTypes.ReplaceDialog]: ReplaceDialog,
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
   [ObiTypes.BotAsks]: BotAsks,
-  [ObiTypes.UserAnswers]: UserAnswers,
+  [ObiTypes.UserAnswers]: UserInput,
   [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
 };
 const DEFAULT_RENDERER = DefaultRenderer;

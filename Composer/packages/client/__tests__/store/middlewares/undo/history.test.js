@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import undoHistory from './../../../../src/store/middlewares/undo/history';
 
 describe('test undo history', () => {

@@ -1,18 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useRef, Fragment, useContext, useEffect } from 'react';
-import {
-  ActionButton,
-  PrimaryButton,
-  Spinner,
-  SpinnerSize,
-  Callout,
-  DefaultButton,
-  Stack,
-} from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
+import { ActionButton, PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
-import { DialogInfo } from 'shared';
+import { DialogInfo } from '@bfc/shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
@@ -50,8 +47,10 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, publishLuis, startBot } = actions;
+  const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
+
+  const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
 
   useEffect(() => {
     toStartBot && handleClick();
@@ -172,12 +171,14 @@ export const TestController: React.FC = () => {
             labelPosition="left"
           />
         )}
-        <PrimaryButton
-          css={botButton}
-          text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
-          onClick={handleClick}
-          id={'publishAndConnect'}
-        />
+        <span ref={addRef}>
+          <PrimaryButton
+            css={botButton}
+            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
+            onClick={handleClick}
+            id={'publishAndConnect'}
+          />
+        </span>
         <Callout
           role="alertdialog"
           ariaLabelledBy="callout-label-id"

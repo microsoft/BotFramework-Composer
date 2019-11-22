@@ -43,8 +43,8 @@ const ConfirmDialog = props => {
     >
       {onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
-        <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
-        <DefaultButton onClick={onCancel} text={cancelBtnText} />
+        <PrimaryButton data-testid="confirmPrompt" onClick={onConfirm} text={confirmBtnText} />
+        <DefaultButton data-testid="cancelPrompt" onClick={onCancel} text={cancelBtnText} />
       </DialogFooter>
     </Dialog>
   );

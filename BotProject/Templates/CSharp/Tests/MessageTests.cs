@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.Bot.Builder;
@@ -10,7 +10,7 @@ using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Builder.LanguageGeneration;
-using Microsoft.Bot.Builder.ComposerBot.json;
+using Microsoft.Bot.Builder.ComposerBot.Json;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,7 +26,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\server\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\..\Composer\packages\server\assets\projects");
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 
@@ -35,7 +35,7 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
-            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "MessageSamples"));
+            string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "RespondingWithTextSample"));
             resourceExplorer.AddFolder(path);
         }
 
@@ -52,24 +52,24 @@ namespace Tests
         {
             await BuildTestFlow()
             .SendConversationUpdate()
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .Send("1")
-                .AssertReply("Here is a simple text message.")
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReplyOneOf(new string[] { "Hello, this is a text with LG", "Hi, this is a text with LG", "Hey, this is a text with LG" })
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .Send("2")
                 .AssertReply("This is a text saved in memory.")
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .Send("3")
                 .AssertReplyOneOf(new string[] { "Hello, this is a text with LG", "Hi, this is a text with LG", "Hey, this is a text with LG" })
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .Send("4")
                 .AssertReply("Hello, I'm Zoidberg. What is your name?")
             .Send("luhan")
                 .AssertReply("Hello luhan, nice to talk to you!")
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .Send("5")
                 .AssertReply("luhan nice to talk to you!")
-                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. Text With LG\n   4. LGWithParam\n   5. LGComposition\n   6. Structured LG\n   7. MultiLineText\n   8. IfElseCondition\n   9. SwitchCondition")
             .StartTestAsync();
         }
 
@@ -96,7 +96,7 @@ namespace Tests
             {
                 if (dialog is AdaptiveDialog planningDialog)
                 {
-                    await dm.OnTurnAsync(turnContext, null, cancellationToken).ConfigureAwait(false);
+                    await dm.OnTurnAsync(turnContext, cancellationToken).ConfigureAwait(false);
                 }
             });
         }
