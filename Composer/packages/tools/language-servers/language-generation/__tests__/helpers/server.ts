@@ -8,10 +8,9 @@ import * as net from 'net';
 import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
+import express from 'express';
 
 import { LGServer } from '../../src';
-
-const express = require('express');
 
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {

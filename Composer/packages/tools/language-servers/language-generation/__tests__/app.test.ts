@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import path from 'path';
+
+import WebSocket from 'ws';
 
 import { startServer } from './helpers/server';
 
-const WebSocket = require('ws');
-
-const lgFile = fs.readFileSync(path.join(__dirname, './mocks/greeting.lg'), 'utf-8');
-const initializeParams = fs.readFileSync(path.join(__dirname, './mocks/initialize-params.json'), 'utf-8');
+const lgFile = fs.readFileSync(`${__dirname}/mocks/greeting.lg`, 'utf-8');
+const initializeParams = fs.readFileSync(`${__dirname}/mocks/initialize-params.json`, 'utf-8');
 
 const ws = new WebSocket('ws://localhost:50002/lgServer');
 let reader;

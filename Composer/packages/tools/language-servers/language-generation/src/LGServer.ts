@@ -151,6 +151,7 @@ export class LGServer {
     const uri = URI.parse(url);
     if (uri.scheme === 'file') {
       return new Promise<string>((resolve, reject) => {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.readFile(uri.fsPath, 'UTF-8', (err, result) => {
           err ? reject('') : resolve(result.toString());
         });
