@@ -27,6 +27,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         }
 
         [HttpPost]
+        [HttpGet]
         public async Task PostAsync()
         {
             // Delegate the processing of the HTTP POST to the adapter.
