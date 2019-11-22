@@ -61,7 +61,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
+app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
 app.use(morgan('dev'));
 
 app.use(bodyParser.json({ limit: '50mb' }));

@@ -1,16 +1,7 @@
 {
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./lib/",
-    "noImplicitAny": false,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "react",
-    "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "resolveJsonModule": true
+    "outDir": "lib"
   },
   "include": [
     "./src/**/*",

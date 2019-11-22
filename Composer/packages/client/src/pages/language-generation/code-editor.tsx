@@ -8,12 +8,13 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { Diagnostic } from 'botbuilder-lg';
+import { LgFile } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
 interface CodeEditorProps {
-  file: { [key: string]: any };
+  file: LgFile;
   template: lgUtil.Template | null;
 }
 

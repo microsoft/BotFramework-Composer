@@ -18,7 +18,6 @@ class StorageService {
 
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
-    this.ensureDefaultBotFoldersExist();
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
@@ -40,18 +39,11 @@ class StorageService {
   };
 
   public getStorageConnections = (): StorageConnection[] => {
-    const connections = this.storageConnections.map(s => {
+    return this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      // if the last accessed path exist
-      if (fs.existsSync(s.path)) {
-        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
-      } else {
-        temp.path = Path.resolve(s.defaultPath);
-      }
+      temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
       return temp;
     });
-    this.ensureDefaultBotFoldersExist();
-    return connections;
   };
 
   public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
@@ -93,17 +85,6 @@ class StorageService {
     }
   };
 
-  public updateCurrentPath = (path: string) => {
-    this.storageConnections[0].path = path;
-    Store.set(this.STORE_KEY, this.storageConnections);
-  };
-
-  private ensureDefaultBotFoldersExist = () => {
-    this.storageConnections.forEach(s => {
-      this.createFolderRecurively(s.defaultPath);
-    });
-  };
-
   private isBotFolder = (path: string) => {
     // locate Main.dialog
     const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
@@ -137,13 +118,6 @@ class StorageService {
     // filter no access permission folder, witch value is null in children array
     const result = await Promise.all(children);
     return result.filter(item => !!item);
-  };
-
-  private createFolderRecurively = (path: string) => {
-    if (!fs.existsSync(path)) {
-      this.createFolderRecurively(Path.dirname(path));
-      fs.mkdirSync(path);
-    }
   };
 }
 

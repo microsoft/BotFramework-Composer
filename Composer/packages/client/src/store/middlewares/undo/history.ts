@@ -16,7 +16,6 @@ class UndoHistory {
   private stacks: { [key: string]: UndoStack } = {};
   private history: History[] = [];
   private pointer = -1;
-  private _limit = 5;
 
   public createStack(undo: ActionCreator, redo: ActionCreator) {
     const stack = new UndoStack(undo, redo);
@@ -62,10 +61,6 @@ class UndoHistory {
     keys(this.stacks).every(key => {
       this.stacks[key].clear();
     });
-  }
-
-  public set limit(limit: number) {
-    this._limit = limit;
   }
 
   canUndo = () => this.pointer > -1;

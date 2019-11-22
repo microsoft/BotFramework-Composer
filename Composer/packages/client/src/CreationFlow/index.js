@@ -25,7 +25,13 @@ export function CreationFlow(props) {
   const { templateId, templateProjects, focusedStorageFolder } = state;
 
   useEffect(() => {
-    const botsInCurrentFolder = getBotsInFocusedStorageFolder();
+    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
+
+    const botsInCurrentFolder = allFilesInFolder.filter(file => {
+      if (file.type === FileTypes.BOT) {
+        return file;
+      }
+    });
 
     setBots(botsInCurrentFolder);
   }, [focusedStorageFolder]);
@@ -60,17 +66,6 @@ export function CreationFlow(props) {
     }
   };
 
-  const getBotsInFocusedStorageFolder = () => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
-
-    const botsInCurrentFolder = allFilesInFolder.filter(file => {
-      if (file.type === FileTypes.BOT) {
-        return file;
-      }
-    });
-    return botsInCurrentFolder;
-  };
-
   const openBot = async botFolder => {
     await openBotProject(botFolder);
     navigateTo('/dialogs/Main');
@@ -81,20 +76,20 @@ export function CreationFlow(props) {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
-  const handleCreateNew = async (formData, location) => {
-    await createProject(templateId || '', formData.name || formData.defaultName, formData.description, location);
+  const handleCreateNew = async formData => {
+    await createProject(templateId || '', formData.name, formData.description, formData.location);
   };
 
   const handleSaveAs = async formData => {
     await saveProjectAs(formData.name, formData.description);
   };
 
-  const handleSubmit = (formData, location) => {
+  const handleSubmit = formData => {
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW_FROM_SCRATCH:
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
-        handleCreateNew(formData, location);
+        handleCreateNew(formData);
         navigateTo('/dialogs/Main');
         break;
       case CreationFlowStatus.SAVEAS:
