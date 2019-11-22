@@ -17,6 +17,9 @@ interface CodeEditorProps {
   template: lgUtil.Template | null;
 }
 
+const lspServerPort = process.env.LANGUAGE_SERVER_PORT ? Number(process.env.LANGUAGE_SERVER_PORT) : 5000;
+const lspServerPath = '/lgServer';
+
 export default function CodeEditor(props: CodeEditorProps) {
   const { actions } = useContext(StoreContext);
   const { file, template } = props;
@@ -110,8 +113,8 @@ export default function CodeEditor(props: CodeEditorProps) {
       errorMsg={errorMsg}
       lgOption={lgOption}
       languageServer={{
-        port: 5000,
-        path: '/lgServer',
+        port: lspServerPort,
+        path: lspServerPath,
       }}
       onChange={_onChange}
     />

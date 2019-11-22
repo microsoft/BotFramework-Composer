@@ -107,7 +107,6 @@ const server = app.listen(port, () => {
   }
 });
 
-// set up language server
 const wss: ws.Server = new ws.Server({
   noServer: true,
   perMessageDeflate: false,

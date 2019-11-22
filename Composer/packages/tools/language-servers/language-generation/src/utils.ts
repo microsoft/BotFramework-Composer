@@ -40,17 +40,15 @@ export function getRangeAtPosition(document: TextDocument, position: Position): 
   return range;
 }
 
+const severityMap = {
+  [LGDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
+  [LGDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
+  [LGDiagnosticSeverity.Information]: DiagnosticSeverity.Information,
+  [LGDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning,
+};
+
 export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSeverity {
-  switch (severity) {
-    case LGDiagnosticSeverity.Error:
-      return DiagnosticSeverity.Error;
-    case LGDiagnosticSeverity.Hint:
-      return DiagnosticSeverity.Hint;
-    case LGDiagnosticSeverity.Information:
-      return DiagnosticSeverity.Information;
-    case LGDiagnosticSeverity.Warning:
-      return DiagnosticSeverity.Warning;
-  }
+  return severityMap[severity];
 }
 
 export function getLGResources(content: string): LGResource {

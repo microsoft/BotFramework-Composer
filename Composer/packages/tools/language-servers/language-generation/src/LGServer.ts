@@ -20,7 +20,7 @@ import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
 import get from 'lodash/get';
 
-import { buildInfunctionsMap } from './builtinFunctions';
+import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   convertSeverity,
@@ -147,7 +147,7 @@ export class LGServer {
     return Promise.resolve(null);
   }
 
-  protected async resovleSchema(url: string): Promise<string> {
+  protected async resolveSchema(url: string): Promise<string> {
     const uri = URI.parse(url);
     if (uri.scheme === 'file') {
       return new Promise<string>((resolve, reject) => {
@@ -188,8 +188,16 @@ export class LGServer {
 
     //if the line starts with '-', will try to match
     flag = true;
-    //initilize the state to plaintext
+
+    //initialize the root state to plaintext
     state.push('PlainText');
+
+    // find out the context state of current cursor, offer precise suggestion and completion etc.
+    /**
+     * - Hi, @{name}, what's the meaning of 'state'
+     * - Hi---------, @{name}--------, what-------' ------s the meaning of "state"
+     * - <plaintext>, @{<expression>}, <plaintext><single><plaintext>------<double>
+     */
     let i = 0;
     while (i < lineContent.length) {
       const char = lineContent.charAt(i);
@@ -254,9 +262,14 @@ export class LGServer {
       completionList.push(item);
     });
 
-    const match = this.matchedStates(params);
+    const matchResult = this.matchedStates(params);
     // TODO: more precise match
-    if (match && match.matched && match.state && allowedCompletionStates.includes(match.state.toLowerCase())) {
+    if (
+      matchResult &&
+      matchResult.matched &&
+      matchResult.state &&
+      allowedCompletionStates.includes(matchResult.state.toLowerCase())
+    ) {
       return Promise.resolve({ isIncomplete: true, items: completionList });
     } else {
       return Promise.resolve(null);
@@ -298,8 +311,8 @@ export class LGServer {
       this.cleanDiagnostics(document);
       return;
     }
-    const staticChercher = new lg.StaticChecker();
-    const lgDiags = staticChercher.checkText(text, '', lg.ImportResolver.fileResolver);
+    const staticChecker = new lg.StaticChecker();
+    const lgDiags = staticChecker.checkText(text, '', lg.ImportResolver.fileResolver);
     const diagnostics: Diagnostic[] = [];
     lgDiags.forEach(diag => {
       const diagnostic: Diagnostic = {

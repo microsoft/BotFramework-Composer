@@ -1,6 +1,6 @@
 # Language-generation language server
 
-## firstly, build the Composer 
+## firstly, build the Composer
 ```
 yarn install
 ```
@@ -9,11 +9,13 @@ yarn install
 yarn build
 ```
 
-## How to start the demo 
+## How to start the demo
 
 #### 1. under language-generation directory, run
 ```
-yarn satrt
+yarn start
 ```
 
-go to [http://localhost:8080/]
+### 2. go to code-editor directory
+
+start lgEditor demo, connect :5002/lgServer

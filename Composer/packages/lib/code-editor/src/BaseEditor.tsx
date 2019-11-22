@@ -6,6 +6,8 @@ import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.ap
 import MonacoEditor, { MonacoEditorProps } from '@bfcomposer/react-monaco-editor';
 import throttle from 'lodash/throttle';
 
+import { assignDefined } from './utils/common';
+
 const defaultOptions: monacoEditor.editor.IEditorConstructionOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
@@ -31,7 +33,7 @@ export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
 
 export function BaseEditor(props: BaseEditorProps) {
   const { onChange, placeholder, value } = props;
-  const options = Object.assign({}, defaultOptions, props.options);
+  const options = assignDefined(defaultOptions, props.options);
   const containerRef = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState({ height: 0, width: 0 });
 
