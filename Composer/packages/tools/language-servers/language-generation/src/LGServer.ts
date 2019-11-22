@@ -55,6 +55,7 @@ export class LGServer {
     this.documents.onDidClose(event => {
       this.cleanPendingValidation(event.document);
       this.cleanDiagnostics(event.document);
+      this.connection.dispose();
     });
 
     this.connection.onInitialize(params => {
@@ -86,7 +87,7 @@ export class LGServer {
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
-          this.doValidate(textDocument);
+          this.validate(textDocument);
         }
       }
     });
