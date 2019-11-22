@@ -3,10 +3,15 @@
   "version": "0.1.0",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
+    "build": "tsc --build tsconfig.build.json",
     "build:demo": "cd demo && tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
-    "start": "cd demo && ts-node ./src/server.ts"
+    "clean": "rimraf lib demo/dist",
+    "start": "cd demo && ts-node ./src/server.ts",
+    "test": "jest",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint:fix": "yarn lint --fix",
+    "lint:typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@types/node": "^12.0.4",
@@ -16,6 +21,9 @@
   },
   "devDependencies": {
     "express": "^4.17.1",
+    "jest": "24.0.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.3",
     "vscode-ws-jsonrpc": "^0.1.1",
