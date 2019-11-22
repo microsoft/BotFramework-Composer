@@ -7,7 +7,13 @@ import { ConceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { TriggerSize } from '../../constants/ElementSizes';
+import {
+  triggerContainerStyle,
+  triggerContentStyle,
+  titleStyle,
+  subtitleStyle,
+  triggerIconStyle,
+} from './triggerStyles';
 
 function getLabel(data: any): string {
   const labelOverrides = ConceptLabels[data.$type];
@@ -24,50 +30,18 @@ function getName(data: any): string {
   return getLabel(data);
 }
 
-const titleStyle: any = {
-  whiteSpace: 'nowrap',
-  color: '#333333',
-  fontFamily: 'Segoe UI',
-  fontSize: '18px',
-  lineHeight: '24px',
-};
-
-const subtitleStyle: any = {
-  whiteSpace: 'nowrap',
-  color: '#BDBDBD',
-  fontFamily: 'Segoe UI',
-  fontSize: '10px',
-  lineHeight: '14px',
-};
-
 export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
   const name = getName(data);
   const label = getLabel(data);
 
   return (
-    <div
-      className="Trigger--Container"
-      css={{
-        ...TriggerSize,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        paddingBottom: '5px',
-        boxSizing: 'border-box',
-      }}
-    >
-      <div
-        className="Trigger--Content"
-        css={{ wordBreak: 'break-all', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      >
-        <div className="Trigger--Title" css={titleStyle}>
-          <Icon iconName="Flow" style={{ lineHeight: '24px', marginRight: '5px' }} />
+    <div css={triggerContainerStyle}>
+      <div css={triggerContentStyle}>
+        <div css={titleStyle}>
+          <Icon iconName="Flow" style={triggerIconStyle} />
           <span>{name}</span>
         </div>
-        <div className="Trigger--Subtitle" css={subtitleStyle}>
-          {label}
-        </div>
+        <div css={subtitleStyle}>{label}</div>
       </div>
     </div>
   );
