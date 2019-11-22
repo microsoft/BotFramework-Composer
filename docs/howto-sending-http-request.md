@@ -11,7 +11,7 @@ Follow the [steps](how_to_use_oauth.md) to set up OAuth in your bot. After the s
 
 ![oauth-setup](./media/integration/oauth-setup.png)
 
-Please note that the **Token property** you set will store the OAuth token result and you can reference it using `dialog.token.token`. You will need to use this value [here](#add-an-http-request). 
+Please note that the **Token property** you set will store the OAuth token result and you can reference it using `{dialog.token.token}`. You will need to use this value [here](#add-an-http-request). 
 
 Also make sure your Composer setting have appropriate `appID` and `app password` of the Azure Bot Service registration as shown in the screenshot below: 
 
