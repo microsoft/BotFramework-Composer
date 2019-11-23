@@ -8,6 +8,9 @@ import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
 
+const lspServerPort = process.env.LANGUAGE_SERVER_PORT ? Number(process.env.LANGUAGE_SERVER_PORT) : 5000;
+const lspServerPath = '/lgServer';
+
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 
@@ -88,8 +91,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
-        port: 5000,
-        path: '/lgServer',
+        port: lspServerPort,
+        path: lspServerPath,
       }}
       height={height}
     />
