@@ -56,6 +56,9 @@ export class LuServer {
           },
           hoverProvider: true,
           foldingRangeProvider: false,
+          documentOnTypeFormattingProvider: {
+            firstTriggerCharacter: "\n"
+          }
         },
       };
     });

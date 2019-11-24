@@ -8,6 +8,7 @@ import {
   createConnection,
 } from 'monaco-languageclient';
 import normalizeUrl = require('normalize-url');
+import { resolve } from 'dns';
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 // register Monaco languages
@@ -91,6 +92,7 @@ function createLanguageClient(connection: MessageConnection): MonacoLanguageClie
         error: () => ErrorAction.Continue,
         closed: () => CloseAction.DoNotRestart,
       },
+      //middleware
     },
     // create a language client connection from the JSON RPC connection on demand
     connectionProvider: {
