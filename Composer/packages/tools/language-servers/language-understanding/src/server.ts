@@ -70,17 +70,20 @@ export class LuServer {
   start() {
     this.connection.listen();
   }
+  private lastLineIndentLevel(text: string): number {
+    const decRegex: RegExp = /.*:\s*/;
+
+    return 0;
+  }
 
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
-    console.log('sssssss');
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
 
     const edits: TextEdit[] = [];
-    if (params.ch == '\n') {
-      console.log(',,,,,,');
+    if (params.ch == '\n' ) {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
       const item: TextEdit = TextEdit.insert(newPos, '-');
