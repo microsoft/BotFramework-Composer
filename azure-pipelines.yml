@@ -50,3 +50,4 @@ jobs:
           CYPRESS_VIDEO: true
           CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
           TERM: xterm
+          COMPOSER_BOTS_FOLDER: $(Pipeline.Workspace)/Composer/TestBots
