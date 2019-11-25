@@ -40,7 +40,7 @@ const validateForm = data => {
 export function DefineConversation(props) {
   const { state } = useContext(StoreContext);
   const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
-  const { templateId, focusedStorageFolder } = state;
+  const { templateId, focusedStorageFolder, botName } = state;
   const [formData, setFormData] = useState({ errors: {} });
   const [location, setLocation] = useState('');
   const [disable, setDisable] = useState(false);
@@ -54,7 +54,8 @@ export function DefineConversation(props) {
       }
     });
     let i = 0;
-    let defaultName = `${templateId}-${i}`;
+    const bot = templateId || botName;
+    let defaultName = `${bot}-${i}`;
 
     while (
       botsInCurrentFolder.findIndex(bot => {
@@ -62,7 +63,7 @@ export function DefineConversation(props) {
       }) > -1
     ) {
       i = i + 1;
-      defaultName = `${templateId}-${i}`;
+      defaultName = `${bot}-${i}`;
     }
     updateForm('defaultName')(null, defaultName);
   }, [templateId, focusedStorageFolder]);

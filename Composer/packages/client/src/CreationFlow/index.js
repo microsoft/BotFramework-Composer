@@ -76,20 +76,20 @@ export function CreationFlow(props) {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
-  const handleCreateNew = async formData => {
-    await createProject(templateId || '', formData.name, formData.description, formData.location);
+  const handleCreateNew = async (formData, location) => {
+    await createProject(templateId || '', formData.name || formData.defaultName, formData.description, location);
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description);
+    await saveProjectAs(formData.name || formData.defaultName, formData.description);
   };
 
-  const handleSubmit = formData => {
+  const handleSubmit = (formData, location) => {
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW_FROM_SCRATCH:
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
-        handleCreateNew(formData);
+        handleCreateNew(formData, location);
         navigateTo('/dialogs/Main');
         break;
       case CreationFlowStatus.SAVEAS:
