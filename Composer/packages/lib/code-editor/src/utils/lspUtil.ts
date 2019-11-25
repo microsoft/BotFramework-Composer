@@ -3,6 +3,15 @@
 
 import * as normalizeUrl from 'normalize-url';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { MessageConnection } from 'vscode-ws-jsonrpc';
+import {
+  MonacoLanguageClient,
+  CloseAction,
+  ErrorAction,
+  createConnection,
+  LanguageClientOptions,
+} from 'monaco-languageclient';
+import nanoid from 'nanoid';
 
 export function createUrl(server: { [key: string]: string } | string): string {
   if (typeof server === 'string') {
@@ -11,8 +20,7 @@ export function createUrl(server: { [key: string]: string } | string): string {
   const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   const endHost = host || `${hostname}:${port}`;
-  const timeStamp = `${new Date().getTime()}${Math.floor(Math.random() * 1000)}`;
-  return normalizeUrl.default(`${protocol}://${endHost}/${path}?t=${timeStamp}`);
+  return normalizeUrl.default(`${protocol}://${endHost}/${path}?id=${nanoid()}`);
 }
 
 export function createWebSocket(url: string): WebSocket {
@@ -26,4 +34,29 @@ export function createWebSocket(url: string): WebSocket {
     debug: false,
   };
   return new ReconnectingWebSocket(url, [], socketOptions);
+}
+
+export function createLanguageClient(
+  name: string,
+  documentSelector: LanguageClientOptions['documentSelector'],
+  connection: MessageConnection
+): MonacoLanguageClient {
+  return new MonacoLanguageClient({
+    name,
+    clientOptions: {
+      // use a language id as a document selector
+      documentSelector,
+      // disable the default error handler
+      errorHandler: {
+        error: () => ErrorAction.Continue,
+        closed: () => CloseAction.DoNotRestart,
+      },
+    },
+    // create a language client connection from the JSON RPC connection on demand
+    connectionProvider: {
+      get: (errorHandler, closeHandler) => {
+        return Promise.resolve(createConnection(connection, errorHandler, closeHandler));
+      },
+    },
+  });
 }

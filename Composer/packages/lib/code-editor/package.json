@@ -65,6 +65,7 @@
     "lodash": "^4.17.15",
     "monaco-editor-core": "0.17.0",
     "monaco-languageclient": "^0.10.0",
+    "nanoid": "^2.1.6",
     "normalize-url": "^4.5.0",
     "reconnecting-websocket": "^3.2.2",
     "vscode-ws-jsonrpc": "^0.1.1"
