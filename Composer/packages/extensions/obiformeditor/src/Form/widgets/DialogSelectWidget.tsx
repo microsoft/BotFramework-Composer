@@ -50,8 +50,8 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
         setComboboxTitle(formatMessage('Create a new dialog'));
         formContext.shellApi.createDialog().then(newDialog => {
           if (newDialog) {
-            setTimeout(() => onChange(newDialog));
-            formContext.shellApi.navTo(newDialog);
+            onChange(newDialog);
+            setTimeout(() => formContext.shellApi.navTo(newDialog), 500);
           } else {
             setComboboxTitle(null);
           }
