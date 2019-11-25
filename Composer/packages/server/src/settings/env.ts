@@ -5,3 +5,5 @@ export const absHosted = process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 export const absHostRoot = process.env.WEBSITE_HOSTNAME
   ? `https://${process.env.WEBSITE_HOSTNAME}`
   : 'http://localhost:3978';
+
+export const botsFolder = process.env.COMPOSER_BOTS_FOLDER;
