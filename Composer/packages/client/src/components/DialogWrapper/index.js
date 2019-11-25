@@ -8,9 +8,14 @@ import { styles } from './styles';
 
 export function DialogWrapper(props) {
   const { isOpen, onDismiss, title, subText, children } = props;
+
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <Dialog
-      hidden={!isOpen}
+      hidden={false}
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
