@@ -19,6 +19,7 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import * as lg from 'botbuilder-lg';
 import get from 'lodash/get';
+import { LGTemplate } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -98,7 +99,10 @@ export class LGServer {
     if (LGDocument) {
       // concat new content
       const { content, template } = LGDocument;
-      text = updateTemplateInContent(content, template);
+      try {
+        text = updateTemplateInContent(content, template);
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
     }
     return text;
   }
@@ -109,8 +113,13 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    const lgResources = getLGResources(text);
-    const templates = lgResources.Templates;
+    let templates: LGTemplate[] = [];
+    try {
+      const lgResources = getLGResources(text);
+      templates = lgResources.Templates;
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.Name === word);
@@ -231,8 +240,12 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    const lgResources = getLGResources(text);
-    const templates = lgResources.Templates;
+    let templates: LGTemplate[] = [];
+    try {
+      const lgResources = getLGResources(text);
+      templates = lgResources.Templates;
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
     const completionList: CompletionItem[] = [];
     templates.forEach(template => {
       const item = {
@@ -297,8 +310,11 @@ export class LGServer {
         Parameters: template.Parameters,
         Body: text,
       };
-      text = updateTemplateInContent(content, updatedTemplate);
-      lineOffset = getTemplatePositionOffset(content, updatedTemplate);
+      try {
+        text = updateTemplateInContent(content, updatedTemplate);
+        lineOffset = getTemplatePositionOffset(content, updatedTemplate);
+        // eslint-disable-next-line no-empty
+      } catch (error) {}
     }
 
     if (text.length === 0) {

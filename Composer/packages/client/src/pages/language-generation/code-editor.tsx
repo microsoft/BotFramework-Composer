@@ -81,13 +81,17 @@ export default function CodeEditor(props: CodeEditorProps) {
     if (inlineMode) {
       const content = get(file, 'content', '');
       const templateName = get(template, 'Name', '');
-      const newContent = lgUtil.updateTemplate(content, templateName, {
-        Name: templateName,
-        Parameters: get(template, 'Parameters'),
-        Body: value,
-      });
-      diagnostics = lgUtil.check(newContent);
-      updateLgTemplate(value);
+      try {
+        const newContent = lgUtil.updateTemplate(content, templateName, {
+          Name: templateName,
+          Parameters: get(template, 'Parameters'),
+          Body: value,
+        });
+        diagnostics = lgUtil.check(newContent);
+        updateLgTemplate(value);
+      } catch (error) {
+        setErrorMsg(error.message);
+      }
     } else {
       diagnostics = lgUtil.check(value);
       updateLgFile(value);
