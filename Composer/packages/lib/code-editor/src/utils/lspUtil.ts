@@ -11,7 +11,8 @@ export function createUrl(server: { [key: string]: string } | string): string {
   const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   const endHost = host || `${hostname}:${port}`;
-  return normalizeUrl.default(`${protocol}://${endHost}/${path}`);
+  const timeStamp = `${new Date().getTime()}${Math.floor(Math.random() * 1000)}`;
+  return normalizeUrl.default(`${protocol}://${endHost}/${path}?t=${timeStamp}`);
 }
 
 export function createWebSocket(url: string): WebSocket {
