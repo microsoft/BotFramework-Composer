@@ -54,11 +54,11 @@ export class LuServer {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{'],
           },
-          hoverProvider: true,
+          //hoverProvider: true,
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
-            firstTriggerCharacter: "\n"
-          }
+            firstTriggerCharacter: '\n',
+          },
         },
       };
     });
@@ -76,17 +76,56 @@ export class LuServer {
     return 0;
   }
 
+  private getLastLineContent(params: TextDocumentPositionParams): string {
+    const document = this.documents.get(params.textDocument.uri);
+    const content = document.getText();
+    const position = params.position;
+    if (position.line === 0) {
+      return '';
+    } else {
+      return content.split('\n')[position.line - 1];
+    }
+  }
+
+  private getCurrentLineContent(params: TextDocumentPositionParams): string {
+    const document = this.documents.get(params.textDocument.uri);
+    const position = params.position;
+    if (position.line === 0) {
+      return '';
+    } else {
+      const range = Range.create(position.line, 0, position.line, position.character);
+      return document.getText(range);
+    }
+  }
+
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
 
+    const lastLineContent = this.getLastLineContent(params);
+    const curLineContent = this.getCurrentLineContent(params);
+    console.log(lastLineContent);
     const edits: TextEdit[] = [];
-    if (params.ch == '\n' ) {
+    const isUtteranceLine = /^\s*-.*/;
+    const isIntentLine = /^\s*#.*/;
+    console.log(lastLineContent);
+    if (
+      params.ch == '\n' &&
+      (isUtteranceLine.test(lastLineContent) || isIntentLine.test(lastLineContent)) &&
+      lastLineContent.trim() !== '-'
+    ) {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
       const item: TextEdit = TextEdit.insert(newPos, '-');
+      edits.push(item);
+    }
+
+    if (lastLineContent.trim() === '-') {
+      const pos = params.position;
+      const range = Range.create(pos.line - 1, 0, pos.line - 1, 2);
+      const item: TextEdit = TextEdit.del(range);
       edits.push(item);
     }
 
@@ -132,7 +171,6 @@ export class LuServer {
         }
       }
     } catch (e) {
-      console.log(e);
       e.text.split('\n').forEach(msg => {
         const matched = msg.match(/line\s(\d+:\d+)/g);
         const positions: Position[] = [];
@@ -241,104 +279,104 @@ export class LuServer {
       });
     }
 
-    // if (this.isPrebuiltEntity(params)) {
-    //   const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
-    //   prebuiltTypes.forEach(entity => {
-    //     const item = {
-    //       label: entity,
-    //       kind: CompletionItemKind.Keyword,
-    //       insertText: ` ${entity}`,
-    //       documentation: `Prebuilt enitity: ${entity}`,
-    //     };
+    if (this.isPrebuiltEntity(params)) {
+      const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
+      prebuiltTypes.forEach(entity => {
+        const item = {
+          label: entity,
+          kind: CompletionItemKind.Keyword,
+          insertText: ` ${entity}`,
+          documentation: `Prebuilt enitity: ${entity}`,
+        };
 
-    //     completionList.push(item);
-    //   });
-    // }
+        completionList.push(item);
+      });
+    }
 
-    // if (this.isRegexEntity(params)) {
-    //   const item = {
-    //     label: 'RegExp Entity',
-    //     kind: CompletionItemKind.Keyword,
-    //     insertText: ` //`,
-    //     documentation: `regex enitity`,
-    //   };
+    if (this.isRegexEntity(params)) {
+      const item = {
+        label: 'RegExp Entity',
+        kind: CompletionItemKind.Keyword,
+        insertText: ` //`,
+        documentation: `regex enitity`,
+      };
 
-    //   completionList.push(item);
-    // }
+      completionList.push(item);
+    }
 
-    // if (this.isEntityName(params)) {
-    //   const item = {
-    //     label: 'hasRoles?',
-    //     kind: CompletionItemKind.Keyword,
-    //     insertText: ` hasrole `,
-    //     documentation: `Entity name hasRole?`,
-    //   };
+    if (this.isEntityName(params)) {
+      const item = {
+        label: 'hasRoles?',
+        kind: CompletionItemKind.Keyword,
+        insertText: ` hasrole `,
+        documentation: `Entity name hasRole?`,
+      };
 
-    //   completionList.push(item);
-    //   const item2 = {
-    //     label: 'useFeature?',
-    //     kind: CompletionItemKind.Keyword,
-    //     insertText: ` usesFeature `,
-    //     documentation: `Entity name useFeature?`,
-    //   };
+      completionList.push(item);
+      const item2 = {
+        label: 'useFeature?',
+        kind: CompletionItemKind.Keyword,
+        insertText: ` usesFeature `,
+        documentation: `Entity name useFeature?`,
+      };
 
-    //   completionList.push(item2);
-    // }
+      completionList.push(item2);
+    }
 
-    // // completion for entities and patterns
-    // const entitiesList: string[] = [];
-    // const regexList: string[] = [];
-    // const pattenAnyList: string[] = [];
-    // const prebuiltList: string[] = [];
-    // const closedList: string[] = [];
+    // completion for entities and patterns
+    const entitiesList: string[] = [];
+    const regexList: string[] = [];
+    const pattenAnyList: string[] = [];
+    const prebuiltList: string[] = [];
+    const closedList: string[] = [];
 
-    // const luisJson = await this.extractLUISContent(text);
+    const luisJson = await this.extractLUISContent(text);
 
-    // if (luisJson !== undefined) {
-    //   if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-    //     luisJson.entities.forEach(entity => {
-    //       entitiesList.push(entity.name);
-    //     });
-    //   }
+    if (luisJson !== undefined) {
+      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
+        luisJson.entities.forEach(entity => {
+          entitiesList.push(entity.name);
+        });
+      }
 
-    //   if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-    //     luisJson.regex_entities.forEach(entity => {
-    //       regexList.push(entity.name);
-    //     });
-    //   }
+      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
+        luisJson.regex_entities.forEach(entity => {
+          regexList.push(entity.name);
+        });
+      }
 
-    //   if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-    //     luisJson.patternAnyEntities.forEach(entity => {
-    //       pattenAnyList.push(entity.name);
-    //     });
-    //   }
+      if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
+        luisJson.patternAnyEntities.forEach(entity => {
+          pattenAnyList.push(entity.name);
+        });
+      }
 
-    //   if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-    //     luisJson.prebuiltEntities.forEach(entity => {
-    //       prebuiltList.push(entity.name);
-    //     });
-    //   }
+      if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
+        luisJson.prebuiltEntities.forEach(entity => {
+          prebuiltList.push(entity.name);
+        });
+      }
 
-    //   if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-    //     luisJson.closedLists.forEach(entity => {
-    //       closedList.push(entity.name);
-    //     });
-    //   }
+      if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
+        luisJson.closedLists.forEach(entity => {
+          closedList.push(entity.name);
+        });
+      }
 
-    //   // auto suggest pattern
-    //   if (this.matchedEnterPattern(params)) {
-    //     entitiesList.forEach(name => {
-    //       const item = {
-    //         label: `Entity: ${name}`,
-    //         kind: CompletionItemKind.Property,
-    //         insertText: ` ${name} =`,
-    //         documentation: `pattern suggestion for entity: ${name}`,
-    //       };
+      // auto suggest pattern
+      if (this.matchedEnterPattern(params)) {
+        entitiesList.forEach(name => {
+          const item = {
+            label: `Entity: ${name}`,
+            kind: CompletionItemKind.Property,
+            insertText: ` ${name} =`,
+            documentation: `pattern suggestion for entity: ${name}`,
+          };
 
-    //       completionList.push(item);
-    //     });
-    //   }
-    // }
+          completionList.push(item);
+        });
+      }
+    }
 
     return Promise.resolve({ isIncomplete: false, items: completionList });
   }
