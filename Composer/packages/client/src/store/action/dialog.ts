@@ -59,7 +59,7 @@ export const createDialogBase: ActionCreator = async (store, { id, content }) =>
     const response = await httpClient.post(`/projects/opened/dialogs`, { id, content });
     const onCreateDialogComplete = store.getState().onCreateDialogComplete;
     if (typeof onCreateDialogComplete === 'function') {
-      onCreateDialogComplete(id);
+      setTimeout(() => onCreateDialogComplete(id));
     }
     store.dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
