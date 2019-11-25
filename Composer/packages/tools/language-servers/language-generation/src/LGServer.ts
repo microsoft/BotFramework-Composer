@@ -79,7 +79,9 @@ export class LGServer {
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
-          this.validate(textDocument);
+          setTimeout(() => {
+            this.validate(textDocument);
+          }, 500);
         }
       }
     });
