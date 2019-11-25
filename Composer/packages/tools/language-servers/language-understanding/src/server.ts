@@ -68,11 +68,6 @@ export class LuServer {
   start() {
     this.connection.listen();
   }
-  private lastLineIndentLevel(text: string): number {
-    const decRegex: RegExp = /.*:\s*/;
-
-    return 0;
-  }
 
   private getLastLineContent(params: TextDocumentPositionParams): string {
     const document = this.documents.get(params.textDocument.uri);
@@ -150,13 +145,19 @@ export class LuServer {
     ) {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
-      const item: TextEdit = TextEdit.insert(newPos, '-');
+      let insertStr = "";
+      if (lastLineContent.trim().endsWith(":")) {
+        insertStr = "\t- "
+      } else {
+        insertStr = "- ";
+      }
+      const item: TextEdit = TextEdit.insert(newPos, insertStr);
       edits.push(item);
     }
 
     if (lastLineContent.trim() === '-') {
       const pos = params.position;
-      const range = Range.create(pos.line - 1, 0, pos.line - 1, 2);
+      const range = Range.create(pos.line - 1, 0, pos.line - 1, lastLineContent.length - 1);
       const item: TextEdit = TextEdit.del(range);
       edits.push(item);
     }
