@@ -5,6 +5,18 @@ import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-langua
 import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
 import get from 'lodash/get';
 
+export interface Template {
+  Name: string;
+  Parameters?: string[];
+  Body: string;
+}
+
+export interface LGDocument {
+  uri: string;
+  content: string;
+  template: Template;
+}
+
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
   let range: Range;
   const text = document.getText();
@@ -55,14 +67,14 @@ export function getLGResources(content: string): LGResource {
   return LGParser.parse(content, ' ');
 }
 
-export function getTemplatePositionOffset(content: string, { Name, Body }): number {
-  const resource = LGParser.parse(content).updateTemplate(Name, Name, [], Body);
+export function getTemplatePositionOffset(content: string, { Name, Parameters = [], Body }: Template): number {
+  const resource = LGParser.parse(content).updateTemplate(Name, Name, Parameters, Body);
   const template = resource.Templates.find(item => item.Name === Name);
   const templateStartLine = get(template, 'ParseTree._start.line', 0);
   return templateStartLine;
 }
 
-export function updateTemplateInContent(content: string, { Name, Body }): string {
+export function updateTemplateInContent(content: string, { Name, Parameters = [], Body }: Template): string {
   const resource = LGParser.parse(content);
-  return resource.updateTemplate(Name, Name, [], Body).toString();
+  return resource.updateTemplate(Name, Name, Parameters, Body).toString();
 }

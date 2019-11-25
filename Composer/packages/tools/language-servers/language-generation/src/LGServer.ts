@@ -27,21 +27,13 @@ import {
   getLGResources,
   updateTemplateInContent,
   getTemplatePositionOffset,
+  LGDocument,
 } from './utils';
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
 const allowedCompletionStates = ['plaintext', 'expression'];
-
-interface LGDocument {
-  uri: string;
-  content: string;
-  template: {
-    Name: string;
-    Body: string;
-  };
-}
 
 export class LGServer {
   protected workspaceRoot: URI | undefined;
@@ -54,7 +46,6 @@ export class LGServer {
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
       this.cleanPendingValidation(event.document);
-      this.cleanDiagnostics(event.document);
       this.connection.dispose();
     });
 
@@ -303,6 +294,7 @@ export class LGServer {
       const { content, template } = LGDocument;
       const updatedTemplate = {
         Name: template.Name,
+        Parameters: template.Parameters,
         Body: text,
       };
       text = updateTemplateInContent(content, updatedTemplate);

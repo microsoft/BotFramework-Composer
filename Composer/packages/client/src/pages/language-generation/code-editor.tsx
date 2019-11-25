@@ -52,6 +52,7 @@ export default function CodeEditor(props: CodeEditorProps) {
           templateName,
           template: {
             Name: templateName,
+            Parameters: get(template, 'Parameters'),
             Body: body,
           },
         };
@@ -81,6 +82,7 @@ export default function CodeEditor(props: CodeEditorProps) {
       const templateName = get(template, 'Name', '');
       const newContent = lgUtil.updateTemplate(content, templateName, {
         Name: templateName,
+        Parameters: get(template, 'Parameters'),
         Body: value,
       });
       diagnostics = lgUtil.check(newContent);

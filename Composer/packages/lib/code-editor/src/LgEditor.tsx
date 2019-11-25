@@ -25,6 +25,7 @@ export interface LGOption {
   content: string;
   template?: {
     Name: string;
+    Parameters?: string[];
     Body: string;
   };
 }
@@ -45,7 +46,7 @@ const defaultLGServer = {
   path: '/lgServer',
 };
 
-async function initializeDocuments(languageClient, lgOption) {
+async function initializeDocuments(languageClient: MonacoLanguageClient, lgOption: LGOption) {
   if (lgOption && lgOption.inline) {
     await languageClient.onReady();
     languageClient.sendRequest('initializeDocuments', lgOption);
