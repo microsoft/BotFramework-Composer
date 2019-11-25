@@ -1,25 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import os from 'os';
 import fs from 'fs';
 
+import log from '../logger';
+import settings from '../settings';
 import { Path } from '../utility/path';
 
-let defaultPath = process.env.DEFAULT_PATH;
+let defaultPath = settings.botsFolder;
 if (defaultPath && defaultPath.endsWith(':')) {
   defaultPath = defaultPath + '/';
 }
 if (!defaultPath) {
-  console.log(`The default path is set to ${Path.join(os.homedir(), 'Documents', 'Composer')}`);
-  defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
+  log(`The default path is set to ${settings.defaultFolder}`);
+  defaultPath = settings.defaultFolder;
 } else if (!fs.existsSync(defaultPath)) {
-  console.log(
-    `The default path ${defaultPath} does not exist. We set it to ${Path.join(os.homedir(), 'Documents', 'Composer')}`
-  );
-  defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
+  log(`The default path ${defaultPath} does not exist. We set it to ${settings.defaultFolder}`);
+  defaultPath = settings.defaultFolder;
 }
 defaultPath = Path.resolve(defaultPath);
+
 export default {
   storageConnections: [
     {
