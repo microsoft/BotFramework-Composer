@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet --ext .ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
@@ -34,7 +34,7 @@
     "format-message": "^6.2.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "7.37.1",
+    "office-ui-fabric-react": "7.62.0",
     "react-error-boundary": "^1.2.5"
   },
   "peerDependencies": {

@@ -33,6 +33,7 @@
         "name": "GetStarted",
         "id": "629539"
       },
+      "condition": "turn.recognized.score > 0.7",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",

@@ -1,26 +1,27 @@
-/// <reference types="Cypress" />
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 context('RemoveDialog', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.copyBot('ToDoBotWithLuisSample', 'ToDoBotWithLuisSampleSpec');
+    cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can remove dialog', () => {
-    cy.getByTestId('ProjectTree').within(() => {
-      cy.getByTestId('DialogTreeItemtriggers[4]').within(() => {
-        cy.getByTestId('dialogMoreButton')
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByTestId('DialogTreeItemtriggers[4]').within(() => {
+        cy.findByTestId('dialogMoreButton')
           .first()
           .invoke('attr', 'style', 'visibility: visible')
           .click();
-        });
       });
-
-    cy.get('.ms-ContextualMenu-linkContent > .ms-ContextualMenu-itemText').within(() => {
-      cy.getByText('Delete').click();
     });
 
-    cy.getByTestId('ProjectTree').within(() => {
+    cy.get('.ms-ContextualMenu-linkContent > .ms-ContextualMenu-itemText').within(() => {
+      cy.findByText('Delete').click();
+    });
+
+    cy.findByTestId('ProjectTree').within(() => {
       cy.get('[title="AddItem"]').should('not.exist');
     });
   });
