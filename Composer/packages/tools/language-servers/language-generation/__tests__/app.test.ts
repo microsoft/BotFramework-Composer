@@ -10,7 +10,7 @@ import { startServer } from './helpers/server';
 const lgFile = fs.readFileSync(`${__dirname}/mocks/greeting.lg`, 'utf-8');
 const initializeParams = fs.readFileSync(`${__dirname}/mocks/initialize-params.json`, 'utf-8');
 
-const ws = new WebSocket('ws://localhost:50002/lgServer');
+const ws = new WebSocket('ws://localhost:50002/lg-language-server');
 let reader;
 ws.on('message', data => {
   reader(data);

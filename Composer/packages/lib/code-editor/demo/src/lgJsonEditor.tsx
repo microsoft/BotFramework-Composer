@@ -106,7 +106,7 @@ export default function App() {
     onChange: value => {
       setValue1(value);
     },
-    languageServer: 'localhost:5000/lgServer',
+    languageServer: 'localhost:5000/lg-language-server',
   };
 
   const props2 = {

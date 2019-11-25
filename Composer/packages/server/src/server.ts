@@ -120,7 +120,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   server.start();
 }
 
-attachLSPServer(wss, server, '/lgServer', webSocket => {
+attachLSPServer(wss, server, '/lg-language-server', webSocket => {
   // launch language server when the web socket is opened
   if (webSocket.readyState === webSocket.OPEN) {
     launchLanguageServer(webSocket);

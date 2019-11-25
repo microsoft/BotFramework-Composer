@@ -9,7 +9,7 @@ import debounce from 'lodash/debounce';
 import { FormContext } from '../types';
 
 const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
-const lspServerPath = '/lgServer';
+const lspServerPath = '/lg-language-server';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';

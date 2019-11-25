@@ -43,7 +43,7 @@ export interface LGLSPEditorProps extends RichEditorProps {
 }
 
 const defaultLGServer = {
-  path: '/lgServer',
+  path: '/lg-language-server',
 };
 
 async function initializeDocuments(languageClient: MonacoLanguageClient, lgOption: LGOption) {

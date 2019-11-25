@@ -42,7 +42,7 @@ export default function App() {
     lgOption,
     languageServer: {
       port: 5000,
-      path: '/lgServer',
+      path: '/lg-language-server',
     },
   };
   return <LgEditor {...props} />;

@@ -18,4 +18,4 @@ yarn start
 
 ### 2. go to code-editor directory
 
-start lgEditor demo, connect :5002/lgServer
+start lgEditor demo, connect :5002/lg-language-server
