@@ -7,6 +7,9 @@ import fs from 'fs';
 import { Path } from '../utility/path';
 
 let defaultPath = process.env.DEFAULT_PATH;
+if (defaultPath && defaultPath.endsWith(':')) {
+  defaultPath = defaultPath + '/';
+}
 if (!defaultPath) {
   console.log(`The default path is set to ${Path.join(os.homedir(), 'Documents', 'Composer')}`);
   defaultPath = Path.join(os.homedir(), 'Documents', 'Composer');
