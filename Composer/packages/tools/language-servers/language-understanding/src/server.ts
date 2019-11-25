@@ -14,7 +14,7 @@ import {
   TextEdit,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
-import { EntityTypesObj, currentLineState } from './entityEnum';
+import { EntityTypesObj, LineState } from './entityEnum';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
@@ -54,7 +54,6 @@ export class LuServer {
             resolveProvider: true,
             triggerCharacters: ['@', ' ', '{'],
           },
-          //hoverProvider: true,
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
@@ -63,7 +62,6 @@ export class LuServer {
       };
     });
     this.connection.onCompletion(params => this.completion(params));
-    //this.connection.onHover(params => this.hover(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
   }
 
@@ -98,6 +96,30 @@ export class LuServer {
     }
   }
 
+  private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
+    const document = this.documents.get(params.textDocument.uri);
+    const position = params.position;
+    const regListEnity = /^\s*@\s*list\s*.*/;
+    const regUtterance = /^\s*#.*/;
+    const regDashLine = /^\s*-.*/;
+    let state: LineState = 'other';
+    const lineContentList = document.getText().split('\n');
+    for (let i = 0; i < position.line; i++) {
+      const line = lineContentList[i];
+      if (regListEnity.test(line)) {
+        state = 'listEntity';
+      } else if (regUtterance.test(line)) {
+        state = 'utterance';
+      } else if (regDashLine.test(line)) {
+        continue;
+      } else {
+        state = 'other';
+      }
+    }
+
+    return state;
+  }
+
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -105,16 +127,26 @@ export class LuServer {
     }
 
     const lastLineContent = this.getLastLineContent(params);
-    const curLineContent = this.getCurrentLineContent(params);
-    console.log(lastLineContent);
     const edits: TextEdit[] = [];
-    const isUtteranceLine = /^\s*-.*/;
-    const isIntentLine = /^\s*#.*/;
-    console.log(lastLineContent);
+    const curLineNumber = params.position.line;
+    const lineCount = document.lineCount;
     if (
       params.ch == '\n' &&
-      (isUtteranceLine.test(lastLineContent) || isIntentLine.test(lastLineContent)) &&
-      lastLineContent.trim() !== '-'
+      this.getInputLineState(params) === 'utterance' &&
+      lastLineContent.trim() !== '-' &&
+      curLineNumber === lineCount - 1
+    ) {
+      const pos = params.position;
+      const newPos = Position.create(pos.line + 1, 0);
+      const item: TextEdit = TextEdit.insert(newPos, '-');
+      edits.push(item);
+    }
+
+    if (
+      params.ch == '\n' &&
+      this.getInputLineState(params) === 'listEntity' &&
+      lastLineContent.trim() !== '-' &&
+      curLineNumber === lineCount - 1
     ) {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
@@ -131,13 +163,6 @@ export class LuServer {
 
     return Promise.resolve(edits);
   }
-
-  // protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return Promise.resolve(null);
-  //   }
-  // }
 
   protected async resovleSchema(url: string): Promise<string> {
     const uri = URI.parse(url);
@@ -196,7 +221,7 @@ export class LuServer {
     try {
       parsedContent = await parseFile(text, false, 'en-us');
     } catch (e) {
-      // nothong to do in catch block
+      // nothing to do in catch block
     }
 
     if (parsedContent !== undefined) {
@@ -369,7 +394,7 @@ export class LuServer {
           const item = {
             label: `Entity: ${name}`,
             kind: CompletionItemKind.Property,
-            insertText: ` ${name} =`,
+            insertText: ` ${name}`,
             documentation: `pattern suggestion for entity: ${name}`,
           };
 
