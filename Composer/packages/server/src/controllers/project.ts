@@ -9,7 +9,7 @@ import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
-import settings from '../settings/settings.json';
+import settings from '../settings/settings';
 
 import { Path } from './../utility/path';
 
