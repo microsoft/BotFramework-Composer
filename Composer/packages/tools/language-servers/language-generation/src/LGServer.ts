@@ -47,7 +47,7 @@ export class LGServer {
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
       this.cleanPendingValidation(event.document);
-      this.connection.dispose();
+      this.cleanDiagnostics(event.document);
     });
 
     this.connection.onInitialize(params => {
