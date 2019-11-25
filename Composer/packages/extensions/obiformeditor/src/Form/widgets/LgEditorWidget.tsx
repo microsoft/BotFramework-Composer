@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
 
-const lspServerPort = process.env.LANGUAGE_SERVER_PORT ? Number(process.env.LANGUAGE_SERVER_PORT) : 5000;
+const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lgServer';
 
 const LG_HELP =
@@ -91,7 +91,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
-        port: lspServerPort,
+        port: Number(lspServerPort),
         path: lspServerPath,
       }}
       height={height}
