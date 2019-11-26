@@ -4,25 +4,32 @@
 import fs from 'fs';
 import path from 'path';
 
+import log from '../logger';
+
 import localInitData from './data.template';
 import abhInitData from './abh-template.json';
-
+import { runMigrations } from './migrations';
 const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
 const dataStorePath =
   isHostedInAzure && process.env.HOME
     ? path.resolve(process.env.HOME, './site/data.json')
     : path.resolve(__dirname, '../../data.json');
 
-const initData = isHostedInAzure ? abhInitData : localInitData;
+let initData = isHostedInAzure ? abhInitData : localInitData;
 
-// create data.json if not exits
-if (!fs.existsSync(dataStorePath)) {
-  fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
-  if (isHostedInAzure) {
-    // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
-    // always find the file, add one more io to kick the  virtual file system
-    fs.appendFileSync(dataStorePath, ' ');
-  }
+if (fs.existsSync(dataStorePath)) {
+  const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
+  initData = runMigrations(userData);
+} else {
+  log('Database not found. Seeding data.json with: %O', initData);
+}
+
+fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+
+if (isHostedInAzure) {
+  // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
+  // always find the file, add one more io to kick the  virtual file system
+  fs.appendFileSync(dataStorePath, ' ');
 }
 
 interface KVStore {

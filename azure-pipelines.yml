@@ -53,6 +53,7 @@ jobs:
           CYPRESS_SCREENSHOTS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/screenshots
           CYPRESS_VIDEOS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/videos
           TERM: xterm
+          COMPOSER_BOTS_FOLDER: $(Pipeline.Workspace)/Composer/TestBots
       - task: PublishPipelineArtifact@1
         condition: in(variables['Agent.JobStatus'], 'SucceededWithIssues', 'Failed')
         continueOnError: true

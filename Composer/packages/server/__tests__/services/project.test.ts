@@ -16,6 +16,7 @@ jest.mock('../../src/store/store', () => {
         name: 'This PC',
         type: 'LocalDisk',
         path: '.',
+        defaultPath: '.',
       },
     ],
     recentBotProjects: [] as any[],
