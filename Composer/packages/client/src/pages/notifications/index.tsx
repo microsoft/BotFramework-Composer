@@ -18,8 +18,12 @@ const navigations = {
   lg: (item: INotification) => {
     navigateTo(`/language-generation/#line=${item.diagnostic.Range.Start.Line || 0}`);
   },
-  lu: (item: INotification) => {},
-  dialog: (item: INotification) => {},
+  lu: (item: INotification) => {
+    navigateTo(`/dialogs/${item.id}`);
+  },
+  dialog: (item: INotification) => {
+    navigateTo(`/dialogs/${item.id}`);
+  },
 };
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');

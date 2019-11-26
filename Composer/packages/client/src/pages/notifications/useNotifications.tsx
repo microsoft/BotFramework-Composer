@@ -21,19 +21,33 @@ export default function useNotifications(filter: string) {
       dialog.diagnostics.map(diagnostic => {
         const location = dialog.displayName;
         locations.add(location);
-        notifactions.push({ type: 'dialog', location, message: diagnostic, severity: 'Error', diagnostic });
+        notifactions.push({
+          type: 'dialog',
+          location,
+          message: diagnostic,
+          severity: 'Error',
+          diagnostic,
+          id: dialog.id,
+        });
       });
     });
     luFiles.forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
         const location = `${lufile.id}.lu`;
         locations.add(location);
-        notifactions.push({ type: 'lu', location, message: diagnostic.text, severity: 'Error', diagnostic });
+        notifactions.push({
+          type: 'lu',
+          location,
+          message: diagnostic.text,
+          severity: 'Error',
+          diagnostic,
+          id: lufile.id,
+        });
       });
     });
-    lgFiles.forEach(lgFiles => {
-      lgFiles.diagnostics.map(diagnostic => {
-        const location = `${lgFiles.id}.lg`;
+    lgFiles.forEach(lgFile => {
+      lgFile.diagnostics.map(diagnostic => {
+        const location = `${lgFile.id}.lg`;
         locations.add(location);
         notifactions.push({
           type: 'lg',
@@ -41,6 +55,7 @@ export default function useNotifications(filter: string) {
           location,
           message: createSingleMessage(diagnostic),
           diagnostic,
+          id: lgFile.id,
         });
       });
     });
