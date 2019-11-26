@@ -18,7 +18,7 @@
 - [Dialogs](./docs/concept-dialog.md)
 - [Events and triggers](./docs/concept-events-and-triggers.md)
 - [Conversation flow and memory](./docs/concept-memory.md)
-- [Language generation](./docs/concept-language-genereation.md)
+- [Language generation](./docs/concept-language-generation.md)
 - [Language understanding](./docs/concept-language-understanding.md)
 
 ### How to
