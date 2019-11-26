@@ -25,6 +25,7 @@
     "ts-jest": "^24.1.0"
   },
   "dependencies": {
+    "@bfc/shared": "*",
     "botbuilder-expression-parser": "^4.5.11",
     "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
     "lodash": "^4.17.15",
