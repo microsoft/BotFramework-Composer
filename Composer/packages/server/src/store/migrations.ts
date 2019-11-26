@@ -30,14 +30,13 @@ interface Migration {
 const migrations: Migration[] = [
   {
     name: 'Add defaultPath',
-    condition: data => !get(data, 'storageConnections.0.defaultPath'),
+    condition: data => get(data, 'storageConnections.0.defaultPath') !== settings.botsFolder,
     run: data => set(data, 'storageConnections[0].defaultPath', settings.botsFolder),
   },
 ];
 
 export function runMigrations(initialData: any): any {
   const migrationsToRun: Migration[] = migrations.filter(m => m.condition(initialData));
-
   if (migrationsToRun.length > 0) {
     log('migration: running migrations...');
 
