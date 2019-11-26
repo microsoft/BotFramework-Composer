@@ -11,6 +11,7 @@ import { notification, typeIcon, listRoot, icons } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
+  onItemInvoked: (item: INotification) => void;
 }
 
 const columns: IColumn[] = [
@@ -23,7 +24,7 @@ const columns: IColumn[] = [
     minWidth: 30,
     maxWidth: 30,
     onRender: (item: INotification) => {
-      return <FontIcon iconName={icons[item.type].iconName} css={typeIcon(icons[item.type])} />;
+      return <FontIcon iconName={icons[item.severity].iconName} css={typeIcon(icons[item.severity])} />;
     },
   },
   {
@@ -36,7 +37,7 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.type}</span>;
+      return <span>{item.severity}</span>;
     },
     isPadded: true,
   },
@@ -71,7 +72,7 @@ const columns: IColumn[] = [
 ];
 
 export const NotificationList: React.FC<INotificationListProps> = props => {
-  const { items } = props;
+  const { items, onItemInvoked } = props;
 
   return (
     <div css={listRoot} data-testid="notifications-table-view">
@@ -82,6 +83,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
         setKey="none"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
+        onItemInvoked={onItemInvoked}
       />
     </div>
   );

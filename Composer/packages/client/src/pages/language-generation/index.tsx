@@ -10,6 +10,7 @@ import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import get from 'lodash/get';
 import { RouteComponentProps } from '@reach/router';
 import { CodeRange } from '@bfc/shared';
+import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { OpenAlertModal, DialogStyle } from '../../components/Modal';
@@ -38,10 +39,22 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
   const [codeRange, setCodeRange] = useState<CodeRange | null>(null);
+  const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  // const editorRef: MutableRefObject<editor.IStandaloneCodeEditor | null> = useRef(null);
 
+  const hash = props.location ? props.location.hash : '';
   const subPath = props['*'];
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
+
+  useEffect(() => {
+    if (hash && lgEditor) {
+      const matched = hash.match(/line=(\d+)/g);
+      if (matched && matched.length > 0) {
+        lgEditor.revealLine(parseInt(matched[0].split('=')[1]));
+      }
+    }
+  }, [hash, lgEditor]);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
@@ -96,7 +109,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
     //  fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
-      navigateTo('/language-generation');
+      navigateTo('/language-generation/');
     }
   }, [subPath, dialogs]);
 
@@ -113,7 +126,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   function onSelect(id) {
     if (id === '_all') {
-      navigateTo('/language-generation');
+      navigateTo('/language-generation/');
     } else {
       navigateTo(`language-generation/${id}`);
     }
@@ -215,7 +228,14 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             {editMode ? (
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} />
+                <CodeEditor
+                  file={lgFile}
+                  codeRange={codeRange}
+                  onChange={onChange}
+                  editorDidMount={editor => {
+                    setLgEditor(editor);
+                  }}
+                />
               </Suspense>
             ) : (
               <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />

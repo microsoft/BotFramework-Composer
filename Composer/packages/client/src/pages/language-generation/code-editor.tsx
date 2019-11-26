@@ -8,6 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { CodeRange, LgFile } from '@bfc/shared';
+import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import * as lgUtil from '../../utils/lgUtil';
 
@@ -15,10 +16,11 @@ interface CodeEditorProps {
   file: LgFile;
   onChange: (value: string) => void;
   codeRange?: Partial<CodeRange> | null;
+  editorDidMount?: (editor: editor.IStandaloneCodeEditor) => void;
 }
 
 export default function CodeEditor(props: CodeEditorProps) {
-  const { file, codeRange } = props;
+  const { file, codeRange, editorDidMount } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState(get(file, 'content', ''));
@@ -53,7 +55,8 @@ export default function CodeEditor(props: CodeEditorProps) {
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
-      codeRange={codeRange || -1}
+      codeRange={codeRange}
+      editorDidMount={editorDidMount}
       errorMsg={errorMsg}
       value={content}
       onChange={_onChange}

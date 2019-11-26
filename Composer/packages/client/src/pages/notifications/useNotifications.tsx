@@ -21,14 +21,14 @@ export default function useNotifications(filter: string) {
       dialog.diagnostics.map(diagnostic => {
         const location = dialog.displayName;
         locations.add(location);
-        notifactions.push({ type: 'Error', location, message: diagnostic });
+        notifactions.push({ type: 'dialog', location, message: diagnostic, severity: 'Error', diagnostic });
       });
     });
     luFiles.forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
         const location = `${lufile.id}.lu`;
         locations.add(location);
-        notifactions.push({ type: 'Error', location, message: diagnostic.text });
+        notifactions.push({ type: 'lu', location, message: diagnostic.text, severity: 'Error', diagnostic });
       });
     });
     lgFiles.forEach(lgFiles => {
@@ -36,9 +36,11 @@ export default function useNotifications(filter: string) {
         const location = `${lgFiles.id}.lg`;
         locations.add(location);
         notifactions.push({
-          type: DiagnosticSeverity[diagnostic.Severity],
+          type: 'lg',
+          severity: DiagnosticSeverity[diagnostic.Severity],
           location,
           message: createSingleMessage(diagnostic),
+          diagnostic,
         });
       });
     });
