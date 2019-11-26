@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
+import { LgMetaData } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
@@ -35,7 +36,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
-  const lgId = `bfd${name}-${formContext.dialogId}`;
+  const lgId = new LgMetaData(name, formContext.dialogId || '').toLgTemplateName();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
 
