@@ -142,7 +142,7 @@ $ listType : grocery =
 ```
 This entity definition contains three lists of entities. Based on user's input, any extracted normalized entity value (todo/shopping/grocery) will be available `@listType` within any triggered actions. 
 
-After publishing the model in [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to LUIS, you can view in LUIS the intents and entities you have defined in Composer: 
+After publishing the model in [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to [LUIS](https://www.luis.ai/), you can view in [LUIS](https://www.luis.ai/) the intents and entities you have defined in Composer: 
 
 ![entities](./media/entities/entities.png)
 
