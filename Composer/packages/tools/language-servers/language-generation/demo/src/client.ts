@@ -63,7 +63,6 @@ monaco.languages.setMonarchTokensProvider('botbuilderlg', {
       //expression
       [/@\{/, { token: 'expression', next: '@expression' }],
     ],
-
     fence_block: [
       [/`{3}\s*$/, 'fence-block', '@pop'],
       //template name
