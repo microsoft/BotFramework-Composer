@@ -103,7 +103,7 @@ export function checkText(text: string): LGDiagnostic[] {
   return staticChecker.checkText(text, '', ImportResolver.fileResolver);
 }
 export function isValid(diagnostics: LGDiagnostic[]): boolean {
-  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
+  return diagnostics.every(d => d.Severity !== LGDiagnosticSeverity.Error);
 }
 
 export function getLGResources(content: string): LGResource {
