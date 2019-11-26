@@ -4,6 +4,9 @@
   "resolutions": {
     "@types/react": "16.9.0"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "workspaces": [
     "packages/client",
     "packages/server",
