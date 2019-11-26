@@ -52,6 +52,10 @@ export const RootField: React.FC<RootFieldProps> = props => {
     return designerName || dialogName || sdkOverrides.title || title || schema.title || startCase(name);
   };
 
+  const getSubTitle = (): string => {
+    return sdkOverrides.title;
+  };
+
   const getDescription = (): string => {
     return sdkOverrides.description || description || schema.description || '';
   };
@@ -65,6 +69,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           styleOverrides={{ field: { fontWeight: FontWeights.semibold } }}
           fontSize={FontSizes.size20}
         />
+        {sdkOverrides.title && <p className="RootFieldSubtitle">{getSubTitle()}</p>}
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p className={classnames('RootFieldDescription', FontClassNames.smallPlus)}>
             {getDescription()}
