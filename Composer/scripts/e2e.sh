@@ -5,7 +5,7 @@ set -e
 yarn start &
 SERVER_PID=$!
 
-npx cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"
+npx cypress run --browser chrome
 cleanup
 
 function cleanup {
