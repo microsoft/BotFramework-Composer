@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
+import parseLgTemplateName from '../parsers/parseLgTemplateName';
+
 import { LgTemplateName, LgTemplateRefString, LgText } from './stringTypes';
 import LgTemplateRef from './LgTemplateRef';
 
@@ -11,6 +13,10 @@ export default class LgMetaData {
   constructor(lgType: string, designerId: string) {
     this.type = lgType;
     this.designerId = designerId;
+  }
+
+  static parse(input: LgTemplateName): LgMetaData | null {
+    return parseLgTemplateName(input);
   }
 
   toLgTemplateName(): LgTemplateName {

@@ -31,4 +31,8 @@ describe('LgTemplateRef', () => {
     expect(c.toString()).toEqual('[c(1,2)]');
     expect(c.toLgText()).toEqual('- [c(1,2)]');
   });
+
+  it('can construct instance via `parse()`', () => {
+    expect(LgTemplateRef.parse('[bfdactivity-123456]')).toBeInstanceOf(LgTemplateRef);
+  });
 });

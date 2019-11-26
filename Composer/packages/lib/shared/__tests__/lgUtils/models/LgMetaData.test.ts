@@ -27,4 +27,8 @@ describe('LgMetaData', () => {
     expect(instance.toLgText()).toEqual('- [bfdactivity-123456]');
     expect(instance.toLgText([])).toEqual('- [bfdactivity-123456()]');
   });
+
+  it('can construct instance via `parse()` method', () => {
+    expect(LgMetaData.parse('bfdactivity-123456')).toBeInstanceOf(LgMetaData);
+  });
 });

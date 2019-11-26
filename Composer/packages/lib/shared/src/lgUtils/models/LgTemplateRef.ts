@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
+import parseLgTemplateRef from '../parsers/parseLgTemplateRef';
+
 import { LgTemplateName, LgTemplateRefString, LgText } from './stringTypes';
 
 export default class LgTemplateRef {
@@ -11,6 +13,10 @@ export default class LgTemplateRef {
   constructor(name: LgTemplateName, parameters?: string[]) {
     this.name = name;
     this.parameters = parameters;
+  }
+
+  static parse(input: LgTemplateRefString): LgTemplateRef | null {
+    return parseLgTemplateRef(input);
   }
 
   toString(): LgTemplateRefString {
