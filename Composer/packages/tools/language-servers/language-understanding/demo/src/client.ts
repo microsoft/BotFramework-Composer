@@ -47,11 +47,9 @@ monaco.editor.defineTheme('lutheme', {
 });
 
 // create Monaco editor
-const value = `#ted
-- hello hello
-- range
-- great 
-- ted hello `;
+const value = `@  ml a
+@  composite la = [a, b]
+ `;
 const editor = monaco.editor.create(document.getElementById('container')!, {
   model: monaco.editor.createModel(value, 'bflu', monaco.Uri.parse('inmemory://model.json')),
   glyphMargin: true,

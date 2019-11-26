@@ -145,11 +145,11 @@ export class LuServer {
     ) {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
-      let insertStr = "";
-      if (lastLineContent.trim().endsWith(":")) {
-        insertStr = "\t- "
+      let insertStr = '';
+      if (lastLineContent.trim().endsWith(':')) {
+        insertStr = '\t- ';
       } else {
-        insertStr = "- ";
+        insertStr = '- ';
       }
       const item: TextEdit = TextEdit.insert(newPos, insertStr);
       edits.push(item);
@@ -191,26 +191,25 @@ export class LuServer {
         try {
           validateLUISBlob(parsedContent.LUISJsonStructure);
         } catch (e) {
-          const range = Range.create(Position.create(0, 0), Position.create(0, 1));
-          const diagnostic: Diagnostic = Diagnostic.create(range, e.text, DiagnosticSeverity.Error);
-          errors.push(diagnostic);
+          e.diagnostics.forEach(diag => {
+            const range = Range.create(0, 0, 0, 1);
+            const message = diag.Message;
+            const severity = DiagnosticSeverity.Error;
+            errors.push(Diagnostic.create(range, message, severity));
+          });
         }
       }
     } catch (e) {
-      e.text.split('\n').forEach(msg => {
-        const matched = msg.match(/line\s(\d+:\d+)/g);
-        const positions: Position[] = [];
-        // matched.forEach(element => {
-        //   let { row, col } = element.match(/(?<row>\d+):(?<col>\d+)/).groups;
-        //   positions.push(Position.create(parseInt(row) - 1, parseInt(col)));
-        // });
-
-        // if (positions.length == 1) {
-        //   positions.push(Position.create(positions[0].line, positions[0].character + 1));
-        // }
-        const range = Range.create(Position.create(0, 0), Position.create(0, 1));
-        const diagnostic: Diagnostic = Diagnostic.create(range, msg, DiagnosticSeverity.Error);
-        errors.push(diagnostic);
+      e.diagnostics.forEach(diag => {
+        const range = Range.create(
+          diag.Range.Start.Line,
+          diag.Range.Start.Character,
+          diag.Range.End.Line,
+          diag.Range.End.Character
+        );
+        const message = diag.Message;
+        const severity = DiagnosticSeverity.Error;
+        errors.push(Diagnostic.create(range, message, severity));
       });
     }
 

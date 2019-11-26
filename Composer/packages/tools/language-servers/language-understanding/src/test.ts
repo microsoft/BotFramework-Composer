@@ -77,16 +77,34 @@ async function extractLUISContent(text: string): Promise<any> {
   }
 }
 
-let luFile = `@ simple ma
-@ simple na
+// let luFile = `@ simple ma
+// @ simple na
 
-# hi
-- ni { ma = "ok"}`;
+// # hi
+// - ni { ma = "ok"}`;
 
-extractLUISContent(luFile)
-  .then(luisJson => {
-    console.log(luisJson);
-  })
-  .catch(e => {
-    console.log('error');
-  });
+// extractLUISContent(luFile)
+//   .then(luisJson => {
+//     console.log(luisJson);
+//   })
+//   .catch(e => {
+//     console.log('error');
+//   });
+
+function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
+  let range: Range;
+  const text = document.getText();
+  const line = position.line;
+  const pos = position.character;
+  const lineText = text.split('\n')[line];
+  let match: RegExpMatchArray | null;
+  const wordDefinition = /[a-zA-Z0-9_/-/.]+/g;
+  while ((match = wordDefinition.exec(lineText))) {
+    const matchIndex = match.index || 0;
+    if (matchIndex > pos) {
+      return undefined;
+    } else if (wordDefinition.lastIndex >= pos) {
+      return Range.create(line, 1 + matchIndex, line, 1 + wordDefinition.lastIndex);
+    }
+  }
+}
