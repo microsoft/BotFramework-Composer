@@ -13,7 +13,14 @@
 .RootFieldTitle {
   border-bottom: 1px solid #c8c6c4;
   padding: 0 18px;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
+}
+.RootFieldSubtitle {
+  height: 15px;
+  line-height: 15px;
+  font-size: 10px;
+  color: #bdbdbd;
+  margin: -7px 0 7px;
 }
 .RootFieldDescription {
   margin-top: 0;
