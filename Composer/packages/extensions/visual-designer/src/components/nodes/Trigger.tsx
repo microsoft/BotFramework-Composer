@@ -25,7 +25,7 @@ function getLabel(data: any): string {
 }
 
 function getName(data: any): string {
-  return get(data, '$designer.name', getLabel(data));
+  return get(data, '$designer.name', ConceptLabels[data.$type] ? ConceptLabels[data.$type].title : data.$type);
 }
 
 export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {

@@ -26,13 +26,14 @@ export const titleStyle: any = {
   fontFamily: 'Segoe UI',
   fontSize: '18px',
   lineHeight: '24px',
+  fontWeight: 600,
 };
 
 export const subtitleStyle: any = {
   whiteSpace: 'nowrap',
-  color: '#BDBDBD',
+  color: '#4f4f4f',
   fontFamily: 'Segoe UI',
-  fontSize: '10px',
+  fontSize: '12px',
   lineHeight: '14px',
 };
 

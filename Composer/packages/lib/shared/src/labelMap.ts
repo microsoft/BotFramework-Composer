@@ -131,55 +131,68 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Handle a Condition'),
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    title: formatMessage('Greeting (ConversationUpdate)'),
+    title: formatMessage('Greeting'),
+    subtitle: formatMessage('Conversation started (ConversationUpdate)'),
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
   [SDKTypes.OnCustomEvent]: {
-    title: formatMessage('Custom trigger'),
+    title: formatMessage('Custom event'),
+    subtitle: formatMessage('(Custom event)'),
   },
   [SDKTypes.OnDialogEvent]: {
     title: formatMessage('Dialog trigger'),
+    subtitle: formatMessage('(Dialog event)'),
   },
   [SDKTypes.OnEndOfConversationActivity]: {
     title: formatMessage('Conversation ended'),
+    subtitle: formatMessage('(EndOfConversation activity)'),
   },
   [SDKTypes.OnError]: {
     title: formatMessage('Error occurred'),
   },
   [SDKTypes.OnEventActivity]: {
     title: formatMessage('Event received'),
+    subtitle: formatMessage('(Event activity)'),
   },
   [SDKTypes.OnHandoffActivity]: {
     title: formatMessage('Handover to human'),
   },
   [SDKTypes.OnIntent]: {
-    title: formatMessage('Intent'),
+    title: formatMessage('User input'),
+    subtitle: formatMessage('(Intent recognized)'),
   },
   [SDKTypes.OnInvokeActivity]: {
     title: formatMessage('Conversation invoked'),
+    subtitle: formatMessage('(Invoke activity)'),
   },
   [SDKTypes.OnMessageActivity]: {
-    title: formatMessage('Message activity trigger'),
+    title: formatMessage('Message received'),
+    subtitle: formatMessage('(Message activity)'),
   },
   [SDKTypes.OnMessageDeleteActivity]: {
     title: formatMessage('Message deleted'),
+    subtitle: formatMessage('(Delete message activity)'),
   },
   [SDKTypes.OnMessageReactionActivity]: {
     title: formatMessage('Message reaction'),
-    subtitle: formatMessage('Message reaction (thumbs up/down)'),
+    subtitle: formatMessage('(Message reaction activity)'),
   },
   [SDKTypes.OnMessageUpdateActivity]: {
     title: formatMessage('Message updated'),
+    subtitle: formatMessage('(Message updated activity)'),
   },
   [SDKTypes.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
+    subtitle: formatMessage('(Reprompt dialog)'),
   },
   [SDKTypes.OnTypingActivity]: {
     title: formatMessage('User is typing'),
+    subtitle: formatMessage('(Typing activity)'),
   },
   [SDKTypes.OnUnknownIntent]: {
-    title: formatMessage('Unrecognized intent'),
+    title: formatMessage('Unrecognized user input'),
+    subtitle: formatMessage('(Unknown intent recognized)'),
   },
   [SDKTypes.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
