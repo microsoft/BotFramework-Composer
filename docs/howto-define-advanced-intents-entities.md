@@ -1,7 +1,7 @@
 # Advanced intent and entity definition 
 Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities need to be labeled consistently across all training utterances for each intent in a model. While intents are required, entities are optional. An utterance can include many entities or none at all, depending on the data required for your client application to perform its task. 
 
-In this article, we will cover how multiple entities are defined and extracted by LUIS and how different types of entities are defined. 
+In this article, we will cover how entities are defined and extracted and how different types of entities are defined in Composer. 
 
 ## Prerequisites: 
 - basic knowledge of [intent and entity](concept-language-understanding.md#core-lu-concepts-in-composer)
@@ -9,20 +9,19 @@ In this article, we will cover how multiple entities are defined and extracted b
 - LUIS account (apply [here](https://www.luis.ai/home))
 - LUIS authoring key (how to get [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
 
-## LUIS for entity extraction 
-In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. Entities are a collection of objects data extracted from an utterance such as places, time, and people. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
+## LUIS for entity extraction
+In addition to specifying intents and utterances as instructed in the [how to use LUIS in Composer](howto-using-LUIS.md) article, it is also possible to train LUIS to recognize named entities. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
 
-Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@[Entity Name]`. For example, given an intent definition like below: 
+Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@{Entity Name}`. For example, given an intent definition like below: 
 
 ```
-# book-flight
-- book a flight to {city=austin}
+# BookFlight
+- book me a flight to {city=shanghai}
 - travel to {city=new york}
-- i want to go to {city=los angeles}
+- i want to go to {city=paris}
 ```
-When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. More details about intents and entities used in Composer can be found [here](concept-language-understanding.md). 
 
-the JSON view of the query "book me a flight to London" in LUIS app looks like this: 
+When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. The JSON view of the query "book me a flight to London" in LUIS app looks like this: 
 
 ```json
 {
@@ -61,12 +60,148 @@ the JSON view of the query "book me a flight to London" in LUIS app looks like t
 ```
 
 ## Entities of different types
+In Composer, you can also define entities of different types. In this section, we focus on the following entity types and their definitions. For more entity types read [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
+
+| Type    | Description                                  | 
+| ---------- | --------------------------------------------- | 
+| [Simple](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data) | extract a single data concept contained in words or phrases | 
+| [List](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-intent-and-list-entity) | extract entity data that matches a predefined list of items  |
 
 ### Simple entity 
+The purpose of defining a Simple type entity is to teach LUIS to detect a single concept data in an utterance. 
+
+Use Simple type entities when the data has the following characteristics:
+- is a single concept 
+- is not well-formatted 
+- is not a prebuilt entity 
+- does not match exactly to a list of known words
+- does not contain other data items 
+
+You can define [Simple]((https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data)) type entities using $\<entityName\>:simple notation. Here is an example from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample): 
+
+```markdown
+> Entity definitions 
+$ itemTitle : simple
+
+> AddItem intent that contains simple entity 
+# AddItem
+- Add todo
+- add a to do item
+- could i add {itemTitle=medicine} to the todos list
+- add {itemTitle} to my todo list
+...
+```
+This entity definition means that if the `AddItem` intent is detected, the extracted `itemTile` entity value will be passed along to any triggered actions or child dialogs, and is available as `@itemTitle`. 
+
+>![NOTE]
+> For any labelled entity that is not explicitly assigned a type, the ludown parser defaults to simple entity type for that entity.
+
+```markdown
+# getUserName 
+- my name is {username=susan}
+
+> Without any explicit entity type definition, the entity defaults to 'Simple' entity type. 
+```
 
 ### List entity 
+The purpose of defining a List type entity is to teach LUIS to get entity data that matches a predefined list of items. 
 
-### RegEx entity 
+Use List type entities when the data has the following characteristics:
+- values of the data are a known set
+- does not exceed maximum [LUIS boundaries](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-boundaries)
+- the text in the utterance is an exact match with a synonym or the canonical name
+
+You can define [List](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-intent-and-list-entity) type entities using the following notation:
+
+```markdown
+$listEntity:\<normalized-value\>=
+    - \<synonym1\>
+    - \<synonym2\>
+```
+
+When using list entity, you should include a value from the list directly in the utterance, not an entity label or any other value. Here is an example definition of a list entity from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample): 
+
+```markdown
+> Add a list entity to detect list tye
+$ listType : todo = 
+- to do
+- todos
+- laundry 
+
+$ listType : shopping = 
+- shopping 
+- shop
+- shoppers
+
+$ listType : grocery = 
+- groceries
+- fruits
+- vegetables
+- household items
+- house hold items
+```
+This entity definition contains three lists of entities. Based on user's input, any extracted normalized entity value (todo/shopping/grocery) will be available `@listType` within any triggered actions. 
+
+After publishing the model in [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to LUIS, you can view in LUIS the intents and entities you have defined in Composer: 
+
+![entities](./media/entities/entities.png)
+
+And test the model using an example utterance such as "add an apple to my shopping list". The JSON view is as follows: 
+
+```json
+{
+  "query": "add apple to my shopping list",
+  "prediction": {
+    "normalizedQuery": "add apple to my shopping list",
+    "topIntent": "AddItem",
+    "intents": {
+      "AddItem": {
+        "score": 0.94462657
+      }
+    },
+    "entities": {
+      "itemTitle": [
+        "apple"
+      ],
+      "listType": [
+        [
+          "shopping"
+        ]
+      ],
+      "$instance": {
+        "itemTitle": [
+          {
+            "type": "itemTitle",
+            "text": "apple",
+            "startIndex": 4,
+            "length": 5,
+            "score": 0.905890763,
+            "modelTypeId": 1,
+            "modelType": "Entity Extractor",
+            "recognitionSources": [
+              "model"
+            ]
+          }
+        ],
+        "listType": [
+          {
+            "type": "listType",
+            "text": "shopping",
+            "startIndex": 16,
+            "length": 8,
+            "modelTypeId": 5,
+            "modelType": "List Entity Extractor",
+            "recognitionSources": [
+              "model"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+
+```
 
 
 # Further reading
