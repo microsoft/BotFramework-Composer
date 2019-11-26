@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
+import { readFile } from 'fs';
 
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
@@ -38,7 +38,7 @@ const InitializeDocumentsMethodName = 'initializeDocuments';
 const allowedCompletionStates = ['plaintext', 'expression'];
 
 export class LGServer {
-  protected workspaceRoot: URI | undefined;
+  protected workspaceRoot?: URI;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = []; // LG Documents Store
@@ -93,7 +93,7 @@ export class LGServer {
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
-    return this.LGDocuments.find(item => item.uri === document.uri);
+    return this.LGDocuments.find(({ uri }) => uri === document.uri);
   }
   protected getLGDocumentContent(document: TextDocument): string {
     const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
@@ -137,7 +137,7 @@ export class LGServer {
       return Promise.resolve(hoveritem);
     }
     if (word.startsWith('builtin.')) {
-      word = word.substring('builtin.'.length);
+      word = word.substring(8);
     }
 
     if (buildInfunctionsMap.has(word)) {
@@ -162,7 +162,7 @@ export class LGServer {
     if (uri.scheme === 'file') {
       return new Promise<string>((resolve, reject) => {
         // eslint-disable-next-line security/detect-non-literal-fs-filename
-        fs.readFile(uri.fsPath, 'UTF-8', (err, result) => {
+        readFile(uri.fsPath, 'UTF-8', (err, result) => {
           err ? reject('') : resolve(result.toString());
         });
       });
@@ -176,10 +176,8 @@ export class LGServer {
   }
 
   private removeParamFormat(params: string): string {
-    const paramArr: string[] = params.split(',');
-    const resultArr: string[] = [];
-    paramArr.forEach(element => {
-      resultArr.push(element.trim().split(':')[0]);
+    const resultArr = params.split(',').map(element => {
+      return element.trim().split(':')[0];
     });
     return resultArr.join(' ,');
   }
@@ -191,14 +189,9 @@ export class LGServer {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const lineContent = document.getText(range);
-    let flag = false;
-    let finalState = '';
     if (!lineContent.trim().startsWith('-')) {
-      return { matched: flag, state: finalState };
+      return { matched: false, state: '' };
     }
-
-    //if the line starts with '-', will try to match
-    flag = true;
 
     //initialize the root state to plaintext
     state.push('PlainText');
@@ -239,8 +232,8 @@ export class LGServer {
       }
       i++;
     }
-    finalState = state[state.length - 1];
-    return { matched: flag, state: finalState };
+    const finalState = state[state.length - 1];
+    return { matched: true, state: finalState };
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -260,27 +253,27 @@ export class LGServer {
     const lgResources = getLGResources(text);
     templates = lgResources.Templates;
 
-    const completionList: CompletionItem[] = [];
-    templates.forEach(template => {
-      const item = {
+    const completionTemplateList: CompletionItem[] = templates.map(template => {
+      return {
         label: template.Name,
         kind: CompletionItemKind.Reference,
         insertText:
           template.Parameters.length > 0 ? template.Name + '(' + template.Parameters.join(', ') + ')' : template.Name,
         documentation: template.Body,
       };
-      completionList.push(item);
     });
 
-    buildInfunctionsMap.forEach((value, key) => {
-      const item = {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map(item => {
+      const [key, value] = item;
+      return {
         label: key,
         kind: CompletionItemKind.Function,
         insertText: key + '(' + this.removeParamFormat(value.Params.toString()) + ')',
         documentation: value.Introduction,
       };
-      completionList.push(item);
     });
+
+    const completionList = completionTemplateList.concat(completionFunctionList);
 
     const matchResult = this.matchedStates(params);
     // TODO: more precise match

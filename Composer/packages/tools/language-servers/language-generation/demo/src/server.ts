@@ -28,20 +28,17 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  return new LGServer(connection);
+  const server = new LGServer(connection);
+  server.start();
+  return server;
 }
 
 attachLSPServer(wss, server, '/lg-language-server', webSocket => {
-  // const socketHandler = createSocketHandler(webSocket);
-
-  // launch language server when the web socket is opened
   if (webSocket.readyState === webSocket.OPEN) {
-    const server = launchLanguageServer(webSocket);
-    server.start();
+    launchLanguageServer(webSocket);
   } else {
     webSocket.on('open', () => {
-      const server = launchLanguageServer(webSocket);
-      server.start();
+      launchLanguageServer(webSocket);
     });
   }
 });

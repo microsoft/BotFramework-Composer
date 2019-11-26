@@ -16,9 +16,9 @@ export function processSize(size) {
 export function assignDefined(target, ...sources) {
   const copyTarget = { ...target };
   for (const source of sources) {
-    for (const key of Object.keys(source)) {
+    for (const key in source) {
       const val = source[key];
-      if (val !== undefined) {
+      if (typeof val !== 'undefined') {
         copyTarget[key] = val;
       }
     }

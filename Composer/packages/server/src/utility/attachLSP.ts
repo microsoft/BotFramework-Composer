@@ -10,12 +10,7 @@ import * as rpc from 'vscode-ws-jsonrpc';
 
 export function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
-    send: content =>
-      webSocket.send(content, error => {
-        if (error) {
-          throw error;
-        }
-      }),
+    send: content => webSocket.send(content),
     onMessage: cb => webSocket.on('message', cb),
     onError: cb => webSocket.on('error', cb),
     onClose: cb => webSocket.on('close', cb),
@@ -29,8 +24,7 @@ export function attachLSPServer(wss: ws.Server, server: http.Server, path: strin
     const pathname = request.url ? url.parse(request.url).pathname : undefined;
     if (pathname === path) {
       wss.handleUpgrade(request, socket, head, webSocket => {
-        const socketHandler = createSocketHandler(webSocket);
-        handler(socketHandler);
+        handler(createSocketHandler(webSocket));
       });
     }
   });
