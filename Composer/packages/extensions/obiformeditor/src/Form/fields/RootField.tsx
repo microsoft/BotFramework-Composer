@@ -69,7 +69,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           styleOverrides={{ field: { fontWeight: FontWeights.semibold } }}
           fontSize={FontSizes.size20}
         />
-        {sdkOverrides && <p className="RootFieldSubtitle">{getSubTitle()}</p>}
+        <p className="RootFieldSubtitle">{getSubTitle()}</p>
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p className={classnames('RootFieldDescription', FontClassNames.smallPlus)}>
             {getDescription()}
