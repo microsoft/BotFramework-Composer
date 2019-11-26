@@ -1,0 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License
+
+export const LgNamePattern = `bfd(\\w+)-(\\d+)`;
+
+export const LgTemplateRefPattern = `\\[(${LgNamePattern})(\\(\\w*\\))?\\]`;
+
+export const LgTextPattern = `- ${LgTemplateRefPattern}`;
