@@ -8,9 +8,9 @@
 export default function parseLgParamString(input: string): string[] | undefined {
   if (!input) return undefined;
 
-  const results = /^\((\w+)\)$/.exec(input);
+  const results = /^\((.*)\)$/.exec(input);
   if (Array.isArray(results) && results.length === 2) {
-    return results[1].split(',');
+    return results[1] ? results[1].split(',') : [];
   }
   return undefined;
 }

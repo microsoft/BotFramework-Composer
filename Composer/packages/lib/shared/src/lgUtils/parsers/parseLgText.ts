@@ -10,7 +10,7 @@ import parseLgParamString from './parseLgParamString';
 export default function parseLgText(inputString: LgText): LgTemplateRef | null {
   if (!inputString) return null;
 
-  const results = LgTextPattern.match(inputString);
+  const results = inputString.match(LgTextPattern);
   if (Array.isArray(results) && results.length === 5) {
     const name = results[1];
     const lgParams = parseLgParamString(results[4]);
