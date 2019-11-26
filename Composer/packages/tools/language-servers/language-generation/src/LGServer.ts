@@ -11,24 +11,25 @@ import {
   Diagnostic,
   CompletionList,
   Hover,
-  Position,
   CompletionItemKind,
   CompletionItem,
   Range,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
-import * as lg from 'botbuilder-lg';
 import get from 'lodash/get';
 import { LGTemplate } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
-  convertSeverity,
   getLGResources,
   updateTemplateInContent,
   getTemplatePositionOffset,
   LGDocument,
+  checkText,
+  checkTemplate,
+  convertDiagnostics,
+  isValid,
 } from './utils';
 
 // define init methods call from client
@@ -92,19 +93,30 @@ export class LGServer {
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
-    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
-    return LGDocument;
+    return this.LGDocuments.find(item => item.uri === document.uri);
   }
   protected getLGDocumentContent(document: TextDocument): string {
     const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
-    let text = document.getText();
+    const text = document.getText();
     if (LGDocument) {
-      // concat new content
       const { content, template } = LGDocument;
-      try {
-        text = updateTemplateInContent(content, template);
-        // eslint-disable-next-line no-empty
-      } catch (error) {}
+      const updatedTemplate = {
+        Name: template.Name,
+        Parameters: template.Parameters,
+        Body: text,
+      };
+
+      const templateDiags = checkTemplate(updatedTemplate);
+      // error in template.
+      if (isValid(templateDiags) === false) {
+        const diagnostics = convertDiagnostics(templateDiags, document);
+        this.sendDiagnostics(document, diagnostics);
+        return content;
+
+        // error in document context
+      } else {
+        return updateTemplateInContent(content, updatedTemplate);
+      }
     }
     return text;
   }
@@ -115,13 +127,8 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    let templates: LGTemplate[] = [];
-    try {
-      const lgResources = getLGResources(text);
-      templates = lgResources.Templates;
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
-
+    const lgResources = getLGResources(text);
+    const templates = lgResources.Templates;
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.Name === word);
@@ -230,7 +237,7 @@ export class LGServer {
       if (char === '}' && state[state.length - 1] === 'expression') {
         state.pop();
       }
-      i = i + 1;
+      i++;
     }
     finalState = state[state.length - 1];
     return { matched: flag, state: finalState };
@@ -243,11 +250,16 @@ export class LGServer {
     }
     const text = this.getLGDocumentContent(document);
     let templates: LGTemplate[] = [];
-    try {
-      const lgResources = getLGResources(text);
-      templates = lgResources.Templates;
-      // eslint-disable-next-line no-empty
-    } catch (error) {}
+
+    const diags = checkText(text);
+
+    if (isValid(diags) === false) {
+      return Promise.resolve(null);
+    }
+
+    const lgResources = getLGResources(text);
+    templates = lgResources.Templates;
+
     const completionList: CompletionItem[] = [];
     templates.forEach(template => {
       const item = {
@@ -286,15 +298,18 @@ export class LGServer {
 
   protected validate(document: TextDocument): void {
     this.cleanPendingValidation(document);
-    setTimeout(() => {
-      this.pendingValidationRequests.delete(document.uri);
-      this.doValidate(document);
-    });
+    this.pendingValidationRequests.set(
+      document.uri,
+      setTimeout(() => {
+        this.pendingValidationRequests.delete(document.uri);
+        this.doValidate(document);
+      })
+    );
   }
 
   protected cleanPendingValidation(document: TextDocument): void {
     const request = this.pendingValidationRequests.get(document.uri);
-    if (request !== undefined) {
+    if (typeof request !== 'undefined') {
       clearTimeout(request);
       this.pendingValidationRequests.delete(document.uri);
     }
@@ -304,41 +319,35 @@ export class LGServer {
     let text = document.getText();
     let lineOffset = 0;
     const LGDocument = this.getLGDocument(document);
+
+    // if inline editor, concat new content for validate
     if (LGDocument) {
-      // concat new content for validate
       const { content, template } = LGDocument;
       const updatedTemplate = {
         Name: template.Name,
         Parameters: template.Parameters,
         Body: text,
       };
-      try {
+
+      const templateDiags = checkTemplate(updatedTemplate);
+      // error in template.
+      if (isValid(templateDiags) === false) {
+        const diagnostics = convertDiagnostics(templateDiags, document);
+        this.sendDiagnostics(document, diagnostics);
+        return;
+      } else {
         text = updateTemplateInContent(content, updatedTemplate);
         lineOffset = getTemplatePositionOffset(content, updatedTemplate);
-        // eslint-disable-next-line no-empty
-      } catch (error) {}
+      }
     }
 
     if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
     }
-    const staticChecker = new lg.StaticChecker();
-    const lgDiags = staticChecker.checkText(text, '', lg.ImportResolver.fileResolver);
-    const diagnostics: Diagnostic[] = [];
-    lgDiags.forEach(diag => {
-      const diagnostic: Diagnostic = {
-        severity: convertSeverity(diag.Severity),
-        range: {
-          start: Position.create(diag.Range.Start.Line - 1 - lineOffset, diag.Range.Start.Character),
-          end: Position.create(diag.Range.End.Line - 1 - lineOffset, diag.Range.End.Character),
-        },
-        message: diag.Message,
-        source: document.uri,
-      };
-      diagnostics.push(diagnostic);
-    });
 
+    const lgDiagnostics = checkText(text);
+    const diagnostics = convertDiagnostics(lgDiagnostics, document, lineOffset);
     this.sendDiagnostics(document, diagnostics);
   }
 

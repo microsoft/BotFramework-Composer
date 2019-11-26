@@ -1,9 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-languageserver-types';
-import { LGResource, LGParser, DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
+import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import {
+  LGResource,
+  LGParser,
+  DiagnosticSeverity as LGDiagnosticSeverity,
+  ImportResolver,
+  Diagnostic as LGDiagnostic,
+  StaticChecker,
+} from 'botbuilder-lg';
 import get from 'lodash/get';
+
+const staticChecker = new StaticChecker();
 
 export interface Template {
   Name: string;
@@ -61,6 +70,56 @@ const severityMap = {
 
 export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSeverity {
   return severityMap[severity];
+}
+
+export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextDocument, lineOffset = 0): Diagnostic[] {
+  const diagnostics: Diagnostic[] = [];
+  lgDiags.forEach(diag => {
+    const diagnostic: Diagnostic = {
+      severity: convertSeverity(diag.Severity),
+      range: Range.create(
+        Position.create(diag.Range.Start.Line - 1 - lineOffset, diag.Range.Start.Character),
+        Position.create(diag.Range.End.Line - 1 - lineOffset, diag.Range.End.Character)
+      ),
+      message: diag.Message,
+      source: document.uri,
+    };
+    diagnostics.push(diagnostic);
+  });
+  return diagnostics;
+}
+
+export function textFromTemplate(template: Template): string {
+  let text = '';
+  if (template.Name && (template.Body !== null && template.Body !== undefined)) {
+    text += `# ${template.Name.trim()}`;
+    if (template.Parameters && template.Parameters.length > 0) {
+      text += '(' + template.Parameters.join(', ') + ')';
+    }
+    text += '\n';
+    text += `${template.Body.trim()}`;
+  }
+  return text;
+}
+
+export function textFromTemplates(templates: Template[]): string {
+  return templates
+    .map(template => {
+      return textFromTemplate(template);
+    })
+    .join('\n');
+}
+
+export function checkTemplate(template: Template): LGDiagnostic[] {
+  const text = textFromTemplate(template);
+  return staticChecker.checkText(text, '', ImportResolver.fileResolver);
+}
+
+export function checkText(text: string): LGDiagnostic[] {
+  return staticChecker.checkText(text, '', ImportResolver.fileResolver);
+}
+export function isValid(diagnostics: LGDiagnostic[]): boolean {
+  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
 }
 
 export function getLGResources(content: string): LGResource {
