@@ -116,7 +116,7 @@ async function saveProjectAs(req: Request, res: Response) {
 
   const locationRef: LocationRef = {
     storageId,
-    path: Path.resolve(settings.development.defaultFolder, name),
+    path: Path.resolve(settings.botsFolder, name),
   };
 
   try {

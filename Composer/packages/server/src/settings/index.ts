@@ -11,11 +11,19 @@ import settings from './settings';
 // section with a default value, and override the value for different environment
 // in later sections
 
+interface Settings {
+  botAdminEndpoint: string;
+  botEndpoint: string;
+  assetsLibray: string;
+  runtimeFolder: string;
+  botsFolder: string;
+}
+
 const defaultSettings = settings.development;
 const environment = process.env.NODE_ENV || 'development';
 const environmentSettings = settings[environment];
 
-const finalSettings = merge(defaultSettings, environmentSettings);
+const finalSettings = merge<Settings, Settings>(defaultSettings, environmentSettings);
 
 log('App Settings: %O', finalSettings);
 
