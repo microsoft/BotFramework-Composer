@@ -20,27 +20,25 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/^\s*-/, { token: 'template-body-identifier', goBack: 1, next: '@template_body' }],
         //comments
         [/^\s*>/, { token: 'comments', next: '@comments' }],
-        // import statement in lg
-        [/\[.*\]/, 'imports'],
-        //inline string
-        [/^\s*\"/, { token: 'inline-string', next: '@inline_string' }],
-        //bracktets
-        [/[{}()\[\]]/, '@brackets'],
       ],
       comments: [
         [/^\s*#/, { token: 'template-name', next: '@template_name' }],
         [/^\s*-/, { token: 'template-body-identifier', next: '@template_body' }],
-        [/./, 'comments'],
+        [/$/, 'comments', '@pop'],
       ],
       template_name: [
         //comments
         [/^\s*>/, { token: 'comments', next: '@comments' }],
+        //fence block
+        [/^\s*-\s*`{3}/, { token: 'fence-block', next: '@fence_block' }],
         //template_body
         [/^\s*-/, { token: 'template-body-identifier', goBack: 1, next: '@template_body' }],
         // structure_lg
         [/^\s*\[/, { token: 'structure-lg', next: '@structure_lg' }],
         //parameter in template name
         [/([a-zA-Z0-9_.'-]+)(,|\))/, ['parameter', 'delimeter']],
+        //expression
+        [/@\{/, { token: 'expression', next: '@expression' }],
         // other
         [/[^\()]/, 'template-name'],
       ],
@@ -51,40 +49,24 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/^\s*#/, { token: 'template-name', next: '@template_name' }],
         //keywords
         [/(\s*-\s*)(if|else|else\s*if|switch|case|default)(\s*:)/, ['identifier', 'keywords', 'colon']],
+        //fence block
+        [/^\s*-\s*`{3}/, { token: 'fence-block', next: '@fence_block' }],
         //template_body
         [/^\s*-/, { token: 'template-body-identifier', next: '@template_body' }],
-        //fence block
-        [/`{3}/, { token: 'fence-block', next: '@fence_block' }],
-        //template-ref
-        [/\[/, { token: 'template-ref', next: 'template_ref' }],
         //expression
         [/@\{/, { token: 'expression', next: '@expression' }],
-        //pop
-        [/.*/, '@pop'],
-      ],
-
-      template_ref: [
-        [/\]/, 'template-ref', '@pop'],
-        [/([a-zA-Z0-9_.-]+)(\()/, [{ token: 'function-name' }, { token: 'param_identifier' }]],
-        [/'[\s\S]*?'/, 'string'],
-        [/([a-zA-Z][a-zA-Z0-9_.-]*)(,|\))/, ['parameter', 'delimeter']],
-        [/([a-zA-Z][a-zA-Z0-9_.-]*)/, 'parameter'],
-        [/[0-9.]+/, 'number'],
       ],
 
       fence_block: [
         [/`{3}\s*$/, 'fence-block', '@pop'],
+        //template name
+        [/^\s*#/, { token: 'template-name', next: '@template_name' }],
         [/@\{/, { token: 'expression', next: '@expression' }],
         [/./, 'fence-block.content'],
       ],
-      inline_string: [
-        [/\"\s*$/, 'inline-string', '@pop'],
-        [/\{/, { token: 'expression', next: '@expression' }],
-        [/./, 'inline-string.content'],
-      ],
       expression: [
         [/\}/, 'expression', '@pop'],
-        [/([a-zA-Z][a-zA-Z0-9_.-]*)(\()/, [{ token: 'function-name' }, { token: 'param_identifier' }]],
+        [/([a-zA-Z][a-zA-Z0-9_.-]*)(\s*\()/, [{ token: 'function-name' }, { token: 'param_identifier' }]],
         [/'[\s\S]*?'/, 'string'],
         [/([a-zA-Z][a-zA-Z0-9_.-]*)(,|\))/, ['parameter', 'delimeter']],
         [/([a-zA-Z][a-zA-Z0-9_.-]*)/, 'parameter'],
@@ -93,6 +75,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
+        [/\]\s*$/, 'imports', '@pop'],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/(=|\|)([a_zA-Z0-9\s]|\@)*\{/, { token: 'expression', next: '@expression' }],
         [/^\s*@\{/, { token: 'expression', next: '@expression' }],
