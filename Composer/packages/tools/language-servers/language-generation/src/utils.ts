@@ -96,7 +96,10 @@ export function textFromTemplates(templates: Template[]): string {
 
 export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
-  return staticChecker.checkText(text, '', ImportResolver.fileResolver);
+  return staticChecker.checkText(text, '', ImportResolver.fileResolver).filter(diagnostic => {
+    // ignore non-exist references in template body.
+    return diagnostic.Message.includes('does not have an evaluator') === false;
+  });
 }
 
 export function checkText(text: string): LGDiagnostic[] {
