@@ -34,33 +34,20 @@ function LGEditor() {
 }
 
 export default function App() {
-  const editor0 = <LGEditor />;
-  const [editors, setEditors] = useState([editor0]);
-
-  const increaseEditorInstance = () => {
-    const img = [...editors];
-    const newEditor = <LGEditor />;
-    img.push(newEditor);
-    setEditors(img);
-  };
-  const decreaseEditorInstance = () => {
-    const img = [...editors];
-    img.pop();
-    setEditors(img);
-  };
-
-  const doms = editors.map((editor, index) => {
+  const [count, setCount] = useState(1);
+  const editors = Array.from(Array(count).keys()).map(index => {
     return (
       <div style={{ width: '500px', height: '300px', float: 'left' }} key={index}>
-        {editor}
+        <LGEditor />
       </div>
     );
   });
   return (
     <Fragment>
-      <button onClick={increaseEditorInstance}>add</button>
-      <button onClick={decreaseEditorInstance}>remove</button>
-      <div>{doms}</div>
+      <button onClick={() => setCount(1)}>Reset</button>
+      <button onClick={() => setCount(prevCount => prevCount + 1)}>add</button>
+      <button onClick={() => setCount(prevCount => prevCount - 1)}>remove</button>
+      <div>{editors}</div>
     </Fragment>
   );
 }
