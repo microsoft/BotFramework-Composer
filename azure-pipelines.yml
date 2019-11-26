@@ -55,6 +55,7 @@ jobs:
           TERM: xterm
       - task: PublishPipelineArtifact@1
         condition: in(variables['Agent.JobStatus'], 'SucceededWithIssues', 'Failed')
+        continueOnError: true
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)/cypress
           artifactName: e2e
