@@ -32,6 +32,7 @@
 - [Add QnA to your bot](./docs/how-to-add-qna-to-bot.md)
 - [Send cards](./docs/howto-sending-cards.md) 
 - [Define triggers and events](./docs/howto-defining-triggers.md)
+- [Define advanced intents and entities](./docs/howto-define-advanced-intents-entities.md)
 - [Use OAuth](./docs/how_to_use_oauth.md)
 - [Send an HTTP request](./docs/howto-sending-http-request.md)
 
