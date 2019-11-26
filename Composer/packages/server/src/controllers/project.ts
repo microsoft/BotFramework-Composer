@@ -9,7 +9,7 @@ import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
-import settings from '../settings/settings.json';
+import settings from '../settings';
 
 import { Path } from './../utility/path';
 
@@ -21,7 +21,7 @@ async function createProject(req: Request, res: Response) {
   }
 
   // default the path to the default folder.
-  let path = settings.development.defaultFolder;
+  let path = settings.botsFolder;
   // however, if path is specified as part of post body, use that one.
   // this allows developer to specify a custom home for their bot.
   if (location) {
@@ -116,7 +116,7 @@ async function saveProjectAs(req: Request, res: Response) {
 
   const locationRef: LocationRef = {
     storageId,
-    path: Path.resolve(settings.development.defaultFolder, name),
+    path: Path.resolve(settings.botsFolder, name),
   };
 
   try {
@@ -352,7 +352,7 @@ async function publishLuis(req: Request, res: Response) {
 
 async function getAllProjects(req: Request, res: Response) {
   const storageId = 'default';
-  const folderPath = Path.resolve(settings.development.defaultFolder);
+  const folderPath = Path.resolve(settings.botsFolder);
   try {
     res.status(200).json(await StorageService.getBlob(storageId, folderPath));
   } catch (e) {
