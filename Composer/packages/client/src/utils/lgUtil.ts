@@ -9,7 +9,6 @@
 
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
 import get from 'lodash/get';
-import { LgTemplateRefPattern } from '@bfc/shared';
 
 const lgStaticChecker = new StaticChecker();
 
@@ -128,25 +127,6 @@ export function copyTemplateAnyway(content: string, fromTemplateName: string, to
 export function getTemplate(content: string, templateName: string): LGTemplate | undefined {
   const resource = LGParser.parse(content);
   return resource.Templates.find(t => t.Name === templateName);
-}
-
-/**
- *
- * @param text string
- * -[Greeting], I'm a fancy bot, [Bye] ---> ['Greeting', 'Bye']
- *
- */
-export function extractTemplateNames(text: string): string[] {
-  const templateNames: string[] = [];
-  // match a template name match a temlate func  e.g. `showDate()`
-  // eslint-disable-next-line security/detect-unsafe-regex
-  const reg = new RegExp(LgTemplateRefPattern, 'g');
-  let matchResult;
-  while ((matchResult = reg.exec(text)) !== null) {
-    const templateName = matchResult[1];
-    templateNames.push(templateName);
-  }
-  return templateNames;
 }
 
 export function removeTemplate(content: string, templateName: string): string {
