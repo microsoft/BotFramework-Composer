@@ -11,9 +11,9 @@ export default function parseLgTemplateRef(inputString: LgTemplateRefString): Lg
   if (!inputString) return null;
 
   const results = inputString.match(LgTemplateRefPattern);
-  if (Array.isArray(results) && results.length === 5) {
+  if (Array.isArray(results) && results.length === 3) {
     const name = results[1];
-    const lgParams = parseLgParamString(results[4]);
+    const lgParams = parseLgParamString(results[2]);
 
     return new LgTemplateRef(name, lgParams);
   }
