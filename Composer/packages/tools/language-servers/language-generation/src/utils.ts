@@ -2,39 +2,23 @@ import { TextDocument, Range, Position, DiagnosticSeverity } from 'vscode-langua
 
 import * as lg from 'botbuilder-lg';
 
-export function getRangeAtPosition(document: TextDocument, position: Position): Range {
-  let range: Range;
+export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
   const text = document.getText();
   const line = position.line;
-  const character = position.character;
+  const pos = position.character;
   const lineText = text.split('\n')[line];
-  let lastIdx = -1;
-  let start: number = -1;
-  let end: number = -1;
-  const regex = /[a-zA-Z0-9_/.]+/;
-  for (let idx = 0; idx < lineText.length; idx++) {
-    if (!regex.test(lineText[idx])) {
-      if (idx > character && character > lastIdx) {
-        start = lastIdx + 1;
-        end = idx;
-        break;
-      } else {
-        lastIdx = idx;
-      }
-    }
-    if (idx === lineText.length - 1) {
-      start = lineText.lastIndexOf(' ') + 1;
-      end = idx + 1;
+  let match: RegExpMatchArray | null;
+  const wordDefinition = /[a-zA-Z0-9_/-/.]+/g;
+  while ((match = wordDefinition.exec(lineText))) {
+    const matchIndex = match.index || 0;
+    if (matchIndex > pos) {
+      return undefined;
+    } else if (wordDefinition.lastIndex >= pos) {
+      return Range.create(line, matchIndex, line, wordDefinition.lastIndex);
     }
   }
 
-  if (start < 0 || end < 0) {
-    return;
-  } else {
-    range = Range.create(line, start, line, end);
-  }
-
-  return range;
+  return undefined;
 }
 
 export function convertSeverity(severity: lg.DiagnosticSeverity): DiagnosticSeverity {
