@@ -1,8 +1,16 @@
 # How to use OAuth in Bot Framework Composer
 
-If your bot needs to access external resources using permissions granted by the end user, it will need to use the `OAuth Login` action within the Integrations menu, along with a an Oauth configuration that lives in the Azure Bot Service channel registration.  (It is not necessary to deploy your bot to Azure for this to work.)
+If your bot needs to access external resources using permissions granted by the end user, it will need to use the `OAuth Login` action within the `Access external resources` menu, along with a an Oauth configuration that lives in the Azure Bot Service Channels Registration. In this article, you will cover how to use basic OAuth to authenticate your bot with your Github account. (It is not necessary to deploy your bot to Azure for this to work.)
 
 ![oauth-menu](./media/integration/oauth-menu.png)
+
+## Prerequisites: 
+- [Microsoft Azure subscription](https://azure.microsoft.com)
+- [a basic bot you build using Composer](tutorial-create-echobot.md)
+- a service provider your bot is authenticating with such as [GitHub](https://github.com/)
+- basic knowledge of [Bot Channels Registration](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-quickstart-registration?view=azure-bot-service-3.0) and how to create one
+- basic knowledge of [user authentication within a conversation](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-authentication?view=azure-bot-service-4.0)
+
 
 ## Create the Azure Bot Service registration
 
