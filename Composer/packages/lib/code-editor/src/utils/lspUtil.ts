@@ -11,7 +11,6 @@ import {
   createConnection,
   LanguageClientOptions,
 } from 'monaco-languageclient';
-import nanoid from 'nanoid';
 
 export function createUrl(server: { [key: string]: string } | string): string {
   if (typeof server === 'string') {
@@ -20,7 +19,7 @@ export function createUrl(server: { [key: string]: string } | string): string {
   const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   const endHost = host || `${hostname}:${port}`;
-  return normalizeUrl.default(`${protocol}://${endHost}/${path}?id=${nanoid()}`);
+  return normalizeUrl.default(`${protocol}://${endHost}/${path}`);
 }
 
 export function createWebSocket(url: string): WebSocket {

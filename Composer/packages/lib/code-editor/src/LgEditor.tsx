@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import * as monacoCore from 'monaco-editor-core';
@@ -45,11 +45,13 @@ const defaultLGServer = {
 declare global {
   interface Window {
     monacoServiceInstance: MonacoServices;
+    monacoLGEditorInstance: MonacoLanguageClient;
   }
 }
 
-async function initializeDocuments(languageClient, lgOption) {
-  if (lgOption && lgOption.inline) {
+async function initializeDocuments(lgOption) {
+  const languageClient = window.monacoLGEditorInstance;
+  if (languageClient && lgOption && lgOption.inline) {
     await languageClient.onReady();
     languageClient.sendRequest('initializeDocuments', lgOption);
   }
@@ -64,21 +66,6 @@ export function LgEditor(props: LGLSPEditorProps) {
   const { lgOption = {}, languageServer, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
-  const [monacoDisposableClient, setMonacoDisposableClient] = useState<MonacoLanguageClient | null>(null);
-  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
-  const [modelUri, setModelUri] = useState<string | null>(null);
-  // auto close connection when unmount
-  useEffect(() => {
-    return () => {
-      if (webSocket) {
-        webSocket.close();
-      }
-      if (monacoDisposableClient) {
-        monacoDisposableClient.stop();
-      }
-    };
-  }, [modelUri]);
-
   const editorWillMount = (monaco: typeof monacoEditor) => {
     registerLGLanguage(monaco);
     if (typeof props.editorWillMount === 'function') {
@@ -86,30 +73,29 @@ export function LgEditor(props: LGLSPEditorProps) {
     }
   };
   const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
-    if (!webSocket) {
+    if (!window.monacoServiceInstance) {
+      window.monacoServiceInstance = MonacoServices.install(editor as (monacoCore.editor.IStandaloneCodeEditor | any));
+    }
+
+    if (!window.monacoLGEditorInstance) {
+      const uri = get(editor.getModel(), 'uri._formatted', '');
       const url = createUrl(lgServer);
       const webSocket: WebSocket = createWebSocket(url);
-      setWebSocket(webSocket);
-
-      // monacoServiceInstance must be window unique
-      if (!window.monacoServiceInstance) {
-        const monacoServiceInstance = MonacoServices.install(editor as (monacoCore.editor.IStandaloneCodeEditor | any));
-        window.monacoServiceInstance = monacoServiceInstance;
-      }
-
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
           const languageClient = createLanguageClient('LG Language Client', ['botbuilderlg'], connection);
-          setMonacoDisposableClient(languageClient);
-          const model = editor.getModel();
-          const uri = get(model, 'uri._formatted', '');
-          setModelUri(uri);
-          initializeDocuments(languageClient, { ...lgOption, uri });
+          if (!window.monacoLGEditorInstance) {
+            window.monacoLGEditorInstance = languageClient;
+          }
+          initializeDocuments({ ...lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
         },
       });
+    } else {
+      const uri = get(editor.getModel(), 'uri._formatted', '');
+      initializeDocuments({ ...lgOption, uri });
     }
 
     if (typeof props.editorDidMount === 'function') {
