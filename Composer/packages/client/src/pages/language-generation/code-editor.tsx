@@ -15,7 +15,7 @@ import * as lgUtil from '../../utils/lgUtil';
 interface CodeEditorProps {
   file: LgFile;
   onChange: (value: string) => void;
-  codeRange?: Partial<CodeRange> | -1;
+  codeRange?: Partial<CodeRange> | undefined;
   editorDidMount?: (editor: editor.IStandaloneCodeEditor) => void;
 }
 

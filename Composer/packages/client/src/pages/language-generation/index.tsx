@@ -38,7 +38,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [codeRange, setCodeRange] = useState<CodeRange | null>(null);
+  const [codeRange, setCodeRange] = useState<CodeRange | undefined>(undefined);
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
   // const editorRef: MutableRefObject<editor.IStandaloneCodeEditor | null> = useRef(null);
 
@@ -134,7 +134,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   function onToggleEditMode() {
     setEditMode(!editMode);
-    setCodeRange(null);
+    setCodeRange(undefined);
   }
 
   async function onChange(newContent) {
