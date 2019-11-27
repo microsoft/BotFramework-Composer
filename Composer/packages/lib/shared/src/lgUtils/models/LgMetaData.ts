@@ -3,7 +3,7 @@
 
 import parseLgTemplateName from '../parsers/parseLgTemplateName';
 
-import { LgTemplateName, LgTemplateRefString, LgText } from './stringTypes';
+import { LgTemplateName, LgTemplateRefString } from './stringTypes';
 import LgTemplateRef from './LgTemplateRef';
 
 export default class LgMetaData {
@@ -29,9 +29,5 @@ export default class LgMetaData {
 
   toLgTemplateRefString(lgParams?: string[]): LgTemplateRefString {
     return this.toLgTemplateRef(lgParams).toString();
-  }
-
-  toLgText(lgParams?: string[]): LgText {
-    return this.toLgTemplateRef(lgParams).toLgText();
   }
 }

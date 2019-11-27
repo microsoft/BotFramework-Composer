@@ -13,7 +13,6 @@ describe('LgMetaData', () => {
     expect(instance.toLgTemplateName).toBeDefined();
     expect(instance.toLgTemplateRef).toBeDefined();
     expect(instance.toLgTemplateRefString).toBeDefined();
-    expect(instance.toLgText).toBeDefined();
   });
 
   it('can generate correct output strings', () => {
@@ -23,9 +22,6 @@ describe('LgMetaData', () => {
 
     expect(instance.toLgTemplateRefString()).toEqual('[bfdactivity-123456]');
     expect(instance.toLgTemplateRefString(['1', '2'])).toEqual('[bfdactivity-123456(1,2)]');
-
-    expect(instance.toLgText()).toEqual('- [bfdactivity-123456]');
-    expect(instance.toLgText([])).toEqual('- [bfdactivity-123456()]');
   });
 
   it('can construct instance via `parse()` method', () => {
