@@ -3,8 +3,8 @@
 
 import { LgTemplateRefString } from '../models/stringTypes';
 import LgTemplateRef from '../models/LgTemplateRef';
+import { LgTemplateRefPattern } from '../lgPatterns';
 
-import { LgTemplateRefPattern } from './patterns';
 import parseLgParamString from './parseLgParamString';
 
 export default function parseLgTemplateRef(inputString: LgTemplateRefString): LgTemplateRef | null {

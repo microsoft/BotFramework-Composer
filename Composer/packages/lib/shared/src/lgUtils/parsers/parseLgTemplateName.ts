@@ -3,8 +3,7 @@
 
 import { LgTemplateName } from '../models/stringTypes';
 import LgMetaData from '../models/LgMetaData';
-
-import { LgNamePattern } from './patterns';
+import { LgNamePattern } from '../lgPatterns';
 
 export default function parseLgTemplateName(lgTemplateName: LgTemplateName): LgMetaData | null {
   if (!lgTemplateName) return null;

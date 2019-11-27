@@ -3,8 +3,7 @@
 
 import { LgText } from '../models/stringTypes';
 import LgTemplateRef from '../models/LgTemplateRef';
-
-import { LgTextPattern } from './patterns';
+import { LgTextPattern } from '../lgPatterns';
 
 export default function parseLgText(inputString: LgText): LgTemplateRef | null {
   if (!inputString) return null;
