@@ -17,7 +17,7 @@ context('Visual Designer', () => {
     });
 
     cy.withinEditor('VisualEditor', () => {
-      cy.findByText('Conversation started (ConversationUpdate)').should('exist');
+      cy.findByText('ConversationUpdate activity').should('exist');
     });
   });
 });
