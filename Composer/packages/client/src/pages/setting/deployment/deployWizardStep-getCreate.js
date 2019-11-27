@@ -4,7 +4,10 @@
 import React, { Fragment } from 'react';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { StoreContext } from '../../../store';
 
@@ -33,7 +36,7 @@ export const DeployWizardStep2 = props => {
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
             label={formatMessage('Create Resources Script')}
-            styles={styles.input}
+            styles={styles.textarea}
             value={scriptValue}
             readOnly={true}
             multiline={true}

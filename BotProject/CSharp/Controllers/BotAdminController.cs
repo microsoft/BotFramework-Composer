@@ -6,17 +6,17 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     [Route("api/admin")]
     [ApiController]
     public class BotAdminController : ControllerBase
     {
-        private readonly IBotManager BotManager;
+        private readonly BotManager botManager;
 
-        public BotAdminController(IBotManager botManager)
+        public BotAdminController(BotManager botManager)
         {
-            BotManager = botManager;
+            this.botManager = botManager;
         }
 
         [HttpGet] 
@@ -24,7 +24,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
         {
             return Ok();
         }
-
 
         [HttpPost]
         public IActionResult PostAsync(IFormFile file, [FromForm]string endpointKey = null, [FromForm]string microsoftAppPassword = null)
@@ -34,7 +33,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
                 return BadRequest();
             }
 
-            BotManager.SetCurrent(file.OpenReadStream(), endpointKey, microsoftAppPassword);
+            botManager.SetCurrent(file.OpenReadStream(), endpointKey, microsoftAppPassword);
                 
             return Ok();
         }

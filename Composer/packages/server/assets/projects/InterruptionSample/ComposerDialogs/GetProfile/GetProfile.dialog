@@ -20,18 +20,18 @@
             "name": "Prompt for text",
             "id": "362298"
           },
-          "allowInterruptions": "true",
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
-          "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
+          "invalidPrompt": "[bfdinvalidPrompt-362298]",
           "maxTurnCount": 3,
           "validations": [
-            "length(turn.value) <= 150",
-            "length(turn.value) > 2"
+            "length(this.value) <= 150",
+            "length(this.value) > 2"
           ],
-          "value": "concat(toUpper(substring(@userName, 0, 1)), substring(@userName, 1))",
           "property": "user.profile.name",
           "defaultValue": "'Human'",
+          "value": "@userName",
           "alwaysPrompt": false,
+          "allowInterruptions": "true",
           "outputFormat": "trim"
         },
         {
@@ -40,21 +40,21 @@
             "name": "Prompt for a number",
             "id": "005947"
           },
-          "property": "user.profile.age",
           "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
-          "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "invalidPrompt": "[bfdinvalidPrompt-005947]",
           "maxTurnCount": 3,
           "validations": [
-            "int(turn.value) >= 1",
-            "int(turn.value) <= 150"
+            "int(this.value) >= 1",
+            "int(this.value) <= 150"
           ],
-          "value": "@userAge",
+          "property": "user.profile.age",
           "defaultValue": "30",
+          "value": "@userAge",
           "alwaysPrompt": false,
-          "allowInterruptions": "notRecognized",
+          "allowInterruptions": "true",
           "outputFormat": "float",
-          "defaultLocale": "en-us",
-          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]"
+          "defaultLocale": "en-us"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -169,5 +169,5 @@
       "intent": "GetProfileInputs"
     }
   ],
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

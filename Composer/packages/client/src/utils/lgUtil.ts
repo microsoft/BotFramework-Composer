@@ -8,7 +8,7 @@
  */
 
 import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 const lgStaticChecker = new StaticChecker();
 
@@ -33,12 +33,16 @@ export function parse(content: string, id = ''): LGTemplate[] {
   return get(resource, 'Templates', []);
 }
 
+export function createSingleMessage(diagnostic: Diagnostic): string {
+  const { Start, End } = diagnostic.Range;
+  const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+
+  return `${position} \n ${diagnostic.Message}\n`;
+}
+
 export function combineMessage(diagnostics: Diagnostic[]): string {
   return diagnostics.reduce((msg, d) => {
-    const { Start, End } = d.Range;
-    const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-    msg += `${position} \n ${d.Message}\n`;
+    msg += createSingleMessage(d);
     return msg;
   }, '');
 }

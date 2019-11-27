@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { IButtonStyles } from 'office-ui-fabric-react';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 import { palette } from '../../palette';
 

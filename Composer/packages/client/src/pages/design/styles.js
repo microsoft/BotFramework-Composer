@@ -78,7 +78,7 @@ export const visualEditor = css`
 `;
 
 export const formEditor = css`
-  max-width: 600px;
+  max-width: 400px;
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;

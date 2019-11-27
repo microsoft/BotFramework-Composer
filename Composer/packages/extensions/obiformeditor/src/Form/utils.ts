@@ -1,15 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  DropdownMenuItemType,
-  IContextualMenuItem,
-  ContextualMenuItemType,
-  IDropdownOption,
-} from 'office-ui-fabric-react';
+import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState } from 'react';
-import merge from 'lodash.merge';
-import get from 'lodash.get';
+import merge from 'lodash/merge';
+import get from 'lodash/get';
 import { dialogGroups, DialogGroup, DialogGroupItem, getDesignerId } from '@bfc/shared';
 
 import { FormMemory, MemoryScope } from '../types';
@@ -118,7 +114,9 @@ export function insertAt<T = any>(arr: T[], item: T, idx: number): T[] {
   return newArr;
 }
 
-function getOptions(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
+function getOptions(memory: FormMemory | undefined, scope: MemoryScope): IDropdownOption[] {
+  if (!memory || !memory[scope]) return [];
+
   const options: IDropdownOption[] = [];
   for (const key in memory[scope]) {
     options.push({ key: `${scope}.${key}`, text: `${memory[scope][key]}` });
@@ -126,7 +124,7 @@ function getOptions(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
   return options;
 }
 
-function buildScope(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
+function buildScope(memory: FormMemory | undefined, scope: MemoryScope): IDropdownOption[] {
   if (!memory || !memory[scope]) return [];
 
   const options = getOptions(memory, scope);
@@ -140,7 +138,7 @@ function buildScope(memory: FormMemory, scope: MemoryScope): IDropdownOption[] {
   ];
 }
 
-export function getMemoryOptions(memory: FormMemory): IDropdownOption[] {
+export function getMemoryOptions(memory?: FormMemory): IDropdownOption[] {
   return [
     ...buildScope(memory, MemoryScope.user),
     ...buildScope(memory, MemoryScope.conversation),

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import startCase from 'lodash.startcase';
+import startCase from 'lodash/startCase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import classnames from 'classnames';
 
 import { FormContext } from '../types';

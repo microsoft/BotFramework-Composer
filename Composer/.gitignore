@@ -4,3 +4,5 @@ junit.xml
 cypress/screenshots
 cypress/results
 cypress/videos
+
+TestBots/

@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { FormContext } from '../types';
@@ -51,6 +51,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   );
 
   const template = (lgFile &&
+    lgFile.templates &&
     lgFile.templates.find(template => {
       return template.Name === lgId;
     })) || {
@@ -68,7 +69,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
 
   // only do this once
   const allContent = useMemo(() => {
-    if (!lgFile) {
+    if (!lgFile || !lgFile.templates) {
       return '';
     }
 
@@ -179,3 +180,5 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     />
   );
 };
+
+export default LgEditorWidget;

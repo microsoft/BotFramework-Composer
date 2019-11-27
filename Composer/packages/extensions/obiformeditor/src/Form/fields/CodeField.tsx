@@ -4,7 +4,8 @@
 import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { Dropdown, IDropdownOption, MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import formatMessage from 'format-message';
 
 import 'codemirror/mode/javascript/javascript';

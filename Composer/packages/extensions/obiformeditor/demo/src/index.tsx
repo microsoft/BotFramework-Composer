@@ -2,14 +2,13 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PrimaryButton, DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, LuFile, DialogInfo, ShellApi } from '@bfc/shared';
 
 import Example from '../../src';
-import { ShellApi, LuFile, DialogInfo } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -149,12 +148,8 @@ function getDefaultMemory() {
 const mockShellApi = [
   'getState',
   'getData',
-  'getDialogs',
   'saveData',
   'navTo',
-  'navDown',
-  'focusTo',
-  'shellNavigate',
   'updateLuFile',
   'updateLgFile',
   'createLuFile',
@@ -163,6 +158,8 @@ const mockShellApi = [
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',
+  'onFocusSteps',
+  'onFocusEvent',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {

@@ -2,8 +2,8 @@
 
 # Microsoft Bot Framework Composer [PREVIEW]
 
-[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=stable)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Astable)
-[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=stable)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=stable)
+[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=master)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amaster)
+[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=master)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/microsoft/BotFramework-Composer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/microsoft/BotFramework-Composer/alerts/)
 
 ## Overview
@@ -46,8 +46,8 @@ $ yarn startall // start client and server at the same time
 
 ## Support and Feedback
 
-- [As a question on stack overflow][10]
-- [Request few feature][11]
+- [Ask a question on Stack Overflow][10]
+- [Request a new feature][11]
 - [File an issue][12]
 
 ## Related project
@@ -73,7 +73,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ### Issues and feature requests
 
-Please file issues and feature requests [here](https://github.com/microsoft/BotFramework-Composer/issues/issues). 
+Please file issues and feature requests [here](https://github.com/microsoft/BotFramework-Composer/issues/issues).
 
 Also, see current [known issues](https://github.com/microsoft/BotFramework-Composer/labels/known%20issue) for high impact bugs you may experience.
 

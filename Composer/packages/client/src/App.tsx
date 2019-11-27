@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { forwardRef, useContext, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -17,10 +19,11 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
-import Onboarding from './Onboarding';
+import { LoadingSpinner } from './components/LoadingSpinner';
 
 initializeIcons(undefined, { disableWarnings: true });
 
+const Onboarding = React.lazy(() => import('./Onboarding'));
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
@@ -30,56 +33,57 @@ const topLinks = (botLoaded: boolean) => {
       to: '/home',
       iconName: 'Home',
       labelName: formatMessage('Home'),
-      activeIfUrlContains: 'home',
       exact: true,
+      disabled: false,
     },
     {
       to: '/dialogs/Main',
       iconName: 'SplitObject',
       labelName: formatMessage('Design Flow'),
-      activeIfUrlContains: 'dialogs',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: '/test-conversation',
       iconName: 'WaitListConfirm',
       labelName: formatMessage('Test Conversation'),
-      activeIfUrlContains: '',
       exact: false,
-      underTest: true, // will delete
+      disabled: true, // will delete
     },
     {
       to: 'language-generation/',
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
-      activeIfUrlContains: 'language-generation',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: 'language-understanding/',
       iconName: 'People',
       labelName: formatMessage('User Input'),
-      activeIfUrlContains: 'language-understanding',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
     {
       to: '/evaluate-performance',
       iconName: 'Chart',
       labelName: formatMessage('Evaluate performance'),
-      activeIfUrlContains: '',
       exact: false,
-      underTest: true, // will delete
+      disabled: true,
+    },
+    {
+      to: '/notifications',
+      iconName: 'Warning',
+      labelName: formatMessage('Notifications'),
+      exact: true,
+      disabled: !botLoaded,
     },
     {
       to: '/setting/',
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
-      activeIfUrlContains: 'setting',
       exact: false,
-      underTest: !botLoaded,
+      disabled: !botLoaded,
     },
   ];
 
@@ -95,16 +99,15 @@ const bottomLinks = [
     to: '/help',
     iconName: 'unknown',
     labelName: formatMessage('Info'),
-    activeIfUrlContains: '/help',
-    exact: false,
-    underTest: true, // will delete
+    exact: true,
+    disabled: true,
   },
   {
     to: '/about',
     iconName: 'info',
     labelName: formatMessage('About'),
-    activeIfUrlContains: '/about',
-    exact: false,
+    exact: true,
+    disabled: false,
   },
 ];
 
@@ -116,7 +119,7 @@ export const App: React.FC = () => {
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
-    <>
+    <Fragment>
       <Header botName={botName} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
@@ -140,11 +143,8 @@ export const App: React.FC = () => {
                   to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  labelHide={!sideBarExpand}
-                  index={index}
                   exact={link.exact}
-                  targetUrl={link.activeIfUrlContains}
-                  underTest={link.underTest}
+                  disabled={link.disabled}
                 />
               );
             })}
@@ -158,11 +158,8 @@ export const App: React.FC = () => {
                   to={mapNavItemTo(link.to)}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  labelHide={!sideBarExpand}
-                  index={index}
                   exact={link.exact}
-                  targetUrl={link.activeIfUrlContains}
-                  underTest={link.underTest}
+                  disabled={link.disabled}
                 />
               );
             })}
@@ -178,8 +175,8 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
-        <Onboarding />
+        <Suspense fallback={<LoadingSpinner />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
       </div>
-    </>
+    </Fragment>
   );
 };

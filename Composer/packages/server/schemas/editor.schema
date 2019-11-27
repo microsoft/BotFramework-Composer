@@ -99,7 +99,7 @@
     "Microsoft.HttpRequest": {
       "title": "HTTP Request",
       "helpLink": "https://aka.ms/bfc-using-http",
-      "helpLinkText": "Learn more" 
+      "helpLinkText": "Learn more"
     },
     "Microsoft.IfCondition": {
       "title": "Branch: If/Else",
@@ -150,9 +150,8 @@
       "title": "Dialog started (BeginDialog)"
     },
     "Microsoft.OnConversationUpdateActivity": {
-      "title": "Conversation started (ConversationUpdate)",
-      "description":
-        "Handle the events fired when a user begins a new conversation with the bot.",
+      "title": "Greeting (ConversationUpdate)",
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
       "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
       "helpLinkText": "Learn more"
     },
@@ -244,7 +243,7 @@
     "Microsoft.TextInput": {
       "title": "Prompt for text",
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "helpLinkText": "Learn more" 
+      "helpLinkText": "Learn more"
     },
     "Microsoft.TraceActivity": {
       "title": "Emit a trace event",

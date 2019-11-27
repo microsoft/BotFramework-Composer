@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import compression from 'compression';
 
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
@@ -16,6 +17,7 @@ import { BASEURL } from './constants';
 const app: Express = express();
 app.set('view engine', 'ejs');
 app.set('view options', { delimiter: '?' });
+app.use(compression());
 
 const { login, authorize } = getAuthProvider();
 
@@ -25,7 +27,7 @@ const CS_POLICIES = [
   "img-src 'self' data:;",
   "base-uri 'none';",
   "connect-src 'self';",
-  "frame-src 'self' bfemulator:;",
+  "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
   "worker-src 'self';",
   "form-action 'none';",
   "frame-ancestors 'self';",
@@ -54,7 +56,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
   next();
 });
 
-app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public')));
+app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
 app.use(morgan('dev'));
 
 app.use(bodyParser.json({ limit: '50mb' }));

@@ -4,9 +4,10 @@
 /** @jsx jsx */
 import { jsx, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef, useState, useEffect } from 'react';
-import { isEqual } from 'lodash';
+import React, { useRef } from 'react';
+import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
+import { ShellData, ShellApi } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
@@ -53,6 +54,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     saveData,
     updateLgTemplate,
     getLgTemplates,
+    copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
     undo,
@@ -61,31 +63,21 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  // NOTE: avoid re-render. https://reactjs.org/docs/context.html#caveats
-  const [context, setContext] = useState({
+  const nodeContext = {
     focusedId,
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
     getLgTemplates,
+    copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
-  });
-
-  useEffect(() => {
-    setContext({
-      ...context,
-      focusedId,
-      focusedEvent,
-      focusedTab,
-      clipboardActions,
-    });
-  }, [focusedEvent, focusedActions, focusedTab, clipboardActions]);
+  };
 
   return (
     <CacheProvider value={emotionCache}>
-      <NodeRendererContext.Provider value={context}>
+      <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
           <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
             <ObiEditor
@@ -97,7 +89,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
               onClipboardChange={onCopy}
-              onOpen={(x, rest) => navTo(x, rest)}
+              onOpen={x => navTo(x)}
               onChange={x => saveData(x)}
               onSelect={onSelect}
               undo={undo}
@@ -111,32 +103,24 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps {
-  data: object;
-  dialogId: string;
-  focusedEvent: string;
-  focusedActions: string[];
-  focusedSteps: string[];
-  focusedTab: string;
-  clipboardActions: any[];
-  shellApi: any;
-  hosted: boolean;
-  currentDialog: { id: string; displayName: string; isRoot: boolean };
+interface VisualDesignerProps extends ShellData {
+  onChange: (newData: object, updatePath?: string) => void;
+  shellApi: ShellApi;
 }
 
 VisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
-  data: {},
-  shellApi: {
+  data: { $type: '' },
+  shellApi: ({
     navTo: () => {},
-    onFocusEvent: (_eventId: string) => {},
-    onFocusSteps: (_stepIds: string[], _fragment?: string) => {},
-    onSelect: (_ids: string[]) => {},
+    onFocusEvent: () => {},
+    onFocusSteps: () => {},
+    onSelect: () => {},
     saveData: () => {},
-    addCoachMarkRef: (_: any) => {},
-  },
+    addCoachMarkRef: () => {},
+  } as unknown) as ShellApi,
 };
 
 export default VisualDesigner;

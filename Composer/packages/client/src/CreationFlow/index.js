@@ -4,7 +4,7 @@
 import Path from 'path';
 
 import React, { useState, useEffect, useContext } from 'react';
-import get from 'lodash.get';
+import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 

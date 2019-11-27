@@ -2,12 +2,15 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useContext, useRef, useEffect, useState } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useContext, useRef, useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { isEmpty, get } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { IconButton } from 'office-ui-fabric-react';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';

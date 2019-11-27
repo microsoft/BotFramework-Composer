@@ -1,19 +1,13 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist/",
-    "noImplicitAny": false,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "preserve",
-    "sourceMap": true,
-    "declaration": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "resolveJsonModule": true
+    "allowJs": true,
+    "declaration": false,
+    "module": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/*"]
+    }
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
-  "exclude": [
-    "node_modules"
-  ],
 }
