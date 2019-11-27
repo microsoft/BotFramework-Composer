@@ -67,6 +67,7 @@ class JsonStore implements KVStore {
 
   private ensureStore() {
     if (!fs.existsSync(this.filePath)) {
+      log('data.json not found. Re-initializing with initial data.');
       this.initializeStore();
     }
   }
