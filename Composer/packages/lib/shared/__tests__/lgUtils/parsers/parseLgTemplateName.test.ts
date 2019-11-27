@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { parseLgTemplateName, LgMetaData } from '../../../src';
+import { LgMetaData } from '../../../src';
+import parseLgTemplateName from '../../../src/lgUtils/parsers/parseLgTemplateName';
 
 describe('parseLgTemplateName', () => {
   it('should return null when inputs are invalid', () => {

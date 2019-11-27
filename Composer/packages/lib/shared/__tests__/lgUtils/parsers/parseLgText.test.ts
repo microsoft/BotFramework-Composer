@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { parseLgText, LgTemplateRef } from '../../../src';
+import parseLgText from '../../../src/lgUtils/parsers/parseLgText';
+import { LgTemplateRef } from '../../../src';
 
 describe('parseLgText', () => {
   it('should return null when inputs are invalid', () => {
