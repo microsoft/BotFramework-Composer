@@ -3,7 +3,6 @@
 
 import fs from 'fs';
 
-import isEqual from 'lodash/isEqual';
 import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
 import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
 
@@ -267,16 +266,6 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    let currentLufileParsedContentLUISJsonStructure = null;
-    try {
-      currentLufileParsedContentLUISJsonStructure = await luIndexer.parse(content);
-    } catch (error) {
-      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
-    }
-
-    const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
-    const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) return this.luFiles;
 
     await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
