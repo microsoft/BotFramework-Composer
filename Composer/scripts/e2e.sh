@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
 
-set -e
+function cleanup {
+  kill $SERVER_PID
+}
 
-yarn start > server.log 2>&1 &
+yarn start >> e2e.log 2>&1 &
 SERVER_PID=$!
 
 npx cypress run
 EXIT_CODE=$?
-cat server.log
-cleanup
-
-function cleanup {
-  kill $SERVER_PID
-}
 
 # kill server process
 trap cleanup EXIT
