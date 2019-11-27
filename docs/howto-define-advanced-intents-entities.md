@@ -1,11 +1,10 @@
 # Advanced intent and entity definition 
-Entities are a collection of objects data extracted from an utterance such as places, time, and people. Entities need to be labeled consistently across all training utterances for each intent in a model. While intents are required, entities are optional. An utterance can include many entities or none at all, depending on the data required for your client application to perform its task. 
-
-In this article, we will cover how entities are defined and extracted and how different types of entities are defined in Composer. 
+In this article, we will cover some details of how LUIS recognizer extracts the intent and entity you may define in Composer. We will also instruct on how to define the different types of entities as shown in the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample). 
 
 ## Prerequisites: 
-- basic knowledge of [intent and entity](concept-language-understanding.md#core-lu-concepts-in-composer)
+- basic knowledge of [intent and entity](concept-language-understanding.md#core-lu-concepts-in-composer) 
 - basic knowledge of [how to define an intent trigger](howto-defining-triggers.md#intent)
+- basic knowledge of [how to use LUIS in Composer](howto-using-LUIS.md)
 - LUIS account (apply [here](https://www.luis.ai/home))
 - LUIS authoring key (how to get [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
 
