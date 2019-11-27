@@ -35,15 +35,16 @@ The http request action is found under the **Access external resources** menu in
 
 In the properties editor, set the method to `GET` and set the URL to your target API. For example, a typical Github API URL such as `https://api.github.com/users/your-username/orgs`. 
 
-Then add one or more headers to include more info in the request. For example we can add two headers to pass in the authentication values in this request. 
-    Add first header: set **Name** as `Authorization` and set the value to `bearer{dialog.token.token}`.
-    Add second header: set **Name** as `User-Agent` and set the value to `Vary`. 
+Then add headers to include more info in the request. For example we can add two headers to pass in the authentication values in this request. 
+    
+   In the first header, add the authentication token to the `bearer`: set **Name** as `Authorization` and set the value to `bearer{dialog.token.token}`.  
+   In the second header, add the `Vary HTTP header`: set **Name** as `User-Agent` and set the value to `Vary`. 
 
 Finally, set the **Result property** to `dialog.api_response` and **Response type** in `Json`. 
 
 ![oauth-headers](./media/integration/oauth-headers.png)
 
-HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
+HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, and headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
 ## Testing 
 You can add an [IF/ELSE branch](howto-controlling-conversation-flow.md#branch-if-else) to test the status of the response. 
