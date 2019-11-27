@@ -75,4 +75,4 @@ To use this to access the protected resources, pass the token into any API calls
 
 ## Next
 
-* [Overview of Bot Framework Composer](overview_of_bfd.md) 
+* Learn how to [send an HTTP request adn using OAuth](howto-sending-http-request.md). 
