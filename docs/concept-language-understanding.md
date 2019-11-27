@@ -1,12 +1,12 @@
 # Language Understanding
-Language Understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers which define how bots will respond with appropriate actions. 
+Language Understanding (LU) is used by the bot to understand language naturally and contextually to determine what next to do in a conversation flow. In Bot Framework Composer,the process is achieved through setting up recognizers and providing training data in the dialog so that any **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers which define how bots will respond with appropriate actions.
 
 In Bot Framework Composer LU has the following characteristics:
 
-- LU content is authored in inline editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
-- LU content is training data for recognizers 
-- Composer currently supports LU technologies such as LUIS and Regular Expression 
-- Composer provides an all-up LU view in **User Responses**
+- LU content is authored in inline editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+- LU content is training data for recognizers. 
+- Composer currently supports LU technologies such as LUIS and Regular Expression. 
+- Composer provides an all-up LU view in **User Responses**.
 
 ## Core LU concepts in Composer 
 ### Intents  
@@ -50,15 +50,7 @@ Entities are a collection of objects data extracted from an utterance such as pl
     - book a flight to {toCity=seattle}
     - book a flight from {fromCity=new york} to {toCity=seattle}
 
-The example above shows the definition of a `BookFlight` intent with two example utterances and two entity definitions: `toCity` and `fromCity`. When triggered, if LUIS is able to identify a destination city, the city name will be made available as `@toCity` within the triggered actions or a departure city with `@fromCity` as available entity values. The entity values can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use.
-
-Composer supports the following [LUIS entity types](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/luis-concept-entity-types):
-
-- [Simple](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Simple-entity)
-- [Prebuilt](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Prebuilt-entity)
-- [List](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#List-entity)
-- [RegEx](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#RegEx-entity)
-- [Composite](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#Composite-entity)
+The example above shows the definition of a `BookFlight` intent with two example utterances and two entity definitions: `toCity` and `fromCity`. When triggered, if LUIS is able to identify a destination city, the city name will be made available as `@toCity` within the triggered actions or a departure city with `@fromCity` as available entity values. The entity values can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. Read [here](howto-define-advanced-intents-entities.md) for advanced intents and entities definition. 
 
 ### Example 
 To better understand intents, entities and utterances, we provide some examples in the table below. All the three utterances share the same intent _BookFlight_ and with different entities. There are different types of entities, see details [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
