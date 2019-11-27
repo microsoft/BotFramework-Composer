@@ -2,10 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import path from 'path';
-
 import { jsx } from '@emotion/core';
-import { Fragment, useEffect, useState, useContext, useRef } from 'react';
+import { Fragment, useContext, useRef } from 'react';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
