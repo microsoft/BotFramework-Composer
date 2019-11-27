@@ -7,6 +7,7 @@ describe('parseLgTemplateRef', () => {
   it('should return null when inputs are invalid', () => {
     expect(parseLgTemplateRef('')).toEqual(null);
     expect(parseLgTemplateRef('xxx')).toEqual(null);
+    expect(parseLgTemplateRef('[0]')).toEqual(null);
   });
 
   it('should return LgTemplateRef when inputs are valid', () => {
