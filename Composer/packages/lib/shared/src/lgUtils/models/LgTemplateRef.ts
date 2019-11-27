@@ -3,7 +3,7 @@
 
 import parseLgTemplateRef from '../parsers/parseLgTemplateRef';
 
-import { LgTemplateName, LgTemplateRefString, LgText } from './stringTypes';
+import { LgTemplateName, LgTemplateRefString } from './stringTypes';
 
 export default class LgTemplateRef {
   name: LgTemplateName;
@@ -22,9 +22,5 @@ export default class LgTemplateRef {
   toString(): LgTemplateRefString {
     const paramsSuffix = Array.isArray(this.parameters) ? `(${this.parameters.join(',')})` : '';
     return `[${this.name}${paramsSuffix}]`;
-  }
-
-  toLgText(): LgText {
-    return `- ${this.toString()}`;
   }
 }

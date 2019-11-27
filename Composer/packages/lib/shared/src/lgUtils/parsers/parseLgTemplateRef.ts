@@ -8,7 +8,7 @@ import { LgTemplateRefPattern } from '../lgPatterns';
 import parseLgParamString from './parseLgParamString';
 
 export default function parseLgTemplateRef(inputString: LgTemplateRefString): LgTemplateRef | null {
-  if (!inputString) return null;
+  if (typeof inputString !== 'string') return null;
 
   const results = inputString.match(LgTemplateRefPattern);
   if (Array.isArray(results) && results.length === 3) {
