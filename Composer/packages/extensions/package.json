@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "build:visual-designer": "cd visual-designer && yarn build",
     "build:obiformeditor": "cd obiformeditor && yarn build",

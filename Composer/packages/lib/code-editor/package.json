@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Code editor component that is shared in composer packages",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
   "private": true,
@@ -14,7 +17,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
