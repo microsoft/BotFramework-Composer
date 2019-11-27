@@ -3,6 +3,6 @@
 
 export const LgNamePattern = `bfd(\\w+)-(\\d+)`;
 
-export const LgTemplateRefPattern = `\\[(.+?)(\\(.*\\))?\\]`;
+export const LgTemplateRefPattern = `\\[([A-Za-z_][-\\w]+)(\\(.*\\))?\\]`;
 
 export const LgTextPattern = `- (\\[.+\\])`;
