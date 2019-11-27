@@ -2,11 +2,12 @@
 
 set -e
 
-yarn start &
+yarn start > server.log 2>&1 &
 SERVER_PID=$!
 
-npx cypress run --browser chrome
+npx cypress run
 EXIT_CODE=$?
+cat server.log
 cleanup
 
 function cleanup {
