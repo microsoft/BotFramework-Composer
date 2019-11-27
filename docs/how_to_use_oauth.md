@@ -38,7 +38,7 @@ You should fill in the values of `Client ID`, `Client Secret`, and optionally `S
 
 ![oauth-app-credentials](./media/integration/oauth-app-credentials.png)
 
-- Copy the `Client ID` and `Client Secret` values and paste them to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and Github. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant. Save this setting.  
+- Copy the `Client ID` and `Client Secret` values and paste them to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and Github. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant to the caller. Save this setting.  
 
 Now, with the  `Name` , `Client ID`, `Client Secret`, and `Scopes` of your new OAuth connection setting in Azure, you are ready to configure your bot.
 
