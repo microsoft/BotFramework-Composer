@@ -71,11 +71,11 @@ In Composer, you can also define entities of different types. In this section, w
 The purpose of defining a Simple type entity is to teach LUIS to detect a single concept data in an utterance. 
 
 Use Simple type entities when the data has the following characteristics:
-- is a single concept 
-- is not well-formatted 
-- is not a prebuilt entity 
-- does not match exactly to a list of known words
-- does not contain other data items 
+- The data is a single concept. 
+- The data is not well-formatted. 
+- The data is not a prebuilt entity. 
+- The data does not match exactly to a list of known words.
+- The data does not contain other data items. 
 
 You can define [Simple]((https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data)) type entities using $\<entityName\>:simple notation. Here is an example from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample): 
 
@@ -107,9 +107,9 @@ This entity definition means that if the `AddItem` intent is detected, the extra
 The purpose of defining a List type entity is to teach LUIS to get entity data that matches a predefined list of items. 
 
 Use List type entities when the data has the following characteristics:
-- values of the data are a known set
-- does not exceed maximum [LUIS boundaries](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-boundaries)
-- the text in the utterance is an exact match with a synonym or the canonical name
+- Values of the data are a known set.
+- The data does not exceed maximum [LUIS boundaries](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-boundaries).
+- The text in the utterance is an exact match with a synonym or the canonical name.
 
 You can define [List](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-intent-and-list-entity) type entities using the following notation:
 
@@ -140,9 +140,9 @@ $ listType : grocery =
 - household items
 - house hold items
 ```
-This entity definition contains three lists of entities. Based on user's input, any extracted normalized entity value (todo/shopping/grocery) will be available `@listType` within any triggered actions. 
+This entity definition contains three lists of entities. Based on the user's input, any extracted normalized entity value (e.g. todo/shopping/grocery) will be available as `@listType` within any triggered actions. 
 
-After publishing the model in [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to [LUIS](https://www.luis.ai/), you can view in [LUIS](https://www.luis.ai/) the intents and entities you have defined in Composer: 
+After publishing the model of [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to [LUIS](https://www.luis.ai/), you can view in [LUIS](https://www.luis.ai/) the intents and entities you have defined in Composer: 
 
 ![entities](./media/entities/entities.png)
 
@@ -202,7 +202,6 @@ And test the model using an example utterance such as "add an apple to my shoppi
 }
 
 ```
-
 
 # Further reading
 - [Entities and their purpose in LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-entity-types)
