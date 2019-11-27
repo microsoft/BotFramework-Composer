@@ -2,15 +2,26 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType, IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 import { styles } from './styles';
 
-export function DialogWrapper(props) {
+interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
+  isOpen: boolean;
+  title: string;
+  subText: string;
+}
+
+export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
   const { isOpen, onDismiss, title, subText, children } = props;
+
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <Dialog
-      hidden={!isOpen}
+      hidden={false}
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
@@ -26,4 +37,4 @@ export function DialogWrapper(props) {
       {children}
     </Dialog>
   );
-}
+};

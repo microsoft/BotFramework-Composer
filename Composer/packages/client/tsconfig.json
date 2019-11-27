@@ -4,6 +4,10 @@
     "allowJs": true,
     "declaration": false,
     "module": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/*"]
+    }
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
 }

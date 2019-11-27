@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "visual-designer React component",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "files": [
     "css",
     "es",
@@ -31,7 +34,7 @@
     "dagre-d3": "^0.6.3",
     "format-message": "^6.2.1",
     "lodash": "^4.17.15",
-    "office-ui-fabric-react": "7.37.1",
+    "office-ui-fabric-react": "7.62.0",
     "prop-types": "^15.7.2",
     "source-map-loader": "^0.2.4"
   },

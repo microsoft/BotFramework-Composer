@@ -2,6 +2,9 @@
   "name": "@bfc/client",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
@@ -67,6 +70,7 @@
     "babel-plugin-named-asset-import": "^0.3.1",
     "babel-preset-react-app": "^7.0.1",
     "bfj": "6.1.1",
+    "browserslist": "^4.7.3",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "css-loader": "3.2.0",
     "dotenv": "6.0.0",

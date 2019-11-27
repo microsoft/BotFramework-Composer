@@ -2,6 +2,9 @@
   "name": "@bfc/obiformeditor",
   "version": "1.0.0",
   "description": "obieditortest React component",
+  "engines": {
+    "node": ">=12"
+  },
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
@@ -35,7 +38,7 @@
     "format-message": "^6.2.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "7.37.1",
+    "office-ui-fabric-react": "7.62.0",
     "react-error-boundary": "^1.2.5"
   },
   "peerDependencies": {

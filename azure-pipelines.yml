@@ -13,8 +13,9 @@ variables:
 jobs:
   - job: e2e
     displayName: End-to-End Tests
-    strategy:
-      parallel: 4
+    # re-enable once we upgrade our subscription to cypress
+    # strategy:
+    #   parallel: 4
     pool:
       vmImage: ubuntu-latest
 
@@ -44,9 +45,17 @@ jobs:
       - script: ./scripts/e2e.sh
         displayName: Run E2E Tests
         workingDirectory: Composer
-        continueOnError: true
         env:
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+          # CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
           CYPRESS_VIDEO: true
-          CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+          # CYPRESS_VIDEO_UPLOAD_ON_PASSES: true
+          CYPRESS_SCREENSHOTS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/screenshots
+          CYPRESS_VIDEOS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/videos
           TERM: xterm
+          COMPOSER_BOTS_FOLDER: $(Pipeline.Workspace)/Composer/TestBots
+      - task: PublishPipelineArtifact@1
+        condition: failed()
+        continueOnError: true
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)/cypress
+          artifactName: e2e

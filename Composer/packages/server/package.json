@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",

@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "Code editor component that is shared in composer packages",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
   "private": true,
