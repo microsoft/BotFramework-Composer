@@ -2,6 +2,9 @@
   "name": "@bfc/obiformeditor",
   "version": "1.0.0",
   "description": "obieditortest React component",
+  "engines": {
+    "node": ">=12"
+  },
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
