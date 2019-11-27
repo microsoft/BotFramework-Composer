@@ -228,11 +228,14 @@ describe('lu operation', () => {
     }
   });
 
-  it('should throw error when lu content is invalid', async () => {
+  it('should update diagnostics when lu content is invalid', async () => {
     const id = 'root';
     const content = 'hello \n hello3';
-
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+    const luFiles = await proj.updateLuFile(id, content);
+    const result = luFiles.find(f => f.id === id);
+    if (result !== undefined) {
+      await expect(result.diagnostics.length).toBeGreaterThan(0);
+    }
   });
 
   it('should delete lu file and update index', async () => {

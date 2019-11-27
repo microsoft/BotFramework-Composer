@@ -8,9 +8,9 @@ import { NotificationList } from '../../src/pages/notifications/NotificationList
 
 describe('<NotificationList/>', () => {
   const items = [
-    { type: 'Error', location: 'test1', message: 'error1' },
-    { type: 'Warning', location: 'test2', message: 'error2' },
-    { type: 'Error', location: 'test3', message: 'error3' },
+    { id: '1', severity: 'Error', type: 'dialog', location: 'test1', message: 'error1', diagnostic: '' },
+    { id: '2', severity: 'Warning', type: 'lu', location: 'test2', message: 'error2', diagnostic: '' },
+    { id: '3', severity: 'Error', type: 'lg', location: 'test3', message: 'error3', diagnostic: '' },
   ];
   it('should render the NotificationList', () => {
     const { container } = render(<NotificationList items={items} />);

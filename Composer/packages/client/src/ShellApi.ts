@@ -5,6 +5,7 @@ import React, { useEffect, useContext, useMemo } from 'react';
 import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
+import { LGTemplate } from 'botbuilder-lg';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -132,8 +133,13 @@ export const ShellApi: React.FC = () => {
     if (id === undefined) throw new Error('must have a file id');
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
+    let templates: LGTemplate[] = [];
+    try {
+      templates = lgUtil.parse(file.content);
+    } catch (error) {
+      console.error(error);
+    }
 
-    const templates = lgUtil.parse(file.content);
     const lines = file.content.split('\n');
 
     return templates.map(t => {

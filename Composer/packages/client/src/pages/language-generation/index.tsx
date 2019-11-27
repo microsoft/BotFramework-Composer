@@ -186,6 +186,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             css={actionButton}
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
+            defaultChecked={false}
             checked={editMode}
             disabled={(!isRoot && editMode === false) || (codeRange === null && fileValid === false)}
             onChange={onToggleEditMode}

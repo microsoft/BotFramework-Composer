@@ -35,6 +35,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
     selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
   );
 
+  //make the inline editor show error message
   useEffect(() => {
     if (selectedFile && selectedFile.diagnostics.length > 0) {
       const msg = selectedFile.diagnostics.reduce((msg: string, diagnostic) => {
