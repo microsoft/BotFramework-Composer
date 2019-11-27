@@ -13,7 +13,8 @@ context('breadcrumb', () => {
   });
 
   function hasBreadcrumbItems(cy: Cypress.cy, items: (string | RegExp)[]) {
-    cy.findByTestId('Breadcrumb')
+    cy.findAllByTestId('Breadcrumb')
+      .last()
       .get('li')
       .should($li => {
         items.forEach((item, idx) => {
