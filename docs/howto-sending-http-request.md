@@ -1,10 +1,11 @@
 # Sending an HTTP request and using OAuth 
-In this topic, we will walk you through the steps to send an HTTP request and using OAuth for authorization of the access. It is helpful to read [here](./tutorial/bot-tutorial-get-weather.md#add-an-http-request) about sending an HTTP request without OAuth.
+In this topic, we will walk you through the steps to send an HTTP request and using OAuth for authorization of the access. It is not necessary to deploy your bot to Azure for this to work.
 
 ## Prerequisites
-- [Bot Framework Composer](https://github.com/microsoft/BotFramework-Composer/tree/master)
-- A bot built using Composer
-- A target API you wish to call
+- [a basic bot you build using Composer](tutorial-create-echobot.md)
+- A target API for your bot to call
+- basic knowledge of [how to send an http request without OAuth](./tutorial/bot-tutorial-get-weather.md#add-an-http-request)
+- basic knowledge of [how to use OAuth in Composer](how_to_use_oauth.md)
   
 ## Set up OAuth in Composer 
 Follow the [steps](how_to_use_oauth.md) to set up OAuth in your bot. After the setup, your bot may look like the following: 
@@ -13,7 +14,7 @@ Follow the [steps](how_to_use_oauth.md) to set up OAuth in your bot. After the s
 
 Please note that the **Token property** you set will store the OAuth token result and you can reference it using `{dialog.token.token}`. You will need to use this value [here](#add-an-http-request). 
 
-Also make sure your Composer setting have appropriate `appID` and `app password` of the Azure Bot Service registration as shown in the screenshot below: 
+Also make sure your Composer settings have appropriate `appID` and `app password` of the Azure Bot Service registration as shown in the screenshot below: 
 
 ![composer-oauth-setting](./media/integration/composer-oauth-setting.png)
 
@@ -25,9 +26,9 @@ Restart bot and test in the Emulator, you should be able to see the authenticati
 
 ![oauth-test-token](./media/integration/oauth-test-token.png)
 
-Now, with the OAuth setup ready and token obtained with success, you are ready to add the HTTP request in your bot. 
+Now, with the OAuth setup ready and token successfully obtained, you are ready to add the HTTP request in your bot. 
 
-## Add an HTTP request
+## Add an HTTP request action
 The http request action is found under the **Access external resources** menu in the flow **+** button.
 
 ![](./media/tutorial-weatherbot/03/http-step.png)
