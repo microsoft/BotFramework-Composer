@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
@@ -21,8 +21,27 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const { fetchTemplates, openBotProject, createProject, saveProjectAs, saveTemplateId, fetchStorages } = actions;
-  const { templateId, templateProjects, focusedStorageFolder } = state;
+  const {
+    fetchTemplates,
+    openBotProject,
+    createProject,
+    saveProjectAs,
+    saveTemplateId,
+    fetchStorages,
+    fetchFolderItemsByPath,
+  } = actions;
+  const { templateId, templateProjects, focusedStorageFolder, storages } = state;
+  const currentStorageIndex = useRef(0);
+  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
+  const [currentPath, setCurrentPath] = useState('');
+  useEffect(() => {
+    if (storages && storages.length > 0) {
+      const storageId = storages[currentStorageIndex.current].id;
+      const path = storages[currentStorageIndex.current].path;
+      const formatedPath = Path.normalize(path);
+      fetchFolderItemsByPath(storageId, formatedPath);
+    }
+  }, [storages]);
 
   useEffect(() => {
     const allFilesInFolder = get(focusedStorageFolder, 'children', []);
@@ -34,6 +53,9 @@ export function CreationFlow(props) {
     });
 
     setBots(botsInCurrentFolder);
+    if (Object.keys(focusedStorageFolder).length > 0) {
+      setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
+    }
   }, [focusedStorageFolder]);
 
   useEffect(() => {
@@ -63,6 +85,18 @@ export function CreationFlow(props) {
       default:
         setStep(Steps.NONE);
         break;
+    }
+  };
+
+  const updateCurrentPath = async (newPath, storageId) => {
+    if (!storageId) {
+      storageId = currentStorageId;
+    }
+    if (newPath) {
+      // const formatedPath = Path.normalize(newPath.replace(/\\/g, '/'));
+      const formatedPath = Path.normalize(newPath);
+      //await fetchFolderItemsByPath(storageId, formatedPath);
+      await actions.updateCurrentPath(formatedPath);
     }
   };
 
@@ -137,6 +171,10 @@ export function CreationFlow(props) {
           onGetErrorMessage={getErrorMessage}
           onDismiss={handleDismiss}
           enableLocationBrowse={true}
+          updateCurrentPath={updateCurrentPath}
+          focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
+          bots={bots}
         />
       ),
     },

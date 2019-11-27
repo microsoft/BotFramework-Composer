@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -11,6 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
 
+import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
@@ -29,10 +30,25 @@ const validateForm = data => {
 };
 
 export function DefineConversation(props) {
-  const { onSubmit, onGetErrorMessage, onDismiss, enableLocationBrowse } = props;
+  const {
+    onSubmit,
+    onGetErrorMessage,
+    onDismiss,
+    enableLocationBrowse,
+    focusedStorageFolder,
+    updateCurrentPath,
+    currentPath,
+    bots,
+  } = props;
 
-  const [formData, setFormData] = useState({ errors: {} });
+  const { state } = useContext(StoreContext);
+  const { storages, storageFileLoadingStatus, templateId, botName } = state;
+  const [formData, setFormData] = useState({ name: getDefaultName(), errors: {} });
   const [disable, setDisable] = useState(false);
+
+  useEffect(() => {
+    updateForm('location')(null, currentPath);
+  }, [currentPath]);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -59,6 +75,22 @@ export function DefineConversation(props) {
     });
   };
 
+  function getDefaultName() {
+    let i = 0;
+    const bot = templateId || botName;
+    let defaultName = `${bot}-${i}`;
+
+    while (
+      bots.findIndex(bot => {
+        return bot.name === defaultName;
+      }) > -1
+    ) {
+      i = i + 1;
+      defaultName = `${bot}-${i}`;
+    }
+    return defaultName;
+  }
+
   //disable the next button if the text has errors.
   const getErrorMessage = text => {
     if (typeof onGetErrorMessage === 'function') {
@@ -75,11 +107,6 @@ export function DefineConversation(props) {
     } else {
       return '';
     }
-  };
-
-  // // update the path in the form and toggle the location picker.
-  const updateLocation = path => {
-    updateForm('location')(null, path);
   };
 
   return (
@@ -109,7 +136,14 @@ export function DefineConversation(props) {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && <LocationSelectContent onChange={updateLocation} allowOpeningBot={false} />}
+        {enableLocationBrowse && (
+          <LocationSelectContent
+            updateCurrentPath={updateCurrentPath}
+            allowOpeningBot={false}
+            focusedStorageFolder={focusedStorageFolder}
+            currentPath={currentPath}
+          />
+        )}
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

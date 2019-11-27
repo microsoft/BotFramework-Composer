@@ -12,50 +12,11 @@ import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 
 export function LocationSelectContent(props) {
-  const { state, actions } = useContext(StoreContext);
-  const { storages, focusedStorageFolder, storageFileLoadingStatus } = state;
-  const { onOpen, onChange, allowOpeningBot = true } = props;
+  const { state } = useContext(StoreContext);
+  const { storages, storageFileLoadingStatus } = state;
+  const { onOpen, allowOpeningBot = true, focusedStorageFolder, updateCurrentPath, currentPath } = props;
 
-  const { fetchFolderItemsByPath } = actions;
   const currentStorageIndex = useRef(0);
-  const [currentPath, setCurrentPath] = useState('');
-  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
-
-  useEffect(() => {
-    if (onChange) {
-      onChange(currentPath);
-    }
-  }, []);
-
-  const updateCurrentPath = async (newPath?: string, storageId?: string) => {
-    if (!storageId) {
-      storageId = currentStorageId;
-    }
-    if (newPath) {
-      // const formatedPath = path.normalize(newPath.replace(/\\/g, '/'));
-      const formatedPath = path.normalize(newPath);
-      await fetchFolderItemsByPath(storageId, formatedPath);
-      await actions.updateCurrentPath(formatedPath);
-      setCurrentPath(formatedPath);
-    }
-  };
-
-  useEffect(() => {
-    const index = currentStorageIndex.current;
-    let path = currentPath;
-    let id = '';
-    if (storages[index]) {
-      path = storages[index].path;
-      id = storages[index].id;
-    }
-    updateCurrentPath(path, id);
-  }, [storages]);
-
-  useEffect(() => {
-    if (onChange) {
-      onChange(currentPath);
-    }
-  }, [currentPath]);
 
   const onSelectionChanged = item => {
     if (item) {

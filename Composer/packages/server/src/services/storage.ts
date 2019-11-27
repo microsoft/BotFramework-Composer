@@ -88,6 +88,7 @@ class StorageService {
   public updateCurrentPath = (path: string) => {
     this.storageConnections[0].path = path;
     Store.set(this.STORE_KEY, this.storageConnections);
+    return this.storageConnections;
   };
 
   private ensureDefaultBotFoldersExist = () => {
