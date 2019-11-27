@@ -75,4 +75,4 @@ To use this to access the protected resources, pass the token into any API calls
 
 ## Next
 
-* Learn how to [send an HTTP request adn using OAuth](howto-sending-http-request.md). 
+* Learn how to [send an HTTP request adn use OAuth](howto-sending-http-request.md). 
