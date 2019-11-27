@@ -29,6 +29,10 @@
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "helpLinkText": "Learn more"
     },
+    "Microsoft.OnCancelDialog": {
+      "title": "Dialog cancelled",
+      "subtitle": "Cancel dialog event"
+    },
     "Microsoft.CancelAllDialogs": {
       "title": "Cancel All Dialogs",
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
@@ -144,75 +148,83 @@
       "helpLink": "https://aka.ms/bfc-using-oauth"
     },
     "Microsoft.OnActivity": {
-      "title": "Activity trigger",
-      "subtitle": "(Activity)"
+      "title": "Activities",
+      "subtitle": "Activity recieved"
     },
     "Microsoft.OnBeginDialog": {
       "title": "Dialog started",
-      "subtitle": "(Begin dialog)"
+      "subtitle": "Begin dialog event"
     },
     "Microsoft.OnConversationUpdateActivity": {
       "title": "Greeting",
-      "subtitle": "(ConversationUpdate activity)",
+      "subtitle": "ConversationUpdate activity",
       "description": "Handle the events fired when a user begins a new conversation with the bot.",
       "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
       "helpLinkText": "Learn more"
     },
     "Microsoft.OnDialogEvent": {
-      "title": "Dialog event",
-      "subtitle": "(Dialog event)"
+      "title": "Dialog events",
+      "subtitle": "Dialog event"
     },
     "Microsoft.OnEndOfConversationActivity": {
       "title": "Conversation ended",
-      "subtitle": "(EndOfConversation activity)"
+      "subtitle": "EndOfConversation activity"
     },
     "Microsoft.OnCondition": {
       "title": "Handle a condition",
-      "subtitle": "(Condition)"
+      "subtitle": "Condition"
     },
     "Microsoft.OnCustomEvent": {
       "title": "Handle an Event",
-      "subtitle": "(Custom event)"
+      "subtitle": "Custom event"
     },
     "Microsoft.OnEventActivity": {
       "title": "Event received",
-      "subtitle": "(Event activity)"
+      "subtitle": "Event activity"
+    },
+    "Microsoft.OnError": {
+      "title": "Error occurred",
+      "subtitle": "Error event"
     },
     "Microsoft.OnHandoffActivity": {
       "title": "Handover to human",
-      "subtitle": "(Handoff activity)"
+      "subtitle": "Handoff activity"
     },
     "Microsoft.OnIntent": {
-      "title": "User input",
-      "subtitle": "(Intent recognized)"
+      "title": "Intent recognized",
+      "subtitle": "Intent recognized"
     },
     "Microsoft.OnInvokeActivity": {
       "title": "Conversation invoked",
-      "subtitle": "(Invoke activity)"
+      "subtitle": "Invoke activity"
     },
     "Microsoft.OnMessageActivity": {
-      "title": "Message received",
-      "subtitle": "(Message activity)"
+      "title": "Message events",
+      "subtitle": "Message recieved activity"
     },
     "Microsoft.OnMessageDeleteActivity": {
       "title": "Message deleted",
-      "subtitle": "(Delete message activity)"
+      "subtitle": "Message deleted activity"
     },
     "Microsoft.OnMessageReactionActivity": {
       "title": "Message reaction",
-      "subtitle": "(Message reaction activity)"
+      "subtitle": "Message reaction activity"
     },
     "Microsoft.OnMessageUpdateActivity": {
       "title": "Message updated",
-      "subtitle": "(Message updated activity)"
+      "subtitle": "Message updated activity"
     },
     "Microsoft.OnTypingActivity": {
       "title": "User is typing",
-      "subtitle": "(Typing activity)"
+      "subtitle": "Typing activity"
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "Re-prompt for input",
+      "subtitle": "Reprompt dialog event"
     },
     "Microsoft.OnUnknownIntent": {
-      "title": "Unrecognized user input",
-      "subtitle": "(Unknown intent recognized)"
+      "title": "Unknown intent",
+      "subtitle": "Unknown intent recognized"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog",
