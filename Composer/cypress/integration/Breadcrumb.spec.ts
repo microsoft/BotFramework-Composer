@@ -43,15 +43,15 @@ context('breadcrumb', () => {
   it('can show event name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('AddToDo').click();
-      cy.findByText('Dialog started (BeginDialog)').click();
+      cy.findByText('Dialog started').click();
     });
 
-    hasBreadcrumbItems(cy, ['AddToDo', 'Dialog started (BeginDialog)']);
+    hasBreadcrumbItems(cy, ['AddToDo', 'Dialog started']);
   });
 
   it('can show action name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Greeting (ConversationUpdate)').click();
+      cy.findByText('Greeting').click();
     });
 
     // Click on an action
@@ -61,6 +61,6 @@ context('breadcrumb', () => {
       });
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main', 'Greeting (ConversationUpdate)', 'Send a response']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample.Main', 'Greeting', 'Send a response']);
   });
 });
