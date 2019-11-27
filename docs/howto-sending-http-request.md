@@ -43,13 +43,12 @@ Finally, set the **Result property** to `dialog.api_response` and **Response typ
 
 ![oauth-headers](./media/integration/oauth-headers.png)
 
->![Note]
-> HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
+HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
 ## Testing 
 You can add an [IF/ELSE branch](howto-controlling-conversation-flow.md#branch-if-else) to test the status of the response. 
 
-Set **Condition** to `dialog.api_response.statusCode == 200` in the properties editor. 
+Set **Condition** to `dialog.api_response.statusCode == 200` in the properties panel. 
 
 Add two **Send a response** actions to be fired based on the testing results (true/false) of the condition. 
 
