@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "<description>",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
   "scripts": {

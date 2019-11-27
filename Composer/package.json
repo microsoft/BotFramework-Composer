@@ -4,6 +4,9 @@
   "resolutions": {
     "@types/react": "16.9.0"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "workspaces": [
     "packages/client",
     "packages/server",
@@ -31,7 +34,7 @@
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",
     "test:integration": "cypress run --browser chrome",
     "test:integration:open": "cypress open",
-    "test:integration:clean": "rimraf ../MyBots/__Test* packages/server/data.json",
+    "test:integration:clean": "rimraf TestBots/*",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",

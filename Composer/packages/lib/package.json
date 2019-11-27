@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "build:code-editor": "cd code-editor && yarn build",
     "build:shared": "cd shared && yarn build",
