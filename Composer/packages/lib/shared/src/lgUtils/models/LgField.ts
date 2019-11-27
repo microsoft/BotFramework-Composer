@@ -12,8 +12,8 @@ enum LgFieldType {
 }
 
 export default class LgField {
+  private type: LgFieldType;
   content: string | LgTemplateRef;
-  type: LgFieldType;
 
   private constructor(content: string | LgTemplateRef, type: LgFieldType) {
     this.content = content;
@@ -51,5 +51,13 @@ export default class LgField {
     }
 
     return '';
+  }
+
+  isTemplateRef(): boolean {
+    return this.type === LgFieldType.Ref;
+  }
+
+  isLgText(): boolean {
+    return this.type === LgFieldType.LgText;
   }
 }

@@ -8,7 +8,7 @@ describe('LgField#', () => {
     it('when inputs a lg content string', () => {
       const result = LgField.parse('- hello');
 
-      expect((result as LgField).type).toEqual('LgText');
+      expect((result as LgField).isLgText()).toBeTruthy();
       expect((result as LgField).content).toEqual('hello');
     });
 
@@ -16,14 +16,14 @@ describe('LgField#', () => {
       const inputTemplateRef = new LgTemplateRef('greeting');
       const result = LgField.parse(inputTemplateRef.toString());
 
-      expect((result as LgField).type).toEqual('LgTemplateRef');
+      expect((result as LgField).isTemplateRef()).toBeTruthy();
       expect((result as LgField).content).toEqual(inputTemplateRef);
     });
 
     it('when input is plain string', () => {
       const result = LgField.parse('hi');
 
-      expect((result as LgField).type).toEqual('LgText');
+      expect((result as LgField).isLgText()).toBeTruthy();
       expect((result as LgField).content).toEqual('hi');
     });
   });
@@ -33,7 +33,7 @@ describe('LgField#', () => {
       const inputRef = new LgTemplateRef('greeting');
       const result = LgField.from(inputRef);
 
-      expect((result as LgField).type).toEqual('LgTemplateRef');
+      expect((result as LgField).isTemplateRef()).toBeTruthy();
       expect((result as LgField).content).toEqual(inputRef);
     });
   });
