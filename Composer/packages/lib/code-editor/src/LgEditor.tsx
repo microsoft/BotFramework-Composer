@@ -51,7 +51,7 @@ declare global {
 
 async function initializeDocuments(lgOption) {
   const languageClient = window.monacoLGEditorInstance;
-  if (languageClient && lgOption && lgOption.inline) {
+  if (languageClient) {
     await languageClient.onReady();
     languageClient.sendRequest('initializeDocuments', lgOption);
   }
