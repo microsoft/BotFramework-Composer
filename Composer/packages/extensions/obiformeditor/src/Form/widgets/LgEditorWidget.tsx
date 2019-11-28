@@ -29,7 +29,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
   if (tryGetLgMetaDataType(lgText) === fieldName) {
     return '';
   }
-  return lgText.startsWith('-') ? lgText : `-${lgText}`;
+  return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
 interface LgEditorWidgetProps {
