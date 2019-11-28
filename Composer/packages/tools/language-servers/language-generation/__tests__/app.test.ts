@@ -66,28 +66,41 @@ describe('lg lsp server', () => {
     );
     // client initialized
     send(`{"jsonrpc":"2.0","method":"initialized","params":{}}`);
+    send(
+      `{"jsonrpc":"2.0","method":"textDocument/didOpen","params": {"textDocument":{"uri":"inmemory://model/1","languageId":"botbuilderlg","version":2,"text": "${content}" }}}`
+    );
+    await new Promise(resolve => setTimeout(() => resolve(), 10));
   });
 
-  it('didOpen, check diagnostics', async () => {
-    // didOpen, check diagnostics
-    const payload = `{"jsonrpc":"2.0","method":"textDocument/didOpen","params": {"textDocument":{"uri":"inmemory://model/1","languageId":"botbuilderlg","version":2,"text": "${content}" }}}`;
-    const response = await send(payload);
-    expect(response.method).toEqual('textDocument/publishDiagnostics');
-    expect(response.params.diagnostics.length).toEqual(0);
+  it('initialize documents', async () => {
+    // initialize, check diagnostics
+    await send(
+      `{"jsonrpc":"2.0","id":1,"method":"initializeDocuments","params":{"uri":"inmemory://model/1"}}`,
+      (response, resolve) => {
+        if (response.method) {
+          expect(response.method).toEqual('textDocument/publishDiagnostics');
+          expect(response.params.diagnostics.length).toEqual(0);
+        } else {
+          expect(response.id).toEqual(1);
+          resolve();
+        }
+      }
+    );
   });
 
   it('hover', async () => {
+    await new Promise(resolve => setTimeout(() => resolve(), 10));
     // didChange
-    const newContent = `${content}-[G\\r\\n`;
-    const payload = `{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"inmemory://model/1","version":3},"contentChanges":[{"text": "${newContent}"}]}}`;
-    const response = await send(payload);
-    expect(response.method).toEqual('textDocument/publishDiagnostics');
-    expect(response.params.diagnostics.length).toEqual(0);
+    const response = await send(
+      `{"jsonrpc":"2.0","id":2,"method":"textDocument/hover","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":6,"character":6}}}`
+    );
+    expect(response.id).toEqual(2);
+    expect(response.result.contents[0]).toEqual('-Good evening');
   });
 
   it('didChange', async () => {
     // didChange
-    const newContent = `${content}-[G\\r\\n`;
+    const newContent = `${content}-@{G\\r\\n`;
     const payload = `{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"inmemory://model/1","version":3},"contentChanges":[{"text": "${newContent}"}]}}`;
     const response = await send(payload);
     expect(response.method).toEqual('textDocument/publishDiagnostics');
@@ -96,10 +109,10 @@ describe('lg lsp server', () => {
 
   it('completion', async () => {
     // completion,
-    // input -[G, should suggest Greeting*
-    const payload = `{"jsonrpc":"2.0","id":2,"method":"textDocument/completion","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":8,"character":3},"context":{"triggerKind":1}}}`;
+    // input G, should suggest Greeting*
+    const payload = `{"jsonrpc":"2.0","id":3,"method":"textDocument/completion","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":8,"character":4},"context":{"triggerKind":1}}}`;
     const response = await send(payload);
-    expect(response.id).toEqual(2);
+    expect(response.id).toEqual(3);
     expect(
       response.result.items
         .slice(0, 3)
