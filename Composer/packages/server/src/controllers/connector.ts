@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import merge from 'lodash/merge';
 
 import { BotEnvironments } from '../models/connector';
 import { EnvironmentProvider } from '../models/environment';
@@ -33,7 +34,8 @@ async function getPublishHistory(req: any, res: any) {
 async function sync(req: any, res: any) {
   try {
     const environment = EnvironmentProvider.getCurrent();
-    await environment.getBotConnector().sync({ ...req.body, user: req.user });
+    const settingsInDisk = await environment.getSettingsManager().get('', false);
+    await environment.getBotConnector().sync(merge(settingsInDisk, req.body, { user: req.user }));
     res.send('OK');
   } catch (error) {
     res.status(400).json({

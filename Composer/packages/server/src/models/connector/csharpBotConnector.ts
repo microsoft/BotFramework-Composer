@@ -2,74 +2,169 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import Path from 'path';
+import { ChildProcess, spawn } from 'child_process';
 
-import axios from 'axios';
 import archiver from 'archiver';
-import FormData from 'form-data';
 
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
+import { Path } from '../../utility/path';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
 export class CSharpBotConnector implements IBotConnector {
-  private adminEndpoint: string;
+  public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
-  constructor(adminEndpoint: string, endpoint: string) {
-    this.adminEndpoint = adminEndpoint;
+  private runtime: ChildProcess | null = null;
+  constructor(endpoint: string) {
     this.endpoint = endpoint;
+    this.addProcessListeners();
   }
 
-  public status: BotStatus = BotStatus.NotConnected;
-
-  connect = async (_: BotEnvironments, __: string) => {
-    // confirm bot runtime is listening here
-    try {
-      await axios.get(this.adminEndpoint + '/api/admin');
-    } catch (err) {
-      throw new Error(err);
-    }
-
-    this.status = BotStatus.NotConnected;
-
-    return `${this.endpoint}/api/messages`;
+  private addProcessListeners = () => {
+    process.on('SIGINT', () => {
+      console.log('[SIGINT] start graceful shutdown');
+      this.stop();
+      process.exit(1);
+    });
+    process.on('SIGTERM', () => {
+      console.log('[SIGTERM] start graceful shutdown');
+      this.stop();
+      process.exit(1);
+    });
+    process.on('SIGQUIT', () => {
+      console.log('[SIGQUIT] start graceful shutdown');
+      this.stop();
+      process.exit(1);
+    });
   };
 
-  sync = async (config: DialogSetting) => {
-    // archive the project
-    // send to bot runtime service
+  private stop = () => {
+    if (this.runtime) {
+      console.log(`kill this bot with process PID: ${this.runtime.pid}`);
+      this.runtime.kill('SIGKILL');
+      this.runtime = null;
+    }
+  };
+
+  private buildProcess = async (dir: string): Promise<number | null> => {
+    return new Promise((resolve, reject) => {
+      const startScript = Path.resolve(__dirname, './build_runtime.ps1');
+      console.log(startScript);
+      const build = spawn(`pwsh ${startScript}`, {
+        cwd: dir,
+        detached: true,
+        shell: true,
+        stdio: ['ignore', 'ignore', 'inherit'],
+      });
+      console.log(`build pid : ${build.pid}`);
+
+      build.stderr &&
+        build.stderr.on('data', function(err) {
+          reject(err.toString());
+        });
+
+      build.on('exit', function(code) {
+        resolve(code);
+      });
+    });
+  };
+
+  private getConnectorConfig = (config: DialogSetting) => {
+    const configList: string[] = [];
+    if (config.MicrosoftAppPassword) {
+      configList.push('--MicrosoftAppPassword');
+      configList.push(config.MicrosoftAppPassword);
+    }
+    if (config.luis) {
+      if (config.luis.authoringKey) {
+        configList.push('--luis:endpointKey');
+        configList.push(config.luis.authoringKey);
+      }
+      if (config.luis.authoringRegion) {
+        configList.push('--luis:endpoint');
+        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
+      }
+    }
+
+    return configList;
+  };
+  private addListeners = (child: ChildProcess, handler: Function) => {
+    if (child.stdout !== null) {
+      child.stdout.on('data', (data: any) => {
+        console.log(`stdout: ${data}`);
+      });
+    }
+
+    if (child.stderr !== null) {
+      child.stderr.on('data', (data: any) => {
+        console.log(`stderr: ${data}`);
+      });
+    }
+
+    child.on('close', code => {
+      console.log(`close ${code}`);
+      handler();
+    });
+
+    child.on('error', (err: any) => {
+      console.log(`stderr: ${err}`);
+    });
+
+    child.on('exit', code => {
+      console.log(`exit: ${code}`);
+      handler();
+    });
+
+    child.on('message', msg => {
+      console.log(msg);
+    });
+
+    child.on('disconnect', code => {
+      console.log(`disconnect: ${code}`);
+      handler();
+    });
+  };
+
+  private getBotPath = () => {
     const currentProject = BotProjectService.getCurrentBotProject();
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = Path.join(currentProject.dataDir);
-    const luisConfig = currentProject.luPublisher.getLuisConfig();
-    await this.archiveDirectory(dir, './tmp.zip');
-    const content = fs.readFileSync('./tmp.zip');
+    return Path.join(currentProject.dir);
+  };
 
-    const form = new FormData();
-    form.append('file', content, 'bot.zip');
+  private start = async (dir: string, config: DialogSetting) => {
+    this.runtime = spawn(
+      'dotnet',
+      ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
+      {
+        detached: true,
+        cwd: dir,
+        stdio: ['ignore', 'ignore', 'inherit'],
+      }
+    );
+    this.addListeners(this.runtime, this.stop);
+  };
 
-    if (luisConfig && luisConfig.authoringKey !== null && !currentProject.checkLuisPublished()) {
-      throw new Error('Please publish your Luis models');
-    }
-
-    if (luisConfig) {
-      form.append('endpointKey', luisConfig.endpointKey || luisConfig.authoringKey || '');
-    }
-
-    config = {
-      ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
-      ...config,
-    };
-    if (config.MicrosoftAppPassword) {
-      form.append('microsoftAppPassword', config.MicrosoftAppPassword);
-    }
+  connect = async (_: BotEnvironments, __: string) => {
+    // confirm bot runtime is listening here
     try {
-      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
+      const dir = this.getBotPath();
+      await this.buildProcess(dir);
+      return Promise.resolve(`${this.endpoint}/api/messages`);
     } catch (err) {
-      throw new Error('Unable to sync content to bot runtime');
+      throw new Error(err);
+    }
+  };
+
+  sync = async (config: DialogSetting) => {
+    try {
+      const dir = this.getBotPath();
+      await this.start(dir, config);
+    } catch (err) {
+      this.stop();
+      throw new Error(err);
     }
   };
 
