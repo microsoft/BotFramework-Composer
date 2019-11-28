@@ -3,7 +3,7 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateNames } from '@bfc/shared';
+import { extractLgTemplateRefs } from '@bfc/shared';
 
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { DialogChecker } from './utils/dialogChecker';
@@ -38,7 +38,7 @@ function ExtractLgTemplates(dialog): string[] {
           return true;
       }
       targets.forEach(target => {
-        templates.push(...extractLgTemplateNames(target));
+        templates.push(...extractLgTemplateRefs(target).map(x => x.name));
       });
     }
     return false;
