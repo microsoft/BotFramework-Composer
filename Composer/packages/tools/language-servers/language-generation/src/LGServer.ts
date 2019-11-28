@@ -75,14 +75,12 @@ export class LGServer {
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const { uri, content, template } = params;
-        this.LGDocuments.push({ uri, content, template });
+        const { uri, inline = false, content, template } = params;
+        this.LGDocuments.push({ uri, inline, content, template });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
-          setTimeout(() => {
-            this.validate(textDocument);
-          }, 500);
+          this.validate(textDocument);
         }
       }
     });
@@ -98,8 +96,9 @@ export class LGServer {
   protected getLGDocumentContent(document: TextDocument): string {
     const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
     const text = document.getText();
-    if (LGDocument) {
+    if (LGDocument && LGDocument.inline) {
       const { content, template } = LGDocument;
+      if (!content || !template) return text;
       const updatedTemplate = {
         Name: template.Name,
         Parameters: template.Parameters,
@@ -313,9 +312,15 @@ export class LGServer {
     let lineOffset = 0;
     const LGDocument = this.getLGDocument(document);
 
+    // uninitialized
+    if (!LGDocument) {
+      return;
+    }
+
     // if inline editor, concat new content for validate
-    if (LGDocument) {
+    if (LGDocument.inline) {
       const { content, template } = LGDocument;
+      if (!content || !template) return;
       const updatedTemplate = {
         Name: template.Name,
         Parameters: template.Parameters,

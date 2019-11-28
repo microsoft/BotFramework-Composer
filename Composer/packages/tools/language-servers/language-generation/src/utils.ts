@@ -22,8 +22,9 @@ export interface Template {
 
 export interface LGDocument {
   uri: string;
-  content: string;
-  template: Template;
+  inline: boolean;
+  content?: string;
+  template?: Template;
 }
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
