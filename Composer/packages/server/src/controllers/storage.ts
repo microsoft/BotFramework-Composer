@@ -16,8 +16,7 @@ function createStorageConnection(req: Request, res: Response) {
 }
 
 function updateCurrentPath(req: Request, res: Response) {
-  const storages = StorageService.updateCurrentPath(req.body.path);
-  res.status(200).json(storages);
+  res.status(200).json(StorageService.updateCurrentPath(req.body.path, req.body.storageId));
 }
 
 async function getBlob(req: Request, res: Response) {

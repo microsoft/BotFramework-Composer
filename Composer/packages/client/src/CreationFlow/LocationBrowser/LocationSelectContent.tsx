@@ -9,10 +9,15 @@ import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 
-export function LocationSelectContent(props) {
+export function LocationSelectContent({
+  onOpen,
+  allowOpeningBot = true,
+  focusedStorageFolder,
+  updateCurrentPath,
+  currentPath,
+}) {
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus } = state;
-  const { onOpen, allowOpeningBot = true, focusedStorageFolder, updateCurrentPath, currentPath } = props;
 
   const currentStorageIndex = useRef(0);
 

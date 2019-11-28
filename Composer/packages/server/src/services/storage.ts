@@ -85,9 +85,12 @@ class StorageService {
     }
   };
 
-  public updateCurrentPath = (path: string) => {
-    this.storageConnections[0].path = path;
-    Store.set(this.STORE_KEY, this.storageConnections);
+  public updateCurrentPath = (path: string, storageId: string) => {
+    const index = this.storageConnections.findIndex(s => s.id === storageId);
+    if (~index) {
+      this.storageConnections[index].path = path;
+      Store.set(this.STORE_KEY, this.storageConnections);
+    }
     return this.storageConnections;
   };
 

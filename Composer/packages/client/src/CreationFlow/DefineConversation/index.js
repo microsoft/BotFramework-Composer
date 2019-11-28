@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import Path from 'path';
+
 import React, { useState, Fragment, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -14,25 +16,11 @@ import { styles as wizardStyles } from '../StepWizard/styles';
 import { StoreContext } from './../../store';
 import { name, description } from './styles';
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
-const validateForm = data => {
-  const errors = {};
-  const { name } = data;
-
-  if (!name || !nameRegex.test(name)) {
-    errors.name = formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
-  }
-
-  return errors;
-};
+const MAXTRYTIMES = 10000;
 
 export function DefineConversation(props) {
   const {
     onSubmit,
-    onGetErrorMessage,
     onDismiss,
     enableLocationBrowse,
     focusedStorageFolder,
@@ -42,31 +30,60 @@ export function DefineConversation(props) {
   } = props;
 
   const { state } = useContext(StoreContext);
-  const { storages, storageFileLoadingStatus, templateId, botName } = state;
-  const [formData, setFormData] = useState({ name: getDefaultName(), errors: {} });
+  const { templateId, botName } = state;
+  const [formData, setFormData] = useState({ name: getDefaultName() });
+  const [formDataErrors, setFormDataErrors] = useState({ errors: {} });
   const [disable, setDisable] = useState(false);
+  const updateForm = field => (e, newValue) => {
+    setFormData({
+      ...formData,
+      [field]: newValue,
+    });
+  };
+
+  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+  const validateForm = data => {
+    const errors = {};
+    const { name } = data;
+
+    if (!name || !nameRegex.test(name)) {
+      errors.name = formatMessage(
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+      );
+    }
+
+    if (
+      name &&
+      ~bots.findIndex(bot => {
+        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
+        return bot.path === path;
+      })
+    ) {
+      errors.name = formatMessage('Duplication of names');
+    }
+    return errors;
+  };
 
   useEffect(() => {
     updateForm('location')(null, currentPath);
   }, [currentPath]);
 
-  const updateForm = field => (e, newValue) => {
-    setFormData({
-      ...formData,
-      errors: {},
-      [field]: newValue,
-    });
-  };
+  useEffect(() => {
+    const errors = validateForm(formData);
+    if (Object.keys(errors).length) {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
+    setFormDataErrors(errors);
+  }, [bots, formData.name]);
 
   const handleSubmit = e => {
     e.preventDefault();
     const errors = validateForm(formData);
 
     if (Object.keys(errors).length) {
-      setFormData({
-        ...formData,
-        errors,
-      });
+      setFormDataErrors(errors);
       return;
     }
 
@@ -81,33 +98,16 @@ export function DefineConversation(props) {
     let defaultName = `${bot}-${i}`;
 
     while (
-      bots.findIndex(bot => {
+      ~bots.findIndex(bot => {
         return bot.name === defaultName;
-      }) > -1
+      }) &&
+      i < MAXTRYTIMES
     ) {
-      i = i + 1;
+      i++;
       defaultName = `${bot}-${i}`;
     }
     return defaultName;
   }
-
-  //disable the next button if the text has errors.
-  const getErrorMessage = text => {
-    if (typeof onGetErrorMessage === 'function') {
-      const result = onGetErrorMessage(text);
-      if (result === '' && disable) {
-        setDisable(false);
-      }
-
-      if (result !== '' && !disable) {
-        setDisable(true);
-      }
-
-      return result;
-    } else {
-      return '';
-    }
-  };
 
   return (
     <Fragment>
@@ -120,8 +120,7 @@ export function DefineConversation(props) {
               value={formData.name}
               styles={name}
               onChange={updateForm('name')}
-              errorMessage={formData.errors.name}
-              onGetErrorMessage={getErrorMessage}
+              errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
             />
           </StackItem>

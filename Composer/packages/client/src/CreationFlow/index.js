@@ -32,12 +32,13 @@ export function CreationFlow(props) {
   } = actions;
   const { templateId, templateProjects, focusedStorageFolder, storages } = state;
   const currentStorageIndex = useRef(0);
-  const currentStorageId = storages[currentStorageIndex.current] ? storages[currentStorageIndex.current].id : 'default';
+  const storage = storages[currentStorageIndex.current];
+  const currentStorageId = storage ? storage.id : 'default';
   const [currentPath, setCurrentPath] = useState('');
   useEffect(() => {
-    if (storages && storages.length > 0) {
-      const storageId = storages[currentStorageIndex.current].id;
-      const path = storages[currentStorageIndex.current].path;
+    if (storages && storages.length) {
+      const storageId = storage.id;
+      const path = storage.path;
       const formatedPath = Path.normalize(path);
       fetchFolderItemsByPath(storageId, formatedPath);
     }
@@ -53,7 +54,7 @@ export function CreationFlow(props) {
     });
 
     setBots(botsInCurrentFolder);
-    if (Object.keys(focusedStorageFolder).length > 0) {
+    if (Object.keys(focusedStorageFolder).length) {
       setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
     }
   }, [focusedStorageFolder]);
@@ -93,21 +94,19 @@ export function CreationFlow(props) {
       storageId = currentStorageId;
     }
     if (newPath) {
-      // const formatedPath = Path.normalize(newPath.replace(/\\/g, '/'));
-      const formatedPath = Path.normalize(newPath);
-      //await fetchFolderItemsByPath(storageId, formatedPath);
-      await actions.updateCurrentPath(formatedPath);
+      const formattedPath = Path.normalize(newPath);
+      await actions.updateCurrentPath(formattedPath, storageId);
     }
+  };
+
+  const handleDismiss = () => {
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
   const openBot = async botFolder => {
     await openBotProject(botFolder);
     navigateTo('/dialogs/Main');
     handleDismiss();
-  };
-
-  const handleDismiss = () => {
-    setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
   const handleCreateNew = async formData => {
@@ -142,18 +141,6 @@ export function CreationFlow(props) {
     setStep(Steps.DEFINE);
   };
 
-  const getErrorMessage = name => {
-    if (
-      bots.findIndex(bot => {
-        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
-        return bot.path === path;
-      }) >= 0
-    ) {
-      return 'duplication of name';
-    }
-    return '';
-  };
-
   const steps = {
     [Steps.CREATE]: {
       ...DialogCreationCopy.CREATE_NEW_BOT,
@@ -168,7 +155,6 @@ export function CreationFlow(props) {
       children: (
         <DefineConversation
           onSubmit={handleSubmit}
-          onGetErrorMessage={getErrorMessage}
           onDismiss={handleDismiss}
           enableLocationBrowse={true}
           updateCurrentPath={updateCurrentPath}
