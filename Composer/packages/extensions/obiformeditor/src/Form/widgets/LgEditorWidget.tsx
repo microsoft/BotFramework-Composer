@@ -23,18 +23,13 @@ const tryGetLgMetaDataType = (lgText: string): string | null => {
 };
 
 const getInitialTemplate = (fieldName: string, formData?: string): string => {
-  let newTemplate = '- ';
-
   const lgText = formData || '';
+
+  // Field content is already a ref created by composer.
   if (tryGetLgMetaDataType(lgText) === fieldName) {
     return '';
   }
-
-  if (lgText && !lgText.startsWith('-')) {
-    newTemplate = `-${lgText}`;
-  }
-
-  return lgText;
+  return lgText.startsWith('-') ? lgText : `-${lgText}`;
 };
 
 interface LgEditorWidgetProps {
