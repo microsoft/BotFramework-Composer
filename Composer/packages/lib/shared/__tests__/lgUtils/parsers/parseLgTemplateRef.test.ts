@@ -9,6 +9,7 @@ describe('parseLgTemplateRef', () => {
     expect(parseLgTemplateRef('')).toEqual(null);
     expect(parseLgTemplateRef('xxx')).toEqual(null);
     expect(parseLgTemplateRef('[0]')).toEqual(null);
+    expect(parseLgTemplateRef('hi, [greeting]. [greeting]')).toEqual(null);
   });
 
   it('should return LgTemplateRef when inputs are valid', () => {
