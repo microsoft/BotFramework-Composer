@@ -15,12 +15,12 @@ import * as lgUtil from '../../utils/lgUtil';
 interface CodeEditorProps {
   file: LgFile;
   onChange: (value: string) => void;
-  codeRange?: Partial<CodeRange> | undefined;
-  editorDidMount?: (editor: editor.IStandaloneCodeEditor) => void;
+  codeRange?: Partial<CodeRange>;
+  onMount?: (editor: editor.IStandaloneCodeEditor) => void;
 }
 
 export default function CodeEditor(props: CodeEditorProps) {
-  const { file, codeRange, editorDidMount } = props;
+  const { file, codeRange, onMount } = props;
   const onChange = debounce(props.onChange, 500);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState(get(file, 'content', ''));
@@ -56,7 +56,7 @@ export default function CodeEditor(props: CodeEditorProps) {
         lineNumbersMinChars: false,
       }}
       codeRange={codeRange}
-      editorDidMount={editorDidMount}
+      editorDidMount={onMount}
       errorMsg={errorMsg}
       value={content}
       onChange={_onChange}

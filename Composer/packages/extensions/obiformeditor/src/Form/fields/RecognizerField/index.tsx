@@ -154,9 +154,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           {() => {
             if (selectedFile && isLuFileSelected) {
               const updateLuFile = (newValue?: string): void => {
-                shellApi.updateLuFile({ id: selectedFile.id, content: newValue }).catch(error => {
-                  setErrorMsg(error);
-                });
+                shellApi.updateLuFile({ id: selectedFile.id, content: newValue }).catch(setErrorMsg);
               };
 
               return (

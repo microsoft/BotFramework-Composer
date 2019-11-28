@@ -38,9 +38,8 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [codeRange, setCodeRange] = useState<CodeRange | undefined>(undefined);
+  const [codeRange, setCodeRange] = useState<CodeRange>();
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
-  // const editorRef: MutableRefObject<editor.IStandaloneCodeEditor | null> = useRef(null);
 
   const hash = props.location ? props.location.hash : '';
   const subPath = props['*'];
@@ -49,9 +48,9 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     if (hash && lgEditor) {
-      const matched = hash.match(/line=(\d+)/g);
-      if (matched && matched.length > 0) {
-        lgEditor.revealLine(parseInt(matched[0].split('=')[1]));
+      const match = /line=(\d+)/g.exec(hash);
+      if (match) {
+        lgEditor.revealLine(+match[1]);
       }
     }
   }, [hash, lgEditor]);
@@ -188,7 +187,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             offText={formatMessage('Edit mode')}
             defaultChecked={false}
             checked={editMode}
-            disabled={(!isRoot && editMode === false) || (codeRange === null && fileValid === false)}
+            disabled={(!isRoot && editMode === false) || (!codeRange && fileValid === false)}
             onChange={onToggleEditMode}
           />
         </div>
@@ -229,14 +228,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             {editMode ? (
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor
-                  file={lgFile}
-                  codeRange={codeRange}
-                  onChange={onChange}
-                  editorDidMount={editor => {
-                    setLgEditor(editor);
-                  }}
-                />
+                <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} onMount={setLgEditor} />
               </Suspense>
             ) : (
               <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />

@@ -3,14 +3,36 @@
 
 import * as React from 'react';
 import { render } from 'react-testing-library';
+import { formatMessage } from 'format-message';
 
 import { NotificationList } from '../../src/pages/notifications/NotificationList';
 
 describe('<NotificationList/>', () => {
   const items = [
-    { id: '1', severity: 'Error', type: 'dialog', location: 'test1', message: 'error1', diagnostic: '' },
-    { id: '2', severity: 'Warning', type: 'lu', location: 'test2', message: 'error2', diagnostic: '' },
-    { id: '3', severity: 'Error', type: 'lg', location: 'test3', message: 'error3', diagnostic: '' },
+    {
+      id: 'Main.dialog',
+      severity: formatMessage('Error'),
+      type: 'dialog',
+      location: formatMessage('test1'),
+      message: formatMessage('error1'),
+      diagnostic: '',
+    },
+    {
+      id: 'Main.lu',
+      severity: formatMessage('Warning'),
+      type: 'lu',
+      location: formatMessage('test2'),
+      message: formatMessage('error2'),
+      diagnostic: '',
+    },
+    {
+      id: 'common.lg',
+      severity: formatMessage('Error'),
+      type: 'lg',
+      location: formatMessage('test3'),
+      message: formatMessage('error3'),
+      diagnostic: '',
+    },
   ];
   it('should render the NotificationList', () => {
     const { container } = render(<NotificationList items={items} />);

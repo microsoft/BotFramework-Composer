@@ -24,7 +24,8 @@ const columns: IColumn[] = [
     minWidth: 30,
     maxWidth: 30,
     onRender: (item: INotification) => {
-      return <FontIcon iconName={icons[item.severity].iconName} css={typeIcon(icons[item.severity])} />;
+      const icon = icons[item.severity];
+      return <FontIcon iconName={icon.iconName} css={typeIcon(icon)} />;
     },
   },
   {
