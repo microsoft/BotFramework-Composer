@@ -7,8 +7,6 @@ import LgTemplateRef from '../models/LgTemplateRef';
 import { LgTemplateRefPattern } from './lgPatterns';
 import parseLgParamString from './parseLgParamString';
 
-const BoundariedLgTemplateRefPattern = `^${LgTemplateRefPattern}$`;
-
 const mapMatchResultToTemplateRef = (matchResult: RegExpMatchArray): LgTemplateRef | null => {
   if (matchResult.length !== 3) {
     return null;
@@ -27,6 +25,7 @@ const mapMatchResultToTemplateRef = (matchResult: RegExpMatchArray): LgTemplateR
 export default function parseLgTemplateRef(inputString: LgTemplateRefString): LgTemplateRef | null {
   if (typeof inputString !== 'string') return null;
 
+  const BoundariedLgTemplateRefPattern = `^${LgTemplateRefPattern}$`;
   const matchResult = inputString.match(BoundariedLgTemplateRefPattern);
   if (!matchResult) return null;
 
