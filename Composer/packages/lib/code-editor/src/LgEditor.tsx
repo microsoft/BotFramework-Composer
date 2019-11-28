@@ -49,11 +49,15 @@ declare global {
   }
 }
 
-async function initializeDocuments(lgOption) {
+async function initializeDocuments(lgOption: LGOption | undefined, uri: string) {
   const languageClient = window.monacoLGEditorInstance;
   if (languageClient) {
     await languageClient.onReady();
-    languageClient.sendRequest('initializeDocuments', lgOption);
+    if (lgOption && lgOption.inline) {
+      languageClient.sendRequest('initializeDocuments', { ...lgOption, uri });
+    } else {
+      languageClient.sendRequest('initializeDocuments', { uri });
+    }
   }
 }
 
@@ -63,7 +67,7 @@ export function LgEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption = {}, languageServer, ...restProps } = props;
+  const { lgOption, languageServer, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
   const editorWillMount = (monaco: typeof monacoEditor) => {
@@ -88,14 +92,14 @@ export function LgEditor(props: LGLSPEditorProps) {
           if (!window.monacoLGEditorInstance) {
             window.monacoLGEditorInstance = languageClient;
           }
-          initializeDocuments({ ...lgOption, uri });
+          initializeDocuments(lgOption, uri);
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
         },
       });
     } else {
       const uri = get(editor.getModel(), 'uri._formatted', '');
-      initializeDocuments({ ...lgOption, uri });
+      initializeDocuments(lgOption, uri);
     }
 
     if (typeof props.editorDidMount === 'function') {
