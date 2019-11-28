@@ -9,6 +9,17 @@ import parseLgParamString from './parseLgParamString';
 
 const BoundariedLgTemplateRefPattern = `^${LgTemplateRefPattern}$`;
 
+const mapMatchResultToTemplateRef = (matchResult: RegExpMatchArray): LgTemplateRef | null => {
+  if (matchResult.length !== 3) {
+    return null;
+  }
+
+  const name = matchResult[1];
+  const lgParams = parseLgParamString(matchResult[2]);
+
+  return new LgTemplateRef(name, lgParams);
+};
+
 /**
  * '[greetings()]' => { name: greetings, parameters: []}
  * 'hi [greetings()]' => null
@@ -16,14 +27,10 @@ const BoundariedLgTemplateRefPattern = `^${LgTemplateRefPattern}$`;
 export default function parseLgTemplateRef(inputString: LgTemplateRefString): LgTemplateRef | null {
   if (typeof inputString !== 'string') return null;
 
-  const results = inputString.match(BoundariedLgTemplateRefPattern);
-  if (Array.isArray(results) && results.length === 3) {
-    const name = results[1];
-    const lgParams = parseLgParamString(results[2]);
+  const matchResult = inputString.match(BoundariedLgTemplateRefPattern);
+  if (!matchResult) return null;
 
-    return new LgTemplateRef(name, lgParams);
-  }
-  return null;
+  return mapMatchResultToTemplateRef(matchResult);
 }
 
 /**
@@ -39,13 +46,10 @@ export function extractLgTemplateRefs(text: string): LgTemplateRef[] {
 
   let matchResult;
   while ((matchResult = reg.exec(text)) !== null) {
-    if (Array.isArray(matchResult) && matchResult.length === 3) {
-      const name = matchResult[1];
-      const paramString = matchResult[2];
+    const ref = mapMatchResultToTemplateRef(matchResult);
+    if (!ref) continue;
 
-      const parameters = parseLgParamString(paramString);
-      templateRefs.push(new LgTemplateRef(name, parameters));
-    }
+    templateRefs.push(ref);
   }
   return templateRefs;
 }
