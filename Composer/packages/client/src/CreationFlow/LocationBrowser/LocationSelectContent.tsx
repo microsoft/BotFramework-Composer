@@ -5,19 +5,14 @@
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useRef } from 'react';
 
+import { CreationFlowStatus } from '../../constants';
+
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
-
-export function LocationSelectContent({
-  onOpen,
-  allowOpeningBot = true,
-  focusedStorageFolder,
-  updateCurrentPath,
-  currentPath,
-}) {
+export function LocationSelectContent({ onOpen, focusedStorageFolder, onCurrentPathUpdate, currentPath }) {
   const { state } = useContext(StoreContext);
-  const { storages, storageFileLoadingStatus } = state;
+  const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
 
   const currentStorageIndex = useRef(0);
 
@@ -27,8 +22,8 @@ export function LocationSelectContent({
       const storageId = storages[currentStorageIndex.current].id;
       const path = item.filePath;
       if (type === FileTypes.FOLDER) {
-        updateCurrentPath(path, storageId);
-      } else if (type === FileTypes.BOT && allowOpeningBot) {
+        onCurrentPathUpdate(path, storageId);
+      } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
         onOpen(path, storageId);
       }
     }
@@ -48,7 +43,7 @@ export function LocationSelectContent({
         checkShowItem={checkShowItem}
         currentPath={currentPath}
         focusedStorageFolder={focusedStorageFolder}
-        updateCurrentPath={updateCurrentPath}
+        onCurrentPathUpdate={onCurrentPathUpdate}
         onSelectionChanged={onSelectionChanged}
       />
     </Fragment>

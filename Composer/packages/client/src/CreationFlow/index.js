@@ -157,7 +157,7 @@ export function CreationFlow(props) {
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
           enableLocationBrowse={true}
-          updateCurrentPath={updateCurrentPath}
+          onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
           currentPath={currentPath}
           bots={bots}

@@ -24,7 +24,7 @@ export function DefineConversation(props) {
     onDismiss,
     enableLocationBrowse,
     focusedStorageFolder,
-    updateCurrentPath,
+    onCurrentPathUpdate,
     currentPath,
     bots,
   } = props;
@@ -93,19 +93,19 @@ export function DefineConversation(props) {
   };
 
   function getDefaultName() {
-    let i = 0;
+    let i = -1;
     const bot = templateId || botName;
-    let defaultName = `${bot}-${i}`;
+    let defaultName = '';
 
-    while (
+    do {
+      i++;
+      defaultName = `${bot}-${i}`;
+    } while (
       ~bots.findIndex(bot => {
         return bot.name === defaultName;
       }) &&
       i < MAXTRYTIMES
-    ) {
-      i++;
-      defaultName = `${bot}-${i}`;
-    }
+    );
     return defaultName;
   }
 
@@ -137,8 +137,7 @@ export function DefineConversation(props) {
         </Stack>
         {enableLocationBrowse && (
           <LocationSelectContent
-            updateCurrentPath={updateCurrentPath}
-            allowOpeningBot={false}
+            onCurrentPathUpdate={onCurrentPathUpdate}
             focusedStorageFolder={focusedStorageFolder}
             currentPath={currentPath}
           />
