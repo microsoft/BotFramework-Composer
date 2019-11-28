@@ -5,7 +5,7 @@ pr:
   autoCancel: true
   branches:
     include:
-      - '*'
+      - "*"
 
 variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
@@ -52,7 +52,7 @@ jobs:
           CYPRESS_SCREENSHOTS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/screenshots
           CYPRESS_VIDEOS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/videos
           TERM: xterm
-          COMPOSER_BOTS_FOLDER: $(Pipeline.Workspace)/Composer/TestBots
+          COMPOSER_BOTS_FOLDER: $(System.DefaultWorkingDirectory)/MyBots
       - task: PublishPipelineArtifact@1
         condition: failed()
         continueOnError: true

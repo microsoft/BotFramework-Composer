@@ -5,6 +5,7 @@ context('Notification Page', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    cy.visitPage('Notifications');
   });
 
   it('can show lg syntax error ', () => {
@@ -17,7 +18,6 @@ context('Notification Page', () => {
     cy.get('textarea').type('test lg syntax error');
 
     cy.visitPage('Notifications');
-
     cy.get('[data-testid="notifications-table-view"]').within(() => {
       cy.findByText('common.lg').should('exist');
     });
