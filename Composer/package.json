@@ -34,7 +34,7 @@
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",
     "test:integration": "cypress run --browser chrome",
     "test:integration:open": "cypress open",
-    "test:integration:clean": "rimraf TestBots/* packages/server/data.json",
+    "test:integration:clean": "rimraf ../MyBots/__Test*",
     "lint": "wsrun --exclude-missing --collect-logs --report lint",
     "lint:fix": "wsrun --exclude-missing --collect-logs --report lint:fix",
     "typecheck": "concurrently --kill-others-on-fail \"npm:typecheck:*\"",
