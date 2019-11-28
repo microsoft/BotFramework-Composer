@@ -7,7 +7,7 @@ describe('LgTemplateRef', () => {
   it('can construct an instance via constructor', () => {
     const a = new LgTemplateRef('a', undefined);
     expect(a.name).toEqual('a');
-    expect(a.parameters).toEqual(undefined);
+    expect(a.parameters).toEqual([]);
 
     const b = new LgTemplateRef('b', []);
     expect(b.name).toEqual('b');
@@ -20,7 +20,7 @@ describe('LgTemplateRef', () => {
 
   it('can output correct strings', () => {
     const a = new LgTemplateRef('a', undefined);
-    expect(a.toString()).toEqual('[a]');
+    expect(a.toString()).toEqual('[a()]');
 
     const b = new LgTemplateRef('b', []);
     expect(b.toString()).toEqual('[b()]');
@@ -30,6 +30,7 @@ describe('LgTemplateRef', () => {
   });
 
   it('can construct instance via `parse()`', () => {
+    expect(LgTemplateRef.parse('[bfdactivity-123456]')).toBeInstanceOf(LgTemplateRef);
     expect(LgTemplateRef.parse('[bfdactivity-123456]')).toBeInstanceOf(LgTemplateRef);
   });
 });

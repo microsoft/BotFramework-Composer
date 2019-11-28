@@ -8,9 +8,9 @@ import { LgTemplateName, LgTemplateRefString } from './stringTypes';
 export default class LgTemplateRef {
   name: LgTemplateName;
 
-  parameters: string[] | undefined;
+  parameters: string[];
 
-  constructor(name: LgTemplateName, parameters?: string[]) {
+  constructor(name: LgTemplateName, parameters: string[] = []) {
     this.name = name;
     this.parameters = parameters;
   }
@@ -20,7 +20,7 @@ export default class LgTemplateRef {
   }
 
   toString(): LgTemplateRefString {
-    const paramsSuffix = Array.isArray(this.parameters) ? `(${this.parameters.join(',')})` : '';
+    const paramsSuffix = Array.isArray(this.parameters) ? `(${this.parameters.join(',')})` : '()';
     return `[${this.name}${paramsSuffix}]`;
   }
 }
