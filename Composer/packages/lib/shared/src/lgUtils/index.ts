@@ -6,4 +6,4 @@ export { default as LgMetaData } from './models/LgMetaData';
 export { default as LgTemplateRef } from './models/LgTemplateRef';
 
 /** parsers */
-export { default as extractLgTemplateRefs } from './parsers/extractLgTemplateRefs';
+export { extractLgTemplateRefs } from './parsers/parseLgTemplateRef';
