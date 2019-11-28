@@ -18,8 +18,8 @@ export default class LgMetaData {
     this.designerId = designerId;
   }
 
-  static parse(input: LgTemplateName): LgMetaData | null {
-    return parseLgTemplateName(input);
+  static parse(lgTemplateName: LgTemplateName): LgMetaData | null {
+    return parseLgTemplateName(lgTemplateName);
   }
 
   toString(): LgTemplateName {
