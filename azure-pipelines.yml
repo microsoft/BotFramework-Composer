@@ -63,5 +63,6 @@ jobs:
           artifactName: e2e
       - script: cat e2e.log
         displayName: Server Logs
+        condition: always()
         continueOnError: true
         workingDirectory: Composer
