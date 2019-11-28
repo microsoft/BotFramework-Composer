@@ -36,7 +36,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
-  const lgId = new LgMetaData(name, formContext.dialogId || '').toLgTemplateName();
+  const lgId = new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
 
