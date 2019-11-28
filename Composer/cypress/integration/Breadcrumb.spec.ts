@@ -13,7 +13,7 @@ context('breadcrumb', () => {
   });
 
   function hasBreadcrumbItems(cy: Cypress.cy, items: (string | RegExp)[]) {
-    cy.findByTestId('Breadcrumb')
+    cy.get('[data-testid="Breadcrumb"]')
       .get('li')
       .should($li => {
         items.forEach((item, idx) => {
@@ -37,7 +37,7 @@ context('breadcrumb', () => {
       cy.findByText('__TestTodoSample.Main').click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
   });
 
   it('can show event name in breadcrumb', () => {
