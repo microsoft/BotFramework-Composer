@@ -2,6 +2,7 @@
 // Licensed under the MIT License
 
 import parseLgTemplateName from '../parsers/parseLgTemplateName';
+import buildLgTemplateName from '../stringBuilders/buildLgTemplateName';
 
 import { LgTemplateName } from './stringTypes';
 
@@ -23,6 +24,6 @@ export default class LgMetaData {
   }
 
   toString(): LgTemplateName {
-    return `bfd${this.type}-${this.designerId}`;
+    return buildLgTemplateName(this);
   }
 }

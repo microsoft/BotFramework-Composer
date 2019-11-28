@@ -2,6 +2,7 @@
 // Licensed under the MIT License
 
 import parseLgTemplateRef from '../parsers/parseLgTemplateRef';
+import buildLgTemplateRefString from '../stringBuilders/buildLgTemplateRefString';
 
 import { LgTemplateName, LgTemplateRefString } from './stringTypes';
 
@@ -20,7 +21,6 @@ export default class LgTemplateRef {
   }
 
   toString(): LgTemplateRefString {
-    const paramsSuffix = Array.isArray(this.parameters) ? `(${this.parameters.join(',')})` : '()';
-    return `[${this.name}${paramsSuffix}]`;
+    return buildLgTemplateRefString(this);
   }
 }
