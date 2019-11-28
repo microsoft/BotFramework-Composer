@@ -9,6 +9,7 @@ import archiver from 'archiver';
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
+import log from '../../logger';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
@@ -23,17 +24,17 @@ export class CSharpBotConnector implements IBotConnector {
 
   private addProcessListeners = () => {
     process.on('SIGINT', () => {
-      console.log('[SIGINT] start graceful shutdown');
+      log('[SIGINT] start graceful shutdown');
       this.stop();
       process.exit(1);
     });
     process.on('SIGTERM', () => {
-      console.log('[SIGTERM] start graceful shutdown');
+      log('[SIGTERM] start graceful shutdown');
       this.stop();
       process.exit(1);
     });
     process.on('SIGQUIT', () => {
-      console.log('[SIGQUIT] start graceful shutdown');
+      log('[SIGQUIT] start graceful shutdown');
       this.stop();
       process.exit(1);
     });
@@ -41,23 +42,23 @@ export class CSharpBotConnector implements IBotConnector {
 
   private stop = () => {
     if (this.runtime) {
-      console.log(`kill this bot with process PID: ${this.runtime.pid}`);
+      log(`kill this bot with process PID: ${this.runtime.pid}`);
       this.runtime.kill('SIGKILL');
       this.runtime = null;
     }
+    this.status = BotStatus.NotConnected;
   };
 
   private buildProcess = async (dir: string): Promise<number | null> => {
     return new Promise((resolve, reject) => {
       const startScript = Path.resolve(dir, './Scripts/build_runtime.ps1');
-      console.log(startScript);
       const build = spawn(`pwsh ${startScript}`, {
         cwd: dir,
         detached: true,
         shell: true,
         stdio: ['ignore', 'ignore', 'inherit'],
       });
-      console.log(`build pid : ${build.pid}`);
+      log(`build pid : ${build.pid}`);
 
       build.stderr &&
         build.stderr.on('data', function(err) {
@@ -92,36 +93,36 @@ export class CSharpBotConnector implements IBotConnector {
   private addListeners = (child: ChildProcess, handler: Function) => {
     if (child.stdout !== null) {
       child.stdout.on('data', (data: any) => {
-        console.log(`stdout: ${data}`);
+        log(`stdout: ${data}`);
       });
     }
 
     if (child.stderr !== null) {
       child.stderr.on('data', (data: any) => {
-        console.log(`stderr: ${data}`);
+        log(`stderr: ${data}`);
       });
     }
 
     child.on('close', code => {
-      console.log(`close ${code}`);
+      log(`close ${code}`);
       handler();
     });
 
     child.on('error', (err: any) => {
-      console.log(`stderr: ${err}`);
+      log(`stderr: ${err}`);
     });
 
     child.on('exit', code => {
-      console.log(`exit: ${code}`);
+      log(`exit: ${code}`);
       handler();
     });
 
     child.on('message', msg => {
-      console.log(msg);
+      log(msg);
     });
 
     child.on('disconnect', code => {
-      console.log(`disconnect: ${code}`);
+      log(`disconnect: ${code}`);
       handler();
     });
   };
@@ -144,8 +145,9 @@ export class CSharpBotConnector implements IBotConnector {
         stdio: ['ignore', 'ignore', 'inherit'],
       }
     );
-    console.log(`start runtime at ${this.runtime.pid}`);
+    log(`start runtime at ${this.runtime.pid}`);
     this.addListeners(this.runtime, this.stop);
+    this.status = BotStatus.Connected;
   };
 
   connect = async (_: BotEnvironments, __: string) => {
