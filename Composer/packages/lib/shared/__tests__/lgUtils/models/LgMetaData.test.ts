@@ -9,19 +9,13 @@ describe('LgMetaData', () => {
 
     expect(instance.type).toEqual('activity');
     expect(instance.designerId).toEqual('123456');
-
-    expect(instance.toLgTemplateName).toBeDefined();
-    expect(instance.toLgTemplateRef).toBeDefined();
-    expect(instance.toLgTemplateRefString).toBeDefined();
+    expect(instance.toString).toBeDefined();
   });
 
   it('can generate correct output strings', () => {
     const instance = new LgMetaData('activity', '123456');
 
-    expect(instance.toLgTemplateName()).toEqual('bfdactivity-123456');
-
-    expect(instance.toLgTemplateRefString()).toEqual('[bfdactivity-123456]');
-    expect(instance.toLgTemplateRefString(['1', '2'])).toEqual('[bfdactivity-123456(1,2)]');
+    expect(instance.toString()).toEqual('bfdactivity-123456');
   });
 
   it('can construct instance via `parse()` method', () => {
