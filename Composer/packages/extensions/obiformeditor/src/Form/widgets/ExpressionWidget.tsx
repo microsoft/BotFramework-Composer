@@ -3,7 +3,7 @@
 
 import React from 'react';
 import formatMessage from 'format-message';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react';
+import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { JSONSchema6 } from 'json-schema';
 
 import { FormContext } from '../types';

@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext, useEffect } from 'react';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useCallback, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
-import { Icon } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -45,17 +48,20 @@ const turtorials = [
   },
 ];
 
-export const Home = props => {
+const Home: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, recentProjects, templateProjects } = state;
-  const { openBotProject, setCreationFlowStatus, fetchTemplates, saveTemplateId, fetchRecentProjects } = actions;
+  const {
+    openBotProject,
+    setCreationFlowStatus,
+    fetchTemplates,
+    saveTemplateId,
+    fetchRecentProjects,
+    onboardingAddCoachMarkRef,
+  } = actions;
 
   const onClickRecentBotProject = async path => {
     await openBotProject(path);
-  };
-
-  const onClickNewBotProject = () => {
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_SCRATCH);
   };
 
   const onSelectionChanged = async item => {
@@ -70,6 +76,9 @@ export const Home = props => {
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
+
+  const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
+
   const toolbarItems = [
     {
       type: 'action',
@@ -146,6 +155,7 @@ export const Home = props => {
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
+                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
@@ -155,6 +165,7 @@ export const Home = props => {
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
+                forwardedRef={addRef}
               />
             )}
           </div>
@@ -216,3 +227,5 @@ export const Home = props => {
     </div>
   );
 };
+
+export default Home;

@@ -56,10 +56,7 @@ export class CSharpBotConnector implements IBotConnector {
     }
 
     if (luisConfig) {
-      form.append(
-        'endpointKey',
-        luisConfig.endpointKey && luisConfig.endpointKey !== '' ? luisConfig.endpointKey : luisConfig.authoringKey
-      );
+      form.append('endpointKey', luisConfig.endpointKey || luisConfig.authoringKey || '');
     }
 
     config = {

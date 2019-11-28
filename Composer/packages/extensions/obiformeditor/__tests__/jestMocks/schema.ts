@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { JSONSchema6 } from 'json-schema';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 
 const schema: JSONSchema6 = {
   title: 'Mock Schema',

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React from 'react';
 import { render, fireEvent, findByText, RenderResult } from 'react-testing-library';
 
@@ -71,12 +74,14 @@ describe('<IDialogArray />', () => {
         id: expect.any(String),
         name: 'Send a response',
       },
+      activity: '',
       data: {
         $type: 'Microsoft.SendActivity',
         $designer: {
           id: expect.any(String),
           name: 'Send a response',
         },
+        activity: '',
       },
       key: 'Microsoft.SendActivity',
       name: 'Send a response',

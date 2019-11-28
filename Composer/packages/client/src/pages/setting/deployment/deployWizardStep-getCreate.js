@@ -2,20 +2,28 @@
 // Licensed under the MIT License.
 
 import React, { Fragment } from 'react';
+import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+
+import { StoreContext } from '../../../store';
 
 import { styles } from './styles';
 import processGif from './deploy-create-output.gif';
 
 export const DeployWizardStep2 = props => {
+  const { state } = useContext(StoreContext);
+  const { settings } = state;
   const { nextStep, closeModal, botValues } = props;
-
+  const luisAuthoringKey = settings.luis && settings.luis.authoringKey ? settings.luis.authoringKey : undefined;
   const scriptValue = [
     `cd ${botValues.location}`,
     `pwsh ./Scripts/create.ps1 -name ${botValues.name} -environment ${botValues.environment} -location ${
       botValues.region.key
-    } -appPassword '${botValues.secret}'`,
+    } -appPassword '${botValues.secret}' ${luisAuthoringKey ? '-luisAuthoringKey ' + luisAuthoringKey : ''}`,
   ].join('\n');
 
   const copyToClipboard = () => {
@@ -28,7 +36,7 @@ export const DeployWizardStep2 = props => {
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
             label={formatMessage('Create Resources Script')}
-            styles={styles.input}
+            styles={styles.textarea}
             value={scriptValue}
             readOnly={true}
             multiline={true}

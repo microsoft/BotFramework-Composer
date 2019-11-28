@@ -1,24 +1,11 @@
-﻿// Copyright (c) Microsoft Corporation.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder.ComposerBot.json
+namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
-    public class LuisCustomConfig
-    {
-        public Dictionary<string, string> Luis { get; set; }
-    }
-
-    public class LuisKey
-    {
-        public string Key { get; set; }
-    }
-
-    public class LuConfigFile
+    public class LuisConfig
     {
         public string Name { get; set; }
 
@@ -46,5 +33,4 @@ namespace Microsoft.Bot.Builder.ComposerBot.json
 
         public string EndpointKeys { get; set; }
     }
-
 }

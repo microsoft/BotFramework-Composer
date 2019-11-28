@@ -15,6 +15,12 @@ if ($PSVersionTable.PSVersion.Major -lt 6) {
 	Break
 }
 
+if ((dotnet --version) -lt 3) {
+	Write-Host "! dotnet core 3.0 is required, please refer following documents for help."
+	Write-Host "https://dotnet.microsoft.com/download/dotnet-core/3.0"
+	Break
+}
+
 # Get mandatory parameters
 if (-not $name) {
 	$name = Read-Host "? Bot Web App Name"
@@ -135,6 +141,14 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 		Break
 	}
 	
+	if ($?) {
+		Write-Host "lubuild succeeded"
+	}
+	else {
+		Write-Host "lubuild failed, please verify your luis models."
+		Break	
+	}
+
 	Set-Location -Path $projFolder
 
 	# change setting file in publish folder
@@ -171,16 +185,27 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	$tokenResponse = (az account get-access-token) | ConvertFrom-Json
 	$token = $tokenResponse.accessToken
 
+	if (-not $token) {
+		Write-Host "! Could not get valid Azure access token"
+		Break
+	}
+
 	Write-Host "Getting Luis accounts..."
 	$luisAccountEndpoint = "$luisEndpoint/luis/api/v2.0/azureaccounts"
-	$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
-
 	$luisAccount = $null
-	foreach ($account in $luisAccounts) {
-		if ($account.AccountName -eq "$name-$environment-luis") {
-			$luisAccount = $account
-			break
+	try {
+		$luisAccounts = Invoke-WebRequest -Method GET -Uri $luisAccountEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+
+		foreach ($account in $luisAccounts) {
+			if ($account.AccountName -eq "$name-$environment-luis") {
+				$luisAccount = $account
+				break
+			}
 		}
+	}
+	catch {
+		Write-Host "Return invalid status code while gettings luis accounts: $($_.Exception.Response.StatusCode.Value__), error message: $($_.Exception.Response)"
+		break
 	}
 
 	$luisAccountBody = $luisAccount | ConvertTo-Json
@@ -190,8 +215,14 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 		$luisAppId = $luisAppIds.Item($k)
 		Write-Host "Assigning to Luis app id: $luisAppId"
 		$luisAssignEndpoint = "$luisEndpoint/luis/api/v2.0/apps/$luisAppId/azureaccounts"
-		$response = Invoke-WebRequest -Method POST -ContentType application/json -Body $luisAccountBody -Uri $luisAssignEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
-		Write-Host $response
+		try {
+			$response = Invoke-WebRequest -Method POST -ContentType application/json -Body $luisAccountBody -Uri $luisAssignEndpoint -Headers @{"Authorization" = "Bearer $token"; "Ocp-Apim-Subscription-Key" = $luisAuthoringKey } | ConvertFrom-Json
+			Write-Host $response
+		}
+		catch {
+			Write-Host "Return invalid status code while assigning key to luis apps: $($_.Exception.Response.StatusCode.Value__), error message: $($_.Exception.Response)"
+			exit
+		}
 	}
 }
 

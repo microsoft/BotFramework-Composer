@@ -4,7 +4,9 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { IButtonStyles, ICalloutContentStyles, IGroupedListStyles } from 'office-ui-fabric-react';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
+import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {

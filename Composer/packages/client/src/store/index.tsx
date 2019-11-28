@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useReducer, useRef } from 'react';
-import once from 'lodash.once';
+import once from 'lodash/once';
 
 import { prepareAxios } from '../utils/auth';
 
@@ -53,6 +53,10 @@ const initialState: State = {
   publishStatus: 'inactive',
   lastPublishChange: null,
   visualEditorSelection: [],
+  onboarding: {
+    complete: true,
+    coachMarkRefs: {},
+  },
   clipboardActions: [],
 };
 

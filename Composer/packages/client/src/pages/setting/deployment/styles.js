@@ -57,4 +57,20 @@ export const styles = {
       },
     },
   },
+  textarea: {
+    root: [
+      {
+        paddingBottom: '1rem',
+      },
+    ],
+    subComponentStyles: {
+      label: {
+        root: [
+          {
+            fontWeight: FontWeights.semibold,
+          },
+        ],
+      },
+    },
+  },
 };

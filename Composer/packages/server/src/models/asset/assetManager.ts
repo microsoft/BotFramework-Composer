@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import find from 'lodash.find';
+import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
 
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -106,7 +106,7 @@ export class AssetManager {
 
   public async getProjectTemplates(): Promise<ProjectTemplate[]> {
     const path = this.assetsLibraryPath + '/projects';
-    const output = [];
+    const output: ProjectTemplate[] = [];
 
     if (await this.templateStorage.exists(path)) {
       const folders = await this.templateStorage.readDir(path);
@@ -138,7 +138,7 @@ export class AssetManager {
 
   public async getProjectRuntime() {
     const path = this.runtimesPath;
-    const output = [];
+    const output: ProjectTemplate[] = [];
 
     if (await this.templateStorage.exists(path)) {
       const folders = await this.templateStorage.readDir(path);

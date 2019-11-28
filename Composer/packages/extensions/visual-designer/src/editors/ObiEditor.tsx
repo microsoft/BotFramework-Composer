@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { has, get } from 'lodash';
+import { deleteAction, deleteActions } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -21,10 +21,11 @@ import {
   pasteNodes,
   deleteNodes,
 } from '../utils/jsonTracker';
-import { moveCursor } from '../utils/cursorTracker';
+import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
+import { scrollNodeIntoView } from '../utils/nodeOperation';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -39,13 +40,26 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onSelect,
   undo,
   redo,
+  addCoachMarkRef,
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, getLgTemplates, removeLgTemplate } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates } = useContext(
     NodeRendererContext
   );
-  const lgApi = { getLgTemplates, removeLgTemplate, updateLgTemplate };
+
+  const deleteLgTemplates = (lgTemplates: string[]) => {
+    const lgPattern = /\[(bfd\w+-\d+)\]/;
+    const normalizedLgTemplates = lgTemplates
+      .map(x => {
+        const matches = lgPattern.exec(x);
+        if (matches && matches.length === 2) return matches[1];
+        return '';
+      })
+      .filter(x => !!x);
+    return removeLgTemplates('common', normalizedLgTemplates);
+  };
+
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -67,46 +81,26 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          // TODO: move the shared logic into shared lib as a generic destruction process
-          const findLgTemplates = (value: any): string[] => {
-            const targetNames = ['prompt', 'unrecognizedPrompt', 'defaultValueResponse', 'invalidPrompt', 'activity'];
-            const targets: string[] = [];
-
-            targetNames.forEach(name => {
-              if (has(value, name)) {
-                targets.push(get(value, name));
-              }
-            });
-
-            const templates: string[] = [];
-            targets.forEach(target => {
-              // only match auto generated lg temapte name
-              const reg = /\[(bfd((?:activity)|(?:prompt)|(?:unrecognizedPrompt)|(?:defaultValueResponse)|(?:invalidPrompt))-\d{6})\]/g;
-              let matchResult;
-              while ((matchResult = reg.exec(target)) !== null) {
-                const templateName = matchResult[1];
-                templates.push(templateName);
-              }
-            });
-
-            return templates;
-          };
-
-          const cleanLgTemplate = async (removedData: any): Promise<void> => {
-            const templates: string[] = findLgTemplates(removedData);
-            const lgFileId = 'common';
-            for (const template of templates) {
-              await removeLgTemplate(lgFileId, template);
-            }
-          };
-          onChange(deleteNode(data, e.id, cleanLgTemplate));
+          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
           onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardActions, lgApi).then(dialog => {
+            // TODO: clean this along with node deletion.
+            const copyLgTemplateToNewNode = async (lgTemplateName: string, newNodeId: string) => {
+              const matches = /\[(bfd\w+-(\d+))\]/.exec(lgTemplateName);
+              if (Array.isArray(matches) && matches.length === 3) {
+                const originLgId = matches[1];
+                const originNodeId = matches[2];
+                const newLgId = originLgId.replace(originNodeId, newNodeId);
+                await copyLgTemplate('common', originLgId, newLgId);
+                return `[${newLgId}]`;
+              }
+              return lgTemplateName;
+            };
+            pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
               onChange(dialog);
             });
           };
@@ -141,7 +135,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
-          const dialog = deleteNodes(data, e.actionIds);
+          const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
           onChange(dialog);
           onFocusSteps([]);
         };
@@ -228,10 +222,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     },
   });
 
-  const querySelectableElements = (): NodeListOf<HTMLElement> => {
-    return document.querySelectorAll(`[${AttrNames.SelectableElement}]`);
-  };
-  const [selectableElements, setSelectableElements] = useState<NodeListOf<HTMLElement>>(querySelectableElements());
+  const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -283,6 +274,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           selectedIds: [selected as string],
         });
         focused && onFocusSteps([focused], tab);
+        scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
@@ -329,6 +321,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
                 divRef.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
               }}
+              addCoachMarkRef={addCoachMarkRef}
             />
           </div>
         </MarqueeSelection>
@@ -350,6 +343,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   undo: () => {},
   redo: () => {},
+  addCoachMarkRef: () => {},
 };
 
 interface ObiEditorProps {
@@ -366,4 +360,5 @@ interface ObiEditorProps {
   onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
+  addCoachMarkRef?: (_: any) => void;
 }

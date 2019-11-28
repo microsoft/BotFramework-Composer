@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { IIconStyles } from 'office-ui-fabric-react';
+import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
 

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { FieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import { FIELDS_TO_HIDE } from '@bfc/shared';
 

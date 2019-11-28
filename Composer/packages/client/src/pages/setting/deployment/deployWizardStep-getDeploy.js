@@ -3,7 +3,10 @@
 
 import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
-import { Stack, DialogFooter, PrimaryButton, StackItem, TextField } from 'office-ui-fabric-react';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { styles } from './styles';
 import processGif from './deploy-deploy-output.gif';
@@ -25,8 +28,8 @@ export const DeployWizardStep3 = props => {
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
-            label={formatMessage('Create Resources Script')}
-            styles={styles.input}
+            label={formatMessage('Deploy Bot Script')}
+            styles={styles.textarea}
             value={scriptValue}
             readOnly={true}
             multiline={true}

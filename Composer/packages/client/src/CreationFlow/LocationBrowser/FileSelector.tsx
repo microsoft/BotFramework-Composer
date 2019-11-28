@@ -20,7 +20,8 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Dropdown, Stack, StackItem, IDropdownOption } from 'office-ui-fabric-react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 
 import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
@@ -157,7 +158,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     });
     return files;
   }, [focusedStorageFolder]);
-
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>

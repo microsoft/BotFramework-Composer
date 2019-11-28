@@ -46,11 +46,12 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
     }
   };
 
-  useEffect((): void => {
+  const { boundary, nodes, edges } = layout;
+
+  useEffect(() => {
     onResize(layout.boundary);
   }, [layout]);
 
-  const { boundary, nodes, edges } = layout;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}

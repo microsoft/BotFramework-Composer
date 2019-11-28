@@ -4,7 +4,7 @@
 import formatMessage from 'format-message';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
-export const BASEURL = `${process.env.PUBLIC_URL || 'http://localhost:5000'}/api`;
+export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 
 //the count about the undo/redo
 export const UNDO_LIMIT = 10;
@@ -69,6 +69,7 @@ export enum ActionTypes {
   CONNECT_BOT_SUCCESS = 'CONNECT_BOT_SUCCESS',
   RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
+  GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   TO_START_BOT = 'TO_START_BOT',
@@ -86,6 +87,8 @@ export enum ActionTypes {
   PUBLISH_SUCCESS = 'PUBLISH_SUCCESS', // remote publish
   PUBLISH_ERROR = 'PUBLISH_ERROR', // remote publish
   GET_ENDPOINT_SUCCESS = 'GET_ENDPOINT_SUCCESS', // remote publish
+  ONBOARDING_ADD_COACH_MARK_REF = 'ONBOARDING_ADD_COACH_MARK_REF',
+  ONBOARDING_SET_COMPLETE = 'ONBOARDING_SET_COMPLETE',
 }
 
 export const Tips = {
@@ -93,7 +96,7 @@ export const Tips = {
     (projectname-environment-LUfilename)`),
   ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
-  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
+  AUTHORING_KEY: formatMessage('A primary key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
@@ -101,12 +104,12 @@ export const Tips = {
 };
 
 export const Links = {
-  LUIS: 'https://www.luis.ai/applications',
+  LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
 };
 
 export const Text = {
   LUISDEPLOY: formatMessage(
-    `To use your language model, first publish the latest intents and examples to your LUIS instance.`
+    `Your bot is using LUIS for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
@@ -206,4 +209,3 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
-export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];

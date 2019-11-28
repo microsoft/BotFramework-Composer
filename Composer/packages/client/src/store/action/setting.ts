@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { get } from 'lodash';
+import get from 'lodash/get';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { SensitiveProperties } from '../../constants';
 
 import { ActionTypes } from './../../constants/index';
 import { BotEnvironments } from './../../utils/envUtil';
@@ -53,7 +53,7 @@ export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot
     const response = await httpClient.get(`/projects/opened/settings${suffix}`);
     const settings = response.data;
     dispatch({
-      type: ActionTypes.SYNC_ENV_SETTING,
+      type: ActionTypes.GET_ENV_SETTING,
       payload: {
         settings,
       },

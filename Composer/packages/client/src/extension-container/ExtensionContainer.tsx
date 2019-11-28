@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { initializeIcons } from 'office-ui-fabric-react';
+import { initializeIcons } from '@uifabric/icons';
 import { LuFile, ShellData } from '@bfc/shared';
 
 import ApiClient from '../messenger/ApiClient';
@@ -94,6 +94,14 @@ const shellApi = {
     return apiClient.apiCall('removeLgTemplate', { id, templateName });
   },
 
+  removeLgTemplates: (id: string, templateNames: string[]) => {
+    return apiClient.apiCall('removeLgTemplates', { id, templateNames });
+  },
+
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName: string) => {
+    return apiClient.apiCall('copyLgTemplate', { id, fromTemplateName, toTemplateName });
+  },
+
   updateLgTemplate: (id: string, templateName: string, template: string) => {
     return apiClient.apiCall('updateLgTemplate', {
       id,
@@ -116,6 +124,10 @@ const shellApi = {
 
   redo: () => {
     return apiClient.apiCall('redo');
+  },
+
+  addCoachMarkRef: (target: any) => {
+    return apiClient.apiCall('addCoachMarkPosition', target);
   },
 };
 

@@ -3,19 +3,24 @@
 
 import nanoid from 'nanoid/generate';
 
+import { DesignerData } from './types/sdk';
 import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
+import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
+import { MicrosoftIDialog } from './types';
 
 interface DesignerAttributes {
   name: string;
   description: string;
 }
 
-export interface DesignerData {
-  name?: string;
-  description?: string;
-  id: string;
-}
+const initialInputDialog = {
+  allowInterruptions: 'false',
+  prompt: '',
+  unrecognizedPrompt: '',
+  invalidPrompt: '',
+  defaultValueResponse: '',
+};
 
 const initialDialogShape = {
   'Microsoft.AdaptiveDialog': {
@@ -33,24 +38,15 @@ const initialDialogShape = {
     $type: 'Microsoft.OnConversationUpdateActivity',
     condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
   },
-  'Microsoft.AttachmentInput': {
-    allowInterruptions: 'false',
+  'Microsoft.SendActivity': {
+    activity: '',
   },
-  'Microsoft.ChoiceInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.ConfirmInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.DateTimeInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.NumberInput': {
-    allowInterruptions: 'false',
-  },
-  'Microsoft.TextInput': {
-    allowInterruptions: 'false',
-  },
+  'Microsoft.AttachmentInput': initialInputDialog,
+  'Microsoft.ChoiceInput': initialInputDialog,
+  'Microsoft.ConfirmInput': initialInputDialog,
+  'Microsoft.DateTimeInput': initialInputDialog,
+  'Microsoft.NumberInput': initialInputDialog,
+  'Microsoft.TextInput': initialInputDialog,
 };
 
 export function getNewDesigner(name: string, description: string) {
@@ -94,15 +90,22 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-const updateDesigner = data => {
-  const $designer = data.$designer ? getDesignerId(data.$designer) : getNewDesigner('', '');
-  data.$designer = $designer;
+export const deepCopyAction = async (
+  data,
+  copyLgTemplateToNewNode: (lgTemplateName: string, newNodeId: string) => Promise<string>
+) => {
+  return await copyAdaptiveAction(data, {
+    getDesignerId,
+    copyLgTemplate: copyLgTemplateToNewNode,
+  });
 };
 
-// TODO: lgApi should also be included in shared lib instead of pass it in
-//       since it's already used by Shell, Visual and Form.
-export const deepCopyAction = async (data, lgApi) => {
-  return await copyAdaptiveAction(data, { lgApi, updateDesigner });
+export const deleteAction = (data: MicrosoftIDialog, deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveAction(data, deleteLgTemplates);
+};
+
+export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (templates: string[]) => any) => {
+  return deleteAdaptiveActionList(inputs, deleteLgTemplates);
 };
 
 export const seedNewDialog = (
