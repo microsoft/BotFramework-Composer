@@ -3,7 +3,7 @@
 
 import { LgTemplateRef } from '../../../src';
 
-describe('LgTemplateRef', () => {
+describe('LgTemplateRef#', () => {
   it('can construct an instance via constructor', () => {
     const a = new LgTemplateRef('a', undefined);
     expect(a.name).toEqual('a');
@@ -29,8 +29,22 @@ describe('LgTemplateRef', () => {
     expect(c.toString()).toEqual('[c(1,2)]');
   });
 
-  it('can construct instance via `parse()`', () => {
-    expect(LgTemplateRef.parse('[bfdactivity-123456]')).toBeInstanceOf(LgTemplateRef);
-    expect(LgTemplateRef.parse('[bfdactivity-123456]')).toBeInstanceOf(LgTemplateRef);
+  describe('parse()', () => {
+    it('should return null when inputs are invalid', () => {
+      expect(LgTemplateRef.parse('')).toEqual(null);
+      expect(LgTemplateRef.parse('xxx')).toEqual(null);
+      expect(LgTemplateRef.parse('[0]')).toEqual(null);
+    });
+
+    it('should return LgTemplateRef when inputs are valid', () => {
+      const a = LgTemplateRef.parse('[bfdactivity-123456]');
+      expect(a).toEqual(new LgTemplateRef('bfdactivity-123456'));
+
+      const a2 = LgTemplateRef.parse('[bfdactivity-123456()]');
+      expect(a2).toEqual(new LgTemplateRef('bfdactivity-123456'));
+
+      const b = LgTemplateRef.parse('[greeting(1,2)]');
+      expect(b).toEqual(new LgTemplateRef('greeting', ['1', '2']));
+    });
   });
 });
