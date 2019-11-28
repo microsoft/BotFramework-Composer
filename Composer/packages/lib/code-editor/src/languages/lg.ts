@@ -60,9 +60,8 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       ],
 
       fence_block: [
+        // There are only expression and normal text in multi-line mode
         [/`{3}\s*$/, 'fence-block', '@pop'],
-        //template name
-        [/^\s*#/, { token: 'template-name', next: '@template_name' }],
         [/@\{/, { token: 'expression', next: '@expression' }],
         [/./, 'fence-block.content'],
       ],
