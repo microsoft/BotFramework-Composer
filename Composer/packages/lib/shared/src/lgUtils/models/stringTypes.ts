@@ -2,17 +2,17 @@
 // Licensed under the MIT License
 
 /**
- * example: '- hello' | '[bfdactivity-123456]'
+ * example: 'hello' | '[bfdactivity-123456]'
  */
 export type LgText = string;
 
 /**
- * example: '[bfdactivity-123456()]'
+ * example: '[greetings()]' | '[bfdactivity-123456()]'
  */
 export type LgTemplateRefString = string;
 
 /**
- * example: 'bfdactivity-123456'
+ * example: 'greeting' | 'bfdactivity-123456'
  */
 export type LgTemplateName = string;
 
