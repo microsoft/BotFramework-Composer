@@ -5,5 +5,5 @@
 export { default as LgMetaData } from './models/LgMetaData';
 export { default as LgTemplateRef } from './models/LgTemplateRef';
 
-/** utils */
-export { default as extractLgTemplateNames } from './extractLgTemplateNames';
+/** parsers */
+export { default as extractLgTemplateNames } from './parsers/extractLgTemplateNames';

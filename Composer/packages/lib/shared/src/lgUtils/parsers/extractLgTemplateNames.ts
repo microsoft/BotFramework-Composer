@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
+import { LgTemplateName } from '../models/stringTypes';
+
 import { LgTemplateRefPattern } from './lgPatterns';
-import { LgTemplateName } from './models/stringTypes';
 
 /**
  *

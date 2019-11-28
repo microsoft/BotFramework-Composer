@@ -2,7 +2,8 @@
 // Licensed under the MIT License
 
 import { LgText } from '../models/stringTypes';
-import { LgTextPattern } from '../lgPatterns';
+
+import { LgTextPattern } from './lgPatterns';
 
 export default function parseLgText(inputString: LgText): string | null {
   if (typeof inputString !== 'string') return null;
