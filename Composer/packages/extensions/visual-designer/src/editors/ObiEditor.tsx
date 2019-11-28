@@ -87,18 +87,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         if (eventData.$type === 'PASTE') {
           handler = e => {
             // TODO: clean this along with node deletion.
-            const copyLgTemplateToNewNode = async (input: string, newNodeId: string) => {
-              const lgTemplateRef = LgTemplateRef.parse(input);
-              if (!lgTemplateRef) return input;
+            const copyLgTemplateToNewNode = async (lgText: string, newNodeId: string) => {
+              const inputLgRef = LgTemplateRef.parse(lgText);
+              if (!inputLgRef) return lgText;
 
-              const lgMetadata = LgMetaData.parse(lgTemplateRef.name);
-              if (!lgMetadata) return input;
+              const inputLgMetaData = LgMetaData.parse(inputLgRef.name);
+              if (!inputLgMetaData) return lgText;
 
-              lgMetadata.designerId = newNodeId;
-              const newLgName = lgMetadata.toLgTemplateName();
-              const newLgTemplateRefString = lgMetadata.toLgTemplateRefString();
+              inputLgMetaData.designerId = newNodeId;
+              const newLgName = inputLgMetaData.toString();
+              const newLgTemplateRefString = new LgTemplateRef(newLgName).toString();
 
-              await copyLgTemplate('common', lgTemplateRef.name, newLgName);
+              await copyLgTemplate('common', inputLgRef.name, newLgName);
               return newLgTemplateRefString;
             };
             pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
