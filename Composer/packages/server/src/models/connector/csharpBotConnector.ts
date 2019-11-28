@@ -49,7 +49,7 @@ export class CSharpBotConnector implements IBotConnector {
 
   private buildProcess = async (dir: string): Promise<number | null> => {
     return new Promise((resolve, reject) => {
-      const startScript = Path.resolve(__dirname, './build_runtime.ps1');
+      const startScript = Path.resolve(dir, './Scripts/build_runtime.ps1');
       console.log(startScript);
       const build = spawn(`pwsh ${startScript}`, {
         cwd: dir,
@@ -144,23 +144,20 @@ export class CSharpBotConnector implements IBotConnector {
         stdio: ['ignore', 'ignore', 'inherit'],
       }
     );
+    console.log(`start runtime at ${this.runtime.pid}`);
     this.addListeners(this.runtime, this.stop);
   };
 
   connect = async (_: BotEnvironments, __: string) => {
     // confirm bot runtime is listening here
-    try {
-      const dir = this.getBotPath();
-      await this.buildProcess(dir);
-      return Promise.resolve(`${this.endpoint}/api/messages`);
-    } catch (err) {
-      throw new Error(err);
-    }
+    return Promise.resolve(`${this.endpoint}/api/messages`);
   };
 
   sync = async (config: DialogSetting) => {
     try {
+      this.stop();
       const dir = this.getBotPath();
+      await this.buildProcess(dir);
       await this.start(dir, config);
     } catch (err) {
       this.stop();

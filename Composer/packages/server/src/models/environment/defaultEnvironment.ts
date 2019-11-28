@@ -18,6 +18,7 @@ export class DefaultEnvironment implements IEnvironment {
   public constructor(config: IEnvironmentConfig) {
     this.config = config;
     this.settingManager = new DefaultSettingManager(this.config.basePath);
+    console.log(this.config.basePath);
     this.botConnector = new CSharpBotConnector(this.config.endpoint);
   }
 
