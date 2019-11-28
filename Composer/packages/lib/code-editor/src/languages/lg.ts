@@ -20,7 +20,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/^\s*-/, { token: 'template-body-identifier', goBack: 1, next: '@template_body' }],
         //comments
         [/^\s*>/, { token: 'comments', next: '@comments' }],
-        //dealing with inline-lg 
+        //dealing with inline-lg
         [/^\s*\[/, { token: 'structure-lg', next: '@structure_lg' }],
       ],
       comments: [
