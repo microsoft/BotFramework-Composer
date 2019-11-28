@@ -35,7 +35,7 @@ import {
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const allowedCompletionStates = ['plaintext', 'expression'];
+const allowedCompletionStates = ['expression'];
 
 export class LGServer {
   protected workspaceRoot?: URI;
