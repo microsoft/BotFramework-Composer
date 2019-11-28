@@ -9,6 +9,10 @@ import parseLgParamString from './parseLgParamString';
 
 const BoundariedLgTemplateRefPattern = `^${LgTemplateRefPattern}$`;
 
+/**
+ * '[greetings()]' => { name: greetings, parameters: []}
+ * 'hi [greetings()]' => null
+ */
 export default function parseLgTemplateRef(inputString: LgTemplateRefString): LgTemplateRef | null {
   if (typeof inputString !== 'string') return null;
 
@@ -25,8 +29,7 @@ export default function parseLgTemplateRef(inputString: LgTemplateRefString): Lg
 /**
  *
  * @param text string
- * -[Greeting], I'm a fancy bot, [Bye] ---> ['Greeting', 'Bye']
- *
+ * '-[Greeting], I'm a fancy bot, [Bye]' => [ LgTemplateRef('Greeting'), LgTemplateRef('Bye') ]
  */
 export function extractLgTemplateRefs(text: string): LgTemplateRef[] {
   const templateRefs: LgTemplateRef[] = [];
