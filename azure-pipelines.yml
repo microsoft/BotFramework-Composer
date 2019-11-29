@@ -52,10 +52,17 @@ jobs:
           CYPRESS_SCREENSHOTS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/screenshots
           CYPRESS_VIDEOS_FOLDER: $(Build.ArtifactStagingDirectory)/cypress/videos
           TERM: xterm
-          COMPOSER_BOTS_FOLDER: $(System.DefaultWorkingDirectory)/Composer/TestBots
+          COMPOSER_BOTS_FOLDER: $(System.DefaultWorkingDirectory)/MyBots
+          DEBUG: composer
       - task: PublishPipelineArtifact@1
+        displayName: Publish Cypress Artifacts
         condition: failed()
         continueOnError: true
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)/cypress
           artifactName: e2e
+      - script: cat e2e.log
+        displayName: Server Logs
+        condition: always()
+        continueOnError: true
+        workingDirectory: Composer
