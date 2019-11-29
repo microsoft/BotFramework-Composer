@@ -9,10 +9,15 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import compression from 'compression';
+import * as ws from 'ws';
+import * as rpc from 'vscode-ws-jsonrpc';
+import { IConnection, createConnection } from 'vscode-languageserver';
+import { LGServer } from '@bfc/lg-languageserver';
 
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
+import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
 
 const app: Express = express();
@@ -96,9 +101,33 @@ app.get('*', function(req, res) {
 });
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   if (process.env.NODE_ENV === 'production') {
     // eslint-disable-next-line no-console
     console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+  }
+});
+
+const wss: ws.Server = new ws.Server({
+  noServer: true,
+  perMessageDeflate: false,
+});
+
+function launchLanguageServer(socket: rpc.IWebSocket) {
+  const reader = new rpc.WebSocketMessageReader(socket);
+  const writer = new rpc.WebSocketMessageWriter(socket);
+  const connection: IConnection = createConnection(reader, writer);
+  const server = new LGServer(connection);
+  server.start();
+}
+
+attachLSPServer(wss, server, '/lg-language-server', webSocket => {
+  // launch language server when the web socket is opened
+  if (webSocket.readyState === webSocket.OPEN) {
+    launchLanguageServer(webSocket);
+  } else {
+    webSocket.on('open', () => {
+      launchLanguageServer(webSocket);
+    });
   }
 });

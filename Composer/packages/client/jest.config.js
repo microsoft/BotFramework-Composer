@@ -10,6 +10,8 @@ module.exports = {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object
     '\\.(jpg|jpeg|png|svg|gif)$': '<rootDir>/__tests__/jestMocks/styleMock.js',
     '\\.(s)?css$': '<rootDir>/__tests__/jestMocks/styleMock.js',
+    // lsp code editor
+    vscode$: 'monaco-languageclient/lib/vscode-compatibility',
 
     // use commonjs modules for test so they do not need to be compiled
     'office-ui-fabric-react/lib/(.*)$': 'office-ui-fabric-react/lib-commonjs/$1',
