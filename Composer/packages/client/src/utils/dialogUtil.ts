@@ -128,7 +128,11 @@ export function getEventTypes(): IDropdownOption[] {
       const labelOverrides = ConceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
+        if (labelOverrides.subtitle) {
+          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
+        } else {
+          name = labelOverrides.title;
+        }
       }
 
       return { key: t, text: name || t };
@@ -144,7 +148,11 @@ export function getActivityTypes(): IDropdownOption[] {
       const labelOverrides = ConceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
+        if (labelOverrides.subtitle) {
+          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
+        } else {
+          name = labelOverrides.title;
+        }
       }
 
       return { key: t, text: name || t };
