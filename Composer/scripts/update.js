@@ -3,8 +3,10 @@ const { execSync } = require('child_process');
 
 console.log(chalk.yellow('Checking for updates...\n'));
 try {
-  const sha = execSync('git rev-parse --short');
-  const originSha = execSync('git rev-parse --short origin/stable');
+  const branch = execSync("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/'");
+  console.log('b', branch.toString())
+  const sha = execSync(`git rev-parse --short ${branch.toString()}`);
+  const originSha = execSync(`git rev-parse --short origin/${branch.toString()}`);
   if (sha.toString() !== originSha.toString()) {
     console.log(
       chalk.yellow(
