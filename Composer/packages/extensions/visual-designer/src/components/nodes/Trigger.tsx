@@ -5,42 +5,44 @@
 
 import { ConceptLabels } from '@bfc/shared';
 import { jsx } from '@emotion/core';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
-import { ElementIcon } from '../../utils/obiPropertyResolver';
-import { TriggerSize } from '../../constants/ElementSizes';
-
-import { FormCard } from './templates/FormCard';
+import {
+  triggerContainerStyle,
+  triggerContentStyle,
+  titleStyle,
+  subtitleStyle,
+  triggerIconStyle,
+} from './triggerStyles';
 
 function getLabel(data: any): string {
-  if (data.intent) {
-    return data.intent;
-  }
-
   const labelOverrides = ConceptLabels[data.$type];
-
-  if (labelOverrides.title) {
-    return labelOverrides.title;
+  if (labelOverrides) {
+    return labelOverrides.subtitle || labelOverrides.title;
   }
-
   return data.$type;
 }
 
-export const Trigger = ({ data, onClick = () => {} }): JSX.Element => (
-  <div
-    css={{
-      ...TriggerSize,
-    }}
-  >
-    <FormCard
-      nodeColors={{
-        themeColor: '#BFEAE9',
-        iconColor: 'black',
-      }}
-      icon={ElementIcon.Flow}
-      iconSize={8}
-      header={'Trigger'}
-      label={getLabel(data)}
-      onClick={onClick}
-    />
-  </div>
-);
+function getName(data: any): string {
+  return (
+    data.intent || get(data, '$designer.name', ConceptLabels[data.$type] ? ConceptLabels[data.$type].title : data.$type)
+  );
+}
+
+export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
+  const name = getName(data);
+  const label = getLabel(data);
+
+  return (
+    <div css={triggerContainerStyle}>
+      <div css={triggerContentStyle}>
+        <div css={titleStyle}>
+          <Icon iconName="Flow" style={triggerIconStyle} />
+          <span>{name}</span>
+        </div>
+        <div css={subtitleStyle}>{label}</div>
+      </div>
+    </div>
+  );
+};

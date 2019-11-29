@@ -5,6 +5,7 @@ context('Notification Page', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    cy.visitPage('Notifications');
   });
 
   it('can show lg syntax error ', () => {

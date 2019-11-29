@@ -18,6 +18,8 @@ import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
+import log from './logger';
+
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -86,7 +88,7 @@ app.use(`${BASEURL}/api`, authorize, apiRouter);
 
 app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
   if (err) {
-    console.log(err);
+    log(err);
     res.status(500).json({ message: err.message });
   }
 });
