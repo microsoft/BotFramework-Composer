@@ -5,6 +5,7 @@ import * as fs from 'fs';
 
 import { Request, Response } from 'express';
 
+import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
@@ -37,6 +38,8 @@ async function createProject(req: Request, res: Response) {
     path: Path.resolve(path, name),
   };
 
+  log('Attempting to create project at %s', path);
+
   try {
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef);
     await BotProjectService.openProject(newProjRef);
@@ -45,6 +48,7 @@ async function createProject(req: Request, res: Response) {
       await currentProject.updateBotInfo(name, description);
       await currentProject.index();
       const project = currentProject.getIndexes();
+      log('Project created successfully.');
       res.status(200).json({
         ...project,
       });

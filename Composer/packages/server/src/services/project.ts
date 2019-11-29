@@ -7,6 +7,7 @@ import find from 'lodash/find';
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
 import { Store } from '../store/store';
+import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
@@ -44,7 +45,7 @@ export class BotProjectService {
         dateModified = await StorageService.getBlobDateModified(project.storageId, project.path);
         dateModifiedDict.push({ dateModified, path: project.path });
       } catch (err) {
-        console.error(err);
+        log(err);
       }
     });
     await Promise.all(promises);
