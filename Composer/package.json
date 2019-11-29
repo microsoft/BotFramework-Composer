@@ -19,7 +19,7 @@
     "packages/tools/language-servers/*"
   ],
   "scripts": {
-    "build": "node scripts/begin.js && node scripts/update.js && yarn build:prod",
+    "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client",
     "build:dev": "yarn build:tools && yarn build:lib && yarn build:extensions",
     "build:lib": "yarn workspace @bfc/libs build:all",

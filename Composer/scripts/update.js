@@ -1,7 +1,7 @@
 const chalk = require('react-dev-utils/chalk');
 const { execSync } = require('child_process');
 
-const RELEASE_BRANCH = 'cwhitten/stable';
+const RELEASE_BRANCH = 'stable';
 const branch = execSync("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* (.*)/ \1/'");
 const trimmedBranch = branch
   .toString()
