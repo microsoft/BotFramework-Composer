@@ -23,7 +23,6 @@ if (trimmedBranch === RELEASE_BRANCH) {
       console.log(chalk.green('You are using the most up to date version of Composer.'));
     }
   } catch (e) {
-    console.log('e', e);
-    return;
+    console.log(chalk.yellow('Unable to compare applications versions.. continuing'));
   }
 }
