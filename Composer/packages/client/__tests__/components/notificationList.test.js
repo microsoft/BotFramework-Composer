@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { render } from 'react-testing-library';
-import { formatMessage } from 'format-message';
+import formatMessage from 'format-message';
 
 import { NotificationList } from '../../src/pages/notifications/NotificationList';
 
