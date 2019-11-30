@@ -180,7 +180,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           )}
           {showIntentDropDown && (
             <Dropdown
-              label={formatMessage('Which intent do you want to handle?')}
+              label={formatMessage('Which intent do you want to handle? (Optional)')}
               options={intentOptions}
               styles={dropdownStyles}
               onChange={onSelectIntent}
