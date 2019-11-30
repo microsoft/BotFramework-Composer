@@ -1,7 +1,7 @@
 const chalk = require('react-dev-utils/chalk');
 const { execSync } = require('child_process');
 
-const RELEASE_BRANCH = 'stable';
+const RELEASE_BRANCH = 'cwhitten/update';
 const branch = execSync("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* (.*)/ \1/'");
 const trimmedBranch = branch
   .toString()
@@ -11,6 +11,7 @@ const trimmedBranch = branch
 if (trimmedBranch === RELEASE_BRANCH) {
   console.log(chalk.yellow('Checking for updates...\n'));
   try {
+    execSync('git fetch');
     const sha = execSync(`git rev-parse --short ${RELEASE_BRANCH}`).toString();
     const originSha = execSync(`git rev-parse --short origin/${RELEASE_BRANCH}`).toString();
     if (sha !== originSha) {
