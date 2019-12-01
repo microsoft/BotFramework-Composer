@@ -6,6 +6,7 @@ import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
+import { processSize } from './utils/common';
 
 export interface RichEditorProps extends BaseEditorProps {
   hidePlaceholder?: boolean; // default false
@@ -37,11 +38,7 @@ export function RichEditor(props: RichEditorProps) {
       return '100%';
     }
 
-    if (typeof height === 'string') {
-      return height;
-    }
-
-    return `${height}px`;
+    return processSize(height);
   };
 
   let borderColor = NeutralColors.gray120;
