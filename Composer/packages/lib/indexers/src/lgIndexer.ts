@@ -1,15 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  LGParser,
-  StaticChecker,
-  Diagnostic as LGDiagnostic,
-  LGTemplate as LgTemplate,
-  ImportResolver,
-} from 'botbuilder-lg';
+import { LGParser, StaticChecker, Diagnostic as LGDiagnostic, ImportResolver } from 'botbuilder-lg';
 
-import { FileInfo, LgFile } from './type';
+import { FileInfo, LgFile, LgTemplate } from './type';
 import { getBaseName } from './utils/help';
 import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
 
@@ -41,7 +35,14 @@ function check(content: string, id: string, path?: string): Diagnostic[] {
 
 function parse(content: string, id?: string): LgTemplate[] {
   const resource = LGParser.parse(content, id);
-  return resource.Templates;
+  const templates = resource.Templates.map(t => {
+    return {
+      Name: t.Name,
+      Body: t.Body,
+      Parameters: t.Parameters,
+    };
+  });
+  return templates;
 }
 
 function index(files: FileInfo[]): LgFile[] {

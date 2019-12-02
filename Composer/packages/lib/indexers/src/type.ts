@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGTemplate as LgTemplate } from 'botbuilder-lg';
-
 import { Diagnostic } from './diagnostic';
 
 export interface FileInfo {
@@ -59,6 +57,12 @@ export interface LuFile {
   };
   diagnostics: LuDiagnostic[];
   [key: string]: any;
+}
+
+export interface LgTemplate {
+  Name: string;
+  Body: string;
+  Parameters: string[];
 }
 
 export interface LgFile {
