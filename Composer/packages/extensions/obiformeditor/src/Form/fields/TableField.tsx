@@ -96,6 +96,7 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
         const item = formData[index];
         // @ts-ignore
         if (item.$type === 'Microsoft.SendActivity' && item.activity && item.activity.indexOf('bfdactivity-') !== -1) {
+          // TODO: (ze) 'removeLgTemplate' -> 'removeLgTemplateRef', it should accept inputs like '[bfdactivity-1234]'
           // @ts-ignore
           formContext.shellApi.removeLgTemplate('common', item.activity.slice(1, item.activity.length - 1));
         }
