@@ -4,6 +4,7 @@
 export enum NodeEventTypes {
   Expand = 'event.view.expand',
   Focus = 'event.view.focus',
+  Navigation = 'event.view.navigation',
   FocusEvent = 'event.view.focus-event',
   OpenDialog = 'event.nav.opendialog',
   Delete = 'event.data.delete',
