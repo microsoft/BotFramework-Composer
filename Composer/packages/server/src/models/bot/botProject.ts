@@ -326,13 +326,10 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    try {
-      if (unpublished.length > 0) {
-        await this.luPublisher.publish(unpublished);
-      }
-    } catch (error) {
-      throw error;
+    if (unpublished.length > 0) {
+      await this.luPublisher.publish(unpublished);
     }
+
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
