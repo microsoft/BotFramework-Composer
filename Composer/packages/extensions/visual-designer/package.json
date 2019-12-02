@@ -58,7 +58,8 @@
     "react-dom": "16.9.0",
     "react-testing-library": "^6.0.2",
     "ts-jest": "^24.1.0",
-    "ts-loader": "^6.0.3"
+    "ts-loader": "^6.0.3",
+    "webpack-cli": "^3.3.10"
   },
   "author": "",
   "homepage": "",
