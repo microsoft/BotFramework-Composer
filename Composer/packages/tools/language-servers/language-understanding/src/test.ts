@@ -77,24 +77,15 @@ async function extractLUISContent(text: string): Promise<any> {
   }
 }
 
-let luFile = `@ list listCity
-@ prebuilt number
-@ prebuilt geographyV2
-@ regex regexZipcode = /[0-9]{5}/
-@ ml address hasRoles fromAddress, toAddress
-@ address =
-- @ number 'door number'
-- @ ml streetName
-- @ ml location usesFeature geographyV2
-- @ listCity city
-- @ regexZipcode zipcode`;
+let luFile = `@regex zipcode
+`;
 
 extractLUISContent(luFile)
   .then(luisJson => {
-    console.log(luisJson.entities[0].roles);
+    console.log(luisJson);
   })
   .catch(e => {
-    console.log('error');
+    console.log(e);
   });
 
 function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {

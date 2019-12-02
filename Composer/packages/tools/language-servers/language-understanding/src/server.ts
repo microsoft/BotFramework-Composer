@@ -235,77 +235,60 @@ export class LuServer {
     }
   }
 
-  private isEntityType(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private isEntityType(content: string): boolean {
     const regexEntifyDef: RegExp = /^\s*@\s*$/;
-
-    return regexEntifyDef.test(lineContent);
+    return regexEntifyDef.test(content);
   }
 
-  private isPrebuiltEntity(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private isPrebuiltEntity(content: string): boolean {
     const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*prebuilt\s*$/;
-
-    return regexPrebuiltEntifyDef.test(lineContent);
+    return regexPrebuiltEntifyDef.test(content);
   }
 
-  private isRegexEntity(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private isRegexEntity(content: string): boolean {
     const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
-
-    return regexPrebuiltEntifyDef.test(lineContent);
+    return regexPrebuiltEntifyDef.test(content);
   }
 
-  private isEntityName(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private isSeperatedEntityDef(content: string): boolean {
+    const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+    return regexPrebuiltEntifyDef.test(content);
+  }
+
+  private isEntityName(content: string): boolean {
     const regexhasNameEntifyDef: RegExp = /^\s*@\s*(ml|list|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
-
-    return regexhasNameEntifyDef.test(lineContent);
+    return regexhasNameEntifyDef.test(content);
   }
 
-  private matchedEnterPattern(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private matchedEnterPattern(content: string): boolean {
     const regexPatternDef: RegExp = /^\s*-.*{\s*$/;
     const regexPatternDef2: RegExp = /^\s*-.*{\s*}$/;
-
-    return regexPatternDef.test(lineContent) || regexPatternDef2.test(lineContent);
+    return regexPatternDef.test(content) || regexPatternDef2.test(content);
   }
 
-  private matchedRolesPattern(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private matchedRolesPattern(content: string): boolean {
     const regexRolesPatternDef: RegExp = /^\s*-.*{\s*.*:/;
     const regexRolesPatternDef2: RegExp = /^\s*-.*{\s*.*:}/;
-
-    return regexRolesPatternDef.test(lineContent) || regexRolesPatternDef2.test(lineContent);
+    return regexRolesPatternDef.test(content) || regexRolesPatternDef2.test(content);
   }
 
-  private matchedRolesAndEntityPattern(params: TextDocumentPositionParams): boolean {
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const document = this.documents.get(params.textDocument.uri);
-    const lineContent = document.getText(range);
+  private matchedRolesAndEntityPattern(content: string): boolean {
     const regexRolesEntityPatternDef: RegExp = /^\s*-.*{\s*@/;
     const regexRolesEntityPatternDef2: RegExp = /^\s*-.*{\s*@}/;
+    return regexRolesEntityPatternDef.test(content) || regexRolesEntityPatternDef2.test(content);
+  }
 
-    return regexRolesEntityPatternDef.test(lineContent) || regexRolesEntityPatternDef2.test(lineContent);
+  private getRegexEntities(luisJson: any): string[] {
+    const suggestionRegexList: string[] = [];
+    if (luisJson !== undefined) {
+      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
+        luisJson.regex_entities.forEach(entity => {
+          suggestionRegexList.push(entity.name);
+        });
+      }
+    }
+
+    return suggestionRegexList;
   }
 
   private getSuggestionEntities(luisJson: any): string[] {
@@ -440,9 +423,12 @@ export class LuServer {
       return Promise.resolve(null);
     }
 
+    const position = params.position;
+    const range = Range.create(position.line, 0, position.line, position.character);
+    const curLineContent = document.getText(range);
     const text = document.getText();
     const completionList = [];
-    if (this.isEntityType(params)) {
+    if (this.isEntityType(curLineContent)) {
       const entityTypes: string[] = EntityTypesObj.EntityType;
       entityTypes.forEach(entity => {
         const item = {
@@ -456,7 +442,7 @@ export class LuServer {
       });
     }
 
-    if (this.isPrebuiltEntity(params)) {
+    if (this.isPrebuiltEntity(curLineContent)) {
       const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
       prebuiltTypes.forEach(entity => {
         const item = {
@@ -470,7 +456,7 @@ export class LuServer {
       });
     }
 
-    if (this.isRegexEntity(params)) {
+    if (this.isRegexEntity(curLineContent)) {
       const item = {
         label: 'RegExp Entity',
         kind: CompletionItemKind.Keyword,
@@ -481,7 +467,7 @@ export class LuServer {
       completionList.push(item);
     }
 
-    if (this.isEntityName(params)) {
+    if (this.isEntityName(curLineContent)) {
       const item = {
         label: 'hasRoles?',
         kind: CompletionItemKind.Keyword,
@@ -500,11 +486,31 @@ export class LuServer {
       completionList.push(item2);
     }
 
-    // completion for entities and patterns
-    const luisJson = await this.extractLUISContent(text);
+    // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
+    const lines = text.split('\n');
+    const textBeforeCurLine = lines.slice(0, lines.length - 1).join('\n');
+    const luisJson = await this.extractLUISContent(textBeforeCurLine);
     const suggestionEntityList = this.getSuggestionEntities(luisJson);
+    const regexEntityList = this.getRegexEntities(luisJson);
+
+    //suggest a regex pattern for seperated line definition
+    if (this.isSeperatedEntityDef(curLineContent)) {
+      const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+      const entityName = curLineContent.match(seperatedEntityDef)[1].trim();
+      if (regexEntityList.includes(entityName)) {
+        const item = {
+          label: 'RegExp Entity',
+          kind: CompletionItemKind.Keyword,
+          insertText: ` //`,
+          documentation: `regex enitity`,
+        };
+
+        completionList.push(item);
+      }
+    }
+
     // auto suggest pattern
-    if (this.matchedEnterPattern(params)) {
+    if (this.matchedEnterPattern(curLineContent)) {
       suggestionEntityList.forEach(name => {
         const item = {
           label: `Entity: ${name}`,
@@ -517,9 +523,23 @@ export class LuServer {
       });
     }
 
+    // suggestions for entities in a seperated line
+    if (this.isEntityType(curLineContent)) {
+      suggestionEntityList.forEach(entity => {
+        const item = {
+          label: entity,
+          kind: CompletionItemKind.Property,
+          insertText: ` ${entity}`,
+          documentation: `Enitity type: ${entity}`,
+        };
+
+        completionList.push(item);
+      });
+    }
+
     const suggestionRolesList = this.getSuggestionRoles(luisJson);
     // auto suggest roles
-    if (this.matchedRolesPattern(params)) {
+    if (this.matchedRolesPattern(curLineContent)) {
       suggestionRolesList.forEach(name => {
         const item = {
           label: `Role: ${name}`,
@@ -532,7 +552,7 @@ export class LuServer {
       });
     }
 
-    if (this.matchedRolesAndEntityPattern(params)) {
+    if (this.matchedRolesAndEntityPattern(curLineContent)) {
       suggestionRolesList.forEach(name => {
         const item = {
           label: `Role: ${name}`,
