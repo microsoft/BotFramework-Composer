@@ -7,13 +7,11 @@ import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } f
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import get from 'lodash/get';
+import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
-import { CodeRange } from '@bfc/shared';
-import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import get from 'lodash/get';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -34,12 +32,12 @@ import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LGPage: React.FC<RouteComponentProps> = props => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [fileValid, setFileValid] = useState(true);
-  const [codeRange, setCodeRange] = useState<CodeRange>();
-  const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
+  const [line, setLine] = useState<number>(0);
 
   const hash = props.location ? props.location.hash : '';
   const subPath = props['*'];
@@ -47,13 +45,11 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   useEffect(() => {
-    if (hash && lgEditor) {
+    if (hash) {
       const match = /line=(\d+)/g.exec(hash);
-      if (match) {
-        lgEditor.revealLine(+match[1]);
-      }
+      if (match) setLine(+match[1]);
     }
-  }, [hash, lgEditor]);
+  }, [hash]);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
@@ -133,34 +129,16 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   function onToggleEditMode() {
     setEditMode(!editMode);
-    setCodeRange(undefined);
-  }
-
-  async function onChange(newContent) {
-    if (!lgFile) {
-      return;
-    }
-
-    const payload = {
-      id: lgFile.id,
-      content: newContent,
-    };
-
-    try {
-      await actions.updateLgFile(payload);
-    } catch (error) {
-      OpenAlertModal('Save Failed', error.message, {
-        style: DialogStyle.Console,
-      });
-    }
+    setInlineTemplate(null);
   }
 
   // #TODO: get line number from lg parser, then deep link to code editor this
   // Line
-  function onTableViewClickEdit(template) {
-    setCodeRange({
-      startLineNumber: get(template, 'ParseTree._start._line', 0),
-      endLineNumber: get(template, 'ParseTree._stop._line', 0),
+  function onTableViewClickEdit(template: LGTemplate) {
+    setInlineTemplate({
+      Name: get(template, 'Name', ''),
+      Parameters: get(template, 'Parameters'),
+      Body: get(template, 'Body', ''),
     });
     navigateTo(`/language-generation`);
     setEditMode(true);
@@ -187,7 +165,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             offText={formatMessage('Edit mode')}
             defaultChecked={false}
             checked={editMode}
-            disabled={(!isRoot && editMode === false) || (!codeRange && fileValid === false)}
+            disabled={(!isRoot && editMode === false) || (fileValid === false && editMode === true)}
             onChange={onToggleEditMode}
           />
         </div>
@@ -228,7 +206,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             {editMode ? (
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} onMount={setLgEditor} />
+                <CodeEditor file={lgFile} template={inlineTemplate} line={line} />
               </Suspense>
             ) : (
               <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />

@@ -2,47 +2,118 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from 'react';
-import { LgEditor } from '@bfc/code-editor';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { CodeRange, LgFile } from '@bfc/shared';
+import { Diagnostic } from 'botbuilder-lg';
+import { LgFile } from '@bfc/shared';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
+import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
 interface CodeEditorProps {
   file: LgFile;
-  onChange: (value: string) => void;
-  codeRange?: Partial<CodeRange>;
-  onMount?: (editor: editor.IStandaloneCodeEditor) => void;
+  template: lgUtil.Template | null;
+  line: number;
 }
 
+// lsp server port should be same with composer/server port.
+const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
+const lspServerPath = '/lg-language-server';
+
 export default function CodeEditor(props: CodeEditorProps) {
-  const { file, codeRange, onMount } = props;
-  const onChange = debounce(props.onChange, 500);
+  const { actions } = useContext(StoreContext);
+  const { file, template, line } = props;
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-  const [content, setContent] = useState(get(file, 'content', ''));
+  const [content, setContent] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
   const fileId = file && file.id;
+  const inlineMode = !!template;
   useEffect(() => {
     // reset content with file.content's initial state
     if (isEmpty(file)) return;
-    setContent(file.content);
-  }, [fileId]);
+    const value = template ? get(template, 'Body', '') : get(file, 'content', '');
+    setContent(value);
+  }, [fileId, template]);
 
-  // local content maybe invalid and should always sync real-time
-  // file.content assume to be load from server
+  useEffect(() => {
+    const isInvalid = !lgUtil.isValid(diagnostics);
+    const text = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
+    setErrorMsg(text);
+  }, [diagnostics]);
+
+  useEffect(() => {
+    if (lgEditor) {
+      lgEditor.revealLine(line);
+    }
+  }, [lgEditor]);
+
+  const updateLgTemplate = useMemo(
+    () =>
+      debounce((body: string) => {
+        const templateName = get(template, 'Name');
+        if (!templateName) return;
+        const payload = {
+          file,
+          templateName,
+          template: {
+            Name: templateName,
+            Parameters: get(template, 'Parameters'),
+            Body: body,
+          },
+        };
+        actions.updateLgTemplate(payload);
+      }, 500),
+    [file, template]
+  );
+
+  const updateLgFile = useMemo(
+    () =>
+      debounce((content: string) => {
+        const payload = {
+          id: file.id,
+          content,
+        };
+        actions.updateLgFile(payload);
+      }, 500),
+    [file]
+  );
+
   const _onChange = value => {
     setContent(value);
-    onChange(value);
-    const diagnostics = lgUtil.check(value);
+
+    let diagnostics: Diagnostic[] = [];
+    if (inlineMode) {
+      const content = get(file, 'content', '');
+      const templateName = get(template, 'Name', '');
+      try {
+        const newContent = lgUtil.updateTemplate(content, templateName, {
+          Name: templateName,
+          Parameters: get(template, 'Parameters'),
+          Body: value,
+        });
+        diagnostics = lgUtil.check(newContent);
+        updateLgTemplate(value);
+      } catch (error) {
+        setErrorMsg(error.message);
+      }
+    } else {
+      diagnostics = lgUtil.check(value);
+      updateLgFile(value);
+    }
     setDiagnostics(diagnostics);
   };
 
-  const isInvalid = !lgUtil.isValid(diagnostics);
-  const errorMsg = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
+  const lgOption: LGOption = {
+    inline: inlineMode,
+    content: get(file, 'content', ''),
+    template: template ? template : undefined,
+  };
 
   return (
     <LgEditor
@@ -55,10 +126,15 @@ export default function CodeEditor(props: CodeEditorProps) {
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
       }}
-      codeRange={codeRange}
-      editorDidMount={onMount}
-      errorMsg={errorMsg}
+      hidePlaceholder={inlineMode}
+      editorDidMount={setLgEditor}
       value={content}
+      errorMsg={errorMsg}
+      lgOption={lgOption}
+      languageServer={{
+        port: Number(lspServerPort),
+        path: lspServerPath,
+      }}
       onChange={_onChange}
     />
   );
