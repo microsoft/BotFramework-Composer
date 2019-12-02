@@ -98,6 +98,7 @@ export class LuServer {
     const regUtterance = /^\s*#.*/;
     const regDashLine = /^\s*-.*/;
     const mlEntity = /^\s*@\s*ml\s*.*/;
+    const regEntityDefLine = /^\s*@.*/;
     let state: LineState = 'other';
     const lineContentList = document.getText().split('\n');
     for (let i = 0; i < position.line; i++) {
@@ -108,7 +109,7 @@ export class LuServer {
         state = 'utterance';
       } else if (mlEntity.test(line)) {
         state = 'mlEntity';
-      } else if (regDashLine.test(line)) {
+      } else if (regDashLine.test(line) || regEntityDefLine.test(line)) {
         continue;
       } else {
         state = 'other';
@@ -129,6 +130,20 @@ export class LuServer {
     }
 
     return entitiesList;
+  }
+
+  private getMLEntities(text: string): string[] {
+    const lines = text.split("\n");
+    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_\.-]+)\s*.*/;
+    const mlEntities: string[] = [];
+    for (const i in lines) {
+      if (mlEntityRegExp.test(lines[i])) {
+        const entity = lines[i].match(mlEntityRegExp)[1];
+        mlEntities.push(entity);
+      }
+    }
+
+    return mlEntities;
   }
 
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
@@ -169,9 +184,17 @@ export class LuServer {
       inputState === 'mlEntity' &&
       lastLineContent.endsWith("=")
     ) {
-      const newPos = Position.create(pos.line + 1, 0);
-      const item: TextEdit = TextEdit.insert(newPos, "\t-");
-      edits.push(item);
+      const mlEntities = this.getMLEntities(textBeforeCurLine);
+      const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_\.-]+)\s*.*/;
+      let entityName = "";
+      if (entityNameRegExp.test(lastLineContent)) {
+        entityName = lastLineContent.match(entityNameRegExp)[1];
+      }
+      if (mlEntities.includes(entityName)) {
+        const newPos = Position.create(pos.line + 1, 0);
+        const item: TextEdit = TextEdit.insert(newPos, "\t- @ ");
+        edits.push(item);
+      }
     }
 
     if (
