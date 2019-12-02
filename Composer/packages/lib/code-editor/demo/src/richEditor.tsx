@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import React, { useState } from 'react';
 
 import { RichEditor } from '../../src';
@@ -18,11 +21,6 @@ export default function App() {
 > ${LU_HELP}`;
   const errorMsg = showError ? 'example error' : undefined;
 
-  const codeRange = {
-    startLineNumber: 2,
-    endLineNumber: 3,
-  };
-
   return (
     <div style={{ height: '99vh', width: '100%' }}>
       <div style={{ marginBottom: '10px' }}>
@@ -31,7 +29,6 @@ export default function App() {
       <RichEditor
         onChange={newVal => setValue(newVal)}
         value={value}
-        codeRange={codeRange}
         placeholder={placeholder}
         errorMsg={errorMsg}
         helpURL="https://dev.botframework.com"

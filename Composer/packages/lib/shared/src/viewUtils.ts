@@ -110,6 +110,7 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [
+      SDKTypes.OnActivity,
       SDKTypes.OnConversationUpdateActivity,
       SDKTypes.OnEndOfConversationActivity,
       SDKTypes.OnEventActivity,
@@ -120,7 +121,12 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MESSAGE_EVENTS]: {
     label: 'Message events',
-    types: [SDKTypes.OnMessageDeleteActivity, SDKTypes.OnMessageReactionActivity, SDKTypes.OnMessageUpdateActivity],
+    types: [
+      SDKTypes.OnMessageActivity,
+      SDKTypes.OnMessageDeleteActivity,
+      SDKTypes.OnMessageReactionActivity,
+      SDKTypes.OnMessageUpdateActivity,
+    ],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',

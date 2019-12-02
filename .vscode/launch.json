@@ -2,13 +2,40 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "LSP Server",
+      "type": "node",
+      "request": "launch",
+      "args": [
+        "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src/server.ts"
+      ],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "${workspaceFolder}/Composer/node_modules/ts-node/register"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-generation/demo/src",
+      "protocol": "inspector",
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Server: Launch",
-      "args": ["./build/server.js"],
+      "args": [
+        "./build/server.js"
+      ],
       "preLaunchTask": "server: build",
       "restart": true,
-      "outFiles": ["./build/*"],
+      "outFiles": [
+        "./build/*"
+      ],
       "envFile": "${workspaceFolder}/Composer/packages/server/.env",
       "outputCapture": "std",
       "cwd": "${workspaceFolder}/Composer/packages/server"
@@ -20,8 +47,14 @@
       "name": "Jest Debug",
       "program": "${workspaceRoot}/Composer/node_modules/jest/bin/jest",
       "stopOnEntry": false,
-      "args": ["--runInBand", "--env=jsdom", "--config=jest.config.js"],
-      "runtimeArgs": ["--inspect-brk"],
+      "args": [
+        "--runInBand",
+        "--env=jsdom",
+        "--config=jest.config.js"
+      ],
+      "runtimeArgs": [
+        "--inspect-brk"
+      ],
       "cwd": "${workspaceRoot}/Composer/packages/server",
       "sourceMaps": true,
       "console": "integratedTerminal"
