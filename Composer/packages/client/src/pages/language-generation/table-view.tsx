@@ -17,8 +17,8 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { DialogInfo, LgFile } from '@bfc/shared';
 import { LGTemplate } from 'botbuilder-lg';
-
 import { lgIndexer } from '@bfc/indexers';
+
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
