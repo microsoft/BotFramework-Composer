@@ -97,6 +97,7 @@ export class LuServer {
     const regListEnity = /^\s*@\s*list\s*.*/;
     const regUtterance = /^\s*#.*/;
     const regDashLine = /^\s*-.*/;
+    const mlEntity = /^\s*@\s*ml\s*.*/;
     let state: LineState = 'other';
     const lineContentList = document.getText().split('\n');
     for (let i = 0; i < position.line; i++) {
@@ -105,6 +106,8 @@ export class LuServer {
         state = 'listEntity';
       } else if (regUtterance.test(line)) {
         state = 'utterance';
+      } else if (mlEntity.test(line)) {
+        state = 'mlEntity';
       } else if (regDashLine.test(line)) {
         continue;
       } else {
@@ -125,6 +128,14 @@ export class LuServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const lineCount = document.lineCount;
+    const position = params.position;
+    const range = Range.create(position.line, 0, position.line, position.character);
+    //const curLineContent = document.getText(range);
+    const text = document.getText();
+    const lines = text.split('\n');
+    const textBeforeCurLine = lines.slice(0, lines.length - 1).join('\n');
+    const luisJson = await this.extractLUISContent(textBeforeCurLine);
+
     if (
       params.ch == '\n' &&
       this.getInputLineState(params) === 'utterance' &&
@@ -137,6 +148,14 @@ export class LuServer {
       edits.push(item);
     }
 
+    // if (
+    //   params.ch == '\n' &&
+    //   this.getInputLineState(params) === 'mlEntity' &&
+
+    // ) {
+
+    // }
+
     if (
       params.ch == '\n' &&
       this.getInputLineState(params) === 'listEntity' &&
@@ -146,7 +165,7 @@ export class LuServer {
       const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
       let insertStr = '';
-      if (lastLineContent.trim().endsWith(':')) {
+      if (lastLineContent.trim().endsWith(':') || lastLineContent.trim().endsWith('=')) {
         insertStr = '\t- ';
       } else {
         insertStr = '- ';

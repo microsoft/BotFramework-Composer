@@ -20,4 +20,4 @@ export const EntityTypesObj = {
   ],
 };
 
-export type LineState = 'listEntity' | 'utterance' | 'other';
+export type LineState = 'listEntity' | 'utterance' | 'mlEntity' | 'other';
