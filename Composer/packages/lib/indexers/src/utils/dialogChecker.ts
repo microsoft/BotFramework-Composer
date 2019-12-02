@@ -4,24 +4,33 @@
 import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
+import { Diagnostic } from './../diagnostic';
+
 const ExpressionParser = new ExpressionEngine();
 
 interface CheckerFunc {
-  (node: { path: string; value: any }): string; // error msg
+  (node: { path: string; value: any }): Diagnostic | null; // error msg
 }
 
 function IsExpression(name: string): CheckerFunc {
   return node => {
-    const exp = get(node.value, name);
-    if (!exp) return `In ${node.path}: ${node.value.$type}: ${name} is missing or empty`;
-
     let message = '';
-    try {
-      ExpressionParser.parse(exp);
-    } catch (error) {
-      message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
+    const exp = get(node.value, name);
+    if (!exp) {
+      message = `In ${node.path}: ${node.value.$type}: ${name} is missing or empty`;
+    } else {
+      try {
+        ExpressionParser.parse(exp);
+      } catch (error) {
+        message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
+      }
     }
-    return message;
+    if (message) {
+      const diagnostic = new Diagnostic(message, '');
+      diagnostic.path = node.path;
+      return diagnostic;
+    }
+    return null;
   };
 }
 
@@ -34,9 +43,7 @@ enum EditArrayChangeTypes {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function EditArrayValueChecker(node: { path: string; value: any }): string {
-  let message = '';
-
+function EditArrayValueChecker(node: { path: string; value: any }): Diagnostic | null {
   const changeType = get(node.value, 'changeType');
 
   // when push and remove, value is required
@@ -45,11 +52,14 @@ function EditArrayValueChecker(node: { path: string; value: any }): string {
     try {
       ExpressionParser.parse(exp);
     } catch (error) {
-      message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
+      const message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
+      const diagnostic = new Diagnostic(message, '');
+      diagnostic.path = node.path;
+      return diagnostic;
     }
   }
 
-  return message;
+  return null;
 }
 
 /**

@@ -16,13 +16,29 @@ import { navigateTo } from './../../utils';
 
 const navigations = {
   lg: (item: INotification) => {
-    navigateTo(`/language-generation/#line=${item.diagnostic.Range.Start.Line || 0}`);
+    navigateTo(`/language-generation/#line=${item.diagnostic.range.start.line || 0}`);
   },
   lu: (item: INotification) => {
     navigateTo(`/dialogs/${item.id}`);
   },
   dialog: (item: INotification) => {
-    navigateTo(`/dialogs/${item.id}`);
+    //path is like main.trigers[0].actions[0]
+    //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
+    const path = item.diagnostic.path;
+    let uri = `/dialogs/${item.id}`;
+    if (path) {
+      const matchTriggers = /triggers\[(\d+)\]/g.exec(path);
+      const matchActions = /actions\[(\d+)\]/g.exec(path);
+      const trigger = matchTriggers ? `triggers[${+matchTriggers[1]}]` : '';
+      const action = matchActions ? `actions[${+matchActions[1]}]` : '';
+      if (trigger) {
+        uri += `?selected=${trigger}`;
+        if (action) {
+          uri += `&focused=${trigger}.${action}`;
+        }
+      }
+    }
+    navigateTo(uri);
   },
 };
 const Notifications: React.FC<RouteComponentProps> = () => {

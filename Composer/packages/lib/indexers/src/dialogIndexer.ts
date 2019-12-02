@@ -131,8 +131,8 @@ function ExtractReferredDialogs(dialog): string[] {
 }
 
 // check all fields
-function CheckFields(dialog): string[] {
-  const errors: string[] = [];
+function CheckFields(dialog, id: string): Diagnostic[] {
+  const errors: Diagnostic[] = [];
   /**
    *
    * @param path , jsonPath string
@@ -144,12 +144,7 @@ function CheckFields(dialog): string[] {
     if (has(value, '$type') && has(DialogChecker, value.$type)) {
       const matchedCheckers = DialogChecker[value.$type];
       matchedCheckers.forEach(checker => {
-        const checkRes = checker.apply(null, [
-          {
-            path,
-            value,
-          },
-        ]);
+        const checkRes = checker.apply(null, [{ path, value }]);
         if (checkRes) {
           Array.isArray(checkRes) ? errors.push(...checkRes) : errors.push(checkRes);
         }
@@ -157,14 +152,16 @@ function CheckFields(dialog): string[] {
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
-  return errors;
+  JsonWalk(id, dialog, visitor);
+  return errors.map(e => {
+    e.source = id;
+    return e;
+  });
 }
 
 function validate(id: string, content): Diagnostic[] {
   try {
-    const errors = CheckFields(content);
-    return errors.map(x => new Diagnostic(x, id));
+    return CheckFields(content, id);
   } catch (error) {
     return [new Diagnostic(error.message, id)];
   }

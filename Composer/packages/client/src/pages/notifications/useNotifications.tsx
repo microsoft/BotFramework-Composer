@@ -19,7 +19,7 @@ export default function useNotifications(filter: string) {
     const locations = new Set<string>();
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
-        const location = dialog.displayName;
+        const location = `${dialog.id}.dialog`;
         locations.add(location);
         notifactions.push({
           type: 'dialog',
