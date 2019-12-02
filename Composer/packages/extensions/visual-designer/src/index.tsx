@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { ShellData, ShellApi } from '@bfc/shared';
 
-import { ObiEditor } from './editors/ObiEditor';
+import { VisualDesigner } from './containers/VisualDesigner';
 import { NodeRendererContext } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 
@@ -80,7 +80,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
           <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-            <ObiEditor
+            <VisualDesigner
               key={dialogId}
               path={dialogId}
               data={data}

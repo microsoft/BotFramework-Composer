@@ -26,10 +26,9 @@ import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
+import { AdaptiveDialogEditor } from '../editors/AdaptiveDialogEditor';
 
-import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
-
-export const ObiEditor: FC<ObiEditorProps> = ({
+export const VisualDesigner: FC<VisualDesignerProps> = ({
   path,
   data,
   onFocusEvent,
@@ -330,7 +329,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   );
 };
 
-ObiEditor.defaultProps = {
+VisualDesigner.defaultProps = {
   path: '.',
   data: {},
   focusedSteps: [],
@@ -346,7 +345,7 @@ ObiEditor.defaultProps = {
   addCoachMarkRef: () => {},
 };
 
-interface ObiEditorProps {
+interface VisualDesignerProps {
   path: string;
   // Obi raw json
   data: any;
