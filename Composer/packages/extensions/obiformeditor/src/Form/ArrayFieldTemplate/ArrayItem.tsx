@@ -13,7 +13,7 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { arrayItem, arrayItemField } from './styles';
 
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
-  const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
+  const { children, hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -47,7 +47,7 @@ const ArrayItem: React.FC<ArrayFieldItem> = props => {
 
   return (
     <div css={arrayItem}>
-      <div css={arrayItemField}>{props.children}</div>
+      <div css={arrayItemField}>{children}</div>
       <IconButton
         menuProps={{ items: contextItems }}
         menuIconProps={{ iconName: 'MoreVertical' }}

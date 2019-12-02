@@ -1,11 +1,25 @@
 .ObjectItem {
   display: flex;
+  flex: 1;
 }
 
 .ObjectItem .ObjectItemField {
   flex: 1;
   padding: 0px 18px;
   margin: 10px 0;
+}
+
+.ObjectItem .ObjectItemField {
+  padding: 0px 18px;
+  margin: 10px 0;
+}
+
+.ObjectItemFieldInline {
+  flex: 1;
+}
+
+.ObjectItemFieldInline + .ObjectItemFieldInline {
+  margin-left: 10px;
 }
 
 .ObjectItem .ObjectItemContext {

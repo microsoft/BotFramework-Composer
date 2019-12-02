@@ -22,6 +22,27 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.AdaptiveDialog]: {
     recognizer: {
       'ui:field': 'RecognizerField',
+      intents: {
+        'ui:options': {
+          object: true,
+        },
+        items: {
+          'ui:options': {
+            inline: true,
+            hideDescription: true,
+          },
+          intent: {
+            'ui:options': {
+              label: false,
+            },
+          },
+          pattern: {
+            'ui:options': {
+              label: false,
+            },
+          },
+        },
+      },
     },
     'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],

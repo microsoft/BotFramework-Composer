@@ -32,6 +32,7 @@ export function TextWidget(props: BFDWidgetProps) {
     disabled,
     formContext,
     rawErrors,
+    options,
   } = props;
   const { description, examples = [], type, $role } = schema;
 
@@ -57,7 +58,7 @@ export function TextWidget(props: BFDWidgetProps) {
 
     return (
       <>
-        <WidgetLabel label={label} description={description} id={id} />
+        {options && options.label !== false && <WidgetLabel label={label} description={description} id={id} />}
         <SpinButton
           onDecrement={updateValue(-step)}
           onIncrement={updateValue(step)}
@@ -99,7 +100,7 @@ export function TextWidget(props: BFDWidgetProps) {
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
+      {options && options.label !== false && <WidgetLabel label={label} description={description} id={id} />}
       <TextField {...sharedProps} />
     </>
   );

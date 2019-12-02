@@ -15,5 +15,9 @@ export default function FieldTemplate(props: FieldTemplateProps) {
     return null;
   }
 
-  return <div className="FieldTemplate">{children}</div>;
+  return (
+    <div className="FieldTemplate" style={{ flex: 1 }}>
+      {children}
+    </div>
+  );
 }

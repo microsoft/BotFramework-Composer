@@ -19,9 +19,9 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   const { canAdd, items, onAddClick } = props;
   const [value, setValue] = useState('');
 
-  const handleOnChange = useCallback((_, newValue?: string) => setValue(newValue || ''), [setValue]);
+  const handleChange = useCallback((_, newValue?: string) => setValue(newValue || ''), [setValue]);
 
-  const handleOnKeyDown = useCallback(
+  const handleKeyDown = useCallback(
     event => {
       if (event.key.toLowerCase() === 'enter') {
         event.preventDefault();
@@ -46,8 +46,8 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
         <div css={arrayItemInputFieldContainer}>
           <div css={arrayItemField}>
             <TextField
-              onChange={handleOnChange}
-              onKeyDown={handleOnKeyDown}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
               value={value}
               iconProps={{
                 iconName: 'ReturnKey',
