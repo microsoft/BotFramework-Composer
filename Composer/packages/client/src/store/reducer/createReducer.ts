@@ -10,7 +10,7 @@ import { ActionTypes } from './../../constants';
 
 type CreateReducerFunc = (
   handlers: {
-    [type in Exclude<ActionTypes, ActionTypes.UNDO | ActionTypes.REDO | ActionTypes.HISTORY_CLEAR>]: ReducerFunc
+    [type in Exclude<ActionTypes, ActionTypes.UNDO | ActionTypes.REDO | ActionTypes.HISTORY_CLEAR>]: ReducerFunc;
   }
 ) => (state: State, action: ActionType) => State;
 

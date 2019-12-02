@@ -194,11 +194,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
   }, [focusedId, selectionContext]);
 
-  useEffect(
-    (): void => {
-      selection.setItems(nodeIndexGenerator.current.getItemList());
-    }
-  );
+  useEffect((): void => {
+    selection.setItems(nodeIndexGenerator.current.getItemList());
+  });
 
   useEffect((): void => {
     resetSelectionData();
