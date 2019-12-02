@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useState } from 'react';
+import { MessageBar, MessageBarType, Link } from 'office-ui-fabric-react/lib';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
-import formatMessage from 'format-message';
 
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
 import { processSize } from './utils/common';
@@ -20,18 +20,6 @@ export function RichEditor(props: RichEditorProps) {
   const { errorMsg, helpURL, placeholder, hidePlaceholder = false, height, ...rest } = props;
   const isInvalid = !!errorMsg;
   const [hovered, setHovered] = useState(false);
-
-  const errorHelp = formatMessage.rich(
-    'This text has errors in the syntax. Refer to the syntax documentation <a>here</a>.',
-    {
-      // eslint-disable-next-line react/display-name
-      a: ({ children }) => (
-        <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      ),
-    }
-  );
 
   const getHeight = () => {
     if (height === null || height === undefined) {
@@ -56,7 +44,7 @@ export function RichEditor(props: RichEditorProps) {
       <div
         style={{
           height: `calc(${getHeight()} - 40px)`,
-          borderWidth: '1px',
+          borderWidth: '2px',
           borderStyle: 'solid',
           borderColor,
           transition: 'border-color 0.1s linear',
@@ -67,9 +55,19 @@ export function RichEditor(props: RichEditorProps) {
         <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
       {isInvalid && (
-        <div style={{ fontSize: '14px', color: SharedColors.red20 }}>
-          <span>{errorHelp}</span>
-        </div>
+        <MessageBar
+          messageBarType={MessageBarType.error}
+          isMultiline={false}
+          dismissButtonAriaLabel="Close"
+          truncated={true}
+          overflowButtonAriaLabel="See more"
+        >
+          This text has errors in the syntax. Refer to the syntax documentation
+          <Link href={helpURL} target="_blank" rel="noopener noreferrer">
+            here
+          </Link>
+          .
+        </MessageBar>
       )}
     </Fragment>
   );
