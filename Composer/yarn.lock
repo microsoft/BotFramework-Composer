@@ -16886,10 +16886,10 @@ ws@^7.2.0:
   dependencies:
     async-limiter "^1.0.0"
 
-wsrun@^3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/wsrun/-/wsrun-3.6.4.tgz#05cfcc5bfaf3056c3eecb0762fdc1038cb3db0bc"
-  integrity sha512-lOWQ7Oo+PPuiJ3ggUETrYoqEmGCJyvnnSDY2TAXR5IcV2HlAIjhcNKTK0u8rzz9+CTiEe/n46UR7fKK2PeAHEg==
+wsrun@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/wsrun/-/wsrun-5.1.0.tgz#75bb43610b5cf57f6e64918fbb9f8a13df4e6e56"
+  integrity sha512-YBhT0XQh5iXTjHT2JKIp+XwaahmJihrY22SvdcS5otEHuTsnBarBC0wjqDysDYtE6b052EG9Sd88khKAiwq00A==
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.3.0"
@@ -16898,7 +16898,7 @@ wsrun@^3.6.4:
     minimatch "^3.0.4"
     split "^1.0.1"
     throat "^4.1.0"
-    yargs "^10.0.3"
+    yargs "^11.1.1"
 
 x-is-string@^0.1.0:
   version "0.1.0"
@@ -17083,16 +17083,16 @@ yargs@^10.0.3:
     y18n "^3.2.1"
     yargs-parser "^8.1.0"
 
-yargs@^11.0.0:
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.1.0.tgz#90b869934ed6e871115ea2ff58b03f4724ed2d77"
-  integrity sha512-NwW69J42EsCSanF8kyn5upxvjp5ds+t3+udGBeTbFnERA+lF541DDpMawzo4z6W/QrzNM18D+BPMiOBibnFV5A==
+yargs@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.1.1.tgz#5052efe3446a4df5ed669c995886cc0f13702766"
+  integrity sha512-PRU7gJrJaXv3q3yQZ/+/X6KBswZiaQ+zOmdprZcouPYtQgvNU35i+68M4b1ZHLZtYFT5QObFLV+ZkmJYcwKdiw==
   dependencies:
     cliui "^4.0.0"
     decamelize "^1.1.1"
     find-up "^2.1.0"
     get-caller-file "^1.0.1"
-    os-locale "^2.0.0"
+    os-locale "^3.1.0"
     require-directory "^2.1.1"
     require-main-filename "^1.0.1"
     set-blocking "^2.0.0"
