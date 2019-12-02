@@ -118,6 +118,19 @@ export class LuServer {
     return state;
   }
 
+  private getEntitiesList(luisJson: any): string[] {
+    const entitiesList: string[] = [];
+    if (luisJson !== undefined) {
+      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
+        luisJson.entities.forEach(entity => {
+          entitiesList.push(entity.name);
+        });
+      }
+    }
+
+    return entitiesList;
+  }
+
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -130,39 +143,43 @@ export class LuServer {
     const lineCount = document.lineCount;
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
-    //const curLineContent = document.getText(range);
+    const curLineContent = document.getText(range);
     const text = document.getText();
     const lines = text.split('\n');
     const textBeforeCurLine = lines.slice(0, lines.length - 1).join('\n');
-    const luisJson = await this.extractLUISContent(textBeforeCurLine);
+    //const luisJson = await this.extractLUISContent(textBeforeCurLine);
+    const key = params.ch;
+    const inputState = this.getInputLineState(params);
+    //const entitiesList = this.getEntitiesList(luisJson);
+    const pos = params.position;
 
     if (
-      params.ch == '\n' &&
-      this.getInputLineState(params) === 'utterance' &&
+      key == '\n' &&
+      inputState === 'utterance' &&
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
     ) {
-      const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
       const item: TextEdit = TextEdit.insert(newPos, '-');
       edits.push(item);
     }
 
-    // if (
-    //   params.ch == '\n' &&
-    //   this.getInputLineState(params) === 'mlEntity' &&
-
-    // ) {
-
-    // }
+    if (
+      key == '\n' &&
+      inputState === 'mlEntity' &&
+      lastLineContent.endsWith("=")
+    ) {
+      const newPos = Position.create(pos.line + 1, 0);
+      const item: TextEdit = TextEdit.insert(newPos, "\t-");
+      edits.push(item);
+    }
 
     if (
-      params.ch == '\n' &&
-      this.getInputLineState(params) === 'listEntity' &&
+      key == '\n' &&
+      inputState === 'listEntity' &&
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
     ) {
-      const pos = params.position;
       const newPos = Position.create(pos.line + 1, 0);
       let insertStr = '';
       if (lastLineContent.trim().endsWith(':') || lastLineContent.trim().endsWith('=')) {
@@ -175,7 +192,6 @@ export class LuServer {
     }
 
     if (lastLineContent.trim() === '-') {
-      const pos = params.position;
       const range = Range.create(pos.line - 1, 0, pos.line - 1, lastLineContent.length - 1);
       const item: TextEdit = TextEdit.del(range);
       edits.push(item);
