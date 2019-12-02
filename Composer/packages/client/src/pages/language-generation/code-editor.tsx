@@ -33,7 +33,7 @@ export default function CodeEditor(props: CodeEditorProps) {
   useEffect(() => {
     // reset content with file.content's initial state
     if (isEmpty(file)) return;
-    const value = template ? get(template, 'Body', '') : get(file, 'content', '');
+    const value = template ? get(template, 'body', '') : get(file, 'content', '');
     setContent(value);
   }, [fileId, template]);
 
@@ -46,15 +46,15 @@ export default function CodeEditor(props: CodeEditorProps) {
   const updateLgTemplate = useMemo(
     () =>
       debounce((body: string) => {
-        const templateName = get(template, 'Name');
+        const templateName = get(template, 'name');
         if (!templateName) return;
         const payload = {
           file,
           templateName,
           template: {
-            Name: templateName,
-            Parameters: get(template, 'Parameters'),
-            Body: body,
+            name: templateName,
+            parameters: get(template, 'parameters'),
+            body: body,
           },
         };
         actions.updateLgTemplate(payload);
@@ -80,12 +80,12 @@ export default function CodeEditor(props: CodeEditorProps) {
     let diagnostics: Diagnostic[] = [];
     if (inlineMode) {
       const content = get(file, 'content', '');
-      const templateName = get(template, 'Name', '');
+      const templateName = get(template, 'name', '');
       try {
         const newContent = lgUtil.updateTemplate(content, templateName, {
-          Name: templateName,
-          Parameters: get(template, 'Parameters'),
-          Body: value,
+          name: templateName,
+          parameters: get(template, 'parameters'),
+          body: value,
         });
         diagnostics = lgUtil.check(newContent);
         updateLgTemplate(value);

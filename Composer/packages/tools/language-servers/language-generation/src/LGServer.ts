@@ -100,9 +100,9 @@ export class LGServer {
       const { content, template } = LGDocument;
       if (!content || !template) return text;
       const updatedTemplate = {
-        Name: template.Name,
-        Parameters: template.Parameters,
-        Body: text,
+        name: template.name,
+        parameters: template.parameters,
+        body: text,
       };
 
       const templateDiags = checkTemplate(updatedTemplate);
@@ -127,12 +127,12 @@ export class LGServer {
     }
     const text = this.getLGDocumentContent(document);
     const lgResources = getLGResources(text);
-    const templates = lgResources.Templates;
+    const templates = lgResources.templates;
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem = templates.find(u => u.Name === word);
+    const matchItem = templates.find(u => u.name === word);
     if (matchItem) {
-      const hoveritem: Hover = { contents: [matchItem.Body] };
+      const hoveritem: Hover = { contents: [matchItem.body] };
       return Promise.resolve(hoveritem);
     }
     if (word.startsWith('builtin.')) {
@@ -250,15 +250,15 @@ export class LGServer {
     }
 
     const lgResources = getLGResources(text);
-    templates = lgResources.Templates;
+    templates = lgResources.templates;
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
-        label: template.Name,
+        label: template.name,
         kind: CompletionItemKind.Reference,
         insertText:
-          template.Parameters.length > 0 ? template.Name + '(' + template.Parameters.join(', ') + ')' : template.Name,
-        documentation: template.Body,
+          template.parameters.length > 0 ? template.name + '(' + template.parameters.join(', ') + ')' : template.name,
+        documentation: template.body,
       };
     });
 
@@ -322,9 +322,9 @@ export class LGServer {
       const { content, template } = LGDocument;
       if (!content || !template) return;
       const updatedTemplate = {
-        Name: template.Name,
-        Parameters: template.Parameters,
-        Body: text,
+        name: template.name,
+        parameters: template.parameters,
+        body: text,
       };
 
       const templateDiags = checkTemplate(updatedTemplate);

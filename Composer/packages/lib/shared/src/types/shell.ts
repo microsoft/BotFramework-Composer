@@ -88,10 +88,10 @@ export interface CodeRange {
 }
 
 export interface LgTemplate {
-  Name: string;
-  Body: string;
-  Parameters: string[];
-  Range: CodeRange;
+  name: string;
+  body: string;
+  parameters: string[];
+  range: CodeRange;
 }
 
 export interface ShellData {

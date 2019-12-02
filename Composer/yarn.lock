@@ -2818,6 +2818,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/moment-timezone@^0.5.12":
+  version "0.5.12"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/moment-timezone/-/@types/moment-timezone-0.5.12.tgz#0fb680c03db194fe8ff4551eaeb1eec8d3d80e9f"
+  integrity sha1-D7aAwD2xlP6P9FUerrHuyNPYDp8=
+  dependencies:
+    moment ">=2.14.0"
+
 "@types/morgan@^1.7.35":
   version "1.7.35"
   resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.7.35.tgz#6358f502931cc2583d7a94248c41518baa688494"
@@ -3011,6 +3018,11 @@
     "@types/uglify-js" "*"
     "@types/webpack-sources" "*"
     source-map "^0.6.0"
+
+"@types/xmldom@^0.1.29":
+  version "0.1.29"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/xmldom/-/@types/xmldom-0.1.29.tgz#c4428b0ca86d3b881475726fd94980b38a27c381"
+  integrity sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
 
 "@types/yargs-parser@*":
   version "13.1.0"
@@ -3784,6 +3796,14 @@ assert@^1.1.1:
   dependencies:
     util "0.10.3"
 
+assert@^1.4.1:
+  version "1.5.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/assert/-/assert-1.5.0.tgz#55c109aaf6e0aefdb3dc4b71240c70bf574b18eb"
+  integrity sha1-VcEJqvbgrv2z3EtxJAxwv1dLGOs=
+  dependencies:
+    object-assign "^4.1.1"
+    util "0.10.3"
+
 assertion-error@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
@@ -4325,6 +4345,14 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
+botbuilder-core@4.7.0-preview.92771:
+  version "4.7.0-preview.92771"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-core/-/botbuilder-core-4.7.0-preview.92771.tgz#96915e9cf535f6137e559c9e7d54879c0ee13df3"
+  integrity sha1-lpFenPU19hN+VZyefVSHnA7hPfM=
+  dependencies:
+    assert "^1.4.1"
+    botframework-schema "4.7.0-preview.92771"
+
 botbuilder-expression-parser@^4.5.11:
   version "4.5.11"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.11.tgz#fcce377a2b2c1a2c2345b2c77d9cf4289e171f9f"
@@ -4347,29 +4375,36 @@ botbuilder-expression-parser@^4.5.11:
     xmldom "^0.1.27"
     xpath "0.0.27"
 
-"botbuilder-lg@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz":
-  version "4.7.0-preview2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz#2a3dd7d7991e0727fb88630501d2fb14d475537b"
+botbuilder-lg@4.7.0-preview.92771:
+  version "4.7.0-preview.92771"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.7.0-preview.92771.tgz#16548d1ac205027ba16e4b59192d8102a8ecdc96"
+  integrity sha1-FlSNGsIFAnuhbktZGS2BAqjs3JY=
   dependencies:
     antlr4ts "0.5.0-alpha.1"
-    botframework-expressions "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz"
+    botbuilder-core "4.7.0-preview.92771"
+    botframework-expressions "4.7.0-preview.92771"
     lodash "^4.17.11"
     uuid "^3.3.3"
 
-"botframework-expressions@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz":
-  version "4.7.0-preview0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botframework-expressions/-/4.7.0-preview0.tgz#032f104222866c5dfbcf1e17b66a56cbf4a30707"
+botframework-expressions@4.7.0-preview.92771:
+  version "4.7.0-preview.92771"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-expressions/-/botframework-expressions-4.7.0-preview.92771.tgz#0daf6893d88a5af56b2d0ff94bd6f5b5d4ab8d40"
+  integrity sha1-Da9ok9iKWvVrLQ/5S9b1tdSrjUA=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
+    "@types/moment-timezone" "^0.5.12"
+    "@types/xmldom" "^0.1.29"
     antlr4ts "0.5.0-alpha.1"
     jspath "^0.4.0"
     lodash "^4.17.15"
     lru-cache "^5.1.1"
     moment "2.24.0"
     moment-timezone "^0.5.25"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "0.0.27"
+
+botframework-schema@4.7.0-preview.92771:
+  version "4.7.0-preview.92771"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-schema/-/botframework-schema-4.7.0-preview.92771.tgz#656baf8815fccf00fa310bd5115cfe15a72f3ef6"
+  integrity sha1-ZWuviBX8zwD6MQvVEVz+FacvPvY=
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -11495,7 +11530,7 @@ moment-timezone@^0.5.25:
   dependencies:
     moment ">= 2.9.0"
 
-moment@2.24.0, "moment@>= 2.9.0":
+moment@2.24.0, "moment@>= 2.9.0", moment@>=2.14.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==

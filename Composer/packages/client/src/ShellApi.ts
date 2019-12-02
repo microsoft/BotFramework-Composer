@@ -140,13 +140,13 @@ export const ShellApi: React.FC = () => {
       const [start, end] = getTemplateBodyRange(t);
       const body = lines.slice(start - 1, end).join('\n');
 
-      return { Name: t.Name, Parameters: t.Parameters, Body: body };
+      return { name: t.name, parameters: t.parameters, body: body };
     });
   }
 
   function getTemplateBodyRange(template) {
-    const startLineNumber = template.ParseTree._start.line + 1;
-    const endLineNumber = template.ParseTree._stop.line;
+    const startLineNumber = template.parseTree._start.line + 1;
+    const endLineNumber = template.parseTree._stop.line;
     return [startLineNumber, endLineNumber];
   }
 
@@ -155,7 +155,7 @@ export const ShellApi: React.FC = () => {
    * @param {
    * id: string,
    * templateName: string,
-   * template: { Name: string, ?Parameters: string[], Body: string }
+   * template: { name: string, ?parameters: string[], body: string }
    * }
    * when templateName exit in current file, will do update
    * when templateName do not exit in current file, will do create

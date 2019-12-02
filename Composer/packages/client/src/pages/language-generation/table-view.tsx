@@ -54,7 +54,7 @@ const TableView: React.FC<TableViewProps> = props => {
     } else {
       const dialogsTemplates: LGTemplate[] = [];
       activeDialog.lgTemplates.forEach(item => {
-        const template = allTemplates.find(t => t.Name === item);
+        const template = allTemplates.find(t => t.name === item);
         if (template) {
           dialogsTemplates.push(template);
         }
@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         onRender: item => {
-          return <div css={formCell}>#{item.Name}</div>;
+          return <div css={formCell}>#{item.name}</div>;
         },
       },
       {
@@ -119,7 +119,7 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         isPadded: true,
         onRender: item => {
-          return <div css={formCell}>{item.Body}</div>;
+          return <div css={formCell}>{item.body}</div>;
         },
       },
 
@@ -151,8 +151,8 @@ const TableView: React.FC<TableViewProps> = props => {
 
       // build usedIn map
       templates.forEach(template => {
-        templateUsedInDialogMap[template.Name] = dialogs.reduce<string[]>((result, dialog) => {
-          if (dialog.lgTemplates.includes(template.Name)) {
+        templateUsedInDialogMap[template.name] = dialogs.reduce<string[]>((result, dialog) => {
+          if (dialog.lgTemplates.includes(template.name)) {
             result.push(dialog.id);
           }
           return result;
@@ -167,7 +167,7 @@ const TableView: React.FC<TableViewProps> = props => {
         maxWidth: 200,
         data: 'string',
         onRender: item => {
-          const usedDialogsLinks = templateUsedInDialogMap[item.Name].map(id => {
+          const usedDialogsLinks = templateUsedInDialogMap[item.name].map(id => {
             return (
               <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
                 <Link>{id}</Link>
@@ -216,8 +216,8 @@ const TableView: React.FC<TableViewProps> = props => {
     const payload = {
       file: lgFile,
       template: {
-        Name: newName,
-        Body: '-TemplateValue',
+        name: newName,
+        body: '-TemplateValue',
       },
     };
     createLgTemplate(payload);
@@ -226,18 +226,18 @@ const TableView: React.FC<TableViewProps> = props => {
   function onRemoveTemplate(index) {
     const payload = {
       file: lgFile,
-      templateName: templates[index].Name,
+      templateName: templates[index].name,
     };
 
     removeLgTemplate(payload);
   }
 
   function onCopyTemplate(index) {
-    const Name = templates[index].Name;
-    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${Name}_Copy`);
+    const name = templates[index].name;
+    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
     const payload = {
       file: lgFile,
-      fromTemplateName: Name,
+      fromTemplateName: name,
       toTemplateName: resolvedName,
     };
     copyLgTemplate(payload);
@@ -262,7 +262,7 @@ const TableView: React.FC<TableViewProps> = props => {
           }}
           className="table-view-list"
           columns={getTableColums()}
-          getKey={item => item.Name}
+          getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderDetailsFooter={onRenderDetailsFooter}

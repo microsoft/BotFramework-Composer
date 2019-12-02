@@ -34,7 +34,7 @@ function index(files: FileInfo[]): LgFile[] {
 }
 
 function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
+  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
 }
 
 function check(content: string, path: string): Diagnostic[] {
@@ -43,14 +43,14 @@ function check(content: string, path: string): Diagnostic[] {
 
 function parse(content: string, id: string): LgTemplate[] {
   const resource = LGParser.parse(content, id);
-  const templates = resource.Templates.map(t => {
+  const templates = resource.templates.map(t => {
     return {
-      Name: t.Name,
-      Body: t.Body,
-      Parameters: t.Parameters,
-      Range: {
-        startLineNumber: get(t, 'ParseTree._start._line', 0),
-        endLineNumber: get(t, 'ParseTree._stop._line', 0),
+      name: t.name,
+      body: t.body,
+      parameters: t.parameters,
+      range: {
+        startLineNumber: get(t, 'parseTree._start._line', 0),
+        endLineNumber: get(t, 'parseTree._stop._line', 0),
       },
     };
   });
@@ -59,10 +59,10 @@ function parse(content: string, id: string): LgTemplate[] {
 
 function combineMessage(diagnostics: Diagnostic[]): string {
   return diagnostics.reduce((msg, d) => {
-    const { Start, End } = d.Range;
-    const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
+    const { start, end } = d.range;
+    const position = `line ${start.line}:${start.character} - line ${end.line}:${end.character}`;
 
-    msg += `${position} \n ${d.Message}\n`;
+    msg += `${position} \n ${d.message}\n`;
     return msg;
   }, '');
 }

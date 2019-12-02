@@ -127,9 +127,9 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   // Line
   function onTableViewClickEdit(template: LGTemplate) {
     setInlineTemplate({
-      Name: get(template, 'Name', ''),
-      Parameters: get(template, 'Parameters'),
-      Body: get(template, 'Body', ''),
+      name: get(template, 'name', ''),
+      parameters: get(template, 'parameters'),
+      body: get(template, 'body', ''),
     });
     navigateTo(`/language-generation`);
     setEditMode(true);

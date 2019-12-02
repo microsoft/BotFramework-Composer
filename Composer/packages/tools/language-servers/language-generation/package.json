@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@types/node": "^12.0.4",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
+    "botbuilder-lg": "4.7.0-preview.92771",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
   },
@@ -24,7 +24,7 @@
     "jest": "24.0.0",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.1.0",
-    "ts-node": "^8.3.0",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^7.2.0"

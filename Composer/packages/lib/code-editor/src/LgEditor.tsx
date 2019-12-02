@@ -21,9 +21,9 @@ export interface LGOption {
   inline: boolean;
   content: string;
   template?: {
-    Name: string;
-    Parameters?: string[];
-    Body: string;
+    name: string;
+    parameters?: string[];
+    body: string;
   };
 }
 
