@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -48,12 +48,10 @@ export const VisualDesigner: FC<VisualDesignerProps> = ({
   );
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
-    const lgPattern = /\[(bfd\w+-\d+)\]/;
     const normalizedLgTemplates = lgTemplates
       .map(x => {
-        const matches = lgPattern.exec(x);
-        if (matches && matches.length === 2) return matches[1];
-        return '';
+        const lgTemplateRef = LgTemplateRef.parse(x);
+        return lgTemplateRef ? lgTemplateRef.name : '';
       })
       .filter(x => !!x);
     return removeLgTemplates('common', normalizedLgTemplates);
@@ -88,16 +86,19 @@ export const VisualDesigner: FC<VisualDesignerProps> = ({
         if (eventData.$type === 'PASTE') {
           handler = e => {
             // TODO: clean this along with node deletion.
-            const copyLgTemplateToNewNode = async (lgTemplateName: string, newNodeId: string) => {
-              const matches = /\[(bfd\w+-(\d+))\]/.exec(lgTemplateName);
-              if (Array.isArray(matches) && matches.length === 3) {
-                const originLgId = matches[1];
-                const originNodeId = matches[2];
-                const newLgId = originLgId.replace(originNodeId, newNodeId);
-                await copyLgTemplate('common', originLgId, newLgId);
-                return `[${newLgId}]`;
-              }
-              return lgTemplateName;
+            const copyLgTemplateToNewNode = async (lgText: string, newNodeId: string) => {
+              const inputLgRef = LgTemplateRef.parse(lgText);
+              if (!inputLgRef) return lgText;
+
+              const inputLgMetaData = LgMetaData.parse(inputLgRef.name);
+              if (!inputLgMetaData) return lgText;
+
+              inputLgMetaData.designerId = newNodeId;
+              const newLgName = inputLgMetaData.toString();
+              const newLgTemplateRefString = new LgTemplateRef(newLgName).toString();
+
+              await copyLgTemplate('common', inputLgRef.name, newLgName);
+              return newLgTemplateRefString;
             };
             pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
               onChange(dialog);
