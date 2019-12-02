@@ -35,15 +35,17 @@
 - [Define advanced intents and entities](./docs/howto-define-advanced-intents-entities.md)
 - [Use OAuth](./docs/how_to_use_oauth.md)
 - [Send an HTTP request](./docs/howto-sending-http-request.md)
-
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Publish
 - [Publish your bot to Azure](/docs/deploy-bot.md)
+
 ### Resources
 - [Bot Framework Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog)
-- [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
-- [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language)
+- [Language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
+- [Common expression language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language)
+- [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 
 ## Related projects
 * [Bot Framework](https://github.com/microsoft/botframework)
