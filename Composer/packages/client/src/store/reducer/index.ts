@@ -71,7 +71,7 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      const result = dialogIndexer.parse(content);
+      const result = dialogIndexer.parse(dialog.id, content);
       return { ...dialog, ...result };
     }
     return dialog;

@@ -7,49 +7,19 @@
  *
  */
 
-import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import get from 'lodash/get';
+import { LGParser, LGTemplate } from 'botbuilder-lg';
+import { lgIndexer } from '@bfc/indexers';
 
-const lgStaticChecker = new StaticChecker();
-
-const lgImportResolver = ImportResolver.fileResolver;
-
+const { check, isValid, combineMessage, parse } = lgIndexer;
 export interface Template {
   Name: string;
   Parameters?: string[];
   Body: string;
 }
 
-export function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
-}
-
-export function check(content: string, id = ''): Diagnostic[] {
-  return lgStaticChecker.checkText(content, id, lgImportResolver);
-}
-
-export function parse(content: string, id = ''): LGTemplate[] {
-  const resource = LGParser.parse(content, id);
-  return get(resource, 'Templates', []);
-}
-
-export function createSingleMessage(diagnostic: Diagnostic): string {
-  const { Start, End } = diagnostic.Range;
-  const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-  return `${position} \n ${diagnostic.Message}\n`;
-}
-
-export function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    msg += createSingleMessage(d);
-    return msg;
-  }, '');
-}
-
-export function checkLgContent(content: string) {
+export function checkLgContent(content: string, id: string) {
   // check lg content, make up error message
-  const diagnostics = check(content);
+  const diagnostics = check(content, id);
   if (isValid(diagnostics) === false) {
     const errorMsg = combineMessage(diagnostics);
     throw new Error(errorMsg);

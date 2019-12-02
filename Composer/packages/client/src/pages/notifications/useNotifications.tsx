@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
+import { lgIndexer } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
-import { createSingleMessage } from '../../utils/lgUtil';
 
 import { INotification } from './types';
 
@@ -24,8 +24,8 @@ export default function useNotifications(filter: string) {
         notifactions.push({
           type: 'dialog',
           location,
-          message: diagnostic,
-          severity: 'Error',
+          message: diagnostic.message,
+          severity: DiagnosticSeverity[diagnostic.severity],
           diagnostic,
           id: dialog.id,
         });
@@ -51,9 +51,9 @@ export default function useNotifications(filter: string) {
         locations.add(location);
         notifactions.push({
           type: 'lg',
-          severity: DiagnosticSeverity[diagnostic.Severity],
+          severity: DiagnosticSeverity[diagnostic.severity],
           location,
-          message: createSingleMessage(diagnostic),
+          message: lgIndexer.createSingleMessage(diagnostic),
           diagnostic,
           id: lgFile.id,
         });

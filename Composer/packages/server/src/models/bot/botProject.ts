@@ -4,7 +4,8 @@
 import fs from 'fs';
 
 import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
-import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
+import { dialogIndexer, lgIndexer } from '@bfc/indexers';
+import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';

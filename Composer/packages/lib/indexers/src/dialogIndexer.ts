@@ -8,6 +8,7 @@ import { ITrigger, DialogInfo, FileInfo } from './type';
 import { DialogChecker } from './utils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
+import { Diagnostic } from './diagnostic';
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
@@ -52,6 +53,7 @@ function ExtractLgTemplates(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(templates);
 }
+
 // find out all lu intents given dialog
 function ExtractLuIntents(dialog): string[] {
   const intents: string[] = [];
@@ -71,6 +73,7 @@ function ExtractLuIntents(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(intents);
 }
+
 // find out all triggers given dialog
 function ExtractTriggers(dialog): ITrigger[] {
   const trigers: ITrigger[] = [];
@@ -106,6 +109,7 @@ function ExtractTriggers(dialog): ITrigger[] {
   JsonWalk('$', dialog, visitor);
   return trigers;
 }
+
 // find out all referred dialog
 function ExtractReferredDialogs(dialog): string[] {
   const dialogs: string[] = [];
@@ -125,6 +129,7 @@ function ExtractReferredDialogs(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(dialogs);
 }
+
 // check all fields
 function CheckFields(dialog): string[] {
   const errors: string[] = [];
@@ -155,12 +160,22 @@ function CheckFields(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return errors;
 }
-function parse(content) {
+
+function validate(id: string, content): Diagnostic[] {
+  try {
+    const errors = CheckFields(content);
+    return errors.map(x => new Diagnostic(x, id));
+  } catch (error) {
+    return [new Diagnostic(error.message, id)];
+  }
+}
+
+function parse(id: string, content) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   return {
     content,
-    diagnostics: CheckFields(content),
+    diagnostics: validate(id, content),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
     luIntents: ExtractLuIntents(content),
@@ -169,6 +184,7 @@ function parse(content) {
     triggers: ExtractTriggers(content),
   };
 }
+
 function index(files: FileInfo[], botName: string): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
   if (files.length !== 0) {
@@ -184,7 +200,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
-            ...parse(dialogJson),
+            ...parse(id, dialogJson),
           };
           dialogs.push(dialog);
         }

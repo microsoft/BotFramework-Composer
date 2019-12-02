@@ -10,7 +10,7 @@
     "build:code-editor": "cd code-editor && yarn build",
     "build:shared": "cd shared && yarn build",
     "build:indexers": "cd indexers && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn:build:code-editor\" \"yarn:build:shared\" \"yarn:build:indexers\""
+    "build:all": "concurrently --kill-others-on-fail \"yarn:build:code-editor\" \"yarn:build:indexers\" && yarn build:shared"
   },
   "author": "",
   "license": "ISC"

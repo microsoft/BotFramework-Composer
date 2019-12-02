@@ -7,12 +7,14 @@ import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { Diagnostic } from 'botbuilder-lg';
 import { LgFile } from '@bfc/shared';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { lgIndexer, Diagnostic } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
+
+const { check, isValid, combineMessage } = lgIndexer;
 
 interface CodeEditorProps {
   file: LgFile;
@@ -42,8 +44,8 @@ export default function CodeEditor(props: CodeEditorProps) {
   }, [fileId, template]);
 
   useEffect(() => {
-    const isInvalid = !lgUtil.isValid(diagnostics);
-    const text = isInvalid ? lgUtil.combineMessage(diagnostics) : '';
+    const isInvalid = !isValid(diagnostics);
+    const text = isInvalid ? combineMessage(diagnostics) : '';
     setErrorMsg(text);
   }, [diagnostics]);
 
@@ -97,13 +99,13 @@ export default function CodeEditor(props: CodeEditorProps) {
           Parameters: get(template, 'Parameters'),
           Body: value,
         });
-        diagnostics = lgUtil.check(newContent);
+        diagnostics = check(newContent, fileId);
         updateLgTemplate(value);
       } catch (error) {
         setErrorMsg(error.message);
       }
     } else {
-      diagnostics = lgUtil.check(value);
+      diagnostics = check(value, fileId);
       updateLgFile(value);
     }
     setDiagnostics(diagnostics);

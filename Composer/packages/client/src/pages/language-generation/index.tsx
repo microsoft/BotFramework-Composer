@@ -10,6 +10,7 @@ import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
+import { lgIndexer } from '@bfc/indexers';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
@@ -110,7 +111,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     const errorFiles = lgFiles.filter(file => {
-      return lgUtil.isValid(file.diagnostics) === false;
+      return lgIndexer.isValid(file.diagnostics) === false;
     });
     const hasError = errorFiles.length !== 0;
     setFileValid(hasError === false);

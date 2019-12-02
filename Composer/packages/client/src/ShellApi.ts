@@ -6,6 +6,7 @@ import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 import { LGTemplate } from 'botbuilder-lg';
+import { lgIndexer } from '@bfc/indexers';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
@@ -134,11 +135,7 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     let templates: LGTemplate[] = [];
-    try {
-      templates = lgUtil.parse(file.content);
-    } catch (error) {
-      console.error(error);
-    }
+    templates = lgIndexer.parse(file.content);
 
     const lines = file.content.split('\n');
 
@@ -184,7 +181,7 @@ export const ShellApi: React.FC = () => {
     });
 
     const content = lgUtil.updateTemplate(file.content, templateName, template);
-    return lgUtil.checkLgContent(content);
+    return lgUtil.checkLgContent(content, id);
   }
 
   function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {
