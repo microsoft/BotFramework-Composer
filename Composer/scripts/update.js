@@ -2,13 +2,21 @@ const chalk = require('react-dev-utils/chalk');
 const { execSync } = require('child_process');
 
 const RELEASE_BRANCH = 'stable';
-const branch = execSync("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* (.*)/ \1/'");
-const trimmedBranch = branch
-  .toString()
-  .trim()
-  .replace(/\*\s?/, '');
+let currentBranch;
 
-if (trimmedBranch === RELEASE_BRANCH) {
+try {
+  currentBranch = execSync('git branch', { stdio: ['ignore', 'pipe', 'ignore'] })
+    .toString()
+    .split('\n')
+    .find(b => b.startsWith('* '))
+    .substring(2);
+} catch (err) {
+  // just exit script without error and continue
+  console.log(chalk.yellow('Unable to compare applications versions.. continuing'));
+  process.exit();
+}
+
+if (currentBranch === RELEASE_BRANCH) {
   console.log(chalk.yellow('Checking for updates...\n'));
   try {
     execSync('git fetch');
