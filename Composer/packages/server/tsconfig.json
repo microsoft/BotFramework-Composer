@@ -4,7 +4,11 @@
     "declaration": false,
     "outDir": "./build/",
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
   },
   "include": ["src/**/*.ts", "__tests__/**/*.test.ts"]
 }
