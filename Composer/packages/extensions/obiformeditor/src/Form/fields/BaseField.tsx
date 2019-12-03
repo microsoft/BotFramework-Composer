@@ -93,7 +93,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
           )}
         </div>
       )}
-      <div style={{ ...(displayInline ? { display: 'flex' } : {}) }}>{children}</div>
+      <div className={classnames({ BaseFieldInline: displayInline })}>{children}</div>
     </div>
   );
 }
