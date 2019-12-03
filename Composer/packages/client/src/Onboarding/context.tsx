@@ -22,7 +22,7 @@ interface OnboardingContext {
     minimized: boolean;
     hideModal: boolean;
     stepSets: IStepSet[];
-    teachingBubble: IStep & { setLength: number } | null;
+    teachingBubble: (IStep & { setLength: number }) | null;
   };
 }
 
