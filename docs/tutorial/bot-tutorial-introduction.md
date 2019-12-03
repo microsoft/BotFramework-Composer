@@ -65,7 +65,7 @@ You will notice that the new bot is pre-configured with one trigger in the left 
    ![trigger](../media/tutorial-weatherbot/01/rename-trigger.gif)
 
 Now, let's actually make the bot do something! 
-Inside the flow, you'll see that the teal **Trigger** box has a line below it that includes in a **+** button.
+Inside the flow, you'll see that the real **Trigger** box has a line below it that includes in a **+** button.
 
 The **+** button can be used to add **Actions** to the conversation flow. You can use this to add actions to the end of a flow, or insert actions at an earlier point.
 
@@ -75,7 +75,7 @@ For now, let's instruct the bot to send a simple greeting.
 
    ![menu](../media/tutorial-weatherbot/01/add-send-activity.gif)
 
-5. Select the new **Send a response** action in the flow and it's properties will appear on the right hand side of the screen.  This action has only one main property - the text of the activity to send.
+5. Select the new **Send a response** action in the flow and it's properties will appear on the right hand side of the screen. This action has only one main property - the text of the activity to send.
 
 6. Type a welcome message into this field. It is always a good idea to have your bot introduce itself and explain it's main features.  So let's make the welcome message something like:
 
