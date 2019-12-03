@@ -24,7 +24,7 @@ describe('<Home/>', () => {
     expect(onSelectionChanged.mock.results[0].value).toBe('path1');
   });
 
-  it('should render the Example List', () => {
+  it('should open new bot modal', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
@@ -37,7 +37,7 @@ describe('<Home/>', () => {
     expect(onClickTemplate.mock.results[0].value).toBe('EchoBot');
   });
 
-  it('should render the tool bar', () => {
+  it('should call onClick handler when clicked', () => {
     const setCreationFlowStatus = jest.fn(item => item);
     const items = [
       {

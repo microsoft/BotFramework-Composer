@@ -36,7 +36,7 @@ describe('<ProjectTree/>', () => {
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
 
-  it('should render the NewDialogModal', async () => {
+  it('should open NewDialogModal, close after clicking cancel', async () => {
     let isOpen = true;
     const handleDismiss = jest.fn(() => {
       isOpen = false;
@@ -50,7 +50,7 @@ describe('<ProjectTree/>', () => {
     expect(isOpen).toBe(false);
   });
 
-  it('should render the TriggerCreationModal', async () => {
+  it('should open the TriggerCreationModal, close after clicking cancel', async () => {
     let isOpen = true;
     const handleDismiss = jest.fn(() => {
       isOpen = false;
