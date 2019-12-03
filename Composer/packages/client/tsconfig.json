@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "build",
     "allowJs": true,
     "declaration": false,
     "module": "esnext",
@@ -9,5 +10,5 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["./src/**/*", "./__tests__/**/*"],
+  "include": ["./src/**/*", "./__tests__/**/*"]
 }

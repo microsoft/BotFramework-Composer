@@ -19,14 +19,14 @@ module.exports = {
 
     '^@src/(.*)$': '<rootDir>/src/$1',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '/testUtils/'],
+  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '/testUtils/', '__tests__/setupTests.ts', '.*\\.d\\.ts'],
   // Some node modules are packaged and distributed in a non-transpiled form
   // (ex. contain import & export statements); and Jest won't be able to
   // understand them because node_modules aren't transformed by default. So
   // we can specify that they need to be transformed here.
   transformIgnorePatterns: ['/node_modules/'],
 
-  setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.ts')],
+  setupFilesAfterEnv: [path.resolve(__dirname, './__tests__/setupTests.ts')],
   globals: {
     'ts-jest': {
       tsConfig: path.resolve(__dirname, './tsconfig.json'),

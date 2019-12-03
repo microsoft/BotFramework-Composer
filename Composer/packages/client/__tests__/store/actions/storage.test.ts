@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import httpClient from '@src/utils/httpUtil';
 import { ActionTypes } from '@src/constants';
 import { fetchFolderItemsByPath } from '@src/store/action/storage';

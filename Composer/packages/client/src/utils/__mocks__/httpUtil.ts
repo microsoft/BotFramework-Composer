@@ -1,3 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+/// <reference types="jest" />
+
 const defaultResponse = { data: {} };
 
 export default {

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import formatMessage from 'format-message';
 import { setIconOptions } from 'office-ui-fabric-react/lib/Styling';
 import 'jest-dom/extend-expect';
