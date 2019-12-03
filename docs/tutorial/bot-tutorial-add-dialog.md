@@ -26,9 +26,6 @@ First, we'll set up all the components and make sure they work together. Then, w
       `Get the current weather conditions`
 
 3. Click **Next**, and Composer will create the new dialog and open it in the editor. 
-<p align="center">
-    <img alt="create-getweather" src="../media/tutorial-weatherbot/02/create-getweather" style="max-width:500px;" />
-</p>
 
    ![](../media/tutorial-weatherbot/02/create-getweather.png)
 
