@@ -20,7 +20,7 @@ context('Notification Page', () => {
     cy.visitPage('Notifications');
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findByText('common.lg').should('exist');
+      cy.findAllByText('common.lg').should('exist');
     });
   });
 });

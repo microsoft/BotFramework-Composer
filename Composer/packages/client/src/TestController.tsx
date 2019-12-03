@@ -10,7 +10,6 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { DialogInfo } from '@bfc/shared';
-import { DiagnosticSeverity } from '@bfc/indexers';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';

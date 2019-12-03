@@ -35,7 +35,9 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LGPage: React.FC<RouteComponentProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(
+    lgFiles.filter(file => lgIndexer.isValid(file.diagnostics) === false).length > 0
+  );
   const [fileValid, setFileValid] = useState(true);
   const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
   const [line, setLine] = useState<number>(0);
