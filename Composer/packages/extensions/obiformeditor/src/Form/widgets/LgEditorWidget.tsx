@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { LgEditor } from '@bfc/code-editor';
+import { LgMetaData, LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 
@@ -14,16 +15,24 @@ const lspServerPath = '/lg-language-server';
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 
+const tryGetLgMetaDataType = (lgText: string): string | null => {
+  const lgRef = LgTemplateRef.parse(lgText);
+  if (lgRef === null) return null;
+
+  const lgMetaData = LgMetaData.parse(lgRef.name);
+  if (lgMetaData === null) return null;
+
+  return lgMetaData.type;
+};
+
 const getInitialTemplate = (fieldName: string, formData?: string): string => {
-  let newTemplate = formData || '- ';
+  const lgText = formData || '';
 
-  if (newTemplate.includes(`bfd${fieldName}-`)) {
+  // Field content is already a ref created by composer.
+  if (tryGetLgMetaDataType(lgText) === fieldName) {
     return '';
-  } else if (newTemplate && !newTemplate.startsWith('-')) {
-    newTemplate = `-${newTemplate}`;
   }
-
-  return newTemplate;
+  return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
 interface LgEditorWidgetProps {
@@ -37,7 +46,7 @@ interface LgEditorWidgetProps {
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
   const [errorMsg, setErrorMsg] = useState('');
-  const lgId = `bfd${name}-${formContext.dialogId}`;
+  const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
@@ -45,19 +54,19 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     () =>
       debounce((body: string) => {
         formContext.shellApi
-          .updateLgTemplate(lgFileId, lgId, body)
+          .updateLgTemplate(lgFileId, lgName, body)
           .then(() => setErrorMsg(''))
           .catch(error => setErrorMsg(error));
       }, 500),
-    [lgId, lgFileId]
+    [lgName, lgFileId]
   );
 
   const template = (lgFile &&
     lgFile.templates &&
     lgFile.templates.find(template => {
-      return template.name === lgId;
+      return template.name === lgName;
     })) || {
-    name: lgId,
+    name: lgName,
     body: getInitialTemplate(name, value),
   };
 
@@ -73,10 +82,10 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     if (formContext.dialogId) {
       if (body) {
         updateLgTemplate(body);
-        props.onChange(`[${lgId}]`);
+        props.onChange(new LgTemplateRef(lgName).toString());
       } else {
         updateLgTemplate.flush();
-        formContext.shellApi.removeLgTemplate(lgFileId, lgId);
+        formContext.shellApi.removeLgTemplate(lgFileId, lgName);
         props.onChange();
       }
     }
