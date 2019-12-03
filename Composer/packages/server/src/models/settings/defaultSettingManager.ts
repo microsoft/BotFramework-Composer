@@ -34,7 +34,7 @@ export class DefaultSettingManager extends FileSettingManager {
   };
 
   private filterOutSensitiveValue = (obj: any) => {
-    const SensitiveProperties = obj.SensitiveProperties ? obj.SensitiveProperties : defaultSensitiveProperties;
+    const SensitiveProperties = obj.SensitiveProperties || defaultSensitiveProperties;
     if (obj && typeof obj === 'object') {
       return omit(obj, SensitiveProperties);
     }

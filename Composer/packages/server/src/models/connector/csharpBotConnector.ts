@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
+import { parse } from 'url';
 import { ChildProcess, spawn } from 'child_process';
 
 import archiver from 'archiver';
@@ -9,18 +10,28 @@ import archiver from 'archiver';
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
+import log from '../../logger';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
-let runtime: ChildProcess | null = null;
+
 export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
+  static botRuntimes: { [key: string]: ChildProcess } = {};
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
+  static stopAll = (signal: string) => {
+    for (const pid in CSharpBotConnector.botRuntimes) {
+      const runtime = CSharpBotConnector.botRuntimes[pid];
+      log(`kill runtime before exit at ${runtime.pid}`);
+      runtime.kill(signal);
+      delete CSharpBotConnector.botRuntimes[pid];
+    }
+  };
 
   private stop = () => {
-    shutdown();
+    CSharpBotConnector.stopAll('SIGKILL');
     this.status = BotStatus.NotConnected;
   };
 
@@ -32,7 +43,7 @@ export class CSharpBotConnector implements IBotConnector {
         shell: true,
         stdio: ['ignore', 'ignore', 'inherit'],
       });
-      console.log(`build pid : ${build.pid}`);
+      log(`build pid : ${build.pid}`);
 
       build.stderr &&
         build.stderr.on('data', function(err) {
@@ -67,36 +78,36 @@ export class CSharpBotConnector implements IBotConnector {
   private addListeners = (child: ChildProcess, handler: Function) => {
     if (child.stdout !== null) {
       child.stdout.on('data', (data: any) => {
-        console.log(`stdout: ${data}`);
+        log(`stdout: ${data}`);
       });
     }
 
     if (child.stderr !== null) {
       child.stderr.on('data', (data: any) => {
-        console.log(`stderr: ${data}`);
+        log(`stderr: ${data}`);
       });
     }
 
     child.on('close', code => {
-      console.log(`close ${code}`);
+      log(`close ${code}`);
       handler();
     });
 
     child.on('error', (err: any) => {
-      console.log(`stderr: ${err}`);
+      log(`stderr: ${err}`);
     });
 
     child.on('exit', code => {
-      console.log(`exit: ${code}`);
+      log(`exit: ${code}`);
       handler();
     });
 
     child.on('message', msg => {
-      console.log(msg);
+      log(msg);
     });
 
     child.on('disconnect', code => {
-      console.log(`disconnect: ${code}`);
+      log(`disconnect: ${code}`);
       handler();
     });
   };
@@ -110,7 +121,7 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   private start = async (dir: string, config: DialogSetting) => {
-    runtime = spawn(
+    const runtime = spawn(
       'dotnet',
       ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
       {
@@ -119,14 +130,39 @@ export class CSharpBotConnector implements IBotConnector {
         stdio: ['ignore', 'ignore', 'inherit'],
       }
     );
-    console.log(`start runtime at ${runtime.pid}`);
+    log(`runtime started. pid: ${runtime.pid}`);
     this.addListeners(runtime, this.stop);
+    CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
     this.status = BotStatus.Connected;
   };
 
+  private checkPortUsable = async (port: string | number): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const netstat = spawn('netstat', ['-ano']);
+      const findstr = spawn('findstr', [`${port}`], {
+        stdio: [netstat.stdout, 'pipe', process.stderr],
+      });
+      let output = '';
+      findstr.stderr &&
+        findstr.stderr.on('data', function(err) {
+          reject(err.toString());
+        });
+
+      findstr.stdout && findstr.stdout.on('data', data => (output += data));
+      findstr.on('exit', function() {
+        resolve(output);
+      });
+    });
+  };
+
   connect = async (_: BotEnvironments, __: string) => {
-    // confirm bot runtime can listening here
-    return Promise.resolve(`${this.endpoint}/api/messages`);
+    const port = parse(this.endpoint).port || '3979';
+    const portStatus = await this.checkPortUsable(port);
+    if (portStatus.trim() === '') {
+      return Promise.resolve(`${this.endpoint}/api/messages`);
+    } else {
+      throw new Error('Port already been used');
+    }
   };
 
   sync = async (config: DialogSetting) => {
@@ -137,7 +173,7 @@ export class CSharpBotConnector implements IBotConnector {
       await this.start(dir, config);
     } catch (err) {
       this.stop();
-      throw new Error(err);
+      throw err;
     }
   };
 
@@ -179,24 +215,17 @@ export class CSharpBotConnector implements IBotConnector {
 }
 
 process.on('SIGINT', () => {
-  console.log('[SIGINT] start graceful shutdown');
-  shutdown();
+  log('[SIGINT] start graceful shutdown');
+  CSharpBotConnector.stopAll('SIGINT');
   process.exit(1);
 });
 process.on('SIGTERM', () => {
-  console.log('[SIGTERM] start graceful shutdown');
-  shutdown();
+  log('[SIGTERM] start graceful shutdown');
+  CSharpBotConnector.stopAll('SIGTERM');
   process.exit(1);
 });
 process.on('SIGQUIT', () => {
-  console.log('[SIGQUIT] start graceful shutdown');
-  shutdown();
+  log('[SIGQUIT] start graceful shutdown');
+  CSharpBotConnector.stopAll('SIGQUIT');
   process.exit(1);
 });
-function shutdown() {
-  if (runtime) {
-    console.log(`kill runtime before exit at ${runtime.pid}`);
-    runtime.kill('SIGKILL');
-    runtime = null;
-  }
-}
