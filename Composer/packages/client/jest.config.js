@@ -26,7 +26,7 @@ module.exports = {
   // we can specify that they need to be transformed here.
   transformIgnorePatterns: ['/node_modules/'],
 
-  setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.js')],
+  setupFilesAfterEnv: [path.resolve(__dirname, './setupTests.ts')],
   globals: {
     'ts-jest': {
       tsConfig: path.resolve(__dirname, './tsconfig.json'),
