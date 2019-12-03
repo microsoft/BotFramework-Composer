@@ -48,7 +48,7 @@ After creating your bot, Composer will load the new bot's `Main` dialog in the e
 
 Each dialog contains one or more **[Triggers](concept-events-and-triggers.md)** that define the actions available to the bot while the dialog is active. Right now the dialog is empty, so the bot won't do anything.
 
-You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `ConversationUpdate`. 
+You will notice that the new bot is pre-configured with one trigger in the left dialogs window - `Greeting`. 
 
 > Triggers help your dialog capture events of interest and respond to them using actions.
 
