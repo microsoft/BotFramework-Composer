@@ -12,27 +12,76 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
+import { StoreContext } from '../../store';
+import { StorageFolder } from '../../store/types';
 
-import { StoreContext } from './../../store';
 import { name, description } from './styles';
-
 const MAXTRYTIMES = 10000;
 
-export function DefineConversation(props) {
+interface FormData {
+  name: string;
+  description: string;
+  location: string;
+}
+
+interface FormDataError {
+  name: string;
+}
+
+interface Bots {
+  name: '';
+  path: '';
+}
+
+interface DefineConversationProps {
+  onSubmit: (formData: FormData) => void;
+  onDismiss: () => void;
+  onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
+  onGetErrorMessage?: (text: string) => void;
+  enableLocationBrowse: boolean;
+  focusedStorageFolder?: StorageFolder;
+  currentPath?: string;
+  bots?: Bots[];
+}
+
+const initialFormDataError: FormDataError = {
+  name: '',
+};
+
+export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const {
     onSubmit,
     onDismiss,
+    onCurrentPathUpdate,
     enableLocationBrowse,
     focusedStorageFolder,
-    onCurrentPathUpdate,
     currentPath,
     bots,
   } = props;
-
   const { state } = useContext(StoreContext);
   const { templateId, botName } = state;
-  const [formData, setFormData] = useState({ name: getDefaultName() });
-  const [formDataErrors, setFormDataErrors] = useState({ errors: {} });
+
+  const getDefaultName = () => {
+    let i = -1;
+    const bot = templateId || botName;
+    let defaultName = '';
+
+    do {
+      i++;
+      defaultName = `${bot}-${i}`;
+    } while (
+      bots &&
+      ~bots.findIndex(bot => {
+        return bot.name === defaultName;
+      }) &&
+      i < MAXTRYTIMES
+    );
+    return defaultName;
+  };
+
+  const initalFormData: FormData = { name: getDefaultName(), description: '', location: '' };
+  const [formData, setFormData] = useState(initalFormData);
+  const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -42,8 +91,8 @@ export function DefineConversation(props) {
   };
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = data => {
-    const errors = {};
+  const validateForm = (data: FormData) => {
+    const errors = { name: '' };
     const { name } = data;
 
     if (!name || !nameRegex.test(name)) {
@@ -51,12 +100,14 @@ export function DefineConversation(props) {
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
     }
-
+    const newBotPath = focusedStorageFolder
+      ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name)
+      : '';
     if (
       name &&
+      bots &&
       ~bots.findIndex(bot => {
-        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
-        return bot.path === path;
+        return bot.path === newBotPath;
       })
     ) {
       errors.name = formatMessage('Duplication of names');
@@ -92,23 +143,6 @@ export function DefineConversation(props) {
     });
   };
 
-  function getDefaultName() {
-    let i = -1;
-    const bot = templateId || botName;
-    let defaultName = '';
-
-    do {
-      i++;
-      defaultName = `${bot}-${i}`;
-    } while (
-      ~bots.findIndex(bot => {
-        return bot.name === defaultName;
-      }) &&
-      i < MAXTRYTIMES
-    );
-    return defaultName;
-  }
-
   return (
     <Fragment>
       <form onSubmit={handleSubmit}>
@@ -135,7 +169,7 @@ export function DefineConversation(props) {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && (
+        {enableLocationBrowse && focusedStorageFolder && onCurrentPathUpdate && currentPath && (
           <LocationSelectContent
             onCurrentPathUpdate={onCurrentPathUpdate}
             focusedStorageFolder={focusedStorageFolder}
@@ -150,4 +184,4 @@ export function DefineConversation(props) {
       </form>
     </Fragment>
   );
-}
+};

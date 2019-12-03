@@ -39,8 +39,8 @@ export function CreationFlow(props) {
     if (storages && storages.length) {
       const storageId = storage.id;
       const path = storage.path;
-      const formatedPath = Path.normalize(path);
-      fetchFolderItemsByPath(storageId, formatedPath);
+      const formattedPath = Path.normalize(path);
+      fetchFolderItemsByPath(storageId, formattedPath);
     }
   }, [storages]);
 

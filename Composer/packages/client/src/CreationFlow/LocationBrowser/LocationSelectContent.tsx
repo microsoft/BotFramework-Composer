@@ -6,11 +6,20 @@ import { jsx } from '@emotion/core';
 import { Fragment, useContext, useRef } from 'react';
 
 import { CreationFlowStatus } from '../../constants';
+import { StorageFolder } from '../../store/types';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
-export function LocationSelectContent({ onOpen, focusedStorageFolder, onCurrentPathUpdate, currentPath }) {
+interface LocationSelectContentProps {
+  onOpen?: (path: string, storage: string) => void;
+  focusedStorageFolder: StorageFolder;
+  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  currentPath: string;
+}
+
+export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
+  const { onOpen, focusedStorageFolder, onCurrentPathUpdate, currentPath } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
 
@@ -24,7 +33,7 @@ export function LocationSelectContent({ onOpen, focusedStorageFolder, onCurrentP
       if (type === FileTypes.FOLDER) {
         onCurrentPathUpdate(path, storageId);
       } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
-        onOpen(path, storageId);
+        onOpen && onOpen(path, storageId);
       }
     }
   };
@@ -48,4 +57,4 @@ export function LocationSelectContent({ onOpen, focusedStorageFolder, onCurrentP
       />
     </Fragment>
   );
-}
+};
