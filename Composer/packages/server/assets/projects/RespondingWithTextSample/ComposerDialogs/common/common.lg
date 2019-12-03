@@ -27,7 +27,7 @@
 -@{TextWithLG()}
 
 # bfdactivity-822060
--{user.message}
+-@{user.message}
 
 # bfdactivity-576166
 -Welcome to the Message Samples. You can use this sample to explore different capabilities of sending messages to users.
@@ -41,11 +41,11 @@
     - Happy Sunday!
 -CASE: @{6}
     - Happy Saturday!
--DEFAULT:  
+-DEFAULT:
     - Working day!
 
 # bfdactivity-739923
-- [TextWithLG]
+- @{TextWithLG}
 
 # bfdactivity-853358
 - @{multilineText()}
@@ -55,7 +55,7 @@
     - good morning
 - ELSEIF: @{timeOfDay == 'afternoon'}
     - good afternoon
-- ELSE: 
+- ELSE:
     - good evening
 
 # StructuredText

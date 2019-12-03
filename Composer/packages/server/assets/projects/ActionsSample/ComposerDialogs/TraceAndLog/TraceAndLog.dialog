@@ -38,7 +38,7 @@
           "$designer": {
             "id": "219510"
           },
-          "text": "{user.name}",
+          "text": "@{user.name}",
           "traceActivity": false
         }
       ]

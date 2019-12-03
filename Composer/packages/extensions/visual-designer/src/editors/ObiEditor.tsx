@@ -49,7 +49,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   );
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
-    const lgPattern = /\[(bfd\w+-\d+)\]/;
+    const lgPattern = /@\{(bfd\w+-\d+)\}/;
     const normalizedLgTemplates = lgTemplates
       .map(x => {
         const matches = lgPattern.exec(x);
@@ -90,7 +90,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           handler = e => {
             // TODO: clean this along with node deletion.
             const copyLgTemplateToNewNode = async (lgTemplateName: string, newNodeId: string) => {
-              const matches = /\[(bfd\w+-(\d+))\]/.exec(lgTemplateName);
+              const matches = /@\{(bfd\w+-(\d+))\}/.exec(lgTemplateName);
               if (Array.isArray(matches) && matches.length === 3) {
                 const originLgId = matches[1];
                 const originNodeId = matches[2];

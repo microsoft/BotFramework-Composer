@@ -63,7 +63,7 @@
           "$designer": {
             "id": "116673"
           },
-          "activity": "[bfdactivity-116673]"
+          "activity": "@{bfdactivity-116673}"
         }
       ]
     }

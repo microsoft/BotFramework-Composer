@@ -80,7 +80,7 @@
                     "name": "Send an Activity",
                     "id": "159442"
                   },
-                  "activity": "[bfdactivity-159442]"
+                  "activity": "@{bfdactivity-159442}"
                 }
               ]
             },
@@ -93,7 +93,7 @@
                     "id": "735465",
                     "name": "Text input"
                   },
-                  "prompt": "[bfdprompt-735465]",
+                  "prompt": "@{bfdprompt-735465}",
                   "maxTurnCount": 3,
                   "property": "user.name",
                   "alwaysPrompt": false,
@@ -106,7 +106,7 @@
                     "id": "167246",
                     "name": "Send an Activity"
                   },
-                  "activity": "[bfdactivity-167246]"
+                  "activity": "@{bfdactivity-167246}"
                 }
               ]
             },
@@ -119,7 +119,7 @@
                     "name": "Send an Activity",
                     "id": "762914"
                   },
-                  "activity": "[bfdactivity-762914]"
+                  "activity": "@{bfdactivity-762914}"
                 }
               ]
             },
@@ -132,7 +132,7 @@
                     "name": "Send an Activity",
                     "id": "241579"
                   },
-                  "activity": "[bfdactivity-241579]"
+                  "activity": "@{bfdactivity-241579}"
                 }
               ]
             },
@@ -145,7 +145,7 @@
                     "name": "Send an Activity",
                     "id": "901582"
                   },
-                  "activity": "[bfdactivity-901582]"
+                  "activity": "@{bfdactivity-901582}"
                 }
               ]
             },
@@ -158,7 +158,7 @@
                     "name": "Send an Activity",
                     "id": "553859"
                   },
-                  "activity": "[bfdactivity-553859]"
+                  "activity": "@{bfdactivity-553859}"
                 }
               ]
             },
@@ -171,7 +171,7 @@
                     "name": "Send an Activity",
                     "id": "190928"
                   },
-                  "activity": "[bfdactivity-190928]"
+                  "activity": "@{bfdactivity-190928}"
                 }
               ]
             },
@@ -184,7 +184,7 @@
                     "name": "Send an Activity",
                     "id": "806895"
                   },
-                  "activity": "[bfdactivity-806895]"
+                  "activity": "@{bfdactivity-806895}"
                 }
               ]
             },
@@ -197,7 +197,7 @@
                     "name": "Send an Activity",
                     "id": "997450"
                   },
-                  "activity": "[bfdactivity-997450]"
+                  "activity": "@{bfdactivity-997450}"
                 }
               ]
             }
@@ -223,7 +223,7 @@
           "$designer": {
             "id": "729500"
           },
-          "activity": "[bfdactivity-729500]"
+          "activity": "@{bfdactivity-729500}"
         }
       ],
       "$designer": {

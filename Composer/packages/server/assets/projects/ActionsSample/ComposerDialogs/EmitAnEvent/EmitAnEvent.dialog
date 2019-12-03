@@ -57,7 +57,7 @@
             "id": "576334",
             "name": "Send a response"
           },
-          "activity": "[bfdactivity-576334]"
+          "activity": "@{bfdactivity-576334}"
         }
       ]
     }

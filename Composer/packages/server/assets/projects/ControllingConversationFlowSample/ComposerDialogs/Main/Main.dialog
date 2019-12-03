@@ -163,7 +163,7 @@
           "$designer": {
             "id": "953339"
           },
-          "activity": "[help]"
+          "activity": "@{help}"
         }
       ]
     },
@@ -181,7 +181,7 @@
             "name": "Send an Activity",
             "id": "859266"
           },
-          "activity": "[help]"
+          "activity": "@{help}"
         }
       ]
     }

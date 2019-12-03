@@ -1,6 +1,6 @@
 # help
 [Activity
-    Text = {helpText()}
+    Text = @{helpText()}
 	SuggestedActions = IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog
 ]
 
@@ -15,13 +15,13 @@ You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accep
 -Pushed dialog.id into a list
 
 # bfdactivity-164444
--Your age is {user.age} which satisified the condition that was evaluated
+-Your age is @{user.age} which satisified the condition that was evaluated
 
 # bfdactivity-619321
--Your age is {user.age} which did not satisfy the condition that we evaluated
+-Your age is @{user.age} which did not satisfy the condition that we evaluated
 
 # bfdactivity-097130
--You selected {user.name}
+-You selected @{user.name}
 
 # bfdactivity-040464
 -This is the logic inside the "Susan" switch block.
