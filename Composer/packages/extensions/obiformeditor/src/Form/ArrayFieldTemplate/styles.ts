@@ -35,6 +35,9 @@ export const objectItemValueLabel = css`
   flex: 1;
   font-size: 14px;
   margin-left: 7px;
+  & + & {
+    margin-left: 20px;
+  }
 `;
 
 export const objectItemInputField = css`

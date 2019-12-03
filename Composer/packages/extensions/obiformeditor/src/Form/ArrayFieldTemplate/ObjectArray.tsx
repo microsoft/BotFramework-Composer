@@ -16,7 +16,6 @@ import { BaseField } from '../fields/BaseField';
 import { WidgetLabel } from '../widgets/WidgetLabel';
 
 import ArrayItem from './ArrayItem';
-
 import {
   arrayItemInputFieldContainer,
   arrayItemField,
@@ -33,14 +32,14 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
 
   const [value, setValue] = useState({});
 
-  const handleOnChange = useCallback(
+  const handleChange = useCallback(
     property => (_, newValue?: string) => {
       setValue(currentValue => ({ ...currentValue, [property]: newValue || '' }));
     },
     [setValue]
   );
 
-  const handleOnKeyDown = useCallback(
+  const handleKeyDown = useCallback(
     event => {
       if (event.key.toLowerCase() === 'enter') {
         event.preventDefault();
@@ -54,20 +53,35 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
     [onAddClick, setValue, value]
   );
 
+  const isVisible = useCallback(
+    (property: string) => {
+      const { items: itemsSchema } = uiSchema;
+      return !(
+        itemsSchema['ui:hidden'] &&
+        Array.isArray(itemsSchema['ui:hidden']) &&
+        itemsSchema['ui:hidden'].includes(property)
+      );
+    },
+    [uiSchema]
+  );
+
   return (
     <BaseField {...props}>
       {object && (
         <div css={objectItemLabel}>
-          {Object.keys(properties).map((key, index) => {
-            const { description, title } = properties[key] as JSONSchema6;
-            const { __id = '' } = idSchema[key] || {};
+          {Object.keys(properties)
+            .filter(isVisible)
+            .map((key, index) => {
+              const { description, title } = properties[key] as JSONSchema6;
+              const { __id = '' } = idSchema[key] || {};
 
-            return (
-              <div css={objectItemValueLabel} key={index}>
-                <WidgetLabel description={description} label={title} inline={true} id={__id} />
-              </div>
-            );
-          })}
+              return (
+                <div css={objectItemValueLabel} key={index}>
+                  <WidgetLabel description={description} label={title} inline={true} id={__id} />
+                </div>
+              );
+            })}
+          <div style={{ width: '32px' }} />
         </div>
       )}
       <div className="ObjectArray">
@@ -87,20 +101,27 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
           ) : (
             <div css={arrayItemInputFieldContainer}>
               <div css={arrayItemField}>
-                {Object.keys(properties).map((property, index) => (
-                  <div css={objectItemInputField} key={index}>
-                    <TextField
-                      onChange={handleOnChange(property)}
-                      onKeyDown={handleOnKeyDown}
-                      placeholder={formatMessage(`Add new ${property} here`)}
-                      value={value[property] || ''}
-                      iconProps={{
-                        iconName: 'ReturnKey',
-                        style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
-                      }}
-                    />
-                  </div>
-                ))}
+                {Object.keys(properties)
+                  .filter(isVisible)
+                  .map((property, index, items) => (
+                    <div css={objectItemInputField} key={index}>
+                      <TextField
+                        autoComplete="off"
+                        onChange={handleChange(property)}
+                        onKeyDown={handleKeyDown}
+                        placeholder={`${formatMessage('Add new')} ${property}`}
+                        value={value[property] || ''}
+                        iconProps={{
+                          ...(index === items.length - 1
+                            ? {
+                                iconName: 'ReturnKey',
+                                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+                              }
+                            : {}),
+                        }}
+                      />
+                    </div>
+                  ))}
               </div>
               <IconButton
                 disabled={true}

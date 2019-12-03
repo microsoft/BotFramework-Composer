@@ -1,6 +1,9 @@
-.ObjectItem {
-  display: flex;
+.ObjectItemInline {
   flex: 1;
+}
+
+.ObjectItemInline + .ObjectItemInline {
+  margin-left: 20px;
 }
 
 .ObjectItem .ObjectItemField {
@@ -16,10 +19,6 @@
 
 .ObjectItemFieldInline {
   flex: 1;
-}
-
-.ObjectItemFieldInline + .ObjectItemFieldInline {
-  margin-left: 10px;
 }
 
 .ObjectItem .ObjectItemContext {

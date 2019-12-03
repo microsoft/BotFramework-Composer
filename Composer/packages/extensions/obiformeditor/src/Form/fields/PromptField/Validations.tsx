@@ -172,15 +172,6 @@ export const Validations: React.FC<ValidationsProps> = props => {
             schema={schema}
             formContext={formContext}
             rawErrors={[]}
-            styles={{
-              field: {
-                selectors: {
-                  '::placeholder': {
-                    fontStyle: 'italic',
-                  },
-                },
-              },
-            }}
             iconProps={{
               iconName: 'ReturnKey',
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },

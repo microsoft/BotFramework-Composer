@@ -28,17 +28,19 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
         },
         items: {
           'ui:options': {
-            inline: true,
             hideDescription: true,
+            inline: true,
           },
           intent: {
             'ui:options': {
-              label: false,
+              hideLabel: true,
+              transparentBorder: true,
             },
           },
           pattern: {
             'ui:options': {
-              label: false,
+              hideLabel: true,
+              transparentBorder: true,
             },
           },
         },
@@ -168,7 +170,22 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   },
   [SDKTypes.SwitchCondition]: {
     cases: {
-      'ui:field': 'CasesField',
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:hidden': ['actions'],
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
     },
     'ui:hidden': ['default', ...globalHidden],
   },

@@ -96,13 +96,6 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           value={choice.value}
           styleOverrides={{
             root: { margin: '7px 0 7px 0' },
-            field: {
-              selectors: {
-                '::placeholder': {
-                  fontStyle: 'italic',
-                },
-              },
-            },
           }}
           onBlur={handleBlur}
         />
@@ -114,15 +107,8 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           placeholder={formatMessage('Add multiple comma-separated synonyms')}
           styleOverrides={{
             root: { margin: '7px 0 7px 0' },
-            field: {
-              selectors: {
-                '::placeholder': {
-                  fontStyle: 'italic',
-                },
-              },
-            },
           }}
-          transparentBorder
+          options={{ transparentBorder: true }}
           onBlur={handleBlur}
         />
       </div>
@@ -219,18 +205,9 @@ export const Choices: React.FC<ChoicesProps> = props => {
               placeholder={formatMessage('Add new option here')}
               autoComplete="off"
               errorMessage={errorMsg}
-              styles={{
-                field: {
-                  selectors: {
-                    '::placeholder': {
-                      fontStyle: 'italic',
-                    },
-                  },
-                },
-              }}
             />
           </div>
-          <div css={choiceItemSynonyms}>
+          <div css={choiceItemValue}>
             <TextField
               id={`${id}-synonyms`}
               value={newChoice ? (newChoice.synonyms || []).join(', ') : ''}
@@ -240,15 +217,6 @@ export const Choices: React.FC<ChoicesProps> = props => {
               iconProps={{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
-              }}
-              styles={{
-                field: {
-                  selectors: {
-                    '::placeholder': {
-                      fontStyle: 'italic',
-                    },
-                  },
-                },
               }}
             />
           </div>

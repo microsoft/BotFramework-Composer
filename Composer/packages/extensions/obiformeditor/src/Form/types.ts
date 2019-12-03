@@ -36,6 +36,8 @@ export interface BFDWidgetProps extends Partial<WidgetProps> {
   options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
+    hideLabel?: boolean;
+    transparentBorder?: boolean;
   };
 }
 

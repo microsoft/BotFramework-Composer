@@ -35,12 +35,14 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   editable?: boolean;
   styles?: Partial<ITextFieldStyles>;
   styleOverrides?: Partial<ITextFieldStyles>;
+  options?: any;
 }
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, editable, ...rest } = props;
+  const { rawErrors, formContext, schema, id, label, editable, options = {}, ...rest } = props;
   const { shellApi } = formContext;
   const { description } = schema;
+  const { hideLabel } = options;
 
   const onGetErrorMessage = async (value: string) => {
     if (!value) {
@@ -64,8 +66,8 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
 
   return (
     <>
-      {!!label && <WidgetLabel label={label} description={description} id={id} />}
-      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
+      {!hideLabel && !!label && <WidgetLabel label={label} description={description} id={id} />}
+      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} options={options} autoComplete="off" />
     </>
   );
 };
