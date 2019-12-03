@@ -43,7 +43,7 @@ As the bot takes actions and sends messages, the **language generator** is calle
 ## Create a dialog 
 When you create a bot in Composer you also create its main dialog by default. Follow the steps to create a bot project and its main dialog:
 
-1. On the left side of the Composer home screen, click **+ New** from the upper left corner (or the big **+ ** sign under "Bot Framework Composer" in the middle part of the home screen). 
+1. On the left side of the Composer home screen, click **+ New** from the upper left corner (or the big `+` sign in the middle part of the home screen). 
 
 ![create_new_bot](./media/dialog/create_new_bot.png) 
 
@@ -53,12 +53,12 @@ When you create a bot in Composer you also create its main dialog by default. Fo
 
 ![new_bot](./media/dialog/new_bot.png)
 
-When your bot is created successfully you will see a **.Main** dialog in the dialog navigation pane. Congratulations! You have created your first bot and its main dialog using Composer. Below is a screenshot of a bot named `Greeting` and its main dialog named `Greeting.Main`: 
+When your bot is created successfully you will see a **.Main** dialog in the dialog navigation pane. Congratulations! You have created your first bot! Below is a screenshot of a bot named `GreetingBot` and its main dialog named `GreetingBot.Main`: 
 
 ![main_dialog](./media/dialog/main_dialog.png)
 
 > [!NOTE]
-> After you create a bot a **ConversationUpdate** trigger will be created by default as well. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
+> After you create a bot a **Greeting** trigger will be created by default. It is a trigger to handle activities such as sending a welcome message. For details please read [events and triggers](concept-events-and-triggers.md). 
 
 ## Add a dialog 
 After you create a bot you are also creating its main dialog by default. The main dialog is like the brain of our bot, controlling and managing the dialog system. Sometimes we find it useful to create a child dialog that contains a chunk of functionality so that our dialog system is organized and easily managed. Let's walk through a very simple example to show how to create a child dialog and wire it up to the main dialog. 
@@ -67,15 +67,15 @@ After you create a bot you are also creating its main dialog by default. The mai
 
 ![weather_dialog](./media/dialog/weather_dialog.png)
 
-After that, you will see an empty dialog you created on the navigation pane. When creating a child dialog you also create a **Dialog started (BeginDialog)** trigger by default. The new dialog named `Weather` may look like this: 
+After that, you will see an empty dialog on the navigation pane and a pre-configured **BeginDialog** trigger. The new dialog named `Weather` looks like the following: 
 
 ![new_weather_dialog](./media/dialog/new_weather_dialog.png)
 
-2. Define an action in the **BeginDialog** trigger. Click the `+` sign under **Dialog started (BeginDialog)** in the new dialog and select **Send a response**. In the Language Generation editor put a sentence: "The weather dialog is calle with success!"
+2. Define an action in the **BeginDialog** trigger. In the new dialog's authoring canvas, click the `+` sign under **BeginDialog** trigger node and select **Send a response**. In the Language Generation editor put such a sentence: `The weather dialog is calle with success!`
 
 ![send_response](./media/dialog/send_response.gif)
 
-3. Wire up the new dialog. Click the main dialog in navigation pane and select **ConversationUpdate**. In the authoring canvas, click the **+** sign under **ConversationUpdate** and select **Dialog management** and then **Begin a new dialog** which is a dialog action that begins another dialog. When that dialog is completed, it will return to the caller. 
+3. Wire up the new dialog. Click the main dialog in navigation pane and select **Greeting** trigger. In the authoring canvas, click the `+` sign under **Greeting** trigger node and select **Dialog management** and then **Begin a new dialog**. This is a dialog action that begins another dialog. When that dialog is completed, it will return to the caller. 
 
 ![begin_dialog_action](./media/dialog/begin_dialog_action.png)
 
@@ -86,7 +86,7 @@ Now in the properties panel on the right side select the dialog you want to wire
 When the bot runs, the pattern of this simple design is as follows: 
 
 - The main dialog `Greeting.Main` is called at bot runtime.
-- The **ConversationUpdate** trigger in the main dialog is activated and begins to execute the **Begin a new dialog** action which begins `Weather` dialog. 
+- The **Greeting** trigger in the main dialog is activated and begins to execute the **Begin a new dialog** action which begins `Weather` dialog. 
 - When `Weather` dialog becomes active, the **BeginDialog** trigger in the child dialog is fired and send the response "The weather dialog is called with success!" to users. 
   
 You can test the result by clicking **Start** on the upper right corner and then click **Test in Emulator**. You should be able to see the following result in the emulator: 
