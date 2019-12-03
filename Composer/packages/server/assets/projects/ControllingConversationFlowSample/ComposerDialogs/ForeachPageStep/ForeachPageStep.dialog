@@ -61,7 +61,7 @@
           "$designer": {
             "id": "623448"
           },
-          "activity": "@{bfdactivity-623448}"
+          "activity": "@{bfdactivity-623448()}"
         },
         {
           "$type": "Microsoft.ForeachPage",

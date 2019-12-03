@@ -38,7 +38,7 @@
           "$designer": {
             "id": "150220"
           },
-          "activity": "@{bfdactivity-150220}"
+          "activity": "@{bfdactivity-150220()}"
         },
         {
           "$type": "Microsoft.EndTurn",
@@ -51,7 +51,7 @@
           "$designer": {
             "id": "451180"
           },
-          "activity": "@{bfdactivity-451180}"
+          "activity": "@{bfdactivity-451180()}"
         }
       ]
     }

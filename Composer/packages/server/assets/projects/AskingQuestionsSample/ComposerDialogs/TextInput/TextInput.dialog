@@ -29,7 +29,7 @@
           "$designer": {
             "id": "538962"
           },
-          "activity": "@{bfdactivity-538962}"
+          "activity": "@{bfdactivity-538962()}"
         }
       ]
     }
