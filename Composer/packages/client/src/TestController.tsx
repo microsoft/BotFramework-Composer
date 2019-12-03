@@ -10,8 +10,8 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
 import { DialogInfo } from '@bfc/shared';
-
 import { DiagnosticSeverity } from '@bfc/indexers';
+
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
@@ -152,7 +152,7 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        {connected && fetchState === STATE.SUCCESS && (
+        {connected && showError && fetchState === STATE.SUCCESS && (
           <ActionButton
             iconProps={{
               iconName: 'OpenInNewTab',
