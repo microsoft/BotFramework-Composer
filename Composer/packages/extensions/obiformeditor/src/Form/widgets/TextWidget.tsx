@@ -18,12 +18,7 @@ const getFloat = (value: string, step: number) => {
   return (parseFloat(value) + step).toFixed(step > 0 ? `${step}`.split('.')[1].length : step);
 };
 
-interface ITextWidgetProps extends BFDWidgetProps {
-  hiddenErrMessage?: boolean;
-  onValidate?: (errMessage: JSX.Element | '') => void;
-}
-
-export function TextWidget(props: ITextWidgetProps) {
+export function TextWidget(props: BFDWidgetProps) {
   const {
     label,
     onBlur,
@@ -37,8 +32,6 @@ export function TextWidget(props: ITextWidgetProps) {
     disabled,
     formContext,
     rawErrors,
-    hiddenErrMessage,
-    onValidate,
   } = props;
   const { description, examples = [], type, $role } = schema;
 
@@ -100,8 +93,6 @@ export function TextWidget(props: ITextWidgetProps) {
         schema={schema}
         formContext={formContext}
         rawErrors={rawErrors}
-        hiddenErrMessage={hiddenErrMessage}
-        onValidate={onValidate}
       />
     );
   }

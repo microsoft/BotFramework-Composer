@@ -45,8 +45,6 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
             label={formatMessage('Max turn count')}
             formContext={props.formContext}
             rawErrors={errorSchema.maxTurnCount && errorSchema.maxTurnCount.__errors}
-            hiddenErrMessage={true}
-            onValidate={onValidate}
           />
         </div>
         <div css={[field, settingsFieldHalf]}>
@@ -58,8 +56,6 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
             label={formatMessage('Default value')}
             formContext={props.formContext}
             rawErrors={errorSchema.defaultValue && errorSchema.defaultValue.__errors}
-            hiddenErrMessage={true}
-            onValidate={onValidate}
           />
         </div>
         <div css={[field, settingsFieldFull, settingsFieldValidation]}>
