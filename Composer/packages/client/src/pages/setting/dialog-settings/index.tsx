@@ -79,7 +79,7 @@ export const DialogSettings = () => {
         <Link
           href={
             absHosted
-              ? '//aka.ms/absh/docs/settings'
+              ? 'https://aka.ms/absh/docs/settings'
               : 'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'
           }
           target="_blank"
