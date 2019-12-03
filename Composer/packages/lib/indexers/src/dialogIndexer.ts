@@ -3,7 +3,6 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs } from '@bfc/shared';
 
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { DialogChecker } from './utils/dialogChecker';
@@ -39,7 +38,14 @@ function ExtractLgTemplates(dialog): string[] {
           return true;
       }
       targets.forEach(target => {
-        templates.push(...extractLgTemplateRefs(target).map(x => x.name));
+        // match a template name match a temlate func  e.g. `showDate()`
+        // eslint-disable-next-line security/detect-unsafe-regex
+        const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
+        let matchResult;
+        while ((matchResult = reg.exec(target)) !== null) {
+          const templateName = matchResult[1];
+          templates.push(templateName);
+        }
       });
     }
     return false;
