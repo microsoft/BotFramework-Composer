@@ -151,7 +151,7 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        {connected && showError && fetchState === STATE.SUCCESS && (
+        {connected && !showError && fetchState === STATE.SUCCESS && (
           <ActionButton
             iconProps={{
               iconName: 'OpenInNewTab',
