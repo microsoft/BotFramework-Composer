@@ -1,5 +1,6 @@
 {
   "name": "@bfc/root",
+  "license": "MIT",
   "private": true,
   "resolutions": {
     "@types/react": "16.9.0"

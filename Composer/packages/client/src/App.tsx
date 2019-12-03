@@ -43,13 +43,13 @@ const topLinks = (botLoaded: boolean) => {
       exact: false,
       disabled: !botLoaded,
     },
-    {
-      to: '/test-conversation',
-      iconName: 'WaitListConfirm',
-      labelName: formatMessage('Test Conversation'),
-      exact: false,
-      disabled: true, // will delete
-    },
+    // {
+    //   to: '/test-conversation',
+    //   iconName: 'WaitListConfirm',
+    //   labelName: formatMessage('Test Conversation'),
+    //   exact: false,
+    //   disabled: true, // will delete
+    // },
     {
       to: 'language-generation/',
       iconName: 'Robot',
@@ -64,13 +64,13 @@ const topLinks = (botLoaded: boolean) => {
       exact: false,
       disabled: !botLoaded,
     },
-    {
-      to: '/evaluate-performance',
-      iconName: 'Chart',
-      labelName: formatMessage('Evaluate performance'),
-      exact: false,
-      disabled: true,
-    },
+    // {
+    //   to: '/evaluate-performance',
+    //   iconName: 'Chart',
+    //   labelName: formatMessage('Evaluate performance'),
+    //   exact: false,
+    //   disabled: true,
+    // },
     {
       to: '/notifications',
       iconName: 'Warning',
@@ -95,13 +95,13 @@ const topLinks = (botLoaded: boolean) => {
 };
 
 const bottomLinks = [
-  {
-    to: '/help',
-    iconName: 'unknown',
-    labelName: formatMessage('Info'),
-    exact: true,
-    disabled: true,
-  },
+  // {
+  //   to: '/help',
+  //   iconName: 'unknown',
+  //   labelName: formatMessage('Info'),
+  //   exact: true,
+  //   disabled: true,
+  // },
   {
     to: '/about',
     iconName: 'info',
