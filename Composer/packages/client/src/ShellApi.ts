@@ -5,7 +5,6 @@ import React, { useEffect, useContext, useMemo } from 'react';
 import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-import { LGTemplate } from 'botbuilder-lg';
 import { lgIndexer } from '@bfc/indexers';
 
 import { isExpression } from './utils';
@@ -134,23 +133,7 @@ export const ShellApi: React.FC = () => {
     if (id === undefined) throw new Error('must have a file id');
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
-    let templates: LGTemplate[] = [];
-    templates = lgIndexer.parse(file.content);
-
-    const lines = file.content.split('\n');
-
-    return templates.map(t => {
-      const [start, end] = getTemplateBodyRange(t);
-      const body = lines.slice(start - 1, end).join('\n');
-
-      return { Name: t.Name, Parameters: t.Parameters, Body: body };
-    });
-  }
-
-  function getTemplateBodyRange(template) {
-    const startLineNumber = template.ParseTree._start.line + 1;
-    const endLineNumber = template.ParseTree._stop.line;
-    return [startLineNumber, endLineNumber];
+    return lgIndexer.parse(file.content);
   }
 
   /**

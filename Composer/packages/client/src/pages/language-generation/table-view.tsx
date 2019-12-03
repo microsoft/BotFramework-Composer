@@ -43,7 +43,7 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
-    allTemplates = lgIndexer.parse(lgFile.content);
+    allTemplates = lgIndexer.parse(lgFile.content) as LGTemplate[];
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
