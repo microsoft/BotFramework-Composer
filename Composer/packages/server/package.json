@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "node build/server.js",
     "start:dev": "nodemon",
-    "test": "yarn typecheck && jest",
+    "test": "jest",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
