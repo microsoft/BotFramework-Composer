@@ -17,7 +17,7 @@ module.exports = {
     'office-ui-fabric-react/lib/(.*)$': 'office-ui-fabric-react/lib-commonjs/$1',
     '@uifabric/fluent-theme/lib/(.*)$': '@uifabric/fluent-theme/lib-commonjs/$1',
 
-    '^@app/(.*)$': '<rootDir>/src/$1',
+    '^@src/(.*)$': '<rootDir>/src/$1',
   },
   testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '/testUtils/'],
   // Some node modules are packaged and distributed in a non-transpiled form

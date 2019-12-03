@@ -6,7 +6,7 @@
     "module": "esnext",
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["src/*"]
+      "@src/*": ["src/*"]
     }
   },
   "include": ["./src/**/*", "./__tests__/**/*"],
