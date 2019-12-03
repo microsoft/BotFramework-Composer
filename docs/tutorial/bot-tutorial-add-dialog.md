@@ -72,9 +72,9 @@ You can break pieces of your conversation flow into dialogs and can chain them t
 
 7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
    
-   ![](../media/tutorial-weatherbot/02/begin-dialog-congifure.gif)
-
 8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
+
+    ![](../media/tutorial-weatherbot/02/begin-dialog-congifure.gif)
 
 
 ## Let's test it out.
