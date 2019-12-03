@@ -130,24 +130,21 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
-    const files = focusedStorageFolder.children.reduce(
-      (result, file) => {
-        const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
-        if (check(file)) {
-          result.push({
-            name: file.name,
-            value: file.name,
-            fileType: file.type,
-            iconName: getFileIconName(file),
-            lastModified: file.lastModified,
-            fileSize: file.size ? formatBytes(file.size) : '',
-            filePath: file.path,
-          });
-        }
-        return result;
-      },
-      [] as any[]
-    );
+    const files = focusedStorageFolder.children.reduce((result, file) => {
+      const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
+      if (check(file)) {
+        result.push({
+          name: file.name,
+          value: file.name,
+          fileType: file.type,
+          iconName: getFileIconName(file),
+          lastModified: file.lastModified,
+          fileSize: file.size ? formatBytes(file.size) : '',
+          filePath: file.path,
+        });
+      }
+      return result;
+    }, [] as any[]);
     // add parent folder
     files.unshift({
       name: '..',

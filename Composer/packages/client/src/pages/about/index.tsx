@@ -54,9 +54,7 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
-                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${
-                    process.env.SDK_PACKAGE_VERSON
-                  }`}
+                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSON}`}
                   tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px' }}

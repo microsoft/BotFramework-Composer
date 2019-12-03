@@ -287,24 +287,21 @@ function DesignPage(props) {
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
-        ? breadcrumb.reduce(
-            (result, item, index) => {
-              const { dialogId, selected, focused } = item;
-              const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-              if (text) {
-                result.push({
-                  // @ts-ignore
-                  index,
-                  isRoot: !selected && !focused,
-                  text,
-                  ...item,
-                  onClick: handleBreadcrumbItemClick,
-                });
-              }
-              return result;
-            },
-            [] as IBreadcrumbItem[]
-          )
+        ? breadcrumb.reduce((result, item, index) => {
+            const { dialogId, selected, focused } = item;
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({
+                // @ts-ignore
+                index,
+                isRoot: !selected && !focused,
+                text,
+                ...item,
+                onClick: handleBreadcrumbItemClick,
+              });
+            }
+            return result;
+          }, [] as IBreadcrumbItem[])
         : [];
     return (
       <Breadcrumb
