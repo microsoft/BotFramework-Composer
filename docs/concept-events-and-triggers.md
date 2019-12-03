@@ -24,8 +24,8 @@ This event will appear in the dialog as a node at the top of the editor. Actions
 ## Types of triggers 
 There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](howto-defining-triggers.md). 
 
-### Dialog trigger  
-The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog triggers in Composer: **Dialog started (BeginDialog)**, **Dialog cancelled (CancelDialog)**, **Error occurred** and **Re-prompt for input**. Most dialogs will include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
+### Dialog events  
+The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog triggers in Composer: **Dialog started (Begin dialog event)**, **Dialog cancelled (Cancel dialog event)**, **Error occurred(Error event)** and **Re-prompt for input(Reprompt dialog event)**. Most dialogs will include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
 
 Use dialog triggers when you want to:
 - Take actions immediately when the dialog starts, even before the recognizer is called
@@ -45,7 +45,7 @@ Use intent triggers when you want to:
 
 See how to define an **Intent** trigger [here](howto-defining-triggers.md#intent) and how to define an **Unrecognized intent** trigger [here](howto-defining-triggers.md#unrecognized-intent). 
 
-### Activity trigger 
+### Activities 
 Activity trigger is used to handle activities such as when a user joins and the bot begins a new conversation. **ConversationUpdate** is a trigger of this type and you can use it to send a greeting message. When you create a new bot, the **ConversationUpdate** trigger is initialized by default in the main dialog. This specialized option is provided to avoid handling an event with a complex condition attached. **Message activity trigger** is a type of Activity trigger to handle message activities. 
 
 Use **Activity triggers** when you want to: 
@@ -63,7 +63,7 @@ Use **Message activity triggers** when you want to:
 
 See how to define an **Activity trigger** [here](howto-defining-triggers.md#activity-trigger). 
 
-### Custom trigger
+### Custom events
 **Custom trigger** is a trigger to handle **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will fire this trigger. If you define an **Emit a custom event** and it fires, any **Custom trigger** in any level of dialogs will catch it and trigger corresponding actions. 
 
 Use **Custom trigger** when you want to:
