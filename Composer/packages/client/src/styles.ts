@@ -81,7 +81,18 @@ export const bot = css`
 `;
 
 export const botButton = css`
-  margin-left: 15px;
+  margin-left: 5px;
+`;
+
+export const errorButton = css`
+  color: #a80000;
+`;
+
+export const errorCount = css`
+  height: 32px;
+  line-height: 32px;
+  font-size 16px;
+  cursor: pointer;
 `;
 
 export const calloutLabel = css`

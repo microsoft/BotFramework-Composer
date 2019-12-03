@@ -10,7 +10,7 @@ import { INotification } from './types';
 
 const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
-export default function useNotifications(filter: string) {
+export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
 
