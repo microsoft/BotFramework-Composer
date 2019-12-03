@@ -23,8 +23,8 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       }
 
       const templates = getLgTemplates ? await getLgTemplates('common') : [];
-      const [template] = templates.filter(template => {
-        return template.name === templateId;
+      const [template] = templates.filter(({ name }) => {
+        return name === templateId;
       });
 
       if (cancelled) {

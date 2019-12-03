@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -150,13 +150,10 @@ const TableView: React.FC<TableViewProps> = props => {
       const templateUsedInDialogMap = {};
 
       // build usedIn map
-      templates.forEach(template => {
-        templateUsedInDialogMap[template.name] = dialogs.reduce<string[]>((result, dialog) => {
-          if (dialog.lgTemplates.includes(template.name)) {
-            result.push(dialog.id);
-          }
-          return result;
-        }, []);
+      templates.forEach(({ name }) => {
+        templateUsedInDialogMap[name] = dialogs
+          .filter(dialog => dialog.lgTemplates.includes(name))
+          .map(dialog => dialog.id);
       });
 
       const usedInColumn = {
@@ -262,7 +259,8 @@ const TableView: React.FC<TableViewProps> = props => {
           }}
           className="table-view-list"
           columns={getTableColums()}
-          getKey={item => item.name}
+          // getKey={item => item.name}
+          getKey={useCallback(item => item.name, [])}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderDetailsFooter={onRenderDetailsFooter}

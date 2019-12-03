@@ -54,7 +54,7 @@ export default function CodeEditor(props: CodeEditorProps) {
           template: {
             name: templateName,
             parameters: get(template, 'parameters'),
-            body: body,
+            body,
           },
         };
         actions.updateLgTemplate(payload);

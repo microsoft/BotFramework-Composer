@@ -133,21 +133,7 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
 
-    const templates = lgUtil.parse(file.content);
-    const lines = file.content.split('\n');
-
-    return templates.map(t => {
-      const [start, end] = getTemplateBodyRange(t);
-      const body = lines.slice(start - 1, end).join('\n');
-
-      return { name: t.name, parameters: t.parameters, body: body };
-    });
-  }
-
-  function getTemplateBodyRange(template) {
-    const startLineNumber = template.parseTree._start.line + 1;
-    const endLineNumber = template.parseTree._stop.line;
-    return [startLineNumber, endLineNumber];
+    return lgUtil.parse(file.content);
   }
 
   /**

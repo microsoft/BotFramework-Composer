@@ -75,16 +75,16 @@ export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextD
 }
 
 export function textFromTemplate(template: Template): string {
-  let text = '';
-  if (template.name && (template.body !== null && template.body !== undefined)) {
-    text += `# ${template.name.trim()}`;
-    if (template.parameters && template.parameters.length > 0) {
-      text += '(' + template.parameters.join(', ') + ')';
+  const { name, parameters = [], body } = template;
+  const textBuilder: string[] = [];
+  if (name && (body !== null && body !== undefined)) {
+    textBuilder.push(`# ${name.trim()}`);
+    if (parameters.length) {
+      textBuilder.push(`(${parameters.join(', ')})`);
     }
-    text += '\n';
-    text += `${template.body.trim()}`;
+    textBuilder.push(`\n${template.body.trim()}`);
   }
-  return text;
+  return textBuilder.join('');
 }
 
 export function textFromTemplates(templates: Template[]): string {
