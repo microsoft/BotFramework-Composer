@@ -103,25 +103,6 @@ export function getTemplate(content: string, templateName: string): LGTemplate |
   return resource.Templates.find(t => t.Name === templateName);
 }
 
-/**
- *
- * @param text string
- * -[Greeting], I'm a fancy bot, [Bye] ---> ['Greeting', 'Bye']
- *
- */
-export function extractTemplateNames(text: string): string[] {
-  const templateNames: string[] = [];
-  // match a template name match a temlate func  e.g. `showDate()`
-  // eslint-disable-next-line security/detect-unsafe-regex
-  const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
-  let matchResult;
-  while ((matchResult = reg.exec(text)) !== null) {
-    const templateName = matchResult[1];
-    templateNames.push(templateName);
-  }
-  return templateNames;
-}
-
 export function removeTemplate(content: string, templateName: string): string {
   const resource = LGParser.parse(content);
   return resource.deleteTemplate(templateName).toString();
