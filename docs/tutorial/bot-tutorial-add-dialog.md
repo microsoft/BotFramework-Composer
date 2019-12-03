@@ -71,7 +71,6 @@ You can break pieces of your conversation flow into dialogs and can chain them t
    ![](../media/tutorial-weatherbot/02/weather-trigger.gif)
 
 7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
-
    ![](../media/tutorial-weatherbot/02/begin-dialog-configure.gif)
 
 8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
@@ -86,6 +85,6 @@ You can break pieces of your conversation flow into dialogs and can chain them t
 2. Send the bot a message that says `weather`. The bot should respond with our test message, confirming that our intent was recognized as expected, and the fulfillment action was triggered.
 
    ![](../media/tutorial-weatherbot/02/emulator-weather-draft.png)
-
+   
 ## Next steps
 - [Get weather](./bot-tutorial-get-weather.md)
