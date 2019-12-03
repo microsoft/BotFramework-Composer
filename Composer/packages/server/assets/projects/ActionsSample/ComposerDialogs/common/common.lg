@@ -106,7 +106,7 @@
 -You select: 3
 
 # bfdactivity-640616
--@{help}
+-@{help()}
 
 # bfdactivity-576334
 - Say moo to get a response, say emit to emit a event.

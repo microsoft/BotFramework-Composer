@@ -29,7 +29,7 @@ I can show you examples on how to use actions, You can enter number 01-04
 - @{email.subject}
 
 # bfdactivity-068558
--@{help}
+-@{help()}
 
 # bfdactivity-004212
 -You select: @{user.style}
@@ -62,5 +62,5 @@ I can show you examples on how to use actions, You can enter number 01-04
 -@{ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)}
 
 # bfdactivity-581197
--@{help}
+-@{help()}
 

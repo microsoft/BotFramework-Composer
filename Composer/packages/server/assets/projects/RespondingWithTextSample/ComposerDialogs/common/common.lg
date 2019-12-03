@@ -45,7 +45,7 @@
     - Working day!
 
 # bfdactivity-739923
-- @{TextWithLG}
+- @{TextWithLG()}
 
 # bfdactivity-853358
 - @{multilineText()}

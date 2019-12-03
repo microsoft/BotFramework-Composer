@@ -344,28 +344,28 @@
 -Welcome to Card Samples Bot.
 
 # bfdactivity-159442
--@{HeroCard}
+-@{HeroCard()}
 
 # bfdactivity-762914
--@{ThumbnailCard}
+-@{ThumbnailCard()}
 
 # bfdactivity-241579
--@{SigninCard}
+-@{SigninCard()}
 
 # bfdactivity-901582
--@{AnimationCard}
+-@{AnimationCard()}
 
 # bfdactivity-553859
--@{VideoCard}
+-@{VideoCard()}
 
 # bfdactivity-190928
--@{AudioCard}
+-@{AudioCard()}
 
 # bfdactivity-806895
--@{AdaptiveCard}
+-@{AdaptiveCard()}
 
 # bfdactivity-997450
--@{AllCards}
+-@{AllCards()}
 
 
 # bfdactivity-167246
