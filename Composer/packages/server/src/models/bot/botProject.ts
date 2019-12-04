@@ -3,8 +3,8 @@
 
 import fs from 'fs';
 
-import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
-import { dialogIndexer, lgIndexer } from '@bfc/indexers';
+import { getNewDesigner } from '@bfc/shared';
+import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
 import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';

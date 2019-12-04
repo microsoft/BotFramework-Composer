@@ -4,8 +4,6 @@
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
 import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
 
-export * from '@bfc/indexers/lib/type';
-
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides?: any;

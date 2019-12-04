@@ -7,7 +7,7 @@ import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { LgFile } from '@bfc/shared';
+import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, Diagnostic } from '@bfc/indexers';
 

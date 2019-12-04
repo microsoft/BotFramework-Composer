@@ -6,7 +6,8 @@ import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { MicrosoftIRecognizer, LuFile } from '@bfc/shared';
+import { MicrosoftIRecognizer } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 import { BaseField } from '../BaseField';
 import { LoadingSpinner } from '../../../LoadingSpinner';

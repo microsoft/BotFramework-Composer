@@ -15,7 +15,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { DialogInfo, LgFile } from '@bfc/shared';
+import { DialogInfo, LgFile } from '@bfc/indexers';
 import { LGTemplate } from 'botbuilder-lg';
 import { lgIndexer } from '@bfc/indexers';
 
@@ -43,7 +43,9 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
-    allTemplates = lgIndexer.parse(lgFile.content) as LGTemplate[];
+    if (lgIndexer.isValid(lgFile.diagnostics) === true) {
+      allTemplates = lgIndexer.parse(lgFile.content) as LGTemplate[];
+    }
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
