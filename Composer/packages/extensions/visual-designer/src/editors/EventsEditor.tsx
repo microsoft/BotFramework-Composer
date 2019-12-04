@@ -14,8 +14,18 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
   const ruleCount = data.children.length;
   const title = `Events (${ruleCount})`;
 
-  const onClick = $type => onEvent(NodeEventTypes.Insert, { id, $type, position: ruleCount });
+  const handleRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
+    if (eventName === NodeEventTypes.Expand) {
+      const selectedRulePath = eventData;
+      return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
+    }
+    if (eventName === NodeEventTypes.Insert) {
+      return onEvent(NodeEventTypes.InsertEvent, eventData);
+    }
+    return onEvent(eventName, eventData);
+  };
 
+  const insertEvent = $type => onEvent(NodeEventTypes.InsertEvent, { id, $type, position: ruleCount });
   return (
     <Panel
       title={title}
@@ -24,9 +34,9 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
         onEvent(NodeEventTypes.FocusEvent, '');
       }}
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
-      addMenu={<EventMenu onClick={onClick} data-testid="EventsEditorAdd" />}
+      addMenu={<EventMenu onClick={insertEvent} data-testid="EventsEditorAdd" />}
     >
-      <RuleGroup key={id} id={id} data={data} onEvent={onEvent} />
+      <RuleGroup key={id} id={id} data={data} onEvent={handleRuleEvent} />
     </Panel>
   );
 };

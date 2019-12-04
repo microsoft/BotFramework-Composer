@@ -9,7 +9,9 @@ import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { queryNode } from '../utils/jsonTracker';
-import { NodeRendererContext } from '../store/NodeRendererContext';
+import { EditorContext, EditorContextValue } from '../store/EditorContext';
+import { StoreContext } from '../store/StoreContext';
+import { StoreState } from '../store/store';
 import { Collapse } from '../components/lib/Collapse';
 
 import { EventsEditor } from './EventsEditor';
@@ -28,29 +30,27 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
+const mapStoreToEditorContext = (store: StoreState): EditorContextValue => {
+  const { eventPath, focusedId, focusedTab } = store;
+  return {
+    focusedEvent: eventPath,
+    focusedId,
+    focusedTab,
+  };
+};
+
 export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
-  const { focusedEvent } = useContext(NodeRendererContext);
+  const { state } = useContext(StoreContext);
+  const { eventPath } = state;
 
-  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
-    if (eventName === NodeEventTypes.Expand) {
-      const selectedRulePath = eventData;
-      return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
-    }
-    if (eventName === NodeEventTypes.Insert) {
-      return onEvent(NodeEventTypes.InsertEvent, eventData);
-    }
-    return onEvent(eventName, eventData);
-  };
-
-  const activeEventData = queryNode(data, focusedEvent);
-
+  const activeEventData = queryNode(data, eventPath);
   const eventActions = activeEventData ? (
     <RuleEditor
-      key={focusedEvent}
-      id={focusedEvent}
+      key={eventPath}
+      id={eventPath}
       data={activeEventData}
       onEvent={onEvent}
       addCoachMarkRef={addCoachMarkRef}
@@ -62,24 +62,24 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
   }
 
   return (
-    <div
-      css={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-      onClick={e => {
-        e.stopPropagation();
-        onEvent(NodeEventTypes.Focus, { id: '' });
-      }}
-    >
-      {ruleGroup && (
-        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
-      )}
-      <div className="editor-interval" style={{ height: 50 }} />
-      <Collapse text="Actions">{eventActions}</Collapse>
-    </div>
+    <EditorContext.Provider value={mapStoreToEditorContext(state)}>
+      <div
+        css={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+        onClick={e => {
+          e.stopPropagation();
+          onEvent(NodeEventTypes.Focus, { id: '' });
+        }}
+      >
+        {ruleGroup && <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={onEvent} />}
+        <div className="editor-interval" style={{ height: 50 }} />
+        <Collapse text="Actions">{eventActions}</Collapse>
+      </div>
+    </EditorContext.Provider>
   );
 };
 
