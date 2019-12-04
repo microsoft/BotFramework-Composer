@@ -25,16 +25,17 @@
 #### Set up
 - [Set up Composer using Yarn](./docs/setup-yarn.md)
 #### Develop
-- [Send messages](./docs/howto-sending-messages.md)
-- [Ask for user input](./docs/howto-ask-for-user-input.md)
-- [Manage conversation flow](./docs/howto-controlling-conversation-flow.md)
-- [Add LUIS to your bot](./docs/howto-using-LUIS.md)
+- [Send messages](./docs/how-to-send-messages.md)
+- [Ask for user input](./docs/how-to-ask-for-user-input.md)
+- [Manage conversation flow](./docs/how-to-control-conversation-flow.md)
+- [Add LUIS to your bot](./docs/how-to-use-LUIS.md)
 - [Add QnA to your bot](./docs/how-to-add-qna-to-bot.md)
-- [Send cards](./docs/howto-sending-cards.md) 
-- [Define triggers and events](./docs/howto-defining-triggers.md)
-- [Define advanced intents and entities](./docs/howto-define-advanced-intents-entities.md)
-- [Use OAuth](./docs/how_to_use_oauth.md)
-- [Send an HTTP request](./docs/howto-sending-http-request.md)
+- [Send cards](./docs/how-to-send-cards.md) 
+- [Define triggers and events](./docs/how-to-define-triggers.md)
+- [Define advanced intents and entities](./docs/how-to-define-advanced-intents-entities.md)
+- [Use validation](./docs/how-to-use-validation.md)
+- [Use OAuth](./docs/how-to-use-oauth.md)
+- [Send an HTTP request](./docs/how-to-send-http-request.md)
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Publish
