@@ -7,7 +7,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'offi
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons } from './styles';
+import { notification, typeIcon, listRoot, icons, columnItemText } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
@@ -38,7 +38,7 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.severity}</span>;
+      return <span css={columnItemText}>{item.severity}</span>;
     },
     isPadded: true,
   },
@@ -51,7 +51,7 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.location}</span>;
+      return <span css={columnItemText}>{item.location}</span>;
     },
     isPadded: true,
   },
@@ -66,7 +66,7 @@ const columns: IColumn[] = [
     isMultiline: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.message}</span>;
+      return <span css={columnItemText}>{item.message}</span>;
     },
     isPadded: true,
   },

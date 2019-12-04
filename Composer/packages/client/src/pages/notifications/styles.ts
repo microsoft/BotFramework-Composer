@@ -42,6 +42,7 @@ export const typeIcon = icon => css`
   background: ${icon.background};
   line-height: 24px;
   color: ${icon.color};
+  cursor: pointer;
 `;
 
 export const notificationHeader = css`
@@ -57,6 +58,10 @@ export const notificationHeaderText = css`
   font-size: 20px;
   color: #323130;
   font-weight: bold;
+`;
+
+export const columnItemText = css`
+  cursor: pointer;
 `;
 
 export const root = css`
