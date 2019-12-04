@@ -57,13 +57,12 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     bots,
   } = props;
   const { state } = useContext(StoreContext);
-  const { templateId, botName } = state;
+  const { templateId } = state;
 
   const getDefaultName = () => {
     let i = -1;
-    const bot = templateId || botName;
+    const bot = templateId;
     let defaultName = '';
-
     do {
       i++;
       defaultName = `${bot}-${i}`;
