@@ -76,7 +76,7 @@ export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, pa
         status: 'pending',
       },
     });
-    const response = await httpClient.get(`/storages/${id}/blobs/${path}`);
+    const response = await httpClient.get(`/storages/${id}/blobs`, { params: { path } });
     dispatch({
       type: ActionTypes.GET_STORAGEFILE_SUCCESS,
       payload: {
