@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { LuFile } from '@bfc/shared';
 
@@ -14,6 +14,13 @@ interface InlineLuEditorProps {
 const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   const { file, onSave, errorMsg } = props;
   const [content, setContent] = useState(file.content || '');
+
+  // save on mount to trigger validation
+  useEffect(() => {
+    if (content) {
+      onSave(content);
+    }
+  }, []);
 
   const commitChanges = value => {
     setContent(value);

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
@@ -90,6 +90,13 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       }
     }
   };
+
+  // update the template on mount to get validation
+  useEffect(() => {
+    if (localValue) {
+      updateLgTemplate(localValue);
+    }
+  }, []);
 
   return (
     <LgEditor
