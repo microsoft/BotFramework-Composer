@@ -9,18 +9,12 @@ import { SET_CLIPBOARD } from '../actions/setClipboard';
 import { SET_DRAGSELECTION } from '../actions/setDragSelection';
 import { SET_EVENTPATH } from '../actions/setEventPath';
 import { SET_FOCUSSTATE } from '../actions/setFocusState';
-import { SET_DIALOG } from '../actions/setDialog';
+import { RESET_STORE } from '../actions/resetDialog';
 
 const reducer = (state: StoreState, { type, payload }): StoreState => {
   switch (type) {
-    case SET_DIALOG:
-      return {
-        ...state,
-        dialog: {
-          id: payload.id || '',
-          json: payload.json || {},
-        },
-      };
+    case RESET_STORE:
+      return cloneDeep(payload);
     case SET_EVENTPATH:
       return {
         ...state,
