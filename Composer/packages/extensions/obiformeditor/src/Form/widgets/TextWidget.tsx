@@ -20,7 +20,7 @@ const getFloat = (value: string, step: number) => {
 
 interface ITextWidgetProps extends BFDWidgetProps {
   hiddenErrMessage?: boolean;
-  onValidate?: (errMessage: JSX.Element | '') => void;
+  onValidate?: (err?: JSX.Element | string) => void;
 }
 
 export function TextWidget(props: ITextWidgetProps) {
