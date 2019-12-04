@@ -3,11 +3,9 @@
 
 import { useReducer, Dispatch } from 'react';
 
-import { initialStore, StoreState } from './store';
+import reducer from '../reducer';
 
-const reducer = action => {
-  return initialStore;
-};
+import { initialStore, StoreState } from './store';
 
 type Action = { type: string; payload?: any };
 
@@ -27,7 +25,7 @@ const useStore = (dispatchMiddleware?: (action: Action) => void) => {
   const [state, dispatch] = useReducer(reducer, initialStore);
 
   return {
-    store: state as StoreState,
+    state: state as StoreState,
     dispatch: applyMiddleware(dispatch, dispatchMiddleware),
   };
 };
