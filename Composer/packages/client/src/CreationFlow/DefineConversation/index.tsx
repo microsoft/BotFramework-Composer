@@ -98,9 +98,10 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
     }
-    const newBotPath = focusedStorageFolder
-      ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name)
-      : '';
+    const newBotPath =
+      focusedStorageFolder && Object.keys(focusedStorageFolder as Record<string, any>).length
+        ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name)
+        : '';
     if (
       name &&
       bots &&
