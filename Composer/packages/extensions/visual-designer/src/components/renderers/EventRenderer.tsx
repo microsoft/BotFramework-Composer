@@ -7,7 +7,7 @@ import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { EditorContext } from '../../store/EditorContext';
 import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRule } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
@@ -31,7 +31,7 @@ const nodeBorderStyle = css`
 export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
-  const { focusedId, focusedEvent } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent } = useContext(EditorContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
 
   return (

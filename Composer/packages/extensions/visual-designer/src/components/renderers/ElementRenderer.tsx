@@ -8,7 +8,7 @@ import classnames from 'classnames';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { EditorContext } from '../../store/EditorContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
   DefaultRenderer,
@@ -56,7 +56,7 @@ const nodeBorderDoubleSelectedStyle = css`
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, tab }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   const selectableId = tab ? `${id}${tab}` : id;
-  const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
+  const { focusedId, focusedEvent, focusedTab } = useContext(EditorContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
