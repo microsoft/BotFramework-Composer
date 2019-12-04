@@ -94,7 +94,7 @@ const shellApi: ShellApi = {
     return apiClient.apiCall('updateLgTemplate', {
       id,
       templateName,
-      template: { Name: templateName, Body: template },
+      template: { name: templateName, body: template },
     });
   },
 
