@@ -55,7 +55,7 @@
           "$designer": {
             "id": "157674"
           },
-          "activity": "[bfdactivity-157674]"
+          "activity": "@{bfdactivity-157674()}"
         }
       ]
     },
@@ -112,7 +112,7 @@
           "$designer": {
             "id": "696707"
           },
-          "activity": "[bfdactivity-696707]"
+          "activity": "@{bfdactivity-696707()}"
         }
       ],
       "intent": "HelpIntent"
