@@ -90,7 +90,7 @@
 # Welcome-Suffix
 - How can I be of help today?
 - What can I do for you today?
- 
+
 # Welcome-Prefix
 - Hi
 - Hello
@@ -104,11 +104,11 @@
 
 > This template uses pre-built functions to construct a response.
 # Delete-Items-readback
-- IF: {turn.itemDeleted}
-    - ```I have removed **@{dialog.item}** from your @{dialog.listType} list. 
+- IF: @{turn.itemDeleted}
+    - ```I have removed **@{dialog.item}** from your @{dialog.listType} list.
     You have **@{count(user.taskLists[dialog.listType])}** items in your @{dialog.listType} list.
  ```
- - ELSE : 
+ - ELSE :
     - Sorry, I did not find **@{dialog.item}** in your todo list
 
 # Items-Ordinality (list)
@@ -118,9 +118,9 @@
     - items
 
 # Items-readback
-- IF : {toLower(dialog.listType) == 'all' }
+- IF : @{toLower(dialog.listType) == 'all' }
     - @{Show-all-lists()}
-- ELSE : 
+- ELSE :
     - @{List-readback (user.taskLists, dialog.listType)}
 
 # Show-all-lists
@@ -136,14 +136,14 @@
 ```
 
 > This template uses a foreach prebuilt function to call a template. The template helps with putting together each item in a line prefixed with `-`
-> This way, clients that support multi-line markdown for text can render the items as a list. 
+> This way, clients that support multi-line markdown for text can render the items as a list.
 # List-readback (collection, type)
 - IF: @{collection != null && collection[type] != null && count(collection[type]) != 0}
     - ```
 You have @{count(collection[type])} @{Items-Ordinality(collection[type])} in your @{type} collection.
     - @{join(foreach(collection[type], item, todo-line(item)), '')}
 ```
-- ELSE: 
+- ELSE:
     - ```
 You do not have any items in your @{type} list.
 ```

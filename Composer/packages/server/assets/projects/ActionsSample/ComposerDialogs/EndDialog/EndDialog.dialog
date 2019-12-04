@@ -75,14 +75,14 @@
           "$designer": {
             "id": "604381"
           },
-          "activity": "[bfdactivity-604381]"
+          "activity": "@{bfdactivity-604381()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "338063"
           },
-          "activity": "[bfdactivity-338063]"
+          "activity": "@{bfdactivity-338063()}"
         }
       ]
     }
