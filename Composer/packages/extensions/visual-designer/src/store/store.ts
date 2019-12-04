@@ -3,16 +3,18 @@
 
 export interface StoreState {
   dialog: any;
-  focusedEvent: string;
+  eventPath: string;
   focusedId: string;
+  focusedTab: string;
   selectedIds: string[];
   clipboardActions: any[];
 }
 
 export const initialStore: StoreState = {
   dialog: {},
-  focusedEvent: '',
+  eventPath: '',
   focusedId: '',
+  focusedTab: '',
   selectedIds: [],
   clipboardActions: [],
 };
