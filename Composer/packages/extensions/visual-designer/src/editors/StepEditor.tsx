@@ -25,7 +25,7 @@ const TailSize = {
   height: TerminatorSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
+export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
@@ -60,12 +60,11 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   const { width } = useWindowDimensions();
 
   useEffect(() => {
-    addCoachMarkRef({
-      action: {
-        x: (width + editorWidth) / 2,
-        y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
-      },
-    });
+    const coachMarkPosition = {
+      x: (width + editorWidth) / 2,
+      y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
+    };
+    onEvent(NodeEventTypes.AddCoachMarkRef, coachMarkPosition);
   }, [width]);
 
   return (
