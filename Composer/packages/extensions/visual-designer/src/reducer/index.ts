@@ -31,6 +31,7 @@ const reducer = (state: StoreState, { type, payload }): StoreState => {
         ...state,
         focusedId: payload.focusedId || '',
         focusedTab: payload.focusedTab || '',
+        selectedIds: [],
       };
     case SET_DRAGSELECTION:
       return {
