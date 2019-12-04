@@ -1,5 +1,7 @@
 {
   "name": "@bfc/tools",
+  "license": "MIT",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,6 +9,5 @@
     "build:language-servers": "cd language-servers && yarn build",
     "build:all": "concurrently --kill-others-on-fail \"yarn:build:language-servers\""
   },
-  "author": "",
-  "license": "ISC"
+  "author": ""
 }

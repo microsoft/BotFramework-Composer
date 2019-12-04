@@ -147,20 +147,26 @@ export function removeTemplates(content: string, templateNames: string[]): strin
 }
 
 export function textFromTemplates(templates: Template[]): string {
-  let text = '';
+  const textBuilder: string[] = [];
 
   templates.forEach(template => {
-    if (template.name && (template.body !== null && template.body !== undefined)) {
-      text += `# ${template.name.trim()}`;
-      if (template.parameters && template.parameters.length > 0) {
-        text += '(' + template.parameters.join(', ') + ')';
-      }
-      text += '\n';
-      text += `${template.body.trim()}`;
-    }
+    textBuilder.push(`${textFromTemplate(template)}\n`);
   });
 
-  return text;
+  return textBuilder.join('');
+}
+
+export function textFromTemplate(template: Template): string {
+  const { name, parameters = [], body } = template;
+  const textBuilder: string[] = [];
+  if (name && body !== null && body !== undefined) {
+    textBuilder.push(`# ${name.trim()}`);
+    if (parameters.length) {
+      textBuilder.push(`(${parameters.join(', ')})`);
+    }
+    textBuilder.push(`\n${template.body.trim()}`);
+  }
+  return textBuilder.join('');
 }
 
 export function checkSingleLgTemplate(template: Template) {

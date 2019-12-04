@@ -22,8 +22,11 @@ function updateCurrentPath(req: Request, res: Response) {
 
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
-  const reqpath = decodeURI(req.params.path);
   try {
+    if (!req.query.path) {
+      throw new Error('path missing from query');
+    }
+    const reqpath = decodeURI(req.query.path);
     if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }

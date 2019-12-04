@@ -16,7 +16,11 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
     return new GraphLayout();
   }
 
-  const box = calculateSequenceBoundary(nodes.map(x => x.boundary), withHeadEdge, withTrailingEdge);
+  const box = calculateSequenceBoundary(
+    nodes.map(x => x.boundary),
+    withHeadEdge,
+    withTrailingEdge
+  );
 
   nodes.reduce((offsetY, node) => {
     node.offset = { x: box.axisX - node.boundary.axisX, y: offsetY };
