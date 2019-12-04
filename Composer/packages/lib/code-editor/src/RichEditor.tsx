@@ -22,9 +22,20 @@ export function RichEditor(props: RichEditorProps) {
   const [hovered, setHovered] = useState(false);
 
   const errorHelp = formatMessage.rich(
-    'This text has errors in the syntax. Refer to the syntax documentation <a>here</a>.',
+    '<MessageBar>This text has errors in the syntax. Refer to the syntax documentation <a>here</a>.</MessageBar>',
     {
       // eslint-disable-next-line react/display-name
+      MessageBar: ({ children }) => (
+        <MessageBar
+          messageBarType={MessageBarType.error}
+          isMultiline={false}
+          dismissButtonAriaLabel="Close"
+          truncated={true}
+          overflowButtonAriaLabel="See more"
+        >
+          {children}
+        </MessageBar>
+      ),
       a: ({ children }) => (
         <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
           {children}
@@ -66,17 +77,7 @@ export function RichEditor(props: RichEditorProps) {
       >
         <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
-      {isInvalid && (
-        <MessageBar
-          messageBarType={MessageBarType.error}
-          isMultiline={false}
-          dismissButtonAriaLabel="Close"
-          truncated={true}
-          overflowButtonAriaLabel="See more"
-        >
-          {errorHelp}
-        </MessageBar>
-      )}
+      {isInvalid && errorHelp}
     </Fragment>
   );
 }
