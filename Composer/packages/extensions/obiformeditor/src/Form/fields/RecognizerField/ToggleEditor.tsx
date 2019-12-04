@@ -29,7 +29,7 @@ export default function ToggleEditor(props: ToggleEditorProps) {
           ? formatMessage('Hide {title}', { title: props.title })
           : formatMessage('View {title}', { title: props.title })}
       </Link>
-      <div className="ToggleEditorContent">{showEditor && props.children()}</div>
+      <div>{showEditor && props.children()}</div>
     </div>
   );
 }
