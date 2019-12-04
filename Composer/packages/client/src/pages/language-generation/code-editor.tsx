@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
 import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -74,30 +74,33 @@ export default function CodeEditor(props: CodeEditorProps) {
     [file]
   );
 
-  const _onChange = value => {
-    setContent(value);
+  const _onChange = useCallback(
+    value => {
+      setContent(value);
 
-    let diagnostics: Diagnostic[] = [];
-    if (inlineMode) {
-      const content = get(file, 'content', '');
-      const templateName = get(template, 'name', '');
-      try {
-        const newContent = lgUtil.updateTemplate(content, templateName, {
-          name: templateName,
-          parameters: get(template, 'parameters'),
-          body: value,
-        });
-        diagnostics = lgUtil.check(newContent);
-        updateLgTemplate(value);
-      } catch (error) {
-        setErrorMsg(error.message);
+      let diagnostics: Diagnostic[] = [];
+      if (inlineMode) {
+        const content = get(file, 'content', '');
+        const templateName = get(template, 'name', '');
+        try {
+          const newContent = lgUtil.updateTemplate(content, templateName, {
+            name: templateName,
+            parameters: get(template, 'parameters'),
+            body: value,
+          });
+          diagnostics = lgUtil.check(newContent);
+          updateLgTemplate(value);
+        } catch (error) {
+          setErrorMsg(error.message);
+        }
+      } else {
+        diagnostics = lgUtil.check(value);
+        updateLgFile(value);
       }
-    } else {
-      diagnostics = lgUtil.check(value);
-      updateLgFile(value);
-    }
-    setDiagnostics(diagnostics);
-  };
+      setDiagnostics(diagnostics);
+    },
+    [file, template]
+  );
 
   const lgOption: LGOption = {
     inline: inlineMode,

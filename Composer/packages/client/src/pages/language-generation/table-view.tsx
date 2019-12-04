@@ -63,40 +63,81 @@ const TableView: React.FC<TableViewProps> = props => {
     }
   }, [lgFile, activeDialog]);
 
-  const getTemplatesMoreButtons = (item, index) => {
-    const buttons = [
-      {
-        key: 'edit',
-        name: formatMessage('Edit'),
-        onClick: () => {
-          onClickEdit(templates[index]);
-        },
+  const onCreateNewTemplate = useCallback(() => {
+    const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
+    const payload = {
+      file: lgFile,
+      template: {
+        name: newName,
+        body: '-TemplateValue',
       },
-      {
-        key: 'delete',
-        name: formatMessage('Delete'),
-        onClick: () => {
-          onRemoveTemplate(index);
+    };
+    createLgTemplate(payload);
+  }, [templates, lgFile]);
+
+  const onRemoveTemplate = useCallback(
+    index => {
+      const payload = {
+        file: lgFile,
+        templateName: templates[index].name,
+      };
+
+      removeLgTemplate(payload);
+    },
+    [templates, lgFile]
+  );
+
+  const onCopyTemplate = useCallback(
+    index => {
+      const name = templates[index].name;
+      const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
+      const payload = {
+        file: lgFile,
+        fromTemplateName: name,
+        toTemplateName: resolvedName,
+      };
+      copyLgTemplate(payload);
+    },
+    [templates, lgFile]
+  );
+
+  const getTemplatesMoreButtons = useCallback(
+    (item, index) => {
+      const buttons = [
+        {
+          key: 'edit',
+          name: formatMessage('Edit'),
+          onClick: () => {
+            onClickEdit(templates[index]);
+          },
         },
-      },
-      {
-        key: 'copy',
-        name: formatMessage('Make a copy'),
-        onClick: () => {
-          onCopyTemplate(index);
+        {
+          key: 'delete',
+          name: formatMessage('Delete'),
+          onClick: () => {
+            onRemoveTemplate(index);
+          },
         },
-      },
-    ];
+        {
+          key: 'copy',
+          name: formatMessage('Make a copy'),
+          onClick: () => {
+            onCopyTemplate(index);
+          },
+        },
+      ];
 
-    // do not allow delete/copy template in particular dialog
-    if (activeDialog) {
-      buttons.splice(1, 2);
-    }
+      // do not allow delete/copy template in particular dialog
+      if (activeDialog) {
+        buttons.splice(1, 2);
+      }
 
-    return buttons;
-  };
+      return buttons;
+    },
+    [activeDialog, templates]
+  );
 
-  const getTableColums = () => {
+  const getTableColums = useCallback(() => {
     const tableColums = [
       {
         key: 'name',
@@ -180,9 +221,9 @@ const TableView: React.FC<TableViewProps> = props => {
     }
 
     return tableColums;
-  };
+  }, [activeDialog, templates]);
 
-  function onRenderDetailsHeader(props, defaultRender) {
+  const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
         <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
@@ -193,8 +234,9 @@ const TableView: React.FC<TableViewProps> = props => {
         </Sticky>
       </div>
     );
-  }
-  function onRenderDetailsFooter() {
+  }, []);
+
+  const onRenderDetailsFooter = useCallback(() => {
     // do not allow add template in particular dialog
     // cause new tempalte is not used by this dialog yet.
     if (activeDialog) return <div />;
@@ -206,39 +248,9 @@ const TableView: React.FC<TableViewProps> = props => {
         </ActionButton>
       </div>
     );
-  }
+  }, [activeDialog, templates]);
 
-  function onCreateNewTemplate() {
-    const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
-    const payload = {
-      file: lgFile,
-      template: {
-        name: newName,
-        body: '-TemplateValue',
-      },
-    };
-    createLgTemplate(payload);
-  }
-
-  function onRemoveTemplate(index) {
-    const payload = {
-      file: lgFile,
-      templateName: templates[index].name,
-    };
-
-    removeLgTemplate(payload);
-  }
-
-  function onCopyTemplate(index) {
-    const name = templates[index].name;
-    const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
-    const payload = {
-      file: lgFile,
-      fromTemplateName: name,
-      toTemplateName: resolvedName,
-    };
-    copyLgTemplate(payload);
-  }
+  const getKeyCallback = useCallback(item => item.name, []);
 
   return (
     <div className={'table-view'} data-testid={'table-view'}>
@@ -260,7 +272,7 @@ const TableView: React.FC<TableViewProps> = props => {
           className="table-view-list"
           columns={getTableColums()}
           // getKey={item => item.name}
-          getKey={useCallback(item => item.name, [])}
+          getKey={getKeyCallback}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderDetailsFooter={onRenderDetailsFooter}
