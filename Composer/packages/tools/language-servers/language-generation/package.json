@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@types/node": "^12.0.4",
-    "botbuilder-lg": "4.7.0-preview.92771",
+    "botbuilder-lg": "4.7.0-preview.93464",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
   },

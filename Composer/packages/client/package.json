@@ -23,7 +23,7 @@
     "@emotion/core": "^10.0.7",
     "@reach/router": "^1.2.1",
     "axios": "^0.18.0",
-    "botbuilder-lg": "4.7.0-preview.92771",
+    "botbuilder-lg": "4.7.0-preview.93464",
     "format-message": "^6.2.3",
     "immer": "^2.1.4",
     "jwt-decode": "^2.2.0",

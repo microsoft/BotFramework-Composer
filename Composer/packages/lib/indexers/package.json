@@ -30,7 +30,7 @@
   "dependencies": {
     "@bfc/shared": "*",
     "botbuilder-expression-parser": "^4.5.11",
-    "botbuilder-lg": "4.7.0-preview.92771",
+    "botbuilder-lg": "4.7.0-preview.93464",
     "lodash": "^4.17.15",
     "ludown": "^1.3.4"
   }
