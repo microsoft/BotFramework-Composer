@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import { toIdSchema } from '@bfcomposer/react-jsonschema-form/lib/utils';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { JSONSchema6 } from 'json-schema';
 import { MicrosoftIRecognizer } from '@bfc/shared';
+
+import { regexEditorContainer } from './styles';
 
 export default function RegexEditor(props: FieldProps<MicrosoftIRecognizer>) {
   if (!props.schema.oneOf) {
@@ -25,5 +28,9 @@ export default function RegexEditor(props: FieldProps<MicrosoftIRecognizer>) {
   ) as JSONSchema6;
   const idSchema = toIdSchema(schema, props.idSchema.__id, definitions, formData, idPrefix);
 
-  return <ObjectField {...props} schema={schema} idSchema={idSchema} />;
+  return (
+    <div css={regexEditorContainer}>
+      <ObjectField {...props} schema={schema} idSchema={idSchema} />
+    </div>
+  );
 }
