@@ -23,11 +23,11 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
   const fields: { [key: string]: InputDialogKeys | string }[] = [
     {
       name: 'maxTurnCount',
-      title: 'Max turn count',
+      title: formatMessage('Max turn count'),
     },
     {
       name: 'defaultValue',
-      title: 'Default value',
+      title: formatMessage('Default value'),
     },
   ];
 
