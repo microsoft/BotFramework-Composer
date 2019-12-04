@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import { EditorDidMount } from '@bfcomposer/react-monaco-editor';
+import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
 import { processSize } from './utils/common';
@@ -18,9 +20,36 @@ export interface RichEditorProps extends BaseEditorProps {
 }
 
 export function RichEditor(props: RichEditorProps) {
-  const { errorMsg, helpURL, placeholder, hidePlaceholder = false, height, ...rest } = props;
+  const { errorMsg, helpURL, placeholder, hidePlaceholder = false, height, editorDidMount, ...rest } = props;
   const isInvalid = !!errorMsg;
+  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const onEditorMount: EditorDidMount = (editor, monaco) => {
+    setEditor(editor);
+
+    if (typeof editorDidMount === 'function') {
+      editorDidMount(editor, monaco);
+    }
+  };
+
+  useEffect(() => {
+    if (editor) {
+      const onFocusListener = editor.onDidFocusEditorWidget(() => {
+        setFocused(true);
+      });
+
+      const onBlurListener = editor.onDidBlurEditorWidget(() => {
+        setFocused(false);
+      });
+
+      return () => {
+        onFocusListener.dispose();
+        onBlurListener.dispose();
+      };
+    }
+  }, [editor]);
 
   const errorHelp = formatMessage.rich(
     'This text has errors in the syntax. Refer to the syntax documentation<a>here</a>.',
@@ -47,6 +76,10 @@ export function RichEditor(props: RichEditorProps) {
     borderColor = NeutralColors.gray160;
   }
 
+  if (focused) {
+    borderColor = SharedColors.cyanBlue10;
+  }
+
   if (isInvalid) {
     borderColor = SharedColors.red20;
   }
@@ -56,15 +89,16 @@ export function RichEditor(props: RichEditorProps) {
       <div
         style={{
           height: `calc(${getHeight()} - 40px)`,
-          borderWidth: '1px',
+          borderWidth: focused ? '2px' : '1px',
           borderStyle: 'solid',
           borderColor,
           transition: 'border-color 0.1s linear',
+          boxSizing: 'border-box',
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <BaseEditor {...rest} placeholder={hidePlaceholder ? undefined : placeholder} />
+        <BaseEditor {...rest} editorDidMount={onEditorMount} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
       {isInvalid && (
         <MessageBar
