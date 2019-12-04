@@ -72,7 +72,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/([a-zA-Z][a-zA-Z0-9_.-]*)(,|\))/, ['parameter', 'delimeter']],
         [/([a-zA-Z][a-zA-Z0-9_.-]*)/, 'parameter'],
         [/[0-9.]+/, 'number'],
-        [/./, 'expression.content'],
+        [/.*$/, 'expression.content', '@pop'],
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],

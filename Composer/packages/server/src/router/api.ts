@@ -35,7 +35,7 @@ router.get('/projects/recent', ProjectController.getRecentProjects);
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
-router.get('/storages/:storageId/blobs/:path(*)', StorageController.getBlob);
+router.get('/storages/:storageId/blobs', StorageController.getBlob);
 
 // connector
 router.get('/launcher/connect', BotConnectorController.connect);
