@@ -4,9 +4,10 @@
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
-import mapEditorEventToAction from './mapEditorEventToAction';
-
-function mapShortcutToEditorEvent({ area, command }): { eventName: string; eventData?: any } | undefined {
+export default function mapShortcutToEditorEvent({
+  area,
+  command,
+}): { eventName: string; eventData?: any } | undefined {
   switch (area) {
     case KeyboardPrimaryTypes.Node:
       switch (command) {
@@ -35,12 +36,4 @@ function mapShortcutToEditorEvent({ area, command }): { eventName: string; event
     default:
       break;
   }
-}
-
-export default function mapShortcutToAction(shortcut, store) {
-  const editorEvent = mapShortcutToEditorEvent(shortcut);
-  if (editorEvent) {
-    return mapEditorEventToAction(editorEvent.eventName, editorEvent.eventData, store);
-  }
-  return null;
 }
