@@ -141,7 +141,7 @@ export const ShellApi: React.FC = () => {
    * @param {
    * id: string,
    * templateName: string,
-   * template: { Name: string, ?Parameters: string[], Body: string }
+   * template: { name: string, ?parameters: string[], body: string }
    * }
    * when templateName exit in current file, will do update
    * when templateName do not exit in current file, will do create

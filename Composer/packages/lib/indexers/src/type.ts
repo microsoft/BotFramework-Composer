@@ -60,9 +60,9 @@ export interface LuFile {
 }
 
 export interface LgTemplate {
-  Name: string;
-  Body: string;
-  Parameters: string[];
+  name: string;
+  body: string;
+  parameters: string[];
 }
 
 export interface LgFile {

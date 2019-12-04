@@ -21,10 +21,10 @@
 -If each page shows two items, here are the index and values
 
 # bfdactivity-644042
--Hello {user.name}, nice to talk to you!
+-Hello @{user.name}, nice to talk to you!
 
 # bfdactivity-604381
--Hello {user.name}, nice to talk to you!
+-Hello @{user.name}, nice to talk to you!
 
 # bfdactivity-338063
 -I'm a joke bot. To get started say "joke".
@@ -42,19 +42,19 @@
 -Oh I see!
 
 # bfdactivity-229784
--Great! Your pet's name is {user.petname}
+-Great! Your pet's name is @{user.petname}
 
 # bfdactivity-200761
--Done! You have added a pet named "{user.postResponse.content.name}" with id "{user.postResponse.content.id}"
+-Done! You have added a pet named "@{user.postResponse.content.name}" with id "@{user.postResponse.content.id}"
 
 # bfdactivity-212615
--Great! I found your pet named "{user.getResponse.content.name}"
+-Great! I found your pet named "@{user.getResponse.content.name}"
 
 # bfdactivity-485963
--Hello {user.name}, nice to talk to you!
+-Hello @{user.name}, nice to talk to you!
 
 # bfdactivity-839941
--Hello {user.name}, nice to meet you!
+-Hello @{user.name}, nice to meet you!
 
 # bfdactivity-554030
 -Seeing into your future...
@@ -66,7 +66,7 @@
 -Potentially a successful demo
 
 # bfdactivity-120128
--Hello {user.name}, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.
+-Hello @{user.name}, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.
 
 # bfdactivity-577618
 -Why did the chicken cross the road?
@@ -76,13 +76,13 @@
 
 
 # bfdactivity-166131
--user.age is set to {user.age}
+-user.age is set to @{user.age}
 
 # bfdactivity-643043
 -user.age is set to null
 
 # bfdactivity-797905
--user.age is set to {user.age}
+-user.age is set to @{user.age}
 
 # bfdactivity-309397
 -Step 3
@@ -94,7 +94,7 @@
 -Step 1
 
 # bfdactivity-160914
--You select: {user.style}
+-You select: @{user.style}
 
 # bfdactivity-576002
 -You select: 1
@@ -106,7 +106,7 @@
 -You select: 3
 
 # bfdactivity-640616
--[help]
+-@{help()}
 
 # bfdactivity-576334
 - Say moo to get a response, say emit to emit a event.

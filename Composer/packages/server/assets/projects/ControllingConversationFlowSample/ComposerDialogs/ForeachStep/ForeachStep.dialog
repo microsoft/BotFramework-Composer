@@ -61,7 +61,7 @@
           "$designer": {
             "id": "638869"
           },
-          "activity": "[bfdactivity-638869]"
+          "activity": "@{bfdactivity-638869()}"
         },
         {
           "$type": "Microsoft.Foreach",
@@ -72,7 +72,7 @@
           "actions": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+              "activity": "@{dialog.foreach.index}: @{dialog.foreach.value}"
             }
           ]
         }

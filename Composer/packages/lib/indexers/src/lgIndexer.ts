@@ -11,10 +11,10 @@ const lgStaticChecker = new StaticChecker();
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
-  const result = new Diagnostic(d.Message, source, d.Severity);
+  const result = new Diagnostic(d.message, source, d.severity);
 
-  const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
-  const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);
+  const start: Position = new Position(d.range.start.line, d.range.start.character);
+  const end: Position = new Position(d.range.end.line, d.range.end.character);
   result.range = new Range(start, end);
 
   return result;
@@ -35,14 +35,18 @@ function check(content: string, id: string, path?: string): Diagnostic[] {
 
 function parse(content: string, id?: string): LgTemplate[] {
   const resource = LGParser.parse(content, id);
-  const templates = resource.Templates.map(t => {
+  const templates = resource.templates.map(t => {
     return {
-      Name: t.Name,
-      Body: t.Body,
-      Parameters: t.Parameters,
+      name: t.name,
+      body: t.body,
+      parameters: t.parameters,
     };
   });
   return templates;
+}
+
+function isValid(diagnostics: Diagnostic[]): boolean {
+  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
 }
 
 function index(files: FileInfo[]): LgFile[] {
@@ -54,19 +58,18 @@ function index(files: FileInfo[]): LgFile[] {
       const id = getBaseName(name, '.lg');
       const diagnostics = check(content, id);
       let templates: LgTemplate[] = [];
-      try {
-        templates = parse(file.content, '');
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+      if (isValid(diagnostics)) {
+        try {
+          templates = parse(file.content, '');
+        } catch (err) {
+          diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+        }
       }
+
       lgFiles.push({ id, relativePath, content, templates, diagnostics });
     }
   }
   return lgFiles;
-}
-
-function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
 }
 
 function createSingleMessage(d: Diagnostic): string {

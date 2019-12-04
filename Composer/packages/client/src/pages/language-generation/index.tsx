@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
+import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
@@ -119,30 +119,28 @@ const LGPage: React.FC<RouteComponentProps> = props => {
     }
   }, [lgFiles]);
 
-  function onSelect(id) {
+  const onSelect = useCallback(id => {
     if (id === '_all') {
       navigateTo('/language-generation');
     } else {
       navigateTo(`language-generation/${id}`);
     }
-  }
+  }, []);
 
-  function onToggleEditMode() {
+  const onToggleEditMode = useCallback(() => {
     setEditMode(!editMode);
     setInlineTemplate(null);
-  }
+  }, [editMode]);
 
-  // #TODO: get line number from lg parser, then deep link to code editor this
-  // Line
-  function onTableViewClickEdit(template: LGTemplate) {
+  const onTableViewClickEdit = useCallback((template: LGTemplate) => {
     setInlineTemplate({
-      Name: get(template, 'Name', ''),
-      Parameters: get(template, 'Parameters'),
-      Body: get(template, 'Body', ''),
+      name: get(template, 'name', ''),
+      parameters: get(template, 'parameters'),
+      body: get(template, 'body', ''),
     });
     navigateTo(`/language-generation`);
     setEditMode(true);
-  }
+  }, []);
 
   const toolbarItems = [
     {
