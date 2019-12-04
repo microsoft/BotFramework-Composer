@@ -2,9 +2,29 @@
 // Licensed under the MIT License
 
 export interface StoreState {
-  selectedIds: string[];
+  dialog: {
+    json: any;
+  };
+  editor: {
+    focusedEvent: string;
+    focusedId: string;
+    selectedIds: string[];
+  };
+  clipboard: {
+    actions: any[];
+  };
 }
 
 export const initialStore: StoreState = {
-  selectedIds: [],
+  dialog: {
+    json: {},
+  },
+  editor: {
+    focusedEvent: '',
+    focusedId: '',
+    selectedIds: [],
+  },
+  clipboard: {
+    actions: [],
+  },
 };
