@@ -39,7 +39,7 @@
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
 #### Publish
-- [Publish your bot to Azure](/docs/deploy-bot.md)
+- [Publish your bot to Azure](/docs/how-to-publish-bot.md)
 
 ### Resources
 - [Bot Framework Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog)
