@@ -23,6 +23,7 @@ export class CSharpBotConnector implements IBotConnector {
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
+
   static stopAll = (signal: string) => {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
@@ -38,20 +39,29 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   private buildProcess = async (dir: string): Promise<number | null> => {
+    // check build file exist
+    const buildScript = Path.resolve(__dirname, './build_runtime.ps1');
+    const fileExisted = fs.existsSync(buildScript);
+    if (!fileExisted) {
+      return Promise.reject(new Error('build script not existed'));
+    }
+    // build bot runtime
     return new Promise((resolve, reject) => {
-      const build = spawn(`pwsh ./Scripts/build_runtime.ps1`, {
+      const build = spawn('pwsh', [buildScript], {
         cwd: dir,
         detached: true,
-        shell: true,
+        windowsHide: true,
         stdio: ['ignore', 'ignore', 'inherit'],
       });
       buildDebug('building bot runtime: %d', build.pid);
-
+      build.stdout &&
+        build.stdout.on('data', function(str) {
+          buildDebug('%s', str);
+        });
       build.stderr &&
         build.stderr.on('data', function(err) {
           reject(err.toString());
         });
-
       build.on('exit', function(code) {
         resolve(code);
       });
@@ -77,6 +87,7 @@ export class CSharpBotConnector implements IBotConnector {
 
     return configList;
   };
+
   private addListeners = (child: ChildProcess, handler: Function) => {
     const currentDebugger = runtimeDebugs[child.pid];
     if (child.stdout !== null) {

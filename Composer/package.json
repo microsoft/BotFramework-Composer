@@ -29,7 +29,7 @@
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
-    "startall": "node scripts/update.js && concurrently --kill-others-on-fail \"npm:runtime\" \"npm:start\"",
+    "startall": "node scripts/update.js && yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
