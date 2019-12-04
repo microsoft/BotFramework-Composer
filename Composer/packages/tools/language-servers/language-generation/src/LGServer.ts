@@ -17,19 +17,20 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { LGTemplate } from 'botbuilder-lg';
+import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   getLGResources,
   updateTemplateInContent,
-  getTemplatePositionOffset,
+  getTemplateRange,
   LGDocument,
   checkText,
   checkTemplate,
   convertDiagnostics,
   isValid,
+  TRange,
 } from './utils';
 
 // define init methods call from client
@@ -106,14 +107,7 @@ export class LGServer {
       };
 
       const templateDiags = checkTemplate(updatedTemplate);
-      // error in template.
-      if (isValid(templateDiags) === false) {
-        const diagnostics = convertDiagnostics(templateDiags, document);
-        this.sendDiagnostics(document, diagnostics);
-        return content;
-
-        // error in document context
-      } else {
+      if (isValid(templateDiags)) {
         return updateTemplateInContent(content, updatedTemplate);
       }
     }
@@ -309,11 +303,17 @@ export class LGServer {
 
   protected doValidate(document: TextDocument): void {
     let text = document.getText();
-    let lineOffset = 0;
     const LGDocument = this.getLGDocument(document);
+    let lgDiagnostics: LGDiagnostic[] = [];
+    let lineOffset = 0;
 
     // uninitialized
     if (!LGDocument) {
+      return;
+    }
+
+    if (text.length === 0) {
+      this.cleanDiagnostics(document);
       return;
     }
 
@@ -333,18 +333,23 @@ export class LGServer {
         const diagnostics = convertDiagnostics(templateDiags, document);
         this.sendDiagnostics(document, diagnostics);
         return;
-      } else {
-        text = updateTemplateInContent(content, updatedTemplate);
-        lineOffset = getTemplatePositionOffset(content, updatedTemplate);
       }
+
+      text = updateTemplateInContent(content, updatedTemplate);
+      const templateRange: TRange = getTemplateRange(content, updatedTemplate);
+      lineOffset = templateRange.startLineNumber;
+
+      // filter diagnostics belong to this template.
+      lgDiagnostics = checkText(text).filter(lgDialg => {
+        return (
+          lgDialg.range.start.line >= templateRange.startLineNumber &&
+          lgDialg.range.end.line <= templateRange.endLineNumber
+        );
+      });
+    } else {
+      lgDiagnostics = checkText(text);
     }
 
-    if (text.length === 0) {
-      this.cleanDiagnostics(document);
-      return;
-    }
-
-    const lgDiagnostics = checkText(text);
     const diagnostics = convertDiagnostics(lgDiagnostics, document, lineOffset);
     this.sendDiagnostics(document, diagnostics);
   }

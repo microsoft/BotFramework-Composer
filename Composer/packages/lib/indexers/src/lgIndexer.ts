@@ -49,8 +49,8 @@ function parse(content: string, id: string): LgTemplate[] {
       body: t.body,
       parameters: t.parameters,
       range: {
-        startLineNumber: get(t, 'parseTree._start._line', 0),
-        endLineNumber: get(t, 'parseTree._stop._line', 0),
+        startLineNumber: get(t, 'parseTree.start.line', 0),
+        endLineNumber: get(t, 'parseTree.stop.line', 0),
       },
     };
   });

@@ -20,6 +20,11 @@ export interface Template {
   body: string;
 }
 
+export interface TRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
+
 export interface LGDocument {
   uri: string;
   inline: boolean;
@@ -114,10 +119,13 @@ export function getLGResources(content: string): LGResource {
   return LGParser.parse(content, ' ');
 }
 
-export function getTemplatePositionOffset(content: string, { name, parameters = [], body }: Template): number {
+export function getTemplateRange(content: string, { name, parameters = [], body }: Template): TRange {
   const resource = LGParser.parse(content).updateTemplate(name, name, parameters, body);
   const template = resource.templates.find(item => item.name === name);
-  return get(template, 'parseTree._start.line', 0);
+  return {
+    startLineNumber: get(template, 'parseTree.start.line', 0),
+    endLineNumber: get(template, 'parseTree.stop.line', 0),
+  };
 }
 
 export function updateTemplateInContent(content: string, { name, parameters = [], body }: Template): string {
