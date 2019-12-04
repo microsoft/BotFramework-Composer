@@ -1,5 +1,8 @@
-const chalk = require('react-dev-utils/chalk');
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License
+
 const { execSync } = require('child_process');
+const chalk = require('react-dev-utils/chalk');
 
 const RELEASE_BRANCH = 'stable';
 let currentBranch;

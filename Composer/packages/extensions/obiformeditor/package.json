@@ -1,5 +1,6 @@
 {
   "name": "@bfc/obiformeditor",
+  "license": "MIT",
   "version": "1.0.0",
   "description": "obieditortest React component",
   "engines": {

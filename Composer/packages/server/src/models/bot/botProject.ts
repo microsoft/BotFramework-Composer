@@ -306,7 +306,7 @@ export class BotProject {
     await this._removeFile(luFile.relativePath);
 
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
-    this._cleanUp(luFile.relativePath);
+    await this._cleanUp(luFile.relativePath);
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
@@ -326,13 +326,10 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    try {
-      if (unpublished.length > 0) {
-        await this.luPublisher.publish(unpublished);
-      }
-    } catch (error) {
-      throw error;
+    if (unpublished.length > 0) {
+      await this.luPublisher.publish(unpublished);
     }
+
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
@@ -370,16 +367,16 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  private _cleanUp = (relativePath: string) => {
+  private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    this._removeEmptyFolder(dirPath);
+    await this._removeEmptyFolder(dirPath);
   };
 
   private _removeEmptyFolder = async (folderPath: string) => {
     const files = await this.fileStorage.readDir(folderPath);
     if (files.length === 0) {
-      this.fileStorage.rmDir(folderPath);
+      await this.fileStorage.rmDir(folderPath);
     }
   };
 
