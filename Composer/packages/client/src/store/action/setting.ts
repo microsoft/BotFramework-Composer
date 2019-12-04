@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import has from 'lodash/has';
-import { SensitiveProperties as defaultSensitiveProperties } from '@bfc/shared';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionCreator, DialogSetting } from '../types';
 import settingsStorage from '../../utils/dialogSettingStorage';
@@ -27,11 +27,10 @@ export const setSettings: ActionCreator = async (
       },
     });
     // set value in local storage
-    const SensitiveProperties = settings.SensitiveProperties || defaultSensitiveProperties;
     for (const property of SensitiveProperties) {
       if (has(settings, property)) {
-        const propertyValue = get(settings, property);
-        settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+        const propertyValue = get(settings, property, '');
+        settingsStorage.setField(botName, property, propertyValue);
       }
     }
     // set value to server

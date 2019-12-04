@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import omit from 'lodash/omit';
-import { SensitiveProperties as defaultSensitiveProperties } from '@bfc/shared';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 
@@ -34,7 +34,6 @@ export class DefaultSettingManager extends FileSettingManager {
   };
 
   private filterOutSensitiveValue = (obj: any) => {
-    const SensitiveProperties = obj.SensitiveProperties || defaultSensitiveProperties;
     if (obj && typeof obj === 'object') {
       return omit(obj, SensitiveProperties);
     }

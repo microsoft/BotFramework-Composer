@@ -14,6 +14,8 @@ import log from '../../logger';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
+const buildDebug = log.extend('build bot runtime');
+const runtimeDebugs: { [key: string]: debug.Debugger } = {};
 export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
@@ -24,14 +26,14 @@ export class CSharpBotConnector implements IBotConnector {
   static stopAll = (signal: string) => {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
-      log(`kill runtime before exit at ${runtime.pid}`);
+      runtimeDebugs[pid]('successfully stopped bot runtime: %d', pid);
       runtime.kill(signal);
       delete CSharpBotConnector.botRuntimes[pid];
     }
   };
 
   private stop = () => {
-    CSharpBotConnector.stopAll('SIGKILL');
+    CSharpBotConnector.stopAll('SIGINT');
     this.status = BotStatus.NotConnected;
   };
 
@@ -43,7 +45,7 @@ export class CSharpBotConnector implements IBotConnector {
         shell: true,
         stdio: ['ignore', 'ignore', 'inherit'],
       });
-      log(`build pid : ${build.pid}`);
+      buildDebug('building bot runtime: %d', build.pid);
 
       build.stderr &&
         build.stderr.on('data', function(err) {
@@ -76,38 +78,39 @@ export class CSharpBotConnector implements IBotConnector {
     return configList;
   };
   private addListeners = (child: ChildProcess, handler: Function) => {
+    const currentDebugger = runtimeDebugs[child.pid];
     if (child.stdout !== null) {
       child.stdout.on('data', (data: any) => {
-        log(`stdout: ${data}`);
+        currentDebugger('bot runtime (%d): %s', child.pid, data);
       });
     }
 
     if (child.stderr !== null) {
       child.stderr.on('data', (data: any) => {
-        log(`stderr: ${data}`);
+        currentDebugger('bot runtime (%d): Error %s', child.pid, data);
       });
     }
 
     child.on('close', code => {
-      log(`close ${code}`);
+      currentDebugger('close %d', code);
       handler();
     });
 
     child.on('error', (err: any) => {
-      log(`stderr: ${err}`);
+      currentDebugger('stderr: %s', err);
     });
 
     child.on('exit', code => {
-      log(`exit: ${code}`);
+      currentDebugger('exit %d', code);
       handler();
     });
 
     child.on('message', msg => {
-      log(msg);
+      currentDebugger('bot runtime received: %s', msg);
     });
 
     child.on('disconnect', code => {
-      log(`disconnect: ${code}`);
+      currentDebugger('disconnect %d', code);
       handler();
     });
   };
@@ -130,29 +133,45 @@ export class CSharpBotConnector implements IBotConnector {
         stdio: ['ignore', 'ignore', 'inherit'],
       }
     );
-    log(`runtime started. pid: ${runtime.pid}`);
+    runtimeDebugs[runtime.pid] = log.extend(`port ${runtime.pid}`);
+    runtimeDebugs[runtime.pid]('bot runtime started. pid: %d', runtime.pid);
     this.addListeners(runtime, this.stop);
     CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
     this.status = BotStatus.Connected;
   };
 
   private checkPortUsable = async (port: string | number): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const netstat = spawn('netstat', ['-ano']);
-      const findstr = spawn('findstr', [`${port}`], {
-        stdio: [netstat.stdout, 'pipe', process.stderr],
-      });
-      let output = '';
-      findstr.stderr &&
-        findstr.stderr.on('data', function(err) {
-          reject(err.toString());
+    if (process.platform === 'win32') {
+      return new Promise((resolve, reject) => {
+        const netstat = spawn('netstat', ['-ano']);
+        const findstr = spawn('findstr', [`${port}`], {
+          stdio: [netstat.stdout, 'pipe', process.stderr],
         });
-
-      findstr.stdout && findstr.stdout.on('data', data => (output += data));
-      findstr.on('exit', function() {
-        resolve(output);
+        let output = '';
+        findstr.stderr &&
+          findstr.stderr.on('data', function(err) {
+            reject(err.toString());
+          });
+        findstr.stdout && findstr.stdout.on('data', data => (output += data));
+        findstr.on('exit', function() {
+          resolve(output);
+        });
       });
-    });
+    } else {
+      return new Promise((resolve, reject) => {
+        const lsof = spawn('sudo', ['lsof', '-i', `:${port}`]);
+        let output = '';
+        lsof.stderr && lsof.stderr.on('data', err => reject(err.toString()));
+        lsof.stdout &&
+          lsof.stdout.on('data', function(chunk) {
+            output += chunk.toString();
+          });
+
+        lsof.on('exit', function() {
+          resolve(output);
+        });
+      });
+    }
   };
 
   connect = async (_: BotEnvironments, __: string) => {
@@ -161,7 +180,7 @@ export class CSharpBotConnector implements IBotConnector {
     if (portStatus.trim() === '') {
       return Promise.resolve(`${this.endpoint}/api/messages`);
     } else {
-      throw new Error('Port already been used');
+      throw new Error(`Port ${port} already in use`);
     }
   };
 
@@ -215,17 +234,14 @@ export class CSharpBotConnector implements IBotConnector {
 }
 
 process.on('SIGINT', () => {
-  log('[SIGINT] start graceful shutdown');
   CSharpBotConnector.stopAll('SIGINT');
-  process.exit(1);
+  process.exit(0);
 });
 process.on('SIGTERM', () => {
-  log('[SIGTERM] start graceful shutdown');
   CSharpBotConnector.stopAll('SIGTERM');
-  process.exit(1);
+  process.exit(0);
 });
 process.on('SIGQUIT', () => {
-  log('[SIGQUIT] start graceful shutdown');
   CSharpBotConnector.stopAll('SIGQUIT');
-  process.exit(1);
+  process.exit(0);
 });

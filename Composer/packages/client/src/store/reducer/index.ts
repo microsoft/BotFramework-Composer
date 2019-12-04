@@ -4,7 +4,7 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers/lib/dialogIndexer';
-import { SensitiveProperties as defaultSensitiveProperties } from '@bfc/shared';
+import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -18,7 +18,6 @@ const projectFiles = ['bot', 'botproj'];
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
-  const SensitiveProperties = settings.SensitiveProperties || defaultSensitiveProperties;
   for (const property of SensitiveProperties) {
     const value = get(settings, property);
     if (value) {
@@ -30,7 +29,6 @@ const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
 // merge sensitive values in localStorage
 const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   const localSetting = settingStorage.get(botName);
-  const SensitiveProperties = settings.SensitiveProperties || defaultSensitiveProperties;
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);

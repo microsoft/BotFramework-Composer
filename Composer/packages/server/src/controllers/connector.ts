@@ -14,7 +14,7 @@ async function connect(req: any, res: any) {
     res.send({ botEndpoint });
   } catch (error) {
     res.status(400).json({
-      message: 'cannot connect to a bot runtime, make sure you start the bot runtime',
+      message: error.message || 'cannot connect to a bot runtime, make sure you start the bot runtime',
     });
   }
 }
@@ -34,7 +34,7 @@ async function getPublishHistory(req: any, res: any) {
 async function sync(req: any, res: any) {
   try {
     const environment = EnvironmentProvider.getCurrent();
-    const settingsInDisk = await environment.getSettingsManager().get('', false);
+    const settingsInDisk = await environment.getSettingsManager().get('');
     await environment.getBotConnector().sync(merge(settingsInDisk, req.body, { user: req.user }));
     res.send('OK');
   } catch (error) {
