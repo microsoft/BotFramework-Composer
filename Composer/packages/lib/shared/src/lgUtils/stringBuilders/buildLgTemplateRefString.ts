@@ -7,7 +7,7 @@ import { LgTemplateRefString } from '../models/stringTypes';
 import buildLgParamString from './buildLgParamString';
 
 /**
- * { name: 'greeting', parameters: ['1'] } => '[greeting(1)]'
+ * { name: 'greeting', parameters: ['1'] } => '@{greeting(1)}'
  */
 export default function buildLgTemplateRefString(lgTemplateRef: LgTemplateRef): LgTemplateRefString {
   const { name, parameters } = lgTemplateRef;
