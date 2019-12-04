@@ -51,14 +51,14 @@ const topLinks = (botLoaded: boolean) => {
       disabled: true, // will delete
     },
     {
-      to: 'language-generation/',
+      to: '/language-generation',
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: 'language-understanding/',
+      to: '/language-understanding',
       iconName: 'People',
       labelName: formatMessage('User Input'),
       exact: false,

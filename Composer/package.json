@@ -102,7 +102,7 @@
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "ts-loader": "^6.2.1",
-    "typescript": "3.6.4",
+    "typescript": "3.7.2",
     "wsrun": "^3.6.4"
   },
   "dependencies": {

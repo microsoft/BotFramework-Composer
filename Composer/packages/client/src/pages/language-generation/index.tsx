@@ -107,7 +107,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
     //  fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
-      navigateTo('/language-generation/');
+      navigateTo('/language-generation');
     }
   }, [subPath, dialogs]);
 
@@ -124,7 +124,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   function onSelect(id) {
     if (id === '_all') {
-      navigateTo('/language-generation/');
+      navigateTo('/language-generation');
     } else {
       navigateTo(`language-generation/${id}`);
     }
