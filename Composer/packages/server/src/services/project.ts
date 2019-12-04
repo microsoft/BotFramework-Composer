@@ -75,6 +75,8 @@ export class BotProjectService {
       BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file not exist ${locationRef.path}`);
     }
+    // TODO: possible race condition with openProject and saveProjectAs
+    // eslint-disable-next-line require-atomic-updates
     BotProjectService.currentBotProject = new BotProject(locationRef);
     await BotProjectService.currentBotProject.index();
     BotProjectService.addRecentProject(locationRef.path);
@@ -111,7 +113,9 @@ export class BotProjectService {
   public static saveProjectAs = async (locationRef: LocationRef) => {
     BotProjectService.initialize();
     if (typeof BotProjectService.currentBotProject !== 'undefined') {
-      BotProjectService.currentBotProject = await BotProjectService.currentBotProject.copyTo(locationRef);
+      const newCurrentProject = await BotProjectService.currentBotProject.copyTo(locationRef);
+      // eslint-disable-next-line require-atomic-updates
+      BotProjectService.currentBotProject = newCurrentProject;
       await BotProjectService.currentBotProject.index();
       BotProjectService.addRecentProject(locationRef.path);
     }

@@ -59,29 +59,26 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const lgFile = lgFiles.length ? lgFiles[0] : null;
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
-    const subLinks = dialogs.reduce<INavLink>(
-      (result, file) => {
-        const item = {
-          id: file.id,
-          key: file.id,
-          name: file.displayName,
-          url: file.id,
-        };
+    const subLinks = dialogs.reduce<INavLink>((result, file) => {
+      const item = {
+        id: file.id,
+        key: file.id,
+        name: file.displayName,
+        url: file.id,
+      };
 
-        if (file.isRoot) {
-          result = {
-            ...result,
-            ...item,
-            isExpanded: true,
-          };
-        } else {
-          result.links = result.links || [];
-          result.links.push(item);
-        }
-        return result;
-      },
-      {} as INavLink
-    );
+      if (file.isRoot) {
+        result = {
+          ...result,
+          ...item,
+          isExpanded: true,
+        };
+      } else {
+        result.links = result.links || [];
+        result.links.push(item);
+      }
+      return result;
+    }, {} as INavLink);
 
     return [
       {

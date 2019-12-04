@@ -120,7 +120,7 @@ export function textFromTemplates(templates: Template[]): string {
   let text = '';
 
   templates.forEach(template => {
-    if (template.Name && (template.Body !== null && template.Body !== undefined)) {
+    if (template.Name && template.Body !== null && template.Body !== undefined) {
       text += `# ${template.Name.trim()}`;
       if (template.Parameters && template.Parameters.length > 0) {
         text += '(' + template.Parameters.join(', ') + ')';
