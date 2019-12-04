@@ -238,7 +238,11 @@ describe('lu operation', () => {
 
   it('should update diagnostics when lu content is invalid', async () => {
     const id = 'root';
-    const content = 'hello \n hello3';
+    let content = '## hello \n - hello';
+    await proj.createLuFile(id, content);
+
+    content = 'hello \n hello3';
+
     const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
     expect(result?.diagnostics?.length).toBeGreaterThan(0);

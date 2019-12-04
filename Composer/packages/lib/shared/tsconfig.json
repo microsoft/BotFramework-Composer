@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "lib"
   },
-  "include": ["./src/**/*", "./__tests__/**/*"]
+  "include": ["./src/**/*", "./__tests__/**/*", "../indexers/__test__/lgUtils"]
 }
