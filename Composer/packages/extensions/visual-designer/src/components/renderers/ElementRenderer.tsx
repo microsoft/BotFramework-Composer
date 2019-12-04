@@ -56,8 +56,7 @@ const nodeBorderDoubleSelectedStyle = css`
 export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, tab }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   const selectableId = tab ? `${id}${tab}` : id;
-  const { focusedId, focusedEvent, focusedTab } = useContext(EditorContext);
-  const { selectedIds, getNodeIndex } = useContext(SelectionContext);
+  const { focusedId, focusedEvent, focusedTab, selectedIds, getNodeIndex } = useContext(EditorContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);

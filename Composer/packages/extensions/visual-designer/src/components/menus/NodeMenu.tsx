@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
-import { SelectionContext } from '../../store/SelectionContext';
+import { EditorContext } from '../../store/EditorContext';
 
 import { IconMenu } from './IconMenu';
 
@@ -30,7 +30,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
-  const { selectedIds } = useContext(SelectionContext);
+  const { selectedIds } = useContext(EditorContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.NodeMenu}`);
 
   return (

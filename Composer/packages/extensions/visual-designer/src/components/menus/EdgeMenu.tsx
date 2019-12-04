@@ -12,7 +12,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectionContext } from '../../store/SelectionContext';
+import { EditorContext } from '../../store/EditorContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
@@ -96,8 +96,9 @@ const buildEdgeMenuItemsFromClipboardContext = (
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
   const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
-  const { selectedIds } = useContext(SelectionContext);
+  const { selectedIds } = useContext(EditorContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
+
   const declareElementAttributes = (id: string) => {
     return {
       [AttrNames.SelectableElement]: true,
