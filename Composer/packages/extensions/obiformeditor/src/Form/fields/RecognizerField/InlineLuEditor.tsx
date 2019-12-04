@@ -27,11 +27,7 @@ const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
     onSave(value);
   };
 
-  return (
-    <div style={{ margin: '10px 0', padding: '0 18px' }}>
-      <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} height={450} />
-    </div>
-  );
+  return <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} height={450} />;
 };
 
 export default InlineLuEditor;

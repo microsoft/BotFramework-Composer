@@ -90,6 +90,7 @@ export function RichEditor(props: RichEditorProps) {
         style={{
           height: `calc(${getHeight()} - 40px)`,
           borderWidth: focused ? '2px' : '1px',
+          padding: focused ? 0 : '1px',
           borderStyle: 'solid',
           borderColor,
           transition: 'border-color 0.1s linear',
