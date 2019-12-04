@@ -42,5 +42,5 @@ export default function mapShortcutToAction(shortcut, store) {
   if (editorEvent) {
     return mapEditorEventToAction(editorEvent.eventName, editorEvent.eventData, store);
   }
-  return { type: '' };
+  return null;
 }

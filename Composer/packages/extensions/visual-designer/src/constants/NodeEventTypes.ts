@@ -4,6 +4,7 @@
 export enum NodeEventTypes {
   Expand = 'event.view.expand',
   Focus = 'event.view.focus',
+  Select = 'event.view.select',
   Navigation = 'event.view.navigation',
   FocusEvent = 'event.view.focus-event',
   OpenDialog = 'event.nav.opendialog',
@@ -19,4 +20,5 @@ export enum NodeEventTypes {
   InsertSelection = 'event.data.paste-selection--menu',
   Undo = 'event.operation.undo',
   Redo = 'event.operation.redo',
+  AddCoachMarkRef = 'event.coachmark.addRef',
 }
