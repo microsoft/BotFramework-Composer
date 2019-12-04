@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-const SET_FOCUSSTATE = 'VISUAL/SET_FOCUSSTATE';
+export const SET_FOCUSSTATE = 'VISUAL/SET_FOCUSSTATE';
 
 export default function setFocusState(focusedId: string, focusedTab?: string) {
   return {
@@ -12,5 +12,3 @@ export default function setFocusState(focusedId: string, focusedTab?: string) {
     },
   };
 }
-
-export { SET_FOCUSSTATE };

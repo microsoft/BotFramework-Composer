@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-const SET_EVENTPATH = 'VISUAL/SET_EVENTPATH';
+export const SET_EVENTPATH = 'VISUAL/SET_EVENTPATH';
 
 export default function setEventPath(eventPath: string) {
   return {
@@ -9,5 +9,3 @@ export default function setEventPath(eventPath: string) {
     payload: eventPath,
   };
 }
-
-export { SET_EVENTPATH };

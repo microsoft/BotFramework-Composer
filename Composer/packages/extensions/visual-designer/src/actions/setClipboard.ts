@@ -3,7 +3,7 @@
 
 import { BaseSchema } from '@bfc/shared';
 
-const SET_CLIPBOARD = 'VISUAL/SET_CLIPBOARD';
+export const SET_CLIPBOARD = 'VISUAL/SET_CLIPBOARD';
 
 export default function setClipboard(clipboardActions: BaseSchema[]) {
   return {
@@ -11,5 +11,3 @@ export default function setClipboard(clipboardActions: BaseSchema[]) {
     payload: clipboardActions,
   };
 }
-
-export { SET_CLIPBOARD };

@@ -3,7 +3,7 @@
 
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
-const SET_DIALOG = 'VISUAL/SET_DIALOG';
+export const SET_DIALOG = 'VISUAL/SET_DIALOG';
 
 export default function setDialog(dialogId: string, dialog: MicrosoftAdaptiveDialog) {
   return {
@@ -14,5 +14,3 @@ export default function setDialog(dialogId: string, dialog: MicrosoftAdaptiveDia
     },
   };
 }
-
-export { SET_DIALOG };
