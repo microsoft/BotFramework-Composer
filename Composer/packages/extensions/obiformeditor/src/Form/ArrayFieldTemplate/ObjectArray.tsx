@@ -25,9 +25,9 @@ import {
 } from './styles';
 
 const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
-  const { canAdd, idSchema, items, onAddClick, schema, uiSchema = {} } = props;
+  const { canAdd, idSchema, items, onAddClick, schema = {}, uiSchema = {} } = props;
   const { object } = (uiSchema['ui:options'] || {}) as any;
-  const { items: itemSchema } = schema;
+  const { items: itemSchema = {} } = schema;
   const { properties = {} } = itemSchema as JSONSchema6;
 
   const [value, setValue] = useState({});
@@ -119,6 +119,7 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
                               }
                             : {}),
                         }}
+                        data-testid="object-array-text-input"
                       />
                     </div>
                   ))}
