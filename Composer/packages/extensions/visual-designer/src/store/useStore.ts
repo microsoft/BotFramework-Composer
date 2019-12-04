@@ -9,7 +9,7 @@ const reducer = action => {
   return initialStore;
 };
 
-type Action = { type: string; payload: any };
+type Action = { type: string; payload?: any };
 
 const applyMiddleware = (fn, middleware?): Dispatch<Action> => {
   if (typeof fn !== 'function') return () => {};
@@ -27,7 +27,7 @@ const useStore = (dispatchMiddleware?: (action: Action) => void) => {
   const [state, dispatch] = useReducer(reducer, initialStore);
 
   return {
-    state: state as StoreState,
+    store: state as StoreState,
     dispatch: applyMiddleware(dispatch, dispatchMiddleware),
   };
 };
