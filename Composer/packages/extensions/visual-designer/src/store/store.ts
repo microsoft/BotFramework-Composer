@@ -2,7 +2,10 @@
 // Licensed under the MIT License
 
 export interface StoreState {
-  dialog: any;
+  dialog: {
+    id: string;
+    json: any;
+  };
   eventPath: string;
   focusedId: string;
   focusedTab: string;
@@ -11,7 +14,10 @@ export interface StoreState {
 }
 
 export const initialStore: StoreState = {
-  dialog: {},
+  dialog: {
+    id: '',
+    json: {},
+  },
   eventPath: '',
   focusedId: '',
   focusedTab: '',
