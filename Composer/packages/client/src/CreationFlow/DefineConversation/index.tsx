@@ -25,7 +25,7 @@ interface FormData {
 }
 
 interface FormDataError {
-  name: string;
+  name?: string;
 }
 
 interface Bots {
@@ -44,9 +44,7 @@ interface DefineConversationProps {
   bots?: Bots[];
 }
 
-const initialFormDataError: FormDataError = {
-  name: '',
-};
+const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const {
@@ -71,7 +69,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
       defaultName = `${bot}-${i}`;
     } while (
       bots &&
-      ~bots.findIndex(bot => {
+      bots.find(bot => {
         return bot.name === defaultName;
       }) &&
       i < MAXTRYTIMES
@@ -92,7 +90,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
   const validateForm = (data: FormData) => {
-    const errors = { name: '' };
+    const errors: FormDataError = {};
     const { name } = data;
 
     if (!name || !nameRegex.test(name)) {
@@ -106,7 +104,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     if (
       name &&
       bots &&
-      ~bots.findIndex(bot => {
+      bots.find(bot => {
         return bot.path === newBotPath;
       })
     ) {

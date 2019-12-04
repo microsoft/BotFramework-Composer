@@ -148,7 +148,15 @@ export function CreationFlow(props) {
     },
     [Steps.LOCATION]: {
       ...DialogCreationCopy.SELECT_LOCATION,
-      children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} />,
+      children: (
+        <OpenProject
+          onOpen={openBot}
+          onDismiss={handleDismiss}
+          focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
+          onCurrentPathUpdate={updateCurrentPath}
+        />
+      ),
     },
     [Steps.DEFINE]: {
       ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
