@@ -36,7 +36,7 @@ export default function useNotifications(filter: string) {
         const location = `${lgFiles.id}.lg`;
         locations.add(location);
         notifactions.push({
-          type: DiagnosticSeverity[diagnostic.Severity],
+          type: DiagnosticSeverity[diagnostic.severity],
           location,
           message: createSingleMessage(diagnostic),
         });

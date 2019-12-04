@@ -64,13 +64,13 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const template = (lgFile &&
     lgFile.templates &&
     lgFile.templates.find(template => {
-      return template.Name === lgName;
+      return template.name === lgName;
     })) || {
-    Name: lgName,
-    Body: getInitialTemplate(name, value),
+    name: lgName,
+    body: getInitialTemplate(name, value),
   };
 
-  const [localValue, setLocalValue] = useState(template.Body);
+  const [localValue, setLocalValue] = useState(template.body);
   const lgOption = {
     inline: true,
     content: get(lgFile, 'content', ''),
