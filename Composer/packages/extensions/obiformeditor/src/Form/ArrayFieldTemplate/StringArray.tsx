@@ -53,6 +53,7 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
+              data-testid="string-array-text-input"
             />
           </div>
           <IconButton

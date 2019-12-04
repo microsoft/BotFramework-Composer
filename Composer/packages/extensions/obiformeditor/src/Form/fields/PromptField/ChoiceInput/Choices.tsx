@@ -20,11 +20,8 @@ import {
   choiceItemLabel,
   choiceItemValue,
   choiceItemValueLabel,
-  choiceItemSynonyms,
-  choiceItemSynonymsLabel,
 } from '../styles';
 import { swap, remove } from '../../../utils';
-// import { FormContext } from '../../../types';
 import { WidgetLabel } from '../../../widgets/WidgetLabel';
 import { EditableField } from '../../EditableField';
 
@@ -100,7 +97,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           onBlur={handleBlur}
         />
       </div>
-      <div css={choiceItemSynonyms}>
+      <div css={choiceItemValue}>
         <EditableField
           onChange={handleEdit('synonyms')}
           value={choice.synonyms && choice.synonyms.join(', ')}
@@ -178,7 +175,7 @@ export const Choices: React.FC<ChoicesProps> = props => {
       />
       <div css={[choiceItemContainer('flex-start'), choiceItemLabel]}>
         <div css={[choiceItemValue, choiceItemValueLabel]}>{formatMessage('Choice Name')}</div>
-        <div css={[choiceItemSynonyms, choiceItemSynonymsLabel]}>{formatMessage('Synonyms (Optional)')}</div>
+        <div css={[choiceItemValue, choiceItemValueLabel]}>{formatMessage('Synonyms (Optional)')}</div>
       </div>
       <div css={choiceField}>
         {formData &&

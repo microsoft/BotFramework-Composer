@@ -25,7 +25,7 @@ import {
 } from './styles';
 
 const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
-  const { canAdd, idSchema, items, onAddClick, schema, uiSchema } = props;
+  const { canAdd, idSchema, items, onAddClick, schema, uiSchema = {} } = props;
   const { object } = (uiSchema['ui:options'] || {}) as any;
   const { items: itemSchema } = schema;
   const { properties = {} } = itemSchema as JSONSchema6;

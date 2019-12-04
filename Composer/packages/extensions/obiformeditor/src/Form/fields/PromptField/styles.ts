@@ -88,12 +88,11 @@ export const choiceItem = css`
 `;
 
 export const choiceItemValue = css`
-  width: 180px;
-`;
-
-export const choiceItemSynonyms = css`
   flex: 1;
-  margin-left: 20px;
+
+  & + & {
+    margin-left: 20px;
+  }
 `;
 
 export const choiceItemLabel = css`
@@ -105,9 +104,4 @@ export const choiceItemValueLabel = css`
   color: ${NeutralColors.gray130};
   font-size: 14px;
   margin-left: 7px;
-`;
-
-export const choiceItemSynonymsLabel = css`
-  color: ${NeutralColors.gray130};
-  font-size: 14px;
 `;
