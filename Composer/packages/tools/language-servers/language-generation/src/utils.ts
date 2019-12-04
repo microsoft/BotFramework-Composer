@@ -77,7 +77,7 @@ export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextD
 export function textFromTemplate(template: Template): string {
   const { name, parameters = [], body } = template;
   const textBuilder: string[] = [];
-  if (name && (body !== null && body !== undefined)) {
+  if (name && body) {
     textBuilder.push(`# ${name.trim()}`);
     if (parameters.length) {
       textBuilder.push(`(${parameters.join(', ')})`);
