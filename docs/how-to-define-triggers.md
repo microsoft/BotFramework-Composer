@@ -30,7 +30,7 @@ Follow the steps to define an **Intent recognized** trigger with LUIS recognizer
 
 1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
 
-![luis_recognizer](./media/add_luis/luis_recognizer.png)
+![luis_recognizer](./media/events_triggers/luis_recognizer.png)
 
 2. In the Language Understanding editor, create intents with sample utterances and follow the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 
@@ -76,13 +76,13 @@ Follow the steps to define **Intent recognized**trigger with [Regular Expression
 
 1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
 
-![regexp-recognizer](tutorial-weatherbot/02/regexp-recognizer.gif)
+![regex_recognizer](./media/events_triggers/regex_recognizer.png)
 
 2. In the Language Understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
 
 ![regular_expression_intent](./media/events_triggers/regular_expression_intent.png)
 
-3. Create an **Intent recognized** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](howto-defining-triggers.md#LUIS-recognizer). 
+3. Create an **Intent recognized** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](how-to-define-triggers.md#LUIS-recognizer). 
 
 ## Unknown intent 
 In **Unknown intent** we define actions to take when an intent is not recognized. You do not need to define any intents for this trigger. Follow the steps to define an **Unknown intent** trigger:
