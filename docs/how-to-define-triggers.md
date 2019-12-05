@@ -13,7 +13,7 @@ The table below lists the six different types of triggers in Composer and their 
 | Custom event   | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
 
 ## Intent recognized
-In **Intent recognized** trigger you define actions to take when an `intent` is recognized (and optionally `entities`). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane click **New Trigger** and select **Intent recognized** from the drop-down menu. You will see the intent trigger menu as follows: 
+This is a trigger type we use to define actions to take when an `intent` is recognized (and optionally `entities`). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane click **New Trigger** and select **Intent recognized** from the drop-down menu. You will see the intent trigger menu as follows: 
 
 ![intent_trigger](./media/events_triggers/intent_trigger.png)
 
@@ -85,7 +85,7 @@ Follow the steps to define **Intent recognized**trigger with [Regular Expression
 3. Create an **Intent recognized** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](how-to-define-triggers.md#LUIS-recognizer). 
 
 ## Unknown intent 
-In **Unknown intent** we define actions to take when an intent is not recognized. You do not need to define any intents for this trigger. Follow the steps to define an **Unknown intent** trigger:
+This is a trigger type we use to define actions to take when an intent is not recognized. You do not need to define any intents for this trigger. Follow the steps to define an **Unknown intent** trigger:
 
 1. On the navigation pane click **New Trigger** and select **Unknown intent** from the drop-down menu. 
 
@@ -100,26 +100,30 @@ In **Unknown intent** we define actions to take when an intent is not recognized
 ## Dialog events
 This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **Dialog started (Begin dialog event)** trigger: 
 
-### Create a **Dialog started** trigger
-On dialog navigation pane, click **New Trigger** and select **Dialog started (Begin dialog event)** from the drop-down menu. Click **Submit**. 
+On the navigation pane click **New Trigger** and select **Dialog events** from the drop-down menu. 
 
-![begin_new_dialog](./media/events_triggers/begin_new_dialog.gif)
+![dialog_events](./media/events_triggers/dialog_events.png)
 
-### Add dialog action(s) to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the property editor. Before you use this trigger you must define a dialog to be configured.
+Select **Dialog started (Begin dialog event)** from the drop-down menu. Click **Submit**. 
 
-![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
+![begin_dialog](./media/events_triggers/begin_dialog.png)
+
+Click the "+" sign under the trigger node and mouse over the action menu. Click **Dialog management** and then **Begin a new dialog**. You can configure any pre-defined dialog to the **Begin a new dialog** action on the properties panel on the right side. Before you use this trigger you must define a dialog to be configured.
+
+![configure_dialog](./media/events_triggers/configure_dialog.png) 
 
 ## Activities
-This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Conversation started (ConversationUpdate)** trigger to handle it. Follow the steps below to define a **Conversation started (ConversationUpdate)** trigger and send a welcome message: 
+This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Greeting (ConversationUpdate acvitity)** trigger to handle it. Follow the steps to define a **Greeting (ConversationUpdate acvitity)** trigger to send a welcome message: 
 
-### Create a **ConversationUpdate** trigger
-On the navigation pane on the left side, click **New Trigger** in your selected dialog and choose **Activity trigger** and then **Conversation started (ConversationUpdate)** from the drop-down menu. Click **submit**. 
+On the navigation pane click **New Trigger** and select **Activities** from the drop-down menu. 
+
+![activities](./media/events_triggers/activities.png)
+
+Select **Greeting (ConversationUpdate acvitity)** from the drop-down menu. Click **Submit**. 
 
 ![conversationupdate](./media/events_triggers/conversationupdate.png)
 
-### Add an action node to the trigger
-Under this trigger, click the "+" sign and mouse over the action menu then click **Send a response**. In the language generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+Click the "+" sign under the trigger node and and mouse over the action menu then click **Send a response**. In the language generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
 
 ![welcome](./media/events_triggers/welcome.gif)
 
