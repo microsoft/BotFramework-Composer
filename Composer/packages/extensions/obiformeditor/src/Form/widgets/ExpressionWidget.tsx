@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
@@ -41,7 +41,18 @@ const getDefaultErrorMessage = () => {
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, editable, hiddenErrMessage, onValidate, options = {}, ...rest } = props;
+  const {
+    rawErrors,
+    formContext,
+    schema,
+    id,
+    label,
+    editable,
+    hiddenErrMessage,
+    onValidate,
+    options = {},
+    ...rest
+  } = props;
   const { shellApi } = formContext;
   const { description } = schema;
   const { hideLabel } = options;

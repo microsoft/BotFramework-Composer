@@ -4,6 +4,7 @@
 import './styles.css';
 
 export * from './CodeField';
+export * from './CustomObjectField';
 export * from './JsonField';
 export * from './PromptField';
 export * from './RecognizerField';

@@ -84,7 +84,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
           schema={schema}
           onChange={handleEdit}
           onBlur={handleBlur}
-          styleOverrides={{
+          styles={{
             root: { margin: '7px 0 7px 0' },
           }}
         />

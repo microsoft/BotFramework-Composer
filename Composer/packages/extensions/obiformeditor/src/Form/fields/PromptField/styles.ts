@@ -109,6 +109,6 @@ export const choiceItemLabel = css`
 
 export const choiceItemValueLabel = css`
   color: ${NeutralColors.gray130};
-  font-size: 14px;
+  font-size: 12px;
   margin-left: 7px;
 `;

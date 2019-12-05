@@ -14,8 +14,7 @@ interface EditableFieldProps extends ITextFieldProps {
 }
 
 export const EditableField: React.FC<EditableFieldProps> = props => {
-  const { styleOverrides = {}, placeholder, fontSize, onChange, onBlur, options = {}, value, ...rest } = props;
-  const { styles = {}, placeholder, fontSize, onChange, onBlur, value,  options = {}, ...rest } = props;
+  const { styles = {}, placeholder, fontSize, onChange, onBlur, value, options = {}, ...rest } = props;
   const { transparentBorder } = options;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);

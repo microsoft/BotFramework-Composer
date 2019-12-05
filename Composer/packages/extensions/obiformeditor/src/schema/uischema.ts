@@ -81,6 +81,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     body: {
       'ui:field': 'JsonField',
     },
+    headers: {
+      'ui:field': 'CustomObjectField',
+    },
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   [SDKTypes.IfCondition]: {
