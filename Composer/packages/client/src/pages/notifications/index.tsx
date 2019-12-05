@@ -28,7 +28,12 @@ const navigations = {
     let uri = `/dialogs/${item.id}`;
     if (path) {
       const matchTriggers = /triggers\[(\d+)\]/g.exec(path);
-      const matchActions = /actions\[(\d+)\]/g.exec(path);
+      const actionPatt = /actions\[(\d+)\]/g;
+      let temp: RegExpExecArray | null = null;
+      let matchActions: RegExpExecArray | null = null;
+      while ((temp = actionPatt.exec(path)) !== null) {
+        matchActions = temp;
+      }
       const trigger = matchTriggers ? `triggers[${+matchTriggers[1]}]` : '';
       const action = matchActions ? `actions[${+matchActions[1]}]` : '';
       if (trigger) {

@@ -63,7 +63,7 @@ context('Notification Page', () => {
         .click()
         .findByText('Branch: if/else')
         .click();
-      cy.wait(100);
+      cy.wait(1000);
     });
 
     cy.withinEditor('FormEditor', () => {
