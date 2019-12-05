@@ -4,6 +4,7 @@ import { transformObiRules } from '../../../src/transformers/transformObiRules';
 import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 import { StepEditor } from '../../../src/editors/StepEditor';
 import { NodeRendererContext } from '../../../src/store/NodeRendererContext';
+import { ObiFieldNames } from '../../../src/constants/ObiFieldNames';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
 
@@ -15,7 +16,7 @@ const defaultFile = sampleFileNames[1];
 // Simulate the condition that json is always mutated.
 const copyJson = json => JSON.parse(JSON.stringify(json));
 
-const getStepData = obiJson => transformObiRules(obiJson.events[0]).stepGroup;
+const getStepData = obiJson => transformObiRules(obiJson[ObiFieldNames.Events][0]).stepGroup;
 
 export class StepEditorDemo extends Component {
   state = {
