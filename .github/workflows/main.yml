@@ -78,4 +78,3 @@ jobs:
         uses: actions/checkout@v1
       - name: docker-compose build
         runs: docker-compose build
-        working-directory: Composer
