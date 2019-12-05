@@ -29,7 +29,7 @@ const initialState: State = {
   botStatus: BotStatus.unConnected,
   botLoadErrorMsg: '',
   creationFlowStatus: CreationFlowStatus.CLOSE,
-  templateId: '',
+  templateId: 'EmptyBot',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: { editor: {} },
