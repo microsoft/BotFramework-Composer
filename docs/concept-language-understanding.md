@@ -3,7 +3,7 @@ Language Understanding (LU) is used by the bot to understand language naturally 
 
 In Bot Framework Composer LU has the following characteristics:
 
-- LU content is authored in inline editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+- LU content can be authored in inline editor using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
 - LU content is training data for recognizers. 
 - Composer currently supports LU technologies such as LUIS and Regular Expression. 
 - Composer provides an all-up LU view in **User Responses**.
@@ -128,43 +128,44 @@ To create the LU content, follow these steps:
 - create **Intent** triggers to wire up the LU content 
 - publish LU content (for LUIS) 
 
-#### Step one: Set up a recognizer for specific dialog 
-Composer currently support two types of recognizers: LUIS (by default) and Regular Expression. Before setting up a recognizer type, you need to select the dialog for which you want to customize your LU content. For example, let's select the main dialog and then set up LUIS as recognizer type. 
+#### Set up a recognizer
+Composer currently support two types of recognizers: LUIS (by default) and Regular Expression. Before setting up a recognizer type, you need to select the dialog where you want to customize your LU content. For example, let's select the main dialog and then set up LUIS as recognizer type. 
 
 1. Go to your bot's navigation pane on the left side and select the main dialog. 
 
 ![select_dialog](./media/language_understanding/select_dialog.png)
 
-2. When you see the Language Understanding editor on the right side panel, select **LUIS** as its **Recognizer Type**. 
+2. When you see the Language Understanding editor on the right side, select **LUIS** as its **Recognizer Type**. 
 
 ![luis](./media/language_understanding/luis.png)
 
-#### Step two: Author LU content 
+#### Author LU content 
 After you set up the recognizer type, you can customize your LU content in the editor using the [.lu format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
 
 For example, let's define two intents: **Greeting** and **CheckWeather** with some example utterances inline: 
 
 ![intents](./media/language_understanding/intents.gif)
 
-#### Step three: Wire up LU with **Intent** trigger 
-After you define the intents with example utterances, you need to create **Intent** triggers in the dialog to handle each intent. In the **Intent** trigger you can define the actions to take when an intent is recognized. 
+#### Wire up LU with **Intent recognized** trigger 
+After you define the intents with example utterances, you need to create **Intent recognized** triggers in the dialog to handle each intent. In the **Intent recognized** trigger you can define the actions to take when an intent is recognized. 
 
 1. Go to your bot's navigation pane on the left side and select **New Trigger** in the dialog you wish you create the trigger. 
 
 ![new_trigger](./media/language_understanding/new_trigger.png)
 
-2. In the `Create a trigger` pop-up window, select **Intent** as the type of trigger. Pick the intent you want to handle from the drop-down menu and then click **Submit**. 
+2. In the `Create a trigger` pop-up window, select **Intent recognized** as the type of trigger. Pick the intent you want to handle from the drop-down menu and then click **Submit**. 
 
 ![wireup_intent](./media/language_understanding/wireup_intent.png)
 
-#### Step four: Publish LU (LUIS)
-Now you have completed the process of providing LU content as training data and you can view your LU content in an all-up view. Click "User Input" icon on the left side menu. 
+Click "User Input" icon on the left navigation pane to get an all-up view. 
 
 ![user_say](./media/language_understanding/user_say.png)
 
 The all-up view lists all LU content you have authored and some details such as which dialog you define the content and whether it is published or not.  
 
 ![all_up_view](./media/language_understanding/all_up_view.png)
+
+#### Publish LU
 
 Now the last step is to publish your LU content to LUIS. 
 
@@ -183,4 +184,4 @@ Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if y
 - [Extract data from utterance text with intents and entities](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-data-extraction?tabs=V2)
 
 ## Next 
-Learn how to [send messages to users](howto-sending-messages.md)
+Learn how to [send messages to users](how-to-send-messages.md)
