@@ -42,6 +42,7 @@ You need to define an **Intent recognized** trigger to handle the pre-defined in
 After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. 
 
 3. Click the " + " sign below the trigger node and select **Send a response**
+
 ![send_response_message](./media/add_luis/send_response_message.png)
 
 4. Define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor. 
