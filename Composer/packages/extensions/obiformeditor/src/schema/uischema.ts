@@ -53,6 +53,15 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:order': ['dialog', 'property', '*'],
+  },
+  [SDKTypes.CancelAllDialogs]: {
+    eventValue: {
+      'ui:field': 'CustomObjectField',
+    },
     'ui:order': ['dialog', 'property', '*'],
   },
   [SDKTypes.ConditionalSelector]: {
@@ -67,6 +76,11 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.EditActions]: {
     actions: {
       'ui:field': 'StepsField',
+    },
+  },
+  [SDKTypes.EmitEvent]: {
+    eventValue: {
+      'ui:field': 'CustomObjectField',
     },
   },
   [SDKTypes.Foreach]: {
@@ -168,6 +182,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
+    },
+    options: {
+      'ui:field': 'CustomObjectField',
     },
     'ui:hidden': [...globalHidden],
   },

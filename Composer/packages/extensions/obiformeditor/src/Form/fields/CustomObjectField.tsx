@@ -58,7 +58,10 @@ const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeV
         ariaLabel={formatMessage('Edit Property')}
         menuProps={{ items: contextItems }}
         menuIconProps={{ iconName: 'MoreVertical' }}
-        styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+        styles={{
+          root: { margin: '7px 0 7px 0' },
+          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
+        }}
       />
     </div>
   );
@@ -154,6 +157,7 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: { fontSize: FontSizes.size16 },
+              root: { margin: '7px 0 7px 0' },
               rootDisabled: {
                 backgroundColor: NeutralColors.white,
               },
