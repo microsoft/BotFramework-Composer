@@ -45,6 +45,7 @@ export function extractExpressionDefinitions(
 ): ISearchResult {
   if (!schema) return {};
   const definitions = get(schema, definitionPath);
+  if (!definitions) return {};
   const result = Object.keys(definitions).reduce((result: ISearchResult, key: string) => {
     const properties = findAllProperties(definitions[key], searchTargets || defaultExpressionSearchTargets);
     if (properties.length) {
