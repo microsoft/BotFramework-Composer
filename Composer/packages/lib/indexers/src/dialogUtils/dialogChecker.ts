@@ -5,8 +5,8 @@ import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import { Diagnostic } from '../diagnostic';
-import { DiagnosticSeverity } from './../diagnostic';
 
+import { DiagnosticSeverity } from './../diagnostic';
 import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();

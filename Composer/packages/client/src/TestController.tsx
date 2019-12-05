@@ -9,7 +9,7 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogInfo, DiagnosticSeverity, Diagnostic } from '@bfc/indexers';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
@@ -53,7 +53,8 @@ export const TestController: React.FC = () => {
   const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
-  const showError = notifications.filter(n => n.severity === 'Error').length > 0;
+  const errorLength = notifications.filter(n => n.severity === 'Error').length;
+  const showError = errorLength > 0;
 
   useEffect(() => {
     toStartBot && handleClick();
@@ -72,16 +73,17 @@ export const TestController: React.FC = () => {
   }
 
   async function handleClick() {
-    const dialogErrors = dialogs.reduce<DialogInfo[]>((result, dialog) => {
-      if (dialog.diagnostics.length !== 0) {
-        return result.concat([dialog]);
+    const diagnostics = dialogs.reduce<Diagnostic[]>((result, dialog) => {
+      const errors = dialog.diagnostics.filter(n => n.severity === DiagnosticSeverity.Error);
+      if (errors.length !== 0) {
+        return result.concat(errors);
       }
       return result;
     }, []);
-    if (dialogErrors.length !== 0) {
+    if (diagnostics.length !== 0) {
       const title = `StaticValidationError`;
-      const subTitle = dialogErrors.reduce((msg, dialog) => {
-        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagnostics.join('\n')} \n`;
+      const subTitle = diagnostics.reduce((msg, diagnostic) => {
+        msg += `${diagnostic.message} \n`;
         return msg;
       }, '');
 
@@ -181,7 +183,7 @@ export const TestController: React.FC = () => {
         <div ref={addRef}>
           {showError && (
             <Fragment>
-              <span css={errorCount}>{notifications.length}</span>
+              <span css={errorCount}>{errorLength}</span>
               <IconButton
                 iconProps={{ iconName: 'ErrorBadge' }}
                 css={errorButton}
