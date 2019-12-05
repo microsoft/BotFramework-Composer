@@ -12,3 +12,4 @@ if (folder && folder.endsWith(':')) {
 }
 
 export const botsFolder = folder;
+export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';

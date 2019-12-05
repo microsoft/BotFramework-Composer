@@ -1,28 +1,20 @@
+#################
+#
+# Because Composer is organized as a monorepo with multiple packages
+# managed by yarn workspaces, our Dockerfile may not look like other
+# node / react projects. Specifically, we have to add all source files
+# before doing yarn install due to
+#
+################
+
 FROM node:12-alpine as build
+
 WORKDIR /src/Composer
-
-# yes, docker copy is really this stupid, https://github.com/moby/moby/issues/15858
-COPY yarn.lock .
-COPY .npmrc .
-COPY package.json .
-COPY packages/client/package.json ./packages/client/
-COPY yarn.lock ./packages/server/
-COPY packages/server/package.json ./packages/server/
-COPY packages/lib/package.json ./packages/lib/
-COPY packages/lib/code-editor/package.json ./packages/lib/code-editor/
-COPY packages/lib/shared/package.json ./packages/lib/shared/
-COPY packages/lib/indexers/package.json ./packages/lib/indexers/
-COPY packages/extensions/package.json ./packages/extensions/
-COPY packages/lib/eslint-plugin-bfcomposer/package.json ./packages/lib/eslint-plugin-bfcomposer/
-COPY packages/extensions/obiformeditor/package.json ./packages/extensions/obiformeditor/
-COPY packages/extensions/visual-designer/package.json ./packages/extensions/visual-designer/
-COPY packages/tools/language-servers/language-generation/package.json ./packages/tools/language-servers/language-generation/
-
+COPY . .
 # run yarn install as a distinct layer
 RUN yarn install --frozen-lock-file
-
 ENV NODE_OPTIONS "--max-old-space-size=4096"
-COPY . .
+ENV NODE_ENV "production"
 RUN yarn build:prod
 
 
@@ -30,14 +22,17 @@ RUN yarn build:prod
 FROM node:12-alpine
 
 WORKDIR /app/Composer
-COPY --from=build /src/Composer .
-# COPY --from=build /src/Composer/package.json .
-# COPY --from=build /src/Composer/packages/lib ./server/lib
-# COPY --from=build /src/Composer/packages/server ./server
+COPY --from=build /src/Composer/yarn.lock .
+COPY --from=build /src/Composer/package.json .
+COPY --from=build /src/Composer/packages/server ./packages/server
+COPY --from=build /src/Composer/packages/lib ./packages/lib
+COPY --from=build /src/Composer/packages/tools ./packages/tools
 
-# update server package json to point to local packages
+# # update server package json to point to local packages
 # WORKDIR /app/Composer/server
 # RUN node ./prepare-prod.js
 
-# RUN yarn --production && yarn cache clean
-# CMD ["node", "build/server.js"]
+ENV NODE_ENV "production"
+RUN yarn --production --frozen-lockfile --force && yarn cache clean
+WORKDIR /app/Composer
+CMD ["yarn", "start:server"]
