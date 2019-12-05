@@ -13,6 +13,7 @@ import formatMessage from 'format-message';
 
 import { BaseField } from './BaseField';
 import { customObjectFieldContainer, customObjectFieldItem, customObjectFieldLabel } from './styles';
+import { EditableField } from './EditableField';
 
 const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeValue, handleDropPropertyClick }) => {
   const [name, setName] = useState<string>(originalName);
@@ -29,20 +30,28 @@ const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeV
   return (
     <div css={customObjectFieldContainer}>
       <div css={customObjectFieldItem}>
-        <TextField
+        <EditableField
           autoComplete="off"
           onBlur={() => handleChangeName(name)}
           onChange={(_, newValue) => setName(newValue || '')}
+          options={{ transparentBorder: true }}
           placeholder={formatMessage('Add a new key')}
           value={name}
+          styles={{
+            root: { margin: '7px 0 7px 0' },
+          }}
         />
       </div>
       <div css={customObjectFieldItem}>
-        <TextField
+        <EditableField
           autoComplete="off"
           onChange={handleChangeValue}
+          options={{ transparentBorder: true }}
           placeholder={formatMessage('Add a new value')}
           value={value}
+          styles={{
+            root: { margin: '7px 0 7px 0' },
+          }}
         />
       </div>
       <IconButton
@@ -118,6 +127,9 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
               onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new key')}
               value={name}
+              styles={{
+                root: { margin: '7px 0 7px 0' },
+              }}
             />
           </div>
           <div css={customObjectFieldItem}>
@@ -130,6 +142,9 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
               iconProps={{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+              }}
+              styles={{
+                root: { margin: '7px 0 7px 0' },
               }}
             />
           </div>

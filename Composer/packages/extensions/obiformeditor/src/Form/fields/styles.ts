@@ -29,8 +29,6 @@ export const field = css`
 export const customObjectFieldContainer = css`
   display: flex;
 
-  padding: 7px 0;
-
   &:not(:last-child) {
     border-bottom: 1px solid ${NeutralColors.gray30};
   }
@@ -48,4 +46,5 @@ export const customObjectFieldLabel = css`
   color: ${NeutralColors.gray130};
   font-size: 12px;
   margin-left: 7px;
+  padding-bottom: 5px;
 `;
