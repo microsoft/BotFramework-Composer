@@ -24,7 +24,7 @@ Prompt users for their age and other numerical values using **Number input**. To
 
 ![Select prompt for number](./media/ask-for-input/select-number-prompt.png)
 
-As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. When using number prompts you can set the**Output Format** to either `float` or `integer`.  
+As seen in the **NumberInput** dialog the user is prompted for two numbers: their age stored as `user.age` and the result of `2*2.2`stored as a `user.result`. When using number prompts you can set the **Output Format** to either `float` or `integer`.  
 
 ![Number prompt dialog](./media/ask-for-input/number-dialog.png)
 
@@ -96,4 +96,4 @@ Composer simplified reprompting when users fail to input data that is invalid an
 ![Prompt Exceptions](./media/ask-for-input/other.png)
 
 ## Next
-Learn how to [manage conversation flow](./howto-controlling-conversation-flow.md) using conditionals and dialogs.
+Learn how to [manage conversation flow](./how-to-control-conversation-flow.md) using conditionals and dialogs.
