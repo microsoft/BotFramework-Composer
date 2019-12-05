@@ -116,11 +116,11 @@ async function saveProjectAs(req: Request, res: Response) {
     return;
   }
 
-  const { name, description, storageId } = req.body;
+  const { name, description, location, storageId } = req.body;
 
   const locationRef: LocationRef = {
     storageId,
-    path: Path.resolve(settings.botsFolder, name),
+    path: location ? Path.join(location, name) : Path.resolve(settings.botsFolder, name),
   };
 
   try {

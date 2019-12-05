@@ -33,7 +33,7 @@ import { dropdown, loading, detailListContainer, detailListClass, fileSelectorCo
 interface FileSelectorProps {
   focusedStorageFolder: StorageFolder;
   currentPath: string;
-  updateCurrentPath: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
@@ -45,7 +45,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     focusedStorageFolder,
     checkShowItem,
     currentPath,
-    updateCurrentPath,
+    onCurrentPathUpdate,
     storageFileLoadingStatus,
   } = props;
   // for detail file list in open panel
@@ -204,7 +204,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     .reverse();
 
   const updateLocation = (e, item?: IDropdownOption) => {
-    updateCurrentPath(item ? (item.key as string) : '');
+    onCurrentPathUpdate(item ? (item.key as string) : '');
   };
 
   return (

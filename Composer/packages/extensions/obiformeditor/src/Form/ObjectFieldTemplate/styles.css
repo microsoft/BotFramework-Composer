@@ -4,6 +4,7 @@
 
 .ObjectItem .ObjectItemField {
   flex: 1;
+  overflow: hidden;
   padding: 0px 18px;
   margin: 10px 0;
 }

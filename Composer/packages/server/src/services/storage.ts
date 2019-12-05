@@ -85,9 +85,13 @@ class StorageService {
     }
   };
 
-  public updateCurrentPath = (path: string) => {
-    this.storageConnections[0].path = path;
-    Store.set(this.STORE_KEY, this.storageConnections);
+  public updateCurrentPath = (path: string, storageId: string) => {
+    const storage = this.storageConnections.find(s => s.id === storageId);
+    if (storage) {
+      storage.path = path;
+      Store.set(this.STORE_KEY, this.storageConnections);
+    }
+    return this.storageConnections;
   };
 
   private ensureDefaultBotFoldersExist = () => {
