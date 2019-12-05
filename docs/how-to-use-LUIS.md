@@ -41,9 +41,7 @@ You need to define an **Intent recognized** trigger to handle the pre-defined in
 
 ![configure_intent](./media/add_luis/configure_intent.png)
 
-You need to define an **Intent recognized** trigger to handle each pre-defined intent. After the definition, you will see the name of the intent shown in the trigger node as follows:  
-
-![show_intent_in_trigger](./media/add_luis/show_intent_in_trigger.png)
+You need to define an **Intent recognized** trigger to handle each pre-defined intent. 
 
 #### Add actions to **Intent recognized**
 After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. Follow the steps: 
