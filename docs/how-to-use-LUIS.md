@@ -15,7 +15,7 @@ Composer currently supports two types of recognizers: LUIS recognizer (default) 
 In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author Language Understanding training data, publish your Language Understanding (LU) data, and test them in emulator. 
 
 ### Set LUIS as recognizer 
-In Composer, each dialog can have one type of recognizer and might contain a set of Language Understanding training data. To add LUIS to your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. You need to do the following two things:
+In Composer, each dialog can have one type of recognizer and might contain a set of Language Understanding training data. To add LUIS to your bot, you need to select LUIS as the recognizer type for the specific dialog you want to define. To set LUIS as recognizer, follow the steps: 
 
 1. On the left navigation pane, select the dialog you want to set LUIS recognizer. 
 
@@ -29,7 +29,7 @@ You can author Language Understanding (LU) in the inline editor and follow the [
 ![author_lu](./media/add_luis/author_lu.png)
 
 ### Define an **Intent recognized** trigger 
-You need to define an **Intent recognized** trigger to handle the pre-defined intents. This type of trigger works with the **recognizers**. Each **Intent recognized** trigger handles one intent. Follow the steps to define an **Intent recognized** trigger. To create an **Intent recognized** trigger, follow the steps: 
+You need to define an **Intent recognized** trigger to handle the pre-defined intents. This type of trigger works with the **recognizers**. Each **Intent recognized** trigger handles one intent. Follow the steps to define an **Intent recognized** trigger. 
 
 1. Select the dialog on the left side navigation pane and click **New Trigger**
 
@@ -39,15 +39,12 @@ You need to define an **Intent recognized** trigger to handle the pre-defined in
 
 ![configure_intent](./media/add_luis/configure_intent.png)
 
-After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. To add a **Send a response** action, follow the steps: 
+After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. 
 
-4. click the " + " sign below the trigger node and select **Send a response**
-
-5. define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
-
+3. Click the " + " sign below the trigger node and select **Send a response**
 ![send_response_message](./media/add_luis/send_response_message.png)
 
-The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor. 
+4. Define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor. 
 
 ![greeting_message](./media/add_luis/greeting_message.png)
 
