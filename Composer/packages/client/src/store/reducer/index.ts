@@ -168,6 +168,9 @@ const setCreationFlowStatus: ReducerFunc = (state, { creationFlowStatus }) => {
 };
 
 const saveTemplateId: ReducerFunc = (state, { templateId }) => {
+  if (!templateId) {
+    return state;
+  }
   state.templateId = templateId;
   return state;
 };
