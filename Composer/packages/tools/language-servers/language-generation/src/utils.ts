@@ -15,9 +15,14 @@ import get from 'lodash/get';
 const staticChecker = new StaticChecker();
 
 export interface Template {
-  Name: string;
-  Parameters?: string[];
-  Body: string;
+  name: string;
+  parameters?: string[];
+  body: string;
+}
+
+export interface TRange {
+  startLineNumber: number;
+  endLineNumber: number;
 }
 
 export interface LGDocument {
@@ -61,12 +66,12 @@ export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextD
   const diagnostics: Diagnostic[] = [];
   lgDiags.forEach(diag => {
     const diagnostic: Diagnostic = {
-      severity: convertSeverity(diag.Severity),
+      severity: convertSeverity(diag.severity),
       range: Range.create(
-        Position.create(diag.Range.Start.Line - 1 - lineOffset, diag.Range.Start.Character),
-        Position.create(diag.Range.End.Line - 1 - lineOffset, diag.Range.End.Character)
+        Position.create(diag.range.start.line - 1 - lineOffset, diag.range.start.character),
+        Position.create(diag.range.end.line - 1 - lineOffset, diag.range.end.character)
       ),
-      message: diag.Message,
+      message: diag.message,
       source: document.uri,
     };
     diagnostics.push(diagnostic);
@@ -75,16 +80,16 @@ export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextD
 }
 
 export function textFromTemplate(template: Template): string {
-  let text = '';
-  if (template.Name && template.Body !== null && template.Body !== undefined) {
-    text += `# ${template.Name.trim()}`;
-    if (template.Parameters && template.Parameters.length > 0) {
-      text += '(' + template.Parameters.join(', ') + ')';
+  const { name, parameters = [], body } = template;
+  const textBuilder: string[] = [];
+  if (name && body) {
+    textBuilder.push(`# ${name.trim()}`);
+    if (parameters.length) {
+      textBuilder.push(`(${parameters.join(', ')})`);
     }
-    text += '\n';
-    text += `${template.Body.trim()}`;
+    textBuilder.push(`\n${template.body.trim()}`);
   }
-  return text;
+  return textBuilder.join('');
 }
 
 export function textFromTemplates(templates: Template[]): string {
@@ -99,7 +104,7 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
   return staticChecker.checkText(text, '', ImportResolver.fileResolver).filter(diagnostic => {
     // ignore non-exist references in template body.
-    return diagnostic.Message.includes('does not have an evaluator') === false;
+    return diagnostic.message.includes('does not have an evaluator') === false;
   });
 }
 
@@ -107,20 +112,23 @@ export function checkText(text: string): LGDiagnostic[] {
   return staticChecker.checkText(text, '', ImportResolver.fileResolver);
 }
 export function isValid(diagnostics: LGDiagnostic[]): boolean {
-  return diagnostics.every(d => d.Severity !== LGDiagnosticSeverity.Error);
+  return diagnostics.every(d => d.severity !== LGDiagnosticSeverity.Error);
 }
 
 export function getLGResources(content: string): LGResource {
   return LGParser.parse(content, ' ');
 }
 
-export function getTemplatePositionOffset(content: string, { Name, Parameters = [], Body }: Template): number {
-  const resource = LGParser.parse(content).updateTemplate(Name, Name, Parameters, Body);
-  const template = resource.Templates.find(item => item.Name === Name);
-  return get(template, 'ParseTree._start.line', 0);
+export function getTemplateRange(content: string, { name, parameters = [], body }: Template): TRange {
+  const resource = LGParser.parse(content).updateTemplate(name, name, parameters, body);
+  const template = resource.templates.find(item => item.name === name);
+  return {
+    startLineNumber: get(template, 'parseTree.start.line', 0),
+    endLineNumber: get(template, 'parseTree.stop.line', 0),
+  };
 }
 
-export function updateTemplateInContent(content: string, { Name, Parameters = [], Body }: Template): string {
+export function updateTemplateInContent(content: string, { name, parameters = [], body }: Template): string {
   const resource = LGParser.parse(content);
-  return resource.updateTemplate(Name, Name, Parameters, Body).toString();
+  return resource.updateTemplate(name, name, parameters, body).toString();
 }

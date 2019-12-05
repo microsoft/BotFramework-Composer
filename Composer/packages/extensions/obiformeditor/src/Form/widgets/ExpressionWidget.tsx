@@ -2,18 +2,29 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import formatMessage from 'format-message';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
+import formatMessage from 'format-message';
 
 import { FormContext } from '../types';
 import { EditableField } from '../fields/EditableField';
 
 import { WidgetLabel } from './WidgetLabel';
 
-const getErrorMessage = () =>
-  formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation <a>here</a>', {
-    // eslint-disable-next-line react/display-name
+interface ExpresionWidgetProps extends ITextFieldProps {
+  hiddenErrMessage?: boolean;
+  onValidate?: (err?: JSX.Element | string) => void;
+  formContext: FormContext;
+  rawErrors?: string[];
+  schema: JSONSchema6;
+  onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
+  /** Set to true to display as inline text that is editable on hover */
+  editable?: boolean;
+}
+
+const getDefaultErrorMessage = () => {
+  return formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation<a>here</a>', {
     a: ({ children }) => (
       <a
         key="a"
@@ -25,37 +36,52 @@ const getErrorMessage = () =>
       </a>
     ),
   });
-
-interface ExpresionWidgetProps extends ITextFieldProps {
-  formContext: FormContext;
-  rawErrors?: string[];
-  schema: JSONSchema6;
-  onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
-  /** Set to true to display as inline text that is editable on hover */
-  editable?: boolean;
-}
+};
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, editable, ...rest } = props;
+  const { rawErrors, formContext, schema, id, label, editable, hiddenErrMessage, onValidate, ...rest } = props;
   const { shellApi } = formContext;
   const { description } = schema;
 
-  const onGetErrorMessage = async (value: string) => {
+  const onGetErrorMessage = async (value: string): Promise<JSX.Element | string> => {
     if (!value) {
+      if (hiddenErrMessage) {
+        onValidate && onValidate();
+      }
       return '';
     }
 
     const isValid = await shellApi.validateExpression(value);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let errMessage: string | any[] = '';
     if (!isValid) {
-      return <>{getErrorMessage()}</>;
+      errMessage = getDefaultErrorMessage();
+    } else if (rawErrors && rawErrors.length > 0) {
+      errMessage = rawErrors[0];
     }
 
-    if (rawErrors && rawErrors.length > 0) {
-      return <>{rawErrors[0]}</>;
-    }
+    const messageBar = errMessage ? (
+      <MessageBar
+        messageBarType={MessageBarType.error}
+        isMultiline={false}
+        dismissButtonAriaLabel={formatMessage('Close')}
+        truncated
+        overflowButtonAriaLabel={formatMessage('See more')}
+      >
+        {errMessage}
+      </MessageBar>
+    ) : (
+      ''
+    );
 
-    return '';
+    if (hiddenErrMessage) {
+      onValidate && onValidate(messageBar);
+      // return span so text field shows error border
+      return errMessage ? <span /> : '';
+    } else {
+      return errMessage ? messageBar : '';
+    }
   };
 
   const Field = editable ? EditableField : TextField;
@@ -63,7 +89,18 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
   return (
     <>
       <WidgetLabel label={label} description={description} id={id} />
-      <Field {...rest} id={id} onGetErrorMessage={onGetErrorMessage} autoComplete="off" />
+      <Field
+        {...rest}
+        id={id}
+        onGetErrorMessage={onGetErrorMessage}
+        autoComplete="off"
+        styles={{
+          errorMessage: {
+            display: hiddenErrMessage ? 'none' : 'block',
+            paddingTop: 0,
+          },
+        }}
+      />
     </>
   );
 };

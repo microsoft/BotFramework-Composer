@@ -94,6 +94,16 @@ export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, pa
   }
 };
 
-export const updateCurrentPath: ActionCreator = async ({ dispatch }, path) => {
-  await httpClient.put(`/storages/currentPath`, { path: path });
+export const updateCurrentPath: ActionCreator = async ({ dispatch }, path, storageId) => {
+  try {
+    const response = await httpClient.put(`/storages/currentPath`, { path, storageId });
+    dispatch({
+      type: ActionTypes.GET_STORAGE_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+  } catch (err) {
+    dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
+  }
 };
