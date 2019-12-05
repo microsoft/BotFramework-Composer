@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import { Diagnostic } from '../diagnostic';
+import { DiagnosticSeverity } from './../diagnostic';
 
 import { CheckerFunc } from './types';
 
@@ -13,8 +14,10 @@ const ExpressionParser = new ExpressionEngine();
 export function IsExpression(name: string): CheckerFunc {
   return node => {
     let message = '';
+    let severity = DiagnosticSeverity.Error;
     const exp = get(node.value, name);
     if (!exp) {
+      severity = DiagnosticSeverity.Warning;
       message = `In ${node.path}: ${node.value.$type}: ${name} is missing or empty`;
     } else {
       try {
@@ -24,7 +27,7 @@ export function IsExpression(name: string): CheckerFunc {
       }
     }
     if (message) {
-      const diagnostic = new Diagnostic(message, '');
+      const diagnostic = new Diagnostic(message, '', severity);
       diagnostic.path = node.path;
       return diagnostic;
     }
