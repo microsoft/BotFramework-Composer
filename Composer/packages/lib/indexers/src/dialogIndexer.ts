@@ -4,8 +4,8 @@
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 
+import { ValidateFields } from './dialogUtils/types';
 import { ITrigger, DialogInfo, FileInfo } from './type';
-import { DialogChecker } from './utils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
@@ -125,7 +125,7 @@ function ExtractReferredDialogs(dialog): string[] {
 }
 
 // check all fields
-function CheckFields(dialog, id: string): Diagnostic[] {
+function CheckFields(dialog, id: string, validateFields: ValidateFields): Diagnostic[] {
   const errors: Diagnostic[] = [];
   /**
    *
@@ -135,6 +135,7 @@ function CheckFields(dialog, id: string): Diagnostic[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
+    const DialogChecker = validateFields.getDialogChecker();
     if (has(value, '$type') && has(DialogChecker, value.$type)) {
       const matchedCheckers = DialogChecker[value.$type];
       matchedCheckers.forEach(checker => {
@@ -153,20 +154,20 @@ function CheckFields(dialog, id: string): Diagnostic[] {
   });
 }
 
-function validate(id: string, content): Diagnostic[] {
+function validate(id: string, content, validateFields: ValidateFields): Diagnostic[] {
   try {
-    return CheckFields(content, id);
+    return CheckFields(content, id, validateFields);
   } catch (error) {
     return [new Diagnostic(error.message, id)];
   }
 }
 
-function parse(id: string, content) {
+function parse(id: string, content: any, validateFields: ValidateFields) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   return {
     content,
-    diagnostics: validate(id, content),
+    diagnostics: validate(id, content, validateFields),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
     luIntents: ExtractLuIntents(content),
@@ -176,7 +177,7 @@ function parse(id: string, content) {
   };
 }
 
-function index(files: FileInfo[], botName: string): DialogInfo[] {
+function index(files: FileInfo[], botName: string, validateFields: ValidateFields): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
   if (files.length !== 0) {
     for (const file of files) {
@@ -191,7 +192,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
-            ...parse(id, dialogJson),
+            ...parse(id, dialogJson, validateFields),
           };
           dialogs.push(dialog);
         }

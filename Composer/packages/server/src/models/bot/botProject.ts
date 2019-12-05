@@ -4,7 +4,16 @@
 import fs from 'fs';
 
 import { getNewDesigner } from '@bfc/shared';
-import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
+import {
+  FileInfo,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  dialogIndexer,
+  lgIndexer,
+  extractExpressionDefinitions,
+  ValidateFields,
+} from '@bfc/indexers';
 import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';
@@ -66,7 +75,7 @@ export class BotProject {
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogs = dialogIndexer.index(this.files, this.name);
+    this.dialogs = this.indexDialog();
     this.lgFiles = lgIndexer.index(this.files);
     this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
     await this._checkProjectStructure();
@@ -420,13 +429,18 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
+  private indexDialog() {
+    const expressions = extractExpressionDefinitions(this.getSchemas().sdk.content, 'definitions');
+    return dialogIndexer.index(this.files, this.name, new ValidateFields(expressions));
+  }
+
   // re index according to file change in a certain path
   private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogs = dialogIndexer.index(this.files, this.name);
+        this.dialogs = this.indexDialog();
         break;
       case '.lg':
         this.lgFiles = lgIndexer.index(this.files);

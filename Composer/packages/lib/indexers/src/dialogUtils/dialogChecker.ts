@@ -4,15 +4,13 @@
 import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 
-import { Diagnostic } from './../diagnostic';
+import { Diagnostic } from '../diagnostic';
+
+import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
 
-interface CheckerFunc {
-  (node: { path: string; value: any }): Diagnostic | null; // error msg
-}
-
-function IsExpression(name: string): CheckerFunc {
+export function IsExpression(name: string): CheckerFunc {
   return node => {
     let message = '';
     const exp = get(node.value, name);
@@ -43,7 +41,7 @@ enum EditArrayChangeTypes {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function EditArrayValueChecker(node: { path: string; value: any }): Diagnostic | null {
+export function EditArrayValueChecker(node: { path: string; value: any }): Diagnostic | null {
   const changeType = get(node.value, 'changeType');
 
   // when push and remove, value is required
@@ -61,16 +59,3 @@ function EditArrayValueChecker(node: { path: string; value: any }): Diagnostic |
 
   return null;
 }
-
-/**
- * Dialog Validation Rules
- */
-// TODO: check field by schema.
-export const DialogChecker: { [key: string]: CheckerFunc[] } = {
-  'Microsoft.IfCondition': [IsExpression('condition')],
-  'Microsoft.SwitchCondition': [IsExpression('condition')],
-  'Microsoft.SetProperty': [IsExpression('property'), IsExpression('value')],
-  'Microsoft.ForeachPage': [IsExpression('itemsProperty')],
-  'Microsoft.Foreach': [IsExpression('itemsProperty')],
-  'Microsoft.EditArray': [IsExpression('itemsProperty'), EditArrayValueChecker],
-};

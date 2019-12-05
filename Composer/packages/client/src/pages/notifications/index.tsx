@@ -16,7 +16,7 @@ import { navigateTo } from './../../utils';
 
 const navigations = {
   lg: (item: INotification) => {
-    navigateTo(`/language-generation/#line=${item.diagnostic.range.start.line || 0}`);
+    navigateTo(`/language-generation/#line=${item.diagnostic.range?.start.line || 0}`);
   },
   lu: (item: INotification) => {
     navigateTo(`/dialogs/${item.id}`);
