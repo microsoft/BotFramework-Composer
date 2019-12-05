@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { cleanup, render, waitForElement } from 'react-testing-library';
 
-import VisualDesigner from '../src';
+import ComposerVisualDesigner from '../src';
 
 // READ: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 window.matchMedia = jest.fn().mockImplementation(query => {
@@ -22,7 +22,7 @@ describe('<VisualDesigner />', () => {
 
   it('should render the visual designer', async () => {
     const { getByTestId } = render(
-      <VisualDesigner
+      <ComposerVisualDesigner
         data={{ content: '{"json": "some data"}' }}
         currentDialog={{ id: 'Main', displayName: 'Main', isRoot: false }}
         dialogId="SomeDialog"

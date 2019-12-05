@@ -9,9 +9,12 @@ import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { ShellData, ShellApi } from '@bfc/shared';
 
-import { VisualDesigner } from './containers/VisualDesigner';
+import { VisualEditor } from './containers/VisualEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
+import useStore from './store/useStore';
+import resetStore from './actions/resetDialog';
+import { StoreContext } from './store/StoreContext';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -22,7 +25,7 @@ const emotionCache = createCache({
   nonce: window.__nonce__,
 });
 
-const VisualDesigner: React.FC<VisualDesignerProps> = ({
+const ComposerVisualDesigner: React.FC<ComposerVisualDesignerProps> = ({
   dialogId,
   focusedEvent,
   focusedActions,
@@ -34,12 +37,25 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 }): JSX.Element => {
   const dataCache = useRef({});
 
+  const { state, dispatch } = useStore(action => {
+    console.log('index.tsx', action);
+  });
+
   /**
    * VisualDesigner is coupled with ShellApi where input json always mutates.
    * Deep checking input data here to make React change detection works.
    */
   const dataChanged = !isEqual(dataCache.current, inputData);
   if (dataChanged) {
+    dispatch(
+      resetStore({
+        dialog: {
+          id: dialogId,
+          json: inputData,
+        },
+        clipboardActions,
+      })
+    );
     dataCache.current = inputData;
   }
 
@@ -77,38 +93,25 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   return (
     <CacheProvider value={emotionCache}>
-      <NodeRendererContext.Provider value={nodeContext}>
-        <SelfHostContext.Provider value={hosted}>
-          <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-            <VisualDesigner
-              key={dialogId}
-              path={dialogId}
-              data={data}
-              focusedSteps={focusedActions}
-              onFocusSteps={onFocusSteps}
-              focusedEvent={focusedEvent}
-              onFocusEvent={onFocusEvent}
-              onClipboardChange={onCopy}
-              onOpen={x => navTo(x)}
-              onChange={x => saveData(x)}
-              onSelect={onSelect}
-              undo={undo}
-              redo={redo}
-              addCoachMarkRef={addCoachMarkRef}
-            />
-          </div>
-        </SelfHostContext.Provider>
-      </NodeRendererContext.Provider>
+      <StoreContext.Provider value={{ state, dispatch }}>
+        <NodeRendererContext.Provider value={nodeContext}>
+          <SelfHostContext.Provider value={hosted} /** selfhost only influences the edge menu */>
+            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+              <VisualEditor key={dialogId} addCoachMarkRef={addCoachMarkRef} />
+            </div>
+          </SelfHostContext.Provider>
+        </NodeRendererContext.Provider>
+      </StoreContext.Provider>
     </CacheProvider>
   );
 };
 
-interface VisualDesignerProps extends ShellData {
+interface ComposerVisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
 }
 
-VisualDesigner.defaultProps = {
+ComposerVisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
@@ -123,4 +126,4 @@ VisualDesigner.defaultProps = {
   } as unknown) as ShellApi,
 };
 
-export default VisualDesigner;
+export default ComposerVisualDesigner;
