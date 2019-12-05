@@ -10,7 +10,7 @@ After opening Composer in a browser click the **Echo Bot** button at the top of 
 
 ![homepage new button](./media/tutorial-echobot/echo-new.png)
 
-2. Fill in the **Name** with `EchoBot` and copy `This is a simple echo bot. It echoes back the user's response.` to the **Description** box. Choose where you want to save the bot and click **Next**.
+2. Fill in the **Name** as you want or keep the default name `EchoBot-0` and copy `This is a simple echo bot. It echoes back the user's response.` to the **Description** box. Choose where you want to save the bot and click **Next**.
 
 ![echo bot details](./media/tutorial-echobot/tutorial-echo-setup.png)
 
