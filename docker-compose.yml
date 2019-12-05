@@ -13,7 +13,6 @@ services:
       COMPOSER_APP_DATA: /appdata/data.json
       BOT_ENDPOINT: http://botruntime:80
       PORT: 3000
-      DEBUG: composer
   botruntime:
     build: BotProject/CSharp
     ports:

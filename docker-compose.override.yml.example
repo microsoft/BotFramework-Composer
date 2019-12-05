@@ -1,0 +1,12 @@
+# Use this to override Composer's default docker configuration
+
+version: "3"
+services:
+  composer:
+    volumes:
+      - /Some/path/to/my/bots:/Bots
+    environment:
+      DEBUG: composer
+  botruntime:
+    volumes:
+      - /Some/path/to/my/bots:/Bots
