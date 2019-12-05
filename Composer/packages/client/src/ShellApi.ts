@@ -6,6 +6,7 @@ import { ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
+import { template } from '@babel/core';
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
 import { StoreContext } from './store';
@@ -132,8 +133,14 @@ export const ShellApi: React.FC = () => {
     if (id === undefined) throw new Error('must have a file id');
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
-
-    return lgUtil.parse(file.content);
+    return lgUtil.parse(file.content).map(template => {
+      const { name, parameters, body } = template;
+      return {
+        name,
+        parameters,
+        body,
+      };
+    });
   }
 
   /**
