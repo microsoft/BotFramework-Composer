@@ -184,5 +184,5 @@ Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if y
 - [Extract data from utterance text with intents and entities](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-data-extraction?tabs=V2)
 
 ## Next 
-Learn how to [use validation](./how-to-use-validation.md)
-Learn how to [send messages to users](how-to-send-messages.md)
+- Learn how to [use validation](./how-to-use-validation.md)
+- Learn how to [send messages to users](how-to-send-messages.md)
