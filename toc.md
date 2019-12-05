@@ -35,10 +35,10 @@
 - [Define advanced intents and entities](./docs/how-to-define-advanced-intents-entities.md)
 - [Use OAuth](./docs/how-to-use-oauth.md)
 - [Send an HTTP request](./docs/how-to-send-http-request.md)
-#### Debug
-- [Linting and validation](./docs/how-to-use-validation.md)
 #### Test
 - [Test in Emulator](https://docs.microsoft.com/en-us/azure/bot-service/bot-service-debug-emulator?view=azure-bot-service-4.0&tabs=csharp)
+#### Debug
+- [Linting and validation](./docs/how-to-use-validation.md)
 #### Publish
 - [Publish your bot to Azure](/docs/how-to-publish-bot.md)
 
