@@ -29,9 +29,8 @@ You can author Language Understanding (LU) in the inline editor and follow the [
 ![author_lu](./media/add_luis/author_lu.png)
 
 ### Define an **Intent recognized** trigger 
-You need to define an **Intent recognized** trigger to handle the pre-defined intents. This type of trigger works with the **recognizers**. Each **Intent recognized** trigger handles one intent. Follow the steps to define an **Intent recognized** trigger.
+You need to define an **Intent recognized** trigger to handle the pre-defined intents. This type of trigger works with the **recognizers**. Each **Intent recognized** trigger handles one intent. Follow the steps to define an **Intent recognized** trigger. To create an **Intent recognized** trigger, follow the steps: 
 
-#### Create an **Intent recognized** trigger 
 1. Select the dialog on the left side navigation pane and click **New Trigger**
 
 ![create_trigger](./media/add_luis/create_trigger.png)
@@ -40,13 +39,11 @@ You need to define an **Intent recognized** trigger to handle the pre-defined in
 
 ![configure_intent](./media/add_luis/configure_intent.png)
 
+After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. To add a **Send a response** action, follow the steps: 
 
-#### Add actions to **Intent recognized**
-After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. Follow the steps: 
+4. click the " + " sign below the trigger node and select **Send a response**
 
-1. click the " + " sign below the trigger node
-2. select **Send a response**
-3. define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+5. define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 
 ![send_response_message](./media/add_luis/send_response_message.png)
 
