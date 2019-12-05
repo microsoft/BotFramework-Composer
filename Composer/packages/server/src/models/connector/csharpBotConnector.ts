@@ -1,11 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import fs from 'fs';
 import { parse } from 'url';
 import { ChildProcess, spawn } from 'child_process';
-
-import archiver from 'archiver';
 
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
@@ -39,19 +36,11 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   private buildProcess = async (dir: string): Promise<number | null> => {
-    // check build file exist
-    const buildScript = Path.resolve(__dirname, './build_runtime.ps1');
-    const fileExisted = fs.existsSync(buildScript);
-    if (!fileExisted) {
-      return Promise.reject(new Error('build script not existed'));
-    }
     // build bot runtime
     return new Promise((resolve, reject) => {
-      const build = spawn('pwsh', [buildScript], {
+      const build = spawn('dotnet', ['build'], {
         cwd: dir,
-        detached: true,
-        windowsHide: true,
-        stdio: ['ignore', 'ignore', 'inherit'],
+        stdio: ['ignore', 'ignore', 'pipe'],
       });
       buildDebug('building bot runtime: %d', build.pid);
       build.stdout &&
@@ -88,41 +77,31 @@ export class CSharpBotConnector implements IBotConnector {
     return configList;
   };
 
-  private addListeners = (child: ChildProcess, handler: Function) => {
+  private addListeners = (child: ChildProcess, handler: Function, resolve: Function, reject: Function) => {
     const currentDebugger = runtimeDebugs[child.pid];
-    if (child.stdout !== null) {
+    let erroutput = '';
+    child.stdout &&
       child.stdout.on('data', (data: any) => {
         currentDebugger('bot runtime (%d): %s', child.pid, data);
+        resolve(child.pid);
       });
-    }
 
-    if (child.stderr !== null) {
-      child.stderr.on('data', (data: any) => {
-        currentDebugger('bot runtime (%d): Error %s', child.pid, data);
+    child.stderr &&
+      child.stderr.on('data', (err: any) => {
+        erroutput += err.toString();
       });
-    }
-
-    child.on('close', code => {
-      currentDebugger('close %d', code);
-      handler();
-    });
-
-    child.on('error', (err: any) => {
-      currentDebugger('stderr: %s', err);
-    });
 
     child.on('exit', code => {
       currentDebugger('exit %d', code);
       handler();
+      if (code !== 0) {
+        currentDebugger('exit %d: %s', code, erroutput);
+        reject(erroutput);
+      }
     });
 
     child.on('message', msg => {
       currentDebugger('bot runtime received: %s', msg);
-    });
-
-    child.on('disconnect', code => {
-      currentDebugger('disconnect %d', code);
-      handler();
     });
   };
 
@@ -134,21 +113,30 @@ export class CSharpBotConnector implements IBotConnector {
     return Path.join(currentProject.dir);
   };
 
-  private start = async (dir: string, config: DialogSetting) => {
-    const runtime = spawn(
-      'dotnet',
-      ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
-      {
-        detached: true,
-        cwd: dir,
-        stdio: ['ignore', 'ignore', 'inherit'],
-      }
-    );
-    runtimeDebugs[runtime.pid] = log.extend(`port ${runtime.pid}`);
-    runtimeDebugs[runtime.pid]('bot runtime started. pid: %d', runtime.pid);
-    this.addListeners(runtime, this.stop);
-    CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
-    this.status = BotStatus.Connected;
+  private start = async (dir: string, config: DialogSetting): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const runtime = spawn(
+        'dotnet',
+        [
+          'bin/Debug/netcoreapp2.1/BotProject.dll',
+          `--urls`,
+          this.endpoint,
+          ...this.getConnectorConfig(config),
+          '--environment',
+          'development',
+        ],
+        {
+          detached: true,
+          cwd: dir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
+      // extend runtime debugger
+      runtimeDebugs[runtime.pid] = log.extend(`port ${runtime.pid}`);
+      runtimeDebugs[runtime.pid]('bot runtime started. pid: %d', runtime.pid);
+      CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
+      this.addListeners(runtime, this.stop, resolve, reject);
+    });
   };
 
   private checkPortUsable = async (port: string | number): Promise<string> => {
@@ -186,7 +174,10 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   connect = async (_: BotEnvironments, __: string) => {
-    const port = parse(this.endpoint).port || '3979';
+    const port = parse(this.endpoint).port;
+    if (!port) {
+      return Promise.resolve('');
+    }
     const portStatus = await this.checkPortUsable(port);
     if (portStatus.trim() === '') {
       return Promise.resolve(`${this.endpoint}/api/messages`);
@@ -201,24 +192,12 @@ export class CSharpBotConnector implements IBotConnector {
       const dir = this.getBotPath();
       await this.buildProcess(dir);
       await this.start(dir, config);
+      this.status = BotStatus.Connected;
     } catch (err) {
       this.stop();
-      throw err;
+      this.status = BotStatus.NotConnected;
+      throw new Error('Runtime Exception');
     }
-  };
-
-  archiveDirectory = (src: string, dest: string) => {
-    return new Promise((resolve, reject) => {
-      const archive = archiver('zip');
-      const output = fs.createWriteStream(dest);
-
-      archive.pipe(output);
-      archive.directory(src, false);
-      archive.finalize();
-
-      output.on('close', () => resolve(archive));
-      archive.on('error', err => reject(err));
-    });
   };
 
   getEditingStatus = (): Promise<boolean> => {

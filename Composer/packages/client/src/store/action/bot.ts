@@ -13,6 +13,7 @@ export const connectBot: ActionCreator = async (store, settings) => {
 
   try {
     const res = await httpClient.get(path);
+    await reloadBot(store, settings);
     store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
@@ -21,10 +22,15 @@ export const connectBot: ActionCreator = async (store, settings) => {
       },
     });
   } catch (err) {
+    store.dispatch({
+      type: ActionTypes.CONNECT_BOT_FAILURE,
+      payload: {
+        status: 'unConnected',
+      },
+    });
+    console.error(err.response.data.message);
     throw new Error(err.response.data.message);
   }
-
-  await reloadBot(store, settings);
 };
 
 // return only the connect URL -- do not reload
