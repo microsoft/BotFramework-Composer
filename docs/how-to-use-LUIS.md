@@ -32,16 +32,14 @@ You can author Language Understanding (LU) in the inline editor and follow the [
 You need to define an **Intent recognized** trigger to handle the pre-defined intents. This type of trigger works with the **recognizers**. Each **Intent recognized** trigger handles one intent. Follow the steps to define an **Intent recognized** trigger.
 
 #### Create an **Intent recognized** trigger 
-1. select the dialog on the left side navigation pane
-2. click **New Trigger**
+1. Select the dialog on the left side navigation pane and click **New Trigger**
 
 ![create_trigger](./media/add_luis/create_trigger.png)
 
-3. In the pop-up window, select **Intent recognized** from the drop-down menu and then configure the intent to this trigger from the drop-down menu. Click **Submit**. 
+2. In the pop-up window, select **Intent recognized** from the drop-down menu and then configure the intent to this trigger from the drop-down menu. Click **Submit**. You need to define an **Intent recognized** trigger to handle each pre-defined intent. 
 
 ![configure_intent](./media/add_luis/configure_intent.png)
 
-You need to define an **Intent recognized** trigger to handle each pre-defined intent. 
 
 #### Add actions to **Intent recognized**
 After you define your trigger and configure it to specific intent, you can add actions to be executed after the trigger is fired. For example, you can send a response message. Follow the steps: 
