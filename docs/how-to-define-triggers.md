@@ -102,7 +102,7 @@ On dialog navigation pane, click **New Trigger** and select **Dialog started (Be
 
 ![begin_new_dialog](./media/events_triggers/begin_new_dialog.gif)
 
-### 2. Add dialog action(s) to the trigger
+### Add dialog action(s) to the trigger
 Under this trigger, click the "+" sign and mouse over the action menu. Click **Dialog management** and then select **Begin a new dialog**. Configure a pre-defined dialog to the **Begin a new dialog** action in the property editor. Before you use this trigger you must define a dialog to be configured.
 
 ![begin_new_dialog_configure](./media/events_triggers/begin_new_dialog_configure.gif) 
