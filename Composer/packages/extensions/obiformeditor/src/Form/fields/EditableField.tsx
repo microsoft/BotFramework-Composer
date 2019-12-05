@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { mergeStyles } from '@uifabric/styling';
+import { mergeStyleSets } from '@uifabric/styling';
 
 interface EditableFieldProps extends ITextFieldProps {
   onChange: (e: any, newTitle?: string) => void;
-  styleOverrides?: Partial<ITextFieldStyles>;
   placeholder?: string;
   fontSize?: string;
   options?: any;
@@ -16,6 +15,7 @@ interface EditableFieldProps extends ITextFieldProps {
 
 export const EditableField: React.FC<EditableFieldProps> = props => {
   const { styleOverrides = {}, placeholder, fontSize, onChange, onBlur, options = {}, value, ...rest } = props;
+  const { styles = {}, placeholder, fontSize, onChange, onBlur, value,  options = {}, ...rest } = props;
   const { transparentBorder } = options;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
@@ -51,10 +51,10 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
       <TextField
         placeholder={placeholder || value}
         value={localValue}
-        styles={{
-          root: mergeStyles({ margin: '5px 0 7px -9px' }, styleOverrides.root),
-          field: mergeStyles(
-            {
+        styles={mergeStyleSets(
+          {
+            root: { margin: '5px 0 7px -9px' },
+            field: {
               fontSize: fontSize,
               selectors: {
                 '::placeholder': {
@@ -62,10 +62,7 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
                 },
               },
             },
-            styleOverrides.field
-          ),
-          fieldGroup: mergeStyles(
-            {
+            fieldGroup: {
               borderColor,
               transition: 'border-color 0.1s linear',
               selectors: {
@@ -74,9 +71,9 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
                 },
               },
             },
-            styleOverrides.fieldGroup
-          ),
-        }}
+          },
+          styles
+        )}
         onBlur={handleCommit}
         onFocus={() => setHasFocus(true)}
         onChange={handleChange}

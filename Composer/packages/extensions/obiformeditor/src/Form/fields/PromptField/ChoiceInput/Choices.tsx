@@ -91,7 +91,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
         <EditableField
           onChange={handleEdit('value')}
           value={choice.value}
-          styleOverrides={{
+          styles={{
             root: { margin: '7px 0 7px 0' },
           }}
           onBlur={handleBlur}
@@ -102,7 +102,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           onChange={handleEdit('synonyms')}
           value={choice.synonyms && choice.synonyms.join(', ')}
           placeholder={formatMessage('Add multiple comma-separated synonyms')}
-          styleOverrides={{
+          styles={{
             root: { margin: '7px 0 7px 0' },
           }}
           options={{ transparentBorder: true }}
