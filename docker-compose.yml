@@ -7,8 +7,10 @@ services:
     volumes:
       - ~/Documents/Composer:/Bots
       - ./BotProject:/BotProject
+      - ./.appdata:/appdata
     environment:
       COMPOSER_BOTS_FOLDER: /Bots
+      COMPOSER_APP_DATA: /appdata/data.json
       BOT_ENDPOINT: http://botruntime:80
       PORT: 3000
       DEBUG: composer
