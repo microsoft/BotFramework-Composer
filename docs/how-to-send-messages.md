@@ -1,8 +1,8 @@
 # Sending messages to users
-The primary way a bot communicates with users is through message activities. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use examples in the [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample throughout this article. If you are looking for examples about sending responses with cards please read the [sending cards to users](./howto-sending-cards.md) article. 
+The primary way a bot communicates with users is through message activities. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use examples in the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) throughout this article. If you are looking for examples about sending responses with cards please read the [RespondingWithCardsSample](./how-to-send-cards.md) article. 
 
 ## User scenario
-When your bot receives messages from the user, any **intents** and **entity** values in the message are extracted and passed on to the dialog's event handler (trigger). In the event handler you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the event handler. 
+When your bot receives messages from the user, any **intents** and **entity** values in the message are extracted and passed on to the dialog's event handler (trigger). In the trigger you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the trigger. 
 
 Below is a screenshot of the **Send a response** action in Composer. How to get there: 
 
@@ -11,12 +11,11 @@ Below is a screenshot of the **Send a response** action in Composer. How to get 
 
 ![send_response](./media/send_messages/send_response.png)
 
-> [!NOTE] All types of triggers have the **Send a response** action component. The **ConversationUpdate** trigger is one type of trigger used here for demo purposes. 
 
 ## What to know
-In Composer, all messages that are sent back to the user are composed in the Language Generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) concept article. 
+In Composer, all messages that are sent back to the user are composed in the Language Generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) article. 
 
-The table below lists five different types of text messages provided in Composer and their respective descriptions. 
+The table below lists the different types of text messages provided in Composer and their respective descriptions. 
 
 | Message Type      | Description                                                                           |
 | ----------------- | ------------------------------------------------------------------------------------- |
