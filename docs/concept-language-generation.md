@@ -169,4 +169,5 @@ For more information on structured template, please read the [structured respons
 - [Structured template example2](https://github.com/microsoft/botbuilder-dotnet/blob/master/tests/Microsoft.Bot.Builder.Dialogs.Adaptive.Templates.Tests/lg/NormalStructuredLG.lg)
 
 ## Next 
-- [Language Understanding](./concept-language-understanding.md)
+- [Linting and validation](./how-to-use-validation.md)
+- [Language understanding](./concept-language-understanding.md)
