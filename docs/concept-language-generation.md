@@ -48,11 +48,9 @@ Note: All templates defined in the target file will be pulled in, so ensure that
  
 ## Define LG template in Composer
 
-### When to define
+### User scenario
 
-When you want to determine how your bot should respond to users, you need to define your LG template. For example, if you want to send a welcome message to the user, you can define an LG template in the **Send a response** action. Click on the **Send a response** action node, you will see the inline LG editor where you can define the template. 
-
-![send_response](./media/language_generation/send_response.gif)
+When you want to determine how your bot should respond to users, you need to define LG template. For example, you can send a welcome message to the user in the **Send a response** action. Click on the **Send a response** action node, you will see the inline LG editor where you can define the template. 
 
 ### What to know 
 To define an LG template in Composer, you will need to know 
@@ -61,7 +59,7 @@ To define an LG template in Composer, you will need to know
   - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
   
 ### Where to define 
-In Composer, there are two LG editors: an inline LG editor and the **Bot Responses** LG editor that lists all templates. The following screenshot shows an inline LG editor which hosts the relevant templates content. Below is a screenshot of the inline LG editor where you author responses to users.  
+You can define LG template in two places: inline LG editor and LG all-up view (**Bot Responses**) that lists all templates. Below is a screenshot of LG inline editor. 
 ![inline_editor](./media/language_generation/inline_editor.png)
 
 On the navigation pane click **Bot Responses** item (or the bot icon when collapsed), you will see the all-up LG editor listing all LG templates defined in the bot. Toggle **Edit Mode** on the upper right corner to start editing your LG template. 
