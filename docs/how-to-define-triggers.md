@@ -30,6 +30,8 @@ Follow the steps to define an **Intent recognized** trigger with LUIS recognizer
 
 1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
 
+![luis_recognizer](./media/add_luis/luis_recognizer.png)
+
 2. In the Language Understanding editor, create intents with sample utterances and follow the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 
 >[!NOTE]
@@ -73,24 +75,25 @@ In the example below, a similar book-flight intent is defined. However, this wil
 Follow the steps to define **Intent recognized**trigger with [Regular Expressions](https://regexr.com/) recognizer: 
 
 1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
+
+![regexp-recognizer](tutorial-weatherbot/02/regexp-recognizer.gif)
+
 2. In the Language Understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
 
-![regular_expression_recognizer](./media/events_triggers/regular_expression_recognizer.png)
+![regular_expression_intent](./media/events_triggers/regular_expression_intent.png)
 
 3. Create an **Intent recognized** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](howto-defining-triggers.md#LUIS-recognizer). 
 
 ## Unknown intent 
-**Unknown intent** defines actions to take when an intent is not recognized. For this trigger, you do not need to define any intents. Follow the steps to define an **Unknown intent** trigger:
-<!-- Please note that an "Unknown Intent" will defer to any specific intent that fires in a parent dialog.  -->
-### Create an **Unknown intent** trigger 
-On the navigation pane, click **New Trigger** and then select **Unknown intent** from the drop-down menu. You will see the trigger menu as follows: 
+In **Unknown intent** we define actions to take when an intent is not recognized. You do not need to define any intents for this trigger. Follow the steps to define an **Unknown intent** trigger:
 
-![unrecognized_intent](./media/events_triggers/unrecognized_intent.png)
+1. On the navigation pane click **New Trigger** and select **Unknown intent** from the drop-down menu. 
 
-After you click **Submit**, you will see an empty **Unknown intent** trigger in the authoring canvas. 
+![unknown_intent](./media/events_triggers/unknown_intent.png)
 
-### Add an action(s) to the trigger
-Under the trigger, click the "+" sign to add the action node(s) you want to include. For example, you can click **Send a response** to send a message "This is an unrecognized intent trigger!" authored in [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). When this trigger is fired, the response message will be sent to the user. 
+2. After you click **Submit**, you will see an empty **Unknown intent** trigger in the authoring canvas. 
+
+3. Click the "+" sign under the trigger node to add any action node(s) you want to include. For example, you can click **Send a response** to send a message `This is an unknown intent trigger!`. When this trigger is fired, the response message will be sent to the user. 
 
 ![unrecognized_intent_response](./media/events_triggers/unrecognized_intent_response.gif)  
 
