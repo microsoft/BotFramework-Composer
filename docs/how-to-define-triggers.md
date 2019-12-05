@@ -130,29 +130,27 @@ Click the "+" sign under the trigger node and and mouse over the action menu the
 ## Custom event
 **Custom event** is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using the **Emit a custom event** which will trigger this handler. Follow the steps below to define a **Custom event**: 
 
-### Define **Emit a custom event**
 In your bot's authoring canvas, select the trigger you want to define **Emit a custom event**. Under this trigger, click the "+" sign and mouse over the action menu. Click **Access external resources** and then select **Emit a custom event**. 
 
-![emit_custom_event](./media/events_triggers/emit_custom_event.gif)
+![emit_custom_event](./media/events_triggers/emit_custom_event.png)
 
-On the property editor on the right, you can define some properties of this event. Let's give this event a name "Greeting", leave `Event value` as is, and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
+You can define properties of this event on the properties panel on the right side. Let's give this event a name "Weather", leave `Event value` as is and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
 
-![emit_custom_event_property](./media/events_triggers/emit_custom_event_property.gif)
+![emit_custom_event_property](./media/events_triggers/emit_custom_event_property.png)
 
-### Create **Custom event** trigger to handle the pre-defined event
-On the navigation pane on the left, click on **New Trigger** and select **Custom event** from the drop-down menu. Click **Submit**. 
+Now let's create a **Custom event** trigger to handle the pre-defined event. On the navigation pane on the left, click on **New Trigger** and select **Custom event** from the drop-down menu. Click **Submit**. 
 
-![create_custom_trigger](./media/events_triggers/create_custom_trigger.png)
+![custom_event](./media/events_triggers/custom_event.png)
 
-On the property editor on the right, fill in the name of you pre-defined event in the `Custom event name` section. We fill in "Greeting" as we created in step 1. The name in the `Custom event name` section should match the name of the **Emit a custom event** you just created. 
+On the properties panel on the right side, fill in the name of you pre-defined event in the `Custom event name` section. We fill in `Weather` as we created in step 1. The name in the `Custom event name` section must match the name of the **Emit a custom event** you just created. 
 
-![event_name_greeting](./media/events_triggers/event_name_greeting.png)
+![custom_event_property](./media/events_triggers/custom_event_property.png)
 
-You can add any action to this trigger. Under the trigger, click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the language generation editor as you want. 
+You can add an action to this trigger to test if it triggers the pre-defined event. Click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the language generation editor as you want. 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.gif)
 
-Now you have completed defining a **Custom trigger**. When **Emit a custom event** is fired, the **Custom event** will handle this event and send the response you have defined. 
+Now you have completed defining a **Custom event** trigger. When **Emit a custom event** is fired, the **Custom event** will handle this event and send the response you have defined. 
 
 ![custom_event_response](./media/events_triggers/custom_event_response.png)
 
