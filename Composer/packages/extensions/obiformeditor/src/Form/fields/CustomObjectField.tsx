@@ -15,8 +15,16 @@ import { BaseField } from './BaseField';
 import { customObjectFieldContainer, customObjectFieldItem, customObjectFieldLabel } from './styles';
 import { EditableField } from './EditableField';
 
-const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeValue, handleDropPropertyClick }) => {
+const ObjectItem = ({
+  name: originalName,
+  formData,
+  value,
+  handleNameChange,
+  handleValueChange,
+  handleDropPropertyClick,
+}) => {
   const [name, setName] = useState<string>(originalName);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const contextItems: IContextualMenuItem[] = [
     {
@@ -27,12 +35,21 @@ const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeV
     },
   ];
 
+  const handleBlur = useCallback(() => {
+    if (name !== originalName && Object.keys(formData).includes(name)) {
+      setErrorMessage(formatMessage('Keys must be unique'));
+    } else {
+      handleNameChange(name);
+      setErrorMessage('');
+    }
+  }, [handleNameChange, name]);
+
   return (
     <div css={customObjectFieldContainer}>
       <div css={customObjectFieldItem}>
         <EditableField
           autoComplete="off"
-          onBlur={() => handleChangeName(name)}
+          onBlur={handleBlur}
           onChange={(_, newValue) => setName(newValue || '')}
           options={{ transparentBorder: true }}
           placeholder={formatMessage('Add a new key')}
@@ -40,12 +57,13 @@ const ObjectItem = ({ name: originalName, value, handleChangeName, handleChangeV
           styles={{
             root: { margin: '7px 0 7px 0' },
           }}
+          errorMessage={errorMessage}
         />
       </div>
       <div css={customObjectFieldItem}>
         <EditableField
           autoComplete="off"
-          onChange={handleChangeValue}
+          onChange={handleValueChange}
           options={{ transparentBorder: true }}
           placeholder={formatMessage('Add a new value')}
           value={value}
@@ -92,7 +110,7 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
     [formData, onChange, name, setName, setValue, value]
   );
 
-  const handleChangeName = useCallback(
+  const handleNameChange = useCallback(
     name => newName => {
       const { [name]: value, ...rest } = formData;
       const newFormData = !(newName || value) ? rest : { ...rest, [newName]: value };
@@ -100,7 +118,7 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
     },
     [formData, onChange]
   );
-  const handleChangeValue = useCallback(
+  const handleValueChange = useCallback(
     name => (_, newValue) => {
       onChange({ ...formData, [name]: newValue || '' });
     },
@@ -124,10 +142,11 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
         return (
           <ObjectItem
             key={index}
+            formData={formData}
             name={name}
             value={value}
-            handleChangeName={handleChangeName(name)}
-            handleChangeValue={handleChangeValue(name)}
+            handleNameChange={handleNameChange(name)}
+            handleValueChange={handleValueChange(name)}
             handleDropPropertyClick={handleDropPropertyClick(name)}
           />
         );
