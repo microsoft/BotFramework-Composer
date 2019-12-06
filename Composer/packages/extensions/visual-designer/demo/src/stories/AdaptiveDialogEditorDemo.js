@@ -5,7 +5,7 @@ import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 import { JsonBlock } from '../components/json-block';
 import ToDoBot from '../samples/todo/ToDoBot.main.json';
 
-import './AdaptiveDialogEditorDemo.css';
+import './story.css';
 
 export class AdaptiveDialogEditorDemo extends Component {
   state = {
@@ -44,9 +44,9 @@ export class AdaptiveDialogEditorDemo extends Component {
 
   render() {
     return (
-      <div className="demo-container">
-        <h1 className="demo-title">Visual SDK Demo</h1>
-        <div className="demo-content">
+      <div className="story-container">
+        <h1 className="story-title">Visual SDK Demo</h1>
+        <div className="story-content">
           <div className="block block--left">
             <JsonBlock
               styles={{

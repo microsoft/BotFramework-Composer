@@ -1,13 +1,13 @@
-.demo-container {
+.story-container {
   height: 100%;
 }
 
-.demo-title {
+.story-title {
   height: 50px;
   margin: 0;
 }
 
-.demo-content {
+.story-content {
   display: flex;
   flex-direction: row;
   height: calc(100% - 60px);

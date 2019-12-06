@@ -4,7 +4,7 @@ import VisualDesigner from '../../../src';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
 import { EditorConfig } from '../../../src/editorConfig';
-import './VisualEditorDemo.css';
+import './story.css';
 
 const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
@@ -47,9 +47,9 @@ export class VisualEditorDemo extends Component {
     const { selectedFile, obiJson, focusedEvent, focusedSteps, focusedTab, clipboardActions } = this.state;
 
     return (
-      <div className="ve-container">
-        <h1 className="ve-title">visual-designer Demo</h1>
-        <div className="ve-content">
+      <div className="story-container">
+        <h1 className="story-title">visual-designer Demo</h1>
+        <div className="story-content">
           <div className="block block--left">
             <div>Select built-in schemas:</div>
             <select
