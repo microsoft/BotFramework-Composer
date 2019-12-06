@@ -52,7 +52,7 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
         value={localValue}
         styles={mergeStyleSets(
           {
-            root: { margin: '5px 0 7px -9px' },
+            root: { margin: '5px 0 7px 0' },
             field: {
               fontSize: fontSize,
               selectors: {
