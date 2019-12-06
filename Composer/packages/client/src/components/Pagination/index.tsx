@@ -32,7 +32,7 @@ export const Pagination: React.FC<IPaginationProps> = props => {
 
   const handlePageSelected = (event: React.FormEvent<HTMLDivElement>, item?: IDropdownOption, index?: number) => {
     setIndex(index || 0);
-    onChange(index || 0);
+    onChange(index ? index + 1 : 1);
   };
 
   const hanglePreviousClick = () => {
