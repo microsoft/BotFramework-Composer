@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import VisualDesigner from '../../../src';
 import { JsonBlock } from '../components/json-block';
 import { ObiExamples } from '../samples';
-import { EditorConfig } from '../../../src/editors/editorConfig';
+import { EditorConfig } from '../../../src/editorConfig';
 import './VisualEditorDemo.css';
 
 const sampleFileNames = Object.keys(ObiExamples);

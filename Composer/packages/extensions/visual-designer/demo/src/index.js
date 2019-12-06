@@ -3,11 +3,12 @@ import { render } from 'react-dom';
 import { Nav } from 'office-ui-fabric-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 
-import { EditorConfig } from '../../src/editors/editorConfig';
+import { EditorConfig } from '../../src/editorConfig';
 
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
-import { StepEditorDemo } from './stories/StepEditorDemo';
-import { EventsEditorDemo } from './stories/EventsEditorDemo';
+import { VisualSDKDemo } from './stories/VisualSDKDemo';
+import { AdaptiveEventEditorDemo } from './stories/AdaptiveEventEditorDemo';
+import { AdaptiveDialogEditorDemo } from './stories/AdaptiveDialogEditorDemo';
 import './index.css';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -19,19 +20,23 @@ const DemoMaps = {
     key: 'VisualEditorDemo',
     component: VisualEditorDemo,
   },
-  StepEditorDemo: {
-    key: 'StepEditorDemo',
-    component: StepEditorDemo,
+  VisualSDKDemo: {
+    key: 'VisualSDKDemo',
+    component: VisualSDKDemo,
   },
-  EventsEditorDemo: {
-    key: 'EventsEditorDemo',
-    component: EventsEditorDemo,
+  AdaptiveEventEditorDemo: {
+    key: 'AdaptiveEventEditorDemo',
+    component: AdaptiveEventEditorDemo,
+  },
+  AdaptiveDialogEditorDemo: {
+    key: 'AdaptiveDialogEditorDemo',
+    component: AdaptiveDialogEditorDemo,
   },
 };
 
 class Demo extends Component {
   state = {
-    selectedItem: DemoMaps.VisualEditorDemo.key,
+    selectedItem: DemoMaps.AdaptiveEventEditorDemo.key,
   };
 
   renderNav() {
@@ -54,12 +59,16 @@ class Demo extends Component {
                 name: 'Visual Editor',
               },
               {
-                key: DemoMaps.StepEditorDemo.key,
-                name: 'Step Editor',
+                key: DemoMaps.VisualSDKDemo.key,
+                name: 'Adaptive Visual SDK',
               },
               {
-                key: DemoMaps.EventsEditorDemo.key,
-                name: 'Event Editor',
+                key: DemoMaps.AdaptiveEventEditorDemo.key,
+                name: 'Adaptive Event Editor',
+              },
+              {
+                key: DemoMaps.AdaptiveDialogEditorDemo.key,
+                name: 'Adaptive Dialog Editor',
               },
             ],
           },
