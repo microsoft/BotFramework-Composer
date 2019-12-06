@@ -5,7 +5,8 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, LgFile } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import { LgFile } from '@bfc/indexers';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';

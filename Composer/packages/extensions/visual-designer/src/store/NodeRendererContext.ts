@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { ShellApi, LgFile } from '@bfc/shared';
+import { ShellApi } from '@bfc/shared';
+import { LgFile } from '@bfc/indexers';
 
 type ShellApiFuncs = 'copyLgTemplate' | 'removeLgTemplate' | 'removeLgTemplates' | 'updateLgTemplate';
 
