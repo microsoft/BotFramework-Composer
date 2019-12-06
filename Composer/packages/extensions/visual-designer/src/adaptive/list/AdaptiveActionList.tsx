@@ -37,8 +37,8 @@ export interface AdaptiveActionListProps {
 
 export const AdaptiveActionList: FC<AdaptiveActionListProps> = ({ path, actions, header, onEvent }): JSX.Element => {
   const data = { $type: ObiTypes.StepGroup, children: actions };
-  const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
+  const stepGroupBoundary = measureJsonBoundary(data);
   const hasNoSteps = !Array.isArray(actions) || actions.length === 0;
   const contentBoundary = hasNoSteps ? new Boundary(TerminatorSize.width, TerminatorSize.height) : stepGroupBoundary;
 
@@ -67,16 +67,7 @@ export const AdaptiveActionList: FC<AdaptiveActionListProps> = ({ path, actions,
       id={`${path}[0]`}
     />
   ) : (
-    <StepGroup
-      id={path}
-      data={data}
-      onEvent={onEvent}
-      onResize={boundary => {
-        if (boundary) {
-          setStepGroupBoundary(boundary);
-        }
-      }}
-    />
+    <StepGroup id={path} data={data} onEvent={onEvent} />
   );
 
   return (
