@@ -164,7 +164,6 @@ const mockShellApi = [
   'updateLgFile',
   'createLuFile',
   'createLgFile',
-  'getLgTemplates',
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',
