@@ -70,8 +70,10 @@ jobs:
 
   docker-build:
     name: Docker Build
-    runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -83,6 +85,7 @@ jobs:
           docker-compose up -d
           sleep 10
           curl -Is http://localhost:3000 | grep -q "200 OK"
+        shell: bash
       - name: Cleanup
         if: always()
         run: docker-compose down
