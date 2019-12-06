@@ -11,7 +11,6 @@ import { DialogInfo } from '@bfc/indexers';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
-import { title } from './../pages/about/styles';
 
 const ExpressionParser = new ExpressionEngine();
 
