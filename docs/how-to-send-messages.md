@@ -25,7 +25,7 @@ The table below lists the different types of text messages provided in Composer 
 | [LG composition](how-to-send-messages.md#LG-composition)| An LG template composed with pre-defined templates to generate a text response. |
 | [Structured LG](how-to-send-messages.md#structured-LG)| An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response.|
 | [Multiline text](how-to-send-messages.md#multiline-text) | An LG template defined with multiline response text.       |
-| [If/Else](how-to-send-messages.md#if-else-condition) | An If/Else conditional template defined to generate text responses based on user's input.  |
+| [If/Else](how-to-send-messages.md#multiline-text) | An If/Else conditional template defined to generate text responses based on user's input.  |
 | [Switch](how-to-send-messages.md#switch-condition)|A Switch conditional template defined to generate text responses based on user's input. |
 
 ## Define different text messages
