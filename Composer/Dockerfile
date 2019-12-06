@@ -3,7 +3,7 @@
 # Because Composer is organized as a monorepo with multiple packages
 # managed by yarn workspaces, our Dockerfile may not look like other
 # node / react projects. Specifically, we have to add all source files
-# before doing yarn install due to
+# before doing yarn install due to yarn workspace symlinking.
 #
 ################
 
@@ -27,10 +27,6 @@ COPY --from=build /src/Composer/package.json .
 COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
 COPY --from=build /src/Composer/packages/tools ./packages/tools
-
-# # update server package json to point to local packages
-# WORKDIR /app/Composer/server
-# RUN node ./prepare-prod.js
 
 ENV NODE_ENV "production"
 RUN yarn --production --frozen-lockfile --force && yarn cache clean
