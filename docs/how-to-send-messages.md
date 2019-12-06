@@ -97,10 +97,31 @@ Each one-of variation can include multi-line text enclosed in ```...```.
 Multi-line variation can request template expansion and entity substitution by enclosing the requested operation in `@{}`. With multi-line support, you can have the language generation sub-system fully resolve a complex JSON or XML (e.g. SSML wrapped text to control bot's spoken reply). 
 
 ### If/Else condition
+Instead of using [conditional branching](./how-to-control-conversation-flow.md#conditional-branching), you can define an conditional template to generate text responses based on user's input. For example: 
 
+    # timeOfDayGreeting(timeOfDay)
+    - IF: @{timeOfDay == 'morning'}
+        - good morning
+    - ELSEIF: @{timeOfDay == 'afternoon'}
+        - good afternoon
+    - ELSE:
+        - good evening
+
+In this If/Else conditional template, bot will respond in text message `morning`, `afternoon` or `evening` based on user's input to match specific conditions defined in the template. 
 
 ### Switch condition 
+Similar to If/Else conditional template, you can define a Switch conditonal template to generate text responses based on user's input. For example: 
 
+    # greetInAWeek
+    - SWITCH: @{dayOfWeek(utcNow())}
+    - CASE: @{0}
+        - Happy Sunday!
+    -CASE: @{6}
+        - Happy Saturday!
+    -DEFAULT:
+        - Working day!
+
+In this Switch conditional template, bot will respond in text message `Happy Sunday!`, `Happy Saturday` or `Working day!` based on the returned value of days of the week for a given timestamp. `utcNow()`is a pre-built function which returns current timestamp as string. `dayOfWeek()` is a pre-built function which returns the day of the week from a timestamp. Read more about pre-built functions(https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
 ## References 
 - [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
