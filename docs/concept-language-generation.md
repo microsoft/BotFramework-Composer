@@ -79,7 +79,7 @@ Here is an example of a single line text response from the [RespondingWithTextSa
 
 This is an example of a single line expression response with memory from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample):  
 
-     - {user.message} 
+     - @{user.message} 
 
 A multiline response include multiline text enclosed in `...`. Here is an example response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample). In a multi-line response the bot will pick an utterance by random. 
 
