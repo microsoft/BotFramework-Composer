@@ -19,14 +19,14 @@ The table below lists the different types of text messages provided in Composer 
 
 | Message Type      | Description                                                                           |
 | ----------------- | ------------------------------------------------------------------------------------- |
-| Simple text       | A simple LG defined to generate a simple text response.                          |
-| Text with memory  | An LG template with pre-set property to generate a text response.                     |
-| LG with parameter | An LG template with pre-set property as parameter to generate a text response.        |
-| LG composition    | An LG template composed with pre-defined templates to generate a text response. |
-| Structured LG     | An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response.|
-| Multiline text | An LG template defined with multiline response text.                        |
-| If/Else | An If/Else conditional template defined to generate text responses based on user's input.  |
-| Switch | A Switch conditional template defined to generate text responses based on user's input. |
+| [Simple text](how-to-send-messages.md#simple-text)| A simple LG defined to generate a simple text response.                          |
+| [Text with memory](how-to-send-messages.md#text-with-memory)| An LG template with pre-set property to generate a text response.      |
+| [LG with parameter](how-to-send-messages.md#LG-with-parameter) | An LG template with pre-set property as parameter to generate a text response.|
+| [LG composition](how-to-send-messages.md#LG-composition)| An LG template composed with pre-defined templates to generate a text response. |
+| [Structured LG](how-to-send-messages.md#structured-LG)| An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response.|
+| [Multiline text](how-to-send-messages.md#multiline-text) | An LG template defined with multiline response text.       |
+| [If/Else](how-to-send-messages.md#if-else-condition) | An If/Else conditional template defined to generate text responses based on user's input.  |
+| [Switch](how-to-send-messages.md#switch-condition)|A Switch conditional template defined to generate text responses based on user's input. |
 
 ## Define different text messages
 To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
@@ -128,9 +128,9 @@ In this Switch conditional template, bot will respond in text message `Happy Sun
 
 ## References 
 - [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
-- [Language Generation](./concept-language-generation.md)
+- [Language generation](./concept-language-generation.md)
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 ## NEXT
-Learn how to [ask for user input](./howto-ask-for-user-input.md).
+Learn how to [ask for user input](./how-to-ask-for-user-input.md).
