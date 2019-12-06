@@ -7,18 +7,27 @@
 
 const fs = require('fs');
 const path = require('path');
+const packagesDir = process.argv[2] || path.resolve(__dirname, '..');
 
 const packageJsonPath = path.resolve(__dirname, 'package.json');
 
+function getInstallPath(scope, name) {
+  const data = require(path.resolve(packagesDir, `./lib/${name}/package.json`));
+  const tgzName = `${scope}-${name}-${data.version}.tgz`;
+  const tgzPath = path.resolve(packagesDir, `./lib/${name}`, tgzName);
+  const childPath = path.resolve(__dirname, `./lib/${name}`);
+  const childInstallPath = fs.existsSync(childPath) ? childPath : null;
+  const tgzInstallPath = fs.existsSync(tgzPath) ? tgzPath : null;
+  return { [`@${scope}/${name}`]: childInstallPath || tgzInstallPath };
+}
+
 const localPackages = {
-  '@bfc/indexers': path.resolve(__dirname, './lib/indexers'),
-  '@bfc/shared': path.resolve(__dirname, './lib/shared'),
+  ...getInstallPath('bfc', 'indexers'),
+  ...getInstallPath('bfc', 'shared'),
 };
 
 const packageJson = require(packageJsonPath);
 
-Object.keys(localPackages).forEach(p => {
-  packageJson.dependencies[p] = localPackages[p];
-});
+packageJson.dependencies = { ...packageJson.dependencies, ...localPackages };
 
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
