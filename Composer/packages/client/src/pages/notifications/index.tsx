@@ -49,14 +49,14 @@ const navigations = {
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
   const notifications = useNotifications(filter);
-  const handleItemInvoked = (item: INotification) => {
+  const handleItemClick = (item: INotification) => {
     navigations[item.type](item);
   };
   return (
     <div css={root} data-testid="notifications-page">
       <ToolBar />
       <NotificationHeader onChange={setFilter} />
-      <NotificationList items={notifications} onItemInvoked={handleItemInvoked} />
+      <NotificationList items={notifications} onItemClick={handleItemClick} />
     </div>
   );
 };

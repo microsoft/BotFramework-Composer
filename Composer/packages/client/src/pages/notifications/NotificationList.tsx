@@ -3,7 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  IColumn,
+  CheckboxVisibility,
+} from 'office-ui-fabric-react/lib/DetailsList';
+import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { INotification } from './types';
@@ -11,7 +18,7 @@ import { notification, typeIcon, listRoot, icons } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
-  onItemInvoked: (item: INotification) => void;
+  onItemClick: (item: INotification) => void;
 }
 
 const columns: IColumn[] = [
@@ -76,21 +83,28 @@ const columns: IColumn[] = [
 ];
 
 export const NotificationList: React.FC<INotificationListProps> = props => {
-  const { items, onItemInvoked } = props;
+  const { items, onItemClick } = props;
+
+  const selection = new Selection({
+    onSelectionChanged: () => {
+      const item = selection.getSelection()[0] as INotification;
+      // selected item will be cleaned when folder path changed file will be undefine
+      // when no item selected.
+      onItemClick(item);
+    },
+  });
 
   return (
     <div css={listRoot} data-testid="notifications-table-view">
       <DetailsList
         items={items}
         columns={columns}
-        selectionMode={SelectionMode.none}
+        selection={selection}
+        selectionMode={SelectionMode.single}
         setKey="none"
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
-        onItemInvoked={onItemInvoked}
-        onRenderItemColumn={() => {
-          return <div>test</div>;
-        }}
+        checkboxVisibility={CheckboxVisibility.hidden}
       />
     </div>
   );
