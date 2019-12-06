@@ -81,6 +81,7 @@ jobs:
       - name: Health check
         run: |
           docker-compose up -d
+          sleep 10
           curl -Is http://localhost:3000 | grep -q "200 OK"
       - name: Cleanup
         if: always()
