@@ -2,7 +2,7 @@
 The primary way a bot communicates with users is through message activities. Some messages may simply consist of plain text, while others may contain richer content such as cards or attachments. In this article, we will cover the different types of text messages you can use in Bot Framework Composer and how to use them. We use examples in the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) throughout this article. If you are looking for examples about sending responses with cards please read the [RespondingWithCardsSample](./how-to-send-cards.md) article. 
 
 ## User scenario
-When your bot receives messages from the user, any **intents** and **entity** values in the message are extracted and passed on to the dialog's event handler (trigger). In the trigger you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the trigger. 
+When your bot receives messages from the user, any `intent` and `entity` values in the message are extracted and passed on to the dialog's event handler (trigger). In the trigger you can define actions the bot should take to respond to the users. Sending messages back to the user is one type of action you can define in the trigger. 
 
 Below is a screenshot of the **Send a response** action in Composer. How to get there: 
 
@@ -19,11 +19,14 @@ The table below lists the different types of text messages provided in Composer 
 
 | Message Type      | Description                                                                           |
 | ----------------- | ------------------------------------------------------------------------------------- |
-| Simple text       | A simple LG defined to generate a single line text response.                          |
+| Simple text       | A simple LG defined to generate a simple text response.                          |
 | Text with memory  | An LG template with pre-set property to generate a text response.                     |
-| Text with LG      | A reference to a pre-defined LG template to generate a text response.                 |
 | LG with parameter | An LG template with pre-set property as parameter to generate a text response.        |
-| LG composition    | An LG template composed with other pre-defined templates to generate a text response. |
+| LG composition    | An LG template composed with pre-defined templates to generate a text response. |
+| Structured LG     | An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response.|
+| Multiline text | An LG template defined with multiline response text.                        |
+| If/Else | An If/Else conditional template defined to generate text responses based on user's input.  |
+| Switch | A Switch conditional template defined to generate text responses based on user's input. |
 
 ## Define different text messages
 To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
@@ -97,7 +100,7 @@ Each one-of variation can include multi-line text enclosed in ```...```.
 Multi-line variation can request template expansion and entity substitution by enclosing the requested operation in `@{}`. With multi-line support, you can have the language generation sub-system fully resolve a complex JSON or XML (e.g. SSML wrapped text to control bot's spoken reply). 
 
 ### If/Else condition
-Instead of using [conditional branching](./how-to-control-conversation-flow.md#conditional-branching), you can define an conditional template to generate text responses based on user's input. For example: 
+Instead of using [conditional branching](./how-to-control-conversation-flow.md#conditional-branching), you can define a conditional template to generate text responses based on user's input. For example: 
 
     # timeOfDayGreeting(timeOfDay)
     - IF: @{timeOfDay == 'morning'}
@@ -121,7 +124,7 @@ Similar to If/Else conditional template, you can define a Switch conditonal temp
     -DEFAULT:
         - Working day!
 
-In this Switch conditional template, bot will respond in text message `Happy Sunday!`, `Happy Saturday` or `Working day!` based on the returned value of days of the week for a given timestamp. `utcNow()`is a pre-built function which returns current timestamp as string. `dayOfWeek()` is a pre-built function which returns the day of the week from a timestamp. Read more about pre-built functions(https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
+In this Switch conditional template, bot will respond in text message `Happy Sunday!`, `Happy Saturday` or `Working day!` based on the returned value of days of the week for a given timestamp. `utcNow()`is a pre-built function which returns current timestamp as string. `dayOfWeek()` is a pre-built function which returns the day of the week from a timestamp. Read more about [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
 ## References 
 - [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
