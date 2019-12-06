@@ -77,4 +77,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: docker-compose build
-        runs: docker-compose build
+        run: docker-compose build
