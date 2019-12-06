@@ -8,7 +8,7 @@ import { LgTemplateRef } from '@bfc/shared';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 export const useLgTemplate = (str?: string, dialogId?: string) => {
-  const { getLgTemplates } = useContext(NodeRendererContext);
+  const { lgFiles } = useContext(NodeRendererContext);
   const [templateText, setTemplateText] = useState('');
   let cancelled = false;
 
@@ -18,12 +18,15 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
 
     if (templateId && dialogId) {
       // this is an LG template, go get it's content
-      if (!getLgTemplates || typeof getLgTemplates !== 'function') {
+
+      const lgFile = Array.isArray(lgFiles) ? lgFiles.find(({ id }) => id === 'common') : null;
+
+      if (!lgFile) {
         setTemplateText(str || '');
+        return;
       }
 
-      const templates = getLgTemplates ? await getLgTemplates('common') : [];
-      const [template] = templates.filter(({ name }) => {
+      const template = lgFile.templates.find(({ name }) => {
         return name === templateId;
       });
 
