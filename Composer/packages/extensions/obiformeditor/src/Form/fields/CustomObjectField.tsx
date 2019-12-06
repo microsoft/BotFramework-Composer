@@ -89,19 +89,30 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
         }
       }
     },
-    [onChange, name, setValue, value]
+    [formData, onChange, name, setName, setValue, value]
   );
 
-  const handleChangeName = name => newName => {
-    const { [name]: value, ...rest } = formData;
-    const newFormData = !(newName || value) ? rest : { ...rest, [newName]: value };
-    onChange(newFormData);
-  };
-  const handleChangeValue = name => (_, newValue) => onChange({ ...formData, [name]: newValue || '' });
-  const handleDropPropertyClick = name => () => {
-    const { [name]: _, ...newFormData } = formData;
-    onChange(newFormData);
-  };
+  const handleChangeName = useCallback(
+    name => newName => {
+      const { [name]: value, ...rest } = formData;
+      const newFormData = !(newName || value) ? rest : { ...rest, [newName]: value };
+      onChange(newFormData);
+    },
+    [formData, onChange]
+  );
+  const handleChangeValue = useCallback(
+    name => (_, newValue) => {
+      onChange({ ...formData, [name]: newValue || '' });
+    },
+    [formData, onChange]
+  );
+  const handleDropPropertyClick = useCallback(
+    name => () => {
+      const { [name]: _, ...newFormData } = formData;
+      onChange(newFormData);
+    },
+    [formData, onChange]
+  );
 
   return (
     <BaseField {...props} className="JsonField">
