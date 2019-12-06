@@ -394,32 +394,42 @@ export const appschema: OBISchema = {
           description: 'Choice output format.',
           default: 'value',
         },
-        // TODO: support oneOf
         choices: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              value: {
-                type: 'string',
-                title: 'Value',
-                description: 'Value to return when this choice is selected.',
-              },
-              // action: {
-              //   title: 'Action',
-              //   description: 'Card action for the choice',
-              //   type: 'object',
-              // },
-              synonyms: {
-                type: 'array',
-                title: 'Synonyms',
-                description: 'List of synonyms to recognize in addition to the value (optional).',
-                items: {
-                  type: 'string',
+          oneOf: [
+            {
+              $role: 'expression',
+              type: 'string',
+              title: 'Dynamic',
+              description: 'String must contain an expression.',
+            },
+            {
+              type: 'array',
+              title: 'Static',
+              items: {
+                type: 'object',
+                properties: {
+                  value: {
+                    type: 'string',
+                    title: 'Value',
+                    description: 'Value to return when this choice is selected.',
+                  },
+                  // action: {
+                  //   title: 'Action',
+                  //   description: 'Card action for the choice',
+                  //   type: 'object',
+                  // },
+                  synonyms: {
+                    type: 'array',
+                    title: 'Synonyms',
+                    description: 'List of synonyms to recognize in addition to the value (optional).',
+                    items: {
+                      type: 'string',
+                    },
+                  },
                 },
               },
             },
-          },
+          ],
         },
         appendChoices: {
           type: 'boolean',
