@@ -63,4 +63,5 @@ export const root = css`
 export const listRoot = css`
   position: relative;
   overflow-y: auto;
+  flex-grow: 1;
 `;
