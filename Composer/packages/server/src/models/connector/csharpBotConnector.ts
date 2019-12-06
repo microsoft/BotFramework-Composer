@@ -117,14 +117,7 @@ export class CSharpBotConnector implements IBotConnector {
     return new Promise((resolve, reject) => {
       const runtime = spawn(
         'dotnet',
-        [
-          'bin/Debug/netcoreapp2.1/BotProject.dll',
-          `--urls`,
-          this.endpoint,
-          ...this.getConnectorConfig(config),
-          '--environment',
-          'development',
-        ],
+        ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
         {
           detached: true,
           cwd: dir,
