@@ -89,7 +89,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'FirstHello' }, { name: 'FirstGoodBye' }],
-        utterances: [{ intent: 'FirstHello', text: 'Hi' }, { intent: 'FirstGoodBye', text: 'Goodbye' }],
+        utterances: [
+          { intent: 'FirstHello', text: 'Hi' },
+          { intent: 'FirstGoodBye', text: 'Goodbye' },
+        ],
       },
     },
   },
@@ -100,7 +103,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'SecondHello' }, { name: 'SecondGoodBye' }],
-        utterances: [{ intent: 'SecondHello', text: 'Good morning' }, { intent: 'SecondGoodBye', text: 'See ya!' }],
+        utterances: [
+          { intent: 'SecondHello', text: 'Good morning' },
+          { intent: 'SecondGoodBye', text: 'See ya!' },
+        ],
       },
     },
   },
@@ -111,7 +117,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'ThirdHello' }, { name: 'ThirdGoodbye' }],
-        utterances: [{ intent: 'ThirdHello', text: 'Hello' }, { intent: 'ThirdGoodbye', text: 'Later' }],
+        utterances: [
+          { intent: 'ThirdHello', text: 'Hello' },
+          { intent: 'ThirdGoodbye', text: 'Later' },
+        ],
       },
     },
   },
@@ -154,7 +163,6 @@ const mockShellApi = [
   'updateLgFile',
   'createLuFile',
   'createLgFile',
-  'getLgTemplates',
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',

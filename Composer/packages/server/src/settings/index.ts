@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import os from 'os';
+
 import merge from 'lodash/merge';
 
 import log from '../logger';
+import { Path } from '../utility/path';
 
-import settings from './settings';
-
-// overall the guidance in settings.json is to list every item in "development"
-// section with a default value, and override the value for different environment
-// in later sections
+import { botsFolder, botEndpoint, appDataPath, environment } from './env';
 
 interface Settings {
   botAdminEndpoint: string;
@@ -17,11 +16,22 @@ interface Settings {
   assetsLibray: string;
   runtimeFolder: string;
   botsFolder: string;
+  appDataPath: string;
 }
 
-const defaultSettings = settings.development;
-const environment = process.env.NODE_ENV || 'development';
-const environmentSettings = settings[environment];
+const envSettings: { [env: string]: Settings } = {
+  development: {
+    botAdminEndpoint: botEndpoint,
+    botEndpoint: 'http://localhost:3979', //botEndpoint,
+    assetsLibray: Path.resolve('./assets'),
+    runtimeFolder: Path.resolve('../../../BotProject/Templates'),
+    botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
+    appDataPath,
+  },
+};
+
+const defaultSettings = envSettings.development;
+const environmentSettings = envSettings[environment];
 
 const finalSettings = merge<Settings, Settings>(defaultSettings, environmentSettings);
 
