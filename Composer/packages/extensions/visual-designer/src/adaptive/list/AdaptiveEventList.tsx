@@ -4,11 +4,11 @@
 import React, { FC } from 'react';
 import { BaseSchema } from '@bfc/shared';
 
-import { Panel } from '../components/lib/Panel';
-import { RuleGroup, CollapsedRuleGroup } from '../components/groups';
-import { EventMenu } from '../components/menus/EventMenu';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { ObiTypes } from '../constants/ObiTypes';
+import { Panel } from '../../components/lib/Panel';
+import { RuleGroup, CollapsedRuleGroup } from '../../components/groups';
+import { EventMenu } from '../../components/menus/EventMenu';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { ObiTypes } from '../../constants/ObiTypes';
 
 export interface AdaptiveEventListProps {
   path: string;

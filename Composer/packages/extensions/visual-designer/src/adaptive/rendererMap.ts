@@ -3,10 +3,9 @@
 
 import { SDKTypes } from '@bfc/shared';
 
-import { StepRenderer } from '../components/renderers/StepRenderer';
-
 import { AdaptiveDialog } from './AdaptiveDialog';
 import { AdaptiveEvent } from './AdaptiveEvent';
+import { AdaptiveAction } from './AdaptiveAction';
 
 const isRecognizerType = ($type: string) => $type && $type.endsWith('Recognizer');
 const isDialogType = ($type: string) => $type === SDKTypes.AdaptiveDialog;
@@ -21,5 +20,5 @@ export const resolveAdaptiveDataRenderer = data => {
 
   if (isTriggerType(data.$type)) return AdaptiveEvent;
 
-  return StepRenderer;
+  return AdaptiveAction;
 };

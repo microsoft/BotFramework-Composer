@@ -12,27 +12,27 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { outlineObiJson } from '../utils/outlineObiJson';
 import { ObiFieldNames } from '../constants/ObiFieldNames';
 
-import { AdaptiveActionList } from './AdaptiveActionList';
+import { AdaptiveActionList } from './list/AdaptiveActionList';
 
 export interface AdaptiveEventProps {
   path: string;
-  event: BaseSchema;
+  data: BaseSchema;
   onEvent: (eventName: NodeEventTypes, eventData?: any) => any;
 }
 
-export const AdaptiveEvent: FC<AdaptiveEventProps> = ({ path, event, onEvent }): JSX.Element => {
+export const AdaptiveEvent: FC<AdaptiveEventProps> = ({ path, data, onEvent }): JSX.Element => {
   const outlineCache = useRef();
   const outlineVersion = useRef(0);
 
   useMemo(() => {
-    const newOutline = outlineObiJson(event);
+    const newOutline = outlineObiJson(data);
     if (!isEqual(newOutline, outlineCache.current)) {
       outlineCache.current = newOutline;
       outlineVersion.current += 1;
     }
-  }, [path, event]);
+  }, [path, data]);
 
-  const actionList = event[ObiFieldNames.Actions] || [];
+  const actionList = data[ObiFieldNames.Actions] || [];
   const actionListPath = `${path}.${ObiFieldNames.Actions}`;
 
   return (
@@ -56,7 +56,7 @@ export const AdaptiveEvent: FC<AdaptiveEventProps> = ({ path, event, onEvent }):
         path={actionListPath}
         actions={actionList}
         onEvent={onEvent}
-        header={<Trigger data={event} />}
+        header={<Trigger data={data} />}
       />
     </div>
   );

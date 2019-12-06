@@ -12,24 +12,24 @@ import { EditorContext } from '../store/EditorContext';
 import { Collapse } from '../components/lib/Collapse';
 import { ObiFieldNames } from '../constants/ObiFieldNames';
 
-import { AdaptiveEventList } from './AdaptiveEventList';
+import { AdaptiveEventList } from './list/AdaptiveEventList';
 import { AdaptiveEvent } from './AdaptiveEvent';
 
 export interface AdaptiveDialogProps {
-  dialogId: string;
-  dialogData: MicrosoftAdaptiveDialog;
+  path: string;
+  data: MicrosoftAdaptiveDialog;
   onEvent: (eventName: NodeEventTypes, eventData?: any) => any;
 }
 
-export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({ dialogData, onEvent }): JSX.Element => {
+export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({ data, onEvent }): JSX.Element => {
   const eventsPath = ObiFieldNames.Events;
-  const events = get(dialogData, eventsPath, []);
+  const events = get(data, eventsPath, []);
 
   const FocusedEvent = () => {
     const { focusedEvent } = useContext(EditorContext);
-    const focusedEventData = focusedEvent ? get(dialogData, focusedEvent) : null;
+    const focusedEventData = focusedEvent ? get(data, focusedEvent) : null;
     if (!focusedEventData) return null;
-    return <AdaptiveEvent path={focusedEvent || ''} event={focusedEventData} onEvent={onEvent} />;
+    return <AdaptiveEvent path={focusedEvent || ''} data={focusedEventData} onEvent={onEvent} />;
   };
 
   return (
