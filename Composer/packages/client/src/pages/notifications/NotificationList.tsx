@@ -10,7 +10,10 @@ import {
   IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { INotification } from './types';
@@ -82,30 +85,44 @@ const columns: IColumn[] = [
   },
 ];
 
+function onRenderDetailsHeader(props, defaultRender) {
+  return (
+    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      {defaultRender({
+        ...props,
+        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+      })}
+    </Sticky>
+  );
+}
+
 export const NotificationList: React.FC<INotificationListProps> = props => {
   const { items, onItemClick } = props;
 
   const selection = new Selection({
     onSelectionChanged: () => {
-      const item = selection.getSelection()[0] as INotification;
-      // selected item will be cleaned when folder path changed file will be undefine
-      // when no item selected.
-      onItemClick(item);
+      const items = selection.getSelection();
+      if (items.length) {
+        onItemClick(items[0] as INotification);
+      }
     },
   });
 
   return (
     <div css={listRoot} data-testid="notifications-table-view">
-      <DetailsList
-        items={items}
-        columns={columns}
-        selection={selection}
-        selectionMode={SelectionMode.single}
-        setKey="none"
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible={true}
-        checkboxVisibility={CheckboxVisibility.hidden}
-      />
+      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <DetailsList
+          items={items}
+          columns={columns}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          setKey="none"
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+          checkboxVisibility={CheckboxVisibility.hidden}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+        />
+      </ScrollablePane>
     </div>
   );
 };
