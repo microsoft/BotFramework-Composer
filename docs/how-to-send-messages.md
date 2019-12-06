@@ -26,62 +26,80 @@ The table below lists the different types of text messages provided in Composer 
 | LG composition    | An LG template composed with other pre-defined templates to generate a text response. |
 
 ## Define different text messages
-To send a message, you need to specify **Send a response** action and then in the the Language Generation editor you can author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
 
 ### Simple text
-To define a simple text message, use a "-" before the text that your want your bot to respond to users. 
+To define a simple text message, use a "-" before the text that you want your bot to respond to users. 
 
      - Here is a simple text message. 
+     
+You can also define a simple text message with multiple variations. Bot will respond with any of the simple text messages by random. For example: 
 
-Below is a screenshot of the simple text message example in [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample: 
-
-![simple_text](./media/send_messages/simple_text.png)
+     > Greeting template with 2 variations. 
+     # GreetingPrefix
+     - Hi
+     - Hello
 
 ### Text with memory
 To define a text message with memory, you need to **Set a Property** first and then use an expression response like this: 
 
-     - {user.message} 
+     - @{user.message} 
 
 > [!NOTE] If you are not familiar with setting a property in Composer, please refer to the [conversation flow and memory](./concept-memory.md) article. If you are not familiar with expression response format, please refer to the [common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) article. 
 
-Below is a screenshot of the text with memory example in [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample: 
-
-![text_memory](./media/send_messages/text_memory.png)
-
-### Text with LG
-Text with LG means a reference to a pre-defined LG template to generate a text response. It is achieved by markdown link notation by enclosing the target template name in square brackets - [TemplateName]. For example, you can define an LG templates named **TextWithLG** and reference this template as needed. 
-
-     # TextWithLG
-    - Hi, this is a text with LG
-    - Hey, this is a text with LG
-    - Hello, this is a text with LG 
-
-Below is a screenshot that shows the reference of the pre-defined template named **TextWithLG** in the [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample: 
-
-![text_LG](./media/send_messages/text_LG.png)
-
 ### LG with parameter
-LG with parameter means an LG template with pre-set property as parameter to generate a text response. To define LG with parameter, you need to include the parameter in the LG template. The template can then be referenced elsewhere. 
+LG with parameter means an LG template with pre-set property as parameter to generate a text response. To define LG with parameter, you need to include the parameter in the LG template. For example: 
 
     # LGWithParam(user)
-    - Hello {user.name}, nice to talk to you!
+    - Hello @{user.name}, nice to talk to you!
 
-Below is a screenshot of the LG with parameter example in the the [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample: 
+In this LG template, `user` is included as a parameter in the parentheses `()`of the template. The value of user's name is made available via `@{user.name}`. 
 
-![LG_parameter](./media/send_messages/LG_parameter.png)
-
-### Language Generation composition
-LG composition means to compose new LG template using pre-defined LG templates. To define an LG Composition you need to define the component template(s) first and then use the pre-defined templates as building blocks to compose a new LG template. For example, you can define a **Greeting** LG template and then compose a new template named **LGComposition(user)** using the **Greeting** template. 
+### LG composition
+LG composition means to compose new LG template using pre-defined LG templates. To define an LG Composition you need to define the component template(s) first and then use the pre-defined templates as building blocks to compose a new LG template. For example: 
 
     # Greeting
     - nice to talk to you!
 
     # LGComposition(user)
-    - {user.name} [Greeting]
+    - @{user.name} @{Greeting()}
 
-Below is a screenshot of the text with LG Composition in the [responding with text](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample) sample: 
+In this template `# LGComposition(user)`, a pre-defined template `# Greeting` is used to compose the new template. The syntax to include a pre-defined template is `@{templateName()}`. 
 
-![LG_composition](./media/send_messages/LG_composition.png)
+### Strcutured LG
+Structured LG uses [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) format to compose LG templates. For example: 
+
+    # StructuredText
+    [Activity
+       Text = text from structured
+    ]    
+
+This is a simple structured LG with output response `text from structured`. The definition of a structured template is as follows: 
+    
+    # TemplateName
+    > this is a comment
+    [Structure-name
+        Property1 = <plain text> .or. <plain text with template reference> .or. <expression> 
+        Property2 = list of values are denoted via '|'. e.g. a | b
+    > this is a comment about this specific property
+        Property3 = Nested structures are achieved through composition
+    ]
+
+### Multiline text 
+Each one-of variation can include multi-line text enclosed in ```...```. 
+
+    # multilineText
+    - ``` you have such alarms
+          alarm1:  7:am
+          alarm2: 9:pm
+     ```
+
+Multi-line variation can request template expansion and entity substitution by enclosing the requested operation in `@{}`. With multi-line support, you can have the language generation sub-system fully resolve a complex JSON or XML (e.g. SSML wrapped text to control bot's spoken reply). 
+
+### If/Else condition
+
+
+### Switch condition 
 
 
 ## References 
