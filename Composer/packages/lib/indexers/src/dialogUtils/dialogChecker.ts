@@ -6,18 +6,20 @@ import { ExpressionEngine } from 'botbuilder-expression-parser';
 
 import { Diagnostic } from '../diagnostic';
 
-import { DiagnosticSeverity } from './../diagnostic';
 import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
 
-export function IsExpression(name: string): CheckerFunc {
-  return node => {
-    let message = '';
-    let severity = DiagnosticSeverity.Error;
-    const exp = get(node.value, name);
-    if (!exp) {
-      severity = DiagnosticSeverity.Warning;
+export const IsExpression: CheckerFunc = (
+  path,
+  value,
+  optional: { properties: string[]; requiredTypes: { [key: string]: boolean } }
+) => {
+  let message = '';
+  const { properties, requiredTypes } = optional;
+  return properties.reduce((result: Diagnostic[], property) => {
+    const exp = get(value, property);
+    if (!exp && requiredTypes[property]) {
       message = `is missing or empty`;
     } else {
       try {
@@ -27,38 +29,11 @@ export function IsExpression(name: string): CheckerFunc {
       }
     }
     if (message) {
-      const diagnostic = new Diagnostic(message, '', severity);
-      diagnostic.path = `${node.path}: ${node.value.$type}: ${name}`;
-      return diagnostic;
-    }
-    return null;
-  };
-}
-
-enum EditArrayChangeTypes {
-  Push,
-  Pop,
-  Take,
-  Remove,
-  Clear,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function EditArrayValueChecker(node: { path: string; value: any }): Diagnostic | null {
-  const changeType = get(node.value, 'changeType');
-
-  // when push and remove, value is required
-  if (changeType === EditArrayChangeTypes.Push || changeType === EditArrayChangeTypes.Remove) {
-    const exp = get(node.value, 'value');
-    try {
-      ExpressionParser.parse(exp);
-    } catch (error) {
-      const message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
       const diagnostic = new Diagnostic(message, '');
-      diagnostic.path = node.path;
-      return diagnostic;
+      diagnostic.path = `${path}: ${value.$type}: ${property}`;
+      result.push(diagnostic);
     }
-  }
-
+    return result;
+  }, []);
   return null;
-}
+};

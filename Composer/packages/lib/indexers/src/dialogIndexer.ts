@@ -4,12 +4,13 @@
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 
-import { ValidateFields } from './dialogUtils/types';
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 import { extractLgTemplateRefs } from './lgUtils/parsers/parseLgTemplateRef';
+import { getExpressionProperties } from './dialogUtils/extractExpressionDefinitions';
+import { IsExpression } from './dialogUtils';
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
@@ -125,8 +126,9 @@ function ExtractReferredDialogs(dialog): string[] {
 }
 
 // check all fields
-function CheckFields(dialog, id: string, validateFields: ValidateFields): Diagnostic[] {
+function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
   const errors: Diagnostic[] = [];
+  const expressionProperties = getExpressionProperties(schema);
   /**
    *
    * @param path , jsonPath string
@@ -135,15 +137,12 @@ function CheckFields(dialog, id: string, validateFields: ValidateFields): Diagno
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    const DialogChecker = validateFields.getDialogChecker();
-    if (has(value, '$type') && has(DialogChecker, value.$type)) {
-      const matchedCheckers = DialogChecker[value.$type];
-      matchedCheckers.forEach(checker => {
-        const checkRes = checker.apply(null, [{ path, value }]);
-        if (checkRes) {
-          Array.isArray(checkRes) ? errors.push(...checkRes) : errors.push(checkRes);
-        }
-      });
+    if (has(value, '$type') && has(expressionProperties, value.$type)) {
+      const diagnostics = IsExpression(path, value, { ...expressionProperties[value.$type] });
+
+      if (diagnostics) {
+        errors.push(...diagnostics);
+      }
     }
     return false;
   };
@@ -154,20 +153,20 @@ function CheckFields(dialog, id: string, validateFields: ValidateFields): Diagno
   });
 }
 
-function validate(id: string, content, validateFields: ValidateFields): Diagnostic[] {
+function validate(id: string, content, schema: any): Diagnostic[] {
   try {
-    return CheckFields(content, id, validateFields);
+    return CheckFields(content, id, schema);
   } catch (error) {
     return [new Diagnostic(error.message, id)];
   }
 }
 
-function parse(id: string, content: any, validateFields: ValidateFields) {
+function parse(id: string, content: any, schema: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   return {
     content,
-    diagnostics: validate(id, content, validateFields),
+    diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
     luIntents: ExtractLuIntents(content),
@@ -177,7 +176,7 @@ function parse(id: string, content: any, validateFields: ValidateFields) {
   };
 }
 
-function index(files: FileInfo[], botName: string, validateFields: ValidateFields): DialogInfo[] {
+function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
   if (files.length !== 0) {
     for (const file of files) {
@@ -192,7 +191,7 @@ function index(files: FileInfo[], botName: string, validateFields: ValidateField
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
-            ...parse(id, dialogJson, validateFields),
+            ...parse(id, dialogJson, schema),
           };
           dialogs.push(dialog);
         }

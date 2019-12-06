@@ -4,16 +4,7 @@
 import fs from 'fs';
 
 import { getNewDesigner } from '@bfc/shared';
-import {
-  FileInfo,
-  DialogInfo,
-  LgFile,
-  LuFile,
-  dialogIndexer,
-  lgIndexer,
-  extractExpressionDefinitions,
-  ValidateFields,
-} from '@bfc/indexers';
+import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
 import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';
@@ -430,8 +421,7 @@ export class BotProject {
   };
 
   private indexDialog() {
-    const expressions = extractExpressionDefinitions(this.getSchemas().sdk.content, 'definitions');
-    return dialogIndexer.index(this.files, this.name, new ValidateFields(expressions));
+    return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
   }
 
   // re index according to file change in a certain path

@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { dialogIndexer, extractExpressionDefinitions, ValidateFields } from '@bfc/indexers';
+import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionTypes, FileTypes } from '../../constants';
@@ -71,9 +71,7 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      state.schemas.sdk.content.definitions;
-      const expressions = extractExpressionDefinitions(state.schemas.sdk, 'content.definitions');
-      const result = dialogIndexer.parse(dialog.id, content, new ValidateFields(expressions));
+      const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
       return { ...dialog, ...result };
     }
     return dialog;

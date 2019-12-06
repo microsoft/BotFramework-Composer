@@ -18,11 +18,9 @@ export const notification = mergeStyleSets({
   typeIconCell: {
     textAlign: 'center',
     cursor: 'pointer',
-    padding: 0,
   },
   columnCell: {
     cursor: 'pointer',
-    padding: 0,
   },
 });
 

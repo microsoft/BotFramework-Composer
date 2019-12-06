@@ -1,13 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { extractExpressionDefinitions } from '../../src';
+import { getExpressionProperties } from '../../src';
 
 describe('extractExpressionDefinitions', () => {
   it('should return all expressions properties', () => {
     const schema = {
       definitions: {
         'Ms.type1': {
+          anyOf: [
+            {
+              title: 'Type',
+              required: ['condition'],
+            },
+          ],
           properties: {
             $type: {
               title: '$type',
@@ -28,14 +34,24 @@ describe('extractExpressionDefinitions', () => {
             $type: {
               title: '$type',
             },
+            items: {
+              $role: 'expression',
+            },
           },
         },
       },
     };
-    expect(extractExpressionDefinitions(schema, 'definitions')).toEqual({ 'Ms.type1': ['condition', 'items'] });
-    expect(extractExpressionDefinitions(schema, '')).toEqual({});
-    expect(extractExpressionDefinitions(schema, 'definitions', [{ type: 'title', value: '$copy' }])).toEqual({
-      'Ms.type1': ['$copy'],
+    expect(getExpressionProperties(schema)).toEqual({
+      'Ms.type1': {
+        properties: ['condition', 'items'],
+        requiredTypes: {
+          condition: true,
+        },
+      },
+      'Ms.type2': {
+        properties: ['items'],
+        requiredTypes: {},
+      },
     });
   });
 });
