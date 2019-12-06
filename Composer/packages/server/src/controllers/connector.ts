@@ -35,7 +35,7 @@ async function sync(req: any, res: any) {
   try {
     const environment = EnvironmentProvider.getCurrent();
     const settingsInDisk = await environment.getSettingsManager().get('');
-    await environment.getBotConnector().sync(merge(settingsInDisk, req.body, { user: req.user }));
+    await environment.getBotConnector().sync(merge({}, settingsInDisk, req.body, { user: req.user }));
     res.send('OK');
   } catch (error) {
     res.status(400).json({

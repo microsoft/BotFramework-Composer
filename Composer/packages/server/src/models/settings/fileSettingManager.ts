@@ -18,7 +18,7 @@ export class FileSettingManager implements ISettingManager {
     this.storage = new LocalDiskStorage();
   }
 
-  public get = async (slot: string, obfuscate = false): Promise<any> => {
+  public get = async (slot = '', obfuscate = false): Promise<any> => {
     this.validateSlot(slot);
 
     const path = this.getPath(slot);

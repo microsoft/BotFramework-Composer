@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { parse } from 'url';
+import { parse as urlParse } from 'url';
 import { ChildProcess, spawn } from 'child_process';
+import fs from 'fs';
+
+import getPort from 'get-port';
 
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
@@ -24,8 +27,8 @@ export class CSharpBotConnector implements IBotConnector {
   static stopAll = (signal: string) => {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
-      runtimeDebugs[pid]('successfully stopped bot runtime: %d', pid);
       runtime.kill(signal);
+      runtimeDebugs[pid]('successfully stopped bot runtime: %d', pid);
       delete CSharpBotConnector.botRuntimes[pid];
     }
   };
@@ -36,9 +39,13 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   private buildProcess = async (dir: string): Promise<number | null> => {
+    // check the build script existed
+    if (!fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'))) {
+      throw new Error('build script not existed');
+    }
     // build bot runtime
     return new Promise((resolve, reject) => {
-      const build = spawn('dotnet', ['build'], {
+      const build = spawn('pwsh', ['./Scripts/build_runtime.ps1'], {
         cwd: dir,
         stdio: ['ignore', 'ignore', 'pipe'],
       });
@@ -119,64 +126,25 @@ export class CSharpBotConnector implements IBotConnector {
         'dotnet',
         ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
         {
-          detached: true,
           cwd: dir,
           stdio: ['ignore', 'pipe', 'pipe'],
         }
       );
       // extend runtime debugger
-      runtimeDebugs[runtime.pid] = log.extend(`port ${runtime.pid}`);
+      runtimeDebugs[runtime.pid] = log.extend(`process ${runtime.pid}`);
       runtimeDebugs[runtime.pid]('bot runtime started. pid: %d', runtime.pid);
       CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
       this.addListeners(runtime, this.stop, resolve, reject);
     });
   };
 
-  private checkPortUsable = async (port: string | number): Promise<string> => {
-    if (process.platform === 'win32') {
-      return new Promise((resolve, reject) => {
-        const netstat = spawn('netstat', ['-ano']);
-        const findstr = spawn('findstr', [`${port}`], {
-          stdio: [netstat.stdout, 'pipe', process.stderr],
-        });
-        let output = '';
-        findstr.stderr &&
-          findstr.stderr.on('data', function(err) {
-            reject(err.toString());
-          });
-        findstr.stdout && findstr.stdout.on('data', data => (output += data));
-        findstr.on('exit', function() {
-          resolve(output);
-        });
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        const lsof = spawn('sudo', ['lsof', '-i', `:${port}`]);
-        let output = '';
-        lsof.stderr && lsof.stderr.on('data', err => reject(err.toString()));
-        lsof.stdout &&
-          lsof.stdout.on('data', function(chunk) {
-            output += chunk.toString();
-          });
-
-        lsof.on('exit', function() {
-          resolve(output);
-        });
-      });
-    }
-  };
-
   connect = async (_: BotEnvironments, __: string) => {
-    const port = parse(this.endpoint).port;
-    if (!port) {
-      return Promise.resolve('');
-    }
-    const portStatus = await this.checkPortUsable(port);
-    if (portStatus.trim() === '') {
-      return Promise.resolve(`${this.endpoint}/api/messages`);
-    } else {
-      throw new Error(`Port ${port} already in use`);
-    }
+    const originPort = urlParse(this.endpoint).port;
+    const protocol = urlParse(this.endpoint).protocol;
+    const hostName = urlParse(this.endpoint).hostname;
+    const port = await getPort({ host: hostName, port: parseInt(originPort || '3979') });
+    this.endpoint = `${protocol}//${hostName}:${port}`;
+    return Promise.resolve(`${this.endpoint}/api/messages`);
   };
 
   sync = async (config: DialogSetting) => {
@@ -215,7 +183,9 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
-
+process.on('uncaughtException', err => {
+  log(err);
+});
 process.on('SIGINT', () => {
   CSharpBotConnector.stopAll('SIGINT');
   process.exit(0);

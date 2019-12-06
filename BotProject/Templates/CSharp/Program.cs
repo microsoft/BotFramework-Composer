@@ -41,6 +41,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     Trace.WriteLine(ex.Message);
                 }
 
+                if (env.IsDevelopment())
+                {
+                    config.AddUserSecrets<Startup>();
+                }
+
                 config
                     .AddEnvironmentVariables()
                     .AddCommandLine(args);
