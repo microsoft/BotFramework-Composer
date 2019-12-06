@@ -15,14 +15,19 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { useMemo, useState } from 'react';
+
+import { Pagination } from '../../components/Pagination';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons } from './styles';
+import { notification, typeIcon, listRoot, icons, tableView, detailList } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
   onItemClick: (item: INotification) => void;
 }
+
+const itemCount = 10;
 
 const columns: IColumn[] = [
   {
@@ -98,6 +103,11 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const NotificationList: React.FC<INotificationListProps> = props => {
   const { items, onItemClick } = props;
+  const [pageIndex, setPageIndex] = useState<number>(1);
+
+  const pageCount: number = useMemo(() => {
+    return Math.ceil(items.length / itemCount) || 1;
+  }, [items]);
 
   const selection = new Selection({
     onSelectionChanged: () => {
@@ -108,21 +118,27 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
     },
   });
 
+  const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
+
   return (
     <div css={listRoot} data-testid="notifications-table-view">
-      <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <DetailsList
-          items={items}
-          columns={columns}
-          selection={selection}
-          selectionMode={SelectionMode.single}
-          setKey="none"
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible={true}
-          checkboxVisibility={CheckboxVisibility.hidden}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-        />
-      </ScrollablePane>
+      <div css={tableView}>
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+          <DetailsList
+            css={detailList}
+            items={showItems}
+            columns={columns}
+            selection={selection}
+            selectionMode={SelectionMode.single}
+            setKey="none"
+            layoutMode={DetailsListLayoutMode.justified}
+            isHeaderVisible={true}
+            checkboxVisibility={CheckboxVisibility.hidden}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+          />
+        </ScrollablePane>
+      </div>
+      <Pagination pageCount={pageCount} onChange={setPageIndex} />
     </div>
   );
 };

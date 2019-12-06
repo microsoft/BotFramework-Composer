@@ -64,4 +64,15 @@ export const listRoot = css`
   position: relative;
   overflow-y: auto;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const tableView = css`
+  position: relative;
+  flex-grow: 1;
+`;
+
+export const detailList = css`
+  overflow-x: hidden;
 `;
