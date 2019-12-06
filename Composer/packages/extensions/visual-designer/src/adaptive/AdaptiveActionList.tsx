@@ -3,7 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FC } from 'react';
+import { BaseSchema } from '@bfc/shared';
 
 import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
@@ -15,6 +16,7 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { useWindowDimensions } from '../utils/hooks';
+import { ObiTypes } from '../constants/ObiTypes';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -25,28 +27,19 @@ const TailSize = {
   height: TerminatorSize.height + ElementInterval.y / 2,
 };
 
-export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
+export interface AdaptiveActionListProps {
+  path: string;
+  actions: BaseSchema[];
+  header: JSX.Element;
+  onEvent: (eventName: NodeEventTypes, eventData?: any) => any;
+  onResize?: (boundary: Boundary) => any;
+}
+
+export const AdaptiveActionList: FC<AdaptiveActionListProps> = ({ path, actions, header, onEvent }): JSX.Element => {
+  const data = { $type: ObiTypes.StepGroup, children: actions };
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
 
-  const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
-  const content = hasNoSteps ? (
-    <EdgeMenu
-      onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
-      data-testid="StepGroupAdd"
-      id={`${id}[0]`}
-    />
-  ) : (
-    <StepGroup
-      id={id}
-      data={data}
-      onEvent={onEvent}
-      onResize={boundary => {
-        if (boundary) {
-          setStepGroupBoundary(boundary);
-        }
-      }}
-    />
-  );
+  const hasNoSteps = !Array.isArray(actions) || actions.length === 0;
   const contentBoundary = hasNoSteps ? new Boundary(TerminatorSize.width, TerminatorSize.height) : stepGroupBoundary;
 
   const editorWidth =
@@ -67,11 +60,30 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
     onEvent(NodeEventTypes.AddCoachMarkRef, coachMarkPosition);
   }, [width]);
 
+  const content = hasNoSteps ? (
+    <EdgeMenu
+      onClick={$type => onEvent(NodeEventTypes.Insert, { id: path, $type, position: 0 })}
+      data-testid="StepGroupAdd"
+      id={`${path}[0]`}
+    />
+  ) : (
+    <StepGroup
+      id={path}
+      data={data}
+      onEvent={onEvent}
+      onResize={boundary => {
+        if (boundary) {
+          setStepGroupBoundary(boundary);
+        }
+      }}
+    />
+  );
+
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
-          <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
+          <OffsetContainer offset={{ x: 0, y: 0 }}>{header}</OffsetContainer>
           <Edge direction="y" x={HeadSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
         </div>
       </OffsetContainer>
