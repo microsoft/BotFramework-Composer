@@ -9,3 +9,5 @@ export interface INotification {
   message: string;
   diagnostic: any;
 }
+
+export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'

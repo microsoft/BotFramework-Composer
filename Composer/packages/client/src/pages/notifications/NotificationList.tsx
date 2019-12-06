@@ -7,7 +7,7 @@ import { DetailsList, DetailsListLayoutMode, SelectionMode, IColumn } from 'offi
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons, columnItemText } from './styles';
+import { notification, typeIcon, listRoot, icons } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
@@ -31,6 +31,7 @@ const columns: IColumn[] = [
   {
     key: 'Notification Type',
     name: 'Type',
+    className: notification.columnCell,
     fieldName: 'type',
     minWidth: 70,
     maxWidth: 90,
@@ -38,26 +39,28 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span css={columnItemText}>{item.severity}</span>;
+      return <span>{item.severity}</span>;
     },
     isPadded: true,
   },
   {
     key: 'Notification Location',
     name: 'Location',
+    className: notification.columnCell,
     fieldName: 'location',
     minWidth: 70,
     maxWidth: 90,
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span css={columnItemText}>{item.location}</span>;
+      return <span>{item.location}</span>;
     },
     isPadded: true,
   },
   {
     key: 'Notification Detail',
     name: 'Message',
+    className: notification.columnCell,
     fieldName: 'message',
     minWidth: 70,
     maxWidth: 90,
@@ -66,7 +69,7 @@ const columns: IColumn[] = [
     isMultiline: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span css={columnItemText}>{item.message}</span>;
+      return <span>{item.message}</span>;
     },
     isPadded: true,
   },
@@ -85,6 +88,9 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible={true}
         onItemInvoked={onItemInvoked}
+        onRenderItemColumn={() => {
+          return <div>test</div>;
+        }}
       />
     </div>
   );

@@ -18,17 +18,17 @@ export function IsExpression(name: string): CheckerFunc {
     const exp = get(node.value, name);
     if (!exp) {
       severity = DiagnosticSeverity.Warning;
-      message = `In ${node.path}: ${node.value.$type}: ${name} is missing or empty`;
+      message = `is missing or empty`;
     } else {
       try {
         ExpressionParser.parse(exp);
       } catch (error) {
-        message = `In ${node.path}: ${node.value.$type}: ${name} must be an expression`;
+        message = `must be an expression`;
       }
     }
     if (message) {
       const diagnostic = new Diagnostic(message, '', severity);
-      diagnostic.path = node.path;
+      diagnostic.path = `${node.path}: ${node.value.$type}: ${name}`;
       return diagnostic;
     }
     return null;

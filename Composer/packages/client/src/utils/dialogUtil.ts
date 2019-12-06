@@ -11,6 +11,7 @@ import { DialogInfo } from '@bfc/indexers';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
+import { title } from './../pages/about/styles';
 
 const ExpressionParser = new ExpressionEngine();
 
@@ -288,4 +289,13 @@ export function isExpression(str: string): boolean {
 export function getSelected(focused: string): string {
   if (!focused) return '';
   return focused.split('.')[0];
+}
+
+export function replaceDialogDiagnosticLabel(path?: string): string {
+  if (!path) return '';
+  let list = path.split(': ');
+  list = list.map(item => {
+    return ConceptLabels[item]?.title || item;
+  });
+  return list.join(': ');
 }

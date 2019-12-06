@@ -17,16 +17,12 @@ export const notification = mergeStyleSets({
   },
   typeIconCell: {
     textAlign: 'center',
-    selectors: {
-      '&:before': {
-        content: '.',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        height: '100%',
-        width: '0px',
-        visibility: 'hidden',
-      },
-    },
+    cursor: 'pointer',
+    padding: 0,
+  },
+  columnCell: {
+    cursor: 'pointer',
+    padding: 0,
   },
 });
 
@@ -58,10 +54,6 @@ export const notificationHeaderText = css`
   font-size: 20px;
   color: #323130;
   font-weight: bold;
-`;
-
-export const columnItemText = css`
-  cursor: pointer;
 `;
 
 export const root = css`
