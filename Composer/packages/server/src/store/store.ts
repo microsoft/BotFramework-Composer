@@ -5,15 +5,15 @@ import fs from 'fs';
 import path from 'path';
 
 import log from '../logger';
+import settings from '../settings';
 
 import localInitData from './data.template';
 import abhInitData from './abh-template.json';
 import { runMigrations } from './migrations';
+
 const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
 const dataStorePath =
-  isHostedInAzure && process.env.HOME
-    ? path.resolve(process.env.HOME, './site/data.json')
-    : path.resolve(__dirname, '../../data.json');
+  isHostedInAzure && process.env.HOME ? path.resolve(process.env.HOME, './site/data.json') : settings.appDataPath;
 
 let initData = isHostedInAzure ? abhInitData : localInitData;
 
