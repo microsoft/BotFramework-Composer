@@ -42,7 +42,7 @@ const ObjectItem = ({
       handleNameChange(name);
       setErrorMessage('');
     }
-  }, [handleNameChange, name]);
+  }, [formData, handleNameChange, name, originalName, setErrorMessage]);
 
   return (
     <div css={customObjectFieldContainer}>
