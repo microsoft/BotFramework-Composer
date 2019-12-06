@@ -9,7 +9,6 @@ import classnames from 'classnames';
 import { ObiTypes } from '../../constants/ObiTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { EditorContext } from '../../store/EditorContext';
-import { SelectionContext } from '../../store/SelectionContext';
 import {
   DefaultRenderer,
   BeginDialog,
@@ -53,7 +52,7 @@ const nodeBorderDoubleSelectedStyle = css`
   box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
 
-export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, tab }): JSX.Element => {
+export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, tab }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab, selectedIds, getNodeIndex } = useContext(EditorContext);
@@ -79,6 +78,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, ta
       css={css`
         position: relative;
         border-radius: 2px 2px 0 0;
+        display: inline-block;
         ${nodeSelected && nodeBorderSelectedStyle};
         ${nodeFocused && nodeBorderSelectedStyle};
         ${nodeDoubleSelected && nodeBorderDoubleSelectedStyle};
@@ -88,14 +88,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, ta
       `}
       {...declareElementAttributes(selectableId, id)}
     >
-      <ChosenRenderer
-        id={id}
-        data={data}
-        onEvent={onEvent}
-        onResize={size => {
-          onResize(size, 'element');
-        }}
-      />
+      <ChosenRenderer id={id} data={data} onEvent={onEvent} />
     </div>
   );
 };
