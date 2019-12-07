@@ -17,13 +17,13 @@ Developers familiar with the Bot Framework SDK will notice differences between b
 
 A major difference between the current version of the Bot Framework SDK and Composer is that the apps created using Composer uses the Adaptive dialog format, a JSON specification shared by many tools provided by the Bot Framework. You can find more information about Adaptive dialog [here](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog).
 
-You can manage Composer assests, such as Dialogs, Language Understadning (LU) training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
+You can manage Composer assets, such as Dialogs, Language Understanding (LU) training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
 
 ## Language Understanding
 
 Language Understanding (LU) is a core component of Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
-As dialogs are edited in Composer developers can continuously add to their bot's natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
+As dialogs are edited in Composer developers can continuously add to their bots' natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
 
 ![BF Composer NLU](./media/introduction/intro-nlu.png)
 

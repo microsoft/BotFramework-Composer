@@ -123,7 +123,7 @@ For now, let's add one more global function - a cancel command.
 
 Say `weather` to your bot.  It will ask for a zipcode.
 
-Now say `help`. It'll provide the global help respons.
+Now say `help`. It'll provide the global help response.
 
 Now, say `cancel` - notice, the bot doesn't resume the weather dialog. Instead, it confirms the cancelation, and waits for your next message.
 

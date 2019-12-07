@@ -115,4 +115,4 @@ With these dialog actions, we can easily build a pluggable and extensible dialog
 [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme)
 
 ## Next 
-[Events and triggers](./concept-events-and-triggers.md)
+- [Events and triggers](./concept-events-and-triggers.md)

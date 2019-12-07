@@ -136,4 +136,4 @@ Learn more about [using memory and expressions in LG](concept-memory.md#memory-i
 [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)
 
 ## Next
-[Language Generation](./concept-language-generation.md)
+- [Language Generation](./concept-language-generation.md)

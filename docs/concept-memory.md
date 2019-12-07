@@ -45,7 +45,7 @@ Under the **User Input** tab you'll see **Property to fill**, where the user's r
 
 ![Prompt User Input](./media/memory/user-input.png)
 
-In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` ouput format was selected.
+In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` output format was selected.
 
 For more information about implementing text other prompts and read [asking users for input](./howto-ask-for-user-input.md). 
 
@@ -104,24 +104,24 @@ When executed, the bot will perform the `profile` child dialog, collect the user
 
 Some properties are automatically created and managed by the bot. These are available automatically.
 
-|Property |Description
-|-- |--
-| turn.activity | The full incoming [Activity](https://docs.microsoft.com/en-us/javascript/api/botframework-schema/activity?view=botbuilder-ts-latest) object
-| turn.intents | If a recognizer is run, the intents found
-| turn.entities | If a recognizer is run, the entities found
-| turn.dialogEvents.event name.value | Payload of a custom event fired using the EmitEvent action.
+| Property                           | Description                                                                                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| turn.activity                      | The full incoming [Activity](https://docs.microsoft.com/en-us/javascript/api/botframework-schema/activity?view=botbuilder-ts-latest) object |
+| turn.intents                       | If a recognizer is run, the intents found                                                                                                   |
+| turn.entities                      | If a recognizer is run, the entities found                                                                                                  |
+| turn.dialogEvents.event name.value | Payload of a custom event fired using the EmitEvent action.                                                                                 |
 
 ## Refer to properties in memory
 
 Bots can retrieve and use values from memory for a variety of purposes. The bot may need to use a value in order to construct an outgoing message. The bot may need to make a decision based on a value and perform different actions based on that decision. The bot may need to use the value to calculate other values.
 
-Sometimes, you will refer directly to a property by its address in memory: `user.name`.  Other times, you will refer to one or more properties as part of an expression: `(dialog.orderTotal + dialog.orderTax) > 50`.  When refering to properties in memory, it is generally possibly to use either mechanism to access the necessary values.
+Sometimes, you will refer directly to a property by its address in memory: `user.name`.  Other times, you will refer to one or more properties as part of an expression: `(dialog.orderTotal + dialog.orderTax) > 50`.  When referring to properties in memory, it is generally possibly to use either mechanism to access the necessary values.
 
 ### Expressions
 
 Bot Framework uses the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to calculate computed values. This syntax allows developers to create composite values, define complex conditional tests, and transform the content and format of values.
 
-*  [Operators](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#operators)
+* [Operators](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#operators)
 * [Built-in functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md#pre-built-functions)
 
 When used in expressions, no special notation is necessary to refer to a property from memory.

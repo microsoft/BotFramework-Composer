@@ -61,10 +61,10 @@ When triggered, if LUIS is able to identify a city, the city name will be made a
 ## Entities of different types
 In Composer, you can also define entities of different types. In this section, we focus on the following entity types and their definitions. For more entity types read [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
 
-| Type    | Description                                  | 
-| ---------- | --------------------------------------------- | 
-| [Simple](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data) | extract a single data concept contained in words or phrases | 
-| [List](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-intent-and-list-entity) | extract entity data that matches a predefined list of items  |
+| Type                                                                                                                | Description                                                 |
+| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [Simple](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data) | extract a single data concept contained in words or phrases |
+| [List](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-intent-and-list-entity)       | extract entity data that matches a predefined list of items |
 
 ### Simple entity 
 The purpose of defining a Simple type entity is to teach LUIS to detect a single concept data in an utterance. 

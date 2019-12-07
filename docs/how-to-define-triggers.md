@@ -3,14 +3,14 @@ Each dialog in Bot Framework Composer includes a set of triggers (event handlers
 
 The table below lists the six different types of triggers in Composer and their descriptions. 
 
-| Trigger Type     | Description                                                                             |
-| -----------------| --------------------------------------------------------------------------------------- |
-| Intent recognzied| Trigger an action when an `intent` is recognized (and optionally `entities`)        |
-| Unknown intent   | Trigger an action when no intent is recognized                                          |
-| Dialog events    | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
-| Activites        | Trigger an action to take when an activity event such as when a new conversation starts |
-| Message events | Trigger an action to take when a message activity is fired.                             |
-| Custom event   | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
+| Trigger Type      | Description                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------- |
+| Intent recognized | Trigger an action when an `intent` is recognized (and optionally `entities`)            |
+| Unknown intent    | Trigger an action when no intent is recognized                                          |
+| Dialog events     | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
+| Activities        | Trigger an action to take when an activity event such as when a new conversation starts |
+| Message events    | Trigger an action to take when a message activity is fired.                             |
+| Custom event      | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
 
 ## Intent recognized
 This is a trigger type we use to define actions to take when an `intent` is recognized (and optionally `entities`). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane click **New Trigger** and select **Intent recognized** from the drop-down menu. You will see the intent trigger menu as follows: 
@@ -113,13 +113,13 @@ Click the "+" sign under the trigger node and mouse over the action menu. Click 
 ![configure_dialog](./media/events_triggers/configure_dialog.png) 
 
 ## Activities
-This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Greeting (ConversationUpdate acvitity)** trigger to handle it. Follow the steps to define a **Greeting (ConversationUpdate acvitity)** trigger to send a welcome message: 
+This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Greeting (ConversationUpdate activity)** trigger to handle it. Follow the steps to define a **Greeting (ConversationUpdate activity)** trigger to send a welcome message: 
 
 On the navigation pane click **New Trigger** and select **Activities** from the drop-down menu. 
 
 ![activities](./media/events_triggers/activities.png)
 
-Select **Greeting (ConversationUpdate acvitity)** from the drop-down menu. Click **Submit**. 
+Select **Greeting (ConversationUpdate activity)** from the drop-down menu. Click **Submit**. 
 
 ![conversationupdate](./media/events_triggers/conversationupdate.png)
 
@@ -158,4 +158,4 @@ Now you have completed defining a **Custom event** trigger. When **Emit a custom
 - [Events and triggers](./concept-events-and-triggers.md)
 
 ## Next 
-Learn how to [control conversation flow](./how-to-control-conversation-flow.md).
+- Learn how to [control conversation flow](./how-to-control-conversation-flow.md).

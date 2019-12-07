@@ -36,7 +36,7 @@ Use dialog triggers when you want to:
 See how to define a dialog trigger [here](howto-defining-triggers.md#dialog-trigger).
 
 ### Intent triggers  
-Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent recognzied** and **Uknown intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any configured **Unknown intent** trigger will fire. This will only fire if no matching intent handler is found. **Unknown intent** handles any intent that is not handled by a trigger. 
+Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent recognized** and **Unknown intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any configured **Unknown intent** trigger will fire. This will only fire if no matching intent handler is found. **Unknown intent** handles any intent that is not handled by a trigger. 
 
 Use intent triggers when you want to:
 - Trigger major features of your bot using natural language

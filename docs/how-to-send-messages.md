@@ -17,16 +17,16 @@ In Composer, all messages that are sent back to the user are composed in the Lan
 
 The table below lists the different types of text messages provided in Composer and their respective descriptions. 
 
-| Message Type      | Description                                                                           |
-| ----------------- | ------------------------------------------------------------------------------------- |
-| [Simple text](how-to-send-messages.md#simple-text)| A simple LG defined to generate a simple text response.                          |
-| [Text with memory](how-to-send-messages.md#text-with-memory)| An LG template with pre-set property to generate a text response.      |
-| [LG with parameter](how-to-send-messages.md#LG-with-parameter) | An LG template with pre-set property as parameter to generate a text response.|
-| [LG composition](how-to-send-messages.md#LG-composition)| An LG template composed with pre-defined templates to generate a text response. |
-| [Structured LG](how-to-send-messages.md#structured-LG)| An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response.|
-| [Multiline text](how-to-send-messages.md#multiline-text) | An LG template defined with multiline response text.       |
-| [If/Else](how-to-send-messages.md#multiline-text) | An If/Else conditional template defined to generate text responses based on user's input.  |
-| [Switch](how-to-send-messages.md#switch-condition)|A Switch conditional template defined to generate text responses based on user's input. |
+| Message Type                                                   | Description                                                                                                                                                                                                                 |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Simple text](how-to-send-messages.md#simple-text)             | A simple LG defined to generate a simple text response.                                                                                                                                                                     |
+| [Text with memory](how-to-send-messages.md#text-with-memory)   | An LG template with pre-set property to generate a text response.                                                                                                                                                           |
+| [LG with parameter](how-to-send-messages.md#LG-with-parameter) | An LG template with pre-set property as parameter to generate a text response.                                                                                                                                              |
+| [LG composition](how-to-send-messages.md#LG-composition)       | An LG template composed with pre-defined templates to generate a text response.                                                                                                                                             |
+| [Structured LG](how-to-send-messages.md#structured-LG)         | An LG template defined using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) to generate a text response. |
+| [Multiline text](how-to-send-messages.md#multiline-text)       | An LG template defined with multiline response text.                                                                                                                                                                        |
+| [If/Else](how-to-send-messages.md#multiline-text)              | An If/Else conditional template defined to generate text responses based on user's input.                                                                                                                                   |
+| [Switch](how-to-send-messages.md#switch-condition)             | A Switch conditional template defined to generate text responses based on user's input.                                                                                                                                     |
 
 ## Define different text messages
 To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
@@ -69,7 +69,7 @@ LG composition means to compose new LG template using pre-defined LG templates. 
 
 In this template `# LGComposition(user)`, a pre-defined template `# Greeting` is used to compose the new template. The syntax to include a pre-defined template is `@{templateName()}`. 
 
-### Strcutured LG
+### Structured LG
 Structured LG uses [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md) format to compose LG templates. For example: 
 
     # StructuredText
@@ -113,7 +113,7 @@ Instead of using [conditional branching](./how-to-control-conversation-flow.md#c
 In this If/Else conditional template, bot will respond in text message `morning`, `afternoon` or `evening` based on user's input to match specific conditions defined in the template. 
 
 ### Switch condition 
-Similar to If/Else conditional template, you can define a Switch conditonal template to generate text responses based on user's input. For example: 
+Similar to If/Else conditional template, you can define a Switch conditional template to generate text responses based on user's input. For example: 
 
     # greetInAWeek
     - SWITCH: @{dayOfWeek(utcNow())}
@@ -132,5 +132,5 @@ In this Switch conditional template, bot will respond in text message `Happy Sun
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
-## NEXT
-Learn how to [ask for user input](./how-to-ask-for-user-input.md).
+## Next
+- Learn how to [ask for user input](./how-to-ask-for-user-input.md).

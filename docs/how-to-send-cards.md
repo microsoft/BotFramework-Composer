@@ -1,5 +1,5 @@
 # Sending responses with cards 
-A bot communicates with users through message activities which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance your bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](./howto-sending-messages.md) article. 
+A bot communicates with users through message activities which are multi-modal. There are messages which simply consist of plain text and there are also richer message content such as cards. Bot Framework Composer supports [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) with which you can add rich cards to your bot and enhance your bot's design. If you are looking for examples about sending text messages to users please read the [sending messages to users](./how-to-send-messages.md) article. 
 
 In this article, we will cover different types of cards you can define in Composer using [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md). We use the examples provided in the [RespondingWithCardsSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithCardsSample) throughout this article. 
 
@@ -137,5 +137,5 @@ This template "#AllCards" is defined to display all cards when the template is c
 - [Adaptive Cards for bot developers](https://docs.microsoft.com/en-us/adaptive-cards/getting-started/bots)
 
 ## Next
-Learn [how to define triggers and events](./howto-defining-triggers.md). 
+- Learn [how to define triggers and events](./how-to-define-triggers.md). 
 

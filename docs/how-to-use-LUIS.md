@@ -49,7 +49,6 @@ After you define your trigger and configure it to specific intent, you can add a
 
 ![greeting_message](./media/add_luis/greeting_message.png)
 
-
 ### Publish 
 After you are done with all previous steps, you are ready to publish your language model to LUIS. Please do the following steps to publish your training data: 
 
@@ -73,5 +72,5 @@ To test your bot which you just added LUIS to, click the **Test in Emulator** bu
 - [Language Understanding](./concept-language-understanding.md)
 
 ## Next 
-Learn [how to add a QnA Maker knowledge base to your bot](./how-to-add-qna-to-bot.md). 
+- Learn [how to add a QnA Maker knowledge base to your bot](./how-to-add-qna-to-bot.md). 
 

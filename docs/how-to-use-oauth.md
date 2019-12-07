@@ -1,6 +1,6 @@
 # How to use OAuth in Bot Framework Composer
 
-If your bot needs to access external resources using permissions granted by the end user, it will need to use the `OAuth Login` action within the `Access external resources` menu, along with a an Oauth configuration that lives in the Azure Bot Service Channels Registration. In this article, you will cover how to use basic OAuth to authenticate your bot with your Github account. (It is not necessary to deploy your bot to Azure for this to work.)
+If your bot needs to access external resources using permissions granted by the end user, it will need to use the `OAuth Login` action within the `Access external resources` menu, along with a an OAuth configuration that lives in the Azure Bot Service Channels Registration. In this article, you will cover how to use basic OAuth to authenticate your bot with your GitHub account. (It is not necessary to deploy your bot to Azure for this to work.)
 
 ![oauth-menu](./media/integration/oauth-menu.png)
 
@@ -32,9 +32,9 @@ This will open a new settings pane, where you can configure the OAuth connection
 
 Note the `Name` of your connection - you will need to enter this value in Composer exactly as it is displayed in this setting.
 
-You should fill in the values of `Client ID`, `Client Secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of Github, follow the steps to get these values: 
+You should fill in the values of `Client ID`, `Client Secret`, and optionally `Scopes` depending on the service you are authenticating with. In this example of GitHub, follow the steps to get these values: 
 
-- Go to [Github developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the Github OAuth App registration website. Fill in the values as instructed in the following: 
+- Go to [GitHub developer's setting webpage](https://github.com/settings/developers) and click `New OAuth App` on the right upper corner. This will redirect you to the GitHub OAuth App registration website. Fill in the values as instructed in the following: 
 
   `Application name`: a name you would like to give to your OAuth application, e.g. `Composer`
    
@@ -46,7 +46,7 @@ You should fill in the values of `Client ID`, `Client Secret`, and optionally `S
 
 ![oauth-app-credentials](./media/integration/oauth-app-credentials.png)
 
-- Copy the `Client ID` and `Client Secret` values and paste them to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and Github. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant to the caller. Save this setting.  
+- Copy the `Client ID` and `Client Secret` values and paste them to your Azure's Service Provider Connection Setting. These values configure the connection between your Azure resource and GitHub. Optionally, you can fill `user, repo, admin` in `Scopes`. This field specifies the permission you want to grant to the caller. Save this setting.  
 
 Now, with the  `Name` , `Client ID`, `Client Secret`, and `Scopes` of your new OAuth connection setting in Azure, you are ready to configure your bot.
 
@@ -83,4 +83,4 @@ To use this to access the protected resources, pass the token into any API calls
 
 ## Next
 
-* Learn how to [send an HTTP request and use OAuth](howto-sending-http-request.md). 
+* Learn how to [send an HTTP request and use OAuth](how-to-send-http-request.md). 
