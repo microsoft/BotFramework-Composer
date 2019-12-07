@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
-import { LuFile } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 interface InlineLuEditorProps {
   file: LuFile;

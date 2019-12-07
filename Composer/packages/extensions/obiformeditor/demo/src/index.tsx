@@ -6,7 +6,8 @@ import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { seedNewDialog, LuFile, DialogInfo, ShellApi } from '@bfc/shared';
+import { seedNewDialog, ShellApi } from '@bfc/shared';
+import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import Example from '../../src';
 import { buildDialogOptions } from '../../src/Form/utils';
