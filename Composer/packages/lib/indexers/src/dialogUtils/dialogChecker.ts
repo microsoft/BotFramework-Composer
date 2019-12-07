@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
+import formatMessage from 'format-message';
 
 import { Diagnostic } from '../diagnostic';
 
@@ -15,17 +16,17 @@ export const IsExpression: CheckerFunc = (
   value,
   optional: { properties: string[]; requiredTypes: { [key: string]: boolean } }
 ) => {
-  let message = '';
   const { properties, requiredTypes } = optional;
   return properties.reduce((result: Diagnostic[], property) => {
+    let message = '';
     const exp = get(value, property);
     if (!exp && requiredTypes[property]) {
-      message = `is missing or empty`;
+      message = formatMessage(`is missing or empty`);
     } else {
       try {
         ExpressionParser.parse(exp);
       } catch (error) {
-        message = `must be an expression`;
+        message = formatMessage(`must be an expression`);
       }
     }
     if (message) {
