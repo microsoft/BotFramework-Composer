@@ -154,7 +154,7 @@ export const ShellApi: React.FC = () => {
     });
 
     const content = lgUtil.updateTemplate(file.content, templateName, template);
-    return lgUtil.checkLgContent(content);
+    return lgUtil.checkLgContent(content, id);
   }
 
   function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {

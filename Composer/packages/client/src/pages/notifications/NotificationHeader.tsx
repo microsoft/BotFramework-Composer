@@ -5,15 +5,15 @@
 import { jsx } from '@emotion/core';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { useMemo } from 'react';
 
+import { DiagnosticSeverity } from './types';
 import { notificationHeader, notificationHeaderText, dropdownStyles } from './styles';
 
-const createOptions = (items: string[]): IDropdownOption[] => {
+const createOptions = (): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [
-    { key: formatMessage('Show All Locations'), text: formatMessage('All'), data: '', isSelected: true },
+    { key: formatMessage('Show All Notifications'), text: formatMessage('All'), data: '', isSelected: true },
   ];
-  items.forEach(item => {
+  DiagnosticSeverity.forEach(item => {
     return defaultOptions.push({ key: item, text: item, data: item });
   });
   return defaultOptions;
@@ -21,14 +21,10 @@ const createOptions = (items: string[]): IDropdownOption[] => {
 
 export interface INotificationHeader {
   onChange: (text: string) => void;
-  items: string[];
 }
 
 export const NotificationHeader: React.FC<INotificationHeader> = props => {
-  const { onChange, items } = props;
-  const options = useMemo(() => {
-    return createOptions(items);
-  }, [items]);
+  const { onChange } = props;
 
   return (
     <div css={notificationHeader}>
@@ -37,7 +33,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
         onChange={(event, option) => {
           if (option) onChange(option.data);
         }}
-        options={options}
+        options={createOptions()}
         styles={dropdownStyles}
         data-testid="notifications-dropdown"
       />

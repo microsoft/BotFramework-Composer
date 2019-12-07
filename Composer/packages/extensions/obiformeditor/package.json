@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@bfc/code-editor": "*",
+    "@bfc/indexers": "*",
     "@bfc/shared": "*",
     "@bfcomposer/react-jsonschema-form": "1.6.5",
     "@emotion/core": "^10.0.17",

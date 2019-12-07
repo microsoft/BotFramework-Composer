@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JsonWalk, VisitorFunc } from '../../../server/src/utility/jsonWalk';
+import { JsonWalk, VisitorFunc } from '../../src/utils/jsonWalk';
 
 const data = {
   firstName: 'John',
@@ -34,7 +34,7 @@ describe('run json walk', () => {
     JsonWalk('$', data, visitor);
     const lastPath = visitedPath.pop();
     expect(visitedPath.length).toBe(14);
-    expect(lastPath).toBe('$.phoneNumbers[:1].number');
+    expect(lastPath).toBe('$.phoneNumbers[1].number');
   });
 
   it('if visitor stop, its children should not be visited', () => {
@@ -49,6 +49,6 @@ describe('run json walk', () => {
     };
     JsonWalk('$', data, visitor);
     expect(visitedPath.length).toBe(8);
-    expect(visitedPath.indexOf('$.phoneNumbers[:1].number')).toBe(-1);
+    expect(visitedPath.indexOf('$.phoneNumbers[1].number')).toBe(-1);
   });
 });

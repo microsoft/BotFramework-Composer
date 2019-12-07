@@ -29,7 +29,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Language Generation'),
   },
   [SDKTypes.AdaptiveDialog]: {
-    title: formatMessage('AdaptiveDialog'),
+    title: formatMessage('Adaptive dialog'),
   },
   [SDKTypes.AttachmentInput]: {
     title: formatMessage('File or attachment'),
