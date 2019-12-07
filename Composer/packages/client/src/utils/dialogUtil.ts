@@ -7,7 +7,7 @@ import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import { ExpressionEngine } from 'botbuilder-expression-parser';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -288,4 +288,13 @@ export function isExpression(str: string): boolean {
 export function getSelected(focused: string): string {
   if (!focused) return '';
   return focused.split('.')[0];
+}
+
+export function replaceDialogDiagnosticLabel(path?: string): string {
+  if (!path) return '';
+  let list = path.split(': ');
+  list = list.map(item => {
+    return ConceptLabels[item]?.title || item;
+  });
+  return list.join(': ');
 }

@@ -17,16 +17,10 @@ export const notification = mergeStyleSets({
   },
   typeIconCell: {
     textAlign: 'center',
-    selectors: {
-      '&:before': {
-        content: '.',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        height: '100%',
-        width: '0px',
-        visibility: 'hidden',
-      },
-    },
+    cursor: 'pointer',
+  },
+  columnCell: {
+    cursor: 'pointer',
   },
 });
 
@@ -42,6 +36,7 @@ export const typeIcon = icon => css`
   background: ${icon.background};
   line-height: 24px;
   color: ${icon.color};
+  cursor: pointer;
 `;
 
 export const notificationHeader = css`
@@ -66,5 +61,18 @@ export const root = css`
 `;
 
 export const listRoot = css`
+  position: relative;
   overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const tableView = css`
+  position: relative;
+  flex-grow: 1;
+`;
+
+export const detailList = css`
+  overflow-x: hidden;
 `;
