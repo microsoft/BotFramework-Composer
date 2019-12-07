@@ -182,16 +182,10 @@ export const TestController: React.FC = () => {
         )}
         <div ref={addRef}>
           {showError && (
-            <Fragment>
+            <div style={{ float: 'left' }} onClick={handleErrorButtonClick}>
               <span css={errorCount}>{errorLength}</span>
-              <IconButton
-                iconProps={{ iconName: 'ErrorBadge' }}
-                css={errorButton}
-                title="Error"
-                ariaLabel="Error"
-                onClick={handleErrorButtonClick}
-              />
-            </Fragment>
+              <IconButton iconProps={{ iconName: 'ErrorBadge' }} css={errorButton} title="Error" ariaLabel="Error" />
+            </div>
           )}
           <PrimaryButton
             css={botButton}
