@@ -3,6 +3,8 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
+import { Diagnostic } from '@bfc/indexers';
+import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from '@bfc/shared';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
@@ -74,6 +76,35 @@ export function checkUrl(currentUri: string, { dialogId, selected, focused, prom
 
 interface NavigationState {
   breadcrumb: BreadcrumbItem[];
+}
+
+export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
+  //path is like main.trigers[0].actions[0]
+  //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
+  const { path, source } = diagnostic;
+  if (!source) return '';
+
+  let uri = `/dialogs/${source}`;
+  if (!path) return uri;
+
+  const trigger = parsePathToSelected(path);
+
+  if (!trigger) return uri;
+  uri += `?selected=${trigger}`;
+
+  const actions = parsePathToFocused(path);
+  if (!actions) return uri;
+  uri += `&focused=${trigger}.${actions}`;
+
+  const items = path.split('#');
+  const type = items[1];
+  const property = items[2];
+
+  const fragment = parseTypeToFragment(type, property);
+  if (!fragment) return uri;
+  uri += `#${fragment}`;
+
+  return uri;
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
