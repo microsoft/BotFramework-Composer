@@ -21,7 +21,7 @@ In Composer, each dialog can have one type of recognizer and might contain a set
 
 2. On the properties panel on the right side, select **LUIS** as recognizer type.
 
-![luis_recognizer](./media/tutorial-weatherbot/07/luis_recognizer.png)
+![luis_recognizer](./media/tutorial-weatherbot/07/luis-recognizer.png)
 
 ### Author LU
 You can author Language Understanding (LU) in the inline editor and follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). An LU file usually consists of an intent with matching example utterances. You can author as many intents as you want to include in the dialog. The following screenshot shows two intents: **Greeting** and **CheckWeather** with the respective matching utterances. 
