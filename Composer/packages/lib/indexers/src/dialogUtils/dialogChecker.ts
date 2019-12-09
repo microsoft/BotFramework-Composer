@@ -31,7 +31,7 @@ export const IsExpression: CheckerFunc = (
     }
     if (message) {
       const diagnostic = new Diagnostic(message, '');
-      diagnostic.path = `${path}: ${value.$type}: ${property}`;
+      diagnostic.path = `${path}#${value.$type}#${property}`;
       result.push(diagnostic);
     }
     return result;
