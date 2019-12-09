@@ -55,6 +55,7 @@ const ObjectItem = ({
           placeholder={formatMessage('Add a new key')}
           value={name}
           styles={{
+            errorMessage: { display: 'block', paddingTop: 0 },
             root: { margin: '7px 0 7px 0' },
           }}
           errorMessage={errorMessage}
