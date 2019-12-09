@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+import { Diagnostic } from './diagnostic';
 
 export interface FileInfo {
   name: string;
@@ -19,7 +19,7 @@ export interface ITrigger {
 
 export interface DialogInfo {
   content: any;
-  diagnostics: string[];
+  diagnostics: Diagnostic[];
   displayName: string;
   id: string;
   isRoot: boolean;
@@ -30,19 +30,6 @@ export interface DialogInfo {
   referredDialogs: string[];
   relativePath: string;
   triggers: ITrigger[];
-}
-
-export interface EditorSchema {
-  content?: {
-    fieldTemplateOverrides?: any;
-    SDKOverrides?: any;
-  };
-}
-
-export interface BotSchemas {
-  editor: EditorSchema;
-  sdk?: any;
-  diagnostics?: any[];
 }
 
 export interface Intent {
@@ -72,22 +59,16 @@ export interface LuFile {
   [key: string]: any;
 }
 
-export interface LgFile {
-  id: string;
-  relativePath: string;
-  content: string;
-  diagnostics: LGDiagnostic[];
-  templates: LgTemplate[];
-}
-
-export interface CodeRange {
-  startLineNumber: number;
-  endLineNumber: number;
-}
-
 export interface LgTemplate {
   name: string;
   body: string;
   parameters: string[];
-  range: CodeRange;
+}
+
+export interface LgFile {
+  id: string;
+  relativePath: string;
+  content: string;
+  diagnostics: Diagnostic[];
+  templates: LgTemplate[];
 }

@@ -3,9 +3,9 @@
 
 import fs from 'fs';
 
-import isEqual from 'lodash/isEqual';
-import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
-import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
+import { getNewDesigner } from '@bfc/shared';
+import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
+import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -66,7 +66,7 @@ export class BotProject {
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogs = dialogIndexer.index(this.files, this.name);
+    this.dialogs = this.indexDialog();
     this.lgFiles = lgIndexer.index(this.files);
     this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
     await this._checkProjectStructure();
@@ -267,16 +267,6 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    let currentLufileParsedContentLUISJsonStructure = null;
-    try {
-      currentLufileParsedContentLUISJsonStructure = await luIndexer.parse(content);
-    } catch (error) {
-      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
-    }
-
-    const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
-    const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) return this.luFiles;
 
     await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
@@ -430,13 +420,17 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
+  private indexDialog() {
+    return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
+  }
+
   // re index according to file change in a certain path
   private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogs = dialogIndexer.index(this.files, this.name);
+        this.dialogs = this.indexDialog();
         break;
       case '.lg':
         this.lgFiles = lgIndexer.index(this.files);

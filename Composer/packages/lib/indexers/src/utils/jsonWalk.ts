@@ -25,7 +25,7 @@ export const JsonWalk = (path: string, value: any, visitor: VisitorFunc) => {
   // extract array
   if (Array.isArray(value)) {
     value.forEach((child, index) => {
-      JsonWalk(`${path}[:${index}]`, child, visitor);
+      JsonWalk(`${path}[${index}]`, child, visitor);
     });
 
     // extract object

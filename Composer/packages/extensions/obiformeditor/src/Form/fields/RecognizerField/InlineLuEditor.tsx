@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
-import { LuFile } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 interface InlineLuEditorProps {
   file: LuFile;
@@ -13,21 +13,26 @@ interface InlineLuEditorProps {
 
 const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   const { file, onSave, errorMsg } = props;
-  const [content, setContent] = useState(file.content || '');
+  const [localContent, setLocalContent] = useState('');
+  const [localErrorMsg, setLocalErrorMsg] = useState('');
 
-  // save on mount to trigger validation
   useEffect(() => {
-    if (content) {
-      onSave(content);
-    }
-  }, []);
+    setLocalContent(file.content || '');
+    const errorMsgText = file.diagnostics
+      .map(item => {
+        return item.text;
+      })
+      .join('\n');
+
+    setLocalErrorMsg(errorMsgText || errorMsg || '');
+  }, [file]);
 
   const commitChanges = value => {
-    setContent(value);
+    setLocalContent(value);
     onSave(value);
   };
 
-  return <LuEditor value={content} onChange={commitChanges} errorMsg={errorMsg} height={450} />;
+  return <LuEditor value={localContent} onChange={commitChanges} errorMsg={localErrorMsg} height={450} />;
 };
 
 export default InlineLuEditor;

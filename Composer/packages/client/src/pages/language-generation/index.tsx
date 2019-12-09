@@ -10,6 +10,7 @@ import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
+import { lgIndexer } from '@bfc/indexers';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
@@ -34,13 +35,24 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LGPage: React.FC<RouteComponentProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(
+    lgFiles.filter(file => lgIndexer.isValid(file.diagnostics) === false).length > 0
+  );
   const [fileValid, setFileValid] = useState(true);
   const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
+  const [line, setLine] = useState<number>(0);
 
+  const hash = props.location ? props.location.hash : '';
   const subPath = props['*'];
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
+
+  useEffect(() => {
+    if (hash) {
+      const match = /line=(\d+)/g.exec(hash);
+      if (match) setLine(+match[1]);
+    }
+  }, [hash]);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
@@ -98,7 +110,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     const errorFiles = lgFiles.filter(file => {
-      return lgUtil.isValid(file.diagnostics) === false;
+      return lgIndexer.isValid(file.diagnostics) === false;
     });
     const hasError = errorFiles.length !== 0;
     setFileValid(hasError === false);
@@ -149,6 +161,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             css={actionButton}
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
+            defaultChecked={false}
             checked={editMode}
             disabled={(!isRoot && editMode === false) || (fileValid === false && editMode === true)}
             onChange={onToggleEditMode}
@@ -191,7 +204,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             {editMode ? (
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor file={lgFile} template={inlineTemplate} />
+                <CodeEditor file={lgFile} template={inlineTemplate} line={line} />
               </Suspense>
             ) : (
               <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
