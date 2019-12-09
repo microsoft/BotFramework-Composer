@@ -4,7 +4,7 @@ As an integrated development tool, Bot Framework Composer supports validation of
 
 Below is a screenshot of the **Notification** page listing all errors and warnings.  
 
-![notification](./media/validation/notification.png)
+![notification-all-up-view](./media/validation/notification-all-up-view.png)
 
 ## .lg
 When you author an [.lg file](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) that has syntax errors, an indicator will show in the inline editor with a red wiggling line. See the screenshot below: 
