@@ -51,8 +51,8 @@ export function RichEditor(props: RichEditorProps) {
     }
   }, [editor]);
 
-  // eslint-disable-next-line format-message/literal-pattern
-  const errorHelp = formatMessage.rich(`${errorMsg}. Refer to the syntax documentation<a>here</a>.`, {
+  const errorHelp = formatMessage.rich('{errorMsg}. Refer to the syntax documentation<a>here</a>.', {
+    errorMsg,
     a: ({ children }) => (
       <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
         {children}
