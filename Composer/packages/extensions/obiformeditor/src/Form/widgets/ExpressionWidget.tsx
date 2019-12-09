@@ -109,7 +109,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         onGetErrorMessage={onGetErrorMessage}
         autoComplete="off"
         styles={{
-          root: { margin: '0 0 7px 0' },
+          root: { margin: '7px 0' },
           errorMessage: {
             display: hiddenErrMessage ? 'none' : 'block',
             paddingTop: 0,
