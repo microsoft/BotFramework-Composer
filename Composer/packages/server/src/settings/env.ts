@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
+import { Path } from '../utility/path';
 
 export const absHosted = process.env.COMPOSER_AUTH_PROVIDER === 'abs-h';
 export const absHostRoot = process.env.WEBSITE_HOSTNAME
@@ -16,4 +16,5 @@ if (folder && folder.endsWith(':')) {
 export const environment = process.env.NODE_ENV || 'development';
 export const botsFolder = folder;
 export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';
-export const appDataPath = process.env.COMPOSER_APP_DATA || path.resolve(__dirname, '../../data.json');
+export const appDataPath = process.env.COMPOSER_APP_DATA || Path.resolve(__dirname, '../../data.json');
+export const runtimeFolder = process.env.COMPOSER_RUNTIME_FOLDER || Path.resolve('../../../BotProject/Templates');

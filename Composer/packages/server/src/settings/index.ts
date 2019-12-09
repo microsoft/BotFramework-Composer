@@ -8,7 +8,7 @@ import merge from 'lodash/merge';
 import log from '../logger';
 import { Path } from '../utility/path';
 
-import { botsFolder, botEndpoint, appDataPath, environment } from './env';
+import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder } from './env';
 
 interface Settings {
   botAdminEndpoint: string;
@@ -24,8 +24,8 @@ const envSettings: { [env: string]: Settings } = {
     botAdminEndpoint: botEndpoint,
     botEndpoint: 'http://localhost:3979', //botEndpoint,
     assetsLibray: Path.resolve('./assets'),
-    runtimeFolder: Path.resolve('../../../BotProject/Templates'),
     botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
+    runtimeFolder,
     appDataPath,
   },
 };
