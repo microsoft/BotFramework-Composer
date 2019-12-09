@@ -48,11 +48,22 @@ A Hero card is a basic card type that allows you to combine images, text and int
 
     # HeroCard
     [HeroCard
-        title = BotFramework Hero Card
-        subtitle = Microsoft Bot Framework
-        text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
-        image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
-        buttons = {cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}]
+      title = BotFramework Hero Card
+      subtitle = Microsoft Bot Framework
+      text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack,   Office 365 mail and other popular services.
+      image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
+      buttons = @{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    ]
+
+    # HeroCardWithMemory(name)
+    [Herocard
+      title=@{TitleText(name)}
+      subtitle=@{SubText()}
+      text=@{DescriptionText()}
+      images=@{CardImages()}
+      buttons=@{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    ]
+
 
 This example of hero card will enable your bot to send an image from a designated url back to users when an event to send a hero card is triggered. The hero card will include a button to show more cards when pressed. 
 
@@ -66,14 +77,15 @@ A Thumbnail card is another type of basic card type that combines a mixture of i
         text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
         image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
         buttons = Get Started]
-
+     
 ### SigninCard
 A Signin card is a card that enables a bot to request that a user sign in. A SinginCard is defined using structured template as follows: 
 
     # SigninCard
     [SigninCard
-        text = BotFramework Sign-in Card
-        buttons = Sign-in]
+       text = BotFramework Sign-in Card
+       buttons = {cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')
+    ]
 
 ### AnimationCard
 Animation cards contain animated image content (such as `.gif`). Typically this content does not contain sound, and is typically presented with minimal transport controls (e.g, pause/play) or no transport controls at all. Animation cards follow all shared rules defined for ort controls (e.g. rewind/restart/pause/play). Video cards follow all shared rules defined for [Media cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md#Media-cards). An AnimationCard is defined using structured template as follows: 
@@ -114,7 +126,7 @@ Adaptive cards is an open source toolset of Microsoft that helps apps and servic
 
     # AdaptiveCard
     [Activity
-        Attachments = {json(adaptivecardjson())}
+      Attachments = @{json(adaptivecardjson())}
     ]
 
 ### AllCards 
@@ -122,10 +134,9 @@ This template "#AllCards" is defined to display all cards when the template is c
 
     # AllCards
     [Activity
-        Attachments = {HeroCard()} | {ThumbnailCard()} | {SigninCard()} | {AnimationCard()} | {VideoCard()} | {AudioCard()} | {AdaptiveCard()}
-        AttachmentLayout = {AttachmentLayoutType()}
+         Attachments = @{HeroCard()} | @{ThumbnailCard()} | @{SigninCard()} | @{AnimationCard()} | @{VideoCard()} | @{AudioCard()} | @{AdaptiveCard()}
+    AttachmentLayout = @{AttachmentLayoutType()}
     ]
-
 
 ## References
 - [Bot Framework - Cards](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-cards.md)
