@@ -68,7 +68,7 @@ You can break pieces of your conversation flow into dialogs and can chain them t
 
 6. Click "+ New Trigger" in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select **Intent** from the first dropdown, and then select our freshly created `weather` intent from the second dropdown.
 
-   ![](../media/tutorial-weatherbot/02/weather-trigger.gif)
+   ![](../media/tutorial-weatherbot/02/weather-trigger.png)
 
 7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
    
