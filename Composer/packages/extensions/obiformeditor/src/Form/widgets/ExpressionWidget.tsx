@@ -6,6 +6,7 @@ import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-r
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
 
 import { FormContext } from '../types';
 import { EditableField } from '../fields/EditableField';
@@ -25,40 +26,26 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   options?: any;
 }
 
-const getDefaultErrorMessage = (errMessage: string) => {
-  return formatMessage.rich(
-    // eslint-disable-next-line format-message/literal-pattern
-    `${errMessage} Invalid expression syntax. Refer to the syntax documentation<a>here</a>`,
-    {
-      a: ({ children }) => (
-        <a
-          key="a"
-          href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {children}
-        </a>
-      ),
-    }
-  );
+const getDefaultErrorMessage = () => {
+  return formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation<a>here</a>', {
+    a: ({ children }) => (
+      <a
+        key="a"
+        href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    ),
+  });
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const {
-    rawErrors,
-    formContext,
-    schema,
-    id,
-    label,
-    editable,
-    hiddenErrMessage,
-    onValidate,
-    options = {},
-    ...rest
-  } = props;
+  const { formContext, schema, id, label, editable, hiddenErrMessage, onValidate, options = {}, ...rest } = props;
   const { description } = schema;
   const { hideLabel } = options;
+  const name = props.id?.split('_')[props.id?.split('_').length - 1];
 
   const onGetErrorMessage = async (value: string): Promise<JSX.Element | string> => {
     if (!value) {
@@ -68,17 +55,10 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
       return '';
     }
 
-    const diagnostic = formContext.currentDialog.diagnostics.find(
-      d => d.path && d.path.replace(/: Microsoft(\S*) /, '_').replace('Main.', 'Main#.') === id
-    );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let errMessage: string | any[] = '';
-    if (diagnostic) {
-      errMessage = getDefaultErrorMessage(`${label} : ${diagnostic.message}`);
-    } else if (rawErrors && rawErrors.length > 0) {
-      errMessage = rawErrors[0];
-    }
+    const errMessage = name && get(formContext, ['formErrors', name], '');
 
+    // Just show the default message because the diagnostic is
+    // "must be an expression" which does not look very good next to our default message.
     const messageBar = errMessage ? (
       <MessageBar
         messageBarType={MessageBarType.error}
@@ -87,7 +67,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         truncated
         overflowButtonAriaLabel={formatMessage('See more')}
       >
-        {errMessage}
+        {getDefaultErrorMessage()}
       </MessageBar>
     ) : (
       ''
