@@ -61,41 +61,37 @@ class StorageService {
 
   public getBlobDateModified = async (storageId: string, filePath: string) => {
     const storageClient = this.getStorageClient(storageId);
-    try {
-      const stat = await storageClient.stat(filePath);
-      return stat.lastModified;
-    } catch (err) {
-      throw err;
-    }
+    const stat = await storageClient.stat(filePath);
+    return stat.lastModified;
   };
 
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string) => {
     const storageClient = this.getStorageClient(storageId);
-    try {
-      const stat = await storageClient.stat(filePath);
-      if (stat.isFile) {
-        // NOTE: this behavior is not correct, we should NOT parse this file as json
-        // becase it might not be json, this api is a more general file api than json file
-        // didn't fix it because this is the previous behavior
-        // TODO: fix this behavior and the upper layer interface accordingly
-        return JSON.parse(await storageClient.readFile(filePath));
-      } else {
-        return {
-          name: Path.basename(filePath),
-          parent: Path.dirname(filePath),
-          children: await this.getChildren(storageClient, filePath),
-        };
-      }
-    } catch (err) {
-      throw err;
+    const stat = await storageClient.stat(filePath);
+    if (stat.isFile) {
+      // NOTE: this behavior is not correct, we should NOT parse this file as json
+      // becase it might not be json, this api is a more general file api than json file
+      // didn't fix it because this is the previous behavior
+      // TODO: fix this behavior and the upper layer interface accordingly
+      return JSON.parse(await storageClient.readFile(filePath));
+    } else {
+      return {
+        name: Path.basename(filePath),
+        parent: Path.dirname(filePath),
+        children: await this.getChildren(storageClient, filePath),
+      };
     }
   };
 
-  public updateCurrentPath = (path: string) => {
-    this.storageConnections[0].path = path;
-    Store.set(this.STORE_KEY, this.storageConnections);
+  public updateCurrentPath = (path: string, storageId: string) => {
+    const storage = this.storageConnections.find(s => s.id === storageId);
+    if (storage) {
+      storage.path = path;
+      Store.set(this.STORE_KEY, this.storageConnections);
+    }
+    return this.storageConnections;
   };
 
   private ensureDefaultBotFoldersExist = () => {

@@ -21,9 +21,9 @@ export interface LGOption {
   inline: boolean;
   content: string;
   template?: {
-    Name: string;
-    Parameters?: string[];
-    Body: string;
+    name: string;
+    parameters?: string[];
+    body: string;
   };
 }
 
@@ -78,7 +78,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   };
   const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
     if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as (monacoCore.editor.IStandaloneCodeEditor | any));
+      window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
     }
 
     if (!window.monacoLGEditorInstance) {

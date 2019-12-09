@@ -49,14 +49,17 @@ export const settingsContainer = css`
 export const settingsFields = css`
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 `;
 
 export const settingsFieldFull = css`
   flex-basis: 100%;
+  overflow: hidden;
 `;
 
 export const settingsFieldHalf = css`
   flex: 1;
+  overflow: hidden;
 
   & + & {
     margin-left: 36px;
@@ -65,6 +68,10 @@ export const settingsFieldHalf = css`
 
 export const settingsFieldInline = css`
   margin: 0;
+`;
+
+export const settingsFieldValidation = css`
+  margin-top: -10px;
 `;
 
 export const choiceItemContainer = (align = 'center') => css`
