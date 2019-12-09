@@ -51,16 +51,14 @@ export function RichEditor(props: RichEditorProps) {
     }
   }, [editor]);
 
-  const errorHelp = formatMessage.rich(
-    'This text has errors in the syntax. Refer to the syntax documentation<a>here</a>.',
-    {
-      a: ({ children }) => (
-        <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      ),
-    }
-  );
+  // eslint-disable-next-line format-message/literal-pattern
+  const errorHelp = formatMessage.rich(`${errorMsg}. Refer to the syntax documentation<a>here</a>.`, {
+    a: ({ children }) => (
+      <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    ),
+  });
 
   const getHeight = () => {
     if (height === null || height === undefined) {

@@ -25,19 +25,23 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   options?: any;
 }
 
-const getDefaultErrorMessage = () => {
-  return formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation<a>here</a>', {
-    a: ({ children }) => (
-      <a
-        key="a"
-        href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {children}
-      </a>
-    ),
-  });
+const getDefaultErrorMessage = (errMessage: string) => {
+  return formatMessage.rich(
+    // eslint-disable-next-line format-message/literal-pattern
+    `${errMessage} Invalid expression syntax. Refer to the syntax documentation<a>here</a>`,
+    {
+      a: ({ children }) => (
+        <a
+          key="a"
+          href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {children}
+        </a>
+      ),
+    }
+  );
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
@@ -53,7 +57,6 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     options = {},
     ...rest
   } = props;
-  const { shellApi } = formContext;
   const { description } = schema;
   const { hideLabel } = options;
 
@@ -65,12 +68,13 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
       return '';
     }
 
-    const isValid = await shellApi.validateExpression(value);
-
+    const diagnostic = formContext.currentDialog.diagnostics.find(
+      d => d.path && d.path.replace(/: Microsoft(\S*) /, '_').replace('Main.', 'Main#.') === id
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let errMessage: string | any[] = '';
-    if (!isValid) {
-      errMessage = getDefaultErrorMessage();
+    if (diagnostic) {
+      errMessage = getDefaultErrorMessage(`${label} : ${diagnostic.message}`);
     } else if (rawErrors && rawErrors.length > 0) {
       errMessage = rawErrors[0];
     }

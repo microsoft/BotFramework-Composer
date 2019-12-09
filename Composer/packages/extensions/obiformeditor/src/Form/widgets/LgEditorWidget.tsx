@@ -45,7 +45,6 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const [errorMsg, setErrorMsg] = useState('');
   const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
@@ -53,10 +52,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const updateLgTemplate = useMemo(
     () =>
       debounce((body: string) => {
-        formContext.shellApi
-          .updateLgTemplate(lgFileId, lgName, body)
-          .then(() => setErrorMsg(''))
-          .catch(error => setErrorMsg(error));
+        formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
       }, 500),
     [lgName, lgFileId]
   );
@@ -70,6 +66,24 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     body: getInitialTemplate(name, value),
   };
 
+  const diagnostic =
+    lgFile &&
+    lgFile.diagnostics &&
+    lgFile.diagnostics.find(d => {
+      return (
+        d.range &&
+        template.body.includes(
+          lgFile.content
+            .split('\n')
+            .slice(d.range.start.line - 1, d.range.start.line)
+            .join('')
+            .trim()
+        )
+      );
+    });
+  const errorMsg = diagnostic
+    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+    : '';
   const [localValue, setLocalValue] = useState(template.body);
   const lgOption = {
     inline: true,
