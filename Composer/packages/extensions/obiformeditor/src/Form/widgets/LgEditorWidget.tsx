@@ -66,20 +66,14 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     body: getInitialTemplate(name, value),
   };
 
+  const lgStartLine = (lgFile && lgFile.content.split('\n').findIndex(item => item.trim() === `# ${lgName}()`)) || -1;
+  const templateBodyLines = template.body.split('\n').length;
+
   const diagnostic =
     lgFile &&
     lgFile.diagnostics &&
     lgFile.diagnostics.find(d => {
-      return (
-        d.range &&
-        template.body.includes(
-          lgFile.content
-            .split('\n')
-            .slice(d.range.start.line - 1, d.range.start.line)
-            .join('')
-            .trim()
-        )
-      );
+      return d.range && lgStartLine + 1 < d.range.start.line && lgStartLine + 1 + templateBodyLines >= d.range.end.line;
     });
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
