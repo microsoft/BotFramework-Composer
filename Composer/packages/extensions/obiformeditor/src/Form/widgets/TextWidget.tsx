@@ -106,7 +106,7 @@ export function TextWidget(props: ITextWidgetProps) {
     return (
       <ExpressionWidget
         {...sharedProps}
-        editable
+        editable={transparentBorder}
         label={label}
         schema={schema}
         formContext={formContext}
