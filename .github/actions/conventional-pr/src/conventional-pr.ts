@@ -1,7 +1,13 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import { validateTitle, validateBody } from './utils';
+import {
+  validateTitle,
+  validateBody,
+  validateBaseBranch,
+  PullRequestInfo,
+  isRelease,
+} from './utils';
 
 const OWNER = github.context.repo.owner;
 const REPO = github.context.repo.repo;
@@ -22,6 +28,7 @@ const prQuery = `
       pullRequest(number: $prNumber) {
         title
         body
+        baseRefName
       }
     }
   }
@@ -43,22 +50,29 @@ async function run() {
       repo: REPO,
       prNumber,
     });
-    const pr = repository.pullRequest;
+    const pr = repository?.pullRequest as PullRequestInfo;
 
     if (!pr) {
       core.setFailed('Not in a Pull Request context.');
       return;
     }
 
-    const titleErrors = validateTitle(pr.title);
-    const bodyErrors = validateBody(pr.body);
+    if (!isRelease(pr)) {
+      const titleErrors = validateTitle(pr.title);
+      const bodyErrors = validateBody(pr.body);
+      const branchErrors = validateBaseBranch(pr.title, pr.baseRefName);
 
-    if (titleErrors.length) {
-      core.setFailed(titleErrors.join('\n'));
-    }
+      if (titleErrors.length) {
+        core.setFailed(titleErrors.join('\n'));
+      }
 
-    if (bodyErrors.length) {
-      core.setFailed(bodyErrors.join('\n'));
+      if (bodyErrors.length) {
+        core.setFailed(bodyErrors.join('\n'));
+      }
+
+      if (branchErrors.length) {
+        core.setFailed(branchErrors.join('\n'));
+      }
     }
   } catch (err) {
     core.error(err);

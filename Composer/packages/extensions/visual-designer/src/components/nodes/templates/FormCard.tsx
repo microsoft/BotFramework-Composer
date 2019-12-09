@@ -70,7 +70,20 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           color: 'black',
         }}
       >
-        <div css={{ padding: '4px 8px', fontSize: '12px', fontFamily: 'Segoe UI', lineHeight: '14px' }}>{header}</div>
+        <div
+          css={{
+            padding: '4px 8px',
+            fontSize: '12px',
+            fontFamily: 'Segoe UI',
+            lineHeight: '14px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            width: 'calc(100% - 40px)',
+            whiteSpace: 'pre',
+          }}
+        >
+          {header}
+        </div>
         <div css={{ position: 'absolute', top: 4, right: 0 }}>{corner}</div>
       </div>
       <div

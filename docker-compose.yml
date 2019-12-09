@@ -10,6 +10,7 @@ services:
       - ./.appdata:/appdata
     environment:
       COMPOSER_BOTS_FOLDER: /Bots
+      COMPOSER_RUNTIME_FOLDER: /BotProject/Templates
       COMPOSER_APP_DATA: /appdata/data.json
       BOT_ENDPOINT: http://botruntime:80
       PORT: 3000

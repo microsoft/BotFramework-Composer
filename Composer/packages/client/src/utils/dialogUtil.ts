@@ -292,7 +292,7 @@ export function getSelected(focused: string): string {
 
 export function replaceDialogDiagnosticLabel(path?: string): string {
   if (!path) return '';
-  let list = path.split(': ');
+  let list = path.split('#');
   list = list.map(item => {
     return ConceptLabels[item]?.title || item;
   });
