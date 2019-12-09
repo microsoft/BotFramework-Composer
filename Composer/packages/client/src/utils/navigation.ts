@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 import { Diagnostic } from '@bfc/indexers';
-import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from '@bfc/shared';
+import { parsePathToFocused, parsePathToSelected, parseTypeToFragment, dialogGroups } from '@bfc/shared';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
@@ -87,14 +87,14 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   let uri = `/dialogs/${source}`;
   if (!path) return uri;
 
-  const trigger = parsePathToSelected(path);
+  const selected = parsePathToSelected(path);
 
-  if (!trigger) return uri;
-  uri += `?selected=${trigger}`;
+  if (!selected) return uri;
+  uri += `?selected=${selected}`;
 
-  const actions = parsePathToFocused(path);
-  if (!actions) return uri;
-  uri += `&focused=${trigger}.${actions}`;
+  const focused = parsePathToFocused(path);
+  if (!focused) return uri;
+  uri += `&focused=${focused}`;
 
   const items = path.split('#');
   const type = items[1];
