@@ -45,7 +45,7 @@ In addition to any cases created, there will always be a "default" branch which 
  On the right in the property panel you will see **Items property**. This is where you enter the array property to be iterated. 
 ![For Each Loop Properties](./media/controlling-conversation-flow/for-each-items-property.png)
 
-After setting the properties you then decide what action your bot should perform in the array. In this sample the bot sends the the result of the expression `{dialog.foreach.index}: {dialog.foreach.value}`. 
+After setting the properties you then decide what action your bot should perform in the array. In this sample the bot sends the the result of the expression `@{dialog.foreach.index}: @{dialog.foreach.value}`. 
 
 ![For each send reponse](./media/controlling-conversation-flow/for-each-send-response.png)
 
