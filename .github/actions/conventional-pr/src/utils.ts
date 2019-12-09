@@ -1,5 +1,10 @@
 import * as core from '@actions/core';
 
+export interface PullRequestInfo {
+  title: string;
+  body: string;
+  baseRefName: string;
+}
 type ValidationResult = string[];
 
 const validTypes = [
@@ -47,6 +52,27 @@ export function validateBody(body: string): ValidationResult {
   if (!refMatch.test(body)) {
     errors.push(
       `[Body] Must reference an issue (ex. 'fixes #1234').\nSee ${helpLink} for more details.`
+    );
+  }
+
+  return errors;
+}
+
+export function isRelease(pr: PullRequestInfo) {
+  return pr.title.startsWith('release: ') && pr.baseRefName === 'stable';
+}
+
+export function validateBaseBranch(
+  title: string,
+  baseBranch: string
+): ValidationResult {
+  let errors: ValidationResult = [];
+
+  if (title.startsWith('release: ') && baseBranch !== 'stable') {
+    errors.push("[Release] Release pull request must target 'stable' branch.");
+  } else if (baseBranch === 'stable') {
+    errors.push(
+      "[Branch] Pull requests cannot target 'stable' branch. Perhaps you meant to create a release or are targeting the wrong branch."
     );
   }
 
