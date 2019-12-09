@@ -87,18 +87,19 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   let uri = `/dialogs/${source}`;
   if (!path) return uri;
 
-  const selected = parsePathToSelected(path);
+  const items = path.split('#');
+  const sub = items[0];
+  const type = items[1];
+  const property = items[2];
+
+  const selected = parsePathToSelected(sub);
 
   if (!selected) return uri;
   uri += `?selected=${selected}`;
 
-  const focused = parsePathToFocused(path);
+  const focused = parsePathToFocused(sub);
   if (!focused) return uri;
   uri += `&focused=${focused}`;
-
-  const items = path.split('#');
-  const type = items[1];
-  const property = items[2];
 
   const fragment = parseTypeToFragment(type, property);
   if (!fragment) return uri;
