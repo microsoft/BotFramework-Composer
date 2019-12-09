@@ -135,7 +135,7 @@ This template "#AllCards" is defined to display all cards when the template is c
     # AllCards
     [Activity
          Attachments = @{HeroCard()} | @{ThumbnailCard()} | @{SigninCard()} | @{AnimationCard()} | @{VideoCard()} | @{AudioCard()} | @{AdaptiveCard()}
-    AttachmentLayout = @{AttachmentLayoutType()}
+         AttachmentLayout = @{AttachmentLayoutType()}
     ]
 
 ## References
