@@ -58,14 +58,11 @@ function index(files: FileInfo[]): LgFile[] {
       const id = getBaseName(name, '.lg');
       const diagnostics = check(content, id);
       let templates: LgTemplate[] = [];
-      if (isValid(diagnostics)) {
-        try {
-          templates = parse(file.content, '');
-        } catch (err) {
-          diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-        }
+      try {
+        templates = parse(file.content, '');
+      } catch (err) {
+        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-
       lgFiles.push({ id, relativePath, content, templates, diagnostics });
     }
   }
