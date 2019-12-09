@@ -15,7 +15,7 @@
     },
     "Microsoft.AdaptiveDialog": {
       "description": "This configures a data driven dialog via a collection of events and actions.",
-      "title": "AdaptiveDialog",
+      "title": "Adaptive dialog",
       "helpLink": "https://aka.ms/botframework",
       "helpLinkText": "Learn more"
     },
