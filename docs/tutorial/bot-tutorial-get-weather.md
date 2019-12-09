@@ -51,7 +51,7 @@
 
     Your properties pane should look like this:
 
-    ![](../media/tutorial-weatherbot/03/zipcode-exceptions.png)
+    ![](../media/tutorial-weatherbot/03/zipcode-extensions.png)
 
     And your flow should look like this:
 
