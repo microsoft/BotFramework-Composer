@@ -37,14 +37,14 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
 9. In the left hand explorer, click **+ New Trigger**
-10. In the resulting dialog box, select **Intent**, then choose the new `help` intent. Submit the dialog.
+10. In the resulting dialog box, select **Intent recognized**, then choose the new `help` intent. Click `Submit`.
 
-     ![](../media/tutorial-weatherbot/04/new-trigger.png) 
+     ![](../media/tutorial-weatherbot/04/intent-trigger-help.png) 
 
-11. In the flow editor, click the **+** button at the bottom of the empty flow.
+11. In the flow editor, click the **+** button at the bottom of the empty flow. 
 12. Choose **Dialog management** and then select **Begin a new dialog**
 
-      ![](../media/tutorial-weatherbot/04/help-trigger-flow.png)
+      ![](../media/tutorial-weatherbot/04/begin-new-dialog.png)
 
 13. In the right hand properties panel, select the `help` dialog.
 
