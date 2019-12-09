@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 import { Diagnostic } from '@bfc/indexers';
-import { parsePathToFocused, parsePathToSelected, parseTypeToFragment, dialogGroups } from '@bfc/shared';
+import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from '@bfc/shared';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
