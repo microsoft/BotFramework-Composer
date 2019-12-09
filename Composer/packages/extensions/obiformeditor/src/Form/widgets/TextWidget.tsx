@@ -125,7 +125,7 @@ export function TextWidget(props: ITextWidgetProps) {
       <TextField
         styles={{
           fieldGroup: {
-            borderColor: transparentBorder ? 'transparent' : NeutralColors.gray30,
+            borderColor: transparentBorder ? 'transparent' : undefined,
             transition: 'border-color 0.1s linear',
             selectors: {
               ':hover': {
