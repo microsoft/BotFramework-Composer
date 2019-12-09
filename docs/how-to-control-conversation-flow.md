@@ -21,7 +21,7 @@ The decision is controlled by the **Condition** field, which should contain an [
 
 ![If/Else Condition](./media/controlling-conversation-flow/if-else-condition.png)
 
-Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evaluates to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `reu` or `false`. 
+Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evaluates to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `true` or `false`. 
 
 ![Add If/Else display messages](./media/controlling-conversation-flow/if-else-send-response.png)
 
