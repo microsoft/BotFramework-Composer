@@ -11,6 +11,8 @@ import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
 import log from '../../logger';
+import AssectService from '../../services/asset';
+import { IFileStorage } from '../storage/interface';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
@@ -20,6 +22,7 @@ export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
   static botRuntimes: { [key: string]: ChildProcess } = {};
+  static readonly DEFAULT_RUNTIME = 'CSharp';
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -38,11 +41,19 @@ export class CSharpBotConnector implements IBotConnector {
     this.status = BotStatus.NotConnected;
   };
 
-  private buildProcess = async (dir: string): Promise<number | null> => {
-    // check the build script existed
-    if (!fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'))) {
-      throw new Error('build script not existed');
+  private isOldBot = (dir: string): boolean => {
+    // check bot the bot version through build script existence.
+    return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'));
+  };
+
+  private migrateBot = async (dir: string, storage: IFileStorage) => {
+    if (this.isOldBot(dir)) {
+      // cover the old bot runtime with new runtime template
+      await AssectService.manager.copyRuntimeTo(dir, storage);
     }
+  };
+
+  private buildProcess = async (dir: string): Promise<number | null> => {
     // build bot runtime
     return new Promise((resolve, reject) => {
       const build = spawn('pwsh', ['./Scripts/build_runtime.ps1'], {
@@ -112,12 +123,12 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 
-  private getBotPath = () => {
+  private getBotPathAndStorage = () => {
     const currentProject = BotProjectService.getCurrentBotProject();
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    return Path.join(currentProject.dir);
+    return { dir: Path.join(currentProject.dir), storage: currentProject.fileStorage };
   };
 
   private start = async (dir: string, config: DialogSetting): Promise<string> => {
@@ -150,7 +161,9 @@ export class CSharpBotConnector implements IBotConnector {
   sync = async (config: DialogSetting) => {
     try {
       this.stop();
-      const dir = this.getBotPath();
+      const { dir, storage } = this.getBotPathAndStorage();
+      await this.migrateBot(dir, storage);
+
       await this.buildProcess(dir);
       await this.start(dir, config);
       this.status = BotStatus.Connected;
@@ -183,9 +196,7 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
-process.on('uncaughtException', err => {
-  log(err);
-});
+
 process.on('SIGINT', () => {
   CSharpBotConnector.stopAll('SIGINT');
   process.exit(0);
