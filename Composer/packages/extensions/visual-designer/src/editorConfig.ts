@@ -3,7 +3,7 @@
 
 export const EditorConfig = {
   features: {
-    showEvents: true,
+    showEvents: false,
     arrowNavigation: true,
     tabNavigation: true,
     keyboardNodeEditing: false,

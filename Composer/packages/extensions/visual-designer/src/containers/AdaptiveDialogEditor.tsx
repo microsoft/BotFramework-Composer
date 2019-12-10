@@ -11,6 +11,7 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive/AdaptiveDialog';
 import { Collapse } from '../components/lib/Collapse';
 import { AdaptiveEvent } from '../adaptive/AdaptiveEvent';
+import { EditorConfig } from '../editorConfig';
 
 export interface AdaptiveDialogEditorProps {
   dialogId: string;
@@ -65,7 +66,9 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = (props): JSX.
           onEvent(NodeEventTypes.Focus, { id: '' });
         }}
       >
-        <AdaptiveDialog path={dialogId} data={dialogData} onEvent={onEvent} />
+        {EditorConfig.features.showEvents ? (
+          <AdaptiveDialog path={dialogId} data={dialogData} onEvent={onEvent} />
+        ) : null}
         <div className="editor-interval" style={{ height: 50 }} />
         <Collapse text="Actions">
           <FocusedEventDetail />
