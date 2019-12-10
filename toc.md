@@ -6,6 +6,7 @@
 ### QuickStart
 - [Create your first bot](./docs/tutorial-create-echobot.md) 
 ### Tutorials
+0. [Onboarding](./docs/tutorial-onboarding.md)
 1. [Create a bot](./docs/tutorial/bot-tutorial-introduction.md)
 2. [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
 3. [Get weather report](./docs/tutorial/bot-tutorial-get-weather.md)
