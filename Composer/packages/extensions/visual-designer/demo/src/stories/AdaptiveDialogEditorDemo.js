@@ -17,6 +17,7 @@ export class AdaptiveDialogEditorDemo extends Component {
   };
 
   handleEditorEvent = (eventName, e) => {
+    console.log('OnEvent', eventName, e);
     switch (eventName) {
       case NodeEventTypes.FocusEvent:
         this.setState({ focusedEventId: e, focusedActionId: '', focusedTabId: '' });

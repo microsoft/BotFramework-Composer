@@ -16,6 +16,7 @@ export class AdaptiveEventEditorDemo extends Component {
   };
 
   handleEditorEvent = (eventName, e) => {
+    console.log('OnEvent', eventName, e);
     switch (eventName) {
       case NodeEventTypes.Focus:
         this.setState({ focusedActionId: e.id, focusedTabId: e.tab });
@@ -28,7 +29,7 @@ export class AdaptiveEventEditorDemo extends Component {
     return (
       <AdaptiveEventEditor
         dialogId="todo"
-        eventPath="triggers[0["
+        eventPath="triggers[0]"
         eventData={json}
         focusedId={focusedActionId}
         focusedTab={focusedTabId}
