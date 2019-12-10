@@ -8,13 +8,14 @@ Composer currently supports the following types of rich cards. The definition an
 
 | Card type      | Description                                                                                                                                                           |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Hero Card      | A card that typically contains a single large image, one or more buttons, and simple text.                                                                            |
-| Thumbnail Card | A card that typically contains a single thumbnail image, one or more buttons, and simple text.                                                                        |
-| Signin Card    | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process. |
-| Animation Card | A card that can play animated GIFs or short videos.                                                                                                                   |
-| Voice Card     | A card that can play a voice file.                                                                                                                                    |
-| Audio Card     | A card that can play an audio file.                                                                                                                                   |
-| Adaptive Card  | A customizable card that can contain any combination of text, speech, images, buttons, and input fields.                                                              |
+| [Hero Card](how-to-send-cards.md#HeroCard) | A card that typically contains a single large image, one or more buttons, and simple text.                                                                            |
+| [Thumbnail Card](how-to-send-cards.md#ThumbnailCard) | A card that typically contains a single thumbnail image, one or more buttons, and simple text.                                                                        |
+| [Signin Card](how-to-send-cards.md#SigninCard)    | A card that enables a bot to request that a user sign-in. It typically contains text and one or more buttons that the user can click to initiate the sign-in process. |
+| [Animation Card](how-to-send-cards.md#AnimationCard) | A card that can play animated GIFs or short videos.                                                                                                                   |
+| [Video Card](how-to-send-cards.md#VideoCard)     | A card that can play a video file.                                                                                                                                    |
+| [Audio Card](how-to-send-cards.md#AudioCard)     | A card that can play an audio file.                                                                                                                                   |
+| [Adaptive Card](how-to-send-cards.md#AdaptiveCard)  | A customizable card that can contain any combination of text, speech, images, buttons, and input fields.                                                              |
+| [All Card](how-to-send-cards.md#AllCards)  | To display all cards. | 
 
 ## Structured response template 
 In Composer we use [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) to define the cards you want to send back to users. To get yourself familiar with the structured LG template, it is recommended that you read the [Language Generation](./concept-language-generation.md) concept article and the [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/vishwac/master-4.6/experimental/language-generation/docs/structured-response-template.md) article. 
@@ -84,7 +85,7 @@ A Signin card is a card that enables a bot to request that a user sign in. A Sin
     # SigninCard
     [SigninCard
        text = BotFramework Sign-in Card
-       buttons = {cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')
+       buttons = @{cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')}
     ]
 
 ### AnimationCard
