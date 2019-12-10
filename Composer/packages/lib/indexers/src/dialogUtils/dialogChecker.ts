@@ -26,7 +26,7 @@ export const IsExpression: CheckerFunc = (
       try {
         ExpressionParser.parse(exp);
       } catch (error) {
-        message = formatMessage(`must be an expression`);
+        message = `${formatMessage('must be an expression:')} ${error})`;
       }
     }
     if (message) {
