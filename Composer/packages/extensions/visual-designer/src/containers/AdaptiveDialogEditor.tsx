@@ -20,7 +20,7 @@ export interface AdaptiveDialogEditorProps {
   focusedTab: string;
   selectedIds: string[];
   generateTabIndex?: (nodeId: string) => number;
-  onEvent: (eventName: NodeEventTypes, eventData?: any) => any;
+  onEvent?: (eventName: NodeEventTypes, eventData?: any) => any;
 }
 
 const mapPropsToEditorContext = (props: AdaptiveDialogEditorProps) => {

@@ -37,9 +37,7 @@ const ComposerVisualDesigner: React.FC<ComposerVisualDesignerProps> = ({
 }): JSX.Element => {
   const dataCache = useRef({});
 
-  const { state, dispatch } = useStore(action => {
-    console.log('index.tsx', action);
-  });
+  const { state, dispatch } = useStore();
 
   /**
    * VisualDesigner is coupled with ShellApi where input json always mutates.
@@ -59,22 +57,13 @@ const ComposerVisualDesigner: React.FC<ComposerVisualDesignerProps> = ({
     dataCache.current = inputData;
   }
 
-  const data = dataCache.current;
   const {
     addCoachMarkRef,
-    navTo,
-    onFocusEvent,
-    onFocusSteps,
-    onSelect,
-    onCopy,
-    saveData,
     updateLgTemplate,
     getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
-    undo,
-    redo,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
@@ -117,12 +106,12 @@ ComposerVisualDesigner.defaultProps = {
   focusedSteps: [],
   data: { $type: '' },
   shellApi: ({
-    navTo: () => {},
-    onFocusEvent: () => {},
-    onFocusSteps: () => {},
-    onSelect: () => {},
-    saveData: () => {},
-    addCoachMarkRef: () => {},
+    navTo: () => null,
+    onFocusEvent: () => null,
+    onFocusSteps: () => null,
+    onSelect: () => null,
+    saveData: () => null,
+    addCoachMarkRef: () => null,
   } as unknown) as ShellApi,
 };
 

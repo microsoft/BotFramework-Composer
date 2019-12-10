@@ -7,7 +7,6 @@ import { FC, useContext, useEffect, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { KeyboardZone } from '../components/lib/KeyboardZone';
-import { AdaptiveDialogEditor, AdaptiveDialogEditorProps } from '../editors/AdaptiveDialogEditor';
 import setFocusState from '../actions/setFocusState';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { StoreContext } from '../store/StoreContext';
@@ -16,6 +15,7 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 
 import mapEditorEventToAction from './mapEditorEventToAction';
 import mapShortcutToEditorEvent from './mapShortcutToEditorEvent';
+import { AdaptiveDialogEditor, AdaptiveDialogEditorProps } from './AdaptiveDialogEditor';
 
 const mapStateToEditorProps = (state: StoreState): AdaptiveDialogEditorProps => {
   const { dialog, eventPath, focusedId, focusedTab, selectedIds } = state;
@@ -29,6 +29,10 @@ const mapStateToEditorProps = (state: StoreState): AdaptiveDialogEditorProps => 
   };
 };
 
+/**
+ * Visual Editor is a custmized version of EventEditor used by Composer.
+ * Provides two more features: drag selection, keyboard navigation.
+ */
 export const VisualEditor: FC<VisualDesignerProps> = ({ addCoachMarkRef }): JSX.Element | null => {
   let divRef;
 
@@ -114,7 +118,7 @@ export const VisualEditor: FC<VisualDesignerProps> = ({ addCoachMarkRef }): JSX.
 };
 
 VisualEditor.defaultProps = {
-  addCoachMarkRef: () => {},
+  addCoachMarkRef: () => null,
 };
 
 interface VisualDesignerProps {
