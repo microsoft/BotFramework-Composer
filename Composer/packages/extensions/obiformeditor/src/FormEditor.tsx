@@ -51,7 +51,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
     }
 
     return {};
-  }, [props.currentDialog.diagnostics]);
+  }, [props.currentDialog]);
 
   if (!type) {
     return (
