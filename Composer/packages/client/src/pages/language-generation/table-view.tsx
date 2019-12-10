@@ -16,8 +16,9 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { DialogInfo, LgFile } from '@bfc/indexers';
-import { LGTemplate } from 'botbuilder-lg';
+import { LGTemplate, LGParser } from 'botbuilder-lg';
 import { lgIndexer } from '@bfc/indexers';
+import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
@@ -44,7 +45,8 @@ const TableView: React.FC<TableViewProps> = props => {
     if (isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
     if (lgIndexer.isValid(lgFile.diagnostics) === true) {
-      allTemplates = lgIndexer.parse(lgFile.content) as LGTemplate[];
+      const resource = LGParser.parse(lgFile.content, '');
+      allTemplates = get(resource, 'Templates', []);
     }
     if (!activeDialog) {
       setTemplates(allTemplates);
