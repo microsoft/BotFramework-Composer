@@ -128,18 +128,10 @@ export const ShellApi: React.FC = () => {
 
   function getLgTemplates({ id }, event) {
     if (isEventSourceValid(event) === false) return false;
-
     if (id === undefined) throw new Error('must have a file id');
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
-    return lgUtil.parse(file.content).map(template => {
-      const { name, parameters, body } = template;
-      return {
-        name,
-        parameters,
-        body,
-      };
-    });
+    return file.templates;
   }
 
   /**
