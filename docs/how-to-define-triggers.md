@@ -5,12 +5,12 @@ The table below lists the six different types of triggers in Composer and their 
 
 | Trigger Type      | Description                                                                             |
 | ----------------- | --------------------------------------------------------------------------------------- |
-| Intent recognized | Trigger an action when an `intent` is recognized (and optionally `entities`)            |
-| Unknown intent    | Trigger an action when no intent is recognized                                          |
-| Dialog events     | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
-| Activities        | Trigger an action to take when an activity event such as when a new conversation starts |
-| Message events    | Trigger an action to take when a message activity is fired.                             |
-| Custom event      | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
+| [Intent recognized](how-to-define-triggers.md#intent-recognized) | Trigger an action when an `intent` is recognized (and optionally `entities`)            |
+| [Unknown intent](how-to-define-triggers.md#Unknown-intent)    | Trigger an action when no intent is recognized                                          |
+| [Dialog events](how-to-define-triggers.md#Dialog-events)     | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
+| [Activities](how-to-define-triggers.md#Activities)        | Trigger an action to take when an activity event such as when a new conversation starts |
+| [Message events](how-to-define-triggers.md)    | Trigger an action to take when a message activity is fired.                             |
+| [Custom event](how-to-define-triggers.md#custom-event)      | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
 
 ## Intent recognized
 This is a trigger type we use to define actions to take when an `intent` is recognized (and optionally `entities`). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane click **New Trigger** and select **Intent recognized** from the drop-down menu. You will see the intent trigger menu as follows: 
@@ -95,7 +95,7 @@ This is a trigger type we use to define actions to take when an intent is not re
 
 3. Click the "+" sign under the trigger node to add any action node(s) you want to include. For example, you can click **Send a response** to send a message `This is an unknown intent trigger!`. When this trigger is fired, the response message will be sent to the user. 
 
-![unrecognized_intent_response](./media/events_triggers/unrecognized_intent_response.gif)  
+![unknown_intent_response](./media/events_triggers/unknown_intent_response.gif)  
 
 ## Dialog events
 This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **Dialog started (Begin dialog event)** trigger: 
