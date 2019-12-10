@@ -46,7 +46,7 @@ const TableView: React.FC<TableViewProps> = props => {
     let allTemplates: LGTemplate[] = [];
     if (lgIndexer.isValid(lgFile.diagnostics) === true) {
       const resource = LGParser.parse(lgFile.content, '');
-      allTemplates = get(resource, 'Templates', []);
+      allTemplates = get(resource, 'templates', []);
     }
     if (!activeDialog) {
       setTemplates(allTemplates);
