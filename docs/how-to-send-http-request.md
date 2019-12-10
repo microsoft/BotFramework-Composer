@@ -8,7 +8,7 @@ In this topic, we will walk you through the steps to send an HTTP request and us
 - basic knowledge of [how to use OAuth in Composer](how_to_use_oauth.md)
   
 ## Set up OAuth in Composer 
-Follow the [steps](how_to_use_oauth.md) to set up OAuth in your bot. After the setup, your bot may look like the following: 
+Follow the [steps](how-to-use-oauth.md) to set up OAuth in your bot. After the setup, your bot should look like the following: 
 
 ![oauth-setup](./media/integration/oauth-setup.png)
 
@@ -47,7 +47,7 @@ Finally, set the **Result property** to `dialog.api_response` and **Response typ
 HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, and headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
 ## Testing 
-You can add an [IF/ELSE branch](howto-controlling-conversation-flow.md#branch-if-else) to test the response of this HTTP request. 
+You can add an [IF/ELSE branch](how-to-control-conversation-flow.md#branch-if-else) to test the response of this HTTP request. 
 
 Set **Condition** to `dialog.api_response.statusCode == 200` in the properties panel. 
 
