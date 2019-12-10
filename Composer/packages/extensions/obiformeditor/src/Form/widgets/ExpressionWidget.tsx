@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
@@ -21,6 +21,8 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   onChange: (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
   /** Set to true to display as inline text that is editable on hover */
   editable?: boolean;
+  styles?: Partial<ITextFieldStyles>;
+  options?: any;
 }
 
 const getDefaultErrorMessage = () => {
@@ -39,9 +41,21 @@ const getDefaultErrorMessage = () => {
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { rawErrors, formContext, schema, id, label, editable, hiddenErrMessage, onValidate, ...rest } = props;
+  const {
+    rawErrors,
+    formContext,
+    schema,
+    id,
+    label,
+    editable,
+    hiddenErrMessage,
+    onValidate,
+    options = {},
+    ...rest
+  } = props;
   const { shellApi } = formContext;
   const { description } = schema;
+  const { hideLabel } = options;
 
   const onGetErrorMessage = async (value: string): Promise<JSX.Element | string> => {
     if (!value) {
@@ -88,18 +102,20 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
+      {!hideLabel && !!label && <WidgetLabel label={label} description={description} id={id} />}
       <Field
         {...rest}
         id={id}
         onGetErrorMessage={onGetErrorMessage}
         autoComplete="off"
         styles={{
+          root: { ...(!hideLabel && !!label ? {} : { margin: '7px 0' }) },
           errorMessage: {
             display: hiddenErrMessage ? 'none' : 'block',
             paddingTop: 0,
           },
         }}
+        options={options}
       />
     </>
   );

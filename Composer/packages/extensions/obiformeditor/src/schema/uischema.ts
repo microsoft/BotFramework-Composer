@@ -22,6 +22,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.AdaptiveDialog]: {
     recognizer: {
       'ui:field': 'RecognizerField',
+      intents: {
+        'ui:options': {
+          object: true,
+        },
+        items: {
+          'ui:options': {
+            hideDescription: true,
+            inline: true,
+          },
+          intent: {
+            'ui:options': {
+              hideLabel: true,
+              transparentBorder: true,
+            },
+          },
+          pattern: {
+            'ui:options': {
+              hideLabel: true,
+              transparentBorder: true,
+            },
+          },
+        },
+      },
     },
     'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],
@@ -29,6 +52,15 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.BeginDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
+    },
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:order': ['dialog', 'property', '*'],
+  },
+  [SDKTypes.CancelAllDialogs]: {
+    eventValue: {
+      'ui:field': 'CustomObjectField',
     },
     'ui:order': ['dialog', 'property', '*'],
   },
@@ -46,6 +78,11 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:field': 'StepsField',
     },
   },
+  [SDKTypes.EmitEvent]: {
+    eventValue: {
+      'ui:field': 'CustomObjectField',
+    },
+  },
   [SDKTypes.Foreach]: {
     'ui:order': ['itemsProperty', 'actions', '*'],
     'ui:hidden': ['actions'],
@@ -57,6 +94,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.HttpRequest]: {
     body: {
       'ui:field': 'JsonField',
+    },
+    headers: {
+      'ui:field': 'CustomObjectField',
     },
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
@@ -143,11 +183,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
     'ui:hidden': [...globalHidden],
   },
   [SDKTypes.SwitchCondition]: {
     cases: {
-      'ui:field': 'CasesField',
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:hidden': ['actions'],
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
     },
     'ui:hidden': ['default', ...globalHidden],
   },
