@@ -58,7 +58,7 @@
 # SigninCard
 [SigninCard
     text = BotFramework Sign-in Card
-    buttons = {cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')
+    buttons = @{cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')}
 ]
 
 # AnimationCard
