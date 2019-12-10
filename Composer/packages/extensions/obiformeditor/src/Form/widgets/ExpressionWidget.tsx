@@ -26,8 +26,9 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   options?: any;
 }
 
-const getDefaultErrorMessage = () => {
-  return formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation<a>here</a>', {
+const getDefaultErrorMessage = errMessage => {
+  return formatMessage.rich('{errMessage}. Refer to the syntax documentation<a>here</a>', {
+    errMessage,
     a: ({ children }) => (
       <a
         key="a"
@@ -47,18 +48,9 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
   const { hideLabel } = options;
   const name = props.id?.split('_')[props.id?.split('_').length - 1];
 
-  const onGetErrorMessage = async (value: string): Promise<JSX.Element | string> => {
-    if (!value) {
-      if (hiddenErrMessage) {
-        onValidate && onValidate();
-      }
-      return '';
-    }
-
+  const onGetErrorMessage = (): JSX.Element | string => {
     const errMessage = name && get(formContext, ['formErrors', name], '');
 
-    // Just show the default message because the diagnostic is
-    // "must be an expression" which does not look very good next to our default message.
     const messageBar = errMessage ? (
       <MessageBar
         messageBarType={MessageBarType.error}
@@ -67,7 +59,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         truncated
         overflowButtonAriaLabel={formatMessage('See more')}
       >
-        {getDefaultErrorMessage()}
+        {getDefaultErrorMessage(`${label} ${errMessage}`)}
       </MessageBar>
     ) : (
       ''
