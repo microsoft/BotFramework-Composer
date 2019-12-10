@@ -81,12 +81,13 @@ This is an example of a single line expression response with memory from the [Re
 
      - @{user.message} 
 
-A multiline response include multiline text enclosed in `...`. Here is an example response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample). In a multi-line response the bot will pick an utterance by random. 
+A multiline response include multiline text enclosed in `...`. Here is an example response from the [RespondingWithTextSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/RespondingWithTextSample). 
 
-      # TextWithLG
-      - Hi, this is a text with LG
-      - Hey, this is a text with LG
-      - Hello, this is a text with LG
+    # multilineText
+    - ``` you have such alarms
+          alarm1:  7:am
+          alarm2: 9:pm
+     ```
 
 #### Conditional template  
 For all conditional templates, all conditions are expressed in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two [conditional template examples](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#conditional-response-template). 
