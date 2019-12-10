@@ -1,8 +1,8 @@
 # Get weather report
 
 1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
-2. Click on the `BeginDialog` trigger underneath getWeather. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a **Text Input** to prompt the user for a `zipcode`.
-3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input.
+2. Click on the `BeginDialog` trigger underneath `getWeather`. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a **Text Input** to prompt the user for a `zipcode`.
+3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input. Read details [here](howto-ask-for-user-input.md)
 4. Select **Text Input** from the sub-menu. Two new nodes will appear in the flow!
 
    > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
@@ -51,7 +51,7 @@
 
     Your properties pane should look like this:
 
-    ![](../media/tutorial-weatherbot/03/zipcode-exceptions.png)
+    ![](../media/tutorial-weatherbot/03/zipcode-extensions.png)
 
     And your flow should look like this:
 
