@@ -126,36 +126,12 @@ export const ShellApi: React.FC = () => {
     return true;
   }
 
-  function getLgTemplates({ id }, event) {
-    if (isEventSourceValid(event) === false) return false;
-
-    if (id === undefined) throw new Error('must have a file id');
-    const file = lgFiles.find(file => file.id === id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-
-    const templates = lgUtil.parse(file.content);
-    const lines = file.content.split('\n');
-
-    return templates.map(t => {
-      const [start, end] = getTemplateBodyRange(t);
-      const body = lines.slice(start - 1, end).join('\n');
-
-      return { Name: t.Name, Parameters: t.Parameters, Body: body };
-    });
-  }
-
-  function getTemplateBodyRange(template) {
-    const startLineNumber = template.ParseTree._start.line + 1;
-    const endLineNumber = template.ParseTree._stop.line;
-    return [startLineNumber, endLineNumber];
-  }
-
   /**
    *
    * @param {
    * id: string,
    * templateName: string,
-   * template: { Name: string, ?Parameters: string[], Body: string }
+   * template: { name: string, ?parameters: string[], body: string }
    * }
    * when templateName exit in current file, will do update
    * when templateName do not exit in current file, will do create
@@ -178,7 +154,7 @@ export const ShellApi: React.FC = () => {
     });
 
     const content = lgUtil.updateTemplate(file.content, templateName, template);
-    return lgUtil.checkLgContent(content);
+    return lgUtil.checkLgContent(content, id);
   }
 
   function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {
@@ -316,7 +292,6 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
-    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);

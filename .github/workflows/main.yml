@@ -67,3 +67,23 @@ jobs:
       - name: dotnet test
         run: dotnet test
         working-directory: BotProject/CSharp
+
+  docker-build:
+    name: Docker Build
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: docker-compose build
+        run: docker-compose build
+      - name: Health check
+        run: |
+          docker-compose up -d
+          sleep 10
+          curl -Is http://localhost:3000 | grep -q "200 OK"
+        shell: bash
+      - name: Cleanup
+        if: always()
+        run: docker-compose down

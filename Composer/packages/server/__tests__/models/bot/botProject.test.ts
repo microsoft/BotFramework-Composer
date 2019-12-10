@@ -4,7 +4,8 @@
 import fs from 'fs';
 
 import rimraf from 'rimraf';
-import { seedNewDialog, DialogInfo } from '@bfc/shared';
+import { seedNewDialog } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -236,14 +237,16 @@ describe('lu operation', () => {
     expect(result?.content).toEqual(content);
   });
 
-  it('should throw error when lu content is invalid', async () => {
+  it('should update diagnostics when lu content is invalid', async () => {
     const id = 'root';
     let content = '## hello \n - hello';
     await proj.createLuFile(id, content);
 
     content = 'hello \n hello3';
 
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+    const luFiles = await proj.updateLuFile(id, content);
+    const result = luFiles.find(f => f.id === id);
+    expect(result?.diagnostics?.length).toBeGreaterThan(0);
   });
 
   it('should delete lu file and update index', async () => {

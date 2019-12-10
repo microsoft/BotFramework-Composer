@@ -98,7 +98,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   }
 };
 
-export const saveProjectAs: ActionCreator = async (store, name, description) => {
+export const saveProjectAs: ActionCreator = async (store, name, description, location) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -106,6 +106,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description) => 
       storageId,
       name,
       description,
+      location,
     };
     const response = await httpClient.post(`/projects/opened/project/saveAs`, data);
     const dialogs = response.data.dialogs;

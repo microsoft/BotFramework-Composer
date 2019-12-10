@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
 import { DialogCreationCopy } from '../../constants';
 import { DefineConversation } from '../../CreationFlow/DefineConversation/index';
 import { DialogWrapper } from '../../components/DialogWrapper/index';
 
-interface NewDialogModalProps extends Pick<IDialogProps, 'onDismiss'> {
+interface NewDialogModalProps {
   isOpen: boolean;
+  onDismiss: () => void;
   onSubmit: (data: { name: string; description: string }) => void;
   onGetErrorMessage: (text: string) => string;
 }
