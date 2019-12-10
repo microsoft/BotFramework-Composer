@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
-import { LuFile, ShellData } from '@bfc/shared';
+import { ShellData, ShellApi } from '@bfc/shared';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -29,8 +29,8 @@ const apiClient = new ApiClient();
 
 const subEditorCallbacks = {};
 
-const shellApi = {
-  getState: (): Promise<ShellData> => {
+const shellApi: ShellApi = {
+  getState: () => {
     return apiClient.apiCall('getState', {});
   },
 
@@ -38,75 +38,59 @@ const shellApi = {
     return apiClient.apiCall('saveData', { newData, updatePath });
   },
 
-  navTo: (path: string, rest) => {
+  navTo: (path, rest) => {
     return apiClient.apiCall('navTo', { path, rest });
   },
 
-  navDown: (subPath: string) => {
-    return apiClient.apiCall('navDown', { subPath: subPath });
-  },
-
-  focusTo: (subPath: string) => {
-    return apiClient.apiCall('focusTo', { subPath: subPath });
-  },
-
-  onFocusEvent: (subPath: string) => {
+  onFocusEvent: subPath => {
     return apiClient.apiCall('onFocusEvent', { subPath });
   },
 
-  onFocusSteps: (subPaths: string[], fragment?: string) => {
+  onFocusSteps: (subPaths, fragment) => {
     return apiClient.apiCall('onFocusSteps', { subPaths, fragment });
   },
 
-  onSelect: (ids: string[]) => {
+  onSelect: ids => {
     return apiClient.apiCall('onSelect', ids);
   },
 
-  onCopy: (actions: any[]) => {
+  onCopy: actions => {
     return apiClient.apiCall('onCopy', actions);
   },
 
-  shellNavigate: (shellPage, opts = {}) => {
-    return apiClient.apiCall('shellNavigate', { shellPage, opts });
-  },
-
-  createLuFile: (id: string) => {
+  createLuFile: id => {
     return apiClient.apiCall('createLuFile', { id });
   },
 
-  updateLuFile: (luFile: LuFile) => {
+  updateLuFile: luFile => {
     return apiClient.apiCall('updateLuFile', luFile);
   },
 
-  updateLgFile: (id: string, content: string) => {
+  updateLgFile: (id, content) => {
     return apiClient.apiCall('updateLgFile', { id, content });
   },
 
-  getLgTemplates: (id: string) => {
-    return apiClient.apiCall('getLgTemplates', { id });
-  },
-
-  createLgTemplate: (id: string, template: string, position?: number) => {
+  createLgTemplate: (id, template, position) => {
     return apiClient.apiCall('createLgTemplate', { id, template, position });
   },
 
-  removeLgTemplate: (id: string, templateName: string) => {
+  removeLgTemplate: (id, templateName) => {
     return apiClient.apiCall('removeLgTemplate', { id, templateName });
   },
 
-  removeLgTemplates: (id: string, templateNames: string[]) => {
+  removeLgTemplates: (id, templateNames) => {
     return apiClient.apiCall('removeLgTemplates', { id, templateNames });
   },
 
-  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName: string) => {
+  copyLgTemplate: (id, fromTemplateName, toTemplateName) => {
     return apiClient.apiCall('copyLgTemplate', { id, fromTemplateName, toTemplateName });
   },
 
-  updateLgTemplate: (id: string, templateName: string, template: string) => {
+  updateLgTemplate: (id, templateName, template) => {
     return apiClient.apiCall('updateLgTemplate', {
       id,
       templateName,
-      template: { Name: templateName, Body: template },
+      template: { name: templateName, body: template },
     });
   },
 
@@ -114,7 +98,7 @@ const shellApi = {
     return apiClient.apiCall('createDialog');
   },
 
-  validateExpression: (expression: string) => {
+  validateExpression: expression => {
     return apiClient.apiCall('isExpression', { expression });
   },
 
@@ -126,7 +110,7 @@ const shellApi = {
     return apiClient.apiCall('redo');
   },
 
-  addCoachMarkRef: (target: any) => {
+  addCoachMarkRef: target => {
     return apiClient.apiCall('addCoachMarkPosition', target);
   },
 };

@@ -131,6 +131,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseWebSockets();
 
             //app.UseHttpsRedirection();
             app.UseMvc();

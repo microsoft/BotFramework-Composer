@@ -66,7 +66,13 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
         {props.properties
           .filter(p => !isHidden(p.name))
           .map(p => (
-            <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
+            <ObjectItem
+              {...p}
+              key={p.name}
+              onEdit={() => onEditProperty(p.name)}
+              onAdd={() => setShowModal(true)}
+              uiSchema={uiSchema}
+            />
           ))}
         {canExpand(props) && (
           <>

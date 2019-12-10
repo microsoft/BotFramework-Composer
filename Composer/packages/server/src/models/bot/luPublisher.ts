@@ -3,7 +3,7 @@
 
 import isEqual from 'lodash/isEqual';
 import { runBuild } from '@bfcomposer/lubuild';
-import { LuFile } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';

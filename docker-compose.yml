@@ -3,22 +3,20 @@ services:
   composer:
     build: Composer
     ports:
-      - "3000:5000"
-      - "5000:5000"
-      # expose 9229 for debugging
-      # - "9229:9229"
+      - "3000:3000"
     volumes:
-      - ./MyBots:/MyBots
+      - ~/Documents/Composer:/Bots
       - ./BotProject:/BotProject
+      - ./.appdata:/appdata
     environment:
-      - NODE_ENV=container
-    # command:
-    #   - node
-    #   - "--inspect-brk=0.0.0.0"
-    #   - "build/server.js"
+      COMPOSER_BOTS_FOLDER: /Bots
+      COMPOSER_RUNTIME_FOLDER: /BotProject/Templates
+      COMPOSER_APP_DATA: /appdata/data.json
+      BOT_ENDPOINT: http://botruntime:80
+      PORT: 3000
   botruntime:
     build: BotProject/CSharp
     ports:
       - "3979:80"
     volumes:
-      - ./MyBots:/app/MyBots
+      - ~/Documents/Composer:/Bots

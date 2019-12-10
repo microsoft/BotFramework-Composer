@@ -1,13 +1,17 @@
 {
   "name": "@bfc/libs",
+  "license": "MIT",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "build:code-editor": "cd code-editor && yarn build",
     "build:shared": "cd shared && yarn build",
     "build:indexers": "cd indexers && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn:build:code-editor\" \"yarn:build:shared\" \"yarn:build:indexers\""
+    "build:all": "yarn build:indexers && yarn build:shared && yarn build:code-editor"
   },
   "author": "",
   "license": "ISC"

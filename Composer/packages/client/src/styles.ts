@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
 export const main = css`
@@ -81,7 +81,21 @@ export const bot = css`
 `;
 
 export const botButton = css`
-  margin-left: 15px;
+  margin-left: 5px;
+`;
+
+export const errorButton = css`
+  color: ${SharedColors.red20};
+  &:hover {
+    color: ${SharedColors.red20};
+  }
+`;
+
+export const errorCount = css`
+  height: 32px;
+  line-height: 32px;
+  font-size 16px;
+  cursor: pointer;
 `;
 
 export const calloutLabel = css`

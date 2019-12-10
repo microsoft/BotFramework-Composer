@@ -263,7 +263,7 @@
           "$designer": {
             "id": "347762"
           },
-          "activity": "[bfdactivity-640616]"
+          "activity": "@{bfdactivity-640616()}"
         }
       ]
     },
@@ -280,7 +280,7 @@
           "$designer": {
             "id": "640616"
           },
-          "activity": "[bfdactivity-640616]"
+          "activity": "@{bfdactivity-640616()}"
         }
       ]
     }

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-//eslint-disable-next-line @typescript-eslint/no-triple-slash-reference
 import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
@@ -48,7 +47,7 @@ export class SelfHostBotConnector implements IBotConnector {
   public connect = async (env: BotEnvironments, hostName: string) => {
     this.status = BotStatus.Connected;
     const prefix = env === 'production' ? '' : 'integration/';
-    const root = hostName ? `https://${hostName}` : absHostRoot;
+    const root = hostName && hostName !== `localhost` ? `https://${hostName}` : absHostRoot;
 
     return Promise.resolve(`${root}/api/${prefix}messages`);
   };

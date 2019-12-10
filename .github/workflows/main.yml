@@ -42,18 +42,12 @@ jobs:
       - name: yarn test:coverage
         run: yarn test:coverage
         working-directory: Composer
-      # secrets are not exposed to PRs opened by forks, so just skip this step if it is not defined
-      - name: Publish coverage results
-        run: |
-          if [[ -z $COVERALLS_REPO_TOKEN ]]; then
-            echo "Coveralls token not found. Skipping."
-          else
-            cat coverage/lcov.info | ./node_modules/.bin/coveralls
-          fi
-        working-directory: Composer
-        env:
-          COVERALLS_SERVICE_NAME: "Github Actions"
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        continue-on-error: true
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./Composer/coverage/lcov.info
 
   botproject:
     name: BotProject
@@ -73,3 +67,23 @@ jobs:
       - name: dotnet test
         run: dotnet test
         working-directory: BotProject/CSharp
+
+  docker-build:
+    name: Docker Build
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: docker-compose build
+        run: docker-compose build
+      - name: Health check
+        run: |
+          docker-compose up -d
+          sleep 10
+          curl -Is http://localhost:3000 | grep -q "200 OK"
+        shell: bash
+      - name: Cleanup
+        if: always()
+        run: docker-compose down

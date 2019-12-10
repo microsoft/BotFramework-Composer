@@ -10,3 +10,9 @@ export const container = css`
   align-items: center;
   justify-content: center;
 `;
+
+export const root = css`
+  input::placeholder {
+    font-style: italic;
+  }
+`;

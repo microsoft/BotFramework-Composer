@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "<description>",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "repository": "https://github.com/microsoft/BotFramework-Composer",
   "license": "MIT",
   "scripts": {
@@ -13,7 +16,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet --ext .ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
@@ -27,7 +30,7 @@
   "dependencies": {
     "@bfcomposer/bf-lu": "1.0.3",
     "botbuilder-expression-parser": "^4.5.11",
-    "botbuilder-lg": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/4.7.0-preview2.tgz",
+    "botbuilder-lg": "4.7.0-preview.93464",
     "lodash": "^4.17.15"
   }
 }

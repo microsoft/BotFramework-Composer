@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { Global, jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
@@ -13,13 +15,14 @@ import Form from './Form';
 import { uiSchema } from './schema/uischema';
 import { getMemoryOptions } from './Form/utils';
 import { FormMemory, FormData } from './types';
+import { root } from './styles';
 
 const getType = (data: FormData): string | undefined => {
   return data.$type;
 };
 
 export interface FormEditorProps extends ShellData {
-  memory: FormMemory;
+  memory?: FormMemory;
   onBlur?: () => void;
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
@@ -77,6 +80,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
   return (
     <div>
+      <Global styles={root} />
       {memoryOptions.length > 0 && (
         <Dropdown
           style={{ width: '300px', paddingBottom: '10px', paddingLeft: '18px', paddingTop: '18px' }}

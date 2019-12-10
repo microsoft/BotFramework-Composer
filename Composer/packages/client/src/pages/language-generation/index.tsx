@@ -3,16 +3,16 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
+import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import get from 'lodash/get';
+import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
-import { CodeRange } from '@bfc/shared';
+import get from 'lodash/get';
+import { lgIndexer } from '@bfc/indexers';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { OpenAlertModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -33,44 +33,52 @@ import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 const LGPage: React.FC<RouteComponentProps> = props => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(
+    lgFiles.filter(file => lgIndexer.isValid(file.diagnostics) === false).length > 0
+  );
   const [fileValid, setFileValid] = useState(true);
-  const [codeRange, setCodeRange] = useState<CodeRange | null>(null);
+  const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
+  const [line, setLine] = useState<number>(0);
 
+  const hash = props.location ? props.location.hash : '';
   const subPath = props['*'];
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
+
+  useEffect(() => {
+    if (hash) {
+      const match = /line=(\d+)/g.exec(hash);
+      if (match) setLine(+match[1]);
+    }
+  }, [hash]);
 
   // for now, one bot only have one lg file by default. all dialog share one lg
   // file.
   const lgFile = lgFiles.length ? lgFiles[0] : null;
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
-    const subLinks = dialogs.reduce<INavLink>(
-      (result, file) => {
-        const item = {
-          id: file.id,
-          key: file.id,
-          name: file.displayName,
-          url: file.id,
-        };
+    const subLinks = dialogs.reduce<INavLink>((result, file) => {
+      const item = {
+        id: file.id,
+        key: file.id,
+        name: file.displayName,
+        url: file.id,
+      };
 
-        if (file.isRoot) {
-          result = {
-            ...result,
-            ...item,
-            isExpanded: true,
-          };
-        } else {
-          result.links = result.links || [];
-          result.links.push(item);
-        }
-        return result;
-      },
-      {} as INavLink
-    );
+      if (file.isRoot) {
+        result = {
+          ...result,
+          ...item,
+          isExpanded: true,
+        };
+      } else {
+        result.links = result.links || [];
+        result.links.push(item);
+      }
+      return result;
+    }, {} as INavLink);
 
     return [
       {
@@ -102,7 +110,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     const errorFiles = lgFiles.filter(file => {
-      return lgUtil.isValid(file.diagnostics) === false;
+      return lgIndexer.isValid(file.diagnostics) === false;
     });
     const hasError = errorFiles.length !== 0;
     setFileValid(hasError === false);
@@ -111,48 +119,28 @@ const LGPage: React.FC<RouteComponentProps> = props => {
     }
   }, [lgFiles]);
 
-  function onSelect(id) {
+  const onSelect = useCallback(id => {
     if (id === '_all') {
       navigateTo('/language-generation');
     } else {
       navigateTo(`language-generation/${id}`);
     }
-  }
+  }, []);
 
-  function onToggleEditMode() {
+  const onToggleEditMode = useCallback(() => {
     setEditMode(!editMode);
-    setCodeRange(null);
-  }
+    setInlineTemplate(null);
+  }, [editMode]);
 
-  async function onChange(newContent) {
-    if (!lgFile) {
-      return;
-    }
-
-    const payload = {
-      id: lgFile.id,
-      content: newContent,
-    };
-
-    try {
-      await actions.updateLgFile(payload);
-    } catch (error) {
-      OpenAlertModal('Save Failed', error.message, {
-        style: DialogStyle.Console,
-      });
-    }
-  }
-
-  // #TODO: get line number from lg parser, then deep link to code editor this
-  // Line
-  function onTableViewClickEdit(template) {
-    setCodeRange({
-      startLineNumber: get(template, 'ParseTree._start._line', 0),
-      endLineNumber: get(template, 'ParseTree._stop._line', 0),
+  const onTableViewClickEdit = useCallback((template: LGTemplate) => {
+    setInlineTemplate({
+      name: get(template, 'name', ''),
+      parameters: get(template, 'parameters'),
+      body: get(template, 'body', ''),
     });
     navigateTo(`/language-generation`);
     setEditMode(true);
-  }
+  }, []);
 
   const toolbarItems = [
     {
@@ -173,8 +161,9 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             css={actionButton}
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
+            defaultChecked={false}
             checked={editMode}
-            disabled={(!isRoot && editMode === false) || (codeRange === null && fileValid === false)}
+            disabled={(!isRoot && editMode === false) || (fileValid === false && editMode === true)}
             onChange={onToggleEditMode}
           />
         </div>
@@ -215,7 +204,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             {editMode ? (
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor file={lgFile} codeRange={codeRange} onChange={onChange} />
+                <CodeEditor file={lgFile} template={inlineTemplate} line={line} />
               </Suspense>
             ) : (
               <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />

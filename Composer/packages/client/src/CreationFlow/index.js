@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
@@ -21,13 +21,42 @@ export function CreationFlow(props) {
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
-  const { fetchTemplates, openBotProject, createProject, saveProjectAs, saveTemplateId, fetchStorages } = actions;
-  const { templateId, templateProjects, focusedStorageFolder } = state;
+  const {
+    fetchTemplates,
+    openBotProject,
+    createProject,
+    saveProjectAs,
+    saveTemplateId,
+    fetchStorages,
+    fetchFolderItemsByPath,
+  } = actions;
+  const { templateId, templateProjects, focusedStorageFolder, storages } = state;
+  const currentStorageIndex = useRef(0);
+  const storage = storages[currentStorageIndex.current];
+  const currentStorageId = storage ? storage.id : 'default';
+  const [currentPath, setCurrentPath] = useState('');
+  useEffect(() => {
+    if (storages && storages.length) {
+      const storageId = storage.id;
+      const path = storage.path;
+      const formattedPath = Path.normalize(path);
+      fetchFolderItemsByPath(storageId, formattedPath);
+    }
+  }, [storages]);
 
   useEffect(() => {
-    const botsInCurrentFolder = getBotsInFocusedStorageFolder();
+    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
+
+    const botsInCurrentFolder = allFilesInFolder.filter(file => {
+      if (file.type === FileTypes.BOT) {
+        return file;
+      }
+    });
 
     setBots(botsInCurrentFolder);
+    if (Object.keys(focusedStorageFolder).length) {
+      setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
+    }
   }, [focusedStorageFolder]);
 
   useEffect(() => {
@@ -60,15 +89,18 @@ export function CreationFlow(props) {
     }
   };
 
-  const getBotsInFocusedStorageFolder = () => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
+  const updateCurrentPath = async (newPath, storageId) => {
+    if (!storageId) {
+      storageId = currentStorageId;
+    }
+    if (newPath) {
+      const formattedPath = Path.normalize(newPath);
+      await actions.updateCurrentPath(formattedPath, storageId);
+    }
+  };
 
-    const botsInCurrentFolder = allFilesInFolder.filter(file => {
-      if (file.type === FileTypes.BOT) {
-        return file;
-      }
-    });
-    return botsInCurrentFolder;
+  const handleDismiss = () => {
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
   const openBot = async botFolder => {
@@ -77,24 +109,20 @@ export function CreationFlow(props) {
     handleDismiss();
   };
 
-  const handleDismiss = () => {
-    setCreationFlowStatus(CreationFlowStatus.CLOSE);
-  };
-
-  const handleCreateNew = async (formData, location) => {
-    await createProject(templateId || '', formData.name || formData.defaultName, formData.description, location);
+  const handleCreateNew = async formData => {
+    await createProject(templateId || '', formData.name, formData.description, formData.location);
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description);
+    await saveProjectAs(formData.name, formData.description, formData.location);
   };
 
-  const handleSubmit = (formData, location) => {
+  const handleSubmit = formData => {
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW_FROM_SCRATCH:
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
-        handleCreateNew(formData, location);
+        handleCreateNew(formData);
         navigateTo('/dialogs/Main');
         break;
       case CreationFlowStatus.SAVEAS:
@@ -113,18 +141,6 @@ export function CreationFlow(props) {
     setStep(Steps.DEFINE);
   };
 
-  const getErrorMessage = name => {
-    if (
-      bots.findIndex(bot => {
-        const path = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, name);
-        return bot.path === path;
-      }) >= 0
-    ) {
-      return 'duplication of name';
-    }
-    return '';
-  };
-
   const steps = {
     [Steps.CREATE]: {
       ...DialogCreationCopy.CREATE_NEW_BOT,
@@ -132,16 +148,27 @@ export function CreationFlow(props) {
     },
     [Steps.LOCATION]: {
       ...DialogCreationCopy.SELECT_LOCATION,
-      children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} />,
+      children: (
+        <OpenProject
+          onOpen={openBot}
+          onDismiss={handleDismiss}
+          focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
+          onCurrentPathUpdate={updateCurrentPath}
+        />
+      ),
     },
     [Steps.DEFINE]: {
       ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
         <DefineConversation
           onSubmit={handleSubmit}
-          onGetErrorMessage={getErrorMessage}
           onDismiss={handleDismiss}
           enableLocationBrowse={true}
+          onCurrentPathUpdate={updateCurrentPath}
+          focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
+          bots={bots}
         />
       ),
     },

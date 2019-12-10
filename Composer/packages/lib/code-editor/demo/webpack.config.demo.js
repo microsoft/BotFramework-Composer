@@ -1,4 +1,3 @@
-/* eslint-disable */
 const path = require('path');
 
 const webpack = require('webpack');
@@ -95,12 +94,25 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: path.resolve(__dirname, './tsconfig.json') })],
+    alias: {
+      vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+    },
   },
 
   output: {
     filename: '[name].[chunkhash:8].js',
     chunkFilename: '[name].[chunkhash:8].js',
     path: path.resolve('./demo/dist'),
+  },
+
+  node: {
+    module: 'empty',
+    dgram: 'empty',
+    dns: 'mock',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty',
   },
 
   plugins: [
@@ -113,7 +125,7 @@ module.exports = {
     }),
     new MonacoWebpackPlugin({
       // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-      languages: ['markdown', 'botbuilderlg', 'json'],
+      languages: ['markdown', 'json'],
     }),
   ],
 };
