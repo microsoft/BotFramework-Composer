@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { ExpressionEngine } from 'botframework-expressions';
 import formatMessage from 'format-message';
 
 import { Diagnostic } from '../diagnostic';
@@ -26,7 +26,7 @@ export const IsExpression: CheckerFunc = (
       try {
         ExpressionParser.parse(exp);
       } catch (error) {
-        message = formatMessage(`must be an expression`);
+        message = `${formatMessage('must be an expression:')} ${error})`;
       }
     }
     if (message) {
