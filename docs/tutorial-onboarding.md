@@ -18,14 +18,7 @@ Click anywhere outside the overview pane you will see a popup window asking if y
 
 ![leave-product-tour](./media/onboarding/leave-product-tour.png)
 
- Whenever one step finishes, you will be navigated back to the overview pane and you should click the next step until the whole onboarding process is completed. You need to enable the onboarding `Onboarding` functionality every time when you want to start a new onboarding process. 
+Whenever one step finishes you will be navigated back to the overview pane and you should click the next step until the whole onboarding process is completed. You need to enable the `Onboarding` functionality every time you want to start a new onboarding process. 
 
-
-
-
-
-
-
-
-
-
+## Next 
+- Learn [how to build a weather bot](./tutorial/bot-tutorial-introduction.md). 
