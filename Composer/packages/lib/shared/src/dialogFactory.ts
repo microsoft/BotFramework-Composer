@@ -23,7 +23,7 @@ const initialInputDialog = {
 };
 
 const initialDialogShape = {
-  'Microsoft.AdaptiveDialog': {
+  'Microsoft.AdaptiveDialog': seededActions => ({
     $type: 'Microsoft.AdaptiveDialog',
     triggers: [
       {
@@ -31,22 +31,23 @@ const initialDialogShape = {
         $designer: {
           name: 'BeginDialog',
         },
+        actions: [...seededActions],
       },
     ],
-  },
-  'Microsoft.OnConversationUpdateActivity': {
+  }),
+  'Microsoft.OnConversationUpdateActivity': () => ({
     $type: 'Microsoft.OnConversationUpdateActivity',
     condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
-  },
-  'Microsoft.SendActivity': {
+  }),
+  'Microsoft.SendActivity': () => ({
     activity: '',
-  },
-  'Microsoft.AttachmentInput': initialInputDialog,
-  'Microsoft.ChoiceInput': initialInputDialog,
-  'Microsoft.ConfirmInput': initialInputDialog,
-  'Microsoft.DateTimeInput': initialInputDialog,
-  'Microsoft.NumberInput': initialInputDialog,
-  'Microsoft.TextInput': initialInputDialog,
+  }),
+  'Microsoft.AttachmentInput': () => initialInputDialog,
+  'Microsoft.ChoiceInput': () => initialInputDialog,
+  'Microsoft.ConfirmInput': () => initialInputDialog,
+  'Microsoft.DateTimeInput': () => initialInputDialog,
+  'Microsoft.NumberInput': () => initialInputDialog,
+  'Microsoft.TextInput': () => initialInputDialog,
 };
 
 export function getNewDesigner(name: string, description: string) {
@@ -111,7 +112,8 @@ export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (te
 export const seedNewDialog = (
   $type: string,
   designerAttributes: Partial<DesignerAttributes> = {},
-  optionalAttributes: object = {}
+  optionalAttributes: object = {},
+  seededActions: unknown[] = []
 ): object => {
   return {
     $type,
@@ -120,7 +122,7 @@ export const seedNewDialog = (
       ...designerAttributes,
     },
     ...seedDefaults($type),
-    ...(initialDialogShape[$type] || {}),
+    ...(initialDialogShape[$type] ? initialDialogShape[$type](seededActions) : {}),
     ...optionalAttributes,
   };
 };

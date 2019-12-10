@@ -48,6 +48,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   const {
     addCoachMarkRef,
     navTo,
+    createDialog,
     onFocusEvent,
     onFocusSteps,
     onSelect,
@@ -89,6 +90,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}
               onFocusEvent={onFocusEvent}
+              onCreateDialog={createDialog}
               onClipboardChange={onCopy}
               onOpen={x => navTo(x)}
               onChange={x => saveData(x)}

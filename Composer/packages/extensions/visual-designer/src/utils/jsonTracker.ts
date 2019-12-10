@@ -153,16 +153,15 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedDat
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $type) {
+export function insert(inputDialog, path, position, $type, extra = {}) {
   const dialog = cloneDeep(inputDialog);
   const current = get(dialog, path, []);
   const newStep = {
     $type,
-    ...seedNewDialog($type, { name: getFriendlyName({ $type }) }),
+    ...seedNewDialog($type, { name: getFriendlyName({ $type }) }, extra),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
-
   current.splice(insertAt, 0, newStep);
 
   set(dialog, path, current);

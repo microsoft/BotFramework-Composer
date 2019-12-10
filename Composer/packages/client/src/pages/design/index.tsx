@@ -260,6 +260,18 @@ function DesignPage(props) {
     },
     {
       type: 'action',
+      text: formatMessage('Move'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Share',
+        },
+        onClick: () => VisualEditorAPI.moveSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
@@ -316,7 +328,7 @@ function DesignPage(props) {
 
   async function onSubmit(data: { name: string; description: string }) {
     const content = getNewDesigner(data.name, data.description);
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
+    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content, state.actionsSeed);
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 

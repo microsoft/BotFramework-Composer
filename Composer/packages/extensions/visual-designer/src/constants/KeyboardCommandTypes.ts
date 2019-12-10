@@ -20,6 +20,7 @@ export const KeyboardCommandTypes = {
     Delete: 'delete node',
     Copy: 'copy',
     Cut: 'cut',
+    Move: 'move',
     Paste: 'paste',
   },
   Operation: {

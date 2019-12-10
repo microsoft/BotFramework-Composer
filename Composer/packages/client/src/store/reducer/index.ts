@@ -85,8 +85,9 @@ const removeDialog: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const createDialogBegin: ReducerFunc = (state, { onComplete }) => {
+const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
   state.showCreateDialogModal = true;
+  state.actionsSeed = actionsSeed;
   state.onCreateDialogComplete = onComplete;
   return state;
 };
@@ -101,6 +102,7 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
   state.showCreateDialogModal = false;
+  state.actionsSeed = [];
   delete state.onCreateDialogComplete;
   return state;
 };

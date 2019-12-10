@@ -94,8 +94,8 @@ const shellApi: ShellApi = {
     });
   },
 
-  createDialog: () => {
-    return apiClient.apiCall('createDialog');
+  createDialog: actions => {
+    return apiClient.apiCall('createDialog', { actions });
   },
 
   validateExpression: expression => {

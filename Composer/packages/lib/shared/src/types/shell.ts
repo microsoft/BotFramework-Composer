@@ -53,7 +53,7 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
-  createDialog: () => Promise<string>;
+  createDialog: (actions) => Promise<string>;
   validateExpression: (expression?: string) => Promise<boolean>;
   // TODO: fix these types
   addCoachMarkRef: any;
