@@ -33,7 +33,7 @@ Use dialog triggers when you want to:
 - Take automatic action on every message as it is received or sent
 - Evaluate the raw content of the incoming activity
 
-See how to define a dialog trigger [here](howto-defining-triggers.md#dialog-trigger).
+See how to define dialog events [here](how-to-define-triggers.md#dialog-events).
 
 ### Intent triggers  
 Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent recognized** and **Unknown intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any configured **Unknown intent** trigger will fire. This will only fire if no matching intent handler is found. **Unknown intent** handles any intent that is not handled by a trigger. 
@@ -61,15 +61,15 @@ Use **Message events** when you want to:
 - Take actions when a message is deleted (on receipt of an activity with type `MessageDelete`)
 - Take actions when a message is reacted (on receipt of an activity with type `MessageReaction`). 
 
-See how to define an **Activities** trigger [here](howto-defining-triggers.md#activities). 
+See how to define an **Activities** trigger [here](how-to-define-triggers.md#activities). 
 
-### Custom events
-**Custom trigger** is a trigger to handle **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will fire this trigger. If you define an **Emit a custom event** and it fires, any **Custom trigger** in any level of dialogs will catch it and trigger corresponding actions. 
+### Custom event
+**Custom event** is a trigger to handle **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will fire this trigger. If you define an **Emit a custom event** and it fires, any **Custom event** in any level of dialogs will catch it and trigger corresponding actions. 
 
-Use **Custom events** when you want to:
+Use **Custom event** when you want to:
 - handle a pre-defined **Emit a custom event**
 
-See how to define a **Custom trigger** [here](how-to-define-triggers.md#custom-events).
+See how to define a **Custom event** [here](how-to-define-triggers.md#custom-event).
 
 ## Further reading
 - [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
