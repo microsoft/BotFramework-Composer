@@ -253,4 +253,3 @@ ENV DEBUG "composer*"
 RUN yarn --production --frozen-lockfile --force && yarn cache clean
 WORKDIR /app/Composer
 CMD ["yarn", "start:server"]
-# CMD ["dotnet", "--version" ]
