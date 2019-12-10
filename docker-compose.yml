@@ -12,11 +12,5 @@ services:
       COMPOSER_BOTS_FOLDER: /Bots
       COMPOSER_RUNTIME_FOLDER: /BotProject/Templates
       COMPOSER_APP_DATA: /appdata/data.json
-      BOT_ENDPOINT: http://botruntime:80
+      BOT_ENDPOINT: http://composer:3979
       PORT: 3000
-  botruntime:
-    build: BotProject/CSharp
-    ports:
-      - "3979:80"
-    volumes:
-      - ~/Documents/Composer:/Bots
