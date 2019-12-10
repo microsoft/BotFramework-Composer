@@ -1,27 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
-import {
-  ActionButton,
-  PrimaryButton,
-  Spinner,
-  SpinnerSize,
-  Callout,
-  DefaultButton,
-  Stack,
-} from 'office-ui-fabric-react';
+import { ActionButton, PrimaryButton, DefaultButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { Callout } from 'office-ui-fabric-react/lib/Callout';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
-import { DialogInfo } from '@bfc/shared';
+import { DiagnosticSeverity, Diagnostic } from '@bfc/indexers';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
-import { bot, botButton, calloutLabel, calloutDescription, calloutContainer } from './styles';
+import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
 import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
+import useNotifications from './pages/notifications/useNotifications';
+import { navigateTo } from './utils';
 
 const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
   // this creates a temporary hidden iframe to fire off the bfemulator protocol
@@ -49,11 +48,13 @@ export const TestController: React.FC = () => {
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
+  const notifications = useNotifications();
   const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
   const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
-
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
+  const errorLength = notifications.filter(n => n.severity === 'Error').length;
+  const showError = errorLength > 0;
 
   useEffect(() => {
     toStartBot && handleClick();
@@ -72,16 +73,17 @@ export const TestController: React.FC = () => {
   }
 
   async function handleClick() {
-    const dialogErrors = dialogs.reduce<DialogInfo[]>((result, dialog) => {
-      if (dialog.diagnostics.length !== 0) {
-        return result.concat([dialog]);
+    const diagnostics = dialogs.reduce<Diagnostic[]>((result, dialog) => {
+      const errors = dialog.diagnostics.filter(n => n.severity === DiagnosticSeverity.Error);
+      if (errors.length !== 0) {
+        return result.concat(errors);
       }
       return result;
     }, []);
-    if (dialogErrors.length !== 0) {
+    if (diagnostics.length !== 0) {
       const title = `StaticValidationError`;
-      const subTitle = dialogErrors.reduce((msg, dialog) => {
-        msg += `\n In ${dialog.id}.dialog: \n ${dialog.diagnostics.join('\n')} \n`;
+      const subTitle = diagnostics.reduce((msg, diagnostic) => {
+        msg += `${diagnostic.message} \n`;
         return msg;
       }, '');
 
@@ -144,10 +146,14 @@ export const TestController: React.FC = () => {
     }
   }
 
+  function handleErrorButtonClick() {
+    navigateTo('/notifications/');
+  }
+
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        {connected && fetchState === STATE.SUCCESS && (
+        {connected && !showError && fetchState === STATE.SUCCESS && (
           <ActionButton
             iconProps={{
               iconName: 'OpenInNewTab',
@@ -174,14 +180,21 @@ export const TestController: React.FC = () => {
             labelPosition="left"
           />
         )}
-        <span ref={addRef}>
+        <div ref={addRef}>
+          {showError && (
+            <div style={{ float: 'left' }} onClick={handleErrorButtonClick}>
+              <span css={errorCount}>{errorLength}</span>
+              <IconButton iconProps={{ iconName: 'ErrorBadge' }} css={errorButton} title="Error" ariaLabel="Error" />
+            </div>
+          )}
           <PrimaryButton
             css={botButton}
             text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
             onClick={handleClick}
             id={'publishAndConnect'}
+            disabled={showError}
           />
-        </span>
+        </div>
         <Callout
           role="alertdialog"
           ariaLabelledBy="callout-label-id"

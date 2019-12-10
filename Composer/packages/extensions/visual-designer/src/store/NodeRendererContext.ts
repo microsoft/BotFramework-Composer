@@ -2,19 +2,27 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { ShellApi } from '@bfc/shared';
+import { LgFile } from '@bfc/indexers';
 
-interface LgTemplate {
-  Name: string;
-  Body: string;
+type ShellApiFuncs = 'copyLgTemplate' | 'removeLgTemplate' | 'removeLgTemplates' | 'updateLgTemplate';
+
+interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
+  focusedId?: string;
+  focusedEvent?: string;
+  focusedTab?: string;
+  lgFiles: LgFile[];
+  clipboardActions: any[];
 }
 
-export const NodeRendererContext = React.createContext({
+export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
   focusedId: '',
   focusedEvent: '',
   focusedTab: '',
-  clipboardActions: [] as any[],
-  getLgTemplates: (_id: string, _templateName: string) => Promise.resolve([] as LgTemplate[]),
-  removeLgTemplate: (_id: string, _templateName: string) => Promise.resolve(),
-  removeLgTemplates: (_id: string, _templateNames: string[]) => Promise.resolve(),
-  updateLgTemplate: (_id: string, _templateName: string, _template: string) => Promise.resolve('' as string),
+  lgFiles: [],
+  clipboardActions: [],
+  copyLgTemplate: () => Promise.resolve(''),
+  removeLgTemplate: () => Promise.resolve(),
+  removeLgTemplates: () => Promise.resolve(),
+  updateLgTemplate: () => Promise.resolve(),
 });

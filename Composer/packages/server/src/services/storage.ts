@@ -18,6 +18,7 @@ class StorageService {
 
   constructor() {
     this.storageConnections = Store.get(this.STORE_KEY);
+    this.ensureDefaultBotFoldersExist();
   }
 
   public getStorageClient = (storageId: string): IFileStorage => {
@@ -39,11 +40,18 @@ class StorageService {
   };
 
   public getStorageConnections = (): StorageConnection[] => {
-    return this.storageConnections.map(s => {
+    const connections = this.storageConnections.map(s => {
       const temp = Object.assign({}, s);
-      temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
+      // if the last accessed path exist
+      if (fs.existsSync(s.path)) {
+        temp.path = Path.resolve(s.path); // resolve path if path is relative, and change it to unix pattern
+      } else {
+        temp.path = Path.resolve(s.defaultPath);
+      }
       return temp;
     });
+    this.ensureDefaultBotFoldersExist();
+    return connections;
   };
 
   public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
@@ -53,36 +61,43 @@ class StorageService {
 
   public getBlobDateModified = async (storageId: string, filePath: string) => {
     const storageClient = this.getStorageClient(storageId);
-    try {
-      const stat = await storageClient.stat(filePath);
-      return stat.lastModified;
-    } catch (err) {
-      throw err;
-    }
+    const stat = await storageClient.stat(filePath);
+    return stat.lastModified;
   };
 
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string) => {
     const storageClient = this.getStorageClient(storageId);
-    try {
-      const stat = await storageClient.stat(filePath);
-      if (stat.isFile) {
-        // NOTE: this behavior is not correct, we should NOT parse this file as json
-        // becase it might not be json, this api is a more general file api than json file
-        // didn't fix it because this is the previous behavior
-        // TODO: fix this behavior and the upper layer interface accordingly
-        return JSON.parse(await storageClient.readFile(filePath));
-      } else {
-        return {
-          name: Path.basename(filePath),
-          parent: Path.dirname(filePath),
-          children: await this.getChildren(storageClient, filePath),
-        };
-      }
-    } catch (err) {
-      throw err;
+    const stat = await storageClient.stat(filePath);
+    if (stat.isFile) {
+      // NOTE: this behavior is not correct, we should NOT parse this file as json
+      // becase it might not be json, this api is a more general file api than json file
+      // didn't fix it because this is the previous behavior
+      // TODO: fix this behavior and the upper layer interface accordingly
+      return JSON.parse(await storageClient.readFile(filePath));
+    } else {
+      return {
+        name: Path.basename(filePath),
+        parent: Path.dirname(filePath),
+        children: await this.getChildren(storageClient, filePath),
+      };
     }
+  };
+
+  public updateCurrentPath = (path: string, storageId: string) => {
+    const storage = this.storageConnections.find(s => s.id === storageId);
+    if (storage) {
+      storage.path = path;
+      Store.set(this.STORE_KEY, this.storageConnections);
+    }
+    return this.storageConnections;
+  };
+
+  private ensureDefaultBotFoldersExist = () => {
+    this.storageConnections.forEach(s => {
+      this.createFolderRecurively(s.defaultPath);
+    });
   };
 
   private isBotFolder = (path: string) => {
@@ -118,6 +133,13 @@ class StorageService {
     // filter no access permission folder, witch value is null in children array
     const result = await Promise.all(children);
     return result.filter(item => !!item);
+  };
+
+  private createFolderRecurively = (path: string) => {
+    if (!fs.existsSync(path)) {
+      this.createFolderRecurively(Path.dirname(path));
+      fs.mkdirSync(path);
+    }
   };
 }
 

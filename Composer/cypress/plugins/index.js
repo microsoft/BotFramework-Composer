@@ -1,17 +1,10 @@
-// ***********************************************************
-// This example plugins/index.js can be used to load plugins
-//
-// You can change the location of this file or turn off loading
-// the plugins file with the 'pluginsFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/plugins-guide
-// ***********************************************************
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
-// This function is called when a project is opened or re-opened (e.g. due to
-// the project's config changing)
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor');
+
+module.exports = on => {
+  on('file:preprocessor', cypressTypeScriptPreprocessor);
+};

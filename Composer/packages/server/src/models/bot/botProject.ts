@@ -3,9 +3,9 @@
 
 import fs from 'fs';
 
-import isEqual from 'lodash.isequal';
-import { FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
-import { dialogIndexer, luIndexer, lgIndexer } from '@bfc/indexers';
+import { getNewDesigner } from '@bfc/shared';
+import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
+import { luIndexer } from '@bfc/indexers/lib/luIndexer';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -66,7 +66,7 @@ export class BotProject {
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogs = dialogIndexer.index(this.files, this.name);
+    this.dialogs = this.indexDialog();
     this.lgFiles = lgIndexer.index(this.files);
     this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
     await this._checkProjectStructure();
@@ -177,12 +177,22 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogs;
     const mainDialog = dialogs.find(item => item.isRoot);
-    if (mainDialog !== undefined) {
-      mainDialog.content.$designer = {
-        ...mainDialog.content.$designer,
-        name,
-        description,
-      };
+
+    if (mainDialog && mainDialog.content) {
+      const oldDesigner = mainDialog.content.$designer;
+
+      let newDesigner;
+      if (oldDesigner && oldDesigner.id) {
+        newDesigner = {
+          ...oldDesigner,
+          name,
+          description,
+        };
+      } else {
+        newDesigner = getNewDesigner(name, description);
+      }
+
+      mainDialog.content.$designer = newDesigner;
       await this.updateDialog('Main', mainDialog.content);
     }
   };
@@ -257,16 +267,6 @@ export class BotProject {
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
     }
-    let currentLufileParsedContentLUISJsonStructure = null;
-    try {
-      currentLufileParsedContentLUISJsonStructure = await luIndexer.parse(content);
-    } catch (error) {
-      throw new Error(`Update ${id}.lu Failed, ${error.text}`);
-    }
-
-    const preLufileParsedContentLUISJsonStructure = luFile.parsedContent.LUISJsonStructure;
-    const isUpdate = !isEqual(currentLufileParsedContentLUISJsonStructure, preLufileParsedContentLUISJsonStructure);
-    if (!isUpdate) return this.luFiles;
 
     await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
@@ -296,7 +296,7 @@ export class BotProject {
     await this._removeFile(luFile.relativePath);
 
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
-    this._cleanUp(luFile.relativePath);
+    await this._cleanUp(luFile.relativePath);
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
@@ -316,13 +316,10 @@ export class BotProject {
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    try {
-      if (unpublished.length > 0) {
-        await this.luPublisher.publish(unpublished);
-      }
-    } catch (error) {
-      throw error;
+    if (unpublished.length > 0) {
+      await this.luPublisher.publish(unpublished);
     }
+
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
@@ -360,16 +357,16 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
-  private _cleanUp = (relativePath: string) => {
+  private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    this._removeEmptyFolder(dirPath);
+    await this._removeEmptyFolder(dirPath);
   };
 
   private _removeEmptyFolder = async (folderPath: string) => {
     const files = await this.fileStorage.readDir(folderPath);
     if (files.length === 0) {
-      this.fileStorage.rmDir(folderPath);
+      await this.fileStorage.rmDir(folderPath);
     }
   };
 
@@ -423,13 +420,17 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
+  private indexDialog() {
+    return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
+  }
+
   // re index according to file change in a certain path
   private reindex = async (filePath: string) => {
     const fileExtension = Path.extname(filePath);
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogs = dialogIndexer.index(this.files, this.name);
+        this.dialogs = this.indexDialog();
         break;
       case '.lg':
         this.lgFiles = lgIndexer.index(this.files);

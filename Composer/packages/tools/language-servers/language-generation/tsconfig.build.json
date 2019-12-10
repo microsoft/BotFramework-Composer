@@ -1,0 +1,7 @@
+{
+  /* Options used for building production code (tests excluded) */
+  "extends": "./tsconfig.json",
+  "include": [
+    "./src/**/*"
+  ]
+}

@@ -1,15 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
-import { IconButton } from 'office-ui-fabric-react';
-import { IContextualMenuItem } from 'office-ui-fabric-react';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ArrayFieldItem } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
+import { arrayItem, arrayItemField } from './styles';
+
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
-  const { hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
+  const { children, hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -42,17 +46,15 @@ const ArrayItem: React.FC<ArrayFieldItem> = props => {
   ];
 
   return (
-    <div className="ArrayItem">
-      <div className="ArrayItemField">{props.children}</div>
-      <div className="ArrayItemContext">
-        <IconButton
-          menuProps={{ items: contextItems }}
-          menuIconProps={{ iconName: 'MoreVertical' }}
-          ariaLabel={formatMessage('Item Actions')}
-          data-testid="ArrayItemContextMenu"
-          styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-        />
-      </div>
+    <div css={arrayItem}>
+      <div css={arrayItemField}>{children}</div>
+      <IconButton
+        menuProps={{ items: contextItems }}
+        menuIconProps={{ iconName: 'MoreVertical' }}
+        ariaLabel={formatMessage('Item Actions')}
+        data-testid="ArrayItemContextMenu"
+        styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+      />
     </div>
   );
 };

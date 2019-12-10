@@ -20,7 +20,8 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Dropdown, Stack, StackItem, IDropdownOption } from 'office-ui-fabric-react';
+import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 
 import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
@@ -32,7 +33,7 @@ import { dropdown, loading, detailListContainer, detailListClass, fileSelectorCo
 interface FileSelectorProps {
   focusedStorageFolder: StorageFolder;
   currentPath: string;
-  updateCurrentPath: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
@@ -44,7 +45,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     focusedStorageFolder,
     checkShowItem,
     currentPath,
-    updateCurrentPath,
+    onCurrentPathUpdate,
     storageFileLoadingStatus,
   } = props;
   // for detail file list in open panel
@@ -129,24 +130,21 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
-    const files = focusedStorageFolder.children.reduce(
-      (result, file) => {
-        const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
-        if (check(file)) {
-          result.push({
-            name: file.name,
-            value: file.name,
-            fileType: file.type,
-            iconName: getFileIconName(file),
-            lastModified: file.lastModified,
-            fileSize: file.size ? formatBytes(file.size) : '',
-            filePath: file.path,
-          });
-        }
-        return result;
-      },
-      [] as any[]
-    );
+    const files = focusedStorageFolder.children.reduce((result, file) => {
+      const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
+      if (check(file)) {
+        result.push({
+          name: file.name,
+          value: file.name,
+          fileType: file.type,
+          iconName: getFileIconName(file),
+          lastModified: file.lastModified,
+          fileSize: file.size ? formatBytes(file.size) : '',
+          filePath: file.path,
+        });
+      }
+      return result;
+    }, [] as any[]);
     // add parent folder
     files.unshift({
       name: '..',
@@ -206,7 +204,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     .reverse();
 
   const updateLocation = (e, item?: IDropdownOption) => {
-    updateCurrentPath(item ? (item.key as string) : '');
+    onCurrentPathUpdate(item ? (item.key as string) : '');
   };
 
   return (

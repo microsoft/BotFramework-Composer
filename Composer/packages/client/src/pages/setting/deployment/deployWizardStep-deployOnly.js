@@ -3,7 +3,10 @@
 
 import React, { Fragment, useContext, useState } from 'react';
 import formatMessage from 'format-message';
-import { Stack, DialogFooter, PrimaryButton, DefaultButton, StackItem, TextField } from 'office-ui-fabric-react';
+import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { StoreContext } from '../../../store';
 

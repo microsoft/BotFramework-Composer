@@ -6,7 +6,10 @@ import { jsx } from '@emotion/core';
 import { useState, useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { DefaultButton, ChoiceGroup, Link, Toggle } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
@@ -73,7 +76,14 @@ export const DialogSettings = () => {
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;
-        <Link href="//aka.ms/absh/docs/settings" target="_blank">
+        <Link
+          href={
+            absHosted
+              ? 'https://aka.ms/absh/docs/settings'
+              : 'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'
+          }
+          target="_blank"
+        >
           {hostControlLabels.learnMore}
         </Link>
       </p>

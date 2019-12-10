@@ -23,7 +23,7 @@
             "name": "Send an Activity",
             "id": "753396"
           },
-          "activity": "[bfdactivity-753396]"
+          "activity": "@{bfdactivity-753396()}"
         }
       ]
     },
@@ -33,6 +33,7 @@
         "name": "GetStarted",
         "id": "629539"
       },
+      "condition": "turn.recognized.score > 0.7",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -74,7 +75,7 @@
                 "name": "Send an Activity",
                 "id": "032735"
               },
-              "activity": "[bfdactivity-032735]"
+              "activity": "@{bfdactivity-032735()}"
             }
           ]
         }
@@ -94,7 +95,7 @@
             "name": "Send an Activity",
             "id": "650736"
           },
-          "activity": "[bfdactivity-650736]"
+          "activity": "@{bfdactivity-650736()}"
         },
         {
           "$type": "Microsoft.CancelAllDialogs",
@@ -119,7 +120,7 @@
             "name": "Send an Activity",
             "id": "031899"
           },
-          "activity": "[bfdactivity-031899]"
+          "activity": "@{bfdactivity-031899()}"
         },
         {
           "$type": "Microsoft.IfCondition",
@@ -135,7 +136,7 @@
                 "name": "Send an Activity",
                 "id": "309274"
               },
-              "activity": "[bfdactivity-309274]"
+              "activity": "@{bfdactivity-309274()}"
             }
           ],
           "elseActions": [
@@ -145,7 +146,7 @@
                 "name": "Send an Activity",
                 "id": "912837"
               },
-              "activity": "[bfdactivity-912837]"
+              "activity": "@{bfdactivity-912837()}"
             }
           ]
         }
@@ -165,7 +166,7 @@
             "name": "Send an Activity",
             "id": "924700"
           },
-          "activity": "[bfdactivity-924700]"
+          "activity": "@{bfdactivity-924700()}"
         }
       ],
       "intent": "Help"

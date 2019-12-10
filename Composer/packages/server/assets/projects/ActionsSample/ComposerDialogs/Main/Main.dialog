@@ -263,14 +263,14 @@
           "$designer": {
             "id": "347762"
           },
-          "activity": "[bfdactivity-640616]"
+          "activity": "@{bfdactivity-640616()}"
         }
       ]
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Conversation started (ConversationUpdate)",
+        "name": "Greeting (ConversationUpdate)",
         "id": "954390"
       },
       "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -280,7 +280,7 @@
           "$designer": {
             "id": "640616"
           },
-          "activity": "[bfdactivity-640616]"
+          "activity": "@{bfdactivity-640616()}"
         }
       ]
     }

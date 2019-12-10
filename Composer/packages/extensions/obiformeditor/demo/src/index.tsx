@@ -2,14 +2,14 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { render } from 'react-dom';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { PrimaryButton, DefaultButton, DirectionalHint } from 'office-ui-fabric-react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
-import { seedNewDialog } from '@bfc/shared';
+import { ExpressionEngine } from 'botframework-expressions';
+import { seedNewDialog, ShellApi } from '@bfc/shared';
+import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import Example from '../../src';
-import { ShellApi, LuFile, DialogInfo } from '../../src/types';
 import { buildDialogOptions } from '../../src/Form/utils';
 
 import editorSchema from './editorschema.json';
@@ -90,7 +90,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'FirstHello' }, { name: 'FirstGoodBye' }],
-        utterances: [{ intent: 'FirstHello', text: 'Hi' }, { intent: 'FirstGoodBye', text: 'Goodbye' }],
+        utterances: [
+          { intent: 'FirstHello', text: 'Hi' },
+          { intent: 'FirstGoodBye', text: 'Goodbye' },
+        ],
       },
     },
   },
@@ -101,7 +104,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'SecondHello' }, { name: 'SecondGoodBye' }],
-        utterances: [{ intent: 'SecondHello', text: 'Good morning' }, { intent: 'SecondGoodBye', text: 'See ya!' }],
+        utterances: [
+          { intent: 'SecondHello', text: 'Good morning' },
+          { intent: 'SecondGoodBye', text: 'See ya!' },
+        ],
       },
     },
   },
@@ -112,7 +118,10 @@ const luFiles: LuFile[] = [
     parsedContent: {
       LUISJsonStructure: {
         intents: [{ name: 'ThirdHello' }, { name: 'ThirdGoodbye' }],
-        utterances: [{ intent: 'ThirdHello', text: 'Hello' }, { intent: 'ThirdGoodbye', text: 'Later' }],
+        utterances: [
+          { intent: 'ThirdHello', text: 'Hello' },
+          { intent: 'ThirdGoodbye', text: 'Later' },
+        ],
       },
     },
   },
@@ -149,20 +158,17 @@ function getDefaultMemory() {
 const mockShellApi = [
   'getState',
   'getData',
-  'getDialogs',
   'saveData',
   'navTo',
-  'navDown',
-  'focusTo',
-  'shellNavigate',
   'updateLuFile',
   'updateLgFile',
   'createLuFile',
   'createLgFile',
-  'getLgTemplates',
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',
+  'onFocusSteps',
+  'onFocusEvent',
 ].reduce((mock, api) => {
   mock[api] = (...args) =>
     new Promise(resolve => {

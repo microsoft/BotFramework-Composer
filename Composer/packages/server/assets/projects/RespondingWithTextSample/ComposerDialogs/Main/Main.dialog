@@ -17,14 +17,14 @@
           "$designer": {
             "id": "551445"
           },
-          "activity": "[bfdactivity-551445]"
+          "activity": "@{bfdactivity-551445()}"
         }
       ]
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Conversation started (ConversationUpdate)",
+        "name": "Greeting (ConversationUpdate)",
         "id": "452701"
       },
       "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -35,7 +35,7 @@
             "name": "Send an Activity",
             "id": "576166"
           },
-          "activity": "[bfdactivity-576166]"
+          "activity": "@{bfdactivity-576166()}"
         }
       ]
     },

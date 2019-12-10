@@ -15,7 +15,7 @@
     },
     "Microsoft.AdaptiveDialog": {
       "description": "This configures a data driven dialog via a collection of events and actions.",
-      "title": "AdaptiveDialog",
+      "title": "Adaptive dialog",
       "helpLink": "https://aka.ms/botframework",
       "helpLinkText": "Learn more"
     },
@@ -28,6 +28,10 @@
       "title": "Begin a Dialog",
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "helpLinkText": "Learn more"
+    },
+    "Microsoft.OnCancelDialog": {
+      "title": "Dialog cancelled",
+      "subtitle": "Cancel dialog event"
     },
     "Microsoft.CancelAllDialogs": {
       "title": "Cancel All Dialogs",
@@ -99,7 +103,7 @@
     "Microsoft.HttpRequest": {
       "title": "HTTP Request",
       "helpLink": "https://aka.ms/bfc-using-http",
-      "helpLinkText": "Learn more" 
+      "helpLinkText": "Learn more"
     },
     "Microsoft.IfCondition": {
       "title": "Branch: If/Else",
@@ -144,59 +148,83 @@
       "helpLink": "https://aka.ms/bfc-using-oauth"
     },
     "Microsoft.OnActivity": {
-      "title": "Activity trigger"
+      "title": "Activities",
+      "subtitle": "Activity recieved"
     },
     "Microsoft.OnBeginDialog": {
-      "title": "Dialog started (BeginDialog)"
+      "title": "Dialog started",
+      "subtitle": "Begin dialog event"
     },
     "Microsoft.OnConversationUpdateActivity": {
-      "title": "Conversation started (ConversationUpdate)",
-      "description":
-        "Handle the events fired when a user begins a new conversation with the bot.",
+      "title": "Greeting",
+      "subtitle": "ConversationUpdate activity",
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
       "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
       "helpLinkText": "Learn more"
     },
     "Microsoft.OnDialogEvent": {
-      "title": "Dialog event"
+      "title": "Dialog events",
+      "subtitle": "Dialog event"
     },
     "Microsoft.OnEndOfConversationActivity": {
-      "title": "Conversation ended"
+      "title": "Conversation ended",
+      "subtitle": "EndOfConversation activity"
     },
     "Microsoft.OnCondition": {
-      "title": "Handle an condition"
+      "title": "Handle a condition",
+      "subtitle": "Condition"
     },
     "Microsoft.OnCustomEvent": {
-      "title": "Handle an Event"
+      "title": "Handle an Event",
+      "subtitle": "Custom event"
     },
     "Microsoft.OnEventActivity": {
-      "title": "Event received"
+      "title": "Event received",
+      "subtitle": "Event activity"
+    },
+    "Microsoft.OnError": {
+      "title": "Error occurred",
+      "subtitle": "Error event"
     },
     "Microsoft.OnHandoffActivity": {
-      "title": "Handover to human"
+      "title": "Handover to human",
+      "subtitle": "Handoff activity"
     },
     "Microsoft.OnIntent": {
-      "title": "Intent"
+      "title": "Intent recognized",
+      "subtitle": "Intent recognized"
     },
     "Microsoft.OnInvokeActivity": {
-      "title": "Conversation invoked"
+      "title": "Conversation invoked",
+      "subtitle": "Invoke activity"
     },
     "Microsoft.OnMessageActivity": {
-      "title": "Message received"
+      "title": "Message events",
+      "subtitle": "Message recieved activity"
     },
     "Microsoft.OnMessageDeleteActivity": {
-      "title": "Message deleted"
+      "title": "Message deleted",
+      "subtitle": "Message deleted activity"
     },
     "Microsoft.OnMessageReactionActivity": {
-      "title": "Message reaction"
+      "title": "Message reaction",
+      "subtitle": "Message reaction activity"
     },
     "Microsoft.OnMessageUpdateActivity": {
-      "title": "Message updated"
+      "title": "Message updated",
+      "subtitle": "Message updated activity"
     },
     "Microsoft.OnTypingActivity": {
-      "title": "User is typing"
+      "title": "User is typing",
+      "subtitle": "Typing activity"
+    },
+    "Microsoft.OnRepromptDialog": {
+      "title": "Re-prompt for input",
+      "subtitle": "Reprompt dialog event"
     },
     "Microsoft.OnUnknownIntent": {
-      "title": "Unrecognized intent"
+      "title": "Unknown intent",
+      "subtitle": "Unknown intent recognized"
     },
     "Microsoft.QnAMakerDialog": {
       "title": "QnAMakerDialog",
@@ -244,7 +272,7 @@
     "Microsoft.TextInput": {
       "title": "Prompt for text",
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
-      "helpLinkText": "Learn more" 
+      "helpLinkText": "Learn more"
     },
     "Microsoft.TraceActivity": {
       "title": "Emit a trace event",

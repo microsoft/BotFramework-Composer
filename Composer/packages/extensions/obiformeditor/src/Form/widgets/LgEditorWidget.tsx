@@ -1,26 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import debounce from 'lodash.debounce';
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { LgMetaData, LgTemplateRef } from '@bfc/shared';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
+
+const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
+const lspServerPath = '/lg-language-server';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 
+const tryGetLgMetaDataType = (lgText: string): string | null => {
+  const lgRef = LgTemplateRef.parse(lgText);
+  if (lgRef === null) return null;
+
+  const lgMetaData = LgMetaData.parse(lgRef.name);
+  if (lgMetaData === null) return null;
+
+  return lgMetaData.type;
+};
+
 const getInitialTemplate = (fieldName: string, formData?: string): string => {
-  let newTemplate = formData || '- ';
+  const lgText = formData || '';
 
-  if (newTemplate.includes(`bfd${fieldName}-`)) {
+  // Field content is already a ref created by composer.
+  if (tryGetLgMetaDataType(lgText) === fieldName) {
     return '';
-  } else if (newTemplate && !newTemplate.startsWith('-')) {
-    newTemplate = `-${newTemplate}`;
   }
-
-  return newTemplate;
+  return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
 interface LgEditorWidgetProps {
@@ -33,149 +45,87 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const [errorMsg, setErrorMsg] = useState('');
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor>();
-  const lgId = `bfd${name}-${formContext.dialogId}`;
+  const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
-  const lgFile = formContext.lgFiles.find(file => file.id === lgFileId);
+  const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useMemo(
     () =>
       debounce((body: string) => {
-        formContext.shellApi
-          .updateLgTemplate(lgFileId, lgId, body)
-          .then(() => setErrorMsg(''))
-          .catch(error => setErrorMsg(error));
+        formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
       }, 500),
-    [lgId, lgFileId]
+    [lgName, lgFileId]
   );
 
   const template = (lgFile &&
+    lgFile.templates &&
     lgFile.templates.find(template => {
-      return template.Name === lgId;
+      return template.name === lgName;
     })) || {
-    Name: lgId,
-    Body: getInitialTemplate(name, value),
-    Parameters: [],
-    Range: {
-      startLineNumber: 1,
-      endLineNumber: 1,
+    name: lgName,
+    body: getInitialTemplate(name, value),
+    range: {
+      startLineNumber: 0,
+      endLineNumber: 2,
     },
   };
 
-  const [localContent, setLocalContent] = useState(template.Body);
-  const templateContent = `# ${template.Name}\n${localContent}`;
+  const diagnostic =
+    lgFile &&
+    lgFile.diagnostics.find(d => {
+      return (
+        d.range &&
+        d.range.start.line >= template.range.startLineNumber &&
+        d.range.end.line <= template.range.endLineNumber
+      );
+    });
 
-  // only do this once
-  const allContent = useMemo(() => {
-    if (!lgFile) {
-      return '';
-    }
-
-    return lgFile.templates.reduce((content, t) => {
-      if (t.Name === lgId) {
-        return content;
-      }
-
-      const params = t.Parameters.length ? `(${t.Parameters.join(', ')})` : '';
-
-      content += `# ${t.Name} ${params}\n-\n`;
-      return content;
-    }, '');
-  }, []);
-  const lineCount = useMemo(() => {
-    return allContent.split('\n').length;
-  }, [allContent]);
-  // template body code range
-  const codeRange = {
-    startLineNumber: lineCount + 2,
-    endLineNumber: lineCount + template.Body.split('\n').length + 1,
+  const errorMsg = diagnostic
+    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+    : '';
+  const [localValue, setLocalValue] = useState(template.body);
+  const lgOption = {
+    inline: true,
+    content: get(lgFile, 'content', ''),
+    template,
   };
 
-  const onChange = (newTemplate: string) => {
-    const [, body] = newTemplate.split(`# ${lgId}\n`);
-
+  const onChange = (body: string) => {
+    setLocalValue(body);
     if (formContext.dialogId) {
       if (body) {
         updateLgTemplate(body);
-        props.onChange(`[${lgId}]`);
+        props.onChange(new LgTemplateRef(lgName).toString());
       } else {
         updateLgTemplate.flush();
-        formContext.shellApi.removeLgTemplate(lgFileId, lgId);
+        formContext.shellApi.removeLgTemplate(lgFileId, lgName);
         props.onChange();
       }
     }
-    setLocalContent(body);
   };
 
-  // useLayoutEffect so that the handler can be updated before the next render
-  useLayoutEffect(() => {
-    if (editor) {
-      const keyDownHandler = editor.onKeyDown(e => {
-        const { startLineNumber, endLineNumber, startColumn, endColumn, positionLineNumber, positionColumn } =
-          editor.getSelection() || {};
-        const isRangeSelected = endLineNumber !== startLineNumber || startColumn !== endColumn;
-
-        switch (e.keyCode) {
-          case monacoEditor.KeyCode.Backspace:
-            if (
-              !localContent ||
-              (!isRangeSelected && positionLineNumber === codeRange.startLineNumber && positionColumn === 1)
-            ) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-
-            break;
-          case monacoEditor.KeyCode.Delete: {
-            const lines = localContent.split('\n');
-            // cursor would be on the column after the last character
-            const lastColumn = lines[lines.length - 1].length + 1;
-            if (
-              !localContent ||
-              (!isRangeSelected && positionLineNumber === codeRange.startLineNumber && positionColumn === lastColumn)
-            ) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-
-            break;
-          }
-          case monacoEditor.KeyCode.KEY_A:
-            if (e.ctrlKey || e.metaKey) {
-              editor.setSelection({
-                ...codeRange,
-                startColumn: 1,
-                endColumn: Infinity,
-              });
-              e.preventDefault();
-              e.stopPropagation();
-            }
-            break;
-          default:
-            return;
-        }
-      });
-
-      return () => {
-        keyDownHandler.dispose();
-      };
+  // update the template on mount to get validation
+  useEffect(() => {
+    if (localValue) {
+      updateLgTemplate(localValue);
     }
-  }, [editor, localContent, codeRange]);
-
-  const handleEditorMount = (editor: monacoEditor.editor.IStandaloneCodeEditor) => {
-    setEditor(editor);
-  };
+  }, []);
 
   return (
     <LgEditor
-      codeRange={codeRange}
-      errorMsg={errorMsg}
-      value={`${allContent}\n${templateContent}`}
       onChange={onChange}
+      value={localValue}
+      lgOption={lgOption}
+      errorMsg={errorMsg}
+      hidePlaceholder={true}
       helpURL={LG_HELP}
+      languageServer={{
+        port: Number(lspServerPort),
+        path: lspServerPath,
+      }}
       height={height}
-      editorDidMount={handleEditorMount}
     />
   );
 };
+
+export default LgEditorWidget;

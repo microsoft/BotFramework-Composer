@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Checkbox } from 'office-ui-fabric-react';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 
 import { BFDWidgetProps } from '../types';
 

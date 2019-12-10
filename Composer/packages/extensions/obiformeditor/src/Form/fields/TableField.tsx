@@ -2,22 +2,19 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import {
-  ContextualMenuItemType,
-  DetailsList,
-  IContextualMenuItem,
-  SelectionMode,
-  DetailsListLayoutMode,
-  IconButton,
-} from 'office-ui-fabric-react';
 import formatMessage from 'format-message';
-import { IColumn } from 'office-ui-fabric-react';
 import { JSONSchema6 } from 'json-schema';
-import { DirectionalHint } from 'office-ui-fabric-react';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { COMPOUND_TYPES, MicrosoftIDialog } from '@bfc/shared';
+import { DetailsList, SelectionMode, DetailsListLayoutMode, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import {
+  ContextualMenuItemType,
+  IContextualMenuItem,
+  DirectionalHint,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
 
 import { buildDialogOptions, swap, remove, insertAt, DialogOptionsOpts } from '../utils';
 import { FormContext } from '../types';
@@ -99,6 +96,7 @@ function ItemActions<T extends MicrosoftIDialog>(props: ItemActionsProps<T>) {
         const item = formData[index];
         // @ts-ignore
         if (item.$type === 'Microsoft.SendActivity' && item.activity && item.activity.indexOf('bfdactivity-') !== -1) {
+          // TODO: (ze) 'removeLgTemplate' -> 'removeLgTemplateRef', it should accept inputs like '[bfdactivity-1234]'
           // @ts-ignore
           formContext.shellApi.removeLgTemplate('common', item.activity.slice(1, item.activity.length - 1));
         }

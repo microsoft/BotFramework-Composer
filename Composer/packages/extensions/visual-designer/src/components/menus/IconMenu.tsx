@@ -2,15 +2,11 @@
 // Licensed under the MIT License.
 
 import React, { useRef, useEffect } from 'react';
-import {
-  OverflowSet,
-  IconButton,
-  Link,
-  IRenderFunction,
-  IContextualMenuItem,
-  IButtonStyles,
-  IButton,
-} from 'office-ui-fabric-react';
+import { IconButton, IButtonStyles, IButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 
 interface IconMenuProps {
   nodeSelected?: boolean;

@@ -1,19 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import merge from 'lodash.merge';
+import os from 'os';
 
-import settings from './settings.json';
+import merge from 'lodash/merge';
 
-// overall the guidance in settings.json is to list every item in "development"
-// section with a default value, and override the value for different environment
-// in later sections
+import log from '../logger';
+import { Path } from '../utility/path';
 
-const defaultSettings = settings.development;
-const environment = process.env.NODE_ENV || 'development';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const environmentSettings = (settings as any)[environment];
+import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder } from './env';
 
-const finalSettings = merge(defaultSettings, environmentSettings);
+interface Settings {
+  botAdminEndpoint: string;
+  botEndpoint: string;
+  assetsLibray: string;
+  runtimeFolder: string;
+  botsFolder: string;
+  appDataPath: string;
+}
+
+const envSettings: { [env: string]: Settings } = {
+  development: {
+    botAdminEndpoint: botEndpoint,
+    botEndpoint: 'http://localhost:3979', //botEndpoint,
+    assetsLibray: Path.resolve('./assets'),
+    botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
+    runtimeFolder,
+    appDataPath,
+  },
+};
+
+const defaultSettings = envSettings.development;
+const environmentSettings = envSettings[environment];
+
+const finalSettings = merge<Settings, Settings>(defaultSettings, environmentSettings);
+
+log('App Settings: %O', finalSettings);
 
 export default finalSettings;

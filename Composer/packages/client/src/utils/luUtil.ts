@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuFile, DialogInfo, LuDiagnostic } from '@bfc/shared';
+import { LuFile, DialogInfo, LuDiagnostic } from '@bfc/indexers';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {

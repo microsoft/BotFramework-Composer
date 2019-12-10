@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import find from 'lodash.find';
+import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
 
+import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
@@ -171,6 +172,7 @@ export class AssetManager {
     const dstStorage = StorageService.getStorageClient(ref.storageId);
     const dstDir = Path.resolve(ref.path);
     if (await dstStorage.exists(dstDir)) {
+      log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
 

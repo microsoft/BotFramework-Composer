@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import isEqual from 'lodash.isequal';
+import isEqual from 'lodash/isEqual';
 import { runBuild } from 'lubuild';
-import { LuFile } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
