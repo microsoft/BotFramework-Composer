@@ -15,23 +15,20 @@ function parseSelector(path: string): null | string[] {
     selectors.shift();
   }
 
-  const normalizedSelectors = selectors.reduce(
-    (result, selector) => {
-      // e.g. actions[0]
-      const parseResult = /(\w+)\[(-\d+|\d+)\]/.exec(selector);
+  const normalizedSelectors = selectors.reduce((result, selector) => {
+    // e.g. actions[0]
+    const parseResult = /(\w+)\[(-\d+|\d+)\]/.exec(selector);
 
-      if (parseResult) {
-        const [, objSelector, arraySelector] = parseResult;
-        const arrayIndex = parseInt(arraySelector);
-        result.push(objSelector, arrayIndex);
-      } else {
-        result.push(selector);
-      }
+    if (parseResult) {
+      const [, objSelector, arraySelector] = parseResult;
+      const arrayIndex = parseInt(arraySelector);
+      result.push(objSelector, arrayIndex);
+    } else {
+      result.push(selector);
+    }
 
-      return result;
-    },
-    [] as any[]
-  );
+    return result;
+  }, [] as any[]);
 
   return normalizedSelectors;
 }

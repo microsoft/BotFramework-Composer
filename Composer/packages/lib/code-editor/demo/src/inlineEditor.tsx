@@ -15,10 +15,10 @@ const content = `# Greeting1
 -Good evening
 `;
 
-// Body will fill in editor
+// body will fill in editor
 const template = {
-  Name: 'Greeting2',
-  Body: `-Good afternoon
+  name: 'Greeting2',
+  body: `-Good afternoon
 -[Greeting3]
 -[Greeting4]`,
 };
@@ -30,7 +30,7 @@ const lgOption = {
 };
 
 export default function App() {
-  const [value, setValue] = useState(template.Body);
+  const [value, setValue] = useState(template.body);
 
   const onChange = value => {
     setValue(value);

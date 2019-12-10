@@ -66,7 +66,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
         <EditableField
           value={getTitle()}
           onChange={handleTitleChange}
-          styleOverrides={{ field: { fontWeight: FontWeights.semibold } }}
+          styles={{ field: { fontWeight: FontWeights.semibold }, root: { margin: '5px 0 7px -9px' } }}
           fontSize={FontSizes.size20}
         />
         <p className="RootFieldSubtitle">{getSubTitle()}</p>

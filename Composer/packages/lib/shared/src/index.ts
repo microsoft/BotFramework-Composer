@@ -12,4 +12,5 @@ export * from './promptTabs';
 export * from './appschema';
 export * from './types';
 export * from './constant';
-export * from './lgUtils';
+export * from './convertUtils';
+export { LgMetaData, LgTemplateRef } from '@bfc/indexers';

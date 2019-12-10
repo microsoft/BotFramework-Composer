@@ -20,19 +20,20 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       // this is an LG template, go get it's content
       if (!getLgTemplates || typeof getLgTemplates !== 'function') {
         setTemplateText(str || '');
+        return;
       }
 
       const templates = getLgTemplates ? await getLgTemplates('common') : [];
-      const [template] = templates.filter(template => {
-        return template.Name === templateId;
+      const [template] = templates.filter(({ name }) => {
+        return name === templateId;
       });
 
       if (cancelled) {
         return;
       }
 
-      if (template && template.Body) {
-        const [firstLine] = template.Body.split('\n');
+      if (template && template.body) {
+        const [firstLine] = template.body.split('\n');
         setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
       } else {
         setTemplateText('');
