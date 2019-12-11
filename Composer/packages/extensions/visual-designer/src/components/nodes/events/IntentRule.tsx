@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import formatMessage from 'format-message';
 
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { RuleCard } from '../templates/RuleCard';
+
+import buildEventRenderer from './buildEventRenderer';
 
 // Generate the title displayed in the graph
 // If a custom title has been specified, use this
@@ -21,8 +22,6 @@ function renderTitle(data): string {
   }
 }
 
-export const IntentRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
-  return <RuleCard id={id} data={data} label={renderTitle(data)} focused={focused} onEvent={onEvent} />;
-};
+export const IntentRule: FunctionComponent<NodeProps> = buildEventRenderer(renderTitle);
 
 IntentRule.defaultProps = defaultNodeProps;
