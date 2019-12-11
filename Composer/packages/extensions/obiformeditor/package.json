@@ -1,6 +1,5 @@
 {
   "name": "@bfc/obiformeditor",
-  "license": "MIT",
   "version": "1.0.0",
   "description": "obieditortest React component",
   "engines": {
@@ -62,7 +61,7 @@
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "autoprefixer": "^9.5.1",
-    "botbuilder-expression-parser": "^4.5.11",
+    "botframework-expressions": "4.7.0-preview.93464",
     "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",

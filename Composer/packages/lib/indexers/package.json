@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@bfcomposer/bf-lu": "1.0.9",
-    "botbuilder-expression-parser": "^4.5.11",
     "botbuilder-lg": "4.7.0-preview.93464",
+    "botframework-expressions": "4.7.0-preview.93464",
     "lodash": "^4.17.15"
   }
 }

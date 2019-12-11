@@ -12,6 +12,7 @@ export interface FormContext
   dialogOptions: { value: string; label: string }[];
   dialogId?: string;
   isRoot: boolean;
+  formErrors: any;
 }
 
 interface EnumOption {

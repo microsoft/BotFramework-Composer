@@ -58,11 +58,16 @@ export interface LuFile {
   diagnostics: Diagnostic[];
   [key: string]: any;
 }
+export interface CodeRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
 
 export interface LgTemplate {
   name: string;
   body: string;
   parameters: string[];
+  range: CodeRange;
 }
 
 export interface LgFile {
