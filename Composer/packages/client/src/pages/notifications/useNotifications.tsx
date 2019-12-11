@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import { lgIndexer } from '@bfc/indexers';
+import { createSingleMessage } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import { replaceDialogDiagnosticLabel } from '../../utils';
@@ -34,7 +34,7 @@ export default function useNotifications(filter?: string) {
         notifactions.push({
           type: 'lu',
           location,
-          message: diagnostic.text,
+          message: createSingleMessage(diagnostic),
           severity: 'Error',
           diagnostic,
           id: lufile.id,
@@ -48,7 +48,7 @@ export default function useNotifications(filter?: string) {
           type: 'lg',
           severity: DiagnosticSeverity[diagnostic.severity] || '',
           location,
-          message: lgIndexer.createSingleMessage(diagnostic),
+          message: createSingleMessage(diagnostic),
           diagnostic,
           id: lgFile.id,
         });

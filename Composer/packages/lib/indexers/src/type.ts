@@ -41,21 +41,21 @@ export interface Utterance {
   text: string;
 }
 
-export interface LuDiagnostic {
-  text: string;
+export interface ILUISJsonStructure {
+  intents: Intent[];
+  utterances: Utterance[];
+}
+
+export interface IParsedObject {
+  LUISJsonStructure: ILUISJsonStructure;
 }
 
 export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent: {
-    LUISJsonStructure: {
-      intents: Intent[];
-      utterances: Utterance[];
-    };
-  };
-  diagnostics: LuDiagnostic[];
+  parsedContent?: IParsedObject;
+  diagnostics: Diagnostic[];
   [key: string]: any;
 }
 

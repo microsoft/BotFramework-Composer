@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
-import { LuFile } from '@bfc/indexers';
+import { LuFile, combineMessage } from '@bfc/indexers';
 
 interface InlineLuEditorProps {
   file: LuFile;
@@ -18,11 +18,7 @@ const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
 
   useEffect(() => {
     setLocalContent(file.content || '');
-    const errorMsgText = file.diagnostics
-      .map(item => {
-        return item.text;
-      })
-      .join('\n');
+    const errorMsgText = combineMessage(file.diagnostics);
 
     setLocalErrorMsg(errorMsgText || errorMsg || '');
   }, [file]);

@@ -4,8 +4,16 @@
 import fs from 'fs';
 
 import { getNewDesigner } from '@bfc/shared';
-import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
-import { luIndexer } from '@bfc/indexers/lib/luIndexer';
+import {
+  FileInfo,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  dialogIndexer,
+  lgIndexer,
+  luIndexer,
+  createSingleMessage,
+} from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -548,7 +556,7 @@ export class BotProject {
   private generateErrorMessage = (invalidLuFile: LuFile[]) => {
     return invalidLuFile.reduce((msg, file) => {
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
-        text += `\n ${diagnostic.text}`;
+        text += `\n ${createSingleMessage(diagnostic)}`;
         return text;
       }, `In ${file.id}.lu: `);
       msg += `\n ${fileErrorText} \n`;

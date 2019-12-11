@@ -8,9 +8,9 @@
  */
 
 import { LGParser, LGTemplate } from 'botbuilder-lg';
-import { lgIndexer } from '@bfc/indexers';
+import { lgIndexer, combineMessage } from '@bfc/indexers';
 
-const { check, isValid, combineMessage, parse } = lgIndexer;
+const { check, isValid, parse } = lgIndexer;
 export interface Template {
   name: string;
   parameters?: string[];
