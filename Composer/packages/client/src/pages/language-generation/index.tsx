@@ -10,7 +10,7 @@ import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { lgIndexer, findErrors } from '@bfc/indexers';
+import { findErrors } from '@bfc/indexers';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';

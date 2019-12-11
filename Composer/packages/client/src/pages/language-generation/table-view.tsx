@@ -17,7 +17,7 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { DialogInfo, LgFile } from '@bfc/indexers';
 import { LGTemplate, LGParser } from 'botbuilder-lg';
-import { lgIndexer, findErrors } from '@bfc/indexers';
+import { findErrors } from '@bfc/indexers';
 import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
