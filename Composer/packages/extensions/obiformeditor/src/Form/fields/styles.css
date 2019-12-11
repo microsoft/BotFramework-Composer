@@ -10,6 +10,9 @@
   margin-bottom: 20px;
   white-space: pre-line;
 }
+.BaseFieldInline {
+  display: flex;
+}
 .RootFieldTitle {
   border-bottom: 1px solid #c8c6c4;
   padding: 0 18px;

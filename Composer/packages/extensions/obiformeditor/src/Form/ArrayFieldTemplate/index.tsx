@@ -10,15 +10,17 @@ import ObjectArray from './ObjectArray';
 import IDialogArray from './IDialogArray';
 
 const ArrayFieldTemplate: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
-  if (!props.schema.items) {
+  const { registry, schema } = props;
+
+  if (!schema.items) {
     return null;
   }
 
-  let itemSchema = props.schema.items as any;
+  let itemSchema = schema.items as any;
   const $ref = itemSchema.$ref;
 
   if (!itemSchema.type && $ref) {
-    itemSchema = findSchemaDefinition($ref, props.registry.definitions);
+    itemSchema = findSchemaDefinition($ref, registry.definitions);
   }
 
   switch (itemSchema.type) {

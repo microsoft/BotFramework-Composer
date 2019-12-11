@@ -98,7 +98,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
-    if (!isRoot) {
+    if (!isRoot && fileValid) {
       setEditMode(false);
     }
 

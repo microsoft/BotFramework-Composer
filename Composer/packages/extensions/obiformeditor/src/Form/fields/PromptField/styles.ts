@@ -3,6 +3,7 @@
 
 import { IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
 import { css } from '@emotion/core';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 export const tabs: Partial<IPivotStyles> = {
   root: {
@@ -24,13 +25,19 @@ export const tabsContainer = css`
   border-bottom: 1px solid #c8c6c4;
 `;
 
-export const validationItem = css`
+export const validationItemInput = css`
   display: flex;
   align-items: center;
   padding-left: 10px;
+`;
 
-  & + & {
-    margin-top: 10px;
+export const validationItem = css`
+  ${validationItemInput}
+
+  border-bottom: 1px solid ${NeutralColors.gray30};
+
+  &:first-of-type {
+    border-top: 1px solid ${NeutralColors.gray30};
   }
 `;
 
@@ -79,11 +86,29 @@ export const choiceItemContainer = (align = 'center') => css`
   align-items: ${align};
 `;
 
-export const choiceItemValue = css`
-  width: 180px;
+export const choiceField = css`
+  margin-bottom: 7px;
 `;
 
-export const choiceItemSynonyms = css`
+export const choiceItem = css`
+  border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const choiceItemValue = css`
   flex: 1;
-  margin-left: 20px;
+
+  & + & {
+    margin-left: 20px;
+  }
+`;
+
+export const choiceItemLabel = css`
+  border-bottom: 1px solid ${NeutralColors.gray30};
+  padding-bottom: 7px;
+`;
+
+export const choiceItemValueLabel = css`
+  color: ${NeutralColors.gray130};
+  font-size: 12px;
+  margin-left: 7px;
 `;

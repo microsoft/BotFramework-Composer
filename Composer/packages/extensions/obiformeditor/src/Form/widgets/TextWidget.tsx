@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import React, { useState } from 'react';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { BFDWidgetProps } from '../types';
 
@@ -39,10 +40,13 @@ export function TextWidget(props: ITextWidgetProps) {
     rawErrors,
     hiddenErrMessage,
     onValidate,
+    options = {},
   } = props;
   const { description, examples = [], type, $role } = schema;
-
+  const { hideLabel, transparentBorder } = options;
   let placeholderText = placeholder;
+
+  const [hasFocus, setHasFocus] = useState<boolean>(false);
 
   if (!placeholderText && examples.length > 0) {
     placeholderText = `ex. ${examples.join(', ')}`;
@@ -64,7 +68,7 @@ export function TextWidget(props: ITextWidgetProps) {
 
     return (
       <>
-        <WidgetLabel label={label} description={description} id={id} />
+        {!hideLabel && <WidgetLabel label={label} description={description} id={id} />}
         <SpinButton
           onDecrement={updateValue(-step)}
           onIncrement={updateValue(step)}
@@ -85,9 +89,15 @@ export function TextWidget(props: ITextWidgetProps) {
     id,
     value,
     autoComplete: 'off',
-    onBlur: () => onBlur && onBlur(id, value),
+    onBlur: () => {
+      onBlur && onBlur(id, value);
+      setHasFocus(false);
+    },
     onChange: (_, newValue?: string) => onChange(newValue),
-    onFocus: () => onFocus && onFocus(id, value),
+    onFocus: () => {
+      onFocus && onFocus(id, value);
+      setHasFocus(true);
+    },
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
   };
@@ -96,20 +106,36 @@ export function TextWidget(props: ITextWidgetProps) {
     return (
       <ExpressionWidget
         {...sharedProps}
+        editable={transparentBorder}
         label={label}
         schema={schema}
         formContext={formContext}
         rawErrors={rawErrors}
+        styles={{ root: { margin: 0 } }}
         hiddenErrMessage={hiddenErrMessage}
         onValidate={onValidate}
+        options={options}
       />
     );
   }
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
-      <TextField {...sharedProps} />
+      {!hideLabel && <WidgetLabel label={label} description={description} id={id} />}
+      <TextField
+        styles={{
+          fieldGroup: {
+            borderColor: transparentBorder ? 'transparent' : undefined,
+            transition: 'border-color 0.1s linear',
+            selectors: {
+              ':hover': {
+                borderColor: hasFocus ? undefined : NeutralColors.gray30,
+              },
+            },
+          },
+        }}
+        {...sharedProps}
+      />
     </>
   );
 }

@@ -12,6 +12,7 @@ export interface FormContext
   dialogOptions: { value: string; label: string }[];
   dialogId?: string;
   isRoot: boolean;
+  formErrors: any;
 }
 
 interface EnumOption {
@@ -36,6 +37,8 @@ export interface BFDWidgetProps extends Partial<WidgetProps> {
   options?: {
     label?: string | false;
     enumOptions?: EnumOption[];
+    hideLabel?: boolean;
+    transparentBorder?: boolean;
   };
 }
 
