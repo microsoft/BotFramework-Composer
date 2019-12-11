@@ -22,7 +22,6 @@ export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
   static botRuntimes: { [key: string]: ChildProcess } = {};
-  static readonly DEFAULT_RUNTIME = 'CSharp';
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -58,7 +57,7 @@ export class CSharpBotConnector implements IBotConnector {
     return new Promise((resolve, reject) => {
       const build = spawn('pwsh', ['./Scripts/build_runtime.ps1'], {
         cwd: dir,
-        stdio: ['ignore', 'ignore', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
       buildDebug('building bot runtime: %d', build.pid);
       build.stdout &&

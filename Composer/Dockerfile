@@ -6,6 +6,7 @@
 # before doing yarn install due to yarn workspace symlinking.
 #
 ################
+
 FROM node:12-alpine as build
 
 WORKDIR /src/Composer
@@ -134,18 +135,25 @@ ENV \
 # Add dependencies for disabling invariant mode (set in base image)
 RUN apk add --no-cache icu-libs
 
-# Install .NET Core SDK and .NET Core Runtime
-RUN dotnet_sdk_version=3.1.100 \
-  && dotnet_version=3.1.0 \
-  && wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
-  && dotnet_sha512='517c1dadbc9081e112f75589eb7160ef70183eb3d93fd55800e145b21f4dd6f5fbe19397ee7476aa16493e112ef95b311ff61bb08d9231b30a7ea609806d85ee' \
+# Install .NET Core 2.1
+ENV DOTNET_SDK_VERSION 2.1.607
+
+RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-x64.tar.gz \
+  && dotnet_sha512='61caf6602b8a2aa89769b3e91ddaec963d8ab9f802cd7f6c6da4f02426358712bc2bb0930e7ee3a81d75c7607039543b554cb8ed50e45610655f9e91ed0f2f17' \
   && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
   && mkdir -p /usr/share/dotnet \
-  && tar -C /usr/share/dotnet -oxzf dotnet.tar.gz \
+  && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
   && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-  && rm dotnet.tar.gz \
-  # Trigger first run experience by running arbitrary cmd
-  && dotnet help
+  && rm dotnet.tar.gz
+
+# Install .NET Core SDK 3.0
+ENV DOTNET_SDK_VERSION 3.0.101
+
+RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-x64.tar.gz \
+  && dotnet_sha512='98cc98f58187d208bd388f8c71862ea75e50ca25666e265f40a4e7c28082c2784738172e8ae4af7815057f7c57072cbe4fc03301d01738fc1ed5bb5e4d30a363' \
+  && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
+  && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
+  && rm dotnet.tar.gz
 
 # Enable detection of running in a container
 ENV DOTNET_RUNNING_IN_CONTAINER=true \

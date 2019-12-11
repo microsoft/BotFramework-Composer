@@ -4,6 +4,7 @@ services:
     build: Composer
     ports:
       - "3000:3000"
+      - "3979:3979"
     volumes:
       - ~/Documents/Composer:/Bots
       - ./BotProject:/BotProject
