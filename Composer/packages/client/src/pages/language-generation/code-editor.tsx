@@ -49,11 +49,19 @@ export default function CodeEditor(props: CodeEditorProps) {
     setErrorMsg(text);
   }, [diagnostics]);
 
+  const editorDidMount = useCallback((lgEditor: editor.IStandaloneCodeEditor) => {
+    setLgEditor(lgEditor);
+  }, []);
+
   useEffect(() => {
     if (lgEditor) {
-      lgEditor.revealLine(line);
+      window.requestAnimationFrame(() => {
+        lgEditor.revealLine(line);
+        lgEditor.focus();
+        lgEditor.setPosition({ lineNumber: line, column: 1 });
+      });
     }
-  }, [lgEditor]);
+  }, [line, lgEditor]);
 
   const updateLgTemplate = useMemo(
     () =>
@@ -132,7 +140,7 @@ export default function CodeEditor(props: CodeEditorProps) {
         lineNumbersMinChars: false,
       }}
       hidePlaceholder={inlineMode}
-      editorDidMount={setLgEditor}
+      editorDidMount={editorDidMount}
       value={content}
       errorMsg={errorMsg}
       lgOption={lgOption}

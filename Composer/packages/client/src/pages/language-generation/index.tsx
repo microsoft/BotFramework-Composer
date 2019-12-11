@@ -42,22 +42,14 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
   const [line, setLine] = useState<number>(0);
 
+  const path = props.location ? props.location.pathname : '';
+  const search = props.location ? props.location.search : '';
   const hash = props.location ? props.location.hash : '';
-  const subPath = props['*'];
+  const matched = /^\/language-generation\/(\w+)/.exec(path);
+  const subPath = matched ? matched[1] : '';
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
-
-  useEffect(() => {
-    if (hash) {
-      const match = /line=(\d+)/g.exec(hash);
-      if (match) setLine(+match[1]);
-    }
-  }, [hash]);
-
-  // for now, one bot only have one lg file by default. all dialog share one lg
-  // file.
   const lgFile = lgFiles.length ? lgFiles[0] : null;
-
   const navLinks = useMemo<INavLinkGroup[]>(() => {
     const subLinks = dialogs.reduce<INavLink>((result, file) => {
       const item = {
@@ -96,28 +88,40 @@ const LGPage: React.FC<RouteComponentProps> = props => {
     ];
   }, [dialogs]);
 
+  // locate editor line number
   useEffect(() => {
-    // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
-    if (!isRoot && fileValid) {
-      setEditMode(false);
+    if (hash) {
+      const match = /L(\d+)/g.exec(hash);
+      if (match) setLine(+match[1]);
     }
+  }, [hash]);
 
-    //  fall back to the all-up page if we don't have an active dialog
+  useEffect(() => {
+    //  fall back to the all-up page if we don't have a matched dialog
     if (!isRoot && !activeDialog && dialogs.length) {
       navigateTo('/language-generation');
     }
-  }, [subPath, dialogs]);
 
-  useEffect(() => {
     const errorFiles = lgFiles.filter(file => {
       return lgIndexer.isValid(file.diagnostics) === false;
     });
     const hasError = errorFiles.length !== 0;
     setFileValid(hasError === false);
+
+    const searchParams = new URLSearchParams(search);
+    const editParam = searchParams.get('edit');
+
+    // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
+    if (!isRoot && fileValid) {
+      setEditMode(false);
+    } else if (editParam === 'on') {
+      setEditMode(true);
+    }
+
     if (hasError) {
       setEditMode(true);
     }
-  }, [lgFiles]);
+  }, [subPath, search, lgFiles, dialogs]);
 
   const onSelect = useCallback(id => {
     if (id === '_all') {

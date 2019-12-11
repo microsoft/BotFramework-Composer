@@ -85,10 +85,11 @@ function createSingleMessage(d: Diagnostic): string {
 }
 
 function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    msg += createSingleMessage(d);
-    return msg;
-  }, '');
+  return diagnostics
+    .map(d => {
+      return createSingleMessage(d);
+    })
+    .join('\n');
 }
 
 export const lgIndexer = {
