@@ -10,6 +10,7 @@ export * from './steps/TextInput';
 export * from './steps/BotAsks';
 export * from './steps/UserInput';
 export * from './steps/InvalidPromptBrick';
+export * from './steps/Trigger';
 
 export * from './layout-steps/Foreach';
 export * from './layout-steps/IfCondition';
@@ -28,3 +29,8 @@ export * from './groups/StepGroup';
 export * from './renderers/ElementRenderer';
 export * from './renderers/EventRenderer';
 export * from './renderers/StepRenderer';
+
+export * from './types/NodeEventTypes';
+export * from './types/NodeEventHandler';
+export * from './types/MenuProps';
+export * from './types/NodeProps';

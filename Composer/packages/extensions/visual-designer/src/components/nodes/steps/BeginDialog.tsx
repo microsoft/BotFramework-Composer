@@ -9,7 +9,7 @@ import { NodeEventTypes } from '../types/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { getFriendlyName } from '../utils';
+import { getFriendlyName } from '../../../utils/adaptive-utils';
 
 export class BeginDialog extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;

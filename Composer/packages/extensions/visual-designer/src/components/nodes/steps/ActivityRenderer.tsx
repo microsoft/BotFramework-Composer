@@ -7,7 +7,7 @@ import { NodeEventTypes } from '../types/NodeEventTypes';
 import { getElementColor, ElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { getFriendlyName } from '../utils';
+import { getFriendlyName } from '../../../utils/adaptive-utils';
 import { useLgTemplate } from '../../../utils/hooks';
 
 export const ActivityRenderer: React.FC<NodeProps> = props => {

@@ -8,7 +8,7 @@ import { ObiTypes } from '../../../constants/ObiTypes';
 import { getElementColor, getElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { getFriendlyName } from '../utils';
+import { getFriendlyName } from '../../../utils/adaptive-utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 

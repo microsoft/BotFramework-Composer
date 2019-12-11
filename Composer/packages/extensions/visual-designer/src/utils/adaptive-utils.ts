@@ -4,7 +4,7 @@
 import get from 'lodash/get';
 import { ConceptLabels } from '@bfc/shared';
 
-import { ObiTypes } from '../../constants/ObiTypes';
+import { ObiTypes } from '../constants/ObiTypes';
 
 export function getFriendlyName(data) {
   // use the developer-specified name if it exists...

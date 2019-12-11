@@ -12,13 +12,13 @@ import { NodeProps } from '../types/nodeProps';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { getUserAnswersTitle } from '../utils';
+import { getUserAnswersTitle } from '../../../utils/adaptive-utils';
 
 import { ChoiceInput } from './ChoiceInput';
 
-export const UserInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const UserInput: FC<NodeProps> = ({ id, data, onEvent, onResize, renderers }): JSX.Element => {
   if (data.$type === ObiTypes.ChoiceInputDetail) {
-    return <ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} />;
+    return <ChoiceInput id={id} data={data} onEvent={onEvent} onResize={onResize} renderers={renderers} />;
   }
 
   return (

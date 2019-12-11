@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { seedNewDialog, deepCopyAction } from '@bfc/shared';
 
-import { getFriendlyName } from '../components/nodes/utils';
+import { getFriendlyName } from './adaptive-utils';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;

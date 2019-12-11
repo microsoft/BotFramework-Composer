@@ -13,7 +13,7 @@ import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../types/nodeProps';
-import { getUserAnswersTitle } from '../utils';
+import { getUserAnswersTitle } from '../../../utils/adaptive-utils';
 
 export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const boundary = measureJsonBoundary(data);
