@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 
-import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
+import { mapShortcutToKeyboardCommand, KeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 const KeyNameByModifierAttr = {
   ctrlKey: 'Control',
@@ -17,7 +17,7 @@ const KeyNameByModifierAttr = {
 const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface KeyboardZoneProps {
-  onCommand: (action, e: KeyboardEvent) => object | void;
+  onCommand: (command: KeyboardCommand, e: KeyboardEvent) => object | void;
 }
 
 const isMac = () => {

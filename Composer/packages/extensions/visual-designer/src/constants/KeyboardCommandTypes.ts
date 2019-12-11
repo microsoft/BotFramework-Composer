@@ -118,7 +118,12 @@ const SupportedShortcuts = {
   ...(keyboardOperationEditing ? KeyboardOperationEditingShortcuts : null),
 };
 
-export function mapShortcutToKeyboardCommand(keyCode) {
+export type KeyboardCommand = {
+  area: string;
+  command: string;
+};
+
+export function mapShortcutToKeyboardCommand(keyCode): KeyboardCommand {
   const command = SupportedShortcuts[keyCode];
   const area = findCommandAreaByValue(command);
 
