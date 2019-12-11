@@ -6,6 +6,7 @@ import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-r
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
 
 import { FormContext } from '../types';
 import { EditableField } from '../fields/EditableField';
@@ -25,8 +26,9 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   options?: any;
 }
 
-const getDefaultErrorMessage = () => {
-  return formatMessage.rich('Invalid expression syntax. Refer to the syntax documentation<a>here</a>', {
+const getDefaultErrorMessage = errMessage => {
+  return formatMessage.rich('{errMessage}. Refer to the syntax documentation<a>here</a>', {
+    errMessage,
     a: ({ children }) => (
       <a
         key="a"
@@ -41,39 +43,13 @@ const getDefaultErrorMessage = () => {
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const {
-    rawErrors,
-    formContext,
-    schema,
-    id,
-    label,
-    editable,
-    hiddenErrMessage,
-    onValidate,
-    options = {},
-    ...rest
-  } = props;
-  const { shellApi } = formContext;
+  const { formContext, schema, id, label, editable, hiddenErrMessage, onValidate, options = {}, ...rest } = props;
   const { description } = schema;
   const { hideLabel } = options;
+  const name = props.id?.split('_')[props.id?.split('_').length - 1];
 
-  const onGetErrorMessage = async (value: string): Promise<JSX.Element | string> => {
-    if (!value) {
-      if (hiddenErrMessage) {
-        onValidate && onValidate();
-      }
-      return '';
-    }
-
-    const isValid = await shellApi.validateExpression(value);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let errMessage: string | any[] = '';
-    if (!isValid) {
-      errMessage = getDefaultErrorMessage();
-    } else if (rawErrors && rawErrors.length > 0) {
-      errMessage = rawErrors[0];
-    }
+  const onGetErrorMessage = (): JSX.Element | string => {
+    const errMessage = name && get(formContext, ['formErrors', name], '');
 
     const messageBar = errMessage ? (
       <MessageBar
@@ -83,7 +59,7 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         truncated
         overflowButtonAriaLabel={formatMessage('See more')}
       >
-        {errMessage}
+        {getDefaultErrorMessage(`${label} ${errMessage}`)}
       </MessageBar>
     ) : (
       ''
