@@ -228,6 +228,10 @@ module.exports = function(webpackEnv) {
       // `web` extension prefixes have been added for better support
       // for React Native Web.
       extensions: paths.moduleFileExtensions.map(ext => `.${ext}`),
+      alias: {
+        // Support lsp code editor
+        vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
+      },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
         // guards against forgotten dependencies and such.
@@ -402,7 +406,7 @@ module.exports = function(webpackEnv) {
     plugins: [
       new MonacoWebpackPlugin({
         // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-        languages: ['markdown', 'botbuilderlg', 'json'],
+        languages: ['markdown', 'json'],
       }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(

@@ -116,12 +116,12 @@ Let's get this wired up.
 
     ![](../media/tutorial-weatherbot/07/zipcode-regex-entity.png)
 
-11. Next, let's configure your `prompt for zipcode` to use the entity if LUIS finds it. To do this, open `getWeather` dialog from the left navigtation menu, select `BeginDialog` trigger and scroll to and find the prompt.
+11. Next, let's configure your `prompt for zipcode` to use the entity if LUIS finds it. To do this, open `getWeather` dialog from the left navigation menu, select `BeginDialog` trigger and scroll to and find the prompt.
 
      ![](../media/tutorial-weatherbot/07/back-at-zipcode-prompt.png)
 
 12. Let's insert an action **before** the prompt by clicking on **+**, musing over **Manage Properties** and selecting **Set a property**
-13. Since the prompt itself is trying to set the zipcode in the `user.zipcode`, let's set that proeperty to the `@zipcode` entity. 
+13. Since the prompt itself is trying to set the zipcode in the `user.zipcode`, let's set that property to the `@zipcode` entity. 
 
       Set **Property** to 
 

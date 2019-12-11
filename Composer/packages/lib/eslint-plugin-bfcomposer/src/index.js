@@ -6,7 +6,10 @@ const reduce = require('lodash/reduce');
 const zipObject = require('lodash/zipObject');
 
 const ruleNames = map(fs.readdirSync(path.resolve(__dirname, 'rules')), f => f.replace(/\.js$/, ''));
-const allRules = zipObject(ruleNames, map(ruleNames, r => require(`./rules/${r}`)));
+const allRules = zipObject(
+  ruleNames,
+  map(ruleNames, r => require(`./rules/${r}`))
+);
 
 module.exports = {
   rules: allRules,

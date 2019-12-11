@@ -11,7 +11,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import get from 'lodash/get';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import {
   addNewTrigger,
@@ -31,10 +31,6 @@ import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow } from './styles';
 
-const isValidName = name => {
-  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  return nameRegex.test(name);
-};
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $type, specifiedType } = data;
@@ -184,7 +180,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           )}
           {showIntentDropDown && (
             <Dropdown
-              label={formatMessage('Which intent do you want to handle?')}
+              label={formatMessage('Which intent do you want to handle? (Optional)')}
               options={intentOptions}
               styles={dropdownStyles}
               onChange={onSelectIntent}

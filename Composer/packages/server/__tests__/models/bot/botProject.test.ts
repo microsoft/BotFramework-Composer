@@ -3,7 +3,9 @@
 
 import fs from 'fs';
 
-import { seedNewDialog, DialogInfo } from '@bfc/shared';
+import rimraf from 'rimraf';
+import { seedNewDialog } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -20,9 +22,10 @@ const mockLocationRef: LocationRef = {
   path: Path.join(__dirname, `${botDir}`),
 };
 
-const proj = new BotProject(mockLocationRef);
+let proj: BotProject;
 
 beforeEach(async () => {
+  proj = new BotProject(mockLocationRef);
   await proj.index();
 });
 
@@ -66,7 +69,7 @@ describe('createFromTemplate', () => {
     try {
       fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}/${dialogName}.dialog`));
     } catch (err) {
-      throw new Error(err);
+      // ignore
     }
   });
 
@@ -104,7 +107,7 @@ describe('copyTo', () => {
               fs.unlinkSync(curPath);
             }
           });
-          fs.rmdirSync(path);
+          rimraf.sync(path);
         }
       };
       deleteFolder(copyDir);
@@ -133,11 +136,11 @@ describe('modify non exist files', () => {
 });
 
 describe('lg operation', () => {
-  afterAll(() => {
+  afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
     } catch (err) {
-      throw new Error(err);
+      // ignore
     }
   });
 
@@ -159,7 +162,10 @@ describe('lg operation', () => {
 
   it('should update lg file and update index', async () => {
     const id = 'root';
-    const content = '# hello \n - hello2';
+    let content = '# hello \n - hello';
+    await proj.createLgFile(id, content);
+
+    content = '# hello \n - hello2';
     const lgFiles = await proj.updateLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
@@ -175,6 +181,9 @@ describe('lg operation', () => {
 
   it('should delete lg file and update index', async () => {
     const id = 'root';
+    const content = '# hello \n - hello';
+    await proj.createLgFile(id, content);
+
     const lgFiles = await proj.removeLgFile(id);
     const result = lgFiles.find(f => f.id === id);
 
@@ -186,13 +195,12 @@ describe('lg operation', () => {
 });
 
 describe('lu operation', () => {
-  afterAll(() => {
+  afterEach(() => {
     try {
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated/luis.status.json`));
-      fs.rmdirSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated`));
     } catch (err) {
-      throw new Error(err);
+      // ignore
     }
   });
 
@@ -214,7 +222,10 @@ describe('lu operation', () => {
 
   it('should update lu file and update index', async () => {
     const id = 'root';
-    const content = '## hello \n - hello2';
+    let content = '## hello \n - hello';
+    await proj.createLuFile(id, content);
+    content = '## hello \n - hello2';
+
     const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
@@ -222,21 +233,26 @@ describe('lu operation', () => {
     expect(luFiles.length).toEqual(4);
 
     expect(result).not.toBeUndefined();
-    if (result !== undefined) {
-      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
-      expect(result.content).toEqual(content);
-    }
+    expect(result?.relativePath).toEqual('ComposerDialogs/root/root.lu');
+    expect(result?.content).toEqual(content);
   });
 
-  it('should throw error when lu content is invalid', async () => {
+  it('should update diagnostics when lu content is invalid', async () => {
     const id = 'root';
-    const content = 'hello \n hello3';
+    let content = '## hello \n - hello';
+    await proj.createLuFile(id, content);
 
-    await expect(proj.updateLuFile(id, content)).rejects.toThrow();
+    content = 'hello \n hello3';
+
+    const luFiles = await proj.updateLuFile(id, content);
+    const result = luFiles.find(f => f.id === id);
+    expect(result?.diagnostics?.length).toBeGreaterThan(0);
   });
 
   it('should delete lu file and update index', async () => {
     const id = 'root';
+    const content = '## hello \n - hello2';
+    await proj.createLuFile(id, content);
     const luFiles = await proj.removeLuFile(id);
     const result = luFiles.find(f => f.id === id);
 

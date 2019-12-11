@@ -5,9 +5,9 @@ import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } fro
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { ExpressionEngine } from 'botframework-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -128,7 +128,11 @@ export function getEventTypes(): IDropdownOption[] {
       const labelOverrides = ConceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
+        if (labelOverrides.subtitle) {
+          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
+        } else {
+          name = labelOverrides.title;
+        }
       }
 
       return { key: t, text: name || t };
@@ -144,7 +148,11 @@ export function getActivityTypes(): IDropdownOption[] {
       const labelOverrides = ConceptLabels[t];
 
       if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
+        if (labelOverrides.subtitle) {
+          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
+        } else {
+          name = labelOverrides.title;
+        }
       }
 
       return { key: t, text: name || t };
@@ -280,4 +288,13 @@ export function isExpression(str: string): boolean {
 export function getSelected(focused: string): string {
   if (!focused) return '';
   return focused.split('.')[0];
+}
+
+export function replaceDialogDiagnosticLabel(path?: string): string {
+  if (!path) return '';
+  let list = path.split('#');
+  list = list.map(item => {
+    return ConceptLabels[item]?.title || item;
+  });
+  return list.join(': ');
 }

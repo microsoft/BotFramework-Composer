@@ -4,7 +4,8 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, DialogInfo, BotSchemas, LgFile, LuFile, ProjectTemplate } from '@bfc/shared';
+import { PromptTab, BotSchemas, ProjectTemplate } from '@bfc/shared';
+import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 

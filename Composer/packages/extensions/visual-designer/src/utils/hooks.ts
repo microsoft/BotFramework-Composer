@@ -3,51 +3,39 @@
 
 import { useContext, useState, useEffect, useRef } from 'react';
 import debounce from 'lodash/debounce';
+import { LgTemplateRef } from '@bfc/shared';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
-// matches [bfd<someName>-123456]
-const TEMPLATE_PATTERN = /^\[(bfd.+-\d{6})\]$/;
-
-const getTemplateId = (str?: string): string | null => {
-  if (!str) {
-    return null;
-  }
-
-  const match = TEMPLATE_PATTERN.exec(str);
-
-  if (!match || !match[1]) {
-    return null;
-  }
-
-  return match[1];
-};
-
 export const useLgTemplate = (str?: string, dialogId?: string) => {
-  const { getLgTemplates } = useContext(NodeRendererContext);
+  const { lgFiles } = useContext(NodeRendererContext);
   const [templateText, setTemplateText] = useState('');
   let cancelled = false;
 
   const updateTemplateText = async () => {
-    const templateId = getTemplateId(str);
+    const lgTemplateRef = LgTemplateRef.parse(str || '');
+    const templateId = lgTemplateRef ? lgTemplateRef.name : '';
 
     if (templateId && dialogId) {
       // this is an LG template, go get it's content
-      if (!getLgTemplates || typeof getLgTemplates !== 'function') {
+
+      const lgFile = Array.isArray(lgFiles) ? lgFiles.find(({ id }) => id === 'common') : null;
+
+      if (!lgFile) {
         setTemplateText(str || '');
+        return;
       }
 
-      const templates = getLgTemplates ? await getLgTemplates('common', `${templateId}`) : [];
-      const [template] = templates.filter(template => {
-        return template.Name === templateId;
+      const template = lgFile.templates.find(({ name }) => {
+        return name === templateId;
       });
 
       if (cancelled) {
         return;
       }
 
-      if (template && template.Body) {
-        const [firstLine] = template.Body.split('\n');
+      if (template && template.body) {
+        const [firstLine] = template.body.split('\n');
         setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
       } else {
         setTemplateText('');

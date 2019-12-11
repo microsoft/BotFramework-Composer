@@ -10,7 +10,7 @@
     subtitle = Microsoft Bot Framework
     text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
     image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
-    buttons = {cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    buttons = @{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
 ]
 
 # HeroCardWithMemory(name)
@@ -19,11 +19,11 @@
     subtitle=@{SubText()}
     text=@{DescriptionText()}
     images=@{CardImages()}
-    buttons={cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    buttons=@{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
 ]
 
 # TitleText(name)
-- Hello, {name}
+- Hello, @{name}
 
 # SubText
 - What is your favorite?
@@ -40,10 +40,10 @@
 
 # cardActionTemplate(type, title, value)
 [CardAction
-    Type = {if(type == null, 'imBack', type)}
-    Title = {title}
-    Value = {value}
-    Text = {title}
+    Type = @{if(type == null, 'imBack', type)}
+    Title = @{title}
+    Value = @{value}
+    Text = @{title}
 ]
 
 # ThumbnailCard
@@ -58,7 +58,7 @@
 # SigninCard
 [SigninCard
     text = BotFramework Sign-in Card
-    buttons = {cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')
+    buttons = @{cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')}
 ]
 
 # AnimationCard
@@ -96,7 +96,7 @@
 
 # AdaptiveCard
 [Activity
-    Attachments = {json(adaptivecardjson())}
+    Attachments = @{json(adaptivecardjson())}
 ]
 
 
@@ -112,8 +112,8 @@
 
 # AllCards
 [Activity
-    Attachments = {HeroCard()} | {ThumbnailCard()} | {SigninCard()} | {AnimationCard()} | {VideoCard()} | {AudioCard()} | {AdaptiveCard()}
-    AttachmentLayout = {AttachmentLayoutType()}
+    Attachments = @{HeroCard()} | @{ThumbnailCard()} | @{SigninCard()} | @{AnimationCard()} | @{VideoCard()} | @{AudioCard()} | @{AdaptiveCard()}
+    AttachmentLayout = @{AttachmentLayoutType()}
 ]
 
 
@@ -344,32 +344,32 @@
 -Welcome to Card Samples Bot.
 
 # bfdactivity-159442
--[HeroCard]
+-@{HeroCard()}
 
 # bfdactivity-762914
--[ThumbnailCard]
+-@{ThumbnailCard()}
 
 # bfdactivity-241579
--[SigninCard]
+-@{SigninCard()}
 
 # bfdactivity-901582
--[AnimationCard]
+-@{AnimationCard()}
 
 # bfdactivity-553859
--[VideoCard]
+-@{VideoCard()}
 
 # bfdactivity-190928
--[AudioCard]
+-@{AudioCard()}
 
 # bfdactivity-806895
--[AdaptiveCard]
+-@{AdaptiveCard()}
 
 # bfdactivity-997450
--[AllCards]
+-@{AllCards()}
 
 
 # bfdactivity-167246
-- [HeroCardWithMemory(user.name)]
+- @{HeroCardWithMemory(user.name)}
 
 
 # bfdprompt-735465
