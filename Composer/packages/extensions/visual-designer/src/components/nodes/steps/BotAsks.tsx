@@ -10,12 +10,11 @@ import { DialogGroup } from '@bfc/shared';
 import { NodeEventTypes } from '../types/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../types/nodeProps';
 import { useLgTemplate } from '../../../utils/hooks';
 
-export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
+export const BotAsks: FC<NodeProps> = ({ id, data, onEvent, renderers: { NodeMenu } }): JSX.Element => {
   const templateText = useLgTemplate(data.prompt, data.$designer && data.$designer.id);
 
   return (
@@ -23,7 +22,7 @@ export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
       nodeColors={NodeColors[DialogGroup.RESPONSE]}
       icon={ElementIcon.MessageBot}
       header={formatMessage('Bot Asks')}
-      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      corner={<NodeMenu nodeId={id} onEvent={onEvent} />}
       label={templateText || '<prompt>'}
       onClick={() => {
         onEvent(id, NodeEventTypes.ClickNode);

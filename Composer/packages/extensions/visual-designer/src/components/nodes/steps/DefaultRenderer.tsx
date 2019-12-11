@@ -6,7 +6,6 @@ import React from 'react';
 import { NodeEventTypes } from '../types/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { getElementColor, getElementIcon } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { getFriendlyName } from '../utils';
@@ -134,7 +133,8 @@ const ContentKeyByTypes: {
 export class DefaultRenderer extends React.Component<NodeProps, {}> {
   static defaultProps = defaultNodeProps;
   render() {
-    const { id, data, onEvent } = this.props;
+    const { id, data, onEvent, renderers } = this.props;
+    const { NodeMenu } = renderers;
     let header = getFriendlyName(data),
       label = '';
 
@@ -163,7 +163,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
       <FormCard
         nodeColors={nodeColors}
         header={header}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        corner={<NodeMenu nodeId={id} onEvent={onEvent} />}
         icon={icon}
         label={label}
         onClick={() => {

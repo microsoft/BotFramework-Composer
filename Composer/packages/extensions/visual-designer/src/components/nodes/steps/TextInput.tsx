@@ -11,7 +11,6 @@ import { NodeColors } from '../../../constants/ElementColors';
 import { NodeEventTypes } from '../types/NodeEventTypes';
 import { textInputLayouter } from '../../../layouters/textInputLayouter';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../types/nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
@@ -19,7 +18,7 @@ import { Diamond } from '../templates/Diamond';
 import { Edge } from '../../lib/EdgeComponents';
 import { useLgTemplate } from '../../../utils/hooks';
 
-export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
+export const TextInput: FC<NodeProps> = ({ id, data, onEvent, renderers: { NodeMenu } }): JSX.Element => {
   const layout = textInputLayouter(id);
   const { boundary, nodeMap, edges } = layout;
   const { initPrompt, propertyBox, unrecognizedPrompt, invalidPrompt, diamond1, diamond2 } = nodeMap;
@@ -31,7 +30,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
         <FormCard
           nodeColors={NodeColors[DialogGroup.RESPONSE]}
           header={formatMessage('Text Input')}
-          corner={<NodeMenu id={id} onEvent={onEvent} />}
+          corner={<NodeMenu nodeId={id} onEvent={onEvent} />}
           icon={ElementIcon.MessageBot}
           label={templateText || '<initPrompt>'}
           onClick={() => {

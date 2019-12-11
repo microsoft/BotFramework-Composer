@@ -12,7 +12,6 @@ import { ObiTypes } from '../../../constants/ObiTypes';
 import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 
 import { IconCard } from './IconCard';
 
@@ -20,6 +19,7 @@ export interface RuleCardProps {
   id: string;
   data: any;
   label: string;
+  corner: JSX.Element;
   focused?: boolean;
 
   onEvent: (nodeId: string, eventName: NodeEventTypes, eventData?: any) => any;
@@ -36,7 +36,7 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard: React.FC<RuleCardProps> = ({ id, data, label, onEvent }): JSX.Element => {
+export const RuleCard: React.FC<RuleCardProps> = ({ id, data, label, corner, onEvent }): JSX.Element => {
   const openNode = () => {
     return onEvent(id, NodeEventTypes.ExpandNode);
   };
@@ -110,11 +110,7 @@ export const RuleCard: React.FC<RuleCardProps> = ({ id, data, label, onEvent }):
     <IconCard
       themeColor={EventColor.expanded}
       iconColor={EventColor.iconColor}
-      corner={
-        <div css={{ display: 'flex' }}>
-          <NodeMenu id={id} onEvent={onEvent} />
-        </div>
-      }
+      corner={<div css={{ display: 'flex' }}>{corner}</div>}
       label={label}
       trigger={trigger}
       summary={summary}

@@ -8,7 +8,6 @@ import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../types/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
-import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { getFriendlyName } from '../utils';
@@ -40,13 +39,14 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
   }
 
   render() {
-    const { id, data, onEvent } = this.props;
+    const { id, data, onEvent, renderers } = this.props;
+    const { NodeMenu } = renderers;
     const nodeColors = getElementColor(data.$type);
     return (
       <FormCard
         nodeColors={nodeColors}
         header={getFriendlyName(data) || 'ReplaceDialog'}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        corner={<NodeMenu nodeId={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
           onEvent(id, NodeEventTypes.ClickNode);
