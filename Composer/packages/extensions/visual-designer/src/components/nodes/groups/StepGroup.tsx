@@ -5,18 +5,18 @@
 import { jsx } from '@emotion/core';
 import { useState, useMemo, useEffect, FunctionComponent } from 'react';
 
-import { GraphNode } from '../../models/GraphNode';
-import { areBoundariesEqual } from '../../models/Boundary';
-import { sequentialLayouter } from '../../layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
-import { transformStepGroup } from '../../transformers/transformStepGroup';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { OffsetContainer } from '../lib/OffsetContainer';
-import { StepRenderer } from '../renderers/StepRenderer';
-import { Edge } from '../lib/EdgeComponents';
-import { GraphLayout } from '../../models/GraphLayout';
-import { EdgeMenu } from '../menus/EdgeMenu';
+import { GraphNode } from '../../../models/GraphNode';
+import { areBoundariesEqual } from '../../../models/Boundary';
+import { sequentialLayouter } from '../../../layouters/sequentialLayouter';
+import { ElementInterval, EdgeAddButtonSize } from '../../../constants/ElementSizes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
+import { transformStepGroup } from '../../../transformers/transformStepGroup';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
+import { OffsetContainer } from '../../lib/OffsetContainer';
+import { StepRenderer } from '../../renderers/StepRenderer';
+import { Edge } from '../../lib/EdgeComponents';
+import { GraphLayout } from '../../../models/GraphLayout';
+import { EdgeMenu } from '../../menus/EdgeMenu';
 
 const StepInterval = ElementInterval.y;
 

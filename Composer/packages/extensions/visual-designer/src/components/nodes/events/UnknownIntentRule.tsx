@@ -5,7 +5,7 @@ import React, { FunctionComponent } from 'react';
 import formatMessage from 'format-message';
 
 import { RuleCard } from '../templates/RuleCard';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 // Generate the title displayed in the graph
 // If a custom title has been specified, use this

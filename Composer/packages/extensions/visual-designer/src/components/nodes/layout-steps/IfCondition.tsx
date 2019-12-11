@@ -7,15 +7,15 @@ import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
 import { transformIfCondtion } from '../../../transformers/transformIfCondition';
 import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { GraphNode } from '../../../models/GraphNode';
 import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
-import { StepGroup } from '../../groups';
+import { StepGroup } from '../groups/StepGroup';
 import { Diamond } from '../templates/Diamond';
 import { ElementRenderer } from '../../renderers/ElementRenderer';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 import { NodeMap, BoundaryMap } from './types';
 
@@ -78,7 +78,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
       <OffsetContainer offset={choice.offset}>
         <Diamond
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode, { part: 'Diamond' });
           }}
         />
       </OffsetContainer>

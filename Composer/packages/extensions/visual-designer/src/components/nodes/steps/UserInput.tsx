@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup, PromptTab } from '@bfc/shared';
+import { DialogGroup } from '@bfc/shared';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
+import { NodeProps } from '../types/nodeProps';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
@@ -28,7 +28,7 @@ export const UserInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
       header={getUserAnswersTitle(data._type)}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_INPUT });
+        onEvent(id, NodeEventTypes.ClickNode);
       }}
     />
   );

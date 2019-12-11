@@ -5,10 +5,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { EventRenderer } from '../renderers/EventRenderer';
-import { Boundary } from '../../models/Boundary';
-import { EventNodeSize, EventNodeLayout } from '../../constants/ElementSizes';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
+import { EventRenderer } from '../../renderers/EventRenderer';
+import { Boundary } from '../../../models/Boundary';
+import { EventNodeSize, EventNodeLayout } from '../../../constants/ElementSizes';
 
 const RuleElementHeight = EventNodeSize.height;
 const RuleElementWidth = EventNodeSize.width;

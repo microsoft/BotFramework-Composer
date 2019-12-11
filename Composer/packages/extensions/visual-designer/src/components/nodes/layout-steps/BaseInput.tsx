@@ -7,12 +7,14 @@ import { FC } from 'react';
 import { PromptTab } from '@bfc/shared';
 
 import { baseInputLayouter } from '../../../layouters/baseInputLayouter';
-import { NodeProps } from '../nodeProps';
+import { NodeProps } from '../types/nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { GraphNode } from '../../../models/GraphNode';
 import { transformBaseInput } from '../../../transformers/transformBaseInput';
 import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { NodeEventTypes } from '../types/NodeEventTypes';
+import { NodeEventhandler } from '../types/NodeEventHandler';
 
 const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
@@ -30,6 +32,18 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   const { boundary, nodeMap, edges } = layout;
   const { botAsksNode, userAnswersNode, invalidPromptNode: brickNode } = nodeMap;
 
+  const overrideClickEvent = (tab: PromptTab, onEvent): NodeEventhandler => (
+    nodeId: string,
+    eventName: NodeEventTypes,
+    eventData?: any
+  ) => {
+    if (eventName === NodeEventTypes.ClickNode) {
+      onEvent(nodeId, NodeEventTypes.ClickNode, { part: tab });
+    } else {
+      onEvent(nodeId, eventName, eventData);
+    }
+  };
+
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
@@ -37,7 +51,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           id={botAsksNode.id}
           tab={PromptTab.BOT_ASKS}
           data={botAsksNode.data}
-          onEvent={onEvent}
+          onEvent={overrideClickEvent(PromptTab.BOT_ASKS, onEvent)}
           onResize={onResize}
         />
       </OffsetContainer>
@@ -46,7 +60,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           id={userAnswersNode.id}
           tab={PromptTab.USER_INPUT}
           data={userAnswersNode.data}
-          onEvent={onEvent}
+          onEvent={overrideClickEvent(PromptTab.USER_INPUT, onEvent)}
           onResize={onResize}
         />
       </OffsetContainer>
@@ -55,7 +69,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           id={brickNode.id}
           tab={PromptTab.OTHER}
           data={brickNode.data}
-          onEvent={onEvent}
+          onEvent={overrideClickEvent(PromptTab.OTHER, onEvent)}
           onResize={onResize}
         />
       </OffsetContainer>

@@ -9,13 +9,13 @@ import { transformForeach } from '../../../transformers/transformForeach';
 import { foreachLayouter } from '../../../layouters/foreachLayouter';
 import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
 import { GraphNode } from '../../../models/GraphNode';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
 import { ElementRenderer } from '../../renderers/ElementRenderer';
-import { StepGroup } from '../../groups';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { StepGroup } from '../groups/StepGroup';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 import { NodeMap, BoundaryMap } from './types';
 
@@ -94,7 +94,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
         .filter(x => !!x)
         .map((x, index) => (
           <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
-            <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
+            <LoopIndicator onClick={() => onEvent(id, NodeEventTypes.ClickNode, { part: 'LoopIndicator' })} />
           </OffsetContainer>
         ))}
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}

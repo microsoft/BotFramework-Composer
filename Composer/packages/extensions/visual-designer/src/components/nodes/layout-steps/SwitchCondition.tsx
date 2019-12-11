@@ -5,17 +5,17 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';
 import { GraphNode } from '../../../models/GraphNode';
 import { areBoundariesEqual } from '../../../models/Boundary';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
-import { StepGroup } from '../../groups';
+import { StepGroup } from '../groups/StepGroup';
 import { Diamond } from '../templates/Diamond';
 import { ElementRenderer } from '../../renderers/ElementRenderer';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);
@@ -77,7 +77,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode, { part: 'Diamond' });
           }}
         />
       </OffsetContainer>

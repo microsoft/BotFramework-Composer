@@ -6,16 +6,24 @@ import { jsx } from '@emotion/core';
 import { ConceptLabels } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { ObiFieldNames } from '../../../constants/ObiFieldNames';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { EventColor } from '../../../constants/ElementColors';
 import { normalizeObiStep } from '../../../utils/stepBuilder';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
-import { CardProps } from '../nodeProps';
 
 import { IconCard } from './IconCard';
+
+export interface RuleCardProps {
+  id: string;
+  data: any;
+  label: string;
+  focused?: boolean;
+
+  onEvent: (nodeId: string, eventName: NodeEventTypes, eventData?: any) => any;
+}
 
 const StepsKey = ObiFieldNames.Actions;
 
@@ -28,15 +36,15 @@ const getDirectJumpDialog = data => {
   return step.$type === ObiTypes.BeginDialog ? step.dialog : null;
 };
 
-export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX.Element => {
+export const RuleCard: React.FC<RuleCardProps> = ({ id, data, label, onEvent }): JSX.Element => {
   const openNode = () => {
-    return onEvent(NodeEventTypes.Expand, id);
+    return onEvent(id, NodeEventTypes.ExpandNode);
   };
 
   const openChildDialog = () => {
     const directJumpDialog = getDirectJumpDialog(data);
     if (directJumpDialog) {
-      return onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: directJumpDialog });
+      return onEvent(id, NodeEventTypes.ClickHyperlink, { target: directJumpDialog });
     }
   };
 

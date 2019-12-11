@@ -20,3 +20,7 @@ export * from './events/EventRule';
 export * from './events/IntentRule';
 export * from './events/UnknownIntentRule';
 export * from './events/ConversationUpdateActivityRule';
+
+export * from './groups/CollapsedRuleGroup';
+export * from './groups/RuleGroup';
+export * from './groups/StepGroup';

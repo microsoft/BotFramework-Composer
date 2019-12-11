@@ -8,12 +8,12 @@ import formatMessage from 'format-message';
 import { DialogGroup } from '@bfc/shared';
 
 import { NodeColors } from '../../../constants/ElementColors';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { textInputLayouter } from '../../../layouters/textInputLayouter';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
+import { NodeProps } from '../types/nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Diamond } from '../templates/Diamond';
 import { Edge } from '../../lib/EdgeComponents';
@@ -35,7 +35,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           icon={ElementIcon.MessageBot}
           label={templateText || '<initPrompt>'}
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode);
           }}
         />
       </OffsetContainer>
@@ -46,7 +46,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           icon={ElementIcon.User}
           label={data.property || '<property>'}
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode);
           }}
         />
       </OffsetContainer>
@@ -57,7 +57,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           icon={ElementIcon.MessageBot}
           label={data.unrecognizedPrompt || '<unrecognizedPrompt>'}
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode);
           }}
         />
       </OffsetContainer>
@@ -68,7 +68,7 @@ export const TextInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => 
           icon={ElementIcon.MessageBot}
           label={data.invalidPrompt || '<invalidPrompt>'}
           onClick={() => {
-            onEvent(NodeEventTypes.Focus, { id });
+            onEvent(id, NodeEventTypes.ClickNode);
           }}
         />
       </OffsetContainer>

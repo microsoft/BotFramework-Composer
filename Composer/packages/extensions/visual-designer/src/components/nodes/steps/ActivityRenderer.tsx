@@ -3,11 +3,11 @@
 
 import React from 'react';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { getElementColor, ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { getFriendlyName } from '../utils';
 import { useLgTemplate } from '../../../utils/hooks';
 
@@ -25,7 +25,7 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
       icon={ElementIcon.MessageBot}
       label={templateText}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id });
+        onEvent(id, NodeEventTypes.ClickNode);
       }}
     />
   );

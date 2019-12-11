@@ -5,11 +5,11 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { getFriendlyName } from '../utils';
 
 export class BeginDialog extends React.Component<NodeProps, object> {
@@ -27,7 +27,7 @@ export class BeginDialog extends React.Component<NodeProps, object> {
         }}
         onClick={e => {
           e.stopPropagation();
-          onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
+          onEvent(id, NodeEventTypes.ClickHyperlink, { target: calleeDialog });
         }}
       >
         {calleeDialog}
@@ -45,7 +45,7 @@ export class BeginDialog extends React.Component<NodeProps, object> {
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         label={this.renderCallDialogLink()}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, { id });
+          onEvent(id, NodeEventTypes.ClickNode);
         }}
       />
     );

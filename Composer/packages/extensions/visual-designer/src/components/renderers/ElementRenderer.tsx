@@ -19,7 +19,7 @@ import {
   UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -52,7 +52,11 @@ const nodeBorderDoubleSelectedStyle = css`
   box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
 
-export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, tab }): JSX.Element => {
+export interface ElementRendererProps extends NodeProps {
+  tab?: string;
+}
+
+export const ElementRenderer: FC<ElementRendererProps> = ({ id, data, tab, onEvent, onResize }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab, selectedIds, getNodeIndex } = useContext(EditorContext);
@@ -88,7 +92,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, tab }): JSX.
       `}
       {...declareElementAttributes(selectableId, id)}
     >
-      <ChosenRenderer id={id} data={data} onEvent={onEvent} />
+      <ChosenRenderer id={id} data={data} onEvent={onEvent} onResize={onResize} />
     </div>
   );
 };

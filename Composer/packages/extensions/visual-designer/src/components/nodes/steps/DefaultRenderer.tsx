@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { ObiTypes } from '../../../constants/ObiTypes';
 import { getElementColor, getElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { getFriendlyName } from '../utils';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
@@ -167,7 +167,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
         icon={icon}
         label={label}
         onClick={() => {
-          onEvent(NodeEventTypes.Focus, { id });
+          onEvent(id, NodeEventTypes.ClickNode);
         }}
       />
     );

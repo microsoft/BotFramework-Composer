@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { TriggerSize } from '../../constants/ElementSizes';
+import { TriggerSize } from '../../../constants/ElementSizes';
 
 export const triggerContainerStyle: any = {
   ...TriggerSize,

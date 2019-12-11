@@ -5,14 +5,14 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import formatMessage from 'format-message';
-import { DialogGroup, PromptTab } from '@bfc/shared';
+import { DialogGroup } from '@bfc/shared';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
+import { NodeProps } from '../types/nodeProps';
 import { useLgTemplate } from '../../../utils/hooks';
 
 export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
@@ -26,7 +26,7 @@ export const BotAsks: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       label={templateText || '<prompt>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.BOT_ASKS });
+        onEvent(id, NodeEventTypes.ClickNode);
       }}
     />
   );

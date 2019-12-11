@@ -4,15 +4,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
-import { DialogGroup, PromptTab } from '@bfc/shared';
+import { DialogGroup } from '@bfc/shared';
 
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../types/NodeEventTypes';
 import { NodeColors } from '../../../constants/ElementColors';
 import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
+import { NodeProps } from '../types/nodeProps';
 import { getUserAnswersTitle } from '../utils';
 
 export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
@@ -78,7 +78,7 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
       icon={ElementIcon.User}
       label={data.property || '<property>'}
       onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_INPUT });
+        onEvent(id, NodeEventTypes.ClickNode);
       }}
       styles={{ width: boundary.width, height: boundary.height }}
     >

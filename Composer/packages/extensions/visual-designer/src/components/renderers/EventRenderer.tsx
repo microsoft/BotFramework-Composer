@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { ObiTypes } from '../../constants/ObiTypes';
 import { EditorContext } from '../../store/EditorContext';
 import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRule } from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.OnCondition]: EventRule,

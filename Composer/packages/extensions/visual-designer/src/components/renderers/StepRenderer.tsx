@@ -7,7 +7,7 @@ import { FC, ComponentClass } from 'react';
 
 import { ObiTypes } from '../../constants/ObiTypes';
 import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
 
 import { ElementRenderer } from './ElementRenderer';
 
