@@ -35,7 +35,6 @@ const SECTIONS = {
   Added: ["feat"],
   Fixed: ["fix"],
   Changed: ["refactor", "style"],
-  Documentation: ["docs"],
   Other: []
 };
 const tagToSection = Object.keys(SECTIONS).reduce((acc, section) => {

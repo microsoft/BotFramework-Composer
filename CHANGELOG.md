@@ -38,13 +38,10 @@
 - refactor: convert cypress tests to typescript ([#1630](https://github.com/microsoft/BotFramework-Composer/pull/1630)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - style: update LGTheme ([#1706](https://github.com/microsoft/BotFramework-Composer/pull/1706)) ([@cosmicshuai](https://github.com/cosmicshuai))
 
-#### Documentation
+#### Other
 
 - docs: R7 Doc Release ([#1743](https://github.com/microsoft/BotFramework-Composer/pull/1743)) ([@Kaiqb](https://github.com/Kaiqb))
 - docs: update coveralls badge ([#1621](https://github.com/microsoft/BotFramework-Composer/pull/1621)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
-
-#### Other
-
 - ci: disallow opening pr against stable branch unless a release ([#1740](https://github.com/microsoft/BotFramework-Composer/pull/1740)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - build: add ability to configure runtime path ([#1713](https://github.com/microsoft/BotFramework-Composer/pull/1713)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - build: make docker great again ([#1709](https://github.com/microsoft/BotFramework-Composer/pull/1709)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
