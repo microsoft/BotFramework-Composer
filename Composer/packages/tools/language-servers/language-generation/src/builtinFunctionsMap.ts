@@ -6,7 +6,7 @@
  * Licensed under the MIT License.
  */
 
-import { ReturnType } from 'botbuilder-expression';
+import { ReturnType } from 'botframework-expressions';
 export class FunctionEntity {
   public constructor(params: string[], returntype: ReturnType, introduction: string) {
     this.Params = params;

@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { Global, jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash/merge';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import { appschema, ShellData, ShellApi } from '@bfc/shared';
+import { Diagnostic } from '@bfc/indexers';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';
@@ -32,6 +33,25 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const { data, schemas, memory, dialogs, shellApi } = props;
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
+
+  const formErrors = useMemo(() => {
+    if (props.currentDialog && props.currentDialog.diagnostics) {
+      const currentPath = props.focusPath.replace('#', '');
+      const diagnostics = get(props.currentDialog, 'diagnostics', [] as Diagnostic[]);
+
+      return diagnostics.reduce((errors, d) => {
+        const [dPath, dType, dProp] = d.path?.split('#') || [];
+
+        if (dPath === currentPath && dType === type && dProp) {
+          errors[dProp] = d.message;
+        }
+
+        return errors;
+      }, {});
+    }
+
+    return {};
+  }, [props.currentDialog]);
 
   if (!type) {
     return (
@@ -112,6 +132,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           focusedEvent: props.focusedEvent,
           focusedSteps: props.focusedSteps,
           focusedTab: props.focusedTab,
+          formErrors,
         }}
         idPrefix={props.focusPath}
       >

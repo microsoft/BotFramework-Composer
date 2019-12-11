@@ -22,8 +22,6 @@ interface CodeEditorProps {
   line: number;
 }
 
-// lsp server port should be same with composer/server port.
-const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lg-language-server';
 
 export default function CodeEditor(props: CodeEditorProps) {
@@ -137,7 +135,6 @@ export default function CodeEditor(props: CodeEditorProps) {
       errorMsg={errorMsg}
       lgOption={lgOption}
       languageServer={{
-        port: Number(lspServerPort),
         path: lspServerPath,
       }}
       onChange={_onChange}
