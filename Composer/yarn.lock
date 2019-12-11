@@ -2081,10 +2081,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bfcomposer/bf-lu@1.0.9":
-  version "1.0.9"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.0.9.tgz#fc22a448fbb261bdff25be449e61f73d42c38474"
-  integrity sha1-/CKkSPuyYb3/Jb5EnmH3PULDhHQ=
+"@bfcomposer/bf-lu@1.1.0":
+  version "1.1.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.0.tgz#9e270815e56084d75179dcd738476ae260fe59d1"
+  integrity sha1-nicIFeVghNdRedzXOEdq4mD+WdE=
   dependencies:
     "@microsoft/bf-cli-command" "1.0.0"
     "@oclif/command" "~1.5.19"
@@ -2101,14 +2101,15 @@
     node-fetch "^2.1.2"
     semver "^5.5.1"
     tslib "^1.10.0"
+    uuid "~3.3.3"
 
-"@bfcomposer/lubuild@1.0.12-preview":
-  version "1.0.12-preview"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/lubuild/-/@bfcomposer/lubuild-1.0.12-preview.tgz#403b63e4505db714ab6f194b49a854b429a6c3a3"
-  integrity sha1-QDtj5FBdtxSrbxlLSahUtCmmw6M=
+"@bfcomposer/lubuild@1.1.0-preview":
+  version "1.1.0-preview"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/lubuild/-/@bfcomposer/lubuild-1.1.0-preview.tgz#c0dddd25f3168a92cc7bd5614d0e85b58b940972"
+  integrity sha1-wN3dJfMWipLMe9VhTQ6FtYuUCXI=
   dependencies:
     "@azure/ms-rest-js" "1.7.0"
-    "@bfcomposer/bf-lu" "1.0.9"
+    "@bfcomposer/bf-lu" "1.1.0"
     async-file "^2.0.2"
     await-delay "^1.0.0"
     chalk "^2.4.2"
@@ -16738,7 +16739,7 @@ uuid@^3.0.0, uuid@^3.0.1, uuid@^3.2.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-uuid@^3.3.3:
+uuid@^3.3.3, uuid@~3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
