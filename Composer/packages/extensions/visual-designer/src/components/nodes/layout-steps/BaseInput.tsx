@@ -25,7 +25,7 @@ const calculateNodes = (data, jsonpath: string) => {
   };
 };
 
-export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize, renderers }): JSX.Element => {
   const nodes = calculateNodes(data, id);
   const layout = baseInputLayouter(nodes.botAsksNode, nodes.userAnswersNode, nodes.invalidPromptNode);
 
@@ -53,6 +53,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           data={botAsksNode.data}
           onEvent={overrideClickEvent(PromptTab.BOT_ASKS, onEvent)}
           onResize={onResize}
+          renderers={renderers}
         />
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
@@ -62,6 +63,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           data={userAnswersNode.data}
           onEvent={overrideClickEvent(PromptTab.USER_INPUT, onEvent)}
           onResize={onResize}
+          renderers={renderers}
         />
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
@@ -71,6 +73,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
           data={brickNode.data}
           onEvent={overrideClickEvent(PromptTab.OTHER, onEvent)}
           onResize={onResize}
+          renderers={renderers}
         />
       </OffsetContainer>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}

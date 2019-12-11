@@ -37,7 +37,7 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };
 
-export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
+export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize, renderers }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -71,6 +71,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
           data={conditionNode.data}
           onEvent={onEvent}
           onResize={onResize}
+          renderers={renderers}
         />
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
@@ -91,6 +92,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
             onResize={size => {
               patchBoundary(x.id, size);
             }}
+            renderers={renderers}
           />
         </OffsetContainer>
       ))}
