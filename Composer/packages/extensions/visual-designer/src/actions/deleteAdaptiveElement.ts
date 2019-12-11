@@ -4,12 +4,9 @@
 import { EditorActionTypes } from './types/EditorActionTypes';
 import { EditorAction } from './types/EditorAction';
 
-export default function setFocusState(focusedId: string, focusedTab?: string): EditorAction {
+export default function deleteAdaptiveElement(dataPath: string): EditorAction {
   return {
-    type: EditorActionTypes.Focus,
-    payload: {
-      focusedId,
-      focusedTab,
-    },
+    type: EditorActionTypes.Delete,
+    payload: dataPath,
   };
 }

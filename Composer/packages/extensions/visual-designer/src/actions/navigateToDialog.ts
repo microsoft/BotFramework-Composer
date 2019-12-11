@@ -4,12 +4,9 @@
 import { EditorActionTypes } from './types/EditorActionTypes';
 import { EditorAction } from './types/EditorAction';
 
-export default function setFocusState(focusedId: string, focusedTab?: string): EditorAction {
+export default function navigateToDialog(targetDialogName: string): EditorAction {
   return {
-    type: EditorActionTypes.Focus,
-    payload: {
-      focusedId,
-      focusedTab,
-    },
+    type: EditorActionTypes.Navigation,
+    payload: targetDialogName,
   };
 }

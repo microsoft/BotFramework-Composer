@@ -4,12 +4,17 @@
 import { EditorActionTypes } from './types/EditorActionTypes';
 import { EditorAction } from './types/EditorAction';
 
-export default function setFocusState(focusedId: string, focusedTab?: string): EditorAction {
+export function insertAdaptiveElementByType(
+  targetArrayPath: string,
+  targetArrayIndex: number,
+  $type: string
+): EditorAction {
   return {
-    type: EditorActionTypes.Focus,
+    type: EditorActionTypes.Insert,
     payload: {
-      focusedId,
-      focusedTab,
+      targetArrayPath,
+      targetArrayIndex,
+      $type,
     },
   };
 }
