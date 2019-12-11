@@ -6,10 +6,10 @@ import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
 
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { EditorContext } from '../../store/EditorContext';
+import deleteAdaptiveElement from '../../actions/deleteAdaptiveElement';
 
 import { IconMenu } from './IconMenu';
 
@@ -27,7 +27,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
       iconProps: {
         iconName: 'Cancel',
       },
-      onClick: () => onEvent(NodeEventTypes.Delete, { id }),
+      onClick: () => deleteAdaptiveElement(id),
     },
   ];
   const { selectedIds } = useContext(EditorContext);

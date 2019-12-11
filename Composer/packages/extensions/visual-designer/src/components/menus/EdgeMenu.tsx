@@ -21,7 +21,7 @@ import { IconMenu } from './IconMenu';
 
 interface EdgeMenuProps {
   id: string;
-  onClick: (item: string | null) => void;
+  onClick: ($type: string) => void;
 }
 
 const buildEdgeMenuItemsFromClipboardContext = (
@@ -41,7 +41,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.$type : null),
+    (e, item) => item && onClick(item.$type),
     filter
   );
 
