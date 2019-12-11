@@ -79,7 +79,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         css={{ zIndex: 100 }}
       >
-        <renderers.EdgeMenu nodeArrayId={id} nodeArrayIndex={0} />
+        <renderers.EdgeMenu nodeArrayId={id} nodeArrayIndex={0} onEvent={onEvent} />
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
@@ -91,7 +91,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
               }}
               css={{ zIndex: 100 }}
             >
-              <renderers.EdgeMenu nodeArrayId={id} nodeArrayIndex={idx + 1} />
+              <renderers.EdgeMenu nodeArrayId={id} nodeArrayIndex={idx + 1} onEvent={onEvent} />
             </OffsetContainer>
           ))
         : null}
