@@ -13,7 +13,7 @@ import { NodeEventTypes } from '../types/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { ElementRenderer } from '../renderers/ElementRenderer';
 import { StepGroup } from '../groups/StepGroup';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 

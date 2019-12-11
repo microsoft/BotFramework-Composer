@@ -24,3 +24,7 @@ export * from './events/ConversationUpdateActivityRule';
 export * from './groups/CollapsedRuleGroup';
 export * from './groups/RuleGroup';
 export * from './groups/StepGroup';
+
+export * from './renderers/ElementRenderer';
+export * from './renderers/EventRenderer';
+export * from './renderers/StepRenderer';

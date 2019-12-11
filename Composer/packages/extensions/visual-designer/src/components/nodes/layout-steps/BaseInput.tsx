@@ -12,7 +12,7 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { GraphNode } from '../../../models/GraphNode';
 import { transformBaseInput } from '../../../transformers/transformBaseInput';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { ElementRenderer } from '../renderers/ElementRenderer';
 import { NodeEventTypes } from '../types/NodeEventTypes';
 import { NodeEventhandler } from '../types/NodeEventHandler';
 

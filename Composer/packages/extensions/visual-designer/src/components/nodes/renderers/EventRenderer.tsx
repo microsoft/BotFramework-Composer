@@ -6,10 +6,10 @@ import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { EditorContext } from '../../store/EditorContext';
-import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRule } from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
+import { ObiTypes } from '../../../constants/ObiTypes';
+import { EditorContext } from '../../../store/EditorContext';
+import { IntentRule, ConversationUpdateActivityRule, EventRule, UnknownIntentRule } from '../index';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.OnCondition]: EventRule,

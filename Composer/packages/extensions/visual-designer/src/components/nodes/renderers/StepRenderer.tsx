@@ -5,9 +5,9 @@
 import { jsx } from '@emotion/core';
 import { FC, ComponentClass } from 'react';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
+import { ObiTypes } from '../../../constants/ObiTypes';
+import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../index';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 import { ElementRenderer } from './ElementRenderer';
 

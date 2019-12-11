@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { EventRenderer } from '../../renderers/EventRenderer';
+import { EventRenderer } from '../renderers/EventRenderer';
 import { Boundary } from '../../../models/Boundary';
 import { EventNodeSize, EventNodeLayout } from '../../../constants/ElementSizes';
 

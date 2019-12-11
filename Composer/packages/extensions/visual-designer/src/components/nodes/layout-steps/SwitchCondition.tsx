@@ -14,7 +14,7 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../groups/StepGroup';
 import { Diamond } from '../templates/Diamond';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { ElementRenderer } from '../renderers/ElementRenderer';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 const calculateNodeMap = (path, data) => {

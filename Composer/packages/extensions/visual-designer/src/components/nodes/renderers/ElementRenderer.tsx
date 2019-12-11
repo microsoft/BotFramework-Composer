@@ -6,9 +6,9 @@ import { jsx, css } from '@emotion/core';
 import { FC, ComponentClass, useContext } from 'react';
 import classnames from 'classnames';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { AttrNames } from '../../constants/ElementAttributes';
-import { EditorContext } from '../../store/EditorContext';
+import { ObiTypes } from '../../../constants/ObiTypes';
+import { AttrNames } from '../../../constants/ElementAttributes';
+import { EditorContext } from '../../../store/EditorContext';
 import {
   DefaultRenderer,
   BeginDialog,
@@ -18,8 +18,8 @@ import {
   BotAsks,
   UserInput,
   InvalidPromptBrick,
-} from '../nodes/index';
-import { NodeProps, defaultNodeProps } from '../nodes/types/nodeProps';
+} from '../index';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,

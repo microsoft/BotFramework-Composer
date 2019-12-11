@@ -13,7 +13,7 @@ import { NodeEventTypes } from '../types/NodeEventTypes';
 import { transformStepGroup } from '../../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { OffsetContainer } from '../../lib/OffsetContainer';
-import { StepRenderer } from '../../renderers/StepRenderer';
+import { StepRenderer } from '../renderers/StepRenderer';
 import { Edge } from '../../lib/EdgeComponents';
 import { GraphLayout } from '../../../models/GraphLayout';
 import { EdgeMenu } from '../../menus/EdgeMenu';
