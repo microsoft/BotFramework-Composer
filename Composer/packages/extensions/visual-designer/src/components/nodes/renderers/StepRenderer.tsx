@@ -30,7 +30,7 @@ function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> 
   return renderer;
 }
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, renderers }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   return (
@@ -41,6 +41,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
       onResize={size => {
         onResize(size, 'node');
       }}
+      renderers={renderers}
     />
   );
 };

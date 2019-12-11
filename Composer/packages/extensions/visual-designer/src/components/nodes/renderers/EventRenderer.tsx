@@ -28,7 +28,7 @@ const nodeBorderStyle = css`
   outline: 2px solid grey;
 `;
 
-export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, renderers }): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
 
   const { focusedId, focusedEvent } = useContext(EditorContext);
@@ -51,6 +51,7 @@ export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): J
         onResize={size => {
           onResize(size, 'node');
         }}
+        renderers={renderers}
       />
     </div>
   );

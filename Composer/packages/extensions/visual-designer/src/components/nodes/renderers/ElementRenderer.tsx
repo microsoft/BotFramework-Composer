@@ -56,7 +56,14 @@ export interface ElementRendererProps extends NodeProps {
   tab?: string;
 }
 
-export const ElementRenderer: FC<ElementRendererProps> = ({ id, data, tab, onEvent, onResize }): JSX.Element => {
+export const ElementRenderer: FC<ElementRendererProps> = ({
+  id,
+  data,
+  tab,
+  onEvent,
+  onResize,
+  renderers,
+}): JSX.Element => {
   const ChosenRenderer = chooseRendererByType(data.$type);
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab, selectedIds, getNodeIndex } = useContext(EditorContext);
@@ -92,7 +99,7 @@ export const ElementRenderer: FC<ElementRendererProps> = ({ id, data, tab, onEve
       `}
       {...declareElementAttributes(selectableId, id)}
     >
-      <ChosenRenderer id={id} data={data} onEvent={onEvent} onResize={onResize} />
+      <ChosenRenderer id={id} data={data} onEvent={onEvent} onResize={onResize} renderers={renderers} />
     </div>
   );
 };
