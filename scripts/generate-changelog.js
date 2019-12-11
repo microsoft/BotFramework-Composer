@@ -112,9 +112,11 @@ const formatChangeLog = groups => {
   let output = `### ${date}`;
 
   for (const section in SECTIONS) {
-    output += `\n\n#### ${section}\n\n`;
+    if (groups[section] && groups[section].length > 0) {
+      output += `\n\n#### ${section}\n\n`;
 
-    output += groups[section].map(c => `- ${c}`).join("\n");
+      output += groups[section].map(c => `- ${c}`).join("\n");
+    }
   }
 
   // Uncategorized
