@@ -9,12 +9,12 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, Diagnostic, combineMessage } from '@bfc/indexers';
+import { lgIndexer, Diagnostic, combineMessage, findErrors } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check, isValid } = lgIndexer;
+const { check } = lgIndexer;
 
 interface CodeEditorProps {
   file: LgFile;
@@ -44,7 +44,7 @@ export default function CodeEditor(props: CodeEditorProps) {
   }, [fileId, template]);
 
   useEffect(() => {
-    const isInvalid = !isValid(diagnostics);
+    const isInvalid = findErrors(diagnostics).length > 0;
     const text = isInvalid ? combineMessage(diagnostics) : '';
     setErrorMsg(text);
   }, [diagnostics]);

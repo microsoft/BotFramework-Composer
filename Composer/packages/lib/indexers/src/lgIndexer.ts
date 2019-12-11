@@ -50,10 +50,6 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
-function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
-}
-
 function index(files: FileInfo[]): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
@@ -78,5 +74,4 @@ export const lgIndexer = {
   index,
   parse,
   check,
-  isValid,
 };

@@ -10,7 +10,7 @@ import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { LGTemplate } from 'botbuilder-lg';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { lgIndexer } from '@bfc/indexers';
+import { lgIndexer, findErrors } from '@bfc/indexers';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
@@ -35,9 +35,7 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LGPage: React.FC<RouteComponentProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(
-    lgFiles.filter(file => lgIndexer.isValid(file.diagnostics) === false).length > 0
-  );
+  const [editMode, setEditMode] = useState(lgFiles.filter(file => findErrors(file.diagnostics).length > 0).length > 0);
   const [fileValid, setFileValid] = useState(true);
   const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
   const [line, setLine] = useState<number>(0);
@@ -110,7 +108,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     const errorFiles = lgFiles.filter(file => {
-      return lgIndexer.isValid(file.diagnostics) === false;
+      return findErrors(file.diagnostics).length > 0;
     });
     const hasError = errorFiles.length !== 0;
     setFileValid(hasError === false);

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic } from '../diagnostic';
+import { Diagnostic, DiagnosticSeverity } from '../diagnostic';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -18,4 +18,8 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
     msg += createSingleMessage(d);
     return msg;
   }, '');
+}
+
+export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
+  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
 }

@@ -5,11 +5,17 @@ import { parser } from '@bfcomposer/bf-lu/lib/parser';
 
 import { FileInfo, LuFile, IParsedObject } from './type';
 import { getBaseName } from './utils/help';
-import { Diagnostic, Position, Range } from './diagnostic';
+import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
 
 function convertLuDiagnostic(d: any, source: string): Diagnostic {
-  const result = new Diagnostic(d.Message, source, d.Severity);
+  const severityMap = {
+    ERROR: DiagnosticSeverity.Error,
+    WARNING: DiagnosticSeverity.Warning,
+    INFORMATION: DiagnosticSeverity.Information,
+    HINT: DiagnosticSeverity.Hint,
+  };
+  const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
   const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
   const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);

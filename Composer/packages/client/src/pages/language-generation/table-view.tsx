@@ -17,7 +17,7 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { DialogInfo, LgFile } from '@bfc/indexers';
 import { LGTemplate, LGParser } from 'botbuilder-lg';
-import { lgIndexer } from '@bfc/indexers';
+import { lgIndexer, findErrors } from '@bfc/indexers';
 import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
@@ -44,7 +44,7 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
-    if (lgIndexer.isValid(lgFile.diagnostics) === true) {
+    if (findErrors(lgFile.diagnostics).length > 0) {
       const resource = LGParser.parse(lgFile.content, '');
       allTemplates = get(resource, 'templates', []);
     }

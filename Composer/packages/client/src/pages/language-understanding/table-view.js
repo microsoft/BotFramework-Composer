@@ -16,10 +16,10 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { findErrors, combineMessage } from '@bfc/indexers';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
-import * as luUtil from '../../utils/luUtil';
 import { navigateTo } from '../../utils';
 
 import { formCell, luPhraseCell } from './styles';
@@ -72,7 +72,7 @@ export default function TableView(props) {
 
   function checkErrors(files) {
     return files.filter(file => {
-      return luUtil.isValid(file.diagnostics) === false;
+      return findErrors(file.diagnostics).length > 0;
     });
   }
 
@@ -90,7 +90,7 @@ export default function TableView(props) {
 
   async function showErrors(files) {
     for (const file of files) {
-      const errorMsg = luUtil.combineMessage(file.diagnostics);
+      const errorMsg = combineMessage(file.diagnostics);
       const errorTitle = formatMessage('There was a problem parsing {fileId}.lu file.', { fileId: file.id });
       const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
         style: DialogStyle.Console,
