@@ -8,7 +8,7 @@ import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
 import { ToolBar } from '../../src/components/ToolBar/index';
 describe('<Home/>', () => {
-  it('should render the recent bot list', () => {
+  it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'a', path: 'path1', storageId: 'default' },
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'b', path: 'path2', storageId: 'default' },
@@ -24,7 +24,7 @@ describe('<Home/>', () => {
     expect(onSelectionChanged.mock.results[0].value).toBe('path1');
   });
 
-  it('should open new bot modal', () => {
+  it('should dispatch onClick event when clicked on an ExampleList', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
