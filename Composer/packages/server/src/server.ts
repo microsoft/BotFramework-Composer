@@ -37,7 +37,7 @@ const CS_POLICIES = [
 function useAppInsights() {
   const key = process.env.SharedAppInsightsKey;
   if (key) {
-    const configAppInsights = require('commands/configAppInsights') as SelfHostCommands.SetupTelemetry;
+    const configAppInsights = require('commands/configAppInsights').default as SelfHostCommands.SetupTelemetry;
     if (configAppInsights) {
       configAppInsights(key);
     }
