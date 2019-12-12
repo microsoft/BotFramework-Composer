@@ -5,38 +5,13 @@ import { Request, Response } from 'express';
 import { ProjectController } from '@src/controllers/project';
 import rimraf from 'rimraf';
 import { Path } from '../../src/utility/path';
-let mockRes: Response;
 
-// offer a bot project ref which to open
-jest.mock('../../src/store/store', () => {
-  const data = {
-    storageConnections: [
-      {
-        id: 'default',
-        name: 'This PC',
-        type: 'LocalDisk',
-        path: '.',
-        defaultPath: '.',
-      },
-    ],
-    recentBotProjects: [] as any[],
-  } as any;
-  return {
-    Store: {
-      get: (key: string) => {
-        return data[key];
-      },
-      set: (key: string, value: any) => {
-        data[key] = value;
-      },
-    },
-  };
-});
+let mockRes: Response;
 
 beforeEach(() => {
   mockRes = {
     status: jest.fn().mockReturnThis(),
-    json: jest.fn(),
+    json: jest.fn().mockReturnThis(),
     send: jest.fn().mockReturnThis(),
   } as any;
 });
@@ -79,7 +54,7 @@ describe('getProject', () => {
   });
 });
 
-describe('should open bot', () => {
+describe('open bot operation', () => {
   it('should fail to open an unexisting bot', async () => {
     const mockReq = {
       params: {},
@@ -250,6 +225,7 @@ describe('lu operation', () => {
     const mockReq = {
       params: { luFileId: 'c' },
       query: {},
+      body: {},
     } as Request;
     await ProjectController.removeLuFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
