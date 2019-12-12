@@ -4,6 +4,7 @@
 import { Request, Response } from 'express';
 import { ProjectController } from '@src/controllers/project';
 import rimraf from 'rimraf';
+
 import { Path } from '../../src/utility/path';
 
 let mockRes: Response;
