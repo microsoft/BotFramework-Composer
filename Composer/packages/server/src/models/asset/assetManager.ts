@@ -108,7 +108,6 @@ export class AssetManager {
   public async getProjectTemplates(): Promise<ProjectTemplate[]> {
     const path = this.assetsLibraryPath + '/projects';
     const output: ProjectTemplate[] = [];
-
     if (await this.templateStorage.exists(path)) {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
@@ -158,12 +157,6 @@ export class AssetManager {
   }
 
   public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
-    if (this.projectTemplates.length === 0) {
-      await this.getProjectTemplates();
-    }
-    if (this.runtimeTemplates.length === 0) {
-      await this.getProjectRuntime();
-    }
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
@@ -187,7 +180,6 @@ export class AssetManager {
 
     // copy runtime code files
     await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
-
     return ref;
   }
 }

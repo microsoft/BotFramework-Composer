@@ -106,19 +106,6 @@ describe('should get recent projects', () => {
   });
 });
 
-describe('create a Empty Bot project', () => {
-  it('should create a new project', async () => {
-    const newBotDir = Path.resolve(__dirname, '../mocks/samplebots/');
-    const name = 'newBot';
-    const mockReq = {
-      params: {},
-      query: {},
-      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: '' },
-    } as Request;
-    await ProjectController.createProject(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-});
 //current opened bot is the newBot
 describe('dialog operation', () => {
   it('should update dialog', async () => {
