@@ -19,8 +19,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const { check, isValid, combineMessage } = lgIndexer;
 
-// lsp server port should be same with composer/server port.
-const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
@@ -158,7 +156,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         errorMsg={errorMsg}
         lgOption={lgOption}
         languageServer={{
-          port: Number(lspServerPort),
           path: lspServerPath,
         }}
         onChange={_onChange}

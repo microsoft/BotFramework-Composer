@@ -126,6 +126,14 @@ export const ShellApi: React.FC = () => {
     return true;
   }
 
+  function getLgTemplates({ id }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    if (id === undefined) throw new Error('must have a file id');
+    const file = lgFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lg file ${id} not found`);
+    return file.templates;
+  }
+
   /**
    *
    * @param {
@@ -292,6 +300,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
+    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
