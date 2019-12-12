@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
@@ -34,6 +33,16 @@ const CS_POLICIES = [
   "manifest-src 'self';",
   'upgrade-insecure-requests;',
 ];
+
+function useAppInsights() {
+  const key = process.env.SharedAppInsightsKey;
+  if (key) {
+    const configAppInsights = require('commands/configAppInsights') as SelfHostCommands.SetupTelemetry;
+    if (configAppInsights) {
+      configAppInsights(key);
+    }
+  }
+}
 
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -93,6 +102,8 @@ app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
 app.get('*', function(req, res) {
   res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
 });
+
+useAppInsights();
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
