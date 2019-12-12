@@ -19,7 +19,7 @@ if ((dotnet --version) -lt 3) {
 	Break
 }
 
-# Init user secret id
+# This command need dotnet core more than 3.0
 dotnet user-secrets init
 
 dotnet build

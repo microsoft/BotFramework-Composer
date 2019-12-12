@@ -150,11 +150,8 @@ export class CSharpBotConnector implements IBotConnector {
 
   connect = async (_: BotEnvironments, __: string) => {
     const originPort = urlParse(this.endpoint).port;
-    const protocol = urlParse(this.endpoint).protocol;
-    const hostName = urlParse(this.endpoint).hostname;
-    const port = await getPort({ host: hostName, port: parseInt(originPort || '3979') });
-    this.endpoint = `${protocol}//${hostName}:${port}`;
-    return Promise.resolve(`${this.endpoint}/api/messages`);
+    const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
+    return Promise.resolve(`http://localhost:${port}/api/messages`);
   };
 
   sync = async (config: DialogSetting) => {

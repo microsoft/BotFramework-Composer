@@ -22,7 +22,7 @@ interface Settings {
 const envSettings: { [env: string]: Settings } = {
   development: {
     botAdminEndpoint: botEndpoint,
-    botEndpoint: 'http://localhost:3979', //botEndpoint,
+    botEndpoint: botEndpoint,
     assetsLibray: Path.resolve('./assets'),
     botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
     runtimeFolder,
