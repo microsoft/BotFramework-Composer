@@ -44,7 +44,7 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
-    if (!isValid(lgFile.diagnostics)) {
+    if (isValid(lgFile.diagnostics)) {
       const resource = LGParser.parse(lgFile.content, '');
       allTemplates = get(resource, 'templates', []);
     }
