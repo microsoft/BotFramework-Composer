@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createSingleMessage, combineMessage, findErrors } from '../../src/utils';
+import { createSingleMessage, combineMessage, findErrors, isValid } from '../../src/utils';
 
 const diagnostics = [
   {
@@ -40,15 +40,19 @@ const diagnostics1 = [
 ];
 
 describe('diagnostic utils', () => {
-  it('should get corrent base name', () => {
+  it('should check if the diagnostics have errors', () => {
+    expect(isValid(diagnostics)).toBe(false);
+    expect(isValid(diagnostics1)).toBe(true);
+  });
+  it('should find all errors', () => {
     expect(findErrors(diagnostics).length).toBe(3);
     expect(findErrors(diagnostics1).length).toBe(0);
   });
-  it('should get corrent base name', () => {
+  it('should create a message for single diagnostic', () => {
     expect(createSingleMessage(diagnostics[0])).toContain('line 15:0 - line 15:1');
     expect(createSingleMessage(diagnostics[1])).toContain('line 0:0 - line 0:1');
   });
-  it('should get corrent base name', () => {
+  it('should combine all error message', () => {
     const result = combineMessage(diagnostics);
     expect(result).toContain('line 15:0 - line 15:1');
     expect(result).toContain('line 0:0 - line 0:1');

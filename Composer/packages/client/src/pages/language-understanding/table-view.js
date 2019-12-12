@@ -16,7 +16,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { findErrors, combineMessage } from '@bfc/indexers';
+import { isValid, combineMessage } from '@bfc/indexers';
 
 import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
@@ -71,9 +71,7 @@ export default function TableView(props) {
   }, [luFiles, activeDialog]);
 
   function checkErrors(files) {
-    return files.filter(file => {
-      return findErrors(file.diagnostics).length > 0;
-    });
+    return files.filter(file => !isValid(file.diagnostics));
   }
 
   function getIntentState(file) {

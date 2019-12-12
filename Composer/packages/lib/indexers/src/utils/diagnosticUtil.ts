@@ -23,3 +23,7 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
 export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
   return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
 }
+
+export function isValid(diagnostics: Diagnostic[]): boolean {
+  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
+}

@@ -8,7 +8,7 @@ import { LuEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { combineMessage, findErrors } from '@bfc/indexers';
+import { combineMessage, isValid } from '@bfc/indexers';
 
 export default function CodeEditor(props) {
   const { file, errorMsg: updateErrorMsg } = props;
@@ -33,7 +33,7 @@ export default function CodeEditor(props) {
 
   // diagnostics is load file error,
   // updateErrorMsg is save file return error.
-  const isInvalid = findErrors(file.diagnostics).length > 0 || updateErrorMsg !== '';
+  const isInvalid = !isValid(file.diagnostics) || updateErrorMsg !== '';
   const errorMsg = isInvalid ? `${combineMessage(diagnostics)}\n ${updateErrorMsg}` : '';
 
   return (

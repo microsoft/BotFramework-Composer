@@ -8,7 +8,7 @@
  */
 
 import { LGParser, LGTemplate } from 'botbuilder-lg';
-import { lgIndexer, combineMessage, findErrors } from '@bfc/indexers';
+import { lgIndexer, combineMessage, isValid } from '@bfc/indexers';
 
 const { check, parse } = lgIndexer;
 export interface Template {
@@ -20,7 +20,7 @@ export interface Template {
 export function checkLgContent(content: string, id: string) {
   // check lg content, make up error message
   const diagnostics = check(content, id);
-  if (findErrors(diagnostics).length > 0) {
+  if (!isValid(diagnostics)) {
     const errorMsg = combineMessage(diagnostics);
     throw new Error(errorMsg);
   }
