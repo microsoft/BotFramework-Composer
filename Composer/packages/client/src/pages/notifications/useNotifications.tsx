@@ -8,6 +8,7 @@ import { StoreContext } from '../../store';
 import { replaceDialogDiagnosticLabel } from '../../utils';
 
 import { INotification, DiagnosticSeverity } from './types';
+import { getReferredFiles } from './../../utils/luUtil';
 
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
@@ -28,7 +29,7 @@ export default function useNotifications(filter?: string) {
         });
       });
     });
-    luFiles.forEach(lufile => {
+    getReferredFiles(luFiles, dialogs).forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
         const location = `${lufile.id}.lu`;
         notifactions.push({
