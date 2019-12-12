@@ -36,7 +36,7 @@ jest.mock('../../src/store/store', () => {
 beforeEach(() => {
   mockRes = {
     status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
+    json: jest.fn(),
     send: jest.fn().mockReturnThis(),
   } as any;
 });
@@ -93,11 +93,11 @@ describe('should open bot', () => {
     });
   });
 
-  it('should open bot2', async () => {
+  it('should open bot1', async () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot2') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -253,5 +253,50 @@ describe('lu operation', () => {
     } as Request;
     await ProjectController.removeLuFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('setting operation', () => {
+  const defaultSetting = {
+    MicrosoftAppId: '',
+    luis: {
+      name: 'test',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      environment: 'composer',
+    },
+    qna: {
+      knowledgebaseid: '',
+      endpointkey: '',
+      hostname: '',
+    },
+  };
+  beforeAll(async () => {
+    const mockReq = {
+      params: {},
+      query: {},
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/saveAsBot') },
+    } as Request;
+    await ProjectController.openProject(mockReq, mockRes);
+  });
+  it('should update default setting', async () => {
+    const mockReq = {
+      params: {},
+      query: {},
+      body: { settings: defaultSetting },
+    } as Request;
+
+    await ProjectController.updateDefaultSlotEnvSettings(mockReq, mockRes);
+    expect(mockRes.send).toHaveBeenCalledWith('ok');
+  });
+
+  it('should update default setting', async () => {
+    const mockReq = {
+      params: {},
+      query: { obfuscate: false },
+    } as Request;
+
+    await ProjectController.getDefaultSlotEnvSettings(mockReq, mockRes);
+    expect(mockRes.send).toHaveBeenCalledWith(defaultSetting);
   });
 });
