@@ -157,6 +157,12 @@ export class AssetManager {
   }
 
   public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
+    if (this.projectTemplates.length === 0) {
+      await this.getProjectTemplates();
+    }
+    if (this.runtimeTemplates.length === 0) {
+      await this.getProjectRuntime();
+    }
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
