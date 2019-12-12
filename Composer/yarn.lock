@@ -2081,10 +2081,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bfcomposer/bf-lu@1.1.0":
-  version "1.1.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.0.tgz#9e270815e56084d75179dcd738476ae260fe59d1"
-  integrity sha1-nicIFeVghNdRedzXOEdq4mD+WdE=
+"@bfcomposer/bf-lu@1.1.2":
+  version "1.1.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.2.tgz#0dcd1efa9f839daefe9e2dfc6f4b6db731b701a3"
+  integrity sha1-Dc0e+p+Dna7+ni38b0tttzG3AaM=
   dependencies:
     "@microsoft/bf-cli-command" "1.0.0"
     "@oclif/command" "~1.5.19"
@@ -2103,13 +2103,13 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
-"@bfcomposer/lubuild@1.1.0-preview":
-  version "1.1.0-preview"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/lubuild/-/@bfcomposer/lubuild-1.1.0-preview.tgz#c0dddd25f3168a92cc7bd5614d0e85b58b940972"
-  integrity sha1-wN3dJfMWipLMe9VhTQ6FtYuUCXI=
+"@bfcomposer/lubuild@1.1.2-preview":
+  version "1.1.2-preview"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/lubuild/-/@bfcomposer/lubuild-1.1.2-preview.tgz#426e5e109c2d6752745dc363aa824a653a3757f7"
+  integrity sha1-Qm5eEJwtZ1J0XcNjqoJKZTo3V/c=
   dependencies:
     "@azure/ms-rest-js" "1.7.0"
-    "@bfcomposer/bf-lu" "1.1.0"
+    "@bfcomposer/bf-lu" "1.1.2"
     async-file "^2.0.2"
     await-delay "^1.0.0"
     chalk "^2.4.2"
