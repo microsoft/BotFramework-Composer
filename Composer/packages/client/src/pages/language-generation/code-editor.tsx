@@ -2,40 +2,52 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useState, useEffect, useMemo, Suspense, useContext, useCallback } from 'react';
 import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, Diagnostic } from '@bfc/indexers';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const { check, isValid, combineMessage } = lgIndexer;
-
-interface CodeEditorProps {
-  file: LgFile;
-  template: lgUtil.Template | null;
-  line: number;
-}
 
 // lsp server port should be same with composer/server port.
 const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lg-language-server';
 
-export default function CodeEditor(props: CodeEditorProps) {
-  const { actions } = useContext(StoreContext);
-  const { file, template, line } = props;
+interface CodeEditorProps extends RouteComponentProps<{}> {
+  fileId?: string;
+}
+
+const CodeEditor: React.FC<CodeEditorProps> = props => {
+  const { actions, state } = useContext(StoreContext);
+  const { lgFiles } = state;
+  const file = lgFiles.length ? lgFiles[0] : null;
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
-  const fileId = file && file.id;
+  const search = props.location ? props.location.search : '';
+  const templateMatched = /^\?t=([-\w]+)/.exec(search);
+  const template =
+    templateMatched && file ? file.templates.find(({ name }) => name === decodeURIComponent(templateMatched[1])) : null;
+
+  const hash = props.location ? props.location.hash : '';
+  const lineMatched = /L(\d+)/g.exec(hash);
+  const line = lineMatched ? +lineMatched[1] : undefined;
+
+  const fileId = (file && file.id) || 'common';
   const inlineMode = !!template;
+
   useEffect(() => {
     // reset content with file.content's initial state
     if (isEmpty(file)) return;
@@ -54,7 +66,7 @@ export default function CodeEditor(props: CodeEditorProps) {
   }, []);
 
   useEffect(() => {
-    if (lgEditor) {
+    if (lgEditor && line !== undefined) {
       window.requestAnimationFrame(() => {
         lgEditor.revealLine(line);
         lgEditor.focus();
@@ -86,7 +98,7 @@ export default function CodeEditor(props: CodeEditorProps) {
     () =>
       debounce((content: string) => {
         const payload = {
-          id: file.id,
+          id: fileId,
           content,
         };
         actions.updateLgFile(payload);
@@ -129,26 +141,30 @@ export default function CodeEditor(props: CodeEditorProps) {
   };
 
   return (
-    <LgEditor
-      // typescript is unable to reconcile 'on' as part of a union type
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      options={{
-        lineNumbers: 'on',
-        minimap: 'on',
-        lineDecorationsWidth: undefined,
-        lineNumbersMinChars: false,
-      }}
-      hidePlaceholder={inlineMode}
-      editorDidMount={editorDidMount}
-      value={content}
-      errorMsg={errorMsg}
-      lgOption={lgOption}
-      languageServer={{
-        port: Number(lspServerPort),
-        path: lspServerPath,
-      }}
-      onChange={_onChange}
-    />
+    <Suspense fallback={<LoadingSpinner />}>
+      <LgEditor
+        // typescript is unable to reconcile 'on' as part of a union type
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        options={{
+          lineNumbers: 'on',
+          minimap: 'on',
+          lineDecorationsWidth: undefined,
+          lineNumbersMinChars: false,
+        }}
+        hidePlaceholder={inlineMode}
+        editorDidMount={editorDidMount}
+        value={content}
+        errorMsg={errorMsg}
+        lgOption={lgOption}
+        languageServer={{
+          port: Number(lspServerPort),
+          path: lspServerPath,
+        }}
+        onChange={_onChange}
+      />
+    </Suspense>
   );
-}
+};
+
+export default CodeEditor;

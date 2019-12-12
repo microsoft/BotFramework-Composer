@@ -3,16 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense, useCallback } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import { LGTemplate } from 'botbuilder-lg';
-import { RouteComponentProps } from '@reach/router';
-import get from 'lodash/get';
-import { lgIndexer } from '@bfc/indexers';
+import { RouteComponentProps, Router } from '@reach/router';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -23,7 +19,6 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
-import * as lgUtil from '../../utils/lgUtil';
 
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';
@@ -35,21 +30,12 @@ const CodeEditor = React.lazy(() => import('./code-editor'));
 const LGPage: React.FC<RouteComponentProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(
-    lgFiles.filter(file => lgIndexer.isValid(file.diagnostics) === false).length > 0
-  );
-  const [fileValid, setFileValid] = useState(true);
-  const [inlineTemplate, setInlineTemplate] = useState<null | lgUtil.Template>(null);
-  const [line, setLine] = useState<number>(0);
-
   const path = props.location ? props.location.pathname : '';
-  const search = props.location ? props.location.search : '';
-  const hash = props.location ? props.location.hash : '';
-  const matched = /^\/language-generation\/(\w+)/.exec(path);
-  const subPath = matched ? matched[1] : '';
-  const isRoot = subPath === '';
-  const activeDialog = dialogs.find(item => item.id === subPath);
+  const matched = /^\/language-generation\/(\w+)/.exec(path.replace(/edit(\/)*$/, ''));
+  const fileId = matched ? matched[1] : '';
+  const edit = /edit(\/)*$/.test(path);
   const lgFile = lgFiles.length ? lgFiles[0] : null;
+
   const navLinks = useMemo<INavLinkGroup[]>(() => {
     const subLinks = dialogs.reduce<INavLink>((result, file) => {
       const item = {
@@ -88,63 +74,25 @@ const LGPage: React.FC<RouteComponentProps> = props => {
     ];
   }, [dialogs]);
 
-  // locate editor line number
-  useEffect(() => {
-    if (hash) {
-      const match = /L(\d+)/g.exec(hash);
-      if (match) setLine(+match[1]);
-    }
-  }, [hash]);
+  const onSelect = useCallback(
+    id => {
+      let url = '/language-generation';
+      if (id !== '_all') url += `/${id}`;
+      if (edit) url += `/edit`;
+      navigateTo(url);
+    },
+    [edit]
+  );
 
-  useEffect(() => {
-    //  fall back to the all-up page if we don't have a matched dialog
-    if (!isRoot && !activeDialog && dialogs.length) {
-      navigateTo('/language-generation');
-    }
-
-    const errorFiles = lgFiles.filter(file => {
-      return lgIndexer.isValid(file.diagnostics) === false;
-    });
-    const hasError = errorFiles.length !== 0;
-    setFileValid(hasError === false);
-
-    const searchParams = new URLSearchParams(search);
-    const editParam = searchParams.get('edit');
-
-    // dialog lg templates is part of commong.lg. By restricting edit in root view, user would aware that the changes they made may affect other dialogs.
-    if (!isRoot && fileValid) {
-      setEditMode(false);
-    } else if (editParam === 'on') {
-      setEditMode(true);
-    }
-
-    if (hasError) {
-      setEditMode(true);
-    }
-  }, [subPath, search, lgFiles, dialogs]);
-
-  const onSelect = useCallback(id => {
-    if (id === '_all') {
-      navigateTo('/language-generation');
-    } else {
-      navigateTo(`language-generation/${id}`);
-    }
-  }, []);
-
-  const onToggleEditMode = useCallback(() => {
-    setEditMode(!editMode);
-    setInlineTemplate(null);
-  }, [editMode]);
-
-  const onTableViewClickEdit = useCallback((template: LGTemplate) => {
-    setInlineTemplate({
-      name: get(template, 'name', ''),
-      parameters: get(template, 'parameters'),
-      body: get(template, 'body', ''),
-    });
-    navigateTo(`/language-generation`);
-    setEditMode(true);
-  }, []);
+  const onToggleEditMode = useCallback(
+    (_e, checked) => {
+      let url = '/language-generation';
+      if (fileId) url += `/${fileId}`;
+      if (checked) url += `/edit`;
+      navigateTo(url);
+    },
+    [fileId]
+  );
 
   const toolbarItems = [
     {
@@ -166,8 +114,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
             defaultChecked={false}
-            checked={editMode}
-            disabled={(!isRoot && editMode === false) || (fileValid === false && editMode === true)}
+            checked={!!edit}
             onChange={onToggleEditMode}
           />
         </div>
@@ -196,7 +143,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
                     backgroundColor: 'transparent',
                   },
                 }}
-                selectedKey={isRoot ? '_all' : subPath}
+                selectedKey={fileId ? fileId : '_all'}
                 groups={navLinks}
                 className={'dialogNavTree'}
                 data-testid={'dialogNavTree'}
@@ -206,13 +153,12 @@ const LGPage: React.FC<RouteComponentProps> = props => {
         </div>
         {lgFile && (
           <div css={contentEditor}>
-            {editMode ? (
-              <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor file={lgFile} template={inlineTemplate} line={line} />
-              </Suspense>
-            ) : (
-              <TableView file={lgFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
-            )}
+            <Router primary={false} component={Fragment}>
+              <CodeEditor path="edit" />
+              <CodeEditor path=":fileId/edit" />
+              <TableView path=":fileId" />
+              <TableView path="/" />
+            </Router>
           </div>
         )}
       </div>

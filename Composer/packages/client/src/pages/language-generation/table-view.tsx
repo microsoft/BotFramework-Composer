@@ -15,34 +15,35 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { DialogInfo, LgFile } from '@bfc/indexers';
 import { LGTemplate, LGParser } from 'botbuilder-lg';
 import { lgIndexer } from '@bfc/indexers';
 import get from 'lodash/get';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-interface TableViewProps {
-  file: LgFile;
-  activeDialog?: DialogInfo;
-  onClickEdit: (template: LGTemplate) => void;
+interface TableViewProps extends RouteComponentProps<{}> {
+  fileId?: string;
 }
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs } = state;
-  const { file: lgFile, activeDialog, onClickEdit } = props;
+  const { dialogs, lgFiles } = state;
+  const { fileId } = props;
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState<LGTemplate[]>([]);
   const listRef = useRef(null);
 
+  const lgFile = lgFiles[0];
+  const activeDialog = dialogs.find(({ id }) => id === fileId);
+
   useEffect(() => {
-    if (isEmpty(lgFile)) return;
+    if (!lgFile || isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
     if (lgIndexer.isValid(lgFile.diagnostics) === true) {
       const resource = LGParser.parse(lgFile.content, '');
@@ -61,6 +62,14 @@ const TableView: React.FC<TableViewProps> = props => {
       setTemplates(dialogsTemplates);
     }
   }, [lgFile, activeDialog]);
+
+  const onClickEdit = useCallback((template: LGTemplate) => {
+    const { name } = template;
+    let url = '/language-generation';
+    if (fileId) url += `/${fileId}`;
+    url += `/edit?t=${encodeURIComponent(name)}`;
+    navigateTo(url);
+  }, []);
 
   const onCreateNewTemplate = useCallback(() => {
     const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
