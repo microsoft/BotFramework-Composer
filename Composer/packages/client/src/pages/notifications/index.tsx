@@ -13,6 +13,7 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification } from './types';
 import { navigateTo } from './../../utils';
+import { convertDialogDiagnosticToUrl } from './../../utils/navigation';
 
 const navigations = {
   lg: (item: INotification) => {
@@ -24,25 +25,7 @@ const navigations = {
   dialog: (item: INotification) => {
     //path is like main.trigers[0].actions[0]
     //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-    const path = item.diagnostic.path;
-    let uri = `/dialogs/${item.id}`;
-    if (path) {
-      const matchTriggers = /triggers\[(\d+)\]/g.exec(path);
-      const actionPatt = /actions\[(\d+)\]/g;
-      let temp: RegExpExecArray | null = null;
-      let matchActions: RegExpExecArray | null = null;
-      while ((temp = actionPatt.exec(path)) !== null) {
-        matchActions = temp;
-      }
-      const trigger = matchTriggers ? `triggers[${+matchTriggers[1]}]` : '';
-      const action = matchActions ? `actions[${+matchActions[1]}]` : '';
-      if (trigger) {
-        uri += `?selected=${trigger}`;
-        if (action) {
-          uri += `&focused=${trigger}.${action}`;
-        }
-      }
-    }
+    const uri = convertDialogDiagnosticToUrl(item.diagnostic);
     navigateTo(uri);
   },
 };

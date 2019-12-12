@@ -6,7 +6,7 @@ The  Composer is designed to be a hosted web app. Currently, you need to run the
 For overview of Composer, read [Introduction to Bot Framewrok Composer](./introduction-to-Composer)  
 
 
-## Deplyment options 
+## Deployment options 
 You have two options  running Composer locally:
 * [Using a docker image](#Using-a-docker-image) 
 * [Build and run Composer locally](#Build-the-Composer-project-and-run-it-locally)
@@ -18,7 +18,7 @@ git clone https://github.com/microsoft/BotFramework-Composer.git
 
 ## Using a docker image 
 
-Using a docker image provides a more controled and isolated environment for you to run the composer.  There are two docker images, one for the Composer web app - where you create assests in the form of dialogs and lanage files, and one for the bot project runtime - which loads assets created by Composer and execuite them.
+Using a docker image provides a more controled and isolated environment for you to run the composer.  There are two docker images, one for the Composer web app - where you create assets in the form of dialogs and language files, and one for the bot project runtime - which loads assets created by Composer and execute them.
 
 ### Prerequisites
 - [docker-compose](https://docs.docker.com/compose/install/)
@@ -123,7 +123,7 @@ This will build and run a Bot Framework bot that the Composer connects to.
 The bot is running on http://localhost:3979/api/messages.
 
 
-Alternativally you can use one command to start both the Composer and the Bot runtime
+Alternatively you can use one command to start both the Composer and the Bot runtime
 ```
 yarn startall
 ```

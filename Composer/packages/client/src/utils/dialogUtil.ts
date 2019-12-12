@@ -5,7 +5,7 @@ import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } fro
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'botbuilder-expression-parser';
+import { ExpressionEngine } from 'botframework-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogInfo } from '@bfc/indexers';
 
@@ -292,7 +292,7 @@ export function getSelected(focused: string): string {
 
 export function replaceDialogDiagnosticLabel(path?: string): string {
   if (!path) return '';
-  let list = path.split(': ');
+  let list = path.split('#');
   list = list.map(item => {
     return ConceptLabels[item]?.title || item;
   });

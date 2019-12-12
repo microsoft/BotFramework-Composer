@@ -9,7 +9,6 @@ import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
 
-const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lg-language-server';
 
 const LG_HELP =
@@ -45,7 +44,6 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const [errorMsg, setErrorMsg] = useState('');
   const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
@@ -53,10 +51,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const updateLgTemplate = useMemo(
     () =>
       debounce((body: string) => {
-        formContext.shellApi
-          .updateLgTemplate(lgFileId, lgName, body)
-          .then(() => setErrorMsg(''))
-          .catch(error => setErrorMsg(error));
+        formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
       }, 500),
     [lgName, lgFileId]
   );
@@ -68,8 +63,25 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     })) || {
     name: lgName,
     body: getInitialTemplate(name, value),
+    range: {
+      startLineNumber: 0,
+      endLineNumber: 2,
+    },
   };
 
+  const diagnostic =
+    lgFile &&
+    lgFile.diagnostics.find(d => {
+      return (
+        d.range &&
+        d.range.start.line >= template.range.startLineNumber &&
+        d.range.end.line <= template.range.endLineNumber
+      );
+    });
+
+  const errorMsg = diagnostic
+    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+    : '';
   const [localValue, setLocalValue] = useState(template.body);
   const lgOption = {
     inline: true,
@@ -107,7 +119,6 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
-        port: Number(lspServerPort),
         path: lspServerPath,
       }}
       height={height}

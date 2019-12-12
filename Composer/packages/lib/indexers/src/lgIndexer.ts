@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { LGParser, StaticChecker, Diagnostic as LGDiagnostic, ImportResolver } from 'botbuilder-lg';
+import get from 'lodash/get';
 
 import { FileInfo, LgFile, LgTemplate } from './type';
 import { getBaseName } from './utils/help';
@@ -40,6 +41,10 @@ function parse(content: string, id?: string): LgTemplate[] {
       name: t.name,
       body: t.body,
       parameters: t.parameters,
+      range: {
+        startLineNumber: get(t, 'parseTree.start.line', 0),
+        endLineNumber: get(t, 'parseTree.stop.line', 0),
+      },
     };
   });
   return templates;
@@ -58,14 +63,11 @@ function index(files: FileInfo[]): LgFile[] {
       const id = getBaseName(name, '.lg');
       const diagnostics = check(content, id);
       let templates: LgTemplate[] = [];
-      if (isValid(diagnostics)) {
-        try {
-          templates = parse(file.content, '');
-        } catch (err) {
-          diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-        }
+      try {
+        templates = parse(file.content, '');
+      } catch (err) {
+        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-
       lgFiles.push({ id, relativePath, content, templates, diagnostics });
     }
   }
