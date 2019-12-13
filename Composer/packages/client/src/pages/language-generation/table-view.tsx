@@ -20,7 +20,7 @@ import get from 'lodash/get';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
-import * as lgUtil from '../../utils/lgUtil';
+import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
@@ -38,7 +38,7 @@ const TableView: React.FC<TableViewProps> = props => {
   const [templates, setTemplates] = useState<LGTemplate[]>([]);
   const listRef = useRef(null);
 
-  const lgFile = lgFiles[0];
+  const lgFile = lgFiles.length ? lgFiles[0] : null;
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const TableView: React.FC<TableViewProps> = props => {
   );
 
   const onCreateNewTemplate = useCallback(() => {
-    const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
+    const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
       file: lgFile,
       template: {
@@ -103,7 +103,7 @@ const TableView: React.FC<TableViewProps> = props => {
   const onCopyTemplate = useCallback(
     index => {
       const name = templates[index].name;
-      const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
+      const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
         file: lgFile,
         fromTemplateName: name,

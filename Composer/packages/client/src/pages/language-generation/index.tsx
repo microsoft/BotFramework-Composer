@@ -9,6 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { RouteComponentProps, Router } from '@reach/router';
 
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
 import {
   ContentHeaderStyle,
@@ -19,7 +20,6 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';

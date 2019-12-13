@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
 import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
