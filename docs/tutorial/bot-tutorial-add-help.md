@@ -37,14 +37,14 @@ With even a simple bot, it is a good practice to provide a help command. You'll 
       ![](../media/tutorial-weatherbot/04/help-intent.png)
 
 9. In the left hand explorer, click **+ New Trigger**
-10. In the resulting dialog box, select **Intent**, then choose the new `help` intent. Submit the dialog.
+10. In the resulting dialog box, select **Intent recognized**, then choose the new `help` intent. Click `Submit`.
 
-     ![](../media/tutorial-weatherbot/04/new-trigger.png) 
+     ![](../media/tutorial-weatherbot/04/intent-trigger-help.png) 
 
-11. In the flow editor, click the **+** button at the bottom of the empty flow.
+11. In the flow editor, click the **+** button at the bottom of the empty flow. 
 12. Choose **Dialog management** and then select **Begin a new dialog**
 
-      ![](../media/tutorial-weatherbot/04/help-trigger-flow.png)
+      ![](../media/tutorial-weatherbot/04/begin-new-dialog.png)
 
 13. In the right hand properties panel, select the `help` dialog.
 
@@ -123,7 +123,7 @@ For now, let's add one more global function - a cancel command.
 
 Say `weather` to your bot.  It will ask for a zipcode.
 
-Now say `help`. It'll provide the global help respons.
+Now say `help`. It'll provide the global help response.
 
 Now, say `cancel` - notice, the bot doesn't resume the weather dialog. Instead, it confirms the cancelation, and waits for your next message.
 

@@ -13,6 +13,7 @@
     { "language": "typescript", "autoFix": true },
     { "language": "typescriptreact", "autoFix": true }
   ],
+  "eslint.workingDirectories": ["./Composer"],
   "editor.formatOnSave": true,
   "typescript.tsdk": "./Composer/node_modules/typescript/lib"
 }

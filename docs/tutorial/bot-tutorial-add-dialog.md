@@ -25,7 +25,7 @@ First, we'll set up all the components and make sure they work together. Then, w
     
       `Get the current weather conditions`
 
-3. Click **Next**, and Composer will create the new dialog and open it in the editor.  
+3. Click **Next**, and Composer will create the new dialog and open it in the editor. 
 
    ![](../media/tutorial-weatherbot/02/create-getweather.png)
 
@@ -68,11 +68,14 @@ You can break pieces of your conversation flow into dialogs and can chain them t
 
 6. Click "+ New Trigger" in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select **Intent** from the first dropdown, and then select our freshly created `weather` intent from the second dropdown.
 
-   ![](../media/tutorial-weatherbot/02/weather-trigger.gif)
+   ![](../media/tutorial-weatherbot/02/weather-trigger.png)
 
 7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
-
+   
 8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
+
+![](../media/tutorial-weatherbot/02/begin-dialog-congifure.gif)
+
 
 ## Let's test it out.
 
@@ -83,6 +86,6 @@ You can break pieces of your conversation flow into dialogs and can chain them t
 2. Send the bot a message that says `weather`. The bot should respond with our test message, confirming that our intent was recognized as expected, and the fulfillment action was triggered.
 
    ![](../media/tutorial-weatherbot/02/emulator-weather-draft.png)
-
+   
 ## Next steps
 - [Get weather](./bot-tutorial-get-weather.md)

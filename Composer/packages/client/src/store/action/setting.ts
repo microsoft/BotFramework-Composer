@@ -50,7 +50,7 @@ export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot
   const url = `/projects/opened/settings${suffix}${query}`;
 
   try {
-    const response = await httpClient.get(`/projects/opened/settings${suffix}`);
+    const response = await httpClient.get(url);
     const settings = response.data;
     dispatch({
       type: ActionTypes.GET_ENV_SETTING,

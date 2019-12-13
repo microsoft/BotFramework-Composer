@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-set -e
+function cleanup {
+  kill $SERVER_PID
+}
 
-yarn start &
+yarn start >> e2e.log 2>&1 &
 SERVER_PID=$!
 
-npx cypress run --browser chrome --record --parallel --ci-build-id $BUILD_BUILDNUMBER --group "Azure CI"
-cleanup
-
-function cleanup {
-  kill -9 $SERVER_PID
-}
+npx cypress run
+EXIT_CODE=$?
 
 # kill server process
 trap cleanup EXIT
 
+exit $EXIT_CODE

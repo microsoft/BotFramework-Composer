@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, ReactElement, Suspense } from 'react';
+import React, { useState, ReactElement, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { MicrosoftIRecognizer, LuFile } from '@bfc/shared';
+import { MicrosoftIRecognizer } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 
 import { BaseField } from '../BaseField';
 import { LoadingSpinner } from '../../../LoadingSpinner';
@@ -34,6 +35,18 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const isLuFileSelected = Boolean(
     selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
   );
+
+  //make the inline editor show error message
+  useEffect(() => {
+    if (selectedFile && selectedFile.diagnostics.length > 0) {
+      const msg = selectedFile.diagnostics.reduce((msg: string, diagnostic) => {
+        return (msg += `${diagnostic.text}\n`);
+      }, '');
+      setErrorMsg(msg);
+    } else {
+      setErrorMsg('');
+    }
+  }, [selectedFile]);
 
   const handleChange = (_, option?: IDropdownOption): void => {
     if (option) {
@@ -142,12 +155,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           {() => {
             if (selectedFile && isLuFileSelected) {
               const updateLuFile = (newValue?: string): void => {
-                shellApi
-                  .updateLuFile({ id: selectedFile.id, content: newValue })
-                  .then(() => setErrorMsg(''))
-                  .catch(error => {
-                    setErrorMsg(error);
-                  });
+                shellApi.updateLuFile({ id: selectedFile.id, content: newValue }).catch(setErrorMsg);
               };
 
               return (

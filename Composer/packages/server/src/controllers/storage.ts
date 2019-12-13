@@ -15,10 +15,17 @@ function createStorageConnection(req: Request, res: Response) {
   res.status(200).json(StorageService.getStorageConnections());
 }
 
+function updateCurrentPath(req: Request, res: Response) {
+  res.status(200).json(StorageService.updateCurrentPath(req.body.path, req.body.storageId));
+}
+
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
-  const reqpath = decodeURI(req.params.path);
   try {
+    if (!req.query.path) {
+      throw new Error('path missing from query');
+    }
+    const reqpath = decodeURI(req.query.path);
     if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
@@ -34,4 +41,5 @@ export const StorageController = {
   getStorageConnections,
   createStorageConnection,
   getBlob,
+  updateCurrentPath,
 };

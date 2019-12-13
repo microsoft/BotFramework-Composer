@@ -2,6 +2,9 @@
   "name": "@bfc/obiformeditor",
   "version": "1.0.0",
   "description": "obieditortest React component",
+  "engines": {
+    "node": ">=12"
+  },
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
@@ -18,23 +21,25 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet --ext .ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
   },
   "dependencies": {
     "@bfc/code-editor": "*",
+    "@bfc/indexers": "*",
     "@bfc/shared": "*",
     "@bfcomposer/react-jsonschema-form": "1.6.5",
     "@emotion/core": "^10.0.17",
+    "@types/vscode": "^1.40.0",
     "@uifabric/fluent-theme": "7.1.4",
     "@uifabric/styling": "7.7.1",
     "classnames": "^2.2.6",
     "format-message": "^6.2.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.1",
-    "office-ui-fabric-react": "7.37.1",
+    "office-ui-fabric-react": "7.62.0",
     "react-error-boundary": "^1.2.5"
   },
   "peerDependencies": {
@@ -56,7 +61,7 @@
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "autoprefixer": "^9.5.1",
-    "botbuilder-expression-parser": "^4.5.11",
+    "botframework-expressions": "4.7.0-preview.93464",
     "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",

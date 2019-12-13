@@ -2,6 +2,9 @@
   "name": "@bfc/eslint-plugin-bfcomposer",
   "version": "1.0.0",
   "main": "src/index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "devDependencies": {
     "lodash": "^4.17.15"
   }

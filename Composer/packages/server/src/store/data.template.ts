@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
+import settings from '../settings';
 
 export default {
   storageConnections: [
@@ -9,7 +9,8 @@ export default {
       id: 'default',
       name: 'This PC',
       type: 'LocalDisk',
-      path: path.resolve(__dirname, '../../../../../MyBots'),
+      path: '', // this is used as last accessed path, if it is invalid, use defaultPath
+      defaultPath: settings.botsFolder,
     },
   ],
   recentBotProjects: [],

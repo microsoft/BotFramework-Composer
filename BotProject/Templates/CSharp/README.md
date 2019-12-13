@@ -1,5 +1,5 @@
 ## Bot Project
-Bot project is the launcher project for the bots written in declarative form (JSON), using the Composer, for the Bot Framework SDK. They follow pattern defined in [OBI](https://github.com/Microsoft/botframework-obi) format. 
+Bot project is the launcher project for the bots written in declarative form (JSON), using the Composer, for the Bot Framework SDK.
 
 ## Instructions for setting up the Bot Project runtime
 The Bot Project is a regular Bot Framework SDK V4 project. Before you can launch it from the emulator, you need to make sure you can run the bot. 
