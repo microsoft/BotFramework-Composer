@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
@@ -19,6 +19,7 @@ import {
 } from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 import { Tree } from './../../components/Tree';
 import TableView from './table-view';
@@ -153,12 +154,14 @@ const LGPage: React.FC<RouteComponentProps> = props => {
         </div>
         {lgFile && (
           <div css={contentEditor}>
-            <Router primary={false} component={Fragment}>
-              <CodeEditor path="edit" />
-              <CodeEditor path=":fileId/edit" />
-              <TableView path=":fileId" />
-              <TableView path="/" />
-            </Router>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Router primary={false} component={Fragment}>
+                <CodeEditor path="edit" />
+                <CodeEditor path=":fileId/edit" />
+                <TableView path=":fileId" />
+                <TableView default />
+              </Router>
+            </Suspense>
           </div>
         )}
       </div>

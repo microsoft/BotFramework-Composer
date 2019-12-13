@@ -16,7 +16,6 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { LGTemplate, LGParser } from 'botbuilder-lg';
-import { lgIndexer } from '@bfc/indexers';
 import get from 'lodash/get';
 import { RouteComponentProps } from '@reach/router';
 
@@ -45,10 +44,13 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (!lgFile || isEmpty(lgFile)) return;
     let allTemplates: LGTemplate[] = [];
-    if (lgIndexer.isValid(lgFile.diagnostics) === true) {
+    try {
       const resource = LGParser.parse(lgFile.content, '');
       allTemplates = get(resource, 'templates', []);
+    } catch (err) {
+      // err already be handled in diagnostics
     }
+
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
@@ -63,13 +65,16 @@ const TableView: React.FC<TableViewProps> = props => {
     }
   }, [lgFile, activeDialog]);
 
-  const onClickEdit = useCallback((template: LGTemplate) => {
-    const { name } = template;
-    let url = '/language-generation';
-    if (fileId) url += `/${fileId}`;
-    url += `/edit?t=${encodeURIComponent(name)}`;
-    navigateTo(url);
-  }, []);
+  const onClickEdit = useCallback(
+    (template: LGTemplate) => {
+      const { name } = template;
+      let url = '/language-generation';
+      if (fileId) url += `/${fileId}`;
+      url += `/edit?t=${encodeURIComponent(name)}`;
+      navigateTo(url);
+    },
+    [fileId]
+  );
 
   const onCreateNewTemplate = useCallback(() => {
     const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');

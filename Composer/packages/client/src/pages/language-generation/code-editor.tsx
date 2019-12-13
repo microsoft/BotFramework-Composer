@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useEffect, useMemo, Suspense, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
 import { LgEditor, LGOption } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -15,7 +15,6 @@ import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const { check, isValid, combineMessage } = lgIndexer;
 
@@ -36,8 +35,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const search = props.location ? props.location.search : '';
   const templateMatched = /^\?t=([-\w]+)/.exec(search);
-  const template =
-    templateMatched && file ? file.templates.find(({ name }) => name === decodeURIComponent(templateMatched[1])) : null;
+  const templateId = templateMatched ? decodeURIComponent(templateMatched[1]) : undefined;
+  const template = templateId && file ? file.templates.find(({ name }) => name === templateId) : undefined;
 
   const hash = props.location ? props.location.hash : '';
   const lineMatched = /L(\d+)/g.exec(hash);
@@ -51,11 +50,22 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (isEmpty(file)) return;
     const value = template ? get(template, 'body', '') : get(file, 'content', '');
     setContent(value);
-  }, [fileId, template]);
+  }, [fileId, templateId]);
 
   useEffect(() => {
-    const isInvalid = !isValid(diagnostics);
-    const text = isInvalid ? combineMessage(diagnostics) : '';
+    const currentDiagnostics =
+      inlineMode && template
+        ? diagnostics.filter(d => {
+            return (
+              d.range &&
+              d.range.start.line >= template.range.startLineNumber &&
+              d.range.end.line <= template.range.endLineNumber
+            );
+          })
+        : diagnostics;
+
+    const isInvalid = !isValid(currentDiagnostics);
+    const text = isInvalid ? combineMessage(currentDiagnostics) : '';
     setErrorMsg(text);
   }, [diagnostics]);
 
@@ -135,32 +145,30 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const lgOption: LGOption = {
     inline: inlineMode,
     content: get(file, 'content', ''),
-    template: template ? template : undefined,
+    template,
   };
 
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <LgEditor
-        // typescript is unable to reconcile 'on' as part of a union type
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        options={{
-          lineNumbers: 'on',
-          minimap: 'on',
-          lineDecorationsWidth: undefined,
-          lineNumbersMinChars: false,
-        }}
-        hidePlaceholder={inlineMode}
-        editorDidMount={editorDidMount}
-        value={content}
-        errorMsg={errorMsg}
-        lgOption={lgOption}
-        languageServer={{
-          path: lspServerPath,
-        }}
-        onChange={_onChange}
-      />
-    </Suspense>
+    <LgEditor
+      // typescript is unable to reconcile 'on' as part of a union type
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      options={{
+        lineNumbers: 'on',
+        minimap: 'on',
+        lineDecorationsWidth: undefined,
+        lineNumbersMinChars: false,
+      }}
+      hidePlaceholder={inlineMode}
+      editorDidMount={editorDidMount}
+      value={content}
+      errorMsg={errorMsg}
+      lgOption={lgOption}
+      languageServer={{
+        path: lspServerPath,
+      }}
+      onChange={_onChange}
+    />
   );
 };
 
