@@ -34,25 +34,23 @@ function parse(content: string): Promise<IParsedObject> {
 async function index(files: FileInfo[]): Promise<LuFile[]> {
   if (files.length === 0) return [];
 
-  const luFiles: LuFile[] = [];
+  const filtered = files.filter(file => file.name.endsWith(FileExtensions.Lu));
 
-  await Promise.all(
-    files.map(async file => {
+  const luFiles = await Promise.all(
+    filtered.map(async file => {
       const { name, content, relativePath } = file;
-      if (name.endsWith(FileExtensions.Lu)) {
-        const diagnostics: Diagnostic[] = [];
-        let parsedContent: IParsedObject | undefined;
+      const diagnostics: Diagnostic[] = [];
+      let parsedContent: IParsedObject | undefined;
 
-        try {
-          parsedContent = await parse(file.content);
-        } catch (err) {
-          err.diagnostics.forEach(diagnostic => {
-            diagnostics.push(convertLuDiagnostic(diagnostic, name));
-          });
-        }
-
-        luFiles.push({ diagnostics, id: getBaseName(name), relativePath, content, parsedContent });
+      try {
+        parsedContent = await parse(file.content);
+      } catch (err) {
+        err.diagnostics.forEach(diagnostic => {
+          diagnostics.push(convertLuDiagnostic(diagnostic, name));
+        });
       }
+
+      return { diagnostics, id: getBaseName(name), relativePath, content, parsedContent };
     })
   );
 
