@@ -13,19 +13,22 @@ interface InlineLuEditorProps {
 
 const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   const { file, onSave, errorMsg } = props;
-  const [localContent, setLocalContent] = useState('');
-  const [localErrorMsg, setLocalErrorMsg] = useState('');
+  const { content, diagnostics } = file;
+  const [localContent, setLocalContent] = useState(content || '');
+
+  const errorFromDiagnostics = diagnostics
+    ? diagnostics
+        .map(item => {
+          return item.text;
+        })
+        .join('\n')
+    : '';
+
+  const [localErrorMsg, setLocalErrorMsg] = useState(errorFromDiagnostics);
 
   useEffect(() => {
-    setLocalContent(file.content || '');
-    const errorMsgText = file.diagnostics
-      .map(item => {
-        return item.text;
-      })
-      .join('\n');
-
-    setLocalErrorMsg(errorMsgText || errorMsg || '');
-  }, [file]);
+    setLocalErrorMsg(errorMsg);
+  }, [errorMsg]);
 
   const commitChanges = value => {
     setLocalContent(value);
