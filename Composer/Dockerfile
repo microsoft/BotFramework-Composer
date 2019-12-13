@@ -93,7 +93,7 @@ RUN wget -O PowerShell.Linux.Alpine.$POWERSHELL_VERSION.nupkg https://pwshtool.b
   && apk add --no-cache ncurses-terminfo-base
 
 WORKDIR /app/Composer
-COPY --from=build /src/Composer/yarn.lock .dotnet 
+COPY --from=build /src/Composer/yarn.lock .
 COPY --from=build /src/Composer/package.json .
 COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
