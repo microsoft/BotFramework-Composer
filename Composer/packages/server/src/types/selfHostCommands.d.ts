@@ -51,4 +51,7 @@ declare namespace SelfHostCommands {
   export interface Publish {
     (argv: PublishARGV): Promise<string>;
   }
+  export interface SetupTelemetry {
+    (key: string): void;
+  }
 }
