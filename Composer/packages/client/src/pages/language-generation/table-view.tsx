@@ -15,9 +15,8 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { LGTemplate, LGParser } from 'botbuilder-lg';
-import get from 'lodash/get';
 import { RouteComponentProps } from '@reach/router';
+import { LgTemplate } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
@@ -35,7 +34,7 @@ const TableView: React.FC<TableViewProps> = props => {
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
-  const [templates, setTemplates] = useState<LGTemplate[]>([]);
+  const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
   const lgFile = lgFiles.length ? lgFiles[0] : null;
@@ -43,18 +42,12 @@ const TableView: React.FC<TableViewProps> = props => {
 
   useEffect(() => {
     if (!lgFile || isEmpty(lgFile)) return;
-    let allTemplates: LGTemplate[] = [];
-    try {
-      const resource = LGParser.parse(lgFile.content, '');
-      allTemplates = get(resource, 'templates', []);
-    } catch (err) {
-      // err already be handled in diagnostics
-    }
+    const allTemplates = lgFile.templates;
 
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
-      const dialogsTemplates: LGTemplate[] = [];
+      const dialogsTemplates: LgTemplate[] = [];
       activeDialog.lgTemplates.forEach(item => {
         const template = allTemplates.find(t => t.name === item);
         if (template) {
@@ -66,7 +59,7 @@ const TableView: React.FC<TableViewProps> = props => {
   }, [lgFile, activeDialog]);
 
   const onClickEdit = useCallback(
-    (template: LGTemplate) => {
+    (template: LgTemplate) => {
       const { name } = template;
       let url = '/language-generation';
       if (fileId) url += `/${fileId}`;
