@@ -56,7 +56,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     options: {
       'ui:field': 'CustomObjectField',
     },
-    'ui:order': ['dialog', 'property', '*'],
+    'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
   [SDKTypes.CancelAllDialogs]: {
     eventValue: {
@@ -78,11 +78,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:field': 'StepsField',
     },
   },
-  [SDKTypes.EmitEvent]: {
-    eventValue: {
-      'ui:field': 'CustomObjectField',
-    },
-  },
   [SDKTypes.Foreach]: {
     'ui:order': ['itemsProperty', 'actions', '*'],
     'ui:hidden': ['actions'],
@@ -102,6 +97,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   },
   [SDKTypes.IfCondition]: {
     'ui:hidden': ['actions', 'elseActions', ...globalHidden],
+  },
+  [SDKTypes.SetProperties]: {
+    'ui:hidden': [...globalHidden],
   },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,
@@ -176,9 +174,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['connectionName', '*'],
   },
-  [SDKTypes.QnAMakerDialog]: {
-    'ui:hidden': ['strictFilters'],
-  },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
@@ -187,6 +182,13 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:field': 'CustomObjectField',
     },
     'ui:hidden': [...globalHidden],
+    'ui:order': ['dialog', 'options', 'includeActivity', '*'],
+  },
+  [SDKTypes.RepeatDialog]: {
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:order': ['options', 'includeActivity', '*'],
   },
   [SDKTypes.SwitchCondition]: {
     cases: {

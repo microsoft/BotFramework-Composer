@@ -65,7 +65,14 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
-    types: [SDKTypes.SetProperty, SDKTypes.InitProperty, SDKTypes.DeleteProperty, SDKTypes.EditArray],
+    types: [
+      SDKTypes.SetProperty,
+      SDKTypes.SetProperties,
+      SDKTypes.InitProperty,
+      SDKTypes.DeleteProperty,
+      SDKTypes.DeleteProperties,
+      SDKTypes.EditArray,
+    ],
   },
   [DialogGroup.STEP]: {
     label: 'Dialog management',
