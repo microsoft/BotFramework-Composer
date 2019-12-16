@@ -53,9 +53,10 @@ describe('<StringArray />', () => {
 
   it('can add an item', async () => {
     const onAddClick = jest.fn();
-    const { findByText } = renderDefault({ canAdd: true, onAddClick });
-    const addBtn = await findByText('Add');
-    fireEvent.click(addBtn);
+    const { findByTestId } = renderDefault({ canAdd: true, onAddClick });
+    const input = await findByTestId('string-array-text-input');
+    fireEvent.change(input, { target: { value: 'test' } });
+    fireEvent.keyDown(input, { key: 'Enter', code: 13 });
     expect(onAddClick).toHaveBeenCalled();
   });
 });

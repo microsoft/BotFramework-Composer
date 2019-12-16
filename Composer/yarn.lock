@@ -4388,28 +4388,6 @@ botbuilder-core@4.7.0-preview.93464:
     assert "^1.4.1"
     botframework-schema "4.7.0-preview.93464"
 
-botbuilder-expression-parser@^4.5.11:
-  version "4.5.11"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression-parser/-/botbuilder-expression-parser-4.5.11.tgz#fcce377a2b2c1a2c2345b2c77d9cf4289e171f9f"
-  integrity sha1-/M43eissGiwjRbLHfZz0KJ4XH58=
-  dependencies:
-    antlr4ts "0.5.0-alpha.1"
-    botbuilder-expression "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz"
-
-"botbuilder-expression@https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz":
-  version "4.5.11"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-expression/-/4.5.11.tgz#d15384417be9c0e17d46bf729fe707b81b66ef68"
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
-    antlr4ts "0.5.0-alpha.1"
-    jspath "^0.4.0"
-    lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
-    xml2js "^0.4.19"
-    xmldom "^0.1.27"
-    xpath "0.0.27"
-
 botbuilder-lg@4.7.0-preview.93464:
   version "4.7.0-preview.93464"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.7.0-preview.93464.tgz#504c647aca501998a0bcf89da33612c808334825"
@@ -17138,20 +17116,10 @@ xmlbuilder@^9.0.7, xmlbuilder@~9.0.1:
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
   integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
 
-xmldom@^0.1.27:
-  version "0.1.27"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
-  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
-
 xmlhttprequest@1:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
   integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
-
-xpath@0.0.27:
-  version "0.0.27"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/xpath/-/xpath-0.0.27.tgz#dd3421fbdcc5646ac32c48531b4d7e9d0c2cfa92"
-  integrity sha1-3TQh+9zFZGrDLEhTG01+nQws+pI=
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.1"

@@ -70,6 +70,10 @@ const shellApi: ShellApi = {
     return apiClient.apiCall('updateLgFile', { id, content });
   },
 
+  getLgTemplates: id => {
+    return apiClient.apiCall('getLgTemplates', { id });
+  },
+
   createLgTemplate: (id, template, position) => {
     return apiClient.apiCall('createLgTemplate', { id, template, position });
   },
