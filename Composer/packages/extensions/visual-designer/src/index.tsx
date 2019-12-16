@@ -31,7 +31,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   data: inputData,
   shellApi,
   hosted,
-  lgFiles,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -54,6 +53,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onCopy,
     saveData,
     updateLgTemplate,
+    getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
@@ -67,9 +67,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedId,
     focusedEvent,
     focusedTab,
-    lgFiles,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
+    getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
@@ -84,7 +84,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
               key={dialogId}
               path={dialogId}
               data={data}
-              lgFiles={lgFiles}
               focusedSteps={focusedActions}
               onFocusSteps={onFocusSteps}
               focusedEvent={focusedEvent}

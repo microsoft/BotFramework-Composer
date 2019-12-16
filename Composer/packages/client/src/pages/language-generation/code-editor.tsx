@@ -9,12 +9,12 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, Diagnostic } from '@bfc/indexers';
+import { lgIndexer, Diagnostic, combineMessage, isValid } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check, isValid, combineMessage } = lgIndexer;
+const { check } = lgIndexer;
 
 interface CodeEditorProps {
   file: LgFile;
@@ -22,8 +22,6 @@ interface CodeEditorProps {
   line: number;
 }
 
-// lsp server port should be same with composer/server port.
-const lspServerPort = process.env.NODE_ENV === 'production' ? process.env.PORT || 3000 : 5000;
 const lspServerPath = '/lg-language-server';
 
 export default function CodeEditor(props: CodeEditorProps) {
@@ -137,7 +135,6 @@ export default function CodeEditor(props: CodeEditorProps) {
       errorMsg={errorMsg}
       lgOption={lgOption}
       languageServer={{
-        port: Number(lspServerPort),
         path: lspServerPath,
       }}
       onChange={_onChange}

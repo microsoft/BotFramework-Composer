@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { LuFile } from '@bfc/indexers';
 
@@ -13,26 +13,15 @@ interface InlineLuEditorProps {
 
 const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
   const { file, onSave, errorMsg } = props;
-  const [localContent, setLocalContent] = useState('');
-  const [localErrorMsg, setLocalErrorMsg] = useState('');
-
-  useEffect(() => {
-    setLocalContent(file.content || '');
-    const errorMsgText = file.diagnostics
-      .map(item => {
-        return item.text;
-      })
-      .join('\n');
-
-    setLocalErrorMsg(errorMsgText || errorMsg || '');
-  }, [file]);
+  const { content } = file;
+  const [localContent, setLocalContent] = useState(content || '');
 
   const commitChanges = value => {
     setLocalContent(value);
     onSave(value);
   };
 
-  return <LuEditor value={localContent} onChange={commitChanges} errorMsg={localErrorMsg} height={450} />;
+  return <LuEditor value={localContent} onChange={commitChanges} errorMsg={errorMsg} height={450} />;
 };
 
 export default InlineLuEditor;
