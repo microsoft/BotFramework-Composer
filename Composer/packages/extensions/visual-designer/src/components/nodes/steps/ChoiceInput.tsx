@@ -17,13 +17,13 @@ import { getUserAnswersTitle } from '../utils';
 
 export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const boundary = measureJsonBoundary(data);
-  const choices = data.choices;
+  const { choices } = data;
   let children: any = null;
 
-  if (choices) {
+  if (Array.isArray(choices)) {
     children = (
       <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
-        {choices.map((choice, index) => {
+        {choices.map(({ value }, index) => {
           if (index < 3) {
             return (
               <div
@@ -44,14 +44,14 @@ export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element =
                   boxSizing: 'border-box',
                   borderRadius: '2px',
                 }}
-                title={typeof choice.value === 'string' ? choice.value : ''}
+                title={typeof value === 'string' ? value : ''}
               >
-                {choice.value}
+                {value}
               </div>
             );
           }
         })}
-        {choices.length > 3 ? (
+        {Array.isArray(choices) && choices.length > 3 ? (
           <div
             data-testid="hasMore"
             css={{

@@ -161,7 +161,7 @@ export const StaticChoices = props => {
         <div css={[choiceItemValue, choiceItemValueLabel]}>{formatMessage('Synonyms (Optional)')}</div>
       </div>
       <div css={choiceField}>
-        {formData &&
+        {Array.isArray(formData) &&
           formData.map((c, i) => (
             <ChoiceItem
               key={`${i}-${formData.length}`}
