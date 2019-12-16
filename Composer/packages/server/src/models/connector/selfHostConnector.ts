@@ -13,9 +13,13 @@ export class SelfHostBotConnector implements IBotConnector {
   constructor(skipLoad?: boolean) {
     if (!skipLoad) {
       // for production
+      //eslint-disable-next-line node/no-missing-require
       this.buildAsync = require('commands/build').handlerAsync;
+      //eslint-disable-next-line node/no-missing-require
       this.publishAsync = require('commands/publish').handlerAsync;
+      //eslint-disable-next-line node/no-missing-require
       this.getEditingStatusAsync = require('commands/editingStatus').handlerAsync;
+      //eslint-disable-next-line node/no-missing-require
       this.getPublishHistoryAsync = require('commands/getPublishHistory').handlerAsync;
     } else {
       // for testing this class

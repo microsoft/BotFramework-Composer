@@ -4,6 +4,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:node/recommended',
     'prettier/@typescript-eslint',
     'plugin:@bfc/bfcomposer/recommended',
   ],
@@ -42,6 +43,17 @@ module.exports = {
     // plugin: import
     'import/first': 'error',
     'import/order': ['error', { 'newlines-between': 'always' }],
+
+    // node
+    'node/no-unsupported-features/es-syntax': 'off',
+    'node/no-missing-import': ['error', {
+      tryExtensions: ['.js', '.tsx', '.ts']
+    }],
+    'node/no-extraneous-import': 'error',
+    'node/no-unpublished-import': 'off',
+    'node/no-deprecated-api': ['error', {
+      ignoreModuleItems: ['url.parse']
+    }],
 
     // security
     'security/detect-buffer-noassert': 'error',
@@ -105,5 +117,11 @@ module.exports = {
         'security/detect-unsafe-regex': 'off',
       },
     },
+    {
+      files: ['__tests__/**/*'],
+      rules: {
+        'node/no-missing-import': 'off'
+      }
+    }
   ],
 };

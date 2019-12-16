@@ -48,6 +48,7 @@
     "ts-jest": "^24.1.0"
   },
   "dependencies": {
+    "botbuilder-lg": "4.7.0-preview.93464",
     "json-schema": "^0.2.5",
     "nanoid": "^2.1.6"
   }
