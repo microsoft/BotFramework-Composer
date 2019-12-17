@@ -7,12 +7,4 @@ module.exports = {
   rules: {
     'node/no-extraneous-import': 'off',
   },
-  overrides: [
-    {
-      files: ['__tests__/**/*.js'],
-      rules: {
-        'node/no-missing-import': 'off',
-      },
-    },
-  ],
 };

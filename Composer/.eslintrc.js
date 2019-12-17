@@ -93,7 +93,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)'],
+      files: ['**/*.+(test|spec).+(js|jsx|ts|tsx)', 'jest.d.ts'],
       env: {
         jest: true,
       },
@@ -101,6 +101,8 @@ module.exports = {
         '@typescript-eslint/ban-ts-ignore': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
         '@typescript-eslint/unbound-method': 'off',
+
+        'node/no-missing-import': 'off',
 
         'security/detect-buffer-noassert': 'off',
         'security/detect-child-process': 'off',
@@ -116,12 +118,6 @@ module.exports = {
         'security/detect-pseudoRandomBytes': 'off',
         'security/detect-unsafe-regex': 'off',
       },
-    },
-    {
-      files: ['__tests__/**/*'],
-      rules: {
-        'node/no-missing-import': 'off'
-      }
     }
   ],
 };
