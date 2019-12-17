@@ -42,7 +42,11 @@ export class CSharpBotConnector implements IBotConnector {
 
   private isOldBot = (dir: string): boolean => {
     // check bot the bot version through build script existence.
-    return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'));
+    if (process.platform === 'win32') {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'));
+    } else {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.sh'));
+    }
   };
 
   private migrateBot = async (dir: string, storage: IFileStorage) => {
@@ -55,7 +59,13 @@ export class CSharpBotConnector implements IBotConnector {
   private buildProcess = async (dir: string): Promise<number | null> => {
     // build bot runtime
     return new Promise((resolve, reject) => {
-      const build = spawn('pwsh', ['./Scripts/build_runtime.ps1'], {
+      let shell = 'sh';
+      let script = './Scripts/build_runtime.sh';
+      if (process.platform === 'win32') {
+        shell = 'pwsh';
+        script = './Scripts/build_runtime.ps1';
+      }
+      const build = spawn(`${shell}`, [`${script}`], {
         cwd: dir,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
