@@ -27,7 +27,7 @@ function makeLabel(data) {
     case ObiTypes.SetProperties:
       return `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`;
     case ObiTypes.DeleteProperties:
-      return `Delete properties {${Array.isArray(data.properties) ? data.properties.toString() : ' '}}`;
+      return `Delete ${Array.isArray(data.properties) ? data.properties.length : 0} properties`;
     case ObiTypes.InitProperty:
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
