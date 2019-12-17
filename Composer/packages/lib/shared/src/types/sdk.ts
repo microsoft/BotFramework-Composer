@@ -29,7 +29,7 @@ interface OpenObject<T = string> {
   [x: string]: T;
 }
 
-export interface IChoice {
+export interface IChoiceObject {
   /** the value to return when selected. */
   value?: string;
   /** Card action for the choice */
@@ -37,6 +37,8 @@ export interface IChoice {
   /** the list of synonyms to recognize in addition to the value. This is optional. */
   synonyms?: string[];
 }
+
+export type IChoice = IChoiceObject[] | string;
 
 type IListStyle = 'None' | 'Auto' | 'Inline' | 'List' | 'SuggestedAction' | 'HeroCard';
 
@@ -111,7 +113,7 @@ export interface AttachmentInput extends Partial<InputDialog> {
 export interface ChoiceInput extends Partial<InputDialog> {
   /** The output format. */
   outputFormat?: 'value' | 'index';
-  choices?: IChoice[];
+  choices?: IChoice;
   /** Compose an output activity containing a set of choices */
   appendChoices?: boolean;
   /** The prompts default locale that should be recognized. */

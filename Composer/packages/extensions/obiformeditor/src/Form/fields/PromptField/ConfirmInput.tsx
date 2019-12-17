@@ -26,6 +26,7 @@ export const ConfirmInputSettings: React.FC<ConfirmInputSettingsProps> = props =
   return (
     <>
       <Choices
+        formContext={formContext}
         formData={formData.confirmChoices}
         schema={getSchema('confirmChoices')}
         onChange={onChange('confirmChoices')}
