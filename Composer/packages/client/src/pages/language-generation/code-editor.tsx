@@ -9,12 +9,12 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, Diagnostic } from '@bfc/indexers';
+import { lgIndexer, Diagnostic, combineMessage, isValid } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check, isValid, combineMessage } = lgIndexer;
+const { check } = lgIndexer;
 
 interface CodeEditorProps {
   file: LgFile;
