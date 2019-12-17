@@ -863,7 +863,7 @@ export const appschema: OBISchema = {
       description: 'Delete multiple properties and any value it holds.',
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.SetProperties),
+        ...$properties(SDKTypes.DeleteProperties),
         properties: {
           type: 'array',
           title: 'Properties',
