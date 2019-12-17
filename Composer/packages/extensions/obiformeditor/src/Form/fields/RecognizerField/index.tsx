@@ -7,7 +7,7 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MicrosoftIRecognizer } from '@bfc/shared';
-import { LuFile } from '@bfc/indexers';
+import { LuFile, combineMessage } from '@bfc/indexers';
 
 import { BaseField } from '../BaseField';
 import { LoadingSpinner } from '../../../LoadingSpinner';
@@ -39,9 +39,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   //make the inline editor show error message
   useEffect(() => {
     if (selectedFile && selectedFile.diagnostics.length > 0) {
-      const msg = selectedFile.diagnostics.reduce((msg: string, diagnostic) => {
-        return (msg += `${diagnostic.text}\n`);
-      }, '');
+      const msg = combineMessage(selectedFile.diagnostics);
       setErrorMsg(msg);
     } else {
       setErrorMsg('');

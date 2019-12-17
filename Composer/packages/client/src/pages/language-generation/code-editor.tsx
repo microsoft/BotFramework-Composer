@@ -8,14 +8,14 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer } from '@bfc/indexers';
+import { lgIndexer, combineMessage, isValid } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check, isValid, combineMessage } = lgIndexer;
+const { check } = lgIndexer;
 
 const lspServerPath = '/lg-language-server';
 
