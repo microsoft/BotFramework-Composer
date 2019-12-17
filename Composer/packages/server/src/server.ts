@@ -40,15 +40,16 @@ const CS_POLICIES = [
   'upgrade-insecure-requests;',
 ];
 
-function useAppInsights() {
-  const key = process.env.SharedAppInsightsKey;
-  if (key) {
-    //eslint-disable-next-line node/no-missing-require
-    const configAppInsights = require('commands/configAppInsights').default as SelfHostCommands.SetupTelemetry;
-    if (configAppInsights) {
-      configAppInsights(key);
-    }
-  }
+const appInsightsKey = process.env.SharedAppInsightsKey;
+// default configAppInsights is no-op
+let configAppInsights = () => Promise.resolve();
+
+if (appInsightsKey) {
+  //eslint-disable-next-line node/no-missing-require
+  configAppInsights = (require('commands/configAppInsights').default as SelfHostCommands.SetupTelemetry).bind(
+    null,
+    appInsightsKey
+  );
 }
 
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
@@ -69,7 +70,11 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
     );
   }
 
-  next();
+  // configAppInsights can be call many many times (only the first time does sth though)
+  configAppInsights().then(
+    () => next(),
+    err => next(err)
+  );
 });
 
 app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
@@ -109,8 +114,6 @@ app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
 app.get('*', function(req, res) {
   res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
 });
-
-useAppInsights();
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () => {
