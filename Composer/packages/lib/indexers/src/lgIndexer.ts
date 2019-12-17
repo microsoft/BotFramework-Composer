@@ -50,10 +50,6 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
-function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
-}
-
 function index(files: FileInfo[]): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
@@ -74,28 +70,8 @@ function index(files: FileInfo[]): LgFile[] {
   return lgFiles;
 }
 
-function createSingleMessage(d: Diagnostic): string {
-  let msg = `${d.message}\n`;
-  if (d.range) {
-    const { start, end } = d.range;
-    const position = `line ${start.line}:${start.character} - line ${end.line}:${end.character}`;
-    msg += `${position} \n ${msg}`;
-  }
-  return msg;
-}
-
-function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    msg += createSingleMessage(d);
-    return msg;
-  }, '');
-}
-
 export const lgIndexer = {
   index,
   parse,
   check,
-  isValid,
-  createSingleMessage,
-  combineMessage,
 };
