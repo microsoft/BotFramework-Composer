@@ -134,7 +134,7 @@ export const dropdownStyles = {
     fontWeight: FontWeights.semibold,
   },
   dropdown: {
-    width: '300px',
+    width: '400px',
   },
   root: {
     paddingBottom: '20px',
@@ -145,7 +145,7 @@ export const dialogWindow = css`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 250px;
+  height: 300px;
 `;
 
 export const textFieldlabel = {
@@ -159,11 +159,16 @@ export const textFieldlabel = {
 };
 
 export const intent = {
-  fieldGroup: {
-    width: 200,
-  },
   root: {
-    height: '90px',
+    width: '400px',
   },
-  subComponentStyles: textFieldlabel,
+};
+
+export const triggerPhrases = {
+  root: {
+    width: '400px',
+  },
+  fieldGroup: {
+    height: 80,
+  },
 };
