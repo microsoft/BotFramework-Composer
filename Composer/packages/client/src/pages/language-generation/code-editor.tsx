@@ -25,7 +25,8 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
   const { lgFiles } = state;
-  const file = lgFiles.length ? lgFiles[0] : null;
+  const { fileId } = props;
+  const file = lgFiles.length ? lgFiles.find(({ id }) => id === 'common') : null;
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -40,7 +41,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const lineMatched = /L(\d+)/g.exec(hash);
   const line = lineMatched ? +lineMatched[1] : undefined;
 
-  const fileId = (file && file.id) || 'common';
   const inlineMode = !!template;
 
   useEffect(() => {

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
@@ -37,6 +37,10 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const edit = /edit(\/)*$/.test(path);
   const lgFile = lgFiles.length ? lgFiles[0] : null;
 
+  useEffect(() => {
+    if (!fileId) navigateTo('/language-generation/common');
+  }, [fileId]);
+
   const navLinks = useMemo<INavLinkGroup[]>(() => {
     const subLinks = dialogs.reduce<INavLink>((result, file) => {
       const item = {
@@ -63,8 +67,8 @@ const LGPage: React.FC<RouteComponentProps> = props => {
       {
         links: [
           {
-            id: '_all',
-            key: '_all',
+            id: 'common',
+            key: 'common',
             name: 'All',
             url: '',
             isExpanded: true,
@@ -77,8 +81,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   const onSelect = useCallback(
     id => {
-      let url = '/language-generation';
-      if (id !== '_all') url += `/${id}`;
+      let url = `/language-generation/${id}`;
       if (edit) url += `/edit`;
       navigateTo(url);
     },
@@ -87,8 +90,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = '/language-generation';
-      if (fileId) url += `/${fileId}`;
+      let url = `/language-generation/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
@@ -144,7 +146,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
                     backgroundColor: 'transparent',
                   },
                 }}
-                selectedKey={fileId ? fileId : '_all'}
+                selectedKey={fileId}
                 groups={navLinks}
                 className={'dialogNavTree'}
                 data-testid={'dialogNavTree'}
@@ -156,10 +158,8 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
-                <CodeEditor path="edit" />
                 <CodeEditor path=":fileId/edit" />
                 <TableView path=":fileId" />
-                <TableView default />
               </Router>
             </Suspense>
           </div>
