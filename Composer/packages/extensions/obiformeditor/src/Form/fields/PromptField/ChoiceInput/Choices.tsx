@@ -9,6 +9,7 @@ import { JSONSchema6 } from 'json-schema';
 import { IChoice } from '@bfc/shared';
 import formatMessage from 'format-message';
 
+import { FormContext } from '../../../types';
 import { WidgetLabel } from '../../../widgets/WidgetLabel';
 
 import { StaticChoices } from './StaticChoices';
@@ -17,15 +18,17 @@ import { DynamicChoices } from './DynamicChoices';
 interface ChoicesProps {
   id: string;
   schema: JSONSchema6;
-  formData?: IChoice[] | string;
+  formContext: FormContext;
+  formData?: IChoice;
   label: string;
-  onChange: (data: IChoice[] | string) => void;
+  onChange: (data: IChoice) => void;
 }
 
 export const Choices: React.FC<ChoicesProps> = props => {
   const {
     id,
     label,
+    formContext,
     formData,
     onChange,
     schema: { oneOf = [] },
@@ -49,9 +52,12 @@ export const Choices: React.FC<ChoicesProps> = props => {
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0' }}>
         <WidgetLabel
           label={label}
-          description={formatMessage(
-            "A list of options to present to the user. Synonyms can be used to allow for variation in a user's response."
-          )}
+          description={
+            formatMessage('A list of options to present to the user.') +
+            (choiceType === 'static'
+              ? formatMessage(" Synonyms can be used to allow for variation in a user's response.")
+              : '')
+          }
           id={id}
         />
         <Dropdown
@@ -69,7 +75,7 @@ export const Choices: React.FC<ChoicesProps> = props => {
       {choiceType === 'static' ? (
         <StaticChoices {...props} />
       ) : (
-        <DynamicChoices {...props} schema={dynamicSchema as JSONSchema6} />
+        <DynamicChoices {...props} formContext={formContext} schema={dynamicSchema as JSONSchema6} />
       )}
     </React.Fragment>
   );

@@ -9,7 +9,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
-import { IChoice } from '@bfc/shared';
+import { IChoiceObject } from '@bfc/shared';
 
 import {
   field,
@@ -25,12 +25,12 @@ import { EditableField } from '../../EditableField';
 
 interface ChoiceItemProps {
   index: number;
-  choice: IChoice;
+  choice: IChoiceObject;
   hasMoveUp: boolean;
   hasMoveDown: boolean;
   onReorder: (a: number, b: number) => void;
   onDelete: (idx: number) => void;
-  onEdit: (idx: number, value?: IChoice) => void;
+  onEdit: (idx: number, value?: IChoiceObject) => void;
 }
 
 const ChoiceItem: React.FC<ChoiceItemProps> = props => {
@@ -113,7 +113,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
 
 export const StaticChoices = props => {
   const { formData = [], id, onChange } = props;
-  const [newChoice, setNewChoice] = useState<IChoice | null>(null);
+  const [newChoice, setNewChoice] = useState<IChoiceObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const handleReorder = (aIdx: number, bIdx: number) => {
