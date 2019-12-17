@@ -35,10 +35,12 @@ const LGPage: React.FC<RouteComponentProps> = props => {
   const matched = /^\/language-generation\/(\w+)/.exec(path.replace(/edit(\/)*$/, ''));
   const fileId = matched ? matched[1] : '';
   const edit = /edit(\/)*$/.test(path);
-  const lgFile = lgFiles.length ? lgFiles[0] : null;
+  const file = lgFiles?.find(({ id }) => id === 'common');
 
   useEffect(() => {
-    if (!fileId) navigateTo('/language-generation/common');
+    // fileId not found, redirect to common
+    if (!fileId || (dialogs.length && dialogs.find(({ id }) => id === fileId) === undefined))
+      navigateTo('/language-generation/common');
   }, [fileId]);
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
@@ -154,7 +156,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
             </div>
           </Tree>
         </div>
-        {lgFile && (
+        {file && (
           <div css={contentEditor}>
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>

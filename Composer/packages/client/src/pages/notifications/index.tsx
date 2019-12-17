@@ -17,7 +17,7 @@ import { convertDialogDiagnosticToUrl } from './../../utils/navigation';
 
 const navigations = {
   lg: (item: INotification) => {
-    navigateTo(`/language-generation/edit#L${item.diagnostic.range?.start.line || 0}`);
+    navigateTo(`/language-generation/${item.id}/edit#L${item.diagnostic.range?.start.line || 0}`);
   },
   lu: (item: INotification) => {
     navigateTo(`/dialogs/${item.id}`);

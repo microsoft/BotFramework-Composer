@@ -3,13 +3,14 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LgEditor, LGOption } from '@bfc/code-editor';
+import { LgEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, Diagnostic } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
+import querystring from 'query-string';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
@@ -26,27 +27,27 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
   const { lgFiles } = state;
   const { fileId } = props;
-  const file = lgFiles.length ? lgFiles.find(({ id }) => id === 'common') : null;
+  const file = lgFiles?.find(({ id }) => id === 'common');
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [content, setContent] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
-  const search = props.location ? props.location.search : '';
-  const templateMatched = /^\?t=([-\w]+)/.exec(search);
-  const templateId = templateMatched ? decodeURIComponent(templateMatched[1]) : undefined;
-  const template = templateId && file ? file.templates.find(({ name }) => name === templateId) : undefined;
+  const search = props?.location?.search ?? '';
+  const searchTemplateName = querystring.parse(search).t;
+  const templateId = Array.isArray(searchTemplateName) ? searchTemplateName[0] : searchTemplateName;
+  const template = templateId && file && file.templates.find(({ name }) => name === templateId);
 
-  const hash = props.location ? props.location.hash : '';
-  const lineMatched = /L(\d+)/g.exec(hash);
+  const hash = props?.location?.hash;
+  const lineMatched = hash && /L(\d+)/g.exec(hash);
   const line = lineMatched ? +lineMatched[1] : undefined;
 
   const inlineMode = !!template;
 
   useEffect(() => {
     // reset content with file.content's initial state
-    if (isEmpty(file)) return;
-    const value = template ? get(template, 'body', '') : get(file, 'content', '');
+    if (!file || isEmpty(file)) return;
+    const value = template ? template.body : file.content;
     setContent(value);
   }, [fileId, templateId]);
 
@@ -56,6 +57,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         ? diagnostics.filter(d => {
             return (
               d.range &&
+              template.range &&
               d.range.start.line >= template.range.startLineNumber &&
               d.range.end.line <= template.range.endLineNumber
             );
@@ -67,9 +69,9 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setErrorMsg(text);
   }, [diagnostics]);
 
-  const editorDidMount = useCallback((lgEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
-  }, []);
+  };
 
   useEffect(() => {
     if (lgEditor && line !== undefined) {
@@ -84,14 +86,14 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const updateLgTemplate = useMemo(
     () =>
       debounce((body: string) => {
-        const templateName = get(template, 'name');
-        if (!templateName) return;
+        if (!file || !template) return;
+        const { name, parameters } = template;
         const payload = {
           file,
-          templateName,
+          templateName: name,
           template: {
-            name: templateName,
-            parameters: get(template, 'parameters'),
+            name,
+            parameters,
             body,
           },
         };
@@ -103,8 +105,10 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const updateLgFile = useMemo(
     () =>
       debounce((content: string) => {
+        if (!file) return;
+        const { id } = file;
         const payload = {
-          id: fileId,
+          id,
           content,
         };
         actions.updateLgFile(payload);
@@ -115,24 +119,26 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const _onChange = useCallback(
     value => {
       setContent(value);
-
+      if (!file) return;
+      const { id } = file;
       let diagnostics: Diagnostic[] = [];
       if (inlineMode) {
-        const content = get(file, 'content', '');
-        const templateName = get(template, 'name', '');
+        if (!template) return;
+        const { name, parameters } = template;
+        const { content } = file;
         try {
-          const newContent = lgUtil.updateTemplate(content, templateName, {
-            name: templateName,
-            parameters: get(template, 'parameters'),
+          const newContent = lgUtil.updateTemplate(content, name, {
+            name,
+            parameters,
             body: value,
           });
-          diagnostics = check(newContent, fileId);
+          diagnostics = check(newContent, id);
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        diagnostics = check(value, fileId);
+        diagnostics = check(value, id);
         updateLgFile(value);
       }
       setDiagnostics(diagnostics);
@@ -140,11 +146,13 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     [file, template]
   );
 
-  const lgOption: LGOption = {
-    inline: inlineMode,
-    content: get(file, 'content', ''),
-    template,
-  };
+  const lgOption = template
+    ? {
+        inline: inlineMode,
+        content: file?.content ?? '',
+        template,
+      }
+    : undefined;
 
   return (
     <LgEditor

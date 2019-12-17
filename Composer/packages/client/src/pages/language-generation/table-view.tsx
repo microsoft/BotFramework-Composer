@@ -31,18 +31,18 @@ const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, lgFiles } = state;
   const { fileId } = props;
+  const file = lgFiles?.find(({ id }) => id === 'common');
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
-  const lgFile = lgFiles.length ? lgFiles[0] : null;
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
   useEffect(() => {
-    if (!lgFile || isEmpty(lgFile)) return;
-    const allTemplates = lgFile.templates;
+    if (!file || isEmpty(file)) return;
+    const allTemplates = file.templates;
 
     if (!activeDialog) {
       setTemplates(allTemplates);
@@ -56,15 +56,12 @@ const TableView: React.FC<TableViewProps> = props => {
       });
       setTemplates(dialogsTemplates);
     }
-  }, [lgFile, activeDialog]);
+  }, [file, activeDialog]);
 
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
       const { name } = template;
-      let url = '/language-generation';
-      if (fileId) url += `/${fileId}`;
-      url += `/edit?t=${encodeURIComponent(name)}`;
-      navigateTo(url);
+      navigateTo(`/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
     },
     [fileId]
   );
@@ -72,25 +69,25 @@ const TableView: React.FC<TableViewProps> = props => {
   const onCreateNewTemplate = useCallback(() => {
     const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
-      file: lgFile,
+      file,
       template: {
         name: newName,
         body: '-TemplateValue',
       },
     };
     createLgTemplate(payload);
-  }, [templates, lgFile]);
+  }, [templates, file]);
 
   const onRemoveTemplate = useCallback(
     index => {
       const payload = {
-        file: lgFile,
+        file,
         templateName: templates[index].name,
       };
 
       removeLgTemplate(payload);
     },
-    [templates, lgFile]
+    [templates, file]
   );
 
   const onCopyTemplate = useCallback(
@@ -98,13 +95,13 @@ const TableView: React.FC<TableViewProps> = props => {
       const name = templates[index].name;
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
-        file: lgFile,
+        file,
         fromTemplateName: name,
         toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
     },
-    [templates, lgFile]
+    [templates, file]
   );
 
   const getTemplatesMoreButtons = useCallback(
