@@ -24,6 +24,8 @@ function makeLabel(data) {
   switch (data.$type) {
     case ObiTypes.SetProperty:
       return `{${data.property || '?'}} = ${data.value || '?'}`;
+    case ObiTypes.SetProperties:
+      return `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`;
     case ObiTypes.InitProperty:
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
@@ -59,6 +61,9 @@ const ContentKeyByTypes: {
   },
   [ObiTypes.DeleteProperty]: {
     label: 'property',
+  },
+  [ObiTypes.DeleteProperties]: {
+    label: 'properties',
   },
   [ObiTypes.IfCondition]: {
     label: 'condition',
