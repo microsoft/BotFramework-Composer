@@ -58,6 +58,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKTypes.DeleteProperty]: {
     title: formatMessage('Delete a property'),
   },
+  [SDKTypes.DeleteProperties]: {
+    title: formatMessage('Delete properties'),
+  },
   [SDKTypes.EditActions]: {
     title: formatMessage('Modify this dialog'),
   },
@@ -220,6 +223,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.SetProperty]: {
     title: formatMessage('Set a property'),
+  },
+  [SDKTypes.SetProperties]: {
+    title: formatMessage('Set properties'),
   },
   [SDKTypes.SwitchCondition]: {
     title: formatMessage('Branch: switch (multiple options)'),
