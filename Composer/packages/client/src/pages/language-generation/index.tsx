@@ -39,8 +39,7 @@ const LGPage: React.FC<RouteComponentProps> = props => {
 
   useEffect(() => {
     // fileId not found, redirect to common
-    if (!fileId || (dialogs.length && dialogs.find(({ id }) => id === fileId) === undefined))
-      navigateTo('/language-generation/common');
+    if (!fileId) navigateTo('/language-generation/common');
   }, [fileId]);
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {

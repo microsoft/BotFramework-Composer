@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, Diagnostic } from '@bfc/indexers';
+import { lgIndexer } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -121,7 +121,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       setContent(value);
       if (!file) return;
       const { id } = file;
-      let diagnostics: Diagnostic[] = [];
       if (inlineMode) {
         if (!template) return;
         const { name, parameters } = template;
@@ -132,16 +131,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
             parameters,
             body: value,
           });
-          diagnostics = check(newContent, id);
+          setDiagnostics(check(newContent, id));
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        diagnostics = check(value, id);
+        setDiagnostics(check(value, id));
         updateLgFile(value);
       }
-      setDiagnostics(diagnostics);
     },
     [file, template]
   );
