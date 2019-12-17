@@ -99,7 +99,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:hidden': ['actions', 'elseActions', ...globalHidden],
   },
   [SDKTypes.SetProperties]: {
-    'ui:hidden': [...globalHidden],
+    assignments: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        property: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
   },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,
@@ -174,6 +196,31 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['connectionName', '*'],
   },
+  [SDKTypes.QnAMakerDialog]: {
+    strictFilters: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        name: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
+  },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
@@ -188,6 +235,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     options: {
       'ui:field': 'CustomObjectField',
     },
+    'ui:hidden': [...globalHidden],
     'ui:order': ['options', 'includeActivity', '*'],
   },
   [SDKTypes.SwitchCondition]: {
