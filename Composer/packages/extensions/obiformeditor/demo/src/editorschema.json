@@ -131,7 +131,7 @@
     "Microsoft.SetProperty": {
       "title": "Set a Property"
     },
-    "Microsoft.setProperties": {
+    "Microsoft.SetProperties": {
       "title": "Set Properties"
     },
     "Microsoft.SwitchCondition": {
