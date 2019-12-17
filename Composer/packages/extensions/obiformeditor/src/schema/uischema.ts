@@ -129,6 +129,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.OnBeginDialog]: {
     ...triggerUiSchema,
   },
+  [SDKTypes.OnCancelDialog]: {
+    ...triggerUiSchema,
+  },
   [SDKTypes.OnCondition]: {
     ...triggerUiSchema,
   },
@@ -142,6 +145,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEndOfConversationActivity]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnError]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEventActivity]: {
@@ -170,6 +176,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     ...triggerUiSchema,
   },
   [SDKTypes.OnMessageUpdateActivity]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnRepromptDialog]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnTypingActivity]: {
