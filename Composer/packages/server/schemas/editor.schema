@@ -64,6 +64,11 @@
       "helpLink": "https://aka.ms/bfc-using-memory",
       "helpLinkText": "Learn more"
     },
+    "Microsoft.DeleteProperties": {
+      "title": "Delete Properties",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
+    },
     "Microsoft.EditActions": {
       "title": "Modify active dialog"
     },
@@ -261,6 +266,11 @@
     },
     "Microsoft.SetProperty": {
       "title": "Set a Property",
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "helpLinkText": "Learn more"
+    },
+    "Microsoft.SetProperties": {
+      "title": "Delete Properties",
       "helpLink": "https://aka.ms/bfc-using-memory",
       "helpLinkText": "Learn more"
     },

@@ -21,8 +21,7 @@
           "prompt": "Hello, What's your age?",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
-          "outputFormat": "float",
+          "allowInterruptions": "false",
           "defaultLocale": "en-us"
         },
         {
