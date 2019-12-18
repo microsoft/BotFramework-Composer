@@ -16,7 +16,7 @@ export const About: React.FC<RouteComponentProps> = () => {
       <div css={about.content}>
         <div css={about.title}> {formatMessage(`About`)} </div>
         <div css={about.body}>
-          <div css={about.version}>{formatMessage(`Release: Preview 1.0`)}</div>
+          <div css={about.version}>{formatMessage(`Release: `) + (process.env.COMPOSER_VERSION || 'Unknown')}</div>
           <div css={about.description}>
             <p>
               {formatMessage(`Bot Framework Composer is an integrated development environment (IDE) for building
@@ -54,12 +54,12 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
-                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSON}`}
+                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
                   tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px' }}
                 >
-                  {process.env.SDK_PACKAGE_VERSON || 'Unknown'}
+                  {process.env.SDK_PACKAGE_VERSION || 'Unknown'}
                 </Link>
               </div>
             </div>
