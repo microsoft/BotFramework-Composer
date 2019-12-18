@@ -11,7 +11,9 @@ import { LgFile } from '@bfc/indexers';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, Diagnostic, combineMessage, isValid } from '@bfc/indexers';
 
+import { BASEPATH } from '../../constants/index';
 import { StoreContext } from '../../store';
+import { resolveToBasePath } from '../../utils/fileUtil';
 import * as lgUtil from '../../utils/lgUtil';
 
 const { check } = lgIndexer;
@@ -22,7 +24,7 @@ interface CodeEditorProps {
   line: number;
 }
 
-const lspServerPath = '/lg-language-server';
+const lspServerPath = resolveToBasePath(BASEPATH, '/lg-language-server');
 
 export default function CodeEditor(props: CodeEditorProps) {
   const { actions } = useContext(StoreContext);
