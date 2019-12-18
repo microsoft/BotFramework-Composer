@@ -24,14 +24,14 @@ import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  fileId: string;
 }
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, lgFiles } = state;
   const { fileId } = props;
-  const file = lgFiles?.find(({ id }) => id === 'common');
+  const file = lgFiles.find(({ id }) => id === 'common');
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;

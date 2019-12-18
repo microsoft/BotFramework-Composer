@@ -20,7 +20,7 @@ const { check } = lgIndexer;
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  fileId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
@@ -33,14 +33,18 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
-  const search = props?.location?.search ?? '';
+  const search = props.location?.search ?? '';
   const searchTemplateName = querystring.parse(search).t;
-  const templateId = Array.isArray(searchTemplateName) ? searchTemplateName[0] : searchTemplateName;
-  const template = templateId && file && file.templates.find(({ name }) => name === templateId);
+  const templateId = Array.isArray(searchTemplateName)
+    ? searchTemplateName[0]
+    : typeof searchTemplateName === 'string'
+    ? searchTemplateName
+    : undefined;
+  const template = templateId && file ? file.templates.find(({ name }) => name === templateId) : undefined;
 
-  const hash = props?.location?.hash;
-  const lineMatched = hash && /L(\d+)/g.exec(hash);
-  const line = lineMatched ? +lineMatched[1] : undefined;
+  const hash = props.location?.hash ?? '';
+  const hashLine = querystring.parse(hash).L;
+  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : undefined;
 
   const inlineMode = !!template;
 

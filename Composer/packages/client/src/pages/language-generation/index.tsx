@@ -28,19 +28,17 @@ import { TestController } from './../../TestController';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-const LGPage: React.FC<RouteComponentProps> = props => {
+interface LGPageProps extends RouteComponentProps<{}> {
+  fileId?: string;
+}
+
+const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const path = props.location ? props.location.pathname : '';
-  const matched = /^\/language-generation\/(\w+)/.exec(path.replace(/edit(\/)*$/, ''));
-  const fileId = matched ? matched[1] : '';
+  const path = props.location?.pathname ?? '';
+  const { fileId = 'common' } = props;
   const edit = /edit(\/)*$/.test(path);
-  const file = lgFiles?.find(({ id }) => id === 'common');
-
-  useEffect(() => {
-    // fileId not found, redirect to common
-    if (!fileId) navigateTo('/language-generation/common');
-  }, [fileId]);
+  const file = lgFiles.find(({ id }) => id === 'common');
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
     const subLinks = dialogs.reduce<INavLink>((result, file) => {
@@ -159,8 +157,8 @@ const LGPage: React.FC<RouteComponentProps> = props => {
           <div css={contentEditor}>
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
-                <CodeEditor path=":fileId/edit" />
-                <TableView path=":fileId" />
+                <CodeEditor path="/edit" fileId={fileId} />
+                <TableView path="/" fileId={fileId} />
               </Router>
             </Suspense>
           </div>
