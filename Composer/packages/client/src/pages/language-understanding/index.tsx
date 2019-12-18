@@ -1,33 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 
 import { StoreContext } from '../../store';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-} from '../language-understanding/styles';
 import { projectContainer, projectTree, projectWrapper } from '../design/styles';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Tree } from '../../components/Tree';
+import { ToolBar } from '../../components/ToolBar/index';
+import { TestController } from '../../TestController';
 
-import { Tree } from './../../components/Tree';
 import TableView from './table-view';
-import { ToolBar } from './../../components/ToolBar/index';
-import { TestController } from './../../TestController';
+import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor } from './styles';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-const LUPage = props => {
+interface DefineConversationProps {
+  path: string;
+}
+
+const LUPage: React.FC<DefineConversationProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
@@ -39,17 +36,20 @@ const LUPage = props => {
 
   const luFile = luFiles.length && activeDialog ? luFiles.find(luFile => luFile.id === activeDialog.id) : null;
 
-  const navLinks = useMemo(() => {
-    const subLinks = dialogs.reduce((result, file) => {
+  const navLinks: INavLinkGroup[] = useMemo(() => {
+    const subLinks = dialogs.reduce((result: INavLink[], file) => {
       if (result.length === 0) {
         result = [
           {
             links: [],
+            name: '',
+            url: '',
           },
         ];
       }
       const item = {
         id: file.id,
+        url: file.id,
         key: file.id,
         name: file.displayName,
       };
@@ -61,7 +61,7 @@ const LUPage = props => {
           isExpanded: true,
         };
       } else {
-        result[0].links.push(item);
+        result[0].links && result[0].links.push(item);
       }
       return result;
     }, []);
@@ -73,6 +73,7 @@ const LUPage = props => {
             id: '_all',
             key: '_all',
             name: 'All',
+            url: '_all',
             isExpanded: true,
             links: subLinks,
           },
@@ -106,9 +107,10 @@ const LUPage = props => {
     setEditMode(false);
   }
 
-  async function onChange(newContent) {
+  async function onChange(newContent: string) {
+    const id = activeDialog ? activeDialog.id : undefined;
     const payload = {
-      id: activeDialog.id, // current opened lu file
+      id: id, // current opened lu file
       content: newContent,
     };
     try {
@@ -156,8 +158,8 @@ const LUPage = props => {
             <div css={projectWrapper}>
               <Nav
                 onLinkClick={(ev, item) => {
-                  onSelect(item.id);
-                  ev.preventDefault();
+                  item && onSelect(item.id);
+                  ev && ev.preventDefault();
                 }}
                 styles={{
                   root: {
@@ -186,7 +188,7 @@ const LUPage = props => {
               <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
             </Suspense>
           ) : (
-            <TableView file={luFile} activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
+            <TableView activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
           )}
         </div>
       </div>
