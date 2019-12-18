@@ -7,10 +7,10 @@
 # LGWithParam(user)
 - Hello @{user.name}, nice to talk to you!
 
-# TextWithLG
-- Hi, this is a text with LG
-- Hey, this is a text with LG
-- Hello, this is a text with LG
+# SimpleText
+- Hi, this is simple text
+- Hey, this is simple text
+- Hello, this is simple text
 
 # help
 - ```
@@ -24,7 +24,7 @@
 -@{LGWithParam(user)}
 
 # bfdactivity-219943
--@{TextWithLG()}
+-@{SimpleText()}
 
 # bfdactivity-822060
 -@{user.message}
@@ -43,9 +43,6 @@
     - Happy Saturday!
 -DEFAULT:
     - Working day!
-
-# bfdactivity-739923
-- @{TextWithLG()}
 
 # bfdactivity-853358
 - @{multilineText()}

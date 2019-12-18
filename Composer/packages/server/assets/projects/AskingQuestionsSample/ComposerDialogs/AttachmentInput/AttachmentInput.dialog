@@ -22,7 +22,7 @@
           "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "false",
-          "outputFormat": "All"
+          "outputFormat": "all"
         },
         {
           "$type": "Microsoft.SendActivity",

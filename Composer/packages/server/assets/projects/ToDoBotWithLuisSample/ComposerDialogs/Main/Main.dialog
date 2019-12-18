@@ -181,7 +181,6 @@
           "property": "dialog.item",
           "alwaysPrompt": false,
           "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@itemTitle",
-          "outputFormat": "none",
           "value": "@itemTitle"
         },
         {
@@ -348,7 +347,6 @@
               "property": "dialog.item",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@itemTitle",
-              "outputFormat": "none",
               "value": "@itemTitle"
             },
             {

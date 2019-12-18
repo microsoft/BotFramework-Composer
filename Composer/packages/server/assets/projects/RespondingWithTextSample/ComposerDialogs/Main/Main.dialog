@@ -61,9 +61,6 @@
               "value": "Text With Memory"
             },
             {
-              "value": "Text With LG"
-            },
-            {
               "value": "LGWithParam"
             },
             {
@@ -123,18 +120,6 @@
                     "id": "598449"
                   },
                   "dialog": "TextWithMemory"
-                }
-              ]
-            },
-            {
-              "value": "Text With LG",
-              "actions": [
-                {
-                  "$type": "Microsoft.BeginDialog",
-                  "$designer": {
-                    "id": "791050"
-                  },
-                  "dialog": "TextWithLG"
                 }
               ]
             },
