@@ -12,14 +12,14 @@ import {
   LanguageClientOptions,
 } from 'monaco-languageclient';
 
-export function createUrl(server: { [key: string]: string } | string): string {
+export function createUrl(server: { [key: string]: string | number | undefined } | string): string {
   if (typeof server === 'string') {
     return normalizeUrl.default(server).replace(/^http/, 'ws');
   }
-  const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
+  const { host, hostname = location.hostname, port = location.port, path = '/', basePath = '' } = server;
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   const endHost = host || `${hostname}:${port}`;
-  return normalizeUrl.default(`${protocol}://${endHost}/${path}`);
+  return normalizeUrl.default(`${protocol}://${endHost}/${basePath}/${path}`);
 }
 
 export function createWebSocket(url: string): WebSocket {

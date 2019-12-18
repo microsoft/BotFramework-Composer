@@ -27,20 +27,24 @@ export interface LGOption {
   };
 }
 
+export type LanguageServer =
+  | string
+  | {
+      host?: string;
+      hostname?: string;
+      port?: number | string;
+      basePath?: string;
+      path: string;
+    };
+
 export interface LGLSPEditorProps extends RichEditorProps {
   lgOption?: LGOption;
-  languageServer?:
-    | {
-        host?: string;
-        hostname?: string;
-        port?: number | string;
-        path: string;
-      }
-    | string;
+  languageServer?: LanguageServer;
 }
 
-const defaultLGServer = {
+const defaultLGServer: LanguageServer = {
   path: '/lg-language-server',
+  basePath: process.env.PUBLIC_URL || '',
 };
 declare global {
   interface Window {
@@ -68,7 +72,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   };
 
   const { lgOption, languageServer, ...restProps } = props;
-  const lgServer = languageServer || defaultLGServer;
+  const lgServer: LanguageServer = languageServer || defaultLGServer;
 
   const editorWillMount = (monaco: typeof monacoEditor) => {
     registerLGLanguage(monaco);
