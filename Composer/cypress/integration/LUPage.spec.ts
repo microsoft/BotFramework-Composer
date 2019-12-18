@@ -25,7 +25,7 @@ context('LU Page', () => {
       .should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
-    cy.get('.dialogNavTree button[title="__TestToDoBotWithLuisSample.Main"]').click({ multiple: true });
+    cy.get('[name="__TestToDoBotWithLuisSample.Main"]').click({ multiple: true });
 
     // goto edit-mode
     cy.get('@switchButton').click();
@@ -34,7 +34,7 @@ context('LU Page', () => {
       .should('exist');
 
     // back to all table view
-    cy.get('.dialogNavTree button[title="All"]').click();
+    cy.get('[name="All"]').click();
     cy.findByTestId('LUEditor')
       .findByTestId('table-view')
       .should('exist');
