@@ -39,6 +39,7 @@ interface LgEditorWidgetProps {
   name: string;
   value?: string;
   height?: number | string;
+  lgServerPath?: string;
   onChange: (template?: string) => void;
 }
 
@@ -119,7 +120,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
-        path: lspServerPath,
+        path: props.lgServerPath || lspServerPath,
       }}
       height={height}
     />

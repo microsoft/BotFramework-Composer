@@ -3,12 +3,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
+import { LgEditorContext } from '@bfc/code-editor';
 import { ShellData, ShellApi } from '@bfc/shared';
 
-import ApiClient from '../messenger/ApiClient';
-
 import getEditor from './EditorMap';
-
+import { BASEPATH } from './../constants';
+import ApiClient from './../messenger/ApiClient';
 import './extensionContainer.css';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -157,7 +157,15 @@ function ExtensionContainer() {
 
   const RealEditor = shellData.data ? getEditor() : null;
 
-  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
+  if (RealEditor === null) {
+    return null;
+  }
+
+  return (
+    <LgEditorContext.Provider value={{ basePath: BASEPATH }}>
+      <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />
+    </LgEditorContext.Provider>
+  );
 }
 
 export default ExtensionContainer;

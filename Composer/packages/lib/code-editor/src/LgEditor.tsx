@@ -11,6 +11,7 @@ import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
 import { RichEditor, RichEditorProps } from './RichEditor';
+import LgEditorContext from './utils/LgEditorContext';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
@@ -27,15 +28,13 @@ export interface LGOption {
   };
 }
 
-export type LanguageServer =
-  | string
-  | {
-      host?: string;
-      hostname?: string;
-      port?: number | string;
-      basePath?: string;
-      path: string;
-    };
+export type LanguageServer = {
+  host?: string;
+  hostname?: string;
+  port?: number | string;
+  basePath?: string;
+  path: string;
+};
 
 export interface LGLSPEditorProps extends RichEditorProps {
   lgOption?: LGOption;
@@ -44,7 +43,6 @@ export interface LGLSPEditorProps extends RichEditorProps {
 
 const defaultLGServer: LanguageServer = {
   path: '/lg-language-server',
-  basePath: process.env.PUBLIC_URL || '',
 };
 declare global {
   interface Window {
@@ -66,13 +64,14 @@ async function initializeDocuments(lgOption: LGOption | undefined, uri: string) 
 }
 
 export function LgEditor(props: LGLSPEditorProps) {
+  const config = React.useContext(LgEditorContext);
   const options = {
     quickSuggestions: true,
     ...props.options,
   };
 
   const { lgOption, languageServer, ...restProps } = props;
-  const lgServer: LanguageServer = languageServer || defaultLGServer;
+  const lgServer: LanguageServer = { basePath: config.basePath, ...(languageServer || defaultLGServer) };
 
   const editorWillMount = (monaco: typeof monacoEditor) => {
     registerLGLanguage(monaco);
