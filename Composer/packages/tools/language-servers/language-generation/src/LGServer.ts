@@ -18,19 +18,19 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+import { LgFile, lgIndexer } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   getLGResources,
   updateTemplateInContent,
-  getTemplateRange,
   LGDocument,
   checkText,
   checkTemplate,
   convertDiagnostics,
   isValid,
-  TRange,
+  LGOption,
 } from './utils';
 
 // define init methods call from client
@@ -38,13 +38,16 @@ const InitializeDocumentsMethodName = 'initializeDocuments';
 
 const allowedCompletionStates = ['expression'];
 
+const { parse } = lgIndexer;
+
 export class LGServer {
   protected workspaceRoot?: URI;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = []; // LG Documents Store
+  protected lgFiles: LgFile[] = [];
 
-  constructor(protected readonly connection: IConnection) {
+  constructor(protected readonly connection: IConnection, protected readonly botProjectService) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -74,10 +77,16 @@ export class LGServer {
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onHover(params => this.hover(params));
 
-    this.connection.onRequest((method, params) => {
+    this.connection.onRequest(async (method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const { uri, inline = false, content, template } = params;
-        this.LGDocuments.push({ uri, inline, content, template });
+        const currentProject = this.botProjectService.getCurrentBotProject();
+        if (currentProject !== undefined && (await currentProject.exists())) {
+          await currentProject.index();
+          const { lgFiles } = currentProject.getIndexes();
+          this.lgFiles = lgFiles;
+        }
+        const { uri, lgOption }: { uri: string; lgOption: LGOption } = params;
+        this.LGDocuments.push({ uri, lgOption });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
@@ -97,9 +106,14 @@ export class LGServer {
   protected getLGDocumentContent(document: TextDocument): string {
     const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
     const text = document.getText();
-    if (LGDocument && LGDocument.inline) {
-      const { content, template } = LGDocument;
-      if (!content || !template) return text;
+    if (LGDocument && LGDocument.lgOption) {
+      const { fileId, templateId } = LGDocument.lgOption;
+      const lgFile = this.lgFiles.find(({ id }) => id === fileId);
+      if (!lgFile) return text;
+      const { content, templates } = lgFile;
+
+      const template = templates.find(({ name }) => name === templateId);
+      if (!template) return text;
       const updatedTemplate = {
         name: template.name,
         parameters: template.parameters,
@@ -302,7 +316,7 @@ export class LGServer {
   }
 
   protected doValidate(document: TextDocument): void {
-    let text = document.getText();
+    const text = document.getText();
     const LGDocument = this.getLGDocument(document);
     let lgDiagnostics: LGDiagnostic[] = [];
     let lineOffset = 0;
@@ -318,16 +332,14 @@ export class LGServer {
     }
 
     // if inline editor, concat new content for validate
-    if (LGDocument.inline) {
-      const { content, template } = LGDocument;
-      if (!content || !template) return;
-      const updatedTemplate = {
-        name: template.name,
-        parameters: template.parameters,
+    const { lgOption } = LGDocument;
+    if (lgOption) {
+      const { templateId, fileId } = lgOption;
+      const templateDiags = checkTemplate({
+        name: templateId,
+        parameters: [],
         body: text,
-      };
-
-      const templateDiags = checkTemplate(updatedTemplate);
+      });
       // error in template.
       if (isValid(templateDiags) === false) {
         const diagnostics = convertDiagnostics(templateDiags, document);
@@ -335,15 +347,18 @@ export class LGServer {
         return;
       }
 
-      text = updateTemplateInContent(content, updatedTemplate);
-      const templateRange: TRange = getTemplateRange(content, updatedTemplate);
-      lineOffset = templateRange.startLineNumber;
+      const fullText = this.getLGDocumentContent(document);
+      const template = parse(fullText, fileId).find(({ name }) => name === templateId);
+      if (!template) return;
+      lineOffset = template.range.startLineNumber;
 
       // filter diagnostics belong to this template.
-      lgDiagnostics = checkText(text).filter(lgDialg => {
+      lgDiagnostics = checkText(fullText).filter(lgDialg => {
         return (
-          lgDialg.range.start.line >= templateRange.startLineNumber &&
-          lgDialg.range.end.line <= templateRange.endLineNumber
+          lgDialg.range &&
+          template.range &&
+          lgDialg.range.start.line >= template.range.startLineNumber &&
+          lgDialg.range.end.line <= template.range.endLineNumber
         );
       });
     } else {

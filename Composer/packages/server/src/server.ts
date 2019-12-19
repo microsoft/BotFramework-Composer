@@ -14,6 +14,7 @@ import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 
+import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
@@ -117,7 +118,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  const server = new LGServer(connection);
+  const server = new LGServer(connection, BotProjectService);
   server.start();
 }
 

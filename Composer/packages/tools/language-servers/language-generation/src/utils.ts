@@ -11,8 +11,14 @@ import {
   StaticChecker,
 } from 'botbuilder-lg';
 import get from 'lodash/get';
+import { CodeRange } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
+
+export interface LGOption {
+  fileId: string;
+  templateId: string;
+}
 
 export interface Template {
   name: string;
@@ -20,16 +26,9 @@ export interface Template {
   body: string;
 }
 
-export interface TRange {
-  startLineNumber: number;
-  endLineNumber: number;
-}
-
 export interface LGDocument {
   uri: string;
-  inline: boolean;
-  content?: string;
-  template?: Template;
+  lgOption?: LGOption;
 }
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
@@ -119,7 +118,7 @@ export function getLGResources(content: string): LGResource {
   return LGParser.parse(content, ' ');
 }
 
-export function getTemplateRange(content: string, { name, parameters = [], body }: Template): TRange {
+export function getTemplateRange(content: string, { name, parameters = [], body }: Template): CodeRange {
   const resource = LGParser.parse(content).updateTemplate(name, name, parameters, body);
   const template = resource.templates.find(item => item.name === name);
   return {
