@@ -51,7 +51,9 @@ In the **ChoiceInput** dialog you will see the **Property to fill** is set to `u
 | Suggested Action | ![list suggested action](./media/ask-for-input/multichoice-list-suggestedactions.png) | displays options as Suggested Action buttons                                   |
 | Hero Card        | ![list hero card](./media/ask-for-input/multichoice-list-herocard.png)                | displays Hero Card with options as buttons **within** card                     |
 
-In the **User Answers** section in the Property panel you will also notice **Choice Options**, which can be used to add more choices and their synonyms. You'll also see three boxes related to inline separation, or how your bot separates the text of your choices:
+In the **User Input** section in the properties panel you will notice **Choice Options**, which can be used to add more choices and their synonyms. You can set the choice options in **Static** or **Dynamic** format. For **Static** format, you need to write each choice option manually; for **Dynamic** format, you can set the options to an array and then retrieve the value dynamically. 
+
+You'll also see three boxes related to inline separation, or how your bot separates the text of your choices:
   - **Inline separator** - character used to separate individual choices when there are more than two choices, usually `,`.
   - **Inline or** - separator used when there are only two choices, usually `or`.
   - **Inline or more** - separator between last two choices when there are more than two options, usually `, or`. 
