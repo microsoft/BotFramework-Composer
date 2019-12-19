@@ -100,7 +100,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       });
       return;
     }
-    const newContent = get(luFile, 'content', '') + '\n\r' + '# ' + formData.intent + '\r' + formData.triggerPhrases;
+    const newContent = get(luFile, 'content', '') + '\n\n' + '# ' + formData.intent + '\n' + formData.triggerPhrases;
 
     const updateLuFile = {
       id: dialogId,
