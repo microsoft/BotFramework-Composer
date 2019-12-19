@@ -15,7 +15,7 @@ To do this, we'll create a dialog that
 First, we'll set up all the components and make sure they work together. Then, we'll flesh out the functionality.
 
 ## Create a new dialog
-1. Click the **+ New Dialog** button in the left hand explorer. A dialog will appear and ask for a **Name** and **Description**
+1. Click the **+ New Dialog** button in the left hand explorer. A dialog will appear and ask for a **Name** and **Description**.
 
 2. Give this new dialog the name:
     
@@ -25,13 +25,11 @@ First, we'll set up all the components and make sure they work together. Then, w
     
       `Get the current weather conditions`
 
-3. Click **Next**, and Composer will create the new dialog and open it in the editor. 
+3. Click **Next**, and Composer will create the new dialog and open it in the editor. Composer will also create this new dialog with a `BeginDialog` trigger pre-configured.
 
    ![](../media/tutorial-weatherbot/02/create-getweather.png)
 
-Composer created this new dialog with a `BeginDialog` trigger pre-configured.
-
-3. For now, we'll just add a simple message to get things hooked up, then we'll come back to flesh out the feature. With `BeginDialog` trigger selected, click the **+** in the flow, and use the same **Send a response** action.  Set the text of the activity to:
+4. For now, we'll just add a simple message to get things hooked up, then we'll come back to flesh out the feature. With `BeginDialog` trigger selected, click the **+** in the flow and use the same **Send a response** action. Set the text of the activity to:
    
       `Let's check the weather`
 
@@ -39,47 +37,39 @@ Composer created this new dialog with a `BeginDialog` trigger pre-configured.
 
    ![](../media/tutorial-weatherbot/02/getweather-draft.png)
 
-## Wiring up dialogs
+## Wire up dialogs
 You can break pieces of your conversation flow into dialogs and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
 
-1. Click on `WeatherBot.Main` from the left navigation tree. After selecting `WeatherBot.Main` from the explorer, find the **Language Understanding** section of the properties panel. 
+1. Click on `WeatherBot.Main` from the left navigation pane. After selecting `WeatherBot.Main` from the explorer, find the **Language Understanding** section of the properties panel. 
 
    > Each dialog can have it's own **recognizer**, a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined **intents**. Different types of recognizers use different techniques to determine which intent, if any, to choose.
 
    > For now, we're going to use the **Regular Expression** recognizer, which uses pattern matching. Later, we'll use more sophisticated natural language understanding technology from **LUIS**.
 
-2. Under the **Recognizer Type**, select `Regular Expression`
+2. Under the **Recognizer Type**, select `Regular Expression`. 
 
    ![](../media/tutorial-weatherbot/02/regexp-recognizer.gif)
 
-3.  Click the **Add** button. Two new fields will appear: **Intent** and **Pattern**
+3. In the two fields **Intent** and **Pattern**, define the bot's first intent `weather`. Set the value of the **Intent** field to `weather` and set the value of the **Pattern** field to `weather`. 
 
    ![](../media/tutorial-weatherbot/02/weather-intent.png)
 
-4. Define the bot's first intent. Set the value of the **Intent** field to:
-
-      `weather`
-
-5. Set the value of the **Pattern** field to:
-
-      `weather`
-
    > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expression patterns can be much more complicated than this, but for now, this will do!
 
-6. Click "+ New Trigger" in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select **Intent** from the first dropdown, and then select our freshly created `weather` intent from the second dropdown.
+4. Click **+ New Trigger** in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select **Intent recognized** from the first dropdown and then select our freshly created `weather` intent from the second dropdown.
 
    ![](../media/tutorial-weatherbot/02/weather-trigger.png)
 
-7. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`
+5. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`.
    
-8. In the properties panel for the new action, set the `dialog name` property to  our `getWeather` dialog.
+6. In the properties panel for the new action, set the `dialog name` property to our `getWeather` dialog.
 
 ![](../media/tutorial-weatherbot/02/begin-dialog-congifure.gif)
 
 
-## Let's test it out.
+## Test
 
-1. Click the **Restart Bot** button in the upper right hand corner of the Composer window.  This will update the bot runtime app with all the new content and settings. Then, click **Test in Emulator**. When Emulator connects to your bot, it'll send the greeting we configured in the last section.
+1. Click the **Restart Bot** button in the upper right hand corner of the Composer window. This will update the bot runtime app with all the new content and settings. Then, click **Test in Emulator**. When Emulator connects to your bot, it'll send the greeting we configured in the last section.
 
    ![](../media/tutorial-weatherbot/02/restart-bot.gif)
 
