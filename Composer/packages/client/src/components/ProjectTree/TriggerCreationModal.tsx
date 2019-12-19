@@ -88,7 +88,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
-  // const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
