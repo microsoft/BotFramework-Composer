@@ -11,7 +11,7 @@ import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
 import log from '../../logger';
-import AssectService from '../../services/asset';
+import AssetService from '../../services/asset';
 import { IFileStorage } from '../storage/interface';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
@@ -52,7 +52,7 @@ export class CSharpBotConnector implements IBotConnector {
   private migrateBot = async (dir: string, storage: IFileStorage) => {
     if (this.isOldBot(dir)) {
       // cover the old bot runtime with new runtime template
-      await AssectService.manager.copyRuntimeTo(dir, storage);
+      await AssetService.manager.copyRuntimeTo(dir, storage);
     }
   };
 
@@ -161,7 +161,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async (_: BotEnvironments, __: string) => {
     const originPort = urlParse(this.endpoint).port;
     const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
-    return Promise.resolve(`http://localhost:${port}/api/messages`);
+    return `http://localhost:${port}/api/messages`;
   };
 
   sync = async (config: DialogSetting) => {
@@ -176,7 +176,7 @@ export class CSharpBotConnector implements IBotConnector {
     } catch (err) {
       this.stop();
       this.status = BotStatus.NotConnected;
-      throw new Error('Runtime Exception');
+      throw new Error('Error while syncing bot runtime.');
     }
   };
 
@@ -202,16 +202,10 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
-
-process.on('SIGINT', () => {
-  CSharpBotConnector.stopAll('SIGINT');
+const cleanup = (signal: NodeJS.Signals) => {
+  CSharpBotConnector.stopAll(signal);
   process.exit(0);
-});
-process.on('SIGTERM', () => {
-  CSharpBotConnector.stopAll('SIGTERM');
-  process.exit(0);
-});
-process.on('SIGQUIT', () => {
-  CSharpBotConnector.stopAll('SIGQUIT');
-  process.exit(0);
+};
+(['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
+  process.on(signal, cleanup.bind(null, signal));
 });

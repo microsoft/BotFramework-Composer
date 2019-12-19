@@ -109,7 +109,6 @@ export class AssetManager {
   public async getProjectTemplates(): Promise<ProjectTemplate[]> {
     const path = this.assetsLibraryPath + '/projects';
     const output: ProjectTemplate[] = [];
-
     if (await this.templateStorage.exists(path)) {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
