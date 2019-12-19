@@ -9,9 +9,9 @@ const content = `# Hello
 -[Welcome(time)] {name}
 
 # Welcome(time)
--IF:{time == 'morning'}
+-IF:@{time == 'morning'}
   - Good morning
--ELSEIF:{time == 'evening'}
+-ELSEIF:@{time == 'evening'}
   - Good evening
 -ELSE:
   - How are you doing,
@@ -23,7 +23,7 @@ const content = `# Hello
 -What's up bro
 
 # ShowTodo
--IF:{count(user.todos) > 0}
+-IF:@{count(user.todos) > 0}
 -\`\`\`
 {HelperFunction()}
 @{join(foreach(user.todos, x, showSingleTodo(x)), '\n')}
