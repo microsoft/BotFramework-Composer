@@ -35,6 +35,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
             services.AddSingleton<InspectionMiddleware>();
+            services.AddSingleton<ShowTypingMiddleware>();
 
             TypeFactory.Configuration = this.Configuration;
             services.AddSingleton<BotManager, BotManager>((sp) => new BotManager(this.Configuration));

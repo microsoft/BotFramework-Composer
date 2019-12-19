@@ -75,6 +75,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
             var inspectionState = new InspectionState(storage);
+            var showTypingMiddleware = new ShowTypingMiddleware();
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
@@ -90,7 +91,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
               .UseResourceExplorer(resourceExplorer)
               .UseLanguageGeneration(resourceExplorer, "common.lg")
               .Use(new RegisterClassMiddleware<IConfiguration>(Config))
-              .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
+              .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
+              .Use(showTypingMiddleware);
               
             adapter.OnTurnError = async (turnContext, exception) =>
             {

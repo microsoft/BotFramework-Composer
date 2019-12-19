@@ -45,6 +45,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
             services.AddSingleton<InspectionMiddleware>();
+            services.AddSingleton<ShowTypingMiddleware>();
 
             // Load settings
             var settings = new BotSettings();
@@ -67,6 +68,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
             var inspectionState = new InspectionState(storage);
+            var showTypingMiddleware = new ShowTypingMiddleware();
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();
@@ -93,7 +95,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                   .UseResourceExplorer(resourceExplorer)
                   .UseLanguageGeneration(resourceExplorer, "common.lg")
                   .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
-                  .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
+                  .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials))
+                  .Use(showTypingMiddleware);
 
                 if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
                 {
