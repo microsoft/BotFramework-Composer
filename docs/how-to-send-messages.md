@@ -38,10 +38,10 @@ To define a simple text message, use a "-" before the text that you want your bo
      
 You can also define a simple text message with multiple variations. Bot will respond with any of the simple text messages by random. For example: 
 
-     > Greeting template with 2 variations. 
-     # GreetingPrefix
-     - Hi
-     - Hello
+     # SimpleText
+     - Hi, this is simple text
+     - Hey, this is simple text
+     - Hello, this is simple text
 
 ### Text with memory
 To define a text message with memory, you need to **Set a Property** first and then use an expression response like this: 
