@@ -56,7 +56,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     options: {
       'ui:field': 'CustomObjectField',
     },
-    'ui:order': ['dialog', 'property', '*'],
+    'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
   [SDKTypes.CancelAllDialogs]: {
     eventValue: {
@@ -76,11 +76,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.EditActions]: {
     actions: {
       'ui:field': 'StepsField',
-    },
-  },
-  [SDKTypes.EmitEvent]: {
-    eventValue: {
-      'ui:field': 'CustomObjectField',
     },
   },
   [SDKTypes.Foreach]: {
@@ -103,10 +98,38 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.IfCondition]: {
     'ui:hidden': ['actions', 'elseActions', ...globalHidden],
   },
+  [SDKTypes.SetProperties]: {
+    assignments: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        property: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
+  },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnBeginDialog]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnCancelDialog]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnCondition]: {
@@ -122,6 +145,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEndOfConversationActivity]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnError]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEventActivity]: {
@@ -152,6 +178,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.OnMessageUpdateActivity]: {
     ...triggerUiSchema,
   },
+  [SDKTypes.OnRepromptDialog]: {
+    ...triggerUiSchema,
+  },
   [SDKTypes.OnTypingActivity]: {
     ...triggerUiSchema,
   },
@@ -177,7 +206,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:order': ['connectionName', '*'],
   },
   [SDKTypes.QnAMakerDialog]: {
-    'ui:hidden': ['strictFilters'],
+    strictFilters: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        name: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
   },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
@@ -187,6 +238,14 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:field': 'CustomObjectField',
     },
     'ui:hidden': [...globalHidden],
+    'ui:order': ['dialog', 'options', 'includeActivity', '*'],
+  },
+  [SDKTypes.RepeatDialog]: {
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:hidden': [...globalHidden],
+    'ui:order': ['options', 'includeActivity', '*'],
   },
   [SDKTypes.SwitchCondition]: {
     cases: {

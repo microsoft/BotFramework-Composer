@@ -23,7 +23,7 @@ const envSettings: { [env: string]: Settings } = {
   development: {
     botAdminEndpoint: botEndpoint,
     botEndpoint: 'http://localhost:3979', //botEndpoint,
-    assetsLibray: Path.resolve('./assets'),
+    assetsLibray: Path.resolve(__dirname, '../../assets'),
     botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
     runtimeFolder,
     appDataPath,

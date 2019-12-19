@@ -97,8 +97,7 @@
                   "maxTurnCount": 3,
                   "property": "user.name",
                   "alwaysPrompt": false,
-                  "allowInterruptions": "false",
-                  "outputFormat": "none"
+                  "allowInterruptions": "false"
                 },
                 {
                   "$type": "Microsoft.SendActivity",
