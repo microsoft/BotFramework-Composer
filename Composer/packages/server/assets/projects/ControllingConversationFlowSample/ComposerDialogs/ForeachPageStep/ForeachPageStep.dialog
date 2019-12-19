@@ -77,7 +77,7 @@
               "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "{dialog.foreach.index}: {dialog.foreach.value}"
+                  "activity": "@{dialog.foreach.index}: @{dialog.foreach.value}"
                 }
               ]
             }
