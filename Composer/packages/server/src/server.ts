@@ -40,16 +40,17 @@ const CS_POLICIES = [
   'upgrade-insecure-requests;',
 ];
 
-const appInsightsKey = process.env.SharedAppInsightsKey;
-// default configAppInsights is no-op
-let configAppInsights = () => Promise.resolve();
+async function configAppInsightsAsNeeded(): Promise<boolean> {
+  const appInsightsKey = process.env.SharedAppInsightsKey;
+  if (appInsightsKey) {
+    //eslint-disable-next-line node/no-missing-require
+    const configAppInsights = require('commands/configAppInsights').default as SelfHostCommands.SetupTelemetry;
+    await configAppInsights(appInsightsKey);
 
-if (appInsightsKey) {
-  //eslint-disable-next-line node/no-missing-require
-  configAppInsights = (require('commands/configAppInsights').default as SelfHostCommands.SetupTelemetry).bind(
-    null,
-    appInsightsKey
-  );
+    return true;
+  }
+
+  return false;
 }
 
 app.all('*', function(req: Request, res: Response, next: NextFunction) {
@@ -70,11 +71,7 @@ app.all('*', function(req: Request, res: Response, next: NextFunction) {
     );
   }
 
-  // configAppInsights can be call many many times (only the first time does sth though)
-  configAppInsights().then(
-    () => next(),
-    err => next(err)
-  );
+  next();
 });
 
 app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
@@ -116,12 +113,6 @@ app.get('*', function(req, res) {
 });
 
 const port = process.env.PORT || 5000;
-const server = app.listen(port, () => {
-  if (process.env.NODE_ENV === 'production') {
-    // eslint-disable-next-line no-console
-    console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
-  }
-});
 
 const wss: ws.Server = new ws.Server({
   noServer: true,
@@ -136,13 +127,21 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   server.start();
 }
 
-attachLSPServer(wss, server, `${BASEURL}/lg-language-server`, webSocket => {
-  // launch language server when the web socket is opened
-  if (webSocket.readyState === webSocket.OPEN) {
-    launchLanguageServer(webSocket);
-  } else {
-    webSocket.on('open', () => {
+configAppInsightsAsNeeded().then(() => {
+  const server = app.listen(port, () => {
+    if (process.env.NODE_ENV === 'production') {
+      // eslint-disable-next-line no-console
+      console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+    }
+  });
+  attachLSPServer(wss, server, `${BASEURL}/lg-language-server`, webSocket => {
+    // launch language server when the web socket is opened
+    if (webSocket.readyState === webSocket.OPEN) {
       launchLanguageServer(webSocket);
-    });
-  }
+    } else {
+      webSocket.on('open', () => {
+        launchLanguageServer(webSocket);
+      });
+    }
+  });
 });
