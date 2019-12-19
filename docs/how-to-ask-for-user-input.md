@@ -15,7 +15,7 @@ As seen in the **TextInput** dialog the user is prompted for their name in the *
 
 ![Text prompt bot says](./media/ask-for-input/text-bot-asks.png)
 
-The user's response is stored in **Property to fill** in the **User Asks** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowercase. 
+The user's response is stored in **Property to fill** in the **User Input** section as `user.name`. Note that you can change the **Output Format** if you want to save the text as trimmed (leading and trailing whitespace removed), uppercase, or lowercase. 
 
 ![Text prompt user input](./media/ask-for-input/text-user-input.png)
 
