@@ -36,7 +36,33 @@ const initialDialogShape = {
   },
   'Microsoft.OnConversationUpdateActivity': {
     $type: 'Microsoft.OnConversationUpdateActivity',
-    condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+    actions: [
+      {
+        $type: 'Microsoft.Foreach',
+        $designer: {
+          name: 'Loop: for each item',
+        },
+        itemsProperty: 'turn.Activity.membersAdded',
+        actions: [
+          {
+            $type: 'Microsoft.IfCondition',
+            $designer: {
+              name: 'Branch: if/else',
+            },
+            condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
+            actions: [
+              {
+                $type: 'Microsoft.SendActivity',
+                $designer: {
+                  name: 'Send a response',
+                },
+                activity: '',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   'Microsoft.SendActivity': {
     activity: '',
