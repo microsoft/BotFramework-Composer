@@ -18,7 +18,7 @@ export class FunctionEntity {
   public Introduction: string;
 }
 
-// todo should add params info and other info og the function
+// https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md
 export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, FunctionEntity>([
   [
     'add',
@@ -226,14 +226,6 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
-    'join',
-    new FunctionEntity(
-      ['collection: Array', 'delimiter: string'],
-      ReturnType.String,
-      'Return a string that has all the items from an array and has each character separated by a delimiter.'
-    ),
-  ],
-  [
     'first',
     new FunctionEntity(['collection: string|Array'], ReturnType.Object, 'Returns the first item from the collection'),
   ],
@@ -244,7 +236,7 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
   [
     'foreach',
     new FunctionEntity(
-      ['collection: Array', 'iteratorName: string', 'function: any'],
+      ['collection: Array | Object', 'iteratorName: string', 'function: any'],
       ReturnType.Object,
       'Operate on each element and return the new collection'
     ),
@@ -523,14 +515,6 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
-    'decodeUriComponent',
-    new FunctionEntity(
-      ['value: string'],
-      ReturnType.String,
-      'Return a string that replaces escape characters with decoded versions.'
-    ),
-  ],
-  [
     'base64',
     new FunctionEntity(['value: string'], ReturnType.String, 'Return the base64-encoded version for a string.'),
   ],
@@ -562,7 +546,8 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the string version for a uniform resource identifier (URI) encoded string, effectively decoding the URI-encoded string.'
     ),
   ],
-  ['xml', new FunctionEntity(['xmlStr: string]'], ReturnType.Object, 'Return the XML version for a string.')],
+  //C# only
+  //['xml', new FunctionEntity(['xmlStr: string]'], ReturnType.Object, 'Return the XML version for a string.')],
   [
     'range',
     new FunctionEntity(
@@ -699,6 +684,7 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the first non-null value from one or more parameters. Empty strings, empty arrays, and empty objects are not null.'
     ),
   ],
+  /* C# only
   [
     'xpath',
     new FunctionEntity(
@@ -707,14 +693,96 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Check XML for nodes or values that match an XPath (XML Path Language) expression, and return the matching nodes or values. An XPath expression, or just "XPath", helps you navigate an XML document structure so that you can select nodes or compute values in the XML content.'
     ),
   ],
-
-  // extra function (lg only)
+  */
   [
-    'lgTemplate',
+    'select',
     new FunctionEntity(
-      ['templateName: string', '...params: string[]'],
+      ['collection: Array | Object', 'iteratorName: string', 'function: any'],
+      ReturnType.Object,
+      'Operate on each element and return the new collection'
+    ),
+  ],
+  [
+    'where',
+    new FunctionEntity(
+      ['collection: Array | Object', 'iteratorName: string', 'confitionFunction: any'],
+      ReturnType.Object,
+      'Filter on each element and return the new collection of filtered elements which match specific condition'
+    ),
+  ],
+  [
+    'sortBy',
+    new FunctionEntity(
+      ['collection: Array', 'property: string'],
+      ReturnType.Object,
+      'Sort elements in the collection with ascending order and return the sorted collection.'
+    ),
+  ],
+  [
+    'sortByDescending',
+    new FunctionEntity(
+      ['collection: Array', 'property: string'],
+      ReturnType.Object,
+      'Sort elements in the collection with descending order and return the sorted collection.'
+    ),
+  ],
+  [
+    'jPath',
+    new FunctionEntity(
+      ['json: Object', 'path: string'],
+      ReturnType.Object,
+      'Check JSON or JSON string for nodes or value that match a path expression, and return the matching nodes.'
+    ),
+  ],
+  [
+    'setPathToValue',
+    new FunctionEntity(
+      ['path: any', 'value: Object'],
+      ReturnType.Object,
+      'Retrieve the value of the specified property from the JSON object.'
+    ),
+  ],
+  [
+    'isMatch',
+    new FunctionEntity(
+      ['targetString: string', 'pattern: string'],
+      ReturnType.Object,
+      'test a given string ia match a common regex pattern.'
+    ),
+  ],
+
+  // Functions injected from LG library
+  // https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/Functions-injected-from-LG.md
+  [
+    'template',
+    new FunctionEntity(
+      ['templateName: string', '...params: any[]'],
+      ReturnType.Object,
+      'Return the evaluated result of given template name and params.'
+    ),
+  ],
+  [
+    'fromFile',
+    new FunctionEntity(
+      ['filePath: string'],
       ReturnType.String,
-      'Evaluate a template and get the result.'
+      'Return the evaluated result of the expression in the given file.'
+    ),
+  ],
+  [
+    'isTemplate',
+    new FunctionEntity(
+      ['templateName: string'],
+      ReturnType.Boolean,
+      'Return whether a given template name is included in the evaluator.'
+    ),
+  ],
+  [
+    'ActivityAttachment',
+    new FunctionEntity(
+      ['content: Object', 'type: string'],
+      ReturnType.Boolean,
+      'Return an activityAttachment constructed from an object and a type.'
     ),
   ],
 ]);
