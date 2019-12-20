@@ -40,6 +40,7 @@ const initialDialogShape = {
       {
         $type: 'Microsoft.Foreach',
         $designer: {
+          id: nanoid('1234567890', 6),
           name: 'Loop: for each item',
         },
         itemsProperty: 'turn.Activity.membersAdded',
@@ -47,6 +48,7 @@ const initialDialogShape = {
           {
             $type: 'Microsoft.IfCondition',
             $designer: {
+              id: nanoid('1234567890', 6),
               name: 'Branch: if/else',
             },
             condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
@@ -54,6 +56,7 @@ const initialDialogShape = {
               {
                 $type: 'Microsoft.SendActivity',
                 $designer: {
+                  id: nanoid('1234567890', 6),
                   name: 'Send a response',
                 },
                 activity: '',
