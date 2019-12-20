@@ -11,7 +11,7 @@ import {
   StaticChecker,
 } from 'botbuilder-lg';
 import get from 'lodash/get';
-import { CodeRange } from '@bfc/indexers';
+import { CodeRange, LgTemplate, lgIndexer } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
 
@@ -29,6 +29,11 @@ export interface Template {
 export interface LGDocument {
   uri: string;
   lgOption?: LGOption;
+}
+
+export interface LGParsedResource {
+  templates: LgTemplate[];
+  diagnostics: Diagnostic[];
 }
 
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
@@ -59,6 +64,30 @@ const severityMap = {
 
 export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSeverity {
   return severityMap[severity];
+}
+
+export function generageDiagnostic(message: string, severity: DiagnosticSeverity, document: TextDocument): Diagnostic {
+  return {
+    severity,
+    range: Range.create(Position.create(0, 0), Position.create(0, 0)),
+    message,
+    source: document.uri,
+  };
+}
+
+export function parse(content: string, document: TextDocument): LGParsedResource {
+  try {
+    const templates = lgIndexer.parse(content);
+    return {
+      templates,
+      diagnostics: [],
+    };
+  } catch (error) {
+    return {
+      templates: [],
+      diagnostics: [generageDiagnostic(error.message, DiagnosticSeverity.Error, document)],
+    };
+  }
 }
 
 export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextDocument, lineOffset = 0): Diagnostic[] {

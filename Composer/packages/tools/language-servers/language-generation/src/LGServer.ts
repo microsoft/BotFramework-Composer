@@ -14,11 +14,12 @@ import {
   CompletionItemKind,
   CompletionItem,
   Range,
+  DiagnosticSeverity,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
-import { LgFile, lgIndexer, LgTemplate } from '@bfc/indexers';
+import { LgFile, LgTemplate } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -28,8 +29,10 @@ import {
   checkText,
   checkTemplate,
   convertDiagnostics,
+  generageDiagnostic,
   isValid,
   LGOption,
+  parse,
 } from './utils';
 
 // define init methods call from client
@@ -37,15 +40,18 @@ const InitializeDocumentsMethodName = 'initializeDocuments';
 
 const allowedCompletionStates = ['expression'];
 
-const { parse } = lgIndexer;
-
 export class LGServer {
   protected workspaceRoot?: URI;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
-  protected LGDocuments: LGDocument[] = []; // LG Documents Store
+  /**
+   * LG documents infomation store.
+   * The connection between lgOption and botProjectService.
+   * Help do inline template editing and server resource passing.
+   */
+  protected LGDocuments: LGDocument[] = [];
 
-  constructor(protected readonly connection: IConnection, protected readonly botProjectService) {
+  constructor(protected readonly connection: IConnection, protected readonly botProjectService?) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -78,23 +84,38 @@ export class LGServer {
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
-        this.LGDocuments.push({ uri, lgOption });
+        if (this.botProjectService) this.LGDocuments.push({ uri, lgOption });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
+          if (lgOption) this.verifyLgOption(lgOption, textDocument);
           this.validate(textDocument);
         }
       }
     });
   }
 
-  protected verifyLgOption(lgOption: LGOption) {
-    const { fileId, templateId } = lgOption;
-    const lgFile = this.getLGFile(fileId);
-    if (!lgFile) throw new Error(`File ${fileId}.lg do not exist`);
-    const { templates } = lgFile;
-    const template = templates.find(({ name }) => name === templateId);
-    if (!template) throw new Error(`Template ${fileId}.lg#${templateId} do not exist`);
+  protected verifyLgOption(lgOption: LGOption, document: TextDocument) {
+    const diagnostics: string[] = [];
+
+    if (!this.botProjectService) {
+      diagnostics.push('[Error lgOption] botProjectService is required but not exist.');
+    } else {
+      const { fileId, templateId } = lgOption;
+      const lgFile = this.getLGFile(fileId);
+      if (!lgFile) {
+        diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
+      } else {
+        const { templates } = lgFile;
+        const template = templates.find(({ name }) => name === templateId);
+        if (!template) diagnostics.push(`Template ${fileId}.lg#${templateId} do not exist`);
+      }
+    }
+    this.connection.console.log(diagnostics.join('\n'));
+    this.sendDiagnostics(
+      document,
+      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+    );
   }
 
   start() {
@@ -109,7 +130,7 @@ export class LGServer {
   }
 
   protected getLGFile(fileId: string): LgFile | undefined {
-    const currentProject = this.botProjectService.getCurrentBotProject();
+    const currentProject = this.botProjectService?.getCurrentBotProject();
     if (!currentProject) return;
     const { lgFiles } = currentProject.getIndexes();
     return lgFiles.find(({ id }) => id === fileId);
@@ -125,6 +146,14 @@ export class LGServer {
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
     return this.LGDocuments.find(({ uri }) => uri === document.uri);
   }
+
+  /**
+   *
+   * @param document
+   * 1. if !botProjectService, return text;
+   * 2. if botProjectService && !lgOption, return text;
+   * 3. if botProjectService
+   */
   protected getLGDocumentContent(document: TextDocument): string {
     const text = document.getText();
     const lgOption = this.getLGOption(document);
@@ -132,11 +161,11 @@ export class LGServer {
 
     const { fileId, templateId } = lgOption;
     const lgFile = this.getLGFile(fileId);
-    if (!lgFile) throw new Error(`File ${fileId}.lg do not exist`);
+    if (!lgFile) return text;
     const { content } = lgFile;
 
     const template = this.getLGTemplate(fileId, templateId);
-    if (!template) throw new Error(`Template ${fileId}.lg#${templateId} do not exist`);
+    if (!template) return content;
 
     const updatedTemplate = {
       name: template.name,
@@ -157,7 +186,11 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    const templates = parse(text);
+    const { templates, diagnostics } = parse(text, document);
+    if (diagnostics.length) {
+      this.sendDiagnostics(document, diagnostics);
+      return Promise.resolve(null);
+    }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.name === word);
@@ -278,7 +311,11 @@ export class LGServer {
       return Promise.resolve(null);
     }
 
-    const templates = parse(text);
+    const { templates, diagnostics } = parse(text, document);
+    if (diagnostics.length) {
+      this.sendDiagnostics(document, diagnostics);
+      return Promise.resolve(null);
+    }
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
@@ -354,7 +391,7 @@ export class LGServer {
     // if inline editor, concat new content for validate
     const { lgOption } = LGDocument;
     if (lgOption) {
-      const { templateId, fileId } = lgOption;
+      const { templateId } = lgOption;
       const templateDiags = checkTemplate({
         name: templateId,
         parameters: [],
@@ -368,7 +405,8 @@ export class LGServer {
       }
 
       const fullText = this.getLGDocumentContent(document);
-      const template = parse(fullText, fileId).find(({ name }) => name === templateId);
+      const { templates } = parse(text, document);
+      const template = templates.find(({ name }) => name === templateId);
       if (!template) return;
       lineOffset = template.range?.startLineNumber ?? 0;
 
