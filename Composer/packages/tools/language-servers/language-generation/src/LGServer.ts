@@ -17,16 +17,12 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 import { LgFile, lgIndexer, LgTemplate } from '@bfc/indexers';
-
-// import { BotProject } from '../../../../server/src/models/bot/botProject';
-// import { BotProjectService } from '../../../../server/src/services/project';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
-  getLGResources,
   updateTemplateInContent,
   LGDocument,
   checkText,
@@ -161,8 +157,7 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    const lgResources = getLGResources(text);
-    const templates = lgResources.templates;
+    const templates = parse(text);
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.name === word);
@@ -276,7 +271,6 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-    let templates: LGTemplate[] = [];
 
     const diags = checkText(text);
 
@@ -284,8 +278,7 @@ export class LGServer {
       return Promise.resolve(null);
     }
 
-    const lgResources = getLGResources(text);
-    templates = lgResources.templates;
+    const templates = parse(text);
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
