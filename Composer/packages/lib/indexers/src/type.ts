@@ -67,7 +67,7 @@ export interface LgTemplate {
   name: string;
   body: string;
   parameters: string[];
-  range: CodeRange;
+  range?: CodeRange;
 }
 
 export interface LgFile {
