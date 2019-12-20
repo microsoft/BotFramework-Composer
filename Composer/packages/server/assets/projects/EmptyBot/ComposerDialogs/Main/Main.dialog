@@ -5,7 +5,6 @@
     "description": "<Fill in the description of your bot here>"
   },
   "generator": "common.lg",
-  "recognizer": "Main.lu",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
