@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { LgEditor } from '../../src';
 
 const content = `# Hello
--[Welcome(time)] {name}
+-@{Welcome(time)} @{name}
 
 # Welcome(time)
 -IF:@{time == 'morning'}
@@ -35,7 +35,7 @@ const content = `# Hello
 -* {x}
 
 # HelperFunction
-- IF: {count(user.todos) == 1}
+- IF: @{count(user.todos) == 1}
   - Your most recent @{count(user.todos)} task is
 - ELSE:
   - Your most recent @{count(user.todos)} tasks are
@@ -46,7 +46,7 @@ const content = `# Hello
 -Help, we don't need no stinkin' help!
 
 # bfdactivity-116673
--Successfully added a todo named {dialog.todo}
+-Successfully added a todo named @{dialog.todo}
 
 # bfdactivity-832307
 -Successfully cleared items in the Todo List.
@@ -55,19 +55,19 @@ const content = `# Hello
 -You don't have any items in the Todo List.
 
 # bfdactivity-725469
--Successfully removed a todo named {dialog.todo}
+-Successfully removed a todo named @{dialog.todo}
 
 # bfdactivity-549615
--{dialog.todo} is not in the Todo List
+-@{dialog.todo} is not in the Todo List
 
 # bfdactivity-339580
 -You have no todos.
 
 # bfdactivity-662084
--[ShowTodo]
+-@{ShowTodo}
 
 # bfdactivity-696707
--[help]
+-@{help}
 
 # bfdactivity-157674
 - Hi! I'm a ToDo bot. Say "add a todo named first" to get started.

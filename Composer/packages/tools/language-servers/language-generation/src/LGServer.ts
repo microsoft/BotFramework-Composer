@@ -18,7 +18,10 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
-import { LgFile, lgIndexer } from '@bfc/indexers';
+import { LgFile, lgIndexer, LgTemplate } from '@bfc/indexers';
+
+// import { BotProject } from '../../../../server/src/models/bot/botProject';
+// import { BotProjectService } from '../../../../server/src/services/project';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -45,7 +48,6 @@ export class LGServer {
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = []; // LG Documents Store
-  protected lgFiles: LgFile[] = [];
 
   constructor(protected readonly connection: IConnection, protected readonly botProjectService) {
     this.documents.listen(this.connection);
@@ -77,15 +79,9 @@ export class LGServer {
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onHover(params => this.hover(params));
 
-    this.connection.onRequest(async (method, params) => {
+    this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const currentProject = this.botProjectService.getCurrentBotProject();
-        if (currentProject !== undefined && (await currentProject.exists())) {
-          await currentProject.index();
-          const { lgFiles } = currentProject.getIndexes();
-          this.lgFiles = lgFiles;
-        }
-        const { uri, lgOption }: { uri: string; lgOption: LGOption } = params;
+        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
         this.LGDocuments.push({ uri, lgOption });
         // run diagnostic
         const textDocument = this.documents.get(uri);
@@ -96,36 +92,67 @@ export class LGServer {
     });
   }
 
+  protected verifyLgOption(lgOption: LGOption) {
+    const { fileId, templateId } = lgOption;
+    const lgFile = this.getLGFile(fileId);
+    if (!lgFile) throw new Error(`File ${fileId}.lg do not exist`);
+    const { templates } = lgFile;
+    const template = templates.find(({ name }) => name === templateId);
+    if (!template) throw new Error(`Template ${fileId}.lg#${templateId} do not exist`);
+  }
+
   start() {
     this.connection.listen();
+  }
+
+  protected getLGOption(document: TextDocument): LGOption | undefined {
+    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
+    if (!LGDocument || !LGDocument.lgOption) return;
+    const { lgOption } = LGDocument;
+    return lgOption;
+  }
+
+  protected getLGFile(fileId: string): LgFile | undefined {
+    const currentProject = this.botProjectService.getCurrentBotProject();
+    if (!currentProject) return;
+    const { lgFiles } = currentProject.getIndexes();
+    return lgFiles.find(({ id }) => id === fileId);
+  }
+
+  protected getLGTemplate(fileId: string, templateId: string): LgTemplate | undefined {
+    const lgFile = this.getLGFile(fileId);
+    if (!lgFile) return;
+    const { templates } = lgFile;
+    return templates.find(({ name }) => name === templateId);
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
     return this.LGDocuments.find(({ uri }) => uri === document.uri);
   }
   protected getLGDocumentContent(document: TextDocument): string {
-    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
     const text = document.getText();
-    if (LGDocument && LGDocument.lgOption) {
-      const { fileId, templateId } = LGDocument.lgOption;
-      const lgFile = this.lgFiles.find(({ id }) => id === fileId);
-      if (!lgFile) return text;
-      const { content, templates } = lgFile;
+    const lgOption = this.getLGOption(document);
+    if (!lgOption) return text;
 
-      const template = templates.find(({ name }) => name === templateId);
-      if (!template) return text;
-      const updatedTemplate = {
-        name: template.name,
-        parameters: template.parameters,
-        body: text,
-      };
+    const { fileId, templateId } = lgOption;
+    const lgFile = this.getLGFile(fileId);
+    if (!lgFile) throw new Error(`File ${fileId}.lg do not exist`);
+    const { content } = lgFile;
 
-      const templateDiags = checkTemplate(updatedTemplate);
-      if (isValid(templateDiags)) {
-        return updateTemplateInContent(content, updatedTemplate);
-      }
+    const template = this.getLGTemplate(fileId, templateId);
+    if (!template) throw new Error(`Template ${fileId}.lg#${templateId} do not exist`);
+
+    const updatedTemplate = {
+      name: template.name,
+      parameters: template.parameters,
+      body: text,
+    };
+
+    const templateDiags = checkTemplate(updatedTemplate);
+    if (isValid(templateDiags)) {
+      return updateTemplateInContent(content, updatedTemplate);
     }
-    return text;
+    return content;
   }
 
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
