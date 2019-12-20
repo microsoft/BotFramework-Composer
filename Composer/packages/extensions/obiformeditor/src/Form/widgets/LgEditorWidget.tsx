@@ -4,7 +4,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
-import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 
 import { FormContext } from '../types';
@@ -85,9 +84,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     : '';
   const [localValue, setLocalValue] = useState(template.body);
   const lgOption = {
-    inline: true,
-    content: get(lgFile, 'content', ''),
-    template,
+    fileId: lgFileId,
+    templateId: lgName,
   };
 
   const onChange = (body: string) => {

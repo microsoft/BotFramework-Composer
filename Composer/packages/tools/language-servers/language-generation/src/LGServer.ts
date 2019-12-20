@@ -377,7 +377,7 @@ export class LGServer {
       const fullText = this.getLGDocumentContent(document);
       const template = parse(fullText, fileId).find(({ name }) => name === templateId);
       if (!template) return;
-      lineOffset = template.range.startLineNumber;
+      lineOffset = template.range?.startLineNumber ?? 0;
 
       // filter diagnostics belong to this template.
       lgDiagnostics = checkText(fullText).filter(lgDialg => {

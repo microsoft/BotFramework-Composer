@@ -150,9 +150,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const lgOption = template
     ? {
-        inline: inlineMode,
-        content: file?.content ?? '',
-        template,
+        fileId,
+        templateId: template?.name || '',
       }
     : undefined;
 
