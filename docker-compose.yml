@@ -2,10 +2,6 @@ version: "3"
 services:
   composer:
     build: Composer
-    image: composerbasic
-    container_name: composer
-  runtime:
-    build: .
     ports:
       - "3000:3000"
       - "3979:3979"
