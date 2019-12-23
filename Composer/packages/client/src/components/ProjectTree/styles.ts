@@ -161,6 +161,7 @@ export const textFieldlabel = {
 export const intent = {
   root: {
     width: '400px',
+    paddingBottom: '20px',
   },
 };
 
