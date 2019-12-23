@@ -25,7 +25,6 @@ context('Notification Page', () => {
     });
 
     cy.findAllByText('Bot Responses').should('exist');
-    cy.get('@switchButton').should('be.disabled');
   });
 
   it('can show lu syntax error ', () => {

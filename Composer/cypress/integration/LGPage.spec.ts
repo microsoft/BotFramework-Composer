@@ -30,9 +30,5 @@ context('LG Page', () => {
 
     // nav to Main dialog
     cy.get('.dialogNavTree a[title="__TestTodoSample.Main"]').click();
-    // cy.wait(300);
-
-    // dialog filter, edit mode button is disabled.
-    cy.get('@switchButton').should('be.disabled');
   });
 });

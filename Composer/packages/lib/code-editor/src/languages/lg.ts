@@ -89,6 +89,14 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
     mimetypes: ['application/lg'],
   });
 
+  monaco.languages.setLanguageConfiguration('botbuilderlg', {
+    autoClosingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+    ],
+  });
+
   monaco.editor.defineTheme('lgtheme', {
     base: 'vs',
     inherit: false,
