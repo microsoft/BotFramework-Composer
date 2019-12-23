@@ -11,7 +11,7 @@ import {
   StaticChecker,
 } from 'botbuilder-lg';
 import get from 'lodash/get';
-import { CodeRange, LgTemplate, lgIndexer } from '@bfc/indexers';
+import { CodeRange, LgTemplate, lgIndexer, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
 
@@ -90,15 +90,16 @@ export function parse(content: string, document: TextDocument): LGParsedResource
   }
 }
 
-export function convertDiagnostics(lgDiags: LGDiagnostic[] = [], document: TextDocument, lineOffset = 0): Diagnostic[] {
+// if template, offset +1 to exclude #TemplateName
+export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
+  const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
   lgDiags.forEach(diag => {
+    // offset +1, lsp start from line:0, but monaco/composer start from line:1
+    const range = diag.range ? offsetRange(diag.range, 1 + offset) : defaultRange;
     const diagnostic: Diagnostic = {
       severity: convertSeverity(diag.severity),
-      range: Range.create(
-        Position.create(diag.range.start.line - 1 - lineOffset, diag.range.start.character),
-        Position.create(diag.range.end.line - 1 - lineOffset, diag.range.end.character)
-      ),
+      range,
       message: diag.message,
       source: document.uri,
     };
@@ -134,13 +135,6 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
-}
-
-export function checkText(text: string): LGDiagnostic[] {
-  return staticChecker.checkText(text, '', ImportResolver.fileResolver);
-}
-export function isValid(diagnostics: LGDiagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== LGDiagnosticSeverity.Error);
 }
 
 export function getLGResources(content: string): LGResource {

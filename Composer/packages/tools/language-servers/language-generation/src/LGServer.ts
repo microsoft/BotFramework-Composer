@@ -18,22 +18,21 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { Diagnostic as LGDiagnostic } from 'botbuilder-lg';
-import { LgFile, LgTemplate } from '@bfc/indexers';
+import { LgFile, LgTemplate, lgIndexer, filterTemplateDiagnostics, isValid } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   updateTemplateInContent,
   LGDocument,
-  checkText,
   checkTemplate,
   convertDiagnostics,
   generageDiagnostic,
-  isValid,
   LGOption,
   parse,
 } from './utils';
+
+const { check } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -305,7 +304,7 @@ export class LGServer {
     }
     const text = this.getLGDocumentContent(document);
 
-    const diags = checkText(text);
+    const diags = check(text, '');
 
     if (isValid(diags) === false) {
       return Promise.resolve(null);
@@ -375,8 +374,6 @@ export class LGServer {
   protected doValidate(document: TextDocument): void {
     const text = document.getText();
     const LGDocument = this.getLGDocument(document);
-    let lgDiagnostics: LGDiagnostic[] = [];
-    let lineOffset = 0;
 
     // uninitialized
     if (!LGDocument) {
@@ -391,7 +388,7 @@ export class LGServer {
     // if inline editor, concat new content for validate
     const { lgOption } = LGDocument;
     if (lgOption) {
-      const { templateId } = lgOption;
+      const { templateId, fileId } = lgOption;
       const templateDiags = checkTemplate({
         name: templateId,
         parameters: [],
@@ -399,7 +396,7 @@ export class LGServer {
       });
       // error in template.
       if (isValid(templateDiags) === false) {
-        const diagnostics = convertDiagnostics(templateDiags, document);
+        const diagnostics = convertDiagnostics(templateDiags, document, 1);
         this.sendDiagnostics(document, diagnostics);
         return;
       }
@@ -408,22 +405,15 @@ export class LGServer {
       const { templates } = parse(text, document);
       const template = templates.find(({ name }) => name === templateId);
       if (!template) return;
-      lineOffset = template.range?.startLineNumber ?? 0;
 
       // filter diagnostics belong to this template.
-      lgDiagnostics = checkText(fullText).filter(lgDialg => {
-        return (
-          lgDialg.range &&
-          template.range &&
-          lgDialg.range.start.line >= template.range.startLineNumber &&
-          lgDialg.range.end.line <= template.range.endLineNumber
-        );
-      });
-    } else {
-      lgDiagnostics = checkText(text);
+      const lgDiagnostics = filterTemplateDiagnostics(check(fullText, fileId), template);
+      const diagnostics = convertDiagnostics(lgDiagnostics, document, 1);
+      this.sendDiagnostics(document, diagnostics);
+      return;
     }
-
-    const diagnostics = convertDiagnostics(lgDiagnostics, document, lineOffset);
+    const lgDiagnostics = check(text, '');
+    const diagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, diagnostics);
   }
 
