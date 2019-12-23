@@ -72,10 +72,10 @@ export function CreateOptions(props) {
 
   const handleJumpToNext = () => {
     if (option === 'Create from template') {
-      if (template === null) onNext(templates[0]);
+      if (template === null) onNext(templates[1].key);
       else onNext(template.key);
     } else {
-      onNext(null);
+      onNext(templates[1].key);
     }
   };
 
