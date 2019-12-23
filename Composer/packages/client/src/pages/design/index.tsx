@@ -120,7 +120,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
+  const { dialogs, luFiles, designPageLocation, breadcrumb, visualEditorSelection } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -157,6 +157,25 @@ function DesignPage(props) {
       clearUndoHistory();
     }
   }, [location]);
+
+  useEffect(() => {
+    const errors = { message: '', summary: formatMessage('Some triggers use an undefined intent') };
+    let isCorrect = true;
+    dialogs.forEach(dialog => {
+      const usedLuIntents = dialog.luIntents;
+      const luFile = luFiles.find(luFile => luFile.id === dialog.id);
+      const definedLuIntents = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
+      usedLuIntents.forEach(uli => {
+        if (definedLuIntents.findIndex(definedLuIntent => definedLuIntent.name === uli) === -1) {
+          isCorrect = false;
+          errors.message += `dialog '${dialog.id}' contains a trigger that use an undefined lu intent '${uli}.'`;
+        }
+      });
+    });
+    if (!isCorrect) {
+      actions.setError(errors);
+    }
+  }, [luFiles]);
 
   useEffect(() => {
     const dialog = dialogs.find(d => d.id === dialogId);
