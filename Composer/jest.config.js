@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 module.exports = {
   collectCoverageFrom: [
     '**/src/**/*.{js,jsx,ts,tsx}',
@@ -39,7 +42,7 @@ module.exports = {
     '<rootDir>/packages/server',
     '<rootDir>/packages/extensions/obiformeditor',
     '<rootDir>/packages/extensions/visual-designer',
-    '<rootDir>/packages/lib/code-editor',
+    '<rootDir>/packages/extensions/code-editor',
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/tools/language-servers/language-generation',
   ],
