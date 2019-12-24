@@ -17,19 +17,24 @@ To start, clone the Composer GitHub repository.
 git clone https://github.com/microsoft/BotFramework-Composer.git
 ```
 
-After cloning the repo open a terminal and navigate to the Bot Framework Composer folder. Navigate to the **Composer** folder and run the following commands:
+After cloning the repo open a terminal and navigate to the Bot Framework Composer folder. Run the following commands: 
 ```
 cd Composer 
-yarn 
 ```
-  This command gets all dependent packages.
+  This command navigates to the **Composer** folder. 
+  
+```
+yarn install
+```
+  This command installs all dependent packages.
 
 ```
 yarn build 
 ```
-  This command builds the Composer app. The build process can take few minutes.
-  
- If you are having trouble intalling or building Composer run `yarn tableflip`, which removes all of the Composer application's dependencies (node_modules) and reinstalls and rebuilds the application's dependencies. After running `yarn tableflip` run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
+  This command builds the Composer app. The build process can take a few minutes.
+
+> [!NOTE]
+> If you are having trouble intalling or building Composer run `yarn tableflip`, which removes all of the Composer application's dependencies (node_modules) and reinstalls and rebuilds the application's dependencies. After running `yarn tableflip` run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
 
 ```
 yarn startall
