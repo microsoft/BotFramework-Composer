@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { dialogGroups, DialogGroup } from '../viewUtils';
-import { PromptTab } from '../promptTabs';
+import { dialogGroups, DialogGroup, PromptTab } from '@bfc/shared';
 
 export function parseTypeToFragment(type: string, property: string): string {
   const inputTypes = dialogGroups[DialogGroup.INPUT].types;
