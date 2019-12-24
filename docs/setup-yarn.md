@@ -36,12 +36,16 @@ yarn build
 > [!NOTE]
 > If you are having trouble intalling or building Composer run `yarn tableflip`, which removes all of the Composer application's dependencies (node_modules) and reinstalls and rebuilds the application's dependencies. After running `yarn tableflip` run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
 
+After the Composer is built successfully you will see the message `Compiled successfully`. Run the last command: 
 ```
 yarn startall
 ```
   This command starts the Composer authoring application and the bot runtime. 
 
 ## Open Composer in a browser
-To use Composer open a browser and navigate to the address after the message `Compiled successfully`, as seen below where the address is http://localhost:3000.
+After you run the last command `yarn startall`, you will see the address message as shown below. To use Composer open a browser and navigate to the address http://localhost:3000. 
 
 ![browser address](./media/setup-yarn/address.png)
+
+## Next steps
+- Learn [how to create your first bot](tutorial-create-echobot.md).
