@@ -30,6 +30,7 @@ import {
   generageDiagnostic,
   LGOption,
   parse,
+  LGCursorState,
 } from './utils';
 
 const { check } = lgIndexer;
@@ -37,7 +38,7 @@ const { check } = lgIndexer;
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const allowedCompletionStates = ['expression'];
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
@@ -243,58 +244,66 @@ export class LGServer {
     return resultArr.join(' ,');
   }
 
-  private matchedStates(params: TextDocumentPositionParams): { matched: boolean; state: string } | null {
-    const state: string[] = [];
+  private matchState(params: TextDocumentPositionParams): LGCursorState | undefined {
+    const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
-    if (!document) return null;
+    if (!document) return;
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const lineContent = document.getText(range);
-    if (!lineContent.trim().startsWith('-')) {
-      return { matched: false, state: '' };
-    }
 
     //initialize the root state to plaintext
-    state.push('PlainText');
+    state.push(ROOT);
+    if (lineContent.trim().startsWith('#')) {
+      return TEMPLATENAME;
+    } else if (lineContent.trim().startsWith('>')) {
+      return COMMENTS;
+    } else if (lineContent.trim().startsWith('-')) {
+      state.push(TEMPLATEBODY);
+    } else {
+      return ROOT;
+    }
 
     // find out the context state of current cursor, offer precise suggestion and completion etc.
     /**
+     * > To learn more about the LG file format...       --- COMMENTS
+     * # Greeting                                        --- TEMPLATENAME
+     * - Hello                                           --- TEMPLATEBODY
      * - Hi, @{name}, what's the meaning of 'state'
-     * - Hi---------, @{name}--------, what-------' ------s the meaning of "state"
-     * - <plaintext>, @{<expression>}, <plaintext><single><plaintext>------<double>
+     *          |
+     *          +------------------------------------------- EXPRESSION
      */
     let i = 0;
     while (i < lineContent.length) {
       const char = lineContent.charAt(i);
       if (char === `'`) {
-        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'double') {
-          state.push('single');
+        if (state[state.length - 1] === EXPRESSION || state[state.length - 1] === DOUBLE) {
+          state.push(SINGLE);
         } else {
           state.pop();
         }
       }
 
       if (char === `"`) {
-        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'single') {
-          state.push('double');
+        if (state[state.length - 1] === EXPRESSION || state[state.length - 1] === SINGLE) {
+          state.push(DOUBLE);
         } else {
           state.pop();
         }
       }
 
-      if (char === '{' && i >= 1 && state[state.length - 1] !== 'single' && state[state.length - 1] !== 'double') {
+      if (char === '{' && i >= 1 && state[state.length - 1] !== SINGLE && state[state.length - 1] !== DOUBLE) {
         if (lineContent.charAt(i - 1) === '@') {
-          state.push('expression');
+          state.push(EXPRESSION);
         }
       }
 
-      if (char === '}' && state[state.length - 1] === 'expression') {
+      if (char === '}' && state[state.length - 1] === EXPRESSION) {
         state.pop();
       }
       i++;
     }
-    const finalState = state[state.length - 1];
-    return { matched: true, state: finalState };
+    return state.pop();
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -303,18 +312,7 @@ export class LGServer {
       return Promise.resolve(null);
     }
     const text = this.getLGDocumentContent(document);
-
-    const diags = check(text, '');
-
-    if (isValid(diags) === false) {
-      return Promise.resolve(null);
-    }
-
-    const { templates, diagnostics } = parse(text, document);
-    if (diagnostics.length) {
-      this.sendDiagnostics(document, diagnostics);
-      return Promise.resolve(null);
-    }
+    const { templates } = parse(text, document);
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
@@ -336,17 +334,11 @@ export class LGServer {
       };
     });
 
-    const completionList = completionTemplateList.concat(completionFunctionList);
-
-    const matchResult = this.matchedStates(params);
-    // TODO: more precise match
-    if (
-      matchResult &&
-      matchResult.matched &&
-      matchResult.state &&
-      allowedCompletionStates.includes(matchResult.state.toLowerCase())
-    ) {
-      return Promise.resolve({ isIncomplete: true, items: completionList });
+    const matchedState = this.matchState(params);
+    if (matchedState === EXPRESSION) {
+      return Promise.resolve({ isIncomplete: true, items: completionTemplateList.concat(completionFunctionList) });
+    } else if (matchedState === TEMPLATEBODY) {
+      return Promise.resolve({ isIncomplete: true, items: completionFunctionList });
     } else {
       return Promise.resolve(null);
     }

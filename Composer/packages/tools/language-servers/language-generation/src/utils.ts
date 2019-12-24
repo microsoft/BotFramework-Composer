@@ -15,6 +15,19 @@ import { CodeRange, LgTemplate, lgIndexer, Diagnostic as BFDiagnostic, offsetRan
 
 const staticChecker = new StaticChecker();
 
+// state should map to tokenizer state
+export enum LGCursorState {
+  ROOT = 'root',
+  TEMPLATENAME = 'template_name',
+  TEMPLATEBODY = 'template_body',
+  COMMENTS = 'comments',
+  FENCEBLOCK = 'fence_block',
+  EXPRESSION = 'expression',
+  STRUCTURELG = 'structure_lg',
+  SINGLE = 'single',
+  DOUBLE = 'double',
+}
+
 export interface LGOption {
   fileId: string;
   templateId: string;
