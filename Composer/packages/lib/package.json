@@ -1,6 +1,5 @@
 {
   "name": "@bfc/libs",
-  "license": "MIT",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,10 +7,9 @@
     "node": ">=12"
   },
   "scripts": {
-    "build:code-editor": "cd code-editor && yarn build",
     "build:shared": "cd shared && yarn build",
     "build:indexers": "cd indexers && yarn build",
-    "build:all": "yarn build:indexers && yarn build:shared && yarn build:code-editor"
+    "build:all": "yarn build:indexers && yarn build:shared"
   },
   "author": "",
   "license": "ISC"

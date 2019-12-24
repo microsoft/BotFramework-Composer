@@ -1,6 +1,5 @@
 {
   "name": "@bfc/extensions",
-  "license": "MIT",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +9,8 @@
   "scripts": {
     "build:visual-designer": "cd visual-designer && yarn build",
     "build:obiformeditor": "cd obiformeditor && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn:build:obiformeditor\" \"yarn:build:visual-designer\""
+    "build:code-editor": "cd code-editor && yarn build",
+    "build:all": "yarn build:code-editor && concurrently --kill-others-on-fail \"yarn:build:obiformeditor\" \"yarn:build:visual-designer\""
   },
   "author": "",
   "license": "ISC"
