@@ -24,6 +24,7 @@ const NewDialogModal: React.FC<NewDialogModalProps> = props => {
         onDismiss={onDismiss}
         onGetErrorMessage={onGetErrorMessage}
         enableLocationBrowse={false}
+        shouldPresetName={false}
       />
     </DialogWrapper>
   );

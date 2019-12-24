@@ -169,6 +169,7 @@ export function CreationFlow(props) {
           focusedStorageFolder={focusedStorageFolder}
           currentPath={currentPath}
           bots={bots}
+          shouldPresetName={true}
         />
       ),
     },

@@ -42,6 +42,7 @@ interface DefineConversationProps {
   focusedStorageFolder?: StorageFolder;
   currentPath?: string;
   bots?: Bots[];
+  shouldPresetName: boolean;
 }
 
 const initialFormDataError: FormDataError = {};
@@ -55,11 +56,15 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     focusedStorageFolder,
     currentPath,
     bots,
+    shouldPresetName,
   } = props;
   const { state } = useContext(StoreContext);
   const { templateId } = state;
 
   const getDefaultName = () => {
+    if (!shouldPresetName) {
+      return '';
+    }
     let i = -1;
     const bot = templateId;
     let defaultName = '';
@@ -92,7 +97,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     const errors: FormDataError = {};
     const { name } = data;
 
-    if (!name || !nameRegex.test(name)) {
+    if (name && !nameRegex.test(name)) {
       errors.name = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
@@ -113,6 +118,13 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     return errors;
   };
 
+  const isEmptyName = (name: string) => {
+    if (!name) {
+      return { name: 'Please input a name' };
+    }
+    return {};
+  };
+
   useEffect(() => {
     updateForm('location')(null, currentPath);
   }, [currentPath]);
@@ -129,8 +141,8 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const errors = validateForm(formData);
-
+    let errors = validateForm(formData);
+    errors = isEmptyName(formData.name);
     if (Object.keys(errors).length) {
       setFormDataErrors(errors);
       return;
