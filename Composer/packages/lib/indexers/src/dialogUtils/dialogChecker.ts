@@ -55,12 +55,12 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
     const property = value[key];
     if (Array.isArray(property)) {
       const itemsSchema = schema.properties[key].items;
-      if (itemsSchema.$role === 'expression') {
+      if (itemsSchema?.$role === 'expression') {
         property.forEach((child, index) => {
           const diagnostic = checkExpression(child, !!requiredTypes[key], `${path}#${type}#${key}[${index}]`);
           if (diagnostic) diagnostics.push(diagnostic);
         });
-      } else if (itemsSchema.type === 'object') {
+      } else if (itemsSchema?.type === 'object') {
         property.forEach((child, index) => {
           const result = IsExpression(`${path}.${key}[${index}]`, child, type, itemsSchema);
           if (result) diagnostics.splice(0, 0, ...result);
