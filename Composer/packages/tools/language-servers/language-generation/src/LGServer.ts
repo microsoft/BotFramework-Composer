@@ -83,7 +83,7 @@ export class LGServer {
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
-        if (this.botProjectService) this.LGDocuments.push({ uri, lgOption });
+        this.LGDocuments.push({ uri, lgOption });
         // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {

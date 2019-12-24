@@ -62,6 +62,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       return template.name === lgName;
     })) || {
     name: lgName,
+    parameters: [],
     body: getInitialTemplate(name, value),
     range: {
       startLineNumber: 0,
@@ -69,7 +70,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template);
+  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
 
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
