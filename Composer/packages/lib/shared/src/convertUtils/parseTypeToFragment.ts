@@ -8,9 +8,15 @@ export function parseTypeToFragment(type: string, property: string): string {
   const inputTypes = dialogGroups[DialogGroup.INPUT].types;
   const index = inputTypes.findIndex(t => t === type);
   if (index >= 0) {
-    if (property === 'property') return PromptTab.USER_INPUT;
-    if (property === 'prompt') return PromptTab.BOT_ASKS;
-    return PromptTab.OTHER;
+    switch (property) {
+      case 'prompt':
+        return PromptTab.BOT_ASKS;
+      case 'property':
+      case 'outputFormat':
+        return PromptTab.USER_INPUT;
+      default:
+        return PromptTab.OTHER;
+    }
   }
   return '';
 }
