@@ -52,41 +52,6 @@ const LGPage: React.FC<LGPageProps> = props => {
       url: '',
     });
     return newDialogLinks;
-    // const subLinks = dialogs.reduce<INavLink>((result, file) => {
-    //   const item = {
-    //     id: file.id,
-    //     key: file.id,
-    //     name: file.displayName,
-    //     url: file.id,
-    //   };
-
-    //   if (file.isRoot) {
-    //     result = {
-    //       ...result,
-    //       ...item,
-    //       isExpanded: true,
-    //     };
-    //   } else {
-    //     result.links = result.links || [];
-    //     result.links.push(item);
-    //   }
-    //   return result;
-    // }, {} as INavLink);
-
-    // return [
-    //   {
-    //     links: [
-    //       {
-    //         id: 'common',
-    //         key: 'common',
-    //         name: 'All',
-    //         url: '',
-    //         isExpanded: true,
-    //         links: [subLinks],
-    //       },
-    //     ],
-    //   },
-    // ];
   }, [dialogs]);
 
   const onSelect = useCallback(
