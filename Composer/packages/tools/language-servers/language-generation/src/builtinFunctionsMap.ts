@@ -727,6 +727,14 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'indicesAndValues',
+    new FunctionEntity(
+      ['collection: Array'],
+      ReturnType.Object,
+      'Turned an array into an array of objects with index (current index) and value property.'
+    ),
+  ],
+  [
     'jPath',
     new FunctionEntity(
       ['json: Object', 'path: string'],
