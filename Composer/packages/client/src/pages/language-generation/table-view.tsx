@@ -15,43 +15,39 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { DialogInfo, LgFile } from '@bfc/indexers';
-import { LGTemplate, LGParser } from 'botbuilder-lg';
-import { isValid } from '@bfc/indexers';
-import get from 'lodash/get';
+import { RouteComponentProps } from '@reach/router';
+import { LgTemplate } from '@bfc/indexers';
 
 import { StoreContext } from '../../store';
-import * as lgUtil from '../../utils/lgUtil';
+import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
-interface TableViewProps {
-  file: LgFile;
-  activeDialog?: DialogInfo;
-  onClickEdit: (template: LGTemplate) => void;
+interface TableViewProps extends RouteComponentProps<{}> {
+  fileId: string;
 }
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs } = state;
-  const { file: lgFile, activeDialog, onClickEdit } = props;
+  const { dialogs, lgFiles } = state;
+  const { fileId } = props;
+  const file = lgFiles.find(({ id }) => id === 'common');
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
-  const [templates, setTemplates] = useState<LGTemplate[]>([]);
+  const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
+  const activeDialog = dialogs.find(({ id }) => id === fileId);
+
   useEffect(() => {
-    if (isEmpty(lgFile)) return;
-    let allTemplates: LGTemplate[] = [];
-    if (isValid(lgFile.diagnostics)) {
-      const resource = LGParser.parse(lgFile.content, '');
-      allTemplates = get(resource, 'templates', []);
-    }
+    if (!file || isEmpty(file)) return;
+    const allTemplates = file.templates;
+
     if (!activeDialog) {
       setTemplates(allTemplates);
     } else {
-      const dialogsTemplates: LGTemplate[] = [];
+      const dialogsTemplates: LgTemplate[] = [];
       activeDialog.lgTemplates.forEach(item => {
         const template = allTemplates.find(t => t.name === item);
         if (template) {
@@ -60,44 +56,52 @@ const TableView: React.FC<TableViewProps> = props => {
       });
       setTemplates(dialogsTemplates);
     }
-  }, [lgFile, activeDialog]);
+  }, [file, activeDialog]);
+
+  const onClickEdit = useCallback(
+    (template: LgTemplate) => {
+      const { name } = template;
+      navigateTo(`/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
+    },
+    [fileId]
+  );
 
   const onCreateNewTemplate = useCallback(() => {
-    const newName = lgUtil.increaseNameUtilNotExist(templates, 'TemplateName');
+    const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
-      file: lgFile,
+      file,
       template: {
         name: newName,
         body: '-TemplateValue',
       },
     };
     createLgTemplate(payload);
-  }, [templates, lgFile]);
+  }, [templates, file]);
 
   const onRemoveTemplate = useCallback(
     index => {
       const payload = {
-        file: lgFile,
+        file,
         templateName: templates[index].name,
       };
 
       removeLgTemplate(payload);
     },
-    [templates, lgFile]
+    [templates, file]
   );
 
   const onCopyTemplate = useCallback(
     index => {
       const name = templates[index].name;
-      const resolvedName = lgUtil.increaseNameUtilNotExist(templates, `${name}_Copy`);
+      const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
-        file: lgFile,
+        file,
         fromTemplateName: name,
         toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
     },
-    [templates, lgFile]
+    [templates, file]
   );
 
   const getTemplatesMoreButtons = useCallback(
