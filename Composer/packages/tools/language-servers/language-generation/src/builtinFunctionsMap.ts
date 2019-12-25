@@ -546,7 +546,7 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the string version for a uniform resource identifier (URI) encoded string, effectively decoding the URI-encoded string.'
     ),
   ],
-  //C# only
+  //TODO. Make sure xml can be used in both browser/node environment
   //['xml', new FunctionEntity(['xmlStr: string]'], ReturnType.Object, 'Return the XML version for a string.')],
   [
     'range',
@@ -684,7 +684,7 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'Return the first non-null value from one or more parameters. Empty strings, empty arrays, and empty objects are not null.'
     ),
   ],
-  /* C# only
+  /* TODO. Make sure xpath can be used in both browser/node environment
   [
     'xpath',
     new FunctionEntity(
