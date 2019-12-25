@@ -11,7 +11,19 @@ import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
 
-export const checkExpression = (exp: string, required: boolean, path: string): Diagnostic | null => {
+const createPath = (path: string, type: string): string => {
+  const steps = ['triggers', 'actions', 'elseActions'];
+  let list = path.split('.');
+  const matchs = list.filter(x => !steps.every(step => !x.startsWith(step)));
+
+  const focused = matchs.join('.');
+  list = path.split(`${focused}.`);
+  if (list.length !== 2) return path;
+
+  return `${list[0]}${focused}#${type}#${list[1]}`;
+};
+
+export const checkExpression = (exp: string, required: boolean, path: string, type: string): Diagnostic | null => {
   let message = '';
   if (!exp && required) {
     message = formatMessage(`is missing or empty`);
@@ -24,7 +36,7 @@ export const checkExpression = (exp: string, required: boolean, path: string): D
   }
   if (message) {
     const diagnostic = new Diagnostic(message, '');
-    diagnostic.path = path;
+    diagnostic.path = createPath(path, type);
     return diagnostic;
   }
 
@@ -57,7 +69,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
       const itemsSchema = schema.properties[key].items;
       if (itemsSchema?.$role === 'expression') {
         property.forEach((child, index) => {
-          const diagnostic = checkExpression(child, !!requiredTypes[key], `${path}#${type}#${key}[${index}]`);
+          const diagnostic = checkExpression(child, !!requiredTypes[key], `${path}.${key}[${index}]`, type);
           if (diagnostic) diagnostics.push(diagnostic);
         });
       } else if (itemsSchema?.type === 'object') {
@@ -67,7 +79,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
         });
       }
     } else if (get(schema.properties[key], '$role') === 'expression') {
-      const diagnostic = checkExpression(property, !!requiredTypes[key], `${path}#${type}#${key}`);
+      const diagnostic = checkExpression(property, !!requiredTypes[key], `${path}.${key}`, type);
       if (diagnostic) diagnostics.push(diagnostic);
     }
   });
@@ -79,7 +91,7 @@ export const checkChoices: CheckerFunc = (path, value, type, schema) => {
   if (type === 'Microsoft.ChoiceInput') {
     const choices = value.choices;
     if (typeof choices === 'string') {
-      const diagnostic = checkExpression(choices, false, `${path}#${type}#choices`);
+      const diagnostic = checkExpression(choices, false, `${path}.choices`, type);
       if (diagnostic) return [diagnostic];
     }
   }

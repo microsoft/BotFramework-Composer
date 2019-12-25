@@ -11,6 +11,7 @@ export function parseTypeToFragment(type: string, property: string): string {
       case 'prompt':
         return PromptTab.BOT_ASKS;
       case 'property':
+      case 'choices':
       case 'outputFormat':
         return PromptTab.USER_INPUT;
       default:
