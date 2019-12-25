@@ -29,6 +29,9 @@ context('LG Page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.get('.dialogNavTree a[title="__TestTodoSample.Main"]').click();
+    //cy.findAllByText('__TestTodoSample.Main').click({ multiple: true });
+    cy.findByTestId('LGEditor').within(() => {
+      cy.findByText('__TestTodoSample.Main').click();
+    });
   });
 });
