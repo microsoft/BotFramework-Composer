@@ -131,6 +131,7 @@ export const dialogItem = selected => css`
   flex-direction: column;
   justify-content: center;
   background: ${selected ? '#f2f2f2' : '#ffffff'};
+  font-weight: ${selected ? 600 : 400};
   height: 32px;
   font-size: 12px;
   padding-left: 18px;
