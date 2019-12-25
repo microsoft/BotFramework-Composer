@@ -125,3 +125,14 @@ export const consoleStyle = css`
   padding: 15px;
   margin-bottom: 20px;
 `;
+
+export const dialogItem = selected => css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: ${selected ? '#f2f2f2' : '#ffffff'};
+  height: 32px;
+  font-size: 12px;
+  padding-left: 18px;
+  cursor: pointer;
+`;

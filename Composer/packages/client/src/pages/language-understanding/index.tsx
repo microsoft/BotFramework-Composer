@@ -5,18 +5,16 @@ import { jsx } from '@emotion/core';
 import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 
 import { StoreContext } from '../../store';
-import { projectContainer, projectTree, projectWrapper } from '../design/styles';
+import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Tree } from '../../components/Tree';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
 
 import TableView from './table-view';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor } from './styles';
+import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor, dialogItem } from './styles';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -29,57 +27,24 @@ const LUPage: React.FC<DefineConversationProps> = props => {
   const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-
+  const [selectedDialogItem, setSelectedDialogItem] = useState('_all');
   const subPath = props['*'];
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
 
   const luFile = luFiles.length && activeDialog ? luFiles.find(luFile => luFile.id === activeDialog.id) : null;
 
-  const navLinks: INavLinkGroup[] = useMemo(() => {
-    const subLinks = dialogs.reduce((result: INavLink[], file) => {
-      if (result.length === 0) {
-        result = [
-          {
-            links: [],
-            name: '',
-            url: '',
-          },
-        ];
-      }
-      const item = {
-        id: file.id,
-        url: file.id,
-        key: file.id,
-        name: file.displayName,
-      };
-
-      if (file.isRoot) {
-        result[0] = {
-          ...result[0],
-          ...item,
-          isExpanded: true,
-        };
-      } else {
-        result[0].links && result[0].links.push(item);
-      }
-      return result;
-    }, []);
-
-    return [
-      {
-        links: [
-          {
-            id: '_all',
-            key: '_all',
-            name: 'All',
-            url: '_all',
-            isExpanded: true,
-            links: subLinks,
-          },
-        ],
-      },
-    ];
+  const navLinks = useMemo(() => {
+    const newDialogLinks = dialogs.map(dialog => {
+      return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
+    });
+    newDialogLinks.splice(0, 0, {
+      id: '_all',
+      key: '_all',
+      name: 'All',
+      url: '_all',
+    });
+    return newDialogLinks;
   }, [dialogs]);
 
   useEffect(() => {
@@ -104,6 +69,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     } else {
       navigateTo(`/language-understanding/${id}`);
     }
+    setSelectedDialogItem(id);
     setEditMode(false);
   }
 
@@ -154,33 +120,19 @@ const LUPage: React.FC<DefineConversationProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          <Tree variant="large" css={projectTree}>
-            <div css={projectWrapper}>
-              <Nav
-                onLinkClick={(ev, item) => {
-                  item && onSelect(item.id);
-                  ev && ev.preventDefault();
+          {navLinks.map(dialog => {
+            return (
+              <div
+                css={dialogItem(selectedDialogItem === dialog.id)}
+                key={dialog.id}
+                onClick={() => {
+                  onSelect(dialog.id);
                 }}
-                styles={{
-                  root: {
-                    /* override dulplicate selected mark bellow All*/
-                    selectors: {
-                      'ul>li>ul button.ms-Nav-chevronButton:after': {
-                        borderLeft: 'none',
-                      },
-                    },
-                  },
-                  chevronButton: {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-                selectedKey={isRoot ? '_all' : subPath}
-                groups={navLinks}
-                className={'dialogNavTree'}
-                data-testid={'dialogNavTree'}
-              />
-            </div>
-          </Tree>
+              >
+                {dialog.name}
+              </div>
+            );
+          })}
         </div>
         <div css={contentEditor}>
           {editMode ? (
