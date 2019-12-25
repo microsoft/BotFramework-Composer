@@ -8,12 +8,10 @@ export function parsePathToFocused(path: string): string {
 
   const trigger = parsePathToSelected(path);
 
-  const actionPatt = /actions\[(\d+)\]/g;
-  let temp: RegExpExecArray | null = null;
-  const matchActions: string[] = [];
-  while ((temp = actionPatt.exec(path)) !== null) {
-    matchActions.push(`actions[${+temp[1]}]`);
-  }
+  const list = path.split('.');
+
+  const matchActions = list.filter(x => x.startsWith('actions') || x.startsWith('elseActions'));
+
   if (matchActions.length > 0) {
     return trigger + '.' + matchActions.join('.');
   }
