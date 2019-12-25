@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
+import React, { useContext, useState, Fragment, useMemo, useCallback, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { Nav, INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
+import { INavLinkGroup, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -17,11 +17,11 @@ import {
   flexContent,
   actionButton,
   contentEditor,
+  dialogItem,
 } from '../language-understanding/styles';
-import { projectContainer, projectTree, projectWrapper } from '../design/styles';
+import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
 
-import { Tree } from './../../components/Tree';
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
@@ -35,47 +35,58 @@ interface LGPageProps extends RouteComponentProps<{}> {
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
+  const [selectedDialogItem, setSelectedDialogItem] = useState('common');
   const path = props.location?.pathname ?? '';
   const { fileId = 'common' } = props;
   const edit = /edit(\/)*$/.test(path);
   const file = lgFiles.find(({ id }) => id === 'common');
 
-  const navLinks = useMemo<INavLinkGroup[]>(() => {
-    const subLinks = dialogs.reduce<INavLink>((result, file) => {
-      const item = {
-        id: file.id,
-        key: file.id,
-        name: file.displayName,
-        url: file.id,
-      };
+  const navLinks = useMemo(() => {
+    const newDialogLinks = dialogs.map(dialog => {
+      return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
+    });
+    newDialogLinks.splice(0, 0, {
+      id: 'common',
+      key: 'common',
+      name: 'All',
+      url: '',
+    });
+    return newDialogLinks;
+    // const subLinks = dialogs.reduce<INavLink>((result, file) => {
+    //   const item = {
+    //     id: file.id,
+    //     key: file.id,
+    //     name: file.displayName,
+    //     url: file.id,
+    //   };
 
-      if (file.isRoot) {
-        result = {
-          ...result,
-          ...item,
-          isExpanded: true,
-        };
-      } else {
-        result.links = result.links || [];
-        result.links.push(item);
-      }
-      return result;
-    }, {} as INavLink);
+    //   if (file.isRoot) {
+    //     result = {
+    //       ...result,
+    //       ...item,
+    //       isExpanded: true,
+    //     };
+    //   } else {
+    //     result.links = result.links || [];
+    //     result.links.push(item);
+    //   }
+    //   return result;
+    // }, {} as INavLink);
 
-    return [
-      {
-        links: [
-          {
-            id: 'common',
-            key: 'common',
-            name: 'All',
-            url: '',
-            isExpanded: true,
-            links: [subLinks],
-          },
-        ],
-      },
-    ];
+    // return [
+    //   {
+    //     links: [
+    //       {
+    //         id: 'common',
+    //         key: 'common',
+    //         name: 'All',
+    //         url: '',
+    //         isExpanded: true,
+    //         links: [subLinks],
+    //       },
+    //     ],
+    //   },
+    // ];
   }, [dialogs]);
 
   const onSelect = useCallback(
@@ -83,6 +94,7 @@ const LGPage: React.FC<LGPageProps> = props => {
       let url = `/language-generation/${id}`;
       if (edit) url += `/edit`;
       navigateTo(url);
+      setSelectedDialogItem(id);
     },
     [edit]
   );
@@ -123,35 +135,19 @@ const LGPage: React.FC<LGPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          <Tree variant="large" css={projectTree}>
-            <div css={projectWrapper}>
-              <Nav
-                onLinkClick={(ev, item) => {
-                  if (ev && item) {
-                    onSelect(item.id);
-                    ev.preventDefault();
-                  }
+          {navLinks.map(dialog => {
+            return (
+              <div
+                css={dialogItem(selectedDialogItem === dialog.id)}
+                key={dialog.id}
+                onClick={() => {
+                  onSelect(dialog.id);
                 }}
-                styles={{
-                  root: {
-                    /* override dulplicate selected mark bellow All*/
-                    selectors: {
-                      'ul>li>ul button.ms-Nav-chevronButton:after': {
-                        borderLeft: 'none',
-                      },
-                    },
-                  },
-                  chevronButton: {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-                selectedKey={fileId}
-                groups={navLinks}
-                className={'dialogNavTree'}
-                data-testid={'dialogNavTree'}
-              />
-            </div>
-          </Tree>
+              >
+                {dialog.name}
+              </div>
+            );
+          })}
         </div>
         {file && (
           <div css={contentEditor}>
