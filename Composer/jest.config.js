@@ -42,7 +42,7 @@ module.exports = {
     '<rootDir>/packages/server',
     '<rootDir>/packages/extensions/obiformeditor',
     '<rootDir>/packages/extensions/visual-designer',
-    '<rootDir>/packages/extensions/code-editor',
+    '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/tools/language-servers/language-generation',
   ],

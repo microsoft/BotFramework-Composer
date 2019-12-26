@@ -9,8 +9,7 @@
   "scripts": {
     "build:visual-designer": "cd visual-designer && yarn build",
     "build:obiformeditor": "cd obiformeditor && yarn build",
-    "build:code-editor": "cd code-editor && yarn build",
-    "build:all": "yarn build:code-editor && concurrently --kill-others-on-fail \"yarn:build:obiformeditor\" \"yarn:build:visual-designer\""
+    "build:all": "concurrently --kill-others-on-fail \"yarn:build:obiformeditor\" \"yarn:build:visual-designer\""
   },
   "author": "",
   "license": "ISC"
