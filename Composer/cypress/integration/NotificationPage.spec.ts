@@ -2,17 +2,13 @@
 // Licensed under the MIT License.
 
 context('Notification Page', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
-  });
-
-  beforeEach(() => {
     cy.visitPage('Notifications');
   });
 
   it('can show lg syntax error ', () => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
     cy.visitPage('Bot Responses');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -32,7 +28,6 @@ context('Notification Page', () => {
   });
 
   it('can show lu syntax error ', () => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
     cy.visitPage('User Input');
 
     cy.findByTestId('LUEditor').within(() => {
@@ -55,7 +50,6 @@ context('Notification Page', () => {
   });
 
   it('can show dialog expression error ', () => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
     cy.visitPage('Design Flow');
 
     cy.findByTestId('ProjectTree').within(() => {
