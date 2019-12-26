@@ -33,7 +33,7 @@ The bot's memory also has two "ephemeral" scopes - a place to store temporary va
 * **turn** is associated with a single turn. You can also think of this as the bot handling a single message from the user. Properties in the turn scope are discarded at the end of the turn.
 
 ## Set properties with prompts
-Input is collected from user's with prompt types provided in the **Ask a question** sub-menu.
+Input is collected from users with prompt types provided in the **Ask a question** sub-menu.
 
 ![Ask a question submenu](./media/memory/ask-a-question-menu.png)
 
