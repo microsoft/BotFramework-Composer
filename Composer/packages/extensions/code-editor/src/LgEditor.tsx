@@ -55,6 +55,7 @@ async function initializeDocuments(lgOption: LGOption | undefined, uri: string) 
 export function LgEditor(props: LGLSPEditorProps) {
   const options = {
     quickSuggestions: true,
+    wordBasedSuggestions: false,
     ...props.options,
   };
 

@@ -337,8 +337,6 @@ export class LGServer {
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
       return Promise.resolve({ isIncomplete: true, items: completionTemplateList.concat(completionFunctionList) });
-    } else if (matchedState === TEMPLATEBODY) {
-      return Promise.resolve({ isIncomplete: true, items: completionFunctionList });
     } else {
       return Promise.resolve(null);
     }
