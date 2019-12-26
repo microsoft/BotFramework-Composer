@@ -29,7 +29,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { fileId } = props;
   const file = lgFiles?.find(({ id }) => id === 'common');
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-  const [content, setContent] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
@@ -47,6 +46,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : undefined;
 
   const inlineMode = !!template;
+  const [content, setContent] = useState(template?.body || file?.content);
 
   useEffect(() => {
     // reset content with file.content's initial state
