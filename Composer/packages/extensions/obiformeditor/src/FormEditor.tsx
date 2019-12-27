@@ -41,9 +41,13 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
       return diagnostics.reduce((errors, d) => {
         const [dPath, dType, dProp] = d.path?.split('#') || [];
+        const dPropName = dProp
+          .replace('[', '')
+          .replace(']', '')
+          .replace('.', '');
 
-        if (dPath === currentPath && dType === type && dProp) {
-          errors[dProp] = d.message;
+        if (dPath === currentPath && dType === type && dPropName) {
+          errors[dPropName] = d.message;
         }
 
         return errors;

@@ -46,7 +46,10 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
   const { formContext, schema, id, label, editable, hiddenErrMessage, onValidate, options = {}, ...rest } = props;
   const { description } = schema;
   const { hideLabel } = options;
-  const name = props.id?.split('_')[props.id?.split('_').length - 1];
+  const name = props.id
+    ?.split('_')
+    .slice(1)
+    .join('');
 
   const onGetErrorMessage = (): JSX.Element | string => {
     const errMessage = name && get(formContext, ['formErrors', name], '');

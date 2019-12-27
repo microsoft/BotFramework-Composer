@@ -20,6 +20,7 @@ import { validationItem, validationItemInput, validationItemValue, field } from 
 interface ValidationItemProps {
   index: number;
   value: string;
+  id: string;
   hasMoveUp: boolean;
   hasMoveDown: boolean;
   onReorder: (a: number, b: number) => void;
@@ -30,7 +31,7 @@ interface ValidationItemProps {
 }
 
 const ValidationItem: React.FC<ValidationItemProps> = props => {
-  const { value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, formContext, onEdit, schema } = props;
+  const { id, value, hasMoveDown, hasMoveUp, onReorder, onDelete, index, formContext, onEdit, schema } = props;
   const [key, setKey] = useState<string>(value);
 
   // This needs to return true to dismiss the menu after a click.
@@ -79,6 +80,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
         <ExpressionWidget
           key={key}
           value={value}
+          id={id}
           editable
           formContext={formContext}
           schema={schema}
@@ -151,6 +153,7 @@ export const Validations: React.FC<ValidationsProps> = props => {
             key={`${i}-${formData.length}`}
             value={v}
             index={i}
+            id={`${id}_${i}`}
             onReorder={handleReorder}
             onDelete={handleDelete}
             hasMoveDown={i !== props.formData.length - 1}
