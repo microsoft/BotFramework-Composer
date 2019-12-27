@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as monaco from 'monaco-editor-core';
 import { listen, MessageConnection, Disposable } from 'vscode-ws-jsonrpc';
 import {
@@ -7,6 +10,7 @@ import {
   MonacoServices,
   createConnection,
 } from 'monaco-languageclient';
+
 import normalizeUrl = require('normalize-url');
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
@@ -38,15 +42,7 @@ monaco.editor.defineTheme('lutheme', {
   base: 'vs',
   inherit: false,
   colors: {},
-  rules: [
-    { token: 'template-name', foreground: '0000FF' },
-    { token: 'function-name', foreground: '79571E' },
-    { token: 'keywords', foreground: '0000FF' },
-    { token: 'comments', foreground: '7A7574' },
-    { token: 'number', foreground: '00A32B' },
-    { token: 'string', foreground: 'DF2C2C' },
-    { token: 'structure-name', foreground: '00B7C3' },
-  ],
+  rules: [],
 });
 
 // create Monaco editor

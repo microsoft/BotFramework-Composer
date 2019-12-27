@@ -1,5 +1,9 @@
-import { attachLSPServer } from '../../src/startServer';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as express from 'express';
+
+import { attachLSPServer } from '../../src/startServer';
 
 // create the express application
 const app = express();

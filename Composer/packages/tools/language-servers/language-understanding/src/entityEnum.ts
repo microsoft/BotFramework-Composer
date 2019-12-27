@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export const EntityTypesObj = {
   EntityType: ['ml', 'prebuilt', 'regex', 'list', 'composite', 'patternany', 'phraselist', 'simple'],
   Prebuilt: [

@@ -1,18 +1,25 @@
 {
-    "name": "lu-lsp-server",
+    "name": "@bfc/lu-languageserver",
+    "license": "MIT",
     "version": "0.1.0",
     "main": "lib/index.js",
     "scripts": {
-        "build": "tsc && yarn build:demo",
-        "build:demo": "cd demo && webpack",
-        "prepublishOnly": "npm run build",
-        "start": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
-        "start:client": "cd demo && webpack-dev-server",
-        "start:server": "cd demo && ts-node ./src/server.ts"
+      "build": "tsc --build tsconfig.build.json",
+      "build:demo": "cd demo && tsc --build tsconfig.json",
+      "prepublishOnly": "npm run build",
+      "clean": "rimraf lib demo/dist",
+      "start": "cd demo && ts-node ./src/server.ts",
+      "test": "jest",
+      "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+      "lint:fix": "yarn lint --fix",
+      "lint:typecheck": "tsc --noEmit",
+      "startDemo": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
+      "start:client": "cd demo && webpack-dev-server",
+      "start:server": "cd demo && ts-node ./src/server.ts"
     },
     "dependencies": {
         "@microsoft/bf-cli-command": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz",
-        "@bfcomposer/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.0.9.tgz",
+        "@bfcomposer/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.3.tgz",
         "@types/node": "^12.0.4",
         "express": "^4.15.2",
         "monaco-editor-core": "^0.17.0",

@@ -1,38 +1,34 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import * as fs from 'fs';
+
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
-import {
-  IConnection,
-  TextDocuments,
-  createConnection,
-  CodeAction,
-  CodeActionKind,
-  Command,
-} from 'vscode-languageserver';
+import { IConnection, TextDocuments, createConnection } from 'vscode-languageserver';
 import {
   TextDocument,
   Diagnostic,
   CompletionList,
   Position,
+  CompletionItem,
   CompletionItemKind,
   Range,
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import {
-  TextDocumentPositionParams,
-  DocumentOnTypeFormattingParams,
-  CodeLensParams,
-  CodeActionParams,
-} from 'vscode-languageserver-protocol';
+import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+
 import { EntityTypesObj, LineState } from './entityEnum';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
 
 export function start(reader: MessageReader, writer: MessageWriter): LuServer {
   const connection = createConnection(reader, writer);
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const server = new LuServer(connection);
   server.start();
   return server;
@@ -67,7 +63,6 @@ export class LuServer {
             triggerCharacters: ['@', ' ', '{', ':'],
           },
           foldingRangeProvider: false,
-          //CodeActionRegistrationOptions:
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
             moreTriggerCharacter: ['Tab', 'Shift'],
@@ -77,7 +72,6 @@ export class LuServer {
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
-    //this.connection.onCodeAction(codeActionParams => this.codeActions(codeActionParams));
   }
 
   start() {
@@ -92,6 +86,9 @@ export class LuServer {
 
   private getLastLineContent(params: TextDocumentPositionParams): string {
     const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return '';
+    }
     const content = document.getText();
     const position = params.position;
     if (position.line === 0) {
@@ -101,16 +98,19 @@ export class LuServer {
     }
   }
 
-  private getCurrentLineContent(params: TextDocumentPositionParams): string {
-    const document = this.documents.get(params.textDocument.uri);
-    const position = params.position;
-    if (position.line === 0) {
-      return '';
-    } else {
-      const range = Range.create(position.line, 0, position.line, position.character);
-      return document.getText(range);
-    }
-  }
+  // private getCurrentLineContent(params: TextDocumentPositionParams): string {
+  //   const document = this.documents.get(params.textDocument.uri);
+  //   if (!document) {
+  //     return '';
+  //   }
+  //   const position = params.position;
+  //   if (position.line === 0) {
+  //     return '';
+  //   } else {
+  //     const range = Range.create(position.line, 0, position.line, position.character);
+  //     return document.getText(range);
+  //   }
+  // }
 
   private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
     const document = this.documents.get(params.textDocument.uri);
@@ -121,6 +121,9 @@ export class LuServer {
     const mlEntity = /^\s*@\s*ml\s*.*/;
     const regEntityDefLine = /^\s*@.*/;
     let state: LineState = 'other';
+    if (!document) {
+      return 'other';
+    }
     const lineContentList = document.getText().split('\n');
     for (let i = 0; i < position.line; i++) {
       const line = lineContentList[i];
@@ -140,27 +143,30 @@ export class LuServer {
     return state;
   }
 
-  private getEntitiesList(luisJson: any): string[] {
-    const entitiesList: string[] = [];
-    if (luisJson !== undefined) {
-      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-        luisJson.entities.forEach(entity => {
-          entitiesList.push(entity.name);
-        });
-      }
-    }
+  // private getEntitiesList(luisJson: any): string[] {
+  //   const entitiesList: string[] = [];
+  //   if (luisJson !== undefined) {
+  //     if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
+  //       luisJson.entities.forEach(entity => {
+  //         entitiesList.push(entity.name);
+  //       });
+  //     }
+  //   }
 
-    return entitiesList;
-  }
+  //   return entitiesList;
+  // }
 
   private getMLEntities(text: string): string[] {
     const lines = text.split('\n');
-    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_\.-]+)\s*.*/;
+
+    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*/;
     const mlEntities: string[] = [];
-    for (const i in lines) {
-      if (mlEntityRegExp.test(lines[i])) {
-        const entity = lines[i].match(mlEntityRegExp)[1];
-        mlEntities.push(entity);
+    for (const line of lines) {
+      if (mlEntityRegExp.test(line)) {
+        const entityGroup = line.match(mlEntityRegExp);
+        if (entityGroup && entityGroup.length >= 2) {
+          mlEntities.push(entityGroup[1]);
+        }
       }
     }
 
@@ -182,11 +188,9 @@ export class LuServer {
     const textBeforeCurLine = lines.slice(0, curLineNumber - 1).join('\n');
     //const luisJson = await this.extractLUISContent(textBeforeCurLine);
     const key = params.ch;
-    console.log(key);
     const inputState = this.getInputLineState(params);
     //const entitiesList = this.getEntitiesList(luisJson);
     const pos = params.position;
-    console.log(pos);
 
     if (
       key == '\n' &&
@@ -201,15 +205,18 @@ export class LuServer {
 
     if (key == '\n' && inputState === 'mlEntity' && lastLineContent.endsWith('=')) {
       const mlEntities = this.getMLEntities(textBeforeCurLine);
-      const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_\.-]+)\s*.*/;
+      const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_.-]+)\s*.*/;
       let entityName = '';
       if (entityNameRegExp.test(lastLineContent)) {
-        entityName = lastLineContent.match(entityNameRegExp)[1];
-      }
-      if (mlEntities.includes(entityName)) {
-        const newPos = Position.create(pos.line + 1, 0);
-        const item: TextEdit = TextEdit.insert(newPos, '\t- @ ');
-        edits.push(item);
+        const entityGroup = lastLineContent.match(entityNameRegExp);
+        if (entityGroup && entityGroup.length >= 2) {
+          entityName = entityGroup[1];
+        }
+        if (mlEntities.includes(entityName)) {
+          const newPos = Position.create(pos.line + 1, 0);
+          const item: TextEdit = TextEdit.insert(newPos, '\t- @ ');
+          edits.push(item);
+        }
       }
     }
 
@@ -243,6 +250,7 @@ export class LuServer {
     const uri = URI.parse(url);
     if (uri.scheme === 'file') {
       return new Promise<string>((resolve, reject) => {
+        // eslint-disable-next-line security/detect-non-literal-fs-filename
         fs.readFile(uri.fsPath, 'UTF-8', (err, result) => {
           err ? reject('') : resolve(result.toString());
         });
@@ -257,7 +265,7 @@ export class LuServer {
   }
 
   private async validateLuBody(content: string): Promise<{ parsedContent: any; errors: any }> {
-    let errors: Diagnostic[] = [];
+    const errors: Diagnostic[] = [];
     let parsedContent: any;
     const log = false;
     const locale = 'en-us';
@@ -310,45 +318,45 @@ export class LuServer {
   }
 
   private isEntityType(content: string): boolean {
-    const regexEntifyDef: RegExp = /^\s*@\s*$/;
+    const regexEntifyDef = /^\s*@\s*$/;
     return regexEntifyDef.test(content);
   }
 
   private isPrebuiltEntity(content: string): boolean {
-    const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*prebuilt\s*$/;
+    const regexPrebuiltEntifyDef = /^\s*@\s*prebuilt\s*$/;
     return regexPrebuiltEntifyDef.test(content);
   }
 
   private isRegexEntity(content: string): boolean {
-    const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+    const regexPrebuiltEntifyDef = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
     return regexPrebuiltEntifyDef.test(content);
   }
 
   private isSeperatedEntityDef(content: string): boolean {
-    const regexPrebuiltEntifyDef: RegExp = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
+    const regexPrebuiltEntifyDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
     return regexPrebuiltEntifyDef.test(content);
   }
 
   private isEntityName(content: string): boolean {
-    const regexhasNameEntifyDef: RegExp = /^\s*@\s*(ml|list|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
+    const regexhasNameEntifyDef = /^\s*@\s*(ml|list|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
     return regexhasNameEntifyDef.test(content);
   }
 
   private matchedEnterPattern(content: string): boolean {
-    const regexPatternDef: RegExp = /^\s*-.*{\s*$/;
-    const regexPatternDef2: RegExp = /^\s*-.*{\s*}$/;
+    const regexPatternDef = /^\s*-.*{\s*$/;
+    const regexPatternDef2 = /^\s*-.*{\s*}$/;
     return regexPatternDef.test(content) || regexPatternDef2.test(content);
   }
 
   private matchedRolesPattern(content: string): boolean {
-    const regexRolesPatternDef: RegExp = /^\s*-.*{\s*.*:/;
-    const regexRolesPatternDef2: RegExp = /^\s*-.*{\s*.*:}/;
+    const regexRolesPatternDef = /^\s*-.*{\s*.*:/;
+    const regexRolesPatternDef2 = /^\s*-.*{\s*.*:}/;
     return regexRolesPatternDef.test(content) || regexRolesPatternDef2.test(content);
   }
 
   private matchedRolesAndEntityPattern(content: string): boolean {
-    const regexRolesEntityPatternDef: RegExp = /^\s*-.*{\s*@/;
-    const regexRolesEntityPatternDef2: RegExp = /^\s*-.*{\s*@}/;
+    const regexRolesEntityPatternDef = /^\s*-.*{\s*@/;
+    const regexRolesEntityPatternDef2 = /^\s*-.*{\s*@}/;
     return regexRolesEntityPatternDef.test(content) || regexRolesEntityPatternDef2.test(content);
   }
 
@@ -501,7 +509,7 @@ export class LuServer {
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
     const text = document.getText();
-    const completionList = [];
+    const completionList: CompletionItem[] = [];
     if (this.isEntityType(curLineContent)) {
       const entityTypes: string[] = EntityTypesObj.EntityType;
       entityTypes.forEach(entity => {
@@ -570,7 +578,12 @@ export class LuServer {
     //suggest a regex pattern for seperated line definition
     if (this.isSeperatedEntityDef(curLineContent)) {
       const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
-      const entityName = curLineContent.match(seperatedEntityDef)[1].trim();
+      let entityName = '';
+      const matchGroup = curLineContent.match(seperatedEntityDef);
+      if (matchGroup && matchGroup.length >= 2) {
+        entityName = matchGroup[1].trim();
+      }
+
       if (regexEntityList.includes(entityName)) {
         const item = {
           label: 'RegExp Entity',

@@ -1,16 +1,11 @@
 {
+    "extends": "../../../../tsconfig.base.json",
     "compilerOptions": {
-        "target": "ESNext",
-        "module": "commonjs",
-        "declaration": true,
-        "outDir": "./lib",
-        "sourceMap": true
+      "outDir": "lib"
     },
     "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "demo"
+      "./src/**/*",
+      "./__tests__/**/*"
     ]
-}
+  }
+  

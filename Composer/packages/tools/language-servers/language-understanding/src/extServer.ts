@@ -1,5 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { StreamMessageReader, StreamMessageWriter } from 'vscode-jsonrpc';
-import { start } from './server';
+
+import { start } from './LUServer';
 
 const reader = new StreamMessageReader(process.stdin);
 const writer = new StreamMessageWriter(process.stdout);
