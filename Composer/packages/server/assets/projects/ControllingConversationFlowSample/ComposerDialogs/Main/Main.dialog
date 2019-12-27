@@ -163,14 +163,14 @@
           "$designer": {
             "id": "953339"
           },
-          "activity": "[help]"
+          "activity": "@{help()}"
         }
       ]
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Conversation started (ConversationUpdate)",
+        "name": "Greeting (ConversationUpdate)",
         "id": "791275"
       },
       "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -181,7 +181,7 @@
             "name": "Send an Activity",
             "id": "859266"
           },
-          "activity": "[help]"
+          "activity": "@{help()}"
         }
       ]
     }

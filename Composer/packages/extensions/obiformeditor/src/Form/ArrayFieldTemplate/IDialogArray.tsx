@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { PrimaryButton } from 'office-ui-fabric-react';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup } from '@bfc/shared';

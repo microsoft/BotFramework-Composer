@@ -11,6 +11,7 @@ formatMessage.setup({
 
 interface LabelOverride {
   title?: string | false;
+  subtitle?: string | false;
   description?: string | false;
 }
 
@@ -28,7 +29,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Language Generation'),
   },
   [SDKTypes.AdaptiveDialog]: {
-    title: formatMessage('AdaptiveDialog'),
+    title: formatMessage('Adaptive dialog'),
   },
   [SDKTypes.AttachmentInput]: {
     title: formatMessage('File or attachment'),
@@ -56,6 +57,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.DeleteProperty]: {
     title: formatMessage('Delete a property'),
+  },
+  [SDKTypes.DeleteProperties]: {
+    title: formatMessage('Delete properties'),
   },
   [SDKTypes.EditActions]: {
     title: formatMessage('Modify this dialog'),
@@ -118,66 +122,85 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('OAuth login'),
   },
   [SDKTypes.OnActivity]: {
-    title: formatMessage('Activity trigger'),
+    title: formatMessage('Activities'),
+    subtitle: formatMessage('Activity recieved'),
   },
   [SDKTypes.OnBeginDialog]: {
-    title: formatMessage('Dialog started (BeginDialog)'),
+    title: formatMessage('Dialog started'),
+    subtitle: formatMessage('Begin dialog event'),
   },
   [SDKTypes.OnCancelDialog]: {
-    title: formatMessage('Dialog cancelled (CancelDialog)'),
+    title: formatMessage('Dialog cancelled'),
+    subtitle: formatMessage('Cancel dialog event'),
   },
   [SDKTypes.OnCondition]: {
     title: formatMessage('Handle a Condition'),
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    title: formatMessage('Conversation started (ConversationUpdate)'),
+    title: formatMessage('Greeting'),
+    subtitle: formatMessage('ConversationUpdate activity'),
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
   [SDKTypes.OnCustomEvent]: {
-    title: formatMessage('Custom trigger'),
+    title: formatMessage('Custom event'),
+    subtitle: formatMessage('Custom event'),
   },
   [SDKTypes.OnDialogEvent]: {
-    title: formatMessage('Dialog trigger'),
+    title: formatMessage('Dialog events'),
+    subtitle: formatMessage('Dialog events'),
   },
   [SDKTypes.OnEndOfConversationActivity]: {
     title: formatMessage('Conversation ended'),
+    subtitle: formatMessage('EndOfConversation activity'),
   },
   [SDKTypes.OnError]: {
     title: formatMessage('Error occurred'),
+    subtitle: formatMessage('Error event'),
   },
   [SDKTypes.OnEventActivity]: {
     title: formatMessage('Event received'),
+    subtitle: formatMessage('Event activity'),
   },
   [SDKTypes.OnHandoffActivity]: {
     title: formatMessage('Handover to human'),
+    subtitle: formatMessage('Handoff activity'),
   },
   [SDKTypes.OnIntent]: {
-    title: formatMessage('Intent'),
+    title: formatMessage('Intent recognized'),
+    subtitle: formatMessage('Intent recognized'),
   },
   [SDKTypes.OnInvokeActivity]: {
     title: formatMessage('Conversation invoked'),
+    subtitle: formatMessage('Invoke activity'),
   },
   [SDKTypes.OnMessageActivity]: {
-    title: formatMessage('Message activity trigger'),
+    title: formatMessage('Message events'),
+    subtitle: formatMessage('Message recieved activity'),
   },
   [SDKTypes.OnMessageDeleteActivity]: {
     title: formatMessage('Message deleted'),
+    subtitle: formatMessage('Message deleted activity'),
   },
   [SDKTypes.OnMessageReactionActivity]: {
     title: formatMessage('Message reaction'),
+    subtitle: formatMessage('Message reaction activity'),
   },
   [SDKTypes.OnMessageUpdateActivity]: {
     title: formatMessage('Message updated'),
+    subtitle: formatMessage('Message updated activity'),
   },
   [SDKTypes.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
+    subtitle: formatMessage('Reprompt dialog event'),
   },
   [SDKTypes.OnTypingActivity]: {
     title: formatMessage('User is typing'),
+    subtitle: formatMessage('Typing activity'),
   },
   [SDKTypes.OnUnknownIntent]: {
-    title: formatMessage('Unrecognized intent'),
+    title: formatMessage('Unknown intent'),
+    subtitle: formatMessage('Unknown intent recognized'),
   },
   [SDKTypes.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
@@ -200,6 +223,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.SetProperty]: {
     title: formatMessage('Set a property'),
+  },
+  [SDKTypes.SetProperties]: {
+    title: formatMessage('Set properties'),
   },
   [SDKTypes.SwitchCondition]: {
     title: formatMessage('Branch: switch (multiple options)'),

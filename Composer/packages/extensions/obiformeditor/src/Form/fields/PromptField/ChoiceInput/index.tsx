@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import { FieldProps, IdSchema } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { ChoiceInput, IChoiceOption } from '@bfc/shared';
@@ -9,11 +11,13 @@ import { ChoiceInput, IChoiceOption } from '@bfc/shared';
 import { PromptFieldChangeHandler, GetSchema } from '../types';
 import { CheckboxWidget } from '../../../widgets';
 import { field } from '../styles';
+import { FormContext } from '../../../types';
 
 import { Choices } from './Choices';
 import { ChoiceOptions } from './ChoiceOptions';
 
 interface ChoiceInputSettingsProps extends FieldProps<ChoiceInput> {
+  formContext: FormContext;
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
@@ -27,8 +31,9 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
   };
 
   return (
-    <>
+    <Fragment>
       <Choices
+        formContext={formContext}
         formData={formData.choices}
         schema={getSchema('choices')}
         onChange={onChange('choices')}
@@ -52,6 +57,6 @@ export const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => 
           formContext={formContext}
         />
       </div>
-    </>
+    </Fragment>
   );
 };

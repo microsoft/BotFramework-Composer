@@ -1,3 +1,7 @@
+.FieldTemplate {
+  flex: 1;
+}
+
 .FormContainer {
   flex: 1;
   /**

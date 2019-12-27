@@ -63,10 +63,9 @@
               },
               "property": "user.name",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
-              "maxTurnCount": 2147483647,
+              "maxTurnCount": 3,
               "alwaysPrompt": false,
-              "allowInterruptions": "true",
-              "outputFormat": "none"
+              "allowInterruptions": "true"
             }
           ]
         },
@@ -75,14 +74,14 @@
           "$designer": {
             "id": "604381"
           },
-          "activity": "[bfdactivity-604381]"
+          "activity": "@{bfdactivity-604381()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "338063"
           },
-          "activity": "[bfdactivity-338063]"
+          "activity": "@{bfdactivity-338063()}"
         }
       ]
     }

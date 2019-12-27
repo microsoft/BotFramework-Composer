@@ -7,141 +7,95 @@
  *
  */
 
-import { LGParser, StaticChecker, DiagnosticSeverity, ImportResolver, Diagnostic, LGTemplate } from 'botbuilder-lg';
-import get from 'lodash.get';
+import { LGParser } from 'botbuilder-lg';
+import { lgIndexer, combineMessage, isValid, LgTemplate } from '@bfc/indexers';
 
-const lgStaticChecker = new StaticChecker();
-
-const lgImportResolver = ImportResolver.fileResolver;
-
-interface Template {
-  Name: string;
-  Parameters: string[];
-  Body: string;
+const { check, parse } = lgIndexer;
+export interface Template {
+  name: string;
+  parameters?: string[];
+  body: string;
 }
 
-export function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.Severity !== DiagnosticSeverity.Error);
-}
-
-export function check(content: string, id = ''): Diagnostic[] {
-  return lgStaticChecker.checkText(content, id, lgImportResolver);
-}
-
-export function parse(content: string, id = ''): LGTemplate[] {
-  const resource = LGParser.parse(content, id);
-  return get(resource, 'Templates', []);
-}
-
-export function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    const { Start, End } = d.Range;
-    const position = `line ${Start.Line}:${Start.Character} - line ${End.Line}:${End.Character}`;
-
-    msg += `${position} \n ${d.Message}\n`;
-    return msg;
-  }, '');
-}
-
-export function checkLgContent(content: string) {
+export function checkLgContent(content: string, id: string) {
   // check lg content, make up error message
-  const diagnostics = check(content);
-  if (isValid(diagnostics) === false) {
+  const diagnostics = check(content, id);
+  if (!isValid(diagnostics)) {
     const errorMsg = combineMessage(diagnostics);
     throw new Error(errorMsg);
   }
 }
 
-export function increaseNameUtilNotExist(templates: LGTemplate[], name: string): string {
+export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {
   // if duplicate, increse name with Copy1 Copy2 ...
 
   let repeatIndex = 0;
   let newName = name;
 
-  while (templates.findIndex(item => item.Name === newName) !== -1) {
+  while (templates.findIndex(item => item.name === newName) !== -1) {
     repeatIndex += 1;
     newName = name + repeatIndex.toString();
   }
   return newName;
 }
 
-export function updateTemplate(content: string, templateName: string, { Name, Parameters, Body }: Template): string {
+export function updateTemplate(
+  content: string,
+  templateName: string,
+  { name, parameters = [], body }: LgTemplate
+): string {
   const resource = LGParser.parse(content);
   // add if not exist
-  if (resource.Templates.findIndex(t => t.Name === templateName) === -1) {
-    return resource.addTemplate(Name, Parameters, Body).toString();
+  if (resource.templates.findIndex(t => t.name === templateName) === -1) {
+    return resource.addTemplate(name, parameters, body).toString();
   } else {
-    return resource.updateTemplate(templateName, Name, Parameters, Body).toString();
+    return resource.updateTemplate(templateName, name, parameters, body).toString();
   }
 }
 
-// if Name exist, throw error.
-export function addTemplate(content: string, { Name, Parameters, Body }: Template): string {
+// if name exist, throw error.
+export function addTemplate(content: string, { name, parameters = [], body }: LgTemplate): string {
   const resource = LGParser.parse(content);
-  return resource.addTemplate(Name, Parameters, Body).toString();
+  return resource.addTemplate(name, parameters, body).toString();
 }
 
-// if Name exist, add it anyway, with name like `${Name}1` `${Name}2`
+// if name exist, add it anyway, with name like `${name}1` `${name}2`
 export function addTemplateAnyway(
   content: string,
-  { Name = 'TemplateName', Parameters = [], Body = '-TemplateBody' }: Template
+  { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate
 ): string {
   const resource = LGParser.parse(content);
-  const newName = increaseNameUtilNotExist(resource.Templates, Name);
+  const newName = increaseNameUtilNotExist(resource.templates, name);
 
-  return resource.addTemplate(newName, Parameters, Body).toString();
+  return resource.addTemplate(newName, parameters, body).toString();
 }
 
 // if toTemplateName exist, throw error.
 export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): string {
   const resource = LGParser.parse(content);
-  const fromTemplate = resource.Templates.find(t => t.Name === fromTemplateName);
+  const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error('fromTemplateName no exist');
   }
-  const { Parameters, Body } = fromTemplate;
-  return resource.addTemplate(toTemplateName, Parameters, Body).toString();
+  const { parameters, body } = fromTemplate;
+  return resource.addTemplate(toTemplateName, parameters, body).toString();
 }
 
 // if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
 export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): string {
   const resource = LGParser.parse(content);
-  const fromTemplate = resource.Templates.find(t => t.Name === fromTemplateName);
+  const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     return resource.toString();
   }
 
   let newName = toTemplateName;
   if (!newName) {
-    const copyName = `${fromTemplate.Name}_Copy`;
-    newName = increaseNameUtilNotExist(resource.Templates, copyName);
+    const copyName = `${fromTemplate.name}_Copy`;
+    newName = increaseNameUtilNotExist(resource.templates, copyName);
   }
-  const { Parameters, Body } = fromTemplate;
-  return resource.addTemplate(newName, Parameters, Body).toString();
-}
-
-export function getTemplate(content: string, templateName: string): LGTemplate | undefined {
-  const resource = LGParser.parse(content);
-  return resource.Templates.find(t => t.Name === templateName);
-}
-
-/**
- *
- * @param text string
- * -[Greeting], I'm a fancy bot, [Bye] ---> ['Greeting', 'Bye']
- *
- */
-export function extractTemplateNames(text: string): string[] {
-  const templateNames: string[] = [];
-  // match a template name match a temlate func  e.g. `showDate()`
-  // eslint-disable-next-line security/detect-unsafe-regex
-  const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
-  let matchResult;
-  while ((matchResult = reg.exec(text)) !== null) {
-    const templateName = matchResult[1];
-    templateNames.push(templateName);
-  }
-  return templateNames;
+  const { parameters, body } = fromTemplate;
+  return resource.addTemplate(newName, parameters, body).toString();
 }
 
 export function removeTemplate(content: string, templateName: string): string {
@@ -157,24 +111,30 @@ export function removeTemplates(content: string, templateNames: string[]): strin
   return resource.toString();
 }
 
-export function textFromTemplates(templates: Template[]): string {
-  let text = '';
-
-  templates.forEach(template => {
-    if (template.Name && (template.Body !== null && template.Body !== undefined)) {
-      text += `# ${template.Name.trim()}`;
-      if (template.Parameters && template.Parameters.length > 0) {
-        text += '(' + template.Parameters.join(', ') + ')';
-      }
-      text += '\n';
-      text += `${template.Body.trim()}`;
+export function textFromTemplate(template: LgTemplate): string {
+  const { name, parameters = [], body } = template;
+  const textBuilder: string[] = [];
+  if (name && body !== null && body !== undefined) {
+    textBuilder.push(`# ${name.trim()}`);
+    if (parameters.length) {
+      textBuilder.push(`(${parameters.join(', ')})`);
     }
-  });
-
-  return text;
+    textBuilder.push(`\n${template.body.trim()}`);
+  }
+  return textBuilder.join('');
 }
 
-export function checkSingleLgTemplate(template: Template) {
+export function textFromTemplates(templates: LgTemplate[]): string {
+  const textBuilder: string[] = [];
+
+  templates.forEach(template => {
+    textBuilder.push(`${textFromTemplate(template)}\n`);
+  });
+
+  return textBuilder.join('');
+}
+
+export function checkSingleLgTemplate(template: LgTemplate) {
   const content = textFromTemplates([template]);
 
   if (parse(content).length !== 1) {

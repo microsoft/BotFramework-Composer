@@ -20,19 +20,19 @@
             "name": "Prompt for text",
             "id": "362298"
           },
-          "allowInterruptions": "true",
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
-          "invalidPrompt": "Sorry, '{turn.value}' does not work. I'm looking for 2-150 characters. What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
+          "invalidPrompt": "@{bfdinvalidPrompt-362298()}",
           "maxTurnCount": 3,
           "validations": [
-            "length(turn.value) <= 150",
-            "length(turn.value) > 2"
+            "length(this.value) <= 150",
+            "length(this.value) > 2"
           ],
-          "value": "concat(toUpper(substring(@userName, 0, 1)), substring(@userName, 1))",
           "property": "user.profile.name",
           "defaultValue": "'Human'",
+          "value": "@userName",
           "alwaysPrompt": false,
-          "outputFormat": "trim"
+          "allowInterruptions": "true",
+          "outputFormat": "trim(this.value)"
         },
         {
           "$type": "Microsoft.NumberInput",
@@ -40,21 +40,20 @@
             "name": "Prompt for a number",
             "id": "005947"
           },
-          "property": "user.profile.age",
           "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
-          "invalidPrompt": "Sorry, {turn.value} does not work. I'm looking for a value between 1-150. What is your age?  \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "invalidPrompt": "@{bfdinvalidPrompt-005947()}",
           "maxTurnCount": 3,
           "validations": [
-            "int(turn.value) >= 1",
-            "int(turn.value) <= 150"
+            "int(this.value) >= 1",
+            "int(this.value) <= 150"
           ],
-          "value": "@userAge",
+          "property": "user.profile.age",
           "defaultValue": "30",
+          "value": "@userAge",
           "alwaysPrompt": false,
-          "allowInterruptions": "notRecognized",
-          "outputFormat": "float",
-          "defaultLocale": "en-us",
-          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]"
+          "allowInterruptions": "true",
+          "defaultLocale": "en-us"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -62,7 +61,7 @@
             "name": "Send an Activity",
             "id": "296924"
           },
-          "activity": "[bfdactivity-296924]"
+          "activity": "@{bfdactivity-296924()}"
         }
       ]
     },
@@ -87,7 +86,7 @@
                 "name": "Send an Activity",
                 "id": "907674"
               },
-              "activity": "[bfdactivity-907674]"
+              "activity": "@{bfdactivity-907674()}"
             }
           ],
           "elseActions": [
@@ -97,7 +96,7 @@
                 "name": "Send an Activity",
                 "id": "558329"
               },
-              "activity": "[bfdactivity-558329]"
+              "activity": "@{bfdactivity-558329()}"
             }
           ]
         }
@@ -125,7 +124,7 @@
                 "name": "Send an Activity",
                 "id": "074631"
               },
-              "activity": "[bfdactivity-074631]"
+              "activity": "@{bfdactivity-074631()}"
             },
             {
               "$type": "Microsoft.SetProperty",
@@ -144,7 +143,7 @@
                 "name": "Send an Activity",
                 "id": "758791"
               },
-              "activity": "[bfdactivity-758791]"
+              "activity": "@{bfdactivity-758791()}"
             },
             {
               "$type": "Microsoft.SetProperty",
@@ -169,5 +168,5 @@
       "intent": "GetProfileInputs"
     }
   ],
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

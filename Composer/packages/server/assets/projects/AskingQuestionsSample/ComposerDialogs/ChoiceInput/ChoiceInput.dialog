@@ -20,7 +20,7 @@
           },
           "property": "user.style",
           "prompt": "Please select a value from below:",
-          "maxTurnCount": "2147483647",
+          "maxTurnCount": 3,
           "alwaysPrompt": true,
           "allowInterruptions": "false",
           "outputFormat": "value",
@@ -54,7 +54,7 @@
           "$designer": {
             "id": "004212"
           },
-          "activity": "[bfdactivity-004212]"
+          "activity": "@{bfdactivity-004212()}"
         }
       ]
     }

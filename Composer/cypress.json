@@ -1,8 +1,10 @@
 {
+  "projectId": "27ikaq",
   "ignoreTestFiles": [
     "**/examples/*",
     "*.hot-update.js"
   ],
+  "supportFile": "cypress/support/index.ts",
   "video": false,
   "videoUploadOnPasses": false,
   "viewportWidth": 1600,

@@ -1,13 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import has from 'lodash.has';
-import uniq from 'lodash.uniq';
+import has from 'lodash/has';
+import uniq from 'lodash/uniq';
 
 import { ITrigger, DialogInfo, FileInfo } from './type';
-import { DialogChecker } from './utils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
+import { Diagnostic } from './diagnostic';
+import { extractLgTemplateRefs } from './lgUtils/parsers/parseLgTemplateRef';
+import { getExpressionProperties } from './dialogUtils/extractExpressionDefinitions';
+import { IsExpression } from './dialogUtils';
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
@@ -37,14 +40,7 @@ function ExtractLgTemplates(dialog): string[] {
           return true;
       }
       targets.forEach(target => {
-        // match a template name match a temlate func  e.g. `showDate()`
-        // eslint-disable-next-line security/detect-unsafe-regex
-        const reg = /\[([A-Za-z_][-\w]+)(\(.*\))?\]/g;
-        let matchResult;
-        while ((matchResult = reg.exec(target)) !== null) {
-          const templateName = matchResult[1];
-          templates.push(templateName);
-        }
+        templates.push(...extractLgTemplateRefs(target).map(x => x.name));
       });
     }
     return false;
@@ -52,6 +48,7 @@ function ExtractLgTemplates(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(templates);
 }
+
 // find out all lu intents given dialog
 function ExtractLuIntents(dialog): string[] {
   const intents: string[] = [];
@@ -71,6 +68,7 @@ function ExtractLuIntents(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(intents);
 }
+
 // find out all triggers given dialog
 function ExtractTriggers(dialog): ITrigger[] {
   const trigers: ITrigger[] = [];
@@ -106,6 +104,7 @@ function ExtractTriggers(dialog): ITrigger[] {
   JsonWalk('$', dialog, visitor);
   return trigers;
 }
+
 // find out all referred dialog
 function ExtractReferredDialogs(dialog): string[] {
   const dialogs: string[] = [];
@@ -125,9 +124,11 @@ function ExtractReferredDialogs(dialog): string[] {
   JsonWalk('$', dialog, visitor);
   return uniq(dialogs);
 }
+
 // check all fields
-function CheckFields(dialog): string[] {
-  const errors: string[] = [];
+function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
+  const errors: Diagnostic[] = [];
+  const expressionProperties = getExpressionProperties(schema);
   /**
    *
    * @param path , jsonPath string
@@ -136,31 +137,36 @@ function CheckFields(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && has(DialogChecker, value.$type)) {
-      const matchedCheckers = DialogChecker[value.$type];
-      matchedCheckers.forEach(checker => {
-        const checkRes = checker.apply(null, [
-          {
-            path,
-            value,
-          },
-        ]);
-        if (checkRes) {
-          Array.isArray(checkRes) ? errors.push(...checkRes) : errors.push(checkRes);
-        }
-      });
+    if (has(value, '$type') && has(expressionProperties, value.$type)) {
+      const diagnostics = IsExpression(path, value, { ...expressionProperties[value.$type] });
+
+      if (diagnostics) {
+        errors.push(...diagnostics);
+      }
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
-  return errors;
+  JsonWalk(id, dialog, visitor);
+  return errors.map(e => {
+    e.source = id;
+    return e;
+  });
 }
-function parse(content) {
+
+function validate(id: string, content, schema: any): Diagnostic[] {
+  try {
+    return CheckFields(content, id, schema);
+  } catch (error) {
+    return [new Diagnostic(error.message, id)];
+  }
+}
+
+function parse(id: string, content: any, schema: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
   return {
     content,
-    diagnostics: CheckFields(content),
+    diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
     luIntents: ExtractLuIntents(content),
@@ -169,7 +175,8 @@ function parse(content) {
     triggers: ExtractTriggers(content),
   };
 }
-function index(files: FileInfo[], botName: string): DialogInfo[] {
+
+function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
   if (files.length !== 0) {
     for (const file of files) {
@@ -184,7 +191,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
-            ...parse(dialogJson),
+            ...parse(id, dialogJson, schema),
           };
           dialogs.push(dialog);
         }

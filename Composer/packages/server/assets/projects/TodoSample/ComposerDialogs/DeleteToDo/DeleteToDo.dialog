@@ -29,8 +29,7 @@
           "prompt": "OK, please enter the title of the todo you want to remove.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.EditArray",
@@ -54,7 +53,7 @@
               "$designer": {
                 "id": "725469"
               },
-              "activity": "[bfdactivity-725469]"
+              "activity": "@{bfdactivity-725469()}"
             }
           ],
           "elseActions": [
@@ -63,7 +62,7 @@
               "$designer": {
                 "id": "549615"
               },
-              "activity": "[bfdactivity-549615]"
+              "activity": "@{bfdactivity-549615()}"
             }
           ]
         }

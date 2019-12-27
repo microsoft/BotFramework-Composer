@@ -22,6 +22,29 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.AdaptiveDialog]: {
     recognizer: {
       'ui:field': 'RecognizerField',
+      intents: {
+        'ui:options': {
+          object: true,
+        },
+        items: {
+          'ui:options': {
+            hideDescription: true,
+            inline: true,
+          },
+          intent: {
+            'ui:options': {
+              hideLabel: true,
+              transparentBorder: true,
+            },
+          },
+          pattern: {
+            'ui:options': {
+              hideLabel: true,
+              transparentBorder: true,
+            },
+          },
+        },
+      },
     },
     'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],
@@ -29,6 +52,15 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.BeginDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
+    },
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
+  },
+  [SDKTypes.CancelAllDialogs]: {
+    eventValue: {
+      'ui:field': 'CustomObjectField',
     },
     'ui:order': ['dialog', 'property', '*'],
   },
@@ -58,15 +90,46 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     body: {
       'ui:field': 'JsonField',
     },
+    headers: {
+      'ui:field': 'CustomObjectField',
+    },
     'ui:order': ['method', 'url', 'body', 'property', 'responseTypes', 'headers', '*'],
   },
   [SDKTypes.IfCondition]: {
     'ui:hidden': ['actions', 'elseActions', ...globalHidden],
   },
+  [SDKTypes.SetProperties]: {
+    assignments: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        property: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
+  },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnBeginDialog]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnCancelDialog]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnCondition]: {
@@ -82,6 +145,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEndOfConversationActivity]: {
+    ...triggerUiSchema,
+  },
+  [SDKTypes.OnError]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnEventActivity]: {
@@ -112,6 +178,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.OnMessageUpdateActivity]: {
     ...triggerUiSchema,
   },
+  [SDKTypes.OnRepromptDialog]: {
+    ...triggerUiSchema,
+  },
   [SDKTypes.OnTypingActivity]: {
     ...triggerUiSchema,
   },
@@ -137,17 +206,65 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:order': ['connectionName', '*'],
   },
   [SDKTypes.QnAMakerDialog]: {
-    'ui:hidden': ['strictFilters'],
+    strictFilters: {
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        name: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
+    },
   },
   [SDKTypes.ReplaceDialog]: {
     dialog: {
       'ui:widget': 'DialogSelectWidget',
     },
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
     'ui:hidden': [...globalHidden],
+    'ui:order': ['dialog', 'options', 'includeActivity', '*'],
+  },
+  [SDKTypes.RepeatDialog]: {
+    options: {
+      'ui:field': 'CustomObjectField',
+    },
+    'ui:hidden': [...globalHidden],
+    'ui:order': ['options', 'includeActivity', '*'],
   },
   [SDKTypes.SwitchCondition]: {
     cases: {
-      'ui:field': 'CasesField',
+      'ui:options': {
+        object: true,
+      },
+      items: {
+        'ui:hidden': ['actions'],
+        'ui:options': {
+          hideDescription: true,
+          inline: true,
+        },
+        value: {
+          'ui:options': {
+            hideLabel: true,
+            transparentBorder: true,
+          },
+        },
+      },
     },
     'ui:hidden': ['default', ...globalHidden],
   },

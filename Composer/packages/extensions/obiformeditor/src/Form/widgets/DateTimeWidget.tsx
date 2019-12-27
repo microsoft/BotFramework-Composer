@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { DatePicker } from 'office-ui-fabric-react';
+import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
 
 import { BFDWidgetProps } from '../types';
 

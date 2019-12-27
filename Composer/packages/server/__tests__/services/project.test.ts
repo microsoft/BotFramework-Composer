@@ -16,6 +16,7 @@ jest.mock('../../src/store/store', () => {
         name: 'This PC',
         type: 'LocalDisk',
         path: '.',
+        defaultPath: '.',
       },
     ],
     recentBotProjects: [] as any[],
@@ -26,7 +27,7 @@ jest.mock('../../src/store/store', () => {
         return data[key];
       },
       set: (key: string, value: any) => {
-        console.log(`set ${value} in store`);
+        // console.log(`set ${value} in store`);
       },
     },
   };

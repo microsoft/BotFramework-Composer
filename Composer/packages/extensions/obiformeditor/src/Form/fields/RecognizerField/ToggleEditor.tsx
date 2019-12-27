@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import React, { useState, ReactNode } from 'react';
-import { Link, FontSizes } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import formatMessage from 'format-message';
 
 interface ToggleEditorProps {
@@ -28,7 +29,7 @@ export default function ToggleEditor(props: ToggleEditorProps) {
           ? formatMessage('Hide {title}', { title: props.title })
           : formatMessage('View {title}', { title: props.title })}
       </Link>
-      <div className="ToggleEditorContent">{showEditor && props.children()}</div>
+      <div>{showEditor && props.children()}</div>
     </div>
   );
 }

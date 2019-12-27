@@ -1,11 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton, Breadcrumb, Icon, IBreadcrumbItem } from 'office-ui-fabric-react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import { toLower, get } from 'lodash';
+import toLower from 'lodash/toLower';
+import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
@@ -282,24 +287,21 @@ function DesignPage(props) {
   const breadcrumbItems = useMemo(() => {
     const items =
       dialogs.length > 0
-        ? breadcrumb.reduce(
-            (result, item, index) => {
-              const { dialogId, selected, focused } = item;
-              const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-              if (text) {
-                result.push({
-                  // @ts-ignore
-                  index,
-                  isRoot: !selected && !focused,
-                  text,
-                  ...item,
-                  onClick: handleBreadcrumbItemClick,
-                });
-              }
-              return result;
-            },
-            [] as IBreadcrumbItem[]
-          )
+        ? breadcrumb.reduce((result, item, index) => {
+            const { dialogId, selected, focused } = item;
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({
+                // @ts-ignore
+                index,
+                isRoot: !selected && !focused,
+                text,
+                ...item,
+                onClick: handleBreadcrumbItemClick,
+              });
+            }
+            return result;
+          }, [] as IBreadcrumbItem[])
         : [];
     return (
       <Breadcrumb
@@ -312,7 +314,7 @@ function DesignPage(props) {
     );
   }, [dialogs, breadcrumb]);
 
-  async function onSubmit(data) {
+  async function onSubmit(data: { name: string; description: string }) {
     const content = getNewDesigner(data.name, data.description);
     const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
     await actions.createDialog({ id: data.name, content: seededContent });
@@ -381,7 +383,7 @@ function DesignPage(props) {
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
-          <Conversation extraCss={editorContainer}>
+          <Conversation css={editorContainer}>
             <Fragment>
               <div css={editorWrapper}>
                 <div css={visualPanel}>

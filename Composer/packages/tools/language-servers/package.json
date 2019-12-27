@@ -1,5 +1,6 @@
 {
-    "name": "tools-language-servers",
+    "name": "@bfc/language-servers",
+    "license": "MIT",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -7,6 +8,5 @@
         "build": "yarn build:lg",
         "build:lg": "cd language-generation && yarn build"
     },
-    "author": "",
-    "license": "ISC"
+    "author": ""
 }

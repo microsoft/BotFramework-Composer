@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuFile, DialogInfo, LuDiagnostic } from '@bfc/shared';
+import { LuFile, DialogInfo } from '@bfc/indexers';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
@@ -10,15 +10,4 @@ export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
     }
     return false;
   });
-}
-
-export function isValid(diagnostics: LuDiagnostic[]) {
-  return diagnostics.length === 0;
-}
-
-export function combineMessage(diagnostics: LuDiagnostic[]) {
-  return diagnostics.reduce((msg, d) => {
-    msg += `${d.text}\n`;
-    return msg;
-  }, '');
 }

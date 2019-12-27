@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useContext } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import OnboardingContext from '../../context';
 import { palette } from '../../palette';

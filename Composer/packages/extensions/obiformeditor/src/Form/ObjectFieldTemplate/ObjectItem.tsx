@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { IContextualMenuItem, ContextualMenuItemType, IconButton } from 'office-ui-fabric-react';
+import { IContextualMenuItem, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import classnames from 'classnames';
 import { FIELDS_TO_HIDE, OBISchema } from '@bfc/shared';
+import { UiSchema } from '@bfcomposer/react-jsonschema-form';
 
 import './styles.css';
 
@@ -17,10 +19,12 @@ interface ObjectItemProps {
   onEdit: (e) => void;
   onAdd: (e) => void;
   schema: OBISchema;
+  uiSchema: UiSchema;
 }
 
 export default function ObjectItem(props: ObjectItemProps) {
-  const { content, schema, onAdd, onEdit, onDropPropertyClick, name } = props;
+  const { content, schema, onAdd, onEdit, onDropPropertyClick, name, uiSchema } = props;
+  const { inline } = uiSchema['ui:options'] || ({} as any);
 
   if (name && FIELDS_TO_HIDE.includes(name)) {
     return null;
@@ -58,8 +62,8 @@ export default function ObjectItem(props: ObjectItemProps) {
   const compoundType = schema.type && typeof schema.type === 'string' && ['array', 'object'].includes(schema.type);
 
   return (
-    <div className={classnames('ObjectItem', { ObjectItemContainer: compoundType })}>
-      <div className="ObjectItemField">{content}</div>
+    <div className={classnames(inline ? 'ObjectItemInline' : 'ObjectItem', { ObjectItemContainer: compoundType })}>
+      <div className={inline ? 'ObjectItemFieldInline' : 'ObjectItemField'}>{content}</div>
       {contextItems.length > 0 && (
         <div className="ObjectItemContext">
           <IconButton

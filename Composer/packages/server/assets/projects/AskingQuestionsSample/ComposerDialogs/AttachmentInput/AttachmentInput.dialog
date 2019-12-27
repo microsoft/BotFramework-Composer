@@ -22,14 +22,14 @@
           "maxTurnCount": 3,
           "alwaysPrompt": false,
           "allowInterruptions": "false",
-          "outputFormat": "All"
+          "outputFormat": "all"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "365176"
           },
-          "activity": "[bfdactivity-365176]"
+          "activity": "@{bfdactivity-365176()}"
         }
       ]
     }

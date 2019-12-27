@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IContextualMenuItem, IContextualMenuProps } from 'office-ui-fabric-react';
+import {
+  IContextualMenuItem,
+  IContextualMenuProps,
+} from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
 
 import { SDKTypes } from './types';
 import { ConceptLabels } from './labelMap';
@@ -62,7 +65,14 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
-    types: [SDKTypes.SetProperty, SDKTypes.InitProperty, SDKTypes.DeleteProperty, SDKTypes.EditArray],
+    types: [
+      SDKTypes.SetProperty,
+      SDKTypes.SetProperties,
+      SDKTypes.InitProperty,
+      SDKTypes.DeleteProperty,
+      SDKTypes.DeleteProperties,
+      SDKTypes.EditArray,
+    ],
   },
   [DialogGroup.STEP]: {
     label: 'Dialog management',
@@ -107,6 +117,7 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [
+      SDKTypes.OnActivity,
       SDKTypes.OnConversationUpdateActivity,
       SDKTypes.OnEndOfConversationActivity,
       SDKTypes.OnEventActivity,
@@ -117,7 +128,12 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MESSAGE_EVENTS]: {
     label: 'Message events',
-    types: [SDKTypes.OnMessageDeleteActivity, SDKTypes.OnMessageReactionActivity, SDKTypes.OnMessageUpdateActivity],
+    types: [
+      SDKTypes.OnMessageActivity,
+      SDKTypes.OnMessageDeleteActivity,
+      SDKTypes.OnMessageReactionActivity,
+      SDKTypes.OnMessageUpdateActivity,
+    ],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',

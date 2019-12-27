@@ -4,16 +4,16 @@
 import { css } from '@emotion/core';
 import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
-export const link = (active, underTest) => css`
+export const link = (active, disabled) => css`
   display: block;
   text-decoration: none;
   color: #4f4f4f;
   position: relative;
 
-  ${underTest && `pointer-events: none;`}
-  ${!underTest &&
+  ${disabled && `pointer-events: none;`}
+  ${!disabled &&
     `&::after {
       content: '';
       position: absolute;

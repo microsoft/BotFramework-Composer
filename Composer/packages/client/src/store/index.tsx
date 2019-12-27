@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useReducer, useRef } from 'react';
-import once from 'lodash.once';
+import once from 'lodash/once';
 
 import { prepareAxios } from '../utils/auth';
 
@@ -29,7 +29,7 @@ const initialState: State = {
   botStatus: BotStatus.unConnected,
   botLoadErrorMsg: '',
   creationFlowStatus: CreationFlowStatus.CLOSE,
-  templateId: '',
+  templateId: 'EmptyBot',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: { editor: {} },

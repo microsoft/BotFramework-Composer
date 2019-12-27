@@ -5,9 +5,10 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { LuEditor } from '@bfc/code-editor';
-import { get, debounce, isEmpty } from 'lodash';
-
-import * as luUtil from '../../utils/luUtil';
+import get from 'lodash/get';
+import debounce from 'lodash/debounce';
+import isEmpty from 'lodash/isEmpty';
+import { combineMessage, isValid } from '@bfc/indexers';
 
 export default function CodeEditor(props) {
   const { file, errorMsg: updateErrorMsg } = props;
@@ -32,8 +33,8 @@ export default function CodeEditor(props) {
 
   // diagnostics is load file error,
   // updateErrorMsg is save file return error.
-  const isInvalid = !luUtil.isValid(diagnostics) || updateErrorMsg !== '';
-  const errorMsg = isInvalid ? `${luUtil.combineMessage(diagnostics)}\n ${updateErrorMsg}` : '';
+  const isInvalid = !isValid(file.diagnostics) || updateErrorMsg !== '';
+  const errorMsg = isInvalid ? `${combineMessage(diagnostics)}\n ${updateErrorMsg}` : '';
 
   return (
     <LuEditor

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import clonedeep from 'lodash.clonedeep';
-import { remove } from 'lodash';
-import { DialogInfo } from '@bfc/shared';
-import debounce from 'lodash.debounce';
+import clonedeep from 'lodash/cloneDeep';
+import reject from 'lodash/reject';
+import { DialogInfo } from '@bfc/indexers';
+import debounce from 'lodash/debounce';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
@@ -19,9 +19,9 @@ import { fetchProject } from './project';
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
   const dialog = state.dialogs.find(dialog => dialog.id === id);
-  const dialogs = clonedeep(state.dialogs);
+  let dialogs = clonedeep(state.dialogs);
   if (!isStackEmpty) {
-    remove(dialogs, (item: DialogInfo) => item.id === id);
+    dialogs = reject(dialogs, ['id', id]);
   }
   return [{ id, content: dialog ? dialog.content : {}, dialogs }];
 };
@@ -59,7 +59,7 @@ export const createDialogBase: ActionCreator = async (store, { id, content }) =>
     const response = await httpClient.post(`/projects/opened/dialogs`, { id, content });
     const onCreateDialogComplete = store.getState().onCreateDialogComplete;
     if (typeof onCreateDialogComplete === 'function') {
-      onCreateDialogComplete(id);
+      setTimeout(() => onCreateDialogComplete(id));
     }
     store.dispatch({
       type: ActionTypes.CREATE_DIALOG_SUCCESS,
@@ -67,7 +67,6 @@ export const createDialogBase: ActionCreator = async (store, { id, content }) =>
         response,
       },
     });
-    navTo(store, id);
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,

@@ -1,11 +1,44 @@
-import { attachLSPServer } from 'lg-lsp-server';
-import * as express from 'express';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+// import { attachLSPServer } from '../../src/attachWSToHTTPServer';
+import * as ws from 'ws';
+import * as rpc from 'vscode-ws-jsonrpc';
+import { IConnection, createConnection } from 'vscode-languageserver';
+
+import { LGServer } from '../../src';
+
+import { attachLSPServer } from './attach';
+
+const express = require('express');
 
 // create the express application
 const app = express();
 // server the static content, i.e. index.html
 app.use(express.static(__dirname));
 // start the server
-const server = app.listen(5000);
+const server = app.listen(5002);
 
-attachLSPServer(server, '/lgServer');
+const wss: ws.Server = new ws.Server({
+  noServer: true,
+  perMessageDeflate: false,
+});
+
+function launchLanguageServer(socket: rpc.IWebSocket) {
+  const reader = new rpc.WebSocketMessageReader(socket);
+  const writer = new rpc.WebSocketMessageWriter(socket);
+  const connection: IConnection = createConnection(reader, writer);
+  const server = new LGServer(connection);
+  server.start();
+  return server;
+}
+
+attachLSPServer(wss, server, '/lg-language-server', webSocket => {
+  if (webSocket.readyState === webSocket.OPEN) {
+    launchLanguageServer(webSocket);
+  } else {
+    webSocket.on('open', () => {
+      launchLanguageServer(webSocket);
+    });
+  }
+});

@@ -21,8 +21,7 @@
           "prompt": "Hello, What's your age?",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": false,
-          "outputFormat": "float",
+          "allowInterruptions": "false",
           "defaultLocale": "en-us"
         },
         {
@@ -37,7 +36,7 @@
               "$designer": {
                 "id": "164444"
               },
-              "activity": "[bfdactivity-164444]"
+              "activity": "@{bfdactivity-164444()}"
             }
           ],
           "elseActions": [
@@ -46,7 +45,7 @@
               "$designer": {
                 "id": "619321"
               },
-              "activity": "[bfdactivity-619321]"
+              "activity": "@{bfdactivity-619321()}"
             }
           ]
         }

@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { Fragment } from 'react';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
@@ -31,7 +33,7 @@ export const UserInput: React.FC<UserInputProps> = props => {
   const { onChange, getSchema, idSchema, formData, errorSchema } = props;
 
   return (
-    <>
+    <Fragment>
       <div css={field}>
         <TextWidget
           onChange={onChange('property')}
@@ -45,7 +47,7 @@ export const UserInput: React.FC<UserInputProps> = props => {
       </div>
       {getSchema('outputFormat') && (
         <div css={field}>
-          <SelectWidget
+          <TextWidget
             onChange={onChange('outputFormat')}
             schema={getSchema('outputFormat')}
             id={idSchema.outputFormat.__id}
@@ -53,7 +55,6 @@ export const UserInput: React.FC<UserInputProps> = props => {
             label={formatMessage('Output Format')}
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
-            options={{ enumOptions: getOptions(getSchema('outputFormat')) }}
           />
         </div>
       )}
@@ -90,6 +91,6 @@ export const UserInput: React.FC<UserInputProps> = props => {
       {formData.$type === SDKTypes.ConfirmInput && (
         <ConfirmInputSettings {...props} formData={(formData as unknown) as ConfirmInput} />
       )}
-    </>
+    </Fragment>
   );
 };

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import React, { useState } from 'react';
-import { DefaultButton } from 'office-ui-fabric-react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { getUiOptions } from '@bfcomposer/react-jsonschema-form/lib/utils';
-import get from 'lodash.get';
-import omit from 'lodash.omit';
+import get from 'lodash/get';
+import omit from 'lodash/omit';
 import { ObjectFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 
@@ -66,7 +66,13 @@ const ObjectFieldTemplate: React.FunctionComponent<ObjectFieldTemplateProps> = p
         {props.properties
           .filter(p => !isHidden(p.name))
           .map(p => (
-            <ObjectItem {...p} key={p.name} onEdit={() => onEditProperty(p.name)} onAdd={() => setShowModal(true)} />
+            <ObjectItem
+              {...p}
+              key={p.name}
+              onEdit={() => onEditProperty(p.name)}
+              onAdd={() => setShowModal(true)}
+              uiSchema={uiSchema}
+            />
           ))}
         {canExpand(props) && (
           <>

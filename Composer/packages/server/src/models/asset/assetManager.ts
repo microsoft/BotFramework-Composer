@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import find from 'lodash.find';
+import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
 
+import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
 import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
@@ -107,7 +108,6 @@ export class AssetManager {
   public async getProjectTemplates(): Promise<ProjectTemplate[]> {
     const path = this.assetsLibraryPath + '/projects';
     const output: ProjectTemplate[] = [];
-
     if (await this.templateStorage.exists(path)) {
       const folders = await this.templateStorage.readDir(path);
       this.projectTemplates = [];
@@ -157,6 +157,12 @@ export class AssetManager {
   }
 
   public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
+    if (this.projectTemplates.length === 0) {
+      await this.getProjectTemplates();
+    }
+    if (this.runtimeTemplates.length === 0) {
+      await this.getProjectRuntime();
+    }
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
@@ -171,6 +177,7 @@ export class AssetManager {
     const dstStorage = StorageService.getStorageClient(ref.storageId);
     const dstDir = Path.resolve(ref.path);
     if (await dstStorage.exists(dstDir)) {
+      log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
 
@@ -179,7 +186,6 @@ export class AssetManager {
 
     // copy runtime code files
     await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
-
     return ref;
   }
 }

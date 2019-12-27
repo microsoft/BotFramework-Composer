@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import startCase from 'lodash.startcase';
+import startCase from 'lodash/startCase';
 import { JSONSchema6 } from 'json-schema';
 import { IdSchema, UiSchema } from '@bfcomposer/react-jsonschema-form';
-import get from 'lodash.get';
+import get from 'lodash/get';
 import classnames from 'classnames';
 
 import { FormContext } from '../types';
@@ -29,13 +29,14 @@ interface BaseFieldProps<T> {
 }
 
 export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
-  const { children, title, name, description, schema, uiSchema, idSchema, formContext, className } = props;
+  const { children, className, description, formContext, idSchema, name, schema, title, uiSchema } = props;
   const isRootBaseField = idSchema.__id === formContext.rootId;
   const fieldOverrides = get(formContext.editorSchema, `content.SDKOverrides`);
-  let titleOverride = undefined;
-  let descriptionOverride = undefined;
-  let helpLink = undefined;
-  let helpLinkText = undefined;
+  const { inline: displayInline, hideDescription } = (uiSchema['ui:options'] || {}) as any;
+  let titleOverride;
+  let descriptionOverride;
+  let helpLink;
+  let helpLinkText;
   let key = idSchema.__id;
 
   if (schema.title) {
@@ -72,25 +73,27 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
       {children}
     </RootField>
   ) : (
-    <div className={classnames('BaseField', className)} key={key} id={key.replace(/\.|#/g, '')}>
-      <div>
-        <h3 className="BaseFieldTitle">{getTitle()}</h3>
-        {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-          <p className="BaseFieldDescription">
-            {getDescription()}
-            {helpLink && helpLinkText && (
-              <>
-                <br />
-                <br />
-                <a href={helpLink} target="_blank" rel="noopener noreferrer">
-                  {helpLinkText}
-                </a>
-              </>
-            )}
-          </p>
-        )}
-      </div>
-      {children}
+    <div className={classnames({ BaseField: !displayInline }, className)} key={key} id={key.replace(/\.|#/g, '')}>
+      {!hideDescription && (
+        <div>
+          <h3 className="BaseFieldTitle">{getTitle()}</h3>
+          {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
+            <p className="BaseFieldDescription">
+              {getDescription()}
+              {helpLink && helpLinkText && (
+                <>
+                  <br />
+                  <br />
+                  <a href={helpLink} target="_blank" rel="noopener noreferrer">
+                    {helpLinkText}
+                  </a>
+                </>
+              )}
+            </p>
+          )}
+        </div>
+      )}
+      <div className={classnames({ BaseFieldInline: displayInline })}>{children}</div>
     </div>
   );
 }

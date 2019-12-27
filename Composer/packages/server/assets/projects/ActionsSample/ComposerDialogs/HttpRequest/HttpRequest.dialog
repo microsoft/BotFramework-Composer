@@ -19,17 +19,16 @@
           },
           "property": "user.petname",
           "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
-          "maxTurnCount": 2147483647,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "true",
-          "outputFormat": "none"
+          "allowInterruptions": "true"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "229784"
           },
-          "activity": "[bfdactivity-229784]"
+          "activity": "@{bfdactivity-229784()}"
         },
         {
           "$type": "Microsoft.TextInput",
@@ -40,8 +39,7 @@
           "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.HttpRequest",
@@ -79,7 +77,7 @@
           "$designer": {
             "id": "200761"
           },
-          "activity": "[bfdactivity-200761]"
+          "activity": "@{bfdactivity-200761()}"
         },
         {
           "$type": "Microsoft.TextInput",
@@ -90,8 +88,7 @@
           "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.HttpRequest",
@@ -107,7 +104,7 @@
           "$designer": {
             "id": "212615"
           },
-          "activity": "[bfdactivity-212615]"
+          "activity": "@{bfdactivity-212615()}"
         }
       ]
     }

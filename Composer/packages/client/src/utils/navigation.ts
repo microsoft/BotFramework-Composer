@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
+import { Diagnostic } from '@bfc/indexers';
+import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from '@bfc/shared';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
@@ -74,6 +76,36 @@ export function checkUrl(currentUri: string, { dialogId, selected, focused, prom
 
 interface NavigationState {
   breadcrumb: BreadcrumbItem[];
+}
+
+export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
+  //path is like main.trigers[0].actions[0]
+  //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
+  const { path, source } = diagnostic;
+  if (!source) return '';
+
+  let uri = `/dialogs/${source}`;
+  if (!path) return uri;
+
+  const items = path.split('#');
+  const sub = items[0];
+  const type = items[1];
+  const property = items[2];
+
+  const selected = parsePathToSelected(sub);
+
+  if (!selected) return uri;
+  uri += `?selected=${selected}`;
+
+  const focused = parsePathToFocused(sub);
+  if (!focused) return uri;
+  uri += `&focused=${focused}`;
+
+  const fragment = parseTypeToFragment(type, property);
+  if (!fragment) return uri;
+  uri += `#${fragment}`;
+
+  return uri;
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {

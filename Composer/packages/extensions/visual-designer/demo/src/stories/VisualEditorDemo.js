@@ -83,7 +83,7 @@ export class VisualEditorDemo extends Component {
               data={obiJson}
               dialogId={selectedFile}
               focusedEvent={focusedEvent}
-              focusedSteps={focusedSteps}
+              focusedActions={focusedSteps}
               focusedTab={focusedTab}
               clipboardActions={clipboardActions}
               shellApi={{
@@ -119,9 +119,9 @@ export class VisualEditorDemo extends Component {
                   return Promise.resolve('');
                 },
                 getLgTemplates: () => {
-                  return Promise.resolve([{ Name: 'lg', Body: 'LgTemplate Placeholder.' }]);
+                  return Promise.resolve([{ name: 'lg', body: 'LgTemplate Placeholder.' }]);
                 },
-                removeLgTemplate: () => {
+                removeLgTemplates: () => {
                   return Promise.resolve(true);
                 },
               }}

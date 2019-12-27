@@ -397,3 +397,7 @@ MyBots/*
 
 # VsCode
 Composer/.vscode/
+
+# Docker App Data
+.appdata
+docker-compose.override.yml

@@ -17,14 +17,14 @@
           "$designer": {
             "id": "551445"
           },
-          "activity": "[bfdactivity-551445]"
+          "activity": "@{bfdactivity-551445()}"
         }
       ]
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "name": "Conversation started (ConversationUpdate)",
+        "name": "Greeting (ConversationUpdate)",
         "id": "452701"
       },
       "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
@@ -35,7 +35,7 @@
             "name": "Send an Activity",
             "id": "576166"
           },
-          "activity": "[bfdactivity-576166]"
+          "activity": "@{bfdactivity-576166()}"
         }
       ]
     },
@@ -59,9 +59,6 @@
             },
             {
               "value": "Text With Memory"
-            },
-            {
-              "value": "Text With LG"
             },
             {
               "value": "LGWithParam"
@@ -123,18 +120,6 @@
                     "id": "598449"
                   },
                   "dialog": "TextWithMemory"
-                }
-              ]
-            },
-            {
-              "value": "Text With LG",
-              "actions": [
-                {
-                  "$type": "Microsoft.BeginDialog",
-                  "$designer": {
-                    "id": "791050"
-                  },
-                  "dialog": "TextWithLG"
                 }
               ]
             },

@@ -6,14 +6,16 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
-import { IconButton, IContextualMenuItem } from 'office-ui-fabric-react';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { swap, remove } from '../../utils';
 import { ExpressionWidget } from '../../widgets/ExpressionWidget';
 import { FormContext } from '../../types';
+import { WidgetLabel } from '../../widgets/WidgetLabel';
 
-import { validationItem, validationItemValue, field } from './styles';
+import { validationItem, validationItemInput, validationItemValue, field } from './styles';
 
 interface ValidationItemProps {
   index: number;
@@ -72,7 +74,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
   };
 
   return (
-    <div css={[validationItem, field]}>
+    <div css={validationItem}>
       <div css={validationItemValue}>
         <ExpressionWidget
           key={key}
@@ -82,6 +84,9 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
           schema={schema}
           onChange={handleEdit}
           onBlur={handleBlur}
+          styles={{
+            root: { margin: '7px 0 7px 0' },
+          }}
         />
       </div>
       <IconButton
@@ -104,6 +109,7 @@ interface ValidationsProps {
 
 export const Validations: React.FC<ValidationsProps> = props => {
   const { schema, id, formData, formContext } = props;
+  const { description } = schema;
   const [newValidation, setNewValidation] = useState<string>('');
 
   const handleChange = (_e: any, newValue?: string) => {
@@ -137,19 +143,7 @@ export const Validations: React.FC<ValidationsProps> = props => {
 
   return (
     <div>
-      <div css={field}>
-        <ExpressionWidget
-          label={formatMessage('Validation Rules')}
-          id={id}
-          value={newValidation}
-          onChange={handleChange}
-          placeholder={formatMessage('Add new validation rule here')}
-          onKeyDown={submitNewValidation}
-          schema={schema}
-          formContext={formContext}
-          rawErrors={[]}
-        />
-      </div>
+      <WidgetLabel label={formatMessage('Validation Rules')} description={description} id={id} />
       <div>
         {formData.map((v, i) => (
           <ValidationItem
@@ -166,6 +160,39 @@ export const Validations: React.FC<ValidationsProps> = props => {
             schema={schema}
           />
         ))}
+      </div>
+      <div css={[validationItemInput, field]}>
+        <div css={validationItemValue}>
+          <ExpressionWidget
+            id={id}
+            value={newValidation}
+            onChange={handleChange}
+            placeholder={formatMessage('Add new validation rule here')}
+            onKeyDown={submitNewValidation}
+            schema={schema}
+            formContext={formContext}
+            rawErrors={[]}
+            iconProps={{
+              iconName: 'ReturnKey',
+              style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+            }}
+          />
+        </div>
+        <IconButton
+          disabled={true}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          ariaLabel={formatMessage('Item Actions')}
+          styles={{
+            menuIcon: {
+              backgroundColor: NeutralColors.white,
+              color: NeutralColors.gray130,
+              fontSize: FontSizes.size16,
+            },
+            rootDisabled: {
+              backgroundColor: NeutralColors.white,
+            },
+          }}
+        />
       </div>
     </div>
   );

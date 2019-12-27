@@ -2,14 +2,10 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import {
-  SelectableOptionMenuItemType,
-  ComboBox,
-  IComboBoxOption,
-  IRenderFunction,
-  ISelectableOption,
-  Icon,
-} from 'office-ui-fabric-react';
+import { SelectableOptionMenuItemType, ComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
+import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
 import { BFDWidgetProps } from '../types';
@@ -55,7 +51,7 @@ export const DialogSelectWidget: React.FC<BFDWidgetProps> = props => {
         formContext.shellApi.createDialog().then(newDialog => {
           if (newDialog) {
             onChange(newDialog);
-            setComboboxTitle(newDialog);
+            setTimeout(() => formContext.shellApi.navTo(newDialog), 500);
           } else {
             setComboboxTitle(null);
           }
