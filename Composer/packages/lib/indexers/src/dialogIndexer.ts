@@ -136,8 +136,14 @@ function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     if (has(value, '$type')) {
-      checkerFuncs.forEach(checkerFunc => {
-        const result = checkerFunc(path, value, value.$type, schema.definitions[value.$type]);
+      const allChecks = checkerFuncs['.'];
+      const checkerFunc = checkerFuncs[value.$type];
+      if (checkerFunc) {
+        allChecks.splice(0, 0, ...checkerFunc);
+      }
+
+      allChecks.forEach(func => {
+        const result = func(path, value, value.$type, schema.definitions[value.$type]);
         if (result) {
           diagnostics.splice(0, 0, ...result);
         }
