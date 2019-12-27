@@ -51,35 +51,39 @@ For more information about implementing text other prompts and read [asking user
 
 ## Manipulating properties using memory actions
 
-Bot Framework provides a set of memory manipulation actions in the **Manage properties** sub-menu to create and modify properties in memory. Properties can be created on the fly in the editor - the runtime will automatically manage the underlying data for you in the background.
+Composer provides a set of memory manipulation actions in the **Manage properties** sub-menu to create and modify properties in memory. Properties can be created on the fly in the editor - the runtime will automatically manage the underlying data for you in the background.
 
 ![Memory manipulation menu](./media/memory/memory-mainpulation-menu.png)
 
-### Set a Property
-Use **Set a Property** to set the value of a property.
+### Set a property
+Use **Set a property** to set the value of a property.
 
 ![Delete Property](./media/memory/set-property.png)
 
  The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
+ 
+### Set properties
 
-### Initialize a Property
-Use **Initialize a Property** to create new properties that are objects or arrays. This allows your bot to use sub-properties, or store multiple values inside the property. 
+### Initialize a property
+Use **Initialize a property** to create new properties that are objects or arrays. This allows your bot to use sub-properties, or store multiple values inside the property. 
 
 ![Initialize Property](./media/memory/initialize-property.png)
 
 It is important to note that before setting the value of a sub-property like `user.profile.age` that `user.profile` must first be initialized. It is not necessary to further initialize `user.profile.age` unless `age` must also contain sub-values.
 
-### Edit an Array Property
-Use **Edit an Array Property** to add and remove items from an array. Items set in **Value** can be added or removed from the top or bottom of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
+### Edit an Array property
+Use **Edit an Array property** to add and remove items from an array. Items set in **Value** can be added or removed from the top or bottom of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
 
 ![Edit Array Property](./media/memory/edit-array-property.png)
 
 Note that it is possible to push the value of an existing property into another Array property - for example, push `turn.choice` onto `dialog.choices`.
 
-### Delete a Property
-Use **Delete a Property** to remove a property from memory.
+### Delete a property
+Use **Delete a property** to remove a property from memory.
 
 ![Delete Property](./media/memory/delete-property.png)
+
+### Delete properties
 
 ## Manipulating properties with dialogs
 
