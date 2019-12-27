@@ -71,7 +71,6 @@ export class LgServer {
     }
     const lgResources = getLGResources(document);
     const templates = lgResources.Templates;
-    const hoverItemList = [];
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem: lg.LGTemplate = templates.find(u => u.Name === word);
