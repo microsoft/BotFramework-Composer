@@ -2,7 +2,14 @@ import * as fs from 'fs';
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
-import { IConnection, TextDocuments, createConnection } from 'vscode-languageserver';
+import {
+  IConnection,
+  TextDocuments,
+  createConnection,
+  CodeAction,
+  CodeActionKind,
+  Command,
+} from 'vscode-languageserver';
 import {
   TextDocument,
   Diagnostic,
@@ -13,7 +20,12 @@ import {
   DiagnosticSeverity,
   TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import {
+  TextDocumentPositionParams,
+  DocumentOnTypeFormattingParams,
+  CodeLensParams,
+  CodeActionParams,
+} from 'vscode-languageserver-protocol';
 import { EntityTypesObj, LineState } from './entityEnum';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
@@ -55,19 +67,28 @@ export class LuServer {
             triggerCharacters: ['@', ' ', '{', ':'],
           },
           foldingRangeProvider: false,
+          //CodeActionRegistrationOptions:
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
+            moreTriggerCharacter: ['Tab', 'Shift'],
           },
         },
       };
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
+    //this.connection.onCodeAction(codeActionParams => this.codeActions(codeActionParams));
   }
 
   start() {
     this.connection.listen();
   }
+
+  // protected async codeActions(params: CodeActionParams): Promise<CodeAction[] | Command> {
+  //   const uri = params.textDocument.uri;
+  //   const title = 'With User Input';
+  //   return [CodeAction.create(title, Command.create(title, 'sample.fixMe', uri), CodeActionKind.QuickFix)];
+  // }
 
   private getLastLineContent(params: TextDocumentPositionParams): string {
     const document = this.documents.get(params.textDocument.uri);
@@ -133,7 +154,7 @@ export class LuServer {
   }
 
   private getMLEntities(text: string): string[] {
-    const lines = text.split("\n");
+    const lines = text.split('\n');
     const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_\.-]+)\s*.*/;
     const mlEntities: string[] = [];
     for (const i in lines) {
@@ -156,17 +177,16 @@ export class LuServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const lineCount = document.lineCount;
-    const position = params.position;
-    const range = Range.create(position.line, 0, position.line, position.character);
-    const curLineContent = document.getText(range);
     const text = document.getText();
     const lines = text.split('\n');
-    const textBeforeCurLine = lines.slice(0, lines.length - 1).join('\n');
+    const textBeforeCurLine = lines.slice(0, curLineNumber - 1).join('\n');
     //const luisJson = await this.extractLUISContent(textBeforeCurLine);
     const key = params.ch;
+    console.log(key);
     const inputState = this.getInputLineState(params);
     //const entitiesList = this.getEntitiesList(luisJson);
     const pos = params.position;
+    console.log(pos);
 
     if (
       key == '\n' &&
@@ -179,20 +199,16 @@ export class LuServer {
       edits.push(item);
     }
 
-    if (
-      key == '\n' &&
-      inputState === 'mlEntity' &&
-      lastLineContent.endsWith("=")
-    ) {
+    if (key == '\n' && inputState === 'mlEntity' && lastLineContent.endsWith('=')) {
       const mlEntities = this.getMLEntities(textBeforeCurLine);
       const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_\.-]+)\s*.*/;
-      let entityName = "";
+      let entityName = '';
       if (entityNameRegExp.test(lastLineContent)) {
         entityName = lastLineContent.match(entityNameRegExp)[1];
       }
       if (mlEntities.includes(entityName)) {
         const newPos = Position.create(pos.line + 1, 0);
-        const item: TextEdit = TextEdit.insert(newPos, "\t- @ ");
+        const item: TextEdit = TextEdit.insert(newPos, '\t- @ ');
         edits.push(item);
       }
     }

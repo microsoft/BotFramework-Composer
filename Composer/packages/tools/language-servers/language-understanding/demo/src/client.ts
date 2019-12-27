@@ -1,5 +1,5 @@
 import * as monaco from 'monaco-editor-core';
-import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
+import { listen, MessageConnection, Disposable } from 'vscode-ws-jsonrpc';
 import {
   MonacoLanguageClient,
   CloseAction,
@@ -8,7 +8,6 @@ import {
   createConnection,
 } from 'monaco-languageclient';
 import normalizeUrl = require('normalize-url');
-import { resolve } from 'dns';
 const ReconnectingWebSocket = require('reconnecting-websocket');
 
 // register Monaco languages
@@ -28,7 +27,11 @@ monaco.languages.register({
 });
 
 monaco.languages.setLanguageConfiguration('bflu', {
-  autoClosingPairs: [{ open: '{', close: '}' }, { open: '[', close: ']' }, { open: '(', close: ')' }],
+  autoClosingPairs: [
+    { open: '{', close: '}' },
+    { open: '[', close: ']' },
+    { open: '(', close: ')' },
+  ],
 });
 
 monaco.editor.defineTheme('lutheme', {
@@ -50,10 +53,12 @@ monaco.editor.defineTheme('lutheme', {
 const value = `@  ml a
 @  composite la = [a, b]
  `;
+
 const editor = monaco.editor.create(document.getElementById('container')!, {
   model: monaco.editor.createModel(value, 'bflu', monaco.Uri.parse('inmemory://model.json')),
   glyphMargin: true,
   autoClosingBrackets: 'always',
+  wordBasedSuggestions: false,
   autoIndent: true,
   formatOnType: true,
   lightbulb: {
@@ -74,9 +79,17 @@ listen({
   onConnection: connection => {
     // create and start the language client
     const languageClient = createLanguageClient(connection);
-    const disposable = languageClient.start();
+    const disposable: Disposable = languageClient.start();
     connection.onClose(() => disposable.dispose());
+    // editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.F9, function () {
+    //   connection.sendRequest(DocumentOnTypeFormattingRequest.type );
+    // });
   },
+});
+
+const keybinding = editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.F9, function() {
+  if (webSocket.OPEN) {
+  }
 });
 
 function createLanguageClient(connection: MessageConnection): MonacoLanguageClient {
