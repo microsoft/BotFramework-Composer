@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "botbuilder-lg": "4.7.0-preview.93464",
+    "botframework-expressions": "4.7.0-preview.93464",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
   },
