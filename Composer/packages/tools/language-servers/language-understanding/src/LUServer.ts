@@ -5,8 +5,7 @@ import * as fs from 'fs';
 
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
-import { MessageReader, MessageWriter } from 'vscode-jsonrpc';
-import { IConnection, TextDocuments, createConnection } from 'vscode-languageserver';
+import { IConnection, TextDocuments } from 'vscode-languageserver';
 import {
   TextDocument,
   Diagnostic,
@@ -26,15 +25,7 @@ const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
 
-export function start(reader: MessageReader, writer: MessageWriter): LuServer {
-  const connection = createConnection(reader, writer);
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  const server = new LuServer(connection);
-  server.start();
-  return server;
-}
-
-export class LuServer {
+export class LUServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();

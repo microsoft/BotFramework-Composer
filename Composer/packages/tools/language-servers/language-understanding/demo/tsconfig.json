@@ -1,12 +1,10 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "commonjs",
-        "declaration": true,
-        "outDir": "./lib",
-        "sourceMap": true
-    },
+    "extends": "../tsconfig.json",
     "include": [
-        "src/*"
+        "./src/**/*",
+        "./__tests__/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ],
 }

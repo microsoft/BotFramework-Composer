@@ -13,7 +13,7 @@ import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
-import { LuServer } from '@bfc/lu-languageserver';
+import { LUServer } from '@bfc/lu-languageserver';
 
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
@@ -126,7 +126,7 @@ function launchLuLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  const server = new LuServer(connection);
+  const server = new LUServer(connection);
   server.start();
 }
 
