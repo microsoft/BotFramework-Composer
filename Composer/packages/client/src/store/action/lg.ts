@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import * as lgUtil from '../../utils/lgUtil';
-import { ActionCreator } from '../types';
+import { ActionCreator, State } from '../types';
+import { undoable } from '../middlewares/undo';
 
 import { ActionTypes } from './../../constants';
 import httpClient from './../../utils/httpUtil';
@@ -22,6 +23,21 @@ export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content })
     });
   }
 };
+
+export const undoableUpdateLgFile = undoable(
+  updateLgFile,
+  (state: State, args: any[], isEmpty) => {
+    if (isEmpty) {
+      const id = args[0].id;
+      const content = state.lgFiles.find(lgFile => lgFile.id === id)?.content;
+      return [{ id, content }];
+    } else {
+      return args;
+    }
+  },
+  updateLgFile,
+  updateLgFile
+);
 
 export const createLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
   try {
@@ -57,25 +73,25 @@ export const removeLgFile: ActionCreator = async ({ dispatch }, { id }) => {
 
 export const updateLgTemplate: ActionCreator = async (store, { file, templateName, template }) => {
   const newContent = lgUtil.updateTemplate(file.content, templateName, template);
-  return await updateLgFile(store, { id: file.id, content: newContent });
+  return await undoableUpdateLgFile(store, { id: file.id, content: newContent });
 };
 
 export const createLgTemplate: ActionCreator = async (store, { file, template }) => {
   const newContent = lgUtil.addTemplate(file.content, template);
-  return await updateLgFile(store, { id: file.id, content: newContent });
+  return await undoableUpdateLgFile(store, { id: file.id, content: newContent });
 };
 
 export const removeLgTemplate: ActionCreator = async (store, { file, templateName }) => {
   const newContent = lgUtil.removeTemplate(file.content, templateName);
-  return await updateLgFile(store, { id: file.id, content: newContent });
+  return await undoableUpdateLgFile(store, { id: file.id, content: newContent });
 };
 
 export const removeLgTemplates: ActionCreator = async (store, { file, templateNames }) => {
   const newContent = lgUtil.removeTemplates(file.content, templateNames);
-  return await updateLgFile(store, { id: file.id, content: newContent });
+  return await undoableUpdateLgFile(store, { id: file.id, content: newContent });
 };
 
 export const copyLgTemplate: ActionCreator = async (store, { file, fromTemplateName, toTemplateName }) => {
   const newContent = lgUtil.copyTemplate(file.content, fromTemplateName, toTemplateName);
-  return await updateLgFile(store, { id: file.id, content: newContent });
+  return await undoableUpdateLgFile(store, { id: file.id, content: newContent });
 };

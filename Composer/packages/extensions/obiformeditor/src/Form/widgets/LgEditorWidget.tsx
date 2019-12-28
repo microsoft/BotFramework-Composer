@@ -105,11 +105,17 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   };
 
   // update the template on mount to get validation
+  // useEffect(() => {
+  //   if (localValue) {
+  //     updateLgTemplate(localValue);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (localValue) {
-      updateLgTemplate(localValue);
+    if (template.body !== localValue) {
+      setLocalValue(template.body);
     }
-  }, []);
+  }, [template.body]);
 
   return (
     <LgEditor
