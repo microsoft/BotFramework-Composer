@@ -17,7 +17,7 @@ const app = express();
 // server the static content, i.e. index.html
 app.use(express.static(__dirname));
 // start the server
-const server = app.listen(5002);
+const server = app.listen(5003);
 
 const wss: ws.Server = new ws.Server({
   noServer: true,

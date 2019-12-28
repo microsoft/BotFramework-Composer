@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
 import React from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';

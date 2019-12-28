@@ -9,12 +9,14 @@ npm install
 
 ## How to start the demo 
 
-#### run
+#### 1. under language-understanding directory, run
 ```
-yarn satrt
+yarn start
 ```
 
-go to [http://localhost:8080/]
+### 2. go to code-editor directory
+
+start luEditor demo, connect :5003/lu-language-server
 
 ## Features
 
