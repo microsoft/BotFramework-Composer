@@ -38,33 +38,19 @@ interface DefineConversationProps {
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  enableLocationBrowse: boolean;
   focusedStorageFolder?: StorageFolder;
   currentPath?: string;
   bots?: Bots[];
-  shouldPresetName: boolean;
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const {
-    onSubmit,
-    onDismiss,
-    onCurrentPathUpdate,
-    enableLocationBrowse,
-    focusedStorageFolder,
-    currentPath,
-    bots,
-    shouldPresetName,
-  } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, currentPath, bots } = props;
   const { state } = useContext(StoreContext);
   const { templateId } = state;
 
   const getDefaultName = () => {
-    if (!shouldPresetName) {
-      return '';
-    }
     let i = -1;
     const bot = templateId;
     let defaultName = '';
@@ -157,7 +143,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     <Fragment>
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
-        <Stack horizontal={enableLocationBrowse} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <Stack horizontal={true} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}
@@ -179,7 +165,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
             />
           </StackItem>
         </Stack>
-        {enableLocationBrowse && focusedStorageFolder && onCurrentPathUpdate && currentPath && (
+        {focusedStorageFolder && onCurrentPathUpdate && currentPath && (
           <LocationSelectContent
             onCurrentPathUpdate={onCurrentPathUpdate}
             focusedStorageFolder={focusedStorageFolder}

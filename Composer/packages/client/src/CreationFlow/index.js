@@ -164,12 +164,10 @@ export function CreationFlow(props) {
         <DefineConversation
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
-          enableLocationBrowse={true}
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
           currentPath={currentPath}
           bots={bots}
-          shouldPresetName={true}
         />
       ),
     },

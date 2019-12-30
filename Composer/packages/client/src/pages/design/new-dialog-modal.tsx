@@ -4,8 +4,9 @@
 import React from 'react';
 
 import { DialogCreationCopy } from '../../constants';
-import { DefineConversation } from '../../CreationFlow/DefineConversation/index';
 import { DialogWrapper } from '../../components/DialogWrapper/index';
+
+import { DefineDialog } from './defineDialog';
 
 interface NewDialogModalProps {
   isOpen: boolean;
@@ -19,13 +20,7 @@ const NewDialogModal: React.FC<NewDialogModalProps> = props => {
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}>
-      <DefineConversation
-        onSubmit={onSubmit}
-        onDismiss={onDismiss}
-        onGetErrorMessage={onGetErrorMessage}
-        enableLocationBrowse={false}
-        shouldPresetName={false}
-      />
+      <DefineDialog onSubmit={onSubmit} onDismiss={onDismiss} onGetErrorMessage={onGetErrorMessage} />
     </DialogWrapper>
   );
 };
