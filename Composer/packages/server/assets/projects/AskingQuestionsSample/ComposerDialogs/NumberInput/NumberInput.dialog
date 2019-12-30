@@ -22,7 +22,7 @@
           "invalidPrompt": "Please input a number.",
           "maxTurnCount": 2,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
+          "allowInterruptions": "false",
           "defaultLocale": "en-us"
         },
         {
