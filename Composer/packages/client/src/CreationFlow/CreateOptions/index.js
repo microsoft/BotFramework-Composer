@@ -67,12 +67,12 @@ export function CreateOptions(props) {
   };
 
   const handleItemChange = (event, option) => {
-    setTemplate(option);
+    setTemplate(option.key);
   };
 
   const handleJumpToNext = () => {
     if (option === 'Create from template') {
-      onNext(template.key);
+      onNext(template);
     } else {
       onNext(emptyBotKey);
     }
