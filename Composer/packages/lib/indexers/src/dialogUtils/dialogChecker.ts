@@ -44,6 +44,7 @@ export const checkExpression = (exp: string, required: boolean, path: string, ty
 };
 
 function findAllRequiredType(schema: any): { [key: string]: boolean } {
+  if (!schema) return {};
   const types = schema.anyOf?.filter(x => x.title === 'Type');
   const required = {};
   if (types && types.length) {
@@ -61,6 +62,7 @@ function findAllRequiredType(schema: any): { [key: string]: boolean } {
 }
 
 export const IsExpression: CheckerFunc = (path, value, type, schema) => {
+  if (!schema) return [];
   const diagnostics: Diagnostic[] = [];
   const requiredTypes = findAllRequiredType(schema);
   Object.keys(value).forEach(key => {
