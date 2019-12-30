@@ -43,6 +43,7 @@ export const validationItem = css`
 
 export const validationItemValue = css`
   flex: 1;
+  min-width: 0;
 `;
 
 export const field = css`

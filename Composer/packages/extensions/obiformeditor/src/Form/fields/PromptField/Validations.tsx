@@ -81,6 +81,7 @@ const ValidationItem: React.FC<ValidationItemProps> = props => {
           key={key}
           value={value}
           id={id}
+          label={formatMessage('Validation')}
           editable
           formContext={formContext}
           schema={schema}
