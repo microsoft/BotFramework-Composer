@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { LgFile, LgTemplate, lgIndexer, filterTemplateDiagnostics, isValid } from '@bfc/indexers';
+import { LgFile, LgTemplate, lgIndexer, filterTemplateDiagnostics, isValid, FileResolver } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -33,7 +33,7 @@ import {
   LGCursorState,
 } from './utils';
 
-const { check } = lgIndexer;
+const { check, indexOne } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -44,14 +44,9 @@ export class LGServer {
   protected workspaceRoot?: URI;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
-  /**
-   * LG documents infomation store.
-   * The connection between lgOption and botProjectService.
-   * Help do inline template editing and server resource passing.
-   */
   protected LGDocuments: LGDocument[] = [];
 
-  constructor(protected readonly connection: IConnection, protected readonly botProjectService?) {
+  constructor(protected readonly connection: IConnection, protected readonly resolver?: FileResolver) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -98,8 +93,8 @@ export class LGServer {
   protected verifyLgOption(lgOption: LGOption, document: TextDocument) {
     const diagnostics: string[] = [];
 
-    if (!this.botProjectService) {
-      diagnostics.push('[Error lgOption] botProjectService is required but not exist.');
+    if (!this.resolver) {
+      diagnostics.push('[Error lgOption] resolver is required but not exist.');
     } else {
       const { fileId, templateId } = lgOption;
       const lgFile = this.getLGFile(fileId);
@@ -130,10 +125,10 @@ export class LGServer {
   }
 
   protected getLGFile(fileId: string): LgFile | undefined {
-    const currentProject = this.botProjectService?.getCurrentBotProject();
-    if (!currentProject) return;
-    const { lgFiles } = currentProject.getIndexes();
-    return lgFiles.find(({ id }) => id === fileId);
+    if (!this.resolver) return;
+    const file = this.resolver(fileId);
+    if (!file) return;
+    return indexOne(file);
   }
 
   protected getLGTemplate(fileId: string, templateId: string): LgTemplate | undefined {
