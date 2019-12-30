@@ -74,6 +74,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     lgFile.diagnostics.find(d => {
       return (
         d.range &&
+        template.range &&
         d.range.start.line >= template.range.startLineNumber &&
         d.range.end.line <= template.range.endLineNumber
       );
