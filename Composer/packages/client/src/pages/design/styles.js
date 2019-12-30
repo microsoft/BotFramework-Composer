@@ -143,7 +143,6 @@ export const styles = {
   },
   modal: {
     main: {
-      // maxWidth: '416px !important',
       maxWidth: '80% !important',
       width: '960px !important',
     },
