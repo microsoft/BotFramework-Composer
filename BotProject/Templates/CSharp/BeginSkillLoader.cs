@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Loaders;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Newtonsoft.Json;
@@ -12,10 +12,13 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
         private ConversationState conversationState;
 
-        public BeginSkillLoader(SkillHttpClient httpClient, ConversationState conversationState)
+        private string appId;
+
+        public BeginSkillLoader(SkillHttpClient httpClient, ConversationState conversationState, string appId)
         {
             this.skillHttpClient = httpClient;
             this.conversationState = conversationState;
+            this.appId = appId;
         }
 
         public object Load(JToken obj, JsonSerializer serializer, Type type)
@@ -23,6 +26,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var orignalObject = obj.ToObject<BeginSkill>(serializer);
             orignalObject.SetHttpClient(this.skillHttpClient);
             orignalObject.SetConversationState(this.conversationState);
+            orignalObject.SetAppId(this.appId);
+
             return orignalObject;
         }
     }

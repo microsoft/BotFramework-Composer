@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -21,6 +21,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
         private BotFrameworkSkill activeSkill;
 
+        private string appId;
+
         public BeginSkill([CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
             : base()
         {
@@ -33,12 +35,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         [JsonProperty("skillHostEndpoint")]
         public string SkillHostEndpoint { get; set; }
 
-        [JsonProperty("appId")]
-        public string AppId { get; set; }
-
-        [JsonProperty("appPwd")]
-        public string AppPwd { get; set; }
-
         public void SetHttpClient(SkillHttpClient skillHttpClient)
         {
             this._skillClient = skillHttpClient;
@@ -47,6 +43,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public void SetConversationState(ConversationState conversationState)
         {
             this._conversationState = conversationState;
+        }
+
+        public void SetAppId(string appId)
+        {
+            this.appId = appId;
         }
 
         public override async Task<DialogTurnResult> BeginDialogAsync(DialogContext dc, object options = null, CancellationToken cancellationToken = default)
@@ -82,7 +83,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             await _conversationState.SaveChangesAsync(dc.Context, force: true, cancellationToken: cancellationToken);
 
             // route the activity to the skill
-            var response = await _skillClient.PostActivityAsync(AppId, targetSkill, new Uri(SkillHostEndpoint), dc.Context.Activity, cancellationToken);
+            var response = await _skillClient.PostActivityAsync(this.appId, targetSkill, new Uri(SkillHostEndpoint), dc.Context.Activity, cancellationToken);
 
             // Check response status
             if (!(response.Status >= 200 && response.Status <= 299))
