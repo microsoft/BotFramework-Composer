@@ -4,7 +4,7 @@
 import { parsePathToSelected } from './parsePathToSelected';
 
 export function parsePathToFocused(path: string): string {
-  //path is like main.trigers[0].actions[0]
+  //path is like main.triggers[0].actions[0]
 
   const trigger = parsePathToSelected(path);
 
@@ -13,7 +13,7 @@ export function parsePathToFocused(path: string): string {
   const matchActions = list.filter(x => x.startsWith('actions') || x.startsWith('elseActions'));
 
   if (matchActions.length > 0) {
-    return trigger + '.' + matchActions.join('.');
+    return `${trigger}.${matchActions.join('.')}`;
   }
   return '';
 }

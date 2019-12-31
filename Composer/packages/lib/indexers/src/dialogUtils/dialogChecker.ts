@@ -14,9 +14,9 @@ const ExpressionParser = new ExpressionEngine();
 const createPath = (path: string, type: string): string => {
   const steps = ['triggers', 'actions', 'elseActions'];
   let list = path.split('.');
-  const matchs = list.filter(x => !steps.every(step => !x.startsWith(step)));
+  const matches = list.filter(x => !steps.every(step => !x.startsWith(step)));
 
-  const focused = matchs.join('.');
+  const focused = matches.join('.');
   list = path.split(`${focused}.`);
   if (list.length !== 2) return path;
 
@@ -68,7 +68,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
   Object.keys(value).forEach(key => {
     const property = value[key];
     if (Array.isArray(property)) {
-      const itemsSchema = schema.properties[key].items;
+      const itemsSchema = get(schema, ['properties', key, 'items'], null);
       if (itemsSchema?.$role === 'expression') {
         property.forEach((child, index) => {
           const diagnostic = checkExpression(child, !!requiredTypes[key], `${path}.${key}[${index}]`, type);
