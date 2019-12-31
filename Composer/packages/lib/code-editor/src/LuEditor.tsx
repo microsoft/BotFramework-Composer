@@ -63,6 +63,8 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 export function LuEditor(props: LULSPEditorProps) {
   const options = {
     quickSuggestions: true,
+    wordBasedSuggestions: false,
+    formatOnType: true,
   };
 
   const { luOption, languageServer, ...restProps } = props;

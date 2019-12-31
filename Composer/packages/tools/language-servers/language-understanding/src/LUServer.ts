@@ -69,101 +69,6 @@ export class LUServer {
     this.connection.listen();
   }
 
-  // protected async codeActions(params: CodeActionParams): Promise<CodeAction[] | Command> {
-  //   const uri = params.textDocument.uri;
-  //   const title = 'With User Input';
-  //   return [CodeAction.create(title, Command.create(title, 'sample.fixMe', uri), CodeActionKind.QuickFix)];
-  // }
-
-  private getLastLineContent(params: TextDocumentPositionParams): string {
-    const document = this.documents.get(params.textDocument.uri);
-    if (!document) {
-      return '';
-    }
-    const content = document.getText();
-    const position = params.position;
-    if (position.line === 0) {
-      return '';
-    } else {
-      return content.split('\n')[position.line - 1];
-    }
-  }
-
-  // private getCurrentLineContent(params: TextDocumentPositionParams): string {
-  //   const document = this.documents.get(params.textDocument.uri);
-  //   if (!document) {
-  //     return '';
-  //   }
-  //   const position = params.position;
-  //   if (position.line === 0) {
-  //     return '';
-  //   } else {
-  //     const range = Range.create(position.line, 0, position.line, position.character);
-  //     return document.getText(range);
-  //   }
-  // }
-
-  private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
-    const document = this.documents.get(params.textDocument.uri);
-    const position = params.position;
-    const regListEnity = /^\s*@\s*list\s*.*/;
-    const regUtterance = /^\s*#.*/;
-    const regDashLine = /^\s*-.*/;
-    const mlEntity = /^\s*@\s*ml\s*.*/;
-    const regEntityDefLine = /^\s*@.*/;
-    let state: LineState = 'other';
-    if (!document) {
-      return 'other';
-    }
-    const lineContentList = document.getText().split('\n');
-    for (let i = 0; i < position.line; i++) {
-      const line = lineContentList[i];
-      if (regListEnity.test(line)) {
-        state = 'listEntity';
-      } else if (regUtterance.test(line)) {
-        state = 'utterance';
-      } else if (mlEntity.test(line)) {
-        state = 'mlEntity';
-      } else if (regDashLine.test(line) || regEntityDefLine.test(line)) {
-        continue;
-      } else {
-        state = 'other';
-      }
-    }
-
-    return state;
-  }
-
-  // private getEntitiesList(luisJson: any): string[] {
-  //   const entitiesList: string[] = [];
-  //   if (luisJson !== undefined) {
-  //     if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-  //       luisJson.entities.forEach(entity => {
-  //         entitiesList.push(entity.name);
-  //       });
-  //     }
-  //   }
-
-  //   return entitiesList;
-  // }
-
-  private getMLEntities(text: string): string[] {
-    const lines = text.split('\n');
-
-    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*/;
-    const mlEntities: string[] = [];
-    for (const line of lines) {
-      if (mlEntityRegExp.test(line)) {
-        const entityGroup = line.match(mlEntityRegExp);
-        if (entityGroup && entityGroup.length >= 2) {
-          mlEntities.push(entityGroup[1]);
-        }
-      }
-    }
-
-    return mlEntities;
-  }
-
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -182,7 +87,6 @@ export class LUServer {
     const inputState = this.getInputLineState(params);
     //const entitiesList = this.getEntitiesList(luisJson);
     const pos = params.position;
-
     if (
       key == '\n' &&
       inputState === 'utterance' &&
@@ -235,6 +139,68 @@ export class LUServer {
     }
 
     return Promise.resolve(edits);
+  }
+
+  private getLastLineContent(params: TextDocumentPositionParams): string {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return '';
+    }
+    const content = document.getText();
+    const position = params.position;
+    if (position.line === 0) {
+      return '';
+    } else {
+      return content.split('\n')[position.line - 1];
+    }
+  }
+
+  private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
+    const document = this.documents.get(params.textDocument.uri);
+    const position = params.position;
+    const regListEnity = /^\s*@\s*list\s*.*/;
+    const regUtterance = /^\s*#.*/;
+    const regDashLine = /^\s*-.*/;
+    const mlEntity = /^\s*@\s*ml\s*.*/;
+    const regEntityDefLine = /^\s*@.*/;
+    let state: LineState = 'other';
+    if (!document) {
+      return 'other';
+    }
+    const lineContentList = document.getText().split('\n');
+    for (let i = 0; i < position.line; i++) {
+      const line = lineContentList[i];
+      if (regListEnity.test(line)) {
+        state = 'listEntity';
+      } else if (regUtterance.test(line)) {
+        state = 'utterance';
+      } else if (mlEntity.test(line)) {
+        state = 'mlEntity';
+      } else if (regDashLine.test(line) || regEntityDefLine.test(line)) {
+        continue;
+      } else {
+        state = 'other';
+      }
+    }
+
+    return state;
+  }
+
+  private getMLEntities(text: string): string[] {
+    const lines = text.split('\n');
+
+    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*/;
+    const mlEntities: string[] = [];
+    for (const line of lines) {
+      if (mlEntityRegExp.test(line)) {
+        const entityGroup = line.match(mlEntityRegExp);
+        if (entityGroup && entityGroup.length >= 2) {
+          mlEntities.push(entityGroup[1]);
+        }
+      }
+    }
+
+    return mlEntities;
   }
 
   protected async resovleSchema(url: string): Promise<string> {
@@ -544,7 +510,7 @@ export class LUServer {
       const item = {
         label: 'hasRoles?',
         kind: CompletionItemKind.Keyword,
-        insertText: ` hasrole `,
+        insertText: ` hasRoles `,
         documentation: `Entity name hasRole?`,
       };
 
@@ -552,7 +518,7 @@ export class LUServer {
       const item2 = {
         label: 'useFeature?',
         kind: CompletionItemKind.Keyword,
-        insertText: ` usesFeature `,
+        insertText: ` useFeature `,
         documentation: `Entity name useFeature?`,
       };
 
