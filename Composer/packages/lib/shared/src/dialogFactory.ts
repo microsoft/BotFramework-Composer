@@ -8,7 +8,7 @@ import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
-
+import { SDKTypes } from './types';
 interface DesignerAttributes {
   name: string;
   description: string;
@@ -23,30 +23,48 @@ const initialInputDialog = {
 };
 
 const initialDialogShape = {
-  'Microsoft.AdaptiveDialog': {
-    $type: 'Microsoft.AdaptiveDialog',
+  [SDKTypes.AdaptiveDialog]: {
+    $type: SDKTypes.AdaptiveDialog,
     triggers: [
       {
-        $type: 'Microsoft.OnBeginDialog',
-        $designer: {
-          name: 'BeginDialog',
-        },
+        $type: SDKTypes.OnBeginDialog,
+        ...getNewDesigner('BeginDialog', ''),
       },
     ],
   },
-  'Microsoft.OnConversationUpdateActivity': {
+  [SDKTypes.OnConversationUpdateActivity]: {
     $type: 'Microsoft.OnConversationUpdateActivity',
-    condition: "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
+    actions: [
+      {
+        $type: SDKTypes.Foreach,
+        ...getNewDesigner('Loop: for each item', ''),
+        itemsProperty: 'turn.Activity.membersAdded',
+        actions: [
+          {
+            $type: SDKTypes.IfCondition,
+            ...getNewDesigner('Branch: if/else', ''),
+            condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
+            actions: [
+              {
+                $type: SDKTypes.SendActivity,
+                ...getNewDesigner('Send a response', ''),
+                activity: '',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
-  'Microsoft.SendActivity': {
+  [SDKTypes.SendActivity]: {
     activity: '',
   },
-  'Microsoft.AttachmentInput': initialInputDialog,
-  'Microsoft.ChoiceInput': initialInputDialog,
-  'Microsoft.ConfirmInput': initialInputDialog,
-  'Microsoft.DateTimeInput': initialInputDialog,
-  'Microsoft.NumberInput': initialInputDialog,
-  'Microsoft.TextInput': initialInputDialog,
+  [SDKTypes.AttachmentInput]: initialInputDialog,
+  [SDKTypes.ChoiceInput]: initialInputDialog,
+  [SDKTypes.ConfirmInput]: initialInputDialog,
+  [SDKTypes.DateTimeInput]: initialInputDialog,
+  [SDKTypes.NumberInput]: initialInputDialog,
+  [SDKTypes.TextInput]: initialInputDialog,
 };
 
 export function getNewDesigner(name: string, description: string) {
