@@ -302,7 +302,7 @@ export function replaceDialogDiagnosticLabel(path?: string): string {
 
 export function replaceDialogDiagnosticPath(dialogs: DialogInfo[]): DialogInfo[] {
   return dialogs.map(dialog => {
-    dialog.diagnostics.map(diagnostic => {
+    dialog.diagnostics?.map(diagnostic => {
       diagnostic.path = createNewPath(diagnostic.path);
       return diagnostic;
     });

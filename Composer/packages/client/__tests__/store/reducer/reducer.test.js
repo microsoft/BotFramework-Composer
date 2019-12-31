@@ -6,8 +6,8 @@ import { reducer } from '../../../src/store/reducer/index';
 
 const mockResponse = {
   data: {
-    dialogs: 'test dialogs',
-    lgFiles: 'test lgFiles',
+    dialogs: ['test dialogs'],
+    lgFiles: ['test lgFiles'],
     schemas: 'test schemas',
   },
 };
@@ -15,17 +15,17 @@ const mockResponse = {
 describe('test all reducer handlers', () => {
   it('test getProjectSuccess reducer', () => {
     const result = reducer({}, { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } });
-    expect(result.dialogs).toBe('test dialogs');
-    expect(result.lgFiles).toBe('test lgFiles');
+    expect(result.dialogs[0]).toBe('test dialogs');
+    expect(result.lgFiles[0]).toBe('test lgFiles');
     expect(result.schemas).toBe('test schemas');
   });
   it('test createDialogSuccess reducer', () => {
     const result = reducer({}, { type: ActionTypes.CREATE_DIALOG_SUCCESS, payload: { response: mockResponse } });
-    expect(result.dialogs).toBe('test dialogs');
+    expect(result.dialogs[0]).toBe('test dialogs');
   });
   it('test updateLgTemplate reducer', () => {
     const result = reducer({}, { type: ActionTypes.UPDATE_LG_SUCCESS, payload: { response: mockResponse } });
-    expect(result.lgFiles).toBe('test lgFiles');
+    expect(result.lgFiles[0]).toBe('test lgFiles');
   });
 
   it('test getStorageFileSuccess reducer', () => {
