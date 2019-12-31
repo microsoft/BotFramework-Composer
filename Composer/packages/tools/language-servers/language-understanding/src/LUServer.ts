@@ -51,7 +51,7 @@ export class LUServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['@', ' ', '{', ':'],
+            triggerCharacters: ['@', ' ', '{', ':', '['],
           },
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
@@ -88,7 +88,7 @@ export class LUServer {
     //const entitiesList = this.getEntitiesList(luisJson);
     const pos = params.position;
     if (
-      key == '\n' &&
+      key === '\n' &&
       inputState === 'utterance' &&
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
@@ -98,8 +98,10 @@ export class LUServer {
       edits.push(item);
     }
 
-    if (key == '\n' && inputState === 'mlEntity' && lastLineContent.endsWith('=')) {
+    if (key === '\n' && inputState === 'mlEntity' && lastLineContent.trim().endsWith('=')) {
       const mlEntities = this.getMLEntities(textBeforeCurLine);
+      console.log(mlEntities);
+      console.log('true');
       const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_.-]+)\s*.*/;
       let entityName = '';
       if (entityNameRegExp.test(lastLineContent)) {
@@ -116,7 +118,7 @@ export class LUServer {
     }
 
     if (
-      key == '\n' &&
+      key === '\n' &&
       inputState === 'listEntity' &&
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
@@ -295,10 +297,17 @@ export class LUServer {
   }
 
   private isEntityName(content: string): boolean {
-    const regexhasNameEntifyDef = /^\s*@\s*(ml|list|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
-    return regexhasNameEntifyDef.test(content);
+    const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
+    const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*$/;
+    const hasNameEntifyDef2 = /^\s*@\s*([\w._]+|"[\w._\s]+")\s*$/;
+    return hasNameEntifyDef.test(content) || (!hasTypeEntityDef.test(content) && hasNameEntifyDef2.test(content));
   }
 
+  private isCompositeEntity(content: string): boolean {
+    const compositePatternDef = /^\s*@\s*composite\s*[\w]*\s*=\s*\[\s*.*\s*$/;
+    const compositePatternDef2 = /^\s*@\s*composite\s*[\w]*\s*=\s*\[\s*.*\s*\]\s*$/;
+    return compositePatternDef.test(content) || compositePatternDef2.test(content);
+  }
   private matchedEnterPattern(content: string): boolean {
     const regexPatternDef = /^\s*-.*{\s*$/;
     const regexPatternDef2 = /^\s*-.*{\s*}$/;
@@ -569,6 +578,19 @@ export class LUServer {
 
     // suggestions for entities in a seperated line
     if (this.isEntityType(curLineContent)) {
+      suggestionEntityList.forEach(entity => {
+        const item = {
+          label: entity,
+          kind: CompletionItemKind.Property,
+          insertText: ` ${entity}`,
+          documentation: `Enitity type: ${entity}`,
+        };
+
+        completionList.push(item);
+      });
+    }
+
+    if (this.isCompositeEntity(curLineContent)) {
       suggestionEntityList.forEach(entity => {
         const item = {
           label: entity,
