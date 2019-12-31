@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -16,6 +16,8 @@ using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
+using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +52,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var settings = new BotSettings();
             Configuration.Bind(settings);
 
+            services.AddSingleton(settings);
+
             IStorage storage = null;
 
             // Configure storage for deployment
@@ -64,9 +68,14 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             }
 
             services.AddSingleton(storage);
-            var userState = new UserState(storage);
-            var conversationState = new ConversationState(storage);
-            var inspectionState = new InspectionState(storage);
+
+            // Create the User state. (Used in this bot's Dialog implementation.)
+            services.AddSingleton<UserState>();
+
+            // Create the Conversation state. (Used by the Dialog system itself.)
+            services.AddSingleton<ConversationState>();
+
+            services.AddSingleton<InspectionState>();
 
             // Configure telemetry
             services.AddApplicationInsightsTelemetry();
@@ -80,41 +89,24 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botFile);
+            services.AddSingleton(resourceExplorer);
 
             var credentials = new MicrosoftAppCredentials(this.Configuration["MicrosoftAppId"], this.Configuration["MicrosoftAppPassword"]);
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
-            {
-                var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-                adapter
-                  .UseStorage(storage)
-                  .UseState(userState, conversationState)
-                  .UseAdaptiveDialogs()
-                  .UseResourceExplorer(resourceExplorer)
-                  .UseLanguageGeneration(resourceExplorer, "common.lg")
-                  .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
-                  .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
+            services.AddSingleton<BotFrameworkHttpAdapter, ComposerBotHttpAdapter>();
 
-                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
-                {
-                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
-                }
-                else
-                {
-                    Console.WriteLine("The settings of TranscriptLoggerMiddleware is incomplete, please check following settings: settings.BlobStorage.ConnectionString, settings.BlobStorage.Container");
-                }
+            services.AddSingleton<IBot, ComposerBot>();
 
-                adapter.OnTurnError = async (turnContext, exception) =>
-                {
-                    await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-                    telemetryClient.TrackException(new Exception("Exceptions: " + exception.Message));
-                    await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
-                    await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
-                };
-                return adapter;
-            });
+            services.AddSingleton<SkillsConfiguration>();
 
-            services.AddSingleton<IBot, ComposerBot>((sp) => new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap, telemetryClient));
+            services.AddSingleton(sp => new AuthenticationConfiguration { ClaimsValidator = new AllowedSkillsClaimsValidator(sp.GetService<SkillsConfiguration>()) });
+
+            services.AddSingleton<BotAdapter>(sp => sp.GetService<BotFrameworkHttpAdapter>());
+
+            // Register the skills client and skills request handler.
+            services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
+            services.AddHttpClient<SkillHttpClient>();
+            services.AddSingleton<ChannelServiceHandler, SkillHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

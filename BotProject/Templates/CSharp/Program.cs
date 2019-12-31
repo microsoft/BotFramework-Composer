@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -27,10 +27,10 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     .AddJsonFile($"luis.settings.{env.EnvironmentName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true)
                     .AddJsonFile($"luis.settings.{Environment.UserName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true);
 
-                if (env.IsDevelopment())
-                {
-                    config.AddUserSecrets<Startup>();
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    config.AddUserSecrets<Startup>();
+                //}
 
                 config
                     .AddEnvironmentVariables()

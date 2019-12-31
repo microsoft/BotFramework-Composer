@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.3.0
@@ -19,11 +19,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
     [ApiController]
     public class BotController : ControllerBase
     {
-        private readonly IBotFrameworkHttpAdapter _adapter;
+        private readonly BotFrameworkHttpAdapter _adapter;
 
         private readonly IBot _bot;
 
-        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
+        public BotController(BotFrameworkHttpAdapter adapter, IBot bot)
         {
             this._adapter = adapter;
             this._bot = bot;

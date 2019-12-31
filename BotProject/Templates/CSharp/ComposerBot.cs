@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System.Threading;
@@ -20,17 +20,15 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private DialogManager dialogManager;
         private readonly ConversationState conversationState;
         private readonly IStatePropertyAccessor<DialogState> dialogState;
-        private readonly ISourceMap sourceMap;
         private readonly string rootDialogFile;
 
         private readonly IBotTelemetryClient telemetryClient;
 
-        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap, IBotTelemetryClient telemetryClient)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, IBotTelemetryClient telemetryClient, string rootDialogFile = "Main.dialog")
         {
             this.conversationState = conversationState;
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
-            this.sourceMap = sourceMap;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
             this.telemetryClient = telemetryClient;
@@ -50,7 +48,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, sourceMap);
+            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, DebugSupport.SourceMap);
             this.dialogManager = new DialogManager(rootDialog);
         }       
     }
