@@ -25,6 +25,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
         [/({)(\s*[\w.]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
+        [/({\s*@)(\s*[\w.]*\s*)(})/, ['lb', 'entity-name', 'rb']],
         [/^\s*\[[\w\s.]+\]\(.{1,2}\/[\w.*]+(#[\w.?]+)?\)/, 'import-desc'],
         [/./, 'utterance-other'],
       ],
