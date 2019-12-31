@@ -99,7 +99,7 @@ const AssignmentItem: React.FC<AssignmentItemProps> = props => {
   const [errorMessages, setErrorMessages] = useState<AssignmentItemError>({ property: undefined, value: undefined });
 
   const handleValidation = (field: 'value' | 'property') => (err?: JSX.Element | string) => {
-    setErrorMessages({ ...errorMessages, [field]: err });
+    setErrorMessages(errorMessages => ({ ...errorMessages, [field]: err }));
   };
   return (
     <div css={[assignmentItemContainer(), assignmentItem]} key={key}>
@@ -145,9 +145,10 @@ const AssignmentItem: React.FC<AssignmentItemProps> = props => {
 };
 
 export const AssignmentsField: React.FC<BFDFieldProps> = props => {
-  const { formData = [], id, onChange } = props;
-  const [newassignment, setNewassignment] = useState<IAssignmentObject | null>(null);
+  const { formData = [], idSchema, onChange } = props;
+  const [newassignment, setNewassignment] = useState<IAssignmentObject>({ property: '', value: '' });
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const id = idSchema.__id;
 
   const handleReorder = (aIdx: number, bIdx: number) => {
     onChange(swap(formData, aIdx, bIdx));
@@ -174,7 +175,7 @@ export const AssignmentsField: React.FC<BFDFieldProps> = props => {
       if (newassignment) {
         if (newassignment.value) {
           onChange([...formData, newassignment]);
-          setNewassignment(null);
+          setNewassignment({ property: '', value: '' });
           setErrorMsg('');
         } else {
           setErrorMsg(formatMessage('value required'));
@@ -214,20 +215,20 @@ export const AssignmentsField: React.FC<BFDFieldProps> = props => {
               onChange={handleNewassignmentEdit('property')}
               placeholder={formatMessage('Property (named location to store information).')}
               autoComplete="off"
-              iconProps={{
-                iconName: 'ReturnKey',
-                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
-              }}
             />
           </div>
           <div css={assignmentItemValue}>
             <TextField
-              id={id}
+              id={`${id}-value`}
               value={newassignment ? newassignment.value : ''}
               onChange={handleNewassignmentEdit('value')}
               placeholder={formatMessage('New value or expression.')}
               autoComplete="off"
               errorMessage={errorMsg}
+              iconProps={{
+                iconName: 'ReturnKey',
+                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+              }}
             />
           </div>
           <div>
