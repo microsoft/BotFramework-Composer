@@ -3,15 +3,13 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import {
-  LGResource,
   LGParser,
   DiagnosticSeverity as LGDiagnosticSeverity,
   ImportResolver,
   Diagnostic as LGDiagnostic,
   StaticChecker,
 } from 'botbuilder-lg';
-import get from 'lodash/get';
-import { CodeRange, LgTemplate, lgIndexer, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
+import { LgTemplate, lgIndexer, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
 
@@ -134,33 +132,12 @@ export function textFromTemplate(template: Template): string {
   return textBuilder.join('');
 }
 
-export function textFromTemplates(templates: Template[]): string {
-  return templates
-    .map(template => {
-      return textFromTemplate(template);
-    })
-    .join('\n');
-}
-
 export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
   return staticChecker.checkText(text, '', ImportResolver.fileResolver).filter(diagnostic => {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
-}
-
-export function getLGResources(content: string): LGResource {
-  return LGParser.parse(content, ' ');
-}
-
-export function getTemplateRange(content: string, { name, parameters = [], body }: Template): CodeRange {
-  const resource = LGParser.parse(content).updateTemplate(name, name, parameters, body);
-  const template = resource.templates.find(item => item.name === name);
-  return {
-    startLineNumber: get(template, 'parseTree.start.line', 0),
-    endLineNumber: get(template, 'parseTree.stop.line', 0),
-  };
 }
 
 export function updateTemplateInContent(content: string, { name, parameters = [], body }: Template): string {
