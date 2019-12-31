@@ -11,6 +11,7 @@ import { DialogInfo } from '@bfc/indexers';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
+import { createNewPath } from './convertUtils/createNewPath';
 
 const ExpressionParser = new ExpressionEngine();
 
@@ -297,4 +298,14 @@ export function replaceDialogDiagnosticLabel(path?: string): string {
     return ConceptLabels[item]?.title || item;
   });
   return list.join(': ');
+}
+
+export function replaceDialogDiagnosticPath(dialogs: DialogInfo[]): DialogInfo[] {
+  return dialogs.map(dialog => {
+    dialog.diagnostics.map(diagnostic => {
+      diagnostic.path = createNewPath(diagnostic.path);
+      return diagnostic;
+    });
+    return dialog;
+  });
 }

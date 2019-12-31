@@ -13,6 +13,7 @@ import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
+import { replaceDialogDiagnosticPath } from './../../utils/dialogUtil';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -42,7 +43,7 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+  state.dialogs = replaceDialogDiagnosticPath(response.data.dialogs);
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
   state.location = response.data.location;
@@ -69,18 +70,20 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 };
 
 const updateDialog: ReducerFunc = (state, { id, content }) => {
-  state.dialogs = state.dialogs.map(dialog => {
-    if (dialog.id === id) {
-      const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
-      return { ...dialog, ...result };
-    }
-    return dialog;
-  });
+  state.dialogs = replaceDialogDiagnosticPath(
+    state.dialogs.map(dialog => {
+      if (dialog.id === id) {
+        const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
+        return { ...dialog, ...result };
+      }
+      return dialog;
+    })
+  );
   return state;
 };
 
 const removeDialog: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+  state.dialogs = replaceDialogDiagnosticPath(response.data.dialogs);
   state.luFiles = response.data.luFiles;
   return state;
 };
@@ -98,7 +101,7 @@ const createDialogCancel: ReducerFunc = state => {
 };
 
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+  state.dialogs = replaceDialogDiagnosticPath(response.data.dialogs);
   state.luFiles = response.data.luFiles;
   state.showCreateDialogModal = false;
   delete state.onCreateDialogComplete;

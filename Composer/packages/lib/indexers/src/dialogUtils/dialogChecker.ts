@@ -11,18 +11,6 @@ import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
 
-const createPath = (path: string, type: string): string => {
-  const steps = ['triggers', 'actions', 'elseActions'];
-  let list = path.split('.');
-  const matches = list.filter(x => !steps.every(step => !x.startsWith(step)));
-
-  const focused = matches.join('.');
-  list = path.split(`${focused}.`);
-  if (list.length !== 2) return path;
-
-  return `${list[0]}${focused}#${type}#${list[1]}`;
-};
-
 export const checkExpression = (exp: string, required: boolean, path: string, type: string): Diagnostic | null => {
   let message = '';
   if (!exp && required) {
@@ -36,7 +24,7 @@ export const checkExpression = (exp: string, required: boolean, path: string, ty
   }
   if (message) {
     const diagnostic = new Diagnostic(message, '');
-    diagnostic.path = createPath(path, type);
+    diagnostic.path = `${path}#${type}`;
     return diagnostic;
   }
 
