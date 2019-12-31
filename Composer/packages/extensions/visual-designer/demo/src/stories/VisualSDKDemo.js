@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, SDKTypes } from '@bfc/shared';
 
 import { renderSDKType } from '../../../src/schema/uischemaRenderer';
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
@@ -9,27 +9,62 @@ import './story.css';
 
 export class VisualSDKDemo extends Component {
   state = {
-    json: {
-      $type: 'Microsoft.SendActivity',
-      activity: 'hello',
-    },
+    actions: this.seedInitialActions(),
   };
 
-  renderSDKPreview() {
-    const { json } = this.state;
-    return renderSDKType(json);
+  seedInitialActions() {
+    const initialTypes = [
+      SDKTypes.EditArray,
+      SDKTypes.InitProperty,
+      SDKTypes.SetProperties,
+      SDKTypes.SetProperty,
+      SDKTypes.DeleteProperties,
+      SDKTypes.DeleteProperty,
+      SDKTypes.EndDialog,
+      SDKTypes.CancelAllDialogs,
+      SDKTypes.EmitEvent,
+    ];
+    const initalActions = initialTypes.map(t => seedNewDialog(t));
+    return initalActions;
   }
 
-  seedNewJson($type) {
-    const json = seedNewDialog($type);
-    this.setState({ json });
+  appendActionPreview($type) {
+    this.setState({
+      actions: [...this.state.actions, seedNewDialog($type)],
+    });
+  }
+
+  renderActionPreview(action, index) {
+    return (
+      <div className="action-preview" style={{ display: 'flex', flexDirection: 'row', margin: 10 }}>
+        <div className="action-preview--raw">
+          <JsonBlock
+            key={index}
+            styles={{
+              width: '200px',
+              height: '80px',
+              fontSize: '8px',
+            }}
+            defaultValue={action}
+            onSubmit={newAction => {
+              const newActions = [...this.state.action];
+              newActions[index] = newAction;
+              this.setState({
+                actions: newActions,
+              });
+            }}
+          />
+        </div>
+        <div className="action-preview--visual">{renderSDKType(action)}</div>
+      </div>
+    );
   }
 
   renderActionFactory() {
     return (
       <div style={{ height: 100, margin: 20 }}>
         <h3>Create action by $type</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.seedNewJson($type)} />
+        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.appendActionPreview($type)} />
       </div>
     );
   }
@@ -38,25 +73,9 @@ export class VisualSDKDemo extends Component {
     return (
       <div className="story-container">
         <h1 className="story-title">Visual SDK Demo</h1>
-        <div className="story-content">
-          <div className="block block--left">
-            {this.renderActionFactory()}
-            <JsonBlock
-              key={this.state.json && this.state.json.$type}
-              styles={{
-                width: '95%',
-                height: '80%',
-                minHeight: '500px',
-              }}
-              defaultValue={this.state.json}
-              onSubmit={json => {
-                this.setState({ json });
-              }}
-            />
-          </div>
-          <div className="block block--right" style={{ padding: 10 }}>
-            {this.renderSDKPreview()}
-          </div>
+        <div className="story-content" style={{ display: 'flex', flexFlow: 'wrap' }}>
+          {this.state.actions.map((action, index) => this.renderActionPreview(action, index))}
+          {this.renderActionFactory()}
         </div>
       </div>
     );
