@@ -54,16 +54,32 @@
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
-      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
-          "activity": "@{help()}"
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "activity": "@{help()}"
+                }
+              ]
+            }
+          ]
         }
-      ],
-      "$designer": {
-        "id": "690456"
-      }
+      ]
     },
     {
       "$type": "Microsoft.OnIntent",

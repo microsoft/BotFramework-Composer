@@ -14,9 +14,9 @@ import { choiceGroup, templateItem, optionRoot, optionIcon, placeholder } from '
 
 export function CreateOptions(props) {
   const [option, setOption] = useState('create');
-  const [template, setTemplate] = useState(null);
   const { templates, onDismiss, onNext } = props;
-
+  const emptyBotKey = templates[1].id;
+  const [template, setTemplate] = useState(emptyBotKey);
   function SelectOption(props) {
     const { checked, text, key } = props;
     return (
@@ -67,15 +67,14 @@ export function CreateOptions(props) {
   };
 
   const handleItemChange = (event, option) => {
-    setTemplate(option);
+    setTemplate(option.key);
   };
 
   const handleJumpToNext = () => {
     if (option === 'Create from template') {
-      if (template === null) onNext(templates[0]);
-      else onNext(template.key);
+      onNext(template);
     } else {
-      onNext(null);
+      onNext(emptyBotKey);
     }
   };
 
