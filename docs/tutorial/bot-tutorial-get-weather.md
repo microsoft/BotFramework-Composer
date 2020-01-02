@@ -25,7 +25,7 @@
 
       `user.zipcode`
 
-   For **Output Format**, select `trim`. This ensures leading and trailing spaces in user input are trimmed before the value is assigned to `user.zipcode`
+   For **Output Format**, enter `trim(this.value)`. This ensures leading and trailing spaces in user input are trimmed before the value is assigned to `user.zipcode`. `trim()` is a [pre-built function](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) of [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
    ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
@@ -65,7 +65,7 @@
 
     > By default, prompts will be skip if the bound property already has a value. Always prompt, when enabled, will cause the prompt to appear even if the value is already known. Leave this unchecked for now.
 
-    After this action occurs, the bot can use `{user.zipcode}` in messages, and more importantly, in calls to external APIs!
+    After this action occurs, the bot can use `@{user.zipcode}` in messages, and more importantly, in calls to external APIs!
 
 ## Add an HTTP request
 
@@ -81,26 +81,29 @@ The http request action is found under the **Access external resources** menu in
 
    Set the URL to:    
 
-      `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode={user.zipcode}`
-
-   Set the **Result property** to:
+      `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode=@{user.zipcode}`
+  
+   ![](../media/tutorial-weatherbot/03/http-props.png)
+   
+   Leave the **Body** and **Headers** blank at this time and Set the **Result property** to:
 
       `dialog.api_response`
 
-   ![](../media/tutorial-weatherbot/03/http-props.png)
+   ![](../media/tutorial-weatherbot/03/http-props2.png)
 
-   This will cause the bot to make an HTTP request to the url specified. The reference to `{user.zipcode}` will be replaced by a live value from the bot's memory.
+   This will cause the bot to make an HTTP request to the url specified. The reference to `@{user.zipcode}` will be replaced by a live value from the bot's memory.
 
    > HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
    After making an HTTP request, we need to test the status of the response. To do this, we'll use an If/Else branch.
 
-3. Use the '+' button, then choose **Create a condition**, then choose  **Branch: If/Else**
-4. In the properties panel on the right, set the **Condition** field to:
+3. Click the **+** button and choose **Create a condition**. Then choose **Branch: If/Else**.
+
+4. In the **properties panel** on the right, set the **Condition** field to:
 
       `dialog.api_response.statusCode == 200`
 
-5. In the `true` branch click the **+** button, select **Manage properties**, and then **Set a Property**
+5. In the `true` branch click the **+** button, select **Manage properties**, and then **Set a property**
 
    Set **Property** to:
    
