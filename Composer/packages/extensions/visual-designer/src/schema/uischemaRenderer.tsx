@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FC } from 'react';
+import React from 'react';
 import { BaseSchema } from '@bfc/shared';
 import get from 'lodash/get';
 
