@@ -3,7 +3,7 @@ In Bot Framework Composer, each dialog includes a set of triggers (event handler
 
 On the navigation pane, click **New Trigger** and you will see the trigger menu in Composer as follows: 
 
-![trigger_menu](./media/dialog/trigger_menu.gif)
+![trigger_menu](./media/dialog/trigger_menu.png)
 
 ## Anatomy of a trigger
 The basic idea behind a trigger (event handler) is "When (_event_) happens, then do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request. 
