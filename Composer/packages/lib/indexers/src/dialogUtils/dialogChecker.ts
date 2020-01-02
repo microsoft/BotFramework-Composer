@@ -4,12 +4,25 @@
 import get from 'lodash/get';
 import { ExpressionEngine } from 'botframework-expressions';
 import formatMessage from 'format-message';
+import { SDKTypes, FieldNames } from '@bfc/shared';
 
 import { Diagnostic } from '../diagnostic';
 
 import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
+
+const createPath = (path: string, type: string): string => {
+  const steps = [FieldNames.Events, FieldNames.Actions, FieldNames.ElseActions];
+  let list = path.split('.');
+  const matchs = list.filter(x => !steps.every(step => !x.startsWith(step)));
+
+  const focused = matchs.join('.');
+  list = path.split(`${focused}.`);
+  if (list.length !== 2) return path;
+
+  return `${list[0]}${focused}#${type}#${list[1]}`;
+};
 
 export const checkExpression = (exp: string, required: boolean, path: string, type: string): Diagnostic | null => {
   let message = '';
@@ -24,7 +37,7 @@ export const checkExpression = (exp: string, required: boolean, path: string, ty
   }
   if (message) {
     const diagnostic = new Diagnostic(message, '');
-    diagnostic.path = `${path}#${type}`;
+    diagnostic.path = createPath(path, type);
     return diagnostic;
   }
 
@@ -88,5 +101,5 @@ export const checkChoices: CheckerFunc = (path, value, type, schema) => {
 
 export const checkerFuncs: { [type: string]: CheckerFunc[] } = {
   '.': [IsExpression], //this will check all types
-  'Microsoft.ChoiceInput': [checkChoices],
+  [SDKTypes.ChoiceInput]: [checkChoices],
 };
