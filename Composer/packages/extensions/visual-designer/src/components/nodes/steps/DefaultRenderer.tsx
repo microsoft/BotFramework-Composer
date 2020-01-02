@@ -60,20 +60,6 @@ const ContentKeyByTypes: {
   [ObiTypes.DeleteProperty]: {
     label: 'property',
   },
-  [ObiTypes.IfCondition]: {
-    label: 'condition',
-  },
-  [ObiTypes.SwitchCondition]: {
-    label: 'condition',
-  },
-  [ObiTypes.ForeachDetail]: {
-    header: 'Loop: For Each',
-    label: 'itemsProperty',
-  },
-  [ObiTypes.ForeachPageDetail]: {
-    header: 'Loop: For Each Page',
-    label: 'itemsProperty',
-  },
   [ObiTypes.TextInput]: {
     label: 'prompt',
     details: 'property',
