@@ -34,7 +34,7 @@ When a dialog is called into action its **recognizer** will start to process the
 
 The functionality of a dialog is contained within triggers - rules that tell the bot how to process incoming messages. They are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-handle-user-interrupt?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer.
 
-![trigger_menu](./media/dialog/trigger_menu.gif)
+![trigger_menu](./media/dialog/trigger_menu.png)
 
 ### Action
 
