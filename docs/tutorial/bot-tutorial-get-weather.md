@@ -2,7 +2,7 @@
 
 1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
 2. Click on the `BeginDialog` trigger underneath `getWeather`. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a **Text Input** to prompt the user for a `zipcode`.
-3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input. Read details [here](howto-ask-for-user-input.md)
+3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input. Read details [here](how-to-ask-for-user-input.md)
 4. Select **Text Input** from the sub-menu. Two new nodes will appear in the flow!
 
    > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
@@ -33,11 +33,11 @@
 
 10. In the **Unrecognized Prompt** field, enter:
       
-      `- Sorry, I do not understand '{this.value}'. Please specify a zipcode in the form 12345`
+      `- Sorry, I do not understand '@{this.value}'. Please specify a zipcode in the form 12345`
 
     In the **Invalid Prompt** field, also enter:
 
-      `- Sorry, '{this.value}' is not valid. I'm looking for a 5 digit number as zipcode. Please specify a zipcode in the form 12345`
+      `- Sorry, '@{this.value}' is not valid. I'm looking for a 5 digit number as zipcode. Please specify a zipcode in the form 12345`
 
 11. In **Validation Rules**, type:
 
@@ -116,7 +116,7 @@ The http request action is found under the **Access external resources** menu in
 
    Set the text of the message to:
    
-      `The weather is {dialog.weather.weather} and the temp is {dialog.weather.temp}&deg;`
+      `The weather is @{dialog.weather.weather} and the temp is @{dialog.weather.temp}&deg;`
 
    ![](../media/tutorial-weatherbot/03/ifelse.png)
 
@@ -124,7 +124,7 @@ The http request action is found under the **Access external resources** menu in
 
    Set the text of the message to:
    
-      `I got an error: {dialog.api_response.content.message}`
+      `I got an error: @{dialog.api_response.content.message}`
 
 8. To be safe, let's clean up the invalid value which otherwise would persist. Use the **+**, select **Manage properties**, then select **Delete a property**
 
