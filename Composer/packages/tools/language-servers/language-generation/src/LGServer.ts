@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { readFile } from 'fs';
+import * as path from 'path';
 
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
@@ -31,6 +32,7 @@ import {
   convertDiagnostics,
   isValid,
   TRange,
+  loadMemoryVariavles,
 } from './utils';
 
 // define init methods call from client
@@ -43,6 +45,7 @@ export class LGServer {
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = []; // LG Documents Store
+  private readonly memoryVariables: object;
 
   constructor(protected readonly connection: IConnection) {
     this.documents.listen(this.connection);
@@ -65,6 +68,7 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
+            triggerCharacters: ['.'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
@@ -85,6 +89,10 @@ export class LGServer {
         }
       }
     });
+
+    const curPath = __dirname;
+    const targetPath = path.join(curPath, '../resources/memoryVariables.json');
+    this.memoryVariables = loadMemoryVariavles(targetPath);
   }
 
   start() {
@@ -194,6 +202,12 @@ export class LGServer {
      * - Hi, @{name}, what's the meaning of 'state'
      * - Hi---------, @{name}--------, what-------' ------s the meaning of "state"
      * - <plaintext>, @{<expression>}, <plaintext><single><plaintext>------<double>
+     * in LG, functions and template can only be valid in expression.
+     * expression means a valid expression, eg: @{add(1,2)}
+     * single means single quote string,  eg: 'hello world'
+     * double means double quote string, eg: "hello world"
+     * including single and double since "@{text}" is a string rather that expression.
+     * plaintext means text after dash, eg: - Today is monday
      */
     let i = 0;
     while (i < lineContent.length) {
@@ -227,6 +241,52 @@ export class LGServer {
     }
     const finalState = state[state.length - 1];
     return { matched: true, state: finalState };
+  }
+
+  protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] | null {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return null;
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+
+    if (!wordAtCurRange || !wordAtCurRange.endsWith('.')) {
+      return null;
+    }
+
+    let propertyList = wordAtCurRange.split('.');
+    propertyList = propertyList.slice(0, propertyList.length - 1);
+    let tempVariable: object = this.memoryVariables;
+    for (const property of propertyList) {
+      if (property in tempVariable) {
+        tempVariable = tempVariable[property];
+      } else {
+        tempVariable = {};
+      }
+    }
+
+    if (Object.keys(tempVariable).length === 0) {
+      return null;
+    }
+
+    if (tempVariable instanceof Array) {
+      const completionList: CompletionItem[] = [];
+      for (const variable of tempVariable) {
+        Object.keys(variable).forEach(e => {
+          const item = {
+            label: e.toString(),
+            kind: CompletionItemKind.Property,
+            insertText: e.toString(),
+            documentation: '',
+          };
+          completionList.push(item);
+        });
+      }
+
+      return completionList;
+    }
+
+    return null;
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -266,17 +326,32 @@ export class LGServer {
       };
     });
 
-    const completionList = completionTemplateList.concat(completionFunctionList);
+    const completionVariableList = this.findValidMemoryVariables(params);
+    const completionRootVariableList = Object.keys(this.memoryVariables).map(e => {
+      return {
+        label: e.toString(),
+        kind: CompletionItemKind.Property,
+        insertText: e.toString(),
+        documentation: '',
+      };
+    });
+
+    let completionList = completionTemplateList.concat(completionFunctionList);
+    completionList = completionList.concat(completionRootVariableList);
 
     const matchResult = this.matchedStates(params);
-    // TODO: more precise match
+
     if (
       matchResult &&
       matchResult.matched &&
       matchResult.state &&
       allowedCompletionStates.includes(matchResult.state.toLowerCase())
     ) {
-      return Promise.resolve({ isIncomplete: true, items: completionList });
+      if (completionVariableList !== null && completionVariableList.length > 0) {
+        return Promise.resolve({ isIncomplete: true, items: completionVariableList });
+      } else {
+        return Promise.resolve({ isIncomplete: true, items: completionList });
+      }
     } else {
       return Promise.resolve(null);
     }
