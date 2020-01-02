@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -31,7 +31,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
         public override Task ValidateClaimsAsync(IList<Claim> claims)
         {
-            if (SkillValidation.IsSkillClaim(claims))
+            if (_allowedSkills != null && _allowedSkills.Count > 0 && SkillValidation.IsSkillClaim(claims))
             {
                 // Check that the appId claim in the skill request is in the list of skills configured for this bot.
                 var appId = JwtTokenValidation.GetAppIdFromClaims(claims);
