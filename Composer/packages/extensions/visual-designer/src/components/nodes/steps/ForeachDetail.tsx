@@ -4,7 +4,6 @@
 // Licensed under the MIT License.
 
 import React, { FC } from 'react';
-import get from 'lodash/get';
 
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -14,6 +13,7 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 
 export const ForeachDetail: FC<NodeProps> = ({ id, data, onEvent }) => {
   const { $type } = data;
+  const label = `Each value in {${data.itemsProperty || '?'}}`;
 
   return (
     <FormCard
@@ -21,7 +21,7 @@ export const ForeachDetail: FC<NodeProps> = ({ id, data, onEvent }) => {
       icon={getElementIcon($type)}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       header={'Loop: For Each'}
-      label={get(data, 'itemsProperty', '')}
+      label={label}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, { id });
       }}

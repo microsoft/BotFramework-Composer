@@ -10,6 +10,7 @@ import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
 import { getFriendlyName } from '../utils';
+import { renderSDKType } from '../../../schema/uischemaRenderer';
 
 const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
@@ -32,10 +33,6 @@ function makeLabel(data) {
       return `{${data.property || '?'}} = new ${data.type || '?'}`;
     case ObiTypes.EditArray:
       return `${data.changeType} {${data.itemsProperty || '?'}}`;
-    case ObiTypes.ForeachDetail:
-      return `Each value in {${data.itemsProperty || '?'}}`;
-    case ObiTypes.ForeachPageDetail:
-      return `Each page of ${data.pageSize || '?'} in {${data.itemsProperty || '?'}}`;
 
     default:
       return '';
@@ -145,6 +142,7 @@ export class DefaultRenderer extends React.Component<NodeProps, {}> {
       header = truncateType(data.$type);
     }
 
+    const node = renderSDKType(data);
     return (
       <FormCard
         nodeColors={nodeColors}
