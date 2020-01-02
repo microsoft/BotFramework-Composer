@@ -36,10 +36,13 @@ export class VisualSDKDemo extends Component {
 
   renderActionPreview(action, index) {
     return (
-      <div className="action-preview" style={{ display: 'flex', flexDirection: 'row', margin: 10 }}>
+      <div
+        className="action-preview"
+        key={`action-preview-${index}`}
+        style={{ display: 'flex', flexDirection: 'row', margin: 10 }}
+      >
         <div className="action-preview--raw">
           <JsonBlock
-            key={index}
             styles={{
               width: '200px',
               height: '80px',
@@ -47,7 +50,7 @@ export class VisualSDKDemo extends Component {
             }}
             defaultValue={action}
             onSubmit={newAction => {
-              const newActions = [...this.state.action];
+              const newActions = [...this.state.actions];
               newActions[index] = newAction;
               this.setState({
                 actions: newActions,
