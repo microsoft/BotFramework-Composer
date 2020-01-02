@@ -20,11 +20,12 @@ import {
   UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
+import { ConditionNode } from '../nodes/steps/ConditionNode';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
+  [ObiTypes.ConditionNode]: ConditionNode,
   [ObiTypes.ReplaceDialog]: ReplaceDialog,
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
