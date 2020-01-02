@@ -11,7 +11,8 @@ Bot Framework Composer is an integrated development tool that developers and mul
 
 ## Advantage of developing bots with Composer
 Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framwork Composer. Some of the advantages of developing bots in Composer include:
-- use of Adaptive Dialogs allow for Language Generation (LG), which can simplify interruption handling and give bots character
+- use of Adaptive Dialogs to simplify interruption handling
+- use of Language Generation (LG) to produce responses and give bots character
 - visual design surface in Composer eliminates the need for boilerplate code and makes bot development more accessible. You no longer need to navigate between experiences to maintain LU model as it is editable within the app.
 - time saved with fewer steps to set up your environment
 
