@@ -48,7 +48,7 @@ As the bot takes actions and sends messages, the **language generator** is calle
 
 <!---With a single click from within Composer, developers can launch the bot runtime, and connect to their bot in the Bot Framework Emulator. Once tested in the emulator, the bot runtime can be connected to the Bot Framework Channel service, and from there... the world! -->
 
-## Create a dialog
+## Create a bot
 
 When you create a bot in Composer you also create its main dialog by default. Follow the steps to create a bot project and its main dialog:
 
