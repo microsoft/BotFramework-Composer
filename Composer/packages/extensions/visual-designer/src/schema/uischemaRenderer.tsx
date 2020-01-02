@@ -42,7 +42,7 @@ const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Eleme
 
 const renderFallbackElement = (data: BaseSchema) => <></>;
 
-export const renderSDKType = (data: BaseSchema, context?: { NodeMenu: FC }): JSX.Element => {
+export const renderSDKType = (data: BaseSchema, context?: { menu: JSX.Element; onClick }): JSX.Element => {
   const $type = get(data, '$type');
   const schema: UIWidget = get(uiSchema, $type);
   if (!schema) return renderFallbackElement(data);
