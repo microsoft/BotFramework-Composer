@@ -18,18 +18,16 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { LgFile, LgTemplate, lgIndexer, filterTemplateDiagnostics, isValid, FileResolver } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, FileResolver, FileInfo } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
-  updateTemplateInContent,
   LGDocument,
   checkTemplate,
   convertDiagnostics,
   generageDiagnostic,
   LGOption,
-  parse,
   LGCursorState,
 } from './utils';
 
@@ -79,25 +77,30 @@ export class LGServer {
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
         const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
-        this.LGDocuments.push({ uri, lgOption });
-        // run diagnostic
         const textDocument = this.documents.get(uri);
         if (textDocument) {
-          if (lgOption) this.verifyLgOption(lgOption, textDocument);
+          this.addLGDocument(textDocument, lgOption);
+          this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
       }
     });
   }
 
-  protected verifyLgOption(lgOption: LGOption, document: TextDocument) {
+  start() {
+    this.connection.listen();
+  }
+
+  protected validateLgOption(document: TextDocument, lgOption?: LGOption) {
+    if (!lgOption) return;
+
     const diagnostics: string[] = [];
 
     if (!this.resolver) {
       diagnostics.push('[Error lgOption] resolver is required but not exist.');
     } else {
       const { fileId, templateId } = lgOption;
-      const lgFile = this.getLGFile(fileId);
+      const lgFile = this.getLGDocument(document)?.index();
       if (!lgFile) {
         diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
       } else {
@@ -113,66 +116,40 @@ export class LGServer {
     );
   }
 
-  start() {
-    this.connection.listen();
-  }
-
-  protected getLGOption(document: TextDocument): LGOption | undefined {
-    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
-    if (!LGDocument || !LGDocument.lgOption) return;
-    const { lgOption } = LGDocument;
-    return lgOption;
-  }
-
-  protected getLGFile(fileId: string): LgFile | undefined {
-    if (!this.resolver) return;
-    const file = this.resolver(fileId);
-    if (!file) return;
-    return indexOne(file);
-  }
-
-  protected getLGTemplate(fileId: string, templateId: string): LgTemplate | undefined {
-    const lgFile = this.getLGFile(fileId);
-    if (!lgFile) return;
-    const { templates } = lgFile;
-    return templates.find(({ name }) => name === templateId);
+  protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
+    const { uri } = document;
+    const { fileId, templateId } = lgOption || {};
+    const index = () => {
+      let lgFile: FileInfo | undefined;
+      if (this.resolver && fileId) {
+        lgFile = this.resolver(`${fileId}.lg`);
+        if (!lgFile) {
+          this.sendDiagnostics(document, [
+            generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
+          ]);
+          return;
+        }
+      } else {
+        lgFile = {
+          name: `${uri}.lg`,
+          path: '/',
+          relativePath: './',
+          content: document.getText(),
+        };
+      }
+      return indexOne(lgFile);
+    };
+    const lgDocument: LGDocument = {
+      uri,
+      fileId,
+      templateId,
+      index,
+    };
+    this.LGDocuments.push(lgDocument);
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
     return this.LGDocuments.find(({ uri }) => uri === document.uri);
-  }
-
-  /**
-   *
-   * @param document
-   * 1. if !botProjectService, return text;
-   * 2. if botProjectService && !lgOption, return text;
-   * 3. if botProjectService
-   */
-  protected getLGDocumentContent(document: TextDocument): string {
-    const text = document.getText();
-    const lgOption = this.getLGOption(document);
-    if (!lgOption) return text;
-
-    const { fileId, templateId } = lgOption;
-    const lgFile = this.getLGFile(fileId);
-    if (!lgFile) return text;
-    const { content } = lgFile;
-
-    const template = this.getLGTemplate(fileId, templateId);
-    if (!template) return content;
-
-    const updatedTemplate = {
-      name: template.name,
-      parameters: template.parameters,
-      body: text,
-    };
-
-    const templateDiags = checkTemplate(updatedTemplate);
-    if (isValid(templateDiags)) {
-      return updateTemplateInContent(content, updatedTemplate);
-    }
-    return content;
   }
 
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
@@ -180,10 +157,13 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const text = this.getLGDocumentContent(document);
-    const { templates, diagnostics } = parse(text, document);
+    const lgFile = this.getLGDocument(document)?.index();
+    if (!lgFile) {
+      return Promise.resolve(null);
+    }
+    const { templates, diagnostics } = lgFile;
     if (diagnostics.length) {
-      this.sendDiagnostics(document, diagnostics);
+      this.sendDiagnostics(document, convertDiagnostics(diagnostics, document));
       return Promise.resolve(null);
     }
     const wordRange = getRangeAtPosition(document, params.position);
@@ -306,8 +286,11 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const text = this.getLGDocumentContent(document);
-    const { templates } = parse(text, document);
+    const lgFile = this.getLGDocument(document)?.index();
+    if (!lgFile) {
+      return Promise.resolve(null);
+    }
+    const { templates } = lgFile;
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
@@ -358,10 +341,13 @@ export class LGServer {
 
   protected doValidate(document: TextDocument): void {
     const text = document.getText();
-    const LGDocument = this.getLGDocument(document);
-
-    // uninitialized
-    if (!LGDocument) {
+    const lgDoc = this.getLGDocument(document);
+    if (!lgDoc) {
+      return;
+    }
+    const { fileId, templateId } = lgDoc;
+    const lgFile = lgDoc.index();
+    if (!lgFile) {
       return;
     }
 
@@ -370,10 +356,10 @@ export class LGServer {
       return;
     }
 
+    const { templates, diagnostics } = lgFile;
+
     // if inline editor, concat new content for validate
-    const { lgOption } = LGDocument;
-    if (lgOption) {
-      const { templateId, fileId } = lgOption;
+    if (fileId && templateId) {
       const templateDiags = checkTemplate({
         name: templateId,
         parameters: [],
@@ -381,25 +367,22 @@ export class LGServer {
       });
       // error in template.
       if (isValid(templateDiags) === false) {
-        const diagnostics = convertDiagnostics(templateDiags, document, 1);
-        this.sendDiagnostics(document, diagnostics);
+        const lspDiagnostics = convertDiagnostics(templateDiags, document, 1);
+        this.sendDiagnostics(document, lspDiagnostics);
         return;
       }
-
-      const fullText = this.getLGDocumentContent(document);
-      const { templates } = parse(text, document);
       const template = templates.find(({ name }) => name === templateId);
       if (!template) return;
 
       // filter diagnostics belong to this template.
-      const lgDiagnostics = filterTemplateDiagnostics(check(fullText, fileId), template);
-      const diagnostics = convertDiagnostics(lgDiagnostics, document, 1);
-      this.sendDiagnostics(document, diagnostics);
+      const lgDiagnostics = filterTemplateDiagnostics(diagnostics, template);
+      const lspDiagnostics = convertDiagnostics(lgDiagnostics, document, 1);
+      this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
     const lgDiagnostics = check(text, '');
-    const diagnostics = convertDiagnostics(lgDiagnostics, document);
-    this.sendDiagnostics(document, diagnostics);
+    const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
+    this.sendDiagnostics(document, lspDiagnostics);
   }
 
   protected cleanDiagnostics(document: TextDocument): void {

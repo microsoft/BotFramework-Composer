@@ -3,13 +3,12 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import {
-  LGParser,
   DiagnosticSeverity as LGDiagnosticSeverity,
   ImportResolver,
   Diagnostic as LGDiagnostic,
   StaticChecker,
 } from 'botbuilder-lg';
-import { LgTemplate, lgIndexer, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
+import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
 
@@ -39,7 +38,9 @@ export interface Template {
 
 export interface LGDocument {
   uri: string;
-  lgOption?: LGOption;
+  fileId?: string;
+  templateId?: string;
+  index: () => LgFile | undefined;
 }
 
 export interface LGParsedResource {
@@ -86,21 +87,6 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
   };
 }
 
-export function parse(content: string, document: TextDocument): LGParsedResource {
-  try {
-    const templates = lgIndexer.parse(content);
-    return {
-      templates,
-      diagnostics: [],
-    };
-  } catch (error) {
-    return {
-      templates: [],
-      diagnostics: [generageDiagnostic(error.message, DiagnosticSeverity.Error, document)],
-    };
-  }
-}
-
 // if template, offset +1 to exclude #TemplateName
 export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
@@ -138,9 +124,4 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
-}
-
-export function updateTemplateInContent(content: string, { name, parameters = [], body }: Template): string {
-  const resource = LGParser.parse(content);
-  return resource.updateTemplate(name, name, parameters, body).toString();
 }

@@ -140,7 +140,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const lgOption = template
     ? {
-        fileId,
+        fileId: 'common',
         templateId: template?.name || '',
       }
     : undefined;

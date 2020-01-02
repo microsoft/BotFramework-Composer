@@ -33,9 +33,9 @@ export class BotProjectService {
     }
   }
 
-  public static fileResolver(id: string): FileInfo | undefined {
+  public static fileResolver(name: string): FileInfo | undefined {
     BotProjectService.initialize();
-    return BotProjectService.currentBotProject?.files.find(({ name }) => id === name);
+    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
   }
 
   public static getCurrentBotProject(): BotProject | undefined {
