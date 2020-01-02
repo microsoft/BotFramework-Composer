@@ -15,9 +15,9 @@ const ExpressionParser = new ExpressionEngine();
 const createPath = (path: string, type: string): string => {
   const steps = [FieldNames.Events, FieldNames.Actions, FieldNames.ElseActions];
   let list = path.split('.');
-  const matchs = list.filter(x => !steps.every(step => !x.startsWith(step)));
+  const matches = list.filter(x => !steps.every(step => !x.startsWith(step)));
 
-  const focused = matchs.join('.');
+  const focused = matches.join('.');
   list = path.split(`${focused}.`);
   if (list.length !== 2) return path;
 
