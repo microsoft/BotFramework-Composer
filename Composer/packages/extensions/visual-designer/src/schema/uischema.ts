@@ -32,6 +32,11 @@ export const uiSchema: UISchema = {
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,
     title: generateSDKTitle(),
+    content: data => data.property,
+  },
+  [SDKTypes.DeleteProperties]: {
+    'ui:widget': ActionCard,
+    title: generateSDKTitle(),
     content: data => `Delete ${Array.isArray(data.properties) ? data.properties.length : 0} properties`,
   },
   [SDKTypes.EndDialog]: {
