@@ -57,10 +57,6 @@ const ContentKeyByTypes: {
   [ObiTypes.SetProperty]: {
     label: 'property',
   },
-  [ObiTypes.ConditionNode]: {
-    header: 'Branch',
-    label: 'condition',
-  },
   [ObiTypes.DeleteProperty]: {
     label: 'property',
   },
