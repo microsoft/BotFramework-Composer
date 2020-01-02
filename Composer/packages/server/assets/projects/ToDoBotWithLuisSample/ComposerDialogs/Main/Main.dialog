@@ -14,16 +14,35 @@
         "id": "376720",
         "name": "WelcomeUser"
       },
-      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.Foreach",
           "$designer": {
-            "id": "037171",
-            "name": "Send a response"
+            "id": "518944",
+            "name": "Loop: for each item"
           },
-          "activity": "@{bfdactivity-037171()}"
-        },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "037171",
+                    "name": "Send a response"
+                  },
+                  "activity": "@{bfdactivity-037171()}"
+                }
+              ]
+            }
+          ]
+        },        
         {
           "$type": "Microsoft.InitProperty",
           "$designer": {
