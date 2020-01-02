@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { FC } from 'react';
 import { BaseSchema } from '@bfc/shared';
 import get from 'lodash/get';
 
@@ -35,17 +35,17 @@ const parseWidgetSchema = (data: BaseSchema, widgetSchema: UIWidget) => {
   };
 };
 
-const renderWidget = (inputData, schema: UIWidget): JSX.Element => {
+const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Element => {
   const { Widget, props } = parseWidgetSchema(inputData, schema);
-  return <Widget data={inputData} {...props} />;
+  return <Widget data={inputData} {...contextProps} {...props} />;
 };
 
 const renderFallbackElement = (data: BaseSchema) => <></>;
 
-export const renderSDKType = (data: BaseSchema): JSX.Element => {
+export const renderSDKType = (data: BaseSchema, context?: { NodeMenu: FC }): JSX.Element => {
   const $type = get(data, '$type');
   const schema: UIWidget = get(uiSchema, $type);
   if (!schema) return renderFallbackElement(data);
 
-  return renderWidget(data, schema);
+  return renderWidget(data, schema, context);
 };
