@@ -63,6 +63,11 @@ Use **Set a property** to set the value of a property.
  The value of a property can be set to a literal value, like `true`, 0, or `fred`, or it can be set to the result of an [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
  
 ### Set properties
+Use **Set properties** to set a group of properties. 
+
+![Set Properties](./media/memory/set-properties.png)
+
+The value of each property is assigned individually in the **Properties panel**. Don't forget to press `Enter` in your keyboard to save the property setting before you set the next one. 
 
 ### Initialize a property
 Use **Initialize a property** to create new properties that are objects or arrays. This allows your bot to use sub-properties, or store multiple values inside the property. 
@@ -84,6 +89,9 @@ Use **Delete a property** to remove a property from memory.
 ![Delete Property](./media/memory/delete-property.png)
 
 ### Delete properties
+Use **Delete properties** to remove properties from memory.
+
+![Delete Properties](./media/memory/delete-properties.png)
 
 ## Manipulating properties with dialogs
 
