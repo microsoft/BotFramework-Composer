@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { getElementColor, ElementIcon } from '../../../utils/obiPropertyResolver';
@@ -16,14 +17,14 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   const templateText = useLgTemplate(data.activity, data.$designer && data.$designer.id);
 
   const nodeColors = getElementColor(data.$type);
-
+  const header = getFriendlyName(data) || 'Activity';
   return (
     <FormCard
-      nodeColors={nodeColors}
-      header={getFriendlyName(data) || 'Activity'}
-      corner={<NodeMenu id={id} onEvent={onEvent} />}
-      icon={ElementIcon.MessageBot}
+      header={formatMessage(header)}
       label={templateText}
+      icon={ElementIcon.MessageBot}
+      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      nodeColors={nodeColors}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, { id });
       }}

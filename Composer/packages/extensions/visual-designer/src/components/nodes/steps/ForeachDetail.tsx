@@ -4,6 +4,7 @@
 // Licensed under the MIT License.
 
 import React, { FC } from 'react';
+import formatMessage from 'format-message';
 
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -17,11 +18,11 @@ export const ForeachDetail: FC<NodeProps> = ({ id, data, onEvent }) => {
 
   return (
     <FormCard
-      nodeColors={getElementColor($type)}
+      header={formatMessage('Loop: For Each')}
+      label={formatMessage(label)}
       icon={getElementIcon($type)}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
-      header={'Loop: For Each'}
-      label={label}
+      nodeColors={getElementColor($type)}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, { id });
       }}

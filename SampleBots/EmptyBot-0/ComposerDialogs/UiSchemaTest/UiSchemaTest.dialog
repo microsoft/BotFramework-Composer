@@ -1,0 +1,205 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "UiSchemaTest",
+    "id": "299909"
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "914985"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.ForeachPage",
+          "$designer": {
+            "id": "636807",
+            "name": "Loop: for each page (multiple items)"
+          },
+          "itemsProperty": "user.todo",
+          "pageSize": 5
+        },
+        {
+          "$type": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "651021",
+            "name": "Branch: switch (multiple options)"
+          },
+          "condition": "use.faceicon"
+        },
+        {
+          "$type": "Microsoft.OAuthInput",
+          "$designer": {
+            "id": "726771",
+            "name": "OAuth login"
+          },
+          "connectionName": "xxx",
+          "text": "at",
+          "title": "xad",
+          "timeout": "900000",
+          "tokenProperty": "diallog.token"
+        },
+        {
+          "$type": "Microsoft.QnAMakerDialog",
+          "$designer": {
+            "id": "001712",
+            "name": "Connect to QnA Knowledgebase"
+          },
+          "knowledgeBaseId": "settings.qna.knowledgebaseid",
+          "endpointKey": "settings.qna.endpointkey",
+          "hostname": "settings.qna.hostname",
+          "noAnswer": "Sorry, I did not find an answer.",
+          "threshold": 0.3,
+          "activeLearningCardTitle": "Did you mean:",
+          "cardNoMatchText": "None of the above.",
+          "cardNoMatchResponse": "Thanks for the feedback.",
+          "top": 3
+        },
+        {
+          "$type": "Microsoft.LogAction",
+          "$designer": {
+            "id": "859918",
+            "name": "Log to console"
+          },
+          "text": "xxxx",
+          "traceActivity": true
+        },
+        {
+          "$type": "Microsoft.TraceActivity",
+          "$designer": {
+            "id": "212157",
+            "name": "Emit a trace event"
+          },
+          "name": "taca",
+          "valueType": "axxx",
+          "value": "xxxx"
+        },
+        {
+          "$type": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "274751",
+            "name": "Send an HTTP request"
+          },
+          "method": "GET",
+          "url": "aad.com",
+          "responseType": "Json"
+        },
+        {
+          "$type": "Microsoft.EmitEvent",
+          "$designer": {
+            "id": "577165",
+            "name": "Emit a custom event"
+          },
+          "eventName": "hi",
+          "eventValue": "nae"
+        },
+        {
+          "$type": "Microsoft.EndTurn",
+          "$designer": {
+            "id": "231722",
+            "name": "End dialog turn"
+          }
+        },
+        {
+          "$type": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "id": "700665",
+            "name": "Cancel all dialogs"
+          },
+          "eventName": "xxxxx"
+        },
+        {
+          "$type": "Microsoft.EndDialog",
+          "$designer": {
+            "id": "552148",
+            "name": "End this dialog"
+          },
+          "value": "tomato"
+        },
+        {
+          "$type": "Microsoft.DeleteProperty",
+          "$designer": {
+            "id": "413333",
+            "name": "Delete a property"
+          },
+          "property": "nae"
+        },
+        {
+          "$type": "Microsoft.SetProperties",
+          "$designer": {
+            "id": "077278",
+            "name": "Set properties"
+          },
+          "assignments": [
+            {
+              "property": "name",
+              "value": "xxx"
+            },
+            {
+              "property": "12fds",
+              "value": "xxx2"
+            }
+          ]
+        },
+        {
+          "$type": "Microsoft.InitProperty",
+          "$designer": {
+            "id": "626012",
+            "name": "Initialize a property"
+          },
+          "property": "user.age",
+          "type": "object"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "846159",
+            "name": "Edit an Array property"
+          },
+          "changeType": "Push",
+          "itemsProperty": "name",
+          "resultProperty": "ads"
+        },
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "870453",
+            "name": "Set a property"
+          },
+          "property": "asd",
+          "value": "zxc"
+        },
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "name": "Loop: for each item",
+            "id": "287569"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "name": "Branch: if/else",
+                "id": "669904"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "name": "Send a response",
+                    "id": "837335"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

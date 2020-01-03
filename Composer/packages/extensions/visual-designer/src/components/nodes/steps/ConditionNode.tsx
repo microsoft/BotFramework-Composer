@@ -3,6 +3,7 @@
 
 import React, { FC } from 'react';
 import get from 'lodash/get';
+import formatMessage from 'format-message';
 
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -15,11 +16,11 @@ export const ConditionNode: FC<NodeProps> = ({ id, data, onEvent }) => {
 
   return (
     <FormCard
-      nodeColors={getElementColor($type)}
+      header={formatMessage('Branch')}
+      label={get(data, 'condition', '')}
       icon={getElementIcon($type)}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
-      header={'Branch'}
-      label={get(data, 'condition', '')}
+      nodeColors={getElementColor($type)}
       onClick={() => {
         onEvent(NodeEventTypes.Focus, { id });
       }}

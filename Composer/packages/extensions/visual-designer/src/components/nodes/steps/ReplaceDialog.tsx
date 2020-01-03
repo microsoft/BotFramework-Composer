@@ -42,12 +42,13 @@ export class ReplaceDialog extends React.Component<NodeProps, {}> {
   render() {
     const { id, data, onEvent } = this.props;
     const nodeColors = getElementColor(data.$type);
+    const header = getFriendlyName(data) || 'ReplaceDialog';
     return (
       <FormCard
-        nodeColors={nodeColors}
-        header={getFriendlyName(data) || 'ReplaceDialog'}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        header={formatMessage(header)}
         label={this.renderCallDialogLink()}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        nodeColors={nodeColors}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, { id });
         }}

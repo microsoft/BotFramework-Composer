@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
@@ -38,12 +39,13 @@ export class BeginDialog extends React.Component<NodeProps, object> {
   render() {
     const { id, data, onEvent } = this.props;
     const nodeColors = getElementColor(data.$type);
+    const header = getFriendlyName(data) || 'BeginDialog';
     return (
       <FormCard
-        nodeColors={nodeColors}
-        header={getFriendlyName(data) || 'BeginDialog'}
-        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        header={formatMessage(header)}
         label={this.renderCallDialogLink()}
+        corner={<NodeMenu id={id} onEvent={onEvent} />}
+        nodeColors={nodeColors}
         onClick={() => {
           onEvent(NodeEventTypes.Focus, { id });
         }}
