@@ -94,7 +94,7 @@ export class LuPublisher {
       });
       await this.saveStatus();
     } catch (error) {
-      throw new Error((error.body && error.body.error && error.body.error.message) || 'Error publishing to LUIS.');
+      throw new Error(error?.body?.error?.message ?? 'Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);
