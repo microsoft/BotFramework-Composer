@@ -14,12 +14,12 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 
 export const ForeachDetail: FC<NodeProps> = ({ id, data, onEvent }) => {
   const { $type } = data;
-  const label = `Each value in {${data.itemsProperty || '?'}}`;
+  const label = `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`;
 
   return (
     <FormCard
       header={formatMessage('Loop: For Each')}
-      label={formatMessage(label)}
+      label={label}
       icon={getElementIcon($type)}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       nodeColors={getElementColor($type)}

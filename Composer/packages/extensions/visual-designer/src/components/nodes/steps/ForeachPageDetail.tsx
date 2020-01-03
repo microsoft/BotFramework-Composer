@@ -5,6 +5,7 @@
 
 import React, { FC } from 'react';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
 
 import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
@@ -14,12 +15,15 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 
 export const ForeachPageDetail: FC<NodeProps> = ({ id, data, onEvent }) => {
   const { $type } = data;
-  const label = `Each page of ${data.pageSize || '?'} in {${data.itemsProperty || '?'}}`;
+
+  const pageSizeString = get(data, 'pageSize', '?');
+  const propString = get(data, 'itemsProperty', '?');
+  const label = `${formatMessage('Each page of')} ${pageSizeString} ${formatMessage('in')} {${propString}}`;
 
   return (
     <FormCard
       header={formatMessage('Loop: For Each Page')}
-      label={formatMessage(label)}
+      label={label}
       icon={getElementIcon($type)}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       nodeColors={getElementColor($type)}

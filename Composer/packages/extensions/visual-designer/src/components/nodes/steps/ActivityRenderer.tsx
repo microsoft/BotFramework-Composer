@@ -17,10 +17,10 @@ export const ActivityRenderer: React.FC<NodeProps> = props => {
   const templateText = useLgTemplate(data.activity, data.$designer && data.$designer.id);
 
   const nodeColors = getElementColor(data.$type);
-  const header = getFriendlyName(data) || 'Activity';
+  const header = getFriendlyName(data) || formatMessage('Activity');
   return (
     <FormCard
-      header={formatMessage(header)}
+      header={header}
       label={templateText}
       icon={ElementIcon.MessageBot}
       corner={<NodeMenu id={id} onEvent={onEvent} />}

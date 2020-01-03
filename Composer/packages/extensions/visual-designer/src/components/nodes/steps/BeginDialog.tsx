@@ -39,10 +39,10 @@ export class BeginDialog extends React.Component<NodeProps, object> {
   render() {
     const { id, data, onEvent } = this.props;
     const nodeColors = getElementColor(data.$type);
-    const header = getFriendlyName(data) || 'BeginDialog';
+    const header = getFriendlyName(data) || formatMessage('BeginDialog');
     return (
       <FormCard
-        header={formatMessage(header)}
+        header={header}
         label={this.renderCallDialogLink()}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         nodeColors={nodeColors}
