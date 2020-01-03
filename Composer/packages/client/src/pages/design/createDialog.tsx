@@ -1,52 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useContext, Fragment } from 'react';
+import React, { useState, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
+import { DialogCreationCopy } from '../../constants';
+import { DialogWrapper } from '../../components/DialogWrapper/index';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
 
 import { name, description, styles as wizardStyles } from './styles';
 
-interface FormData {
+interface CreateDialogParams {
   name: string;
   description: string;
-  location: string;
 }
 
-interface FormDataError {
-  name?: string;
-}
-
-interface Bots {
-  name: '';
-  path: '';
-}
-
-interface DefineDialogProps {
-  onSubmit: (formData: FormData) => void;
+interface CreateDialogProps {
+  onSubmit: (createDialogParams: CreateDialogParams) => void;
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
-  onGetErrorMessage?: (text: string) => void;
   focusedStorageFolder?: StorageFolder;
   currentPath?: string;
-  bots?: Bots[];
+  isOpen: boolean;
 }
 
-const initialFormDataError: FormDataError = {};
+const initialFormDataError = {};
 
-export const DefineDialog: React.FC<DefineDialogProps> = props => {
+export const CreateDialog: React.FC<CreateDialogProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
-  const { onSubmit, onDismiss } = props;
-
-  const initalFormData: FormData = { name: '', description: '', location: '' };
+  const { onSubmit, onDismiss, isOpen } = props;
+  const initalFormData: CreateDialogParams = { name: '', description: '' };
   const [formData, setFormData] = useState(initalFormData);
-  const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
+  const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>(initialFormDataError);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -56,8 +46,8 @@ export const DefineDialog: React.FC<DefineDialogProps> = props => {
   };
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = (data: FormData) => {
-    const errors: FormDataError = {};
+  const validateForm = (data: CreateDialogParams) => {
+    const errors: { name?: string } = {};
     const { name } = data;
 
     if (name) {
@@ -89,7 +79,7 @@ export const DefineDialog: React.FC<DefineDialogProps> = props => {
   };
 
   return (
-    <Fragment>
+    <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}>
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
         <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
@@ -120,6 +110,6 @@ export const DefineDialog: React.FC<DefineDialogProps> = props => {
           <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
         </DialogFooter>
       </form>
-    </Fragment>
+    </DialogWrapper>
   );
 };

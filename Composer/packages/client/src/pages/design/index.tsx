@@ -9,7 +9,6 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
-import toLower from 'lodash/toLower';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
@@ -29,7 +28,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
-import NewDialogModal from './new-dialog-modal';
+import { CreateDialog } from './createDialog';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -189,17 +188,6 @@ function DesignPage(props) {
       navTo(id);
     }
   }
-
-  const getErrorMessage = text => {
-    if (
-      dialogs.findIndex(dialog => {
-        return toLower(dialog.id) === toLower(text);
-      }) >= 0
-    ) {
-      return `${text} has been used, please choose another name`;
-    }
-    return '';
-  };
 
   const onCreateDialogComplete = newDialog => {
     if (newDialog) {
@@ -410,12 +398,13 @@ function DesignPage(props) {
           </Conversation>
         </div>
       </div>
-      <NewDialogModal
-        isOpen={state.showCreateDialogModal}
-        onDismiss={() => actions.createDialogCancel()}
-        onSubmit={onSubmit}
-        onGetErrorMessage={getErrorMessage}
-      />
+      {state.showCreateDialogModal && (
+        <CreateDialog
+          isOpen={state.showCreateDialogModal}
+          onDismiss={() => actions.createDialogCancel()}
+          onSubmit={onSubmit}
+        />
+      )}
       {triggerModalVisible && (
         <TriggerCreationModal
           dialogId={dialogId}

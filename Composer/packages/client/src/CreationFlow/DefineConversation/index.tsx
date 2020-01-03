@@ -83,7 +83,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     const errors: FormDataError = {};
     const { name } = data;
 
-    if (name && !nameRegex.test(name)) {
+    if (!name || !nameRegex.test(name)) {
       errors.name = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
       );
@@ -104,13 +104,6 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     return errors;
   };
 
-  const isEmptyName = (name: string) => {
-    if (!name) {
-      return { name: 'Please input a name' };
-    }
-    return {};
-  };
-
   useEffect(() => {
     updateForm('location')(null, currentPath);
   }, [currentPath]);
@@ -127,8 +120,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    let errors = validateForm(formData);
-    errors = isEmptyName(formData.name);
+    const errors = validateForm(formData);
     if (Object.keys(errors).length) {
       setFormDataErrors(errors);
       return;
