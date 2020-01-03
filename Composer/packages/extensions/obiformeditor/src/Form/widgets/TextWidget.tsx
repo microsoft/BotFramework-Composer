@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState } from 'react';
+import React from 'react';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -46,8 +46,6 @@ export function TextWidget(props: ITextWidgetProps) {
   const { hideLabel, transparentBorder } = options;
   let placeholderText = placeholder;
 
-  const [hasFocus, setHasFocus] = useState<boolean>(false);
-
   if (!placeholderText && examples.length > 0) {
     placeholderText = `ex. ${examples.join(', ')}`;
   }
@@ -91,12 +89,10 @@ export function TextWidget(props: ITextWidgetProps) {
     autoComplete: 'off',
     onBlur: () => {
       onBlur && onBlur(id, value);
-      setHasFocus(false);
     },
     onChange: (_, newValue?: string) => onChange(newValue),
     onFocus: () => {
       onFocus && onFocus(id, value);
-      setHasFocus(true);
     },
     placeholder: placeholderText,
     readOnly: Boolean(schema.const) || readonly,
@@ -129,7 +125,7 @@ export function TextWidget(props: ITextWidgetProps) {
             transition: 'border-color 0.1s linear',
             selectors: {
               ':hover': {
-                borderColor: hasFocus ? undefined : NeutralColors.gray30,
+                borderColor: transparentBorder ? NeutralColors.gray30 : undefined,
               },
             },
           },
