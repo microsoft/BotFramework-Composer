@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useState, Fragment, useMemo, useCallback, Suspense } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -34,16 +34,23 @@ interface LGPageProps extends RouteComponentProps<{}> {
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { lgFiles, dialogs } = state;
-  const [selectedDialogItem, setSelectedDialogItem] = useState('common');
+
   const path = props.location?.pathname ?? '';
   const { fileId = 'common' } = props;
   const edit = /edit(\/)*$/.test(path);
   const file = lgFiles.find(({ id }) => id === 'common');
-
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
+    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialog = newDialogLinks.find(link => link.id === 'Main');
+
+    if (mainDialog) {
+      newDialogLinks.splice(mainDialogIndex, 1);
+      newDialogLinks.splice(0, 0, mainDialog);
+    }
+
     newDialogLinks.splice(0, 0, {
       id: 'common',
       key: 'common',
@@ -58,7 +65,6 @@ const LGPage: React.FC<LGPageProps> = props => {
       let url = `/language-generation/${id}`;
       if (edit) url += `/edit`;
       navigateTo(url);
-      setSelectedDialogItem(id);
     },
     [edit]
   );
@@ -102,7 +108,7 @@ const LGPage: React.FC<LGPageProps> = props => {
           {navLinks.map(dialog => {
             return (
               <div
-                css={dialogItem(selectedDialogItem === dialog.id)}
+                css={dialogItem(fileId === dialog.id)}
                 key={dialog.id}
                 onClick={() => {
                   onSelect(dialog.id);

@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-
+import { NeutralColors } from '@uifabric/fluent-theme';
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
@@ -130,10 +130,10 @@ export const dialogItem = selected => css`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: ${selected ? '#f2f2f2' : '#ffffff'};
-  font-weight: ${selected ? 600 : 400};
+  background: ${selected ? NeutralColors.gray20 : NeutralColors.white};
+  font-weight: ${selected ? FontWeights.semibold : FontWeights.semilight};
   height: 32px;
-  font-size: 12px;
+  font-size: ${FontSizes.small};
   padding-left: 18px;
   cursor: pointer;
 `;

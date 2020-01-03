@@ -27,7 +27,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
   const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [selectedDialogItem, setSelectedDialogItem] = useState('_all');
+  //const [selectedDialogItem, setSelectedDialogItem] = useState('_all');
   const subPath = props['*'];
   const isRoot = subPath === '';
   const activeDialog = dialogs.find(item => item.id === subPath);
@@ -38,6 +38,14 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     const newDialogLinks = dialogs.map(dialog => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
+    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialog = newDialogLinks.find(link => link.id === 'Main');
+
+    if (mainDialog) {
+      newDialogLinks.splice(mainDialogIndex, 1);
+      newDialogLinks.splice(0, 0, mainDialog);
+    }
+
     newDialogLinks.splice(0, 0, {
       id: '_all',
       key: '_all',
@@ -69,7 +77,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     } else {
       navigateTo(`/language-understanding/${id}`);
     }
-    setSelectedDialogItem(id);
+    //setSelectedDialogItem(id);
     setEditMode(false);
   }
 
@@ -123,7 +131,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
           {navLinks.map(dialog => {
             return (
               <div
-                css={dialogItem(selectedDialogItem === dialog.id)}
+                css={dialogItem(activeDialog ? activeDialog.id === dialog.id : false)}
                 key={dialog.id}
                 onClick={() => {
                   onSelect(dialog.id);
