@@ -140,5 +140,3 @@ export function loadMemoryVariavles(path: string): object {
   const varibles = JSON.parse(text);
   return varibles;
 }
-
-console.log(__dirname);

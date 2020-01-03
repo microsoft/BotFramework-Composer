@@ -265,25 +265,32 @@ export class LGServer {
       }
     }
 
-    if (Object.keys(tempVariable).length === 0) {
+    if (!tempVariable || Object.keys(tempVariable).length === 0) {
       return null;
     }
 
-    if (tempVariable instanceof Array) {
+    if (tempVariable instanceof Object) {
       const completionList: CompletionItem[] = [];
-      for (const variable of tempVariable) {
-        Object.keys(variable).forEach(e => {
-          const item = {
-            label: e.toString(),
-            kind: CompletionItemKind.Property,
-            insertText: e.toString(),
-            documentation: '',
-          };
-          completionList.push(item);
-        });
-      }
+      Object.keys(tempVariable).forEach(e => {
+        const item = {
+          label: e.toString(),
+          kind: CompletionItemKind.Property,
+          insertText: e.toString(),
+          documentation: '',
+        };
+        completionList.push(item);
+      });
 
       return completionList;
+    } else if (typeof tempVariable === 'string') {
+      return [
+        {
+          label: tempVariable,
+          kind: CompletionItemKind.Property,
+          insertText: tempVariable,
+          documentation: '',
+        },
+      ];
     }
 
     return null;
@@ -340,7 +347,6 @@ export class LGServer {
     completionList = completionList.concat(completionRootVariableList);
 
     const matchResult = this.matchedStates(params);
-
     if (
       matchResult &&
       matchResult.matched &&

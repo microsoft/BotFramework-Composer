@@ -1,13 +1,13 @@
 {
-    "this" : [{"value": ""}, {"turnCount": ""}],
-    "turn" : [{
-        "dialogEvent": "value"
-    }],
-    "dialog" : [
-        {"item": ""},
-        {"listType": ""}
-    ],
-    "#intent": [
+    "this" : {"value": "", "turnCount": ""},
+    "turn" : {
+        "dialogEvent": "value",
+        "recognitionResult": ""
+    },
+    "dialog" : 
+        {"item": "",
+        "listType": ""}
+    ,
+    "intent":
         {"score": ""}
-    ]
 }
