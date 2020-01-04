@@ -30,6 +30,7 @@ export interface DialogInfo {
   referredDialogs: string[];
   relativePath: string;
   triggers: ITrigger[];
+  forceUpdate?: boolean;
 }
 
 export interface Intent {
@@ -54,8 +55,9 @@ export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent?: IParsedObject;
   diagnostics: Diagnostic[];
+  parsedContent?: IParsedObject;
+  forceUpdate?: boolean;
   [key: string]: any;
 }
 export interface CodeRange {
@@ -76,4 +78,5 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
+  forceUpdate?: boolean;
 }

@@ -68,11 +68,11 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
   return state;
 };
 
-const updateDialog: ReducerFunc = (state, { id, content }) => {
+const updateDialog: ReducerFunc = (state, { id, content, forceUpdate = false }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
       const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
-      return { ...dialog, ...result };
+      return { ...dialog, ...result, forceUpdate };
     }
     return dialog;
   });
@@ -105,8 +105,13 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { response }) => {
-  state.lgFiles = response.data.lgFiles;
+const updateLgTemplate: ReducerFunc = (state, { id, response, forceUpdate = false }) => {
+  //set forceUpdate = true to let editors force update
+  state.lgFiles = response.data.lgFiles.map(lgFile => {
+    if (lgFile.id === id) lgFile.forceUpdate = forceUpdate;
+    return lgFile;
+  });
+
   return state;
 };
 

@@ -112,8 +112,8 @@ export const debouncedUpdateDialog = debounce(async (store, id, content) => {
   }
 }, 500);
 
-export const updateDialogBase: ActionCreator = (store, { id, content }) => {
-  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
+export const updateDialogBase: ActionCreator = (store, { id, content, forceUpdate = false }) => {
+  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content, forceUpdate } });
   debouncedUpdateDialog(store, id, content);
 };
 
@@ -123,9 +123,9 @@ export const updateDialog: ActionCreator = undoable(
     if (isEmpty) {
       const id = state.designPageLocation.dialogId;
       const dialog = state.dialogs.find(dialog => dialog.id === id);
-      return [{ id, content: dialog ? dialog.content : {} }];
+      return [{ id, content: dialog ? dialog.content : {}, forceUpdate: true }];
     } else {
-      return args;
+      return [{ ...args[0], forceUpdate: true }];
     }
   },
   updateDialogBase,

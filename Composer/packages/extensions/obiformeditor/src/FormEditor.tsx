@@ -30,12 +30,14 @@ export interface FormEditorProps extends ShellData {
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, schemas, memory, dialogs, shellApi } = props;
+  const { data, schemas, memory, dialogs, shellApi, dialogId } = props;
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
 
   useEffect(() => {
-    if (!isEqual(localData, data)) {
+    const dialog = dialogs.find(dialog => dialog.id === dialogId);
+    // undo and redo will update the localData
+    if (!isEqual(localData, data) && dialog?.forceUpdate) {
       setLocalData(data);
     }
   }, [data]);

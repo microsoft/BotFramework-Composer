@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import clonedeep from 'lodash/cloneDeep';
 
 import * as lgUtil from '../../utils/lgUtil';
 import { ActionCreator, State } from '../types';
@@ -8,12 +9,12 @@ import { undoable } from '../middlewares/undo';
 import { ActionTypes } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 
-export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content, forceUpdate = false }) => {
   try {
     const response = await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_LG_SUCCESS,
-      payload: { response },
+      payload: { id, response, forceUpdate },
     });
   } catch (err) {
     dispatch({
@@ -29,10 +30,10 @@ export const undoableUpdateLgFile = undoable(
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = args[0].id;
-      const content = state.lgFiles.find(lgFile => lgFile.id === id)?.content;
-      return [{ id, content }];
+      const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
+      return [{ id, content, forceUpdate: true }];
     } else {
-      return args;
+      return [{ ...args[0], forceUpdate: true }];
     }
   },
   updateLgFile,

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
@@ -48,11 +48,10 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
-  const updateLgTemplate = useMemo(
-    () =>
-      debounce((body: string) => {
-        formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
-      }, 500),
+  const updateLgTemplate = useCallback(
+    debounce((body: string) => {
+      formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
+    }, 500),
     [lgName, lgFileId]
   );
 
@@ -104,15 +103,9 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     }
   };
 
-  // update the template on mount to get validation
-  // useEffect(() => {
-  //   if (localValue) {
-  //     updateLgTemplate(localValue);
-  //   }
-  // }, []);
-
+  //undo and redo can update the localValue
   useEffect(() => {
-    if (template.body !== localValue) {
+    if (template.body !== localValue && lgFile?.forceUpdate) {
       setLocalValue(template.body);
     }
   }, [template.body]);
