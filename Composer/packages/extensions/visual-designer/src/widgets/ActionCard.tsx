@@ -6,7 +6,7 @@ import React from 'react';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
-import { getFriendlyName } from '../components/nodes/utils';
+import { generateSDKTitle } from '../components/nodes/utils';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
@@ -19,8 +19,6 @@ export interface ActionCardProps extends WidgetContainerProps {
   };
   onClick: () => any;
 }
-
-const truncateType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
 const DefaultCardColor = {
   theme: ObiColors.AzureGray3,
@@ -36,7 +34,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   onClick,
   colors = DefaultCardColor,
 }) => {
-  const header = getFriendlyName(data) || title || truncateType(data.$type);
+  const header = generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
   return (
     <FormCard header={header} corner={menu} icon={icon} label={content} nodeColors={nodeColors} onClick={onClick} />
