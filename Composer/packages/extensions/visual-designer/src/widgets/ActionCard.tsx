@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React from 'react';
+import { generateSDKTitle } from '@bfc/shared';
 
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
-import { generateSDKTitle } from '../components/nodes/utils';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
