@@ -5,13 +5,13 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import formatMessage from 'format-message';
+import { generateSDKTitle } from '@bfc/shared';
 
 import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { getElementColor } from '../../../utils/obiPropertyResolver';
 import { NodeMenu } from '../../menus/NodeMenu';
 import { FormCard } from '../templates/FormCard';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { getFriendlyName } from '../utils';
 
 export class BeginDialog extends React.Component<NodeProps, object> {
   static defaultProps = defaultNodeProps;
@@ -39,10 +39,10 @@ export class BeginDialog extends React.Component<NodeProps, object> {
   render() {
     const { id, data, onEvent } = this.props;
     const nodeColors = getElementColor(data.$type);
-    const header = getFriendlyName(data) || formatMessage('BeginDialog');
+    const header = formatMessage('BeginDialog');
     return (
       <FormCard
-        header={header}
+        header={generateSDKTitle(data, header)}
         label={this.renderCallDialogLink()}
         corner={<NodeMenu id={id} onEvent={onEvent} />}
         nodeColors={nodeColors}

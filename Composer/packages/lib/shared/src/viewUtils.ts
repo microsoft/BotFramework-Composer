@@ -290,13 +290,13 @@ export function getDialogGroupByType(type) {
 const truncateSDKType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
 
 /**
- * Title priority: $designer.name > override title > title from sdk schema > $type suffix
- * @param overrideTitle customized title
+ * Title priority: $designer.name > title from sdk schema > customize title > $type suffix
+ * @param customizedTitile customized title
  */
-export function generateSDKTitle(data, overrideTitle?: string) {
+export function generateSDKTitle(data, customizedTitile?: string) {
   const $type = get(data, '$type');
   const titleFrom$designer = get(data, '$designer.name');
   const titleFromShared = get(ConceptLabels, [$type, 'title']);
   const titleFrom$type = truncateSDKType($type);
-  return titleFrom$designer || overrideTitle || titleFromShared || titleFrom$type;
+  return titleFrom$designer || titleFromShared || customizedTitile || titleFrom$type;
 }
