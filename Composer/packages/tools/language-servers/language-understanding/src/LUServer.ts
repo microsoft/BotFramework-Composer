@@ -94,14 +94,12 @@ export class LUServer {
       curLineNumber === lineCount - 1
     ) {
       const newPos = Position.create(pos.line + 1, 0);
-      const item: TextEdit = TextEdit.insert(newPos, '-');
+      const item: TextEdit = TextEdit.insert(newPos, '- ');
       edits.push(item);
     }
 
     if (key === '\n' && inputState === 'mlEntity' && lastLineContent.trim().endsWith('=')) {
       const mlEntities = this.getMLEntities(textBeforeCurLine);
-      console.log(mlEntities);
-      console.log('true');
       const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_.-]+)\s*.*/;
       let entityName = '';
       if (entityNameRegExp.test(lastLineContent)) {
@@ -111,7 +109,7 @@ export class LUServer {
         }
         if (mlEntities.includes(entityName)) {
           const newPos = Position.create(pos.line + 1, 0);
-          const item: TextEdit = TextEdit.insert(newPos, '\t- @ ');
+          const item: TextEdit = TextEdit.insert(newPos, '\t-@ ');
           edits.push(item);
         }
       }
@@ -536,7 +534,7 @@ export class LUServer {
 
     // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
     const lines = text.split('\n');
-    const textBeforeCurLine = lines.slice(0, lines.length - 1).join('\n');
+    const textBeforeCurLine = lines.slice(0, position.line).join('\n');
     const luisJson = await this.extractLUISContent(textBeforeCurLine);
     const suggestionEntityList = this.getSuggestionEntities(luisJson);
     const regexEntityList = this.getRegexEntities(luisJson);

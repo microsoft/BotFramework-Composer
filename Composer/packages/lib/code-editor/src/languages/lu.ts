@@ -7,17 +7,17 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
   monaco.languages.setMonarchTokensProvider('botframeworklu', {
     tokenizer: {
       root: [
-        [/^\s*#/, { token: 'intent-indentifier', next: '@intent' }],
+        [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
       ],
 
       intent: [
-        [/^\s*#/, { token: 'intent-indentifier', next: '@intent' }],
+        [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: '@utterrance' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
-        [/.*$/, 'intent-name'],
+        [/.*$/, 'intent'],
       ],
       utterrance: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
@@ -64,7 +64,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
     inherit: false,
     colors: {},
     rules: [
-      { token: 'intent-name', foreground: '0000FF' },
+      { token: 'intent', foreground: '0000FF' },
       { token: 'pattern', foreground: '00B7C3' },
       { token: 'entity-name', foreground: '038387' },
       { token: 'comments', foreground: '7A7A7A' },
