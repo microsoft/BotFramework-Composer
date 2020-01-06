@@ -124,7 +124,7 @@ With these dialog actions, we can easily build a pluggable and extensible dialog
 
 ## Further reading
 
-[Dialogs library](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-dialog?view=azure-bot-service-4.0)
+[Dialogs library](https://docs.microsoft.com/azure/bot-service/bot-builder-concept-dialog)
 
 [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme)
 
