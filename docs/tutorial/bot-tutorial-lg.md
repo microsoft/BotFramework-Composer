@@ -52,42 +52,42 @@ Let's improve the language used when delivering the weather conditions. To do th
 8. Paste the following text:
     ```
     # DescribeWeather(weather)
-    - IF: {weather.weather=="Clouds"}
+    - IF: @{weather.weather=="Clouds"}
         - It is cloudy
-    - ELSEIF: {weather.weather=="Thunderstorm"}
+    - ELSEIF: @{weather.weather=="Thunderstorm"}
         - There's a thunderstorm
-    - ELSEIF: {weather.weather=="Drizzle"}
+    - ELSEIF: @{weather.weather=="Drizzle"}
         - It is drizzling
-    - ELSEIF: {weather.weather=="Rain"}
+    - ELSEIF: @{weather.weather=="Rain"}
         - It is raining
-    - ELSEIF: {weather.weather=="Snow"}
+    - ELSEIF: @{weather.weather=="Snow"}
         - There's snow
-    - ELSEIF: {weather.weather=="Clear"}
-        - The skies are clear
-    - ELSEIF: {weather.weather=="Mist"}
+    - ELSEIF: @{weather.weather=="Clear"}
+        - The sky is clear
+    - ELSEIF: @{weather.weather=="Mist"}
         - There's a mist in the air
-    - ELSEIF: {weather.weather=="Smoke"}
+    - ELSEIF: @{weather.weather=="Smoke"}
         - There's smoke in the air
-    - ELSEIF: {weather.weather=="Haze"}
+    - ELSEIF: @{weather.weather=="Haze"}
         - There's a haze
-    - ELSEIF: {weather.weather=="Dust"}
+    - ELSEIF: @{weather.weather=="Dust"}
         - There's a dust in the air
-    - ELSEIF: {weather.weather=="Fog"}
+    - ELSEIF: @{weather.weather=="Fog"}
         - It's foggy
-    - ELSEIF: {weather.weather=="Ash"}
+    - ELSEIF: @{weather.weather=="Ash"}
         - There's ash in the air
-    - ELSEIF: {weather.weather=="Squall"}
+    - ELSEIF: @{weather.weather=="Squall"}
         - There's a squall
-    - ELSEIF: {weather.weather=="Tornado"}
+    - ELSEIF: @{weather.weather=="Tornado"}
         - There's a tornado happening
     - ELSE:
-        - {weather.weather}
+        - @{weather.weather}
     ```
 
     > This creates a new Language Generation template called `DescribeWeather`. This template receives weather data from our API as a parameter, and outputs a friendlier 
     description of the weather based on the raw data from the API.
 
-9. Navigate back to the flow designer by clicking on **Flow designer** in the left navigation bar.
+9. Navigate back to the flow designer by clicking on **Design Flow** in the left navigation bar.
 10. In Composer's explorer, click on the `getWeather` dialog, and make sure the `BeginDialog` trigger is highlighted.
 
       ![](../media/tutorial-weatherbot/05/nav2.png)
@@ -95,7 +95,7 @@ Let's improve the language used when delivering the weather conditions. To do th
 11. Scroll to the bottom, and click on the **Send a response** node that starts with `The weather is...`
 13. In the right hand property pane, replace the activity text with the following:
 
-      `- {DescribeWeather(dialog.weather)} and the temp is {dialog.weather.temp}&deg;`
+      `- @{DescribeWeather(dialog.weather)} and the temp is @{dialog.weather.temp}&deg;`
 
       > Here, we are using the `DescribeWeather` template _inside another template_. LG templates can be combined in this way to create more complex templates.
 
