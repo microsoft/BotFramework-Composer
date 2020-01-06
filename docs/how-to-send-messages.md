@@ -127,7 +127,7 @@ Similar to If/Else conditional template, you can define a Switch conditional tem
 In this Switch conditional template, bot will respond in text message `Happy Sunday!`, `Happy Saturday` or `Working day!` based on the returned value of days of the week for a given timestamp. `utcNow()`is a pre-built function which returns current timestamp as string. `dayOfWeek()` is a pre-built function which returns the day of the week from a timestamp. Read more about [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
 ## References 
-- [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
+- [Send and receive text message](https://docs.microsoft.com/azure/bot-service/bot-builder-howto-send-messages)
 - [Language generation](./concept-language-generation.md)
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
