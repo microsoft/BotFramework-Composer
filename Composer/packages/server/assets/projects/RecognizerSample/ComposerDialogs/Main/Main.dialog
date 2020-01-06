@@ -1,0 +1,123 @@
+{
+  "$schema": "../../app.schema",
+  "$kind": "Microsoft.AdaptiveDialog",
+  "recognizer": {
+    "$kind": "Microsoft.RecognizerSet",
+    "recognizers": [
+      {
+        "$kind": "Microsoft.RegexRecognizer",
+        "id": "x",
+        "intents": [
+          {
+            "intent": "codeIntent",
+            "pattern": "(?<code>[a-z][0-9])"
+          },
+          {
+            "intent": "sameIntent",
+            "pattern": "same"
+          }
+        ],
+        "entities": [
+          {
+            "$kind": "Microsoft.AgeEntityRecognizer"
+          },
+          {
+            "$kind": "Microsoft.NumberEntityRecognizer"
+          },
+          {
+            "$kind": "Microsoft.PercentageEntityRecognizer"
+          },
+          {
+            "$kind": "Microsoft.PhoneNumberEntityRecognizer"
+          },
+          {
+            "$kind": "Microsoft.TemperatureEntityRecognizer"
+          }
+        ]
+      },
+      {
+        "$kind": "Microsoft.RegexRecognizer",
+        "id": "y",
+        "intents": [
+          {
+            "intent": "colorIntent",
+            "pattern": "(?i)(color|colour)"
+          },
+          {
+            "intent": "sameIntent",
+            "pattern": "same"
+          }
+        ],
+        "entities": [
+          {
+            "$kind": "Microsoft.UrlEntityRecognizer"
+          },
+          {
+            "$kind": "Microsoft.RegexEntityRecognizer",
+            "name": "color",
+            "pattern": "(?i)(red|green|blue|purple|orange|violet|white|black)"
+          },
+          {
+            "$kind": "Microsoft.RegexEntityRecognizer",
+            "name": "backgroundColor",
+            "pattern": "(?i)(back|background)"
+          },
+          {
+            "$kind": "Microsoft.RegexEntityRecognizer",
+            "name": "foregroundColor",
+            "pattern": "(?i)(foreground|front) {color}"
+          }
+        ]
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "codeIntent",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "code intent:"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "@{join(turn.recognized.entities.code, ',')}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "colorIntent",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "color intent:"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "@{join(turn.recognized.entities.color, ',')}"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "sameIntent",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "same intent"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "Sample Usage: \r\n1. say 'a1' or 'b2' to trigger code intent\r\n2. say 'i would like color red green to trigger color intent'\r\n3. say 'same' to trigger same intent in different recognizers"
+        }
+      ]
+    }
+  ]
+}

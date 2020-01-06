@@ -1,0 +1,78 @@
+{
+  "$schema": "../../app.schema",
+  "$kind": "Microsoft.AdaptiveDialog",
+  "recognizer": {
+    "$kind": "Microsoft.CrossTrainedRecognizerSet",
+    "recognizers": [
+      {
+        "$kind": "Microsoft.RegexRecognizer",
+        "id": "a",
+        "intents": [
+          {
+            "intent": "DeferToRecognizer_b",
+            "pattern": "cross"
+          },
+          {
+            "intent": "a",
+            "pattern": "a"
+          }
+        ]
+      },
+      {
+        "$kind": "Microsoft.RegexRecognizer",
+        "id": "b",
+        "intents": [
+          {
+            "intent": "cross",
+            "pattern": "cross"
+          },
+          {
+            "intent": "b",
+            "pattern": "b"
+          }
+        ]
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "a",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "triggered by intent a"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "b",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "triggered by intent b"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "cross",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "triggered by intent cross in regex recognizer b"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnUnknownIntent",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "Say 'a' to trigger intent 'a'\r\n'b' to trigger intent 'b'\r\n'cross' to trigger intent 'cross' in regex recognizer b"
+        }
+      ]
+    }
+  ]
+}
