@@ -28,7 +28,7 @@
     "ts-jest": "^24.1.0"
   },
   "dependencies": {
-    "@bfcomposer/bf-lu": "^1.1.5",
+    "@bfcomposer/bf-lu": "^1.1.6",
     "botbuilder-lg": "4.7.0-preview.93464",
     "botframework-expressions": "4.7.0-preview.93464",
     "lodash": "^4.17.15"

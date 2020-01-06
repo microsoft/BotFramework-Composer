@@ -2103,10 +2103,10 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
-"@bfcomposer/bf-lu@^1.1.5":
-  version "1.1.5"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.5.tgz#bc065e5b785fa85431139f4bcbf580292425f3dc"
-  integrity sha1-vAZeW3hfqFQxE59Ly/WAKSQl89w=
+"@bfcomposer/bf-lu@^1.1.6":
+  version "1.1.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.6.tgz#962f5b0da4314983939a99b391f2ab88d8304829"
+  integrity sha1-li9bDaQxSYOTmpmzkfKriNgwSCk=
   dependencies:
     "@microsoft/bf-cli-command" "1.0.0"
     "@oclif/command" "~1.5.19"
