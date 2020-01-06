@@ -298,5 +298,5 @@ export function generateSDKTitle(data, customizedTitile?: string) {
   const titleFrom$designer = get(data, '$designer.name');
   const titleFromShared = get(ConceptLabels, [$type, 'title']);
   const titleFrom$type = truncateSDKType($type);
-  return titleFrom$designer || titleFromShared || customizedTitile || titleFrom$type;
+  return titleFrom$designer || customizedTitile || titleFromShared || titleFrom$type;
 }
