@@ -9,7 +9,7 @@ import { dialogs } from '../constants.json';
 
 import { TriggerCreationModal } from './../../src/components/ProjectTree/TriggerCreationModal';
 import { ProjectTree } from './../../src/components/ProjectTree';
-import NewDialogModal from './../../src/pages/design/new-dialog-modal';
+import { CreateDialog } from './../../src/pages/design/createDialog';
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
     const dialogId = 'Main';
@@ -36,15 +36,13 @@ describe('<ProjectTree/>', () => {
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
 
-  it('should open NewDialogModal, close after clicking cancel', async () => {
+  it('should open CreateDialog Modal, close after clicking cancel', async () => {
     let isOpen = true;
     const handleDismiss = jest.fn(() => {
       isOpen = false;
     });
     const handleSubmit = jest.fn(() => {});
-    const { getByText } = render(
-      <NewDialogModal isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} onGetErrorMessage={() => {}} />
-    );
+    const { getByText } = render(<CreateDialog isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />);
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);
     expect(isOpen).toBe(false);
