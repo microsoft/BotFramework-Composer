@@ -270,7 +270,7 @@
       "helpLinkText": "Learn more"
     },
     "Microsoft.SetProperties": {
-      "title": "Delete Properties",
+      "title": "Set Properties",
       "helpLink": "https://aka.ms/bfc-using-memory",
       "helpLinkText": "Learn more"
     },
