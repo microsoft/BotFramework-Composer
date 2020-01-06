@@ -176,13 +176,12 @@ Click **Start Bot** on the upper right corner of your Composer, fill in your LUI
 Any time you hit **Start Bot** (or **Restart Bot**), Composer will evaluate if your LU content has changed. If so Composer will automatically make required updates to your LUIS applications, train and publish them. If you go to your LUIS app website, you will find the newly published LU model. 
 
 ## References
-- [What is LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/what-is-luis)
-- [Language Understanding](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-concept-luis?view=azure-bot-service-4.0)
+- [What is LUIS](https://docs.microsoft.com/azure/cognitive-services/luis/what-is-luis)
+- [Language Understanding](https://docs.microsoft.com/azure/bot-service/bot-builder-concept-luis)
 - [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
-- [Using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
-- [Extract data from utterance text with intents and entities](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-data-extraction?tabs=V2)
+- [Extract data from utterance text with intents and entities](https://docs.microsoft.com/azure/cognitive-services/luis/luis-concept-data-extraction?tabs=V2)
 
 ## Next 
-- Learn how to [use validation](./how-to-use-validation.md)
+- Learn how to [use validation](how-to-use-validation.md)
 - Learn how to [send messages to users](how-to-send-messages.md)
