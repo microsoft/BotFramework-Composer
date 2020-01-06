@@ -10,10 +10,10 @@ The basic idea behind a trigger (event handler) is "When (_event_) happens, then
 
 Every trigger contains the following components:
 - A trigger name that can be changed in the property panel 
-- Possible **Condition** (specified using [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)), must evaluate to be "true" for the event to fire
+- Possible **Condition** (specified using the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)), must evaluate to be "true" for the event to fire
 - Actions defined to fire when the event is triggered
 
-The screenshot below shows the definition of an **Intent** trigger that is configured to fire whenever the "cancel" intent is detected. It is possible to add a condition to the event - this expression which follows [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), if specified, must evaluate to be "true" for the event to fire. 
+The screenshot below shows the definition of an **Intent** trigger that is configured to fire whenever the "cancel" intent is detected. It is possible to add a condition to the event - this expression which follows the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), if specified, must evaluate to be "true" for the event to fire. 
 
 ![anatomy_trigger](./media/events_triggers/anatomy_trigger.png)
 
