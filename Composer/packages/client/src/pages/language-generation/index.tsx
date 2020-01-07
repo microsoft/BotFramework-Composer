@@ -43,7 +43,6 @@ const LGPage: React.FC<LGPageProps> = props => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
-    //const mainDialog = newDialogLinks.find(link => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
