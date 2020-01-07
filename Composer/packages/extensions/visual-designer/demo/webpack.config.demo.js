@@ -15,6 +15,9 @@ module.exports = {
     port: 3001,
     stats: 'errors-only',
   },
+  node: {
+    fs: 'empty',
+  },
   module: {
     rules: [
       {

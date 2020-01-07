@@ -3,14 +3,14 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
+import { extractLgTemplateRefs } from '@bfc/shared';
 
+import { checkerFuncs } from './dialogUtils/dialogChecker';
 import { ITrigger, DialogInfo, FileInfo } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
-import { extractLgTemplateRefs } from './lgUtils/parsers/parseLgTemplateRef';
-import { getExpressionProperties } from './dialogUtils/extractExpressionDefinitions';
-import { IsExpression } from './dialogUtils';
+
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
   const templates: string[] = [];
@@ -127,8 +127,7 @@ function ExtractReferredDialogs(dialog): string[] {
 
 // check all fields
 function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
-  const errors: Diagnostic[] = [];
-  const expressionProperties = getExpressionProperties(schema);
+  const diagnostics: Diagnostic[] = [];
   /**
    *
    * @param path , jsonPath string
@@ -136,18 +135,24 @@ function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
    * @return boolean, true to stop walk
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    // it's a valid schema dialog node.
-    if (has(value, '$type') && has(expressionProperties, value.$type)) {
-      const diagnostics = IsExpression(path, value, { ...expressionProperties[value.$type] });
-
-      if (diagnostics) {
-        errors.push(...diagnostics);
+    if (has(value, '$type')) {
+      const allChecks = [...checkerFuncs['.']];
+      const checkerFunc = checkerFuncs[value.$type];
+      if (checkerFunc) {
+        allChecks.splice(0, 0, ...checkerFunc);
       }
+
+      allChecks.forEach(func => {
+        const result = func(path, value, value.$type, schema.definitions[value.$type]);
+        if (result) {
+          diagnostics.splice(0, 0, ...result);
+        }
+      });
     }
     return false;
   };
   JsonWalk(id, dialog, visitor);
-  return errors.map(e => {
+  return diagnostics.map(e => {
     e.source = id;
     return e;
   });
@@ -164,6 +169,7 @@ function validate(id: string, content, schema: any): Diagnostic[] {
 function parse(id: string, content: any, schema: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
+
   return {
     content,
     diagnostics: validate(id, content, schema),
