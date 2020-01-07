@@ -29,19 +29,18 @@ import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  fileId: string;
 }
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { lgFiles, dialogs } = state;
+  const { dialogs } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId = 'common' } = props;
+  const { fileId } = props;
   const edit = /edit(\/)*$/.test(path);
-  const file = lgFiles.find(({ id }) => id === 'common');
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
-    const subLinks = dialogs.reduce<INavLink>((result, file) => {
+    const links = dialogs.reduce<INavLink>((result, file) => {
       const item = {
         id: file.id,
         key: file.id,
@@ -68,11 +67,11 @@ const LGPage: React.FC<LGPageProps> = props => {
           {
             id: 'common',
             key: 'common',
-            name: 'All',
+            name: 'Common',
             url: '',
             isExpanded: true,
-            links: [subLinks],
           },
+          links,
         ],
       },
     ];
@@ -153,16 +152,14 @@ const LGPage: React.FC<LGPageProps> = props => {
             </div>
           </Tree>
         </div>
-        {file && (
-          <div css={contentEditor}>
-            <Suspense fallback={<LoadingSpinner />}>
-              <Router primary={false} component={Fragment}>
-                <CodeEditor path="/edit" fileId={fileId} />
-                <TableView path="/" fileId={fileId} />
-              </Router>
-            </Suspense>
-          </div>
-        )}
+        <div css={contentEditor}>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Router primary={false} component={Fragment}>
+              <CodeEditor path="/edit" fileId={fileId} />
+              <TableView path="/" fileId={fileId} />
+            </Router>
+          </Suspense>
+        </div>
       </div>
     </Fragment>
   );

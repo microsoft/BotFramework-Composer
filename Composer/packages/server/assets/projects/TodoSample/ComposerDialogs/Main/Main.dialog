@@ -41,7 +41,7 @@
       }
     ]
   },
-  "generator": "common.lg",
+  "generator": "Main.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
