@@ -33,6 +33,12 @@ const oauthInput = () => ({
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
 
+interface DialogResources {
+  dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+}
+
 export class BotProject {
   public ref: LocationRef;
 
@@ -205,7 +211,7 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<DialogInfo[]> => {
+  public updateDialog = async (id: string, dialogContent: any): Promise<DialogResources> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
@@ -215,20 +221,35 @@ export class BotProject {
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
     await this._updateFile(relativePath, content);
 
-    return this.dialogs;
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
-  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<DialogInfo[]> => {
+  public createDialog = async (
+    id: string,
+    content = '',
+    dir: string = this.defaultDir(id)
+  ): Promise<DialogResources> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
-    const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    await this._createFile(relativePath, content);
-    return this.dialogs;
+    const relativePathBase = Path.join(dir, id.trim());
+    await this._createFile(`${relativePathBase}.dialog`, content);
+    await this._createFile(`${relativePathBase}.lu`, '');
+
+    let lgInitialContent = '';
+    const lgCommonFile = this.lgFiles.find(({ id }) => id === 'common');
+    if (lgCommonFile) {
+      lgInitialContent = `[import](${Path.relative(dir, lgCommonFile.relativePath)})`;
+    }
+    await this._createFile(`${relativePathBase}.lg`, lgInitialContent);
+
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
-  public removeDialog = async (id: string): Promise<DialogInfo[]> => {
+  public removeDialog = async (id: string): Promise<DialogResources> => {
     if (id === 'Main') {
       throw new Error(`Main dialog can't be removed`);
     }
@@ -237,9 +258,13 @@ export class BotProject {
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
-    await this._removeFile(dialog.relativePath);
+    const relativePathBase = dialog.relativePath.replace(/\.dialog$/, '');
+    await this._removeFile(`${relativePathBase}.dialog`);
+    await this._removeFile(`${relativePathBase}.lg`);
+    await this._removeFile(`${relativePathBase}.lu`);
     this._cleanUp(dialog.relativePath);
-    return this.dialogs;
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
   public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
@@ -503,13 +528,18 @@ export class BotProject {
      * + AddToDo (folder)
      *   - AddToDo.dialog
      *   - AddToDo.lu                     // if not exist, auto create it
+     *   - AddToDo.lg                     // if not exist, auto create it
      */
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      const exist = luFiles.findIndex((luFile: LuFile) => luFile.relativePath === targetLuFilePath);
-      if (exist === -1) {
+      if (luFiles.findIndex((luFile: LuFile) => luFile.relativePath === targetLuFilePath) === -1) {
         await this._createFile(targetLuFilePath, '');
+      }
+      // dialog/lg should in the same path folder
+      const targetLgFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lg');
+      if (lgFiles.findIndex((lgFile: LgFile) => lgFile.relativePath === targetLgFilePath) === -1) {
+        await this._createFile(targetLgFilePath, '');
       }
     }
 

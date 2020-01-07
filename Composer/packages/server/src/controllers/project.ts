@@ -169,19 +169,8 @@ async function createDialog(req: Request, res: Response) {
     const id = req.body.id;
 
     //dir = id
-    const dialogs = await currentProject.createDialog(id, content);
-    const luFiles = await currentProject.createLuFile(id, '');
-    let lgFiles = await currentProject.createLgFile(id, '');
-
-    // update lg import
-    const lgCommonFile = lgFiles.find(({ id }) => id === 'common');
-    if (lgCommonFile) {
-      const lgFilePath = lgFiles.find(file => file.id === id)?.relativePath || '';
-      const content = `[import](${Path.relative(Path.dirname(lgFilePath), lgCommonFile.relativePath)})`;
-      lgFiles = await currentProject.updateLgFile(id, content);
-    }
-
-    res.status(200).json({ dialogs, luFiles, lgFiles });
+    const dialogResources = await currentProject.createDialog(id, content);
+    res.status(200).json(dialogResources);
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -192,10 +181,8 @@ async function createDialog(req: Request, res: Response) {
 async function removeDialog(req: Request, res: Response) {
   const currentProject = BotProjectService.getCurrentBotProject();
   if (currentProject !== undefined) {
-    const dialogs = await currentProject.removeDialog(req.params.dialogId);
-    const luFiles = await currentProject.removeLuFile(req.params.dialogId);
-    const lgFiles = await currentProject.removeLgFile(req.params.dialogId);
-    res.status(200).json({ dialogs, luFiles, lgFiles });
+    const dialogResources = await currentProject.removeDialog(req.params.dialogId);
+    res.status(200).json(dialogResources);
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
