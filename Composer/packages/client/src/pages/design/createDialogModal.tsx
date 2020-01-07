@@ -14,13 +14,13 @@ import { StoreContext } from '../../store';
 
 import { name, description, styles as wizardStyles } from './styles';
 
-interface CreateDialogParams {
+interface DialogFormData {
   name: string;
   description: string;
 }
 
-interface CreateDialogProps {
-  onSubmit: (createDialogParams: CreateDialogParams) => void;
+interface CreateDialogModalProps {
+  onSubmit: (dialogFormData: DialogFormData) => void;
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
@@ -28,15 +28,13 @@ interface CreateDialogProps {
   isOpen: boolean;
 }
 
-const initialFormDataError = {};
-
-export const CreateDialog: React.FC<CreateDialogProps> = props => {
+export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
-  const initalFormData: CreateDialogParams = { name: '', description: '' };
-  const [formData, setFormData] = useState(initalFormData);
-  const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>(initialFormDataError);
+  const initialFormData: DialogFormData = { name: '', description: '' };
+  const [formData, setFormData] = useState(initialFormData);
+  const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -46,7 +44,7 @@ export const CreateDialog: React.FC<CreateDialogProps> = props => {
   };
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = (data: CreateDialogParams) => {
+  const validateForm = (data: DialogFormData) => {
     const errors: { name?: string } = {};
     const { name } = data;
 
@@ -56,7 +54,7 @@ export const CreateDialog: React.FC<CreateDialogProps> = props => {
           'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
         );
       }
-      if (dialogs.findIndex(dialog => dialog.id === name) > -1) {
+      if (dialogs.some(dialog => dialog.id === name)) {
         errors.name = formatMessage('Duplicaton of dialog name');
       }
     } else {

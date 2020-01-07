@@ -28,7 +28,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
-import { CreateDialog } from './createDialog';
+import { CreateDialogModal } from './createDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -399,7 +399,7 @@ function DesignPage(props) {
         </div>
       </div>
       {state.showCreateDialogModal && (
-        <CreateDialog
+        <CreateDialogModal
           isOpen={state.showCreateDialogModal}
           onDismiss={() => actions.createDialogCancel()}
           onSubmit={onSubmit}

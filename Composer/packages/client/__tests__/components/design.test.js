@@ -9,7 +9,7 @@ import { dialogs } from '../constants.json';
 
 import { TriggerCreationModal } from './../../src/components/ProjectTree/TriggerCreationModal';
 import { ProjectTree } from './../../src/components/ProjectTree';
-import { CreateDialog } from './../../src/pages/design/createDialog';
+import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
     const dialogId = 'Main';
@@ -42,7 +42,9 @@ describe('<ProjectTree/>', () => {
       isOpen = false;
     });
     const handleSubmit = jest.fn(() => {});
-    const { getByText } = render(<CreateDialog isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />);
+    const { getByText } = render(
+      <CreateDialogModal isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
+    );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);
     expect(isOpen).toBe(false);
