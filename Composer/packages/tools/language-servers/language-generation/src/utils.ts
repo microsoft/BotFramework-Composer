@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { readFileSync } from 'fs';
-
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import {
   LGResource,
@@ -133,10 +131,4 @@ export function getTemplateRange(content: string, { name, parameters = [], body 
 export function updateTemplateInContent(content: string, { name, parameters = [], body }: Template): string {
   const resource = LGParser.parse(content);
   return resource.updateTemplate(name, name, parameters, body).toString();
-}
-
-export function loadMemoryVariavles(path: string): object {
-  const text = readFileSync(path, 'utf-8');
-  const varibles = JSON.parse(text);
-  return varibles;
 }

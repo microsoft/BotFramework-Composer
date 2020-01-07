@@ -77,3 +77,5 @@ export interface LgFile {
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }
+
+export type FileResolver = (id: string) => FileInfo | undefined;

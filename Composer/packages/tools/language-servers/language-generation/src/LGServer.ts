@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { readFile } from 'fs';
-import * as path from 'path';
 
 import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
@@ -16,10 +15,12 @@ import {
   CompletionItem,
   Range,
 } from 'vscode-languageserver-types';
+import { FileResolver, FileInfo } from '@bfc/indexers';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 
+import { staticMemoryVariables } from './staticMemoryVariables';
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
@@ -32,11 +33,11 @@ import {
   convertDiagnostics,
   isValid,
   TRange,
-  loadMemoryVariavles,
 } from './utils';
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
+const UpdateUserDefinedMemoryVariablesMethod = 'updateUserDefinedMemoryVariables';
 
 const allowedCompletionStates = ['expression'];
 
@@ -45,9 +46,10 @@ export class LGServer {
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = []; // LG Documents Store
-  private readonly memoryVariables: object;
+  private readonly staticMemoryVariables: object;
+  private userDefinedMemoryVariables: object = {};
 
-  constructor(protected readonly connection: IConnection) {
+  constructor(protected readonly connection: IConnection, protected readonly resolver?: FileResolver) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -88,15 +90,33 @@ export class LGServer {
           this.validate(textDocument);
         }
       }
+
+      if (UpdateUserDefinedMemoryVariablesMethod === method) {
+        const { uri } = params;
+        this.updateUserDefinedMemoryVariables(uri);
+      }
     });
 
-    const curPath = __dirname;
-    const targetPath = path.join(curPath, '../resources/memoryVariables.json');
-    this.memoryVariables = loadMemoryVariavles(targetPath);
+    // load static memory from file
+    this.staticMemoryVariables = staticMemoryVariables;
   }
 
   start() {
     this.connection.listen();
+  }
+
+  protected updateUserDefinedMemoryVariables(uri: string): void {
+    if (!this.resolver) {
+      return;
+    }
+
+    const userMemoryFileInfo: FileInfo | undefined = this.resolver(uri);
+    if (!userMemoryFileInfo) {
+      return;
+    }
+
+    const content: string = userMemoryFileInfo.content;
+    this.userDefinedMemoryVariables = JSON.parse(content);
   }
 
   protected getLGDocument(document: TextDocument): LGDocument | undefined {
@@ -196,19 +216,6 @@ export class LGServer {
 
     //initialize the root state to plaintext
     state.push('PlainText');
-
-    // find out the context state of current cursor, offer precise suggestion and completion etc.
-    /**
-     * - Hi, @{name}, what's the meaning of 'state'
-     * - Hi---------, @{name}--------, what-------' ------s the meaning of "state"
-     * - <plaintext>, @{<expression>}, <plaintext><single><plaintext>------<double>
-     * in LG, functions and template can only be valid in expression.
-     * expression means a valid expression, eg: @{add(1,2)}
-     * single means single quote string,  eg: 'hello world'
-     * double means double quote string, eg: "hello world"
-     * including single and double since "@{text}" is a string rather that expression.
-     * plaintext means text after dash, eg: - Today is monday
-     */
     let i = 0;
     while (i < lineContent.length) {
       const char = lineContent.charAt(i);
@@ -243,6 +250,51 @@ export class LGServer {
     return { matched: true, state: finalState };
   }
 
+  protected matchingCompletionProperty(propertyList: string[], ...objects: object[]): CompletionItem[] {
+    const completionList: CompletionItem[] = [];
+    for (const obj of objects) {
+      let tempVariable = obj;
+      for (const property of propertyList) {
+        if (property in obj) {
+          tempVariable = tempVariable[property];
+        } else {
+          tempVariable = {};
+        }
+      }
+
+      if (!tempVariable || Object.keys(tempVariable).length === 0) {
+        continue;
+      }
+
+      if (tempVariable instanceof Object) {
+        Object.keys(tempVariable).forEach(e => {
+          const item = {
+            label: e.toString(),
+            kind: CompletionItemKind.Property,
+            insertText: e.toString(),
+            documentation: '',
+          };
+          if (!completionList.includes(item)) {
+            completionList.push(item);
+          }
+        });
+      } else if (typeof tempVariable === 'string') {
+        const item = {
+          label: tempVariable,
+          kind: CompletionItemKind.Property,
+          insertText: tempVariable,
+          documentation: '',
+        };
+
+        if (!completionList.includes(item)) {
+          completionList.push(item);
+        }
+      }
+    }
+
+    return completionList;
+  }
+
   protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] | null {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return null;
@@ -256,41 +308,14 @@ export class LGServer {
 
     let propertyList = wordAtCurRange.split('.');
     propertyList = propertyList.slice(0, propertyList.length - 1);
-    let tempVariable: object = this.memoryVariables;
-    for (const property of propertyList) {
-      if (property in tempVariable) {
-        tempVariable = tempVariable[property];
-      } else {
-        tempVariable = {};
-      }
-    }
+    const completionList = this.matchingCompletionProperty(
+      propertyList,
+      this.staticMemoryVariables,
+      this.userDefinedMemoryVariables
+    );
 
-    if (!tempVariable || Object.keys(tempVariable).length === 0) {
-      return null;
-    }
-
-    if (tempVariable instanceof Object) {
-      const completionList: CompletionItem[] = [];
-      Object.keys(tempVariable).forEach(e => {
-        const item = {
-          label: e.toString(),
-          kind: CompletionItemKind.Property,
-          insertText: e.toString(),
-          documentation: '',
-        };
-        completionList.push(item);
-      });
-
+    if (completionList.length > 0) {
       return completionList;
-    } else if (typeof tempVariable === 'string') {
-      return [
-        {
-          label: tempVariable,
-          kind: CompletionItemKind.Property,
-          insertText: tempVariable,
-          documentation: '',
-        },
-      ];
     }
 
     return null;
@@ -301,6 +326,11 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDotFlag = wordAtCurRange.endsWith('.');
+
     const text = this.getLGDocumentContent(document);
     let templates: LGTemplate[] = [];
 
@@ -334,7 +364,7 @@ export class LGServer {
     });
 
     const completionVariableList = this.findValidMemoryVariables(params);
-    const completionRootVariableList = Object.keys(this.memoryVariables).map(e => {
+    const completionRootVariableList = Object.keys(this.staticMemoryVariables).map(e => {
       return {
         label: e.toString(),
         kind: CompletionItemKind.Property,
@@ -356,11 +386,13 @@ export class LGServer {
       if (completionVariableList !== null && completionVariableList.length > 0) {
         return Promise.resolve({ isIncomplete: true, items: completionVariableList });
       } else {
-        return Promise.resolve({ isIncomplete: true, items: completionList });
+        if (!endWithDotFlag) {
+          return Promise.resolve({ isIncomplete: true, items: completionList });
+        }
       }
-    } else {
-      return Promise.resolve(null);
     }
+
+    return Promise.resolve(null);
   }
 
   protected validate(document: TextDocument): void {
