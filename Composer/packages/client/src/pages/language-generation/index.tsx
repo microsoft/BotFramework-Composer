@@ -16,15 +16,14 @@ import {
   flexContent,
   actionButton,
   contentEditor,
-  dialogItem,
 } from '../language-understanding/styles';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
+import { NavLinks } from '../../components/NavLinks';
 
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
 import { TestController } from './../../TestController';
-
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
@@ -37,20 +36,19 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const path = props.location?.pathname ?? '';
   const { fileId = 'common' } = props;
-  const edit = /edit(\/)*$/.test(path);
+  const edit = /\/edit(\/)?$/.test(path);
   const file = lgFiles.find(({ id }) => id === 'common');
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
-    const mainDialog = newDialogLinks.find(link => link.id === 'Main');
+    //const mainDialog = newDialogLinks.find(link => link.id === 'Main');
 
-    if (mainDialog) {
-      newDialogLinks.splice(mainDialogIndex, 1);
+    if (mainDialogIndex > -1) {
+      const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
-
     newDialogLinks.splice(0, 0, {
       id: 'common',
       key: 'common',
@@ -105,19 +103,7 @@ const LGPage: React.FC<LGPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          {navLinks.map(dialog => {
-            return (
-              <div
-                css={dialogItem(fileId === dialog.id)}
-                key={dialog.id}
-                onClick={() => {
-                  onSelect(dialog.id);
-                }}
-              >
-                {dialog.name}
-              </div>
-            );
-          })}
+          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>
         {file && (
           <div css={contentEditor}>

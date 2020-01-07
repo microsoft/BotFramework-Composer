@@ -12,10 +12,10 @@ import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
+import { NavLinks } from '../../components/NavLinks';
 
 import TableView from './table-view';
 import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor, dialogItem } from './styles';
-
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface DefineConversationProps {
@@ -27,9 +27,9 @@ const LUPage: React.FC<DefineConversationProps> = props => {
   const { luFiles, dialogs } = state;
   const [editMode, setEditMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const subPath = props['*'];
-  const isRoot = subPath === '';
-  const activeDialog = dialogs.find(item => item.id === subPath);
+  const fileId = props['*'];
+  const isRoot = fileId === '';
+  const activeDialog = dialogs.find(item => item.id === fileId);
 
   const luFile = luFiles.length && activeDialog ? luFiles.find(luFile => luFile.id === activeDialog.id) : null;
 
@@ -44,13 +44,6 @@ const LUPage: React.FC<DefineConversationProps> = props => {
       newDialogLinks.splice(mainDialogIndex, 1);
       newDialogLinks.splice(0, 0, mainDialog);
     }
-
-    newDialogLinks.splice(0, 0, {
-      id: '_all',
-      key: '_all',
-      name: 'All',
-      url: '_all',
-    });
     return newDialogLinks;
   }, [dialogs]);
 
@@ -64,7 +57,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     if (!isRoot && !activeDialog && dialogs.length) {
       navigateTo('/language-understanding');
     }
-  }, [subPath, dialogs]);
+  }, [fileId, dialogs]);
 
   useEffect(() => {
     setErrorMsg('');
@@ -126,19 +119,16 @@ const LUPage: React.FC<DefineConversationProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          {navLinks.map(dialog => {
-            return (
-              <div
-                css={dialogItem(activeDialog ? activeDialog.id === dialog.id : dialog.id === '_all')}
-                key={dialog.id}
-                onClick={() => {
-                  onSelect(dialog.id);
-                }}
-              >
-                {dialog.name}
-              </div>
-            );
-          })}
+          <div
+            css={dialogItem(!activeDialog)}
+            key={'_all'}
+            onClick={() => {
+              onSelect('_all');
+            }}
+          >
+            {'All'}
+          </div>
+          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>
         <div css={contentEditor}>
           {editMode ? (
