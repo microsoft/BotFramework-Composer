@@ -6,11 +6,13 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { IChoice } from '@bfc/shared';
 import { JSONSchema6 } from 'json-schema';
+import formatMessage from 'format-message';
 
 import { ExpressionWidget } from '../../../widgets/ExpressionWidget';
 import { FormContext } from '../../../types';
 
 interface DynamicChoicesProps {
+  id: string;
   formContext: FormContext;
   formData?: any;
   onChange?: (value: IChoice) => void;
@@ -19,6 +21,7 @@ interface DynamicChoicesProps {
 
 export const DynamicChoices: React.FC<DynamicChoicesProps> = props => {
   const {
+    id,
     formContext,
     formData = '',
     onChange,
@@ -27,6 +30,8 @@ export const DynamicChoices: React.FC<DynamicChoicesProps> = props => {
   } = props;
   return (
     <ExpressionWidget
+      id={id}
+      label={formatMessage('Choice')}
       formContext={formContext}
       onChange={(_, value = '') => onChange && onChange(value)}
       options={{ hideLabel: true }}
