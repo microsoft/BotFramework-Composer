@@ -69,7 +69,7 @@
     "express": "^4.16.4",
     "form-data": "^2.3.3",
     "format-message": "^6.2.1",
-    "get-port": "^5.0.0",
+    "get-port": "^5.1.0",
     "globby": "^9.1.0",
     "http-errors": "^1.7.2",
     "immer": "^2.1.4",
