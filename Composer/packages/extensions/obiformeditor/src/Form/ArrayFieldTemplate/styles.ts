@@ -18,6 +18,7 @@ export const arrayItem = css`
 export const arrayItemField = css`
   flex: 1;
   display: flex;
+  min-width: 0;
 `;
 
 export const arrayItemInputFieldContainer = css`
