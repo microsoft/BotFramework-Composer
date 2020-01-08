@@ -80,3 +80,5 @@ export interface LgFile {
   templates: LgTemplate[];
   forceUpdate?: boolean;
 }
+
+export type FileResolver = (id: string) => FileInfo | undefined;

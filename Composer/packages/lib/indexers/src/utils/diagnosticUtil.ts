@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic, DiagnosticSeverity } from '../diagnostic';
+import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
+import { LgTemplate } from '../type';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -18,6 +19,29 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
     msg += createSingleMessage(d);
     return msg;
   }, '');
+}
+
+export function offsetRange(range: Range, offset: number): Range {
+  return new Range(
+    new Position(range.start.line - offset, range.start.character),
+    new Position(range.end.line - offset, range.end.character)
+  );
+}
+
+export function filterTemplateDiagnostics(diagnostics: Diagnostic[], template: LgTemplate): Diagnostic[] {
+  const { range } = template;
+  if (!range) return diagnostics;
+  const filteredDiags = diagnostics.filter(d => {
+    return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+  });
+  const offset = range.startLineNumber;
+  return filteredDiags.map(d => {
+    const { range } = d;
+    if (range) {
+      d.range = offsetRange(range, offset);
+    }
+    return d;
+  });
 }
 
 export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {

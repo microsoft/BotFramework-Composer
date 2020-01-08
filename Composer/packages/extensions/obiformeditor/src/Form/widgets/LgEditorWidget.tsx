@@ -4,8 +4,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
-import get from 'lodash/get';
 import debounce from 'lodash/debounce';
+import { filterTemplateDiagnostics } from '@bfc/indexers';
 
 import { FormContext } from '../types';
 
@@ -61,6 +61,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       return template.name === lgName;
     })) || {
     name: lgName,
+    parameters: [],
     body: getInitialTemplate(name, value),
     range: {
       startLineNumber: 0,
@@ -68,25 +69,15 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic =
-    lgFile &&
-    lgFile.diagnostics.find(d => {
-      return (
-        d.range &&
-        template.range &&
-        d.range.start.line >= template.range.startLineNumber &&
-        d.range.end.line <= template.range.endLineNumber
-      );
-    });
+  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
 
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
     : '';
   const [localValue, setLocalValue] = useState(template.body);
   const lgOption = {
-    inline: true,
-    content: get(lgFile, 'content', ''),
-    template,
+    fileId: lgFileId,
+    templateId: lgName,
   };
 
   const onChange = (body: string) => {
