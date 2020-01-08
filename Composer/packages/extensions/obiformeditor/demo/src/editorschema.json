@@ -36,6 +36,9 @@
     "Microsoft.DeleteProperty": {
       "title": "Delete a Property"
     },
+    "Microsoft.DeleteProperties": {
+      "title": "Delete Properties"
+    },
     "Microsoft.EditArray": {
       "title": "Edit an Array Property"
     },
@@ -127,6 +130,9 @@
     },
     "Microsoft.SetProperty": {
       "title": "Set a Property"
+    },
+    "Microsoft.SetProperties": {
+      "title": "Set Properties"
     },
     "Microsoft.SwitchCondition": {
       "title": "Branch: Switch"

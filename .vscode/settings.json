@@ -5,15 +5,16 @@
     "*.schema": "json"
   },
   "eslint.enable": true,
-  "eslint.autoFixOnSave": true,
   "eslint.packageManager": "yarn",
   "eslint.validate": [
     "javascript",
     "javascriptreact",
-    { "language": "typescript", "autoFix": true },
-    { "language": "typescriptreact", "autoFix": true }
+    "typescript",
+    "typescriptreact",
   ],
   "eslint.workingDirectories": ["./Composer"],
-  "editor.formatOnSave": true,
-  "typescript.tsdk": "./Composer/node_modules/typescript/lib"
+  "typescript.tsdk": "./Composer/node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

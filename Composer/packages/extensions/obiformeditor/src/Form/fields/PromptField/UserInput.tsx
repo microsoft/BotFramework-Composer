@@ -47,7 +47,7 @@ export const UserInput: React.FC<UserInputProps> = props => {
       </div>
       {getSchema('outputFormat') && (
         <div css={field}>
-          <SelectWidget
+          <TextWidget
             onChange={onChange('outputFormat')}
             schema={getSchema('outputFormat')}
             id={idSchema.outputFormat.__id}
@@ -55,7 +55,6 @@ export const UserInput: React.FC<UserInputProps> = props => {
             label={formatMessage('Output Format')}
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
-            options={{ enumOptions: getOptions(getSchema('outputFormat')) }}
           />
         </div>
       )}

@@ -19,10 +19,9 @@
           },
           "property": "user.petname",
           "prompt": "Welcome! Here is a http request sample, please enter a name for you visual pet.",
-          "maxTurnCount": 2147483647,
+          "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "true",
-          "outputFormat": "none"
+          "allowInterruptions": "true"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -40,8 +39,7 @@
           "prompt": "Now please enter the id of your pet, this could help you find your pet later.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.HttpRequest",
@@ -90,8 +88,7 @@
           "prompt": "Now try to specify the id of your pet, and I will help your find it out from the store.",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.HttpRequest",

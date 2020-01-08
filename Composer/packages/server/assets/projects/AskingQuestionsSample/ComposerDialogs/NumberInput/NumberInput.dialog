@@ -22,8 +22,7 @@
           "invalidPrompt": "Please input a number.",
           "maxTurnCount": 2,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
-          "outputFormat": "float",
+          "allowInterruptions": "false",
           "defaultLocale": "en-us"
         },
         {
@@ -43,7 +42,6 @@
           "maxTurnCount": 2147483647,
           "alwaysPrompt": true,
           "allowInterruptions": "false",
-          "outputFormat": "float",
           "defaultLocale": "en-us"
         },
         {

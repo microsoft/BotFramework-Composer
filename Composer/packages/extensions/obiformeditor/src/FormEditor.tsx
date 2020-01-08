@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { Global, jsx } from '@emotion/core';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash/merge';
@@ -34,6 +34,12 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
 
+  useEffect(() => {
+    if (!isEqual(localData, data)) {
+      setLocalData(data);
+    }
+  }, [data]);
+
   const formErrors = useMemo(() => {
     if (props.currentDialog && props.currentDialog.diagnostics) {
       const currentPath = props.focusPath.replace('#', '');
@@ -41,9 +47,13 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
 
       return diagnostics.reduce((errors, d) => {
         const [dPath, dType, dProp] = d.path?.split('#') || [];
+        const dPropName = dProp
+          ?.replace('[', '')
+          ?.replace(']', '')
+          ?.replace('.', '');
 
-        if (dPath === currentPath && dType === type && dProp) {
-          errors[dProp] = d.message;
+        if (dPath === currentPath && dType === type && dPropName) {
+          errors[dPropName] = d.message;
         }
 
         return errors;
