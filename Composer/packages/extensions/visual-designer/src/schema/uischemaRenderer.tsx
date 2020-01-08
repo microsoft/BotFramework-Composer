@@ -40,12 +40,9 @@ const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Eleme
   return <Widget data={inputData} {...contextProps} {...props} />;
 };
 
-const renderFallbackElement = (data: BaseSchema) => <></>;
-
 export const renderSDKType = (data: BaseSchema, context?: { menu: JSX.Element; onClick }): JSX.Element => {
   const $type = get(data, '$type');
-  const schema: UIWidget = get(uiSchema, $type);
-  if (!schema) return renderFallbackElement(data);
+  const schema = get(uiSchema, $type, uiSchema.default);
 
   return renderWidget(data, schema, context);
 };
