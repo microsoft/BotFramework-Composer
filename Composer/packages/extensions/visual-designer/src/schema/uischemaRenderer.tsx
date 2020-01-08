@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { BaseSchema } from '@bfc/shared';
+import { BaseSchema, generateSDKTitle } from '@bfc/shared';
 import get from 'lodash/get';
+
+import { ActionCard } from '../widgets/ActionCard';
 
 import { uiSchema } from './uischema';
 import { UIWidget, UI_WIDGET_KEY, UIWidgetProp } from './uischema.types';
@@ -40,12 +42,14 @@ const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Eleme
   return <Widget data={inputData} {...contextProps} {...props} />;
 };
 
-const renderFallbackElement = (data: BaseSchema) => <></>;
+const renderFallbackElement = (data: BaseSchema, context) => {
+  return <ActionCard data={data} title={generateSDKTitle(data)} menu={context.menu} onClick={context.onClick} />;
+};
 
 export const renderSDKType = (data: BaseSchema, context?: { menu: JSX.Element; onClick }): JSX.Element => {
   const $type = get(data, '$type');
   const schema: UIWidget = get(uiSchema, $type);
-  if (!schema) return renderFallbackElement(data);
+  if (!schema) return renderFallbackElement(data, context);
 
   return renderWidget(data, schema, context);
 };
