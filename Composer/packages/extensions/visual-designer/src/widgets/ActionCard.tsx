@@ -8,12 +8,12 @@ import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeMenu } from '../components/menus/NodeMenu';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
   icon: string;
   content: string | number | JSX.Element;
-  menu: JSX.Element;
   colors?: {
     theme: string;
     icon: string;
@@ -32,7 +32,6 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   title,
   icon,
   content,
-  menu,
   colors = DefaultCardColor,
 }) => {
   const header = generateSDKTitle(data, title);
@@ -40,7 +39,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   return (
     <FormCard
       header={header}
-      corner={menu}
+      corner={<NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
       label={content}
       nodeColors={nodeColors}
