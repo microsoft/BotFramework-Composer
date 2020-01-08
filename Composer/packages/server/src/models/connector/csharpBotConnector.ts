@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-import Path from 'path';
+// import Path from 'path';
 
 import axios from 'axios';
 import archiver from 'archiver';
 import FormData from 'form-data';
+import { FileInfo } from '@bfc/indexers';
 
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
@@ -43,9 +44,11 @@ export class CSharpBotConnector implements IBotConnector {
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = Path.join(currentProject.dataDir);
+    await currentProject.index();
+    // const dir = Path.join(currentProject.dataDir);
     const luisConfig = currentProject.luPublisher.getLuisConfig();
-    await this.archiveDirectory(dir, './tmp.zip');
+    await this.createZipFromFiles(currentProject.files, './tmp.zip');
+    // await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
@@ -71,6 +74,23 @@ export class CSharpBotConnector implements IBotConnector {
     } catch (err) {
       throw new Error('Unable to sync content to bot runtime');
     }
+  };
+
+  createZipFromFiles = (files: FileInfo[], dest: string) => {
+    return new Promise((resolve, reject) => {
+      const archive = archiver('zip');
+      const output = fs.createWriteStream(dest);
+
+      archive.pipe(output);
+      for (const f in files) {
+        const file = files[f];
+        archive.append(file.content, { name: file.relativePath });
+      }
+      archive.finalize();
+
+      output.on('close', () => resolve(archive));
+      archive.on('error', err => reject(err));
+    });
   };
 
   archiveDirectory = (src: string, dest: string) => {
