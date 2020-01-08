@@ -10,8 +10,8 @@ import { ObiColors } from '../constants/ElementColors';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
-  icon?: string;
-  content?: string | number | JSX.Element;
+  icon: string;
+  content: string | number | JSX.Element;
   menu: JSX.Element;
   colors?: {
     theme: string;
