@@ -19,11 +19,14 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import pluginLoader from './services/pluginLoader';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
 app.set('view options', { delimiter: '?' });
 app.use(compression());
+
+pluginLoader.loadPluginsFromFolder(__dirname + '/../../../plugins');
 
 const { login, authorize } = getAuthProvider();
 
