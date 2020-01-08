@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import { Path } from '../../utility/path';
-import { LocalDiskStorage } from '../storage/localDiskStorage';
+import { IFileStorage } from '../storage/interface';
+import StorageService from '../../services/storage';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
 
@@ -11,11 +12,12 @@ const subPath = 'ComposerDialogs/settings/appsettings.json';
 
 export class FileSettingManager implements ISettingManager {
   private basePath: string;
-  protected storage: LocalDiskStorage;
+  protected storage: IFileStorage;
 
   constructor(basePath: string) {
     this.basePath = basePath;
-    this.storage = new LocalDiskStorage();
+    // todo: this should not just load default
+    this.storage = StorageService.getStorageClient('default');
   }
 
   public get = async (slot: string, obfuscate: boolean): Promise<any> => {

@@ -72,16 +72,26 @@ export class BotProject {
   }
 
   public index = async () => {
+    console.log('--------> INDEXING!');
     this.files = await this._getFiles();
+    console.log('---------> GOT FILES');
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
+    console.log('---------> GOT SETTINGS');
     this.dialogs = this.indexDialog();
+    console.log('---------> GOT DIALOGS INDEXED');
     this.lgFiles = lgIndexer.index(this.files);
+    console.log('---------> GOT LG INDEXED');
     this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+    console.log('---------> GOT LU INDEXED');
     await this._checkProjectStructure();
+    console.log('---------> PROJECT STRUCTURE CHCKED');
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
     }
+    console.log('---------> LUIS CONFIGU SET');
+
     await this.luPublisher.loadStatus(this.luFiles.map(f => f.relativePath));
+    console.log('---------> LU PUBISH STATUS LOADED');
   };
 
   public getIndexes = () => {

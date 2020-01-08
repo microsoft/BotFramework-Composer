@@ -78,8 +78,14 @@ export class BotProjectService {
     // TODO: possible race condition with openProject and saveProjectAs
     // eslint-disable-next-line require-atomic-updates
     BotProjectService.currentBotProject = new BotProject(locationRef);
+
+    console.log('------------> BOT PROJECT OPENED!');
     await BotProjectService.currentBotProject.index();
+
+    console.log('------------> BOT PROJECT INDEXED!');
+
     BotProjectService.addRecentProject(locationRef.path);
+    console.log('--------------> BOT PROJECT ADDED TO RECENT LIST');
   };
 
   private static addRecentProject = (path: string): void => {

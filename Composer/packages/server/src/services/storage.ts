@@ -100,10 +100,10 @@ class StorageService {
     });
   };
 
-  private isBotFolder = (path: string) => {
+  private isBotFolder = async (storage: IFileStorage, path: string) => {
     // locate Main.dialog
     const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
-    const isbot = fs.existsSync(mainPath);
+    const isbot = await storage.exists(mainPath);
     return isbot;
   };
 
@@ -121,7 +121,7 @@ class StorageService {
         }
         return {
           name: childName,
-          type: childStat.isDir ? (this.isBotFolder(childAbsPath) ? 'bot' : 'folder') : 'file',
+          type: childStat.isDir ? ((await this.isBotFolder(storage, childAbsPath)) ? 'bot' : 'folder') : 'file',
           path: childAbsPath,
           lastModified: childStat.lastModified, // just keep the previous interface
           size: childStat.size, // just keep the previous interface
