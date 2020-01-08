@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, combineMessage, isValid } from '@bfc/indexers';
+import { lgIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -56,17 +56,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   }, [fileId, templateId]);
 
   useEffect(() => {
-    const currentDiagnostics =
-      inlineMode && template
-        ? diagnostics.filter(d => {
-            return (
-              d.range &&
-              template.range &&
-              d.range.start.line >= template.range.startLineNumber &&
-              d.range.end.line <= template.range.endLineNumber
-            );
-          })
-        : diagnostics;
+    const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
     const isInvalid = !isValid(currentDiagnostics);
     const text = isInvalid ? combineMessage(currentDiagnostics) : '';
@@ -150,9 +140,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const lgOption = template
     ? {
-        inline: inlineMode,
-        content: file?.content ?? '',
-        template,
+        fileId: 'common',
+        templateId: template?.name || '',
       }
     : undefined;
 
