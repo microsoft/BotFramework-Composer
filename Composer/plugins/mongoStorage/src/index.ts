@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -30,19 +29,9 @@ const fileSchema = new mongoose.Schema({
   },
 });
 
-// const folderSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//   },
-//   path: {
-//     type: String,
-//   },
-// });
-
 export class MongoStorage implements IFileStorage {
   private db: any;
   private files: any;
-  // private folders: any;
 
   constructor(conn: StorageConnection) {
     // connect to Mongo
@@ -51,20 +40,19 @@ export class MongoStorage implements IFileStorage {
 
     mongoose.connect('mongodb://localhost:27017/composer', {});
     this.db = mongoose.connection;
-    // eslint-disable-next-line no-console
-    this.db.on('error', console.error.bind(console, 'connection error:'));
+    this.db.on('error', (err) => {
+      throw new Error(err);
+    });
     this.db.once('open', function() {
       // we're connected!
       // eslint-disable-next-line no-console
-      console.log('CONNECTED TO MONGO');
+      // console.log('CONNECTED TO MONGO');
     });
 
     this.files = mongoose.model('file', fileSchema, 'files');
-    // this.folders = mongoose.model('folder', folderSchema, 'folders');
   }
 
   async stat(path: string): Promise<any> {
-    console.log('MONGO STAT', path);
     return new Promise((resolve, reject) => {
       this.files.findOne({ path: path }, (err, file) => {
         if (err) {
@@ -92,7 +80,6 @@ export class MongoStorage implements IFileStorage {
               reject(err);
             } else if (!file) {
               if (path == '/') {
-                console.log('Requested ROOT path', path);
                 resolve({
                   isDir: true,
                   isFile: false,
@@ -106,7 +93,7 @@ export class MongoStorage implements IFileStorage {
               resolve({
                 isDir: true,
                 isFile: false,
-                // lastModified: file.lastModified,
+                lastModified: file.lastModified,
                 size: 0, // TODO: ??
               });
             }
@@ -117,7 +104,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
-    console.log('MONGO READFILE', path);
     return new Promise((resolve, reject) => {
       this.files.findOne({ path: path }, (err, file) => {
         if (err) {
@@ -132,7 +118,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async readDir(path: string): Promise<string[]> {
-    console.log('MONGO READDIR', path);
     return new Promise((resolve, reject) => {
       // find all files where the parent folder matches the specified path
       this.files.find({ folder: path }, 'path', {}, (err, files) => {
@@ -153,7 +138,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async exists(path: string): Promise<boolean> {
-    console.log('MONGO EXISTS', path);
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       await this.stat(path);
@@ -164,7 +148,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
-    console.log('MONGO WRITEFILE', path);
     return new Promise((resolve, reject) => {
       const doc = {
         path: path,
@@ -184,7 +167,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async removeFile(path: string): Promise<void> {
-    console.log('MONGO REMOVEFILE', path);
     return new Promise((resolve, reject) => {
       this.files.deleteOne({ path: path }, (err) => {
         if (err) {
@@ -197,7 +179,6 @@ export class MongoStorage implements IFileStorage {
   }
 
   async mkDir(path: string, options?: MakeDirectoryOptions): Promise<void> {
-    console.log('MONGO MKDIR', path);
     return new Promise((resolve, reject) => {
       const doc = {
         path: path,
@@ -217,20 +198,31 @@ export class MongoStorage implements IFileStorage {
   }
 
   async rmDir(path: string): Promise<void> {
-    console.log('MONGO RMDIR', path);
+    return new Promise((resolve, reject) => {
+      const root = pathLib.dirname(path);
+      const pattern = new RegExp(path + '.*');
+
+      // remove all files inside this folder, any subfolder, including the folder itself
+      this.files.remove({ folder: pattern }, (err, removed) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
     // await rmDir(path);
     // noop required - there are no real folders, this is just part of the file records
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
-    console.log('MONGO GLOB', pattern, path);
     return new Promise((resolve, reject) => {
       //convert the glob to a regexp
       let regex = globToRegExp(pattern, {globstar: true});
 
       // make sure the folder contains the root path but can also have other stuff
       let pathPattern = new RegExp(path + '.*');
-      console.log('MONGO GLOB QUERY', regex, pathPattern);
       this.files.find({ path: regex, folder: pathPattern}, (err, files) => {
         if (err) {
           reject(err);
