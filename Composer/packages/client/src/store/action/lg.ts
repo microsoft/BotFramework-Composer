@@ -1,21 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
+import { ExternalUpdate, UpdateScope, UpdateAction } from '@bfc/shared';
 
+import { ActionTypes } from '../../constants';
+import httpClient from '../../utils/httpUtil';
 import * as lgUtil from '../../utils/lgUtil';
-import { ActionCreator, State } from '../types';
 import { undoable } from '../middlewares/undo';
+import { ActionCreator, State } from '../types';
 
-import { ActionTypes } from './../../constants';
-import httpClient from './../../utils/httpUtil';
+import { recordExternalUpdate } from './shell';
 
-export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content, forceUpdate = false }) => {
+export const updateLgFile: ActionCreator = async (store, { id, content }, externalUpdate?: ExternalUpdate) => {
+  const { dispatch } = store;
   try {
     const response = await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, content });
     dispatch({
       type: ActionTypes.UPDATE_LG_SUCCESS,
-      payload: { id, response, forceUpdate },
+      payload: { response },
     });
+    if (externalUpdate) recordExternalUpdate(store, externalUpdate);
   } catch (err) {
     dispatch({
       type: ActionTypes.UPDATE_LG_FAILURE,
@@ -28,12 +32,16 @@ export const updateLgFile: ActionCreator = async ({ dispatch }, { id, content, f
 export const undoableUpdateLgFile = undoable(
   updateLgFile,
   (state: State, args: any[], isEmpty) => {
+    const externalUpdate = {
+      scope: UpdateScope.LgFile,
+      action: UpdateAction.UndoRedo,
+    };
     if (isEmpty) {
       const id = args[0].id;
       const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
-      return [{ id, content, forceUpdate: true }];
+      return [{ id, content }, externalUpdate];
     } else {
-      return [{ ...args[0], forceUpdate: true }];
+      return [{ ...args[0] }, externalUpdate];
     }
   },
   updateLgFile,

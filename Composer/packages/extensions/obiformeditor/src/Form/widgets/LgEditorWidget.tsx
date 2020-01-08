@@ -3,7 +3,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import { LgMetaData, LgTemplateRef } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, UpdateScope } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 
@@ -96,10 +96,10 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
 
   //undo and redo can update the localValue
   useEffect(() => {
-    if (template.body !== localValue && lgFile?.forceUpdate) {
+    if (formContext.externalUpdate?.scope === UpdateScope.LgFile && template.body !== localValue) {
       setLocalValue(template.body);
     }
-  }, [template.body]);
+  }, [template.body, formContext.externalUpdate]);
 
   return (
     <LgEditor

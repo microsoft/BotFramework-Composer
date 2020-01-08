@@ -3,6 +3,8 @@
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
 
+import { UpdateAction, UpdateScope } from '../constant';
+
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides?: any;
@@ -14,6 +16,11 @@ export interface BotSchemas {
   editor: EditorSchema;
   sdk?: any;
   diagnostics?: any[];
+}
+
+export interface ExternalUpdate {
+  scope: UpdateScope;
+  action: UpdateAction;
 }
 
 export interface ShellData {
@@ -35,6 +42,7 @@ export interface ShellData {
   lgFiles: any[];
   luFiles: any[];
   schemas: BotSchemas;
+  externalUpdate?: ExternalUpdate;
 }
 
 export interface ShellApi {

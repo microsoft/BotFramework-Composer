@@ -10,3 +10,13 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
+
+export enum UpdateScope {
+  DialogFile,
+  LgFile,
+  LuFile,
+}
+
+export enum UpdateAction {
+  UndoRedo,
+}

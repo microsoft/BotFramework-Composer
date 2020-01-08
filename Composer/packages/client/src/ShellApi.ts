@@ -45,7 +45,17 @@ const FileTargetTypes = {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
 
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
+  const {
+    dialogs,
+    schemas,
+    lgFiles,
+    luFiles,
+    designPageLocation,
+    focusPath,
+    breadcrumb,
+    botName,
+    externalUpdate,
+  } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -279,6 +289,17 @@ export const ShellApi: React.FC = () => {
     apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
+  function resetDataAll(externalUpdate?) {
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
+      apiClient.apiCall('reset', { ...getState(VISUAL_EDITOR), externalUpdate }, editorWindow);
+    }
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
+      apiClient.apiCall('reset', { ...getState(FORM_EDITOR), externalUpdate }, editorWindow);
+    }
+  }
+
   useEffect(() => {
     apiClient.connect();
 
@@ -324,18 +345,13 @@ export const ShellApi: React.FC = () => {
   }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
-    if (window.frames[VISUAL_EDITOR]) {
-      const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
-    }
+    resetDataAll();
   }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
+  //reset the date if the data is not updated by editor
   useEffect(() => {
-    if (window.frames[FORM_EDITOR]) {
-      const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+    resetDataAll(externalUpdate);
+  }, [externalUpdate]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);

@@ -30,7 +30,6 @@ export interface DialogInfo {
   referredDialogs: string[];
   relativePath: string;
   triggers: ITrigger[];
-  forceUpdate?: boolean;
 }
 
 export interface Intent {
@@ -78,7 +77,6 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
-  forceUpdate?: boolean;
 }
 
 export type FileResolver = (id: string) => FileInfo | undefined;

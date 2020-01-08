@@ -68,11 +68,11 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
   return state;
 };
 
-const updateDialog: ReducerFunc = (state, { id, content, forceUpdate = false }) => {
+const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
       const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
-      return { ...dialog, ...result, forceUpdate };
+      return { ...dialog, ...result };
     }
     return dialog;
   });
@@ -105,13 +105,8 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { id, response, forceUpdate = false }) => {
-  //set forceUpdate = true to let editors force update
-  state.lgFiles = response.data.lgFiles.map(lgFile => {
-    if (lgFile.id === id) lgFile.forceUpdate = forceUpdate;
-    return lgFile;
-  });
-
+const updateLgTemplate: ReducerFunc = (state, { response }) => {
+  state.lgFiles = response.data.lgFiles;
   return state;
 };
 
@@ -286,6 +281,10 @@ const noOp: ReducerFunc = state => {
   return state;
 };
 
+const recordExternalUpdate: ReducerFunc = (state, { externalUpdate }) => {
+  return (state.externalUpdate = externalUpdate);
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_PROJECT_FAILURE]: noOp,
@@ -339,4 +338,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.RECORD_EXTERNAL_UPDATE]: recordExternalUpdate,
 });
