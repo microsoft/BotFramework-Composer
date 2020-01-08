@@ -3,8 +3,11 @@
 
 import { Path } from '../../utility/path';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
+import log from '../../logger';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
+
+const debug = log.extend('file-settings-manager');
 
 // TODO: this causes tests to fail
 const subPath = 'ComposerDialogs/settings/appsettings.json';
@@ -50,6 +53,7 @@ export class FileSettingManager implements ISettingManager {
 
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
+      debug('Storage path does not exist. Creating directory now: %s', dir);
       await this.storage.mkDir(dir, { recursive: true });
     }
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));

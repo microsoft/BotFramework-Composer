@@ -16,7 +16,8 @@ import { IFileStorage } from '../storage/interface';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
-const buildDebug = log.extend('build bot runtime');
+const debug = log.extend('bot-runtime');
+const buildDebug = debug.extend('build');
 const runtimeDebugs: { [key: string]: debug.Debugger } = {};
 export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
@@ -30,7 +31,7 @@ export class CSharpBotConnector implements IBotConnector {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
       runtime.kill(signal);
-      runtimeDebugs[pid]('successfully stopped bot runtime: %d', pid);
+      runtimeDebugs[pid]('successfully stopped bot runtime');
       delete CSharpBotConnector.botRuntimes[pid];
     }
   };
@@ -109,7 +110,7 @@ export class CSharpBotConnector implements IBotConnector {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        currentDebugger('bot runtime (%d): %s', child.pid, data);
+        currentDebugger('%s', data);
         resolve(child.pid);
       });
 
@@ -128,7 +129,7 @@ export class CSharpBotConnector implements IBotConnector {
     });
 
     child.on('message', msg => {
-      currentDebugger('bot runtime received: %s', msg);
+      currentDebugger('%s', msg);
     });
   };
 
@@ -151,8 +152,8 @@ export class CSharpBotConnector implements IBotConnector {
         }
       );
       // extend runtime debugger
-      runtimeDebugs[runtime.pid] = log.extend(`process ${runtime.pid}`);
-      runtimeDebugs[runtime.pid]('bot runtime started. pid: %d', runtime.pid);
+      runtimeDebugs[runtime.pid] = debug.extend(`process (${runtime.pid})`);
+      runtimeDebugs[runtime.pid]('bot runtime started');
       CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
       this.addListeners(runtime, this.stop, resolve, reject);
     });
