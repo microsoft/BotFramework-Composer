@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
+import { PromptTab } from '@bfc/shared';
 
-import { parseTypeToFragment, PromptTab } from './../../src';
+import { parseTypeToFragment } from '../../../src/utils/convertUtils';
 
 describe('parseTypeToFragment', () => {
   it('should return corrent tab name', () => {
