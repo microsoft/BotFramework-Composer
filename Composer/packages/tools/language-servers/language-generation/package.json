@@ -15,6 +15,7 @@
     "lint:typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@bfc/indexers": "*",
     "botbuilder-lg": "4.7.0-preview.93464",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
