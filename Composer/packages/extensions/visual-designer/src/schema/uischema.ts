@@ -8,6 +8,9 @@ import { ActionCard } from '../widgets/ActionCard';
 import { UISchema } from './uischema.types';
 
 export const uiSchema: UISchema = {
+  default: {
+    'ui:widget': ActionCard,
+  },
   [SDKTypes.EditArray]: {
     'ui:widget': ActionCard,
     content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
