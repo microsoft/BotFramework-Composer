@@ -30,7 +30,9 @@ context('Notification Page', () => {
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.get('[name="__TestToDoBotWithLuisSample.Main"]').click({ multiple: true });
+    cy.findByTestId('LUEditor').within(() => {
+      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+    });
 
     cy.get('.toggleEditMode button').click();
     cy.get('textarea').type('test lu syntax error');
