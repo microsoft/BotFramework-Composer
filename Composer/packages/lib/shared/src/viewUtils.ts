@@ -5,6 +5,7 @@ import {
   IContextualMenuItem,
   IContextualMenuProps,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
+import get from 'lodash/get';
 
 import { SDKTypes } from './types';
 import { ConceptLabels } from './labelMap';
@@ -284,4 +285,18 @@ export function getDialogGroupByType(type) {
   });
 
   return dialogType;
+}
+
+const truncateSDKType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
+
+/**
+ * Title priority: $designer.name > title from sdk schema > customize title > $type suffix
+ * @param customizedTitile customized title
+ */
+export function generateSDKTitle(data, customizedTitile?: string) {
+  const $type = get(data, '$type');
+  const titleFrom$designer = get(data, '$designer.name');
+  const titleFromShared = get(ConceptLabels, [$type, 'title']);
+  const titleFrom$type = truncateSDKType($type);
+  return titleFrom$designer || customizedTitile || titleFromShared || titleFrom$type;
 }
