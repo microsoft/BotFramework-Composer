@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, FileResolver, FileInfo } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, LgFile } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -29,6 +29,7 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
+  LGFileResolver,
 } from './utils';
 
 const { check, indexOne } = lgIndexer;
@@ -44,7 +45,7 @@ export class LGServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = [];
 
-  constructor(protected readonly connection: IConnection, protected readonly resolver?: FileResolver) {
+  constructor(protected readonly connection: IConnection, protected readonly resolver?: LGFileResolver) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -120,9 +121,9 @@ export class LGServer {
     const { uri } = document;
     const { fileId, templateId } = lgOption || {};
     const index = () => {
-      let lgFile: FileInfo | undefined;
+      let lgFile: LgFile | undefined;
       if (this.resolver && fileId) {
-        lgFile = this.resolver(`${fileId}.lg`);
+        lgFile = this.resolver(fileId);
         if (!lgFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
@@ -130,14 +131,12 @@ export class LGServer {
           return;
         }
       } else {
-        lgFile = {
-          name: `${uri}.lg`,
-          path: '/',
-          relativePath: './',
+        lgFile = indexOne({
+          id: uri,
           content: document.getText(),
-        };
+        });
       }
-      return indexOne(lgFile);
+      return lgFile;
     };
     const lgDocument: LGDocument = {
       uri,

@@ -3,7 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
-import { FileInfo } from '@bfc/indexers';
+import { LgFile } from '@bfc/indexers';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -33,9 +33,9 @@ export class BotProjectService {
     }
   }
 
-  public static fileResolver(name: string): FileInfo | undefined {
+  public static lgFileResolver(id: string): LgFile | undefined {
     BotProjectService.initialize();
-    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
+    return BotProjectService.currentBotProject?.lgFiles.find(file => file.id === id);
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

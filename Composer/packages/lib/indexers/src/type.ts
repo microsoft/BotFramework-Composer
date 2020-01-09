@@ -72,10 +72,13 @@ export interface LgTemplate {
 
 export interface LgFile {
   id: string;
-  relativePath: string;
+  relativePath?: string;
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }
 
-export type FileResolver = (id: string) => FileInfo | undefined;
+export interface TextFile {
+  id: string;
+  content: string;
+}

@@ -48,6 +48,8 @@ export interface LGParsedResource {
   diagnostics: Diagnostic[];
 }
 
+export type LGFileResolver = (id: string) => LgFile | undefined;
+
 export function getRangeAtPosition(document: TextDocument, position: Position): Range | undefined {
   const text = document.getText();
   const line = position.line;

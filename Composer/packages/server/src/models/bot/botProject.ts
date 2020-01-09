@@ -3,6 +3,7 @@
 
 import fs from 'fs';
 
+import { ImportResolverDelegate } from 'botbuilder-lg';
 import { getNewDesigner } from '@bfc/shared';
 import {
   FileInfo,
@@ -80,8 +81,8 @@ export class BotProject {
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogs = this.indexDialog();
-    this.lgFiles = lgIndexer.index(this.files);
+    this.dialogs = this.indexDialogs();
+    this.lgFiles = this.indexLgFiles();
     this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
     await this._checkProjectStructure();
     if (this.settings) {
@@ -239,7 +240,7 @@ export class BotProject {
     await this._createFile(`${relativePathBase}.lu`, '');
 
     let lgInitialContent = '';
-    const lgCommonFile = this.lgFiles.find(({ id }) => id === 'common');
+    const lgCommonFile = this.files.find(({ name }) => name === 'common.lg');
     if (lgCommonFile) {
       lgInitialContent = `[import](${Path.relative(dir, lgCommonFile.relativePath)})`;
     }
@@ -268,7 +269,7 @@ export class BotProject {
   };
 
   public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
@@ -277,7 +278,7 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
@@ -287,7 +288,7 @@ export class BotProject {
   };
 
   public removeLgFile = async (id: string): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
@@ -453,8 +454,46 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  private indexDialog() {
+  private indexDialogs() {
     return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
+  }
+
+  private indexLgFiles(): LgFile[] {
+    return this.files
+      .filter(({ name }) => name.endsWith('.lg'))
+      .map(({ name, content }) => {
+        return lgIndexer.indexOne(
+          {
+            id: Path.basename(name, '.lg'),
+            content,
+          },
+          this._fileImportResolver('.lg')
+        );
+      });
+  }
+
+  /**
+   *
+   * @param ext file extension.
+   * return an importResolver
+   */
+  private _fileImportResolver(ext: string): ImportResolverDelegate {
+    /**
+     *  @param source current file id
+     *  @param id imported file path
+     *  for example:
+     * < -- AddToDo.lg -->
+     * [import](../common/common.lg)
+     * <EOF>
+     * source is "AddToDo"
+     * id is "../common/common.lg"
+     */
+    return (source: string, id: string) => {
+      const sourceFilePath = this.files.find(file => file.name === `${source}${ext}`)?.relativePath || '';
+      const targetFilePath = Path.join(Path.dirname(sourceFilePath), id);
+      const targetFile = this.files.find(file => file.relativePath === targetFilePath);
+      return { id, content: targetFile ? targetFile.content : '' };
+    };
   }
 
   // re index according to file change in a certain path
@@ -463,10 +502,10 @@ export class BotProject {
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogs = this.indexDialog();
+        this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files);
+        this.lgFiles = this.indexLgFiles();
         break;
       case '.lu':
         this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
@@ -520,8 +559,7 @@ export class BotProject {
   // check project stracture is valid or not, if not, try fix it.
   private _checkProjectStructure = async () => {
     const dialogs: DialogInfo[] = this.dialogs;
-    const luFiles: LuFile[] = this.luFiles;
-    const lgFiles: LgFile[] = this.lgFiles;
+    const files: FileInfo[] = this.files;
 
     // ensure each dialog folder have a lu file, e.g.
     /**
@@ -533,12 +571,12 @@ export class BotProject {
     for (const dialog of dialogs) {
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      if (luFiles.findIndex((luFile: LuFile) => luFile.relativePath === targetLuFilePath) === -1) {
+      if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
         await this._createFile(targetLuFilePath, '');
       }
       // dialog/lg should in the same path folder
       const targetLgFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lg');
-      if (lgFiles.findIndex((lgFile: LgFile) => lgFile.relativePath === targetLgFilePath) === -1) {
+      if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
         await this._createFile(targetLgFilePath, '');
       }
     }
@@ -553,8 +591,8 @@ export class BotProject {
      */
     for (const dialog of dialogs) {
       const { lgFile, luFile } = dialog;
-      const lgExist = lgFiles.findIndex((file: LgFile) => file.id === lgFile);
-      const luExist = luFiles.findIndex((file: LuFile) => file.id === luFile);
+      const lgExist = files.findIndex(({ name }) => name === `${lgFile}.lg`);
+      const luExist = files.findIndex(({ name }) => name === `${luFile}.lu`);
 
       if (lgFile && lgExist === -1) {
         throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
