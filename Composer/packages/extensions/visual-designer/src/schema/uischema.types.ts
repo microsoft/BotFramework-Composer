@@ -4,9 +4,13 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKTypes } from '@bfc/shared';
 
+export enum UISchemaBuiltinKeys {
+  default = 'default',
+}
+
 /** schema */
 export type UISchema = {
-  [key in SDKTypes]?: UIWidget;
+  [key in SDKTypes | UISchemaBuiltinKeys]?: UIWidget;
 };
 
 /** widget */
