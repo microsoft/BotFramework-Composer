@@ -33,7 +33,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         {
             var registrations = new TypeRegistration[]
             {
-                new TypeRegistration<BeginSkill>("Microsoft.BeginSkill") { CustomDeserializer = new BeginSkillLoader(skillHttpClient, conversationState, settings.MicrosoftAppId) }
+                new TypeRegistration<BeginSkill>("Microsoft.BeginSkill") { CustomDeserializer = new BeginSkillLoader(skillHttpClient, conversationState, settings.MicrosoftAppId, settings.SkillHostEndpoint) }
             };
             this
               .UseStorage(storage)

@@ -8,27 +8,30 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class BeginSkillLoader : ICustomDeserializer
     {
-        private SkillHttpClient skillHttpClient;
+        private readonly SkillHttpClient skillHttpClient;
 
-        private ConversationState conversationState;
+        private readonly ConversationState conversationState;
 
-        private string appId;
+        private readonly string appId;
 
-        public BeginSkillLoader(SkillHttpClient httpClient, ConversationState conversationState, string appId)
+        private readonly string skillHostEndpoint;
+
+        public BeginSkillLoader(SkillHttpClient httpClient, ConversationState conversationState, string appId, string skillHostEndpoint)
         {
             this.skillHttpClient = httpClient;
             this.conversationState = conversationState;
             this.appId = appId;
+            this.skillHostEndpoint = skillHostEndpoint;
         }
 
         public object Load(JToken obj, JsonSerializer serializer, Type type)
         {
-            var orignalObject = obj.ToObject<BeginSkill>(serializer);
-            orignalObject.SetHttpClient(this.skillHttpClient);
-            orignalObject.SetConversationState(this.conversationState);
-            orignalObject.SetAppId(this.appId);
-
-            return orignalObject;
+            var originalObject = obj.ToObject<BeginSkill>(serializer);
+            originalObject.SetHttpClient(this.skillHttpClient);
+            originalObject.SetConversationState(this.conversationState);
+            originalObject.SetAppId(this.appId);
+            originalObject.SetSkillHostEndpoint(this.skillHostEndpoint);
+            return originalObject;
         }
     }
 }

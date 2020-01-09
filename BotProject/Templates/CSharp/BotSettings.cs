@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using Microsoft.ApplicationInsights.Extensibility;
@@ -17,6 +17,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public CosmosDbStorageOptions CosmosDb { get; set; }
 
         public TelemetryConfiguration AppInsights { get; set; }
+
+        public string SkillHostEndpoint { get; set; }
 
         public class BlobStorageConfiguration
         {
