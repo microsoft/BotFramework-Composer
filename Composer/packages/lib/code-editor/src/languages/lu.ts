@@ -8,7 +8,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
     tokenizer: {
       root: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
-        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
+        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
       ],
 
@@ -16,20 +16,21 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: '@utterrance' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
-        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
+        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/.*$/, 'intent'],
       ],
       utterrance: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
-        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entity_mode' }],
-        [/({)(\s*[\w.\:\s]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
+        [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
+        [/({)(\s*[\w.:\s]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
         [/({\s*@)(\s*[\w.]*\s*)(})/, ['lb', 'entity-name', 'rb']],
+        // eslint-disable-next-line security/detect-unsafe-regex
         [/\s*\[[\w\s.]+\]\(.{1,2}\/[\w.*]+(#[\w.?]+)?\)/, 'import-desc'],
         [/./, 'utterance-other'],
       ],
-      entity_mode: [
+      entityMode: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],

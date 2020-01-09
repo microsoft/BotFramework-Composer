@@ -104,6 +104,7 @@ export class LUServer {
     const position = params.position;
     const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
     const curLineContent = document.getText(range);
+    // eslint-disable-next-line security/detect-unsafe-regex
     const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.]+\s*=\s*[\w.]+\}[^{}]*)+/;
 
     if (labeledUtterRegex.test(curLineContent)) {
