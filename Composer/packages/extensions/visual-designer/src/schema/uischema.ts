@@ -4,12 +4,24 @@
 import { SDKTypes } from '@bfc/shared';
 
 import { ActionCard } from '../widgets/ActionCard';
+import { ActivityRenderer } from '../widgets/ActivityRenderer';
+import { ElementIcon } from '../utils/obiPropertyResolver';
+import { ObiColors } from '../constants/ElementColors';
 
 import { UISchema } from './uischema.types';
 
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
+  },
+  [SDKTypes.SendActivity]: {
+    'ui:widget': ActivityRenderer,
+    field: 'activity',
+    icon: ElementIcon.MessageBot,
+    colors: {
+      theme: ObiColors.BlueMagenta20,
+      icon: ObiColors.BlueMagenta30,
+    },
   },
   [SDKTypes.EditArray]: {
     'ui:widget': ActionCard,
