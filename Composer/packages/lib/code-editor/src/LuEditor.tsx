@@ -48,18 +48,6 @@ declare global {
   }
 }
 
-async function initializeDocuments(luOption: LUOption | undefined, uri: string) {
-  const languageClient = window.monacoLUEditorInstance;
-  if (languageClient) {
-    await languageClient.onReady();
-    if (luOption && luOption.inline) {
-      languageClient.sendRequest('initializeDocuments', { ...luOption, uri });
-    } else {
-      languageClient.sendRequest('initializeDocuments', { uri });
-    }
-  }
-}
-
 function convertEdit(serverEdit: any) {
   return {
     range: {
@@ -80,7 +68,7 @@ export function LuEditor(props: LULSPEditorProps) {
     formatOnType: true,
   };
 
-  const { luOption, languageServer, ...restProps } = props;
+  const { languageServer, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
   const editorWillMount = (monaco: typeof monacoEditor) => {
@@ -105,7 +93,7 @@ export function LuEditor(props: LULSPEditorProps) {
           if (!window.monacoLUEditorInstance) {
             window.monacoLUEditorInstance = languageClient;
           }
-          initializeDocuments(luOption, uri);
+
           editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, function() {
             const position = editor.getPosition();
             languageClient.sendRequest('labelingExperienceRequest', { uri, position });
@@ -122,9 +110,6 @@ export function LuEditor(props: LULSPEditorProps) {
           connection.onClose(() => disposable.dispose());
         },
       });
-    } else {
-      const uri = get(editor.getModel(), 'uri._formatted', '');
-      initializeDocuments(luOption, uri);
     }
 
     if (typeof props.editorDidMount === 'function') {

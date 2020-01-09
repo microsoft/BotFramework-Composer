@@ -110,14 +110,11 @@ export class LUServer {
     if (labeledUtterRegex.test(curLineContent)) {
       const newText = this.removeLabelsInUtterance(curLineContent);
       const newPos = Position.create(position.lineNumber, 0);
-      const newUnlalbelTail = newText + '\n';
-      const item: TextEdit = TextEdit.insert(newPos, newUnlalbelTail);
-      const edits: TextEdit[] = [];
+      const newUnlalbelText = newText + '\n';
+      const editPreviousLine: TextEdit = TextEdit.insert(newPos, newUnlalbelText);
       const newPos2 = Position.create(position.lineNumber - 1, 0);
-      const newUnlalbelAHead = newText + '\n';
-      const item2: TextEdit = TextEdit.insert(newPos2, newUnlalbelAHead);
-      edits.push(item);
-      edits.push(item2);
+      const editNextLine: TextEdit = TextEdit.insert(newPos2, newUnlalbelText);
+      const edits: TextEdit[] = [editPreviousLine, editNextLine];
       this.connection.sendNotification('docFormat', { edits: edits });
     }
   }
