@@ -16,6 +16,7 @@ import { ObiColors } from '../constants/ElementColors';
 export interface ActivityRenderer extends WidgetContainerProps {
   /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPropmt'...) */
   field: string;
+  icon: ElementIcon;
   colors?: {
     theme: string;
     icon: string;
@@ -32,6 +33,7 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
   data,
   onEvent,
   field,
+  icon = ElementIcon.MessageBot,
   colors = DefaultThemeColor,
 }) => {
   const designerId = get(data, '$designer.id');
@@ -44,7 +46,7 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
     <FormCard
       header={generateSDKTitle(data)}
       label={templateText}
-      icon={ElementIcon.MessageBot}
+      icon={icon}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       nodeColors={nodeColors}
       onClick={() => {
