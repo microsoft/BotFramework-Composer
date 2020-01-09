@@ -73,7 +73,7 @@ export class LUServer {
     this.connection.listen();
   }
 
-  protected removeLabelsInutterance(lineContent: string): string {
+  protected removeLabelsInUtterance(lineContent: string): string {
     const entityLabelRegex = /\{\s*[\w.]+\s*=\s*[\w.]+\s*\}/g;
     let match: RegExpMatchArray | null;
     let resultStr = '';
@@ -107,7 +107,7 @@ export class LUServer {
     const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.]+\s*=\s*[\w.]+\}[^{}]*)+/;
 
     if (labeledUtterRegex.test(curLineContent)) {
-      const newText = this.removeLabelsInutterance(curLineContent);
+      const newText = this.removeLabelsInUtterance(curLineContent);
       const newPos = Position.create(position.lineNumber, 0);
       const newUnlalbelTail = newText + '\n';
       const item: TextEdit = TextEdit.insert(newPos, newUnlalbelTail);

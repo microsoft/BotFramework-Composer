@@ -115,7 +115,6 @@ export function LuEditor(props: LULSPEditorProps) {
               const edits = result.edits.map(e => {
                 return convertEdit(e);
               });
-              console.log(edits);
               editor.executeEdits(uri, edits);
             })
           );
