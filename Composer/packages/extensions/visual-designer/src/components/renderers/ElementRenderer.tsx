@@ -20,11 +20,16 @@ import {
   UserInput,
   InvalidPromptBrick,
 } from '../nodes/index';
+import { ConditionNode } from '../nodes/steps/ConditionNode';
+import { ForeachDetail } from '../nodes/steps/ForeachDetail';
+import { ForeachPageDetail } from '../nodes/steps/ForeachPageDetail';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
-  [ObiTypes.ConditionNode]: DefaultRenderer,
+  [ObiTypes.ConditionNode]: ConditionNode,
+  [ObiTypes.ForeachDetail]: ForeachDetail,
+  [ObiTypes.ForeachPageDetail]: ForeachPageDetail,
   [ObiTypes.ReplaceDialog]: ReplaceDialog,
   [ObiTypes.SendActivity]: ActivityRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
