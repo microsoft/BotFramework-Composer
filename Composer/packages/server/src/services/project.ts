@@ -38,6 +38,11 @@ export class BotProjectService {
     return BotProjectService.currentBotProject?.files.find(file => file.name === name);
   }
 
+  public static memoryResolver(name: string): FileInfo | undefined {
+    BotProjectService.initialize();
+    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
+  }
+
   public static getCurrentBotProject(): BotProject | undefined {
     BotProjectService.initialize();
     return BotProjectService.currentBotProject;
