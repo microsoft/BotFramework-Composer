@@ -56,17 +56,69 @@ export class LUServer {
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
             firstTriggerCharacter: '\n',
-            moreTriggerCharacter: ['Tab', 'Shift'],
           },
         },
       };
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
+    this.connection.onRequest((method, params) => {
+      if (method === 'labelingExperienceRequest') {
+        this.labelingExperienceHandler(params);
+      }
+    });
   }
 
   start() {
     this.connection.listen();
+  }
+
+  protected removeLabelsInutterance(lineContent: string): string {
+    const entityLabelRegex = /\{\s*[\w.]+\s*=\s*[\w.]+\s*\}/g;
+    let match: RegExpMatchArray | null;
+    let resultStr = '';
+    let startIdx = 0;
+    while ((match = entityLabelRegex.exec(lineContent))) {
+      const leftBoundIdx = match.index;
+      const rightBoundIdx = entityLabelRegex.lastIndex;
+      resultStr += lineContent.slice(startIdx, leftBoundIdx);
+      if (leftBoundIdx && rightBoundIdx) {
+        const entityStr = lineContent.slice(leftBoundIdx + 1, rightBoundIdx - 1);
+        if (entityStr.split('=').length == 2) {
+          const enitity = entityStr.split('=')[1].trim();
+          resultStr += enitity;
+        }
+
+        startIdx = rightBoundIdx;
+      }
+    }
+
+    return resultStr;
+  }
+
+  protected labelingExperienceHandler(params: any): void {
+    const document: TextDocument | undefined = this.documents.get(params.uri);
+    if (!document) {
+      return;
+    }
+    const position = params.position;
+    const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
+    const curLineContent = document.getText(range);
+    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.]+\s*=\s*[\w.]+\}[^{}]*)+/;
+
+    if (labeledUtterRegex.test(curLineContent)) {
+      const newText = this.removeLabelsInutterance(curLineContent);
+      const newPos = Position.create(position.lineNumber, 0);
+      const newUnlalbelTail = newText + '\n';
+      const item: TextEdit = TextEdit.insert(newPos, newUnlalbelTail);
+      const edits: TextEdit[] = [];
+      const newPos2 = Position.create(position.lineNumber - 1, 0);
+      const newUnlalbelAHead = newText + '\n';
+      const item2: TextEdit = TextEdit.insert(newPos2, newUnlalbelAHead);
+      edits.push(item);
+      edits.push(item2);
+      this.connection.sendNotification('docFormat', { edits: edits });
+    }
   }
 
   protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {

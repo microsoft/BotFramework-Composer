@@ -60,6 +60,19 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
   }
 }
 
+function convertEdit(serverEdit: any) {
+  return {
+    range: {
+      startLineNumber: serverEdit.range.start.line + 1,
+      startColumn: serverEdit.range.start.character,
+      endLineNumber: serverEdit.range.end.line + 1,
+      endColumn: serverEdit.range.end.character,
+    },
+    text: serverEdit.newText,
+    forceMoveMarkers: true,
+  };
+}
+
 export function LuEditor(props: LULSPEditorProps) {
   const options = {
     quickSuggestions: true,
@@ -81,7 +94,7 @@ export function LuEditor(props: LULSPEditorProps) {
       window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
     }
 
-    if (!window.monacoLGEditorInstance) {
+    if (!window.monacoLUEditorInstance) {
       const uri = get(editor.getModel(), 'uri._formatted', '');
       const url = createUrl(luServer);
       const webSocket: WebSocket = createWebSocket(url);
@@ -89,10 +102,23 @@ export function LuEditor(props: LULSPEditorProps) {
         webSocket,
         onConnection: (connection: MessageConnection) => {
           const languageClient = createLanguageClient('LU Language Client', ['botframeworklu'], connection);
-          if (!window.monacoLGEditorInstance) {
-            window.monacoLGEditorInstance = languageClient;
+          if (!window.monacoLUEditorInstance) {
+            window.monacoLUEditorInstance = languageClient;
           }
           initializeDocuments(luOption, uri);
+          editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, function() {
+            const position = editor.getPosition();
+            languageClient.sendRequest('labelingExperienceRequest', { uri, position });
+          });
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('docFormat', result => {
+              const edits = result.edits.map(e => {
+                return convertEdit(e);
+              });
+              console.log(edits);
+              editor.executeEdits(uri, edits);
+            })
+          );
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
         },
