@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { seedNewDialog, SDKTypes } from '@bfc/shared';
 
-import { renderSDKType } from '../../../src/schema/uischemaRenderer';
+import { UISchemaRenderer } from '../../../src/schema/uischemaRenderer';
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
 
@@ -14,13 +14,17 @@ export class VisualSDKDemo extends Component {
 
   seedInitialActions() {
     const initialTypes = [
+      SDKTypes.SendActivity,
       SDKTypes.EditArray,
       SDKTypes.InitProperty,
       SDKTypes.SetProperties,
       SDKTypes.SetProperty,
       SDKTypes.DeleteProperties,
       SDKTypes.DeleteProperty,
+      SDKTypes.BeginDialog,
       SDKTypes.EndDialog,
+      SDKTypes.RepeatDialog,
+      SDKTypes.ReplaceDialog,
       SDKTypes.CancelAllDialogs,
       SDKTypes.EmitEvent,
     ];
@@ -58,7 +62,9 @@ export class VisualSDKDemo extends Component {
             }}
           />
         </div>
-        <div className="action-preview--visual">{renderSDKType(action)}</div>
+        <div className="action-preview--visual">
+          <UISchemaRenderer id={`actions[${index}]`} data={action} onEvent={() => null} />
+        </div>
       </div>
     );
   }
