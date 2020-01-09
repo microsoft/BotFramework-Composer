@@ -7,8 +7,19 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "author": "",
-  "license": "ISC",
+  "extendsComposer": {
+    "storage": {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "className": "MongoStorage",
+      "defaultPath": "/",
+      "settings": { 
+        "mongoURI": "mongodb://localhost:27017/composer"
+      }
+    }
+  },
+  "author": "benbro@microsoft.com",
+  "license": "MIT",
   "dependencies": {
     "glob-to-regexp": "^0.4.1",
     "mongoose": "^5.8.5"
