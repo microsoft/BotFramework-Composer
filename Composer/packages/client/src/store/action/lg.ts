@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import { ExternalUpdate, UpdateScope, UpdateAction } from '@bfc/shared';
 
 import { ActionTypes } from '../../constants';
@@ -9,24 +10,28 @@ import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State } from '../types';
 
+import { fetchProject } from './project';
+import { setError } from './error';
 import { recordExternalUpdate } from './shell';
 
-export const updateLgFile: ActionCreator = async (store, { id, content }, externalUpdate?: ExternalUpdate) => {
-  const { dispatch } = store;
+//remove editor's debounce and add it to action
+export const debouncedUpdateLg = debounce(async (store, id, content) => {
   try {
-    const response = await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, content });
-    dispatch({
-      type: ActionTypes.UPDATE_LG_SUCCESS,
-      payload: { response },
-    });
-    if (externalUpdate) recordExternalUpdate(store, externalUpdate);
+    await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, content });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_LG_FAILURE,
-      payload: null,
-      error: err,
+    setError(store, {
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'UPDATE LG ERROR',
     });
+    //if update lg error, do a full refresh.
+    fetchProject(store);
   }
+}, 500);
+
+export const updateLgFile: ActionCreator = async (store, { id, content }, externalUpdate?: ExternalUpdate) => {
+  store.dispatch({ type: ActionTypes.UPDATE_LG_SUCCESS, payload: { id, content } });
+  recordExternalUpdate(store, externalUpdate);
+  debouncedUpdateLg(store, id, content);
 };
 
 export const undoableUpdateLgFile = undoable(

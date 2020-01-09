@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
+import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -105,8 +106,21 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { response }) => {
-  state.lgFiles = response.data.lgFiles;
+const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
+  state.lgFiles = state.lgFiles.map(lgFile => {
+    if (lgFile.id === id) {
+      const { check, parse } = lgIndexer;
+      const diagnostics = check(content, id);
+      let templates: LgTemplate[] = [];
+      try {
+        templates = parse(content, id);
+      } catch (err) {
+        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+      }
+      return { ...lgFile, templates, diagnostics };
+    }
+    return lgFile;
+  });
   return state;
 };
 

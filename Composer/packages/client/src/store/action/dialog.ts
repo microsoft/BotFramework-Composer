@@ -116,7 +116,7 @@ export const debouncedUpdateDialog = debounce(async (store, id, content) => {
 
 export const updateDialogBase: ActionCreator = (store, { id, content }, externalUpdate?: ExternalUpdate) => {
   store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
-  if (externalUpdate) recordExternalUpdate(store, externalUpdate);
+  recordExternalUpdate(store, externalUpdate);
   debouncedUpdateDialog(store, id, content);
 };
 

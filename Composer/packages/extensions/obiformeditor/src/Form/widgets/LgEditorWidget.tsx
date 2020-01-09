@@ -4,7 +4,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef, UpdateScope } from '@bfc/shared';
-import debounce from 'lodash/debounce';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 
 import { FormContext } from '../types';
@@ -49,9 +48,9 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
-    debounce((body: string) => {
+    (body: string) => {
       formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
-    }, 500),
+    },
     [lgName, lgFileId]
   );
 
@@ -87,7 +86,6 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
         updateLgTemplate(body);
         props.onChange(new LgTemplateRef(lgName).toString());
       } else {
-        updateLgTemplate.flush();
         formContext.shellApi.removeLgTemplate(lgFileId, lgName);
         props.onChange();
       }
