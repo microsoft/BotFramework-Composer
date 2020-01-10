@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, FileResolver, FileInfo } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, FileResolver, FileInfo, MemoryResolver } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -29,13 +29,13 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
+  MemoryVaribleCompletionResult,
 } from './utils';
 
 const { check, indexOne } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
-const UpdateUserDefinedMemoryVariablesMethod = 'updateUserDefinedMemoryVariables';
 
 const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE } = LGCursorState;
 
@@ -49,7 +49,7 @@ export class LGServer {
   constructor(
     protected readonly connection: IConnection,
     protected readonly resolver?: FileResolver,
-    protected readonly memoryResolver?: FileResolver
+    protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
@@ -91,11 +91,6 @@ export class LGServer {
           this.validate(textDocument);
         }
       }
-
-      if (UpdateUserDefinedMemoryVariablesMethod === method) {
-        const { uri } = params;
-        this.updateMemoryVariables(uri);
-      }
     });
   }
 
@@ -120,21 +115,17 @@ export class LGServer {
       return;
     }
 
-    const memoryFileInfo: FileInfo | undefined = this.memoryResolver(uri);
-    if (!memoryFileInfo) {
+    const memoryFileInfo: string[] | undefined = this.memoryResolver(uri);
+    if (!memoryFileInfo || memoryFileInfo.length === 0) {
       return;
     }
 
-    const content: string = memoryFileInfo.content;
-    if (content) {
-      const variablesList = content.split(',');
-      variablesList.forEach(variable => {
-        const propertyList = variable.split('.');
-        if (propertyList.length >= 1) {
-          this.updateObject(propertyList);
-        }
-      });
-    }
+    memoryFileInfo.forEach(variable => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList);
+      }
+    });
   }
 
   protected validateLgOption(document: TextDocument, lgOption?: LGOption) {
@@ -372,26 +363,34 @@ export class LGServer {
     return completionList;
   }
 
-  protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] | null {
+  protected findValidMemoryVariables(params: TextDocumentPositionParams): MemoryVaribleCompletionResult {
     const document = this.documents.get(params.textDocument.uri);
-    if (!document) return null;
+    if (!document) return { endWithDotFlag: false, completionList: [] };
     const position = params.position;
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
+    const flag = wordAtCurRange.endsWith('.');
 
-    if (!wordAtCurRange || !wordAtCurRange.endsWith('.')) {
-      return null;
+    this.updateMemoryVariables(params.textDocument.uri);
+    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
+      return {
+        label: e.toString(),
+        kind: CompletionItemKind.Property,
+        insertText: e.toString(),
+        documentation: '',
+      };
+    });
+
+    if (!wordAtCurRange || !flag) {
+      return { endWithDotFlag: flag, completionList: memoryVariblesRootCompletionList };
     }
 
     let propertyList = wordAtCurRange.split('.');
     propertyList = propertyList.slice(0, propertyList.length - 1);
+
     const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
 
-    if (completionList.length > 0) {
-      return completionList;
-    }
-
-    return null;
+    return { endWithDotFlag: true, completionList: completionList };
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -425,14 +424,24 @@ export class LGServer {
       };
     });
 
+    const completionPropertyResult = this.findValidMemoryVariables(params);
+
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
-      return Promise.resolve({ isIncomplete: true, items: completionTemplateList.concat(completionFunctionList) });
+      if (completionPropertyResult.endWithDotFlag) {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionPropertyResult.completionList,
+        });
+      } else {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult.completionList)),
+        });
+      }
     } else {
       return Promise.resolve(null);
     }
-
-    return Promise.resolve(null);
   }
 
   protected validate(document: TextDocument): void {

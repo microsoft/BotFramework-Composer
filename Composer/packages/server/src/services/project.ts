@@ -38,9 +38,9 @@ export class BotProjectService {
     return BotProjectService.currentBotProject?.files.find(file => file.name === name);
   }
 
-  public static memoryResolver(name: string): FileInfo | undefined {
+  public static staticMemoryResolver(name: string): string[] | undefined {
     BotProjectService.initialize();
-    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
+    return ['this.value', 'this.turnCount', 'turn.DialogEvent.value', 'intent.score'];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

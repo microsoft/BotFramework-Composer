@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
+import {
+  TextDocument,
+  Range,
+  Position,
+  DiagnosticSeverity,
+  Diagnostic,
+  CompletionItem,
+} from 'vscode-languageserver-types';
 import {
   DiagnosticSeverity as LGDiagnosticSeverity,
   ImportResolver,
@@ -125,3 +132,8 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
 }
+
+export type MemoryVaribleCompletionResult = {
+  endWithDotFlag: boolean;
+  completionList: CompletionItem[];
+};
