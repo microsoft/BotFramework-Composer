@@ -11,7 +11,6 @@ import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import {
-  DefaultRenderer,
   BeginDialog,
   ReplaceDialog,
   ActivityRenderer,
@@ -24,6 +23,7 @@ import { ConditionNode } from '../nodes/steps/ConditionNode';
 import { ForeachDetail } from '../nodes/steps/ForeachDetail';
 import { ForeachPageDetail } from '../nodes/steps/ForeachPageDetail';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { UISchemaRenderer } from '../../schema/uischemaRenderer';
 
 const rendererByObiType = {
   [ObiTypes.BeginDialog]: BeginDialog,
@@ -37,7 +37,7 @@ const rendererByObiType = {
   [ObiTypes.UserAnswers]: UserInput,
   [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
 };
-const DEFAULT_RENDERER = DefaultRenderer;
+const DEFAULT_RENDERER = UISchemaRenderer;
 
 function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
   const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
