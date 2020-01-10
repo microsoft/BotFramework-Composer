@@ -24,7 +24,7 @@ The scope of the property determines when the property is available, and how lon
 The bot's memory has two "permanent" scopes - a place to store information about individual users, and a place to store information about ongoing conversations:
 
 * **user** is associated with a specific user. Properties in the user scope are retained forever.
-* **conversation** is associated with the conversation id. Properties in the user scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in an Microsoft Teams channel).
+* **conversation** is associated with the conversation id. Properties in the conversation scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in an Microsoft Teams channel).
 
 ### Storing temporary values during task handling
 The bot's memory also has two "ephemeral" scopes - a place to store temporary values that are only relevant while a task is being handled:
@@ -47,7 +47,7 @@ Under the **User Input** tab you'll see **Property to fill**, where the user's r
 
 In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` output format was selected.
 
-For more information about implementing text other prompts and read [asking users for input](./howto-ask-for-user-input.md). 
+For more information about implementing text other prompts and read [asking users for input](./how-to-ask-for-user-input.md). 
 
 ## Manipulating properties using memory actions
 

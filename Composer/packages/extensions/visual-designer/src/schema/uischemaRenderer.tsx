@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { FC } from 'react';
 import { BaseSchema } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { uiSchema } from './uischema';
-import { UIWidget, UI_WIDGET_KEY, UIWidgetProp } from './uischema.types';
+import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
 const buildWidgetProp = (data: BaseSchema, rawPropValue: UIWidgetProp) => {
   if (typeof rawPropValue === 'function') {
@@ -35,17 +35,20 @@ const parseWidgetSchema = (data: BaseSchema, widgetSchema: UIWidget) => {
   };
 };
 
-const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Element => {
-  const { Widget, props } = parseWidgetSchema(inputData, schema);
-  return <Widget data={inputData} {...contextProps} {...props} />;
-};
+export interface UISchemaRendererProps {
+  /** The uniq id of current schema data. Usually a json path. */
+  id: string;
 
-const renderFallbackElement = (data: BaseSchema) => <></>;
+  /** Declarative json with a $type field. */
+  data: BaseSchema;
 
-export const renderSDKType = (data: BaseSchema, context?: { menu: JSX.Element; onClick }): JSX.Element => {
+  /** Handle UI events */
+  onEvent: WidgetEventHandler;
+}
+
+export const UISchemaRenderer: FC<UISchemaRendererProps> = ({ id, data, onEvent, ...contextProps }): JSX.Element => {
   const $type = get(data, '$type');
-  const schema: UIWidget = get(uiSchema, $type);
-  if (!schema) return renderFallbackElement(data);
-
-  return renderWidget(data, schema, context);
+  const schema = get(uiSchema, $type, uiSchema.default);
+  const { Widget, props } = parseWidgetSchema(data, schema);
+  return <Widget id={id} data={data} onEvent={onEvent} {...contextProps} {...props} />;
 };
