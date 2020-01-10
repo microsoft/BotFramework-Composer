@@ -1,34 +1,37 @@
-# Introduction to Bot Framework Composer
-Bot Framework Composer is an integrated development tool that developers and multi-disciplinary teams can use to build bots. Bot Framework Composer is built using the latest features of the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk).
+# Introduction to the Bot Framework Composer
+The Bot Framework Composer is an integrated development tool that developers and multi-disciplinary teams can use to build bots. The Bot Framework Composer is built using the latest features of the [Bot Framework SDK](https://github.com/microsoft/botframework-sdk).
 
 ![BF Composer](./media/introduction/composer-overview.png)
 
  Within this tool, you'll find everything you need to build a sophisticated conversational experience:
-* a visual dialog editor 
-* tools to train and manage Language Understanding (LU)
-* powerful language generation and templating systems
-* a ready-to-use bot runtime executable 
+* A visual dialog editor.
+* Tools to train and manage Language Understanding (LU).
+* Powerful language generation and templating systems.
+* A ready-to-use bot runtime executable .
+
+<!-- https://docs.microsoft.com/en-us/style-guide/scannable-content/lists#capitalization -->
 
 ## Advantage of developing bots with Composer
-Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framwork Composer. Some of the advantages of developing bots in Composer include:
-- use of Adaptive Dialogs to simplify interruption handling
-- use of Language Generation (LG) to produce responses and give bots character
-- visual design surface in Composer eliminates the need for boilerplate code and makes bot development more accessible. You no longer need to navigate between experiences to maintain LU model as it is editable within the app.
-- time saved with fewer steps to set up your environment
+Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framework Composer. Some of the advantages of developing bots in Composer include:
+- Use of Adaptive Dialogs allow for Language Generation (LG), which can simplify interruption handling and give bots character.
+- Visual design surface in Composer eliminates the need for boilerplate code and makes bot .development more accessible. You no longer need to navigate between experiences to maintain LU model as it is editable within the app.
+- Time saved with fewer steps to set up your environment.
 
-A major difference between the current version of the Bot Framework SDK and Composer is that the apps created using Composer uses the Adaptive dialog format, a JSON specification shared by many tools provided by the Bot Framework. You can find more information about Adaptive dialog [here](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog).
+A major difference between the current version of the Bot Framework SDK and Composer is that the apps created using Composer uses the Adaptive dialog format, a JSON specification shared by many tools provided by the Bot Framework. You can find more information in the [Adaptive dialog repository's readme](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog) on GitHub.
 
-You can manage Composer assets, such as Dialogs, Language Understanding (LU) training data, and message templates like normal developer assets - files that can be committed to source control and deployed alongside code updates.
+<!--Composer assets such as Dialogs, Language Understanding (LU) training data, and message templates can be managed like any other developer asset. They are files that can be committed to source control and deployed with code updates.-->
+
+Composer assets are files that can be committed to source control and deployed along with code updates, such as dialogs, language understanding (LU) training data, and message templates.
 
 ## Language Understanding
 
 Language Understanding (LU) is a core component of Composer, allowing developers and conversation designers to train language understanding directly in the context of editing a dialog.  
 
-As dialogs are edited in Composer developers can continuously add to their bots' natural language capabilities through a simple markdown-like format that makes it easy to define new intents and provide sample utterances.
+As dialogs are edited in Composer, developers can continuously add to their bots' natural language capabilities using the [lu file format](https://aka.ms/lu-file-format), a simple markdown-like format that makes it easy to define new [intents](concept-language-understanding.md#intents) and provide sample [utterances](concept-language-understanding.md#utterances).
 
 ![BF Composer NLU](./media/introduction/intro-nlu.png)
 
- Composer detects changes and updates the bot's cloud-based NLU model automatically so it is always up to date.
+ Composer detects changes and updates the bot's cloud-based natural-language understanding (NLU) model automatically so it is always up to date.
 
 ## Language Generation
 
@@ -37,10 +40,10 @@ Creating grammatically correct, data-driven responses that have a consistent ton
 ![BF Composer LG](.//media/language_generation/bot_responses.png)
 
 With Language Generation, previously complex tasks can be quickly achieved, like:
-* including dynamic elements in messages
-* generating grammatically correct lists, pronouns, articles
-* providing context-sensitive variation in messages
-* creating Adaptive Cards attachments, as seen above
+* Including dynamic elements in messages.
+* Generating grammatically correct lists, pronouns, articles.
+* Providing context-sensitive variation in messages.
+* Creating Adaptive Cards attachments, as seen above.
 
 ## Unified toolset
 
@@ -56,8 +59,9 @@ After creating bots with Composer the resulting bot project will contain reusabl
 
 ## Further reading
 
-* [Bot Framework on Github](https://github.com/microsoft/botframework)
+* The [Bot Framework](https://github.com/microsoft/botframework#microsoft-bot-framework)  on Github
 
 ## Next
 
-* Learn how to [create an echo bot](./tutorial-create-echobot.md) using Composer
+* [Set up the Bot Framework Composer using Yarn](./setup-yarn.md).
+* Learn how to [create an echo bot](./tutorial-create-echobot.md) using Composer.
