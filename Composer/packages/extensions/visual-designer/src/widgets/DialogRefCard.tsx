@@ -4,13 +4,13 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { NodeMenu } from '../components/menus/NodeMenu';
-import get from 'lodash/get';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
   dialog: string | object;
