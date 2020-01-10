@@ -18,6 +18,11 @@ export interface BotSchemas {
   diagnostics?: any[];
 }
 
+/**
+ * recoed the status when data updated in shell
+ * scope: the updated resource
+ * action: the cause of update
+ */
 export interface ExternalUpdate {
   scope: UpdateScope;
   action: UpdateAction;

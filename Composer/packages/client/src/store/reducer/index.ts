@@ -295,7 +295,7 @@ const noOp: ReducerFunc = state => {
   return state;
 };
 
-const recordExternalUpdate: ReducerFunc = (state, { externalUpdate }) => {
+const setUpdateStatus: ReducerFunc = (state, { externalUpdate }) => {
   return (state.externalUpdate = externalUpdate);
 };
 
@@ -353,5 +353,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
-  [ActionTypes.RECORD_EXTERNAL_UPDATE]: recordExternalUpdate,
+  [ActionTypes.SET_UPDATE_STATUS]: setUpdateStatus,
 });

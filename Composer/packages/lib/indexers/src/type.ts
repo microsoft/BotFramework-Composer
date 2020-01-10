@@ -54,9 +54,8 @@ export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
-  diagnostics: Diagnostic[];
   parsedContent?: IParsedObject;
-  forceUpdate?: boolean;
+  diagnostics: Diagnostic[];
   [key: string]: any;
 }
 export interface CodeRange {

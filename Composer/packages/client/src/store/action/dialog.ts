@@ -16,7 +16,7 @@ import { Store } from './../types';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
 import { fetchProject } from './project';
-import { recordExternalUpdate } from './shell';
+import { setUpdateStatus } from './shell';
 
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
@@ -114,25 +114,25 @@ export const debouncedUpdateDialog = debounce(async (store, id, content) => {
   }
 }, 500);
 
-export const updateDialogBase: ActionCreator = (store, { id, content }, externalUpdate?: ExternalUpdate) => {
+export const updateDialogBase: ActionCreator = (store, { id, content }, updateStatus?: ExternalUpdate) => {
   store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
-  recordExternalUpdate(store, externalUpdate);
+  setUpdateStatus(store, updateStatus);
   debouncedUpdateDialog(store, id, content);
 };
 
 export const updateDialog: ActionCreator = undoable(
   updateDialogBase,
   (state: State, args: any[], isEmpty) => {
-    const externalUpdate = {
+    const updateStatus = {
       scope: UpdateScope.DialogFile,
       action: UpdateAction.UndoRedo,
     };
     if (isEmpty) {
       const id = state.designPageLocation.dialogId;
       const dialog = state.dialogs.find(dialog => dialog.id === id);
-      return [{ id, content: dialog ? dialog.content : {} }, externalUpdate];
+      return [{ id, content: dialog ? dialog.content : {} }, updateStatus];
     } else {
-      return [{ ...args[0] }, externalUpdate];
+      return [{ ...args[0] }, updateStatus];
     }
   },
   updateDialogBase,

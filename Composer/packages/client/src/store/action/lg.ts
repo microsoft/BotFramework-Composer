@@ -12,7 +12,7 @@ import { ActionCreator, State } from '../types';
 
 import { fetchProject } from './project';
 import { setError } from './error';
-import { recordExternalUpdate } from './shell';
+import { setUpdateStatus } from './shell';
 
 //remove editor's debounce and add it to action
 export const debouncedUpdateLg = debounce(async (store, id, content) => {
@@ -28,25 +28,25 @@ export const debouncedUpdateLg = debounce(async (store, id, content) => {
   }
 }, 500);
 
-export const updateLgFile: ActionCreator = async (store, { id, content }, externalUpdate?: ExternalUpdate) => {
+export const updateLgFile: ActionCreator = async (store, { id, content }, updateStatus?: ExternalUpdate) => {
   store.dispatch({ type: ActionTypes.UPDATE_LG_SUCCESS, payload: { id, content } });
-  recordExternalUpdate(store, externalUpdate);
+  setUpdateStatus(store, updateStatus);
   debouncedUpdateLg(store, id, content);
 };
 
 export const undoableUpdateLgFile = undoable(
   updateLgFile,
   (state: State, args: any[], isEmpty) => {
-    const externalUpdate = {
+    const updateStatus = {
       scope: UpdateScope.LgFile,
       action: UpdateAction.UndoRedo,
     };
     if (isEmpty) {
       const id = args[0].id;
       const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
-      return [{ id, content }, externalUpdate];
+      return [{ id, content }, updateStatus];
     } else {
-      return [{ ...args[0] }, externalUpdate];
+      return [{ ...args[0] }, updateStatus];
     }
   },
   updateLgFile,
