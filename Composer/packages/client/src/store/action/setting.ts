@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
+import has from 'lodash/has';
 import { SensitiveProperties } from '@bfc/shared';
 
 import { ActionCreator, DialogSetting } from '../types';
@@ -27,8 +28,10 @@ export const setSettings: ActionCreator = async (
     });
     // set value in local storage
     for (const property of SensitiveProperties) {
-      const propertyValue = get(settings, property);
-      settingsStorage.setField(botName, property, propertyValue ? propertyValue : '');
+      if (has(settings, property)) {
+        const propertyValue = get(settings, property, '');
+        settingsStorage.setField(botName, property, propertyValue);
+      }
     }
     // set value to server
     const suffix = slot ? `/${slot}` : '';
