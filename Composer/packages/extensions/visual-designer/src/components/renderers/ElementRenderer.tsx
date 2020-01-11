@@ -10,7 +10,7 @@ import { ObiTypes } from '../../constants/ObiTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
-import { BeginDialog, ReplaceDialog, ChoiceInput, BotAsks, UserInput, InvalidPromptBrick } from '../nodes/index';
+import { ChoiceInput, BotAsks, UserInput, InvalidPromptBrick } from '../nodes/index';
 import { ConditionNode } from '../nodes/steps/ConditionNode';
 import { ForeachDetail } from '../nodes/steps/ForeachDetail';
 import { ForeachPageDetail } from '../nodes/steps/ForeachPageDetail';
@@ -18,11 +18,11 @@ import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { UISchemaRenderer } from '../../schema/uischemaRenderer';
 
 const rendererByObiType = {
-  [ObiTypes.BeginDialog]: BeginDialog,
   [ObiTypes.ConditionNode]: ConditionNode,
   [ObiTypes.ForeachDetail]: ForeachDetail,
   [ObiTypes.ForeachPageDetail]: ForeachPageDetail,
-  [ObiTypes.ReplaceDialog]: ReplaceDialog,
+  [ObiTypes.BeginDialog]: UISchemaRenderer,
+  [ObiTypes.ReplaceDialog]: UISchemaRenderer,
   [ObiTypes.SendActivity]: UISchemaRenderer,
   [ObiTypes.ChoiceInputDetail]: ChoiceInput,
   [ObiTypes.BotAsks]: BotAsks,
