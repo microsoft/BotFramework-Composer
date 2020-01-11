@@ -23,6 +23,7 @@ export const projectContainer = css`
   flex-grow: 0;
   flex-shrink: 0;
   width: 255px;
+  border-right: 1px solid #c4c4c4;
 `;
 
 //remove TODO

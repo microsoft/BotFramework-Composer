@@ -4,6 +4,8 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKTypes } from '@bfc/shared';
 
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+
 export enum UISchemaBuiltinKeys {
   default = 'default',
 }
@@ -23,8 +25,12 @@ export interface UIWidget {
 
 export type WidgetComponent<T extends WidgetContainerProps> = FC<T> | ComponentClass<T, any>;
 
+export type WidgetEventHandler = (eventName: NodeEventTypes, eventData?: any) => void;
+
 export interface WidgetContainerProps {
+  id: string;
   data: BaseSchema;
+  onEvent: WidgetEventHandler;
   [propKey: string]: any;
 }
 
