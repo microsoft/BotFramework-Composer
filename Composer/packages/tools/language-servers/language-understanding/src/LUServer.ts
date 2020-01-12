@@ -567,7 +567,7 @@ export class LUServer {
       const item = {
         label: 'hasRoles?',
         kind: CompletionItemKind.Keyword,
-        insertText: ` hasRoles `,
+        insertText: `hasRoles `,
         documentation: `Entity name hasRole?`,
       };
 
@@ -575,7 +575,7 @@ export class LUServer {
       const item2 = {
         label: 'useFeature?',
         kind: CompletionItemKind.Keyword,
-        insertText: ` useFeature `,
+        insertText: `useFeature `,
         documentation: `Entity name useFeature?`,
       };
 
@@ -583,9 +583,9 @@ export class LUServer {
     }
 
     // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
-    const lines = text.split('\n');
-    const textBeforeCurLine = lines.slice(0, position.line).join('\n');
-    const luisJson = await this.extractLUISContent(textBeforeCurLine);
+    //const lines = text.split('\n');
+    //const textBeforeCurLine = lines.slice(0, position.line).join('\n');
+    const luisJson = await this.extractLUISContent(text);
     const suggestionEntityList = this.getSuggestionEntities(luisJson);
     const regexEntityList = this.getRegexEntities(luisJson);
 
