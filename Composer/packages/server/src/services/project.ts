@@ -39,8 +39,16 @@ export class BotProjectService {
   }
 
   public static staticMemoryResolver(name: string): string[] | undefined {
-    BotProjectService.initialize();
-    return ['this.value', 'this.turnCount', 'turn.DialogEvent.value', 'intent.score'];
+    return [
+      'this.value',
+      'this.turnCount',
+      'turn.DialogEvent.value',
+      'intent.score',
+      'turn.recognized.intent',
+      'turn.recognized.intents.***.score',
+      'turn.recognized.score',
+      'turn.recognized.entities',
+    ];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

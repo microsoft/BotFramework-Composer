@@ -29,7 +29,6 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
-  MemoryVaribleCompletionResult,
 } from './utils';
 
 const { check, indexOne } = lgIndexer;
@@ -100,10 +99,15 @@ export class LGServer {
 
   protected updateObject(propertyList: string[]): void {
     let tempVariable: Record<string, any> = this.memoryVariables;
-    for (const property of propertyList) {
+    const antPattern = /\*+/;
+    const normalizedAnyPattern = '***';
+    for (let property of propertyList) {
       if (property in tempVariable) {
         tempVariable = tempVariable[property];
       } else {
+        if (antPattern.test(property)) {
+          property = normalizedAnyPattern;
+        }
         tempVariable[property] = {};
         tempVariable = tempVariable[property];
       }
@@ -320,11 +324,14 @@ export class LGServer {
 
   protected matchingCompletionProperty(propertyList: string[], ...objects: object[]): CompletionItem[] {
     const completionList: CompletionItem[] = [];
+    const normalizedAnyPattern = '***';
     for (const obj of objects) {
       let tempVariable = obj;
       for (const property of propertyList) {
-        if (property in obj) {
+        if (property in tempVariable) {
           tempVariable = tempVariable[property];
+        } else if (normalizedAnyPattern in tempVariable) {
+          tempVariable = tempVariable[normalizedAnyPattern];
         } else {
           tempVariable = {};
         }
@@ -334,8 +341,8 @@ export class LGServer {
         continue;
       }
 
-      if (tempVariable instanceof Object) {
-        Object.keys(tempVariable).forEach(e => {
+      Object.keys(tempVariable).forEach(e => {
+        if (e.toString() !== normalizedAnyPattern) {
           const item = {
             label: e.toString(),
             kind: CompletionItemKind.Property,
@@ -345,31 +352,20 @@ export class LGServer {
           if (!completionList.includes(item)) {
             completionList.push(item);
           }
-        });
-      } else if (typeof tempVariable === 'string') {
-        const item = {
-          label: tempVariable,
-          kind: CompletionItemKind.Property,
-          insertText: tempVariable,
-          documentation: '',
-        };
-
-        if (!completionList.includes(item)) {
-          completionList.push(item);
         }
-      }
+      });
     }
 
     return completionList;
   }
 
-  protected findValidMemoryVariables(params: TextDocumentPositionParams): MemoryVaribleCompletionResult {
+  protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] {
     const document = this.documents.get(params.textDocument.uri);
-    if (!document) return { endWithDot: false, completionList: [] };
+    if (!document) return [];
     const position = params.position;
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
-    const flag = wordAtCurRange.endsWith('.');
+    const endWithDot = wordAtCurRange.endsWith('.');
 
     this.updateMemoryVariables(params.textDocument.uri);
     const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
@@ -381,8 +377,8 @@ export class LGServer {
       };
     });
 
-    if (!wordAtCurRange || !flag) {
-      return { endWithDot: flag, completionList: memoryVariblesRootCompletionList };
+    if (!wordAtCurRange || !endWithDot) {
+      return memoryVariblesRootCompletionList;
     }
 
     let propertyList = wordAtCurRange.split('.');
@@ -390,7 +386,7 @@ export class LGServer {
 
     const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
 
-    return { endWithDot: true, completionList: completionList };
+    return completionList;
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -398,6 +394,10 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDot = wordAtCurRange.endsWith('.');
     const lgFile = this.getLGDocument(document)?.index();
     if (!lgFile) {
       return Promise.resolve(null);
@@ -428,15 +428,15 @@ export class LGServer {
 
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
-      if (completionPropertyResult.endWithDot) {
+      if (endWithDot) {
         return Promise.resolve({
           isIncomplete: true,
-          items: completionPropertyResult.completionList,
+          items: completionPropertyResult,
         });
       } else {
         return Promise.resolve({
           isIncomplete: true,
-          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult.completionList)),
+          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
         });
       }
     } else {
