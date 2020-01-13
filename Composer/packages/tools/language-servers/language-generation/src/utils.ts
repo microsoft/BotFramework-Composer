@@ -134,6 +134,6 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
 }
 
 export type MemoryVaribleCompletionResult = {
-  endWithDotFlag: boolean;
+  endWithDot: boolean;
   completionList: CompletionItem[];
 };

@@ -365,7 +365,7 @@ export class LGServer {
 
   protected findValidMemoryVariables(params: TextDocumentPositionParams): MemoryVaribleCompletionResult {
     const document = this.documents.get(params.textDocument.uri);
-    if (!document) return { endWithDotFlag: false, completionList: [] };
+    if (!document) return { endWithDot: false, completionList: [] };
     const position = params.position;
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
@@ -382,7 +382,7 @@ export class LGServer {
     });
 
     if (!wordAtCurRange || !flag) {
-      return { endWithDotFlag: flag, completionList: memoryVariblesRootCompletionList };
+      return { endWithDot: flag, completionList: memoryVariblesRootCompletionList };
     }
 
     let propertyList = wordAtCurRange.split('.');
@@ -390,7 +390,7 @@ export class LGServer {
 
     const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
 
-    return { endWithDotFlag: true, completionList: completionList };
+    return { endWithDot: true, completionList: completionList };
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -428,7 +428,7 @@ export class LGServer {
 
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
-      if (completionPropertyResult.endWithDotFlag) {
+      if (completionPropertyResult.endWithDot) {
         return Promise.resolve({
           isIncomplete: true,
           items: completionPropertyResult.completionList,
