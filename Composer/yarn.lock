@@ -2135,27 +2135,6 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
-"@bfcomposer/bf-lu@^1.1.6":
-  version "1.1.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.6.tgz#962f5b0da4314983939a99b391f2ab88d8304829"
-  integrity sha1-li9bDaQxSYOTmpmzkfKriNgwSCk=
-  dependencies:
-    "@microsoft/bf-cli-command" "1.0.0"
-    "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
-    "@oclif/errors" "~1.2.2"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "^2.1.2"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
 "@bfcomposer/bf-lu@^1.1.7":
   version "1.1.7"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.7.tgz#065cff8cd222256323e0ddee198bec7dbdcfff7d"
