@@ -4,20 +4,30 @@
 import fs from 'fs';
 
 import { getNewDesigner } from '@bfc/shared';
-import { FileInfo, DialogInfo, LgFile, LuFile, dialogIndexer, lgIndexer } from '@bfc/indexers';
-import { luIndexer } from '@bfc/indexers/lib/luIndexer';
+import {
+  FileInfo,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  dialogIndexer,
+  lgIndexer,
+  luIndexer,
+  createSingleMessage,
+} from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
+import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
+const debug = log.extend('bot-project');
 const DIALOGFOLDER = 'ComposerDialogs';
 
 const oauthInput = () => ({
@@ -377,6 +387,7 @@ export class BotProject {
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
+    debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
     // update this.files which is memory cache of all files
@@ -449,6 +460,7 @@ export class BotProject {
       return;
     }
     if (!(await this.fileStorage.exists(dir))) {
+      debug('Creating directory: %s', dir);
       await this.fileStorage.mkDir(dir, { recursive: true });
     }
   };
@@ -548,7 +560,7 @@ export class BotProject {
   private generateErrorMessage = (invalidLuFile: LuFile[]) => {
     return invalidLuFile.reduce((msg, file) => {
       const fileErrorText = file.diagnostics.reduce((text, diagnostic) => {
-        text += `\n ${diagnostic.text}`;
+        text += `\n ${createSingleMessage(diagnostic)}`;
         return text;
       }, `In ${file.id}.lu: `);
       msg += `\n ${fileErrorText} \n`;

@@ -63,7 +63,7 @@ function measureChoiceInputDetailBoundary(data): Boundary {
   const width = InitNodeSize.width;
   const height =
     InitNodeSize.height +
-    (data.choices
+    (data.choices && Array.isArray(data.choices)
       ? (data.choices.length <= 4 ? data.choices.length : 4) * (ChoiceInputSize.height + ChoiceInputMarginTop)
       : 0);
   return new Boundary(width, height);

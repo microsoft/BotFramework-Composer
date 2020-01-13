@@ -22,8 +22,7 @@
           "prompt": "Hello, what is your name?",
           "maxTurnCount": 3,
           "alwaysPrompt": false,
-          "allowInterruptions": "false",
-          "outputFormat": "none"
+          "allowInterruptions": "false"
         },
         {
           "$type": "Microsoft.TraceActivity",

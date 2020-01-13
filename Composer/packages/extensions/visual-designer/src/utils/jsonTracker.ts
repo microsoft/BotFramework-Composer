@@ -4,9 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyAction } from '@bfc/shared';
-
-import { getFriendlyName } from '../components/nodes/utils';
+import { seedNewDialog, deepCopyAction, generateSDKTitle } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -158,7 +156,7 @@ export function insert(inputDialog, path, position, $type) {
   const current = get(dialog, path, []);
   const newStep = {
     $type,
-    ...seedNewDialog($type, { name: getFriendlyName({ $type }) }),
+    ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }),
   };
 
   const insertAt = typeof position === 'undefined' ? current.length : position;

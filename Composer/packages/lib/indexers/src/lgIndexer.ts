@@ -50,52 +50,35 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
-function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
+function indexOne(file: FileInfo): LgFile | undefined {
+  const { name, relativePath, content } = file;
+  if (!name.endsWith('.lg')) return;
+  const id = getBaseName(name, '.lg');
+  const diagnostics = check(content, id);
+  let templates: LgTemplate[] = [];
+  try {
+    templates = parse(file.content, '');
+  } catch (err) {
+    diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+  }
+  return { id, relativePath, content, templates, diagnostics };
 }
 
 function index(files: FileInfo[]): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
-    const { name, relativePath, content } = file;
-    if (name.endsWith('.lg')) {
-      const id = getBaseName(name, '.lg');
-      const diagnostics = check(content, id);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(file.content, '');
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
-      lgFiles.push({ id, relativePath, content, templates, diagnostics });
+    const indexedFile = indexOne(file);
+    if (indexedFile) {
+      lgFiles.push(indexedFile);
     }
   }
   return lgFiles;
-}
-
-function createSingleMessage(d: Diagnostic): string {
-  let msg = `${d.message}\n`;
-  if (d.range) {
-    const { start, end } = d.range;
-    const position = `line ${start.line}:${start.character} - line ${end.line}:${end.character}`;
-    msg += `${position} \n ${msg}`;
-  }
-  return msg;
-}
-
-function combineMessage(diagnostics: Diagnostic[]): string {
-  return diagnostics.reduce((msg, d) => {
-    msg += createSingleMessage(d);
-    return msg;
-  }, '');
 }
 
 export const lgIndexer = {
   index,
   parse,
   check,
-  isValid,
-  createSingleMessage,
-  combineMessage,
+  indexOne,
 };

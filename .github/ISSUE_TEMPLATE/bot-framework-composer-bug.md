@@ -1,48 +1,57 @@
 ---
-name: Bot Framework Composer Bug
-about: Create a report for a bug you found in the Bot Framework Composer (including
+name: Bug
+about:
+  Create a report for a bug you found in the Bot Framework Composer (including
   documentation)
-title: ''
-labels: 'Needs-triage, Type: bug'
-assignees: ''
-
+title: ""
+labels: "Needs-triage, Type: bug"
+assignees: ""
 ---
 
-Complete the necessary portions of this template and delete the rest.
+<!-- Complete the necessary portions of this template and delete the rest. -->
 
 ## Describe the bug
-Give a clear and concise description of what the bug is.
+
+<!-- Give a clear and concise description of what the bug is. -->
 
 ## Version
-What version of the Composer are you using? Paste the build SHA found on the about page (`/about`).
+
+<!-- What version of the Composer are you using? Paste the build SHA found on the about page (`/about`). -->
 
 ## Browser
-What browser are you using?
+
+<!-- What browser are you using? -->
 
 - [ ] Chrome
 - [ ] Safari
 - [ ] Firefox
 - [ ] Edge
 
-## OS 
-What operating system are you using?
+## OS
+
+<!-- What operating system are you using? -->
 
 - [ ] macOS
 - [ ] Windows
 - [ ] Ubuntu
 
 ## To Reproduce
+
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
 ## Expected behavior
-Give a clear and concise description of what you expected to happen.
+
+<!-- Give a clear and concise description of what you expected to happen. -->
 
 ## Screenshots
-If applicable, add screenshots/gif/video to help explain your problem.
+
+<!-- If applicable, add screenshots/gif/video to help explain your problem. -->
 
 ## Additional context
-Add any other context about the problem here.
+
+<!-- Add any other context about the problem here. -->
