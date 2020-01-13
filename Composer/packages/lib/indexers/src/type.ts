@@ -41,21 +41,33 @@ export interface Utterance {
   text: string;
 }
 
-export interface ILUISJsonStructure {
-  intents: Intent[];
-  utterances: Utterance[];
+export interface LuParsed {
+  intents: LuIntentSection[];
+  diagnostics: Diagnostic[];
 }
 
-export interface IParsedObject {
-  LUISJsonStructure: ILUISJsonStructure;
+export enum LuSectionTypes {
+  SIMPLEINTENTSECTION = 'simpleIntentSection',
+  NESTEDINTENTSECTION = 'nestedIntentSection',
+}
+
+export interface LuEntity {
+  Name: string;
+}
+
+export interface LuIntentSection {
+  Name: string;
+  Body: string;
+  Entities?: LuEntity[];
+  Children?: LuIntentSection[];
 }
 
 export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent?: IParsedObject;
   diagnostics: Diagnostic[];
+  intents: LuIntentSection[];
   [key: string]: any;
 }
 export interface CodeRange {
