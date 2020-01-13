@@ -79,3 +79,5 @@ export interface LgFile {
 }
 
 export type FileResolver = (id: string) => FileInfo | undefined;
+
+export type MemoryResolver = (id: string) => string[] | undefined;
