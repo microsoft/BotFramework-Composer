@@ -47,16 +47,26 @@ export default function useNotifications(filter?: string) {
       lgFile.diagnostics.map(diagnostic => {
         const mappedTemplate = lgTemplates.find(
           t =>
-            diagnostic.range.start.line >= t.range.startLineNumber && diagnostic.range.end.line <= t.range.endLineNumber
+            get(diagnostic, 'range.start.line', -1) >= get(t, 'range.startLineNumber') &&
+            get(diagnostic, 'range.end.line', -1) <= get(t, 'range.endLineNumber')
         );
         if (mappedTemplate && inLineLgTemplateFormat.test(mappedTemplate.name)) {
           //should navigate to design page
           console.log(mappedTemplate);
           console.log(diagnostic);
+          const location = `${lgFile.id}.lg`;
+          notifactions.push({
+            type: 'inlineLgTemplate',
+            severity: DiagnosticSeverity[diagnostic.severity] || '',
+            location,
+            message: createSingleMessage(diagnostic),
+            diagnostic,
+            id: mappedTemplate.name,
+          });
         } else {
           const location = `${lgFile.id}.lg`;
           notifactions.push({
-            type: 'lg',
+            type: 'customCraftedLgTemplateg',
             severity: DiagnosticSeverity[diagnostic.severity] || '',
             location,
             message: createSingleMessage(diagnostic),

@@ -10,7 +10,7 @@ import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
-
+import get from 'lodash/get';
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
   Focused: 'focused',
@@ -108,7 +108,39 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   return uri;
 }
 
+export function convertInlineLgDiagnosticToUrl(item, dialogs): string {
+  let url = '';
+  dialogs.forEach(dialog => {
+    const triggers = get(dialog, 'content.triggers', []);
+    triggers.forEach((t, index) => {
+      const res = searchTargetLgInTriggers(
+        t,
+        item,
+        `dialogs/${dialog.id}?selected=triggers[${index}]&focused=triggers[${index}]`
+      );
+      if (url === '') {
+        url = res;
+      }
+    });
+  });
+  return url;
+}
+
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
   navigate(mapNavPath, navigateOpts);
+}
+
+function searchTargetLgInTriggers(trigger, target, url) {
+  if (trigger.activity === `@{${target}()}`) {
+    return url;
+  }
+  const actions = get(trigger, 'actions', []);
+  for (let i = 0; i < actions.length; i++) {
+    let res = searchTargetLgInTriggers(actions[i], target, url + `actions[${i}]`);
+    if (res) {
+      return res;
+    }
+  }
+  return '';
 }
