@@ -22,7 +22,7 @@ This event will appear in the dialog as a node at the top of the editor. Actions
 ![cancel_trigger](./media/events_triggers/cancel_trigger.png)
 
 ## Types of triggers 
-There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](howto-defining-triggers.md). 
+There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](how-to-define-triggers.md). 
 
 ### Dialog events  
 The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog triggers in Composer: **Dialog started (Begin dialog event)**, **Dialog cancelled (Cancel dialog event)**, **Error occurred(Error event)** and **Re-prompt for input(Reprompt dialog event)**. Most dialogs will include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
