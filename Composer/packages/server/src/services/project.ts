@@ -3,6 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
+import { FileInfo } from '@bfc/indexers';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -30,6 +31,24 @@ export class BotProjectService {
     if (BotProjectService.recentBotProjects.length > 0) {
       BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
     }
+  }
+
+  public static fileResolver(name: string): FileInfo | undefined {
+    BotProjectService.initialize();
+    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
+  }
+
+  public static staticMemoryResolver(name: string): string[] | undefined {
+    return [
+      'this.value',
+      'this.turnCount',
+      'turn.DialogEvent.value',
+      'intent.score',
+      'turn.recognized.intent',
+      'turn.recognized.intents.***.score',
+      'turn.recognized.score',
+      'turn.recognized.entities',
+    ];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

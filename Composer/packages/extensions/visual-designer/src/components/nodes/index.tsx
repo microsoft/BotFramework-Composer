@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from './steps/ActivityRenderer';
-export * from './steps/BeginDialog';
-export * from './steps/DefaultRenderer';
-export * from './steps/ReplaceDialog';
 export * from './steps/ChoiceInput';
 export * from './steps/TextInput';
 export * from './steps/BotAsks';

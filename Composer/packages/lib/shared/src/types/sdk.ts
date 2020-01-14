@@ -29,6 +29,11 @@ interface OpenObject<T = string> {
   [x: string]: T;
 }
 
+export interface IAssignmentObject {
+  value?: string;
+  property?: string;
+}
+
 export interface IChoiceObject {
   /** the value to return when selected. */
   value?: string;

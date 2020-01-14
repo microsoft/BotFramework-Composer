@@ -23,6 +23,7 @@ export const projectContainer = css`
   flex-grow: 0;
   flex-shrink: 0;
   width: 255px;
+  border-right: 1px solid #c4c4c4;
 `;
 
 //remove TODO
@@ -128,3 +129,55 @@ export const triggerButton = css`
   font-size: 12px;
   color: #0078d4;
 `;
+
+export const styles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '80% !important',
+      width: '960px !important',
+    },
+  },
+  halfstack: {
+    root: [
+      {
+        flexBasis: '50%',
+      },
+    ],
+  },
+  stackinput: {
+    root: [
+      {
+        marginBottom: '1rem',
+      },
+    ],
+  },
+};
+
+export const textFieldlabel = {
+  label: {
+    root: [
+      {
+        fontWeight: FontWeights.semibold,
+      },
+    ],
+  },
+};
+
+export const name = {
+  subComponentStyles: textFieldlabel,
+};
+
+export const description = {
+  subComponentStyles: textFieldlabel,
+};

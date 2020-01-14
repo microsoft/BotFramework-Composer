@@ -2,12 +2,38 @@
 // Licensed under the MIT License.
 
 import { SDKTypes } from '@bfc/shared';
+import React from 'react';
 
 import { ActionCard } from '../widgets/ActionCard';
+import { ActivityRenderer } from '../widgets/ActivityRenderer';
+import { DialogRefCard } from '../widgets/DialogRefCard';
+import { ElementIcon } from '../utils/obiPropertyResolver';
+import { ObiColors } from '../constants/ElementColors';
 
 import { UISchema } from './uischema.types';
 
 export const uiSchema: UISchema = {
+  default: {
+    'ui:widget': ActionCard,
+  },
+  [SDKTypes.SendActivity]: {
+    'ui:widget': ActivityRenderer,
+    field: 'activity',
+    icon: ElementIcon.MessageBot,
+    colors: {
+      theme: ObiColors.BlueMagenta20,
+      icon: ObiColors.BlueMagenta30,
+    },
+  },
+  [SDKTypes.BeginDialog]: {
+    'ui:widget': DialogRefCard,
+    dialog: data => data.dialog,
+  },
+  [SDKTypes.ReplaceDialog]: {
+    'ui:widget': DialogRefCard,
+    dialog: data => data.dialog,
+    getRefContent: data => dialogRef => <>Switch to {dialogRef}</>,
+  },
   [SDKTypes.EditArray]: {
     'ui:widget': ActionCard,
     content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,

@@ -26,7 +26,7 @@
     "botbuilder-lg": "4.7.0-preview.93464",
     "botframework-expressions": "4.7.0-preview.93464",
     "format-message": "^6.2.3",
-    "immer": "^2.1.4",
+    "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.6",

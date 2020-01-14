@@ -50,21 +50,27 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
+function indexOne(file: FileInfo): LgFile | undefined {
+  const { name, relativePath, content } = file;
+  if (!name.endsWith('.lg')) return;
+  const id = getBaseName(name, '.lg');
+  const diagnostics = check(content, id);
+  let templates: LgTemplate[] = [];
+  try {
+    templates = parse(file.content, '');
+  } catch (err) {
+    diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+  }
+  return { id, relativePath, content, templates, diagnostics };
+}
+
 function index(files: FileInfo[]): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
-    const { name, relativePath, content } = file;
-    if (name.endsWith('.lg')) {
-      const id = getBaseName(name, '.lg');
-      const diagnostics = check(content, id);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(file.content, '');
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
-      lgFiles.push({ id, relativePath, content, templates, diagnostics });
+    const indexedFile = indexOne(file);
+    if (indexedFile) {
+      lgFiles.push(indexedFile);
     }
   }
   return lgFiles;
@@ -74,4 +80,5 @@ export const lgIndexer = {
   index,
   parse,
   check,
+  indexOne,
 };
