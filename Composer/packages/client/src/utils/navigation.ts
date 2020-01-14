@@ -114,8 +114,6 @@ export function convertInlineLgDiagnosticToUrl(targetTemplateId, dialogs): strin
   let url = '';
   function visitor(path: string, value: any): boolean {
     if (has(value, 'activity') && value.activity === `@{${targetTemplateId}()}`) {
-      console.log(path);
-      console.log(value);
       url = path;
       return true;
     }
@@ -138,15 +136,12 @@ export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationS
 
 function searchLgTemplate(path: string, value: any, visitor) {
   const stop = visitor(path, value);
-  if (stop === true) return;
+  if (stop) return;
 
-  // extract array
   if (Array.isArray(value)) {
     value.forEach((child, index) => {
       searchLgTemplate(`${path}[${index}]`, child, visitor);
     });
-
-    // extract object
   } else if (typeof value === 'object' && value) {
     Object.keys(value).forEach(key => {
       searchLgTemplate(`${path}.${key}`, value[key], visitor);
