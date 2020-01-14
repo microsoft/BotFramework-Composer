@@ -61,12 +61,12 @@ export class CSharpBotConnector implements IBotConnector {
     // build bot runtime
     return new Promise((resolve, reject) => {
       let shell = 'sh';
-      let script = './Scripts/build_runtime.sh';
+      let script = ['./Scripts/build_runtime.sh'];
       if (process.platform === 'win32') {
         shell = 'powershell';
-        script = './Scripts/build_runtime.ps1';
+        script = ['./Scripts/build_runtime.ps1', '-executionpolicy', 'bypass'];
       }
-      const build = spawn(`${shell}`, [`${script}`], {
+      const build = spawn(`${shell}`, script, {
         cwd: dir,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
