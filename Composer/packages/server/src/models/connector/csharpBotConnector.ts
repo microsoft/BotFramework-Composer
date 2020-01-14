@@ -63,7 +63,7 @@ export class CSharpBotConnector implements IBotConnector {
       let shell = 'sh';
       let script = './Scripts/build_runtime.sh';
       if (process.platform === 'win32') {
-        shell = 'pwsh';
+        shell = 'powershell';
         script = './Scripts/build_runtime.ps1';
       }
       const build = spawn(`${shell}`, [`${script}`], {
@@ -177,7 +177,7 @@ export class CSharpBotConnector implements IBotConnector {
     } catch (err) {
       this.stop();
       this.status = BotStatus.NotConnected;
-      throw new Error('Error while syncing bot runtime.');
+      throw err;
     }
   };
 
