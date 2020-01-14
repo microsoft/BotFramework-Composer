@@ -2135,10 +2135,10 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
-"@bfcomposer/bf-lu@^1.1.7":
-  version "1.1.7"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.7.tgz#065cff8cd222256323e0ddee198bec7dbdcfff7d"
-  integrity sha1-Blz/jNIiJWMj4N3uGYvsfb3P/30=
+"@bfcomposer/bf-lu@^1.1.8":
+  version "1.1.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.8.tgz#a3c7767de038025157bdc8cf9f56b393f1428fd4"
+  integrity sha1-o8d2feA4AlFXvcjPn1azk/FCj9Q=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "3.0.1"
     "@azure/ms-rest-azure-js" "2.0.1"
