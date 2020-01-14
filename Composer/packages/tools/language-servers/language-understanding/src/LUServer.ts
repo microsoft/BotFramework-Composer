@@ -20,6 +20,7 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 
 import { EntityTypesObj, LineState } from './entityEnum';
+import * as util from './matchingPattern';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -74,7 +75,7 @@ export class LUServer {
   }
 
   protected removeLabelsInUtterance(lineContent: string): string {
-    const entityLabelRegex = /\{\s*[\w.]+\s*=\s*[\w.]+\s*\}/g;
+    const entityLabelRegex = /\{\s*[\w.@:]+\s*=\s*[\w.]+\s*\}/g;
     let match: RegExpMatchArray | null;
     let resultStr = '';
     let startIdx = 0;
@@ -105,7 +106,7 @@ export class LUServer {
     const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
     const curLineContent = document.getText(range);
     // eslint-disable-next-line security/detect-unsafe-regex
-    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.]+\s*=\s*[\w.]+\}[^{}]*)+/;
+    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:]+\s*=\s*[\w.]+\}[^{}]*)+/;
 
     if (labeledUtterRegex.test(curLineContent)) {
       const newText = this.removeLabelsInUtterance(curLineContent);
@@ -131,11 +132,13 @@ export class LUServer {
     const lineCount = document.lineCount;
     const text = document.getText();
     const lines = text.split('\n');
-    const textBeforeCurLine = lines.slice(0, curLineNumber - 1).join('\n');
-    //const luisJson = await this.extractLUISContent(textBeforeCurLine);
+    const position = params.position;
+    const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
+    const range = Range.create(position.line, 0, position.line, position.character);
+    const curLineContent = document.getText(range);
     const key = params.ch;
     const inputState = this.getInputLineState(params);
-    //const entitiesList = this.getEntitiesList(luisJson);
+
     const pos = params.position;
     if (
       key === '\n' &&
@@ -149,7 +152,7 @@ export class LUServer {
     }
 
     if (key === '\n' && inputState === 'mlEntity' && lastLineContent.trim().endsWith('=')) {
-      const mlEntities = this.getMLEntities(textBeforeCurLine);
+      const mlEntities = util.getMLEntities(textBeforeCurLine);
       const entityNameRegExp = /^\s*@\s*([0-9a-zA-Z_.-]+)\s*.*/;
       let entityName = '';
       if (entityNameRegExp.test(lastLineContent)) {
@@ -158,8 +161,8 @@ export class LUServer {
           entityName = entityGroup[1];
         }
         if (mlEntities.includes(entityName)) {
-          const newPos = Position.create(pos.line + 1, 0);
-          const item: TextEdit = TextEdit.insert(newPos, '\t-@ ');
+          const newPos = Position.create(pos.line - 1, lastLineContent.length + 1);
+          const item: TextEdit = TextEdit.insert(newPos, '\n\t-@ ');
           edits.push(item);
         }
       }
@@ -171,7 +174,7 @@ export class LUServer {
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
     ) {
-      const newPos = Position.create(pos.line + 1, 0);
+      const newPos = Position.create(pos.line - 1, 0);
       let insertStr = '';
       if (lastLineContent.trim().endsWith(':') || lastLineContent.trim().endsWith('=')) {
         insertStr = '\t- ';
@@ -183,7 +186,7 @@ export class LUServer {
     }
 
     if (lastLineContent.trim() === '-') {
-      const range = Range.create(pos.line - 1, 0, pos.line - 1, lastLineContent.length - 1);
+      const range = Range.create(pos.line - 1, 0, pos.line, curLineContent.length + 1);
       const item: TextEdit = TextEdit.del(range);
       edits.push(item);
     }
@@ -226,7 +229,7 @@ export class LUServer {
         state = 'utterance';
       } else if (mlEntity.test(line)) {
         state = 'mlEntity';
-      } else if (regDashLine.test(line) || regEntityDefLine.test(line)) {
+      } else if (regDashLine.test(line) || regEntityDefLine.test(line) || line.trim().startsWith('>')) {
         continue;
       } else {
         state = 'other';
@@ -234,23 +237,6 @@ export class LUServer {
     }
 
     return state;
-  }
-
-  private getMLEntities(text: string): string[] {
-    const lines = text.split('\n');
-
-    const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*/;
-    const mlEntities: string[] = [];
-    for (const line of lines) {
-      if (mlEntityRegExp.test(line)) {
-        const entityGroup = line.match(mlEntityRegExp);
-        if (entityGroup && entityGroup.length >= 2) {
-          mlEntities.push(entityGroup[1]);
-        }
-      }
-    }
-
-    return mlEntities;
   }
 
   protected async resovleSchema(url: string): Promise<string> {
@@ -293,9 +279,9 @@ export class LUServer {
     } catch (e) {
       e.diagnostics.forEach(diag => {
         const range = Range.create(
-          diag.Range.Start.Line,
+          diag.Range.Start.Line - 1,
           diag.Range.Start.Character,
-          diag.Range.End.Line,
+          diag.Range.End.Line - 1,
           diag.Range.End.Character
         );
         const message = diag.Message;
@@ -324,195 +310,6 @@ export class LUServer {
     }
   }
 
-  private isEntityType(content: string): boolean {
-    const regexEntifyDef = /^\s*@\s*$/;
-    return regexEntifyDef.test(content);
-  }
-
-  private isPrebuiltEntity(content: string): boolean {
-    const regexPrebuiltEntifyDef = /^\s*@\s*prebuilt\s*$/;
-    return regexPrebuiltEntifyDef.test(content);
-  }
-
-  private isRegexEntity(content: string): boolean {
-    const regexPrebuiltEntifyDef = /^\s*@\s*regex\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
-    return regexPrebuiltEntifyDef.test(content);
-  }
-
-  private isSeperatedEntityDef(content: string): boolean {
-    const regexPrebuiltEntifyDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
-    return regexPrebuiltEntifyDef.test(content);
-  }
-
-  private isEntityName(content: string): boolean {
-    const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
-    const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*$/;
-    const hasNameEntifyDef2 = /^\s*@\s*([\w._]+|"[\w._\s]+")\s*$/;
-    return hasNameEntifyDef.test(content) || (!hasTypeEntityDef.test(content) && hasNameEntifyDef2.test(content));
-  }
-
-  private isCompositeEntity(content: string): boolean {
-    const compositePatternDef = /^\s*@\s*composite\s*[\w]*\s*=\s*\[\s*.*\s*$/;
-    const compositePatternDef2 = /^\s*@\s*composite\s*[\w]*\s*=\s*\[\s*.*\s*\]\s*$/;
-    return compositePatternDef.test(content) || compositePatternDef2.test(content);
-  }
-  private matchedEnterPattern(content: string): boolean {
-    const regexPatternDef = /^\s*-.*{\s*$/;
-    const regexPatternDef2 = /^\s*-.*{\s*}$/;
-    return regexPatternDef.test(content) || regexPatternDef2.test(content);
-  }
-
-  private matchedRolesPattern(content: string): boolean {
-    const regexRolesPatternDef = /^\s*-.*{\s*.*:/;
-    const regexRolesPatternDef2 = /^\s*-.*{\s*.*:}/;
-    return regexRolesPatternDef.test(content) || regexRolesPatternDef2.test(content);
-  }
-
-  private matchedEntityPattern(content: string): boolean {
-    const regexRolesEntityPatternDef = /^\s*-.*{\s*@/;
-    const regexRolesEntityPatternDef2 = /^\s*-.*{\s*@}/;
-    return regexRolesEntityPatternDef.test(content) || regexRolesEntityPatternDef2.test(content);
-  }
-
-  private getRegexEntities(luisJson: any): string[] {
-    const suggestionRegexList: string[] = [];
-    if (luisJson !== undefined) {
-      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-        luisJson.regex_entities.forEach(entity => {
-          suggestionRegexList.push(entity.name);
-        });
-      }
-    }
-
-    return suggestionRegexList;
-  }
-
-  private getSuggestionEntities(luisJson: any): string[] {
-    const suggestionEntityList: string[] = [];
-    if (luisJson !== undefined) {
-      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-        luisJson.entities.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-        luisJson.regex_entities.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-        luisJson.patternAnyEntities.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-        luisJson.prebuiltEntities.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.closedLists.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.phraselists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.composites.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-
-      if (luisJson.phraselists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.composites.forEach(entity => {
-          suggestionEntityList.push(entity.name);
-        });
-      }
-    }
-
-    return suggestionEntityList;
-  }
-
-  private getSuggestionRoles(luisJson: any): string[] {
-    const suggestionRolesList: string[] = [];
-    if (luisJson !== undefined) {
-      if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-        luisJson.entities.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-        luisJson.regex_entities.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-        luisJson.patternAnyEntities.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-        luisJson.prebuiltEntities.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.closedLists.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.phraselists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.composites.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-
-      if (luisJson.phraselists !== undefined && luisJson.closedLists.length > 0) {
-        luisJson.composites.forEach(entity => {
-          if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
-            });
-          }
-        });
-      }
-    }
-
-    return suggestionRolesList;
-  }
-
   protected async completion(params: TextDocumentPositionParams): Promise<CompletionList | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
@@ -523,14 +320,17 @@ export class LUServer {
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
     const text = document.getText();
+    const lines = text.split('\n');
+    const curLineNumber = params.position.line;
+    const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
     const completionList: CompletionItem[] = [];
-    if (this.isEntityType(curLineContent)) {
+    if (util.isEntityType(curLineContent)) {
       const entityTypes: string[] = EntityTypesObj.EntityType;
       entityTypes.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
-          insertText: ` ${entity}`,
+          insertText: `${entity}`,
           documentation: `Enitity type: ${entity}`,
         };
 
@@ -538,13 +338,13 @@ export class LUServer {
       });
     }
 
-    if (this.isPrebuiltEntity(curLineContent)) {
+    if (util.isPrebuiltEntity(curLineContent)) {
       const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
       prebuiltTypes.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
-          insertText: ` ${entity}`,
+          insertText: `${entity}`,
           documentation: `Prebuilt enitity: ${entity}`,
         };
 
@@ -552,31 +352,31 @@ export class LUServer {
       });
     }
 
-    if (this.isRegexEntity(curLineContent)) {
+    if (util.isRegexEntity(curLineContent)) {
       const item = {
         label: 'RegExp Entity',
         kind: CompletionItemKind.Keyword,
-        insertText: ` //`,
+        insertText: `//`,
         documentation: `regex enitity`,
       };
 
       completionList.push(item);
     }
 
-    if (this.isEntityName(curLineContent)) {
+    if (util.isEntityName(curLineContent)) {
       const item = {
         label: 'hasRoles?',
         kind: CompletionItemKind.Keyword,
-        insertText: `hasRoles `,
+        insertText: `hasRoles`,
         documentation: `Entity name hasRole?`,
       };
 
       completionList.push(item);
       const item2 = {
-        label: 'useFeature?',
+        label: 'usesFeature?',
         kind: CompletionItemKind.Keyword,
-        insertText: `useFeature `,
-        documentation: `Entity name useFeature?`,
+        insertText: `usesFeature`,
+        documentation: `Entity name usesFeature?`,
       };
 
       completionList.push(item2);
@@ -585,12 +385,16 @@ export class LUServer {
     // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
     //const lines = text.split('\n');
     //const textBeforeCurLine = lines.slice(0, position.line).join('\n');
-    const luisJson = await this.extractLUISContent(text);
-    const suggestionEntityList = this.getSuggestionEntities(luisJson);
-    const regexEntityList = this.getRegexEntities(luisJson);
+    let luisJson = await this.extractLUISContent(text);
+    if (!luisJson) {
+      luisJson = await this.extractLUISContent(textBeforeCurLine);
+    }
+
+    const suggestionEntityList = util.getSuggestionEntities(luisJson);
+    const regexEntityList = util.getRegexEntities(luisJson);
 
     //suggest a regex pattern for seperated line definition
-    if (this.isSeperatedEntityDef(curLineContent)) {
+    if (util.isSeperatedEntityDef(curLineContent)) {
       const seperatedEntityDef = /^\s*@\s*([\w._]+|"[\w._\s]+")+\s*=\s*$/;
       let entityName = '';
       const matchGroup = curLineContent.match(seperatedEntityDef);
@@ -602,7 +406,7 @@ export class LUServer {
         const item = {
           label: 'RegExp Entity',
           kind: CompletionItemKind.Keyword,
-          insertText: ` //`,
+          insertText: `//`,
           documentation: `regex enitity`,
         };
 
@@ -611,12 +415,12 @@ export class LUServer {
     }
 
     // auto suggest pattern
-    if (this.matchedEnterPattern(curLineContent)) {
+    if (util.matchedEnterPattern(curLineContent)) {
       suggestionEntityList.forEach(name => {
         const item = {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
-          insertText: ` ${name}`,
+          insertText: `${name}`,
           documentation: `pattern suggestion for entity: ${name}`,
         };
 
@@ -625,12 +429,12 @@ export class LUServer {
     }
 
     // suggestions for entities in a seperated line
-    if (this.isEntityType(curLineContent)) {
+    if (util.isEntityType(curLineContent)) {
       suggestionEntityList.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,
-          insertText: ` ${entity}`,
+          insertText: `${entity}`,
           documentation: `Enitity type: ${entity}`,
         };
 
@@ -638,12 +442,12 @@ export class LUServer {
       });
     }
 
-    if (this.isCompositeEntity(curLineContent)) {
+    if (util.isCompositeEntity(curLineContent)) {
       suggestionEntityList.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,
-          insertText: ` ${entity}`,
+          insertText: `${entity}`,
           documentation: `Enitity type: ${entity}`,
         };
 
@@ -651,14 +455,14 @@ export class LUServer {
       });
     }
 
-    const suggestionRolesList = this.getSuggestionRoles(luisJson);
+    const suggestionRolesList = util.getSuggestionRoles(luisJson);
     // auto suggest roles
-    if (this.matchedRolesPattern(curLineContent)) {
+    if (util.matchedRolesPattern(curLineContent)) {
       suggestionRolesList.forEach(name => {
         const item = {
           label: `Role: ${name}`,
           kind: CompletionItemKind.Property,
-          insertText: ` ${name}`,
+          insertText: `${name}`,
           documentation: `roles suggestion for entity name: ${name}`,
         };
 
@@ -666,13 +470,53 @@ export class LUServer {
       });
     }
 
-    if (this.matchedEntityPattern(curLineContent)) {
+    if (util.matchedEntityPattern(curLineContent)) {
       suggestionEntityList.forEach(name => {
         const item = {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
           insertText: ` ${name}`,
           documentation: `pattern suggestion for entity: ${name}`,
+        };
+        completionList.push(item);
+      });
+    }
+
+    if (util.matchedEntityCanusesFeature(curLineContent, text, luisJson)) {
+      const enitityName = util.extractEntityNameInUseFeature(curLineContent);
+      const suggestionFeatureList = util.getSuggestionEntities(luisJson, false);
+      suggestionFeatureList.forEach(name => {
+        if (name !== enitityName) {
+          const item = {
+            label: `Entity: ${name}`,
+            kind: CompletionItemKind.Method,
+            insertText: `${name}`,
+            documentation: `Feature suggestion for current entity: ${name}`,
+          };
+
+          completionList.push(item);
+        }
+      });
+    }
+
+    if (util.matchIntentInEntityDef(curLineContent)) {
+      const item = {
+        label: 'usesFeature?',
+        kind: CompletionItemKind.Keyword,
+        insertText: `usesFeature`,
+        documentation: `Entity name usesFeature?`,
+      };
+
+      completionList.push(item);
+    }
+    if (util.matchIntentUsesFeatures(curLineContent)) {
+      const suggestionFeatureList = util.getSuggestionEntities(luisJson, false);
+      suggestionFeatureList.forEach(name => {
+        const item = {
+          label: `Entity: ${name}`,
+          kind: CompletionItemKind.Method,
+          insertText: `${name}`,
+          documentation: `Feature suggestion for current entity: ${name}`,
         };
 
         completionList.push(item);
