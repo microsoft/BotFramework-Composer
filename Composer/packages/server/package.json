@@ -72,7 +72,7 @@
     "get-port": "^5.1.0",
     "globby": "^9.1.0",
     "http-errors": "^1.7.2",
-    "immer": "^2.1.4",
+    "immer": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.15",
