@@ -99,7 +99,7 @@ export function LuEditor(props: LULSPEditorProps) {
             languageClient.sendRequest('labelingExperienceRequest', { uri, position });
           });
           languageClient.onReady().then(() =>
-            languageClient.onNotification('docFormat', result => {
+            languageClient.onNotification('addUnlabelUtterance', result => {
               const edits = result.edits.map(e => {
                 return convertEdit(e);
               });

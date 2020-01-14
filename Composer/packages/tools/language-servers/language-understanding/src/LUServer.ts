@@ -24,7 +24,7 @@ import { EntityTypesObj, LineState } from './entityEnum';
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
-
+const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 export class LUServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
@@ -63,7 +63,7 @@ export class LUServer {
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
     this.connection.onRequest((method, params) => {
-      if (method === 'labelingExperienceRequest') {
+      if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
       }
     });
@@ -115,7 +115,7 @@ export class LUServer {
       const newPos2 = Position.create(position.lineNumber - 1, 0);
       const editNextLine: TextEdit = TextEdit.insert(newPos2, newUnlalbelText);
       const edits: TextEdit[] = [editPreviousLine, editNextLine];
-      this.connection.sendNotification('docFormat', { edits: edits });
+      this.connection.sendNotification('addUnlabelUtterance', { edits: edits });
     }
   }
 
@@ -368,7 +368,7 @@ export class LUServer {
     return regexRolesPatternDef.test(content) || regexRolesPatternDef2.test(content);
   }
 
-  private matchedRolesAndEntityPattern(content: string): boolean {
+  private matchedEntityPattern(content: string): boolean {
     const regexRolesEntityPatternDef = /^\s*-.*{\s*@/;
     const regexRolesEntityPatternDef2 = /^\s*-.*{\s*@}/;
     return regexRolesEntityPatternDef.test(content) || regexRolesEntityPatternDef2.test(content);
@@ -666,18 +666,7 @@ export class LUServer {
       });
     }
 
-    if (this.matchedRolesAndEntityPattern(curLineContent)) {
-      suggestionRolesList.forEach(name => {
-        const item = {
-          label: `Role: ${name}`,
-          kind: CompletionItemKind.Property,
-          insertText: ` ${name}`,
-          documentation: `roles suggestion for entity name: ${name}`,
-        };
-
-        completionList.push(item);
-      });
-
+    if (this.matchedEntityPattern(curLineContent)) {
       suggestionEntityList.forEach(name => {
         const item = {
           label: `Entity: ${name}`,
