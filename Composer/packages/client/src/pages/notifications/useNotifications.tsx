@@ -47,13 +47,11 @@ export default function useNotifications(filter?: string) {
       lgFile.diagnostics.map(diagnostic => {
         const mappedTemplate = lgTemplates.find(
           t =>
-            get(diagnostic, 'range.start.line', -1) >= get(t, 'range.startLineNumber') &&
-            get(diagnostic, 'range.end.line', -1) <= get(t, 'range.endLineNumber')
+            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
+            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
         );
         if (mappedTemplate && inLineLgTemplateFormat.test(mappedTemplate.name)) {
           //should navigate to design page
-          console.log(mappedTemplate);
-          console.log(diagnostic);
           const location = `${lgFile.id}.lg`;
           notifactions.push({
             type: 'inlineLgTemplate',

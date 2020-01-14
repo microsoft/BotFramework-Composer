@@ -4,13 +4,15 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 import { Diagnostic } from '@bfc/indexers';
+import get from 'lodash/get';
+import has from 'lodash/has';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
 import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
-import get from 'lodash/get';
+
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
   Focused: 'focused',
@@ -108,19 +110,22 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   return uri;
 }
 
-export function convertInlineLgDiagnosticToUrl(item, dialogs): string {
+export function convertInlineLgDiagnosticToUrl(targetTemplateId, dialogs): string {
   let url = '';
+  function visitor(path: string, value: any): boolean {
+    if (has(value, 'activity') && value.activity === `@{${targetTemplateId}()}`) {
+      console.log(path);
+      console.log(value);
+      url = path;
+      return true;
+    }
+    return false;
+  }
   dialogs.forEach(dialog => {
     const triggers = get(dialog, 'content.triggers', []);
+
     triggers.forEach((t, index) => {
-      const res = searchTargetLgInTriggers(
-        t,
-        item,
-        `dialogs/${dialog.id}?selected=triggers[${index}]&focused=triggers[${index}]`
-      );
-      if (url === '') {
-        url = res;
-      }
+      searchLgTemplate(`dialogs/${dialog.id}?selected=triggers[${index}]&focused=triggers[${index}]`, t, visitor);
     });
   });
   return url;
@@ -131,16 +136,20 @@ export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationS
   navigate(mapNavPath, navigateOpts);
 }
 
-function searchTargetLgInTriggers(trigger, target, url) {
-  if (trigger.activity === `@{${target}()}`) {
-    return url;
+function searchLgTemplate(path: string, value: any, visitor) {
+  const stop = visitor(path, value);
+  if (stop === true) return;
+
+  // extract array
+  if (Array.isArray(value)) {
+    value.forEach((child, index) => {
+      searchLgTemplate(`${path}[${index}]`, child, visitor);
+    });
+
+    // extract object
+  } else if (typeof value === 'object' && value) {
+    Object.keys(value).forEach(key => {
+      searchLgTemplate(`${path}.${key}`, value[key], visitor);
+    });
   }
-  const actions = get(trigger, 'actions', []);
-  for (let i = 0; i < actions.length; i++) {
-    let res = searchTargetLgInTriggers(actions[i], target, url + `actions[${i}]`);
-    if (res) {
-      return res;
-    }
-  }
-  return '';
 }
