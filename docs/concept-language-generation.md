@@ -200,15 +200,15 @@ For more examples of structured response templates, see [StructuredTemplate.lg](
  
 ### Common expression language cheat sheet 
 
-| Symbol | Description                                                                                           |
-| ------ | ----------------------------------------------------------------------------------------------------- |
-| #      | Template definition symbol                                                                            |
-| -      | Variation                                                                                             |
-| \      | Escape character                                                                                      |
-| @      | A prefix character to signify need expression evaluation when in multi-line response                  |
-| {}     | Used for all expressions. Templates are also functions so {templateName()} is valid and supported.    |
+| Symbol | Description                                                                                                                                                      |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #      | Template definition symbol                                                                                                                                       |
+| -      | Variation                                                                                                                                                        |
+| \      | Escape character                                                                                                                                                 |
+| @      | A prefix character to signify need expression evaluation when in multi-line response                                                                             |
+| {}     | Used for all expressions. Templates are also functions so {templateName()} is valid and supported.                                                      |
 | ()     | Used to denote parameters to a function or to a template. E.g {templateName(‘value1’, ‘value2’)} or to a prebuilt function {length(greeting)} or {length(‘value1’)} |
-| ` ``` `| Used in pair to denote multi-line segment.                                                            |
+| ```    | Used in pair to denote multi-line segment.                                                                                                                     |```
 
 
 ## References
