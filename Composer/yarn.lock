@@ -2,6 +2,22 @@
 # yarn lockfile v1
 
 
+"@azure/cognitiveservices-luis-authoring@3.0.1":
+  version "3.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/cognitiveservices-luis-authoring/-/@azure/cognitiveservices-luis-authoring-3.0.1.tgz#9b89c480e7c19f112121b52c9b5f73542d3fc1ee"
+  integrity sha1-m4nEgOfBnxEhIbUsm19zVC0/we4=
+  dependencies:
+    "@azure/ms-rest-js" "^2.0.3"
+    tslib "^1.10.0"
+
+"@azure/ms-rest-azure-js@2.0.1":
+  version "2.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/ms-rest-azure-js/-/@azure/ms-rest-azure-js-2.0.1.tgz#fa1b38f039b3ee48a9e086a88c8a5b5b7776491c"
+  integrity sha1-+hs48Dmz7kip4IaojIpbW3d2SRw=
+  dependencies:
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
 "@azure/ms-rest-js@1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-1.7.0.tgz#31386f47583752c5efeaf93f58f282ba64d085ca"
@@ -28,6 +44,22 @@
     tslib "^1.9.2"
     tunnel "0.0.6"
     uuid "^3.2.1"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@^2.0.3", "@azure/ms-rest-js@^2.0.4":
+  version "2.0.5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/ms-rest-js/-/@azure/ms-rest-js-2.0.5.tgz#7ac1043b7b8c99bb8c5b09ada96b858b02db8e75"
+  integrity sha1-esEEO3uMmbuMWwmtqWuFiwLbjnU=
+  dependencies:
+    "@types/node-fetch" "^2.3.7"
+    "@types/tunnel" "0.0.1"
+    abort-controller "^3.0.0"
+    form-data "^2.5.0"
+    node-fetch "^2.6.0"
+    tough-cookie "^3.0.1"
+    tslib "^1.10.0"
+    tunnel "0.0.6"
+    uuid "^3.3.2"
     xml2js "^0.4.19"
 
 "@babel/cli@7.2.3", "@babel/cli@^7.2.3":
@@ -2103,6 +2135,30 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
+"@bfcomposer/bf-lu@^1.1.8":
+  version "1.1.8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.8.tgz#a3c7767de038025157bdc8cf9f56b393f1428fd4"
+  integrity sha1-o8d2feA4AlFXvcjPn1azk/FCj9Q=
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "3.0.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@microsoft/bf-cli-command" "1.0.0"
+    "@oclif/command" "~1.5.19"
+    "@oclif/config" "~1.13.3"
+    "@oclif/errors" "~1.2.2"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.15"
+    node-fetch "^2.1.2"
+    semver "^5.5.1"
+    tslib "^1.10.0"
+
 "@bfcomposer/lubuild@1.1.2-preview":
   version "1.1.2-preview"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/lubuild/-/@bfcomposer/lubuild-1.1.2-preview.tgz#426e5e109c2d6752745dc363aa824a653a3757f7"
@@ -3184,6 +3240,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/node-fetch@^2.3.7":
+  version "2.5.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/node-fetch/-/@types/node-fetch-2.5.4.tgz#5245b6d8841fc3a6208b82291119bc11c4e0ce44"
+  integrity sha1-UkW22IQfw6Ygi4IpERm8EcTgzkQ=
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^11.9.6":
   version "11.11.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.4.tgz#8808bd5a82bbf6f5d412eff1c228d178e7c24bb3"
@@ -3299,6 +3362,13 @@
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@types/tunnel/-/tunnel-0.0.0.tgz#c2a42943ee63c90652a5557b8c4e56cda77f944e"
   integrity sha512-FGDp0iBRiBdPjOgjJmn1NH0KDLN+Z8fRmo+9J7XGBhubq1DPrGrbmG4UTlGzrpbCpesMqD0sWkzi27EYkOMHyg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/tunnel@0.0.1":
+  version "0.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/tunnel/-/@types/tunnel-0.0.1.tgz#0d72774768b73df26f25df9184273a42da72b19c"
+  integrity sha1-DXJ3R2i3PfJvJd+RhCc6QtpysZw=
   dependencies:
     "@types/node" "*"
 
@@ -3757,6 +3827,13 @@ abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
+
+abort-controller@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/abort-controller/-/abort-controller-3.0.0.tgz#eaf54d53b62bae4138e809ca225c8439a6efb392"
+  integrity sha1-6vVNU7YrrkE46AnKIlyEOabvs5I=
+  dependencies:
+    event-target-shim "^5.0.0"
 
 accepts@~1.3.4, accepts@~1.3.5:
   version "1.3.5"
@@ -7135,6 +7212,11 @@ del@^4.1.1:
     pify "^4.0.1"
     rimraf "^2.6.3"
 
+delay@^4.3.0:
+  version "4.3.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/delay/-/delay-4.3.0.tgz#efeebfb8f545579cb396b3a722443ec96d14c50e"
+  integrity sha1-7+6/uPVFV5yzlrOnIkQ+yW0UxQ4=
+
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
@@ -7892,6 +7974,11 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+event-target-shim@^5.0.0:
+  version "5.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
+  integrity sha1-XU0+vflYPWOlMzzi3rdICrKwV4k=
+
 eventemitter3@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
@@ -8487,6 +8574,15 @@ form-data@^2.3.2, form-data@^2.3.3, form-data@~2.3.2:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.3.tgz#dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
   integrity sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.6"
+    mime-types "^2.1.12"
+
+form-data@^2.5.0:
+  version "2.5.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
+  integrity sha1-8svsV7XlniNxbhKP5E1OXdI4lfQ=
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
@@ -12126,7 +12222,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.1.2:
+node-fetch@^2.1.2, node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
@@ -16231,6 +16327,15 @@ tough-cookie@^2.3.3, tough-cookie@^2.3.4, tough-cookie@^2.4.3:
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
   integrity sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==
   dependencies:
+    psl "^1.1.28"
+    punycode "^2.1.1"
+
+tough-cookie@^3.0.1:
+  version "3.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/tough-cookie/-/tough-cookie-3.0.1.tgz#9df4f57e739c26930a018184887f4adb7dca73b2"
+  integrity sha1-nfT1fnOcJpMKAYGEiH9K233Kc7I=
+  dependencies:
+    ip-regex "^2.1.0"
     psl "^1.1.28"
     punycode "^2.1.1"
 
