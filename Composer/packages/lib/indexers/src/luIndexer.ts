@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { parser } from '@bfcomposer/bf-lu/lib/parser';
+import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 
-import { FileInfo, LuFile, IParsedObject } from './type';
+import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
 import { getBaseName } from './utils/help';
 import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
+
+const { luParser } = sectionHandler;
 
 function convertLuDiagnostic(d: any, source: string): Diagnostic {
   const severityMap = {
@@ -24,35 +26,52 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
   return result;
 }
 
-function parse(content: string): Promise<IParsedObject> {
-  const log = false;
-  const locale = 'en-us';
-
-  return parser.parseFile(content, log, locale);
+function parse(content: string, id = ''): LuParsed {
+  const { Sections, Errors } = luParser.parse(content);
+  const intents = Sections.map(section => {
+    const { Name, Body, SectionType } = section;
+    if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
+      const Entities = section.Entities.map(({ Name }) => Name);
+      return {
+        Name,
+        Body,
+        Entities,
+      };
+    } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
+      const Children = section.SimpleIntentSections.map(subSection => {
+        const { Name, Body } = subSection;
+        const Entities = subSection.Entities.map(({ Name }) => Name);
+        return {
+          Name,
+          Body,
+          Entities,
+        };
+      });
+      return {
+        Name,
+        Body,
+        Children,
+      };
+    }
+  }).filter(item => item !== undefined);
+  const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
+  return {
+    intents,
+    diagnostics,
+  };
 }
 
-async function index(files: FileInfo[]): Promise<LuFile[]> {
+function index(files: FileInfo[]): LuFile[] {
   if (files.length === 0) return [];
 
   const filtered = files.filter(file => file.name.endsWith(FileExtensions.Lu));
 
-  const luFiles = await Promise.all(
-    filtered.map(async file => {
-      const { name, content, relativePath } = file;
-      const diagnostics: Diagnostic[] = [];
-      let parsedContent: IParsedObject | undefined;
-
-      try {
-        parsedContent = await parse(file.content);
-      } catch (err) {
-        err.diagnostics.forEach(diagnostic => {
-          diagnostics.push(convertLuDiagnostic(diagnostic, name));
-        });
-      }
-
-      return { diagnostics, id: getBaseName(name), relativePath, content, parsedContent };
-    })
-  );
+  const luFiles = filtered.map(file => {
+    const { name, content, relativePath } = file;
+    const id = getBaseName(name);
+    const { intents, diagnostics } = parse(content, id);
+    return { id, relativePath, content, intents, diagnostics };
+  });
 
   return luFiles;
 }

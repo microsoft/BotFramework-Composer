@@ -8,6 +8,7 @@ import get from 'lodash/get';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
+import * as luUtil from './utils/luUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -202,6 +203,48 @@ export const ShellApi: React.FC = () => {
     });
   }
 
+  /**
+   *
+   * @param {
+   * id: string,
+   * intentName: string,
+   * intent: { name: string, body: string }
+   * }
+   *
+   * @param {*} event
+   */
+  async function updateLuIntentHandler({ id, intentName, intent }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const newLuContent = luUtil.updateIntent(file.content, intentName, intent);
+
+    return await updateLuFile({ id, newLuContent });
+  }
+
+  async function addLuIntentHandler({ id, intent }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+
+    const newLuContent = luUtil.addIntent(file.content, intent);
+
+    return await updateLuFile({ id, newLuContent });
+  }
+
+  async function removeLuIntentHandler({ id, intentName }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const newLuContent = luUtil.removeIntent(file.content, intentName);
+
+    return await updateLuFile({ id, newLuContent });
+  }
+
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
     if (isEventSourceValid(event) === false) return false;
 
@@ -301,6 +344,9 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
+    apiClient.registerApi('addLuIntent', addLuIntentHandler);
+    apiClient.registerApi('updateLuIntent', updateLuIntentHandler);
+    apiClient.registerApi('removeLuIntent', removeLuIntentHandler);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);
