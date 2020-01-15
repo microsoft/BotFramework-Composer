@@ -113,8 +113,8 @@ export class LUServer {
       const newPos = Position.create(position.lineNumber, 0);
       const newUnlalbelText = newText + '\n';
       const editPreviousLine: TextEdit = TextEdit.insert(newPos, newUnlalbelText);
-      const newPos2 = Position.create(position.lineNumber - 1, 0);
-      const editNextLine: TextEdit = TextEdit.insert(newPos2, newUnlalbelText);
+      const newPos2 = Position.create(position.lineNumber, curLineContent.length + 1);
+      const editNextLine: TextEdit = TextEdit.insert(newPos2, '\n' + newUnlalbelText);
       const edits: TextEdit[] = [editPreviousLine, editNextLine];
       this.connection.sendNotification('addUnlabelUtterance', { edits: edits });
     }
@@ -161,8 +161,8 @@ export class LUServer {
           entityName = entityGroup[1];
         }
         if (mlEntities.includes(entityName)) {
-          const newPos = Position.create(pos.line - 1, lastLineContent.length + 1);
-          const item: TextEdit = TextEdit.insert(newPos, '\n\t-@ ');
+          const newPos = Position.create(pos.line, 0);
+          const item: TextEdit = TextEdit.insert(newPos, '\t-@');
           edits.push(item);
         }
       }
@@ -174,12 +174,12 @@ export class LUServer {
       lastLineContent.trim() !== '-' &&
       curLineNumber === lineCount - 1
     ) {
-      const newPos = Position.create(pos.line - 1, 0);
+      const newPos = Position.create(pos.line + 1, 0);
       let insertStr = '';
       if (lastLineContent.trim().endsWith(':') || lastLineContent.trim().endsWith('=')) {
-        insertStr = '\t- ';
+        insertStr = '\t-';
       } else {
-        insertStr = '- ';
+        insertStr = '-';
       }
       const item: TextEdit = TextEdit.insert(newPos, insertStr);
       edits.push(item);
@@ -211,11 +211,11 @@ export class LUServer {
   private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
     const document = this.documents.get(params.textDocument.uri);
     const position = params.position;
-    const regListEnity = /^\s*@\s*list\s*.*/;
-    const regUtterance = /^\s*#.*/;
-    const regDashLine = /^\s*-.*/;
-    const mlEntity = /^\s*@\s*ml\s*.*/;
-    const regEntityDefLine = /^\s*@.*/;
+    const regListEnity = /^\s*@\s*list\s*.*$/;
+    const regUtterance = /^\s*#.*$/;
+    const regDashLine = /^\s*-.*$/;
+    const mlEntity = /^\s*@\s*ml\s*.*$/;
+    const regEntityDefLine = /^\s*@.*$/;
     let state: LineState = 'other';
     if (!document) {
       return 'other';
@@ -504,11 +504,12 @@ export class LUServer {
         label: 'usesFeature?',
         kind: CompletionItemKind.Keyword,
         insertText: `usesFeature`,
-        documentation: `Entity name usesFeature?`,
+        documentation: `Does this intent usesFeature?`,
       };
 
       completionList.push(item);
     }
+
     if (util.matchIntentUsesFeatures(curLineContent)) {
       const suggestionFeatureList = util.getSuggestionEntities(luisJson, false);
       suggestionFeatureList.forEach(name => {

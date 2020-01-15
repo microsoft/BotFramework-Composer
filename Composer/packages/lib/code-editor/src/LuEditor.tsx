@@ -51,9 +51,9 @@ declare global {
 function convertEdit(serverEdit: any) {
   return {
     range: {
-      startLineNumber: serverEdit.range.start.line + 1,
+      startLineNumber: serverEdit.range.start.line,
       startColumn: serverEdit.range.start.character,
-      endLineNumber: serverEdit.range.end.line + 1,
+      endLineNumber: serverEdit.range.end.line,
       endColumn: serverEdit.range.end.character,
     },
     text: serverEdit.newText,

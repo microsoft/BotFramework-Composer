@@ -4,7 +4,7 @@
 export function getMLEntities(text: string): string[] {
   const lines = text.split('\n');
 
-  const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*/;
+  const mlEntityRegExp = /^\s*@\s*ml\s*([0-9a-zA-Z_.-]+)\s*.*$/;
   const mlEntities: string[] = [];
   for (const line of lines) {
     if (mlEntityRegExp.test(line)) {
@@ -32,9 +32,9 @@ export function getCompositesEntities(luisJson: any): string[] {
 }
 
 export function matchedEntityCanusesFeature(lineContent: string, text: string, luisJson: any): boolean {
-  const mlTypedEntityusesFeature = /^\s*@\s*ml\s*\w*\s*usesFeature\s*/;
-  const compositesTypedEntityusesFeature = /^\s*@\s*composites\s*\w*\s*usesFeature\s*/;
-  const notTypedEntityusesFeature = /^\s*@\s*(\w*)\s*usesFeature\s*/;
+  const mlTypedEntityusesFeature = /^\s*@\s*ml\s*\w*\s*usesFeature\s*$/;
+  const compositesTypedEntityusesFeature = /^\s*@\s*composites\s*\w*\s*usesFeature\s*$/;
+  const notTypedEntityusesFeature = /^\s*@\s*(\w*)\s*usesFeature\s*$/;
   if (mlTypedEntityusesFeature.test(lineContent) || compositesTypedEntityusesFeature.test(lineContent)) {
     return true;
   } else if (notTypedEntityusesFeature.test(lineContent)) {
@@ -57,7 +57,7 @@ export function matchIntentUsesFeatures(content: string): boolean {
 }
 
 export function matchIntentInEntityDef(content: string): boolean {
-  const intentInEntityDefRegEx = /^\s*@\s*intent\s*\w*\s*$/;
+  const intentInEntityDefRegEx = /^\s*@\s*intent\s*\w+\s*$/;
   return intentInEntityDefRegEx.test(content);
 }
 
@@ -83,7 +83,7 @@ export function isSeperatedEntityDef(content: string): boolean {
 
 export function isEntityName(content: string): boolean {
   const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
-  const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*$/;
+  const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist|intent)\s*$/;
   const hasNameEntifyDef2 = /^\s*@\s*([\w._]+|"[\w._\s]+")\s*$/;
   return hasNameEntifyDef.test(content) || (!hasTypeEntityDef.test(content) && hasNameEntifyDef2.test(content));
 }
@@ -106,8 +106,8 @@ export function matchedRolesPattern(content: string): boolean {
 }
 
 export function matchedEntityPattern(content: string): boolean {
-  const regexRolesEntityPatternDef = /^\s*-.*{\s*@/;
-  const regexRolesEntityPatternDef2 = /^\s*-.*{\s*@}/;
+  const regexRolesEntityPatternDef = /^\s*-.*{\s*@\s*$/;
+  const regexRolesEntityPatternDef2 = /^\s*-.*{\s*@\s*}\s*$/;
   return regexRolesEntityPatternDef.test(content) || regexRolesEntityPatternDef2.test(content);
 }
 
