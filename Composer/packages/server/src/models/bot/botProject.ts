@@ -21,12 +21,14 @@ import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
+import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
+const debug = log.extend('bot-project');
 const DIALOGFOLDER = 'ComposerDialogs';
 
 const oauthInput = () => ({
@@ -82,8 +84,8 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = this.indexLgFiles();
-    this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+    this.lgFiles = lgIndexer.index(this.files);
+    this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
@@ -344,7 +346,7 @@ export class BotProject {
       const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = unpublished.filter(this.isEmpty);
+    const emptyLuFiles = unpublished.filter(this.isLuFileEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
@@ -411,6 +413,7 @@ export class BotProject {
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
+    debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
     // update this.files which is memory cache of all files
@@ -508,7 +511,7 @@ export class BotProject {
         this.lgFiles = this.indexLgFiles();
         break;
       case '.lu':
-        this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+        this.luFiles = luIndexer.index(this.files);
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -521,6 +524,7 @@ export class BotProject {
       return;
     }
     if (!(await this.fileStorage.exists(dir))) {
+      debug('Creating directory: %s', dir);
       await this.fileStorage.mkDir(dir, { recursive: true });
     }
   };
@@ -603,13 +607,11 @@ export class BotProject {
     }
   };
 
-  private isEmpty = (LUFile: LuFile) => {
-    if (LUFile === undefined) return true;
-    if (LUFile.content === undefined || LUFile.content === '') return true;
-    if (LUFile.parsedContent === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure.intents.length !== 0) return false;
-    if (LUFile.parsedContent.LUISJsonStructure.utterances.length !== 0) return false;
+  private isLuFileEmpty = (file: LuFile) => {
+    const { content, intents } = file;
+    if (content && intents?.length) {
+      return false;
+    }
     return true;
   };
 

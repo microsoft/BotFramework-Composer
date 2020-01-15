@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, LgFile } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, LgFile, FileResolver, MemoryResolver } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -29,7 +29,6 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
-  LGFileResolver,
 } from './utils';
 
 const { check, indexOne } = lgIndexer;
@@ -44,8 +43,13 @@ export class LGServer {
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = [];
+  private memoryVariables: Record<string, any> = {};
 
-  constructor(protected readonly connection: IConnection, protected readonly resolver?: LGFileResolver) {
+  constructor(
+    protected readonly connection: IConnection,
+    protected readonly resolver?: FileResolver,
+    protected readonly memoryResolver?: MemoryResolver
+  ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -66,6 +70,7 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
+            triggerCharacters: ['.'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
@@ -90,6 +95,41 @@ export class LGServer {
 
   start() {
     this.connection.listen();
+  }
+
+  protected updateObject(propertyList: string[]): void {
+    let tempVariable: Record<string, any> = this.memoryVariables;
+    const antPattern = /\*+/;
+    const normalizedAnyPattern = '***';
+    for (let property of propertyList) {
+      if (property in tempVariable) {
+        tempVariable = tempVariable[property];
+      } else {
+        if (antPattern.test(property)) {
+          property = normalizedAnyPattern;
+        }
+        tempVariable[property] = {};
+        tempVariable = tempVariable[property];
+      }
+    }
+  }
+
+  protected updateMemoryVariables(uri: string): void {
+    if (!this.memoryResolver) {
+      return;
+    }
+
+    const memoryFileInfo: string[] | undefined = this.memoryResolver(uri);
+    if (!memoryFileInfo || memoryFileInfo.length === 0) {
+      return;
+    }
+
+    memoryFileInfo.forEach(variable => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList);
+      }
+    });
   }
 
   protected validateLgOption(document: TextDocument, lgOption?: LGOption) {
@@ -280,11 +320,82 @@ export class LGServer {
     return state.pop();
   }
 
+  protected matchingCompletionProperty(propertyList: string[], ...objects: object[]): CompletionItem[] {
+    const completionList: CompletionItem[] = [];
+    const normalizedAnyPattern = '***';
+    for (const obj of objects) {
+      let tempVariable = obj;
+      for (const property of propertyList) {
+        if (property in tempVariable) {
+          tempVariable = tempVariable[property];
+        } else if (normalizedAnyPattern in tempVariable) {
+          tempVariable = tempVariable[normalizedAnyPattern];
+        } else {
+          tempVariable = {};
+        }
+      }
+
+      if (!tempVariable || Object.keys(tempVariable).length === 0) {
+        continue;
+      }
+
+      Object.keys(tempVariable).forEach(e => {
+        if (e.toString() !== normalizedAnyPattern) {
+          const item = {
+            label: e.toString(),
+            kind: CompletionItemKind.Property,
+            insertText: e.toString(),
+            documentation: '',
+          };
+          if (!completionList.includes(item)) {
+            completionList.push(item);
+          }
+        }
+      });
+    }
+
+    return completionList;
+  }
+
+  protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return [];
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDot = wordAtCurRange.endsWith('.');
+
+    this.updateMemoryVariables(params.textDocument.uri);
+    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
+      return {
+        label: e.toString(),
+        kind: CompletionItemKind.Property,
+        insertText: e.toString(),
+        documentation: '',
+      };
+    });
+
+    if (!wordAtCurRange || !endWithDot) {
+      return memoryVariblesRootCompletionList;
+    }
+
+    let propertyList = wordAtCurRange.split('.');
+    propertyList = propertyList.slice(0, propertyList.length - 1);
+
+    const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
+
+    return completionList;
+  }
+
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDot = wordAtCurRange.endsWith('.');
     const lgFile = this.getLGDocument(document)?.index();
     if (!lgFile) {
       return Promise.resolve(null);
@@ -311,9 +422,21 @@ export class LGServer {
       };
     });
 
+    const completionPropertyResult = this.findValidMemoryVariables(params);
+
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
-      return Promise.resolve({ isIncomplete: true, items: completionTemplateList.concat(completionFunctionList) });
+      if (endWithDot) {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionPropertyResult,
+        });
+      } else {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
+        });
+      }
     } else {
       return Promise.resolve(null);
     }

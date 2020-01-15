@@ -315,6 +315,7 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
+  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
