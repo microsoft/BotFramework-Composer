@@ -6,14 +6,14 @@ import uniq from 'lodash/uniq';
 import { extractLgTemplateRefs } from '@bfc/shared';
 
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo } from './type';
+import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 
 // find out all lg templates given dialog
-function ExtractLgTemplates(dialog): string[] {
-  const templates: any[] = [];
+function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
+  const templates: LgTemplateJsonPath[] = [];
   /**
    *
    * @param path , jsonPath string
