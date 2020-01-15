@@ -322,7 +322,11 @@ export class LUServer {
     const text = document.getText();
     const lines = text.split('\n');
     const curLineNumber = params.position.line;
-    const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
+    //const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
+    const textExceptCurLine = lines
+      .slice(0, curLineNumber)
+      .concat(lines.slice(curLineNumber + 1))
+      .join('\n');
     const completionList: CompletionItem[] = [];
     if (util.isEntityType(curLineContent)) {
       const entityTypes: string[] = EntityTypesObj.EntityType;
@@ -383,11 +387,10 @@ export class LUServer {
     }
 
     // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
-    //const lines = text.split('\n');
-    //const textBeforeCurLine = lines.slice(0, position.line).join('\n');
+
     let luisJson = await this.extractLUISContent(text);
     if (!luisJson) {
-      luisJson = await this.extractLUISContent(textBeforeCurLine);
+      luisJson = await this.extractLUISContent(textExceptCurLine);
     }
 
     const suggestionEntityList = util.getSuggestionEntities(luisJson);
@@ -443,7 +446,7 @@ export class LUServer {
     }
 
     if (util.isCompositeEntity(curLineContent)) {
-      suggestionEntityList.forEach(entity => {
+      util.getSuggestionEntities(luisJson, true, false).forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,

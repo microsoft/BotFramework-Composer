@@ -124,7 +124,7 @@ export function getRegexEntities(luisJson: any): string[] {
   return suggestionRegexList;
 }
 
-export function getSuggestionEntities(luisJson: any, includePatternAny = true): string[] {
+export function getSuggestionEntities(luisJson: any, includePatternAny = true, includeComposites = true): string[] {
   const suggestionEntityList: string[] = [];
   if (luisJson !== undefined) {
     if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
@@ -177,12 +177,14 @@ export function getSuggestionEntities(luisJson: any, includePatternAny = true): 
       });
     }
 
-    if (luisJson.composites !== undefined && luisJson.composites.length > 0) {
-      luisJson.composites.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
+    if (includeComposites) {
+      if (luisJson.composites !== undefined && luisJson.composites.length > 0) {
+        luisJson.composites.forEach(entity => {
+          if (entity.name) {
+            suggestionEntityList.push(entity.name);
+          }
+        });
+      }
     }
   }
 
