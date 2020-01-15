@@ -30,7 +30,7 @@ interface TableViewProps {
 
 interface Intent {
   name: string;
-  phrases: string[];
+  phrases: string;
   fileId: string;
   used: boolean;
   state: string;
@@ -55,21 +55,16 @@ const TableView: React.FC<TableViewProps> = props => {
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      get(luFile, 'parsedContent.LUISJsonStructure.utterances', []).forEach(utterance => {
-        const name = utterance.intent;
-        const updateIntent = items.find(item => item.name === name && item.fileId === luFile.id);
+      get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(luFile);
-        if (updateIntent) {
-          updateIntent.phrases.push(utterance.text);
-        } else {
-          items.push({
-            name,
-            phrases: [utterance.text],
-            fileId: luFile.id,
-            used: luDialog ? luDialog.luIntents.includes(name) : false, // used by it's dialog or not
-            state,
-          });
-        }
+
+        items.push({
+          name,
+          phrases,
+          fileId: luFile.id,
+          used: luDialog ? luDialog.luIntents.includes(name) : false, // used by it's dialog or not
+          state,
+        });
       });
       return result.concat(items);
     }, []);
@@ -148,10 +143,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         onRender: item => {
-          const phraseLines = item.phrases.map((text, idx) => {
-            return <p key={idx}>{text}</p>;
-          });
-          return <div css={luPhraseCell}>{phraseLines}</div>;
+          return <div css={luPhraseCell}>{item.phrases}</div>;
         },
       },
       {
