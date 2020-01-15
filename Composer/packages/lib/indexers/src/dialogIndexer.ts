@@ -49,6 +49,7 @@ function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
     }
     return false;
   };
+  JsonWalk('', dialog, visitor);
   //uniquify lgTemplates based on name
   const res: LgTemplateJsonPath[] = [];
   templates.forEach(t => {
