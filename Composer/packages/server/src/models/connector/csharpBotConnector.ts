@@ -70,6 +70,7 @@ export class CSharpBotConnector implements IBotConnector {
         cwd: dir,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
+      let errorMsg = '';
       buildDebug('building bot runtime: %d', build.pid);
       build.stdout &&
         build.stdout.on('data', function(str) {
@@ -77,10 +78,14 @@ export class CSharpBotConnector implements IBotConnector {
         });
       build.stderr &&
         build.stderr.on('data', function(err) {
-          reject(err.toString());
+          errorMsg = errorMsg + err.toString();
         });
       build.on('exit', function(code) {
-        resolve(code);
+        if (code !== 0) {
+          reject(errorMsg);
+        } else {
+          resolve(code);
+        }
       });
     });
   };
