@@ -49,8 +49,14 @@ function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
     }
     return false;
   };
-  JsonWalk('', dialog, visitor);
-  return uniq(templates);
+  //uniquify lgTemplates based on name
+  const res: LgTemplateJsonPath[] = [];
+  templates.forEach(t => {
+    if (!res.find(r => r.name === t.name)) {
+      res.push(t);
+    }
+  });
+  return res;
 }
 
 // find out all lu intents given dialog

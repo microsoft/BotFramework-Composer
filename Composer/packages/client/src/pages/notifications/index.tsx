@@ -41,11 +41,9 @@ const Notifications: React.FC<RouteComponentProps> = () => {
               navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
             }
           } else {
-            //the dialog is not using the lgTemplate, it should be a bug
             navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
           }
         } else {
-          //no dialog is using the lgFile which contains the lgTemplate, it should be a bug
           navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
         }
       } else {
