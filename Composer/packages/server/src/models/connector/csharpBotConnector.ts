@@ -167,6 +167,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async (_: BotEnvironments, __: string) => {
     const originPort = urlParse(this.endpoint).port;
     const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
+    this.endpoint = `http://localhost:${port}`;
     return `http://localhost:${port}/api/messages`;
   };
 
