@@ -13,7 +13,7 @@ import { Diagnostic } from './diagnostic';
 
 // find out all lg templates given dialog
 function ExtractLgTemplates(dialog): string[] {
-  const templates: string[] = [];
+  const templates: any[] = [];
   /**
    *
    * @param path , jsonPath string
@@ -22,30 +22,34 @@ function ExtractLgTemplates(dialog): string[] {
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
     if (has(value, '$type')) {
-      const targets: string[] = [];
+      const targets: any[] = [];
       // look for prompt field
       if (has(value, 'prompt')) {
-        targets.push(value.prompt);
+        targets.push({ value: value.prompt, path: path });
       }
       // look for unrecognizedPrompt field
       if (has(value, 'unrecognizedPrompt')) {
-        targets.push(value.unrecognizedPrompt);
+        targets.push({ value: value.unrecognizedPrompt, path: path });
       }
       // look for other $type
       switch (value.$type) {
         case 'Microsoft.SendActivity':
-          targets.push(value.activity);
+          targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $type, do here
         case 'location':
           return true;
       }
       targets.forEach(target => {
-        templates.push(...extractLgTemplateRefs(target).map(x => x.name));
+        templates.push(
+          ...extractLgTemplateRefs(target.value).map(x => {
+            return { name: x.name, path: target.path };
+          })
+        );
       });
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
+  JsonWalk('', dialog, visitor);
   return uniq(templates);
 }
 

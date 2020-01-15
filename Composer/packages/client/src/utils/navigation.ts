@@ -12,7 +12,6 @@ import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
-
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
   Focused: 'focused',
@@ -110,41 +109,19 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   return uri;
 }
 
-export function convertInlineLgDiagnosticToUrl(targetTemplateId, dialogs): string {
-  let url = '';
-  function visitor(path: string, value: any): boolean {
-    if (has(value, 'activity') && value.activity === `@{${targetTemplateId}()}`) {
-      url = path;
-      return true;
-    }
-    return false;
+export function convertInlineLgPathToUrl(dialogId: string, path: string, templateId: string): string {
+  const tokens = path.split('.');
+  const trigger = tokens[1];
+  const urlToken = tokens.splice(2).join('.');
+  if (templateId.indexOf('bfdactivity') > -1) {
+    return `dialogs/${dialogId}?selected=${trigger}&focused=${trigger}.${urlToken}`;
+  } else if (templateId.indexOf('bfdprompt') > -1) {
+    return `dialogs/${dialogId}?selected=${trigger}&focused=${trigger}.${urlToken}#botAsks`;
   }
-  dialogs.forEach(dialog => {
-    const triggers = get(dialog, 'content.triggers', []);
-
-    triggers.forEach((t, index) => {
-      searchLgTemplate(`dialogs/${dialog.id}?selected=triggers[${index}]&focused=triggers[${index}]`, t, visitor);
-    });
-  });
-  return url;
+  return '';
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
   navigate(mapNavPath, navigateOpts);
-}
-
-function searchLgTemplate(path: string, value: any, visitor) {
-  const stop = visitor(path, value);
-  if (stop) return;
-
-  if (Array.isArray(value)) {
-    value.forEach((child, index) => {
-      searchLgTemplate(`${path}[${index}]`, child, visitor);
-    });
-  } else if (typeof value === 'object' && value) {
-    Object.keys(value).forEach(key => {
-      searchLgTemplate(`${path}.${key}`, value[key], visitor);
-    });
-  }
 }

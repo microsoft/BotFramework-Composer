@@ -13,7 +13,7 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification } from './types';
 import { navigateTo } from './../../utils';
-import { convertDialogDiagnosticToUrl, convertInlineLgDiagnosticToUrl } from './../../utils/navigation';
+import { convertDialogDiagnosticToUrl, convertInlineLgPathToUrl } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
@@ -21,12 +21,34 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const { dialogs } = state;
   const notifications = useNotifications(filter);
   const navigations = {
-    inlineLgTemplate: (item: INotification) => {
-      const url = convertInlineLgDiagnosticToUrl(item.id, dialogs);
-      navigateTo(url);
-    },
-    customCraftedLgTemplateg: (item: INotification) => {
-      navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+    lg: (item: INotification) => {
+      const dividerIndex = item.id.indexOf('#');
+      //the format of item.id is lgFile#inlineTemplateId
+      if (dividerIndex > -1) {
+        const templateId = item.id.substring(dividerIndex + 1);
+        const lgFile = item.id.substring(0, dividerIndex);
+        const dialog = dialogs.find(d => d.lgFile === lgFile);
+        if (dialog) {
+          const lgTemplate = dialog.lgTemplates.find(lg => lg.name === templateId);
+          if (lgTemplate) {
+            const path = lgTemplate.path;
+            const url = convertInlineLgPathToUrl(dialog.id, path, templateId);
+            if (url) {
+              navigateTo(url);
+            } else {
+              navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+            }
+          } else {
+            //the dialog is not using the lgTemplate, it should be a bug
+            navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+          }
+        } else {
+          //no dialog is using the lgFile which contains the lgTemplate, it should be a bug
+          navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+        }
+      } else {
+        navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+      }
     },
     lu: (item: INotification) => {
       navigateTo(`/dialogs/${item.id}`);

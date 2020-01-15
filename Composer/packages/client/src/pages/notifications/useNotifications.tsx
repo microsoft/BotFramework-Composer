@@ -10,10 +10,11 @@ import { replaceDialogDiagnosticLabel } from '../../utils';
 
 import { INotification, DiagnosticSeverity } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
+
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
-  const inLineLgTemplateFormat = /^bfd(.*)-[0-9]+$/;
+  const inLineLgTemplateFormat = /^bfd(activity|prompt)-[0-9]+$/;
   const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     dialogs.forEach(dialog => {
@@ -54,17 +55,17 @@ export default function useNotifications(filter?: string) {
           //should navigate to design page
           const location = `${lgFile.id}.lg`;
           notifactions.push({
-            type: 'inlineLgTemplate',
+            type: 'lg',
             severity: DiagnosticSeverity[diagnostic.severity] || '',
             location,
             message: createSingleMessage(diagnostic),
             diagnostic,
-            id: mappedTemplate.name,
+            id: `${lgFile.id}#${mappedTemplate.name}`,
           });
         } else {
           const location = `${lgFile.id}.lg`;
           notifactions.push({
-            type: 'customCraftedLgTemplateg',
+            type: 'lg',
             severity: DiagnosticSeverity[diagnostic.severity] || '',
             location,
             message: createSingleMessage(diagnostic),
