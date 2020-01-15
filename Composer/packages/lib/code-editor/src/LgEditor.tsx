@@ -19,7 +19,7 @@ const placeholder = `> To learn more about the LG file format, read the document
 
 export interface LGOption {
   fileId: string;
-  templateId: string;
+  templateId?: string;
 }
 
 export interface LGLSPEditorProps extends RichEditorProps {

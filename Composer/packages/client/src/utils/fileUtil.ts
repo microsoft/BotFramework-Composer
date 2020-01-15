@@ -26,6 +26,10 @@ export function resolveToBasePath(base: string, relPath: string) {
   return base === '/' ? leaf : `${base}${leaf}`;
 }
 
+export function getFileName(path: string): string {
+  return path.split('/').pop() || path;
+}
+
 // todo: icon file is fixed for now, need to be updated when get it from
 // designer.
 export function getFileIconName(file: File) {

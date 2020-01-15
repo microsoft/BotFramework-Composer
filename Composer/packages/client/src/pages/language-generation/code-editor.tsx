@@ -24,8 +24,9 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
-  const { actions, state } = useContext(StoreContext);
+  const { actions, state, resolvers } = useContext(StoreContext);
   const { lgFiles } = state;
+  const { lgImportresolver } = resolvers;
   const { fileId } = props;
   const file = lgFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
@@ -125,25 +126,23 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
             parameters,
             body: value,
           });
-          setDiagnostics(check(newContent, id));
+          setDiagnostics(check(newContent, id, lgImportresolver));
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        setDiagnostics(check(value, id));
+        setDiagnostics(check(value, id, lgImportresolver));
         updateLgFile(value);
       }
     },
     [file, template]
   );
 
-  const lgOption = template
-    ? {
-        fileId: 'common',
-        templateId: template?.name || '',
-      }
-    : undefined;
+  const lgOption = {
+    fileId,
+    templateId: template?.name,
+  };
 
   return (
     <LgEditor

@@ -29,14 +29,14 @@ import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
-  fileId: string;
+  fileId?: string;
 }
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId } = props;
+  const { fileId = 'common' } = props;
   const edit = /edit(\/)*$/.test(path);
 
   const navLinks = useMemo<INavLinkGroup[]>(() => {
