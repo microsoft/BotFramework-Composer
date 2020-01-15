@@ -18,7 +18,8 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, LgFile, FileResolver, MemoryResolver } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver, TextFile } from '@bfc/indexers';
+import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -31,7 +32,7 @@ import {
   LGCursorState,
 } from './utils';
 
-const { check, indexOne } = lgIndexer;
+const { check, parse } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -47,7 +48,7 @@ export class LGServer {
 
   constructor(
     protected readonly connection: IConnection,
-    protected readonly resolver?: FileResolver,
+    protected readonly importResolver?: ImportResolverDelegate,
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
@@ -137,8 +138,8 @@ export class LGServer {
 
     const diagnostics: string[] = [];
 
-    if (!this.resolver) {
-      diagnostics.push('[Error lgOption] resolver is required but not exist.');
+    if (!this.importResolver) {
+      diagnostics.push('[Error lgOption] importResolver is required but not exist.');
     } else {
       const { fileId, templateId } = lgOption;
       const lgFile = this.getLGDocument(document)?.index();
@@ -157,26 +158,49 @@ export class LGServer {
     );
   }
 
-  protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
-    const { uri } = document;
-    const { fileId, templateId } = lgOption || {};
-    const index = () => {
-      let lgFile: LgFile | undefined;
-      if (this.resolver && fileId) {
-        lgFile = this.resolver(fileId);
+  protected getImportResolver(document: TextDocument) {
+    const internalImportResolver = () => {
+      return {
+        id: document.uri,
+        content: document.getText(),
+      };
+    };
+    const fileId = this.getLGDocument(document)?.fileId;
+    if (this.importResolver && fileId) {
+      const resolver = this.importResolver;
+      return (source: string, id: string) => {
+        const lgFile = resolver(source, id);
         if (!lgFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
           ]);
-          return;
         }
+        return lgFile;
+      };
+    }
+
+    return internalImportResolver;
+  }
+
+  protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
+    const { uri } = document;
+    const { fileId, templateId } = lgOption || {};
+    const index = () => {
+      const importResolver: ImportResolverDelegate = this.getImportResolver(document);
+      let lgFile: TextFile;
+      if (this.importResolver && fileId) {
+        lgFile = importResolver('.', fileId);
       } else {
-        lgFile = indexOne({
+        lgFile = {
           id: uri,
           content: document.getText(),
-        });
+        };
       }
-      return lgFile;
+      const { id, content } = lgFile;
+      const diagnostics = check(content, id, importResolver);
+      const templates = parse(content, id);
+
+      return { templates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
@@ -467,7 +491,7 @@ export class LGServer {
     if (!lgDoc) {
       return;
     }
-    const { fileId, templateId } = lgDoc;
+    const { fileId, templateId, uri } = lgDoc;
     const lgFile = lgDoc.index();
     if (!lgFile) {
       return;
@@ -502,7 +526,7 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = check(text, '');
+    const lgDiagnostics = check(text, fileId || uri, this.getImportResolver(document));
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }

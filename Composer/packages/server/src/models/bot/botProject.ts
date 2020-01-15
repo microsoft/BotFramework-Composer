@@ -84,7 +84,7 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = lgIndexer.index(this.files);
+    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver('.lg'));
     this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
@@ -461,20 +461,6 @@ export class BotProject {
     return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
   }
 
-  private indexLgFiles(): LgFile[] {
-    return this.files
-      .filter(({ name }) => name.endsWith('.lg'))
-      .map(({ name, content }) => {
-        return lgIndexer.indexOne(
-          {
-            id: Path.basename(name, '.lg'),
-            content,
-          },
-          this._fileImportResolver('.lg')
-        );
-      });
-  }
-
   /**
    *
    * @param ext file extension.
@@ -508,7 +494,7 @@ export class BotProject {
         this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = this.indexLgFiles();
+        this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver('.lg'));
         break;
       case '.lu':
         this.luFiles = luIndexer.index(this.files);

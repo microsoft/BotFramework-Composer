@@ -82,9 +82,14 @@ export interface LgTemplate {
   range?: CodeRange;
 }
 
+export interface LgParsed {
+  diagnostics: Diagnostic[];
+  templates: LgTemplate[];
+}
+
 export interface LgFile {
   id: string;
-  relativePath?: string;
+  relativePath: string;
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];

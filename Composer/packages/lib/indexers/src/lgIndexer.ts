@@ -10,7 +10,8 @@ import {
 } from 'botbuilder-lg';
 import get from 'lodash/get';
 
-import { LgTemplate, LgFile, TextFile } from './type';
+import { getBaseName } from './utils/help';
+import { LgTemplate, LgFile, FileInfo } from './type';
 import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
 
 const lgStaticChecker = new StaticChecker();
@@ -53,25 +54,21 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
-function indexOne(file: TextFile, importResolver?: ImportResolverDelegate): LgFile {
-  const { id, content } = file;
-  const diagnostics = check(content, id, importResolver);
-  let templates: LgTemplate[] = [];
-  try {
-    templates = parse(file.content, id);
-  } catch (err) {
-    diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-  }
-  return { id, content, templates, diagnostics };
-}
-
-function index(files: TextFile[], importResolver?: ImportResolverDelegate): LgFile[] {
+function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
-    const indexedFile = indexOne(file, importResolver);
-    if (indexedFile) {
-      lgFiles.push(indexedFile);
+    const { name, relativePath, content } = file;
+    if (name.endsWith('.lg')) {
+      const id = getBaseName(name, '.lg');
+      const diagnostics = check(content, id, importResolver);
+      let templates: LgTemplate[] = [];
+      try {
+        templates = parse(file.content, id);
+      } catch (err) {
+        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+      }
+      lgFiles.push({ id, content, relativePath, templates, diagnostics });
     }
   }
   return lgFiles;
@@ -81,5 +78,4 @@ export const lgIndexer = {
   index,
   parse,
   check,
-  indexOne,
 };

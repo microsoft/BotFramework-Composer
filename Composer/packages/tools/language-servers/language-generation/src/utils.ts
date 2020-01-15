@@ -8,7 +8,7 @@ import {
   Diagnostic as LGDiagnostic,
   StaticChecker,
 } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile } from '@bfc/indexers';
+import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
 
 const staticChecker = new StaticChecker();
 
@@ -40,7 +40,7 @@ export interface LGDocument {
   uri: string;
   fileId?: string;
   templateId?: string;
-  index: () => LgFile | undefined;
+  index: () => LgParsed;
 }
 
 export interface LGParsedResource {
