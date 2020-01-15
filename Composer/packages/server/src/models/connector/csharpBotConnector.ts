@@ -64,7 +64,7 @@ export class CSharpBotConnector implements IBotConnector {
       let script = ['./Scripts/build_runtime.sh'];
       if (process.platform === 'win32') {
         shell = 'powershell';
-        script = ['./Scripts/build_runtime.ps1', '-executionpolicy', 'bypass'];
+        script = ['-executionpolicy', 'bypass', '-file', './Scripts/build_runtime.ps1'];
       }
       const build = spawn(`${shell}`, script, {
         cwd: dir,
