@@ -1,161 +1,210 @@
 # Defining triggers 
-Each dialog in Bot Framework Composer includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. There are several different types of triggers in Composer. They all work in a similar manner and can be interchanged in some cases. In this article, we instruct how to define each type of them. Before you walk through this article, please read the [events and triggers](concept-events-and-triggers.md) concept article. 
+Each dialog in the Bot Framework Composer includes a set of triggers (event handlers) that contain actions (instructions) for how the bot will respond to inputs received when the dialog is active. There are several different types of triggers in Composer. They all work in a similar manner and can even be interchanged in some cases. This article explains how to define each type of trigger. Before you walk through this article, please read the [events and triggers](concept-events-and-triggers.md) concept article. 
 
 The table below lists the six different types of triggers in Composer and their descriptions. 
 
-| Trigger Type      | Description                                                                             |
-| ----------------- | --------------------------------------------------------------------------------------- |
-| [Intent recognized](how-to-define-triggers.md#intent-recognized) | Trigger an action when an `intent` is recognized (and optionally `entities`)            |
-| [Unknown intent](how-to-define-triggers.md#Unknown-intent)    | Trigger an action when no intent is recognized                                          |
-| [Dialog events](how-to-define-triggers.md#Dialog-events)     | Trigger an action when a dialog event such as **BeginDialog** is fired                  |
-| [Activities](how-to-define-triggers.md#Activities)        | Trigger an action to take when an activity event such as when a new conversation starts |
-| [Message events](how-to-define-triggers.md)    | Trigger an action to take when a message activity is fired.                             |
-| [Custom event](how-to-define-triggers.md#custom-event)      | Trigger a pre-defined custom event such as **Emit a custom event**.                     |
+| Trigger Type      | Description                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| [Intent recognized](#intent-recognized) | Executes when an `intent` is recognized.                              |
+| [Unknown intent](#Unknown-intent)       | Executes when no intent is recognized.                                |
+| [Dialog events](#Dialog-events)         | Executes when a dialog event such as **BeginDialog** occurs.          |
+| [Activities](h#Activities)    | Executes when an activity event occurs, such as when a new conversation starts. |
+| [Message events](#message-events)       | Executes when a message is updated, deleted or reacted to.            |
+| [Custom event](#custom-event)           | Executes when a custom event occurs.                                  |
+
 
 ## Intent recognized
-This is a trigger type we use to define actions to take when an `intent` is recognized (and optionally `entities`). It is a trigger that works with **recognizers**. There are two **recognizers** in Composer: [LUIS](https://www.luis.ai) recognizer and [Regular Expression](https://regexr.com/) recognizer. On the navigation pane click **New Trigger** and select **Intent recognized** from the drop-down menu. You will see the intent trigger menu as follows: 
+This trigger type is used to define the actions to execute when an [intent](concept-language-understanding.md#intents) is found in a message sent from the user. The **Intent recognized** trigger works in conjunction with **recognizers**. There are two **recognizers** in Composer, one for [LUIS](#luis-recognizer) and the other for [Regular Expression](#regular-expression-recognizer). You define which recognizer is used, if any, at the dialog level and all triggers in a dialog will use the same type of recognizer. 
 
-![intent_trigger](./media/events_triggers/intent_trigger.png)
+To create the **Intent recognized** trigger, select **New Trigger** in the navigation pane then **Intent recognized** from the drop-down list. You will see the intent trigger menu as follows: 
 
-If you have not defined any intents the sub-menu will show `No intents configured for this dialog` and there is no intent to configure. The basic steps to define an **Intent recognized** trigger are as follows:
-- set up a recognizer type in your selected dialog
-- define intent(s) in the language understanding editor
-- create **Intent recognized** triggers to handle pre-defined intents (one trigger handles one intent)
-- define actions in the trigger 
+![Intent trigger](./media/events_triggers/intent_trigger.png)
+
+If you have not defined any intents the **Which intent do you want to handle?** drop-down list will show "_No intents configured for this dialog_" and there will be no intent to configure, however you can define an intent later in the triggers properties panel located on the left side of the Composer screen.
+
+Once the **Intent recognized** trigger has been created, you can further refine it by assigning one or more [entities](concept-language-understanding.md#entities) in the properties panel. 
+
+> [!TIP]
+> You need to press the **Enter** key after entering an entity or it will not be saved.
+
+It is also possible to add a **condition** to the trigger.  A condition is an expression that follows [Common Language Expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) syntax. If a condition is specified, it must evaluate to  "true" for the event to fire.
+
+ The basic steps to define an **Intent recognized** trigger are as follows:
+
+1. Set up a [recognizer](./concept-dialog.md#recognizer) type in your dialog.
+2. Define [intents](concept-language-understanding.md#intents) in the Language Understanding editor.
+3. Create an **Intent recognized** trigger to handle each intent you created (one trigger per intent).
+4. Define [activities](#activities) in the trigger.
 
 ### LUIS recognizer 
-Composer enables developers to create language training data in the dialog editing surface because it is deeply integrated with the [LUIS.ai](https://www.luis.ai/home) language understanding API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. 
+[LUIS](https://www.luis.ai/home) is a machine learning-based service you can use to build natural language capabilities into your bot. Using a LUIS recognizer enables you to extract intents and entities based on a LUIS application, which you can train in advance.
 
-Follow the steps to define an **Intent recognized** trigger with LUIS recognizer:
+Composer enables developers to create language training data in the dialog authoring canvas because it is deeply integrated with the [LUIS](https://www.luis.ai/home) API. LUIS is able to take natural language input from users and translate it into a named intent and a set of extracted entity values the message contains. 
+
+### Create an Intent recognized trigger
+Follow the steps to define an **Intent recognized** trigger with a LUIS recognizer:
 
 1. In the properties panel of your selected dialog, choose **LUIS** as recognizer type.
 
-![luis_recognizer](./media/events_triggers/luis_recognizer.png)
+    ![luis_recognizer](./media/events_triggers/luis_recognizer.png)
 
-2. In the Language Understanding editor, create intents with sample utterances and follow the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
+2. In the Language Understanding editor, create intents with sample [utterances](concept-language-understanding.md#utterances) following the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format). 
 
->[!NOTE]
-> Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. You will need a [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
+    Below is a screenshot showing the **text editor** in a dialogs properties panel. This example captures two simple _intents_ ("Greeting" and "BookFlight") each with a list of example _utterances_ that capture ways users might express these two intents. You can use - or + or * to denote lists. Numbered lists are not supported.
 
-Below is a screenshot to show the previous two steps: 
+    ![LUIS_intent](./media/events_triggers/LUIS_intent.png)
 
-![LUIS_intent](./media/events_triggers/LUIS_intent.png)
+    >[!NOTE]
+    > Each intent contains a series of sample utterances which will be used as training data in LUIS to recognize any pre-defined intent. 
+    
+    > [IIMPORTANT]
+    > You will need a [LUIS authoring key](https://aka.ms/bot-framework-emulator-LUIS-keys?tabs=V2#programmatic-key) to get your training data published. For details, read [using LUIS for language understanding](howto-using-LUIS.md) article. 
 
-3. Select **Intent recognized** from the trigger menu and pick any pre-defined intent you want this trigger to handle. Each **Intent** trigger handles one pre-defined intent. 
+3. Select **Intent recognized** from the trigger menu and pick the intent you want the trigger to handle. Each **Intent** trigger handles one intent. 
 
-![BookFlight_configure](./media/events_triggers/BookFlight_configure.png) 
+    ![BookFlight_configure](./media/events_triggers/BookFlight_configure.png) 
 
 4. Optionally, you can set the **Condition** property to avoid low confidence results given that LUIS is a machine learning based intent classifier. For example, set the **Condition** property to this in the **Greeting** intent: 
 
     `#Greeting.Score >=0.8` 
 
-![score](./media/events_triggers/score.png)
+    ![score](./media/events_triggers/score.png)
 
-This definition means that the **Greeting** intent trigger will only fire when the confidence score returned by LUIS equals or is higher than 0.8. 
+This definition means that the **Greeting** intent trigger will only fire when the confidence score returned by LUIS is equal to or greater than 0.8. 
 
-#### LUIS for entity extraction 
-In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. Entities are a collection of objects data extracted from an utterance such as places, time, and people. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
 
-Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@{Entity Name}`. For example, given an intent definition like below: 
-
-```
-# book-flight
-- book a flight to {city=austin}
-- travel to {city=new york}
-- i want to go to {city=los angeles}
-```
-
-When triggered, if LUIS is able to identify a city, the city name will be made available as `@city` within the triggered actions. The entity value can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. Advanced intents and entities definition in Composer can be found [here](howto-define-advanced-intents-entities.md). 
-
-### Regular Expression recognizer 
-[Regular expressions](https://regexr.com/) are rigid patterns that can be used to match simple or sophisticated patterns in a text. Composer exposes the ability to define intents using regular expressions and also allows the regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, [Regular Expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords. 
+### Regular expression recognizer 
+A [regular expression](https://regexr.com/) is a special text string for describing a search pattern that can be used to match simple or sophisticated patterns in a string. Composer exposes the ability to define intents using regular expressions and also allows regular expressions to extract simple entity values. While LUIS offers the flexibility of a more fully featured language understanding technology, the [regular expression recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer) works well when you need to match a narrow set of highly structured commands or keywords. 
 
 In the example below, a similar book-flight intent is defined. However, this will _only_ match the very narrow pattern "book flight to [somewhere]", whereas the LUIS recognizer will be able match a much wider variety of messages. 
 
-Follow the steps to define **Intent recognized**trigger with [Regular Expressions](https://regexr.com/) recognizer: 
+Follow the steps to define **Intent recognized** trigger with [Regular Expressions](https://regexr.com/) recognizer: 
 
-1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your trigger. 
+1. In the properties panel of your selected dialog, choose **Regular Expression** as recognizer type for your dialog. 
 
-![regex_recognizer](./media/events_triggers/regex_recognizer.png)
+    ![regex_recognizer](./media/events_triggers/regex_recognizer.png)
 
-2. In the Language Understanding editor, create [Regular Expression](https://regexr.com/) **intents** and **pattern** as shown in the screenshot below: 
+2. In the **regular expression editor**, create a regular expression **intent** and **pattern** as shown in the screenshot below: 
 
-![regular_expression_intent](./media/events_triggers/regular_expression_intent.png)
+    ![regular_expression_intent](./media/events_triggers/regular_expression_intent.png)
 
-3. Create an **Intent recognized** trigger for each pre-defined intent as instructed in the [LUIS recognizer section](how-to-define-triggers.md#LUIS-recognizer). 
+
+    <!-- OPEN ISSUE: This is not clear... is the string "book a flight to" part of the RegEx? What is the parenthesis around the "?<city>.*" for?  What are the angle brackets for? What does the "?<city>.*" do?  While it is not our job to teach RegEx, we should explain the sample  -->
+
+> [!NOTE]
+> Create an **Intent recognized** trigger to handle each intent you define as instructed in the [LUIS recognizer](how-to-define-triggers.md#LUIS-recognizer) section. 
 
 ## Unknown intent 
-This is a trigger type we use to define actions to take when an intent is not recognized. You do not need to define any intents for this trigger. Follow the steps to define an **Unknown intent** trigger:
+This is a trigger type used to define actions to take when there is no **Intent recognized** trigger to handle an existing intent. 
 
-1. On the navigation pane click **New Trigger** and select **Unknown intent** from the drop-down menu. 
+Follow the steps to define an **Unknown intent** trigger:
 
-![unknown_intent](./media/events_triggers/unknown_intent.png)
+1. In the navigation pane, select **New Trigger**.
 
-2. After you click **Submit**, you will see an empty **Unknown intent** trigger in the authoring canvas. 
+2. Select **Create a Trigger** from the **What is the type of this trigger?** drop-down list, then **Submit**. 
 
-3. Click the "+" sign under the trigger node to add any action node(s) you want to include. For example, you can click **Send a response** to send a message `This is an unknown intent trigger!`. When this trigger is fired, the response message will be sent to the user. 
+    ![unknown_intent](./media/events_triggers/unknown_intent.png)
 
-![unknown_intent_response](./media/events_triggers/unknown_intent_response.gif)  
+2. After you select **Submit**, you will see an empty **Unknown intent** trigger in the authoring canvas. 
+
+3. Select the **+** sign under the trigger node to add any action node(s) you want to include. For example, you can select **Send a response** to send a message "This is an unknown intent trigger!". When this trigger is fired, the response message will be sent to the user. 
+
+    ![unknown_intent_response](./media/events_triggers/unknown_intent_response.gif)  
+
+<!--  OPEN ISSUE: "Dialog events" or Dialog trigger"?  Why not stick to a consistent terminology?  It basically says that a dialog event "is a trigger type use to define..." -->
 
 ## Dialog events
-This is a trigger type we use to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **Dialog started (Begin dialog event)** trigger: 
+This is a trigger type used to define actions to take when a dialog event such as `BeginDialog` is fired. Most dialogs will include an event handler (trigger) configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. Follow the steps below to define a **Dialog started** trigger: 
 
-On the navigation pane click **New Trigger** and select **Dialog events** from the drop-down menu. 
+1. Select **New Trigger** in the navigation pane then select **Dialog events** from the drop-down list.
 
-![dialog_events](./media/events_triggers/dialog_events.png)
+    ![dialog events](./media/events_triggers/dialog_events.png)
 
-Select **Dialog started (Begin dialog event)** from the drop-down menu. Click **Submit**. 
+2. Select **Dialog started (Begin dialog event)** from the **Which event?** drop-down list then select **Submit**. 
 
-![begin_dialog](./media/events_triggers/begin_dialog.png)
+    ![begin dialog](./media/events_triggers/begin_dialog.png)
 
-Click the "+" sign under the trigger node and mouse over the action menu. Click **Dialog management** and then **Begin a new dialog**. You can configure any pre-defined dialog to the **Begin a new dialog** action on the properties panel on the right side. Before you use this trigger you must define a dialog to be configured.
+3. Select the **+** sign under the *Dialog started* node and then select **Begin a new dialog** from the **Dialog management** menu. 
 
-![configure_dialog](./media/events_triggers/configure_dialog.png) 
+    ![begin a new dialog](./media/events_triggers/begin_a_new_dialog.png)
+
+4. Before you can use this trigger you must associate a dialog to it. You do this by selecting a dialog from the **Dialog name** drop-down list in the **properties panel** on the right side of the Composer window. You can select an existing dialog or create a new one.  the example below demonstrates selecting and existing dialog named *weather*. 
+
+    ![configure_dialog](./media/dialog/wire_up_dialog.gif) 
+    <!--![configure_dialog](./media/events_triggers/configure_dialog.png) -->
+
+    <!--  OPEN ISSUE: Why not explain the next steps are? See additions to step 4 above.  -->
+    
 
 ## Activities
-This is a type of trigger used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation begins and you use a **Greeting (ConversationUpdate activity)** trigger to handle it. Follow the steps to define a **Greeting (ConversationUpdate activity)** trigger to send a welcome message: 
+This type of trigger is used to handle activity events such as your bot receiving a `ConversationUpdate` Activity. This indicates a new conversation began and you use a **Greeting (ConversationUpdate activity)** trigger to handle it. 
 
-On the navigation pane click **New Trigger** and select **Activities** from the drop-down menu. 
+The following steps demonstrate hot to create a **Greeting (ConversationUpdate activity)** trigger to send a welcome message: 
 
-![activities](./media/events_triggers/activities.png)
+1. Select **New Trigger** in the navigation pane then **Activities** from the drop-down list.
 
-Select **Greeting (ConversationUpdate activity)** from the drop-down menu. Click **Submit**. 
+    ![activities](./media/events_triggers/activities.png)
 
-![conversationupdate](./media/events_triggers/conversationupdate.png)
 
-Click the "+" sign under the trigger node and and mouse over the action menu then click **Send a response**. In the language generation editor, author your response message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+2. Select **Greeting (ConversationUpdate activity)** from the **Which activity type?** drop-down list then select **Submit**. 
 
-![welcome](./media/events_triggers/welcome.gif)
+    ![conversationupdate](./media/events_triggers/conversationupdate.png)
 
-## Custom event
-**Custom event** is a trigger to handle a custom event such as **Emit a custom event**. Bots can emit user-defined events using the **Emit a custom event** which will trigger this handler. Follow the steps below to define a **Custom event**: 
+3. Select the **+** sign under the *ConversationUpdate Activity* node and then select **Send a response**. 
 
-In your bot's authoring canvas, select the trigger you want to define **Emit a custom event**. Under this trigger, click the "+" sign and mouse over the action menu. Click **Access external resources** and then select **Emit a custom event**. 
+4. Author your response in the **Language Generation** editor in the **properties panel** on the right side of the Composer window, by entering a message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) as demonstrated in the image below. 
 
-![emit_custom_event](./media/events_triggers/emit_custom_event.png)
+    ![welcome](./media/events_triggers/welcome.gif)
 
-You can define properties of this event on the properties panel on the right side. Let's give this event a name "Weather", leave `Event value` as is and check `Bubble event`. When `Bubble event`is checked this event will be passed on to the parent dialogs to look for handlers to handle it. 
+<!-- OPEN ISSUE: Custom Events are confusing.  If I understand this correctly a 'custom event' consists of 2 separate but related things:
 
-![emit_custom_event_property](./media/events_triggers/emit_custom_event_property.png)
+    1. You create a mechanism that fires a custom event.  This is defined as a new trigger.
+    2. You create a mechanism that handles a custom event. This seems to be defined as a new action contained in a dialog flow that is
+       separate from the trigger in which the mechanism that fires a custom event resides in.  If it is an action, it is not labeled as 
+       such in the UI.  The label still shows "Emit a custom event", just as it does in step 1 above.
 
-Now let's create a **Custom event** trigger to handle the pre-defined event. On the navigation pane on the left, click on **New Trigger** and select **Custom event** from the drop-down menu. Click **Submit**. 
+    My changes to the instructions below will explain that this is a two step process, and I changed the order of creation to create the
+    trigger first.
 
-![custom_event](./media/events_triggers/custom_event.png)
+ -->
 
-On the properties panel on the right side, fill in the name of you pre-defined event in the `Custom event name` section. We fill in `Weather` as we created in step 1. The name in the `Custom event name` section must match the name of the **Emit a custom event** you just created. 
+## Custom events
+Creating custom events is a two step process. The first step is to create a new trigger of type *Custom event* that any dialog in your bot can consume. This is your custom event handler that contains the actions associated with this event. The second step is to assign this custom event (trigger) to one or more dialogs. Follow the steps below to create a **Custom event** handler:
 
-![custom_event_property](./media/events_triggers/custom_event_property.png)
+### Create a custom event handler
+1. Select **New Trigger** in the navigation pane, then select **Custom event** from the drop-down list, then **Submit**.
 
-You can add an action to this trigger to test if it triggers the pre-defined event. Click the "+" sign and select **Send a response** from the actions menu. Author your response for this action in the language generation editor as you want. 
+2. Name your custom event handler "*Weather*" by entering that into the **Custom event name** field in the properties panel on the right side of the Composer window. You will use the custom event name when associating it with any triggers that will invoke it.
 
-![custom_event_response](./media/events_triggers/custom_event_response.gif)
+    ![custom_event_property](./media/events_triggers/custom_event_property.png)
 
-Now you have completed defining a **Custom event** trigger. When **Emit a custom event** is fired, the **Custom event** will handle this event and send the response you have defined. 
+3. Now you can add an action to your custom event handler, this defines what will happen when it is triggered. Do this by selecting the **+** sign and then **Send a response** from the actions menu. Enter the desired response for this action in the Language Generation editor, for this example enter "This is a custom trigger!". 
+
+    ![custom_event_response](./media/events_triggers/custom_event_response.gif)
+
+Now you have completed defining your **Custom event** trigger. The next step is to create the **Emit a custom event** activity.
+
+### Emit a custom event
+Now that your custom event handler has been created, you can fire (emit) that event from any place in the flow of any dialog in your bot. Follow the steps below to emit your custom event:
+
+1. In the Composer navigation pane select the trigger you want to associate your custom event with. This opens the trigger in the authoring canvas where you can specify exactly where in the flow you want to trigger this event from. Once determined, select the **+** sign and then select **Emit a custom event** from the **Access external resources** drop-down list.
+
+    ![emit_custom_event](./media/events_triggers/emit_custom_event.png)
+
+2. In the _properties panel_ of this activity, on the right side of the Composer window, enter the name of the _custom event handler_ previously created ("*Weather*") into the **Event name** field, then select **Bubble event**. 
+
+    ![emit_custom_event_property](./media/events_triggers/emit_custom_event_property.png)
+
+> [!TIP]
+> When **Bubble event** is selected, any event that is not handled in the current dialog will _bubble up_ to that dialogs parent dialog where it will continue to look for handlers for the custom event. 
+
+Now you have completed both of the required steps needed to create and execute a custom event. When **Emit a custom event** fires, your custom event handler will handle this event and send the response you defined.
 
 ![custom_event_response](./media/events_triggers/custom_event_response.png)
 
 ## References
-- [Events and triggers](./concept-events-and-triggers.md)
+- The [Events and triggers](./concept-events-and-triggers.md) concept article.
 
 ## Next 
 - Learn how to [control conversation flow](./how-to-control-conversation-flow.md).
+
