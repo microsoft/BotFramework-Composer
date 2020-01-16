@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { Global, jsx } from '@emotion/core';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6Definition, JSONSchema6 } from 'json-schema';
 import merge from 'lodash/merge';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
-import { appschema, ShellData, ShellApi, UpdateScope } from '@bfc/shared';
+import { appschema, ShellData, ShellApi } from '@bfc/shared';
 import { Diagnostic } from '@bfc/indexers';
 
 import Form from './Form';
@@ -30,16 +30,9 @@ export interface FormEditorProps extends ShellData {
 }
 
 export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
-  const { data, schemas, memory, dialogs, shellApi, externalUpdate } = props;
+  const { data, schemas, memory, dialogs, shellApi } = props;
   const [localData, setLocalData] = useState(data);
   const type = getType(localData);
-
-  useEffect(() => {
-    // undo and redo will update the localData
-    if (externalUpdate?.scope === UpdateScope.DialogFile && !isEqual(localData, data)) {
-      setLocalData(data);
-    }
-  }, [data, externalUpdate]);
 
   const formErrors = useMemo(() => {
     if (props.currentDialog && props.currentDialog.diagnostics) {
@@ -134,7 +127,6 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           shellApi,
           dialogOptions,
           editorSchema: schemas.editor,
-          externalUpdate,
           rootId: props.focusPath,
           luFiles: props.luFiles,
           lgFiles: props.lgFiles,

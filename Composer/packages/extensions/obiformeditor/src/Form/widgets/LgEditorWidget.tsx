@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { LgEditor } from '@bfc/code-editor';
-import { LgMetaData, LgTemplateRef, UpdateScope } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 
 import { FormContext } from '../types';
@@ -91,13 +91,6 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       }
     }
   };
-
-  //undo and redo can update the localValue
-  useEffect(() => {
-    if (formContext.externalUpdate?.scope === UpdateScope.LgFile && template.body !== localValue) {
-      setLocalValue(template.body);
-    }
-  }, [template.body, formContext.externalUpdate]);
 
   return (
     <LgEditor

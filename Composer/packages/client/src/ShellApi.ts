@@ -332,14 +332,14 @@ export const ShellApi: React.FC = () => {
     apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
-  function resetDataAll(externalUpdate?) {
+  function resetDataAll() {
     if (window.frames[VISUAL_EDITOR]) {
       const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCall('reset', { ...getState(VISUAL_EDITOR), externalUpdate }, editorWindow);
+      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCall('reset', { ...getState(FORM_EDITOR), externalUpdate }, editorWindow);
+      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
   }
 
@@ -396,7 +396,13 @@ export const ShellApi: React.FC = () => {
 
   //reset the date if the data is not updated by editor
   useEffect(() => {
-    resetDataAll(externalUpdate);
+    let editorWindow = null;
+    if ((editorWindow = window.frames[VISUAL_EDITOR])) {
+      apiClient.apiCall('updateExtension', externalUpdate, editorWindow);
+    }
+    if ((editorWindow = window.frames[FORM_EDITOR])) {
+      apiClient.apiCall('updateExtension', externalUpdate, editorWindow);
+    }
   }, [externalUpdate]);
 
   useEffect(() => {
