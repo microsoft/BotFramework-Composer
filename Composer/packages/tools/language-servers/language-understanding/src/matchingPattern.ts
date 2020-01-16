@@ -31,9 +31,9 @@ export function getCompositesEntities(luisJson: any): string[] {
   return suggestionCompositesList;
 }
 
-export function matchedEntityCanusesFeature(lineContent: string, text: string, luisJson: any): boolean {
-  const mlTypedEntityusesFeature = /^\s*@\s*ml\s*\w*\s*usesFeature\s*$/;
-  const compositesTypedEntityusesFeature = /^\s*@\s*composites\s*\w*\s*usesFeature\s*$/;
+export function matchedEntityCanUsesFeature(lineContent: string, text: string, luisJson: any): boolean {
+  const mlTypedEntityusesFeature = /^\s*@\s*ml\s*\w+\s*usesFeature\s*$/;
+  const compositesTypedEntityusesFeature = /^\s*@\s*composites\s*\w+\s*usesFeature\s*$/;
   const notTypedEntityusesFeature = /^\s*@\s*(\w*)\s*usesFeature\s*$/;
   if (mlTypedEntityusesFeature.test(lineContent) || compositesTypedEntityusesFeature.test(lineContent)) {
     return true;
@@ -124,145 +124,65 @@ export function getRegexEntities(luisJson: any): string[] {
   return suggestionRegexList;
 }
 
-export function getSuggestionEntities(luisJson: any, includePatternAny = true, includeComposites = true): string[] {
+export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: string[]): string[] {
   const suggestionEntityList: string[] = [];
   if (luisJson !== undefined) {
-    if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-      luisJson.entities.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
-    }
-
-    if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-      luisJson.regex_entities.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
-    }
-
-    if (includePatternAny) {
-      if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-        luisJson.patternAnyEntities.forEach(entity => {
-          if (entity.name) {
+    suggestionEntityTypes.forEach(entityType => {
+      if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
+        luisJson[entityType].forEach(entity => {
+          if (entity) {
             suggestionEntityList.push(entity.name);
           }
         });
       }
-    }
-
-    if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-      luisJson.prebuiltEntities.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
-    }
-
-    if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-      luisJson.closedLists.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
-    }
-
-    if (luisJson.phraselists !== undefined && luisJson.phraselists.length > 0) {
-      luisJson.phraselists.forEach(entity => {
-        if (entity.name) {
-          suggestionEntityList.push(entity.name);
-        }
-      });
-    }
-
-    if (includeComposites) {
-      if (luisJson.composites !== undefined && luisJson.composites.length > 0) {
-        luisJson.composites.forEach(entity => {
-          if (entity.name) {
-            suggestionEntityList.push(entity.name);
-          }
-        });
-      }
-    }
+    });
   }
 
   return suggestionEntityList;
 }
 
-export function getSuggestionRoles(luisJson: any): string[] {
+export const suggestionAllEntityTypes = [
+  'entities',
+  'regex_entities',
+  'patternAnyEntities',
+  'preBuiltEntities',
+  'closedLists',
+  'phraselists',
+  'composites',
+];
+
+export const suggestionNoPatternAnyEntityTypes = [
+  'entities',
+  'regex_entities',
+  'preBuiltEntities',
+  'closedLists',
+  'phraselists',
+  'composites',
+];
+
+export const suggestionNoCompositeEntityTypes = [
+  'entities',
+  'regex_entities',
+  'patternAnyEntities',
+  'preBuiltEntities',
+  'closedLists',
+  'phraselists',
+];
+
+export function getSuggestionRoles(luisJson: any, suggestionEntityTypes: string[]): string[] {
   const suggestionRolesList: string[] = [];
   if (luisJson !== undefined) {
-    if (luisJson.entities !== undefined && luisJson.entities.length > 0) {
-      luisJson.entities.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-      luisJson.regex_entities.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.patternAnyEntities !== undefined && luisJson.patternAnyEntities.length > 0) {
-      luisJson.patternAnyEntities.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.prebuiltEntities !== undefined && luisJson.prebuiltEntities.length > 0) {
-      luisJson.prebuiltEntities.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.closedLists !== undefined && luisJson.closedLists.length > 0) {
-      luisJson.closedLists.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.phraselists !== undefined && luisJson.phraselists.length > 0) {
-      luisJson.phraselists.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
-
-    if (luisJson.composites !== undefined && luisJson.composites.length > 0) {
-      luisJson.composites.forEach(entity => {
-        if (entity.roles !== undefined && entity.roles.length > 0) {
-          entity.roles.forEach(role => {
-            suggestionRolesList.push(role);
-          });
-        }
-      });
-    }
+    suggestionEntityTypes.forEach(entityType => {
+      if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
+        luisJson[entityType].forEach(entity => {
+          if (entity.roles !== undefined && entity.roles.length > 0) {
+            entity.roles.forEach(role => {
+              suggestionRolesList.push(role);
+            });
+          }
+        });
+      }
+    });
   }
 
   return suggestionRolesList;
@@ -279,4 +199,27 @@ export function extractEntityNameInUseFeature(lineContent: string): string {
   }
 
   return '';
+}
+
+export function removeLabelsInUtterance(lineContent: string): string {
+  const entityLabelRegex = /\{\s*[\w.@:\s]+\s*=\s*[\w.]+\s*\}/g;
+  let match: RegExpMatchArray | null;
+  let resultStr = '';
+  let startIdx = 0;
+  while ((match = entityLabelRegex.exec(lineContent))) {
+    const leftBoundIdx = match.index;
+    const rightBoundIdx = entityLabelRegex.lastIndex;
+    resultStr += lineContent.slice(startIdx, leftBoundIdx);
+    if (leftBoundIdx && rightBoundIdx) {
+      const entityStr = lineContent.slice(leftBoundIdx + 1, rightBoundIdx - 1);
+      if (entityStr.split('=').length == 2) {
+        const enitity = entityStr.split('=')[1].trim();
+        resultStr += enitity;
+      }
+
+      startIdx = rightBoundIdx;
+    }
+  }
+
+  return resultStr;
 }

@@ -4,7 +4,7 @@
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
 export function registerLULanguage(monaco: typeof monacoEditor) {
-  monaco.languages.setMonarchTokensProvider('botframeworklu', {
+  monaco.languages.setMonarchTokensProvider('lu', {
     tokenizer: {
       root: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
@@ -24,7 +24,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
-        [/({)(\s*[\w.:\s]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
+        [/({)(\s*[\w.@:\s]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
         [/({\s*@)(\s*[\w.]*\s*)(})/, ['lb', 'entity-name', 'rb']],
         // eslint-disable-next-line security/detect-unsafe-regex
         [/\s*\[[\w\s.]+\]\(.{1,2}\/[\w.*]+(#[\w.?]+)?\)/, 'import-desc'],
@@ -46,13 +46,13 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
   });
 
   monaco.languages.register({
-    id: 'botframeworklu',
+    id: 'lu',
     extensions: ['.lu'],
     aliases: ['LU', 'language-understanding'],
     mimetypes: ['application/lu'],
   });
 
-  monaco.languages.setLanguageConfiguration('botframeworklu', {
+  monaco.languages.setLanguageConfiguration('lu', {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -60,7 +60,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
     ],
   });
 
-  monaco.editor.defineTheme('lutheme', {
+  monaco.editor.defineTheme('lu', {
     base: 'vs',
     inherit: false,
     colors: {},

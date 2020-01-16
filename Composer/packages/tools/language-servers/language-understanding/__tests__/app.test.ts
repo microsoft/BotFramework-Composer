@@ -87,7 +87,7 @@ describe('lu lsp server', () => {
     // client initialized
     await send(`{"jsonrpc":"2.0","method":"initialized","params":{}}`, []);
     await send(
-      `{"jsonrpc":"2.0","method":"textDocument/didOpen","params": {"textDocument":{"uri":"inmemory://model/1","languageId":"botframeworklu","version":2,"text": "${content}" }}}`,
+      `{"jsonrpc":"2.0","method":"textDocument/didOpen","params": {"textDocument":{"uri":"inmemory://model/1","languageId":"lu","version":2,"text": "${content}" }}}`,
       []
     );
   });

@@ -74,29 +74,6 @@ export class LUServer {
     this.connection.listen();
   }
 
-  protected removeLabelsInUtterance(lineContent: string): string {
-    const entityLabelRegex = /\{\s*[\w.@:]+\s*=\s*[\w.]+\s*\}/g;
-    let match: RegExpMatchArray | null;
-    let resultStr = '';
-    let startIdx = 0;
-    while ((match = entityLabelRegex.exec(lineContent))) {
-      const leftBoundIdx = match.index;
-      const rightBoundIdx = entityLabelRegex.lastIndex;
-      resultStr += lineContent.slice(startIdx, leftBoundIdx);
-      if (leftBoundIdx && rightBoundIdx) {
-        const entityStr = lineContent.slice(leftBoundIdx + 1, rightBoundIdx - 1);
-        if (entityStr.split('=').length == 2) {
-          const enitity = entityStr.split('=')[1].trim();
-          resultStr += enitity;
-        }
-
-        startIdx = rightBoundIdx;
-      }
-    }
-
-    return resultStr;
-  }
-
   protected labelingExperienceHandler(params: any): void {
     const document: TextDocument | undefined = this.documents.get(params.uri);
     if (!document) {
@@ -106,10 +83,11 @@ export class LUServer {
     const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
     const curLineContent = document.getText(range);
     // eslint-disable-next-line security/detect-unsafe-regex
-    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:]+\s*=\s*[\w.]+\}[^{}]*)+/;
+    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:\s]+\s*=\s*[\w.]+\}[^{}]*)+$/;
 
     if (labeledUtterRegex.test(curLineContent)) {
-      const newText = this.removeLabelsInUtterance(curLineContent);
+      const newText = util.removeLabelsInUtterance(curLineContent);
+
       const newPos = Position.create(position.lineNumber, 0);
       const newUnlalbelText = newText + '\n';
       const editPreviousLine: TextEdit = TextEdit.insert(newPos, newUnlalbelText);
@@ -393,7 +371,7 @@ export class LUServer {
       luisJson = await this.extractLUISContent(textExceptCurLine);
     }
 
-    const suggestionEntityList = util.getSuggestionEntities(luisJson);
+    const suggestionEntityList = util.getSuggestionEntities(luisJson, util.suggestionAllEntityTypes);
     const regexEntityList = util.getRegexEntities(luisJson);
 
     //suggest a regex pattern for seperated line definition
@@ -446,7 +424,7 @@ export class LUServer {
     }
 
     if (util.isCompositeEntity(curLineContent)) {
-      util.getSuggestionEntities(luisJson, true, false).forEach(entity => {
+      util.getSuggestionEntities(luisJson, util.suggestionNoCompositeEntityTypes).forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,
@@ -458,7 +436,7 @@ export class LUServer {
       });
     }
 
-    const suggestionRolesList = util.getSuggestionRoles(luisJson);
+    const suggestionRolesList = util.getSuggestionRoles(luisJson, util.suggestionAllEntityTypes);
     // auto suggest roles
     if (util.matchedRolesPattern(curLineContent)) {
       suggestionRolesList.forEach(name => {
@@ -485,9 +463,9 @@ export class LUServer {
       });
     }
 
-    if (util.matchedEntityCanusesFeature(curLineContent, text, luisJson)) {
+    if (util.matchedEntityCanUsesFeature(curLineContent, text, luisJson)) {
       const enitityName = util.extractEntityNameInUseFeature(curLineContent);
-      const suggestionFeatureList = util.getSuggestionEntities(luisJson, false);
+      const suggestionFeatureList = util.getSuggestionEntities(luisJson, util.suggestionNoPatternAnyEntityTypes);
       suggestionFeatureList.forEach(name => {
         if (name !== enitityName) {
           const item = {
@@ -514,7 +492,7 @@ export class LUServer {
     }
 
     if (util.matchIntentUsesFeatures(curLineContent)) {
-      const suggestionFeatureList = util.getSuggestionEntities(luisJson, false);
+      const suggestionFeatureList = util.getSuggestionEntities(luisJson, util.suggestionNoPatternAnyEntityTypes);
       suggestionFeatureList.forEach(name => {
         const item = {
           label: `Entity: ${name}`,

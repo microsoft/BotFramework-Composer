@@ -59,7 +59,7 @@ export function startServer() {
     noServer: true,
     perMessageDeflate: false,
   });
-  attachLSPServer(wss, server, '/lg-language-server', webSocket => {
+  attachLSPServer(wss, server, '/lu-language-server', webSocket => {
     // const socketHandler = createSocketHandler(webSocket);
 
     // launch language server when the web socket is opened

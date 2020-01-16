@@ -48,7 +48,15 @@ declare global {
   }
 }
 
-function convertEdit(serverEdit: any) {
+type ServerEdit = {
+  range: { start: { line: number; character: number }; end: { line: number; character: number } };
+  newText: string;
+};
+
+/*
+convert the edits results from the server to an exectable object in manoco editor
+*/
+function convertEdit(serverEdit: ServerEdit) {
   return {
     range: {
       startLineNumber: serverEdit.range.start.line,
@@ -89,7 +97,7 @@ export function LuEditor(props: LULSPEditorProps) {
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
-          const languageClient = createLanguageClient('LU Language Client', ['botframeworklu'], connection);
+          const languageClient = createLanguageClient('LU Language Client', ['lu'], connection);
           if (!window.monacoLUEditorInstance) {
             window.monacoLUEditorInstance = languageClient;
           }
@@ -122,8 +130,8 @@ export function LuEditor(props: LULSPEditorProps) {
       placeholder={placeholder}
       helpURL={LU_HELP}
       {...restProps}
-      theme={'lutheme'}
-      language={'botframeworklu'}
+      theme={'lu'}
+      language={'lu'}
       options={options}
       editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
