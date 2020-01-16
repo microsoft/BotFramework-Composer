@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import get from 'lodash/get';
 import formatMessage from 'format-message';
 import { RegexRecognizer } from '@bfc/shared';
 import { LuFile, DialogInfo } from '@bfc/indexers';
@@ -54,7 +53,11 @@ function luIntentOptions(formContext: FormContext): IDropdownOption[] {
   let options: IDropdownOption[] = [EMPTY_OPTION];
 
   if (luFile) {
-    const intents: { name: string }[] = get(luFile, 'parsedContent.LUISJsonStructure.intents', []);
+    const intents: { name: string }[] = luFile.intents.map(({ Name: name }) => {
+      return {
+        name,
+      };
+    });
 
     options = options.concat(
       intents.map(i => ({
