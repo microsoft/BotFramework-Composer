@@ -61,15 +61,16 @@ export class CSharpBotConnector implements IBotConnector {
     // build bot runtime
     return new Promise((resolve, reject) => {
       let shell = 'sh';
-      let script = './Scripts/build_runtime.sh';
+      let script = ['./Scripts/build_runtime.sh'];
       if (process.platform === 'win32') {
-        shell = 'pwsh';
-        script = './Scripts/build_runtime.ps1';
+        shell = 'powershell';
+        script = ['-executionpolicy', 'bypass', '-file', './Scripts/build_runtime.ps1'];
       }
-      const build = spawn(`${shell}`, [`${script}`], {
+      const build = spawn(`${shell}`, script, {
         cwd: dir,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
+      let errorMsg = '';
       buildDebug('building bot runtime: %d', build.pid);
       build.stdout &&
         build.stdout.on('data', function(str) {
@@ -77,10 +78,14 @@ export class CSharpBotConnector implements IBotConnector {
         });
       build.stderr &&
         build.stderr.on('data', function(err) {
-          reject(err.toString());
+          errorMsg = errorMsg + err.toString();
         });
       build.on('exit', function(code) {
-        resolve(code);
+        if (code !== 0) {
+          reject(errorMsg);
+        } else {
+          resolve(code);
+        }
       });
     });
   };
@@ -162,6 +167,7 @@ export class CSharpBotConnector implements IBotConnector {
   connect = async (_: BotEnvironments, __: string) => {
     const originPort = urlParse(this.endpoint).port;
     const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
+    this.endpoint = `http://localhost:${port}`;
     return `http://localhost:${port}/api/messages`;
   };
 
@@ -177,7 +183,7 @@ export class CSharpBotConnector implements IBotConnector {
     } catch (err) {
       this.stop();
       this.status = BotStatus.NotConnected;
-      throw new Error('Error while syncing bot runtime.');
+      throw err;
     }
   };
 
