@@ -12,7 +12,7 @@ import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 
 // find out all lg templates given dialog
-function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
+function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
   /**
    *
@@ -25,11 +25,19 @@ function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
       const targets: any[] = [];
       // look for prompt field
       if (has(value, 'prompt')) {
-        targets.push({ value: value.prompt, path: path });
+        targets.push({ value: value.prompt, path: `${path}#${value.$type}#prompt` });
       }
       // look for unrecognizedPrompt field
       if (has(value, 'unrecognizedPrompt')) {
-        targets.push({ value: value.unrecognizedPrompt, path: path });
+        targets.push({ value: value.unrecognizedPrompt, path: `${path}#${value.$type}#unrecognizedPrompt` });
+      }
+
+      if (has(value, 'invalidPrompt')) {
+        targets.push({ value: value.invalidPrompt, path: `${path}#${value.$type}#invalidPrompt` });
+      }
+
+      if (has(value, 'defaultValueResponse')) {
+        targets.push({ value: value.defaultValueResponse, path: `${path}#${value.$type}#defaultValueResponse` });
       }
       // look for other $type
       switch (value.$type) {
@@ -49,7 +57,7 @@ function ExtractLgTemplates(dialog): LgTemplateJsonPath[] {
     }
     return false;
   };
-  JsonWalk('', dialog, visitor);
+  JsonWalk(id, dialog, visitor);
   //uniquify lgTemplates based on name
   const res: LgTemplateJsonPath[] = [];
   templates.forEach(t => {
@@ -185,7 +193,7 @@ function parse(id: string, content: any, schema: any) {
     content,
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
-    lgTemplates: ExtractLgTemplates(content),
+    lgTemplates: ExtractLgTemplates(id, content),
     luIntents: ExtractLuIntents(content),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),

@@ -15,7 +15,7 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification } from './types';
 import { navigateTo } from './../../utils';
-import { convertDialogDiagnosticToUrl, convertInlineLgPathToUrl } from './../../utils/navigation';
+import { convertDialogDiagnosticToUrl, toUrlUtil } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
@@ -34,7 +34,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
           const lgTemplate = dialog.lgTemplates.find(lg => lg.name === templateId);
           if (lgTemplate) {
             const path = lgTemplate.path;
-            const url = convertInlineLgPathToUrl(dialog.id, path, templateId);
+            const url = toUrlUtil(dialog.id, path);
             if (url) {
               navigateTo(url);
             } else {

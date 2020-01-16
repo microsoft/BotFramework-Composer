@@ -107,16 +107,17 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   return uri;
 }
 
-export function convertInlineLgPathToUrl(dialogId: string, path: string, templateId: string): string {
-  const tokens = path.split('.');
-  const trigger = tokens[1];
-  const urlToken = tokens.splice(2).join('.');
-  if (templateId.indexOf('bfdactivity') > -1) {
-    return `dialogs/${dialogId}?selected=${trigger}&focused=${trigger}.${urlToken}`;
-  } else if (templateId.indexOf('bfdprompt') > -1) {
-    return `dialogs/${dialogId}?selected=${trigger}&focused=${trigger}.${urlToken}#botAsks`;
+export function toUrlUtil(dialogId: string, path: string): string {
+  const tokens = path.split('#');
+  const focusedPath = parsePathToFocused(tokens[0]);
+  const selectedPath = parsePathToSelected(tokens[0]);
+  const type = tokens[1];
+  const property = tokens[2];
+  const fragment = parseTypeToFragment(type, property);
+  if (!focusedPath || !selectedPath) {
+    return '';
   }
-  return '';
+  return `dialogs/${dialogId}?selected=${selectedPath}&focused=${focusedPath}${fragment ? '#' + fragment : ''}`;
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {

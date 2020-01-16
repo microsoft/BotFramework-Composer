@@ -14,7 +14,7 @@ import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
-  const inLineLgTemplateFormat = /^bfd(activity|prompt)-[0-9]+$/;
+  const inLineLgTemplateFormat = /^bfd(activity|prompt|defaultValueResponse|invalidPrompt|unrecognizedPrompt)-[0-9]+/;
   const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     dialogs.forEach(dialog => {
