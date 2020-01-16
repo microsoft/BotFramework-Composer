@@ -3,6 +3,7 @@
 
 import { lgIndexer } from '../src/lgIndexer';
 import { FileInfo } from '../src/type';
+import { getBaseName } from '../src/utils/help';
 
 const { parse, index, check } = lgIndexer;
 
@@ -33,11 +34,13 @@ Thanks for using todo bot.
 });
 
 describe('index', () => {
-  const content = `# Exit
+  const content = `[import](../common/common.lg)
+# Exit
 -Thanks for using todo bot.
 
-# Greeting
--What's up bro`;
+# Hi
+- @{Greeting1()}
+`;
 
   const file: FileInfo = {
     name: 'test.lg',
@@ -45,12 +48,26 @@ describe('index', () => {
     content,
     path: '/',
   };
-  it('should index lg file', () => {
-    const { id, templates, diagnostics }: any = index([file])[0];
+
+  const files = {
+    common: {
+      id: 'common',
+      content: `# Greeting
+      -What's up bro`,
+    },
+  };
+
+  const importResolver = (_source: string, _id: string) => {
+    const id = getBaseName(_id.split('/').pop() || '', '.lg');
+    return files[id];
+  };
+
+  it('should index lg file with [import]', () => {
+    const { id, templates, diagnostics }: any = index([file], importResolver)[0];
     expect(id).toEqual('test');
     expect(templates.length).toEqual(2);
     expect(diagnostics.length).toEqual(0);
     expect(templates[0].name).toEqual('Exit');
-    expect(templates[1].name).toEqual('Greeting');
+    expect(templates[1].name).toEqual('Hi');
   });
 });

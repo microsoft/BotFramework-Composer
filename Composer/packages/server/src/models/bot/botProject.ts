@@ -3,7 +3,6 @@
 
 import fs from 'fs';
 
-import { ImportResolverDelegate } from 'botbuilder-lg';
 import { getNewDesigner } from '@bfc/shared';
 import {
   FileInfo,
@@ -84,7 +83,7 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver('.lg'));
+    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
     this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
@@ -94,6 +93,7 @@ export class BotProject {
   };
 
   public getIndexes = () => {
+    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
     return {
       botName: this.name,
       location: this.dir,
@@ -462,28 +462,24 @@ export class BotProject {
   }
 
   /**
+   *  @param source current file id
+   *  @param id imported file path
+   *  for example:
+   *  in AddToDo.lg:
+   *   [import](../common/common.lg)
    *
-   * @param ext file extension.
-   * return an importResolver
+   * source = AddToDo.lg
+   * id = ../common/common.lg
    */
-  private _fileImportResolver(ext: string): ImportResolverDelegate {
-    /**
-     *  @param source current file id
-     *  @param id imported file path
-     *  for example:
-     * < -- AddToDo.lg -->
-     * [import](../common/common.lg)
-     * <EOF>
-     * source is "AddToDo"
-     * id is "../common/common.lg"
-     */
-    return (source: string, id: string) => {
-      const sourceFilePath = this.files.find(file => file.name === `${source}${ext}`)?.relativePath || '';
-      const targetFilePath = Path.join(Path.dirname(sourceFilePath), id);
-      const targetFile = this.files.find(file => file.relativePath === targetFilePath);
-      return { id, content: targetFile ? targetFile.content : '' };
+  private _fileImportResolver = (source: string, id: string) => {
+    const targetName = Path.basename(id);
+    const targetFile = this.files.find(({ name }) => name === targetName);
+    if (!targetFile) throw new Error('file not found');
+    return {
+      id,
+      content: targetFile.content,
     };
-  }
+  };
 
   // re index according to file change in a certain path
   private reindex = async (filePath: string) => {
@@ -494,7 +490,7 @@ export class BotProject {
         this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver('.lg'));
+        this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
         break;
       case '.lu':
         this.luFiles = luIndexer.index(this.files);

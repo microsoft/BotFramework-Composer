@@ -106,7 +106,8 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     resolvers: {
       lgImportresolver: function(_source: string, id: string) {
         const targetFile = getState().lgFiles.find(file => `${file.id}.lg` === getFileName(id));
-        return { id, content: targetFile ? targetFile.content : '' };
+        if (!targetFile) throw new Error(`file not found`);
+        return { id, content: targetFile.content };
       } as ImportResolverDelegate,
     },
   };
