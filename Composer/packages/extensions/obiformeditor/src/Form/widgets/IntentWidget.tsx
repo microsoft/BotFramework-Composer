@@ -5,11 +5,12 @@ import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { RegexRecognizer } from '@bfc/shared';
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/indexers';
 
-import { BFDWidgetProps, FormContext } from '../types';
+import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
+import LuEditorWidget from './LuEditorWidget';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
@@ -48,42 +49,26 @@ function regexIntentOptions(currentDialog: DialogInfo): IDropdownOption[] {
   return options;
 }
 
-function luIntentOptions(formContext: FormContext): IDropdownOption[] {
-  const luFile: LuFile | void = formContext.luFiles.find(f => f.id === formContext.currentDialog.id);
-  let options: IDropdownOption[] = [EMPTY_OPTION];
-
-  if (luFile) {
-    const intents: { name: string }[] = luFile.intents.map(({ Name: name }) => {
-      return {
-        name,
-      };
-    });
-
-    options = options.concat(
-      intents.map(i => ({
-        key: i.name,
-        text: i.name,
-      }))
-    );
-  }
-
-  return options;
-}
-
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
   const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
   const { description } = schema;
+  const { currentDialog } = formContext;
   let options: IDropdownOption[] = [];
+  let widgetLabel = label;
+  let isLuisSelected = false;
 
-  switch (recognizerType(formContext.currentDialog)) {
+  switch (recognizerType(currentDialog)) {
     case RecognizerType.regex:
-      options = regexIntentOptions(formContext.currentDialog);
+      options = regexIntentOptions(currentDialog);
+      isLuisSelected = false;
       break;
     case RecognizerType.luis:
-      options = luIntentOptions(formContext);
+      widgetLabel = `Trigger phrases(intent name: #${value || ''})`;
+      isLuisSelected = true;
       break;
     default:
       options = [EMPTY_OPTION];
+      isLuisSelected = false;
       break;
   }
 
@@ -95,18 +80,21 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
-      <Dropdown
-        id={id.replace(/\.|#/g, '')}
-        onBlur={() => onBlur && onBlur(id, value)}
-        onChange={handleChange}
-        onFocus={() => onFocus && onFocus(id, value)}
-        options={options}
-        selectedKey={value || null}
-        responsiveMode={ResponsiveMode.large}
-        disabled={disabled || options.length === 1}
-        placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
-      />
+      <WidgetLabel label={widgetLabel} description={description} id={id} />
+      {!isLuisSelected && (
+        <Dropdown
+          id={id.replace(/\.|#/g, '')}
+          onBlur={() => onBlur && onBlur(id, value)}
+          onChange={handleChange}
+          onFocus={() => onFocus && onFocus(id, value)}
+          options={options}
+          selectedKey={value || null}
+          responsiveMode={ResponsiveMode.large}
+          disabled={disabled || options.length === 1}
+          placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
+        />
+      )}
+      {isLuisSelected && <LuEditorWidget formContext={formContext} onChange={onChange} name={value} height={316} />}
     </>
   );
 };

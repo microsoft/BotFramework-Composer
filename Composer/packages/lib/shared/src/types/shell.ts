@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
+import { LuIntentSection } from '@bfc/indexers';
 
 export interface EditorSchema {
   content?: {
@@ -53,6 +54,9 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  addLuIntent: (id: string, intent: LuIntentSection | null) => Promise<void>;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
+  removeLuIntent: (id: string, intentName: string) => Promise<void>;
   createDialog: () => Promise<string>;
   validateExpression: (expression?: string) => Promise<boolean>;
   // TODO: fix these types
