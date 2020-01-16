@@ -150,6 +150,9 @@ function ExtensionContainer() {
     });
 
     apiClient.registerApi('updateExtension', externalUpdate => {
+      //the externalUpdate contains the reason of the update.
+      //use key to forceupdate the extension.
+      //we can use the info from externalUpdate in the future.
       if (externalUpdate) {
         setForceUpdateCount(forceUpdateCountRef.current + 1);
       }
