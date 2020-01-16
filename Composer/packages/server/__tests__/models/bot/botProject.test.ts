@@ -33,7 +33,7 @@ describe('index', () => {
   it('should index successfully', () => {
     const project: { [key: string]: any } = proj.getIndexes();
     expect(project.dialogs.length).toBe(3);
-    expect(project.lgFiles.length).toBe(1);
+    expect(project.lgFiles.length).toBe(4);
     expect(project.luFiles.length).toBe(3);
 
     // find out lg templates used in
@@ -53,7 +53,7 @@ describe('updateDialog', () => {
   it('should update a file at a path', async () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
-    const dialogs = await proj.updateDialog('a', newValue);
+    const { dialogs } = await proj.updateDialog('a', newValue);
     const aDialog = dialogs.find((f: { id: string }) => f.id === 'a');
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
@@ -67,14 +67,14 @@ describe('createFromTemplate', () => {
 
   afterEach(() => {
     try {
-      fs.unlinkSync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}/${dialogName}.dialog`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}`));
     } catch (err) {
       // ignore
     }
   });
 
   it('should create a dialog file with given steps', async () => {
-    const dialogs = await proj.createDialog(dialogName, content);
+    const { dialogs } = await proj.createDialog(dialogName, content);
     const newFile = dialogs.find((f: { id: string }) => f.id === dialogName);
 
     expect(newFile).not.toBeUndefined();
@@ -135,7 +135,7 @@ describe('modify non exist files', () => {
   });
 });
 
-describe('lg operation', () => {
+describe('lg operations', () => {
   afterEach(() => {
     try {
       rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
@@ -145,13 +145,16 @@ describe('lg operation', () => {
   });
 
   it('should create lg file and update index', async () => {
+    await proj.index();
+    const filesCount = proj.files.length;
+    const lgFilesCount = proj.lgFiles.length;
     const id = 'root';
     const content = '# hello \n - hello';
     const lgFiles = await proj.createLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
-    expect(lgFiles.length).toEqual(2);
+    expect(proj.files.length).toEqual(filesCount + 1);
+    expect(lgFiles.length).toEqual(lgFilesCount + 1);
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
@@ -161,6 +164,10 @@ describe('lg operation', () => {
   });
 
   it('should update lg file and update index', async () => {
+    await proj.index();
+    const filesCount = proj.files.length;
+    const lgFilesCount = proj.lgFiles.length;
+
     const id = 'root';
     let content = '# hello \n - hello';
     await proj.createLgFile(id, content);
@@ -169,8 +176,8 @@ describe('lg operation', () => {
     const lgFiles = await proj.updateLgFile(id, content);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
-    expect(lgFiles.length).toEqual(2);
+    expect(proj.files.length).toEqual(filesCount + 1);
+    expect(lgFiles.length).toEqual(lgFilesCount + 1);
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
@@ -184,17 +191,20 @@ describe('lg operation', () => {
     const content = '# hello \n - hello';
     await proj.createLgFile(id, content);
 
+    const filesCount = proj.files.length;
+    const lgFilesCount = proj.lgFiles.length;
+
     const lgFiles = await proj.removeLgFile(id);
     const result = lgFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(7);
-    expect(lgFiles.length).toEqual(1);
+    expect(proj.files.length).toEqual(filesCount - 1);
+    expect(lgFiles.length).toEqual(lgFilesCount - 1);
 
     expect(result).toBeUndefined();
   });
 });
 
-describe('lu operation', () => {
+describe('lu operations', () => {
   afterEach(() => {
     try {
       rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
@@ -205,13 +215,17 @@ describe('lu operation', () => {
   });
 
   it('should create lu file and update index', async () => {
+    await proj.index();
+    const filesCount = proj.files.length;
+    const luFilesCount = proj.luFiles.length;
+
     const id = 'root';
-    const content = '## hello \n - hello';
+    const content = '# hello \n - hello';
     const luFiles = await proj.createLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
-    expect(luFiles.length).toEqual(4);
+    expect(proj.files.length).toEqual(filesCount + 1);
+    expect(luFiles.length).toEqual(luFilesCount + 1);
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
@@ -221,6 +235,10 @@ describe('lu operation', () => {
   });
 
   it('should update lu file and update index', async () => {
+    await proj.index();
+    const filesCount = proj.files.length;
+    const luFilesCount = proj.luFiles.length;
+
     const id = 'root';
     let content = '## hello \n - hello';
     await proj.createLuFile(id, content);
@@ -229,8 +247,8 @@ describe('lu operation', () => {
     const luFiles = await proj.updateLuFile(id, content);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(8);
-    expect(luFiles.length).toEqual(4);
+    expect(proj.files.length).toEqual(filesCount + 1);
+    expect(luFiles.length).toEqual(luFilesCount + 1);
 
     expect(result).not.toBeUndefined();
     expect(result?.relativePath).toEqual('ComposerDialogs/root/root.lu');
@@ -253,12 +271,58 @@ describe('lu operation', () => {
     const id = 'root';
     const content = '## hello \n - hello2';
     await proj.createLuFile(id, content);
+    const filesCount = proj.files.length;
+    const luFilesCount = proj.luFiles.length;
+
     const luFiles = await proj.removeLuFile(id);
     const result = luFiles.find(f => f.id === id);
 
-    expect(proj.files.length).toEqual(7);
-    expect(luFiles.length).toEqual(3);
+    expect(proj.files.length).toEqual(filesCount - 1);
+    expect(luFiles.length).toEqual(luFilesCount - 1);
 
     expect(result).toBeUndefined();
+  });
+});
+
+describe('dialog operations', () => {
+  afterEach(() => {
+    try {
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+    } catch (err) {
+      // ignore
+    }
+  });
+
+  it('should create dialog and related lg lu file', async () => {
+    const filesCount = proj.files.length;
+    const dialogsFilesCount = proj.dialogs.length;
+    const lgFilesCount = proj.lgFiles.length;
+    const luFilesCount = proj.luFiles.length;
+
+    const id = 'root';
+    const content = '{}';
+    const { dialogs, lgFiles, luFiles } = await proj.createDialog(id, content);
+
+    expect(proj.files.length).toEqual(filesCount + 3);
+    expect(dialogs.length).toEqual(dialogsFilesCount + 1);
+    expect(lgFiles.length).toEqual(lgFilesCount + 1);
+    expect(luFiles.length).toEqual(luFilesCount + 1);
+  });
+
+  it('should delete dialog and related lg lu file', async () => {
+    const id = 'root';
+    const content = '{}';
+    await proj.createDialog(id, content);
+    const filesCount = proj.files.length;
+    const dialogsFilesCount = proj.dialogs.length;
+    const lgFilesCount = proj.lgFiles.length;
+    const luFilesCount = proj.luFiles.length;
+
+    const { dialogs, lgFiles, luFiles } = await proj.removeDialog(id);
+
+    expect(proj.files.length).toEqual(filesCount - 3);
+    expect(dialogs.length).toEqual(dialogsFilesCount - 1);
+    expect(lgFiles.length).toEqual(lgFilesCount - 1);
+    expect(luFiles.length).toEqual(luFilesCount - 1);
   });
 });
