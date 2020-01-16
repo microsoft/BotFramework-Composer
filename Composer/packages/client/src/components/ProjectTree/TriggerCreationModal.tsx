@@ -27,6 +27,7 @@ import {
   getActivityTypes,
   getMessageTypes,
 } from '../../utils/dialogUtil';
+import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow, intent, triggerPhrases } from './styles';
@@ -100,13 +101,13 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       });
       return;
     }
-    const newContent = get(luFile, 'content', '') + '\n\n' + '# ' + formData.intent + '\n' + formData.triggerPhrases;
 
+    const content = get(luFile, 'content', '');
+    const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
     const updateLuFile = {
       id: dialogId,
       content: newContent,
     };
-
     const newDialog = addNewTrigger(dialogs, dialogId, formData);
     onSubmit(newDialog, updateLuFile);
     onDismiss();
