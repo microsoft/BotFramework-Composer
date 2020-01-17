@@ -11,10 +11,10 @@
             "content": "#Dummy\r\n--I am Dummy",
             "diagnostics": [],
             "id": "Main",
+            "intents": [],
+            "relativePath": "Main/Main.lu",
             "lastPublishTime": 2,
-            "lastUpdateTime": 1,
-            "parsedContent": {},
-            "relativePath": "Main/Main.lu"
+            "lastUpdateTime": 1
         }
     ]
 }

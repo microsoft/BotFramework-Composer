@@ -29,7 +29,7 @@ To define and use intents in Composer, you will need to:
 - publish the training data to LUIS 
 
 > [!NOTE]
-> Please read details of how to define intents with LUIS recognizer and Regular Expression recognizer [here](howto-defining-triggers.md#intent). 
+> Please read details of how to define intents with LUIS recognizer and Regular Expression recognizer [here](how-to-define-triggers.md#intent). 
 
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well formed we need to provide example utterances for specific intents to train our bots to recognize intents from different utterances. By doing so, our bots will have some "intelligence" to understand human languages. 
@@ -50,7 +50,7 @@ Entities are a collection of objects data extracted from an utterance such as pl
     - book a flight to {toCity=seattle}
     - book a flight from {fromCity=new york} to {toCity=seattle}
 
-The example above shows the definition of a `BookFlight` intent with two example utterances and two entity definitions: `toCity` and `fromCity`. When triggered, if LUIS is able to identify a destination city, the city name will be made available as `@toCity` within the triggered actions or a departure city with `@fromCity` as available entity values. The entity values can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. Read [here](howto-define-advanced-intents-entities.md) for advanced intents and entities definition. 
+The example above shows the definition of a `BookFlight` intent with two example utterances and two entity definitions: `toCity` and `fromCity`. When triggered, if LUIS is able to identify a destination city, the city name will be made available as `@toCity` within the triggered actions or a departure city with `@fromCity` as available entity values. The entity values can be used directly in expressions and LG templates, or [stored into a memory property](concept-memory.md) for later use. Read [here](how-to-define-advanced-intents-entities.md) for advanced intents and entities definition. 
 
 ### Example 
 To better understand intents, entities and utterances, we provide some examples in the table below. All the three utterances share the same intent _BookFlight_ and with different entities. There are different types of entities, see details [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 

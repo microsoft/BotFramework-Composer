@@ -78,7 +78,7 @@ export class BotProject {
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialog();
     this.lgFiles = lgIndexer.index(this.files);
-    this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+    this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
@@ -320,7 +320,7 @@ export class BotProject {
       const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = unpublished.filter(this.isEmpty);
+    const emptyLuFiles = unpublished.filter(this.isLuFileEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
@@ -447,7 +447,7 @@ export class BotProject {
         this.lgFiles = lgIndexer.index(this.files);
         break;
       case '.lu':
-        this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+        this.luFiles = luIndexer.index(this.files);
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -539,13 +539,11 @@ export class BotProject {
     }
   };
 
-  private isEmpty = (LUFile: LuFile) => {
-    if (LUFile === undefined) return true;
-    if (LUFile.content === undefined || LUFile.content === '') return true;
-    if (LUFile.parsedContent === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure.intents.length !== 0) return false;
-    if (LUFile.parsedContent.LUISJsonStructure.utterances.length !== 0) return false;
+  private isLuFileEmpty = (file: LuFile) => {
+    const { content, intents } = file;
+    if (content && intents?.length) {
+      return false;
+    }
     return true;
   };
 
