@@ -285,14 +285,6 @@ describe('lu operations', () => {
 });
 
 describe('dialog operations', () => {
-  afterEach(() => {
-    try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
-    } catch (err) {
-      // ignore
-    }
-  });
-
   it('should create dialog and related lg lu file', async () => {
     const filesCount = proj.files.length;
     const dialogsFilesCount = proj.dialogs.length;
@@ -311,8 +303,6 @@ describe('dialog operations', () => {
 
   it('should delete dialog and related lg lu file', async () => {
     const id = 'root';
-    const content = '{}';
-    await proj.createDialog(id, content);
     const filesCount = proj.files.length;
     const dialogsFilesCount = proj.dialogs.length;
     const lgFilesCount = proj.lgFiles.length;
