@@ -19,7 +19,10 @@ export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
   const { formContext, name, height = 250 } = props;
   const luFileId = formContext.currentDialog.id;
   const luFile: LuFile | null = formContext.luFiles.find(f => f.id === luFileId);
-  const luIntent: LuIntentSection | undefined = luFile?.intents.find(intent => intent.Name === name);
+  const luIntent: LuIntentSection = (luFile && luFile.intents.find(intent => intent.Name === name)) || {
+    Name: name,
+    Body: '',
+  };
 
   const updateLuIntent = useMemo(
     () =>
@@ -35,11 +38,16 @@ export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
     : '';
-  const [localValue, setLocalValue] = useState(luIntent?.Body);
 
+  const [localValue, setLocalValue] = useState(luIntent.Body);
+
+  // updating localValue when getting newest luIntent Data
+  // it will be deleted after leilei's pr: fix: Undo / redo behavior on LG resources
   useEffect(() => {
-    setLocalValue(luIntent?.Body);
-  }, [luIntent]);
+    if (!localValue) {
+      setLocalValue(luIntent.Body);
+    }
+  }, [luIntent.Body]);
   const onChange = (body: string) => {
     setLocalValue(body);
     if (luFileId) {
@@ -48,7 +56,6 @@ export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
       } else {
         updateLuIntent.flush();
         formContext.shellApi.removeLuIntent(luFileId, name);
-        props.onChange();
       }
     }
   };
