@@ -7,13 +7,13 @@ import has from 'lodash/has';
 import { VisitorFunc, JsonWalk } from '../utils/jsonWalk';
 
 //limit the scope
-function checkProperty(property: string): boolean {
-  const scopePatt = /(user|conversion|dialog|this).[\S]+$/;
+export function checkProperty(property: string): boolean {
+  const scopePatt = /(user|conversation|dialog|this).[\S]+$/;
   return scopePatt.test(property.trim());
 }
 
 // find all properties from specific type
-function getProperties(value: any): string[] {
+export function getProperties(value: any): string[] {
   let properties: string[] = [];
   switch (value.$type) {
     case SDKTypes.NumberInput:
