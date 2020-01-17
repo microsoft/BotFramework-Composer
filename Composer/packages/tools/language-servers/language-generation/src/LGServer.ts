@@ -19,7 +19,7 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
-import { ImportResolverDelegate } from 'botbuilder-lg';
+import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -190,12 +190,27 @@ export class LGServer {
       let content: string = document.getText();
       // if inline mode, composite local with server resolved file.
       if (this.importResolver && fileId && templateId) {
-        content = importResolver('.', fileId).content;
+        try {
+          content = importResolver('.', fileId).content;
+        } catch (error) {
+          // ignore if file not exist
+        }
       }
 
       const id = fileId || uri;
       const diagnostics = check(content, id, importResolver);
       const templates = parse(content, id);
+      const { imports } = LGParser.parse(content, id);
+
+      imports.forEach(({ id }) => {
+        try {
+          const importedContent = importResolver('.', id).content;
+          const importedTemplates = parse(importedContent, id);
+          templates.push(...importedTemplates);
+        } catch (error) {
+          // ignore if file not exist
+        }
+      });
 
       return { templates, diagnostics };
     };
