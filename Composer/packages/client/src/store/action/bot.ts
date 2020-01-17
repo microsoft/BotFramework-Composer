@@ -28,7 +28,7 @@ export const connectBot: ActionCreator = async (store, settings) => {
         status: 'unConnected',
       },
     });
-    throw new Error(err.response.data.message);
+    throw new Error(err.response?.data?.message || err.message);
   }
 };
 

@@ -8,26 +8,47 @@
 -```Welcome to the Controlling Conversation sample. Choose from the list below to try.
 You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accept an input.```
 
-# bfdactivity-623448
+# bfdactivity-623448()
 -Pushed dialog.ids into a list
 
-# bfdactivity-638869
+# bfdactivity-638869()
 -Pushed dialog.id into a list
 
-# bfdactivity-164444
+# bfdactivity-164444()
 -Your age is @{user.age} which satisified the condition that was evaluated
 
-# bfdactivity-619321
+# bfdactivity-619321()
 -Your age is @{user.age} which did not satisfy the condition that we evaluated
 
-# bfdactivity-097130
+# bfdactivity-097130()
 -You selected @{user.name}
 
-# bfdactivity-040464
+# bfdactivity-040464()
 -This is the logic inside the "Susan" switch block.
 
-# bfdactivity-230206
+# bfdactivity-230206()
 -This is the logic inside the "Nick" switch block.
 
 # bfdactivity-604251
 -This is the logic inside the "Tom" switch block.
+
+# bfdactivity-()
+- @{dialog.foreach.index}: @{dialog.foreach.value}
+
+# bfdactivity-636747()
+- @{dialog.foreach.index}: @{dialog.foreach.value}
+
+# bfdprompt-699003()
+- Who are your?
+
+# bfdprompt-841600()
+- Do you want to repeat this dialog, yes to repeat, no to end this dialog
+
+# bfdactivity-006441()
+- @{dialog.foreach.index}: @{dialog.foreach.value}
+
+# bfdactivity-953339()
+- @{help()}
+
+# bfdactivity-859266()
+- @{help()}
