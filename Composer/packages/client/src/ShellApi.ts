@@ -219,9 +219,9 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const newLuContent = luUtil.updateIntent(file.content, intentName, intent);
+    const content = luUtil.updateIntent(file.content, intentName, intent);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, content });
   }
 
   async function addLuIntentHandler({ id, intent }, event) {
@@ -229,9 +229,9 @@ export const ShellApi: React.FC = () => {
     const file = luFiles.find(file => file.id === id);
     if (!file) throw new Error(`lu file ${id} not found`);
 
-    const newLuContent = luUtil.addIntent(file.content, intent);
+    const content = luUtil.addIntent(file.content, intent);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, content });
   }
 
   async function removeLuIntentHandler({ id, intentName }, event) {
@@ -240,9 +240,9 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const newLuContent = luUtil.removeIntent(file.content, intentName);
+    const content = luUtil.removeIntent(file.content, intentName);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, content });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
