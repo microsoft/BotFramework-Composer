@@ -13,9 +13,12 @@ import { NodeEventTypes } from '../../../constants/NodeEventTypes';
 import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { LoopIndicator } from '../../decorations/LoopIndicator';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { StepGroup } from '../../groups';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { ForeachDetail } from '../steps/ForeachDetail';
+import { ElementWrapper } from '../../renderers/ElementWrapper';
+import { ObiTypes } from '../../../constants/ObiTypes';
+import { ForeachPageDetail } from '../steps/ForeachPageDetail';
 
 import { NodeMap, BoundaryMap } from './types';
 
@@ -68,16 +71,19 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   }
 
   const { foreachNode, stepsNode, loopBeginNode, loopEndNode } = nodeMap;
+  const ForeachHeader = data.$type === ObiTypes.Foreach ? ForeachDetail : ForeachPageDetail;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
-        <ElementRenderer
-          key={foreachNode.id}
-          id={foreachNode.id}
-          data={foreachNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={id}>
+          <ForeachHeader
+            key={foreachNode.id}
+            id={foreachNode.id}
+            data={foreachNode.data}
+            onEvent={onEvent}
+            onResize={onResize}
+          />
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>
         <StepGroup
