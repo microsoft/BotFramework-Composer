@@ -322,17 +322,6 @@ export const ShellApi: React.FC = () => {
     apiClient.apiCall('reset', nextState, window.frames[VISUAL_EDITOR]);
   }
 
-  function resetDataAll() {
-    if (window.frames[VISUAL_EDITOR]) {
-      const editorWindow = window.frames[VISUAL_EDITOR];
-      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
-    }
-    if (window.frames[FORM_EDITOR]) {
-      const editorWindow = window.frames[FORM_EDITOR];
-      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
-    }
-  }
-
   useEffect(() => {
     apiClient.connect();
 
@@ -381,7 +370,17 @@ export const ShellApi: React.FC = () => {
   }); // this is intented to reconstruct everytime store is refresh
 
   useEffect(() => {
-    resetDataAll();
+    if (window.frames[VISUAL_EDITOR]) {
+      const editorWindow = window.frames[VISUAL_EDITOR];
+      apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
+    }
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+
+  useEffect(() => {
+    if (window.frames[FORM_EDITOR]) {
+      const editorWindow = window.frames[FORM_EDITOR];
+      apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
+    }
   }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
 
   useEffect(() => {
