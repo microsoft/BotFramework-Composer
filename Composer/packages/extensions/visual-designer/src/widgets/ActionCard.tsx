@@ -14,6 +14,7 @@ export interface ActionCardProps extends WidgetContainerProps {
   title: string;
   icon: string;
   content: string | number | JSX.Element;
+  menu?: JSX.Element | string;
   colors?: {
     theme: string;
     icon: string;
@@ -31,6 +32,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   onEvent,
   title,
   icon,
+  menu,
   content,
   colors = DefaultCardColor,
 }) => {
@@ -39,7 +41,7 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   return (
     <FormCard
       header={header}
-      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      corner={menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
       label={content}
       nodeColors={nodeColors}

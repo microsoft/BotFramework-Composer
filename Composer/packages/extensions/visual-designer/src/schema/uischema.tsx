@@ -7,10 +7,37 @@ import React from 'react';
 import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
 import { DialogRefCard } from '../widgets/DialogRefCard';
+import { PromptWidget } from '../widgets/PromptWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 
-import { UISchema } from './uischema.types';
+import { UISchema, UIWidget } from './uischema.types';
+
+const BaseInputSchema: UIWidget = {
+  'ui:widget': PromptWidget,
+  botAsks: {
+    'ui:widget': ActivityRenderer,
+    title: 'Bot Asks',
+    field: 'prompt',
+    defaultContent: '<prompt>',
+    icon: ElementIcon.MessageBot,
+    colors: {
+      theme: ObiColors.BlueMagenta20,
+      icon: ObiColors.BlueMagenta30,
+    },
+  },
+  userInput: {
+    'ui:widget': ActionCard,
+    title: 'User Answers (Text)',
+    icon: ElementIcon.User,
+    menu: 'none',
+    content: data => data.property || '<property>',
+    colors: {
+      theme: ObiColors.LightBlue,
+      icon: ObiColors.AzureBlue,
+    },
+  },
+};
 
 export const uiSchema: UISchema = {
   default: {
@@ -25,6 +52,12 @@ export const uiSchema: UISchema = {
       icon: ObiColors.BlueMagenta30,
     },
   },
+  [SDKTypes.AttachmentInput]: BaseInputSchema,
+  [SDKTypes.ConfirmInput]: BaseInputSchema,
+  [SDKTypes.DateTimeInput]: BaseInputSchema,
+  [SDKTypes.NumberInput]: BaseInputSchema,
+  [SDKTypes.TextInput]: BaseInputSchema,
+  [SDKTypes.ChoiceInput]: BaseInputSchema,
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
