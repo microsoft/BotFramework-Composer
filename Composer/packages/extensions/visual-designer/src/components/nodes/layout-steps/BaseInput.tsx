@@ -34,7 +34,7 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   const { botAsksNode, userAnswersNode, invalidPromptNode: brickNode } = nodeMap;
 
   return (
-    <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
+    <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS}>
           <BotAsks id={botAsksNode.id} data={botAsksNode.data} onEvent={onEvent} onResize={onResize} />
