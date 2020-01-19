@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { checkProperty, getProperties } from '../../src/dialogUtils/extractProperties';
+import { checkProperty, getProperties } from '../../src/dialogUtils/extractMemoryPaths';
 
 const data = [
   {

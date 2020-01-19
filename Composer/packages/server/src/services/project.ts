@@ -65,7 +65,7 @@ export class BotProjectService {
     ];
     const userDefined: string[] =
       BotProjectService.currentBotProject?.dialogs.reduce((result: string[], dialog) => {
-        result = [...dialog.stateProperties, ...result];
+        result = [...dialog.userDefinedVariables, ...result];
         return result;
       }, []) || [];
     return [...defaultProperties, ...userDefined];
