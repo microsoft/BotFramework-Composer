@@ -77,7 +77,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     : '';
   const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
-    debounce((shellData: FormData, localData: FormData) => {
+    debounce((shellData: any, localData: any) => {
       if (!isEqual(shellData, localData)) {
         setLocalValue(shellData);
       }
