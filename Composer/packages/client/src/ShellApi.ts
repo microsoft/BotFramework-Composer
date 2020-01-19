@@ -46,17 +46,7 @@ const FileTargetTypes = {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
 
-  const {
-    dialogs,
-    schemas,
-    lgFiles,
-    luFiles,
-    designPageLocation,
-    focusPath,
-    breadcrumb,
-    botName,
-    externalUpdate,
-  } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -393,17 +383,6 @@ export const ShellApi: React.FC = () => {
   useEffect(() => {
     resetDataAll();
   }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
-
-  //reset the date if the data is not updated by editor
-  useEffect(() => {
-    let editorWindow = null;
-    if ((editorWindow = window.frames[VISUAL_EDITOR])) {
-      apiClient.apiCall('updateExtension', externalUpdate, editorWindow);
-    }
-    if ((editorWindow = window.frames[FORM_EDITOR])) {
-      apiClient.apiCall('updateExtension', externalUpdate, editorWindow);
-    }
-  }, [externalUpdate]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);

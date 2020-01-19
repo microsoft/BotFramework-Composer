@@ -3,8 +3,6 @@
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
 
-import { UpdateAction, UpdateScope } from '../constant';
-
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides?: any;
@@ -18,21 +16,11 @@ export interface BotSchemas {
   diagnostics?: any[];
 }
 
-/**
- * recoed the status when data updated in shell
- * scope: the updated resource
- * action: the cause of update
- */
-export interface ExternalUpdate {
-  scope: UpdateScope;
-  action: UpdateAction;
-}
-
 export interface ShellData {
   botName: string;
   currentDialog: any;
   data: {
-    $type: string;
+    $type?: string;
     [key: string]: any;
   };
   dialogId: string;
@@ -47,7 +35,6 @@ export interface ShellData {
   lgFiles: any[];
   luFiles: any[];
   schemas: BotSchemas;
-  externalUpdate?: ExternalUpdate;
 }
 
 export interface ShellApi {

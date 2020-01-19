@@ -5,7 +5,6 @@ import clonedeep from 'lodash/cloneDeep';
 import reject from 'lodash/reject';
 import { DialogInfo } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
-import { ExternalUpdate, UpdateScope, UpdateAction } from '@bfc/shared';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
@@ -16,7 +15,6 @@ import { Store } from './../types';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
 import { fetchProject } from './project';
-import { setUpdateStatus } from './shell';
 
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
@@ -114,25 +112,20 @@ export const debouncedUpdateDialog = debounce(async (store, id, content) => {
   }
 }, 500);
 
-export const updateDialogBase: ActionCreator = (store, { id, content }, updateStatus?: ExternalUpdate) => {
+export const updateDialogBase: ActionCreator = (store, { id, content }) => {
   store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, content } });
-  setUpdateStatus(store, updateStatus);
   debouncedUpdateDialog(store, id, content);
 };
 
 export const updateDialog: ActionCreator = undoable(
   updateDialogBase,
   (state: State, args: any[], isEmpty) => {
-    const updateStatus = {
-      scope: UpdateScope.DialogFile,
-      action: UpdateAction.UndoRedo,
-    };
     if (isEmpty) {
       const id = state.designPageLocation.dialogId;
       const dialog = state.dialogs.find(dialog => dialog.id === id);
-      return [{ id, content: dialog ? dialog.content : {} }, updateStatus];
+      return [{ id, content: dialog ? dialog.content : {} }];
     } else {
-      return [{ ...args[0] }, updateStatus];
+      return args;
     }
   },
   updateDialogBase,

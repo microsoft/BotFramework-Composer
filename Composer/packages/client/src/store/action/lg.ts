@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
-import { ExternalUpdate, UpdateScope, UpdateAction } from '@bfc/shared';
 
 import { ActionTypes } from '../../constants';
 import httpClient from '../../utils/httpUtil';
@@ -12,7 +11,6 @@ import { ActionCreator, State } from '../types';
 
 import { fetchProject } from './project';
 import { setError } from './error';
-import { setUpdateStatus } from './shell';
 
 //remove editor's debounce and add it to action
 export const debouncedUpdateLg = debounce(async (store, id, content) => {
@@ -28,25 +26,20 @@ export const debouncedUpdateLg = debounce(async (store, id, content) => {
   }
 }, 500);
 
-export const updateLgFile: ActionCreator = async (store, { id, content }, updateStatus?: ExternalUpdate) => {
+export const updateLgFile: ActionCreator = async (store, { id, content }) => {
   store.dispatch({ type: ActionTypes.UPDATE_LG_SUCCESS, payload: { id, content } });
-  setUpdateStatus(store, updateStatus);
   debouncedUpdateLg(store, id, content);
 };
 
 export const undoableUpdateLgFile = undoable(
   updateLgFile,
   (state: State, args: any[], isEmpty) => {
-    const updateStatus = {
-      scope: UpdateScope.LgFile,
-      action: UpdateAction.UndoRedo,
-    };
     if (isEmpty) {
       const id = args[0].id;
       const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
-      return [{ id, content }, updateStatus];
+      return [{ id, content }];
     } else {
-      return [{ ...args[0] }, updateStatus];
+      return args;
     }
   },
   updateLgFile,

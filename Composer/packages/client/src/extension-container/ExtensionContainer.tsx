@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
 import { ShellData, ShellApi } from '@bfc/shared';
 
@@ -121,9 +121,6 @@ const shellApi: ShellApi = {
 
 function ExtensionContainer() {
   const [shellData, setShellData] = useState<ShellData>({} as ShellData);
-  const [forceUpdateCount, setForceUpdateCount] = useState<number>(0);
-  const forceUpdateCountRef = useRef(forceUpdateCount);
-  forceUpdateCountRef.current = forceUpdateCount;
 
   useEffect(() => {
     apiClient.connect();
@@ -149,15 +146,6 @@ function ExtensionContainer() {
       return result;
     });
 
-    apiClient.registerApi('updateExtension', externalUpdate => {
-      //the externalUpdate contains the reason of the update.
-      //use key to forceupdate the extension.
-      //we can use the info from externalUpdate in the future.
-      if (externalUpdate) {
-        setForceUpdateCount(forceUpdateCountRef.current + 1);
-      }
-    });
-
     shellApi.getState().then(result => {
       setShellData(result);
     });
@@ -169,9 +157,7 @@ function ExtensionContainer() {
 
   const RealEditor = shellData.data ? getEditor() : null;
 
-  return (
-    RealEditor && <RealEditor key={forceUpdateCount} {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />
-  );
+  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
 }
 
 export default ExtensionContainer;

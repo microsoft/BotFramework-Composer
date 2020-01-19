@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
+import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 
 import { FormContext } from '../types';
 
@@ -74,6 +76,22 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
     : '';
   const [localValue, setLocalValue] = useState(template.body);
+  const sync = useRef(
+    debounce((shellData: FormData, localData: FormData) => {
+      if (!isEqual(shellData, localData)) {
+        setLocalValue(shellData);
+      }
+    }, 750)
+  ).current;
+
+  useEffect(() => {
+    sync(template.body, localValue);
+
+    return () => {
+      sync.cancel();
+    };
+  }, [template.body]);
+
   const lgOption = {
     fileId: lgFileId,
     templateId: lgName,
