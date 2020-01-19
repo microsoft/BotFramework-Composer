@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver, LgTemplate } from '@bfc/indexers';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
@@ -199,18 +199,20 @@ export class LGServer {
 
       const id = fileId || uri;
       const diagnostics = check(content, id, importResolver);
-      const templates = parse(content, id);
-      const { imports } = LGParser.parse(content, id);
+      let templates: LgTemplate[] = [];
+      if (isValid(diagnostics)) {
+        templates = parse(content, id);
+        const { imports } = LGParser.parse(content, id);
 
-      imports.forEach(({ id }) => {
-        try {
+        imports.forEach(({ id }) => {
           const importedContent = importResolver('.', id).content;
-          const importedTemplates = parse(importedContent, id);
-          templates.push(...importedTemplates);
-        } catch (error) {
-          // ignore if file not exist
-        }
-      });
+          const importedContentDiagnostics = check(importedContent, '');
+          if (isValid(importedContentDiagnostics)) {
+            const importedTemplates = parse(importedContent, id);
+            templates.push(...importedTemplates);
+          }
+        });
+      }
 
       return { templates, diagnostics };
     };
