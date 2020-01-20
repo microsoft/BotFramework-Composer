@@ -30,6 +30,7 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
+  updateTemplate,
 } from './utils';
 
 const { check, parse } = lgIndexer;
@@ -159,14 +160,19 @@ export class LGServer {
   }
 
   protected getImportResolver(document: TextDocument) {
+    const editorContent = document.getText();
     const internalImportResolver = () => {
       return {
         id: document.uri,
-        content: document.getText(),
+        content: editorContent,
       };
     };
-    const fileId = this.getLGDocument(document)?.fileId;
-    if (this.importResolver && fileId) {
+    const { fileId, templateId } = this.getLGDocument(document) || {};
+    /**
+     * if inline editor, server file write may have delay than webSocket updated LSP server
+     * so here build the full content from server file content and editor content
+     */
+    if (this.importResolver && fileId && templateId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
         const lgFile = resolver(source, id);
@@ -175,7 +181,8 @@ export class LGServer {
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
-        return lgFile;
+        const fullContent = updateTemplate(lgFile.content, templateId, editorContent);
+        return { id: lgFile.id, content: fullContent };
       };
     }
 
@@ -191,7 +198,7 @@ export class LGServer {
       // if inline mode, composite local with server resolved file.
       if (this.importResolver && fileId && templateId) {
         try {
-          content = importResolver('.', fileId).content;
+          content = importResolver('.', `${fileId}.lg`).content;
         } catch (error) {
           // ignore if file not exist
         }

@@ -7,6 +7,7 @@ import {
   ImportResolver,
   Diagnostic as LGDiagnostic,
   StaticChecker,
+  LGParser,
 } from 'botbuilder-lg';
 import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
 
@@ -126,4 +127,15 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
+}
+
+export function updateTemplate(content: string, name: string, body: string): string {
+  const resource = LGParser.parse(content);
+  const template = resource.templates.find(t => t.name === name);
+  // add if not exist
+  if (!template) {
+    return resource.addTemplate(name, [], body).toString();
+  } else {
+    return resource.updateTemplate(name, name, template.parameters, body).toString();
+  }
 }
