@@ -240,13 +240,7 @@ export class BotProject {
     const relativePathBase = Path.join(dir, id.trim());
     await this._createFile(`${relativePathBase}.dialog`, content);
     await this._createFile(`${relativePathBase}.lu`, '');
-
-    let lgInitialContent = '';
-    const lgCommonFile = this.files.find(({ name }) => name === 'common.lg');
-    if (lgCommonFile) {
-      lgInitialContent = `[import](${Path.relative(dir, lgCommonFile.relativePath)})`;
-    }
-    await this._createFile(`${relativePathBase}.lg`, lgInitialContent);
+    await this.createLgFile(id, '', dir);
 
     const { dialogs, lgFiles, luFiles } = this;
     return { dialogs, lgFiles, luFiles };
@@ -284,8 +278,14 @@ export class BotProject {
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
+    // slot with common.lg import
+    let lgInitialContent = '';
+    const lgCommonFile = this.files.find(({ name }) => name === 'common.lg');
+    if (lgCommonFile) {
+      lgInitialContent = `[import](${Path.relative(dir, lgCommonFile.relativePath)})`;
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    await this._createFile(relativePath, content);
+    await this._createFile(relativePath, [lgInitialContent, content].join('\n'));
     return this.lgFiles;
   };
 
@@ -555,6 +555,8 @@ export class BotProject {
      *   - AddToDo.lg                     // if not exist, auto create it
      */
     for (const dialog of dialogs) {
+      const dialogDir = Path.dirname(dialog.relativePath);
+      const dialogId = Path.basename(dialog.id);
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
       if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
@@ -563,7 +565,7 @@ export class BotProject {
       // dialog/lg should in the same path folder
       const targetLgFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lg');
       if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
-        await this._createFile(targetLgFilePath, '');
+        await this.createLgFile(dialogId, '', dialogDir);
       }
     }
 
