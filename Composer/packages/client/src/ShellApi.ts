@@ -130,7 +130,8 @@ export const ShellApi: React.FC = () => {
   function getLgTemplates({ id }, event) {
     if (isEventSourceValid(event) === false) return false;
     if (id === undefined) throw new Error('must have a file id');
-    const file = lgFiles.find(file => file.id === id);
+    const focusedDialogId = focusPath.split('#').shift() || id;
+    const file = lgFiles.find(file => file.id === focusedDialogId);
     if (!file) throw new Error(`lg file ${id} not found`);
     return file.templates;
   }
