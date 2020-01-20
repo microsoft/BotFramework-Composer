@@ -3,38 +3,12 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, ComponentClass, useContext } from 'react';
+import { FC, useContext } from 'react';
 import classnames from 'classnames';
 
-import { ObiTypes } from '../../constants/ObiTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
-import { ChoiceInput, BotAsks, UserInput, InvalidPromptBrick } from '../nodes/index';
-import { ConditionNode } from '../nodes/steps/ConditionNode';
-import { ForeachDetail } from '../nodes/steps/ForeachDetail';
-import { ForeachPageDetail } from '../nodes/steps/ForeachPageDetail';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { UISchemaRenderer } from '../../schema/uischemaRenderer';
-
-const rendererByObiType = {
-  [ObiTypes.ConditionNode]: ConditionNode,
-  [ObiTypes.ForeachDetail]: ForeachDetail,
-  [ObiTypes.ForeachPageDetail]: ForeachPageDetail,
-  [ObiTypes.BeginDialog]: UISchemaRenderer,
-  [ObiTypes.ReplaceDialog]: UISchemaRenderer,
-  [ObiTypes.SendActivity]: UISchemaRenderer,
-  [ObiTypes.ChoiceInputDetail]: ChoiceInput,
-  [ObiTypes.BotAsks]: BotAsks,
-  [ObiTypes.UserAnswers]: UserInput,
-  [ObiTypes.InvalidPromptBrick]: InvalidPromptBrick,
-};
-const DEFAULT_RENDERER = UISchemaRenderer;
-
-function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
-  const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-  return renderer;
-}
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;
@@ -49,9 +23,12 @@ const nodeBorderDoubleSelectedStyle = css`
   outline: 2px solid #0078d4;
   box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
+export interface ElementWrapperProps {
+  id: string;
+  tab?: string;
+}
 
-export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, tab }): JSX.Element => {
-  const ChosenRenderer = chooseRendererByType(data.$type);
+export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
@@ -86,16 +63,7 @@ export const ElementRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize, ta
       `}
       {...declareElementAttributes(selectableId, id)}
     >
-      <ChosenRenderer
-        id={id}
-        data={data}
-        onEvent={onEvent}
-        onResize={size => {
-          onResize(size, 'element');
-        }}
-      />
+      {children}
     </div>
   );
 };
-
-ElementRenderer.defaultProps = defaultNodeProps;

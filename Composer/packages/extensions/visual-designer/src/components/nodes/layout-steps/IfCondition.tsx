@@ -14,8 +14,9 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { ElementWrapper } from '../../renderers/ElementWrapper';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { ConditionNode } from '../steps/ConditionNode';
 
 import { NodeMap, BoundaryMap } from './types';
 
@@ -67,13 +68,15 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
-        <ElementRenderer
-          key={condition.id}
-          id={condition.id}
-          data={condition.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={condition.id}>
+          <ConditionNode
+            key={condition.id}
+            id={condition.id}
+            data={condition.data}
+            onEvent={onEvent}
+            onResize={onResize}
+          />
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
         <Diamond
