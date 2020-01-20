@@ -159,7 +159,7 @@ describe('lg operations', () => {
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
       expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
-      expect(result.content).toEqual(content);
+      expect(result.content).toContain(content);
     }
   });
 
@@ -182,7 +182,7 @@ describe('lg operations', () => {
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
       expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
-      expect(result.content).toEqual(content);
+      expect(result.content).toContain(content);
     }
   });
 
@@ -230,7 +230,7 @@ describe('lu operations', () => {
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
       expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
-      expect(result.content).toEqual(content);
+      expect(result.content).toContain(content);
     }
   });
 
@@ -252,7 +252,7 @@ describe('lu operations', () => {
 
     expect(result).not.toBeUndefined();
     expect(result?.relativePath).toEqual('ComposerDialogs/root/root.lu');
-    expect(result?.content).toEqual(content);
+    expect(result?.content).toContain(content);
   });
 
   it('should update diagnostics when lu content is invalid', async () => {
