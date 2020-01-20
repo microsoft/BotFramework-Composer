@@ -55,6 +55,7 @@
     "@azure/ms-rest-js": "^1.8.7",
     "@bfc/indexers": "*",
     "@bfc/lg-languageserver": "*",
+    "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
     "@bfcomposer/lubuild": "1.1.2-preview",
     "archiver": "^3.0.0",
