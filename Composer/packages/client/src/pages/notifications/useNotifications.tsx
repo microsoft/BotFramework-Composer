@@ -4,17 +4,16 @@
 import { useContext, useMemo } from 'react';
 import { createSingleMessage } from '@bfc/indexers';
 import get from 'lodash/get';
+import { LgNamePattern } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { replaceDialogDiagnosticLabel } from '../../utils';
 
 import { INotification, DiagnosticSeverity } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
-
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
-  const inLineLgTemplateFormat = /^bfd(activity|prompt|defaultValueResponse|invalidPrompt|unrecognizedPrompt)-[0-9]+/;
   const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     dialogs.forEach(dialog => {
@@ -51,7 +50,7 @@ export default function useNotifications(filter?: string) {
             get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
             get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
         );
-        if (mappedTemplate && inLineLgTemplateFormat.test(mappedTemplate.name)) {
+        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
           //should navigate to design page
           const location = `${lgFile.id}.lg`;
           notifactions.push({
