@@ -146,7 +146,7 @@ export class LGServer {
       const lgFile = this.getLGDocument(document)?.index();
       if (!lgFile) {
         diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
-      } else {
+      } else if (templateId) {
         const { templates } = lgFile;
         const template = templates.find(({ name }) => name === templateId);
         if (!template) diagnostics.push(`Template ${fileId}.lg#${templateId} do not exist`);
@@ -168,11 +168,8 @@ export class LGServer {
       };
     };
     const { fileId, templateId } = this.getLGDocument(document) || {};
-    /**
-     * if inline editor, server file write may have delay than webSocket updated LSP server
-     * so here build the full content from server file content and editor content
-     */
-    if (this.importResolver && fileId && templateId) {
+
+    if (this.importResolver && fileId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
         const lgFile = resolver(source, id);
@@ -184,8 +181,10 @@ export class LGServer {
         let { content } = lgFile;
         /**
          * source is . means use as file resolver, not import resolver
+         * if inline editor, server file write may have delay than webSocket updated LSP server
+         * so here build the full content from server file content and editor content
          */
-        if (source === '.') {
+        if (source === '.' && templateId) {
           content = updateTemplate(lgFile.content, templateId, editorContent);
         }
         return { id, content };
