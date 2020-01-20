@@ -181,8 +181,14 @@ export class LGServer {
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
-        const fullContent = updateTemplate(lgFile.content, templateId, editorContent);
-        return { id: lgFile.id, content: fullContent };
+        let { content } = lgFile;
+        /**
+         * source is . means use as file resolver, not import resolver
+         */
+        if (source === '.') {
+          content = updateTemplate(lgFile.content, templateId, editorContent);
+        }
+        return { id, content };
       };
     }
 
