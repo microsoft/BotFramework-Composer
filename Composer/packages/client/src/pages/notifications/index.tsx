@@ -24,31 +24,20 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const notifications = useNotifications(filter);
   const navigations = {
     lg: (item: INotification) => {
+      let url = `/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       const dividerIndex = item.id.indexOf('#');
       //the format of item.id is lgFile#inlineTemplateId
       if (dividerIndex > -1) {
         const templateId = item.id.substring(dividerIndex + 1);
         const lgFile = item.id.substring(0, dividerIndex);
         const dialog = dialogs.find(d => d.lgFile === lgFile);
-        if (dialog) {
-          const lgTemplate = dialog.lgTemplates.find(lg => lg.name === templateId);
-          if (lgTemplate) {
-            const path = lgTemplate.path;
-            const url = toUrlUtil(dialog.id, path);
-            if (url) {
-              navigateTo(url);
-            } else {
-              navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
-            }
-          } else {
-            navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
-          }
-        } else {
-          navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
+        const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === templateId) : null;
+        const path = lgTemplate ? lgTemplate.path : '';
+        if (path && dialog) {
+          url = toUrlUtil(dialog.id, path);
         }
-      } else {
-        navigateTo(`/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`);
       }
+      navigateTo(url);
     },
     lu: (item: INotification) => {
       navigateTo(`/dialogs/${item.id}`);
