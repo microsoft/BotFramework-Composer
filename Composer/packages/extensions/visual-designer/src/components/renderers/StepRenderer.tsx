@@ -65,7 +65,11 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
     return content;
   }
 
-  return <ElementWrapper id={id}>{content}</ElementWrapper>;
+  return (
+    <ElementWrapper id={id} onEvent={onEvent}>
+      {content}
+    </ElementWrapper>
+  );
 };
 
 StepRenderer.defaultProps = defaultNodeProps;

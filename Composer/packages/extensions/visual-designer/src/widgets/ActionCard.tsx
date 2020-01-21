@@ -7,7 +7,6 @@ import { generateSDKTitle } from '@bfc/shared';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { NodeMenu } from '../components/menus/NodeMenu';
 
 export interface ActionCardProps extends WidgetContainerProps {
@@ -45,7 +44,6 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
       icon={icon}
       label={content}
       nodeColors={nodeColors}
-      onClick={() => onEvent(NodeEventTypes.Focus, { id })}
     />
   );
 };

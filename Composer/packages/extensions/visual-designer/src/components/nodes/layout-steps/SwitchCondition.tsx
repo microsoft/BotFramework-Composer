@@ -66,7 +66,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
-        <ElementWrapper id={conditionNode.id}>
+        <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
           <ConditionNode
             key={conditionNode.id}
             id={conditionNode.id}

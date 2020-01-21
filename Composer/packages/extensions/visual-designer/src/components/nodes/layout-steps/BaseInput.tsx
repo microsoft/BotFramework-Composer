@@ -36,17 +36,17 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS}>
+        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <BotAsks id={botAsksNode.id} data={botAsksNode.data} onEvent={onEvent} onResize={onResize} />
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT}>
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
           <UserInput id={userAnswersNode.id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER}>
+        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} onEvent={onEvent}>
           <InvalidPromptBrick id={brickNode.id} data={brickNode.data} onEvent={onEvent} onResize={onResize} />
         </ElementWrapper>
       </OffsetContainer>

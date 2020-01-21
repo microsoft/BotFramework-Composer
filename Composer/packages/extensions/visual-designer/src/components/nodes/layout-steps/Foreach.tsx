@@ -75,7 +75,7 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
-        <ElementWrapper id={id}>
+        <ElementWrapper id={id} onEvent={onEvent}>
           <ForeachHeader
             key={foreachNode.id}
             id={foreachNode.id}
