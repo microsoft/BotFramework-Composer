@@ -40,17 +40,17 @@ export const PromptWidget: FC<PromptWdigetProps> = ({ id, data, onEvent, botAsks
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS}>
+        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           {botAsks}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT}>
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
           {userInput}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER}>
+        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} onEvent={onEvent}>
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
