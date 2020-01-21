@@ -24,8 +24,18 @@ describe('test all reducer handlers', () => {
     expect(result.dialogs[0]).toBe('test dialogs');
   });
   it('test updateLgTemplate reducer', () => {
-    const result = reducer({}, { type: ActionTypes.UPDATE_LG_SUCCESS, payload: { response: mockResponse } });
-    expect(result.lgFiles[0]).toBe('test lgFiles');
+    const result = reducer(
+      { lgFiles: [{ id: 'common.lg', content: 'test lgFiles' }] },
+      {
+        type: ActionTypes.UPDATE_LG_SUCCESS,
+        payload: {
+          id: 'common.lg',
+          content: ` # bfdactivity-003038
+        - You said '@{turn.activity.text}'`,
+        },
+      }
+    );
+    expect(result.lgFiles[0].templates.length).toBe(1);
   });
 
   it('test getStorageFileSuccess reducer', () => {
