@@ -14,8 +14,9 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { StepGroup } from '../../groups';
 import { Diamond } from '../templates/Diamond';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
 import { NodeProps, defaultNodeProps } from '../nodeProps';
+import { ElementWrapper } from '../../renderers/ElementWrapper';
+import { ConditionNode } from '../steps/ConditionNode';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);
@@ -65,13 +66,15 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
-        <ElementRenderer
-          key={conditionNode.id}
-          id={conditionNode.id}
-          data={conditionNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={conditionNode.id}>
+          <ConditionNode
+            key={conditionNode.id}
+            id={conditionNode.id}
+            data={conditionNode.data}
+            onEvent={onEvent}
+            onResize={onResize}
+          />
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
         <Diamond

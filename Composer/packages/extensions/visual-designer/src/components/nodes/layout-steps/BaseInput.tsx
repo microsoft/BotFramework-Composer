@@ -12,7 +12,10 @@ import { OffsetContainer } from '../../lib/OffsetContainer';
 import { Edge } from '../../lib/EdgeComponents';
 import { GraphNode } from '../../../models/GraphNode';
 import { transformBaseInput } from '../../../transformers/transformBaseInput';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
+import { ElementWrapper } from '../../renderers/ElementWrapper';
+import { BotAsks } from '../steps/BotAsks';
+import { UserInput } from '../steps/UserInput';
+import { InvalidPromptBrick } from '../steps/InvalidPromptBrick';
 
 const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
@@ -33,31 +36,19 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementRenderer
-          id={botAsksNode.id}
-          tab={PromptTab.BOT_ASKS}
-          data={botAsksNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS}>
+          <BotAsks id={botAsksNode.id} data={botAsksNode.data} onEvent={onEvent} onResize={onResize} />
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementRenderer
-          id={userAnswersNode.id}
-          tab={PromptTab.USER_INPUT}
-          data={userAnswersNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT}>
+          <UserInput id={userAnswersNode.id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementRenderer
-          id={brickNode.id}
-          tab={PromptTab.OTHER}
-          data={brickNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER}>
+          <InvalidPromptBrick id={brickNode.id} data={brickNode.data} onEvent={onEvent} onResize={onResize} />
+        </ElementWrapper>
       </OffsetContainer>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
     </div>
