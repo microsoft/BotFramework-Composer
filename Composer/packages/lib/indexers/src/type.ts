@@ -29,6 +29,7 @@ export interface DialogInfo {
   luIntents: string[];
   referredDialogs: string[];
   relativePath: string;
+  userDefinedVariables: string[];
   triggers: ITrigger[];
 }
 

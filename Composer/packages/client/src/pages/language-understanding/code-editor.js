@@ -43,6 +43,14 @@ export default function CodeEditor(props) {
         minimap: 'on',
         lineDecorationsWidth: undefined,
         lineNumbersMinChars: false,
+        glyphMargin: true,
+        autoClosingBrackets: 'always',
+        wordBasedSuggestions: false,
+        autoIndent: true,
+        formatOnType: true,
+        lightbulb: {
+          enabled: true,
+        },
       }}
       errorMsg={errorMsg}
       value={content}
