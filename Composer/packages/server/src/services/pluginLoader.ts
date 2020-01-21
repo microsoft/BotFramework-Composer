@@ -28,6 +28,7 @@ class PluginLoader {
 
     if (json.extendsComposer) {
       const modulePath = path.replace(/package\.json$/, '');
+      // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
       const thisPlugin = require(modulePath);
       console.log('This is a composer plugin!');
       if (json.extendsComposer.storage) {
