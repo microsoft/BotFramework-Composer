@@ -10,7 +10,6 @@ export * from './steps/InvalidPromptBrick';
 export * from './layout-steps/Foreach';
 export * from './layout-steps/IfCondition';
 export * from './layout-steps/SwitchCondition';
-export * from './layout-steps/BaseInput';
 
 export * from './events/EventRule';
 export * from './events/IntentRule';

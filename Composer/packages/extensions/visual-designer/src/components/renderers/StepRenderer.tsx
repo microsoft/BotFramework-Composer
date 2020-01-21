@@ -8,7 +8,7 @@ import { SDKTypes } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { ObiTypes } from '../../constants/ObiTypes';
-import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
+import { IfCondition, SwitchCondition, Foreach } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { UISchemaRenderer } from '../../schema/uischemaRenderer';
 
@@ -19,12 +19,6 @@ const rendererByObiType = {
   [ObiTypes.SwitchCondition]: SwitchCondition,
   [ObiTypes.Foreach]: Foreach,
   [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.AttachmentInput]: BaseInput,
-  [ObiTypes.ConfirmInput]: BaseInput,
-  [ObiTypes.DateTimeInput]: BaseInput,
-  [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.TextInput]: BaseInput,
-  [ObiTypes.ChoiceInput]: BaseInput,
 };
 const DEFAULT_RENDERER = UISchemaRenderer;
 
