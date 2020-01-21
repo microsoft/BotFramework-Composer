@@ -35,14 +35,14 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
         [
-          /(@\s*)(prebuilt\s*)(age|datetimeV2|dimension|email|geographyV2|keyPhrase|money|number|ordinal|ordinalV2|percentage|personName|phonenumber|temperature|url|datetime)(\s*\w*)/,
+          /(@\s*)(prebuilt\s*)(age|datetimeV2|dimension|email|geographyV2|keyPhrase|money|number|ordinal|ordinalV2|percentage|personName|phonenumber|temperature|url|datetime)(\s*[\w\s,_]+)/,
           ['intent-indentifier', 'entity-type', 'prebult-type', 'entity-name'],
         ],
         [
-          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*\w*)/,
+          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*[\w\s,_]+)/,
           ['intent-indentifier', 'entity-type', 'entity-name'],
         ],
-        [/(@\s*)(\s*\w*)/, ['intent-indentifier', 'entity-name']],
+        [/(@\s*)(\s*[\w\s,_]+)/, ['intent-indentifier', 'entity-name']],
         [/\s*(hasRoles|useFeature)\s*/, 'keywords'],
         [/.*$/, 'entity-other', '@pop'],
       ],
