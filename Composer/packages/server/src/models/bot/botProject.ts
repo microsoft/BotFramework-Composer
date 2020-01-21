@@ -589,6 +589,48 @@ export class BotProject {
         throw new Error(`${dialog.id}.dialog referred recognizer ${luFile} not exist`);
       }
     }
+
+    await this._autofixTemplateInCommon();
+  };
+
+  /**
+   * move generated lg template (like bfdactivity-123456) from common.lg into dialog.lg
+   * help migrate old version single-lg bot to multiple-lg
+   * we can disable this code after a period of time, when there is no old version bot.
+   */
+  private _autofixTemplateInCommon = async () => {
+    const NEWLINE = '\n';
+    const DUBNEWLINE = '\n\n';
+    const dialogs: DialogInfo[] = this.dialogs;
+    const lgFiles: LgFile[] = this.lgFiles;
+    const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
+    const commonLgFile = lgFiles.find(({ id }) => id === 'common');
+    if (!commonLgFile) return;
+    const lineContentArray = commonLgFile.content.split(NEWLINE);
+    for (const dialog of dialogs) {
+      const { lgTemplates } = dialog;
+      const dialogTemplateTexts: string[] = [];
+      for (const templateName of lgTemplates) {
+        if (inlineLgNamePattern.test(templateName)) {
+          const template = commonLgFile.templates.find(({ name }) => name === templateName);
+          if (!template?.range) continue;
+          const { startLineNumber, endLineNumber } = template.range;
+          const lineCount = endLineNumber - startLineNumber + 1;
+          const templateText = lineContentArray
+            .splice(startLineNumber - 1, lineCount, ...Array(lineCount))
+            .join(NEWLINE);
+          dialogTemplateTexts.push(templateText);
+        }
+      }
+      const updatedContent =
+        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') + dialogTemplateTexts.join(DUBNEWLINE);
+      await this.updateLgFile(dialog.id, updatedContent);
+    }
+    const updatedCommonContent = lineContentArray
+      .filter(item => item !== undefined)
+      .join(NEWLINE)
+      .trim();
+    await this.updateLgFile('common', updatedCommonContent);
   };
 
   private isLuFileEmpty = (file: LuFile) => {
