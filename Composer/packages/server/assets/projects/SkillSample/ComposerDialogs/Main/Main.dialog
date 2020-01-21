@@ -1,0 +1,54 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "433224",
+    "description": "This bot shows how to connect to a remote skill."
+  },
+  "autoEndDialog": true,
+  "generator": "common.lg",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnUnknownIntent",
+      "$designer": {
+        "id": "821845"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.BeginSkill",
+          "targetSkill": {
+            "Id": "EchoSkill",
+            "AppId": "<your skill appId>",
+            "SkillEndpoint": "<Your skill endpint(http://localhost:3979/api/messages)>"
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

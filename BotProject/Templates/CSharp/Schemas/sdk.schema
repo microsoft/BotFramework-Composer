@@ -31,6 +31,11 @@
             "$ref": "#/definitions/Microsoft.BeginDialog"
         },
         {
+            "title": "Microsoft.BeginSkillDialog",
+            "description": "Begin a skill.",
+            "$ref": "#/definitions/Microsoft.BeginSkill"
+        },
+        {
             "title": "Microsoft.CancelAllDialogs",
             "description": "Cancel all active dialogs. All dialogs in the dialog chain will need a trigger to capture the event configured in this action.",
             "$ref": "#/definitions/Microsoft.CancelAllDialogs"
@@ -910,6 +915,80 @@
                         "dialog.userName"
                     ],
                     "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+                "^\\$": {
+                    "type": "string"
+                }
+            },
+            "anyOf": [
+                {
+                    "title": "Reference",
+                    "required": [
+                        "$copy"
+                    ]
+                },
+                {
+                    "title": "Type",
+                    "required": [
+                        "$kind"
+                    ]
+                }
+            ]
+        },
+        "Microsoft.BeginSkill": {
+            "$role": "union(Microsoft.IDialog)",
+            "title": "Begin a skill",
+            "description": "Begin a remote skill.",
+            "type": "object",
+            "properties": {
+                "$kind": {
+                    "title": "$kind",
+                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
+                    "const": "Microsoft.BeginSkill"
+                },
+                "$copy": {
+                    "title": "$copy",
+                    "description": "Copy the definition by id from a .dialog file.",
+                    "type": "string",
+                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
+                },
+                "$id": {
+                    "title": "$id",
+                    "description": "Inline id for reuse of an inline definition",
+                    "type": "string",
+                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
+                },
+                "$designer": {
+                    "title": "$designer",
+                    "type": "object",
+                    "description": "Extra information for the Bot Framework Designer."
+                },
+                "targetSkill": {
+                    "type": "object",
+                    "title": "Target skill",
+                    "description": "Target skill ID, AppId and Skill Endpoint",
+                    "properties": {
+                        "Id": {
+                            "type": "string",
+                            "title": "Skill id",
+                            "description": "The remote skill id."
+                        },
+                        "AppID": {
+                            "type": "string",
+                            "title": "Skill appid",
+                            "description": "The remote skill appid."
+                        },
+                        "skillEndPoint": {
+                            "type": "string",
+                            "title": "Skill endpoint",
+                            "description": "The endpoint of the remote skill."
+                        }
+                    }              
                 }
             },
             "additionalProperties": false,
