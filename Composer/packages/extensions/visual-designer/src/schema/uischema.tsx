@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes } from '@bfc/shared';
+import { SDKTypes, getInputType } from '@bfc/shared';
 import React from 'react';
 
 import { ActionCard } from '../widgets/ActionCard';
@@ -17,7 +17,7 @@ const BaseInputSchema: UIWidget = {
   'ui:widget': PromptWidget,
   botAsks: {
     'ui:widget': ActivityRenderer,
-    title: 'Bot Asks',
+    title: data => `Bot Asks (${getInputType(data.$type)})`,
     field: 'prompt',
     defaultContent: '<prompt>',
     icon: ElementIcon.MessageBot,
@@ -28,7 +28,8 @@ const BaseInputSchema: UIWidget = {
   },
   userInput: {
     'ui:widget': ActionCard,
-    title: 'User Answers (Text)',
+    title: data => `User Answers (${getInputType(data.$type)})`,
+    disableSDKTitle: true,
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
