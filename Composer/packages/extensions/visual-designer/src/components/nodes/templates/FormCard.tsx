@@ -33,7 +33,7 @@ interface NodeProps {
   iconSize?: number;
   styles?: object;
   nodeColors: { [key: string]: any };
-  onClick: () => void;
+  onClick?: () => void;
   children?: any;
 }
 export const FormCard: FunctionComponent<NodeProps> = ({
@@ -54,8 +54,10 @@ export const FormCard: FunctionComponent<NodeProps> = ({
       data-testid="FormCard"
       css={[containerStyle, { ...styles }]}
       onClick={e => {
-        e.stopPropagation();
-        onClick();
+        if (typeof onClick === 'function') {
+          e.stopPropagation();
+          onClick();
+        }
       }}
     >
       <div

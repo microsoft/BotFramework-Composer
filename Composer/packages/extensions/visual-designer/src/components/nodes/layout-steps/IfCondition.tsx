@@ -68,7 +68,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
-        <ElementWrapper id={condition.id}>
+        <ElementWrapper id={condition.id} onEvent={onEvent}>
           <ConditionNode
             key={condition.id}
             id={condition.id}

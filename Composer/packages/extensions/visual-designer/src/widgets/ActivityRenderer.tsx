@@ -5,7 +5,6 @@ import React from 'react';
 import { generateSDKTitle } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { FormCard } from '../components/nodes/templates/FormCard';
@@ -49,9 +48,6 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
       icon={icon}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       nodeColors={nodeColors}
-      onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id });
-      }}
     />
   );
 };

@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;
@@ -26,9 +27,10 @@ const nodeBorderDoubleSelectedStyle = css`
 export interface ElementWrapperProps {
   id: string;
   tab?: string;
+  onEvent: (eventName: NodeEventTypes, eventData: any) => any;
 }
 
-export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, children }): JSX.Element => {
+export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
@@ -62,6 +64,10 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, children }): 
         }
       `}
       {...declareElementAttributes(selectableId, id)}
+      onClick={e => {
+        e.stopPropagation();
+        onEvent(NodeEventTypes.Focus, { id, tab });
+      }}
     >
       {children}
     </div>

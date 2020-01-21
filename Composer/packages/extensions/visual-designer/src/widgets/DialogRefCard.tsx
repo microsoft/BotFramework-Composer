@@ -54,7 +54,6 @@ export const DialogRefCard: WidgetComponent<DialogRefCardProps> = ({
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       label={typeof getRefContent === 'function' ? getRefContent(dialogRef) : dialogRef}
       nodeColors={nodeColors}
-      onClick={() => onEvent(NodeEventTypes.Focus, { id })}
     />
   );
 };
