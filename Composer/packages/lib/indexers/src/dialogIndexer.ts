@@ -10,6 +10,7 @@ import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
+import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
@@ -195,6 +196,7 @@ function parse(id: string, content: any, schema: any) {
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
     luIntents: ExtractLuIntents(content),
+    userDefinedVariables: ExtractMemoryPaths(content),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
