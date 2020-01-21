@@ -17,6 +17,7 @@ export interface ActivityRenderer extends WidgetContainerProps {
   field: string;
   icon: ElementIcon;
   title?: string;
+  disableSDKTitle?: boolean;
   defaultContent?: string;
   colors?: {
     theme: string;
@@ -34,6 +35,7 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
   data,
   onEvent,
   title,
+  disableSDKTitle,
   field,
   defaultContent,
   icon = ElementIcon.MessageBot,
@@ -47,7 +49,7 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
 
   return (
     <FormCard
-      header={generateSDKTitle(data, title)}
+      header={disableSDKTitle ? title : generateSDKTitle(data, title)}
       label={templateText || defaultContent}
       icon={icon}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
