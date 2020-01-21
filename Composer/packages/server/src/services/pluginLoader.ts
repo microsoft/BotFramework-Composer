@@ -6,8 +6,6 @@ import * as pathLib from 'path';
 
 import glob from 'globby';
 
-import { Store } from '../store/store';
-
 class PluginLoader {
   public extensions: {
     storage: {

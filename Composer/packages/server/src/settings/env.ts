@@ -13,9 +13,6 @@ if (folder && folder.endsWith(':')) {
   folder = folder + '/';
 }
 
-// HACK: change default root folder to / for mongo db
-folder = '/';
-
 export const environment = process.env.NODE_ENV || 'development';
 export const botsFolder = folder;
 export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';

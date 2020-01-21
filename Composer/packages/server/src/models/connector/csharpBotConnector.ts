@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import fs from 'fs';
-// import Path from 'path';
 
 import axios from 'axios';
 import archiver from 'archiver';
@@ -44,11 +43,10 @@ export class CSharpBotConnector implements IBotConnector {
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
+    // call .index() in order to load all the files from storage into memory
     await currentProject.index();
-    // const dir = Path.join(currentProject.dataDir);
     const luisConfig = currentProject.luPublisher.getLuisConfig();
     await this.createZipFromFiles(currentProject.files, './tmp.zip');
-    // await this.archiveDirectory(dir, './tmp.zip');
     const content = fs.readFileSync('./tmp.zip');
 
     const form = new FormData();
@@ -76,6 +74,10 @@ export class CSharpBotConnector implements IBotConnector {
     }
   };
 
+  /**
+   * given an array of FileInfo objects (resulting from indexing a project),
+   * create a zip file of the contents. The original files do not have to live on the local filesystem.
+   */
   createZipFromFiles = (files: FileInfo[], dest: string) => {
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
@@ -93,19 +95,22 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 
-  archiveDirectory = (src: string, dest: string) => {
-    return new Promise((resolve, reject) => {
-      const archive = archiver('zip');
-      const output = fs.createWriteStream(dest);
-
-      archive.pipe(output);
-      archive.directory(src, false);
-      archive.finalize();
-
-      output.on('close', () => resolve(archive));
-      archive.on('error', err => reject(err));
-    });
-  };
+  /**
+   * given a local folder of files, create a zipfile.
+   * only works with local files (not those managed by a storage provider)
+   * This method is deprecated in favor of createZipFromFiles.
+   */
+  // archiveDirectory = (src: string, dest: string) => {
+  //   return new Promise((resolve, reject) => {
+  //     const archive = archiver('zip');
+  //     const output = fs.createWriteStream(dest);
+  //     archive.pipe(output);
+  //     archive.directory(src, false);
+  //     archive.finalize();
+  //     output.on('close', () => resolve(archive));
+  //     archive.on('error', err => reject(err));
+  //   });
+  // };
 
   getEditingStatus = (): Promise<boolean> => {
     return new Promise(resolve => {

@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as mongoose from 'mongoose';
 import * as pathLib from 'path';
+
+import * as mongoose from 'mongoose';
 import * as globToRegExp from 'glob-to-regexp';
 
 import { StorageConnection, IFileStorage, MakeDirectoryOptions } from './interface';
@@ -40,7 +41,7 @@ export class MongoStorage implements IFileStorage {
 
     mongoose.connect('mongodb://localhost:27017/composer', {});
     this.db = mongoose.connection;
-    this.db.on('error', (err) => {
+    this.db.on('error', err => {
       throw new Error(err);
     });
     this.db.once('open', function() {
@@ -168,7 +169,7 @@ export class MongoStorage implements IFileStorage {
 
   async removeFile(path: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.files.deleteOne({ path: path }, (err) => {
+      this.files.deleteOne({ path: path }, err => {
         if (err) {
           reject(err);
         } else {
@@ -211,19 +212,16 @@ export class MongoStorage implements IFileStorage {
         }
       });
     });
-
-    // await rmDir(path);
-    // noop required - there are no real folders, this is just part of the file records
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
       //convert the glob to a regexp
-      let regex = globToRegExp(pattern, {globstar: true});
+      const regex = globToRegExp(pattern, { globstar: true });
 
       // make sure the folder contains the root path but can also have other stuff
-      let pathPattern = new RegExp(path + '.*');
-      this.files.find({ path: regex, folder: pathPattern}, (err, files) => {
+      const pathPattern = new RegExp(path + '.*');
+      this.files.find({ path: regex, folder: pathPattern }, (err, files) => {
         if (err) {
           reject(err);
         } else {
@@ -239,7 +237,7 @@ export class MongoStorage implements IFileStorage {
   }
 
   async copyFile(src: string, dest: string): Promise<void> {
-    let content = await this.readFile(src);
+    const content = await this.readFile(src);
     return this.writeFile(dest, content);
   }
 

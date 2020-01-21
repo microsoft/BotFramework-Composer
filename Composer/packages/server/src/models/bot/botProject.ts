@@ -81,7 +81,6 @@ export class BotProject {
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
     }
-
     await this.luPublisher.loadStatus(this.luFiles.map(f => f.relativePath));
   };
 

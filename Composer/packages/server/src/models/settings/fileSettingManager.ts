@@ -16,7 +16,7 @@ export class FileSettingManager implements ISettingManager {
 
   constructor(basePath: string) {
     this.basePath = basePath;
-    // todo: this should not just load default
+    // todo: do we need to pass in a storage client id? there can only be one at a time.
     this.storage = StorageService.getStorageClient('default');
   }
 
