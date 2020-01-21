@@ -89,16 +89,9 @@ async function openProject(req: Request, res: Response) {
   };
 
   try {
-    // eslint-disable-next-line no-console
-    console.log('-------------------------- A');
     await BotProjectService.openProject(location);
-    // eslint-disable-next-line no-console
-    console.log('-------------------------- B');
     const currentProject = BotProjectService.getCurrentBotProject();
     if (currentProject !== undefined) {
-      // eslint-disable-next-line no-console
-      console.log('-------------------------- C');
-
       const project = currentProject.getIndexes();
       res.status(200).json({
         ...project,
