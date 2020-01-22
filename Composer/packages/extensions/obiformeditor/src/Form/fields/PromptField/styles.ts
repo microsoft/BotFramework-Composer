@@ -63,6 +63,7 @@ export const settingsFields = css`
 export const settingsFieldFull = css`
   flex-basis: 100%;
   overflow: hidden;
+  align-items: flex-end;
 `;
 
 export const settingsFieldHalf = css`
