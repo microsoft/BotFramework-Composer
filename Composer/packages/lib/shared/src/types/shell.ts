@@ -2,7 +2,17 @@
 // Licensed under the MIT License.
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
-import { LuIntentSection } from '@bfc/indexers';
+
+export interface LuIntentSection {
+  Name: string;
+  Body: string;
+  Entities?: LuEntity[];
+  Children?: LuIntentSection[];
+}
+
+export interface LuEntity {
+  Name: string;
+}
 
 export interface EditorSchema {
   content?: {

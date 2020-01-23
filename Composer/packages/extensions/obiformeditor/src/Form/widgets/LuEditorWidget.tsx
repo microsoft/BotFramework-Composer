@@ -4,8 +4,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import debounce from 'lodash/debounce';
-import { LuFile, LuIntentSection } from '@bfc/indexers';
-
+import { LuIntentSection } from '@bfc/shared';
+import { LuFile } from '@bfc/indexers';
 import { FormContext } from '../types';
 
 interface LuEditorWidgetProps {

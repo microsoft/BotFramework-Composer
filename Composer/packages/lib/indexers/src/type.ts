@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Diagnostic } from './diagnostic';
+import { LuIntentSection } from '@bfc/shared';
 
 export interface FileInfo {
   name: string;
@@ -49,17 +50,6 @@ export interface LuParsed {
 export enum LuSectionTypes {
   SIMPLEINTENTSECTION = 'simpleIntentSection',
   NESTEDINTENTSECTION = 'nestedIntentSection',
-}
-
-export interface LuEntity {
-  Name: string;
-}
-
-export interface LuIntentSection {
-  Name: string;
-  Body: string;
-  Entities?: LuEntity[];
-  Children?: LuIntentSection[];
 }
 
 export interface LuFile {
