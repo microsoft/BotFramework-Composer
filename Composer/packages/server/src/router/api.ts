@@ -6,6 +6,7 @@ import express, { Router, Request, Response, NextFunction, RequestHandler } from
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
 import { BotConnectorController } from '../controllers/connector';
+import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 
 const router: Router = express.Router({});
@@ -44,6 +45,8 @@ router.get('/launcher/status', BotConnectorController.status);
 router.get('/launcher/publishHistory', BotConnectorController.getPublishHistory);
 router.post('/launcher/publish', BotConnectorController.publish);
 router.post('/launcher/publish/:label', BotConnectorController.publish);
+
+router.get('/publish/:method', PublishController.publish);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);

@@ -30,7 +30,7 @@ const fileSchema = new mongoose.Schema({
   },
 });
 
-export class MongoStorage implements IFileStorage {
+class MongoStorage implements IFileStorage {
   private db: any;
   private files: any;
 
@@ -258,4 +258,9 @@ export class MongoStorage implements IFileStorage {
       });
     });
   }
+}
+
+export default async (composer: any): Promise<void> => {
+  // pass in the custom storage class that will override the default
+  await composer.setStorage(MongoStorage);
 }

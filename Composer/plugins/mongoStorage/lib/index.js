@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
 const pathLib = require("path");
+const mongoose = require("mongoose");
 const globToRegExp = require("glob-to-regexp");
 const fileSchema = new mongoose.Schema({
     name: {
@@ -42,7 +42,7 @@ class MongoStorage {
         conn;
         mongoose.connect('mongodb://localhost:27017/composer', {});
         this.db = mongoose.connection;
-        this.db.on('error', (err) => {
+        this.db.on('error', err => {
             throw new Error(err);
         });
         this.db.once('open', function () {
@@ -183,7 +183,7 @@ class MongoStorage {
     removeFile(path) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                this.files.deleteOne({ path: path }, (err) => {
+                this.files.deleteOne({ path: path }, err => {
                     if (err) {
                         reject(err);
                     }
@@ -229,17 +229,15 @@ class MongoStorage {
                     }
                 });
             });
-            // await rmDir(path);
-            // noop required - there are no real folders, this is just part of the file records
         });
     }
     glob(pattern, path) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
                 //convert the glob to a regexp
-                let regex = globToRegExp(pattern, { globstar: true });
+                const regex = globToRegExp(pattern, { globstar: true });
                 // make sure the folder contains the root path but can also have other stuff
-                let pathPattern = new RegExp(path + '.*');
+                const pathPattern = new RegExp(path + '.*');
                 this.files.find({ path: regex, folder: pathPattern }, (err, files) => {
                     if (err) {
                         reject(err);
@@ -256,7 +254,7 @@ class MongoStorage {
     }
     copyFile(src, dest) {
         return __awaiter(this, void 0, void 0, function* () {
-            let content = yield this.readFile(src);
+            const content = yield this.readFile(src);
             return this.writeFile(dest, content);
         });
     }
@@ -280,5 +278,9 @@ class MongoStorage {
         });
     }
 }
-exports.MongoStorage = MongoStorage;
+exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
+    // pass in the custom storage class that will override the default
+    yield composer.setStorage(MongoStorage);
+    console.log('I AM LOGGING SOME STUFF!!!');
+});
 //# sourceMappingURL=index.js.map
