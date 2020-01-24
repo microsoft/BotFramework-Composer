@@ -18,7 +18,7 @@ import { ForeachDetail } from '../components/nodes/steps/ForeachDetail';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ObiTypes } from '../constants/ObiTypes';
 import { ForeachPageDetail } from '../components/nodes/steps/ForeachPageDetail';
-import { NodeMap, BoundaryMap } from '../components/nodes/layout-steps/types';
+import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
 const calculateNodeMap = (jsonpath, data): NodeMap => {

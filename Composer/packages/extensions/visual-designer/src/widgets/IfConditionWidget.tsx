@@ -16,7 +16,7 @@ import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ConditionNode } from '../components/nodes/steps/ConditionNode';
-import { NodeMap, BoundaryMap } from '../components/nodes/layout-steps/types';
+import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
 const calculateNodeMap = (path, data): NodeMap => {
