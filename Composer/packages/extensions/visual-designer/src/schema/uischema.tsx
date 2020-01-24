@@ -1,20 +1,89 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes } from '@bfc/shared';
+import { SDKTypes, getInputType } from '@bfc/shared';
+import formatMessage from 'format-message';
 import React from 'react';
+import get from 'lodash/get';
 
 import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
 import { DialogRefCard } from '../widgets/DialogRefCard';
+import { PromptWidget } from '../widgets/PromptWidget';
+import { IfConditionWidget } from '../widgets/IfConditionWidget';
+import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
+import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 
-import { UISchema } from './uischema.types';
+import { UISchema, UIWidget } from './uischema.types';
+
+const BaseInputSchema: UIWidget = {
+  'ui:widget': PromptWidget,
+  botAsks: {
+    'ui:widget': ActivityRenderer,
+    title: data => `Bot Asks (${getInputType(data.$type)})`,
+    field: 'prompt',
+    defaultContent: '<prompt>',
+    icon: ElementIcon.MessageBot,
+    colors: {
+      theme: ObiColors.BlueMagenta20,
+      icon: ObiColors.BlueMagenta30,
+    },
+  },
+  userInput: {
+    'ui:widget': ActionCard,
+    title: data => `User Answers (${getInputType(data.$type)})`,
+    disableSDKTitle: true,
+    icon: ElementIcon.User,
+    menu: 'none',
+    content: data => data.property || '<property>',
+    colors: {
+      theme: ObiColors.LightBlue,
+      icon: ObiColors.AzureBlue,
+    },
+  },
+};
 
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
+  },
+  [SDKTypes.IfCondition]: {
+    'ui:widget': IfConditionWidget,
+    judgement: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Branch'),
+      content: data => data.condition,
+    },
+  },
+  [SDKTypes.SwitchCondition]: {
+    'ui:widget': SwitchConditionWidget,
+    judgement: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Branch'),
+      content: data => data.condition,
+    },
+  },
+  [SDKTypes.Foreach]: {
+    'ui:widget': ForeachWidget,
+    loop: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Loop: For Each'),
+      content: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
+    },
+  },
+  [SDKTypes.ForeachPage]: {
+    'ui:widget': ForeachWidget,
+    loop: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Loop: For Each Page'),
+      content: data => {
+        const pageSizeString = get(data, 'pageSize', '?');
+        const propString = get(data, 'itemsProperty', '?');
+        return `${formatMessage('Each page of')} ${pageSizeString} ${formatMessage('in')} {${propString}}`;
+      },
+    },
   },
   [SDKTypes.SendActivity]: {
     'ui:widget': ActivityRenderer,
@@ -25,6 +94,12 @@ export const uiSchema: UISchema = {
       icon: ObiColors.BlueMagenta30,
     },
   },
+  [SDKTypes.AttachmentInput]: BaseInputSchema,
+  [SDKTypes.ConfirmInput]: BaseInputSchema,
+  [SDKTypes.DateTimeInput]: BaseInputSchema,
+  [SDKTypes.NumberInput]: BaseInputSchema,
+  [SDKTypes.TextInput]: BaseInputSchema,
+  [SDKTypes.ChoiceInput]: BaseInputSchema,
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
