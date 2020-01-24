@@ -8,6 +8,9 @@ import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
 import { DialogRefCard } from '../widgets/DialogRefCard';
 import { PromptWidget } from '../widgets/PromptWidget';
+import { IfConditionWidget } from '../widgets/IfConditionWidget';
+import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
+import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 
@@ -43,6 +46,18 @@ const BaseInputSchema: UIWidget = {
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
+  },
+  [SDKTypes.IfCondition]: {
+    'ui:widget': IfConditionWidget,
+  },
+  [SDKTypes.SwitchCondition]: {
+    'ui:widget': SwitchConditionWidget,
+  },
+  [SDKTypes.Foreach]: {
+    'ui:widget': ForeachWidget,
+  },
+  [SDKTypes.ForeachPage]: {
+    'ui:widget': ForeachWidget,
   },
   [SDKTypes.SendActivity]: {
     'ui:widget': ActivityRenderer,
