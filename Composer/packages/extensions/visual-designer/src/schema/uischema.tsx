@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 import { SDKTypes, getInputType } from '@bfc/shared';
+import formatMessage from 'format-message';
 import React from 'react';
+import get from 'lodash/get';
 
 import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
@@ -49,15 +51,39 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.IfCondition]: {
     'ui:widget': IfConditionWidget,
+    judgement: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Branch'),
+      content: data => data.condition,
+    },
   },
   [SDKTypes.SwitchCondition]: {
     'ui:widget': SwitchConditionWidget,
+    judgement: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Branch'),
+      content: data => data.condition,
+    },
   },
   [SDKTypes.Foreach]: {
     'ui:widget': ForeachWidget,
+    loop: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Loop: For Each'),
+      content: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
+    },
   },
   [SDKTypes.ForeachPage]: {
     'ui:widget': ForeachWidget,
+    loop: {
+      'ui:widget': ActionCard,
+      title: formatMessage('Loop: For Each Page'),
+      content: data => {
+        const pageSizeString = get(data, 'pageSize', '?');
+        const propString = get(data, 'itemsProperty', '?');
+        return `${formatMessage('Each page of')} ${pageSizeString} ${formatMessage('in')} {${propString}}`;
+      },
+    },
   },
   [SDKTypes.SendActivity]: {
     'ui:widget': ActivityRenderer,
