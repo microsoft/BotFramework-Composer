@@ -6,16 +6,15 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import { PromptTab } from '@bfc/shared';
 
-import { baseInputLayouter } from '../../../layouters/baseInputLayouter';
-import { NodeProps } from '../nodeProps';
-import { OffsetContainer } from '../../lib/OffsetContainer';
-import { Edge } from '../../lib/EdgeComponents';
-import { GraphNode } from '../../../models/GraphNode';
-import { transformBaseInput } from '../../../transformers/transformBaseInput';
-import { ElementWrapper } from '../../renderers/ElementWrapper';
-import { BotAsks } from '../steps/BotAsks';
-import { UserInput } from '../steps/UserInput';
-import { InvalidPromptBrick } from '../steps/InvalidPromptBrick';
+import { baseInputLayouter } from '../layouters/baseInputLayouter';
+import { transformBaseInput } from '../transformers/transformBaseInput';
+import { GraphNode } from '../models/GraphNode';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { Edge } from '../components/lib/EdgeComponents';
+import { WidgetContainerProps } from '../schema/uischema.types';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { IconBrick } from '../components/decorations/IconBrick';
 
 const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
@@ -26,7 +25,12 @@ const calculateNodes = (data, jsonpath: string) => {
   };
 };
 
-export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+export interface PromptWdigetProps extends WidgetContainerProps {
+  botAsks: JSX.Element;
+  userInput: JSX.Element;
+}
+
+export const PromptWidget: FC<PromptWdigetProps> = ({ id, data, onEvent, botAsks, userInput }): JSX.Element => {
   const nodes = calculateNodes(data, id);
   const layout = baseInputLayouter(nodes.botAsksNode, nodes.userAnswersNode, nodes.invalidPromptNode);
 
@@ -34,20 +38,20 @@ export const BaseInput: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.E
   const { botAsksNode, userAnswersNode, invalidPromptNode: brickNode } = nodeMap;
 
   return (
-    <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height }}>
+    <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
-          <BotAsks id={botAsksNode.id} data={botAsksNode.data} onEvent={onEvent} onResize={onResize} />
+          {botAsks}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
-          <UserInput id={userAnswersNode.id} data={userAnswersNode.data} onEvent={onEvent} onResize={onResize} />
+          {userInput}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
         <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} onEvent={onEvent}>
-          <InvalidPromptBrick id={brickNode.id} data={brickNode.data} onEvent={onEvent} onResize={onResize} />
+          <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
       {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
