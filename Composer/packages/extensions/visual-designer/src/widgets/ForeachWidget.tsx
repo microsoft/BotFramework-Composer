@@ -14,10 +14,7 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { Edge } from '../components/lib/EdgeComponents';
 import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
-import { ForeachDetail } from '../components/nodes/steps/ForeachDetail';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
-import { ObiTypes } from '../constants/ObiTypes';
-import { ForeachPageDetail } from '../components/nodes/steps/ForeachPageDetail';
 import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
@@ -44,9 +41,11 @@ const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
   return foreachLayouter(nodeMap.foreachNode, nodeMap.stepGroupNode, nodeMap.loopBeginNode, nodeMap.loopEndNode);
 };
 
-export type ForeachWidgetProps = WidgetContainerProps;
+export interface ForeachWidgetProps extends WidgetContainerProps {
+  loop: JSX.Element;
+}
 
-export const ForeachWidget: FunctionComponent<WidgetContainerProps> = ({ id, data, onEvent, onResize }) => {
+export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data, onEvent, onResize, loop }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -72,18 +71,11 @@ export const ForeachWidget: FunctionComponent<WidgetContainerProps> = ({ id, dat
   }
 
   const { foreachNode, stepsNode, loopBeginNode, loopEndNode } = nodeMap;
-  const ForeachHeader = data.$type === ObiTypes.Foreach ? ForeachDetail : ForeachPageDetail;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
-          <ForeachHeader
-            key={foreachNode.id}
-            id={foreachNode.id}
-            data={foreachNode.data}
-            onEvent={onEvent}
-            onResize={onResize}
-          />
+          {loop}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>

@@ -15,7 +15,6 @@ import { Edge } from '../components/lib/EdgeComponents';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
-import { ConditionNode } from '../components/nodes/steps/ConditionNode';
 import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
@@ -40,8 +39,17 @@ const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export type IfConditionWidgetProps = WidgetContainerProps;
-export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({ id, data, onEvent, onResize }) => {
+export interface IfConditionWidgetProps extends WidgetContainerProps {
+  judgement: JSX.Element;
+}
+
+export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
+  id,
+  data,
+  onEvent,
+  onResize,
+  judgement,
+}) => {
   const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -69,13 +77,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({ i
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
         <ElementWrapper id={condition.id} onEvent={onEvent}>
-          <ConditionNode
-            key={condition.id}
-            id={condition.id}
-            data={condition.data}
-            onEvent={onEvent}
-            onResize={onResize}
-          />
+          {judgement}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
