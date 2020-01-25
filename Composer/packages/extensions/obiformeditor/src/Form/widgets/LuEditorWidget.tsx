@@ -5,7 +5,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import debounce from 'lodash/debounce';
 import { LuIntentSection } from '@bfc/shared';
-import { LuFile } from '@bfc/indexers';
+import { LuFile, filterSectionDiagnostics } from '@bfc/indexers';
+
 import { FormContext } from '../types';
 
 interface LuEditorWidgetProps {
@@ -32,8 +33,7 @@ export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
     [name, luFileId]
   );
 
-  // TODO
-  const diagnostic = { message: '' };
+  const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
 
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]

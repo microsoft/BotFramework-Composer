@@ -33,7 +33,7 @@ function parse(content: string, id = ''): LuParsed {
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
       return {
-        range: { start: section.ParseTree.start.line, stop: section.ParseTree.stop.line },
+        range: { startLineNumber: section.ParseTree.start.line, endLineNumber: section.ParseTree.stop.line },
         Name,
         Body,
         Entities,
@@ -49,7 +49,7 @@ function parse(content: string, id = ''): LuParsed {
         };
       });
       return {
-        range: { start: section.ParseTree.start.line, stop: section.ParseTree.stop.line },
+        range: { startLineNumber: section.ParseTree.start.line, endLineNumber: section.ParseTree.stop.line },
         Name,
         Body,
         Children,
