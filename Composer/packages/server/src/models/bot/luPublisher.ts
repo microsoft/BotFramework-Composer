@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import { runBuild } from 'lubuild';
+import { runBuild } from '@bfcomposer/lubuild';
 import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
@@ -94,7 +94,7 @@ export class LuPublisher {
       });
       await this.saveStatus();
     } catch (error) {
-      throw new Error('Error publishing to LUIS.');
+      throw new Error(error?.body?.error?.message ?? 'Error publishing to LUIS.');
     }
 
     await this._copyDialogsToTargetFolder(config);

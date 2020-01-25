@@ -14,37 +14,42 @@ import {
   CompletionItemKind,
   CompletionItem,
   Range,
+  DiagnosticSeverity,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { LGTemplate, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
+import { lgIndexer, filterTemplateDiagnostics, isValid, FileResolver, FileInfo, MemoryResolver } from '@bfc/indexers';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
-  getLGResources,
-  updateTemplateInContent,
-  getTemplateRange,
   LGDocument,
-  checkText,
   checkTemplate,
   convertDiagnostics,
-  isValid,
-  TRange,
+  generageDiagnostic,
+  LGOption,
+  LGCursorState,
 } from './utils';
+
+const { check, indexOne } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const allowedCompletionStates = ['expression'];
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
-  protected LGDocuments: LGDocument[] = []; // LG Documents Store
+  protected LGDocuments: LGDocument[] = [];
+  private memoryVariables: Record<string, any> = {};
 
-  constructor(protected readonly connection: IConnection) {
+  constructor(
+    protected readonly connection: IConnection,
+    protected readonly resolver?: FileResolver,
+    protected readonly memoryResolver?: MemoryResolver
+  ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -65,6 +70,7 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
+            triggerCharacters: ['.'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
@@ -76,11 +82,11 @@ export class LGServer {
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
-        const { uri, inline = false, content, template } = params;
-        this.LGDocuments.push({ uri, inline, content, template });
-        // run diagnostic
+        const { uri, lgOption }: { uri: string; lgOption?: LGOption } = params;
         const textDocument = this.documents.get(uri);
         if (textDocument) {
+          this.addLGDocument(textDocument, lgOption);
+          this.validateLgOption(textDocument, lgOption);
           this.validate(textDocument);
         }
       }
@@ -91,27 +97,100 @@ export class LGServer {
     this.connection.listen();
   }
 
-  protected getLGDocument(document: TextDocument): LGDocument | undefined {
-    return this.LGDocuments.find(({ uri }) => uri === document.uri);
-  }
-  protected getLGDocumentContent(document: TextDocument): string {
-    const LGDocument = this.LGDocuments.find(item => item.uri === document.uri);
-    const text = document.getText();
-    if (LGDocument && LGDocument.inline) {
-      const { content, template } = LGDocument;
-      if (!content || !template) return text;
-      const updatedTemplate = {
-        name: template.name,
-        parameters: template.parameters,
-        body: text,
-      };
-
-      const templateDiags = checkTemplate(updatedTemplate);
-      if (isValid(templateDiags)) {
-        return updateTemplateInContent(content, updatedTemplate);
+  protected updateObject(propertyList: string[]): void {
+    let tempVariable: Record<string, any> = this.memoryVariables;
+    const antPattern = /\*+/;
+    const normalizedAnyPattern = '***';
+    for (let property of propertyList) {
+      if (property in tempVariable) {
+        tempVariable = tempVariable[property];
+      } else {
+        if (antPattern.test(property)) {
+          property = normalizedAnyPattern;
+        }
+        tempVariable[property] = {};
+        tempVariable = tempVariable[property];
       }
     }
-    return text;
+  }
+
+  protected updateMemoryVariables(uri: string): void {
+    if (!this.memoryResolver) {
+      return;
+    }
+
+    const memoryFileInfo: string[] | undefined = this.memoryResolver(uri);
+    if (!memoryFileInfo || memoryFileInfo.length === 0) {
+      return;
+    }
+
+    memoryFileInfo.forEach(variable => {
+      const propertyList = variable.split('.');
+      if (propertyList.length >= 1) {
+        this.updateObject(propertyList);
+      }
+    });
+  }
+
+  protected validateLgOption(document: TextDocument, lgOption?: LGOption) {
+    if (!lgOption) return;
+
+    const diagnostics: string[] = [];
+
+    if (!this.resolver) {
+      diagnostics.push('[Error lgOption] resolver is required but not exist.');
+    } else {
+      const { fileId, templateId } = lgOption;
+      const lgFile = this.getLGDocument(document)?.index();
+      if (!lgFile) {
+        diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
+      } else {
+        const { templates } = lgFile;
+        const template = templates.find(({ name }) => name === templateId);
+        if (!template) diagnostics.push(`Template ${fileId}.lg#${templateId} do not exist`);
+      }
+    }
+    this.connection.console.log(diagnostics.join('\n'));
+    this.sendDiagnostics(
+      document,
+      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+    );
+  }
+
+  protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
+    const { uri } = document;
+    const { fileId, templateId } = lgOption || {};
+    const index = () => {
+      let lgFile: FileInfo | undefined;
+      if (this.resolver && fileId) {
+        lgFile = this.resolver(`${fileId}.lg`);
+        if (!lgFile) {
+          this.sendDiagnostics(document, [
+            generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
+          ]);
+          return;
+        }
+      } else {
+        lgFile = {
+          name: `${uri}.lg`,
+          path: '/',
+          relativePath: './',
+          content: document.getText(),
+        };
+      }
+      return indexOne(lgFile);
+    };
+    const lgDocument: LGDocument = {
+      uri,
+      fileId,
+      templateId,
+      index,
+    };
+    this.LGDocuments.push(lgDocument);
+  }
+
+  protected getLGDocument(document: TextDocument): LGDocument | undefined {
+    return this.LGDocuments.find(({ uri }) => uri === document.uri);
   }
 
   protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
@@ -119,9 +198,15 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const text = this.getLGDocumentContent(document);
-    const lgResources = getLGResources(text);
-    const templates = lgResources.templates;
+    const lgFile = this.getLGDocument(document)?.index();
+    if (!lgFile) {
+      return Promise.resolve(null);
+    }
+    const { templates, diagnostics } = lgFile;
+    if (diagnostics.length) {
+      this.sendDiagnostics(document, convertDiagnostics(diagnostics, document));
+      return Promise.resolve(null);
+    }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
     const matchItem = templates.find(u => u.name === word);
@@ -175,58 +260,133 @@ export class LGServer {
     return resultArr.join(' ,');
   }
 
-  private matchedStates(params: TextDocumentPositionParams): { matched: boolean; state: string } | null {
-    const state: string[] = [];
+  private matchState(params: TextDocumentPositionParams): LGCursorState | undefined {
+    const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
-    if (!document) return null;
+    if (!document) return;
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const lineContent = document.getText(range);
-    if (!lineContent.trim().startsWith('-')) {
-      return { matched: false, state: '' };
-    }
 
     //initialize the root state to plaintext
-    state.push('PlainText');
+    state.push(ROOT);
+    if (lineContent.trim().startsWith('#')) {
+      return TEMPLATENAME;
+    } else if (lineContent.trim().startsWith('>')) {
+      return COMMENTS;
+    } else if (lineContent.trim().startsWith('-')) {
+      state.push(TEMPLATEBODY);
+    } else {
+      return ROOT;
+    }
 
     // find out the context state of current cursor, offer precise suggestion and completion etc.
     /**
+     * > To learn more about the LG file format...       --- COMMENTS
+     * # Greeting                                        --- TEMPLATENAME
+     * - Hello                                           --- TEMPLATEBODY
      * - Hi, @{name}, what's the meaning of 'state'
-     * - Hi---------, @{name}--------, what-------' ------s the meaning of "state"
-     * - <plaintext>, @{<expression>}, <plaintext><single><plaintext>------<double>
+     *          |
+     *          +------------------------------------------- EXPRESSION
      */
     let i = 0;
     while (i < lineContent.length) {
       const char = lineContent.charAt(i);
       if (char === `'`) {
-        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'double') {
-          state.push('single');
+        if (state[state.length - 1] === EXPRESSION || state[state.length - 1] === DOUBLE) {
+          state.push(SINGLE);
         } else {
           state.pop();
         }
       }
 
       if (char === `"`) {
-        if (state[state.length - 1] === 'expression' || state[state.length - 1] === 'single') {
-          state.push('double');
+        if (state[state.length - 1] === EXPRESSION || state[state.length - 1] === SINGLE) {
+          state.push(DOUBLE);
         } else {
           state.pop();
         }
       }
 
-      if (char === '{' && i >= 1 && state[state.length - 1] !== 'single' && state[state.length - 1] !== 'double') {
+      if (char === '{' && i >= 1 && state[state.length - 1] !== SINGLE && state[state.length - 1] !== DOUBLE) {
         if (lineContent.charAt(i - 1) === '@') {
-          state.push('expression');
+          state.push(EXPRESSION);
         }
       }
 
-      if (char === '}' && state[state.length - 1] === 'expression') {
+      if (char === '}' && state[state.length - 1] === EXPRESSION) {
         state.pop();
       }
       i++;
     }
-    const finalState = state[state.length - 1];
-    return { matched: true, state: finalState };
+    return state.pop();
+  }
+
+  protected matchingCompletionProperty(propertyList: string[], ...objects: object[]): CompletionItem[] {
+    const completionList: CompletionItem[] = [];
+    const normalizedAnyPattern = '***';
+    for (const obj of objects) {
+      let tempVariable = obj;
+      for (const property of propertyList) {
+        if (property in tempVariable) {
+          tempVariable = tempVariable[property];
+        } else if (normalizedAnyPattern in tempVariable) {
+          tempVariable = tempVariable[normalizedAnyPattern];
+        } else {
+          tempVariable = {};
+        }
+      }
+
+      if (!tempVariable || Object.keys(tempVariable).length === 0) {
+        continue;
+      }
+
+      Object.keys(tempVariable).forEach(e => {
+        if (e.toString() !== normalizedAnyPattern) {
+          const item = {
+            label: e.toString(),
+            kind: CompletionItemKind.Property,
+            insertText: e.toString(),
+            documentation: '',
+          };
+          if (!completionList.includes(item)) {
+            completionList.push(item);
+          }
+        }
+      });
+    }
+
+    return completionList;
+  }
+
+  protected findValidMemoryVariables(params: TextDocumentPositionParams): CompletionItem[] {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return [];
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDot = wordAtCurRange.endsWith('.');
+
+    this.updateMemoryVariables(params.textDocument.uri);
+    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
+      return {
+        label: e.toString(),
+        kind: CompletionItemKind.Property,
+        insertText: e.toString(),
+        documentation: '',
+      };
+    });
+
+    if (!wordAtCurRange || !endWithDot) {
+      return memoryVariblesRootCompletionList;
+    }
+
+    let propertyList = wordAtCurRange.split('.');
+    propertyList = propertyList.slice(0, propertyList.length - 1);
+
+    const completionList = this.matchingCompletionProperty(propertyList, this.memoryVariables);
+
+    return completionList;
   }
 
   protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
@@ -234,17 +394,15 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const text = this.getLGDocumentContent(document);
-    let templates: LGTemplate[] = [];
-
-    const diags = checkText(text);
-
-    if (isValid(diags) === false) {
+    const position = params.position;
+    const range = getRangeAtPosition(document, position);
+    const wordAtCurRange = document.getText(range);
+    const endWithDot = wordAtCurRange.endsWith('.');
+    const lgFile = this.getLGDocument(document)?.index();
+    if (!lgFile) {
       return Promise.resolve(null);
     }
-
-    const lgResources = getLGResources(text);
-    templates = lgResources.templates;
+    const { templates } = lgFile;
 
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
@@ -266,17 +424,21 @@ export class LGServer {
       };
     });
 
-    const completionList = completionTemplateList.concat(completionFunctionList);
+    const completionPropertyResult = this.findValidMemoryVariables(params);
 
-    const matchResult = this.matchedStates(params);
-    // TODO: more precise match
-    if (
-      matchResult &&
-      matchResult.matched &&
-      matchResult.state &&
-      allowedCompletionStates.includes(matchResult.state.toLowerCase())
-    ) {
-      return Promise.resolve({ isIncomplete: true, items: completionList });
+    const matchedState = this.matchState(params);
+    if (matchedState === EXPRESSION) {
+      if (endWithDot) {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionPropertyResult,
+        });
+      } else {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
+        });
+      }
     } else {
       return Promise.resolve(null);
     }
@@ -302,13 +464,14 @@ export class LGServer {
   }
 
   protected doValidate(document: TextDocument): void {
-    let text = document.getText();
-    const LGDocument = this.getLGDocument(document);
-    let lgDiagnostics: LGDiagnostic[] = [];
-    let lineOffset = 0;
-
-    // uninitialized
-    if (!LGDocument) {
+    const text = document.getText();
+    const lgDoc = this.getLGDocument(document);
+    if (!lgDoc) {
+      return;
+    }
+    const { fileId, templateId } = lgDoc;
+    const lgFile = lgDoc.index();
+    if (!lgFile) {
       return;
     }
 
@@ -317,41 +480,33 @@ export class LGServer {
       return;
     }
 
-    // if inline editor, concat new content for validate
-    if (LGDocument.inline) {
-      const { content, template } = LGDocument;
-      if (!content || !template) return;
-      const updatedTemplate = {
-        name: template.name,
-        parameters: template.parameters,
-        body: text,
-      };
+    const { templates, diagnostics } = lgFile;
 
-      const templateDiags = checkTemplate(updatedTemplate);
+    // if inline editor, concat new content for validate
+    if (fileId && templateId) {
+      const templateDiags = checkTemplate({
+        name: templateId,
+        parameters: [],
+        body: text,
+      });
       // error in template.
       if (isValid(templateDiags) === false) {
-        const diagnostics = convertDiagnostics(templateDiags, document);
-        this.sendDiagnostics(document, diagnostics);
+        const lspDiagnostics = convertDiagnostics(templateDiags, document, 1);
+        this.sendDiagnostics(document, lspDiagnostics);
         return;
       }
-
-      text = updateTemplateInContent(content, updatedTemplate);
-      const templateRange: TRange = getTemplateRange(content, updatedTemplate);
-      lineOffset = templateRange.startLineNumber;
+      const template = templates.find(({ name }) => name === templateId);
+      if (!template) return;
 
       // filter diagnostics belong to this template.
-      lgDiagnostics = checkText(text).filter(lgDialg => {
-        return (
-          lgDialg.range.start.line >= templateRange.startLineNumber &&
-          lgDialg.range.end.line <= templateRange.endLineNumber
-        );
-      });
-    } else {
-      lgDiagnostics = checkText(text);
+      const lgDiagnostics = filterTemplateDiagnostics(diagnostics, template);
+      const lspDiagnostics = convertDiagnostics(lgDiagnostics, document, 1);
+      this.sendDiagnostics(document, lspDiagnostics);
+      return;
     }
-
-    const diagnostics = convertDiagnostics(lgDiagnostics, document, lineOffset);
-    this.sendDiagnostics(document, diagnostics);
+    const lgDiagnostics = check(text, '');
+    const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
+    this.sendDiagnostics(document, lspDiagnostics);
   }
 
   protected cleanDiagnostics(document: TextDocument): void {

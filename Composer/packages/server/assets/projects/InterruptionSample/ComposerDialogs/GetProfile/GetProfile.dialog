@@ -32,7 +32,7 @@
           "value": "@userName",
           "alwaysPrompt": false,
           "allowInterruptions": "true",
-          "outputFormat": "trim"
+          "outputFormat": "trim(this.value)"
         },
         {
           "$type": "Microsoft.NumberInput",
@@ -53,7 +53,6 @@
           "value": "@userAge",
           "alwaysPrompt": false,
           "allowInterruptions": "true",
-          "outputFormat": "float",
           "defaultLocale": "en-us"
         },
         {

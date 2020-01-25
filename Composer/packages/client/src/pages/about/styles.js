@@ -55,7 +55,7 @@ export const smallText = css`
 export const DiagnosticsInfoText = css`
   display: flex;
   justify-content: space-between;
-  width: 460px;
+  width: 550px;
   font-size: 24px;
 `;
 

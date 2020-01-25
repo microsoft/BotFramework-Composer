@@ -7,6 +7,7 @@ import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 import { debouncedUpdateDialog } from './dialog';
+import { debouncedUpdateLg } from './lg';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
@@ -25,6 +26,7 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
   if (checkUrl(currentUri, state.designPageLocation)) return;
   //if dialog change we should flush some debounced functions
   debouncedUpdateDialog.flush();
+  debouncedUpdateLg.flush();
   navigateTo(currentUri, { state: { breadcrumb } });
 };
 

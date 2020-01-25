@@ -29,6 +29,7 @@ export interface DialogInfo {
   luIntents: string[];
   referredDialogs: string[];
   relativePath: string;
+  userDefinedVariables: string[];
   triggers: ITrigger[];
 }
 
@@ -41,21 +42,33 @@ export interface Utterance {
   text: string;
 }
 
-export interface LuDiagnostic {
-  text: string;
+export interface LuParsed {
+  intents: LuIntentSection[];
+  diagnostics: Diagnostic[];
+}
+
+export enum LuSectionTypes {
+  SIMPLEINTENTSECTION = 'simpleIntentSection',
+  NESTEDINTENTSECTION = 'nestedIntentSection',
+}
+
+export interface LuEntity {
+  Name: string;
+}
+
+export interface LuIntentSection {
+  Name: string;
+  Body: string;
+  Entities?: LuEntity[];
+  Children?: LuIntentSection[];
 }
 
 export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
-  parsedContent: {
-    LUISJsonStructure: {
-      intents: Intent[];
-      utterances: Utterance[];
-    };
-  };
-  diagnostics: LuDiagnostic[];
+  diagnostics: Diagnostic[];
+  intents: LuIntentSection[];
   [key: string]: any;
 }
 export interface CodeRange {
@@ -67,7 +80,7 @@ export interface LgTemplate {
   name: string;
   body: string;
   parameters: string[];
-  range: CodeRange;
+  range?: CodeRange;
 }
 
 export interface LgFile {
@@ -77,3 +90,7 @@ export interface LgFile {
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }
+
+export type FileResolver = (id: string) => FileInfo | undefined;
+
+export type MemoryResolver = (id: string) => string[] | undefined;

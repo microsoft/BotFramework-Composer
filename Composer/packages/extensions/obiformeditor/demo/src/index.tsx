@@ -86,44 +86,50 @@ const luFiles: LuFile[] = [
   {
     id: 'Main',
     relativePath: 'SomePath/Main',
-    content: '## FirstHello\n-Hi\n\n## FirstGoodBye\n-Goodbye',
-    parsedContent: {
-      LUISJsonStructure: {
-        intents: [{ name: 'FirstHello' }, { name: 'FirstGoodBye' }],
-        utterances: [
-          { intent: 'FirstHello', text: 'Hi' },
-          { intent: 'FirstGoodBye', text: 'Goodbye' },
-        ],
+    content: '# FirstHello\n-Hi\n\n# FirstGoodBye\n-Goodbye',
+    intents: [
+      {
+        Name: 'FirstHello',
+        Body: '- Hi',
       },
-    },
+      {
+        Name: 'FirstGoodBye',
+        Body: '- Goodbye',
+      },
+    ],
+    diagnostics: [],
   },
   {
     id: 'MyCustomDialog2',
     relativePath: 'SomePath/MyCustomDialog2',
-    content: '## SecondHello\n-Good morning\n\n## SecondGoodBye\n-See ya!',
-    parsedContent: {
-      LUISJsonStructure: {
-        intents: [{ name: 'SecondHello' }, { name: 'SecondGoodBye' }],
-        utterances: [
-          { intent: 'SecondHello', text: 'Good morning' },
-          { intent: 'SecondGoodBye', text: 'See ya!' },
-        ],
+    content: '# SecondHello\n-Good morning\n\n# SecondGoodBye\n-See ya!',
+    intents: [
+      {
+        Name: 'SecondHello',
+        Body: '- Good morning',
       },
-    },
+      {
+        Name: 'SecondGoodBye',
+        Body: '- See ya!',
+      },
+    ],
+    diagnostics: [],
   },
   {
     id: 'MyCustomDialog3',
     relativePath: 'SomePath/MyCustomDialog3',
-    content: '## ThirdHello\n-Hello\n\n## ThirdGoodBye\n-Later',
-    parsedContent: {
-      LUISJsonStructure: {
-        intents: [{ name: 'ThirdHello' }, { name: 'ThirdGoodbye' }],
-        utterances: [
-          { intent: 'ThirdHello', text: 'Hello' },
-          { intent: 'ThirdGoodbye', text: 'Later' },
-        ],
+    content: '# ThirdHello\n-Hello\n\n# ThirdGoodBye\n-Later',
+    intents: [
+      {
+        Name: 'ThirdHello',
+        Body: '- Hello',
       },
-    },
+      {
+        Name: 'ThirdGoodbye',
+        Body: '- Later',
+      },
+    ],
+    diagnostics: [],
   },
 ];
 
@@ -164,6 +170,7 @@ const mockShellApi = [
   'updateLgFile',
   'createLuFile',
   'createLgFile',
+  'getLgTemplates',
   'createLgTemplate',
   'updateLgTemplate',
   'validateExpression',
