@@ -5,20 +5,18 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { transformIfCondtion } from '../../../transformers/transformIfCondition';
-import { ifElseLayouter } from '../../../layouters/ifelseLayouter';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { GraphNode } from '../../../models/GraphNode';
-import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
-import { OffsetContainer } from '../../lib/OffsetContainer';
-import { Edge } from '../../lib/EdgeComponents';
-import { StepGroup } from '../../groups';
-import { Diamond } from '../templates/Diamond';
-import { ElementWrapper } from '../../renderers/ElementWrapper';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { ConditionNode } from '../steps/ConditionNode';
-
-import { NodeMap, BoundaryMap } from './types';
+import { transformIfCondtion } from '../transformers/transformIfCondition';
+import { ifElseLayouter } from '../layouters/ifelseLayouter';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { GraphNode } from '../models/GraphNode';
+import { areBoundariesEqual, Boundary } from '../models/Boundary';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { Edge } from '../components/lib/EdgeComponents';
+import { StepGroup } from '../components/groups';
+import { Diamond } from '../components/nodes/templates/Diamond';
+import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { NodeMap, BoundaryMap } from '../components/nodes/types';
+import { WidgetContainerProps } from '../schema/uischema.types';
 
 const calculateNodeMap = (path, data): NodeMap => {
   const result = transformIfCondtion(data, path);
@@ -41,7 +39,17 @@ const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
   return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
 };
 
-export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
+export interface IfConditionWidgetProps extends WidgetContainerProps {
+  judgement: JSX.Element;
+}
+
+export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
+  id,
+  data,
+  onEvent,
+  onResize,
+  judgement,
+}) => {
   const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -69,13 +77,7 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
         <ElementWrapper id={condition.id} onEvent={onEvent}>
-          <ConditionNode
-            key={condition.id}
-            id={condition.id}
-            data={condition.data}
-            onEvent={onEvent}
-            onResize={onResize}
-          />
+          {judgement}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
@@ -107,4 +109,6 @@ export const IfCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
   );
 };
 
-IfCondition.defaultProps = defaultNodeProps;
+IfConditionWidget.defaultProps = {
+  onResize: () => null,
+};

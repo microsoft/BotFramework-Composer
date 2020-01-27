@@ -5,18 +5,17 @@
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useEffect, useState, useMemo } from 'react';
 
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { transformSwitchCondition } from '../../../transformers/transformSwitchCondition';
-import { switchCaseLayouter } from '../../../layouters/switchCaseLayouter';
-import { GraphNode } from '../../../models/GraphNode';
-import { areBoundariesEqual } from '../../../models/Boundary';
-import { OffsetContainer } from '../../lib/OffsetContainer';
-import { Edge } from '../../lib/EdgeComponents';
-import { StepGroup } from '../../groups';
-import { Diamond } from '../templates/Diamond';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-import { ElementWrapper } from '../../renderers/ElementWrapper';
-import { ConditionNode } from '../steps/ConditionNode';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
+import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
+import { GraphNode } from '../models/GraphNode';
+import { areBoundariesEqual } from '../models/Boundary';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { Edge } from '../components/lib/EdgeComponents';
+import { StepGroup } from '../components/groups';
+import { Diamond } from '../components/nodes/templates/Diamond';
+import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { WidgetContainerProps } from '../schema/uischema.types';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);
@@ -38,7 +37,17 @@ const calculateLayout = (nodeMap, boundaryMap) => {
   return switchCaseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.branchNodes);
 };
 
-export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
+export interface SwitchConditionWidgetProps extends WidgetContainerProps {
+  judgement: JSX.Element;
+}
+
+export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps> = ({
+  id,
+  data,
+  onEvent,
+  onResize,
+  judgement,
+}) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -67,13 +76,7 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
-          <ConditionNode
-            key={conditionNode.id}
-            id={conditionNode.id}
-            data={conditionNode.data}
-            onEvent={onEvent}
-            onResize={onResize}
-          />
+          {judgement}
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
@@ -102,4 +105,6 @@ export const SwitchCondition: FunctionComponent<NodeProps> = ({ id, data, onEven
   );
 };
 
-SwitchCondition.defaultProps = defaultNodeProps;
+SwitchConditionWidget.defaultProps = {
+  onResize: () => null,
+};
