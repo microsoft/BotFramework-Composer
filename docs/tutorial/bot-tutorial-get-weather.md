@@ -1,190 +1,154 @@
----
-title: The bot framework Composer tutorial adding functionality to a new dialog in your bot
-description: Learn how to prompt users for additional information, then query an external service and display results to the user, using the bot framework Composer.
-keywords: The bot framework Composer, Composer, Tutorial, Emulator, dialog, prompt
-author: washingtonKayaker
-ms.author: v-liyan
-manager: kamrani
-ms.topic: article
-ms.service: bot-service
-ms.date: 01/17/2020
-monikerRange: 'azure-bot-service-4.0'
----
-
-# Tutorial: Adding actions to you dialog
-
-In this tutorial you will use Composer to add actions to your dialog to prompt the user for their zip code, then respond with the weather forecast for the specified location based on a query to an external service.
-
-In this tutorial, you learn how to:
-
-> [!div class="checklist"]
-> * Create actions in your trigger to prompt the user for information.
-> * Create properties with default values.
-> * Save data into properties for later use.
-> * Retrieve data from properties and use it to accomplish tasks.
-> * Make calls to external services.
-
-## Prerequisites
-- Completion of the tutorial [Adding dialogs to your bot](./bot-tutorial-add-dialog.md).
-- An understanding of the concepts taught in the [Dialogs](../concept-dialog.md) concept article, specifically the section on [actions](../concept-dialog.md#action).
-- An understanding of the concepts taught in the [Conversation flow and memory](../concept-dialog.md) concept article.
-
-
-
 # Get weather report
-Before you can get the weather forecast you need to know the desired location.  You can create a **Text Input** action to prompt the user for a zip code to pass to the weather service. At the end of the following steps is an animated GIF that demonstrates this process.
 
-1. Select **getWeather** in the _Navigation_ panel to show the _getWeather_ dialog.
+1. In the explorer, click on `getWeather` to select the dialog and reveal the triggers it contains.
+2. Click on the `BeginDialog` trigger underneath `getWeather`. The first thing we need to do to check a user's local weather is collect the user's location. Our weather API accepts a 5 digit zipcode as a parameter. So, let's add a **Text Input** to prompt the user for a `zipcode`.
+3. Click the **+** button in the flow and select **Ask a question**. You'll see a variety of options for asking for different types of input. Read details [here](how-to-ask-for-user-input.md)
+4. Select **Text Input** from the sub-menu. Two new nodes will appear in the flow!
 
-2. Select the **BeginDialog** trigger.
+   > You use prompts to collect information from user. Prompt are broken down into a few pieces. We'll configure each separately.
 
-3. To create the **Text Input** action, select **+** in the triggers flow in the _Authoring canvas_ then select **Text Input** from the **Ask a question** menu.
+   ![](../media/tutorial-weatherbot/03/empty-prompt.png)
 
-      > [!TIP] 
-      > There are multiple options in the **Ask a question** menu. This enables you to easily request and validate different types of user input depending on your needs. See the [Asking for user input](../how-to-ask-for-user-input.md) article for more information.
+5. Click on the **Bot Asks** node. This part of the prompt represents the message the bot will send to the user requesting information. In the properties panel set the prompt to:
 
-      > [!IMPORTANT] 
-      > After selecting **Text Input** from the **Ask a question** menu, you will notice that two new nodes appear in the flow. Each node coorisponds to a tab in the _Properties_ panel as shown in the following image:
-      > 
-      > ![Set the Default value property](../media/tutorial-weatherbot/03/user-prompts.png)
-      > 
-      > 1. **Bot Asks** refers to the bots prompt to the user for information.
-      > 2. **User Input** enables you to assign the user input to a property that is saved in memory and can be used by the bot for further processing.
-      > 3. **Other** enables you to validate the user input and respond with a message if invalid input is entered.
+      `What is your zipcode?`
 
-4. Click on the **Bot Asks** tab in the _Properties_ panel and enter the **Prompt** that the bot will display to the user to request their input:
+6. Set the **Default value** property (next to Max turn count) to `'98052'` (include the quotes). 
 
-      "***What is your zip code?***"
+   > By default prompts are configured to ask the user for information `Max turn count` number of times (defaults to 3). When this happens, the prompt will stop and set the **Default value** to the `Property` and move forward with the conversaiton. 
 
-5. Set the **Default value** property (next to Max turn count) to ***'98052'*** (include the quotes). 
+   ![](../media/tutorial-weatherbot/03/zipcode-prompt.png)
 
-   > [!TIP] 
-   > By default prompts are configured to ask the user for information **Max turn count** number of times (defaults to 3). When the _max turn count_ is reached, the prompt will stop and the property will be set to the value defined in the **Default value** field before moving forward with the conversation. 
+7. Next, click the **User Input** tab in the properties panel. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
 
-6. Next, select the **User Input** tab in the _Properties_ panel. This part of the prompt represents the user's response, including where to store the value and how to pre-process it.
+8. Here, we can specify what property in memory will be used to store the user's response. In `Property to fill`, enter the value:
 
-7. Here is where you specify the property used to store the user's response. Enter the following value in the **Property to fill** field:
+      `user.zipcode`
 
-      "`user.zipcode`"
+   For **Output Format**, enter `trim(this.value)`. This ensures leading and trailing spaces in user input are trimmed before the value is assigned to `user.zipcode`. `trim()` is a [pre-built function](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) of [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
-8. Select **trim** from the **Output Format** drop-down list. This ensures that all leading and trailing spaces in the users input are trimmed before the value is validated and assigned to the property defined in the **Property to fill** field (`user.zipcode`).
+   ![](../media/tutorial-weatherbot/03/zipcode-answer.png)
 
-
-9. Select the **Other** tab in the _Properties_ panel. This is where you can specify your validation rules for the prompt, as well as any error messages that will be displayed to the user if they enter an invalid value based on the **Validation Rules** you create.
+9. Click on the **Others** tab in the properties panel. This section allows you to specify validation rules for the prompt, as well as error messages that will be used if the user provides an invalid response.
 
 10. In the **Unrecognized Prompt** field, enter:
       
-      "***Sorry, I do not understand '{this.value}'. Please specify a zip code in the form 12345***"
+      `- Sorry, I do not understand '@{this.value}'. Please specify a zipcode in the form 12345`
 
-11. In the **Invalid Prompt** field, enter:
+    In the **Invalid Prompt** field, also enter:
 
-      "***Sorry, '{this.value}' is not valid. I'm looking for a 5 digit number as zip code. Please specify a zip code in the form 12345***"
+      `- Sorry, '@{this.value}' is not valid. I'm looking for a 5 digit number as zipcode. Please specify a zipcode in the form 12345`
 
-11. In the **Validation Rules** field, enter:
+11. In **Validation Rules**, type:
 
-      `length(this.value) == 5` 
- 
-      This is the first validation rules, and it requires a five character value to pass, otherwise it will cause the error to appear to the user.
+    > validation rule 1 says we need a five characters
 
-      > [!IMPORTANT] Make sure to press the enter key after entering the rule, if you don't it will not be added.
+      `length(this.value) == 5`
 
+    and then press enter.
 
+    > Make sure to press enter to add the rule!
 
-   ![Output Format](../media/tutorial-weatherbot/03/text-prompt-zip-code.gif)
+    Your properties pane should look like this:
 
+    ![](../media/tutorial-weatherbot/03/zipcode-extensions.png)
 
-You have created an action in your **BeginDialog** trigger that will prompt the user for their zip code and placed it into the `user.zipcode` property.  Next you will pass the value of that property in an HTTP request to a weather service and validate the response, then if it passes your validation you will display the weather report to the user.
+    And your flow should look like this:
+
+    ![](../media/tutorial-weatherbot/03/zipcode-flow.png)
+
+    With these options set, we have a dialog that will prompt the user for a zipcode. If the user gives a valid 5 digit zipcode, the prompt will store the value in `user.zipcode` and move on. If the user gives an invalid zipcode (e.g. `tomato` or `123456`), the prompt will present an error message and repeat until a valid response is received.
+
+    > There are some options in the footer of the prompt properties that can be used to tune how the prompt works.
+
+    > Max turn count can be used to control how many times the bot will reprompt after invalid responses.
+
+    > By default, prompts will be skip if the bound property already has a value. Always prompt, when enabled, will cause the prompt to appear even if the value is already known. Leave this unchecked for now.
+
+    After this action occurs, the bot can use `@{user.zipcode}` in messages, and more importantly, in calls to external APIs!
 
 ## Add an HTTP request
 
-The entire process of adding an HTTP request, capturing the results into a property then determining what action to take depending on the results is demonstrated in this section. At the end of this section you will see an animated image that demonstrates the entire process.
+The http request action is found under the **Access external resources** menu in the flow **+** button.
 
-1. Select the **+** in the _Authoring canvas_, then select **Send an HTTP request** from the **Access external resources** menu.
+1. Select **Send an HTTP request** to add a the step to your flow.
 
-   ![Select Send an HTTP request](../media/tutorial-weatherbot/03/http-step.png)
+   ![](../media/tutorial-weatherbot/03/http-step.png)
 
-2. In the _Properties_ panel:
+2. In the properties editor,
 
-      - select **GET** from the **HTTP method** drop-down list.
+   Set the method to `GET`
 
-      - Enter the following in the **Url** field: 
+   Set the URL to:    
 
-        `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode={user.zipcode}`
-      
-        This will enable the bot to make an HTTP request to the specified URL. The reference to `{user.zipcode}` will be replaced by the value from the bots'  `user.zipcode` property.
+      `http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode=@{user.zipcode}`
+  
+   ![](../media/tutorial-weatherbot/03/http-props.png)
+   
+   Leave the **Body** and **Headers** blank at this time and Set the **Result property** to:
 
-      - Next, enter the following in the **Result property** field: 
+      `dialog.api_response`
 
-        `dialog.api_response`
+   ![](../media/tutorial-weatherbot/03/http-props2.png)
 
-        > [!TIP]
-        > Some things to know about **Result property**:
-        > - This represents the property where the result of this action will be stored. The result can include any of the following 4 properties from the http response:
-        >      - _statusCode_. This can be accessed via the `dialog.api_response.statusCode`.
-        >      - _reasonPhrase_. This can be accessed via the `dialog.api_response.reasonPhrase`.
-        >      - _content_. This can be accessed via the `dialog.api_response.content`.
-        >      - _headers_. This can be accessed via the `dialog.api_response.headers`.
-        > - If the **Response type** is json, it will be a deserialized object available via `dialog.api_response.content` property.
+   This will cause the bot to make an HTTP request to the url specified. The reference to `@{user.zipcode}` will be replaced by a live value from the bot's memory.
 
-3. After making an HTTP request, you need to test the status of the response and handle errors is they occur. You can use an _If/Else branch_ for this purpose. To do this, select the **+** button, then select **Branch: If/Else** from the **Create a condition** menu.  
+   > HTTP action sets the following information in the **Result property**: statusCode, reasonPhrase, content, headers. Setting the **Result property** to `dialog.api_response` means we can access those values via `dialog.api_response.statusCode`, `dialog.api_response.reasonPhrase`, `dialog.api_response.content` and `dialog.api_response.headers`. If the response is json, it will be a deserialized object available via `dialog.api_response.content`.
 
-4. In the _Properties_ panel on the right, enter the following value into the **Condition** field:
+   After making an HTTP request, we need to test the status of the response. To do this, we'll use an If/Else branch.
+
+3. Click the **+** button and choose **Create a condition**. Then choose **Branch: If/Else**.
+
+4. In the **properties panel** on the right, set the **Condition** field to:
 
       `dialog.api_response.statusCode == 200`
 
-5. In the **True** branch select the **+** button then select **Set a Property** from the **Manage properties** menu.
+5. In the `true` branch click the **+** button, select **Manage properties**, and then **Set a property**
 
-6. In the _Properties_ panel on the right, enter the following in the **Property** field:
-
+   Set **Property** to:
+   
       `dialog.weather`
 
-7. Next, enter the following in the **Value** field:
+   Set **Value** to:
 
       `dialog.api_response.content`
 
-   ![Manage properties dialog](../media/tutorial-weatherbot/03/set-property-condition.png)
+   ![](../media/tutorial-weatherbot/03/set-property-condition.png)
 
-8. While still in the **True** branch, select the **+** button that appears beneath the action created in the previous step, then select **Send a response**. 
+6. Still in the `true` branch, use the **+** button, then select **Send a response**
 
-9. In the _Properties_ panel on the right, enter the following response to send:
+   Set the text of the message to:
    
-      `The weather is {dialog.weather.weather} and the temp is {dialog.weather.temp}&deg;`
+      `The weather is @{dialog.weather.weather} and the temp is @{dialog.weather.temp}&deg;`
 
-      The flow should now appear in the _Authoring canvas_ as follows:
+   ![](../media/tutorial-weatherbot/03/ifelse.png)
 
-   ![If/Else diagram](../media/tutorial-weatherbot/03/ifelse.png)
+7. Now, in the `false` branch, use the **+** button, then select **Send a response**
 
-      You will now tell the bot what to do in the event that the [statusCode](https://docs.microsoft.com/en-us/windows/win32/winhttp/http-status-codes) returned is not 200.
-
-10. Select the **+** button in the **False** branch, then select **Send a response** and set the text of the message to:
+   Set the text of the message to:
    
-       `I got an error: {dialog.api_response.content.message}`
+      `I got an error: @{dialog.api_response.content.message}`
 
-11. For the purposes of this tutorial we will assume that if you are in this branch, it is because the zip code is invalid, and if it is invalid it should be removed so that the invalid value does not persist in the `user.zipcode` property. To remove the invalid value from this property, select the **+** button that follows the **Send a response** action you created in the previous step, then select **Delete a property** from the **Manage properties** menu.
+8. To be safe, let's clean up the invalid value which otherwise would persist. Use the **+**, select **Manage properties**, then select **Delete a property**
 
-12. In the _Properties_ panel on the right, enter `user.zipcode` into the **Property** field.
+   Set the property to:
 
-The flow should appear in the _Authoring canvas_ as follows:
+      `user.zipcode`
 
-![user.zipcode If/Else diagram](../media/tutorial-weatherbot/03/ifelse2.png)
+   ![](../media/tutorial-weatherbot/03/ifelse2.png)
 
-All of the steps covered in the **Add an HTTP request** section are demonstrated in the following animated image:
 
-   ![Add an HTTP request](../media/tutorial-weatherbot/03/http-request-then-validate.gif)
-   
-You have now completed adding an HTTP request to your _BeginDialog_ trigger. The next step is to validate that these additions to your bot work correctly.  To do that you can test it in the Emulator.
+## Test in Emulator
 
-## Test in the bot Emulator
+1. Restart the bot again, and open it in the emulator.
 
-1. Select the **Restart bot** button in the upper right-hand corner of the Composer screen, then **Test in Emulator**.
+   ![](../media/tutorial-weatherbot/02/restart-bot.gif)
 
-   ![Restart bot and test in Emulator](../media/tutorial-weatherbot/02/restart-bot.gif)
+2. After the greeting, send `weather` to the bot. The bot will prompt you for a zipcode. Give it your home zipcode, and seconds later, you should see the current weather conditions!
 
-2. After the greeting, send `weather` to the bot. The bot will prompt you for a zip code. Give it your home zip code, and seconds later, you should see the current weather conditions.
+   ![](../media/tutorial-weatherbot/03/basic-weather.gif)
 
-   ![Weather bot in Emulator](../media/tutorial-weatherbot/03/basic-weather.gif)
-
-   If you ask for the weather again, notice that the bot doesn't prompt for a zip code the second time. Remember, this is because `user.zipcode` is already set. If **Always prompt** had been selected, the bot would have prompted for the zip code. You can verify that by going back to step 10 and checking **Always prompt** and try again. Your bot will ask for a zip code every time you re-start the conversation in THE Emulator.
+   If you ask for the weather again, notice that the bot doesn't prompt for a zipcode the second time. Remember, this is because `user.zipcode` is already set. Had we checked **Always prompt** the bot would ask each time. Go back to step 10, check **Always prompt** and try again. Your bot will ask for a zipcode everytime you re-start the conversation in emulator.
 
 ## Next steps
-- [Add help and cancel commands](./bot-tutorial-add-help.md)
+- [Add help and cancel command](./bot-tutorial-add-help.md)
