@@ -4,7 +4,7 @@
     "id": "607738"
   },
   "autoEndDialog": true,
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -22,7 +22,7 @@
           "unrecognizedPrompt": "I need a yes or no.",
           "maxTurnCount": 3,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
+          "allowInterruptions": "false",
           "defaultLocale": "en-us",
           "style": "Auto",
           "choiceOptions": {
@@ -57,5 +57,6 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

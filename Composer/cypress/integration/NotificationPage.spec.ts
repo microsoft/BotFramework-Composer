@@ -4,7 +4,7 @@
 context('Notification Page', () => {
   beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
-    cy.createBot('TodoSample');
+    cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
   });
 
@@ -25,13 +25,14 @@ context('Notification Page', () => {
     });
 
     cy.findAllByText('Bot Responses').should('exist');
-    cy.get('@switchButton').should('be.disabled');
   });
 
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.get('.dialogNavTree button[title="__TestTodoSample.Main"]').click({ multiple: true });
+    cy.findByTestId('LUEditor').within(() => {
+      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+    });
 
     cy.get('.toggleEditMode button').click();
     cy.get('textarea').type('test lu syntax error');
@@ -45,18 +46,18 @@ context('Notification Page', () => {
         .click();
     });
 
-    cy.findAllByText('__TestTodoSample.Main').should('exist');
+    cy.findAllByText('__TestToDoBotWithLuisSample.Main').should('exist');
   });
 
   it('can show dialog expression error ', () => {
     cy.visitPage('Design Flow');
 
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Greeting').click();
+      cy.findByText('WelcomeUser').click();
     });
 
     cy.withinEditor('VisualEditor', () => {
-      cy.findByText('Greeting').should('exist');
+      cy.findByText('WelcomeUser').should('exist');
     });
 
     cy.withinEditor('FormEditor', () => {
@@ -73,6 +74,6 @@ context('Notification Page', () => {
         .click();
     });
 
-    cy.findAllByText('Greeting').should('exist');
+    cy.findAllByText('WelcomeUser').should('exist');
   });
 });

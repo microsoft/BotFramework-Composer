@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 module.exports = {
   collectCoverageFrom: [
     '**/src/**/*.{js,jsx,ts,tsx}',

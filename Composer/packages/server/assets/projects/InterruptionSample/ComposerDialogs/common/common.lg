@@ -29,13 +29,22 @@ Here's what I know about you -
 - Sure, I've cancelled that.
 
 # bfdactivity-296924
-- Hello @{user.profile.name}, I have your age as @{user.profile.age}. \n \[Suggestions=Reset profile]
+[Activity
+    Text = Hello @{user.profile.name}, I have your age as @{user.profile.age}.
+	SuggestedActions = Reset profile
+]
 
 # bfdactivity-907674
-- I need your age to customize recommediations. \n \[Suggestions=No age | Reset profile | Cancel]
+[Activity
+    Text = I need your age to customize recommediations.
+	SuggestedActions = No age | Reset profile | Cancel
+]
 
 # bfdactivity-558329
-- I need your name to address you correctly! \n \[Suggestions=No name | Reset profile | Cancel]
+[Activity
+    Text = I need your name to address you correctly!
+	SuggestedActions = No name | Reset profile | Cancel
+]
 
 # bfdactivity-074631
 - No worries. I'll set your age to 30 for now.
@@ -47,13 +56,25 @@ Here's what I know about you -
 - @{user.profile.name}
 
 # bfdactivity-924700
-- Hello, I'm the interruption sample bot! \n \[Suggestions=Get started | Reset profile | Cancel | Show profile]
+[Activity
+    Text = Hello, I'm the interruption sample bot!
+	SuggestedActions = Get started | Reset profile | Cancel | Show profile
+]
 
 # bfdactivity-032735
-- I've reset your profile. \n \[Suggestions=Get started]
+[Activity
+    Text = I've reset your profile.
+	SuggestedActions = Get started
+]
 
 # bfdinvalidPrompt-362298
-- Sorry, '@{this.value}' does not work. I'm looking for 2-150 characters. What is your name? \n \[Suggestions=Why? | No name | Cancel | Reset profile\]
+[Activity
+    Text = Sorry, '@{this.value}' does not work. I'm looking for 2-150 characters. What is your name?
+	SuggestedActions = Why? | No name | Cancel | Reset profile
+]
 
 # bfdinvalidPrompt-005947
-- Sorry, @{this.value} does not work. I'm looking for a value between 1-150. What is your age?  \n \[Suggestions=Why? | Reset profile | Cancel | No age\]
+[Activity
+    Text = Sorry, @{this.value} does not work. I'm looking for a value between 1-150. What is your age?
+	SuggestedActions = Why? | Reset profile | Cancel | No age
+]

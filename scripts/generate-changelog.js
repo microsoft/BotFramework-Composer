@@ -13,12 +13,16 @@ const AUTHORS = {
   leileizhang: "lei9444",
   zeye: "yeze322",
   "Zhixiang Zhan": "zhixzhan",
+  zhixzhan: "zhixzhan",
   "Shuai Wang": "cosmicshuai",
   liweitian: "liweitian",
   "Ben Brown": "benbrown",
   "Pooja Nagpal": "p-nagpal",
   xieofxie: "xieofxie",
-  "Lu Han": "luhan2017"
+  "Lu Han": "luhan2017",
+  VanyLaw: "VanyLaw",
+  "Hongyang Du (hond)": "Danieladu",
+  "Weitian Li": "liweitian"
 };
 
 const getLog = () =>

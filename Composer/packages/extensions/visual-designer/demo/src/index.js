@@ -8,6 +8,7 @@ import { EditorConfig } from '../../src/editors/editorConfig';
 import { VisualEditorDemo } from './stories/VisualEditorDemo';
 import { StepEditorDemo } from './stories/StepEditorDemo';
 import { EventsEditorDemo } from './stories/EventsEditorDemo';
+import { VisualSDKDemo } from './stories/VisualSDKDemo';
 import './index.css';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -27,11 +28,15 @@ const DemoMaps = {
     key: 'EventsEditorDemo',
     component: EventsEditorDemo,
   },
+  VisualSDKDemo: {
+    key: 'VisualSDKDemo',
+    component: VisualSDKDemo,
+  },
 };
 
 class Demo extends Component {
   state = {
-    selectedItem: DemoMaps.VisualEditorDemo.key,
+    selectedItem: DemoMaps.VisualSDKDemo.key,
   };
 
   renderNav() {
@@ -60,6 +65,10 @@ class Demo extends Component {
               {
                 key: DemoMaps.EventsEditorDemo.key,
                 name: 'Event Editor',
+              },
+              {
+                key: DemoMaps.VisualSDKDemo.key,
+                name: 'Visual SDK',
               },
             ],
           },

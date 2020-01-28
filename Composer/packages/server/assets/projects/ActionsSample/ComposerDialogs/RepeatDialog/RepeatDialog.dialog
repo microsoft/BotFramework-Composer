@@ -22,7 +22,7 @@
           "unrecognizedPrompt": "I need a yes or no.",
           "maxTurnCount": 3,
           "alwaysPrompt": true,
-          "allowInterruptions": false,
+          "allowInterruptions": "false",
           "defaultLocale": "en-us",
           "style": "Auto",
           "choiceOptions": {

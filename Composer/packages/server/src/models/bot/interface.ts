@@ -39,7 +39,7 @@ export interface IOperationLUFile {
   diagnostics?: any[]; // ludown parser output
   relativePath?: string;
   content?: string;
-  parsedContent?: { [key: string]: any };
+  intents: [];
   lastUpdateTime?: number;
   lastPublishTime?: number;
   [key: string]: any;

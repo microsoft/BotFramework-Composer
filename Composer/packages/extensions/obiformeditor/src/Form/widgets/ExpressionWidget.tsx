@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { JSONSchema6 } from 'json-schema';
@@ -43,12 +43,27 @@ const getDefaultErrorMessage = errMessage => {
 };
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
-  const { formContext, schema, id, label, editable, hiddenErrMessage, onValidate, options = {}, ...rest } = props;
+  const {
+    formContext,
+    schema,
+    id,
+    label,
+    value,
+    editable,
+    hiddenErrMessage,
+    onValidate,
+    options = {},
+    ...rest
+  } = props;
   const { description } = schema;
   const { hideLabel } = options;
-  const name = props.id?.split('_')[props.id?.split('_').length - 1];
+  const name = props.id
+    ?.split('_')
+    .slice(1)
+    .join('');
 
-  const onGetErrorMessage = (): JSX.Element | string => {
+  const [errorMessage, setErrorMessage] = useState<JSX.Element | string>('');
+  const getErrorMessage = (): JSX.Element | string => {
     const errMessage = name && get(formContext, ['formErrors', name], '');
 
     const messageBar = errMessage ? (
@@ -74,6 +89,10 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
     }
   };
 
+  useEffect(() => {
+    setErrorMessage(getErrorMessage());
+  }, [formContext.formErrors, value]);
+
   const Field = editable ? EditableField : TextField;
 
   return (
@@ -82,7 +101,8 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
       <Field
         {...rest}
         id={id}
-        onGetErrorMessage={onGetErrorMessage}
+        value={value}
+        errorMessage={errorMessage}
         autoComplete="off"
         styles={{
           root: { ...(!hideLabel && !!label ? {} : { margin: '7px 0' }) },

@@ -173,15 +173,34 @@
         "name": "Greeting (ConversationUpdate)",
         "id": "791275"
       },
-      "condition": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.Foreach",
           "$designer": {
-            "name": "Send an Activity",
-            "id": "859266"
+            "id": "518944",
+            "name": "Loop: for each item"
           },
-          "activity": "@{help()}"
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "@{help()}"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
