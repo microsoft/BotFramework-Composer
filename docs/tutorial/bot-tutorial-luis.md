@@ -91,8 +91,8 @@ With LUIS, you no longer have to type in exact regex patterns to trigger specifi
 
 * "How is the weather"
 * "Weather please"
-* "Cancel everything"
-* "Not sure what I can do" 
+* "Can you help me" 
+* "Cancel please"
 
 ![](../media/tutorial-weatherbot/07/luis-wired-up.png)
 
