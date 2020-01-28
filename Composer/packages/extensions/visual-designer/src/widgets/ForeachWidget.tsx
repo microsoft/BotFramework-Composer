@@ -5,19 +5,18 @@
 import { jsx } from '@emotion/core';
 import { useMemo, useEffect, useState, FunctionComponent } from 'react';
 
-import { transformForeach } from '../../../transformers/transformForeach';
-import { foreachLayouter } from '../../../layouters/foreachLayouter';
-import { areBoundariesEqual, Boundary } from '../../../models/Boundary';
-import { GraphNode } from '../../../models/GraphNode';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { OffsetContainer } from '../../lib/OffsetContainer';
-import { Edge } from '../../lib/EdgeComponents';
-import { LoopIndicator } from '../../decorations/LoopIndicator';
-import { ElementRenderer } from '../../renderers/ElementRenderer';
-import { StepGroup } from '../../groups';
-import { NodeProps, defaultNodeProps } from '../nodeProps';
-
-import { NodeMap, BoundaryMap } from './types';
+import { transformForeach } from '../transformers/transformForeach';
+import { foreachLayouter } from '../layouters/foreachLayouter';
+import { areBoundariesEqual, Boundary } from '../models/Boundary';
+import { GraphNode } from '../models/GraphNode';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { Edge } from '../components/lib/EdgeComponents';
+import { LoopIndicator } from '../components/decorations/LoopIndicator';
+import { StepGroup } from '../components/groups';
+import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { NodeMap, BoundaryMap } from '../components/nodes/types';
+import { WidgetContainerProps } from '../schema/uischema.types';
 
 const calculateNodeMap = (jsonpath, data): NodeMap => {
   const result = transformForeach(data, jsonpath);
@@ -42,7 +41,11 @@ const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
   return foreachLayouter(nodeMap.foreachNode, nodeMap.stepGroupNode, nodeMap.loopBeginNode, nodeMap.loopEndNode);
 };
 
-export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }) => {
+export interface ForeachWidgetProps extends WidgetContainerProps {
+  loop: JSX.Element;
+}
+
+export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data, onEvent, onResize, loop }) => {
   const [boundaryMap, setBoundaryMap] = useState({});
   const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
@@ -71,13 +74,9 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
-        <ElementRenderer
-          key={foreachNode.id}
-          id={foreachNode.id}
-          data={foreachNode.data}
-          onEvent={onEvent}
-          onResize={onResize}
-        />
+        <ElementWrapper id={id} onEvent={onEvent}>
+          {loop}
+        </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>
         <StepGroup
@@ -102,4 +101,6 @@ export const Foreach: FunctionComponent<NodeProps> = ({ id, data, onEvent, onRes
   );
 };
 
-Foreach.defaultProps = defaultNodeProps;
+ForeachWidget.defaultProps = {
+  onResize: () => null,
+};

@@ -38,17 +38,37 @@ export class BotProjectService {
     return BotProjectService.currentBotProject?.files.find(file => file.name === name);
   }
 
-  public static staticMemoryResolver(name: string): string[] | undefined {
-    return [
+  public static staticMemoryResolver(): string[] {
+    const defaultProperties = [
       'this.value',
       'this.turnCount',
-      'turn.DialogEvent.value',
-      'intent.score',
+      'this.options',
+      'dialog.eventCounter',
+      'dialog.expectedProperties',
+      'dialog.lastEvent',
+      'dialog.requiredProperties',
+      'dialog.retries',
+      'dialog.lastIntent',
+      'dialog.lastTriggerEvent',
+      'turn.lastresult',
+      'turn.activity',
+      'turn.recognized',
       'turn.recognized.intent',
-      'turn.recognized.intents.***.score',
       'turn.recognized.score',
-      'turn.recognized.entities',
+      'turn.recognized.text',
+      'turn.unrecognizedText',
+      'turn.recognizedEntities',
+      'turn.interrupted',
+      'turn.dialogEvent',
+      'turn.repeatedIds',
+      'turn.activityProcessed',
     ];
+    const userDefined: string[] =
+      BotProjectService.currentBotProject?.dialogs.reduce((result: string[], dialog) => {
+        result = [...dialog.userDefinedVariables, ...result];
+        return result;
+      }, []) || [];
+    return [...defaultProperties, ...userDefined];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

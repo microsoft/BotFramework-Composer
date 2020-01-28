@@ -3,45 +3,42 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, ComponentClass } from 'react';
+import { FC } from 'react';
+import { SDKTypes } from '@bfc/shared';
+import get from 'lodash/get';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { UISchemaRenderer } from '../../schema/uischemaRenderer';
 
-import { ElementRenderer } from './ElementRenderer';
+import { ElementWrapper } from './ElementWrapper';
 
-const rendererByObiType = {
-  [ObiTypes.IfCondition]: IfCondition,
-  [ObiTypes.SwitchCondition]: SwitchCondition,
-  [ObiTypes.Foreach]: Foreach,
-  [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.AttachmentInput]: BaseInput,
-  [ObiTypes.ConfirmInput]: BaseInput,
-  [ObiTypes.DateTimeInput]: BaseInput,
-  [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.TextInput]: BaseInput,
-  [ObiTypes.ChoiceInput]: BaseInput,
-};
-const DEFAULT_RENDERER = ElementRenderer;
+/** TODO: (zeye) integrate this array into UISchema */
+const TypesWithoutWrapper = [
+  SDKTypes.IfCondition,
+  SDKTypes.SwitchCondition,
+  SDKTypes.Foreach,
+  SDKTypes.ForeachPage,
+  SDKTypes.AttachmentInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+  SDKTypes.ChoiceInput,
+];
 
-function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
-  const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-  return renderer;
-}
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
+  const $type = get(data, '$type', '');
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  const ChosenRenderer = chooseRendererByType(data.$type);
+  const content = <UISchemaRenderer id={id} data={data} onEvent={onEvent} />;
+
+  if (TypesWithoutWrapper.some(x => $type === x)) {
+    return content;
+  }
 
   return (
-    <ChosenRenderer
-      id={id}
-      data={data}
-      onEvent={onEvent}
-      onResize={size => {
-        onResize(size, 'node');
-      }}
-    />
+    <ElementWrapper id={id} onEvent={onEvent}>
+      {content}
+    </ElementWrapper>
   );
 };
 
