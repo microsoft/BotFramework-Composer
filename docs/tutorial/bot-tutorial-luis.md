@@ -44,7 +44,7 @@ Let's go ahead and update our dialog's recognizers to use luis instead.
    ![](../media/tutorial-weatherbot/07/luis-with-lu-content.png)
 
 3. Once you have done this, you need to re-configure the various **Intent** triggers within that dialog. 
-4. Click on `weather` trigger in the left navigation and choose `Weather` from the intent drop down
+4. Click on `weather` trigger in the left navigation. Select `Weather` from the intent drop-down menu in the properties panel on the right side of the Composer. 
 
    Update the title of the trigger to `Weather` instead of **Intent**
 
