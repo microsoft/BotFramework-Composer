@@ -3,35 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, ComponentClass } from 'react';
+import { FC } from 'react';
 import { SDKTypes } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { UISchemaRenderer } from '../../schema/uischemaRenderer';
 
 import { ElementWrapper } from './ElementWrapper';
-
-const rendererByObiType = {
-  [ObiTypes.IfCondition]: IfCondition,
-  [ObiTypes.SwitchCondition]: SwitchCondition,
-  [ObiTypes.Foreach]: Foreach,
-  [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.AttachmentInput]: BaseInput,
-  [ObiTypes.ConfirmInput]: BaseInput,
-  [ObiTypes.DateTimeInput]: BaseInput,
-  [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.TextInput]: BaseInput,
-  [ObiTypes.ChoiceInput]: BaseInput,
-};
-const DEFAULT_RENDERER = UISchemaRenderer;
-
-function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
-  const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-  return renderer;
-}
 
 /** TODO: (zeye) integrate this array into UISchema */
 const TypesWithoutWrapper = [
@@ -46,20 +25,11 @@ const TypesWithoutWrapper = [
   SDKTypes.TextInput,
   SDKTypes.ChoiceInput,
 ];
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
+
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const $type = get(data, '$type', '');
 
-  const ChosenRenderer = chooseRendererByType($type);
-  const content = (
-    <ChosenRenderer
-      id={id}
-      data={data}
-      onEvent={onEvent}
-      onResize={size => {
-        onResize(size, 'node');
-      }}
-    />
-  );
+  const content = <UISchemaRenderer id={id} data={data} onEvent={onEvent} />;
 
   if (TypesWithoutWrapper.some(x => $type === x)) {
     return content;

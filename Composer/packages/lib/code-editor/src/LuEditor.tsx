@@ -74,6 +74,7 @@ export function LuEditor(props: LULSPEditorProps) {
     quickSuggestions: true,
     wordBasedSuggestions: false,
     formatOnType: true,
+    ...props.options,
   };
 
   const { languageServer, ...restProps } = props;

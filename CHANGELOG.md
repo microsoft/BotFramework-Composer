@@ -2,6 +2,69 @@
 
 ## Releases
 
+### 01-27-2020
+
+#### Added
+
+- feat: enrich prebuilt memory paths and add user defined memory paths ([#1868](https://github.com/microsoft/BotFramework-Composer/pull/1868)) ([@lei9444](https://github.com/lei9444))
+- feat: Language-Understanding LSP ([#1711](https://github.com/microsoft/BotFramework-Composer/pull/1711)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- feat: lu shell api ([#1810](https://github.com/microsoft/BotFramework-Composer/pull/1810)) ([@zhixzhan](https://github.com/zhixzhan))
+- feat: Start Botproject runtime in bot folder ([#1672](https://github.com/microsoft/BotFramework-Composer/pull/1672)) ([@VanyLaw](https://github.com/VanyLaw))
+- feat: Schema-driven visual editor - migrates 15 simple types ([#1811](https://github.com/microsoft/BotFramework-Composer/pull/1811)) ([@yeze322](https://github.com/yeze322))
+- feat: Update OnConversationUpdate actions ([#1794](https://github.com/microsoft/BotFramework-Composer/pull/1794)) ([@luhan2017](https://github.com/luhan2017))
+- feat: Update LG and built in expression functions in LSP ([#1790](https://github.com/microsoft/BotFramework-Composer/pull/1790)) ([@Danieladu](https://github.com/Danieladu))
+- feat: Add dynamic choices to Choice Prompt ([#1777](https://github.com/microsoft/BotFramework-Composer/pull/1777)) ([@tdurnford](https://github.com/tdurnford))
+- feat: update ui for new schema ([#1775](https://github.com/microsoft/BotFramework-Composer/pull/1775)) ([@alanlong9278](https://github.com/alanlong9278))
+- feat: lu all up view ux enhancement ([#1879](https://github.com/microsoft/BotFramework-Composer/pull/1879)) ([@zhixzhan](https://github.com/zhixzhan))
+- feat: add autoClosingPairs for lg editor ([#1789](https://github.com/microsoft/BotFramework-Composer/pull/1789)) ([@cosmicshuai](https://github.com/cosmicshuai))
+
+#### Fixed
+
+- fix: update the lg content to store when editor editing ([#1884](https://github.com/microsoft/BotFramework-Composer/pull/1884)) ([@lei9444](https://github.com/lei9444))
+- fix: Aligned elements in prompt settings ([#1893](https://github.com/microsoft/BotFramework-Composer/pull/1893)) ([@tdurnford](https://github.com/tdurnford))
+- fix: remove label from validations ([#1891](https://github.com/microsoft/BotFramework-Composer/pull/1891)) ([@tdurnford](https://github.com/tdurnford))
+- fix: Undo / redo behavior on LG resources ([#1813](https://github.com/microsoft/BotFramework-Composer/pull/1813)) ([@lei9444](https://github.com/lei9444))
+- fix: botproject build script powershell version limit ([#1857](https://github.com/microsoft/BotFramework-Composer/pull/1857)) ([@VanyLaw](https://github.com/VanyLaw))
+- fix: Add support of auto suggestion memory variable ([#1819](https://github.com/microsoft/BotFramework-Composer/pull/1819)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: Fixed Multiple Choice Type undo/redo functionality ([#1844](https://github.com/microsoft/BotFramework-Composer/pull/1844)) ([@tdurnford](https://github.com/tdurnford))
+- fix: RepeatDialog not shown ([#1835](https://github.com/microsoft/BotFramework-Composer/pull/1835)) ([@yeze322](https://github.com/yeze322))
+- fix: do not preset name when creating a dialog ([#1805](https://github.com/microsoft/BotFramework-Composer/pull/1805)) ([@liweitian](https://github.com/liweitian))
+- fix: luis authoringRegion not update in popup form ([#1818](https://github.com/microsoft/BotFramework-Composer/pull/1818)) ([@VanyLaw](https://github.com/VanyLaw))
+- fix: Check all expressions in dialog ([#1798](https://github.com/microsoft/BotFramework-Composer/pull/1798)) ([@lei9444](https://github.com/lei9444))
+- fix: TextWidget hover ([#1825](https://github.com/microsoft/BotFramework-Composer/pull/1825)) ([@tdurnford](https://github.com/tdurnford))
+- fix: Create bot from scratch may create a non-empty bot ([#1796](https://github.com/microsoft/BotFramework-Composer/pull/1796)) ([@liweitian](https://github.com/liweitian))
+- fix: Updated release version on about page ([#1788](https://github.com/microsoft/BotFramework-Composer/pull/1788)) ([@tdurnford](https://github.com/tdurnford))
+- fix: Remove the unused lufiles in notifications ([#1760](https://github.com/microsoft/BotFramework-Composer/pull/1760)) ([@lei9444](https://github.com/lei9444))
+- fix: update form correctly when undo or redo changes ([#1808](https://github.com/microsoft/BotFramework-Composer/pull/1808)) ([@lei9444](https://github.com/lei9444))
+- fix: handle multiple ctrl+z in lg editor ([#1804](https://github.com/microsoft/BotFramework-Composer/pull/1804)) ([@zhixzhan](https://github.com/zhixzhan))
+
+#### Changed
+
+- refactor: re-provide `getLgTemplates` api ([#1746](https://github.com/microsoft/BotFramework-Composer/pull/1746)) ([@yeze322](https://github.com/yeze322))
+- style: updated delete icon ([#1892](https://github.com/microsoft/BotFramework-Composer/pull/1892)) ([@tdurnford](https://github.com/tdurnford))
+- refactor: let ElementWrapper control the focus state ([#1880](https://github.com/microsoft/BotFramework-Composer/pull/1880)) ([@yeze322](https://github.com/yeze322))
+- refactor: render Elements with composition strategy (ElementRenderer -> ElementWrapper) ([#1873](https://github.com/microsoft/BotFramework-Composer/pull/1873)) ([@yeze322](https://github.com/yeze322))
+
+#### Other
+
+- chore: migrate IfCondition, SwitchCondition, Foreach(Page) to uischema ([#1899](https://github.com/microsoft/BotFramework-Composer/pull/1899)) ([@yeze322](https://github.com/yeze322))
+- chore: migrate TextInput and all other \*Input types to uischema ([#1874](https://github.com/microsoft/BotFramework-Composer/pull/1874)) ([@yeze322](https://github.com/yeze322))
+- chore: migrate SendActivity, BeginDialog, ReplaceDialog to uischema ([#1840](https://github.com/microsoft/BotFramework-Composer/pull/1840)) ([@yeze322](https://github.com/yeze322))
+- chore: retire 'DefaultRenderer' in visual editor ([#1836](https://github.com/microsoft/BotFramework-Composer/pull/1836)) ([@yeze322](https://github.com/yeze322))
+- chore: update lu/lg all up view ([#1806](https://github.com/microsoft/BotFramework-Composer/pull/1806)) ([@liweitian](https://github.com/liweitian))
+- chore: share server's resource to lsp server ([#1793](https://github.com/microsoft/BotFramework-Composer/pull/1793)) ([@zhixzhan](https://github.com/zhixzhan))
+- chore: refactor lg page route & url ([#1756](https://github.com/microsoft/BotFramework-Composer/pull/1756)) ([@zhixzhan](https://github.com/zhixzhan))
+- chore: convert ludown to bf-lu ([#1608](https://github.com/microsoft/BotFramework-Composer/pull/1608)) ([@lei9444](https://github.com/lei9444))
+- chore: proxy lsp ws request in dev ([#1754](https://github.com/microsoft/BotFramework-Composer/pull/1754)) ([@zhixzhan](https://github.com/zhixzhan))
+- docs: fix a typo ([#1901](https://github.com/microsoft/BotFramework-Composer/pull/1901)) ([@HiltonGiesenow](https://github.com/HiltonGiesenow))
+- docs: use correct link in events and triggers documentation ([#1832](https://github.com/microsoft/BotFramework-Composer/pull/1832)) ([@arafattehsin](https://github.com/arafattehsin))
+- docs: fix memory documentation link and typo ([#1833](https://github.com/microsoft/BotFramework-Composer/pull/1833)) ([@arafattehsin](https://github.com/arafattehsin))
+- docs: fix the links to intents and advanced definitions ([#1854](https://github.com/microsoft/BotFramework-Composer/pull/1854)) ([@arafattehsin](https://github.com/arafattehsin))
+- chore: bump immer to 5.2.0 ([#1846](https://github.com/microsoft/BotFramework-Composer/pull/1846)) ([@cwhitten](https://github.com/cwhitten))
+- chore: update botproject packages ([#1809](https://github.com/microsoft/BotFramework-Composer/pull/1809)) ([@luhan2017](https://github.com/luhan2017))
+- chore: update github templates ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: update schema and samples ([@luhan2017](https://github.com/luhan2017))
+
 ### 12-10-2019
 
 #### Added
@@ -73,7 +136,7 @@
 
 #### Fixed
 
-- write QnA Maker endpointKey to settings (#1571) (@VanyLaw)
+- write QnA Maker endpointKey to settings (#1571) (@([@VanyLaw](https://github.com/VanyLaw)))
 - fix docs typos (#1575) (@v-kydela)
 - prevent double render in visual editor (#1601) (@yeze322)
 - fix issue installing lubuild (#1606) (@lei9444)

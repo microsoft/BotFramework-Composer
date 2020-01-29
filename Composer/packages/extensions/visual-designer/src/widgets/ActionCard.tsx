@@ -11,8 +11,10 @@ import { NodeMenu } from '../components/menus/NodeMenu';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
+  disableSDKTitle?: boolean;
   icon: string;
   content: string | number | JSX.Element;
+  menu?: JSX.Element | string;
   colors?: {
     theme: string;
     icon: string;
@@ -29,16 +31,18 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   data,
   onEvent,
   title,
+  disableSDKTitle,
   icon,
+  menu,
   content,
   colors = DefaultCardColor,
 }) => {
-  const header = generateSDKTitle(data, title);
+  const header = disableSDKTitle ? title : generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
   return (
     <FormCard
       header={header}
-      corner={<NodeMenu id={id} onEvent={onEvent} />}
+      corner={menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
       label={content}
       nodeColors={nodeColors}
