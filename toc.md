@@ -6,7 +6,7 @@
 - [Set up Composer using Yarn](./docs/setup-yarn.md)
 ### QuickStart
 - [Tour of Composer](./docs/onboarding.md)
-- [Create your first bot](./docs/tutorial-create-bot.md) 
+- [Create your first bot](./docs/quickstart-create-bot.md) 
 ### Tutorials
 0. [Introduction](./docs/tutorial-introduction.md)
 1. [Create a bot](./docs/tutorial/bot-tutorial-introduction.md)
