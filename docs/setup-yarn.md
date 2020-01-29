@@ -50,4 +50,4 @@ The next time you need to run the Composer, all you will need is to run `yarn st
 
 ## Next steps
 
-- Create a [echo bot](./composer-quickstart-create-bot.md) using Composer.
+- Create a [echo bot](./quickstart-create-bot.md) using Composer.
