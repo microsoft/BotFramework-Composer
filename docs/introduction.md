@@ -27,7 +27,7 @@ Composer detects changes and updates the bot's cloud-based natural-language unde
 
 Creating grammatically correct, data-driven responses that have a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Composer's integrated [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers to create bot replies with a great deal of flexibility.
 
-  ![BF Composer LG](./media/language_generation/Bot_Responses.png)
+  ![BF Composer LG](./media/dialog/Bot-Responses.png)
 
 With Language Generation, previously complex tasks can be quickly achieved, like:
 * Including dynamic elements in messages.
