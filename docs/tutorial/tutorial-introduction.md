@@ -1,8 +1,9 @@
 # The Bot Framework Composer tutorials
 
-Welcome to the bot framework Composer tutorials. These start with the creation of a simple bot with each successive tutorial building on the previous tutorial adding additional capabilities designed to teach some of the basic concepts required to build bots with the Bot Framework Composer.
+Welcome to the Bot Framework Composer tutorials. These start with the creation of a simple bot and gradually introducing more sophistication with each successive tutorial building on the previous tutorial and adding additional capabilities. These tutorials are designed to teach some of the basic concepts required to build bots with the Bot Framework Composer.
 
-In these tutorials, you will build a weather bot using Composer, starting with a simple bot and gradually introducing more sophistication. You'll learn how to: 
+In these tutorials, you'll learn how to: 
+
 > [!div class="checklist"]
 > * [Create a simple bot and test it in the Emulator](tutorial-create-bot.md)
 > * [Add multiple dialogs](tutorial-add-dialog.md) to help your bot fulfill more than one scenario
