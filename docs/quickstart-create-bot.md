@@ -29,5 +29,5 @@ After opening Composer in a browser click the **Echo Bot** button at the top of 
 You've successfully created an echo bot!  
 
 ## Next Steps
-Create a [weather bot](tutorial/bot-tutorial-introduction.md) using Composer.
+Create a [weather bot](tutorial/tutorial-introduction.md) using Composer.
 
