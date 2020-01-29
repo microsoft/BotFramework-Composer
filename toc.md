@@ -2,10 +2,11 @@
 # Microsoft Bot Framework Composer
 ### Overview
 - [Introduction to Bot Framework Composer](./docs/introduction.md)
-
+### Installation 
+- [Set up Composer using Yarn](./docs/setup-yarn.md)
 ### QuickStart
 - [Tour of Composer](./docs/onboarding.md)
-- [Create your first bot](./docs/tutorial-create-echobot.md) 
+- [Create your first bot](./docs/quickstart-create-bot.md) 
 ### Tutorials
 0. [Introduction](./docs/tutorial-introduction.md)
 1. [Create a bot](./docs/tutorial/bot-tutorial-introduction.md)
@@ -24,8 +25,6 @@
 - [Language understanding](./docs/concept-language-understanding.md)
 
 ### How to
-#### Set up
-- [Set up Composer using Yarn](./docs/setup-yarn.md)
 #### Develop
 - [Send messages](./docs/how-to-send-messages.md)
 - [Ask for user input](./docs/how-to-ask-for-user-input.md)

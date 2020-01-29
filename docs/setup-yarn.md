@@ -48,4 +48,4 @@ After you run the last command `yarn startall`, you will see the address message
 ![browser address](./media/setup-yarn/address.png)
 
 ## Next steps
-- Learn [how to create your first bot](tutorial-create-echobot.md).
+- Learn [how to create your first bot](quickstart-create-bot.md).
