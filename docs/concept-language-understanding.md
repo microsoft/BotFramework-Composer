@@ -1,15 +1,3 @@
----
-title: Introduction to language understanding in Bot Framework Composer  - Bot Composer
-description: Introduction to language understanding in Composer
-keywords: composer, bot, introduction, language understanding
-author: zxyanliu
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/11/2020
----
-
 # Language Understanding
 
 Language Understanding (LU) is used by a bot to understand language naturally and contextually to determine what next to do in a conversation flow. In the Bot Framework Composer, the process is achieved through setting up recognizers and providing training data in the dialog so that the **intents** and **entities** contained in the message can be captured. These values will then be passed on to triggers which define how the bot responds using the appropriate actions.

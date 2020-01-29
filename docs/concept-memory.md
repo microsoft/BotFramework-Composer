@@ -1,15 +1,3 @@
----
-title: Manage conversation flow in Bot Framework Composer  - Bot Composer
-description: Understanding conversation flow in Composer
-keywords: composer, bot, introduction, overview
-author: ivorb
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/11/2020
----
-
 # Conversation flow and memory
 
 All bots built with the Bot Framework Composer have a "memory", a representation of everything that is currently in the bot's active mind. Developers can store and retrieve values in the bot's memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot. Properties stored in memory can be used inside templates or as part of a calculation.
@@ -49,18 +37,15 @@ The bot's memory also has two "ephemeral" scopes. Ephemeral scopes are a place t
 ## Set properties with prompts
 Input is collected from user's with prompt types provided in the **Ask a question** sub-menu.
 
-> [!div class="mx-imgBorder"]
-> ![Ask a question submenu](./media/memory/ask-a-question-menu.png)
+![Ask a question submenu](./media/memory/ask-a-question-menu.png)
 
 Prompts define the question posed to the user and are set in the **Prompt** box under the **Bot Asks** tab in the properties panel on the left.
 
-> [!div class="mx-imgBorder"]
-> ![Prompt Bot Asks](./media/memory/bot-asks.png)
+![Prompt Bot Asks](./media/memory/bot-asks.png)
 
 Under the **User Input** tab you'll see **Property to fill**, where the user's response will be stored. Prompt responses can be formatted before being stored by selecting an option for **Output Format**, and their locale can be set with **Default locale**.
 
-> [!div class="mx-imgBorder"]
-> ![Prompt User Input](./media/memory/user-input.png)
+![Prompt User Input](./media/memory/user-input.png)
 
 In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` output format was selected.
 
@@ -70,50 +55,43 @@ For more information about implementing text other prompts see the article [Aski
 
 The Bot Framework Composer provides a set of memory manipulation actions in the **Manage properties** sub-menu. These actions can be used to create, initialize, modify and delete properties in memory. Properties can be created in the editor and during runtime. Composer will automatically manage the underlying data for you.
 
-> [!div class="mx-imgBorder"]
-> ![Memory manipulation menu](./media/memory/memory-mainpulation-menu.png)
+![Memory manipulation menu](./media/memory/memory-mainpulation-menu.png)
 
 ### Set a property
 Use **Set a property** to set the value of a property.
 
-> [!div class="mx-imgBorder"]
-> ![Set a property](./media/memory/set-property.png)
+![Set a property](./media/memory/set-property.png)
 
  The value of a property can be set to a literal value, like `true`, `0`, or `fred`, or it can be set to the result of a [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
 
 ### Set properties
 Use **Set properties** to set a group of properties.
 
-> [!div class="mx-imgBorder"]
-> ![Set properties](./media/memory/set-properties.png)
+![Set properties](./media/memory/set-properties.png)
 
 The value of each property is assigned individually in the **Properties panel**. Don't forget to press `Enter` to save the property setting before you set the next one. 
 
 ### Initialize a property
 Use **Initialize a property** to create new properties that are objects or arrays.
 
-> [!div class="mx-imgBorder"]
-> ![Initialize property](./media/memory/initialize-property.png)
+![Initialize property](./media/memory/initialize-property.png)
 
 It is important to note that before setting the value of a sub-property like `user.profile.age` that `user.profile` must first be initialized. It is not necessary to also initialize `user.profile.age` unless `age` also contains sub-values.
 
 ### Delete a property
 Use **Delete a Property** to remove a property from memory.
 
-> [!div class="mx-imgBorder"]
-> ![Delete a property](./media/memory/delete-property.png)
+![Delete a property](./media/memory/delete-property.png)
 
 ### Delete properties
 Use **Delete properties** to remove properties from memory.
 
-> [!div class="mx-imgBorder"]
-> ![Delete properties](./media/memory/delete-properties.png)
+[Delete properties](./media/memory/delete-properties.png)
 
 ### Edit an Array Property
 Use **Edit an Array Property** to add and remove items from an array. Items set in **Value** can be added or removed from the beginning or end of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
 
-> [!div class="mx-imgBorder"]
-> ![Edit an Array Property](./media/memory/edit-array-property.png)
+![Edit an Array Property](./media/memory/edit-array-property.png)
 
 Note that it is possible to push the value of an existing property into an array property. For example, push `turn.choice` onto `dialog.choices`.
 
@@ -124,18 +102,15 @@ Child dialogs can return values to their parent dialogs. In this way, a child di
 
 For example, a child dialog might first **Initialize an object** property called `dialog.profile`. Then, using prompts, build a compound property representing a user profile:
 
-> [!div class="mx-imgBorder"]
-> ![Initialize object profile](./media/memory/initialize-object-profile.png)
+![Initialize object profile](./media/memory/initialize-object-profile.png)
 
 Finally, the dialog returns the compound value to the parent dialog. The return value is specified as the **Default result property** within the trigger for the child dialog:
 
-> [!div class="mx-imgBorder"]
-> ![Default result property](./media/memory/default-result-property.png)
+![Default result property](./media/memory/default-result-property.png)
 
 Finally, the parent dialog is configured to capture the return value inside the **Begin a new dialog** action:
 
-> [!div class="mx-imgBorder"]
-> ![Return value stored in parent dialog](./media/memory/begin-new-dialog.png)
+![Return value stored in parent dialog](./media/memory/begin-new-dialog.png)
 
 
 When executed, the bot will execute the **profile** child dialog, collect the user's name and age in a _temporary_ scope, then return it to the parent dialog where it is captured into the `user.profile` property and stored permanently.
@@ -169,20 +144,17 @@ A bot can evaluate values from memory when making decisions inside a [branching 
 
 In the example below, the expression `user.profile.age > 13` will evaluate to either `True` or `False`, and the flow will continue through the appropriate branch.
 
-> [!div class="mx-imgBorder"]
-> ![If/Else Condition](./media/memory/if-else.png)
+![If/Else Condition](./media/memory/if-else.png)
 
 In this second example, the value of `turn.choice` is used to match against multiple `Switch` cases. Note that, while it looks like a raw reference to a property, this is actually an expression and since no operation is being taken on the property, the expression evaluates to the raw value.
 
-> [!div class="mx-imgBorder"]
-> ![Switch condition](./media/memory/switch.png)
+![Switch condition](./media/memory/switch.png)
 
 ### Memory in loops
 
 When using **For each** and **For each page** loops, properties also come into play. Both require an **Items property** that holds the array, and **For each page** loops also require a **Page size**, or number of items per page.
 
-> [!div class="mx-imgBorder"]
-> ![For each page properties](./media/memory/for-each.png)
+![For each page properties](./media/memory/for-each.png)
 
 ### Memory in LG
 
@@ -196,8 +168,7 @@ To use the value of a property from memory inside a message, wrap the property r
 
 The screenshot below demonstrates how a bot can prompt a user for a value, then immediately use that value in a confirmation message.
 
-> [!div class="mx-imgBorder"]
-> ![LG memory](./media/memory/lg.png)
+![LG memory](./media/memory/lg.png)
 
 In addition to getting properties values, it is also possible to embed properties in [expressions](#expressions) used in a message template. Refer to the _Common Expression Language_ page for the full list of [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md).
 

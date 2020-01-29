@@ -1,15 +1,3 @@
----
-title: Introduction to language generation in Bot Framework Composer  - Bot Composer
-description: Introduction to language generation in Composer
-keywords: composer, bot, introduction, language generation
-author: zxyanliu
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/11/2020
----
-
 # Language Generation
 
 Language Generation (LG) enables you to define multiple variations of a phrase, execute simple expressions based on context, and refer to conversational memory. At the core of language generation lies template expansion and entity substitution. You can provide one-off variation for expansion as well as conditionally expanding a template. The output from language generation can be a simple text string or multi-line response or a complex object payload that a layer above language generation will use to construct a complete [activity](https://github.com/microsoft/botframework-sdk/blob/master/specs/botframework-activity/botframework-activity.md). The Bot Framework Composer natively supports language generation to produce output activities using the LG templating system. 
@@ -155,15 +143,15 @@ For more examples of structured response templates, see [StructuredTemplate.lg](
  
 ### Common expression language cheat sheet 
 
-| Symbol | Description                                                                                                                                                      |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| #      | Template definition symbol                                                                                                                                       |
-| -      | Variation                                                                                                                                                        |
-| \      | Escape character                                                                                                                                                 |
-| @      | A prefix character to signify need expression evaluation when in multi-line response                                                                             |
-| {}     | Used for all expressions. Templates are also functions so {templateName()} is valid and supported.                                                      |
+| Symbol | Description                                                                                                                                                         |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #      | Template definition symbol                                                                                                                                          |
+| -      | Variation                                                                                                                                                           |
+| \      | Escape character                                                                                                                                                    |
+| @      | A prefix character to signify need expression evaluation when in multi-line response                                                                                |
+| {}     | Used for all expressions. Templates are also functions so {templateName()} is valid and supported.                                                                  |
 | ()     | Used to denote parameters to a function or to a template. E.g {templateName(‘value1’, ‘value2’)} or to a prebuilt function {length(greeting)} or {length(‘value1’)} |
-| ```    | Used in pair to denote multi-line segment.                                                                                                                   |
+| ```    | Used in pair to denote multi-line segment.                                                                                                                          |
 
 ## References
 - [Language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) 

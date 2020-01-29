@@ -1,15 +1,3 @@
----
-title: Introduction to dialogs in Bot Framework Composer  - Bot Composer
-description: Introduction to dialogs
-keywords: composer, bot, introduction, dialog
-author: zxyanliu
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/24/2020
----
-
 # Dialogs
 
 Modern conversational software has many different components, including source code, custom business logic, cloud API, training data for language processing systems, and perhaps most importantly, the actual content used in conversations with the bot's end users. With Composer integrated all of these pieces into a single interface for constructing the building blocks of bot functionality called **Dialogs**. 
@@ -40,8 +28,7 @@ The following diagram shows the anatomy of a dialog in Composer. Note that dialo
 
 The recognizer interprets what the user wants based on their input. When a dialog is invoked its **recognizer** will start to process the message and try to extract the primary [**intent**](concept-language-understanding.md#intents) and any [**entity values**](concept-language-understanding.md#entities) the message includes. After processing the message, both the **intent** and **entity values** are passed onto the dialog's triggers. Composer currently supports two recognizers: The LUIS recognizer, which is the default, and the Regular Expression recognizer. You can choose only one recognizer per dialog, or you can choose not to have a recognizer at all. Below is a screenshot of recognizers supported in Composer.
 
-> [!div class="mx-imgBorder"]
-> ![Recognizer](./media/dialog/recognizer.png)
+![Recognizer](./media/dialog/recognizer.png)
 
 **Recognizers** give your bot the ability to understand and extract meaningful pieces of information from user input. All recognizers emit events when the recognizer picks up an **intent** (or extracts **entities**) from a given user **utterance**. The **recognizer** of a dialog is not always called into play when a dialog is invoked. It depends on how you design the dialog system.
 
@@ -49,15 +36,13 @@ The recognizer interprets what the user wants based on their input. When a dialo
 
 The functionality of a dialog is contained within triggers. Triggers are rules that tell the bot how to process incoming messages and are also used to define a wide variety of bot behaviors, from performing the main fulfillment of the user's request, to handling [interruptions](https://aka.ms/botservice-howto-handle-user-interruptions?view=azure-bot-service-4.0&tabs=csharp) like requests for help, to handling custom, developer-defined events originating from the app itself. Below is a screenshot of the trigger menu in Composer.
 
-> [!div class="mx-imgBorder"]
-> ![Trigger menu](./media/dialog/trigger-menu.png)
+![Trigger menu](./media/dialog/trigger-menu.png)
 
 ### Action
 
 Triggers contain a series of actions that the bot will undertake to fulfill a user's request. Actions are things like sending messages, responding to user questions using a [knowledge base](./how-to-add-qna-to-bot.md), making calculations, and performing computational tasks on behalf of the user. The path the bot follows through a dialog can branch and loop. The bot can ask ad even answer questions, validate input, manipulate and store values in memory, and make decisions. Below is a screenshot of the action menu in Composer. Select the **+** sign below the trigger you can mouse over the action menu.
 
-> [!div class="mx-imgBorder"]
-> ![Action Menu](./media/dialog/action-menu.gif)
+![Action Menu](./media/dialog/action-menu.gif)
 
 ### Language Generator
 

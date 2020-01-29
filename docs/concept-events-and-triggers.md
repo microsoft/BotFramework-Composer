@@ -1,23 +1,10 @@
----
-title: Introduction to events and triggers in Bot Framework Composer  - Bot Composer
-description: Introduction to events and triggers in Composer
-keywords: composer, bot, introduction, overview
-author: zxyanliu
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/11/2020
----
-
 # Events and triggers
 
 In the Bot Framework Composer, each [dialog](./concept-dialog.md) includes one or more event handlers called _triggers_. Each trigger contains one or more _actions_. Actions are the instructions that the bot will execute when the dialog receives any event that it has a trigger defined to handle. Once a given event is handled by a trigger, no further action is taken on that event. Some event handlers have a condition specified that must be met before it will handle the event and if that condition is not met, the event is passed to the next event handler. If an event is not handled in a child dialog, it gets passed up to its parent dialog to handle and this continues until it is either handled or reaches the bots main dialog. If no event handler is found, it will be ignored and no action will be taken.
 
 To see the trigger menu in Composer, select **New Trigger** in the navigation pane.
 
-> [!div class="mx-imgBorder"]
-> ![Trigger menu](./media/events-triggers/trigger-menu.gif)
+![Trigger menu](./media/events-triggers/trigger-menu.gif)
 
 ## Anatomy of a trigger
 
@@ -25,18 +12,17 @@ The basic idea behind a trigger (event handler) is "When (_event_) happens, do (
 
 A trigger contains the following properties:
 
-| Trigger property | Description                                             |
-| ---------------- | ------------------------------------------------------- |
-| Name             | The trigger name can be changed in the property panel.  |
-| Actions          | The set of instructions that the bot will execute.      |
-| Condition        | The condition can be created or updated in the properties panel and is ignored if left blank, otherwise it must evaluate to _true_ for the event to fire. Conditions must follow the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) syntax. If the condition is ignored or evaluates to false, processing of the event continues with the next trigger.     |
+| Trigger property | Description                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Name             | The trigger name can be changed in the property panel.                                                                                                                                                                                                                                                                                                                                                                                     |
+| Actions          | The set of instructions that the bot will execute.                                                                                                                                                                                                                                                                                                                                                                                         |
+| Condition        | The condition can be created or updated in the properties panel and is ignored if left blank, otherwise it must evaluate to _true_ for the event to fire. Conditions must follow the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) syntax. If the condition is ignored or evaluates to false, processing of the event continues with the next trigger. |
 
 A dialog can contain multiple triggers. You can view them under the specific dialog in the navigation pane. Each trigger shows as the first node in the authoring canvas. A trigger contains actions defined to be executed. Actions within a trigger occur in the context of the active dialog.
 
 The screenshot below shows the properties of an **Intent recognized** trigger named _Cancel_ that is configured to fire whenever the _Cancel_ [intent](./concept-language-understanding.md#intents) is detected as shown in the properties panel. In this example the **Condition** field is left blank, so no additional conditions are required in order to fire this trigger.
 
-> [!div class="mx-imgBorder"]
-> ![Cancel trigger](./media/events-triggers/cancel-trigger.png)
+![Cancel trigger](./media/events-triggers/cancel-trigger.png)
 
 
 ## Types of triggers

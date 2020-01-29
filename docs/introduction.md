@@ -1,15 +1,3 @@
----
-title: Introduction to Bot Framework Composer  - Bot Composer
-description: Introduction to Bot Framework Composer
-keywords: composer, bot, introduction, overview
-author: kaiqb
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/23/2020
----
-
 # Introduction to the Bot Framework Composer
 
 The Bot Framework Composer is an integrated development tool that developers and multi-disciplinary teams can use to build bots. It is built using the latest features of the Bot Framework SDK. Within Composer, you'll find everything you need to build a sophisticated conversational experience:
@@ -19,7 +7,7 @@ The Bot Framework Composer is an integrated development tool that developers and
 * Powerful language generation and templating systems.
 * A ready-to-use bot runtime executable .
 
-[![BF Composer](./media/introduction/composer-overview.png)](./media/introduction/composer-overview.png#lightbox)
+![BF Composer](./media/introduction/composer-overview.png)
 
 Under the hood, Composer harnesses the power of many of the components from the Bot Framework SDK. When building bots in Composer, developers will have access to:
 
@@ -39,7 +27,7 @@ Composer detects changes and updates the bot's cloud-based natural-language unde
 
 Creating grammatically correct, data-driven responses that have a consistent tone and convey a clear brand voice has always been a challenge for bot developers. Composer's integrated [Language Generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) system allows developers to create bot replies with a great deal of flexibility.
 
-  [![BF Composer LG](./media/language-generation/Bot-Responses.png)](./media/language-generation/Bot-Responses.png#lightbox)
+  ![BF Composer LG](./media/language_generation/Bot_Responses.png)
 
 With Language Generation, previously complex tasks can be quickly achieved, like:
 * Including dynamic elements in messages.
@@ -55,9 +43,6 @@ With Language Generation, previously complex tasks can be quickly achieved, like
 
 [Emulator](https://github.com/Microsoft/BotFramework-Emulator/blob/master/README.md) is a desktop application that allows bot developers to test and debug bots built using Composer.
 
-
-
-<!-- https://docs.microsoft.com/style-guide/scannable-content/lists#capitalization -->
 
 ## Advantage of developing bots with Composer
 Developers familiar with the Bot Framework SDK will notice differences between bots developed with it and the Bot Framework Composer. Some of the advantages of developing bots in Composer include:
