@@ -1,81 +1,120 @@
+---
+title: Introduction to events and triggers in Bot Framework Composer  - Bot Composer
+description: Introduction to events and triggers in Composer
+keywords: composer, bot, introduction, overview
+author: zxyanliu
+ms.author: kamrani
+manager: kamrani
+ms.topic: conceptual
+ms.service: bot-composer
+ms.date: 01/11/2020
+---
+
 # Events and triggers
-In Bot Framework Composer, each dialog includes a set of triggers (event handlers) that contain instructions for how the bot will respond to inputs received when the dialog is active. When a bot receives a message, an event of the type `activityReceived` is fired. As the message is processed by the recognizer and passes through the dialog system, other events of different types are fired. If an event handler is found to handle an incoming event, that event is considered handled, and processing of further event handlers stops. If no event handler is found, the event will pass through the bot with no additional actions taken. 
 
-On the navigation pane, click **New Trigger** and you will see the trigger menu in Composer as follows: 
+In the Bot Framework Composer, each [dialog](./concept-dialog.md) includes one or more event handlers called _triggers_. Each trigger contains one or more _actions_. Actions are the instructions that the bot will execute when the dialog receives any event that it has a trigger defined to handle. Once a given event is handled by a trigger, no further action is taken on that event. Some event handlers have a condition specified that must be met before it will handle the event and if that condition is not met, the event is passed to the next event handler. If an event is not handled in a child dialog, it gets passed up to its parent dialog to handle and this continues until it is either handled or reaches the bots main dialog. If no event handler is found, it will be ignored and no action will be taken.
 
-![trigger_menu](./media/dialog/trigger_menu.png)
+To see the trigger menu in Composer, select **New Trigger** in the navigation pane.
+
+> [!div class="mx-imgBorder"]
+> ![Trigger menu](./media/events-triggers/trigger-menu.gif)
 
 ## Anatomy of a trigger
-The basic idea behind a trigger (event handler) is "When (_event_) happens, then do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request. 
 
-Every trigger contains the following components:
-- A trigger name that can be changed in the property panel 
-- Possible **Condition** (specified using the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language)), must evaluate to be "true" for the event to fire
-- Actions defined to fire when the event is triggered
+The basic idea behind a trigger (event handler) is "When (_event_) happens, do (_actions_)". The trigger is a conditional test on an incoming event, while the actions are one or more programmatic steps the bot will take to fulfill the user's request.
 
-The screenshot below shows the definition of an **Intent** trigger that is configured to fire whenever the "cancel" intent is detected. It is possible to add a condition to the event - this expression which follows the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), if specified, must evaluate to be "true" for the event to fire. 
+A trigger contains the following properties:
 
-![anatomy_trigger](./media/events_triggers/anatomy_trigger.png)
+| Trigger property | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| Name             | The trigger name can be changed in the property panel.  |
+| Actions          | The set of instructions that the bot will execute.      |
+| Condition        | The condition can be created or updated in the properties panel and is ignored if left blank, otherwise it must evaluate to _true_ for the event to fire. Conditions must follow the [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) syntax. If the condition is ignored or evaluates to false, processing of the event continues with the next trigger.     |
 
-This event will appear in the dialog as a node at the top of the editor. Actions within this trigger occur in the context of the active dialog. These steps control the main functionality of a bot.
+A dialog can contain multiple triggers. You can view them under the specific dialog in the navigation pane. Each trigger shows as the first node in the authoring canvas. A trigger contains actions defined to be executed. Actions within a trigger occur in the context of the active dialog.
 
-![cancel_trigger](./media/events_triggers/cancel_trigger.png)
+The screenshot below shows the properties of an **Intent recognized** trigger named _Cancel_ that is configured to fire whenever the _Cancel_ [intent](./concept-language-understanding.md#intents) is detected as shown in the properties panel. In this example the **Condition** field is left blank, so no additional conditions are required in order to fire this trigger.
 
-## Types of triggers 
-There are different types of triggers. They all work in a similar manner, and in some cases, can be interchanged. This section will cover the different types of triggers and when should we use them. Read more to learn how to [define triggers](how-to-define-triggers.md). 
+> [!div class="mx-imgBorder"]
+> ![Cancel trigger](./media/events-triggers/cancel-trigger.png)
 
-### Dialog events  
-The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog triggers in Composer: **Dialog started (Begin dialog event)**, **Dialog cancelled (Cancel dialog event)**, **Error occurred(Error event)** and **Re-prompt for input(Reprompt dialog event)**. Most dialogs will include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins and allows the bot to respond immediately. 
 
-Use dialog triggers when you want to:
-- Take actions immediately when the dialog starts, even before the recognizer is called
-- Take actions when a "cancel" signal is detected
-- Take automatic action on every message as it is received or sent
-- Evaluate the raw content of the incoming activity
+## Types of triggers
 
-See how to define dialog events [here](how-to-define-triggers.md#dialog-events).
+There are different types of triggers that all work in a similar manner, and in some cases can be interchanged. This section will cover the different types of triggers and when you should use them. See the [define triggers](how-to-define-triggers.md) article for additional information.
 
-### Intent triggers  
-Intent triggers work with recognizers. There are two intent triggers in Composer: **Intent recognized** and **Unknown intent**. After the first round of events is fired, the bot will pass the incoming activity through the configured recognizer. If an intent is detected, it will be passed onto the matching handler along with any **entity values** the message contains. If an intent is not detected by the recognizer, any configured **Unknown intent** trigger will fire. This will only fire if no matching intent handler is found. **Unknown intent** handles any intent that is not handled by a trigger. 
+### Intent triggers
 
-Use intent triggers when you want to:
-- Trigger major features of your bot using natural language
-- Recognize common interruptions like "help" or "cancel" and provide context-specific responses
-- Extract and use entity values as parameters to your dialog or a child dialog
+Intent triggers work with recognizers. There are two types of intent triggers in Composer: **Intent recognized** and **Unknown intent**. After the first round of events is fired, the bot will pass the incoming message through the recognizer. If an intent is detected, it will be passed into the trigger (event handler) with any **entities** contained in the message. If no intent is detected by the recognizer, an **Unknown intent** trigger will fire, which handles intents not handled by any trigger.
 
-See how to define an **Intent recognized** trigger [here](how-to-define-triggers.md#intent-recognized) and how to define an **Unknown intent** trigger [here](how-to-define-triggers.md#unknown-intent). 
+You should use _intent triggers_ when you want to:
 
-### Activities 
-Activity trigger is used to handle activities such as when a user joins and the bot begins a new conversation. **Greeting (ConversationUpdate activity)** is a trigger of this type and you can use it to send a greeting message. When you create a new bot, the **Greeting (ConversationUpdate activity)** trigger is initialized by default in the main dialog. This specialized option is provided to avoid handling an event with a complex condition attached. **Message events** is a type of Activity trigger to handle message activities. 
+- Trigger major features of your bot using natural language.
+- Recognize common interruptions like "help" or "cancel" and provide context-specific responses.
+- Extract and use entity values as parameters to your dialog.
 
-Use **Activities** trigger when you want to: 
-- Take actions when a user begins a new conversation with the bot
-- Take actions on receipt of an activity with type `EndOfConversation`
-- Take actions on receipt of an activity with type `Event`
-- Take actions on receipt of an activity with type `HandOff`
-- Take actions on receipt of an activity with type `Invoke`
-- Take actions on receipt of an activity with type `Typing`
+For additional information see how to define an [Intent recognized](how-to-define-triggers.md#intent-recognized) trigger or an [Unknown intent](how-to-define-triggers.md#unknown-intent) trigger in the article titled _How to define triggers_.
 
-Use **Message events** when you want to:
-- Take actions when a message is updated (on receipt of an activity with type `MessageUpdate`)
-- Take actions when a message is deleted (on receipt of an activity with type `MessageDelete`)
-- Take actions when a message is reacted (on receipt of an activity with type `MessageReaction`). 
+### Dialog events
 
-See how to define an **Activities** trigger [here](how-to-define-triggers.md#activities). 
+The base type of triggers are dialog triggers. Almost all events start as dialog events which are related to the "lifecycle" of the dialog. Currently there are four different dialog events triggers in Composer:
+
+- **Dialog started (Begin dialog event)**
+- **Dialog cancelled (Cancel dialog event)**
+- **Error occurred(Error event)**
+- **Re-prompt for input(Reprompt dialog event)**
+
+Most dialogs include a trigger configured to respond to the `BeginDialog` event, which fires when the dialog begins. This allows the bot to respond immediately.
+
+You should use _dialog triggers_ to:
+
+- Take actions immediately when the dialog starts, even before the recognizer is called.
+- Take actions when a "cancel" signal is detected.
+- Take actions on messages received or sent.
+- Evaluate the content of the incoming activity.
+
+For additional information, see the [dialog events](how-to-define-triggers.md#dialog-events) section of the article on how to define triggers.
+
+### Activities
+
+Activity triggers are used to handle activities such as when a new user joins and the bot begins a new conversation. **Greeting (ConversationUpdate activity)** is a trigger of this type and you can use it to send a greeting message. When you create a new bot, the **Greeting (ConversationUpdate activity)** trigger is initialized by default in the main dialog. This specialized option is provided to avoid handling an event with a complex condition attached. **Message events** is a type of Activity trigger to handle message activities.
+
+You should use **Activities** trigger when you want to:
+
+- Take actions when a user begins a new conversation with the bot.
+- Take actions on receipt of an activity with type `EndOfConversation`.
+- Take actions on receipt of an activity with type `Event`.
+- Take actions on receipt of an activity with type `HandOff`.
+- Take actions on receipt of an activity with type `Invoke`.
+- Take actions on receipt of an activity with type `Typing`.
+
+For additional information, see [Activities](how-to-define-triggers.md#activities) trigger in the article titled _How to define triggers_.
+
+### Message events
+
+**Message event** triggers allow you to react to the different message events such as when a message is updated or deleted or when someone reacts to a message (for example, some of the common message reactions include a Like, Heart, Laugh, Surprised, Sad and Angry reactions).
+
+You should use **Message events** when you want to:
+
+- Take actions when a message is updated (on receipt of an activity with type `MessageUpdate`).
+- Take actions when a message is deleted (on receipt of an activity with type `MessageDelete`).
+- Take actions when a message is reacted (on receipt of an activity with type `MessageReaction`).
 
 ### Custom event
-**Custom event** is a trigger to handle **Emit a custom event**. Bots can emit user-defined events using **Emit a custom event** which will fire this trigger. If you define an **Emit a custom event** and it fires, any **Custom event** in any level of dialogs will catch it and trigger corresponding actions. 
 
-Use **Custom event** when you want to:
-- handle a pre-defined **Emit a custom event**
+You can create and emit your own events by creating an action associated with any trigger, then you can handle that custom event in any dialog in your bot by defining a **Custom event** event trigger.
 
-See how to define a **Custom event** [here](how-to-define-triggers.md#custom-event).
+Bots can emit your user-defined events using **Emit a custom event**. If you define an **Emit a custom event** and it fires, any **Custom event** in any dialog will catch it and execute the corresponding actions.
+
+For additional information, see [Custom event](how-to-define-triggers.md#custom-event) in the article titled _How to define triggers_.
 
 ## Further reading
-- [Adaptive dialog: Recognizers, generators, triggers and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
+
+- [Adaptive dialog: Recognizers, rules, steps and inputs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
 - [.lu format file](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
 - [RegEx recognizer and LUIS recognizer](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#regex-recognizer)
 
-## Next 
-- Learn [conversation flow and memory](./concept-memory.md)
-- Learn [how to define triggers](how-to-define-triggers.md)
+## Next
+
+- [conversation flow and memory](./concept-memory.md)
+- [how to define triggers](how-to-define-triggers.md)
