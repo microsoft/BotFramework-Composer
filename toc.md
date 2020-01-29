@@ -9,13 +9,13 @@
 - [Create your first bot](./docs/quickstart-create-bot.md) 
 ### Tutorials
 0. [Introduction](./docs/tutorial-introduction.md)
-1. [Create a bot](./docs/tutorial/bot-tutorial-introduction.md)
-2. [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
-3. [Get weather report](./docs/tutorial/bot-tutorial-get-weather.md)
-4. [Add help and cancel commands](./docs/tutorial/bot-tutorial-add-help.md)
-5. [Add Language Generation](./docs/tutorial/bot-tutorial-lg.md)
-6. [Use cards](./docs/tutorial/bot-tutorial-cards.md)
-7. [Add LUIS](./docs/tutorial/bot-tutorial-luis.md)
+1. [Create a bot](./docs/tutorial/tutorial-create-bot.md)
+2. [Add a dialog](./docs/tutorial/tutorial-add-dialog.md)
+3. [Get weather report](./docs/tutorial/tutorial-get-weather.md)
+4. [Add help and cancel commands](./docs/tutorial/tutorial-add-help.md)
+5. [Add Language Generation](./docs/tutorial/tutorial-lg.md)
+6. [Use cards](./docs/tutorial/tutorial-cards.md)
+7. [Add LUIS](./docs/tutorial/tutorial-luis.md)
 
 ### Concepts 
 - [Dialogs](./docs/concept-dialog.md)
