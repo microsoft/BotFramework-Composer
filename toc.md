@@ -8,7 +8,7 @@
 - [Tour of Composer](./docs/onboarding.md)
 - [Create your first bot](./docs/quickstart-create-bot.md) 
 ### Tutorials
-0. [Introduction](./docs/tutorial-introduction.md)
+0. [Introduction](./docs/tutorial/tutorial-introduction.md)
 1. [Create a bot](./docs/tutorial/tutorial-create-bot.md)
 2. [Add a dialog](./docs/tutorial/tutorial-add-dialog.md)
 3. [Get weather report](./docs/tutorial/tutorial-get-weather.md)
