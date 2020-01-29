@@ -1,6 +1,6 @@
 # The Bot Framework Composer tutorials
 
-Welcome to the Bot Framework Composer tutorials. These start with the creation of a simple bot and gradually introducing more sophistication with each successive tutorial building on the previous tutorial and adding additional capabilities. These tutorials are designed to teach some of the basic concepts required to build bots with the Bot Framework Composer.
+Welcome to the Bot Framework Composer tutorials. These start with the creation of a simple bot and gradually introducing more sophistication with each successive tutorial building on the previous one and adding additional capabilities. These tutorials are designed to teach some of the basic concepts required to build bots with the Bot Framework Composer.
 
 In these tutorials, you'll learn how to: 
 
