@@ -1,15 +1,3 @@
----
-title: The Bot Framework Composer tutorial overview
-description: Learn how to create bots using the Bot Framework Composer.
-keywords: The Bot Framework Composer, Composer, tutorial
-author: WashingtonKayaker
-ms.author: kamrani
-manager: kamrani
-ms.topic: conceptual
-ms.service: bot-composer
-ms.date: 01/23/2020
----
-
 # The Bot Framework Composer tutorials
 
 Welcome to the bot framework Composer tutorials. These start with the creation of a simple bot with each successive tutorial building on the previous tutorial adding additional capabilities designed to teach some of the basic concepts required to build bots with the Bot Framework Composer.
@@ -25,7 +13,7 @@ In these tutorials, you will build a weather bot using Composer, starting with a
 > * [Use LUIS in your bot](tutorial-luis.md)
 
 ## Prerequisites
-- A good understanding of the material covered in the [Introduction to Bot Framework Composer](../bfcomposer-intro.md), including the naming conventions used for elements in the Composer.
+- A good understanding of the material covered in the [Introduction to Bot Framework Composer](../introduction.md), including the naming conventions used for elements in the Composer.
 
 ## Next step
  - [Create a new bot and test it in the Emulator](./tutorial-create-bot.md)
