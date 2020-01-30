@@ -9,7 +9,7 @@ In this tutorial, you learn how to:
 ## Prerequisites
 - Completion of the tutorial [Incorporating cards and buttons into your bot](./tutorial-cards.md).
 - A working knowledge of the concepts taught in the [Language Understanding](../concept-language-understanding.md) article.
-- LUIS and how to get LUIS authoring key. 
+- [LUIS](https://www.luis.ai/home) and how to get [LUIS authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys#programmatic-key). 
 
 
 ## Update recognizer
