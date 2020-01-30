@@ -1,8 +1,16 @@
-# Using LUIS for Language Understanding
-
+# Tutorial: Using LUIS for Language Understanding
 Up until this point, we have been using a simple regex recognizer to detect user intent. Bot Framework Composer has deep integration with LUIS. 
 
-Let's go ahead and update our dialog's recognizers to use luis instead. 
+In this tutorial, you learn how to:
+
+> [!div class="checklist"]
+> * Add LUIS into your bot with Composer for Language Understanding
+
+## Prerequisites
+- Completion of the tutorial [Incorporating cards and buttons into your bot](./tutorial-cards.md).
+- A working knowledge of the concepts taught in the [Language Understanding](../concept-language-understanding.md) article.
+- LUIS and how to get LUIS authoring key. 
+
 
 ## Update recognizer
 
