@@ -32,7 +32,8 @@ The first step in creating a bot with the Bot Framework Composer is to create a 
 
       ![create project](../media/tutorial-weatherbot/01/create-2.png)
 
-      [!TIP] Spaces and special characters are not allowed in the bot's name.
+      > [!TIP] 
+      > Spaces and special characters are not allowed in the bot's name.
 
    After creating your bot, Composer will load the new bot's main dialog in the editor. It should look like this:
 
@@ -44,7 +45,7 @@ The first step in creating a bot with the Bot Framework Composer is to create a 
    > [!TIP] 
    > To help keep bots created in Composer organized, you can rename any trigger to something that better describes what it does. 
 
-   Steps 4-8 are demonstrated in the image immediately following step 8. 
+   **Steps 4-8 are demonstrated in the image immediately following step 8. **
 
 4. Click the **Greeting** trigger in the navigation pane.
 
