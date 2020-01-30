@@ -108,9 +108,10 @@ After you define the intents with example utterances, you need to create **Inten
 1. Go to your bot's navigation pane on the left side and select **New Trigger**. 
 
 2. In the `Create a trigger` pop-up window, select **Intent recognized** as the type of trigger. Pick the intent you want to handle from the drop-down menu and select **Submit**. 
+
     ![Wireup intent](./media/language-understanding/wireup-intent.png)
 
-1. Click the **User Input** icon in Composer menu. You will see a list of all the LU content you have authored along with details such as which dialog the content is associated with and whether it is published or not.
+3. Click the **User Input** icon in Composer menu. You will see a list of all the LU content you have authored along with details such as which dialog the content is associated with and whether it is published or not.
     
     ![User Input](./media/language-understanding/user-input.png)
 
@@ -126,8 +127,7 @@ Now the last step is to publish your LU content to LUIS.
     > If you do not have a LUIS account, you can get one on the [LUIS](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS primary key please see the [Azure resources for LUIS](https://aka.ms/LUIS-Authoring-Keys#programmatic-key) section of the _Authoring and runtime keys_ article.
 
 3. Select **OK**.
-    > [!div class="mx-imgBorder"]
-    > ![Publish LU](./media/language-understanding/publish-lu.png)
+    ![Publish LU](./media/language-understanding/publish-lu.png)
 
 Any time you select **Start Bot** (or **Restart Bot**), Composer will evaluate if your LU content has changed. If so Composer will automatically make the required updates to your LUIS applications then train and publish them. If you go to your LUIS app website, you will find the newly published LU model.
 
