@@ -93,16 +93,14 @@ To create the LU content, follow these steps:
 Composer currently supports two types of recognizers: LUIS (by default) and Regular Expressions. This article focuses solely on the LUIS recognizer. Before setting up a recognizer type, you need to select the dialog you will be using for this purpose. In this example you will use the main dialog to set up LUIS as the recognizer type.
 
 1. Select the main dialog in the navigation pane. Then you will see the **Language Understanding** section in the bots properties panel on the right side of the Composer window. select **LUIS** from the **Recognizer Type** drop-down list.
-    > [!div class="mx-imgBorder"]
-    > ![select-recognizer](./media/language-understanding/select-recognizer.png)
+    ![select-recognizer](./media/language-understanding/select-recognizer.png)
 
 #### Author LU content 
 After you set up the recognizer type, you can customize your LU content in the editor using the [.lu format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
 
 For this example define two intents: **Greeting** and **CheckWeather** with some example utterances inline: 
 
-> [!div class="mx-imgBorder"]
-> ![LU content](./media/language-understanding/LU-content.png)
+![LU content](./media/language-understanding/LU-content.png)
 
 ### Wire up LU content
 After you define the intents with example utterances, you need to create **Intent recognized** triggers in the dialog to handle each intent by defining the actions to take when an intent is recognized.
@@ -110,12 +108,11 @@ After you define the intents with example utterances, you need to create **Inten
 1. Go to your bot's navigation pane on the left side and select **New Trigger**. 
 
 2. In the `Create a trigger` pop-up window, select **Intent recognized** as the type of trigger. Pick the intent you want to handle from the drop-down menu and select **Submit**. 
-    > [!div class="mx-imgBorder"]
-    > ![Wireup intent](./media/language-understanding/wireup-intent.png)
+    ![Wireup intent](./media/language-understanding/wireup-intent.png)
 
-3. Click the **User Input** icon in Composer menu. You will see a list of all the LU content you have authored along with details such as which dialog the content is associated with and whether it is published or not.
-    > [!div class="mx-imgBorder"]
-    > ![User Input](./media/language-understanding/user-input.png)
+1. Click the **User Input** icon in Composer menu. You will see a list of all the LU content you have authored along with details such as which dialog the content is associated with and whether it is published or not.
+    
+    ![User Input](./media/language-understanding/user-input.png)
 
 ### Publish LU
 
@@ -143,5 +140,5 @@ Any time you select **Start Bot** (or **Restart Bot**), Composer will evaluate i
 - [Extract data from utterance text with intents and entities](https://aka.ms/luis-concept-data-extraction?tabs=V2)
 
 ## Next 
-- Learn how to [use validation](./how-to-use-validation.md).
+- Learn how to [use validation](./how-to-use-validation.md)
 - Learn how to [send messages to users](how-to-send-messages.md).
