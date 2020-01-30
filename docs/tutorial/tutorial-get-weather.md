@@ -1,4 +1,4 @@
-# Tutorial: Adding actions to you dialog
+# Tutorial: Adding actions to your dialog
 
 In this tutorial you will use the Bot Framework Composer to add actions to your dialog to prompt the user for their zip code, then the bot will respond with the weather forecast for the specified location based on a query to an external service.
 
