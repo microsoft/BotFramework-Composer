@@ -141,4 +141,4 @@ Any time you select **Start Bot** (or **Restart Bot**), Composer will evaluate i
 
 ## Next 
 - Learn how to [use validation](./how-to-use-validation.md)
-- Learn how to [send messages to users](how-to-send-messages.md).
+- Learn how to [send messages to users](how-to-send-messages.md)
