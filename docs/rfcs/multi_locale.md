@@ -1,12 +1,21 @@
-### Multi-locale LG & LU support in Composer
+### Multi-locale LG & LU authoring in Composer
 
 ---
 
-#####Approach:
+The following RFC is intended to be guided by the following scenarios to be supported in Composer:
 
-Providing a good experience to allow translations of these files can be complex. In considering the UX to provide support for language specific .lg and .lu files, we should take the opportunity to consider what has become convention for how Composer bot assets are representing on the filesytem. This RFC lays out different options to write files to disk logically and proposes an update to the current convention.
+1. I can create, modify, or delete a .lg or .lu file for a dialog or create a common.lg file in a language of my choosing.
+2. I can set the language for assets to be rendered in the authoring surface and forms.
+3. If the Shell cannot find the configured language, the original authored language of the asset will be used.
+4. I can create a full set of files in a language (base -> target(s)) that copies base as target(s) initial implementation.
+5. I can copy all Bot directory assets to a location of my choosing.
+6. I can load Bot Assets to replace the current assets if identical files exist to over-write implementations with new or modified versions
 
-The distribution of .lg and .lu files in a set of Composer assets will look like the following:
+##### Implementation:
+
+Providing a good experience to allow translations of these files can be complex. In considering the UX to provide support for language specific .lg and .lu files, we should take the opportunity to consider what has become convention for how Composer bot assets are represented on the filesytem. This RFC lays out different options to write files to disk logically and proposes an update to the current convention.
+
+The distribution of .lg and .lu files in a set of Composer assets currently look like the following:
 
 ```
 /ComposerDialogs
@@ -30,9 +39,9 @@ The distribution of .lg and .lu files in a set of Composer assets will look like
     DialogBaz.lu
 ```
 
-#####Problem
+##### Problem
 
-We want to allow an editing experience for these files, as well as allow a user to add .lg and .lu in different languages and make sensible choices on the user's behalf in how we structure the asset directory.
+We want to allow an editing experience for these files as well as allow a user to add .lg and .lu in different languages and make sensible choices on the user's behalf in how we structure the asset directory.
 
 What this would look like in today's file representation:
 
@@ -70,16 +79,16 @@ What this would look like in today's file representation:
 
 ##### Issues with current file structure
 
-Representing the .lu and .lg locally with the .dialog file is logical in that it better places the files where they are being used. This makes a Dialog directory more portable in a world where Dialogs are not only used in a single bot. This file structure is a natural place to graduate to a system where Dialogs hold their own dependencies (_.lu, _.lg) and can be published or shared outside of the current bot.
+Representing the .lu and .lg locally with the .dialog file is logical in that it better places the files where they are being used. This makes a Dialog directory more portable in a world where Dialogs are not only used in a single bot. This file structure is a natural place to graduate to a system where Dialogs hold their own dependencies (.lu, .lg) and can be published or shared outside of the current bot.
 
-A example downside of this approach is that this distribution of files may not be set up for domain specific work in one of the file-formats. One could prefer that all the .lg files exist in its own directly, and all the .lg files exist in its own directory, or all "en-us" files live in an "en-us" directory, and so on. Because of the anticipation of a Dialog and its associated content files (.lu, .lg) are intended to be shared via mechanisms currently planned to be built, a structure to imply a tigher binding between .dialog, .lg, .lu is the preferred approach.
+A example downside of this approach is that this distribution of files may not be set up for domain specific work in one of the file-formats. One could prefer that all the .lg files exist in its own directly, and all the .lg files exist in its own directory, or all "en-us" files live in an "en-us" directory, and so on. Because of the anticipation of a Dialog and its associated content files (.lu, .lg) are intended to be shared via mechanisms currently planned to be built, a structure to imply a tigher binding between .dialog, .lg, .lu is currently the preferred approach.
 
 #####Note
 
 1. This proposal only applies to a filesystem-based storage plugin, and has little bearing on a database-backed store plugin implementation. **It may have merit to choose a structure that better aligns with a database-driven index approach.**
 2. This is ideally the final time we make a significant naming or serialization decision before Composer hits GA. If we wanted to, for example, lowercass files and/or directories, this would be the time to do it.
 
-#####Alternative structures
+##### Alternative structures
 
 ```
 /Dialogs
@@ -145,16 +154,6 @@ Main.dialog
     Main.de.lu
 ```
 
-#####Implementation
+##### Important consideration:
 
-Scenarios:
-
-1. In Composer I can create, modify, or delete a .lg or .lu file for a dialog, or create a common.lg file in a language.
-2. In Composer I can set the language for assets to be rendered in the authoring surface and forms.
-3. If the Shell cannot find the configured language, the original authored language of the asset will be used.
-4. I can create a full set of files in a language (base -> target(s)) that copies base as target(s) initial implementation.
-5. I can copy all Bot directory assets to a location of my choosing.
-6. I can load Bot Assets to replace the current assets if identical files exist to over-write implementations with new or modified versions.
-
-#####Important consideration:
 When attempting file lookups, we should try and be agnostic to the file structure as possible, in trying to support the scenario where one authors these assets outside of Composer. We shouldn't limit the realistic scenario that users would wish to author in a different text editor or IDE and load in to Composer expecting a full experience. To fully support this, we aim to utilize the Adaptive Dialog ResourceManager module so there is near to exact parity in how the runtime and authoring surface do file lookups and resolution. Whatever we choose for a directory convention, we should not hardcode it into the resolution logic.
