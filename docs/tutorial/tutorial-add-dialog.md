@@ -1,81 +1,110 @@
-# Add a dialog
+# Tutorial: Adding dialogs to your bot
 
-When building features of a bot with Composer, it is sometimes useful to create a new **dialog** to contain a chunk of functionality. This helps keep the dialog system organized, and also allows sub-dialogs to be combined into larger, more complex dialogs. 
+This tutorial walks you through adding additional dialogs to a basic bot with the Bot Framework Composer and testing it in the Emulator.
 
-Each dialog contains one or more triggers that launch associated actions. They can have their own dedicated language model. Dialogs can call other dialogs and can pass values back and forth.
+It can be useful to include functionality in [**dialogs**](../concept-dialog.md) when building the features of your bot with Composer. This helps keep the dialogs organized and allow sub-dialogs to be combined into larger and more complex dialogs.
+
+A dialog contains one or more [triggers](../concept-events-and-triggers.md). Each trigger consists of one or more actions which are the set of instructions that the bot will execute. Dialogs can also call other dialogs and can pass values back and forth between them.
+
+In this tutorial, you learn how to:
+
+> [!div class="checklist"]
+> * Build on the basic bot created in the previous tutorial by adding an additional dialog
+> * Run your bot locally and test it using the Bot Framework Emulator
+
+## Prerequisites
+- Completion of the tutorial [Create a new bot and test it in the Emulator](./bot-tutorial-create-bot.md)
+- An understanding of the concepts taught in [the dialog concept article](../concept-dialog.md)
 
 ## What are we building?
 
 The main feature of this bot is reporting on the current weather conditions.
 
-To do this, we'll create a dialog that 
-- prompts the user to enter a zipcode to use as location for weather lookup
-- calls an external API to retrieve the weather data for a specific zipcode.
+To do this, you will create a dialog that 
+- Prompts the user to enter a zip code to use as location for weather lookup.
+- Calls an external API to retrieve the weather data for a specific zip code.
 
-First, we'll set up all the components and make sure they work together. Then, we'll flesh out the functionality.
+> [!TIP]
+> It is recommended that you first create all of the components of your bot and make sure they work together before creating the detailed functionality.
 
 ## Create a new dialog
-1. Click the **+ New Dialog** button in the left hand explorer. A dialog will appear and ask for a **Name** and **Description**.
+1. Click the **+ New Dialog** button in the navigation pane. A dialog will appear and ask for a **Name** and **Description**.
 
-2. Give this new dialog the name:
-    
-      `getWeather`
-    
-    and the description:
-    
-      `Get the current weather conditions`
-
-3. Click **Next**, and Composer will create the new dialog and open it in the editor. Composer will also create this new dialog with a `BeginDialog` trigger pre-configured.
-
-   ![](../media/tutorial-weatherbot/02/create-getweather.png)
-
-4. For now, we'll just add a simple message to get things hooked up, then we'll come back to flesh out the feature. With `BeginDialog` trigger selected, click the **+** in the flow and use the same **Send a response** action. Set the text of the activity to:
+2. Fill in the **Name** field with **getWeather** and the **Description** field with **Get the current weather conditions**.
    
-      `Let's check the weather`
+    > [!div class="mx-imgBorder"]
+    > ![Create Get Weather Dialog](../media/tutorial-weatherbot/02/create-getweather-dialog.png)
+
+3. After clicking **Next**, Composer will create the new dialog and open it in the editor. Composer will also create this new dialog with a pre-configured **BeginDialog** trigger.
+
+4. For now, we'll just add a simple message to get things hooked up, then come back to flesh out the feature. With **BeginDialog** trigger selected, click the **+** sign in the flow and use the same **Send a response** action. Set the text of the activity to:
+   
+    **Let's check the weather**
 
    You'll have a flow that looks like this:
 
-   ![](../media/tutorial-weatherbot/02/getweather-draft.png)
+    > [!div class="mx-imgBorder"]
+    > ![Begin dialog](../media/tutorial-weatherbot/02/begin-dialog.png)
 
-## Wire up dialogs
-You can break pieces of your conversation flow into dialogs and can chain them together. Let's get the newly created `getWeather` dialog wired up to the root dialog.
+## Connect your new dialog
+You can break pieces of your conversation flow into different dialogs and can chain them together. Next you need to get the newly created **getWeather** dialog connected to the main dialog. 
 
-1. Click on `WeatherBot.Main` from the left navigation pane. After selecting `WeatherBot.Main` from the explorer, find the **Language Understanding** section of the properties panel. 
+1. Select **WeatherBot.Main** in the **Navigation pane**.
 
-   > Each dialog can have it's own **recognizer**, a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined **intents**. Different types of recognizers use different techniques to determine which intent, if any, to choose.
+2. Find the **Language Understanding** section of the in the **Properties panel**.
 
-   > For now, we're going to use the **Regular Expression** recognizer, which uses pattern matching. Later, we'll use more sophisticated natural language understanding technology from **LUIS**.
+   > Each dialog can have its own [recognizer](../concept-dialog.md#recognizer), a component that lets the bot examine an incoming message and decide what it means by choosing between a set of predefined [intents](../concept-language-understanding.md#intents). Different types of recognizers use different techniques to determine which intent, if any, to choose.
 
-2. Under the **Recognizer Type**, select `Regular Expression`. 
+   > [!NOTE]
+   > For now, you're going to use the [Regular Expression Recognizer](../how-to-define-triggers.md#regular-expression-recognizer), which uses pattern matching. Later, you will use more sophisticated natural language understanding technology from [LUIS](../how-to-define-triggers.md#luis-recognizer).
 
-   ![](../media/tutorial-weatherbot/02/regexp-recognizer.gif)
-
-3. In the two fields **Intent** and **Pattern**, define the bot's first intent `weather`. Set the value of the **Intent** field to `weather` and set the value of the **Pattern** field to `weather`. 
-
-   ![](../media/tutorial-weatherbot/02/weather-intent.png)
-
-   > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expression patterns can be much more complicated than this, but for now, this will do!
-
-4. Click **+ New Trigger** in the left hand side under the `weatherBot.Main` header, and a modal will appear. Select **Intent recognized** from the first dropdown and then select our freshly created `weather` intent from the second dropdown.
-
-   ![](../media/tutorial-weatherbot/02/weather-trigger.png)
-
-5. Click the **+** in the flow and select the `Dialog management` option. From the submenu, select `Begin a new dialog`.
+3. Select **Regular Expression** from the **Recognizer Type** drop-down list.
    
-6. In the properties panel for the new action, set the `dialog name` property to our `getWeather` dialog.
+    > [!div class="mx-imgBorder"]
+    > ![regular expression recognizer](../media/tutorial-weatherbot/02/recognizer-type.png)
 
-![](../media/tutorial-weatherbot/02/begin-dialog-congifure.gif)
-
-
-## Test
-
-1. Click the **Restart Bot** button in the upper right hand corner of the Composer window. This will update the bot runtime app with all the new content and settings. Then, click **Test in Emulator**. When Emulator connects to your bot, it'll send the greeting we configured in the last section.
-
-   ![](../media/tutorial-weatherbot/02/restart-bot.gif)
-
-2. Send the bot a message that says `weather`. The bot should respond with our test message, confirming that our intent was recognized as expected, and the fulfillment action was triggered.
-
-   ![](../media/tutorial-weatherbot/02/emulator-weather-draft.png)
+4. Enter **weather** for both **Intent** and **Pattern**. Make sure you press **Enter** in your keyboard to save the setting.
    
+    > [!div class="mx-imgBorder"]
+    > ![intent and pattern](../media/tutorial-weatherbot/02/intent-pattern.png)
+
+    > [!NOTE]
+    > This tells the bot to look for the word "weather" anywhere in an incoming message. Regular expression patterns are generally much more complicated, but this is adequate for the purposes of this example.
+
+5. Next, create a new trigger in the **weatherBot.Main** dialog by selecting **+ New Trigger**.
+
+6. In the **Create a trigger** form that appears, select **Intent recognized** as the trigger type, then select **weather** from the **Which intent do you want to handle?** drop-down list, then **Submit**.
+
+    > [!div class="mx-imgBorder"]
+    > ![weather intent trigger](../media/tutorial-weatherbot/02/weather-intent-trigger.png)
+
+7. Next, create a new action for the **Intent recognized** trigger you just created. You can do this by selecting the **+** sign under the trigger node in the _Authoring canvas_, then select **Begin a new dialog** from the **Dialog management** menu.
+
+    > [!div class="mx-imgBorder"]
+    > ![dialog management](../media/tutorial-weatherbot/02/dialog-management.png)
+
+8. In the **Properties panel** for the new **Begin a new dialog** action, select **getWeather** from the **dialog name** drop-down list.
+   
+    > [!div class="mx-imgBorder"]
+    > ![connect dialog](../media/tutorial-weatherbot/02/connect-dialog.png)
+
+Now when a user enters **weather**, your bot will respond by activating the **getWeather** dialog.
+
+In the next tutorial you will learn how to prompt the user for additional information, then query a weather service and return the results to the user, but first you need to validate that the functionality developed so far works correctly, you will do this using the Emulator.
+
+
+## Test bot in the Emulator
+
+1. Select the **Restart Bot** button in the upper right hand corner of the Composer window. This will update the bot runtime app with all the new content and settings. Then select **Test in Emulator**. When the Emulator connects to your bot, it'll send the greeting you configured in the last section.
+
+    > [!div class="mx-imgBorder"]
+    > ![Restart Bot](../media/tutorial-weatherbot/02/restart-bot.gif)
+
+2. Send the bot a message that says **weather**. The bot should respond with your test message, confirming that your intent was recognized as expected, and the fulfillment action was triggered.
+
+    > [!div class="mx-imgBorder"]
+    > ![Weather Bot in Emulator](../media/tutorial-weatherbot/02/emulator-weather.png)
+
+
 ## Next steps
-- [Get weather](./bot-tutorial-get-weather.md)
+- [Get weather](./tutorial-get-weather.md)
