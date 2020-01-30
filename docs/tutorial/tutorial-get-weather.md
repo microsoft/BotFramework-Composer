@@ -111,13 +111,13 @@ The entire process of adding an HTTP request, capturing the results into a prope
       
       ![http result property](../media/tutorial-weatherbot/03/http-result-property.png)
 
-        > [!TIP]
-        > **Result property** represents the property where the result of this action will be stored. The result can include any of the following 4 properties from the http response:
-          - _statusCode_. This can be accessed via the `dialog.api_response.statusCode`.
-          - _reasonPhrase_. This can be accessed via the `dialog.api_response.reasonPhrase`.
-          - _content_. This can be accessed via the `dialog.api_response.content`.
-          - _headers_. This can be accessed via the `dialog.api_response.headers`.
-          - If the **Response type** is json, it will be a deserialized object available via `dialog.api_response.content` property.
+      > [!TIP]
+      > **Result property** represents the property where the result of this action will be stored. The result can include any of the following 4 properties from the http response:
+      > - _statusCode_. This can be accessed via the `dialog.api_response.statusCode`.
+      > - _reasonPhrase_. This can be accessed via the `dialog.api_response.reasonPhrase`.
+      > - _content_. This can be accessed via the `dialog.api_response.content`.
+      > - _headers_. This can be accessed via the `dialog.api_response.headers`.
+      > - If the **Response type** is json, it will be a deserialized object available via `dialog.api_response.content` property.
 
 3. After making an HTTP request, you need to test the status of the response and handle errors is they occur. You can use an **If/Else branch** for this purpose. To do this, select the **+** button, then select **Branch: If/Else** from the **Create a condition** menu.  
 
