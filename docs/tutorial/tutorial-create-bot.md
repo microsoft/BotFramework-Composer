@@ -22,7 +22,7 @@ The first step in creating a bot with the Bot Framework Composer is to create a 
 
 2. In the **Create from scratch?** screen, you'll be presented with options to create an empty bot project from scratch or to create one based on a template. For this tutorial, select the **Create from Scratch** option, then **Next**.
 
-   [create project](../media/tutorial-weatherbot/01/create-1.png)
+   ![create project](../media/tutorial-weatherbot/01/create-1.png)
 
 3. The **Define conversation objective** form:
     1. Enter the name **WeatherBot** in the **Name** field.
