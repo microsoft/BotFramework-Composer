@@ -24,7 +24,6 @@ The screenshot below shows the properties of an **Intent recognized** trigger na
 
 ![Cancel trigger](./media/events-triggers/cancel-trigger.png)
 
-
 ## Types of triggers
 
 There are different types of triggers that all work in a similar manner, and in some cases can be interchanged. This section will cover the different types of triggers and when you should use them. See the [define triggers](how-to-define-triggers.md) article for additional information.

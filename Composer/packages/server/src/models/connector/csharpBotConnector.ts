@@ -1,90 +1,190 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { parse as urlParse } from 'url';
+import { ChildProcess, spawn } from 'child_process';
 import fs from 'fs';
-import Path from 'path';
 
-import axios from 'axios';
-import archiver from 'archiver';
-import FormData from 'form-data';
+import getPort from 'get-port';
 
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
+import { Path } from '../../utility/path';
+import log from '../../logger';
+import AssetService from '../../services/asset';
+import { IFileStorage } from '../storage/interface';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
+const debug = log.extend('bot-runtime');
+const buildDebug = debug.extend('build');
+const runtimeDebugs: { [key: string]: debug.Debugger } = {};
 export class CSharpBotConnector implements IBotConnector {
-  private adminEndpoint: string;
+  public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
-  constructor(adminEndpoint: string, endpoint: string) {
-    this.adminEndpoint = adminEndpoint;
+  static botRuntimes: { [key: string]: ChildProcess } = {};
+  constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
 
-  public status: BotStatus = BotStatus.NotConnected;
-
-  connect = async (_: BotEnvironments, __: string) => {
-    // confirm bot runtime is listening here
-    try {
-      await axios.get(this.adminEndpoint + '/api/admin');
-    } catch (err) {
-      throw new Error(err);
+  static stopAll = (signal: string) => {
+    for (const pid in CSharpBotConnector.botRuntimes) {
+      const runtime = CSharpBotConnector.botRuntimes[pid];
+      runtime.kill(signal);
+      runtimeDebugs[pid]('successfully stopped bot runtime');
+      delete CSharpBotConnector.botRuntimes[pid];
     }
-
-    this.status = BotStatus.NotConnected;
-
-    return `${this.endpoint}/api/messages`;
   };
 
-  sync = async (config: DialogSetting) => {
-    // archive the project
-    // send to bot runtime service
+  private stop = () => {
+    CSharpBotConnector.stopAll('SIGINT');
+    this.status = BotStatus.NotConnected;
+  };
+
+  private isOldBot = (dir: string): boolean => {
+    // check bot the bot version through build script existence.
+    if (process.platform === 'win32') {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'));
+    } else {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.sh'));
+    }
+  };
+
+  private migrateBot = async (dir: string, storage: IFileStorage) => {
+    if (this.isOldBot(dir)) {
+      // cover the old bot runtime with new runtime template
+      await AssetService.manager.copyRuntimeTo(dir, storage);
+    }
+  };
+
+  private buildProcess = async (dir: string): Promise<number | null> => {
+    // build bot runtime
+    return new Promise((resolve, reject) => {
+      let shell = 'sh';
+      let script = ['./Scripts/build_runtime.sh'];
+      if (process.platform === 'win32') {
+        shell = 'powershell';
+        script = ['-executionpolicy', 'bypass', '-file', './Scripts/build_runtime.ps1'];
+      }
+      const build = spawn(`${shell}`, script, {
+        cwd: dir,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      let errorMsg = '';
+      buildDebug('building bot runtime: %d', build.pid);
+      build.stdout &&
+        build.stdout.on('data', function(str) {
+          buildDebug('%s', str);
+        });
+      build.stderr &&
+        build.stderr.on('data', function(err) {
+          errorMsg = errorMsg + err.toString();
+        });
+      build.on('exit', function(code) {
+        if (code !== 0) {
+          reject(errorMsg);
+        } else {
+          resolve(code);
+        }
+      });
+    });
+  };
+
+  private getConnectorConfig = (config: DialogSetting) => {
+    const configList: string[] = [];
+    if (config.MicrosoftAppPassword) {
+      configList.push('--MicrosoftAppPassword');
+      configList.push(config.MicrosoftAppPassword);
+    }
+    if (config.luis) {
+      if (config.luis.authoringKey) {
+        configList.push('--luis:endpointKey');
+        configList.push(config.luis.authoringKey);
+      }
+      if (config.luis.authoringRegion) {
+        configList.push('--luis:endpoint');
+        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
+      }
+    }
+
+    return configList;
+  };
+
+  private addListeners = (child: ChildProcess, handler: Function, resolve: Function, reject: Function) => {
+    const currentDebugger = runtimeDebugs[child.pid];
+    let erroutput = '';
+    child.stdout &&
+      child.stdout.on('data', (data: any) => {
+        currentDebugger('%s', data);
+        resolve(child.pid);
+      });
+
+    child.stderr &&
+      child.stderr.on('data', (err: any) => {
+        erroutput += err.toString();
+      });
+
+    child.on('exit', code => {
+      currentDebugger('exit %d', code);
+      handler();
+      if (code !== 0) {
+        currentDebugger('exit %d: %s', code, erroutput);
+        reject(erroutput);
+      }
+    });
+
+    child.on('message', msg => {
+      currentDebugger('%s', msg);
+    });
+  };
+
+  private getBotPathAndStorage = () => {
     const currentProject = BotProjectService.getCurrentBotProject();
     if (currentProject === undefined) {
       throw new Error('no project is opened, nothing to sync');
     }
-    const dir = Path.join(currentProject.dataDir);
-    const luisConfig = currentProject.luPublisher.getLuisConfig();
-    await this.archiveDirectory(dir, './tmp.zip');
-    const content = fs.readFileSync('./tmp.zip');
-
-    const form = new FormData();
-    form.append('file', content, 'bot.zip');
-
-    if (luisConfig && luisConfig.authoringKey !== null && !currentProject.checkLuisPublished()) {
-      throw new Error('Please publish your Luis models');
-    }
-
-    if (luisConfig) {
-      form.append('endpointKey', luisConfig.endpointKey || luisConfig.authoringKey || '');
-    }
-
-    config = {
-      ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
-      ...config,
-    };
-    if (config.MicrosoftAppPassword) {
-      form.append('microsoftAppPassword', config.MicrosoftAppPassword);
-    }
-    try {
-      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
-    } catch (err) {
-      throw new Error('Unable to sync content to bot runtime');
-    }
+    return { dir: Path.join(currentProject.dir), storage: currentProject.fileStorage };
   };
 
-  archiveDirectory = (src: string, dest: string) => {
+  private start = async (dir: string, config: DialogSetting): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const archive = archiver('zip');
-      const output = fs.createWriteStream(dest);
-
-      archive.pipe(output);
-      archive.directory(src, false);
-      archive.finalize();
-
-      output.on('close', () => resolve(archive));
-      archive.on('error', err => reject(err));
+      const runtime = spawn(
+        'dotnet',
+        ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
+        {
+          cwd: dir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
+      // extend runtime debugger
+      runtimeDebugs[runtime.pid] = debug.extend(`process (${runtime.pid})`);
+      runtimeDebugs[runtime.pid]('bot runtime started');
+      CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
+      this.addListeners(runtime, this.stop, resolve, reject);
     });
+  };
+
+  connect = async (_: BotEnvironments, __: string) => {
+    const originPort = urlParse(this.endpoint).port;
+    const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
+    this.endpoint = `http://localhost:${port}`;
+    return `http://localhost:${port}/api/messages`;
+  };
+
+  sync = async (config: DialogSetting) => {
+    try {
+      this.stop();
+      const { dir, storage } = this.getBotPathAndStorage();
+      await this.migrateBot(dir, storage);
+
+      await this.buildProcess(dir);
+      await this.start(dir, config);
+      this.status = BotStatus.Connected;
+    } catch (err) {
+      this.stop();
+      this.status = BotStatus.NotConnected;
+      throw err;
+    }
   };
 
   getEditingStatus = (): Promise<boolean> => {
@@ -109,3 +209,10 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
+const cleanup = (signal: NodeJS.Signals) => {
+  CSharpBotConnector.stopAll(signal);
+  process.exit(0);
+};
+(['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
+  process.on(signal, cleanup.bind(null, signal));
+});

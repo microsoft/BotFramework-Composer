@@ -258,6 +258,13 @@ export const appschema: OBISchema = {
           description: 'One or more options that are passed to the dialog that is called.',
           additionalProperties: true,
         },
+        includeActivity: {
+          type: 'boolean',
+          title: 'Include Activity',
+          description: 'When set to true, dialog that is called can process the current activity.',
+          default: false,
+          examples: [false],
+        },
         resultProperty: {
           $role: 'expression',
           title: 'Property',
@@ -620,6 +627,12 @@ export const appschema: OBISchema = {
           default: 'true',
           examples: ['true'],
         },
+        outputFormat: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Output format',
+          description: 'confirm output format.',
+        },
         defaultLocale: {
           type: 'string',
           title: 'Default Locale',
@@ -816,6 +829,12 @@ export const appschema: OBISchema = {
           default: 'true',
           examples: ['true'],
         },
+        outputFormat: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Output format',
+          description: 'Date time output format.',
+        },
         defaultLocale: {
           type: 'string',
           title: 'Default locale',
@@ -845,6 +864,26 @@ export const appschema: OBISchema = {
           title: 'Property',
           description: 'Property to delete.',
           type: 'string',
+        },
+      },
+    },
+    'Microsoft.DeleteProperties': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Delete Properties',
+      description: 'Delete multiple properties and any value it holds.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.DeleteProperties),
+        properties: {
+          type: 'array',
+          title: 'Properties',
+          description: 'Properties to delete.',
+          items: {
+            $role: 'expression',
+            title: 'Property',
+            description: 'Property to delete.',
+            type: 'string',
+          },
         },
       },
     },
@@ -959,10 +998,10 @@ export const appschema: OBISchema = {
           // ],
         },
         eventValue: {
-          type: 'object',
+          $role: 'expression',
+          type: 'string',
           title: 'Event value',
           description: 'Value to emit with the event (optional).',
-          additionalProperties: true,
         },
         bubbleEvent: {
           type: 'boolean',
@@ -1302,6 +1341,16 @@ export const appschema: OBISchema = {
           $ref: '#/definitions/Microsoft.DeleteProperty',
         },
         {
+          title: 'Microsoft.DeleteProperty',
+          description: 'Delete a property and any value it holds.',
+          $ref: '#/definitions/Microsoft.DeleteProperty',
+        },
+        {
+          title: 'Microsoft.DeleteProperties',
+          description: 'Delete multiple properties and any value it holds.',
+          $ref: '#/definitions/Microsoft.DeleteProperties',
+        },
+        {
           title: 'Microsoft.EditActions',
           description: 'Edit the current list of actions.',
           $ref: '#/definitions/Microsoft.EditActions',
@@ -1391,6 +1440,11 @@ export const appschema: OBISchema = {
           title: 'Microsoft.SetProperty',
           description: 'Set property to a value.',
           $ref: '#/definitions/Microsoft.SetProperty',
+        },
+        {
+          title: 'Microsoft.SetProperties',
+          description: 'Set one or more property values.',
+          $ref: '#/definitions/Microsoft.SetProperties',
         },
         {
           title: 'Microsoft.SwitchCondition',
@@ -1875,11 +1929,10 @@ export const appschema: OBISchema = {
           examples: ['true'],
         },
         outputFormat: {
+          $role: 'expression',
           type: 'string',
-          enum: ['float', 'integer'],
           title: 'Output format',
           description: 'Number output format.',
-          default: 'float',
         },
         defaultLocale: {
           type: 'string',
@@ -2553,11 +2606,29 @@ export const appschema: OBISchema = {
         },
         strictFilters: {
           type: 'array',
-          title: 'Strict Filter Property',
-          description: 'Memory property that holds strict filters to use when calling the QnA Maker KB.',
+          title: 'Strict Filters',
+          description: 'Metadata filters to use when calling the QnA Maker KB.',
           items: {
             type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+                title: 'Name',
+                maximum: 100,
+              },
+              value: {
+                type: 'string',
+                title: 'Value',
+                maximum: 100,
+              },
+            },
           },
+        },
+        top: {
+          type: 'number',
+          title: 'Top',
+          description: 'The number of answers you want to retrieve.',
+          default: 3,
         },
       },
     },
@@ -2637,6 +2708,19 @@ export const appschema: OBISchema = {
       description: 'Repeat current dialog.',
       properties: {
         ...$properties(SDKTypes.RepeatDialog),
+        options: {
+          type: 'object',
+          title: 'Options',
+          description: 'One or more options that are passed to the dialog that is called.',
+          additionalProperties: true,
+        },
+        includeActivity: {
+          type: 'boolean',
+          title: 'Include Activity',
+          description: 'When set to true, dialog that is called can process the current activity.',
+          default: false,
+          examples: [false],
+        },
       },
     },
     'Microsoft.ReplaceDialog': {
@@ -2657,6 +2741,13 @@ export const appschema: OBISchema = {
           title: 'Options',
           description: 'One or more options that are passed to the dialog that is called.',
           additionalProperties: true,
+        },
+        includeActivity: {
+          type: 'boolean',
+          title: 'Include Activity',
+          description: 'When set to true, dialog that is called can process the current activity.',
+          default: false,
+          examples: [false],
         },
       },
     },
@@ -2695,6 +2786,39 @@ export const appschema: OBISchema = {
           description: 'New value or expression.',
           examples: ["'milk'", 'dialog.favColor', "dialog.favColor == 'red'"],
           type: 'string',
+        },
+      },
+    },
+    'Microsoft.SetProperties': {
+      $role: 'unionType(Microsoft.IDialog)',
+      title: 'Set properties',
+      description: 'Set one or more property values.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.SetProperties),
+        assignments: {
+          type: 'array',
+          title: 'Assignments',
+          description: 'Property value assignments to set.',
+          items: {
+            type: 'object',
+            properties: {
+              property: {
+                $role: 'expression',
+                title: 'Property',
+                description: 'Property (named location to store information).',
+                examples: ['user.age'],
+                type: 'string',
+              },
+              value: {
+                $role: 'expression',
+                title: 'Value',
+                description: 'New value or expression.',
+                examples: ['"milk"', 'dialog.favColor', 'dialog.favColor == "red"'],
+                type: 'string',
+              },
+            },
+          },
         },
       },
     },
@@ -2874,11 +2998,10 @@ export const appschema: OBISchema = {
           examples: ['true'],
         },
         outputFormat: {
+          $role: 'expression',
           type: 'string',
-          enum: ['none', 'trim', 'lowercase', 'uppercase'],
           title: 'Output format',
           description: 'Format of output.',
-          default: 'none',
         },
       },
     },

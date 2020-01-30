@@ -25,13 +25,14 @@ context('Notification Page', () => {
     });
 
     cy.findAllByText('Bot Responses').should('exist');
-    cy.get('@switchButton').should('be.disabled');
   });
 
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.get('.dialogNavTree button[title="__TestToDoBotWithLuisSample.Main"]').click({ multiple: true });
+    cy.findByTestId('LUEditor').within(() => {
+      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+    });
 
     cy.get('.toggleEditMode button').click();
     cy.get('textarea').type('test lu syntax error');

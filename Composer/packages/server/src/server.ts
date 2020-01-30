@@ -13,7 +13,9 @@ import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
+import { LUServer } from '@bfc/lu-languageserver';
 
+import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
 import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
@@ -113,11 +115,21 @@ const wss: ws.Server = new ws.Server({
   perMessageDeflate: false,
 });
 
+const { fileResolver, staticMemoryResolver } = BotProjectService;
+
 function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  const server = new LGServer(connection);
+  const server = new LGServer(connection, fileResolver, staticMemoryResolver);
+  server.start();
+}
+
+function launchLuLanguageServer(socket: rpc.IWebSocket) {
+  const reader = new rpc.WebSocketMessageReader(socket);
+  const writer = new rpc.WebSocketMessageWriter(socket);
+  const connection: IConnection = createConnection(reader, writer);
+  const server = new LUServer(connection);
   server.start();
 }
 
@@ -128,6 +140,17 @@ attachLSPServer(wss, server, '/lg-language-server', webSocket => {
   } else {
     webSocket.on('open', () => {
       launchLanguageServer(webSocket);
+    });
+  }
+});
+
+attachLSPServer(wss, server, '/lu-language-server', webSocket => {
+  // launch language server when the web socket is opened
+  if (webSocket.readyState === webSocket.OPEN) {
+    launchLuLanguageServer(webSocket);
+  } else {
+    webSocket.on('open', () => {
+      launchLuLanguageServer(webSocket);
     });
   }
 });

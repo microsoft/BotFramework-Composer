@@ -4,23 +4,25 @@ All bots built with the Bot Framework Composer have a "memory", a representation
 
 The memory system makes it possible for bots built in Composer to do things like:
 
-* Store user profiles and preferences.
-* Remember things between sessions such as the last search query or a list of recently mentioned locations.
-* Pass information between dialogs.
+- Store user profiles and preferences.
+- Remember things between sessions such as the last search query or a list of recently mentioned locations.
+- Pass information between dialogs.
 
 ## Anatomy of a property in memory
 
 A piece of data in memory is referred to as a **property**. A property is a distinct value identified by a specific address comprised of two parts, the **scope** of the property and the **name** of the property: `scope.name`.
 
 Here are a couple of examples:
-* `user.name`
-* `turn.activity`
-* `dialog.index`
-* `user.profile.age`
+
+- `user.name`
+- `turn.activity`
+- `dialog.index`
+- `user.profile.age`
 
 The scope of the property determines when the property is available, and how long the value will be retained.
 
 ### Storing information about users and ongoing conversations
+
 The bot's memory has two "permanent" scopes. The first is a place to store information about individual users, the second is a place to store information about ongoing conversations:
 
 1. **user** is associated with a specific user. Properties in the user scope are retained forever.
@@ -28,6 +30,7 @@ The bot's memory has two "permanent" scopes. The first is a place to store infor
 2. **conversation** is associated with the conversation id. Properties in the user scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in a Microsoft Teams channel).
 
 ### Storing temporary values during task handling
+
 The bot's memory also has two "ephemeral" scopes. Ephemeral scopes are a place to store temporary values that are only relevant while a task is being handled. The two scopes are:
 
 1. **dialog** is associated with the active dialog and any child or parent dialogs. Properties in the dialog scope are retained until the last active dialog ends.
@@ -35,6 +38,7 @@ The bot's memory also has two "ephemeral" scopes. Ephemeral scopes are a place t
 2. **turn** is associated with a single turn. You can also think of this as the bot handling a single message from the user. Properties in the turn scope are discarded at the end of the turn.
 
 ## Set properties with prompts
+
 Input is collected from user's with prompt types provided in the **Ask a question** sub-menu.
 
 ![Ask a question submenu](./media/memory/ask-a-question-menu.png)
@@ -49,7 +53,7 @@ Under the **User Input** tab you'll see **Property to fill**, where the user's r
 
 In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` output format was selected.
 
-For more information about implementing text other prompts see the article [Asking users for input](./how-to-ask-for-user-input.md). 
+For more information about implementing text other prompts see the article [Asking users for input](./how-to-ask-for-user-input.md).
 
 ## Manipulating properties using memory actions
 
@@ -58,20 +62,23 @@ The Bot Framework Composer provides a set of memory manipulation actions in the 
 ![Memory manipulation menu](./media/memory/memory-mainpulation-menu.png)
 
 ### Set a property
+
 Use **Set a property** to set the value of a property.
 
 ![Set a property](./media/memory/set-property.png)
 
- The value of a property can be set to a literal value, like `true`, `0`, or `fred`, or it can be set to the result of a [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
+The value of a property can be set to a literal value, like `true`, `0`, or `fred`, or it can be set to the result of a [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
 
 ### Set properties
+
 Use **Set properties** to set a group of properties.
 
 ![Set properties](./media/memory/set-properties.png)
 
-The value of each property is assigned individually in the **Properties panel**. Don't forget to press `Enter` to save the property setting before you set the next one. 
+The value of each property is assigned individually in the **Properties panel**. Don't forget to press `Enter` to save the property setting before you set the next one.
 
 ### Initialize a property
+
 Use **Initialize a property** to create new properties that are objects or arrays.
 
 ![Initialize property](./media/memory/initialize-property.png)
@@ -79,26 +86,28 @@ Use **Initialize a property** to create new properties that are objects or array
 It is important to note that before setting the value of a sub-property like `user.profile.age` that `user.profile` must first be initialized. It is not necessary to also initialize `user.profile.age` unless `age` also contains sub-values.
 
 ### Delete a property
+
 Use **Delete a Property** to remove a property from memory.
 
 ![Delete a property](./media/memory/delete-property.png)
 
 ### Delete properties
+
 Use **Delete properties** to remove properties from memory.
 
 ![Delete properties](./media/memory/delete-properties.png)
 
 ### Edit an Array Property
+
 Use **Edit an Array Property** to add and remove items from an array. Items set in **Value** can be added or removed from the beginning or end of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
 
 ![Edit an Array Property](./media/memory/edit-array-property.png)
 
 Note that it is possible to push the value of an existing property into an array property. For example, push `turn.choice` onto `dialog.choices`.
 
-
 ## Manipulating properties with dialogs
 
-Child dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to its parent dialog. 
+Child dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to its parent dialog.
 
 For example, a child dialog might first **Initialize an object** property called `dialog.profile`. Then, using prompts, build a compound property representing a user profile:
 
@@ -111,7 +120,6 @@ Finally, the dialog returns the compound value to the parent dialog. The return 
 Finally, the parent dialog is configured to capture the return value inside the **Begin a new dialog** action:
 
 ![Return value stored in parent dialog](./media/memory/begin-new-dialog.png)
-
 
 When executed, the bot will execute the **profile** child dialog, collect the user's name and age in a _temporary_ scope, then return it to the parent dialog where it is captured into the `user.profile` property and stored permanently.
 
@@ -178,13 +186,11 @@ Properties can also be used within an LG template to provide conditional variant
 
 The Bot Framework Composer provides a variety of shortcuts for referring to properties in memory. Refer to the _Managing state_ documentation for the complete list of [memory shorthand notations](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md#memory-short-hand-notations).
 
-
 ## Further reading
 
-* [The Bot Framework Adaptive dialogs Memory Model](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md).
-* [The Microsoft Bot Framework](https://github.com/microsoft/botframework).
-
+- [The Bot Framework Adaptive dialogs Memory Model](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md).
+- [The Microsoft Bot Framework](https://github.com/microsoft/botframework).
 
 ## Next
 
-* [Language Generation](./concept-language-generation.md) in the Bot Framework Composer.
+- [Language Generation](./concept-language-generation.md) in the Bot Framework Composer.

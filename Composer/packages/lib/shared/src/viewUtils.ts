@@ -5,6 +5,7 @@ import {
   IContextualMenuItem,
   IContextualMenuProps,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
+import get from 'lodash/get';
 
 import { SDKTypes } from './types';
 import { ConceptLabels } from './labelMap';
@@ -65,7 +66,14 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
-    types: [SDKTypes.SetProperty, SDKTypes.InitProperty, SDKTypes.DeleteProperty, SDKTypes.EditArray],
+    types: [
+      SDKTypes.SetProperty,
+      SDKTypes.SetProperties,
+      SDKTypes.InitProperty,
+      SDKTypes.DeleteProperty,
+      SDKTypes.DeleteProperties,
+      SDKTypes.EditArray,
+    ],
   },
   [DialogGroup.STEP]: {
     label: 'Dialog management',
@@ -277,4 +285,23 @@ export function getDialogGroupByType(type) {
   });
 
   return dialogType;
+}
+
+const truncateSDKType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
+
+/**
+ * Title priority: $designer.name > title from sdk schema > customize title > $type suffix
+ * @param customizedTitile customized title
+ */
+export function generateSDKTitle(data, customizedTitile?: string) {
+  const $type = get(data, '$type');
+  const titleFrom$designer = get(data, '$designer.name');
+  const titleFromShared = get(ConceptLabels, [$type, 'title']);
+  const titleFrom$type = truncateSDKType($type);
+  return titleFrom$designer || customizedTitile || titleFromShared || titleFrom$type;
+}
+
+export function getInputType($type: string): string {
+  if (!$type) return '';
+  return $type.replace(/Microsoft.(.*)Input/, '$1');
 }

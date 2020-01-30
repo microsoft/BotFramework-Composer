@@ -3,6 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
+import { FileInfo } from '@bfc/indexers';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -30,6 +31,44 @@ export class BotProjectService {
     if (BotProjectService.recentBotProjects.length > 0) {
       BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
     }
+  }
+
+  public static fileResolver(name: string): FileInfo | undefined {
+    BotProjectService.initialize();
+    return BotProjectService.currentBotProject?.files.find(file => file.name === name);
+  }
+
+  public static staticMemoryResolver(): string[] {
+    const defaultProperties = [
+      'this.value',
+      'this.turnCount',
+      'this.options',
+      'dialog.eventCounter',
+      'dialog.expectedProperties',
+      'dialog.lastEvent',
+      'dialog.requiredProperties',
+      'dialog.retries',
+      'dialog.lastIntent',
+      'dialog.lastTriggerEvent',
+      'turn.lastresult',
+      'turn.activity',
+      'turn.recognized',
+      'turn.recognized.intent',
+      'turn.recognized.score',
+      'turn.recognized.text',
+      'turn.unrecognizedText',
+      'turn.recognizedEntities',
+      'turn.interrupted',
+      'turn.dialogEvent',
+      'turn.repeatedIds',
+      'turn.activityProcessed',
+    ];
+    const userDefined: string[] =
+      BotProjectService.currentBotProject?.dialogs.reduce((result: string[], dialog) => {
+        result = [...dialog.userDefinedVariables, ...result];
+        return result;
+      }, []) || [];
+    return [...defaultProperties, ...userDefined];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

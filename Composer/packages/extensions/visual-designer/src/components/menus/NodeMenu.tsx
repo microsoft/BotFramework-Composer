@@ -25,7 +25,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
       key: 'delete',
       name: 'Delete',
       iconProps: {
-        iconName: 'Cancel',
+        iconName: 'Delete',
       },
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },

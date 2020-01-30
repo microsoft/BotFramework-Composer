@@ -97,8 +97,7 @@
                   "maxTurnCount": 3,
                   "property": "user.name",
                   "alwaysPrompt": false,
-                  "allowInterruptions": "false",
-                  "outputFormat": "none"
+                  "allowInterruptions": "false"
                 },
                 {
                   "$type": "Microsoft.SendActivity",
@@ -216,19 +215,36 @@
     },
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
-      "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.Foreach",
           "$designer": {
-            "id": "729500"
+            "id": "518944",
+            "name": "Loop: for each item"
           },
-          "activity": "@{bfdactivity-729500()}"
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "729500",
+                    "name": "Send a response"
+                  },
+                  "activity": "@{bfdactivity-729500()}"
+                }
+              ]
+            }
+          ]
         }
-      ],
-      "$designer": {
-        "id": "109137"
-      }
+      ]
     }
   ],
   "generator": "common.lg",
