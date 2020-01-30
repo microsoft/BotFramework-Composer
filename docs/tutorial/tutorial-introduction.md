@@ -5,9 +5,9 @@ Welcome to the Bot Framework Composer tutorials. These start with the creation o
 In these tutorials, you'll learn how to: 
 
 > [!div class="checklist"]
-> * [Create a simple bot and test it in the Emulator](tutorial-create-bot.md)
+> * [Create a simple bot](tutorial-create-bot.md) and test it in the Emulator
 > * [Add multiple dialogs](tutorial-add-dialog.md) to help your bot fulfill more than one scenario
-> * [Use prompts to ask questions](tutorial-get-weather.md) and get responses from an HTTP request
+> * [Use prompts](tutorial-get-weather.md) to ask questionsand get responses from an HTTP request
 > * [Handle interruptions](tutorial-add-help.md) in the conversation flow in order to add global help and the ability to cancel at any time 
 > * [Use Language Generation](tutorial-lg.md) to power your bot's responses
 > * [Send responses with cards](tutorial-cards.md)
