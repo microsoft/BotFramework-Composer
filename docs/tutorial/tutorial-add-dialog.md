@@ -13,7 +13,7 @@ In this tutorial, you learn how to:
 > * Run your bot locally and test it using the Bot Framework Emulator
 
 ## Prerequisites
-- Completion of the tutorial [Create a new bot and test it in the Emulator](./bot-tutorial-create-bot.md)
+- Completion of the tutorial [Create a new bot and test it in the Emulator](./tutorial-create-bot.md)
 - An understanding of the concepts taught in [the dialog concept article](../concept-dialog.md)
 
 ## What are we building?
