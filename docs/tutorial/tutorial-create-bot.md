@@ -40,7 +40,7 @@ The first step in creating a bot with the Bot Framework Composer is to create a 
    ![bot conversation](../media/tutorial-weatherbot/01/empty-main-dialog.png)
 
    > [!NOTE]
-   > Each dialog contains one or more **[triggers](./concept-events-and-triggers.md)** that define the actions available to the bot while the dialog is active. When you create a new bot, an **Activities** trigger of type **Greeting (ConversationUpdate activity)** is automatically provisioned. Triggers help your dialog capture events of interest and respond to them using actions.
+   > Each dialog contains one or more [triggers](./concept-events-and-triggers.md) that define the actions available to the bot while the dialog is active. When you create a new bot, an **Activities** trigger of type **Greeting (ConversationUpdate activity)** is automatically provisioned. Triggers help your dialog capture events of interest and respond to them using actions.
 
    > [!TIP] 
    > To help keep bots created in Composer organized, you can rename any trigger to something that better describes what it does. 
