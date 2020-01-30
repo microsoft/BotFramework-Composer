@@ -86,7 +86,7 @@ Use **Delete a Property** to remove a property from memory.
 ### Delete properties
 Use **Delete properties** to remove properties from memory.
 
-[Delete properties](./media/memory/delete-properties.png)
+![Delete properties](./media/memory/delete-properties.png)
 
 ### Edit an Array Property
 Use **Edit an Array Property** to add and remove items from an array. Items set in **Value** can be added or removed from the beginning or end of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
