@@ -4,8 +4,7 @@ In the Bot Framework Composer, each [dialog](./concept-dialog.md) includes one o
 
 To see the trigger menu in Composer, select **New Trigger** in the navigation pane.
 
-> [!div class="mx-imgBorder"]
-> ![Trigger menu](./media/events-triggers/trigger-menu.gif)
+![Trigger menu](./media/events-triggers/trigger-menu.gif)
 
 ## Anatomy of a trigger
 
