@@ -1,6 +1,6 @@
 # Dialogs
 
-Modern conversational software has many different components, including source code, custom business logic, cloud API, training data for language processing systems, and perhaps most importantly, the actual content used in conversations with the bot's end users. With Composer integrated all of these pieces into a single interface for constructing the building blocks of bot functionality called **Dialogs**. 
+Modern conversational software has many different components, including source code, custom business logic, cloud API, training data for language processing systems, and perhaps most importantly, the actual content used in conversations with the bot's end users. With Composer integrated all of these pieces into a single interface for constructing the building blocks of bot functionality called **Dialogs**.
 
 Each dialog represents a portion of the bot's functionality and contains instructions for how the bot will react to the input. Simple bots will have just a few dialogs. Sophisticated bots may have dozens or hundreds of individual dialogs.
 
@@ -8,7 +8,7 @@ In Composer, dialogs are functional components offered in a visual interface tha
 
 ## Types of dialogs
 
-You create a dialog in Composer to manage a conversation objective. There are two types of dialogs in Composer: _main dialog_ and _child dialog_. The main dialog is initialized by default when you create a new bot, and it has a **.Main** file extension. You can create one or more child dialogs to keep the dialog system organized. Each bot has one main dialog and can have zero or more child dialogs. Refer to the [Create a bot](./tutorial/bot-tutorial-introduction.md) article on how to create a bot and its main dialog in Composer. Refer to the [Add a dialog](./tutorial/bot-tutorial-add-dialog.md) article on how to create a child dialog and wire it up in the dialog system.
+You create a dialog in Composer to manage a conversation objective. There are two types of dialogs in Composer: _main dialog_ and _child dialog_. The main dialog is initialized by default when you create a new bot, and it has a **.Main** file extension. You can create one or more child dialogs to keep the dialog system organized. Each bot has one main dialog and can have zero or more child dialogs. Refer to the [Create a bot](./tutorial/tutorial-introduction.md) article on how to create a bot and its main dialog in Composer. Refer to the [Add a dialog](./tutorial/tutorial-add-dialog.md) article on how to create a child dialog and wire it up in the dialog system.
 
 Below is a screenshot of a main dialog named `MyBot.Main` and two children dialogs called `Weather` and `Greeting`.
 
@@ -20,8 +20,7 @@ At runtime, the main dialog is called into action and becomes the active dialog,
 
 The following diagram shows the anatomy of a dialog in Composer. Note that dialogs in Composer are based on [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme).
 
-> [!div class="mx-imgBorder"]
-> ![The adaptive dialog anatomy](./media/dialog/adaptive-dialog-anatomy.png)
+![The adaptive dialog anatomy](./media/dialog/adaptive-dialog-anatomy.png)
 
 
 ### Recognizer
@@ -51,7 +50,7 @@ As the bot takes actions and sends messages, the **Language Generator** is used 
 
 ## Dialog actions
 
-A bot can have from one to several hundred dialogs, and it can get challenging to manage the dialog system and the conversation with users. In the [Add a dialog](./tutorial/bot-tutorial-add-dialog.md) section, we covered how to create a child dialog and wire it up to the dialog system using **Begin a new dialog** action. Composer provides more dialog actions to make it easier to manage the dialog system. You can access the different dialog actions by clicking the **+** node under a trigger and then select **Dialog management**.
+A bot can have from one to several hundred dialogs, and it can get challenging to manage the dialog system and the conversation with users. In the [Add a dialog](./tutorial/tutorial-add-dialog.md) section, we covered how to create a child dialog and wire it up to the dialog system using **Begin a new dialog** action. Composer provides more dialog actions to make it easier to manage the dialog system. You can access the different dialog actions by clicking the **+** node under a trigger and then select **Dialog management**.
 
 Below is a list of the dialog actions available in Composer:
 
