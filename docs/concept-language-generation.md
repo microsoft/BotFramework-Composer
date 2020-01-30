@@ -59,8 +59,7 @@ You can define LG templates in two places: The inline LG editor and **Bot Respon
 
 Select the **Bot Responses** icon (or the bot icon when collapsed) in the navigation pane to see the LG editor listing all LG templates defined in the bot. Toggle **Edit Mode** on the upper right corner to edit your LG template.
 
-> [!div class="mx-imgBorder"]
-> ![Bot Responses](./media/language-generation/Bot-Responses.png)
+![Bot Responses](./media/language-generation/Bot-Responses.png)
 
 Composer currently supports definitions of the following three types of templates: simple template, conditional template and structured template. 
 
