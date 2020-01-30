@@ -93,7 +93,7 @@ The entire process of adding an HTTP request, capturing the results into a prope
 
       ![Select Send an HTTP request](../media/tutorial-weatherbot/03/http-step.png)
 
-1. In the **Properties panel**:
+2. In the **Properties panel**:
 
       - select **GET** from the **HTTP method** drop-down list.
 
@@ -119,27 +119,27 @@ The entire process of adding an HTTP request, capturing the results into a prope
           - _headers_. This can be accessed via the `dialog.api_response.headers`.
           - If the **Response type** is json, it will be a deserialized object available via `dialog.api_response.content` property.
 
-2. After making an HTTP request, you need to test the status of the response and handle errors is they occur. You can use an **If/Else branch** for this purpose. To do this, select the **+** button, then select **Branch: If/Else** from the **Create a condition** menu.  
+3. After making an HTTP request, you need to test the status of the response and handle errors is they occur. You can use an **If/Else branch** for this purpose. To do this, select the **+** button, then select **Branch: If/Else** from the **Create a condition** menu.  
 
-3. In the **Properties panel** on the right, enter the following value into the **Condition** field:
+4. In the **Properties panel** on the right, enter the following value into the **Condition** field:
 
       **dialog.api_response.statusCode == 200**
 
-4. In the **True** branch select the **+** button then select **Set a Property** from the **Manage properties** menu.
+5. In the **True** branch select the **+** button then select **Set a Property** from the **Manage properties** menu.
 
-5. In the **Properties panel** on the right, enter the following in the **Property** field:
+6. In the **Properties panel** on the right, enter the following in the **Property** field:
 
       **dialog.weather**
 
-6. Next, enter the following in the **Value** field:
+7. Next, enter the following in the **Value** field:
 
       **dialog.api_response.content**
 
       ![set a property](../media/tutorial-weatherbot/03/set-a-property.png)
 
-7. While still in the **True** branch, select the **+** button that appears beneath the action created in the previous step, then select **Send a response**. 
+8. While still in the **True** branch, select the **+** button that appears beneath the action created in the previous step, then select **Send a response**. 
 
-8. In the **Properties panel** on the right, enter the following response to send:
+9. In the **Properties panel** on the right, enter the following response to send:
    
       `The weather is @{dialog.weather.weather} and the temp is @{dialog.weather.temp}&deg;`
 
@@ -149,13 +149,13 @@ The entire process of adding an HTTP request, capturing the results into a prope
 
 You will now tell the bot what to do in the event that the [statusCode](https://docs.microsoft.com/en-us/windows/win32/winhttp/http-status-codes) returned is not 200.
 
-1.  Select the **+** button in the **False** branch, then select **Send a response** and set the text of the message to:
+10.  Select the **+** button in the **False** branch, then select **Send a response** and set the text of the message to:
    
        **I got an error: @{dialog.api_response.content.message}**
 
-2.  For the purposes of this tutorial we will assume that if you are in this branch, it is because the zip code is invalid, and if it is invalid it should be removed so that the invalid value does not persist in the **user.zipcode** property. To remove the invalid value from this property, select the **+** button that follows the **Send a response** action you created in the previous step, then select **Delete a property** from the **Manage properties** menu.
+11.  For the purposes of this tutorial we will assume that if you are in this branch, it is because the zip code is invalid, and if it is invalid it should be removed so that the invalid value does not persist in the **user.zipcode** property. To remove the invalid value from this property, select the **+** button that follows the **Send a response** action you created in the previous step, then select **Delete a property** from the **Manage properties** menu.
 
-3.  In the **Properties panel** on the right, enter **user.zipcode** into the **Property** field.
+12.  In the **Properties panel** on the right, enter **user.zipcode** into the **Property** field.
 
       The flow should appear in the **Authoring canvas** as follows:
 
