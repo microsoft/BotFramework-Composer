@@ -29,7 +29,7 @@ To define and use intents in Composer, you will need to:
 4. Publish the training data to LUIS.
 
 > [!NOTE]
-> For additional information on defining intents with the LUIS recognizer and Regular Expression recognizer refer to the [Defining triggers](how-to-defining-triggers.md#intent) article.
+> For additional information on defining intents with the LUIS recognizer and Regular Expression recognizer refer to the [Defining triggers](how-to-define-triggers.md#intent) article.
 
 ### Utterances 
 Utterances are input from users and may have a lot of variations. Since utterances are not always well-formed, we need to provide example utterances for specific intents to train bots to recognize intents from different utterances. By doing so, your bots will have some "intelligence" to understand human languages. 
