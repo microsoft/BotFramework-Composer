@@ -1,19 +1,21 @@
 
 # Microsoft Bot Framework Composer
 ### Overview
-- [Introduction to Bot Framework Composer](./docs/bfcomposer-intro.md)
-
+- [Introduction to Bot Framework Composer](./docs/introduction.md)
+### Installation 
+- [Set up Composer using Yarn](./docs/setup-yarn.md)
 ### QuickStart
-- [Create your first bot](./docs/tutorial-create-echobot.md) 
+- [Tour of Composer](./docs/onboarding.md)
+- [Create your first bot](./docs/quickstart-create-bot.md) 
 ### Tutorials
-0. [Onboarding](./docs/tutorial-onboarding.md)
-1. [Create a bot](./docs/tutorial/bot-tutorial-introduction.md)
-2. [Add a dialog](./docs/tutorial/bot-tutorial-add-dialog.md)
-3. [Get weather report](./docs/tutorial/bot-tutorial-get-weather.md)
-4. [Add help and cancel commands](./docs/tutorial/bot-tutorial-add-help.md)
-5. [Add Language Generation](./docs/tutorial/bot-tutorial-lg.md)
-6. [Use cards](./docs/tutorial/bot-tutorial-cards.md)
-7. [Add LUIS](./docs/tutorial/bot-tutorial-luis.md)
+0. [Introduction](./docs/tutorial/tutorial-introduction.md)
+1. [Create a bot](./docs/tutorial/tutorial-create-bot.md)
+2. [Add a dialog](./docs/tutorial/tutorial-add-dialog.md)
+3. [Get weather report](./docs/tutorial/tutorial-get-weather.md)
+4. [Add help and cancel commands](./docs/tutorial/tutorial-add-help.md)
+5. [Add Language Generation](./docs/tutorial/tutorial-lg.md)
+6. [Use cards](./docs/tutorial/tutorial-cards.md)
+7. [Add LUIS](./docs/tutorial/tutorial-luis.md)
 
 ### Concepts 
 - [Dialogs](./docs/concept-dialog.md)
@@ -23,8 +25,6 @@
 - [Language understanding](./docs/concept-language-understanding.md)
 
 ### How to
-#### Set up
-- [Set up Composer using Yarn](./docs/setup-yarn.md)
 #### Develop
 - [Send messages](./docs/how-to-send-messages.md)
 - [Ask for user input](./docs/how-to-ask-for-user-input.md)
