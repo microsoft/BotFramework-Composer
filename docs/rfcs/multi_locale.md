@@ -79,7 +79,7 @@ What this would look like in today's file representation:
 
 ##### Issues with current file structure
 
-"Main" became the convention to note the entry dialog, but I feel this is a heavy constraint and we can reconsider to something more expressive. Instead of generating a `/BotName/Main.dialog`, why can't we generate a `/BotName/<BotName>.dialog` as the entry point?
+"Main" became the convention to note the entry dialog, but this is a heavy constraint. We can reconsider to something more expressive. Instead of generating a `/BotName/Main.dialog`, why can't we generate a `/BotName/<BotName>.dialog` as the entry point?
 
 Representing the .lu and .lg locally with the .dialog file is logical in that it better places the files where they are being used. This makes a Dialog directory more portable in a world where Dialogs are not only used in a single bot. This file structure is a natural place to graduate to a system where Dialogs hold their own dependencies (.lu, .lg) and can be published or shared outside of the current bot.
 
