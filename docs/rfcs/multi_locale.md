@@ -79,14 +79,16 @@ What this would look like in today's file representation:
 
 ##### Issues with current file structure
 
+"Main" became the convention to note the entry dialog, but I feel this is a heavy constraint and we can reconsider to something more expressive. Instead of generating a `/BotName/Main.dialog`, why can't we generate a `/BotName/<BotName>.dialog` as the entry point?
+
 Representing the .lu and .lg locally with the .dialog file is logical in that it better places the files where they are being used. This makes a Dialog directory more portable in a world where Dialogs are not only used in a single bot. This file structure is a natural place to graduate to a system where Dialogs hold their own dependencies (.lu, .lg) and can be published or shared outside of the current bot.
 
 A example downside of this approach is that this distribution of files may not be set up for domain specific work in one of the file-formats. One could prefer that all the .lg files exist in its own directly, and all the .lg files exist in its own directory, or all "en-us" files live in an "en-us" directory, and so on. Because of the anticipation of a Dialog and its associated content files (.lu, .lg) are intended to be shared via mechanisms currently planned to be built, a structure to imply a tigher binding between .dialog, .lg, .lu is currently the preferred approach.
 
 ##### Note
 
-1. This proposal only applies to a filesystem-based storage plugin, and has little bearing on a database-backed store plugin implementation. **It may have merit to choose a structure that better aligns with a database-driven index approach.**
-2. This is ideally the final time we make a significant naming or serialization decision before Composer hits GA. If we wanted to, for example, lowercass files and/or directories, this would be the time to do it.
+1. This proposal only applies to a filesystem-based storage plugin, and has little bearing on a database-backed store plugin implementation.
+2. This is ideally the final time we make a significant naming or serialization decision before Composer hits GA. If we wanted to, for example, lowercase files and/or directories, this would be the time to do it.
 
 ##### Alternative structures
 
@@ -96,11 +98,11 @@ Benefit: Dependency encapsulation, recursive, convention can be applied to scena
 
 ```
 /coolbot
-  main.dialog
+  coolbot.dialog
   /language-generation
     /en-us
       common.en-us.lg
-      main.en-us.dialog
+      coolbot.en-us.dialog
   /language-understanding
     main.en-us.lu
   /dialogs
@@ -120,14 +122,14 @@ Benefit: Physically maps to a content editing scenario (.lu, .lg)
 ```
 /coolbot
   /dialogs
-    main.dialog
+    coolbot.dialog
     foo.dialog
     bar.dialog
     baz.dialog
   /language-generation
     /en-us
       common.en-us.lg
-      main.en-us.lg
+      coolbot.en-us.lg
       foo.en-us.lg
       bar.en-us.lg
       baz.en-us.lg
@@ -138,6 +140,12 @@ Benefit: Physically maps to a content editing scenario (.lu, .lg)
       bar.en-us.lu
       baz.en-us.lu
 ```
+
+##### Proposal
+
+1. Adopt a lower-case naming convention for files and directories
+2. Remove hard-coded "Main" entrypoint requirement and key off of the bot name <botname>.dialog
+3. Adopt #1 alternative structure option for physical layout of .dialog, .lu, .lg
 
 ##### Important consideration:
 
