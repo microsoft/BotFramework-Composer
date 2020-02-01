@@ -83,75 +83,60 @@ Representing the .lu and .lg locally with the .dialog file is logical in that it
 
 A example downside of this approach is that this distribution of files may not be set up for domain specific work in one of the file-formats. One could prefer that all the .lg files exist in its own directly, and all the .lg files exist in its own directory, or all "en-us" files live in an "en-us" directory, and so on. Because of the anticipation of a Dialog and its associated content files (.lu, .lg) are intended to be shared via mechanisms currently planned to be built, a structure to imply a tigher binding between .dialog, .lg, .lu is currently the preferred approach.
 
-#####Note
+##### Note
 
 1. This proposal only applies to a filesystem-based storage plugin, and has little bearing on a database-backed store plugin implementation. **It may have merit to choose a structure that better aligns with a database-driven index approach.**
 2. This is ideally the final time we make a significant naming or serialization decision before Composer hits GA. If we wanted to, for example, lowercass files and/or directories, this would be the time to do it.
 
 ##### Alternative structures
 
-```
-/Dialogs
-  /common
-    common.en-us.lg
-    common.fr.lg
-    common.de.lg
-  Main.dialog
-/LanguageGeneration
-  Main.en-us.lg
-  Main.fr.lg
-  Main.de.lg
-/LanguageUnderstanding
-  Main.en-us.lu
-  Main.fr.lu
-  Main.de.lu
-```
+1. Assets partitioned based on dialog and dependent assets
+
+Benefit: Dependency encapsulation, recursive, convention can be applied to scenarios like publishing local dialogs and associated dependencies, or pulling down dialogs and associated dependencies from a external/third-party source.
 
 ```
-/Dialogs
-  Main.dialog
-/LanguageGeneration
-  /en-us
-    common.en-us.lg
-    Main.en-us.lg
-  /fr
-    common.fr.lg
-    Main.de.lg
-  /de
-    common.de.lg
-    Main.de.lg
-/LanguageUnderstanding
-  /en-us
-    Main.en-us.lu
-  /fr
-    Main.fr.lu
-  /de
-    Main.de.lu
+/coolbot
+  main.dialog
+  /language-generation
+    /en-us
+      common.en-us.lg
+      main.en-us.dialog
+  /language-understanding
+    main.en-us.lu
+  /dialogs
+    /foo
+      foo.dialog
+      /language-generation
+        /en-us
+          foo.en-us.dialog
+      /language-understanding
+        foo.en-us.lu
 ```
 
+2. Assets partitioned by asset type
+
+Benefit: Physically maps to a content editing scenario (.lu, .lg)
+
 ```
-Main.dialog
-/common
-  common.en-us.lg
-  common.fr.lg
-  common.de.lg
-/LanguageGeneration
-  /en-us
-    common.en-us.lg
-    Main.en-us.lg
-  /fr
-    common.fr.lg
-    Main.de.lg
-  /de
-    common.de.lg
-    Main.de.lg
-/LanguageUnderstanding
-  /en-us
-    Main.en-us.lu
-  /fr
-    Main.fr.lu
-  /de
-    Main.de.lu
+/coolbot
+  /dialogs
+    main.dialog
+    foo.dialog
+    bar.dialog
+    baz.dialog
+  /language-generation
+    /en-us
+      common.en-us.lg
+      main.en-us.lg
+      foo.en-us.lg
+      bar.en-us.lg
+      baz.en-us.lg
+  /language-understanding
+    /en-us
+      main.en-us.lu
+      foo.en-us.lu
+      bar.en-us.lu
+      baz.en-us.lu
 ```
 
 ##### Important consideration:
