@@ -11,32 +11,43 @@ Bot Framework Composer is designed to be a hosted web app. Currently, you need t
 - [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest): latest stable version
 - [.NET Core SDK 2.2](https://dotnet.microsoft.com/download/dotnet-core/2.2): required to test your bot
 
-## Set up yarn for Composer
-To start, clone the Composer GitHub repository. 
-```
-git clone https://github.com/microsoft/BotFramework-Composer.git
-```
+## Installation instructions
+1. To start, open a terminal and clone the Composer GitHub repository. You will use this terminal for the rest of the steps in this section.
 
-After cloning the repo open a terminal and navigate to the Bot Framework Composer folder. Navigate to the **Composer** folder and run the following commands:
-```
-cd Composer 
-yarn 
-```
-  This command gets all dependent packages.
+    ```
+    git clone https://github.com/microsoft/BotFramework-Composer.git
+    ```
 
-```
-yarn build 
-```
-  This command builds the Composer app. The build process can take few minutes.
+2. After cloning the repository, navigate to the **Bot Framework Composer** folder. Then run the following commands to navigate to the **Composer** folder and get all required packages:
+
+    ```
+    cd Composer
+    yarn 
+    ```
+
+3. Next, run the following command to build the Composer application, this command can take several minutes to finish:
+
+    ```
+    yarn build 
+    ```
   
- If you are having trouble intalling or building Composer run `yarn tableflip`, which removes all of the Composer application's dependencies (node_modules) and reinstalls and rebuilds the application's dependencies. After running `yarn tableflip` run `yarn install` and `yarn build` again. This process can take anywhere from 5-10 minutes.
+   > [!NOTE]
+   > If you are having trouble installing or building Composer run `yarn tableflip`. This will remove all of the Composer application's dependencies (node_modules) and then it reinstalls and rebuilds all of its dependencies. Once completed, run `yarn install` and `yarn build` again. This process generally takes 5-10 minutes.
 
-```
-yarn startall
-```
-  This command starts the Composer authoring application and the bot runtime. 
+4. Again using Yarn, start the Composer authoring application and the bot runtime:
 
-## Open Composer in a browser
-To use Composer open a browser and navigate to the address after the message `Compiled successfully`, as seen below where the address is http://localhost:3000.
+    ```
+    yarn startall
+    ```
 
-![browser address](./media/setup-yarn/address.png)
+5. Once you see **Composer now running at:** appear in your terminal, you can run Composer in your browser using the address http://localhost:3000.
+
+    ![browser address](./media/setup-yarn/address.png)
+
+Keep the terminal open as long as you plan to work with the Composer. If you close it, Composer will stop running. 
+
+The next time you need to run the Composer, all you will need is to run `yarn startall` from the **Composer** directory.
+
+## Next steps
+
+- Create a [echo bot](./quickstart-create-bot.md) using Composer.

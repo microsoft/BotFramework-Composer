@@ -25,7 +25,6 @@ import {
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
-  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { StoreContext } from '../../store';
 
@@ -69,8 +68,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
-  const luFile = luFiles.find(lu => lu.id === dialogId);
+  const { dialogs } = state;
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -104,14 +102,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
 
-  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
-
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
-  const luisIntents = get(luFile, 'intents', []);
-  const intents = isRegEx ? regexIntents : luisIntents;
-
-  const intentOptions = intents.map(t => {
-    return { key: t.name || t.intent, text: t.name || t.intent };
+  const intentOptions = get(dialogFile, 'luIntents', [] as string[]).map(intent => {
+    return { key: intent, text: intent };
   });
 
   const showIntentDropDown = formData.$type === intentTypeKey;
