@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using BotManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +15,16 @@ namespace BotManager.Controllers
     [Route("/composer/api/v1")]
     public class PublishController : Controller
     {
+        private readonly ILogger _logger;
         private readonly string baseDir = Directory.GetCurrentDirectory();
 
-        private readonly Dictionary<string, Process> runningBots = new Dictionary<string, Process>();
+        private readonly static Dictionary<string, Process> runningBots = new Dictionary<string, Process>();
+
+
+        public PublishController(ILogger<PublishController> logger)
+        {
+            _logger = logger;
+        }
 
         [HttpPost]
         [Route("[action]")]
@@ -45,7 +53,7 @@ namespace BotManager.Controllers
         [Route("[action]")]
         public IActionResult Stop(string botID)
         {
-            if (this.runningBots.TryGetValue(botID, out var process))
+            if (runningBots.TryGetValue(botID, out var process))
             {
                 process.Kill();
                 return Ok();
@@ -57,7 +65,7 @@ namespace BotManager.Controllers
         [Route("[action]")]
         public IActionResult StopAll(string botID)
         {
-            if (this.runningBots.TryGetValue(botID, out var process))
+            if (runningBots.TryGetValue(botID, out var process))
             {
                 process.Kill(true);
                 return Ok();
@@ -82,6 +90,8 @@ namespace BotManager.Controllers
 
                 // Run 'dotnet user-sceret init'
                 RunCommand("dotnet", "user-secrets init", botDir);
+                RunCommand("dotnet", "build", botDir);
+
             }
         }
 
@@ -112,13 +122,16 @@ namespace BotManager.Controllers
         {
             var botDir = GetBotDir(botID);
             var process = CreateProcess("dotnet", "bin/Debug/netcoreapp2.1/BotProject.dll --urls=http://localhost:3979", botDir);
-            this.runningBots[botID] = process;
+            runningBots[botID] = process;
             process.Start();
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
         }
 
         private void StopBot(string botID)
         {
-            if (this.runningBots.TryGetValue(botID, out var process))
+            if (runningBots.TryGetValue(botID, out var process))
             {
                 process.Kill();
             }
@@ -130,13 +143,16 @@ namespace BotManager.Controllers
         {
             var process = CreateProcess(cmd, args, dir);
 
+
             process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
             process.WaitForExit();
         }
 
         private Process CreateProcess(string cmd, string args, string dir)
         {
-            return new Process()
+            var process = new Process()
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -149,6 +165,23 @@ namespace BotManager.Controllers
                     WorkingDirectory = dir
                 }
             };
+
+            process.OutputDataReceived += (sender, args) =>
+            {
+                if (args.Data != null)
+                {
+                    _logger.LogInformation(args.Data);
+                }
+            };
+            process.ErrorDataReceived += (sender, args) =>
+            {
+                if (args.Data != null)
+                {
+                    _logger.LogInformation(args.Data);
+                }
+            };
+
+            return process;
         }
 
         public void Empty(DirectoryInfo directory)
