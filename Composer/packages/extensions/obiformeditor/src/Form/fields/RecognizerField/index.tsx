@@ -28,9 +28,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
   const currentDialogId = currentDialog.id;
   const selectedFile: LuFile | void = luFiles.find(f => f.id === currentDialogId);
-  const isLuFileSelected = Boolean(
-    selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
-  );
 
   const handleChange = (_, option?: IDropdownOption): void => {
     if (option) {
@@ -131,11 +128,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           responsiveMode={ResponsiveMode.large}
           onRenderTitle={onRenderTitle}
         />
-        <ToggleEditor
-          key={getSelectedType()}
-          title={isLuFileSelected ? 'text editor' : 'regular expression editor'}
-          loaded={Boolean(!loading && formData)}
-        >
+        <ToggleEditor key={getSelectedType()} title={'regular expression editor'} loaded={Boolean(isRegex)}>
           {() => {
             if (isRegex) {
               return <RegexEditor {...props} />;
