@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic } from './diagnostic';
 import { LuIntentSection } from '@bfc/shared';
+
+import { Diagnostic } from './diagnostic';
 
 export interface FileInfo {
   name: string;
