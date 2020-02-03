@@ -11,10 +11,12 @@ interface DescriptionCalloutProps {
   title: string;
   description?: string;
   id?: string;
+  helpLink?: string;
+  helpLinkText?: string;
 }
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
-  const { description, title, id } = props;
+  const { description, title, id, helpLink, helpLinkText } = props;
 
   if (!description) {
     return null;
@@ -27,7 +29,18 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
         onRenderContent: () => (
           <div>
             <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>{title}</h3>
-            <p>{description}</p>
+            <p>
+              {description}
+              {helpLink && helpLinkText && (
+                <>
+                  <br />
+                  <br />
+                  <a href={helpLink} target="_blank" rel="noopener noreferrer">
+                    {helpLinkText}
+                  </a>
+                </>
+              )}
+            </p>
           </div>
         ),
       }}
@@ -57,10 +70,12 @@ interface WidgetLabelProps {
   label?: string;
   description?: string;
   inline?: boolean;
+  helpLink?: string;
+  helpLinkText?: string;
 }
 
 export const WidgetLabel: React.FC<WidgetLabelProps> = props => {
-  const { label, description, id, inline } = props;
+  const { label, description, id, inline, helpLink, helpLinkText } = props;
 
   if (!label) {
     return null;
@@ -79,7 +94,13 @@ export const WidgetLabel: React.FC<WidgetLabelProps> = props => {
       }}
     >
       {label}
-      <DescriptionCallout description={description} title={label} id={id} />
+      <DescriptionCallout
+        description={description}
+        title={label}
+        id={id}
+        helpLink={helpLink}
+        helpLinkText={helpLinkText}
+      />
     </Label>
   );
 };
