@@ -44,6 +44,9 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LuEditor
+      // typescript is unable to reconcile 'on' as part of a union type
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       options={{
         lineNumbers: 'on',
         minimap: 'on',
