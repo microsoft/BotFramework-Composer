@@ -81,7 +81,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
           description={getDescription()}
           helpLink={helpLink}
           helpLinkText={helpLinkText}
-          {...props.schema}
+          id={key}
         />
       )}
       <div className={classnames({ BaseFieldInline: displayInline })}>{children}</div>
