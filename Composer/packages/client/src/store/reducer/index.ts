@@ -117,7 +117,7 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
       } catch (err) {
         diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-      return { ...lgFile, templates, diagnostics };
+      return { ...lgFile, templates, diagnostics, content };
     }
     return lgFile;
   });

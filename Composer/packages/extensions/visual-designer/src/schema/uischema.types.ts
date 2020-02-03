@@ -34,6 +34,6 @@ export interface WidgetContainerProps {
   [propKey: string]: any;
 }
 
-export type UIWidgetProp = Value | PropGenerator;
+export type UIWidgetProp = Value | PropGenerator | UIWidget;
 type Value = string | number | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
