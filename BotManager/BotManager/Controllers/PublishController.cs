@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection.Emit;
 using BotManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,14 @@ namespace BotManager.Controllers
 
         private readonly static Dictionary<string, Process> runningBots = new Dictionary<string, Process>();
 
+        public static void StopAllBots()
+        {
+            foreach (var kv in runningBots)
+            {
+                kv.Value.Kill();
+            }
+        }
+
 
         public PublishController(ILogger<PublishController> logger)
         {
@@ -30,22 +39,34 @@ namespace BotManager.Controllers
         [Route("[action]")]
         public PublishResult Publish([FromForm] PublishRequest publishRequest)
         {
-            var botID = publishRequest.botID;
+            // TODO: decouple bussiness logic in a sperate layer
 
+            var botID = publishRequest.botID;
+            var version = publishRequest.version;
+
+            // Make sure the bot is inited
             InitBot(botID);
 
-            StopBot(botID);
+            // Save content with that ID
+            SaveContent(botID, version, publishRequest.content.OpenReadStream());
 
-            UpdateBot(botID, publishRequest.content.OpenReadStream());
-
-            StartBot(botID);
-
+            // A new publish is also implemented by a reset
+            ResetBot(botID, version);
 
             return new PublishResult()
             {
-                versionID = "random",
-                label = publishRequest.label
+                jobID = System.Guid.NewGuid().ToString(),
+                version = version,
+                message = "Bot started at http://localhost:3979/"
             };
+        }
+
+
+        [HttpGet]
+        [Route("[action]")]
+        public List<PublishRecord> PublishHistory(string botID)
+        {
+            return new List<PublishRecord>() { };
         }
 
 
@@ -74,6 +95,9 @@ namespace BotManager.Controllers
         }
 
         private string GetBotDir(string botID) => Path.Combine(this.baseDir, "hostedBots", botID);
+        private string GetBotAssetsDir(string botID) => Path.Combine(this.GetBotDir(botID), "ComposerDialogs");
+        private string GetDownloadDir(string botID) => Path.Combine(this.GetBotDir(botID), "history");
+        private string GetDownloadPath(string botID, string versionID) => Path.Combine(this.GetDownloadDir(botID), $"{versionID}.zip");
 
         private void InitBot(string botID)
         {
@@ -88,33 +112,40 @@ namespace BotManager.Controllers
                 var templatePath = Path.Combine(this.baseDir, "Templates", "CSharp.zip");
                 ZipFile.ExtractToDirectory(templatePath, botDir);
 
-                // Run 'dotnet user-sceret init'
+                // Create ComposerDialogs and history folder
+                Directory.CreateDirectory(this.GetBotAssetsDir(botID));
+                Directory.CreateDirectory(this.GetDownloadDir(botID));
+
                 RunCommand("dotnet", "user-secrets init", botDir);
                 RunCommand("dotnet", "build", botDir);
-
             }
         }
 
-        private void UpdateBot(string botID, Stream botContent)
-        {
-            var botDir = GetBotDir(botID);
-            // Save the content in a tmp.zip 
-            var tmpDir = Path.Combine(botDir, "__tmp__");
-            Directory.CreateDirectory(tmpDir);
 
-            var tmpFilePath = Path.Combine(tmpDir, "tmp.zip");
-            using (var outStream = new FileStream(tmpFilePath, FileMode.Create))
+        private void SaveContent(string botID, string versionID, Stream botContent)
+        {
+            var dstPath = GetDownloadPath(botID, versionID);
+
+            using (var outStream = new FileStream(dstPath, FileMode.Create))
             {
                 botContent.CopyToAsync(outStream).GetAwaiter().GetResult();
             }
+        }
 
-            // Clear up the existing content
-            var botAssetDir = Path.Combine(botDir, "ComposerDialogs");
-            Directory.CreateDirectory(botAssetDir);
-            Empty(new DirectoryInfo(botAssetDir));
 
-            // Extract into composerDialogs dir
-            ZipFile.ExtractToDirectory(tmpFilePath, botAssetDir);
+        private void ResetBot(string botID, string versionID)
+        {
+            StopBot(botID);
+            RestoreContent(botID, versionID);
+            StartBot(botID);
+        }
+
+        private void RestoreContent(string botID, string versionID)
+        {
+            var botAssetsDir = this.GetBotAssetsDir(botID);
+
+            Empty(new DirectoryInfo(botAssetsDir));
+            ZipFile.ExtractToDirectory(this.GetDownloadPath(botID, versionID), botAssetsDir);
         }
 
 

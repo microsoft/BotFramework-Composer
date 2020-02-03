@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using BotManager.Controllers;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,14 +13,22 @@ namespace BotManager.Models
         [Required]
         public string botID { get; set; }
         [Required]
-        public string label { get; set; }
+        public string version { get; set; }
         [Required]
         public IFormFile content { get; set; }
     }
 
     public class PublishResult
     {
-        public string versionID { get; set; }
-        public string label { get; set; }
+        public string jobID { get; set; }
+        public string version { get; set; }
+        public string message { get; set; }
+    }
+
+    public class PublishRecord
+    {
+        public string botID { get; set; }
+        public string version { get; set; }
+        public string lastUpdateTime { get; set; }
     }
 }
