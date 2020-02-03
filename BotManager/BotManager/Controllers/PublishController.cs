@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -66,9 +67,53 @@ namespace BotManager.Controllers
         [Route("[action]")]
         public List<PublishRecord> PublishHistory(string botID)
         {
-            return new List<PublishRecord>() { };
+            var result = new List<PublishRecord>() { };
+
+            var botsDir = GetBotsDir();
+            var dirInfo = new DirectoryInfo(botsDir);
+            foreach (var subDir in dirInfo.GetDirectories())
+            {
+                var id = subDir.Name;
+                var historyDir = new DirectoryInfo(Path.Combine(subDir.FullName, "history"));
+
+                foreach (var file in historyDir.GetFiles())
+                {
+                    result.Add(new PublishRecord
+                    {
+                        botID = id,
+                        version = Path.GetFileNameWithoutExtension(file.FullName),
+                        lastUpdateTime = file.LastWriteTime.ToUniversalTime().ToString()
+                    }) ;
+                }
+
+            }
+
+            if (botID != null)
+            {
+                result = result.FindAll(r => r.botID == botID);
+            }
+
+            return result;
         }
 
+
+        [HttpPost]
+        [Route("[action]")]
+        public PublishResult Rollback([Required]string botID, [Required]string version)
+        {
+            if (!VersionExists(botID, version))
+            {
+                throw new ArgumentException("No such botID or version");
+            }
+
+            ResetBot(botID, version);
+            return new PublishResult
+            {
+                version = version,
+                message = ""
+            };
+
+        }
 
         [HttpGet]
         [Route("[action]")]
@@ -94,10 +139,15 @@ namespace BotManager.Controllers
             return NotFound();
         }
 
-        private string GetBotDir(string botID) => Path.Combine(this.baseDir, "hostedBots", botID);
+        private string GetBotsDir() => Path.Combine(this.baseDir, "hostedBots");
+        private string GetBotDir(string botID) => Path.Combine(this.GetBotsDir(), botID);
         private string GetBotAssetsDir(string botID) => Path.Combine(this.GetBotDir(botID), "ComposerDialogs");
         private string GetDownloadDir(string botID) => Path.Combine(this.GetBotDir(botID), "history");
-        private string GetDownloadPath(string botID, string versionID) => Path.Combine(this.GetDownloadDir(botID), $"{versionID}.zip");
+        private string GetDownloadPath(string botID, string version) => Path.Combine(this.GetDownloadDir(botID), $"{version}.zip");
+
+        private bool BotExists(string botID) => Directory.Exists(GetBotDir(botID));
+        private bool VersionExists(string botID, string version) => System.IO.File.Exists(GetDownloadPath(botID, version));
+
 
         private void InitBot(string botID)
         {
