@@ -60,7 +60,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   },
   [SDKTypes.BeginSkill]: {
     targetSkill: {
-      'ui:field': 'CustomObjectField',
+      'ui:field': 'JsonField',
     },
   },
   [SDKTypes.CancelAllDialogs]: {
