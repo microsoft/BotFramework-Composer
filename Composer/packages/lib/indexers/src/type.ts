@@ -19,6 +19,11 @@ export interface ITrigger {
   isIntent: boolean;
 }
 
+export interface ReferredLuIntents {
+  name: string;
+  path: string;
+}
+
 export interface DialogInfo {
   content: any;
   diagnostics: Diagnostic[];
@@ -28,7 +33,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: string[];
   luFile: string;
-  luIntents: string[];
+  referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   relativePath: string;
   triggers: ITrigger[];

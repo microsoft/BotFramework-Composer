@@ -5,8 +5,9 @@ import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 import { extractLgTemplateRefs } from '@bfc/shared';
 
+import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo } from './type';
+import { ITrigger, DialogInfo, FileInfo, ReferredLuIntents } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
@@ -50,8 +51,8 @@ function ExtractLgTemplates(dialog): string[] {
 }
 
 // find out all lu intents given dialog
-function ExtractLuIntents(dialog): string[] {
-  const intents: string[] = [];
+function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
+  const intents: ReferredLuIntents[] = [];
   /**    *
    * @param path , jsonPath string
    * @param value , current node value    *
@@ -61,11 +62,14 @@ function ExtractLuIntents(dialog): string[] {
     // it's a valid schema dialog node.
     if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
       const intentName = value.intent;
-      intents.push(intentName);
+      intents.push({
+        name: intentName,
+        path: createPath(path, value.$type),
+      });
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
+  JsonWalk(id, dialog, visitor);
   return uniq(intents);
 }
 
@@ -175,7 +179,7 @@ function parse(id: string, content: any, schema: any) {
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(content),
-    luIntents: ExtractLuIntents(content),
+    referredLuIntents: ExtractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),

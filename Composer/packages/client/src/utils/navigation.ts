@@ -78,13 +78,11 @@ interface NavigationState {
   breadcrumb: BreadcrumbItem[];
 }
 
-export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
+export function convertPathToUrl(id: string, path?: string): string {
   //path is like main.trigers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-  const { path, source } = diagnostic;
-  if (!source) return '';
 
-  let uri = `/dialogs/${source}`;
+  let uri = `/dialogs/${id}`;
   if (!path) return uri;
 
   const items = path.split('#');

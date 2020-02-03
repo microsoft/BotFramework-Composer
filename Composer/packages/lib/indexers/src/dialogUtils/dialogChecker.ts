@@ -12,7 +12,7 @@ import { CheckerFunc } from './types';
 
 const ExpressionParser = new ExpressionEngine();
 
-const createPath = (path: string, type: string): string => {
+export const createPath = (path: string, type: string): string => {
   const steps = [FieldNames.Events, FieldNames.Actions, FieldNames.ElseActions];
   let list = path.split('.');
   const matches = list.filter(x => !steps.every(step => !x.startsWith(step)));
