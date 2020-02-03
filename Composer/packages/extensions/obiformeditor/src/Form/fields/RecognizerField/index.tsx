@@ -1,28 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, ReactElement, Suspense, useEffect } from 'react';
+import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { MicrosoftIRecognizer } from '@bfc/shared';
-import { LuFile, combineMessage } from '@bfc/indexers';
+import { LuFile } from '@bfc/indexers';
 
 import { BaseField } from '../BaseField';
-import { LoadingSpinner } from '../../../LoadingSpinner';
 
 import ToggleEditor from './ToggleEditor';
 import RegexEditor from './RegexEditor';
 
 import './styles.css';
 
-const InlineLuEditor = React.lazy(() => import('./InlineLuEditor'));
-
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { formData } = props;
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
 
   const {
     formContext: { luFiles, shellApi, currentDialog },
@@ -35,16 +31,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const isLuFileSelected = Boolean(
     selectedFile && typeof props.formData === 'string' && props.formData.startsWith(selectedFile.id)
   );
-
-  //make the inline editor show error message
-  useEffect(() => {
-    if (selectedFile && selectedFile.diagnostics.length > 0) {
-      const msg = combineMessage(selectedFile.diagnostics);
-      setErrorMsg(msg);
-    } else {
-      setErrorMsg('');
-    }
-  }, [selectedFile]);
 
   const handleChange = (_, option?: IDropdownOption): void => {
     if (option) {
@@ -151,17 +137,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           loaded={Boolean(!loading && formData)}
         >
           {() => {
-            if (selectedFile && isLuFileSelected) {
-              const updateLuFile = (newValue?: string): void => {
-                shellApi.updateLuFile({ id: selectedFile.id, content: newValue }).catch(setErrorMsg);
-              };
-
-              return (
-                <Suspense fallback={<LoadingSpinner />}>
-                  <InlineLuEditor file={selectedFile} onSave={updateLuFile} errorMsg={errorMsg} />
-                </Suspense>
-              );
-            }
             if (isRegex) {
               return <RegexEditor {...props} />;
             }
