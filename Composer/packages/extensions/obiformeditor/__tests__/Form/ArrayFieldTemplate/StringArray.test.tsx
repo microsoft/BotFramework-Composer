@@ -46,13 +46,6 @@ describe('<StringArray />', () => {
     expect(baseElement).toHaveTextContent('My array description.');
   });
 
-  // it('renders a DescriptionField', async () => {
-  //   const { findByText } = renderDefault();
-
-  //   const description = await findByText('My array description.');
-  //   expect(description).toBeTruthy();
-  // });
-
   it('renders a StringItem for each item', async () => {
     const { findAllByText } = renderDefault();
 
