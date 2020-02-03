@@ -59,7 +59,7 @@ function measureSwitchConditionBoundary(json): Boundary {
   );
 }
 
-function measureChoiceInputDetailBoundary(data): Boundary {
+export function measureChoiceInputDetailBoundary(data): Boundary {
   const width = InitNodeSize.width;
   const height =
     InitNodeSize.height +
