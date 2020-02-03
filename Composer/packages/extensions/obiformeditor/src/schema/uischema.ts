@@ -58,6 +58,11 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
+  [SDKTypes.BeginSkill]: {
+    targetSkill: {
+      'ui:field': 'CustomObjectField',
+    },
+  },
   [SDKTypes.CancelAllDialogs]: {
     eventValue: {
       'ui:field': 'CustomObjectField',

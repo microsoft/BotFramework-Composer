@@ -37,6 +37,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKTypes.BeginDialog]: {
     title: formatMessage('Begin a new dialog'),
   },
+  [SDKTypes.BeginSkill]: {
+    title: formatMessage('Begin a skill.'),
+  },
   [SDKTypes.CancelAllDialogs]: {
     title: formatMessage('Cancel all dialogs'),
   },
