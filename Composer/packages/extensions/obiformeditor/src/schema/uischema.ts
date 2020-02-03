@@ -60,7 +60,10 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   },
   [SDKTypes.BeginSkill]: {
     targetSkill: {
-      'ui:field': 'JsonField',
+      'ui:options': {
+        hideLabel: true,
+        transparentBorder: true,
+      },
     },
   },
   [SDKTypes.CancelAllDialogs]: {
