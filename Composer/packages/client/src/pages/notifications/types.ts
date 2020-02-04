@@ -4,7 +4,6 @@ import { Diagnostic, createSingleMessage, DialogInfo } from '@bfc/indexers';
 
 import { replaceDialogDiagnosticLabel } from '../../utils';
 
-import { intent } from './../../components/ProjectTree/styles';
 import { LuFile } from './../../../../lib/indexers/lib/type.d';
 
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
