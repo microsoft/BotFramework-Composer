@@ -2268,7 +2268,7 @@
   dependencies:
     lodash "^4.17.15"
 
-"@botframework-ui/json@^0.0.0":
+"@botframework-ui/json@^0.0.0-0":
   version "0.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/json/-/@botframework-ui/json-0.0.0.tgz#3361a2e492508e5270a30fbde1c79d783837361b"
   integrity sha1-M2Gi5JJQjlJwow+94cedeDg3Nhs=
@@ -2278,7 +2278,7 @@
     "@monaco-editor/react" "^3.0.1"
     monaco-editor "^0.19.3"
 
-"@botframework-ui/prompts@^0.0.0":
+"@botframework-ui/prompts@^0.0.0-0":
   version "0.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/prompts/-/@botframework-ui/prompts-0.0.0.tgz#bda0320e62f17bf09bf1ca3a98a79701c4c5f77c"
   integrity sha1-vaAyDmLxe/Cb8co6mKeXAcTF93w=
