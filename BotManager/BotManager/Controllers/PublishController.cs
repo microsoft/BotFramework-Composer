@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection.Emit;
 using BotManager.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -52,13 +55,13 @@ namespace BotManager.Controllers
             SaveContent(botID, version, publishRequest.content.OpenReadStream());
 
             // A new publish is also implemented by a reset
-            ResetBot(botID, version);
+            var url = ResetBot(botID, version);
 
             return new PublishResult()
             {
                 jobID = System.Guid.NewGuid().ToString(),
                 version = version,
-                message = "Bot started at http://localhost:3979/"
+                message = $"Bot started at {url}"
             };
         }
 
@@ -106,16 +109,24 @@ namespace BotManager.Controllers
                 throw new ArgumentException("No such botID or version");
             }
 
-            ResetBot(botID, version);
+            var url = ResetBot(botID, version);
             return new PublishResult
             {
                 version = version,
-                message = ""
+                message = $"Bot started at {url}"
             };
 
         }
 
-        [HttpGet]
+
+        [HttpPost]
+        [Route("[action]")]
+        public IActionResult Status()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("[action]")]
         public IActionResult Stop(string botID)
         {
@@ -127,16 +138,12 @@ namespace BotManager.Controllers
             return NotFound();
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("[action]")]
         public IActionResult StopAll(string botID)
         {
-            if (runningBots.TryGetValue(botID, out var process))
-            {
-                process.Kill(true);
-                return Ok();
-            }
-            return NotFound();
+            StopAllBots();
+            return Ok();
         }
 
         private string GetBotsDir() => Path.Combine(this.baseDir, "hostedBots");
@@ -183,11 +190,11 @@ namespace BotManager.Controllers
         }
 
 
-        private void ResetBot(string botID, string versionID)
+        private string ResetBot(string botID, string versionID)
         {
             StopBot(botID);
             RestoreContent(botID, versionID);
-            StartBot(botID);
+            return StartBot(botID);
         }
 
         private void RestoreContent(string botID, string versionID)
@@ -199,31 +206,39 @@ namespace BotManager.Controllers
         }
 
 
-        private void StartBot(string botID)
+        private string StartBot(string botID)
         {
+            var port = NextAvailablePort(3979); // start from 3979
+
             var botDir = GetBotDir(botID);
-            var process = CreateProcess("dotnet", "bin/Debug/netcoreapp2.1/BotProject.dll --urls=http://localhost:3979", botDir);
+            var process = CreateProcess("dotnet", $"bin/Debug/netcoreapp2.1/BotProject.dll --urls=http://localhost:{port}", botDir);
             runningBots[botID] = process;
             process.Start();
 
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
+
+            return $"http://localhost:{port}";
         }
 
         private void StopBot(string botID)
         {
             if (runningBots.TryGetValue(botID, out var process))
             {
-                process.Kill();
+                process.Kill(true);
             }
         }
 
 
+        private EventHandler CommandExited(Process p) => (object sender, EventArgs e) =>
+        {
+            p.Kill(true);
+        };
 
         private void RunCommand(string cmd, string args, string dir)
         {
             var process = CreateProcess(cmd, args, dir);
-
+            process.Exited += CommandExited(process);
 
             process.Start();
             process.BeginOutputReadLine();
@@ -269,6 +284,45 @@ namespace BotManager.Controllers
         {
             foreach (FileInfo file in directory.GetFiles()) file.Delete();
             foreach (DirectoryInfo subDirectory in directory.GetDirectories()) subDirectory.Delete(true);
+        }
+
+
+        private int NextAvailablePort(int startingPort)
+        {
+            IPEndPoint[] endPoints;
+            List<int> portArray = new List<int>();
+
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+
+            // getting active connections
+            TcpConnectionInformation[] connections = properties.GetActiveTcpConnections();
+            portArray.AddRange(from c in connections
+                               where c.LocalEndPoint.Port >= startingPort
+                               select c.LocalEndPoint.Port);
+
+            // getting active tcp listners
+            endPoints = properties.GetActiveTcpListeners();
+            portArray.AddRange(from n in endPoints
+                               where n.Port >= startingPort
+                               select n.Port);
+
+            // getting active udp listeners
+            endPoints = properties.GetActiveUdpListeners();
+            portArray.AddRange(from n in endPoints
+                               where n.Port >= startingPort
+                               select n.Port);
+
+            portArray.Sort();
+
+            for (int i = 0; i < portArray.Count; i++)
+            {
+                if (portArray[i] != startingPort+i)
+                {
+                    return startingPort + i;
+                }
+            }
+
+            return -1;
         }
     }
 }
