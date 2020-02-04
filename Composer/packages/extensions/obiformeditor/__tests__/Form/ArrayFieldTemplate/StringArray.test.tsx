@@ -37,11 +37,13 @@ describe('<StringArray />', () => {
     expect(title).toBeTruthy();
   });
 
-  it('renders a DescriptionField', async () => {
-    const { findByText } = renderDefault();
+  it('renders a DescriptionField in tooltip', async () => {
+    const { baseElement, findAllByRole } = renderDefault();
+    const [icon] = await findAllByRole('presentation');
 
-    const description = await findByText('My array description.');
-    expect(description).toBeTruthy();
+    fireEvent.mouseOver(icon);
+
+    expect(baseElement).toHaveTextContent('My array description.');
   });
 
   it('renders a StringItem for each item', async () => {

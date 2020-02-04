@@ -300,3 +300,8 @@ export function generateSDKTitle(data, customizedTitile?: string) {
   const titleFrom$type = truncateSDKType($type);
   return titleFrom$designer || customizedTitile || titleFromShared || titleFrom$type;
 }
+
+export function getInputType($type: string): string {
+  if (!$type) return '';
+  return $type.replace(/Microsoft.(.*)Input/, '$1');
+}

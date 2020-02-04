@@ -20,7 +20,7 @@ export interface ShellData {
   botName: string;
   currentDialog: any;
   data: {
-    $type: string;
+    $type?: string;
     [key: string]: any;
   };
   dialogId: string;

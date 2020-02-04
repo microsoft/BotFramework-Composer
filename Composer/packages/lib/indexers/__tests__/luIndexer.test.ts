@@ -50,12 +50,12 @@ hi
 
 `;
     const { intents, diagnostics }: any = parse(content);
-    expect(intents.length).toEqual(0);
+    expect(intents.length).toEqual(1);
     expect(diagnostics.length).toEqual(1);
     expect(diagnostics[0].range.start.line).toEqual(2);
     expect(diagnostics[0].range.start.character).toEqual(0);
     expect(diagnostics[0].range.end.line).toEqual(2);
-    expect(diagnostics[0].range.end.character).toEqual(1);
+    expect(diagnostics[0].range.end.character).toEqual(2);
   });
 });
 

@@ -5,7 +5,6 @@ import React from 'react';
 import { generateSDKTitle } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { FormCard } from '../components/nodes/templates/FormCard';
@@ -17,6 +16,9 @@ export interface ActivityRenderer extends WidgetContainerProps {
   /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPropmt'...) */
   field: string;
   icon: ElementIcon;
+  title?: string;
+  disableSDKTitle?: boolean;
+  defaultContent?: string;
   colors?: {
     theme: string;
     icon: string;
@@ -32,7 +34,10 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
   id,
   data,
   onEvent,
+  title,
+  disableSDKTitle,
   field,
+  defaultContent,
   icon = ElementIcon.MessageBot,
   colors = DefaultThemeColor,
 }) => {
@@ -44,14 +49,11 @@ export const ActivityRenderer: React.FC<ActivityRenderer> = ({
 
   return (
     <FormCard
-      header={generateSDKTitle(data)}
-      label={templateText}
+      header={disableSDKTitle ? title : generateSDKTitle(data, title)}
+      label={templateText || defaultContent}
       icon={icon}
       corner={<NodeMenu id={id} onEvent={onEvent} />}
       nodeColors={nodeColors}
-      onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id });
-      }}
     />
   );
 };

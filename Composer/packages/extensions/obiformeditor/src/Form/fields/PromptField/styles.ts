@@ -58,6 +58,7 @@ export const settingsFields = css`
   display: flex;
   flex-wrap: wrap;
   position: relative;
+  align-items: flex-end;
 `;
 
 export const settingsFieldFull = css`

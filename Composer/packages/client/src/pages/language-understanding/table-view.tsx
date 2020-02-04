@@ -16,9 +16,8 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { isValid, combineMessage, DialogInfo, LuFile } from '@bfc/indexers';
+import { isValid, DialogInfo, LuFile } from '@bfc/indexers';
 
-import { OpenConfirmModal, DialogStyle } from '../../components/Modal';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 
@@ -48,7 +47,7 @@ const TableView: React.FC<TableViewProps> = props => {
 
     const errorFiles = checkErrors(luFiles);
     if (errorFiles.length !== 0) {
-      showErrors(errorFiles);
+      onClickEdit({ fileId: errorFiles[0].id });
       return;
     }
 
@@ -90,21 +89,6 @@ const TableView: React.FC<TableViewProps> = props => {
       return formatMessage('Published');
     } else {
       return formatMessage('Unknown State'); // It's a bug in most cases.
-    }
-  }
-
-  async function showErrors(files: LuFile[]) {
-    for (const file of files) {
-      const errorMsg = combineMessage(file.diagnostics);
-      const errorTitle = formatMessage('There was a problem parsing {fileId}.lu file.', { fileId: file.id });
-      const confirmed = await OpenConfirmModal(errorTitle, errorMsg, {
-        style: DialogStyle.Console,
-        confirmBtnText: formatMessage('Edit'),
-      });
-      if (confirmed === true) {
-        onClickEdit({ fileId: file.id });
-        break;
-      }
     }
   }
 
