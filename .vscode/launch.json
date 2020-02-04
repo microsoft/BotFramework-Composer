@@ -9,7 +9,23 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "LSP Server",
+      "name": "LU LSP Server",
+      "type": "node",
+      "request": "launch",
+      "args": [
+        "${workspaceFolder}/Composer/packages/tools/language-servers/language-understanding/demo/src/server.ts"
+      ],
+      "runtimeArgs": [
+        "--nolazy",
+        "-r",
+        "${workspaceFolder}/Composer/node_modules/ts-node/register"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/Composer/packages/tools/language-servers/language-understanding/demo/src",
+      "protocol": "inspector",
+    },
+    {
+      "name": "LG LSP Server",
       "type": "node",
       "request": "launch",
       "args": [

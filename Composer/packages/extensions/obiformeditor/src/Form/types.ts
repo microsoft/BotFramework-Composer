@@ -40,6 +40,7 @@ export interface BFDWidgetProps extends Partial<WidgetProps> {
     hideLabel?: boolean;
     transparentBorder?: boolean;
   };
+  hideLabel?: boolean;
 }
 
 export interface SelectWidgetProps extends BFDWidgetProps {

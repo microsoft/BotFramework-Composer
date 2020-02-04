@@ -1,0 +1,51 @@
+{
+    "name": "@bfc/lu-languageserver",
+    "license": "MIT",
+    "version": "0.1.0",
+    "main": "lib/index.js",
+    "scripts": {
+      "build": "tsc --build tsconfig.build.json",
+      "build:demo": "cd demo && tsc --build tsconfig.json",
+      "prepublishOnly": "npm run build",
+      "clean": "rimraf lib demo/dist",
+      "start": "cd demo && ts-node ./src/server.ts",
+      "test": "jest",
+      "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+      "lint:fix": "yarn lint --fix",
+      "lint:typecheck": "tsc --noEmit",
+      "startDemo": "concurrently --kill-others \"yarn start:server\" \"yarn start:client\"",
+      "start:client": "cd demo && webpack-dev-server",
+      "start:server": "cd demo && ts-node ./src/server.ts"
+    },
+    "dependencies": {
+        "@microsoft/bf-cli-command": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz",
+        "@bfcomposer/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.8.tgz",
+        "@types/node": "^12.0.4",
+        "express": "^4.15.2",
+        "monaco-editor-core": "^0.17.0",
+        "monaco-languageclient": "^0.10.0",
+        "normalize-url": "^2.0.1",
+        "reconnecting-websocket": "^3.2.2",
+        "request-light": "^0.2.2",
+        "vscode": "^1.1.34",
+        "vscode-json-languageservice": "^3.3.1",
+        "vscode-languageserver": "^5.3.0-next",
+        "vscode-ws-jsonrpc": "^0.1.1",
+        "ws": "^5.0.0"
+    },
+    "devDependencies": {
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^3.2.0",
+        "html-webpack-plugin": "^3.2.0",
+        "source-map-loader": "^0.2.4",
+        "style-loader": "^1.0.0",
+        "ts-loader": "^6.1.0",
+        "ts-node": "^8.3.0",
+        "typescript": "^3.6.3",
+        "uglifyjs-webpack-plugin": "^2.2.0",
+        "webpack": "^4.39.3",
+        "webpack-cli": "^3.3.8",
+        "webpack-dev-server": "^3.8.0",
+        "webpack-merge": "^4.2.2"
+    }
+}

@@ -45,6 +45,14 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
           },
         },
       },
+      entities: {
+        items: {
+          'ui:options': {
+            hideLabel: true,
+            hideDescription: true,
+          },
+        },
+      },
     },
     'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],
@@ -101,26 +109,10 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.SetProperties]: {
     assignments: {
       'ui:options': {
-        object: true,
+        hideLabel: true,
+        transparentBorder: true,
       },
-      items: {
-        'ui:options': {
-          hideDescription: true,
-          inline: true,
-        },
-        property: {
-          'ui:options': {
-            hideLabel: true,
-            transparentBorder: true,
-          },
-        },
-        value: {
-          'ui:options': {
-            hideLabel: true,
-            transparentBorder: true,
-          },
-        },
-      },
+      'ui:field': 'AssignmentsField',
     },
   },
   [SDKTypes.OnActivity]: {

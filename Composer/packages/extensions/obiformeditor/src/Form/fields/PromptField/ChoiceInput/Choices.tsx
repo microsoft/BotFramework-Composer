@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { JSONSchema6 } from 'json-schema';
 import { IChoice } from '@bfc/shared';
@@ -47,6 +47,10 @@ export const Choices: React.FC<ChoicesProps> = props => {
     [choiceType, onchange, setChoiceType]
   );
 
+  useEffect(() => {
+    setChoiceType(Array.isArray(formData ?? []) && typeof formData !== 'string' ? 'static' : 'dynamic');
+  }, [formData]);
+
   return (
     <React.Fragment>
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0' }}>
@@ -60,19 +64,21 @@ export const Choices: React.FC<ChoicesProps> = props => {
           }
           id={id}
         />
-        <Dropdown
-          styles={{
-            caretDownWrapper: { height: '24px', lineHeight: '24px' },
-            root: { padding: '7px 0', width: '100px' },
-            title: { height: '24px', lineHeight: '20px' },
-          }}
-          onChange={handleChange}
-          options={options}
-          selectedKey={choiceType}
-          responsiveMode={ResponsiveMode.large}
-        />
+        {options.length > 0 && (
+          <Dropdown
+            styles={{
+              caretDownWrapper: { height: '24px', lineHeight: '24px' },
+              root: { padding: '7px 0', width: '100px' },
+              title: { height: '24px', lineHeight: '20px' },
+            }}
+            onChange={handleChange}
+            options={options}
+            selectedKey={choiceType}
+            responsiveMode={ResponsiveMode.large}
+          />
+        )}
       </div>
-      {choiceType === 'static' ? (
+      {!options || choiceType === 'static' ? (
         <StaticChoices {...props} />
       ) : (
         <DynamicChoices {...props} formContext={formContext} schema={dynamicSchema as JSONSchema6} />

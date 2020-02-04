@@ -170,13 +170,13 @@ export const PublishLuis = props => {
           />
           <TextField
             label={formatMessage('Authoring Region')}
-            defaultValue={defaultFields.authoringRegion}
+            defaultValue={formData.authoringRegion || defaultFields.authoringRegion}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
             disabled
           />
           <TextField
             label={formatMessage('Default Language')}
-            defaultValue={defaultFields.defaultLanguage}
+            defaultValue={formData.defaultLanguage || defaultFields.defaultLanguage}
             onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
             disabled
           />
