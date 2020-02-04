@@ -14,7 +14,7 @@ import { getNewDesigner, seedNewDialog } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
-import { BASEPATH, DialogDeleting } from '../../constants';
+import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
@@ -25,7 +25,6 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import grayComposerIcon from '../../images/grayComposerIcon.svg';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -34,11 +33,11 @@ import {
   deleteDialogContent,
   editorContainer,
   editorWrapper,
-  formEditor,
   pageRoot,
   visualPanel,
 } from './styles';
 import { VisualEditor } from './VisualEditor';
+import { PropertyEditor } from './PropertyEdtior';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -78,8 +77,6 @@ const getTabFromFragment = () => {
     return tab;
   }
 };
-
-const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
@@ -330,14 +327,9 @@ function DesignPage(props) {
               <div css={editorWrapper}>
                 <div css={visualPanel}>
                   {breadcrumbItems}
-                  <VisualEditor rootPath={rootPath} openNewTriggerModal={openNewTriggerModal} />
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 </div>
-                <iframe
-                  key="FormEditor"
-                  name="FormEditor"
-                  css={formEditor}
-                  src={`${rootPath}/extensionContainer.html`}
-                />
+                <PropertyEditor />
               </div>
             </Fragment>
           </Conversation>
