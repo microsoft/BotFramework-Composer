@@ -15,6 +15,8 @@ import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
+import { ChoiceInputChoices } from '../components/nodes';
+import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -38,6 +40,8 @@ const BaseInputSchema: UIWidget = {
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
+    children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
+    size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
