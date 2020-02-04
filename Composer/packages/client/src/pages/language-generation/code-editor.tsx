@@ -132,7 +132,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           setErrorMsg(error.message);
         }
       } else {
-        setDiagnostics(check(value, id, lgImportresolver));
+        const diags = check(value, id, lgImportresolver);
+        setDiagnostics(diags);
         updateLgFile(value);
       }
     },

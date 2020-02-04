@@ -6,11 +6,12 @@ import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
 import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
+import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension } from '../../utils';
+import { getExtension, getFileName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
@@ -109,10 +110,16 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
 };
 
 const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
+  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
+    const targetFile = state.lgFiles.find(file => `${file.id}.lg` === getFileName(id));
+    if (!targetFile) throw new Error(`file not found`);
+    return { id, content: targetFile.content };
+  };
+
   state.lgFiles = state.lgFiles.map(lgFile => {
     if (lgFile.id === id) {
       const { check, parse } = lgIndexer;
-      const diagnostics = check(content, id);
+      const diagnostics = check(content, id, lgImportresolver);
       let templates: LgTemplate[] = [];
       try {
         templates = parse(content, id);
