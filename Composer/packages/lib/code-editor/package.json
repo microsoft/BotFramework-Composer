@@ -24,8 +24,8 @@
     "watch": "yarn build:ts --watch"
   },
   "peerDependencies": {
-    "react": "16.9.0",
-    "react-dom": "16.9.0"
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -47,8 +47,8 @@
     "jest-dom": "^3.1.3",
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "style-loader": "^0.23.1",
