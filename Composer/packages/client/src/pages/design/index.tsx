@@ -37,7 +37,7 @@ import {
   visualPanel,
 } from './styles';
 import { VisualEditor } from './VisualEditor';
-import { PropertyEditor } from './PropertyEdtior';
+import { PropertyEditor } from './PropertyEditor';
 
 function onRenderContent(subTitle, style) {
   return (
