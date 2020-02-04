@@ -10,8 +10,11 @@ import get from 'lodash/get';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
+import { BASEPATH } from '../../constants';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
+
+const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 const addIconProps = {
   iconName: 'CircleAddition',
@@ -47,11 +50,10 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
 
 interface VisualEditorProps {
   openNewTriggerModal: () => void;
-  rootPath: string;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = props => {
-  const { rootPath, openNewTriggerModal } = props;
+  const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { state, actions } = useContext(StoreContext);
   const { designPageLocation, dialogs } = state;
