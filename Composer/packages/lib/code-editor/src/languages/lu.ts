@@ -35,10 +35,15 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
         [
-          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*\w*)/,
+          /(@\s*)(prebuilt\s*)(age|datetimeV2|dimension|email|geographyV2|keyPhrase|money|number|ordinal|ordinalV2|percentage|personName|phonenumber|temperature|url|datetime)(\s*[\w_,\s]+)/,
+          ['intent-indentifier', 'entity-type', 'prebult-type', 'entity-name'],
+        ],
+        [
+          // eslint-disable-next-line security/detect-unsafe-regex
+          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*[\w_]+)/,
           ['intent-indentifier', 'entity-type', 'entity-name'],
         ],
-        [/(@\s*)(\s*\w*)/, ['intent-indentifier', 'entity-name']],
+        [/(@\s*)(\s*[\w_]+)/, ['intent-indentifier', 'entity-name']],
         [/\s*(hasRoles|useFeature)\s*/, 'keywords'],
         [/.*$/, 'entity-other', '@pop'],
       ],
@@ -71,6 +76,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
       { token: 'comments', foreground: '7A7A7A' },
       { token: 'import-desc', foreground: '00A32B' },
       { token: 'entity-type', foreground: 'DF2C2C' },
+      { token: 'prebult-type', foreground: 'DF2C2C' },
       { token: 'keywords', foreground: '0078D7' },
     ],
   });

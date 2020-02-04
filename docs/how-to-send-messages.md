@@ -38,10 +38,10 @@ To define a simple text message, use a "-" before the text that you want your bo
      
 You can also define a simple text message with multiple variations. Bot will respond with any of the simple text messages by random. For example: 
 
-     > Greeting template with 2 variations. 
-     # GreetingPrefix
-     - Hi
-     - Hello
+     # SimpleText
+     - Hi, this is simple text
+     - Hey, this is simple text
+     - Hello, this is simple text
 
 ### Text with memory
 To define a text message with memory, you need to **Set a Property** first and then use an expression response like this: 
@@ -127,7 +127,7 @@ Similar to If/Else conditional template, you can define a Switch conditional tem
 In this Switch conditional template, bot will respond in text message `Happy Sunday!`, `Happy Saturday` or `Working day!` based on the returned value of days of the week for a given timestamp. `utcNow()`is a pre-built function which returns current timestamp as string. `dayOfWeek()` is a pre-built function which returns the day of the week from a timestamp. Read more about [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md) in [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). 
 
 ## References 
-- [Send and receive text message](https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-howto-send-messages?view=azure-bot-service-4.0)
+- [Send and receive text message](https://docs.microsoft.com/azure/bot-service/bot-builder-howto-send-messages)
 - [Language generation](./concept-language-generation.md)
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
