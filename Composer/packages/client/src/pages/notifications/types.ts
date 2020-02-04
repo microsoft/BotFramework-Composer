@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { Diagnostic, createSingleMessage, DialogInfo } from '@bfc/indexers';
+import { Diagnostic, createSingleMessage, DialogInfo, LuFile } from '@bfc/indexers';
 
 import { replaceDialogDiagnosticLabel } from '../../utils';
-
-import { LuFile } from './../../../../lib/indexers/lib/type.d';
 
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
@@ -43,7 +41,7 @@ export class DialogNotification implements INotification {
   }
 }
 
-export class LgNotification {
+export class LgNotification implements INotification {
   id: string;
   severity: string;
   type: NotificationType;
@@ -61,7 +59,7 @@ export class LgNotification {
   }
 }
 
-export class LuNotification {
+export class LuNotification implements INotification {
   id: string;
   severity: string;
   type: NotificationType;
