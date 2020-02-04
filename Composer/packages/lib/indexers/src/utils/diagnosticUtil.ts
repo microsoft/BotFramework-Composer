@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { LuIntentSection } from '@bfc/shared';
+
 import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
 import { CodeRange } from '../type';
 
@@ -41,6 +43,22 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
         ...d,
         range: offsetRange(range, offset),
       };
+    }
+    return d;
+  });
+}
+
+export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuIntentSection): Diagnostic[] {
+  const { range } = section;
+  if (!range) return diagnostics;
+  const filteredDiags = diagnostics.filter(d => {
+    return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+  });
+  const offset = range.startLineNumber;
+  return filteredDiags.map(d => {
+    const { range } = d;
+    if (range) {
+      d.range = offsetRange(range, offset);
     }
     return d;
   });

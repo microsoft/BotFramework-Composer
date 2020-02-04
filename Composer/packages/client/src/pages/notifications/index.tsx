@@ -13,9 +13,9 @@ import useNotifications from './useNotifications';
 import { NotificationList } from './NotificationList';
 import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
-import { INotification } from './types';
+import { INotification, NotificationType } from './types';
 import { navigateTo } from './../../utils';
-import { convertDialogDiagnosticToUrl, toUrlUtil } from './../../utils/navigation';
+import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
@@ -23,7 +23,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const { dialogs } = state;
   const notifications = useNotifications(filter);
   const navigations = {
-    lg: (item: INotification) => {
+    [NotificationType.LG]: (item: INotification) => {
       let url = `/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       const dividerIndex = item.id.indexOf('#');
       //the format of item.id is lgFile#inlineTemplateId
@@ -39,13 +39,17 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       }
       navigateTo(url);
     },
-    lu: (item: INotification) => {
-      navigateTo(`/dialogs/${item.id}`);
+    [NotificationType.LU]: (item: INotification) => {
+      let uri = `/language-understanding/${item.id}`;
+      if (item.dialogPath) {
+        uri = convertPathToUrl(item.id, item.dialogPath);
+      }
+      navigateTo(uri);
     },
-    dialog: (item: INotification) => {
+    [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const uri = convertDialogDiagnosticToUrl(item.diagnostic);
+      const uri = convertPathToUrl(item.id, item.dialogPath);
       navigateTo(uri);
     },
   };
