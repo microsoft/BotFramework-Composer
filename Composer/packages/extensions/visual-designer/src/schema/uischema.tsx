@@ -35,7 +35,7 @@ const BaseInputSchema: UIWidget = {
   },
   userInput: {
     'ui:widget': ActionCard,
-    title: data => `User Answers (${getInputType(data.$type)})`,
+    title: data => `User Input (${getInputType(data.$type)})`,
     disableSDKTitle: true,
     icon: ElementIcon.User,
     menu: 'none',
