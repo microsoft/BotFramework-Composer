@@ -230,15 +230,10 @@ namespace BotManager.Controllers
         }
 
 
-        private EventHandler CommandExited(Process p) => (object sender, EventArgs e) =>
-        {
-            p.Kill(true);
-        };
-
         private void RunCommand(string cmd, string args, string dir)
         {
             var process = CreateProcess(cmd, args, dir);
-            process.Exited += CommandExited(process);
+            process.EnableRaisingEvents = true;
 
             process.Start();
             process.BeginOutputReadLine();
@@ -314,11 +309,11 @@ namespace BotManager.Controllers
 
             portArray.Sort();
 
-            for (int i = 0; i < portArray.Count; i++)
+            for (int i = startingPort; i < int.MaxValue; i++)
             {
-                if (portArray[i] != startingPort+i)
+                if (!portArray.Contains(i))
                 {
-                    return startingPort + i;
+                    return i;
                 }
             }
 
