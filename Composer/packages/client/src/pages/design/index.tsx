@@ -3,8 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -36,18 +35,10 @@ import {
   editorContainer,
   editorWrapper,
   formEditor,
-  middleTriggerContainer,
-  middleTriggerElements,
   pageRoot,
-  triggerButton,
-  visualEditor,
   visualPanel,
 } from './styles';
-
-const addIconProps = {
-  iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
-};
+import { VisualEditor } from './VisualEditor';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -65,33 +56,6 @@ function onRenderBreadcrumbItem(item, render) {
       {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
       {render(item)}
     </span>
-  );
-}
-
-function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
-  return (
-    <div css={middleTriggerContainer}>
-      <div css={middleTriggerElements}>
-        {isTriggerEmpty ? (
-          <Fragment>
-            {formatMessage(`This dialog has no trigger yet.`)}
-            <ActionButton
-              data-testid="MiddleAddNewTriggerButton"
-              iconProps={addIconProps}
-              css={triggerButton}
-              onClick={onClickAddTrigger}
-            >
-              {formatMessage('New Trigger ..')}
-            </ActionButton>
-          </Fragment>
-        ) : (
-          <div>
-            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
-            {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
 
@@ -128,14 +92,10 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
-    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
-  const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-
-  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
     if (match) {
@@ -156,12 +116,6 @@ function DesignPage(props) {
       clearUndoHistory();
     }
   }, [location]);
-
-  useEffect(() => {
-    const dialog = dialogs.find(d => d.id === dialogId);
-    const visible = get(dialog, 'triggers', []).length === 0;
-    setTriggerButtonVisibility(visible);
-  }, [dialogs, dialogId]);
 
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
@@ -376,16 +330,7 @@ function DesignPage(props) {
               <div css={editorWrapper}>
                 <div css={visualPanel}>
                   {breadcrumbItems}
-                  <iframe
-                    id="VisualEditor"
-                    key="VisualEditor"
-                    name="VisualEditor"
-                    css={visualEditor}
-                    hidden={triggerButtonVisible || !selected}
-                    src={`${rootPath}/extensionContainer.html`}
-                    ref={addRef}
-                  />
-                  {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
+                  <VisualEditor rootPath={rootPath} openNewTriggerModal={openNewTriggerModal} />
                 </div>
                 <iframe
                   key="FormEditor"
