@@ -7,6 +7,7 @@ import fs from 'fs';
 
 import getPort from 'get-port';
 
+import envSettings from '../../settings';
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
@@ -150,7 +151,12 @@ export class CSharpBotConnector implements IBotConnector {
     return new Promise((resolve, reject) => {
       const runtime = spawn(
         'dotnet',
-        ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
+        [
+          `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
+          `--urls`,
+          this.endpoint,
+          ...this.getConnectorConfig(config),
+        ],
         {
           cwd: dir,
           stdio: ['ignore', 'pipe', 'pipe'],
