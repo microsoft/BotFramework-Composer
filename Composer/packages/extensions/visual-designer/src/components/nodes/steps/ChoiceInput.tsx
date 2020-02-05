@@ -60,7 +60,7 @@ export const ChoiceInputChoices = ({ choices }) => {
             textAlign: 'center',
             fontFamily: 'Segoe UI',
             fontSize: '12px',
-            lineHeight: '19px',
+            lineHeight: '14px',
             boxSizing: 'border-box',
           }}
         >
