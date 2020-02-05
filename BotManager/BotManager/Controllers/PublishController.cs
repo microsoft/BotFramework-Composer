@@ -119,7 +119,7 @@ namespace BotManager.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("[action]")]
         public IActionResult Status()
         {

@@ -1,6 +1,6 @@
 import { IPublisher, PublishResult } from '../models/publisher/interface';
 import { HttpPublisher } from '../models/publisher/httpPublisher';
-import { BotProjectSevice, BotProjectService } from './project';
+import { BotProjectService } from './project';
 
 export class PublisherService {
   private publishers: IPublisher[] = [];
@@ -28,6 +28,14 @@ export class PublisherService {
     throw new Error(`no such publisher with id ${id}`);
   };
 
+  history = async (id: string): Promise<PublishResult[]> => {
+    var publisher = this.getPublisher(id);
+    if (publisher) {
+      return await publisher.history();
+    }
+    throw new Error(`no such publisher with id ${id}`);
+  };
+
   publish = async (id: string, version: string): Promise<PublishResult> => {
     const publisher = this.getPublisher(id);
     if (publisher) {
@@ -36,6 +44,19 @@ export class PublisherService {
         return await publisher.publish(currentBot, version);
       } else {
         throw new Error('No bot is open to be published');
+      }
+    }
+    throw new Error(`no such publisher with id ${id}`);
+  };
+
+  rollback = async (id: string, version: string): Promise<PublishResult> => {
+    const publisher = this.getPublisher(id);
+    if (publisher) {
+      const currentBot = BotProjectService.getCurrentBotProject();
+      if (currentBot) {
+        return await publisher.rollback(currentBot.name, version);
+      } else {
+        throw new Error('No bot is open to be rollback');
       }
     }
     throw new Error(`no such publisher with id ${id}`);

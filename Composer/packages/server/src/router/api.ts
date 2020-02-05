@@ -52,6 +52,9 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 // publisher
 router.get('/publishers', PublisherController.getPublishers);
 router.get('/publishers/:pid/status', PublisherController.status);
+router.post('/publishers/:pid/publish', PublisherController.publish);
+router.get('/publishers/:pid/history', PublisherController.history);
+router.post('/publishers/:pid/rollback', PublisherController.rollback);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

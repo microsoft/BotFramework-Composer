@@ -18,7 +18,42 @@ async function status(req: Request, res: Response) {
   }
 }
 
+async function publish(req: Request, res: Response) {
+  const pid = req.params && req.params.pid;
+  const version = req.query && req.query.version;
+  try {
+    const result = await PublisherService.publish(pid, version);
+    res.status(200).send(result);
+  } catch (e) {
+    res.status(404).send('No such publisher');
+  }
+}
+
+async function history(req: Request, res: Response) {
+  const pid = req.params && req.params.pid;
+  try {
+    const result = await PublisherService.history(pid);
+    res.status(200).send(result);
+  } catch (e) {
+    res.status(404).send('No such publisher');
+  }
+}
+
+async function rollback(req: Request, res: Response) {
+  const pid = req.params && req.params.pid;
+  const version = req.params && req.params.version;
+  try {
+    const result = await PublisherService.rollback(pid, version);
+    res.status(200).send(result);
+  } catch (e) {
+    res.status(404).send('No such publisher');
+  }
+}
+
 export const PublisherController = {
   getPublishers,
   status,
+  publish,
+  history,
+  rollback,
 };
