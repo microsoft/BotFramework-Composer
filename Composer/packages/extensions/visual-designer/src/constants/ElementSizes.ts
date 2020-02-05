@@ -33,7 +33,8 @@ export const ChoiceInputSize = {
   height: 22,
 };
 
-export const ChoiceInputMarginTop = 5;
+export const ChoiceInputMarginTop = 8;
+export const ChoiceInputMarginBottom = 8;
 
 export const EventNodeSize = {
   width: 240,

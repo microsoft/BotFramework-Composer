@@ -21,7 +21,7 @@ export const ChoiceInputChoices = ({ choices }) => {
   }
 
   return (
-    <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
+    <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 29px' }}>
       {choices.map(({ value }, index) => {
         if (index < 3) {
           return (
