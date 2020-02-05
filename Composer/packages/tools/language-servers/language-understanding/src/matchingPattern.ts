@@ -130,7 +130,7 @@ export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: stri
     suggestionEntityTypes.forEach(entityType => {
       if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
         luisJson[entityType].forEach(entity => {
-          if (entity) {
+          if (entity && entity.name) {
             suggestionEntityList.push(entity.name);
           }
         });
@@ -177,7 +177,9 @@ export function getSuggestionRoles(luisJson: any, suggestionEntityTypes: string[
         luisJson[entityType].forEach(entity => {
           if (entity.roles !== undefined && entity.roles.length > 0) {
             entity.roles.forEach(role => {
-              suggestionRolesList.push(role);
+              if (role) {
+                suggestionRolesList.push(role);
+              }
             });
           }
         });

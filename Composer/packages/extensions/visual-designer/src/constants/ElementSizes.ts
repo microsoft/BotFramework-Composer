@@ -17,8 +17,8 @@ export const LoopIconSize = {
 };
 
 export const IconBrickSize = {
-  width: 16,
-  height: 16,
+  width: 24,
+  height: 24,
 };
 
 export const LoopEdgeMarginLeft = 20;
