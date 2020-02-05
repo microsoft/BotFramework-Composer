@@ -1,0 +1,3 @@
+[import](../common/common.lg)
+# bfdactivity-365176
+-@{ShowImage(dialog.attachments[0].contentUrl, dialog.attachments[0].contentType)}

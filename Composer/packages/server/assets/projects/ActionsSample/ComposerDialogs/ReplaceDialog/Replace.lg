@@ -1,0 +1,3 @@
+[import](../common/common.lg)
+# bfdactivity-120128
+-Hello @{user.name}, nice to talk to you! Please either enter 'joke' or 'fortune' to replace the dialog you want.

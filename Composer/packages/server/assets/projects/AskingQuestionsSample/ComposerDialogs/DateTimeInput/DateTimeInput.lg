@@ -1,0 +1,3 @@
+[import](../common/common.lg)
+# bfdactivity-828009
+-You entered: @{user.date[0].value}
