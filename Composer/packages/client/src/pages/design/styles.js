@@ -91,8 +91,8 @@ export const breadcrumbClass = mergeStyleSets({
     padding: '10px',
   },
   itemLink: {
-    fontSize: FontSizes.medium,
-    fontWeight: FontWeights.semilight,
+    fontSize: FontSizes.large,
+    fontWeight: FontWeights.regular,
     color: '#333',
     padding: '4px 8px',
   },
