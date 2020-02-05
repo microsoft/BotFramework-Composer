@@ -591,6 +591,7 @@ export class BotProject {
     }
 
     await this._autofixTemplateInCommon();
+    await this._autofixGeneratorInDialog();
   };
 
   /**
@@ -631,6 +632,19 @@ export class BotProject {
       .join(NEWLINE)
       .trim();
     await this.updateLgFile('common', updatedCommonContent);
+  };
+
+  /**
+   * each dialog should use it's own lg
+   * e.g ShowToDo.dialog's generator property should be `ShowToDo.lg`.
+   */
+  private _autofixGeneratorInDialog = async () => {
+    const dialogs: DialogInfo[] = this.dialogs;
+    for (const dialog of dialogs) {
+      const { content, id } = dialog;
+      const updatedContent = { ...content, generator: `${id}.lg` };
+      await this.updateDialog(id, updatedContent);
+    }
   };
 
   private isLuFileEmpty = (file: LuFile) => {
