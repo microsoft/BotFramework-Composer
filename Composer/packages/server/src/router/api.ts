@@ -7,6 +7,7 @@ import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
 import { BotConnectorController } from '../controllers/connector';
 import { AssetController } from '../controllers/asset';
+import { PublisherController } from '../controllers/publisher';
 
 const router: Router = express.Router({});
 
@@ -47,6 +48,10 @@ router.post('/launcher/publish/:label', BotConnectorController.publish);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
+
+// publisher
+router.get('/publishers', PublisherController.getPublishers);
+router.get('/publishers/:pid/status', PublisherController.status);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
