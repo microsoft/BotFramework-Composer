@@ -45,7 +45,11 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
+  // refered lgTemplateId may not equal to dialogId. find in value at first.
+  const singleLgRefMatched = value?.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
+  const lgName = singleLgRefMatched
+    ? singleLgRefMatched[1]
+    : new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
