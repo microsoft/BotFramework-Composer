@@ -15,62 +15,67 @@ import { FormCard } from '../templates/FormCard';
 import { NodeProps } from '../nodeProps';
 import { getUserAnswersTitle } from '../utils';
 
+export const ChoiceInputChoices = ({ choices }) => {
+  if (!Array.isArray(choices)) {
+    return null;
+  }
+
+  return (
+    <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
+      {choices.map(({ value }, index) => {
+        if (index < 3) {
+          return (
+            <div
+              key={index}
+              role="choice"
+              css={{
+                height: ChoiceInputSize.height,
+                width: ChoiceInputSize.width,
+                marginTop: ChoiceInputMarginTop,
+                paddingLeft: '7px',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                fontFamily: 'Segoe UI',
+                fontSize: '12px',
+                lineHeight: '19px',
+                border: '1px solid #B3B0AD',
+                boxSizing: 'border-box',
+                borderRadius: '2px',
+              }}
+              title={typeof value === 'string' ? value : ''}
+            >
+              {value}
+            </div>
+          );
+        }
+      })}
+      {Array.isArray(choices) && choices.length > 3 ? (
+        <div
+          data-testid="hasMore"
+          css={{
+            height: ChoiceInputSize.height,
+            width: ChoiceInputSize.width,
+            marginTop: ChoiceInputMarginTop,
+            textAlign: 'center',
+            fontFamily: 'Segoe UI',
+            fontSize: '12px',
+            lineHeight: '19px',
+            boxSizing: 'border-box',
+          }}
+        >
+          {`${choices.length - 3} more`}
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
 export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const boundary = measureJsonBoundary(data);
   const { choices } = data;
-  let children: any = null;
+  const children = <ChoiceInputChoices choices={choices} />;
 
-  if (Array.isArray(choices)) {
-    children = (
-      <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
-        {choices.map(({ value }, index) => {
-          if (index < 3) {
-            return (
-              <div
-                key={index}
-                role="choice"
-                css={{
-                  height: ChoiceInputSize.height,
-                  width: ChoiceInputSize.width,
-                  marginTop: ChoiceInputMarginTop,
-                  paddingLeft: '7px',
-                  whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  fontFamily: 'Segoe UI',
-                  fontSize: '12px',
-                  lineHeight: '19px',
-                  border: '1px solid #B3B0AD',
-                  boxSizing: 'border-box',
-                  borderRadius: '2px',
-                }}
-                title={typeof value === 'string' ? value : ''}
-              >
-                {value}
-              </div>
-            );
-          }
-        })}
-        {Array.isArray(choices) && choices.length > 3 ? (
-          <div
-            data-testid="hasMore"
-            css={{
-              height: ChoiceInputSize.height,
-              width: ChoiceInputSize.width,
-              marginTop: ChoiceInputMarginTop,
-              textAlign: 'center',
-              fontFamily: 'Segoe UI',
-              fontSize: '12px',
-              lineHeight: '19px',
-              boxSizing: 'border-box',
-            }}
-          >
-            {`${choices.length - 3} more`}
-          </div>
-        ) : null}
-      </div>
-    );
-  }
   return (
     <FormCard
       nodeColors={NodeColors[DialogGroup.INPUT]}

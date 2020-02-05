@@ -15,6 +15,12 @@ export interface ActionCardProps extends WidgetContainerProps {
   icon: string;
   content: string | number | JSX.Element;
   menu?: JSX.Element | string;
+  children?: JSX.Element;
+  size?: {
+    width: number;
+
+    height: number;
+  };
   colors?: {
     theme: string;
     icon: string;
@@ -35,6 +41,8 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
   icon,
   menu,
   content,
+  children,
+  size,
   colors = DefaultCardColor,
 }) => {
   const header = disableSDKTitle ? title : generateSDKTitle(data, title);
@@ -46,6 +54,9 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
       icon={icon}
       label={content}
       nodeColors={nodeColors}
-    />
+      styles={{ ...size }}
+    >
+      {children}
+    </FormCard>
   );
 };
