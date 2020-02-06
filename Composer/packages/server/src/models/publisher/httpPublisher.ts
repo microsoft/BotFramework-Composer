@@ -49,11 +49,17 @@ export class HttpPublisher implements IPublisher {
   };
 
   history = async (): Promise<PublishResult[]> => {
-    throw new Error('Method not implemented.');
+    try {
+      const result = await axios.get(this.baseUrl + 'publishHistory');
+      return result.data;
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   rollback = async (botID: string, version: string): Promise<PublishResult> => {
-    throw new Error('Method not implemented.');
+    const result = await axios.post(this.baseUrl + 'rollback' + `?botID=${botID}&version=${version}`);
+    return result.data;
   };
 
   private zipBot(bot: BotProject): Promise<string> {
