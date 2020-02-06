@@ -1,4 +1,4 @@
-[import](../common/common.lg)
+[import](common)
 
 # bfdactivity-116673
 -Successfully added a todo named @{dialog.todo}

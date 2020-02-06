@@ -1,4 +1,4 @@
-[import](../common/common.lg)
+[import](common)
 
 # bfdactivity-725469
 -Successfully removed a todo named @{dialog.todo}

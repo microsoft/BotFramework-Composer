@@ -1,4 +1,4 @@
-[import](../common/common.lg)
+[import](common)
 
 # bfdactivity-696707
 -@{help()}
