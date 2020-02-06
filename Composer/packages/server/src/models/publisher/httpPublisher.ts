@@ -48,9 +48,13 @@ export class HttpPublisher implements IPublisher {
     }
   };
 
-  history = async (): Promise<PublishResult[]> => {
+  history = async (botID?: string): Promise<PublishResult[]> => {
     try {
-      const result = await axios.get(this.baseUrl + 'publishHistory');
+      let url = this.baseUrl + 'publishHistory';
+      if (botID) {
+        url += `?botID=${botID}`;
+      }
+      const result = await axios.get(url);
       return result.data;
     } catch (err) {
       throw new Error(err);

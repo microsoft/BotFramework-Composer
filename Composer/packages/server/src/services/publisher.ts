@@ -31,7 +31,12 @@ export class PublisherService {
   history = async (id: string): Promise<PublishResult[]> => {
     var publisher = this.getPublisher(id);
     if (publisher) {
-      return await publisher.history();
+      const currentBot = BotProjectService.getCurrentBotProject();
+      if (currentBot) {
+        return await publisher.history(currentBot.name);
+      } else {
+        throw new Error('No bot is open to be rollback');
+      }
     }
     throw new Error(`no such publisher with id ${id}`);
   };

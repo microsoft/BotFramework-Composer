@@ -4,7 +4,7 @@ export interface IPublisher {
   id: string;
   name: string;
   status(): Promise<boolean>;
-  history(): Promise<PublishResult[]>;
+  history(botID?: string): Promise<PublishResult[]>;
 
   publish(bot: BotProject, version: string): Promise<PublishResult>;
   rollback(botID: string, version: string): Promise<PublishResult>;
