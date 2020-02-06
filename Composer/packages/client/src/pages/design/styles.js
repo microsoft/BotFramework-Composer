@@ -75,7 +75,7 @@ export const visualPanel = css`
 export const visualEditor = css`
   border: 0px;
   flex: 1;
-  background-color: #e5e5e5;
+  background-color: #f6f6f6;
 `;
 
 export const formEditor = css`
