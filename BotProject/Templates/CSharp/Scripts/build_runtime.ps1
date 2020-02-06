@@ -1,5 +1,5 @@
 if ((dotnet --version) -lt '3.1.0') {
-	throw "! dotnet core 3.1 is required, please refer following documents for help. https://dotnet.microsoft.com/download/dotnet-core/3.0"
+	throw "! dotnet core 3.1 is required, please refer following documents for help. https://dotnet.microsoft.com/download/dotnet-core/3.1"
 	Break
 }
 
