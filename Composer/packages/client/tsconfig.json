@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "build",
     "allowJs": true,
-    "declaration": false,
     "module": "esnext",
     "baseUrl": ".",
     "paths": {
