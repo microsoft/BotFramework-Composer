@@ -21,9 +21,6 @@
     <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.7.2" />
     <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.7.2" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.7.2" />
