@@ -6,12 +6,22 @@ export class PublisherService {
   private publishers: IPublisher[] = [];
 
   init = () => {
-    // TODO: load publisher from config file instead of hard coding here
+    // TODO: load this from config file instead of hard coding here
     this.publishers.push(
       new HttpPublisher({
         id: 'local',
         name: 'Local Bot Manager Service',
         endpoint: 'http://localhost:4000',
+      }),
+      new HttpPublisher({
+        id: 'prod',
+        name: 'ABS-H production slot',
+        endpoint: 'http://localhost:4001',
+      }),
+      new HttpPublisher({
+        id: 'stage',
+        name: 'ABS-H stage slot',
+        endpoint: 'http://localhost:4002',
       })
     );
   };
