@@ -2243,7 +2243,7 @@
     "@types/react" "16.9.0"
     prop-types "^15.7.2"
 
-"@botframework-ui/adaptive-form@0.0.0", "@botframework-ui/adaptive-form@^0.0.0":
+"@botframework-ui/adaptive-form@^0.0.0":
   version "0.0.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/adaptive-form/-/@botframework-ui/adaptive-form-0.0.0.tgz#e81c77959575dcbb7c74273d4ce119a1e7d16cd8"
   integrity sha1-6Bx3lZV13Lt8dCc9TOEZoefRbNg=
@@ -2269,21 +2269,19 @@
     lodash "^4.17.15"
 
 "@botframework-ui/json@^0.0.0-0":
-  version "0.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/json/-/@botframework-ui/json-0.0.0.tgz#3361a2e492508e5270a30fbde1c79d783837361b"
-  integrity sha1-M2Gi5JJQjlJwow+94cedeDg3Nhs=
+  version "0.0.0-0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/json/-/@botframework-ui/json-0.0.0-0.tgz#8291bf710a906e9c99cc78767629879eeb2be086"
+  integrity sha1-gpG/cQqQbpyZzHh2dimHnusr4IY=
   dependencies:
-    "@botframework-ui/adaptive-form" "0.0.0"
     "@emotion/core" "^10.0.27"
     "@monaco-editor/react" "^3.0.1"
     monaco-editor "^0.19.3"
 
-"@botframework-ui/prompts@^0.0.0-0":
-  version "0.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/prompts/-/@botframework-ui/prompts-0.0.0.tgz#bda0320e62f17bf09bf1ca3a98a79701c4c5f77c"
-  integrity sha1-vaAyDmLxe/Cb8co6mKeXAcTF93w=
+"@botframework-ui/prompts@0.0.0-1":
+  version "0.0.0-1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/prompts/-/@botframework-ui/prompts-0.0.0-1.tgz#0ccf98bbab74ab91094a975d8f6df4e570e6fa18"
+  integrity sha1-DM+Yu6t0q5EJSpddj2305XDm+hg=
   dependencies:
-    "@botframework-ui/adaptive-form" "0.0.0"
     "@emotion/core" "^10.0.27"
 
 "@cnakazawa/watch@^1.0.3":
