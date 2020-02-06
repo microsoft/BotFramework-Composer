@@ -33,11 +33,11 @@ export class BotProjectService {
     }
   }
 
-  public static importResolver(_source: string, id: string): TextFile {
+  public static lgImportResolver(_source: string, id: string): TextFile {
     BotProjectService.initialize();
-    const targetName = Path.basename(id);
-    const targetFile = BotProjectService.currentBotProject?.files.find(({ name }) => name === targetName);
-    if (!targetFile) throw new Error('file not found');
+    const targetId = Path.basename(id, '.lg');
+    const targetFile = BotProjectService.currentBotProject?.lgFiles.find(({ id }) => id === targetId);
+    if (!targetFile) throw new Error('lg file not found');
     return {
       id,
       content: targetFile.content,

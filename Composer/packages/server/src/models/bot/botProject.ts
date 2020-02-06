@@ -83,7 +83,7 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
@@ -93,7 +93,7 @@ export class BotProject {
   };
 
   public getIndexes = () => {
-    this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     return {
       botName: this.name,
       location: this.dir,
@@ -468,12 +468,12 @@ export class BotProject {
    *  in AddToDo.lg:
    *   [import](../common/common.lg)
    *
-   * source = AddToDo.lg
-   * id = ../common/common.lg
+   * source = AddToDo.lg  || AddToDo
+   * id = ../common/common.lg  || common.lg || common
    */
-  private _fileImportResolver = (source: string, id: string) => {
-    const targetName = Path.basename(id);
-    const targetFile = this.files.find(({ name }) => name === targetName);
+  private _lgImportResolver = (source: string, id: string) => {
+    const targetId = Path.basename(id, '.lg');
+    const targetFile = this.lgFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('file not found');
     return {
       id,
@@ -490,7 +490,7 @@ export class BotProject {
         this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files, this._fileImportResolver);
+        this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
         break;
       case '.lu':
         this.luFiles = luIndexer.index(this.files);
