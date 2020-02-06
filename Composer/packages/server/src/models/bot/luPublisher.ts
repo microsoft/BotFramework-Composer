@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import { runBuild } from '@bfcomposer/lubuild';
+import { luBuild } from '@bfcomposer/bf-lu/lib/parser/luBuild';
 import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+
 const GENERATEDFOLDER = 'ComposerDialogs/generated';
 const LU_STATUS_FILE = 'luis.status.json';
 const DEFAULT_STATUS = {
@@ -81,12 +82,13 @@ export class LuPublisher {
 
   public publish = async (luFiles: LuFile[]) => {
     const config = this._getConfig(luFiles);
-    if (config.models.length === 0) {
-      throw new Error('No luis file exist');
-    }
+    // if (config.models.length === 0) {
+    //   throw new Error('No luis file exist');
+    // }
     const curTime = Date.now();
     try {
-      await runBuild(config);
+      const builder = new luBuild.Builder(console);
+      await builder.build(config);
 
       // update pubish status after sucessfully published
       luFiles.forEach(f => {
@@ -94,10 +96,10 @@ export class LuPublisher {
       });
       await this.saveStatus();
     } catch (error) {
-      throw new Error(error?.body?.error?.message ?? 'Error publishing to LUIS.');
+      throw new Error(error.body?.error?.message || error.message || 'Error publishing to LUIS.');
     }
 
-    await this._copyDialogsToTargetFolder(config);
+    //await this._copyDialogsToTargetFolder(config);
   };
 
   public getUnpublisedFiles = (files: LuFile[]) => {
@@ -147,33 +149,33 @@ export class LuPublisher {
     }
   }
 
-  private _copyDialogsToTargetFolder = async (config: any) => {
-    const defaultLanguage = config.defaultLanguage;
-    await config.models.forEach(async (filePath: string) => {
-      const baseName = Path.basename(filePath, '.lu');
-      const rootPath = Path.dirname(filePath);
-      const currentPath = `${filePath}.dialog`;
-      const targetPath = Path.join(this.generatedFolderPath, `${baseName}.lu.dialog`);
-      const currentVariantPath = Path.join(rootPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-      const targetVariantPath = Path.join(this.generatedFolderPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-      await this.storage.copyFile(currentPath, targetPath);
-      await this.storage.copyFile(currentVariantPath, targetVariantPath);
-      await this.storage.removeFile(currentPath);
-      await this.storage.removeFile(currentVariantPath);
-    });
-  };
+  // private _copyDialogsToTargetFolder = async (config: any) => {
+  //   const defaultLanguage = config.defaultLanguage;
+  //   await config.models.forEach(async (filePath: string) => {
+  //     const baseName = Path.basename(filePath, '.lu');
+  //     const rootPath = Path.dirname(filePath);
+  //     const currentPath = `${filePath}.dialog`;
+  //     const targetPath = Path.join(this.generatedFolderPath, `${baseName}.lu.dialog`);
+  //     const currentVariantPath = Path.join(rootPath, `${baseName}.${defaultLanguage}.lu.dialog`);
+  //     const targetVariantPath = Path.join(this.generatedFolderPath, `${baseName}.${defaultLanguage}.lu.dialog`);
+  //     await this.storage.copyFile(currentPath, targetPath);
+  //     await this.storage.copyFile(currentVariantPath, targetVariantPath);
+  //     await this.storage.removeFile(currentPath);
+  //     await this.storage.removeFile(currentVariantPath);
+  //   });
+  // };
 
   private _getConfig = (luFiles: LuFile[]) => {
-    const luConfig: any = { ...this.config };
-    luConfig.models = [];
-    luConfig.autodelete = true;
-    luConfig.dialogs = true;
-    luConfig.force = false;
-    luConfig.folder = this.generatedFolderPath;
-    luFiles.forEach(file => {
-      luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
-    });
-
+    const luConfig = {
+      out: this.generatedFolderPath,
+      in: this.botDir,
+      dialog: true,
+      force: false,
+      authoringKey: this.config?.authoringKey,
+      region: this.config?.authoringRegion,
+      botName: this.config?.name,
+      suffix: this.config?.environment,
+    };
     return luConfig;
   };
 }
