@@ -6,15 +6,15 @@ import uniq from 'lodash/uniq';
 import { extractLgTemplateRefs } from '@bfc/shared';
 
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo } from './type';
+import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 
 // find out all lg templates given dialog
-function ExtractLgTemplates(dialog): string[] {
-  const templates: string[] = [];
+function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
+  const templates: LgTemplateJsonPath[] = [];
   /**
    *
    * @param path , jsonPath string
@@ -23,31 +23,50 @@ function ExtractLgTemplates(dialog): string[] {
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
     if (has(value, '$type')) {
-      const targets: string[] = [];
+      const targets: any[] = [];
       // look for prompt field
       if (has(value, 'prompt')) {
-        targets.push(value.prompt);
+        targets.push({ value: value.prompt, path: `${path}#${value.$type}#prompt` });
       }
       // look for unrecognizedPrompt field
       if (has(value, 'unrecognizedPrompt')) {
-        targets.push(value.unrecognizedPrompt);
+        targets.push({ value: value.unrecognizedPrompt, path: `${path}#${value.$type}#unrecognizedPrompt` });
+      }
+
+      if (has(value, 'invalidPrompt')) {
+        targets.push({ value: value.invalidPrompt, path: `${path}#${value.$type}#invalidPrompt` });
+      }
+
+      if (has(value, 'defaultValueResponse')) {
+        targets.push({ value: value.defaultValueResponse, path: `${path}#${value.$type}#defaultValueResponse` });
       }
       // look for other $type
       switch (value.$type) {
         case 'Microsoft.SendActivity':
-          targets.push(value.activity);
+          targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $type, do here
         case 'location':
           return true;
       }
       targets.forEach(target => {
-        templates.push(...extractLgTemplateRefs(target).map(x => x.name));
+        templates.push(
+          ...extractLgTemplateRefs(target.value).map(x => {
+            return { name: x.name, path: target.path };
+          })
+        );
       });
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
-  return uniq(templates);
+  JsonWalk(id, dialog, visitor);
+  //uniquify lgTemplates based on name
+  const res: LgTemplateJsonPath[] = [];
+  templates.forEach(t => {
+    if (!res.find(r => r.name === t.name)) {
+      res.push(t);
+    }
+  });
+  return res;
 }
 
 // find out all lu intents given dialog
@@ -175,7 +194,7 @@ function parse(id: string, content: any, schema: any) {
     content,
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
-    lgTemplates: ExtractLgTemplates(content),
+    lgTemplates: ExtractLgTemplates(id, content),
     luIntents: ExtractLuIntents(content),
     userDefinedVariables: ExtractMemoryPaths(content),
     luFile: getBaseName(luFile, '.lu'),

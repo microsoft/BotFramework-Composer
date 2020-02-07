@@ -15,7 +15,15 @@ import { TestController } from '../../TestController';
 import { NavLinks } from '../../components/NavLinks';
 
 import TableView from './table-view';
-import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor, dialogItem } from './styles';
+import {
+  ContentHeaderStyle,
+  ContentStyle,
+  flexContent,
+  actionButton,
+  contentEditor,
+  dialogItem,
+  HeaderText,
+} from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface DefineConversationProps {
@@ -103,7 +111,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('User Input')}</div>
+        <div css={HeaderText}>{formatMessage('User Input')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}

@@ -10,7 +10,6 @@ import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
 import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
-
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
   Focused: 'focused',
@@ -106,6 +105,19 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   uri += `#${fragment}`;
 
   return uri;
+}
+
+export function toUrlUtil(dialogId: string, path: string): string {
+  const tokens = path.split('#');
+  const focusedPath = parsePathToFocused(tokens[0]);
+  const selectedPath = parsePathToSelected(tokens[0]);
+  const type = tokens[1];
+  const property = tokens[2];
+  const fragment = parseTypeToFragment(type, property);
+  if (!focusedPath || !selectedPath) {
+    return '';
+  }
+  return `dialogs/${dialogId}?selected=${selectedPath}&focused=${focusedPath}${fragment ? '#' + fragment : ''}`;
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
