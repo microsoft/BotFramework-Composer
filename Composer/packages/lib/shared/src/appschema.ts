@@ -2737,7 +2737,7 @@ export const appschema: OBISchema = {
         ...$properties(SDKTypes.ReplaceDialog),
         dialog: {
           $type: 'Microsoft.IDialog',
-          title: 'Dialog',
+          title: 'Dialog name',
           description: 'Current dialog will be replaced by this dialog.',
           type: 'string',
         },
