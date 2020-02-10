@@ -1,4 +1,5 @@
-[import](../common/common.lg)
+[import](common.lg)
+
 # bfdactivity-296924
 [Activity
     Text = Hello @{user.profile.name}, I have your age as @{user.profile.age}.

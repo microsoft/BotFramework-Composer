@@ -1,3 +1,4 @@
-[import](../common/common.lg)
+[import](common.lg)
+
 # bfdactivity-576334
 - Say moo to get a response, say emit to emit a event.

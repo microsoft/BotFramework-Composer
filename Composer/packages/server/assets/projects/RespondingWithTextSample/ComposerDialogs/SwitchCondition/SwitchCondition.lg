@@ -1,3 +1,4 @@
-[import](../common/common.lg)
+[import](common.lg)
+
 # bfdactivity-958316
 - @{greetInAWeek()}

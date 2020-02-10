@@ -1,3 +1,4 @@
-[import](../common/common.lg)
+[import](common.lg)
+
 # bfdactivity-003038
 - You said '@{turn.activity.text}'

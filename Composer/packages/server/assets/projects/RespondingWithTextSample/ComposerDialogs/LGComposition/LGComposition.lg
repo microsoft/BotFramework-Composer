@@ -1,3 +1,4 @@
-[import](../common/common.lg)
+[import](common.lg)
+
 # bfdactivity-823322
 -@{LGComposition(user)}
