@@ -59,8 +59,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const onSelect = useCallback(
     id => {
-      let url = `/language-generation/${id}`;
-      if (edit) url += `/edit`;
+      const url = `/language-generation/${id}`;
       navigateTo(url);
     },
     [edit]

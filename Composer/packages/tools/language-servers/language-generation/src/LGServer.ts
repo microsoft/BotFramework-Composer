@@ -212,18 +212,16 @@ export class LGServer {
       const id = fileId || uri;
       const diagnostics = check(content, id, importResolver);
       let templates: LgTemplate[] = [];
-      if (isValid(diagnostics)) {
+      try {
         templates = parse(content, id);
         const { imports } = LGParser.parse(content, id);
-
         imports.forEach(({ id }) => {
           const importedContent = importResolver('.', id).content;
-          const importedContentDiagnostics = check(importedContent, '');
-          if (isValid(importedContentDiagnostics)) {
-            const importedTemplates = parse(importedContent, id);
-            templates.push(...importedTemplates);
-          }
+          const importedTemplates = parse(importedContent, '');
+          templates.push(...importedTemplates);
         });
+      } catch (_error) {
+        // ignore
       }
 
       return { templates, diagnostics };
@@ -252,7 +250,6 @@ export class LGServer {
     }
     const { templates, diagnostics } = lgFile;
     if (diagnostics.length) {
-      this.sendDiagnostics(document, convertDiagnostics(diagnostics, document));
       return Promise.resolve(null);
     }
     const wordRange = getRangeAtPosition(document, params.position);

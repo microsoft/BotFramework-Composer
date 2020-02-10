@@ -20,9 +20,8 @@ const lgStaticChecker = new StaticChecker();
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   const result = new Diagnostic(d.message, source, d.severity);
 
-  // monaco line number start from 1, but lg parser start from 0
-  const start: Position = new Position(d.range.start.line + 1, d.range.start.character);
-  const end: Position = new Position(d.range.end.line + 1, d.range.end.character);
+  const start: Position = new Position(d.range.start.line, d.range.start.character);
+  const end: Position = new Position(d.range.end.line, d.range.end.character);
   result.range = new Range(start, end);
 
   return result;
