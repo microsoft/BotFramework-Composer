@@ -16,6 +16,7 @@ import {
   flexContent,
   actionButton,
   contentEditor,
+  HeaderText,
 } from '../language-understanding/styles';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
@@ -87,7 +88,7 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('Bot Responses')}</div>
+        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}

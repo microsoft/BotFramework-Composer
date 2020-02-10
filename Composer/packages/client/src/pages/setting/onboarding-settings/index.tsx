@@ -9,7 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 
 import { StoreContext } from '../../../store';
 
-import { onboardingSettings } from './style';
+import { onboardingSettings, onboardingTitle } from './style';
 
 export const OnboardingSettings = () => {
   const {
@@ -25,7 +25,7 @@ export const OnboardingSettings = () => {
 
   return (
     <div css={onboardingSettings}>
-      <h1>{formatMessage('Onboarding')}</h1>
+      <div css={onboardingTitle}>{formatMessage('Onboarding')}</div>
       <p>{formatMessage('Enabling Onboarding will restart the product tour.')}</p>
       <Toggle
         data-testid="onboardingToggle"

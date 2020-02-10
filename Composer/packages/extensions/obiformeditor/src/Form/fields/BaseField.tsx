@@ -9,6 +9,7 @@ import get from 'lodash/get';
 import classnames from 'classnames';
 
 import { FormContext } from '../types';
+import { WidgetLabel } from '../widgets/WidgetLabel';
 
 import { RootField } from './RootField';
 
@@ -75,23 +76,13 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   ) : (
     <div className={classnames({ BaseField: !displayInline }, className)} key={key} id={key.replace(/\.|#/g, '')}>
       {!hideDescription && (
-        <div>
-          <h3 className="BaseFieldTitle">{getTitle()}</h3>
-          {descriptionOverride !== false && (descriptionOverride || description || schema.description) && (
-            <p className="BaseFieldDescription">
-              {getDescription()}
-              {helpLink && helpLinkText && (
-                <>
-                  <br />
-                  <br />
-                  <a href={helpLink} target="_blank" rel="noopener noreferrer">
-                    {helpLinkText}
-                  </a>
-                </>
-              )}
-            </p>
-          )}
-        </div>
+        <WidgetLabel
+          label={getTitle()}
+          description={getDescription()}
+          helpLink={helpLink}
+          helpLinkText={helpLinkText}
+          id={key}
+        />
       )}
       <div className={classnames({ BaseFieldInline: displayInline })}>{children}</div>
     </div>

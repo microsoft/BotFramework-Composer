@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets, FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -49,9 +49,9 @@ export const notificationHeader = css`
 `;
 
 export const notificationHeaderText = css`
-  font-size: 20px;
+  font-size: ${FontSizes.xLarge};
   color: #323130;
-  font-weight: bold;
+  font-weight: ${FontWeights.semibold};
 `;
 
 export const root = css`

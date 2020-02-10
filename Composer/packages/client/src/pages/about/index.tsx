@@ -30,7 +30,7 @@ export const About: React.FC<RouteComponentProps> = () => {
                 href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
                 tabIndex={-1}
                 target={'_blank'}
-                style={{ marginLeft: '5px' }}
+                style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
                 {formatMessage(`Learn more`)}
               </Link>
@@ -44,7 +44,7 @@ export const About: React.FC<RouteComponentProps> = () => {
                   href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
                   tabIndex={-1}
                   target={'_blank'}
-                  style={{ marginLeft: '5px' }}
+                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
                   {process.env.GIT_SHA || 'Unknown'}
                 </Link>
@@ -57,7 +57,7 @@ export const About: React.FC<RouteComponentProps> = () => {
                   href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
                   tabIndex={-1}
                   target={'_blank'}
-                  style={{ marginLeft: '5px' }}
+                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
                   {process.env.SDK_PACKAGE_VERSION || 'Unknown'}
                 </Link>
