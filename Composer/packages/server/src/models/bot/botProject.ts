@@ -611,7 +611,8 @@ export class BotProject {
     for (const dialog of dialogs) {
       const { lgTemplates } = dialog;
       const dialogTemplateTexts: string[] = [];
-      for (const templateName of lgTemplates) {
+      for (const lgTemplate of lgTemplates) {
+        const templateName = lgTemplate.name;
         if (inlineLgNamePattern.test(templateName)) {
           const template = commonLgFile.templates.find(({ name }) => name === templateName);
           if (!template?.range) continue;
