@@ -9,7 +9,7 @@ import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
-import { IPublisher } from './../pages/publish/types';
+import { IPublisher } from './../pages/publisher/types';
 import { ActionType } from './action/types';
 
 export interface Store {
