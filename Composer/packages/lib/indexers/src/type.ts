@@ -24,13 +24,18 @@ export interface DialogInfo {
   id: string;
   isRoot: boolean;
   lgFile: string;
-  lgTemplates: string[];
+  lgTemplates: LgTemplateJsonPath[];
   luFile: string;
   luIntents: string[];
   referredDialogs: string[];
   relativePath: string;
   userDefinedVariables: string[];
   triggers: ITrigger[];
+}
+
+export interface LgTemplateJsonPath {
+  name: string;
+  path: string;
 }
 
 export interface Intent {

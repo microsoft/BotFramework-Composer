@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-
+import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 export const hostedSettings = css`
   position: absolute;
   top: 0;
@@ -38,4 +38,9 @@ export const slotChoice = css`
 export const settingsEditor = css`
   flex: 1;
   max-height: 70%;
+`;
+
+export const hostedControlsTitle = css`
+  font-size: ${FontSizes.xLarge};
+  font-weight: ${FontWeights.semibold};
 `;
