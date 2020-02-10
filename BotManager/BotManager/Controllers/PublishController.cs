@@ -23,13 +23,13 @@ namespace BotManager.Controllers
         private readonly ILogger _logger;
         private readonly string baseDir = Directory.GetCurrentDirectory();
 
-        private readonly static Dictionary<string, Process> runningBots = new Dictionary<string, Process>();
+        private readonly static Dictionary<string, RunningBot> runningBots = new Dictionary<string, RunningBot>();
 
         public static void StopAllBots()
         {
             foreach (var kv in runningBots)
             {
-                kv.Value.Kill();
+                kv.Value.process.Kill();
             }
         }
 
@@ -130,9 +130,9 @@ namespace BotManager.Controllers
         [Route("[action]")]
         public IActionResult Stop(string botID)
         {
-            if (runningBots.TryGetValue(botID, out var process))
+            if (runningBots.TryGetValue(botID, out var runningBot))
             {
-                process.Kill();
+                runningBot.process.Kill();
                 return Ok();
             }
             return NotFound();
@@ -192,9 +192,19 @@ namespace BotManager.Controllers
 
         private string ResetBot(string botID, string versionID)
         {
-            StopBot(botID);
+            var port = "-1";
+            if (runningBots.TryGetValue(botID, out var runningBot))
+            {
+                StopBot(botID);
+                port = runningBot.port; // reuse last port
+            }
+            else
+            {
+                port = NextAvailablePort(3979).ToString();
+            }
+            
             RestoreContent(botID, versionID);
-            return StartBot(botID);
+            return StartBot(botID, port);
         }
 
         private void RestoreContent(string botID, string versionID)
@@ -206,14 +216,17 @@ namespace BotManager.Controllers
         }
 
 
-        private string StartBot(string botID)
+        private string StartBot(string botID, string port)
         {
-            var port = NextAvailablePort(3979); // start from 3979
-
             var botDir = GetBotDir(botID);
             var process = CreateProcess("dotnet", $"bin/Debug/netcoreapp2.1/BotProject.dll --urls=http://localhost:{port}", botDir);
-            runningBots[botID] = process;
+            runningBots[botID] = new RunningBot()
+            {
+                process = process,
+                port = port,
+            };
             process.Start();
+            
 
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
@@ -223,9 +236,9 @@ namespace BotManager.Controllers
 
         private void StopBot(string botID)
         {
-            if (runningBots.TryGetValue(botID, out var process))
+            if (runningBots.TryGetValue(botID, out var bot))
             {
-                process.Kill(true);
+                bot.process.Kill(true);
             }
         }
 
