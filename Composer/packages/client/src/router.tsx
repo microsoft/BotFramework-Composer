@@ -20,7 +20,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
-const PublisherPage = React.lazy(() => import('./pages/publish'));
+const PublisherPage = React.lazy(() => import('./pages/publisher'));
 
 const Routes = props => {
   const { actions } = useContext(StoreContext);

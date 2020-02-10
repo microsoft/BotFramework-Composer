@@ -8,7 +8,6 @@ import { SharedColors } from '@uifabric/fluent-theme';
 import { ICardTokens, ICardSectionStyles, ICardSectionTokens } from '@uifabric/react-cards';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { ITextStyles } from 'office-ui-fabric-react/lib/Text';
-import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 export const root = css`
