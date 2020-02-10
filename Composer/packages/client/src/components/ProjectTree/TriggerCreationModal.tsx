@@ -7,12 +7,14 @@ import React, { useState, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogInfo, luIndexer, combineMessage } from '@bfc/indexers';
 import get from 'lodash/get';
+import { LuEditor } from '@bfc/code-editor';
 
 import {
   addNewTrigger,
@@ -30,7 +32,7 @@ import {
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, dialogWindow, intent, triggerPhrases } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
@@ -57,6 +59,9 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
 
   if (!triggerPhrases) {
     errors.triggerPhrases = formatMessage('Please input trigger phrases');
+  }
+  if (data.errors.triggerPhrases) {
+    errors.triggerPhrases = data.errors.triggerPhrases;
   }
   return errors;
 };
@@ -125,8 +130,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, intent: name });
   };
 
-  const onTriggerPhrasesChange = (e, triggerPhrases) => {
-    setFormData({ ...formData, triggerPhrases: triggerPhrases });
+  const onTriggerPhrasesChange = (body: string) => {
+    const errors = formData.errors;
+    const content = '#' + formData.intent + '\n' + body;
+    const { diagnostics } = luIndexer.parse(content);
+    errors.triggerPhrases = combineMessage(diagnostics);
+    setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
   const eventTypes: IDropdownOption[] = getEventTypes();
@@ -206,14 +215,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid="TriggerName"
             />
           )}
+          {showIntentFields && <Label>{formatMessage('Trigger Phrases')}</Label>}
           {showIntentFields && (
-            <TextField
-              label={formatMessage('Trigger phrases')}
-              styles={triggerPhrases}
+            <LuEditor
               onChange={onTriggerPhrasesChange}
-              data-testid="TriggerPhrases"
-              errorMessage={formData.errors.triggerPhrases}
-              multiline
+              value={formData.triggerPhrases}
+              errorMsg={formData.errors.triggerPhrases}
+              hidePlaceholder={true}
+              height={150}
             />
           )}
         </Stack>

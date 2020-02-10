@@ -148,7 +148,7 @@ export const dialogWindow = css`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 300px;
+  min-height: 300px;
 `;
 
 export const textFieldlabel = {
