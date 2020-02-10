@@ -21,12 +21,25 @@ import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
 import pluginLoader from './services/pluginLoader';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const session = require('express-session');
+
 const app: Express = express();
 app.set('view engine', 'ejs');
 app.set('view options', { delimiter: '?' });
 app.use(compression());
 
-pluginLoader.loadPluginsFromFolder(__dirname + '/../../../plugins', app).then(() => {
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: 'bot-framework-composer' }));
+app.use(pluginLoader.passport.initialize());
+app.use(pluginLoader.passport.session());
+
+// make sure plugin has access to our express...
+pluginLoader.useExpress(app);
+
+// load all the plugins that exist in the folder
+pluginLoader.loadPluginsFromFolder(__dirname + '/../../../plugins').then(() => {
   const { login, authorize } = getAuthProvider();
 
   const CS_POLICIES = [
@@ -66,9 +79,6 @@ pluginLoader.loadPluginsFromFolder(__dirname + '/../../../plugins', app).then(()
 
   app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
   app.use(morgan('dev'));
-
-  app.use(bodyParser.json({ limit: '50mb' }));
-  app.use(bodyParser.urlencoded({ extended: false }));
 
   app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
     res.send('fortest');

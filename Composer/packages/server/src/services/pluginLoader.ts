@@ -4,8 +4,13 @@
 import * as fs from 'fs';
 import * as pathLib from 'path';
 
+// import * as passport from 'passport';
 import { Express } from 'express';
 import glob from 'globby';
+import { pathToRegexp } from 'path-to-regexp';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const passport = require('passport');
 
 class ComposerPluginRegistration {
   public loader: PluginLoader;
@@ -16,24 +21,120 @@ class ComposerPluginRegistration {
     this._name = name;
   }
 
-  get name(): string {
+  public get passport() {
+    return this.loader.passport;
+  }
+
+  public get name(): string {
     return this._name;
   }
 
-  public addWebRoute(type: string, url: string, callback: (req: any, res: any) => void) {
-    return this.loader.addWebRoute(type, url, callback);
-  }
-
-  public addWebMiddleware(middleware: (req, res, next) => void) {
-    return this.loader.addWebMiddleware(middleware);
-  }
-
+  /**************************************************************************************
+   * Storage related features
+   *************************************************************************************/
   public async setStorage(customStorageClass: any) {
-    return this.loader.setStorage(customStorageClass);
+    if (!this.loader.extensions.storage.customStorageClass) {
+      this.loader.extensions.storage.customStorageClass = customStorageClass;
+    } else {
+      throw new Error('Cannot redefine storage driver once set.');
+    }
   }
 
-  public async addPublishMethod(plugin: Partial<PublishPlugin>) {
-    return this.loader.addPublishMethod(this.name, plugin);
+  /**************************************************************************************
+   * Publish related features
+   *************************************************************************************/
+  public async addPublishMethod(name: string, plugin: Partial<PublishPlugin>) {
+    this.loader.extensions.publish[name] = plugin;
+  }
+
+  /**************************************************************************************
+   * Express/web related features
+   *************************************************************************************/
+  public addWebMiddleware(middleware: (req, res, next) => void) {
+    if (!this.loader.webserver) {
+      throw new Error('Plugin loaded in context without webserver. Cannot add web middleware.');
+    } else {
+      this.loader.webserver.use(middleware);
+    }
+  }
+
+  public addWebRoute(type: string, url: string, callback: (req: any, res: any) => void) {
+    if (!this.loader.webserver) {
+      throw new Error('Plugin loaded in context without webserver. Cannot add web route.');
+    } else {
+      switch (type.toLowerCase()) {
+        case 'get':
+          this.loader.webserver.get(url, callback);
+          break;
+        case 'put':
+          this.loader.webserver.put(url, callback);
+          break;
+        case 'post':
+          this.loader.webserver.post(url, callback);
+          break;
+        case 'delete':
+          this.loader.webserver.delete(url, callback);
+          break;
+        default:
+          throw new Error(`Unhandled web route type ${type}`);
+      }
+    }
+  }
+
+  /**************************************************************************************
+   * Auth/identity functions
+   *************************************************************************************/
+  public usePassportStrategy(passportStrategy) {
+    // set up the passport strategy to be used
+    this.loader.passport.use(passportStrategy);
+
+    // bind a basic auth middleware. this can be overridden. see setAuthMiddleware below
+    this.loader.extensions.authentication.middleware = (req, res, next) => {
+      if (req.isAuthenticated()) {
+        next();
+      } else {
+        res.redirect(this.loader.loginUri);
+      }
+    };
+
+    // set up default serializer, takes entire object and json encodes
+    this.loader.extensions.authentication.serializeUser = (user, done) => {
+      done(null, JSON.stringify(user));
+    };
+
+    // set up default deserializer.
+    this.loader.extensions.authentication.deserializeUser = (user, done) => {
+      done(null, JSON.parse(user));
+    };
+
+    // use a wrapper on the serializer that calls configured serializer
+    this.passport.serializeUser((user, done) => {
+      if (this.loader.extensions.authentication.serializeUser) {
+        this.loader.extensions.authentication.serializeUser(user, done);
+      }
+    });
+
+    // use a wrapper on the deserializer that calls configured deserializer
+    this.passport.deserializeUser((user, done) => {
+      if (this.loader.extensions.authentication.deserializeUser) {
+        this.loader.extensions.authentication.deserializeUser(user, done);
+      }
+    });
+  }
+
+  public useAuthMiddleware(middleware: (req, res, next) => void) {
+    this.loader.extensions.authentication.middleware = middleware;
+  }
+
+  public useUserSerializers(serialize, deserialize) {
+    this.loader.extensions.authentication.serializeUser = serialize;
+    this.loader.extensions.authentication.deserializeUser = deserialize;
+  }
+
+  public addAllowedUrl(url: string) {
+    if (this.loader.extensions.authentication.allowedUrls.indexOf(url) < 0) {
+      this.loader.extensions.authentication.allowedUrls.push(url);
+    }
   }
 }
 
@@ -46,7 +147,10 @@ interface PublishPlugin {
 }
 
 class PluginLoader {
-  private webserver: Express | undefined;
+  private _passport;
+  private _webserver: Express | undefined;
+  public loginUri: string;
+
   public extensions: {
     storage: {
       [key: string]: any;
@@ -54,104 +158,101 @@ class PluginLoader {
     publish: {
       [key: string]: Partial<PublishPlugin>;
     };
+    authentication: {
+      middleware?: (req, res, next) => void;
+      serializeUser?: (user: any, next: any) => void;
+      deserializeUser?: (user: any, next: any) => void;
+      allowedUrls: string[];
+      [key: string]: any;
+    };
   };
 
   constructor() {
     // load any plugins present in the default folder
     // noop for now
+    this.loginUri = '/login';
+
     this.extensions = {
       storage: {},
       publish: {},
+      authentication: {
+        allowedUrls: [this.loginUri],
+      },
     };
+    this._passport = passport;
   }
 
-  public async loadPlugin(path: string, webserver?: Express) {
+  public get passport() {
+    return this._passport;
+  }
+
+  public get webserver() {
+    return this._webserver;
+  }
+
+  // allow webserver to be set programmatically
+  public useExpress(webserver: Express) {
+    this._webserver = webserver;
+
+    this._webserver.use((req, res, next) => {
+      // if an auth middleware exists...
+      if (this.extensions.authentication.middleware) {
+        // and the url is not in the allowed urls array
+        if (
+          this.extensions.authentication.allowedUrls.filter(pattern => {
+            const regexp = pathToRegexp(pattern);
+            return req.url.match(regexp);
+          }).length === 0
+        ) {
+          // hand off to the plugin-specified middleware
+          return this.extensions.authentication.middleware(req, res, next);
+        }
+      }
+      next();
+    });
+  }
+
+  public async loadPlugin(name: string, thisPlugin: any) {
+    const pluginRegistration = new ComposerPluginRegistration(this, name);
+    if (typeof thisPlugin.default === 'function') {
+      // the module exported just an init function
+      thisPlugin.default.call(null, pluginRegistration);
+    } else if (thisPlugin.default && thisPlugin.default.initialize) {
+      // the module exported an object with an initialize method
+      thisPlugin.default.initialize.call(null, pluginRegistration);
+    } else if (thisPlugin.initialize && typeof thisPlugin.initialize === 'function') {
+      // the module exported an object with an initialize method
+      thisPlugin.initialize.call(null, pluginRegistration);
+    } else {
+      throw new Error('Could not init plugin');
+    }
+  }
+
+  public async loadPluginFromFile(path: string) {
     console.log('LOAD THE PLUGIN LOCATED IN ', path);
     const packageJSON = fs.readFileSync(path, 'utf8');
     const json = JSON.parse(packageJSON);
 
-    if (webserver) {
-      this.webserver = webserver;
-    }
-
-    const pluginRegistration = new ComposerPluginRegistration(this, json.name);
     if (json.extendsComposer) {
       const modulePath = path.replace(/package\.json$/, '');
       // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
-      const thisPlugin = require(modulePath);
-      console.log('TYPEOF PLUGIN', typeof thisPlugin);
-      if (typeof thisPlugin.default === 'function') {
-        console.log('This is a composer plugin that returned a function');
-        // the module exported just an init function
-        thisPlugin.default.call(null, pluginRegistration);
-      } else if (thisPlugin.default && thisPlugin.default.initialize) {
-        // the module exported an object with an initialize method
-        thisPlugin.default.initialize.call(null, pluginRegistration);
-      } else if (thisPlugin.initialize && typeof thisPlugin.initialize === 'function') {
-        // the module exported an object with an initialize method
-        thisPlugin.initialize.call(null, pluginRegistration);
-      } else {
-        console.error('Could not init plugin', modulePath);
+      try {
+        const thisPlugin = require(modulePath);
+        this.loadPlugin(json.name, thisPlugin);
+      } catch (err) {
+        console.error(err);
       }
     } else {
-      console.log('Not a Composer plugin');
+      // console.log('Not a Composer plugin');
     }
   }
 
-  public async setStorage(customStorageClass: any) {
-    if (!this.extensions.storage.customStorageClass) {
-      this.extensions.storage.customStorageClass = customStorageClass;
-    } else {
-      throw new Error('Cannot redefine storage driver once set.');
-    }
-  }
-
-  public async addPublishMethod(name: string, plugin: Partial<PublishPlugin>) {
-    this.extensions.publish[name] = plugin;
-  }
-
-  public addWebMiddleware(middleware: (req, res, next) => void) {
-    if (!this.webserver) {
-      throw new Error('Plugin loaded in context without webserver. Cannot add web middleware.');
-    } else {
-      this.webserver.use(middleware);
-    }
-  }
-
-  public addWebRoute(type: string, url: string, callback: (req: any, res: any) => void) {
-    if (!this.webserver) {
-      throw new Error('Plugin loaded in context without webserver. Cannot add web route.');
-    } else {
-      console.log(`Add route ${type} ${url}`);
-      switch (type.toLowerCase()) {
-        case 'get':
-          this.webserver.get(url, callback);
-          break;
-        case 'put':
-          this.webserver.put(url, callback);
-          break;
-        case 'post':
-          this.webserver.post(url, callback);
-          break;
-        case 'delete':
-          this.webserver.delete(url, callback);
-          break;
-        default:
-          throw new Error(`Unhandled web route type ${type}`);
-      }
-    }
-  }
-
-  public async loadPluginsFromFolder(path: string, webserver: Express) {
-    if (webserver) {
-      this.webserver = webserver;
-    }
-
-    console.log('LOAD PLUGINS FROM ', path);
+  public async loadPluginsFromFolder(path: string) {
+    // console.log('LOAD PLUGINS FROM ', path);
     const plugins = await glob('*/package.json', { cwd: path, dot: true });
-    console.log('FOUND LOCAL PLUGINS:', plugins);
+    // console.log('FOUND LOCAL PLUGINS:', plugins);
     for (const p in plugins) {
-      await this.loadPlugin(pathLib.join(path, plugins[p]));
+      await this.loadPluginFromFile(pathLib.join(path, plugins[p]));
     }
   }
 }
