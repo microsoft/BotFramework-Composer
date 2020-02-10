@@ -225,16 +225,6 @@
     lodash "^4.17.13"
     source-map "^0.5.0"
 
-"@babel/generator@^7.7.7":
-  version "7.8.4"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.8.4.tgz#35bbc74486956fe4251829f9f6c48330e8d0985e"
-  integrity sha512-PwhclGdRpNAf3IxZb0YVuITPZmmrXz9zf6fH8lT4XbrmfQKr6ryBzhv593P5C6poJRciFCL/eHGW2NuGrgEyxA==
-  dependencies:
-    "@babel/types" "^7.8.3"
-    jsesc "^2.5.1"
-    lodash "^4.17.13"
-    source-map "^0.5.0"
-
 "@babel/helper-annotate-as-pure@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.0.0.tgz#323d39dd0b50e10c7c06ca7d7638e6864d8c5c32"
@@ -684,11 +674,6 @@
   version "7.7.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.7.5.tgz#cbf45321619ac12d83363fcf9c94bb67fa646d71"
   integrity sha512-KNlOe9+/nk4i29g0VXgl8PEXIRms5xKLJeuZ6UptN0fHv+jDiriG+y94X6qAgWTR0h3KaoM1wK5G5h7MHFRSig==
-
-"@babel/parser@^7.7.7":
-  version "7.8.4"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.8.4.tgz#d1dbe64691d60358a974295fa53da074dd2ce8e8"
-  integrity sha512-0fKu/QqildpXmPVaRBoXOlyBb3MC+J0A66x97qEfLOMkn3u6nfY5esWogQwi/K0BjASYy4DbnsEWnpNL6qT5Mw==
 
 "@babel/plugin-proposal-async-generator-functions@^7.2.0":
   version "7.2.0"
@@ -2135,15 +2120,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@babel/types@^7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.8.3.tgz#5a383dffa5416db1b73dedffd311ffd0788fb31c"
-  integrity sha512-jBD+G8+LWpMBBWvVcdr4QysjUE4mU/syrhN17o1u3gx0/WzJB1kwiVZAXRtWbsIPOwW8pF/YJV5+nmetPzepXg==
-  dependencies:
-    esutils "^2.0.2"
-    lodash "^4.17.13"
-    to-fast-properties "^2.0.0"
-
 "@bfcomposer/bf-lu@1.1.2":
   version "1.1.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.2.tgz#0dcd1efa9f839daefe9e2dfc6f4b6db731b701a3"
@@ -2243,44 +2219,35 @@
     "@types/react" "16.9.0"
     prop-types "^15.7.2"
 
-"@botframework-ui/adaptive-form@^0.0.0":
-  version "0.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/adaptive-form/-/@botframework-ui/adaptive-form-0.0.0.tgz#e81c77959575dcbb7c74273d4ce119a1e7d16cd8"
-  integrity sha1-6Bx3lZV13Lt8dCc9TOEZoefRbNg=
+"@botframework-ui/adaptive-form@0.0.1-1":
+  version "0.0.1-1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/adaptive-form/-/@botframework-ui/adaptive-form-0.0.1-1.tgz#9c3b96bc1433b16be8ecc7f23b0e1fadaf50dd9c"
+  integrity sha1-nDuWvBQzsWvo7MfyOw4fra9Q3Zw=
   dependencies:
     "@emotion/core" "^10.0.27"
     lodash "^4.17.15"
     react-error-boundary "^1.2.5"
 
-"@botframework-ui/composer-config-loader@^0.0.0":
-  version "0.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/composer-config-loader/-/@botframework-ui/composer-config-loader-0.0.0.tgz#79a7b3f2f1162a092a11ae062811dfba4e04af30"
-  integrity sha1-eaez8vEWKgkqEa4GKBHfuk4ErzA=
-  dependencies:
-    "@babel/generator" "^7.7.7"
-    "@babel/parser" "^7.7.7"
-    "@babel/traverse" "^7.7.4"
-
-"@botframework-ui/extension@^0.0.0":
-  version "0.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/extension/-/@botframework-ui/extension-0.0.0.tgz#7b261999fc9e52043b99416c0c39cc684af0cf49"
-  integrity sha1-eyYZmfyeUgQ7mUFsDDnMaErwz0k=
+"@botframework-ui/extension@0.0.1-0":
+  version "0.0.1-0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/extension/-/@botframework-ui/extension-0.0.1-0.tgz#2ce01f0e37405de317fc1d9e716105ad4c31bb15"
+  integrity sha1-LOAfDjdAXeMX/B2ecWEFrUwxuxU=
   dependencies:
     lodash "^4.17.15"
 
-"@botframework-ui/json@^0.0.0-0":
-  version "0.0.0-0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/json/-/@botframework-ui/json-0.0.0-0.tgz#8291bf710a906e9c99cc78767629879eeb2be086"
-  integrity sha1-gpG/cQqQbpyZzHh2dimHnusr4IY=
+"@botframework-ui/json@0.0.1-0":
+  version "0.0.1-0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/json/-/@botframework-ui/json-0.0.1-0.tgz#e0a513f15ecd46cc90801cf48831d0b86173ee57"
+  integrity sha1-4KUT8V7NRsyQgBz0iDHQuGFz7lc=
   dependencies:
     "@emotion/core" "^10.0.27"
     "@monaco-editor/react" "^3.0.1"
     monaco-editor "^0.19.3"
 
-"@botframework-ui/prompts@0.0.0-1":
-  version "0.0.0-1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/prompts/-/@botframework-ui/prompts-0.0.0-1.tgz#0ccf98bbab74ab91094a975d8f6df4e570e6fa18"
-  integrity sha1-DM+Yu6t0q5EJSpddj2305XDm+hg=
+"@botframework-ui/prompts@0.0.1-0":
+  version "0.0.1-0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@botframework-ui/prompts/-/@botframework-ui/prompts-0.0.1-0.tgz#1249c98b8258ff2bea7b934d6b6cd7af2c34a1ff"
+  integrity sha1-EknJi4JY/yvqe5NNa2zXryw0of8=
   dependencies:
     "@emotion/core" "^10.0.27"
 
