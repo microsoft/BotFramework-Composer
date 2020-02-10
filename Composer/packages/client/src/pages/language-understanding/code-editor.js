@@ -3,20 +3,14 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 import { LuEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { combineMessage, isValid, LuFile } from '@bfc/indexers';
-import { RouteComponentProps } from '@reach/router';
+import { combineMessage, isValid } from '@bfc/indexers';
 
-interface CodeEditorProps extends RouteComponentProps<{}> {
-  file: LuFile;
-  onChange: (value: string) => {};
-  errorMsg: string;
-}
-
-const CodeEditor: React.FC<CodeEditorProps> = props => {
+export default function CodeEditor(props) {
   const { file, errorMsg: updateErrorMsg } = props;
   const onChange = debounce(props.onChange, 500);
   const diagnostics = get(file, 'diagnostics', []);
@@ -44,9 +38,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LuEditor
-      // typescript is unable to reconcile 'on' as part of a union type
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       options={{
         lineNumbers: 'on',
         minimap: 'on',
@@ -66,6 +57,10 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       onChange={_onChange}
     />
   );
-};
+}
 
-export default CodeEditor;
+CodeEditor.propTypes = {
+  file: PropTypes.object,
+  onChange: PropTypes.func,
+  errorMsg: PropTypes.string,
+};
