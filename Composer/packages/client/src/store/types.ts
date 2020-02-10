@@ -9,6 +9,7 @@ import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
+import { IPublisher } from './../pages/publish/types';
 import { ActionType } from './action/types';
 
 export interface Store {
@@ -43,6 +44,12 @@ export interface File {
 export interface StorageFolder extends File {
   parent: string;
   children?: File[];
+}
+
+export interface IRunningBot {
+  id: string;
+  message: string;
+  version: string;
 }
 
 export interface State {
@@ -90,6 +97,8 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
+  publishers: IPublisher[];
+  runingBot: IRunningBot | null;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

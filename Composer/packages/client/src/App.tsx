@@ -79,6 +79,13 @@ const topLinks = (botLoaded: boolean) => {
       disabled: !botLoaded,
     },
     {
+      to: '/publishers',
+      iconName: 'WebPublish',
+      labelName: formatMessage('Publishers'),
+      exact: true,
+      disabled: false,
+    },
+    {
       to: '/setting/',
       iconName: 'Settings',
       labelName: formatMessage('Settings'),

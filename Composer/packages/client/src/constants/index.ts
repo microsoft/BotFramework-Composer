@@ -1,7 +1,6 @@
+import formatMessage from 'format-message';
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-import formatMessage from 'format-message';
 
 export const BASEPATH = process.env.PUBLIC_URL || '/';
 export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
@@ -90,6 +89,11 @@ export enum ActionTypes {
   GET_ENDPOINT_SUCCESS = 'GET_ENDPOINT_SUCCESS', // remote publish
   ONBOARDING_ADD_COACH_MARK_REF = 'ONBOARDING_ADD_COACH_MARK_REF',
   ONBOARDING_SET_COMPLETE = 'ONBOARDING_SET_COMPLETE',
+  GET_PUBLISHERS = 'GET_PUBLISHERS',
+  GET_PUBLISHER_STATUS = 'GET_PUBLISHER_STATUS',
+  GET_PUBLISHER_HISTORY = 'GET_PUBLISHER_HISTORY',
+  PUBLISH_BOT_SUCCESS = 'PUBLISH_BOT_SUCCESS',
+  ROLLBACK_BOT_SUCCESS = 'ROLLBACK_BOT_SUCCESS',
 }
 
 export const Tips = {

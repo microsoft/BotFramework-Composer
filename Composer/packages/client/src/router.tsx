@@ -20,6 +20,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
+const PublisherPage = React.lazy(() => import('./pages/publish'));
 
 const Routes = props => {
   const { actions } = useContext(StoreContext);
@@ -53,6 +54,7 @@ const Routes = props => {
                   <LGPage path="language-generation/:fileId/*" />
                   <Notifications path="notifications" />
                   <Home path="home" />
+                  <PublisherPage path="publishers" />
                   <About path="about" />
                   <NotFound default />
                 </Router>

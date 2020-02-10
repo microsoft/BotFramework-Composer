@@ -58,6 +58,8 @@ const initialState: State = {
     coachMarkRefs: {},
   },
   clipboardActions: [],
+  publishers: [],
+  runingBot: null,
 };
 
 interface StoreContextValue {

@@ -295,6 +295,50 @@ const noOp: ReducerFunc = state => {
   return state;
 };
 
+const getPublishers: ReducerFunc = (state, { publishers }) => {
+  if (publishers.length > 0) {
+    state.publishers = publishers;
+  }
+
+  return state;
+};
+
+const getPublisherStatus: ReducerFunc = (state, { id, online }) => {
+  const publishers = state.publishers.map(publisher => {
+    if (id === publisher.id) {
+      publisher.online = online;
+    }
+    return publisher;
+  });
+  state.publishers = publishers;
+
+  return state;
+};
+
+const getPublisherHistory: ReducerFunc = (state, { id, history }) => {
+  const publishers = state.publishers.map(publisher => {
+    if (id === publisher.id) {
+      publisher.history = history.sort((a, b) => {
+        return new Date(b.lastUpdateTime).getTime() - new Date(a.lastUpdateTime).getTime();
+      });
+    }
+    return publisher;
+  });
+  state.publishers = publishers;
+
+  return state;
+};
+
+const publishBot: ReducerFunc = (state, { id, data }) => {
+  state.runingBot = { id, message: data.message, version: data.version };
+  return state;
+};
+
+const rollbackBot: ReducerFunc = (state, { id, data }) => {
+  state.runingBot = { id, message: data.message, version: data.version };
+  return state;
+};
+
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
   [ActionTypes.GET_PROJECT_FAILURE]: noOp,
@@ -349,4 +393,9 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.GET_PUBLISHERS]: getPublishers,
+  [ActionTypes.GET_PUBLISHER_STATUS]: getPublisherStatus,
+  [ActionTypes.GET_PUBLISHER_HISTORY]: getPublisherHistory,
+  [ActionTypes.PUBLISH_BOT_SUCCESS]: publishBot,
+  [ActionTypes.ROLLBACK_BOT_SUCCESS]: rollbackBot,
 });
