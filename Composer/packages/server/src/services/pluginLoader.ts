@@ -58,25 +58,49 @@ class ComposerPluginRegistration {
     }
   }
 
-  public addWebRoute(type: string, url: string, callback: (req: any, res: any) => void) {
+  public addWebRoute(
+    type: string,
+    url: string,
+    callback_or_middleware: (req: any, res: any, next?: any) => void,
+    callback?: (req: any, res: any) => void
+  ) {
     if (!this.loader.webserver) {
       throw new Error('Plugin loaded in context without webserver. Cannot add web route.');
     } else {
-      switch (type.toLowerCase()) {
-        case 'get':
-          this.loader.webserver.get(url, callback);
-          break;
-        case 'put':
-          this.loader.webserver.put(url, callback);
-          break;
-        case 'post':
-          this.loader.webserver.post(url, callback);
-          break;
-        case 'delete':
-          this.loader.webserver.delete(url, callback);
-          break;
-        default:
-          throw new Error(`Unhandled web route type ${type}`);
+      if (callback) {
+        switch (type.toLowerCase()) {
+          case 'get':
+            this.loader.webserver.get(url, callback_or_middleware, callback);
+            break;
+          case 'put':
+            this.loader.webserver.put(url, callback_or_middleware, callback);
+            break;
+          case 'post':
+            this.loader.webserver.post(url, callback_or_middleware, callback);
+            break;
+          case 'delete':
+            this.loader.webserver.delete(url, callback_or_middleware, callback);
+            break;
+          default:
+            throw new Error(`Unhandled web route type ${type}`);
+        }
+      } else {
+        switch (type.toLowerCase()) {
+          case 'get':
+            this.loader.webserver.get(url, callback_or_middleware);
+            break;
+          case 'put':
+            this.loader.webserver.put(url, callback_or_middleware);
+            break;
+          case 'post':
+            this.loader.webserver.post(url, callback_or_middleware);
+            break;
+          case 'delete':
+            this.loader.webserver.delete(url, callback_or_middleware);
+            break;
+          default:
+            throw new Error(`Unhandled web route type ${type}`);
+        }
       }
     }
   }
@@ -93,6 +117,7 @@ class ComposerPluginRegistration {
       if (req.isAuthenticated()) {
         next();
       } else {
+        console.warn('Rejecting access to ', req.url);
         res.redirect(this.loader.loginUri);
       }
     };
