@@ -15,20 +15,19 @@
 }
 .RootFieldTitle {
   border-bottom: 1px solid #c8c6c4;
-  padding: 0 18px;
+  padding: 0 12px;
   margin-bottom: 0px;
 }
 .RootFieldSubtitle {
   height: 15px;
   line-height: 15px;
   font-size: 12px;
-  font-weight: 600;
   color: #4F4F4F;
-  margin: -7px 0 7px;
+  margin: 12px 0;
 }
 .RootFieldDescription {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   white-space: pre-line;
 }
 .RootFieldMetaData {
