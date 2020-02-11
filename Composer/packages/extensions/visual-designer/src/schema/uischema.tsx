@@ -13,9 +13,9 @@ import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
+import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { ChoiceInputChoices } from '../components/nodes';
 import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
