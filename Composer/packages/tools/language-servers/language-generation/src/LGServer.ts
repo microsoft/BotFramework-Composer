@@ -454,7 +454,9 @@ export class LGServer {
         label: template.name,
         kind: CompletionItemKind.Reference,
         insertText:
-          template.parameters.length > 0 ? template.name + '(' + template.parameters.join(', ') + ')' : template.name,
+          template.parameters.length > 0
+            ? template.name + '(' + template.parameters.join(', ') + ')'
+            : template.name + '()',
         documentation: template.body,
       };
     });

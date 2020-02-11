@@ -54,7 +54,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file)) return;
     const value = template ? template.body : file.content;
     setContent(value);
-  }, [file, templateId]);
+  }, [fileId, templateId]);
 
   useEffect(() => {
     const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
