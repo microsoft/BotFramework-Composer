@@ -110,27 +110,32 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
 };
 
 const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
+  const lgFiles = state.lgFiles.map(lgFile => {
+    if (lgFile.id === id) {
+      lgFile.content = content;
+      return lgFile;
+    }
+    return lgFile;
+  });
   const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
     const targetFileName = getFileName(id);
     const targetFileId = getBaseName(targetFileName);
-    const targetFile = state.lgFiles.find(({ id }) => id === targetFileId);
+    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
     if (!targetFile) throw new Error(`file not found`);
     return { id, content: targetFile.content };
   };
 
-  state.lgFiles = state.lgFiles.map(lgFile => {
-    if (lgFile.id === id) {
-      const { check, parse } = lgIndexer;
-      const diagnostics = check(content, id, lgImportresolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(content, id);
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
-      return { ...lgFile, templates, diagnostics, content };
+  state.lgFiles = lgFiles.map(lgFile => {
+    const { check, parse } = lgIndexer;
+    const { id, content } = lgFile;
+    const diagnostics = check(content, id, lgImportresolver);
+    let templates: LgTemplate[] = [];
+    try {
+      templates = parse(content, id);
+    } catch (err) {
+      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
     }
-    return lgFile;
+    return { ...lgFile, templates, diagnostics, content };
   });
   return state;
 };
