@@ -74,7 +74,7 @@ export const publishBot: ActionCreator = async (store, id, version) => {
 };
 
 export const rollbackBot: ActionCreator = async (store, id, version) => {
-  const path = `/publishers/${id}/publish?version=${version}`;
+  const path = `/publishers/${id}/rollback?version=${version}`;
 
   try {
     const res = await httpClient.post(path);
