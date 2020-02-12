@@ -111,7 +111,7 @@ export class LUServer {
         diagnostics.push(`[Error luOption] File ${fileId}.lu do not exist`);
       } else if (sectionId) {
         const { sections } = luFile;
-        const section = sections.find(({ name }) => name === sectionId);
+        const section = sections.find(({ Name }) => Name === sectionId);
         if (!section) diagnostics.push(`Section ${fileId}.lu#${sectionId} do not exist`);
       }
     }
@@ -634,8 +634,8 @@ export class LUServer {
       if (isValid(sectionDiags) === false) {
         const lspDiagnostics = convertDiagnostics(sectionDiags, document, 1);
         this.sendDiagnostics(document, lspDiagnostics);
+        return;
       }
-      return;
     }
     const lspDiagnostics = convertDiagnostics(diagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);

@@ -9,10 +9,10 @@ import { LuEditor } from '../../src';
 const intent = {
   name: 'Greeting',
   body: `- hi
-  - hello
-  - hiya
-  - how are you? 
-  - how do you do?`,
+- hello
+- hiya
+- how are you? 
+- how do you do?`,
 };
 
 const luOption = {
