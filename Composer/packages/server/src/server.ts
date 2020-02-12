@@ -13,7 +13,8 @@ import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
-import { LUServer } from '@bfc/lu-languageserver';
+
+import { LUServer } from '../../tools/language-servers/language-understanding/src/LUServer';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -115,7 +116,7 @@ const wss: ws.Server = new ws.Server({
   perMessageDeflate: false,
 });
 
-const { fileResolver, staticMemoryResolver } = BotProjectService;
+const { fileResolver, luImportResolver, staticMemoryResolver } = BotProjectService;
 
 function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
@@ -129,7 +130,7 @@ function launchLuLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  const server = new LUServer(connection);
+  const server = new LUServer(connection, luImportResolver);
   server.start();
 }
 

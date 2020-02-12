@@ -223,7 +223,7 @@ export default function App() {
     value,
     onChange,
     languageServer: {
-      port: 5003,
+      port: 5000,
       path: '/lu-language-server',
     },
   };
