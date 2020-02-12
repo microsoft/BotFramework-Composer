@@ -3,17 +3,17 @@
 
 import { useContext, useMemo } from 'react';
 import { createSingleMessage } from '@bfc/indexers';
+import get from 'lodash/get';
+import { LgNamePattern } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { replaceDialogDiagnosticLabel } from '../../utils';
 
 import { INotification, DiagnosticSeverity } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
-
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
-
   const memoized = useMemo(() => {
     const notifactions: INotification[] = [];
     dialogs.forEach(dialog => {
@@ -43,15 +43,26 @@ export default function useNotifications(filter?: string) {
       });
     });
     lgFiles.forEach(lgFile => {
+      const lgTemplates = get(lgFile, 'templates', []);
       lgFile.diagnostics.map(diagnostic => {
+        const mappedTemplate = lgTemplates.find(
+          t =>
+            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
+            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+        );
+        let id = lgFile.id;
         const location = `${lgFile.id}.lg`;
+        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
+          //should navigate to design page
+          id = `${lgFile.id}#${mappedTemplate.name}`;
+        }
         notifactions.push({
           type: 'lg',
           severity: DiagnosticSeverity[diagnostic.severity] || '',
           location,
           message: createSingleMessage(diagnostic),
           diagnostic,
-          id: lgFile.id,
+          id,
         });
       });
     });

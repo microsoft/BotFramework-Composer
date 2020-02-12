@@ -38,9 +38,12 @@ describe('index', () => {
 
     // find out lg templates used in
     expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.length).toBe(3);
-    expect(project.dialogs.find((d: { isRoot: boolean }) => d.isRoot).lgTemplates.join(',')).toBe(
-      ['hello', 'bye', 'ShowImage'].join(',')
-    );
+    expect(
+      project.dialogs
+        .find((d: { isRoot: boolean }) => d.isRoot)
+        .lgTemplates.map(t => t.name)
+        .join(',')
+    ).toBe(['hello', 'bye', 'ShowImage'].join(','));
 
     // find out dialog used in,
     // here main.dialog refers a.dialog

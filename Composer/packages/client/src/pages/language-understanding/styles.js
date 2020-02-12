@@ -29,6 +29,11 @@ export const ContentHeaderStyle = css`
   align-items: center;
 `;
 
+export const HeaderText = css`
+  font-size: ${FontSizes.xLarge};
+  font-weight: ${FontWeights.semibold};
+`;
+
 export const ContentStyle = css`
   margin-left: 2px;
   display: flex;

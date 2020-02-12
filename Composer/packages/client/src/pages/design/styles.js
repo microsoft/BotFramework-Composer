@@ -75,7 +75,7 @@ export const visualPanel = css`
 export const visualEditor = css`
   border: 0px;
   flex: 1;
-  background-color: #e5e5e5;
+  background-color: #f6f6f6;
 `;
 
 export const formEditor = css`
@@ -91,8 +91,12 @@ export const breadcrumbClass = mergeStyleSets({
     padding: '10px',
   },
   itemLink: {
-    fontSize: FontSizes.medium,
-    fontWeight: FontWeights.semilight,
+    selectors: {
+      '.ms-TooltipHost': {
+        fontSize: FontSizes.large,
+        fontWeight: FontWeights.regular,
+      },
+    },
     color: '#333',
     padding: '4px 8px',
   },
