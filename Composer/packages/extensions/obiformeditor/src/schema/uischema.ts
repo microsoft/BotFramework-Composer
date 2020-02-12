@@ -39,7 +39,6 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
           },
           pattern: {
             'ui:options': {
-              displayInline: true,
               hideLabel: true,
               transparentBorder: true,
             },
