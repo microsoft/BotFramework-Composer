@@ -70,6 +70,7 @@ const TableView: React.FC<TableViewProps> = props => {
     const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
       file,
+      projectId: state.projectId,
       template: {
         name: newName,
         body: '-TemplateValue',
@@ -82,6 +83,7 @@ const TableView: React.FC<TableViewProps> = props => {
     index => {
       const payload = {
         file,
+        projectId: state.projectId,
         templateName: templates[index].name,
       };
 
@@ -96,6 +98,7 @@ const TableView: React.FC<TableViewProps> = props => {
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
         file,
+        projectId: state.projectId,
         fromTemplateName: name,
         toTemplateName: resolvedName,
       };

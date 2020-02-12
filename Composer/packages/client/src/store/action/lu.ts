@@ -6,9 +6,9 @@ import { ActionCreator } from '../types';
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
-export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const updateLuFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
   try {
-    const response = await httpClient.put(`/projects/opened/luFiles/${id}`, { id, content });
+    const response = await httpClient.put(`/projects/opened/luFiles/${id}`, { id, projectId, content });
     dispatch({
       type: ActionTypes.UPDATE_LU_SUCCESS,
       payload: { response },
@@ -23,9 +23,9 @@ export const updateLuFile: ActionCreator = async ({ dispatch }, { id, content })
   }
 };
 
-export const createLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const createLuFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
   try {
-    const response = await httpClient.post(`/projects/opened/luFiles`, { id, content });
+    const response = await httpClient.post(`/projects/opened/luFiles`, { id, projectId, content });
     dispatch({
       type: ActionTypes.CREATE_LU_SUCCCESS,
       payload: { response },
@@ -41,9 +41,9 @@ export const createLuFile: ActionCreator = async ({ dispatch }, { id, content })
   }
 };
 
-export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
+export const removeLuFile: ActionCreator = async ({ dispatch }, { id, projectId }) => {
   try {
-    const response = await httpClient.delete(`/projects/opened/luFiles/${id}`);
+    const response = await httpClient.delete(`/projects/opened/luFiles/${projectId}/${id}`);
     dispatch({
       type: ActionTypes.REMOVE_LU_SUCCCESS,
       payload: { response },
@@ -57,9 +57,9 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
   }
 };
 
-export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey) => {
+export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey, projectId) => {
   try {
-    const response = await httpClient.post(`/projects/opened/luFiles/publish`, { authoringKey });
+    const response = await httpClient.post(`/projects/opened/luFiles/publish`, { authoringKey, projectId });
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },

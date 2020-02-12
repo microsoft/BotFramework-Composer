@@ -13,6 +13,7 @@ import httpClient from './../../utils/httpUtil';
 
 export const setSettings: ActionCreator = async (
   { dispatch },
+  projectId: string,
   botName: string,
   settings: DialogSetting,
   slot?: BotEnvironments
@@ -32,7 +33,7 @@ export const setSettings: ActionCreator = async (
     }
     // set value to server
     const suffix = slot ? `/${slot}` : '';
-    await httpClient.post(`/projects/opened/settings${suffix}`, { settings });
+    await httpClient.post(`/projects/opened/settings/${projectId}/${suffix}`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
@@ -44,10 +45,15 @@ export const setSettings: ActionCreator = async (
   }
 };
 
-export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot?: BotEnvironments) => {
+export const setDialogSettingsSlot = async (
+  { dispatch },
+  projectId: string,
+  editing: boolean,
+  slot?: BotEnvironments
+) => {
   const suffix = slot ? `/${slot}` : '';
   const query = editing ? '' : '?obfuscate=true';
-  const url = `/projects/opened/settings${suffix}${query}`;
+  const url = `/projects/opened/settings/${projectId}${suffix}${query}`;
 
   try {
     const response = await httpClient.get(url);
@@ -69,9 +75,14 @@ export const setDialogSettingsSlot = async ({ dispatch }, editing: boolean, slot
   }
 };
 
-export const setEditDialogSettings: ActionCreator = async (store, editing: boolean, slot?: BotEnvironments) => {
+export const setEditDialogSettings: ActionCreator = async (
+  store,
+  projectId: string,
+  editing: boolean,
+  slot?: BotEnvironments
+) => {
   if (editing) {
     // fetch the real settings for editing
-    await setDialogSettingsSlot(store, editing, slot);
+    await setDialogSettingsSlot(store, projectId, editing, slot);
   }
 };

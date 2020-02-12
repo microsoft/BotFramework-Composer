@@ -47,6 +47,7 @@ export interface StorageFolder extends File {
 
 export interface State {
   dialogs: DialogInfo[];
+  projectId: string;
   botName: string;
   location: string;
   botEnvironment: string;
@@ -116,6 +117,7 @@ export interface DialogSetting {
 }
 
 export interface DesignPageLocation {
+  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;

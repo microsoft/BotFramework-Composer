@@ -113,8 +113,10 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id: dialogId,
       content: updatedDialog,
+      projectId: state.projectId,
     };
     dialogsMap[dialogId] = updatedDialog;
+    console.log('update dialog from handlevaluechange');
     updateDialog(payload);
 
     //make sure focusPath always valid
@@ -153,10 +155,13 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
+    const projectId = state.projectId;
+
     lgUtil.checkSingleLgTemplate(template);
 
     await updateLgTemplate({
       file,
+      projectId,
       templateName,
       template,
     });
@@ -171,8 +176,11 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
+    const projectId = state.projectId;
+
     return actions.copyLgTemplate({
       file,
+      projectId,
       fromTemplateName,
       toTemplateName,
     });
@@ -183,9 +191,11 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
+    const projectId = state.projectId;
 
     return actions.removeLgTemplate({
       file,
+      projectId,
       templateName,
     });
   }
@@ -195,9 +205,11 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
+    const projectId = state.projectId;
 
     return actions.removeLgTemplates({
       file,
+      projectId,
       templateNames,
     });
   }
@@ -208,6 +220,7 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id,
       content,
+      projectId: state.projectId,
     };
 
     switch ([fileTargetType, fileChangeType].join(',')) {
@@ -233,6 +246,7 @@ export const ShellApi: React.FC = () => {
       const payload = {
         id: dialogId,
         content: cleanedData,
+        projectId: state.projectId,
       };
       updateDialog(payload);
     }

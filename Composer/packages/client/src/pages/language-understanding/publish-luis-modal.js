@@ -130,7 +130,7 @@ export const PublishLuis = props => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    await setSettings(botName, { ...settings, luis: newValue });
+    await setSettings(state.projectId, botName, { ...settings, luis: newValue });
     await onPublish();
   };
 

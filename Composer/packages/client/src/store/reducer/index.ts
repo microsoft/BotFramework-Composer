@@ -42,6 +42,7 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
+  state.projectId = response.data.id;
   state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;

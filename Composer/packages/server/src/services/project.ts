@@ -17,6 +17,9 @@ const MAX_RECENT_BOTS = 7;
 export class BotProjectService {
   private static currentBotProject: BotProject | undefined = undefined;
   private static recentBotProjects: LocationRef[] = [];
+  private static projectLocationMap: {
+    [key: string]: string;
+  };
 
   private static initialize() {
     if (BotProjectService.currentBotProject) {
@@ -27,12 +30,17 @@ export class BotProjectService {
       BotProjectService.recentBotProjects = Store.get('recentBotProjects');
     }
 
+    if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
+      BotProjectService.projectLocationMap = Store.get('projectLocationMap') || {};
+    }
+
     if (BotProjectService.recentBotProjects.length > 0) {
       BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
     }
   }
 
   public static getCurrentBotProject(): BotProject | undefined {
+    console.warn('called getCurrentBotPRoject()');
     BotProjectService.initialize();
     return BotProjectService.currentBotProject;
   }
@@ -69,19 +77,42 @@ export class BotProjectService {
     });
   };
 
-  public static openProject = async (locationRef: LocationRef) => {
+  public static openProject = async (locationRef: LocationRef): Promise<string> => {
     BotProjectService.initialize();
+
+    // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
       BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file not exist ${locationRef.path}`);
     }
-    // TODO: possible race condition with openProject and saveProjectAs
+
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === locationRef.path) {
+        // TODO: this should probably move to getProjectById
+        BotProjectService.addRecentProject(locationRef.path);
+        return key;
+      }
+    }
+
+    // generate an id and store it in the projectLocationMap
+    const projectId = Math.random() * 100000;
     // eslint-disable-next-line require-atomic-updates
-    BotProjectService.currentBotProject = new BotProject(locationRef);
-
-    await BotProjectService.currentBotProject.index();
-
+    BotProjectService.projectLocationMap[projectId] = locationRef.path;
     BotProjectService.addRecentProject(locationRef.path);
+    Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+    return projectId.toString();
+  };
+
+  public static getProjectById = async (projectId: string) => {
+    BotProjectService.initialize();
+    if (!BotProjectService.projectLocationMap[projectId]) {
+      throw new Error('project not found in cache');
+    } else {
+      const project = new BotProject({ storageId: 'default', path: BotProjectService.projectLocationMap[projectId] });
+      project.id = projectId;
+      await project.index();
+      return project;
+    }
   };
 
   private static addRecentProject = (path: string): void => {

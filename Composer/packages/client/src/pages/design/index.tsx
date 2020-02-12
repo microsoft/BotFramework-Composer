@@ -144,6 +144,7 @@ function DesignPage(props) {
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
+        projectId: state.projectId,
         selected: params.get('selected'),
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
@@ -175,6 +176,7 @@ function DesignPage(props) {
   const onTriggerCreationSubmit = dialog => {
     const payload = {
       id: dialog.id,
+      projectId: state.projectId,
       content: dialog.content,
     };
     const index = get(dialog, 'content.triggers', []).length - 1;
@@ -317,7 +319,7 @@ function DesignPage(props) {
   async function onSubmit(data: { name: string; description: string }) {
     const content = getNewDesigner(data.name, data.description);
     const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
-    await actions.createDialog({ id: data.name, content: seededContent });
+    await actions.createDialog({ id: data.name, content: seededContent, projectId: state.projectId });
   }
 
   async function handleDeleteDialog(id) {
@@ -341,14 +343,14 @@ function DesignPage(props) {
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id);
+      await removeDialog(id, state.projectId);
     }
   }
 
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
-      await updateDialog({ id, content });
+      await updateDialog({ id, projectId: state.projectId, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;

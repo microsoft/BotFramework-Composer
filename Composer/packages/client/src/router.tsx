@@ -28,6 +28,7 @@ const Routes = props => {
   const shouldRenderDesignPage = useRef(false);
 
   useEffect(() => {
+    console.log('fetch project');
     actions.fetchProject();
   }, []);
 
@@ -36,6 +37,8 @@ const Routes = props => {
       {({ match, navigate, location }) => {
         if (match) {
           shouldRenderDesignPage.current = true;
+          // console.log('FETCH PROJECT FOR DIALOG', match.projectId);
+          // actions.fetchProject(match.projectId);
         }
 
         return (
@@ -47,11 +50,13 @@ const Routes = props => {
               {!match && (
                 <Router basepath={BASEPATH} {...parentProps}>
                   <Redirect from="/" to={resolveToBasePath(BASEPATH, 'dialogs/Main')} noThrow />
+                  {/* <ProjectRouter path="/bot/:projectId"> */}
                   <SettingPage path="setting/*" />
                   <LUPage path="language-understanding/*" />
                   <Redirect from="language-generation" to="language-generation/common" noThrow />
                   <LGPage path="language-generation/:fileId/*" />
                   <Notifications path="notifications" />
+                  {/* </ProjectRouter> */}
                   <Home path="home" />
                   <About path="about" />
                   <NotFound default />
@@ -64,5 +69,16 @@ const Routes = props => {
     </Match>
   );
 };
+
+// const ProjectRouter = props => {
+//   const { actions } = useContext(StoreContext);
+
+//   useEffect(() => {
+//     console.log('FETCH PROJECT!!!', props.projectId);
+//     actions.fetchProject(props.projectId);
+//   }, []);
+
+//   return <div>{props.children}</div>;
+// };
 
 export default Routes;
