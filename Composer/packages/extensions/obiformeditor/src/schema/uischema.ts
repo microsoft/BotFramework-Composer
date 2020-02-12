@@ -39,6 +39,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
           },
           pattern: {
             'ui:options': {
+              displayInline: true,
               hideLabel: true,
               transparentBorder: true,
             },
@@ -48,6 +49,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       entities: {
         items: {
           'ui:options': {
+            displayLabel: false,
             hideLabel: true,
             hideDescription: true,
           },
