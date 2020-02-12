@@ -6,14 +6,14 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import { DialogGroup, PromptTab } from '@bfc/shared';
 
-import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeColors } from '../../../constants/ElementColors';
-import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
-import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
-import { getUserAnswersTitle } from '../utils';
+import { ChoiceInputSize, ChoiceInputMarginTop } from '../constants/ElementSizes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeColors } from '../constants/ElementColors';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { ElementIcon } from '../utils/obiPropertyResolver';
+import { FormCard } from '../components/nodes/templates/FormCard';
+import { NodeProps } from '../components/nodes/nodeProps';
+import { getUserAnswersTitle } from '../components/nodes/utils';
 
 export const ChoiceInputChoices = ({ choices }) => {
   if (!Array.isArray(choices)) {

@@ -17,7 +17,7 @@ export const tabs: Partial<IPivotStyles> = {
     flex: 1,
   },
   itemContainer: {
-    padding: '24px 18px',
+    padding: '12px 12px',
   },
 };
 
