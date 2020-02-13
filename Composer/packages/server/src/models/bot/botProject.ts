@@ -594,20 +594,30 @@ export class BotProject {
     await this._autofixGeneratorInDialog();
   };
 
+  private _buildRNNewlineText = (lineArray: string[]): string => {
+    const lineArrayEndWithRN = lineArray.map(line => {
+      if (line.endsWith('\r')) {
+        return line + '\n';
+      }
+      return line;
+    });
+    return lineArrayEndWithRN.join('');
+  };
+
   /**
    * move generated lg template (like bfdactivity-123456) from common.lg into dialog.lg
    * help migrate old version single-lg bot to multiple-lg
    * we can disable this code after a period of time, when there is no old version bot.
    */
+
   private _autofixTemplateInCommon = async () => {
-    const NEWLINE = '\n';
-    const DUBNEWLINE = '\n\n';
+    const NEWLINE = '\r\n';
     const dialogs: DialogInfo[] = this.dialogs;
     const lgFiles: LgFile[] = this.lgFiles;
     const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
     const commonLgFile = lgFiles.find(({ id }) => id === 'common');
     if (!commonLgFile) return;
-    const lineContentArray = commonLgFile.content.split(NEWLINE);
+    const lineContentArray = commonLgFile.content.split('\n');
     for (const dialog of dialogs) {
       const { lgTemplates } = dialog;
       const dialogTemplateTexts: string[] = [];
@@ -618,20 +628,19 @@ export class BotProject {
           if (!template?.range) continue;
           const { startLineNumber, endLineNumber } = template.range;
           const lineCount = endLineNumber - startLineNumber + 1;
-          const templateText = lineContentArray
-            .splice(startLineNumber - 1, lineCount, ...Array(lineCount))
-            .join(NEWLINE);
+          const templateText = this._buildRNNewlineText(
+            lineContentArray.splice(startLineNumber - 1, lineCount, ...Array(lineCount))
+          );
           dialogTemplateTexts.push(templateText);
         }
       }
       const updatedContent =
-        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') + dialogTemplateTexts.join(DUBNEWLINE);
+        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') +
+        this._buildRNNewlineText(dialogTemplateTexts) +
+        NEWLINE;
       await this.updateLgFile(dialog.id, updatedContent);
     }
-    const updatedCommonContent = lineContentArray
-      .filter(item => item !== undefined)
-      .join(NEWLINE)
-      .trim();
+    const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
     await this.updateLgFile('common', updatedCommonContent);
   };
 
