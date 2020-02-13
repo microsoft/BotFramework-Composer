@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
-
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@ export const title = css`
   display: block;
   font-size: 28px;
   line-height: 36px;
-  font-weight: normal;
+  font-weight: ${FontWeights.semibold};
   margin: 0;
 `;
 

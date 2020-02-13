@@ -5,5 +5,5 @@ import { css } from '@emotion/core';
 
 // offset ObjectField's margin
 export const regexEditorContainer = css`
-  margin: 0 -18px -26px -18px;
+  margin: 0 -12px -26px -12px;
 `;

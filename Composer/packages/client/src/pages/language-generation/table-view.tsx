@@ -49,7 +49,7 @@ const TableView: React.FC<TableViewProps> = props => {
     } else {
       const dialogsTemplates: LgTemplate[] = [];
       activeDialog.lgTemplates.forEach(item => {
-        const template = allTemplates.find(t => t.name === item);
+        const template = allTemplates.find(t => t.name === item.name);
         if (template) {
           dialogsTemplates.push(template);
         }
@@ -196,7 +196,7 @@ const TableView: React.FC<TableViewProps> = props => {
       // build usedIn map
       templates.forEach(({ name }) => {
         templateUsedInDialogMap[name] = dialogs
-          .filter(dialog => dialog.lgTemplates.includes(name))
+          .filter(dialog => dialog.lgTemplates.map(t => t.name).includes(name))
           .map(dialog => dialog.id);
       });
 

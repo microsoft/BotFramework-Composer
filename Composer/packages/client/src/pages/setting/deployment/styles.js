@@ -14,6 +14,8 @@ export const styles = {
   },
   header: {
     marginTop: '0',
+    fontSize: FontSizes.size20,
+    fontWeight: FontWeights.semibold,
   },
   halfstack: {
     root: [
