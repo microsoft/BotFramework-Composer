@@ -16,7 +16,7 @@ export enum EdgeDirection {
 }
 
 interface EdgeOptions {
-  color: string;
+  color?: string;
 
   /** Indicates if the line stroke is dashed */
   dashed?: boolean;
@@ -87,13 +87,15 @@ const calculateArrowPoints = (endPoint: Coord2D, direction: EdgeDirection, arrow
 };
 
 export const drawSVGEdge = (
-  startPoint: Coord2D,
+  x: number,
+  y: number,
   direction: EdgeDirection,
   length: number,
   options?: EdgeOptions
 ): JSX.Element => {
   if (length <= 0) return <></>;
 
+  const startPoint = { x, y };
   const edgeOptions = options ? { ...defaultEdgeOptions, ...options } : defaultEdgeOptions;
   const { arrowed, color, dashed, label, labelOptions } = edgeOptions;
   const strokeProps = {
