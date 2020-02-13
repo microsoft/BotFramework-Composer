@@ -6,14 +6,14 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import { DialogGroup, PromptTab } from '@bfc/shared';
 
-import { ChoiceInputSize, ChoiceInputMarginTop } from '../../../constants/ElementSizes';
-import { NodeEventTypes } from '../../../constants/NodeEventTypes';
-import { NodeColors } from '../../../constants/ElementColors';
-import { measureJsonBoundary } from '../../../layouters/measureJsonBoundary';
-import { ElementIcon } from '../../../utils/obiPropertyResolver';
-import { FormCard } from '../templates/FormCard';
-import { NodeProps } from '../nodeProps';
-import { getUserAnswersTitle } from '../utils';
+import { ChoiceInputSize, ChoiceInputMarginTop } from '../constants/ElementSizes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeColors } from '../constants/ElementColors';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { ElementIcon } from '../utils/obiPropertyResolver';
+import { FormCard } from '../components/nodes/templates/FormCard';
+import { NodeProps } from '../components/nodes/nodeProps';
+import { getUserAnswersTitle } from '../components/nodes/utils';
 
 export const ChoiceInputChoices = ({ choices }) => {
   if (!Array.isArray(choices)) {
@@ -21,7 +21,7 @@ export const ChoiceInputChoices = ({ choices }) => {
   }
 
   return (
-    <div data-testid="ChoiceInput" css={{ padding: '0 0 8px 45px' }}>
+    <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 29px' }}>
       {choices.map(({ value }, index) => {
         if (index < 3) {
           return (
@@ -60,7 +60,7 @@ export const ChoiceInputChoices = ({ choices }) => {
             textAlign: 'center',
             fontFamily: 'Segoe UI',
             fontSize: '12px',
-            lineHeight: '19px',
+            lineHeight: '14px',
             boxSizing: 'border-box',
           }}
         >
