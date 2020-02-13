@@ -4,23 +4,24 @@
 import React from 'react';
 import { render } from 'react-testing-library';
 
-import { drawSVGEdge, EdgeDirection } from '../../../src/components/lib/EdgeUtil';
+import { drawSVGEdge } from '../../../src/components/lib/EdgeUtil';
+import { EdgeDirection } from '../../../src/models/EdgeData';
 
 describe('drawSVGEdge', () => {
   it('should render normal edge line', async () => {
-    const { container } = render(<svg>{drawSVGEdge(10, 10, EdgeDirection.Right, 100)}</svg>);
+    const { container } = render(<svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100)}</svg>);
     const lines = await container.querySelectorAll('line');
     expect(lines.length).toEqual(1);
   });
 
   it('should render nothing given a zero length', async () => {
-    const { container } = render(<svg>{drawSVGEdge(10, 10, EdgeDirection.Right, 0)}</svg>);
+    const { container } = render(<svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 0)}</svg>);
     const lines = await container.querySelectorAll('line');
     expect(lines.length).toEqual(0);
   });
 
   it('should render arrow head when "arrowed" option set to true', async () => {
-    const { container } = render(<svg>{drawSVGEdge(10, 10, EdgeDirection.Right, 100, { arrowed: true })}</svg>);
+    const { container } = render(<svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { arrowed: true })}</svg>);
     const lines = await container.querySelectorAll('line');
     expect(lines.length).toEqual(1);
 
@@ -29,7 +30,9 @@ describe('drawSVGEdge', () => {
   });
 
   it('should render label text when "label" is set', async () => {
-    const { container } = render(<svg>{drawSVGEdge(10, 10, EdgeDirection.Right, 100, { label: 'hello' })}</svg>);
+    const { container } = render(
+      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { label: 'hello' })}</svg>
+    );
     const labels = await container.querySelectorAll('text');
     expect(labels.length).toEqual(1);
     expect(labels[0].textContent).toEqual('hello');
