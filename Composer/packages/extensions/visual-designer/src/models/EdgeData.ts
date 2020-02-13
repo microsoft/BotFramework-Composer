@@ -14,8 +14,8 @@ export interface EdgeOptions {
   /** Indicates if the line stroke is dashed */
   dashed?: boolean;
 
-  /** If set to true, an arrow will be drawn at the end of the line */
-  arrowed?: boolean;
+  /** If set to true, an arrowhead will be drawn at the end of the line */
+  directed?: boolean;
 
   /** Text displayed on the edge */
   label?: string | number;

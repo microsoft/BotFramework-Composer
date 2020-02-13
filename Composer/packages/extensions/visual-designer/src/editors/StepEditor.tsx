@@ -80,7 +80,7 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
           contentBoundary.height + HeadSize.height,
           EdgeDirection.Down,
           ElementInterval.y / 2,
-          { arrowed: true }
+          { directed: true }
         )}
         <circle
           r={TerminatorSize.height / 2 - 1}

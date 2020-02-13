@@ -66,7 +66,7 @@ export const foreachLayouter = (
       length: containerBoundary.axisX - node.boundary.axisX,
       options: {
         dashed: true,
-        arrowed: index === 0,
+        directed: index === 0,
       },
     });
   });

@@ -84,7 +84,7 @@ export const drawSVGEdge = (
 
   const startPoint = { x, y };
   const edgeOptions = loadOptions(direction, options);
-  const { arrowed, color, dashed, label, labelOptions } = edgeOptions;
+  const { directed, color, dashed, label, labelOptions } = edgeOptions;
   const strokeProps = {
     strokeDasharray: dashed ? '4' : 'none',
     strokeWidth: '1',
@@ -122,7 +122,7 @@ export const drawSVGEdge = (
     elements.push(text);
   }
   // Draw the edge arrow
-  if (arrowed) {
+  if (directed) {
     const [p1, p2] = calculateArrowPoints(endPoint, direction);
     const points = [p1, endPoint, p2].map(p => `${p.x},${p.y}`).join(' ');
     const arrow = (

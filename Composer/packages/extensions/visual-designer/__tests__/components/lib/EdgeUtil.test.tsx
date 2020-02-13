@@ -20,8 +20,10 @@ describe('drawSVGEdge', () => {
     expect(lines.length).toEqual(0);
   });
 
-  it('should render arrow head when "arrowed" option set to true', async () => {
-    const { container } = render(<svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { arrowed: true })}</svg>);
+  it('should render an arrowhead when "directed" option set to true', async () => {
+    const { container } = render(
+      <svg>{drawSVGEdge('test', 10, 10, EdgeDirection.Right, 100, { directed: true })}</svg>
+    );
     const lines = await container.querySelectorAll('line');
     expect(lines.length).toEqual(1);
 
