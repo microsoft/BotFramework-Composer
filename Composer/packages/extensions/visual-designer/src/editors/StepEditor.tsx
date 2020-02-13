@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { useEffect, useState } from 'react';
 
-import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
@@ -17,6 +16,7 @@ import { EdgeDirection } from '../models/EdgeData';
 import { useWindowDimensions } from '../utils/hooks';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
+import { ObiColors } from '../constants/ElementColors';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -82,6 +82,14 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
           ElementInterval.y / 2,
           { arrowed: true }
         )}
+        <circle
+          r={TerminatorSize.height / 2 - 1}
+          cx={editorAxisX}
+          cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
+          fill="none"
+          stroke={ObiColors.LightGray}
+          strokeWidth="2"
+        />
       </SVGContainer>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
@@ -90,13 +98,6 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
         {content}
-      </OffsetContainer>
-      <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
-        <div className="step-editor__tail" css={{ ...TailSize, position: 'relative' }}>
-          <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
-            <Terminator />
-          </OffsetContainer>
-        </div>
       </OffsetContainer>
     </div>
   );
