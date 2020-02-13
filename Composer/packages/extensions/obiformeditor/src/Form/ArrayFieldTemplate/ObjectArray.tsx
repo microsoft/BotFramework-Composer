@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ArrayFieldTemplateProps } from '@bfcomposer/react-jsonschema-form';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -16,13 +16,7 @@ import { BaseField } from '../fields/BaseField';
 import { WidgetLabel } from '../widgets/WidgetLabel';
 
 import ArrayItem from './ArrayItem';
-import {
-  arrayItemInputFieldContainer,
-  arrayItemField,
-  objectItemLabel,
-  objectItemInputField,
-  objectItemValueLabel,
-} from './styles';
+import { arrayItemInputFieldContainer, objectItemLabel, objectItemInputField, objectItemValueLabel } from './styles';
 
 const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
   const { canAdd, idSchema, items, onAddClick, schema = {}, uiSchema = {} } = props;
@@ -65,13 +59,14 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
     [uiSchema]
   );
 
+  const objectProperties = useMemo(() => Object.keys(properties).filter(isVisible), [properties]);
+
   return (
     <BaseField {...props}>
       {object && (
         <div css={objectItemLabel}>
-          {Object.keys(properties)
-            .filter(isVisible)
-            .map((key, index) => {
+          {objectProperties.length > 1 &&
+            objectProperties.map((key, index) => {
               const { description, title } = properties[key] as JSONSchema6;
               const { __id = '' } = idSchema[key] || {};
 
@@ -90,40 +85,33 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
         ))}
         {canAdd &&
           (!object ? (
-            <DefaultButton
-              type="button"
-              onClick={onAddClick}
-              data-testid="ArrayContainerAdd"
-              styles={{ root: { marginTop: '14px' } }}
-            >
-              {formatMessage('Add')}
-            </DefaultButton>
+            <div css={arrayItemInputFieldContainer}>
+              <DefaultButton type="button" onClick={onAddClick} data-testid="ArrayContainerAdd">
+                {formatMessage('Add')}
+              </DefaultButton>
+            </div>
           ) : (
             <div css={arrayItemInputFieldContainer}>
-              <div css={arrayItemField}>
-                {Object.keys(properties)
-                  .filter(isVisible)
-                  .map((property, index, items) => (
-                    <div css={objectItemInputField} key={index}>
-                      <TextField
-                        autoComplete="off"
-                        onChange={handleChange(property)}
-                        onKeyDown={handleKeyDown}
-                        placeholder={`${formatMessage('Add new')} ${property}`}
-                        value={value[property] || ''}
-                        iconProps={{
-                          ...(index === items.length - 1
-                            ? {
-                                iconName: 'ReturnKey',
-                                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
-                              }
-                            : {}),
-                        }}
-                        data-testid="object-array-text-input"
-                      />
-                    </div>
-                  ))}
-              </div>
+              {objectProperties.map((property, index, items) => (
+                <div css={objectItemInputField} key={index}>
+                  <TextField
+                    autoComplete="off"
+                    onChange={handleChange(property)}
+                    onKeyDown={handleKeyDown}
+                    placeholder={`${formatMessage('Add new')} ${property}`}
+                    value={value[property] || ''}
+                    iconProps={{
+                      ...(index === items.length - 1
+                        ? {
+                            iconName: 'ReturnKey',
+                            style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+                          }
+                        : {}),
+                    }}
+                    data-testid="object-array-text-input"
+                  />
+                </div>
+              ))}
               <IconButton
                 disabled={true}
                 menuIconProps={{ iconName: 'MoreVertical' }}
