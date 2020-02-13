@@ -64,24 +64,15 @@ ENV \
 # Add dependencies for disabling invariant mode (set in base image)
 RUN apk add --no-cache icu-libs
 
-# Install .NET Core 2.1
-ENV DOTNET_SDK_VERSION 2.1.607
+# Install .NET Core SDK 3.1
+ENV DOTNET_SDK_VERSION 3.1.101
 
 RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-x64.tar.gz \
-  && dotnet_sha512='61caf6602b8a2aa89769b3e91ddaec963d8ab9f802cd7f6c6da4f02426358712bc2bb0930e7ee3a81d75c7607039543b554cb8ed50e45610655f9e91ed0f2f17' \
+  && dotnet_sha512='ce386da8bc07033957fd404909fc230e8ab9e29929675478b90f400a1838223379595a4459056c6c2251ab5c722f80858b9ca536db1a2f6d1670a97094d0fe55' \
   && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
   && mkdir -p /usr/share/dotnet \
-  && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
+  && tar -C /usr/share/dotnet -oxzf dotnet.tar.gz \
   && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-  && rm dotnet.tar.gz
-
-# Install .NET Core SDK 3.0
-ENV DOTNET_SDK_VERSION 3.0.101
-
-RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-x64.tar.gz \
-  && dotnet_sha512='98cc98f58187d208bd388f8c71862ea75e50ca25666e265f40a4e7c28082c2784738172e8ae4af7815057f7c57072cbe4fc03301d01738fc1ed5bb5e4d30a363' \
-  && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
-  && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
   && rm dotnet.tar.gz
 
 # Enable detection of running in a container
