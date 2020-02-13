@@ -48,6 +48,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       entities: {
         items: {
           'ui:options': {
+            displayLabel: false,
             hideLabel: true,
             hideDescription: true,
           },
