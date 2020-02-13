@@ -137,7 +137,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
             },
           },
         }}
-        iconSize={8}
+        iconSize={7}
         nodeSelected={nodeSelected}
         menuItems={buildEdgeMenuItemsFromClipboardContext(
           nodeContext,
