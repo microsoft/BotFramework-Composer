@@ -11,7 +11,7 @@ interface Coord2D {
 export enum EdgeDirection {
   Up = 'Up',
   Down = 'Down',
-  Left = 'left',
+  Left = 'Left',
   Right = 'Right',
 }
 
@@ -37,17 +37,6 @@ interface EdgeOptions {
   };
 }
 
-const defaultEdgeOptions: EdgeOptions = {
-  color: '#979797',
-  labelOptions: {
-    offset: {
-      x: 8,
-      y: -5,
-    },
-    fontSize: 14,
-  },
-};
-
 const calculateEdgeEndPoint = (startPoint: Coord2D, direction: EdgeDirection, length: number): Coord2D => {
   switch (direction) {
     case EdgeDirection.Up:
@@ -65,13 +54,13 @@ const calculateArrowPoints = (endPoint: Coord2D, direction: EdgeDirection, arrow
   switch (direction) {
     case EdgeDirection.Up:
       return [
-        { x: endPoint.x - arrowSize, y: endPoint.y - arrowSize },
-        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize },
+        { x: endPoint.x - arrowSize, y: endPoint.y + arrowSize },
+        { x: endPoint.x + arrowSize, y: endPoint.y + arrowSize },
       ];
     case EdgeDirection.Down:
       return [
-        { x: endPoint.x - arrowSize, y: endPoint.y + arrowSize },
-        { x: endPoint.x + arrowSize, y: endPoint.y + arrowSize },
+        { x: endPoint.x - arrowSize, y: endPoint.y - arrowSize },
+        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize },
       ];
     case EdgeDirection.Left:
       return [
@@ -86,6 +75,29 @@ const calculateArrowPoints = (endPoint: Coord2D, direction: EdgeDirection, arrow
   }
 };
 
+const getDefaultEdgeOptions = (direction: EdgeDirection): EdgeOptions => {
+  const defaultTextOffsets = {
+    [EdgeDirection.Right]: { x: 8, y: -5 },
+    [EdgeDirection.Left]: { x: -28, y: -5 },
+    [EdgeDirection.Up]: { x: -22, y: -8 },
+    [EdgeDirection.Down]: { x: 8, y: 22 },
+  };
+
+  return {
+    color: '#979797',
+    labelOptions: {
+      offset: defaultTextOffsets[direction],
+      fontSize: 14,
+    },
+  };
+};
+
+const loadOptions = (direction: EdgeDirection, inputOptions?: EdgeOptions): EdgeOptions => {
+  const defaultEdgeOptions = getDefaultEdgeOptions(direction);
+  const edgeOptions = inputOptions ? { ...defaultEdgeOptions, ...inputOptions } : defaultEdgeOptions;
+  return edgeOptions;
+};
+
 export const drawSVGEdge = (
   x: number,
   y: number,
@@ -96,7 +108,7 @@ export const drawSVGEdge = (
   if (length <= 0) return <></>;
 
   const startPoint = { x, y };
-  const edgeOptions = options ? { ...defaultEdgeOptions, ...options } : defaultEdgeOptions;
+  const edgeOptions = loadOptions(direction, options);
   const { arrowed, color, dashed, label, labelOptions } = edgeOptions;
   const strokeProps = {
     strokeDasharray: dashed ? '4' : 'none',
