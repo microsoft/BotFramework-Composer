@@ -8,13 +8,14 @@ import merge from 'lodash/merge';
 import log from '../logger';
 import { Path } from '../utility/path';
 
-import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder } from './env';
+import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder, runtimeFrameworkVersion } from './env';
 
 interface Settings {
   botAdminEndpoint: string;
   botEndpoint: string;
   assetsLibray: string;
   runtimeFolder: string;
+  runtimeFrameworkVersion: string;
   botsFolder: string;
   appDataPath: string;
 }
@@ -26,6 +27,7 @@ const envSettings: { [env: string]: Settings } = {
     assetsLibray: Path.resolve(__dirname, '../../assets'),
     botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
     runtimeFolder,
+    runtimeFrameworkVersion,
     appDataPath,
   },
 };
