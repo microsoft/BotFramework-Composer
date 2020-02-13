@@ -9,6 +9,7 @@ import {
   LoopIconSize,
   ChoiceInputSize,
   ChoiceInputMarginTop,
+  ChoiceInputMarginBottom,
   IconBrickSize,
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
@@ -64,7 +65,9 @@ export function measureChoiceInputDetailBoundary(data): Boundary {
   const height =
     InitNodeSize.height +
     (data.choices && Array.isArray(data.choices)
-      ? (data.choices.length <= 4 ? data.choices.length : 4) * (ChoiceInputSize.height + ChoiceInputMarginTop)
+      ? data.choices.length < 4
+        ? data.choices.length * (ChoiceInputSize.height + ChoiceInputMarginTop) + ChoiceInputMarginBottom
+        : 4 * (ChoiceInputSize.height + ChoiceInputMarginTop)
       : 0);
   return new Boundary(width, height);
 }
