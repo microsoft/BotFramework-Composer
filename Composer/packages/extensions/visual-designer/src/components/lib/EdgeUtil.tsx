@@ -127,11 +127,10 @@ export const drawSVGEdge = (
   }
   // Draw the edge arrow
   if (arrowed) {
-    const arrowPoints = calculateArrowPoints(endPoint, direction);
-    const arrows = arrowPoints.map((p, index) => (
-      <line key={`edge__arrow-${index}`} x1={endPoint.x} y1={endPoint.y} x2={p.x} y2={p.y} {...strokeProps} />
-    ));
-    elements.push(...arrows);
+    const [p1, p2] = calculateArrowPoints(endPoint, direction);
+    const points = [p1, endPoint, p2].map(p => `${p.x},${p.y}`).join(' ');
+    const arrow = <polyline key="edge__arrow" points={points} {...strokeProps} fill="none" strokeDasharray="none" />;
+    elements.push(arrow);
   }
   return <>{elements}</>;
 };
