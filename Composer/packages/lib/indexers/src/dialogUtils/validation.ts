@@ -21,7 +21,9 @@ const isExpression = (value: string | boolean | number, types: string[]): boolea
 
 //The return type should match the schema type
 const checkReturnType = (returnType: ReturnType, types: string[]): string => {
-  return ~types.indexOf(returnType) || (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
+  return returnType === ReturnType.Object ||
+    ~types.indexOf(returnType) ||
+    (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
     ? ''
     : formatMessage('the expression type is not match');
 };
@@ -56,7 +58,8 @@ export const validate = (
   types: string[]
 ): Diagnostic | null => {
   //if there is no type do nothing
-  if (!types.length || !isExpression(value, types)) {
+  //if the json type length more than 2, the type assumes string interpolation
+  if (!types.length || types.length > 2 || !isExpression(value, types)) {
     return null;
   }
 
