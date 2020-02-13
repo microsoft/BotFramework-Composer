@@ -3,7 +3,12 @@
 
 import React from 'react';
 
-import { Coord2D, EdgeDirection, EdgeOptions } from '../../models/EdgeData';
+import { EdgeDirection, EdgeOptions, Edge } from '../../models/EdgeData';
+
+interface Coord2D {
+  x: number;
+  y: number;
+}
 
 const calculateEdgeEndPoint = (startPoint: Coord2D, direction: EdgeDirection, length: number): Coord2D => {
   switch (direction) {
@@ -67,6 +72,7 @@ const loadOptions = (direction: EdgeDirection, inputOptions?: EdgeOptions): Edge
 };
 
 export const drawSVGEdge = (
+  id: string,
   x: number,
   y: number,
   direction: EdgeDirection,
@@ -89,7 +95,14 @@ export const drawSVGEdge = (
   // Draw the edge line
   if (length > 0) {
     const line = (
-      <line key="edge__line" x1={startPoint.x} y1={startPoint.y} x2={endPoint.x} y2={endPoint.y} {...strokeProps} />
+      <line
+        key={`edge-${id}__line`}
+        x1={startPoint.x}
+        y1={startPoint.y}
+        x2={endPoint.x}
+        y2={endPoint.y}
+        {...strokeProps}
+      />
     );
     elements.push(line);
   }
@@ -97,7 +110,7 @@ export const drawSVGEdge = (
   if (typeof label === 'string' || typeof label === 'number') {
     const text = (
       <text
-        key="edge__text"
+        key={`edge-${id}__text`}
         x={startPoint.x + (labelOptions?.offset?.x || 0)}
         y={startPoint.y + (labelOptions?.offset?.y || 0)}
         fontSize={labelOptions?.fontSize}
@@ -111,8 +124,15 @@ export const drawSVGEdge = (
   if (arrowed) {
     const [p1, p2] = calculateArrowPoints(endPoint, direction);
     const points = [p1, endPoint, p2].map(p => `${p.x},${p.y}`).join(' ');
-    const arrow = <polyline key="edge__arrow" points={points} {...strokeProps} fill="none" strokeDasharray="none" />;
+    const arrow = (
+      <polyline key={`edge-${id}__arrow`} points={points} {...strokeProps} fill="none" strokeDasharray="none" />
+    );
     elements.push(arrow);
   }
   return <>{elements}</>;
+};
+
+export const renderEdge = (edge: Edge): JSX.Element => {
+  const { id, x, y, direction, length, options } = edge;
+  return drawSVGEdge(id, x, y, direction, length, options);
 };
