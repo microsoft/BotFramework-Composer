@@ -4,7 +4,7 @@
 import { ElementInterval, BranchIntervalMinX } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
-import { EdgeData } from '../models/EdgeData';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 
@@ -54,10 +54,10 @@ export function switchCaseLayouter(
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
-  const edges: EdgeData[] = [];
+  const edges: Edge[] = [];
   edges.push({
     id: `edge/${conditionNode.id}/switch/condition->switch`,
-    direction: 'y',
+    direction: EdgeDirection.Down,
     x: containerBoundary.axisX,
     y: conditionNode.offset.y + conditionNode.boundary.height,
     length: BranchIntervalY,
@@ -68,15 +68,15 @@ export function switchCaseLayouter(
     edges.push(
       {
         id: `edge/${choiceNode.id}/case/baseline->${x.id}`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: x.offset.x + x.boundary.axisX,
         y: BaselinePositionY,
         length: x.offset.y - BaselinePositionY,
-        text: x.data.label,
+        options: { label: x.data.label },
       },
       {
         id: `edge/${choiceNode.id}/case/${x.id}->bottom`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: x.offset.x + x.boundary.axisX,
         y: x.offset.y + x.boundary.height,
         length: BottomelinePositionY - x.offset.y - x.boundary.height,
@@ -91,14 +91,14 @@ export function switchCaseLayouter(
     edges.push(
       {
         id: `edge/${conditionNode.id}/baseline`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: BaselinePositionY,
         length: baseLineLength,
       },
       {
         id: `edge/${conditionNode.id}/bottomline`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: BottomelinePositionY,
         length: baseLineLength,

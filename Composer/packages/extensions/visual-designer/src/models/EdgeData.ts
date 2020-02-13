@@ -1,9 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-export interface Coord2D {
-  x: number;
-  y: number;
-}
 
 export enum EdgeDirection {
   Up = 'Up',
@@ -34,14 +30,11 @@ export interface EdgeOptions {
   };
 }
 
-export class EdgeData {
-  id = '';
-  direction: 'x' | 'y' = 'x';
-  x = 0;
-  y = 0;
-  length = 0;
-  text?: string = '';
-  dashed?: boolean = false;
-  directed?: boolean = false;
-  invertDirected?: boolean = false;
+export interface Edge {
+  id: string;
+  x: number;
+  y: number;
+  direction: EdgeDirection;
+  length: number;
+  options?: EdgeOptions;
 }

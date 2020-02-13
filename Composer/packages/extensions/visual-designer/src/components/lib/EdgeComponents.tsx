@@ -5,6 +5,8 @@
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 
+import { EdgeDirection } from '../../models/EdgeData';
+
 const BAR_SIZE = 3;
 const TEXT_PADDING = 8;
 const FONT_SIZE = 14;
@@ -115,23 +117,14 @@ export const VerticalEdge = ({
   );
 };
 
-export const Edge = ({
-  direction,
-  x,
-  y,
-  length,
-  color = DEFAULT_EDGE_COLOR,
-  text = '',
-  dashed = false,
-  directed = false,
-  invertDirected = false,
-}): JSX.Element =>
-  direction === 'x' ? (
+export const Edge = ({ direction, x, y, length, options, invertDirected = false }): JSX.Element => {
+  const { dashed, arrowed: directed, label: text } = options || {};
+  return direction === EdgeDirection.Left || direction === EdgeDirection.Right ? (
     <HorizontalEdge
       x={x}
       y={y}
       length={length}
-      color={color}
+      color={DEFAULT_EDGE_COLOR}
       text={text}
       dashed={dashed}
       beginArrow={invertDirected}
@@ -142,10 +135,11 @@ export const Edge = ({
       x={x}
       y={y}
       length={length}
-      color={color}
+      color={DEFAULT_EDGE_COLOR}
       text={text}
       dashed={dashed}
       beginArrow={invertDirected}
       endArrow={directed}
     />
   );
+};

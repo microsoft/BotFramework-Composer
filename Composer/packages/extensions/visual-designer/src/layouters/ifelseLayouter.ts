@@ -4,7 +4,7 @@
 import { ElementInterval } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
-import { EdgeData } from '../models/EdgeData';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateIfElseBoundary } from './calculateNodeBoundary';
 
@@ -103,10 +103,10 @@ export function ifElseLayouter(
       break;
   }
 
-  const edgeList: EdgeData[] = [];
+  const edgeList: Edge[] = [];
   edgeList.push({
     id: `edge/${conditionNode.id}/condition->choice`,
-    direction: 'y',
+    direction: EdgeDirection.Down,
     x: containerBoundary.axisX,
     y: conditionNode.offset.y + conditionNode.boundary.height,
     length: BranchIntervalY,
@@ -116,29 +116,29 @@ export function ifElseLayouter(
     edgeList.push(
       {
         id: `edge/${rightNode.id}/right/choice->top}`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.axisX - choiceNode.offset.x,
-        text: rightNodeText,
+        options: { label: rightNodeText },
       },
       {
         id: `edge/${rightNode.id}/right/top->node}`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: rightNode.offset.x + rightNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
       },
       {
         id: `edge/${rightNode.id}/right/node->border.bottom`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: rightNode.offset.x + rightNode.boundary.axisX,
         y: rightNode.offset.y + rightNode.boundary.height,
         length: containerBoundary.height - (rightNode.offset.y + rightNode.boundary.height),
       },
       {
         id: `edge/${rightNode.id}/right/border.bottom->axis`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: containerBoundary.height,
         length: rightNode.offset.x + rightNode.boundary.axisX - containerBoundary.axisX,
@@ -148,21 +148,21 @@ export function ifElseLayouter(
     edgeList.push(
       {
         id: `edge/${choiceNode.id}/right/choice->border.right`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: containerBoundary.width - (choiceNode.offset.x + choiceNode.boundary.axisX),
       },
       {
         id: `edge/${choiceNode.id}/right/border.top->border.bottom`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: containerBoundary.width,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.axisY),
       },
       {
         id: `edge/${choiceNode.id}/right/border.bottom->out`,
-        direction: 'x',
+        direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: containerBoundary.height,
         length: containerBoundary.width - containerBoundary.axisX,
@@ -174,15 +174,15 @@ export function ifElseLayouter(
     edgeList.push(
       {
         id: `edge/${leftNode.id}/left/choice->else`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: containerBoundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.height,
         length: BranchIntervalY,
-        text: leftNodeText,
+        options: { label: leftNodeText },
       },
       {
         id: `edge/${leftNode.id}/left/else->out`,
-        direction: 'y',
+        direction: EdgeDirection.Down,
         x: containerBoundary.axisX,
         y: leftNode.offset.y + leftNode.boundary.height,
         length: containerBoundary.height - (leftNode.offset.y + leftNode.boundary.height),
@@ -191,11 +191,11 @@ export function ifElseLayouter(
   } else {
     edgeList.push({
       id: `edge/${choiceNode.id}/left/choice->out`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: containerBoundary.axisX,
       y: choiceNode.offset.y + choiceNode.boundary.height,
       length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
-      text: leftNodeText,
+      options: { label: leftNodeText },
     });
   }
 

@@ -4,7 +4,7 @@
 import { ElementInterval } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
-import { EdgeData } from '../models/EdgeData';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateForeachBoundary } from './calculateNodeBoundary';
 
@@ -45,12 +45,12 @@ export const foreachLayouter = (
     y: stepsNode.offset.y + stepsNode.boundary.height + ForeachIntervalY,
   };
 
-  const edges: EdgeData[] = [];
+  const edges: Edge[] = [];
 
   [foreachNode, loopBeginNode, stepsNode].forEach((node, index) => {
     edges.push({
       id: `edge/axisX/${node.id}-${index}`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: containerBoundary.axisX,
       y: node.offset.y + node.boundary.height,
       length: ForeachIntervalY,
@@ -60,22 +60,24 @@ export const foreachLayouter = (
   [loopBeginNode, loopEndNode].forEach((node, index) => {
     edges.push({
       id: `edge/${node.id}/loopIndicator[${index}]->left`,
-      direction: 'x',
+      direction: EdgeDirection.Right,
       x: 0,
       y: node.offset.y + node.boundary.axisY,
       length: containerBoundary.axisX - node.boundary.axisX,
-      dashed: true,
-      directed: index === 0 ? true : false,
+      options: {
+        dashed: true,
+        arrowed: index === 0,
+      },
     });
   });
 
   edges.push({
     id: `edge/${foreachNode.id}/loopback-vertical`,
-    direction: 'y',
+    direction: EdgeDirection.Down,
     x: 0,
     y: loopBeginNode.offset.y + loopBeginNode.boundary.axisY,
     length: loopEndNode.offset.y + loopEndNode.boundary.axisY - (loopBeginNode.offset.y + loopBeginNode.boundary.axisY),
-    dashed: true,
+    options: { dashed: true },
   });
 
   return {
