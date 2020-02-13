@@ -26,7 +26,7 @@ export const LoopEdgeMarginLeft = 20;
 export const BoxMargin = 5;
 export const TriggerSize = InitNodeSize;
 
-export const TerminatorSize = { width: 14, height: 14 };
+export const TerminatorSize = { width: 16, height: 16 };
 
 export const ChoiceInputSize = {
   width: 145,

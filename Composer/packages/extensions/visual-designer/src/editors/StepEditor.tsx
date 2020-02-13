@@ -24,7 +24,7 @@ const HeadSize = {
 };
 const TailSize = {
   width: TerminatorSize.width,
-  height: TerminatorSize.height + ElementInterval.y / 2,
+  height: TerminatorSize.height + ElementInterval.y / 2 + 5,
 };
 
 export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
