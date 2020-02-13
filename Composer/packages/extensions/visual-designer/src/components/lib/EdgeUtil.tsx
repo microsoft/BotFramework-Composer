@@ -107,7 +107,7 @@ export const drawSVGEdge = (
   // Draw the edge line
   if (length > 0) {
     const line = (
-      <line key={'edge__line'} x1={startPoint.x} y1={startPoint.y} x2={endPoint.x} y2={endPoint.y} {...strokeProps} />
+      <line key="edge__line" x1={startPoint.x} y1={startPoint.y} x2={endPoint.x} y2={endPoint.y} {...strokeProps} />
     );
     elements.push(line);
   }
@@ -115,7 +115,7 @@ export const drawSVGEdge = (
   if (typeof label === 'string' || typeof label === 'number') {
     const text = (
       <text
-        key={'edge__text'}
+        key="edge__text"
         x={startPoint.x + (labelOptions?.offset?.x || 0)}
         y={startPoint.y + (labelOptions?.offset?.y || 0)}
         fontSize={labelOptions?.fontSize}
