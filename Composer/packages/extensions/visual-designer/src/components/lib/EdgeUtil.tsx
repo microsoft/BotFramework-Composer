@@ -4,6 +4,7 @@
 import React from 'react';
 
 import { EdgeDirection, EdgeOptions, Edge } from '../../models/EdgeData';
+import { ObiColors } from '../../constants/ElementColors';
 
 interface Coord2D {
   x: number;
@@ -57,7 +58,7 @@ const getDefaultEdgeOptions = (direction: EdgeDirection): EdgeOptions => {
   };
 
   return {
-    color: '#979797',
+    color: ObiColors.LightGray,
     labelOptions: {
       offset: defaultTextOffsets[direction],
       fontSize: 14,
