@@ -78,8 +78,8 @@ export const drawSVGEdge = (
   direction: EdgeDirection,
   length: number,
   options?: EdgeOptions
-): JSX.Element => {
-  if (length <= 0) return <></>;
+): JSX.Element[] => {
+  if (length <= 0) return [];
 
   const startPoint = { x, y };
   const edgeOptions = loadOptions(direction, options);
@@ -129,10 +129,10 @@ export const drawSVGEdge = (
     );
     elements.push(arrow);
   }
-  return <>{elements}</>;
+  return elements;
 };
 
-export const renderEdge = (edge: Edge): JSX.Element => {
+export const renderEdge = (edge: Edge): JSX.Element[] => {
   const { id, x, y, direction, length, options } = edge;
   return drawSVGEdge(id, x, y, direction, length, options);
 };

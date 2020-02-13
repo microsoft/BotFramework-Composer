@@ -7,14 +7,16 @@ import { useEffect, useState } from 'react';
 
 import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
-import { Edge } from '../components/lib/EdgeComponents';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { ElementInterval, TriggerSize, TerminatorSize, InitNodeSize } from '../constants/ElementSizes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
+import { EdgeDirection } from '../models/EdgeData';
 import { useWindowDimensions } from '../utils/hooks';
+import { SVGContainer } from '../components/lib/SVGContainer';
+import { drawSVGEdge } from '../components/lib/EdgeUtil';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -70,10 +72,20 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
 
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
+      <SVGContainer>
+        {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
+        {drawSVGEdge(
+          'editor-edge__tail',
+          editorAxisX,
+          contentBoundary.height + HeadSize.height,
+          EdgeDirection.Down,
+          ElementInterval.y / 2,
+          { arrowed: true }
+        )}
+      </SVGContainer>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
-          <Edge direction="y" x={HeadSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
         </div>
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
@@ -81,7 +93,6 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
         <div className="step-editor__tail" css={{ ...TailSize, position: 'relative' }}>
-          <Edge direction="y" x={TailSize.width / 2} y={0} length={ElementInterval.y / 2} directed={true} />
           <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
             <Terminator />
           </OffsetContainer>
