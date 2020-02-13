@@ -93,16 +93,6 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
   return diagnostics;
 };
 
-//the type of 'Microsoft.ChoiceInput' has anyof schema in choices
-// export const checkChoices: CheckerFunc = (path, value, type) => {
-//   const choices = value.choices;
-//   if (typeof choices === 'string') {
-//     const diagnostic = checkExpression(choices, false, `${path}.choices`, type);
-//     if (diagnostic) return [diagnostic];
-//   }
-//   return null;
-// };
-
 export const checkerFuncs: { [type: string]: CheckerFunc[] } = {
   '.': [IsExpression], //this will check all types
 };

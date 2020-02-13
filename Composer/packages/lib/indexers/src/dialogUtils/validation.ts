@@ -15,19 +15,15 @@ export const ExpressionType = {
 const ExpressionParser = new ExpressionEngine();
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {
-  if (typeof value === 'string' && value[0] === '=') return true;
   //StringExpression always assumes string interpolation unless prefixed with =, producing a string
-  if (types.length === 1 && types[0] === ExpressionType.string) return false;
-  return true;
+  return (typeof value === 'string' && value[0] === '=') || types.length !== 1 || types[0] !== ExpressionType.string;
 };
 
 //The return type should match the schema type
 const checkReturnType = (returnType: ReturnType, types: string[]): string => {
-  if (types.indexOf(returnType) > -1) return '';
-  if (returnType === ReturnType.Number && types.indexOf(ExpressionType.integer) > -1) {
-    return '';
-  }
-  return formatMessage('the expression type is not match');
+  return ~types.indexOf(returnType) || (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
+    ? ''
+    : formatMessage('the expression type is not match');
 };
 
 export const checkExpression = (exp: string | boolean | number, required: boolean, types: string[]): string => {
@@ -60,9 +56,9 @@ export const validate = (
   types: string[]
 ): Diagnostic | null => {
   //if there is no type do nothing
-  if (types.length === 0) return null;
-
-  if (!isExpression(value, types)) return null;
+  if (!types.length || !isExpression(value, types)) {
+    return null;
+  }
 
   //remove '='
   if (typeof value === 'string' && value[0] === '=') {
