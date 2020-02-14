@@ -7,8 +7,8 @@ describe('DialogFactory', () => {
   describe('#seedDefaults', () => {
     it('can assign defaults to non-object types', () => {
       const seed: any = seedDefaults('Microsoft.TextInput');
-      expect(seed.maxTurnCount).toBe(3);
-      expect(seed.alwaysPrompt).toBe(false);
+      expect(seed.maxTurnCount).toBe('3');
+      expect(seed.alwaysPrompt).toBe(undefined);
     });
 
     it('can assign defaults to object types', () => {
