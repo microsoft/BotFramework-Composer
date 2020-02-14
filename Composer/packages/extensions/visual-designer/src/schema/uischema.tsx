@@ -18,9 +18,9 @@ import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
-import { UISchema, UIWidgetSchema } from './uischema.types';
+import { UISchema, UIWidget } from './uischema.types';
 
-const BaseInputSchema: UIWidgetSchema = {
+const BaseInputSchema: UIWidget = {
   'ui:widget': PromptWidget,
   botAsks: {
     'ui:widget': ActivityRenderer,

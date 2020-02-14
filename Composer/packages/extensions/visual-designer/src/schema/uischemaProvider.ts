@@ -4,10 +4,10 @@
 import get from 'lodash/get';
 
 import { uiSchema } from './uischema';
-import { UIWidgetSchema } from './uischema.types';
+import { UIWidget } from './uischema.types';
 
 export class UISchemaProvider {
-  static provideWidgetSchema = ($type: string): UIWidgetSchema => {
+  static provideWidgetSchema = ($type: string): UIWidget => {
     return get(uiSchema, $type, uiSchema.default);
   };
 }

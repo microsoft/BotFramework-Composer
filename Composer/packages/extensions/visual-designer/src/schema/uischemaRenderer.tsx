@@ -4,7 +4,7 @@
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
 
-import { UIWidgetSchema, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
+import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
@@ -17,7 +17,7 @@ export interface UIWidgetContext {
   onEvent: WidgetEventHandler;
 }
 
-const parseWidgetSchema = (widgetSchema: UIWidgetSchema) => {
+const parseWidgetSchema = (widgetSchema: UIWidget) => {
   const { [UI_WIDGET_KEY]: Widget, ...props } = widgetSchema;
   return {
     Widget,
@@ -33,14 +33,14 @@ const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) =
   }
 
   if (typeof rawPropValue === 'object' && rawPropValue[UI_WIDGET_KEY]) {
-    const widgetSchema = rawPropValue as UIWidgetSchema;
+    const widgetSchema = rawPropValue as UIWidget;
     return renderUIWidget(widgetSchema, context);
   }
 
   return rawPropValue;
 };
 
-export const renderUIWidget = (widgetSchema: UIWidgetSchema, context: UIWidgetContext): JSX.Element => {
+export const renderUIWidget = (widgetSchema: UIWidget, context: UIWidgetContext): JSX.Element => {
   const { Widget, props: rawProps } = parseWidgetSchema(widgetSchema);
   const widgetProps = Object.keys(rawProps).reduce((props, propName) => {
     const propValue = rawProps[propName];
