@@ -75,6 +75,23 @@ async function getProject(req: Request, res: Response) {
   }
 }
 
+async function getProjectById(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const currentProject = await BotProjectService.getProjectById(projectId);
+  if (currentProject !== undefined && (await currentProject.exists())) {
+    await currentProject.index();
+    const project = currentProject.getIndexes();
+    res.status(200).json({
+      id: projectId,
+      ...project,
+    });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
@@ -381,6 +398,7 @@ async function getAllProjects(req: Request, res: Response) {
 
 export const ProjectController = {
   getProject,
+  getProjectById,
   openProject,
   updateDialog,
   createDialog,

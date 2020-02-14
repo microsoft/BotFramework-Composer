@@ -30,6 +30,24 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
+export const fetchProjectById: ActionCreator = async (store, projectId) => {
+  console.log('FETCH A PROJECT BY ITS ID', projectId);
+  try {
+    const response = await httpClient.get(`/projects/opened/${projectId}`);
+    console.log('FETCHED PROJECT!', response.data);
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    navigateTo('/home');
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+  }
+};
+
 export const fetchProject: ActionCreator = async store => {
   try {
     const response = await httpClient.get(`/projects/opened`);
@@ -45,7 +63,6 @@ export const fetchProject: ActionCreator = async store => {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 };
-
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/projects/recent`);
@@ -69,7 +86,10 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       path: absolutePath,
     };
     const response = await httpClient.put(`/projects/opened`, data);
+    console.log('gOT BOT PROJECT', response.data);
     const dialogs = response.data.dialogs;
+    const projectId = response.data.id;
+    console.log('Project id', projectId);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -77,10 +97,14 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
+      // navTo(store, 'Main');
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+      console.log('GO TO MAIN DIALOG', mainUrl, projectId);
+      navigateTo(mainUrl);
       startBot(store, true);
+    } else {
+      navigate(BASEPATH);
     }
-    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,

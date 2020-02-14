@@ -105,7 +105,7 @@ export function CreationFlow(props) {
 
   const openBot = async botFolder => {
     await openBotProject(botFolder);
-    navigateTo(`/dialogs/Main`);
+    // navigateTo(`/bot/${state.projectId}/dialogs/Main`);
     handleDismiss();
   };
 
@@ -123,11 +123,11 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigateTo(`/dialogs/Main`);
+        navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
-        navigateTo(`/dialogs/Main`);
+        navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       default:
         setStep(Steps.NONE);
