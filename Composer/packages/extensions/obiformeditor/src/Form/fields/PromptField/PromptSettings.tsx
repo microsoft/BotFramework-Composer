@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { MicrosoftInputDialog } from '@bfc/shared';
 
-import { TextWidget, CheckboxWidget } from '../../widgets';
+import { TextWidget } from '../../widgets';
 
 import { TwoSettingFields } from './twoSettingFields';
 import { field, settingsFields, settingsFieldFull, settingsFieldInline } from './styles';
@@ -47,7 +47,7 @@ export const PromptSettings: React.FC<PromptSettingsrops> = props => {
           />
         </div>
         <div css={[field, settingsFieldFull, settingsFieldInline]}>
-          <CheckboxWidget
+          <TextWidget
             onChange={onChange('alwaysPrompt')}
             schema={getSchema('alwaysPrompt')}
             id={idSchema.alwaysPrompt.__id}

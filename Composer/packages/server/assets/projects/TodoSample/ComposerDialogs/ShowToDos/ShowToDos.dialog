@@ -4,6 +4,7 @@
     "id": "709692"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -41,5 +42,6 @@
       ]
     }
   ],
+  "generator": "ShowToDos.lg",
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }

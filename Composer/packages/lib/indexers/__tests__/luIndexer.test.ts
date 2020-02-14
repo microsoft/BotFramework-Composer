@@ -75,7 +75,7 @@ describe('index', () => {
     path: '/',
   };
 
-  it('should parse lu file', () => {
+  it('should index lu file', () => {
     const { id, intents, diagnostics }: any = index([file])[0];
     expect(id).toEqual('test');
     expect(diagnostics.length).toEqual(0);

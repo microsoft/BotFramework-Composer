@@ -48,5 +48,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "EditActions.lg"
 }

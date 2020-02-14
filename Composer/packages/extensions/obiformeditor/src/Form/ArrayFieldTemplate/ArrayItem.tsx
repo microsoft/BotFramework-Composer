@@ -10,7 +10,7 @@ import { ArrayFieldItem } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
-import { arrayItem, arrayItemField } from './styles';
+import { arrayItem } from './styles';
 
 const ArrayItem: React.FC<ArrayFieldItem> = props => {
   const { children, hasMoveUp, hasMoveDown, hasRemove, onReorderClick, onDropIndexClick, index } = props;
@@ -47,13 +47,16 @@ const ArrayItem: React.FC<ArrayFieldItem> = props => {
 
   return (
     <div css={arrayItem}>
-      <div css={arrayItemField}>{children}</div>
+      {children}
       <IconButton
         menuProps={{ items: contextItems }}
         menuIconProps={{ iconName: 'MoreVertical' }}
         ariaLabel={formatMessage('Item Actions')}
         data-testid="ArrayItemContextMenu"
-        styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+        styles={{
+          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
+          root: { margin: 'auto 0' },
+        }}
       />
     </div>
   );
