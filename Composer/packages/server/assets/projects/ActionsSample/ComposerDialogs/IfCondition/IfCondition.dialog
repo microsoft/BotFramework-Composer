@@ -41,5 +41,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "IfCondition.lg"
 }

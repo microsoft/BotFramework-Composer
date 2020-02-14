@@ -38,7 +38,10 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], template: L
   return filteredDiags.map(d => {
     const { range } = d;
     if (range) {
-      d.range = offsetRange(range, offset);
+      return {
+        ...d,
+        range: offsetRange(range, offset),
+      };
     }
     return d;
   });
