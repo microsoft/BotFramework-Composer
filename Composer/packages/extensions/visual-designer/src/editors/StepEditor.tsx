@@ -5,16 +5,18 @@
 import { jsx } from '@emotion/core';
 import { useEffect, useState } from 'react';
 
-import { Terminator } from '../components/decorations/Terminator';
 import { StepGroup } from '../components/groups';
-import { Edge } from '../components/lib/EdgeComponents';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { ElementInterval, TriggerSize, TerminatorSize, InitNodeSize } from '../constants/ElementSizes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
+import { EdgeDirection } from '../models/EdgeData';
 import { useWindowDimensions } from '../utils/hooks';
+import { SVGContainer } from '../components/lib/SVGContainer';
+import { drawSVGEdge } from '../components/lib/EdgeUtil';
+import { ObiColors } from '../constants/ElementColors';
 
 const HeadSize = {
   width: TriggerSize.width,
@@ -22,7 +24,7 @@ const HeadSize = {
 };
 const TailSize = {
   width: TerminatorSize.width,
-  height: TerminatorSize.height + ElementInterval.y / 2,
+  height: TerminatorSize.height + ElementInterval.y / 2 + 5,
 };
 
 export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
@@ -70,22 +72,32 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
 
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
+      <SVGContainer>
+        {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
+        {drawSVGEdge(
+          'editor-edge__tail',
+          editorAxisX,
+          contentBoundary.height + HeadSize.height,
+          EdgeDirection.Down,
+          ElementInterval.y / 2,
+          { directed: true }
+        )}
+        <circle
+          r={TerminatorSize.height / 2 - 1}
+          cx={editorAxisX}
+          cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
+          fill="none"
+          stroke={ObiColors.LightGray}
+          strokeWidth="2"
+        />
+      </SVGContainer>
       <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
-          <Edge direction="y" x={HeadSize.width / 2} y={TriggerSize.height} length={ElementInterval.y / 2} />
         </div>
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
         {content}
-      </OffsetContainer>
-      <OffsetContainer offset={{ x: editorAxisX - TailSize.width / 2, y: contentBoundary.height + HeadSize.height }}>
-        <div className="step-editor__tail" css={{ ...TailSize, position: 'relative' }}>
-          <Edge direction="y" x={TailSize.width / 2} y={0} length={ElementInterval.y / 2} directed={true} />
-          <OffsetContainer offset={{ x: -1, y: ElementInterval.y / 2 }}>
-            <Terminator />
-          </OffsetContainer>
-        </div>
       </OffsetContainer>
     </div>
   );
