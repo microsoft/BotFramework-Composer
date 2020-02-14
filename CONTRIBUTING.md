@@ -74,3 +74,30 @@ git pull git://github.com/AwesomeDev/BotFramework-Composer.git my-awesome-featur
 
 - Always work off of branches; don't commit directly to your master branch. This will help avoid conflicts and keep your master branch pristine.
 - When creating pull requests check the `Allow edits from maintainers` option so that others can make changes if necessary.
+
+### Testing
+
+There are two types of tests in the Composer project: unit tests and end-to-end (e2e) tests. Use e2e tests to cover core scenarios (happy path) with some coverage of edge cases. Everything else should be unit tested, with a target coverage goal of 90%.
+The primary outcome of a well-tested code base is greater confidence in making future changes.
+
+#### Unit Testing
+
+[Jest](https://jestjs.io/) is the unit testing framework used. The guiding principle to unit testing is to test the _behavior_ of the code, not the mechanics.
+
+- When testing UI, make assertions about the state of the DOM. Don't let component implementation details leak into tests.
+- It's ok to mock/stub side effecting code (xhr requests, file system reads/writes, etc).
+- Each test should be independent (isolated) from other tests. Make sure to reset state, clean up either before or after eact test run.
+- Provide a concise description of what tests cover using the doc string.
+
+Goal: 90% test coverage.
+
+#### E2E Testing
+
+[Cypress](https://www.cypress.io/) is the e2e testing framework. The main guiding principles for e2e tests boil down to the following:
+
+- E2E tests should be reliable. There should be a high level of confidence in the tests to catch real issues, avoiding flaky tests or false negatives.
+- Work within the framework to make tests work, avoiding using `cy.wait` as that often is a sign of a poorly written test.
+- It's ok to automate environment setup to reduce timing and false negatives.
+- Use `data-testid` to make assertions instead of strings. This helps reduce churn when copy updates occur.
+
+Goal: All P0 scenarios have e2e test coverage. Some P1 scenarios have e2e coverage.
