@@ -79,6 +79,7 @@ export const dialogGroups: DialogGroupsMap = {
     label: 'Dialog management',
     types: [
       SDKTypes.BeginDialog,
+      SDKTypes.BeginSkill,
       SDKTypes.EndDialog,
       SDKTypes.CancelAllDialogs,
       SDKTypes.EndTurn,

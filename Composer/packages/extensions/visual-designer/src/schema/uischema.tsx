@@ -3,6 +3,7 @@
 
 import { SDKTypes } from '@bfc/shared';
 import React from 'react';
+import get from 'lodash/get';
 
 import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
@@ -28,6 +29,10 @@ export const uiSchema: UISchema = {
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
+  },
+  [SDKTypes.BeginSkill]: {
+    'ui:widget': ActionCard,
+    content: data => get(data, 'targetSkill.SkillEndpoint', '<SkillEndpoint>'),
   },
   [SDKTypes.ReplaceDialog]: {
     'ui:widget': DialogRefCard,

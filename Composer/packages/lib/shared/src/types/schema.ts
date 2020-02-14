@@ -24,6 +24,7 @@ export enum SDKTypes {
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
   AttachmentInput = 'Microsoft.AttachmentInput',
   BeginDialog = 'Microsoft.BeginDialog',
+  BeginSkill = 'Microsoft.BeginSkill',
   CancelAllDialogs = 'Microsoft.CancelAllDialogs',
   ChoiceInput = 'Microsoft.ChoiceInput',
   ConditionalSelector = 'Microsoft.ConditionalSelector',

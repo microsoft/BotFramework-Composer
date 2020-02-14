@@ -3062,5 +3062,36 @@ export const appschema: OBISchema = {
         ...$properties(SDKTypes.UrlEntityRecognizer),
       },
     },
+    'Microsoft.BeginSkill': {
+      $role: 'union(Microsoft.IDialog)',
+      title: 'Begin a skill',
+      description: 'Begin a remote skill.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.BeginSkill),
+        targetSkill: {
+          type: 'object',
+          title: 'Target skill',
+          description: 'Target skill ID, AppId and Skill Endpoint',
+          properties: {
+            Id: {
+              type: 'string',
+              title: 'Skill id',
+              description: 'The remote skill id.',
+            },
+            AppID: {
+              type: 'string',
+              title: 'Skill appid',
+              description: 'The remote skill appid.',
+            },
+            skillEndPoint: {
+              type: 'string',
+              title: 'Skill endpoint',
+              description: 'The endpoint of the remote skill.',
+            },
+          },
+        },
+      },
+    },
   },
 };

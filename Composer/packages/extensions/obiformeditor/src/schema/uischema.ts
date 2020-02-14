@@ -58,6 +58,14 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
+  [SDKTypes.BeginSkill]: {
+    targetSkill: {
+      'ui:options': {
+        hideLabel: true,
+        transparentBorder: true,
+      },
+    },
+  },
   [SDKTypes.CancelAllDialogs]: {
     eventValue: {
       'ui:field': 'CustomObjectField',
