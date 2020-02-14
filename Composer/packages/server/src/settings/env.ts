@@ -19,3 +19,4 @@ export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';
 export const appDataPath = process.env.COMPOSER_APP_DATA || Path.resolve(__dirname, '../../data.json');
 export const runtimeFolder =
   process.env.COMPOSER_RUNTIME_FOLDER || Path.resolve(__dirname, '../../../../../BotProject/Templates');
+export const runtimeFrameworkVersion = process.env.COMPOSER_RUNTIME_VERSION || 'netcoreapp3.1';
