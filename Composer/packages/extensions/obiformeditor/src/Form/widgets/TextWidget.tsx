@@ -50,38 +50,6 @@ export function TextWidget(props: ITextWidgetProps) {
     placeholderText = `ex. ${examples.join(', ')}`;
   }
 
-  if (type === 'integer' || type === 'number') {
-    const updateValue = (step: number) => (value: string) => {
-      // if the number is a float, we need to convert to a fixed decimal place
-      // in order to avoid floating point math rounding errors (ex. 1.2000000001)
-      // ex. if step = 0.01, we fix to 2 decimals
-      const newValue = type === 'integer' ? getInt(value, step) : getFloat(value, step);
-
-      onChange(newValue);
-      // need to allow form data to propagate before flushing to state
-      setTimeout(() => onBlur && onBlur(id, value));
-    };
-
-    const step = type === 'integer' ? 1 : 0.1;
-
-    return (
-      <>
-        {!hideLabel && <WidgetLabel label={label} description={description} id={id} />}
-        <SpinButton
-          onDecrement={updateValue(-step)}
-          onIncrement={updateValue(step)}
-          onValidate={updateValue(0)}
-          disabled={Boolean(schema.const) || readonly || disabled}
-          step={step}
-          value={value}
-          styles={{
-            labelWrapper: { display: 'none' },
-          }}
-        />
-      </>
-    );
-  }
-
   const sharedProps = {
     disabled,
     id,
@@ -112,6 +80,38 @@ export function TextWidget(props: ITextWidgetProps) {
         onValidate={onValidate}
         options={options}
       />
+    );
+  }
+
+  if (type === 'integer' || type === 'number') {
+    const updateValue = (step: number) => (value: string) => {
+      // if the number is a float, we need to convert to a fixed decimal place
+      // in order to avoid floating point math rounding errors (ex. 1.2000000001)
+      // ex. if step = 0.01, we fix to 2 decimals
+      const newValue = type === 'integer' ? getInt(value, step) : getFloat(value, step);
+
+      onChange(newValue);
+      // need to allow form data to propagate before flushing to state
+      setTimeout(() => onBlur && onBlur(id, value));
+    };
+
+    const step = type === 'integer' ? 1 : 0.1;
+
+    return (
+      <>
+        {!hideLabel && <WidgetLabel label={label} description={description} id={id} />}
+        <SpinButton
+          onDecrement={updateValue(-step)}
+          onIncrement={updateValue(step)}
+          onValidate={updateValue(0)}
+          disabled={Boolean(schema.const) || readonly || disabled}
+          step={step}
+          value={value}
+          styles={{
+            labelWrapper: { display: 'none' },
+          }}
+        />
+      </>
     );
   }
 
