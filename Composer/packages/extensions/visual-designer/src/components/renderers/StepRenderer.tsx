@@ -31,7 +31,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element 
   const schemaProvider = useContext(UISchemaContext);
 
   const $type = get(data, '$type', '');
-  const widgetSchema = schemaProvider.provideWidgetSchema($type);
+  const widgetSchema = schemaProvider.get($type);
 
   const content = renderUIWidget(widgetSchema, { id, data, onEvent });
   if (TypesWithoutWrapper.some(x => $type === x)) {

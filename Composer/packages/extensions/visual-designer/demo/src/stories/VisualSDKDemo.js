@@ -67,7 +67,7 @@ export class VisualSDKDemo extends Component {
           />
         </div>
         <div className="action-preview--visual">
-          {renderUIWidget(uiSchemaPrivider.provideWidgetSchema(action.$type), {
+          {renderUIWidget(uiSchemaPrivider.get(action.$type), {
             id: `actions[${index}]`,
             data: action,
             onEvent: () => null,

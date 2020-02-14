@@ -12,7 +12,7 @@ export class UISchemaProvider {
     this.schema = uiSchema;
   }
 
-  provideWidgetSchema = ($type: string): UIWidget => {
+  get = ($type: string): UIWidget => {
     return get(this.schema, $type, this.schema.default);
   };
 }
