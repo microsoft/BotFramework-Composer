@@ -596,10 +596,13 @@ export class BotProject {
 
   private _buildRNNewlineText = (lineArray: string[]): string => {
     const lineArrayEndWithRN = lineArray.map(line => {
-      if (line.endsWith('\r')) {
+      if (line.endsWith('\r\n')) {
+        return line;
+      } else if (line.endsWith('\r')) {
         return line + '\n';
+      } else {
+        return line + '\r\n';
       }
-      return line;
     });
     return lineArrayEndWithRN.join('');
   };
