@@ -4,7 +4,7 @@
 import { GraphNode } from '../models/GraphNode';
 import { ElementInterval } from '../constants/ElementSizes';
 import { GraphLayout } from '../models/GraphLayout';
-import { EdgeData } from '../models/EdgeData';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
 
@@ -27,18 +27,18 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
     return offsetY + node.boundary.height + StepInterval;
   }, 0);
 
-  const edges: EdgeData[] = [];
+  const edges: Edge[] = [];
   for (let i = 0; i < nodes.length - 1; i++) {
     const { id, boundary, offset } = nodes[i];
     const x = box.axisX;
     const y = boundary.height + offset.y;
     edges.push({
       id: `edge/${id}->next`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x,
       y,
       length: StepInterval,
-      directed: true,
+      options: { directed: true },
     });
   }
 
@@ -51,18 +51,18 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
     });
     edges.unshift({
       id: `edge/head/${nodes[0].id}--before`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: box.axisX,
       y: 0,
       length: ExtraEdgeLength,
-      directed: true,
+      options: { directed: true },
     });
   }
 
   if (withTrailingEdge) {
     edges.push({
       id: `edge/tail/${nodes[nodes.length - 1].id}--after`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: box.axisX,
       y: box.height - ExtraEdgeLength,
       length: ExtraEdgeLength,
