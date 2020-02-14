@@ -8,7 +8,8 @@ import { SDKTypes } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { UISchemaRenderer } from '../../schema/uischemaRenderer';
+import { UISchemaProvider } from '../../schema/uischemaProvider';
+import { renderUIWidget } from '../../schema/uischemaRenderer';
 
 import { ElementWrapper } from './ElementWrapper';
 
@@ -28,8 +29,8 @@ const TypesWithoutWrapper = [
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const $type = get(data, '$type', '');
-
-  const content = <UISchemaRenderer id={id} data={data} onEvent={onEvent} />;
+  const widgetSchema = UISchemaProvider.provideWidgetSchema($type);
+  const content = renderUIWidget(widgetSchema, { id, data, onEvent });
 
   if (TypesWithoutWrapper.some(x => $type === x)) {
     return content;

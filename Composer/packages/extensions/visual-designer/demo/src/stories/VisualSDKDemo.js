@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { seedNewDialog, SDKTypes } from '@bfc/shared';
 
-import { UISchemaRenderer } from '../../../src/schema/uischemaRenderer';
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
+import { renderUIWidget } from '../../../src/schema/uischemaRenderer';
+import { UISchemaProvider } from '../../../src/schema/uischemaProvider';
 
 import './story.css';
 
@@ -63,7 +64,11 @@ export class VisualSDKDemo extends Component {
           />
         </div>
         <div className="action-preview--visual">
-          <UISchemaRenderer id={`actions[${index}]`} data={action} onEvent={() => null} />
+          {renderUIWidget(UISchemaProvider.provideWidgetSchema(action.$type), {
+            id: `actions[${index}]`,
+            data: action,
+            onEvent: () => null,
+          })}
         </div>
       </div>
     );
