@@ -6,9 +6,9 @@ import { BaseSchema } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { uiSchema } from './uischema';
-import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
+import { UIWidgetSchema, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
-const parseWidgetSchema = (widgetSchema: UIWidget) => {
+const parseWidgetSchema = (widgetSchema: UIWidgetSchema) => {
   const { [UI_WIDGET_KEY]: Widget, ...props } = widgetSchema;
   return {
     Widget,
@@ -24,14 +24,14 @@ const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UISchemaContext) =
   }
 
   if (typeof rawPropValue === 'object' && rawPropValue[UI_WIDGET_KEY]) {
-    const widgetSchema = rawPropValue as UIWidget;
+    const widgetSchema = rawPropValue as UIWidgetSchema;
     return renderUISchema(widgetSchema, context);
   }
 
   return rawPropValue;
 };
 
-const renderUISchema = (schema: UIWidget, context: UISchemaContext): JSX.Element => {
+const renderUISchema = (schema: UIWidgetSchema, context: UISchemaContext): JSX.Element => {
   const { Widget, props: rawProps } = parseWidgetSchema(schema);
   const widgetProps = Object.keys(rawProps).reduce((props, propName) => {
     const propValue = rawProps[propName];

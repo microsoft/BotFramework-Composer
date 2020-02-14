@@ -12,13 +12,13 @@ export enum UISchemaBuiltinKeys {
 
 /** schema */
 export type UISchema = {
-  [key in SDKTypes | UISchemaBuiltinKeys]?: UIWidget;
+  [key in SDKTypes | UISchemaBuiltinKeys]?: UIWidgetSchema;
 };
 
 /** widget */
 export const UI_WIDGET_KEY = 'ui:widget';
 
-export interface UIWidget {
+export interface UIWidgetSchema {
   [UI_WIDGET_KEY]: WidgetComponent<any>;
   [propKey: string]: UIWidgetProp;
 }
@@ -34,6 +34,6 @@ export interface WidgetContainerProps {
   [propKey: string]: any;
 }
 
-export type UIWidgetProp = Value | PropGenerator | UIWidget;
+export type UIWidgetProp = Value | PropGenerator | UIWidgetSchema;
 type Value = string | number | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
