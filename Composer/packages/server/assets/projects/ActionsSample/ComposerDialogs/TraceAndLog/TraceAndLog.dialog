@@ -42,5 +42,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "TraceAndLog.lg"
 }

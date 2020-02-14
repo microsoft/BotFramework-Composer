@@ -55,7 +55,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         return lgTemplateRef ? lgTemplateRef.name : '';
       })
       .filter(x => !!x);
-    return removeLgTemplates('common', normalizedLgTemplates);
+    const lgFileId = path;
+    return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -98,7 +99,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               const newLgName = inputLgMetaData.toString();
               const newLgTemplateRefString = new LgTemplateRef(newLgName).toString();
 
-              await copyLgTemplate('common', inputLgRef.name, newLgName);
+              const lgFileId = path;
+              await copyLgTemplate(lgFileId, inputLgRef.name, newLgName);
               return newLgTemplateRefString;
             };
             pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {

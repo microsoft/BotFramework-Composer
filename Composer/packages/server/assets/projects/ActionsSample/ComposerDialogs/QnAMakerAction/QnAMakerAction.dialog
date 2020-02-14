@@ -32,5 +32,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "QnAMakerAction.lg"
 }
