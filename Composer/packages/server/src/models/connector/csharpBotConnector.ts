@@ -7,12 +7,14 @@ import fs from 'fs';
 
 import getPort from 'get-port';
 
+import envSettings from '../../settings';
 import { BotProjectService } from '../../services/project';
 import { DialogSetting } from '../bot/interface';
 import { Path } from '../../utility/path';
 import log from '../../logger';
 import AssetService from '../../services/asset';
 import { IFileStorage } from '../storage/interface';
+import { currentConfig } from '../environment';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
@@ -150,7 +152,12 @@ export class CSharpBotConnector implements IBotConnector {
     return new Promise((resolve, reject) => {
       const runtime = spawn(
         'dotnet',
-        ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
+        [
+          `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
+          `--urls`,
+          this.endpoint,
+          ...this.getConnectorConfig(config),
+        ],
         {
           cwd: dir,
           stdio: ['ignore', 'pipe', 'pipe'],
@@ -168,6 +175,7 @@ export class CSharpBotConnector implements IBotConnector {
     const originPort = urlParse(this.endpoint).port;
     const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
     this.endpoint = `http://localhost:${port}`;
+    currentConfig.endpoint = this.endpoint;
     return `http://localhost:${port}/api/messages`;
   };
 
