@@ -52,5 +52,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "OAuthInput.lg"
 }

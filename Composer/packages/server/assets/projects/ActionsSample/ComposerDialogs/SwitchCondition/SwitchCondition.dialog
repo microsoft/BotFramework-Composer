@@ -101,5 +101,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "SwitchCondition.lg"
 }

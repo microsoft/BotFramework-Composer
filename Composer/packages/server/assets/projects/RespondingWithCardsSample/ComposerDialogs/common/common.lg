@@ -339,38 +339,3 @@
   ]
 }
 ```
-
-# bfdactivity-729500
--Welcome to Card Samples Bot.
-
-# bfdactivity-159442
--@{HeroCard()}
-
-# bfdactivity-762914
--@{ThumbnailCard()}
-
-# bfdactivity-241579
--@{SigninCard()}
-
-# bfdactivity-901582
--@{AnimationCard()}
-
-# bfdactivity-553859
--@{VideoCard()}
-
-# bfdactivity-190928
--@{AudioCard()}
-
-# bfdactivity-806895
--@{AdaptiveCard()}
-
-# bfdactivity-997450
--@{AllCards()}
-
-
-# bfdactivity-167246
-- @{HeroCardWithMemory(user.name)}
-
-
-# bfdprompt-735465
-- What is your name?
