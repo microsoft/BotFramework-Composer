@@ -11,11 +11,12 @@ import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { areBoundariesEqual } from '../models/Boundary';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { Edge } from '../components/lib/EdgeComponents';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { WidgetContainerProps } from '../schema/uischema.types';
+import { renderEdge } from '../components/lib/EdgeUtil';
+import { SVGContainer } from '../components/lib/SVGContainer';
 
 const calculateNodeMap = (path, data) => {
   const result = transformSwitchCondition(data, path);
@@ -100,7 +101,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           />
         </OffsetContainer>
       ))}
-      {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };
