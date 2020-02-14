@@ -222,11 +222,44 @@ export default function App() {
   const props = {
     value,
     onChange,
+    // options: {
+    //   lineNumbers: 'on',
+    //   minimap: {
+    //     enabled: true,
+    //   },
+    //   // minimap: 'on',
+    //   lineDecorationsWidth: undefined,
+    //   lineNumbersMinChars: false,
+    //   glyphMargin: true,
+    //   autoClosingBrackets: 'always',
+    //   autoIndent: true,
+    //   lightbulb: {
+    //     enabled: true,
+    //   },
+    // },
     languageServer: {
       port: 5000,
       path: '/lu-language-server',
     },
   };
 
-  return <LuEditor {...props} />;
+  return (
+    <LuEditor
+      {...props}
+      options={{
+        lineNumbers: 'on',
+        minimap: 'on',
+        lineDecorationsWidth: undefined,
+        lineNumbersMinChars: false,
+        glyphMargin: true,
+        autoClosingBrackets: 'always',
+        wordBasedSuggestions: false,
+        autoIndent: true,
+        formatOnType: true,
+        lightbulb: {
+          enabled: true,
+        },
+      }}
+    />
+  );
 }

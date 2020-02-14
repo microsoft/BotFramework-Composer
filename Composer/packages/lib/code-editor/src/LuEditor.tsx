@@ -18,7 +18,7 @@ const placeholder = `> To learn more about the LU file format, read the document
 
 export interface LUOption {
   fileId: string;
-  sectionId: string;
+  sectionId?: string;
 }
 
 export interface LULSPEditorProps extends RichEditorProps {
@@ -73,14 +73,15 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 }
 
 export function LuEditor(props: LULSPEditorProps) {
-  const options = {
+  const options: monacoEditor.editor.IEditorConstructionOptions = {
     quickSuggestions: true,
     wordBasedSuggestions: false,
     formatOnType: true,
     lineNumbers: 'on',
-    minimap: 'on',
+    minimap: {
+      enabled: true,
+    },
     lineDecorationsWidth: undefined,
-    lineNumbersMinChars: false,
     glyphMargin: true,
     autoClosingBrackets: 'always',
     autoIndent: true,
