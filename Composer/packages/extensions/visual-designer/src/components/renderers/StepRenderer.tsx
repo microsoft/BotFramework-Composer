@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { SDKTypes } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { UISchemaProvider } from '../../schema/uischemaProvider';
 import { renderUIWidget } from '../../schema/uischemaRenderer';
+import { UISchemaContext } from '../../store/UISchemaContext';
 
 import { ElementWrapper } from './ElementWrapper';
 
@@ -28,14 +28,15 @@ const TypesWithoutWrapper = [
 ];
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
-  const $type = get(data, '$type', '');
-  const widgetSchema = UISchemaProvider.provideWidgetSchema($type);
-  const content = renderUIWidget(widgetSchema, { id, data, onEvent });
+  const schemaProvider = useContext(UISchemaContext);
 
+  const $type = get(data, '$type', '');
+  const widgetSchema = schemaProvider.provideWidgetSchema($type);
+
+  const content = renderUIWidget(widgetSchema, { id, data, onEvent });
   if (TypesWithoutWrapper.some(x => $type === x)) {
     return content;
   }
-
   return (
     <ElementWrapper id={id} onEvent={onEvent}>
       {content}

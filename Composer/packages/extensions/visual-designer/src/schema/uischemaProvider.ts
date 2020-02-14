@@ -3,11 +3,16 @@
 
 import get from 'lodash/get';
 
-import { uiSchema } from './uischema';
-import { UIWidget } from './uischema.types';
+import { UIWidget, UISchema } from './uischema.types';
 
 export class UISchemaProvider {
-  static provideWidgetSchema = ($type: string): UIWidget => {
-    return get(uiSchema, $type, uiSchema.default);
+  schema: UISchema;
+
+  constructor(uiSchema: UISchema) {
+    this.schema = uiSchema;
+  }
+
+  provideWidgetSchema = ($type: string): UIWidget => {
+    return get(this.schema, $type, this.schema.default);
   };
 }
