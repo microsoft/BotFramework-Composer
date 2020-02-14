@@ -6,11 +6,12 @@ import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
 import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
+import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension } from '../../utils';
+import { getExtension, getFileName, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
@@ -83,6 +84,7 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 const removeDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
+  state.lgFiles = response.data.lgFiles;
   return state;
 };
 
@@ -101,25 +103,39 @@ const createDialogCancel: ReducerFunc = state => {
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
+  state.lgFiles = response.data.lgFiles;
   state.showCreateDialogModal = false;
   delete state.onCreateDialogComplete;
   return state;
 };
 
 const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
-  state.lgFiles = state.lgFiles.map(lgFile => {
+  const lgFiles = state.lgFiles.map(lgFile => {
     if (lgFile.id === id) {
-      const { check, parse } = lgIndexer;
-      const diagnostics = check(content, id);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(content, id);
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
-      return { ...lgFile, templates, diagnostics, content };
+      lgFile.content = content;
+      return lgFile;
     }
     return lgFile;
+  });
+  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
+    const targetFileName = getFileName(id);
+    const targetFileId = getBaseName(targetFileName);
+    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
+    if (!targetFile) throw new Error(`file not found`);
+    return { id, content: targetFile.content };
+  };
+
+  state.lgFiles = lgFiles.map(lgFile => {
+    const { check, parse } = lgIndexer;
+    const { id, content } = lgFile;
+    const diagnostics = check(content, id, lgImportresolver);
+    let templates: LgTemplate[] = [];
+    try {
+      templates = parse(content, id);
+    } catch (err) {
+      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+    }
+    return { ...lgFile, templates, diagnostics, content };
   });
   return state;
 };

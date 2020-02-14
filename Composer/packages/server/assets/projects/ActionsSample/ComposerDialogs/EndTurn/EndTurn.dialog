@@ -34,5 +34,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "EndTurn.lg"
 }

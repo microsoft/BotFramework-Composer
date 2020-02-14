@@ -33,5 +33,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "AttachmentInput.lg"
 }

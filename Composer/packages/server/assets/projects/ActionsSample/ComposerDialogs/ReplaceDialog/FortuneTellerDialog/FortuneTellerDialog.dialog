@@ -35,5 +35,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "FortuneTellerDialog.lg"
 }

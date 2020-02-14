@@ -1,0 +1,4 @@
+[import](common.lg)
+
+# bfdactivity-991558
+-@{ShowEmailSummary(user)}
