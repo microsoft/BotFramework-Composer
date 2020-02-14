@@ -25,6 +25,11 @@ export class LuPublisher {
   // key: filePath relative to bot dir
   // value: lastUpdateTime && lastPublishTime
   public status: { [key: string]: LuisStatus } = {};
+
+  private builder = new luBuild.Builder(message => {
+    console.log(message);
+  });
+
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
@@ -81,25 +86,32 @@ export class LuPublisher {
   };
 
   public publish = async (luFiles: LuFile[]) => {
-    const config = this._getConfig(luFiles);
-    // if (config.models.length === 0) {
-    //   throw new Error('No luis file exist');
-    // }
+    if (!luFiles.length) {
+      throw new Error('No luis file exist');
+    }
+    const config = this._getConfig();
     const curTime = Date.now();
     try {
-      const builder = new luBuild.Builder(console);
-      await builder.build(config);
+      const loadResult = await this._loadLuConatents(luFiles);
+      const buildResult = await this.builder.build(
+        loadResult.luContents,
+        loadResult.recognizers,
+        config.authoringKey,
+        config.region,
+        config.botName,
+        config.suffix,
+        ''
+      );
 
       // update pubish status after sucessfully published
       luFiles.forEach(f => {
         this.status[f.relativePath].lastPublishTime = curTime;
       });
       await this.saveStatus();
+      await this.builder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
     } catch (error) {
       throw new Error(error.body?.error?.message || error.message || 'Error publishing to LUIS.');
     }
-
-    //await this._copyDialogsToTargetFolder(config);
   };
 
   public getUnpublisedFiles = (files: LuFile[]) => {
@@ -149,33 +161,26 @@ export class LuPublisher {
     }
   }
 
-  // private _copyDialogsToTargetFolder = async (config: any) => {
-  //   const defaultLanguage = config.defaultLanguage;
-  //   await config.models.forEach(async (filePath: string) => {
-  //     const baseName = Path.basename(filePath, '.lu');
-  //     const rootPath = Path.dirname(filePath);
-  //     const currentPath = `${filePath}.dialog`;
-  //     const targetPath = Path.join(this.generatedFolderPath, `${baseName}.lu.dialog`);
-  //     const currentVariantPath = Path.join(rootPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-  //     const targetVariantPath = Path.join(this.generatedFolderPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-  //     await this.storage.copyFile(currentPath, targetPath);
-  //     await this.storage.copyFile(currentVariantPath, targetVariantPath);
-  //     await this.storage.removeFile(currentPath);
-  //     await this.storage.removeFile(currentVariantPath);
-  //   });
-  // };
-
-  private _getConfig = (luFiles: LuFile[]) => {
+  private _getConfig = () => {
     const luConfig = {
-      out: this.generatedFolderPath,
-      in: this.botDir,
-      dialog: true,
-      force: false,
-      authoringKey: this.config?.authoringKey,
-      region: this.config?.authoringRegion,
-      botName: this.config?.name,
-      suffix: this.config?.environment,
+      authoringKey: this.config?.authoringKey || '',
+      region: this.config?.authoringRegion || '',
+      botName: this.config?.name || '',
+      suffix: this.config?.environment || '',
     };
     return luConfig;
+  };
+
+  private _loadLuConatents = async (luFiles: LuFile[]) => {
+    const pathList = luFiles.map(file => {
+      return Path.resolve(this.botDir, file.relativePath);
+    });
+
+    return await this.builder.LoadContents(
+      pathList,
+      this.config?.defaultLanguage || '',
+      this.config?.environment || '',
+      this.config?.authoringRegion || ''
+    );
   };
 }
