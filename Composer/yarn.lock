@@ -2120,10 +2120,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bfcomposer/bf-lu@^1.2.2":
-  version "1.2.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.2.2.tgz#598e1a17e566674b9d633f294792fd9c82b54334"
-  integrity sha1-WY4aF+VmZ0udYz8pR5L9nIK1QzQ=
+"@bfcomposer/bf-lu@^1.2.4":
+  version "1.2.4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.2.4.tgz#4beb69bf36a9eedab51ad8114b5705362dc0b8c2"
+  integrity sha1-S+tpvzap7tq1GtgRS1cFNi3AuMI=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "3.0.1"
     "@azure/ms-rest-azure-js" "2.0.1"

@@ -8,7 +8,7 @@ declare module '@bfcomposer/bf-lu/lib/parser/luBuild' {
 
       constructor(handler: any);
 
-      LoadContents(
+      loadContents(
         files: string[],
         culture: string,
         suffix: string,
@@ -24,8 +24,9 @@ declare module '@bfcomposer/bf-lu/lib/parser/luBuild' {
         botName: string,
         suffix: string,
         fallbackLocale: string,
-        multiRecognizers?: Map<string, any>,
-        settings?: any
+        deleteOldVersion: boolean,
+        multiRecognizers: Map<string, any>,
+        settings: any
       ): any[];
 
       writeDialogAssets(contents: any[], force: boolean, out: string): void;

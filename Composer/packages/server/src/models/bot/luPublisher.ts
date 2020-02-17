@@ -100,7 +100,10 @@ export class LuPublisher {
         config.region,
         config.botName,
         config.suffix,
-        ''
+        config.fallbackLocal,
+        false,
+        loadResult.multiRecognizers,
+        loadResult.settings
       );
 
       // update pubish status after sucessfully published
@@ -167,6 +170,7 @@ export class LuPublisher {
       region: this.config?.authoringRegion || '',
       botName: this.config?.name || '',
       suffix: this.config?.environment || '',
+      fallbackLocal: this.config?.defaultLanguage || 'en-us',
     };
     return luConfig;
   };
@@ -176,7 +180,7 @@ export class LuPublisher {
       return Path.resolve(this.botDir, file.relativePath);
     });
 
-    return await this.builder.LoadContents(
+    return await this.builder.loadContents(
       pathList,
       this.config?.defaultLanguage || '',
       this.config?.environment || '',
