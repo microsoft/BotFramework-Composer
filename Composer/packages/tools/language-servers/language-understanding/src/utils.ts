@@ -7,8 +7,8 @@ import {
   Diagnostic as BFIndexerDiagnostic,
   offsetRange,
 } from '@bfc/indexers';
-import { LuIntent, textFromIntent } from '@bfc/indexers/lib/utils/luUtil';
-import { luIndexer } from '@bfc/indexers';
+import { textFromIntent } from '@bfc/indexers/lib/utils/luUtil';
+import { luIndexer, LuIntentSection } from '@bfc/indexers';
 const { parse } = luIndexer;
 
 export interface LUOption {
@@ -79,26 +79,14 @@ export function convertDiagnostics(
   return diagnostics;
 }
 
-export function textFromTemplate(template: Template): string {
-  const { name, parameters = [], body } = template;
-  const textBuilder: string[] = [];
-  if (name && body) {
-    textBuilder.push(`# ${name.trim()}`);
-    if (parameters.length) {
-      textBuilder.push(`(${parameters.join(', ')})`);
-    }
-    textBuilder.push(`\n${template.body.trim()}`);
-  }
-  return textBuilder.join('');
-}
-
-export function checkSection(intent: LuIntent): BFIndexerDiagnostic[] {
+export function checkSection(intent: LuIntentSection): BFIndexerDiagnostic[] {
   let { Name } = intent;
   const { Body } = intent;
   if (Name.includes('/')) {
     const [, childName] = Name.split('/');
     Name = childName;
   }
-  const text = textFromIntent({ Name, Body });
+  const nestedSectionDeclare = `> !# @enableSections = true`; // enable nestedSection do check
+  const text = [nestedSectionDeclare, textFromIntent({ Name, Body })].join('\r\n');
   return parse(text).diagnostics;
 }

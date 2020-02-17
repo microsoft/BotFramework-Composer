@@ -10,12 +10,9 @@
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 import isEmpty from 'lodash/isEmpty';
 
-const { luParser, sectionOperator } = sectionHandler;
+import { LuIntentSection } from '../type';
 
-export interface LuIntent {
-  Name: string;
-  Body: string;
-}
+const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\n';
 
@@ -25,7 +22,7 @@ export function isValid(diagnostics: any[]) {
   });
 }
 
-export function textFromIntent(intent: LuIntent | null, secondary = false): string {
+export function textFromIntent(intent: LuIntentSection | null, secondary = false): string {
   if (!intent || isEmpty(intent)) return '';
   const { Name, Body } = intent;
   const textBuilder: string[] = [];
@@ -40,11 +37,15 @@ export function textFromIntent(intent: LuIntent | null, secondary = false): stri
   return textBuilder.join(NEWLINE);
 }
 
-export function textFromIntents(intents: LuIntent[], secondary = false): string {
+export function textFromIntents(intents: LuIntentSection[], secondary = false): string {
   return intents.map(intent => textFromIntent(intent, secondary)).join(`${NEWLINE}${NEWLINE}`);
 }
 
-function updateInSections(sections: LuIntent[], intentName: string, updatedIntent: LuIntent | null): LuIntent[] {
+function updateInSections(
+  sections: LuIntentSection[],
+  intentName: string,
+  updatedIntent: LuIntentSection | null
+): LuIntentSection[] {
   // remove
   if (!updatedIntent || isEmpty(updatedIntent)) {
     return sections.filter(({ Name }) => Name !== intentName);
@@ -69,7 +70,7 @@ function updateInSections(sections: LuIntent[], intentName: string, updatedInten
  * @param intentName intent Name, support subSection naming 'CheckEmail/CheckUnreadEmail'. if #CheckEmail not exist will do recursive add.
  * @param {Name, Body} intent the updates. if intent is empty will do remove.
  */
-export function updateIntent(content: string, intentName: string, intent: LuIntent | null): string {
+export function updateIntent(content: string, intentName: string, intent: LuIntentSection | null): string {
   let targetSection;
   let targetSectionContent;
   const updatedSectionContent = textFromIntent(intent);
@@ -77,7 +78,12 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
   const { Sections, Errors } = resource;
   const updateSectionParsed = luParser.parse(updatedSectionContent);
   // if has error, do nothing.
-  if (isValid(updateSectionParsed.Errors) === false || isValid(Errors) === false) return content;
+  if (
+    isValid(updateSectionParsed.Errors) === false ||
+    isValid(Errors) === false ||
+    (intent != null && updateSectionParsed.Sections.length !== 1) // updates is not a single section
+  )
+    return content;
   // if intent is null, do remove
   // if remove target not exist return origin content;
   if (!intent || isEmpty(intent)) {
@@ -128,7 +134,7 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
  * @param content origin lu file content
  * @param {Name, Body} intent the adds. Name support subSection naming 'CheckEmail/CheckUnreadEmail', if #CheckEmail not exist will do recursive add.
  */
-export function addIntent(content: string, { Name, Body }: LuIntent): string {
+export function addIntent(content: string, { Name, Body }: LuIntentSection): string {
   const intentName = Name;
   if (Name.includes('/')) {
     const [, childName] = Name.split('/');

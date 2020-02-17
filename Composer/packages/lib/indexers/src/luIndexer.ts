@@ -3,7 +3,7 @@
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 
-import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
+import { FileInfo, LuFile, LuParsed, LuSectionTypes, LuIntentSection } from './type';
 import { getBaseName } from './utils/help';
 import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
@@ -28,15 +28,16 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
 
 function parse(content: string, id = ''): LuParsed {
   const { Sections, Errors } = luParser.parse(content);
-  const intents = Sections.map(section => {
+  const intents: LuIntentSection[] = [];
+  Sections.forEach(section => {
     const { Name, Body, SectionType } = section;
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
-      return {
+      intents.push({
         Name,
         Body,
         Entities,
-      };
+      });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map(subSection => {
         const { Name, Body } = subSection;
@@ -47,13 +48,21 @@ function parse(content: string, id = ''): LuParsed {
           Entities,
         };
       });
-      return {
+      intents.push({
         Name,
         Body,
         Children,
-      };
+      });
+      intents.push(
+        ...Children.map(subSection => {
+          return {
+            ...subSection,
+            Name: `${section.Name}/${subSection.Name}`,
+          };
+        })
+      );
     }
-  }).filter(item => item !== undefined);
+  });
   const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
   return {
     intents,

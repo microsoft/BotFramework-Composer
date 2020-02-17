@@ -117,8 +117,13 @@ const TableView: React.FC<TableViewProps> = props => {
         minWidth: 100,
         maxWidth: 150,
         data: 'string',
-        onRender: item => {
-          return <div css={formCell}>#{item.name}</div>;
+        onRender: (item: Intent) => {
+          let displayName = `#${item.name}`;
+          if (item.name.includes('/')) {
+            const [, childName] = item.name.split('/');
+            displayName = `##${childName}`;
+          }
+          return <div css={formCell}>{displayName}</div>;
         },
       },
       {
