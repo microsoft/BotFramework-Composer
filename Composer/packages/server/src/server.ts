@@ -13,8 +13,7 @@ import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
-
-import { LUServer } from '../../tools/language-servers/language-understanding/src/LUServer';
+import { LUServer } from '@bfc/lu-languageserver';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
