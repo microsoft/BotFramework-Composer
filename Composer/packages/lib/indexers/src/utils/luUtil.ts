@@ -10,7 +10,10 @@
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 import isEmpty from 'lodash/isEmpty';
 
-import { LuIntentSection } from '../type';
+import { LuIntentSection, LuSectionTypes } from '../type';
+import { luIndexer } from '../luIndexer';
+import { Diagnostic } from '../diagnostic';
+const { parse } = luIndexer;
 
 const { luParser, sectionOperator } = sectionHandler;
 
@@ -22,9 +25,14 @@ export function isValid(diagnostics: any[]) {
   });
 }
 
-export function textFromIntent(intent: LuIntentSection | null, secondary = false): string {
+export function textFromIntent(intent: LuIntentSection | null, secondary = false, enableSections = false): string {
   if (!intent || isEmpty(intent)) return '';
-  const { Name, Body } = intent;
+  let { Name } = intent;
+  const { Body } = intent;
+  if (Name.includes('/')) {
+    const [, childName] = Name.split('/');
+    Name = childName;
+  }
   const textBuilder: string[] = [];
   if (Name && Body) {
     if (secondary) {
@@ -34,11 +42,29 @@ export function textFromIntent(intent: LuIntentSection | null, secondary = false
     }
     textBuilder.push(Body);
   }
-  return textBuilder.join(NEWLINE);
+  let text = textBuilder.join(NEWLINE);
+  if (enableSections) {
+    const nestedSectionDeclareHeader = `> !# @enableSections = true`;
+    text = [nestedSectionDeclareHeader, text].join('\r\n');
+  }
+  return text;
 }
 
 export function textFromIntents(intents: LuIntentSection[], secondary = false): string {
   return intents.map(intent => textFromIntent(intent, secondary)).join(`${NEWLINE}${NEWLINE}`);
+}
+
+export function checkSection(intent: LuIntentSection, enableSections = true): Diagnostic[] {
+  const text = textFromIntent(intent, false, enableSections);
+  return parse(text).diagnostics;
+}
+
+export function checkSingleSectionValid(intent: LuIntentSection, enableSections = true): boolean {
+  const text = textFromIntent(intent, false, enableSections);
+  const { Sections, Errors } = luParser.parse(text);
+  return (
+    isValid(Errors) && Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1
+  );
 }
 
 function updateInSections(
@@ -76,14 +102,9 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
   const updatedSectionContent = textFromIntent(intent);
   const resource = luParser.parse(content);
   const { Sections, Errors } = resource;
-  const updateSectionParsed = luParser.parse(updatedSectionContent);
   // if has error, do nothing.
-  if (
-    isValid(updateSectionParsed.Errors) === false ||
-    isValid(Errors) === false ||
-    (intent != null && updateSectionParsed.Sections.length !== 1) // updates is not a single section
-  )
-    return content;
+  if (intent && checkSingleSectionValid(intent) === false) return content;
+  if (isValid(Errors) === false) return content;
   // if intent is null, do remove
   // if remove target not exist return origin content;
   if (!intent || isEmpty(intent)) {

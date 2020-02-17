@@ -155,6 +155,30 @@ describe('LU Nested Section CRUD test', () => {
 
 @ simple todoSubject`;
 
+  it('update IntentSection test', () => {
+    const intentName = 'CheckTodo';
+    const intent = {
+      Name: 'CheckTodo',
+      Body: `## CheckUnreadTodo
+  - please check my unread todo
+  - show my unread todos
+
+  @ simple todoTitle
+  `,
+    };
+
+    const fileContentUpdated = updateIntent(fileContent, intentName, intent);
+    const luresource = luParser.parse(fileContentUpdated);
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+    expect(Sections[1].Name).toEqual('CheckTodo');
+    expect(Sections[1].SimpleIntentSections.length).toEqual(1);
+  });
+
   it('parse Nested section test', () => {
     const luresource = luParser.parse(fileContent);
     const { Sections, Errors, Content } = luresource;
@@ -179,10 +203,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-- show my completed todos
+    - show my completed todos
 
-@ simple todoTime
-`,
+    @ simple todoTime
+    `,
     };
 
     const fileContentUpdated = addIntent(fileContent, intent);
@@ -209,10 +233,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-- show my completed todos
+    - show my completed todos
 
-@ simple todoTime
-`,
+    @ simple todoTime
+    `,
     };
 
     const fileContentUpdated = addIntent(fileContent, intent);
@@ -241,11 +265,11 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
+    - please show my unread todos
 
-@ simple todoTitle
-@ simple todoContent
-`,
+    @ simple todoTitle
+    @ simple todoContent
+    `,
     };
 
     const fileContentUpdated = updateIntent(fileContent, intentName, intent);
@@ -281,10 +305,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
+  - please show my unread todos
 
-@ simple todoContent
-`,
+  @ simple todoContent
+  `,
     };
 
     const fileContentUpdated = updateIntent(fileContent, intentName, intent);

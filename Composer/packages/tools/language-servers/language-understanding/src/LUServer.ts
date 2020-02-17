@@ -18,19 +18,12 @@ import {
   TextEdit,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
-import { updateIntent, isValid } from '@bfc/indexers/lib/utils/luUtil';
+import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
-import {
-  ImportResolverDelegate,
-  LUOption,
-  LUDocument,
-  generageDiagnostic,
-  convertDiagnostics,
-  checkSection,
-} from './utils';
+import { ImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
 
 const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 
@@ -626,10 +619,13 @@ export class LUServer {
 
     // if inline editor, concat new content for validate
     if (fileId && sectionId) {
-      const sectionDiags = checkSection({
-        Name: sectionId,
-        Body: text,
-      });
+      const sectionDiags = checkSection(
+        {
+          Name: sectionId,
+          Body: text,
+        },
+        true
+      );
       // error in section.
       if (isValid(sectionDiags) === false) {
         const lspDiagnostics = convertDiagnostics(sectionDiags, document, 1);

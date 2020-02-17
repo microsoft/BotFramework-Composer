@@ -7,9 +7,6 @@ import {
   Diagnostic as BFIndexerDiagnostic,
   offsetRange,
 } from '@bfc/indexers';
-import { textFromIntent } from '@bfc/indexers/lib/utils/luUtil';
-import { luIndexer, LuIntentSection } from '@bfc/indexers';
-const { parse } = luIndexer;
 
 export interface LUOption {
   fileId: string;
@@ -77,16 +74,4 @@ export function convertDiagnostics(
     diagnostics.push(diagnostic);
   });
   return diagnostics;
-}
-
-export function checkSection(intent: LuIntentSection): BFIndexerDiagnostic[] {
-  let { Name } = intent;
-  const { Body } = intent;
-  if (Name.includes('/')) {
-    const [, childName] = Name.split('/');
-    Name = childName;
-  }
-  const nestedSectionDeclare = `> !# @enableSections = true`; // enable nestedSection do check
-  const text = [nestedSectionDeclare, textFromIntent({ Name, Body })].join('\r\n');
-  return parse(text).diagnostics;
 }
