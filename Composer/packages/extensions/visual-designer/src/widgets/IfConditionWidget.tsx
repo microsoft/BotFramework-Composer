@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useEffect, useState, useMemo } from 'react';
+import Measure from 'react-measure';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
@@ -78,7 +79,14 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
         <ElementWrapper id={condition.id} onEvent={onEvent}>
-          {judgement}
+          <Measure
+            bounds
+            onResize={contentRect => {
+              console.log(contentRect);
+            }}
+          >
+            {({ measureRef }) => <div ref={measureRef}>{judgement}</div>}
+          </Measure>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>

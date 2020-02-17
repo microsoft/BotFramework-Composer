@@ -17,6 +17,7 @@ import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
+import { DynamicBlock } from '../widgets/DynamicBlock';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -56,7 +57,7 @@ export const uiSchema: UISchema = {
   [SDKTypes.IfCondition]: {
     'ui:widget': IfConditionWidget,
     judgement: {
-      'ui:widget': ActionCard,
+      'ui:widget': DynamicBlock,
       title: formatMessage('Branch'),
       content: data => data.condition,
     },
