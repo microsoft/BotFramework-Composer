@@ -12,12 +12,10 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EmitEvent",
         "pattern": "emit"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CowboyIntent",
         "pattern": "moo"
       }

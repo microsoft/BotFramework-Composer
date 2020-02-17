@@ -14,7 +14,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class ComposerBot : ActivityHandler
     {
-        private AdaptiveDialog rootDialog;
         private readonly ResourceExplorer resourceExplorer;
         private readonly UserState userState;
         private DialogManager dialogManager;
@@ -34,11 +33,9 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
             this.telemetryClient = telemetryClient;
-            DeclarativeTypeLoader.AddComponent(new QnAMakerComponentRegistration());
-
             LoadRootDialogAsync();
         }
-
+        
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
             this.telemetryClient.TrackTrace("Activity:" + turnContext.Activity.Text, Severity.Information, null);
@@ -50,8 +47,10 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            rootDialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(rootFile, resourceExplorer, sourceMap);
-            this.dialogManager = new DialogManager(rootDialog);
+            var rootDialog = resourceExplorer.LoadType<Dialog>(rootFile); 
+            this.dialogManager = new DialogManager(rootDialog)
+                                .UseResourceExplorer(resourceExplorer)
+                                .UseLanguageGeneration();
         }       
     }
 }

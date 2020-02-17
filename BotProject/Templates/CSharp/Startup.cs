@@ -76,8 +76,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             var botFile = Configuration.GetSection("bot").Get<string>();
 
-            TypeFactory.Configuration = this.Configuration;
-
             // manage all bot resources
             var resourceExplorer = new ResourceExplorer().AddFolder(botFile);
 
@@ -88,12 +86,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
                 adapter
                   .UseStorage(storage)
-                  .UseState(userState, conversationState)
-                  .UseAdaptiveDialogs()
-                  .UseResourceExplorer(resourceExplorer)
-                  .UseLanguageGeneration(resourceExplorer, "common.lg")
-                  .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
-                  .Use(new InspectionMiddleware(inspectionState, userState, conversationState, credentials));
+                  .UseState(userState, conversationState);               
 
                 if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
                 {

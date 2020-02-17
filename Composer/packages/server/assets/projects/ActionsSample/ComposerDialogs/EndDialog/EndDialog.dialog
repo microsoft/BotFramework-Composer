@@ -8,12 +8,10 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "JokeIntent",
         "pattern": "(?i)joke"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
       }

@@ -13,30 +13,13 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
-          "$designer": {
-            "id": "356862"
-          },
-          "condition": "user.ids == null",
-          "actions": [
-            {
-              "$type": "Microsoft.InitProperty",
-              "$designer": {
-                "id": "384024"
-              },
-              "property": "user.ids",
-              "type": "array"
-            }
-          ]
-        },
-        {
           "$type": "Microsoft.EditArray",
           "$designer": {
             "id": "076427"
           },
           "changeType": "Push",
           "itemsProperty": "user.ids",
-          "value": "10000+1000+100+10+1"
+          "value": "=10000+1000+100+10+1"
         },
         {
           "$type": "Microsoft.EditArray",
@@ -45,13 +28,13 @@
           },
           "changeType": "Push",
           "itemsProperty": "user.ids",
-          "value": "200*200"
+          "value": "=200*200"
         },
         {
           "$type": "Microsoft.EditArray",
           "changeType": "Push",
           "itemsProperty": "user.ids",
-          "value": "888888/4",
+          "value": "=888888/4",
           "$designer": {
             "id": "393322"
           }

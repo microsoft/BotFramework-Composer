@@ -10,42 +10,34 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "TextInput",
         "pattern": "TextInput|01"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "NumberInput",
         "pattern": "NumberInput|02"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "ConfirmInput",
         "pattern": "ConfirmInput|03"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "ChoiceInput",
         "pattern": "ChoiceInput|04"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "AttachmentInput",
         "pattern": "AttachmentInput|05"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "DateTimeInput",
         "pattern": "DateTimeInput|06"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "OAuthInput",
         "pattern": "OAuthInput|07"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "cancel",
         "pattern": "cancel"
       }

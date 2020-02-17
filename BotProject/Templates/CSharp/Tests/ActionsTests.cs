@@ -34,7 +34,6 @@ namespace Tests
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
-            TypeFactory.Configuration = new ConfigurationBuilder().AddInMemoryCollection().Build();
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory));
         }
 
@@ -156,6 +155,7 @@ namespace Tests
         }
 
         [TestMethod]
+        [Ignore]
         public async Task Actions_09EditActions()
         {
             await BuildTestFlow(getFolderPath("ActionsSample"))
@@ -204,7 +204,6 @@ namespace Tests
 
         private TestFlow BuildTestFlow(string folderPath, bool sendTrace = false)
         {
-            TypeFactory.Configuration = new ConfigurationBuilder().Build();
             var storage = new MemoryStorage();
             var convoState = new ConversationState(storage);
             var userState = new UserState(storage);
@@ -214,14 +213,14 @@ namespace Tests
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
-                .UseAdaptiveDialogs()
-                .UseLanguageGeneration(resourceExplorer, "common.lg")
-                .UseResourceExplorer(resourceExplorer)
+                
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("Main.dialog");
-            var dialog = DeclarativeTypeLoader.Load<AdaptiveDialog>(resource, resourceExplorer, DebugSupport.SourceMap);
-            DialogManager dm = new DialogManager(dialog);
+            var dialog = resourceExplorer.LoadType<Dialog>(resource);
+            DialogManager dm = new DialogManager(dialog)
+                                .UseResourceExplorer(resourceExplorer)
+                                .UseLanguageGeneration(); ;
 
             return new TestFlow(adapter, async (turnContext, cancellationToken) =>
             {

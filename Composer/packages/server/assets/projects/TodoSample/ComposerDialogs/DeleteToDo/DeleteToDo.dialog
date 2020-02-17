@@ -13,14 +13,6 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "725469"
-          },
-          "property": "dialog.todo",
-          "value": "@title"
-        },
-        {
           "$type": "Microsoft.TextInput",
           "$designer": {
             "id": "870620"
@@ -28,6 +20,7 @@
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of the todo you want to remove.",
           "maxTurnCount": 3,
+          "value": "=@title",
           "alwaysPrompt": false,
           "allowInterruptions": "false"
         },
@@ -39,7 +32,7 @@
           "changeType": "Remove",
           "itemsProperty": "user.todos",
           "resultProperty": "dialog.removed",
-          "value": "dialog.todo"
+          "value": "=dialog.todo"
         },
         {
           "$type": "Microsoft.IfCondition",

@@ -13,14 +13,6 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
-          "$designer": {
-            "id": "201694"
-          },
-          "property": "dialog.todo",
-          "value": "@title"
-        },
-        {
           "$type": "Microsoft.TextInput",
           "$designer": {
             "id": "298897"
@@ -28,34 +20,18 @@
           "property": "dialog.todo",
           "prompt": "OK, please enter the title of your todo.",
           "maxTurnCount": 3,
+          "value": "=@title",
           "alwaysPrompt": false,
           "allowInterruptions": "true"
-        },
-        {
-          "$type": "Microsoft.IfCondition",
-          "$designer": {
-            "id": "015420"
-          },
-          "condition": "user.todos == null",
-          "actions": [
-            {
-              "$type": "Microsoft.InitProperty",
-              "$designer": {
-                "id": "015420"
-              },
-              "property": "user.todos",
-              "type": "array"
-            }
-          ]
         },
         {
           "$type": "Microsoft.EditArray",
           "$designer": {
             "id": "567087"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.todos",
-          "value": "dialog.todo"
+          "value": "=dialog.todo"
         },
         {
           "$type": "Microsoft.SendActivity",
