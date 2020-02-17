@@ -28,4 +28,4 @@
 
 
 # bfdactivity-839941
--Hello @{user.name}, nice to meet you!
+-Hello ${user.name}, nice to meet you!

@@ -37,7 +37,7 @@
                     "id": "037171",
                     "name": "Send a response"
                   },
-                  "activity": "@{bfdactivity-037171()}"
+                  "activity": "${bfdactivity-037171()}"
                 }
               ]
             }
@@ -94,7 +94,7 @@
             "id": "113335",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-113335()}"
+          "activity": "${bfdactivity-113335()}"
         }
       ],
       "intent": "Help"
@@ -112,7 +112,7 @@
             "id": "183920",
             "name": "Confirmation"
           },
-          "prompt": "@{bfdprompt-183920()}",
+          "prompt": "${bfdprompt-183920()}",
           "maxTurnCount": 3,
           "property": "turn.cancelConfirmation",
           "defaultValue": "false",
@@ -141,7 +141,7 @@
                 "id": "304360",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-304360()}"
+              "activity": "${bfdactivity-304360()}"
             },
             {
               "$type": "Microsoft.CancelAllDialogs",
@@ -158,7 +158,7 @@
                 "id": "470975",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-470975()}"
+              "activity": "${bfdactivity-470975()}"
             }
           ]
         }
@@ -178,7 +178,7 @@
             "id": "456012",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-456012()}"
+          "activity": "${bfdactivity-456012()}"
         }
       ],
       "intent": "Greeting"
@@ -195,7 +195,7 @@
             "id": "069270",
             "name": "Text input"
           },
-          "prompt": "@{bfdprompt-069270()}",
+          "prompt": "${bfdprompt-069270()}",
           "maxTurnCount": 3,
           "property": "dialog.item",
           "alwaysPrompt": false,
@@ -216,7 +216,7 @@
                 "id": "781953",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-781953()}",
+              "prompt": "${bfdprompt-781953()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
@@ -265,7 +265,7 @@
             "id": "775572",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-775572()}"
+          "activity": "${bfdactivity-775572()}"
         },
         {
           "$type": "Microsoft.DeleteProperty",
@@ -306,7 +306,7 @@
                 "id": "637111",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-637111()}",
+              "prompt": "${bfdprompt-637111()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
@@ -353,7 +353,7 @@
                 "id": "684852",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-212971()}"
+              "activity": "${bfdactivity-212971()}"
             },
             {
               "$type": "Microsoft.TextInput",
@@ -361,7 +361,7 @@
                 "id": "038757",
                 "name": "Text input"
               },
-              "prompt": "@{bfdprompt-879447()}",
+              "prompt": "${bfdprompt-879447()}",
               "maxTurnCount": 3,
               "property": "dialog.item",
               "alwaysPrompt": false,
@@ -385,7 +385,7 @@
                 "id": "593087",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-056974()}"
+              "activity": "${bfdactivity-056974()}"
             }
           ],
           "elseActions": [
@@ -395,7 +395,7 @@
                 "id": "253146",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-084161()}"
+              "activity": "${bfdactivity-084161()}"
             }
           ]
         },
@@ -438,7 +438,7 @@
                 "id": "059540",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-059540()}",
+              "prompt": "${bfdprompt-059540()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
@@ -483,7 +483,7 @@
             "id": "052697",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-052697()}"
+          "activity": "${bfdactivity-052697()}"
         },
         {
           "$type": "Microsoft.DeleteProperty",

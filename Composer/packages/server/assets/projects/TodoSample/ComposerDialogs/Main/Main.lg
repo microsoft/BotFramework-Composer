@@ -1,7 +1,7 @@
 [import](common.lg)
 
 # bfdactivity-696707
--@{help()}
+-${help()}
 
 # bfdactivity-157674()
 - Hi! I'm a ToDo bot. Say "add a todo named first" to get started.

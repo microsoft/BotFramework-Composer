@@ -156,7 +156,7 @@
           "$designer": {
             "id": "953339"
           },
-          "activity": "@{help()}"
+          "activity": "${help()}"
         }
       ]
     },
@@ -189,7 +189,7 @@
                     "id": "859266",
                     "name": "Send a response"
                   },
-                  "activity": "@{help()}"
+                  "activity": "${help()}"
                 }
               ]
             }

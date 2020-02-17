@@ -44,7 +44,7 @@
           "$designer": {
             "id": "666135"
           },
-          "activity": "@{bfdactivity-666135()}"
+          "activity": "${bfdactivity-666135()}"
         },
         {
           "$type": "Microsoft.Foreach",
@@ -55,7 +55,7 @@
           "actions": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "@{dialog.foreach.index}: @{dialog.foreach.value}"
+              "activity": "${dialog.foreach.index}: ${dialog.foreach.value}"
             }
           ]
         },
@@ -64,7 +64,7 @@
           "$designer": {
             "id": "763672"
           },
-          "activity": "@{bfdactivity-763672()}"
+          "activity": "${bfdactivity-763672()}"
         },
         {
           "$type": "Microsoft.ForeachPage",
@@ -80,7 +80,7 @@
               "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
-                  "activity": "@{dialog.foreach.index}: @{dialog.foreach.value}"
+                  "activity": "${dialog.foreach.index}: ${dialog.foreach.value}"
                 }
               ],
               "$designer": {

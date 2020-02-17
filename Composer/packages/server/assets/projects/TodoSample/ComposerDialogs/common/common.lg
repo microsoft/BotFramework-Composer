@@ -1,10 +1,10 @@
 # Hello
--@{Welcome(time)} @{name}
+-${Welcome(time)} ${name}
 
 # Welcome(time)
--IF:@{time == 'morning'}
+-IF:${time == 'morning'}
   - Good morning
--ELSEIF:@{time == 'evening'}
+-ELSEIF:${time == 'evening'}
   - Good evening
 -ELSE:
   - How are you doing,
@@ -16,22 +16,22 @@
 -What's up bro
 
 # ShowTodo
--IF:@{count(user.todos) > 0}
+-IF:${count(user.todos) > 0}
 -```
-@{HelperFunction()}
-@{join(foreach(user.todos, x, showSingleTodo(x)), '\n')}
+${HelperFunction()}
+${join(foreach(user.todos, x, showSingleTodo(x)), '\n')}
 ```
 -ELSE:
 -You don't have any todos.
 
 # showSingleTodo(x)
--* @{x}
+-* ${x}
 
 # HelperFunction
-- IF: @{count(user.todos) == 1}
-  - Your most recent @{count(user.todos)} task is
+- IF: ${count(user.todos) == 1}
+  - Your most recent ${count(user.todos)} task is
 - ELSE:
-  - Your most recent @{count(user.todos)} tasks are
+  - Your most recent ${count(user.todos)} tasks are
 
 # help
 -I can add a todo, show todos, remove a todo, and clear all todos

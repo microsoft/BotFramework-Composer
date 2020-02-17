@@ -1,10 +1,10 @@
 [import](common.lg)
 
 # bfdactivity-037171
-- @{Welcome-Message()}
+- ${Welcome-Message()}
 
 # bfdactivity-113335
-- @{Welcome-Message()}
+- ${Welcome-Message()}
 
 # bfdprompt-183920
 - Are you sure you want to cancel?
@@ -12,14 +12,14 @@
 # bfdactivity-304360
 [Activity
     Text = Cancelling ...
-    @{Welcome-Actions()}
+    ${Welcome-Actions()}
 ]
 
 # bfdactivity-470975
 - No worries. Let's get right back to where we were...
 
 # bfdactivity-456012
-- @{Welcome-Message()}
+- ${Welcome-Message()}
 
 # bfdprompt-069270
 [Activity
@@ -28,19 +28,19 @@
 ]
 
 # bfdprompt-781953
-- Which list should I add **@{dialog.item}** to?
+- Which list should I add **${dialog.item}** to?
 
 # bfdactivity-775572
 [Activity
-    Text = @{Add-Todo-Text()}
-    @{Welcome-Actions()}
+    Text = ${Add-Todo-Text()}
+    ${Welcome-Actions()}
 ]
 
 # bfdprompt-637111
 - Which list do you want to remove an item from?
 
 # bfdactivity-212971
-- @{List-readback(user.taskLists, dialog.listType)}
+- ${List-readback(user.taskLists, dialog.listType)}
 
 # bfdprompt-879447
 [Activity
@@ -50,14 +50,14 @@
 
 # bfdactivity-056974
 [Activity
-    Text = @{Delete-Items-readback()}
-    @{Welcome-Actions()}
+    Text = ${Delete-Items-readback()}
+    ${Welcome-Actions()}
 ]
 
 # bfdactivity-084161
 [Activity
-    Text = @{Items-readback()}
-    @{Welcome-Actions()}
+    Text = ${Items-readback()}
+    ${Welcome-Actions()}
 ]
 
 # bfdprompt-059540
@@ -65,6 +65,6 @@
 
 # bfdactivity-052697
 [Activity
-    Text = @{Items-readback()}
-    @{Welcome-Actions()}
+    Text = ${Items-readback()}
+    ${Welcome-Actions()}
 ]
