@@ -100,7 +100,7 @@ const TableView: React.FC<TableViewProps> = props => {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          const { name } = intents[index];
+          const { name, fileId } = intents[index];
           navigateTo(`/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
         },
       },

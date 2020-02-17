@@ -3,7 +3,7 @@
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 
-import { updateIntent, addIntent, removeIntent } from '../../src/utils/luUtil';
+import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
 
 const { luParser, luSectionTypes } = sectionHandler;
 

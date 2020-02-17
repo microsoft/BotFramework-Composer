@@ -11,5 +11,6 @@ declare module '@bfcomposer/bf-lu/lib/parser' {
       function parse(content: string): any;
     }
     function sectionOperator(resource: any): void;
+    const luSectionTypes: any;
   }
 }
