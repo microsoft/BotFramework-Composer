@@ -12,6 +12,9 @@ import { ShellData, ShellApi } from '@bfc/shared';
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
+import { UISchemaContext } from './store/UISchemaContext';
+import { UISchemaProvider } from './schema/uischemaProvider';
+import { uiSchema } from './schema/uischema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -21,6 +24,8 @@ const emotionCache = createCache({
   // @ts-ignore
   nonce: window.__nonce__,
 });
+
+const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
@@ -79,24 +84,26 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
-            <ObiEditor
-              key={dialogId}
-              path={dialogId}
-              data={data}
-              focusedSteps={focusedActions}
-              onFocusSteps={onFocusSteps}
-              focusedEvent={focusedEvent}
-              onFocusEvent={onFocusEvent}
-              onClipboardChange={onCopy}
-              onOpen={x => navTo(x)}
-              onChange={x => saveData(x)}
-              onSelect={onSelect}
-              undo={undo}
-              redo={redo}
-              addCoachMarkRef={addCoachMarkRef}
-            />
-          </div>
+          <UISchemaContext.Provider value={visualEditorSchemaProvider}>
+            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+              <ObiEditor
+                key={dialogId}
+                path={dialogId}
+                data={data}
+                focusedSteps={focusedActions}
+                onFocusSteps={onFocusSteps}
+                focusedEvent={focusedEvent}
+                onFocusEvent={onFocusEvent}
+                onClipboardChange={onCopy}
+                onOpen={x => navTo(x)}
+                onChange={x => saveData(x)}
+                onSelect={onSelect}
+                undo={undo}
+                redo={redo}
+                addCoachMarkRef={addCoachMarkRef}
+              />
+            </div>
+          </UISchemaContext.Provider>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>
