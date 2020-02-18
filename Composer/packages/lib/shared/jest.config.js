@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  displayName: 'shared',
   preset: 'ts-jest/presets/js-with-babel',
   testPathIgnorePatterns: ['/node_modules/', '/jestMocks/'],
   watchPathIgnorePatterns: ['<rootDir>/__tests__/mocks'],

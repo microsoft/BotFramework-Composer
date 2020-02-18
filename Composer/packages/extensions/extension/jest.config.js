@@ -5,7 +5,7 @@
 const path = require('path');
 
 module.exports = {
-  displayName: 'adaptive-form',
+  displayName: 'extension',
   preset: 'ts-jest',
   moduleNameMapper: {
     // use commonjs modules for test so they do not need to be compiled

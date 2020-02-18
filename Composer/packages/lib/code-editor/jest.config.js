@@ -2,6 +2,7 @@
 const path = require('path');
 
 module.exports = {
+  displayName: 'code-editor',
   preset: 'ts-jest/presets/js-with-babel',
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object

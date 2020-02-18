@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 const path = require('path');
+
 module.exports = {
+  displayName: 'obiformeditor',
   preset: 'ts-jest/presets/js-with-babel',
   moduleNameMapper: {
     // Any imports of .scss / .css files will instead import styleMock.js which is an empty object

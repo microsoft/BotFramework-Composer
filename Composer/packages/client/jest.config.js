@@ -1,6 +1,7 @@
 // eslint-disable-next-line
 const path = require('path');
 module.exports = {
+  displayName: 'client',
   preset: 'ts-jest/presets/js-with-ts',
   // transform: {
   //   '^.+\\.tsx?$': 'ts-jest',
