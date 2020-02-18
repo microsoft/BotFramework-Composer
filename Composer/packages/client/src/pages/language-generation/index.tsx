@@ -36,7 +36,7 @@ const LGPage: React.FC<LGPageProps> = props => {
   const { dialogs } = state;
 
   const path = props.location?.pathname ?? '';
-  const { fileId } = props;
+  const { fileId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -59,7 +59,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog) {
+    if (!activeDialog && dialogs.length) {
       navigateTo('/language-generation/common');
     }
   }, [fileId, dialogs]);

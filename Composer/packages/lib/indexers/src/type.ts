@@ -67,6 +67,7 @@ export interface LuIntentSection {
   Body: string;
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
+  range?: CodeRange;
 }
 
 export interface LuFile {

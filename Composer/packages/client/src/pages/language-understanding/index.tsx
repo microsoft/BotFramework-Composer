@@ -36,7 +36,7 @@ const LUPage: React.FC<LUPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId } = props;
+  const { fileId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = fileId === 'all';
 
@@ -55,7 +55,7 @@ const LUPage: React.FC<LUPageProps> = props => {
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && fileId !== 'all') {
+    if (!activeDialog && fileId !== 'all' && dialogs.length) {
       navigateTo('/language-understanding/all');
     }
   }, [fileId, dialogs]);

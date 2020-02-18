@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import {
-  DiagnosticSeverity as BFIndexerDiagnosticSeverity,
-  Diagnostic as BFIndexerDiagnostic,
-  offsetRange,
-} from '@bfc/indexers';
+import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
 
 export interface LUOption {
   fileId: string;
@@ -35,13 +31,13 @@ export declare type ImportResolverDelegate = (
 };
 
 const severityMap = {
-  [BFIndexerDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
-  [BFIndexerDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
-  [BFIndexerDiagnosticSeverity.Information]: DiagnosticSeverity.Information,
-  [BFIndexerDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning,
+  [BFDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
+  [BFDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
+  [BFDiagnosticSeverity.Information]: DiagnosticSeverity.Information,
+  [BFDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning,
 };
 
-export function convertSeverity(severity: BFIndexerDiagnosticSeverity): DiagnosticSeverity {
+export function convertSeverity(severity: BFDiagnosticSeverity): DiagnosticSeverity {
   return severityMap[severity];
 }
 
@@ -55,16 +51,11 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
 }
 
 // if section, offset +1 to exclude #IntentName
-export function convertDiagnostics(
-  lgDiags: BFIndexerDiagnostic[] = [],
-  document: TextDocument,
-  offset = 0
-): Diagnostic[] {
+export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
   lgDiags.forEach(diag => {
-    // offset +1, lsp start from line:0, but monaco/composer start from line:1
-    const range = diag.range ? offsetRange(diag.range, 1 + offset) : defaultRange;
+    const range = diag.range ? offsetRange(diag.range, offset) : defaultRange;
     const diagnostic: Diagnostic = {
       severity: convertSeverity(diag.severity),
       range,

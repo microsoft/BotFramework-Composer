@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { luIndexer, combineMessage, isValid } from '@bfc/indexers';
+import { luIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -49,15 +49,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const [content, setContent] = useState(intent?.Body || file?.content);
 
   useEffect(() => {
-    // reset content with file.content's initial state
+    // reset content with file.content initial state
     if (!file || isEmpty(file) || content) return;
     const value = intent ? intent.Body : file.content;
     setContent(value);
   }, [file, sectionId]);
 
   useEffect(() => {
-    // const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
-    const isInvalid = !isValid(diagnostics);
+    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
+    const isInvalid = !isValid(currentDiagnostics);
     const text = isInvalid ? combineMessage(diagnostics) : '';
     setErrorMsg(text);
   }, [diagnostics]);
