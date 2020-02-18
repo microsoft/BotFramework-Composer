@@ -3,8 +3,10 @@
 
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
+import { ImportResolverDelegate, ImportResolver } from 'botbuilder-lg';
 
 import { prepareAxios } from '../utils/auth';
+import { getFileName, getBaseName } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -64,12 +66,14 @@ interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
   actions: BoundActionHandlers;
+  resolvers: { lgImportresolver: ImportResolverDelegate };
 }
 
 export const StoreContext = React.createContext<StoreContextValue>({
   state: initialState,
   dispatch: () => {},
   actions: {} as ActionHandlers,
+  resolvers: { lgImportresolver: ImportResolver.fileResolver },
 });
 
 interface StoreProviderProps {
@@ -99,6 +103,15 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     state: getState(),
     actions: boundActions,
     dispatch: interceptDispatch,
+    resolvers: {
+      lgImportresolver: function(_source: string, id: string) {
+        const targetFileName = getFileName(id);
+        const targetFileId = getBaseName(targetFileName);
+        const targetFile = getState().lgFiles.find(({ id }) => id === targetFileId);
+        if (!targetFile) throw new Error(`${id} lg file not found`);
+        return { id, content: targetFile.content };
+      } as ImportResolverDelegate,
+    },
   };
 
   prepareAxiosWithStore({ dispatch, getState });

@@ -57,5 +57,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "RepeatDialog.lg"
 }

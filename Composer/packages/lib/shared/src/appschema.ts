@@ -259,12 +259,13 @@ export const appschema: OBISchema = {
           description: 'One or more options that are passed to the dialog that is called.',
           additionalProperties: true,
         },
-        includeActivity: {
-          type: 'boolean',
-          title: 'Include Activity',
-          description: 'When set to true, dialog that is called can process the current activity.',
-          default: false,
-          examples: [false],
+        activityProcessed: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Activity Processed',
+          description: 'When set to false, the dialog that is called can process the current activity.',
+          default: 'true',
+          examples: ['true'],
         },
         resultProperty: {
           $role: 'expression',

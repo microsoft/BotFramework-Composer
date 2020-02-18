@@ -14,9 +14,10 @@ import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { OffsetContainer } from '../lib/OffsetContainer';
 import { StepRenderer } from '../renderers/StepRenderer';
-import { Edge } from '../lib/EdgeComponents';
 import { GraphLayout } from '../../models/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
+import { SVGContainer } from '../lib/SVGContainer';
+import { renderEdge } from '../lib/EdgeUtil';
 
 const StepInterval = ElementInterval.y;
 
@@ -54,7 +55,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
       {nodes
         ? nodes.map(x => (
             <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
