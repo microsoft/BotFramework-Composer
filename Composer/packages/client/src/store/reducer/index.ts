@@ -42,6 +42,7 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
+  console.log('SETTING PROJECT ID TO ', response.data.id);
   state.projectId = response.data.id;
   state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
@@ -181,7 +182,10 @@ const setError: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb, promptTab }) => {
+const setDesignPageLocation: ReducerFunc = (
+  state,
+  { projectId, dialogId, selected, focused, breadcrumb, promptTab }
+) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
@@ -194,7 +198,7 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   breadcrumb.push({ dialogId, selected, focused });
 
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused, promptTab };
+  state.designPageLocation = { dialogId, projectId, selected, focused, promptTab };
   return state;
 };
 

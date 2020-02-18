@@ -140,11 +140,11 @@ function DesignPage(props) {
 
   useEffect(() => {
     if (match) {
-      const { dialogId } = match;
+      const { dialogId, projectId } = match;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
-        projectId: state.projectId,
+        projectId: projectId,
         selected: params.get('selected'),
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],

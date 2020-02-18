@@ -61,7 +61,7 @@ const TableView: React.FC<TableViewProps> = props => {
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
       const { name } = template;
-      navigateTo(`/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
+      navigateTo(`/bots/${state.projectId}/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
     },
     [fileId]
   );
@@ -213,7 +213,7 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.name].map(id => {
             return (
-              <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
+              <div key={id} onClick={() => navigateTo(`/bot/${state.projectId}/dialogs/${id}`)}>
                 <Link>{id}</Link>
               </div>
             );

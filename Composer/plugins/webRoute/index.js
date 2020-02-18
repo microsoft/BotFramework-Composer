@@ -7,7 +7,7 @@ module.exports = {
     console.log('Register web route middleware');
 
     composer.addWebMiddleware((req, res, next) => {
-      console.log('WEB HIT TO COMPOSER', req.url);
+      console.log('> ', req.url);
       next();
     });
 

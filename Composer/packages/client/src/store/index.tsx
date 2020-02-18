@@ -36,6 +36,7 @@ const initialState: State = {
   schemas: { editor: {} },
   luFiles: [],
   designPageLocation: {
+    projectId: '',
     dialogId: '',
     focused: '',
     selected: '',

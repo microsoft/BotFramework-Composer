@@ -80,7 +80,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const onSelect = useCallback(
     id => {
-      let url = `/language-generation/${id}`;
+      let url = `/bot/${state.projectId}/language-generation/${id}`;
       if (edit) url += `/edit`;
       navigateTo(url);
     },
@@ -89,7 +89,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-generation/${fileId}`;
+      let url = `/bot/${state.projectId}/language-generation/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },

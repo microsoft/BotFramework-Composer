@@ -66,8 +66,11 @@ export function getUrlSearch(selected: string, focused: string): string {
   return result;
 }
 
-export function checkUrl(currentUri: string, { dialogId, selected, focused, promptTab }: DesignPageLocation) {
-  let lastUri = `/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+export function checkUrl(
+  currentUri: string,
+  { dialogId, projectId, selected, focused, promptTab }: DesignPageLocation
+) {
+  let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {
     lastUri += `#${promptTab}`;
   }
@@ -110,5 +113,6 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
+  console.log('ABOUT TO Navigate to ', mapNavPath, navigateOpts);
   navigate(mapNavPath, navigateOpts);
 }

@@ -3,11 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Link, RouteComponentProps } from '@reach/router';
 
+import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
 import { isAbsHosted } from '../../utils/envUtil';
@@ -39,7 +40,10 @@ const links = [
 
 const SettingPage: React.FC<RouteComponentProps> = () => {
   const [active, setActive] = useState();
-
+  const { state } = useContext(StoreContext);
+  const makeProjectLink = (id, path) => {
+    return `/bot/${id}${path}`;
+  };
   function onRenderLink(link) {
     return (
       <Link
@@ -82,7 +86,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
                   selectedKey={active}
                   onLinkClick={(e, item) => {
                     if (item && item.key) {
-                      navigateTo(item.key);
+                      navigateTo(makeProjectLink(state.projectId, item.key));
                     }
                   }}
                 />
