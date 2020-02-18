@@ -5,6 +5,7 @@ import { ISettingManager } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import { IBotConnector } from '../connector';
 import { CSharpBotConnector } from '../connector/csharpBotConnector';
+import { UserIdentity } from '../../services/pluginLoader';
 
 import { IEnvironmentConfig, IEnvironment } from '.';
 
@@ -15,9 +16,9 @@ export class DefaultEnvironment implements IEnvironment {
   private defaultSlot = '';
   private slots: string[] = [''];
 
-  public constructor(config: IEnvironmentConfig) {
+  public constructor(config: IEnvironmentConfig, user?: UserIdentity) {
     this.config = config;
-    this.settingManager = new DefaultSettingManager(this.config.basePath);
+    this.settingManager = new DefaultSettingManager(this.config.basePath, user);
     this.botConnector = new CSharpBotConnector(this.config.adminEndpoint, this.config.endpoint);
   }
 

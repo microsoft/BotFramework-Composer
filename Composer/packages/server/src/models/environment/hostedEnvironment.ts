@@ -7,19 +7,19 @@ import { ISettingManager } from '../settings';
 import { HostedSettingManager } from '../settings/hostedSettingManager';
 import { IBotConnector } from '../connector';
 import { SelfHostBotConnector } from '../connector/selfHostConnector';
+import { UserIdentity } from '../../services/pluginLoader';
 
 import { IEnvironmentConfig, IEnvironment } from '.';
-
 export class HostedEnvironment implements IEnvironment {
   private settingManager: HostedSettingManager;
   private botConnector: SelfHostBotConnector;
   private defaultSlot = 'integration';
   private slots: string[] = ['integration', 'production'];
 
-  constructor(_: IEnvironmentConfig, skipLoad?: boolean) {
+  constructor(_: IEnvironmentConfig, skipLoad?: boolean, user?: UserIdentity) {
     //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const botRootPath = resolve(process.env.HOME!, 'site/artifacts/bot');
-    this.settingManager = new HostedSettingManager(botRootPath);
+    this.settingManager = new HostedSettingManager(botRootPath, user);
     this.botConnector = new SelfHostBotConnector(skipLoad);
   }
 

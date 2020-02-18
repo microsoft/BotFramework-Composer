@@ -17,6 +17,7 @@ import {
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
+import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
 import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
@@ -55,7 +56,7 @@ export class BotProject {
   public environment: IEnvironment;
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
-  constructor(ref: LocationRef) {
+  constructor(ref: LocationRef, user?: UserIdentity) {
     this.ref = ref;
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dataDir = Path.join(this.dir, DIALOGFOLDER);
@@ -66,9 +67,9 @@ export class BotProject {
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
 
-    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir });
+    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir }, user);
     this.settingManager = this.environment.getSettingsManager();
-    this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
+    this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
@@ -357,9 +358,9 @@ export class BotProject {
     return locationRef;
   };
 
-  public copyTo = async (locationRef: LocationRef) => {
+  public copyTo = async (locationRef: LocationRef, user?: UserIdentity) => {
     const newProjRef = await this.cloneFiles(locationRef);
-    return new BotProject(newProjRef);
+    return new BotProject(newProjRef, user);
   };
 
   public async exists(): Promise<boolean> {

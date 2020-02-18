@@ -4,6 +4,7 @@
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import StorageService from '../../services/storage';
+import { UserIdentity } from '../../services/pluginLoader';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
 
@@ -14,10 +15,10 @@ export class FileSettingManager implements ISettingManager {
   private basePath: string;
   protected storage: IFileStorage;
 
-  constructor(basePath: string) {
+  constructor(basePath: string, user?: UserIdentity) {
     this.basePath = basePath;
     // todo: do we need to pass in a storage client id? there can only be one at a time.
-    this.storage = StorageService.getStorageClient('default');
+    this.storage = StorageService.getStorageClient('default', user);
   }
 
   public get = async (slot: string, obfuscate: boolean): Promise<any> => {

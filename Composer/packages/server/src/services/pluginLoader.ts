@@ -12,7 +12,7 @@ import { pathToRegexp } from 'path-to-regexp';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const passport = require('passport');
 
-class ComposerPluginRegistration {
+export class ComposerPluginRegistration {
   public loader: PluginLoader;
   private _name: string;
 
@@ -171,7 +171,7 @@ interface PublishPlugin {
   [key: string]: any;
 }
 
-class PluginLoader {
+export class PluginLoader {
   private _passport;
   private _webserver: Express | undefined;
   public loginUri: string;
@@ -259,8 +259,8 @@ class PluginLoader {
 
     if (json.extendsComposer) {
       const modulePath = path.replace(/package\.json$/, '');
-      // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
       try {
+        // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
         const thisPlugin = require(modulePath);
         this.loadPlugin(json.name, thisPlugin);
       } catch (err) {
@@ -277,7 +277,16 @@ class PluginLoader {
       await this.loadPluginFromFile(pathLib.join(path, plugins[p]));
     }
   }
+
+  static async getUserFromRequest(req): Promise<UserIdentity | undefined> {
+    return req.user || undefined;
+  }
 }
 
-const pluginLoader = new PluginLoader();
+// todo: is there some existing Passport user typedef?
+export interface UserIdentity {
+  [key: string]: any;
+}
+
+export const pluginLoader = new PluginLoader();
 export default pluginLoader;

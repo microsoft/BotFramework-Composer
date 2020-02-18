@@ -11,6 +11,7 @@ import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
+import { UserIdentity } from './pluginLoader';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -46,12 +47,12 @@ export class BotProjectService {
     // return BotProjectService.currentBotProject;
   }
 
-  public static getProjectsDateModifiedDict = async (projects: LocationRef[]): Promise<any> => {
+  public static getProjectsDateModifiedDict = async (projects: LocationRef[], user?: UserIdentity): Promise<any> => {
     const dateModifiedDict: any = [];
     const promises = projects.map(async project => {
       let dateModified = '';
       try {
-        dateModified = await StorageService.getBlobDateModified(project.storageId, project.path);
+        dateModified = await StorageService.getBlobDateModified(project.storageId, project.path, user);
         dateModifiedDict.push({ dateModified, path: project.path });
       } catch (err) {
         log(err);
@@ -61,9 +62,12 @@ export class BotProjectService {
     return dateModifiedDict;
   };
 
-  public static getRecentBotProjects = async () => {
+  public static getRecentBotProjects = async (user?: UserIdentity) => {
     BotProjectService.initialize();
-    const dateModifiedDict = await BotProjectService.getProjectsDateModifiedDict(BotProjectService.recentBotProjects);
+    const dateModifiedDict = await BotProjectService.getProjectsDateModifiedDict(
+      BotProjectService.recentBotProjects,
+      user
+    );
     const recentBots = BotProjectService.recentBotProjects.reduce((result: any[], item) => {
       const name = Path.basename(item.path);
       //remove .botproj. Someone may open project before new folder structure.
@@ -78,11 +82,11 @@ export class BotProjectService {
     });
   };
 
-  public static openProject = async (locationRef: LocationRef): Promise<string> => {
+  public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
     BotProjectService.initialize();
 
     // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
-    if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path))) {
+    if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path, user))) {
       BotProjectService.deleteRecentProject(locationRef.path);
       throw new Error(`file not exist ${locationRef.path}`);
     }
@@ -108,12 +112,15 @@ export class BotProjectService {
     return projectId;
   };
 
-  public static getProjectById = async (projectId: string) => {
+  public static getProjectById = async (projectId: string, user?: UserIdentity) => {
     BotProjectService.initialize();
     if (!BotProjectService.projectLocationMap[projectId]) {
       throw new Error('project not found in cache');
     } else {
-      const project = new BotProject({ storageId: 'default', path: BotProjectService.projectLocationMap[projectId] });
+      const project = new BotProject(
+        { storageId: 'default', path: BotProjectService.projectLocationMap[projectId] },
+        user
+      );
       project.id = projectId;
       await project.index();
       return project;
@@ -148,10 +155,14 @@ export class BotProjectService {
     Store.set('recentBotProjects', recentBotProjects);
   };
 
-  public static saveProjectAs = async (sourceProject: BotProject, locationRef: LocationRef): Promise<string> => {
+  public static saveProjectAs = async (
+    sourceProject: BotProject,
+    locationRef: LocationRef,
+    user?: UserIdentity
+  ): Promise<string> => {
     BotProjectService.initialize();
     if (typeof sourceProject !== 'undefined') {
-      const newCurrentProject = await sourceProject.copyTo(locationRef);
+      const newCurrentProject = await sourceProject.copyTo(locationRef, user);
       await newCurrentProject.index();
       const projectId = await BotProjectService.generateProjectId(locationRef.path);
       BotProjectService.addRecentProject(locationRef.path);

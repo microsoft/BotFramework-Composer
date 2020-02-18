@@ -19,6 +19,10 @@ export interface MakeDirectoryOptions {
   recursive?: boolean;
 }
 
+export interface UserIdentity {
+  [key: string]: any;
+}
+
 export interface IFileStorage {
   stat(path: string): Promise<Stat>;
   readFile(path: string): Promise<string>;

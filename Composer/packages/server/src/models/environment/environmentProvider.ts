@@ -6,22 +6,23 @@ import { DefaultEnvironment } from './defaultEnvironment';
 import { MockHostedEnvironment } from './mockHostedEnvironment';
 
 import { absHostedConfig, currentConfig, IEnvironmentConfig, IEnvironment, mockHostedConfig } from '.';
+import { UserIdentity } from '@src/services/pluginLoader';
 
 export class EnvironmentProvider {
   private static environments: { [name: string]: IEnvironment } = {};
 
-  public static get(config: IEnvironmentConfig) {
+  public static get(config: IEnvironmentConfig, user?: UserIdentity) {
     const key = this.getConfigKey(config);
     if (this.environments[key]) {
       return this.environments[key];
     }
 
     if (config.name === absHostedConfig.name) {
-      this.environments[key] = new HostedEnvironment(config);
+      this.environments[key] = new HostedEnvironment(config, undefined, user);
     } else if (config.name === mockHostedConfig.name) {
-      this.environments[key] = new MockHostedEnvironment(config);
+      this.environments[key] = new MockHostedEnvironment(config, user);
     } else {
-      this.environments[key] = new DefaultEnvironment(config);
+      this.environments[key] = new DefaultEnvironment(config, user);
     }
 
     return this.environments[key];
@@ -31,7 +32,7 @@ export class EnvironmentProvider {
     return this.get(currentConfig);
   }
 
-  public static getCurrentWithOverride(args: any) {
+  public static getCurrentWithOverride(args: any, user?: UserIdentity) {
     const config: any = { ...currentConfig };
 
     if (args) {
@@ -42,7 +43,7 @@ export class EnvironmentProvider {
       });
     }
 
-    return this.get(config);
+    return this.get(config, user);
   }
 
   private static getConfigKey(config: IEnvironmentConfig): string {

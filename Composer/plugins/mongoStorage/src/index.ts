@@ -6,7 +6,7 @@ import * as pathLib from 'path';
 import * as mongoose from 'mongoose';
 import * as globToRegExp from 'glob-to-regexp';
 
-import { StorageConnection, IFileStorage, MakeDirectoryOptions } from './interface';
+import { StorageConnection, IFileStorage, MakeDirectoryOptions, UserIdentity } from './interface';
 
 const fileSchema = new mongoose.Schema({
   name: {
@@ -28,6 +28,9 @@ const fileSchema = new mongoose.Schema({
   lastModified: {
     type: Date,
   },
+  modifiedBy: {
+    type: String,
+  },
 });
 
 const cleanPath = (path: string): string => {
@@ -36,32 +39,41 @@ const cleanPath = (path: string): string => {
 };
 
 class MongoStorage implements IFileStorage {
-  private db: any;
-  private files: any;
+  static db: any;
+  static files: any;
+  private _user: UserIdentity;
 
-  constructor(conn: StorageConnection) {
+  constructor(conn: StorageConnection, user?: UserIdentity) {
     // connect to Mongo
     // TODO: make the connect string and options pull from the connection
     conn;
 
-    mongoose.connect('mongodb://localhost:27017/composer', {});
-    this.db = mongoose.connection;
-    this.db.on('error', err => {
-      throw new Error(err);
-    });
-    this.db.once('open', function() {
-      // we're connected!
-      // eslint-disable-next-line no-console
-      // console.log('CONNECTED TO MONGO');
-    });
+    if (!MongoStorage.db) {
+      mongoose.connect('mongodb://localhost:27017/composer', {});
+      MongoStorage.db = mongoose.connection;
+      MongoStorage.db.on('error', err => {
+        throw new Error(err);
+      });
+      MongoStorage.db.once('open', function() {
+        // we're connected!
+        // eslint-disable-next-line no-console
+        // console.log('CONNECTED TO MONGO');
+      });
 
-    this.files = mongoose.model('file', fileSchema, 'files');
+      MongoStorage.files = mongoose.model('file', fileSchema, 'files');
+
+    }
+
+    if (user) {
+      this._user = user;
+    }
+
   }
 
   async stat(path: string): Promise<any> {
     path = cleanPath(path);
     return new Promise((resolve, reject) => {
-      this.files.findOne({ path: path }, (err, file) => {
+      MongoStorage.files.findOne({ path: path }, (err, file) => {
         if (err) {
           reject(err);
         } else if (file) {
@@ -82,7 +94,7 @@ class MongoStorage implements IFileStorage {
           }
         } else if (!file) {
           // perhaps this is a folder
-          this.files.findOne({ folder: path }, (err, file) => {
+          MongoStorage.files.findOne({ folder: path }, (err, file) => {
             if (err) {
               reject(err);
             } else if (!file) {
@@ -114,7 +126,7 @@ class MongoStorage implements IFileStorage {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
-      this.files.findOne({ path: path }, (err, file) => {
+      MongoStorage.files.findOne({ path: path }, (err, file) => {
         if (err) {
           reject(err);
         } else if (!file) {
@@ -131,7 +143,7 @@ class MongoStorage implements IFileStorage {
 
     return new Promise((resolve, reject) => {
       // find all files where the parent folder matches the specified path
-      this.files.find({ folder: path }, 'path', {}, (err, files) => {
+      MongoStorage.files.find({ folder: path }, 'path', {}, (err, files) => {
         if (err) {
           reject(err);
         } else if (!files) {
@@ -168,10 +180,11 @@ class MongoStorage implements IFileStorage {
         path: path,
         content: content,
         lastModified: new Date(),
+        modifiedBy: this._user ? this._user.id : null,
         folder: pathLib.dirname(path),
       };
 
-      this.files.findOneAndUpdate({ path: path }, doc, { upsert: true }, (err, updated) => {
+      MongoStorage.files.findOneAndUpdate({ path: path }, doc, { upsert: true }, (err, updated) => {
         if (err) {
           reject(err);
         } else {
@@ -185,7 +198,7 @@ class MongoStorage implements IFileStorage {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
-      this.files.deleteOne({ path: path }, err => {
+      MongoStorage.files.deleteOne({ path: path }, err => {
         if (err) {
           reject(err);
         } else {
@@ -206,7 +219,7 @@ class MongoStorage implements IFileStorage {
         folder: pathLib.dirname(path),
       };
 
-      this.files.findOneAndUpdate({ path: path }, doc, { upsert: true }, (err, updated) => {
+      MongoStorage.files.findOneAndUpdate({ path: path }, doc, { upsert: true }, (err, updated) => {
         if (err) {
           reject(err);
         } else {
@@ -224,7 +237,7 @@ class MongoStorage implements IFileStorage {
       const pattern = new RegExp(path + '.*');
 
       // remove all files inside this folder, any subfolder, including the folder itself
-      this.files.remove({ folder: pattern }, (err, removed) => {
+      MongoStorage.files.remove({ folder: pattern }, (err, removed) => {
         if (err) {
           reject(err);
         } else {
@@ -243,7 +256,7 @@ class MongoStorage implements IFileStorage {
 
       // make sure the folder contains the root path but can also have other stuff
       const pathPattern = new RegExp(path + '.*');
-      this.files.find({ path: regex, folder: pathPattern }, (err, files) => {
+      MongoStorage.files.find({ path: regex, folder: pathPattern }, (err, files) => {
         if (err) {
           reject(err);
         } else {
@@ -277,7 +290,7 @@ class MongoStorage implements IFileStorage {
         folder: pathLib.dirname(newPath),
       };
 
-      this.files.findOneAndUpdate({ path: oldPath }, update, {}, (err, updated) => {
+      MongoStorage.files.findOneAndUpdate({ path: oldPath }, update, {}, (err, updated) => {
         if (err) {
           reject(err);
         } else {

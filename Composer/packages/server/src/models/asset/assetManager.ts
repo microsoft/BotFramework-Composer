@@ -10,6 +10,7 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { UserIdentity } from '@src/services/pluginLoader';
 
 interface TemplateData {
   [key: string]: {
@@ -156,7 +157,7 @@ export class AssetManager {
     return output;
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
     if (this.projectTemplates.length === 0) {
       await this.getProjectTemplates();
     }
@@ -174,7 +175,7 @@ export class AssetManager {
     }
 
     // user storage maybe diff from template storage
-    const dstStorage = StorageService.getStorageClient(ref.storageId);
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
     const dstDir = Path.resolve(ref.path);
     if (await dstStorage.exists(dstDir)) {
       log('Failed copying template to %s', dstDir);
