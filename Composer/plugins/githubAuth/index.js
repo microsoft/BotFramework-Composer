@@ -8,7 +8,7 @@ const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, BASE_URL } = require('./config.j
 
 module.exports = {
   initialize: composer => {
-    console.log('Register auth plugin');
+    console.log('Register github auth plugin');
 
     composer.usePassportStrategy(
       new GitHubStrategy(

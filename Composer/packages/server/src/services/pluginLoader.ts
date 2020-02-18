@@ -254,7 +254,6 @@ class PluginLoader {
   }
 
   public async loadPluginFromFile(path: string) {
-    console.log('LOAD THE PLUGIN LOCATED IN ', path);
     const packageJSON = fs.readFileSync(path, 'utf8');
     const json = JSON.parse(packageJSON);
 
@@ -268,14 +267,12 @@ class PluginLoader {
         console.error(err);
       }
     } else {
-      // console.log('Not a Composer plugin');
+      // noop - this is not a composer plugin
     }
   }
 
   public async loadPluginsFromFolder(path: string) {
-    // console.log('LOAD PLUGINS FROM ', path);
     const plugins = await glob('*/package.json', { cwd: path, dot: true });
-    // console.log('FOUND LOCAL PLUGINS:', plugins);
     for (const p in plugins) {
       await this.loadPluginFromFile(pathLib.join(path, plugins[p]));
     }

@@ -35,11 +35,6 @@ module.exports = {
     );
 
     composer.addAllowedUrl('/login/submit');
-    // composer.addAllowedUrl('/home');
-    // composer.addAllowedUrl('/static/(.*)');
-    // composer.addAllowedUrl('/api/projects/recent');
-    // composer.addAllowedUrl('/api/assets/projectTemplates');
-    // composer.addAllowedUrl('/api/projects/opened');
 
     composer.useUserSerializers(
       (user, done) => {

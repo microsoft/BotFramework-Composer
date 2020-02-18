@@ -42,14 +42,15 @@ async function createProject(req: Request, res: Response) {
 
   try {
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef);
-    await BotProjectService.openProject(newProjRef);
-    const currentProject = BotProjectService.getCurrentBotProject();
+    const id = await BotProjectService.openProject(newProjRef);
+    const currentProject = await BotProjectService.getProjectById(id);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
       await currentProject.index();
       const project = currentProject.getIndexes();
       log('Project created successfully.');
       res.status(200).json({
+        id,
         ...project,
       });
     }
@@ -61,18 +62,20 @@ async function createProject(req: Request, res: Response) {
 }
 
 async function getProject(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined && (await currentProject.exists())) {
-    await currentProject.index();
-    const project = currentProject.getIndexes();
-    res.status(200).json({
-      ...project,
-    });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
+  throw new Error('Deprecated!');
+
+  // const currentProject = BotProjectService.getCurrentBotProject();
+  // if (currentProject !== undefined && (await currentProject.exists())) {
+  //   await currentProject.index();
+  //   const project = currentProject.getIndexes();
+  //   res.status(200).json({
+  //     ...project,
+  //   });
+  // } else {
+  //   res.status(404).json({
+  //     message: 'No such bot project opened',
+  //   });
+  // }
 }
 
 async function getProjectById(req: Request, res: Response) {
