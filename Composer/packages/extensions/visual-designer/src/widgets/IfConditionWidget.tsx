@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useEffect, useState, useMemo } from 'react';
-import Measure from 'react-measure';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
@@ -15,6 +14,7 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -79,14 +79,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={condition.offset}>
         <ElementWrapper id={condition.id} onEvent={onEvent}>
-          <Measure
-            bounds
-            onResize={contentRect => {
-              console.log(contentRect);
-            }}
-          >
-            {({ measureRef }) => <div ref={measureRef}>{judgement}</div>}
-          </Measure>
+          <ElementMeasurer onResize={boundary => patchBoundary(condition.id, boundary)}>{judgement}</ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choice.offset}>
