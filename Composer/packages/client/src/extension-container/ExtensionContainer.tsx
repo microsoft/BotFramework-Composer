@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
 import { ShellData, ShellApi } from '@bfc/shared';
-import Extension from '@botframework-ui/extension';
+import Extension from '@bfc/extension';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -161,7 +161,6 @@ function ExtensionContainer() {
 
   return (
     RealEditor && (
-      // @ts-ignore
       <Extension shell={shellApi} shellData={shellData}>
         <RealEditor
           {...shellData}

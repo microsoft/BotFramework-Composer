@@ -19,6 +19,6 @@ export interface FormMemory {
 }
 
 export interface FormData {
-  $type?: string;
+  $type: string;
   [key: string]: any;
 }

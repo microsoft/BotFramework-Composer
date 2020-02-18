@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LGTemplate as LgTemplate } from 'botbuilder-lg';
+import { LGTemplate } from 'botbuilder-lg';
+import { DialogInfo, LuFile, LgFile } from '@bfc/indexers';
 
 export interface EditorSchema {
   content?: {
-    fieldTemplateOverrides?: any;
-    SDKOverrides?: any;
+    fieldTemplateOverrides: any;
+    SDKOverrifes?: any;
   };
 }
 
@@ -18,13 +20,13 @@ export interface BotSchemas {
 
 export interface ShellData {
   botName: string;
-  currentDialog: any;
+  currentDialog: DialogInfo;
   data: {
-    $type?: string;
+    $type: string;
     [key: string]: any;
   };
   dialogId: string;
-  dialogs: any[];
+  dialogs: DialogInfo[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -32,8 +34,9 @@ export interface ShellData {
   focusPath: string;
   clipboardActions: any[];
   hosted: boolean;
-  lgFiles: any[];
-  luFiles: any[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  // TODO: remove
   schemas: BotSchemas;
 }
 
@@ -47,9 +50,9 @@ export interface ShellApi {
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (luFile: { id: string; content: string }) => Promise<void>;
   updateLgFile: (id: string, content: string) => Promise<void>;
-  getLgTemplates: (id: string) => Promise<LgTemplate[]>;
+  getLgTemplates: (id: string) => Promise<LGTemplate[]>;
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<string>;
-  createLgTemplate: (id: string, template: Partial<LgTemplate>, position: number) => Promise<void>;
+  createLgTemplate: (id: string, template: Partial<LGTemplate>, position: number) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;

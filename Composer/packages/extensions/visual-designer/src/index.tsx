@@ -110,7 +110,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps extends ShellData {
+export interface VisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
 }

@@ -40,7 +40,8 @@ module.exports = {
   projects: [
     '<rootDir>/packages/client',
     '<rootDir>/packages/server',
-    '<rootDir>/packages/extensions/obiformeditor',
+    '<rootDir>/packages/extensions/extension',
+    '<rootDir>/packages/extensions/adaptive-form',
     '<rootDir>/packages/extensions/visual-designer',
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',

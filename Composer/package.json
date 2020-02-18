@@ -24,7 +24,7 @@
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions",
     "build:lib": "yarn workspace @bfc/libs build:all",
-    "build:extensions": "yarn workspace @bfc/extensions build:all",
+    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/adaptive-form @bfc/visual-designer -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",

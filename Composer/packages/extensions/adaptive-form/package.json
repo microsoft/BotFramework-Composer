@@ -1,0 +1,40 @@
+{
+  "name": "@bfc/adaptive-form",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer form components.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/extension": "*",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "@uifabric/icons": "^7.3.0",
+    "@uifabric/styling": "^7.7.4",
+    "format-message": "^6.2.3",
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@bfc/extension": "*",
+    "@types/lodash": "^4.14.149",
+    "@types/react": "^16.9.16",
+    "format-message": "^6.2.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.27",
+    "lodash": "^4.17.15",
+    "react-error-boundary": "^1.2.5"
+  }
+}

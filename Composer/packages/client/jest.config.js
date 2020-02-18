@@ -19,7 +19,14 @@ module.exports = {
 
     '^@src/(.*)$': '<rootDir>/src/$1',
   },
-  testPathIgnorePatterns: ['/node_modules/', '/jestMocks/', '/testUtils/', '__tests__/setupTests.ts', '.*\\.d\\.ts'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/jestMocks/',
+    '__mocks__',
+    '/testUtils/',
+    '__tests__/setupTests.ts',
+    '.*\\.d\\.ts',
+  ],
   // Some node modules are packaged and distributed in a non-transpiled form
   // (ex. contain import & export statements); and Jest won't be able to
   // understand them because node_modules aren't transformed by default. So
