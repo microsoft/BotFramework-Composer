@@ -22,6 +22,8 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
   const state = getState();
   const currentUri = `/dialogs/${dialogId}`;
 
+  console.log('NAV TO ', currentUri);
+
   if (checkUrl(currentUri, state.designPageLocation)) return;
   //if dialog change we should flush some debounced functions
   debouncedUpdateDialog.flush();

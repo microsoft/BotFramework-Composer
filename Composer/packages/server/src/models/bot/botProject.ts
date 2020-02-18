@@ -35,7 +35,8 @@ const oauthInput = () => ({
 
 export class BotProject {
   public ref: LocationRef;
-
+  // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
+  public id: string | undefined;
   public name: string;
   public dir: string;
   public dataDir: string;

@@ -94,6 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { name, parameters } = template;
         const payload = {
           file,
+          projectId: state.projectId,
           templateName: name,
           template: {
             name,
@@ -113,6 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { id } = file;
         const payload = {
           id,
+          projectId: state.projectId,
           content,
         };
         actions.updateLgFile(payload);

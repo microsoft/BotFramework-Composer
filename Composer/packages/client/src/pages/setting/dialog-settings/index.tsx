@@ -40,7 +40,7 @@ export const DialogSettings = () => {
 
   const changeEditing = (_, on) => {
     setEditing(on);
-    actions.setEditDialogSettings(on, absHosted ? slot : undefined);
+    actions.setEditDialogSettings(state.projectId, on, absHosted ? slot : undefined);
   };
 
   const slots = [
@@ -50,13 +50,13 @@ export const DialogSettings = () => {
 
   const changeSlot = (_, option) => {
     setSlot(option.key);
-    actions.setDialogSettingsSlot(editing, option.key);
+    actions.setDialogSettingsSlot(state.projectId, editing, option.key);
   };
 
   const saveChangeResult = result => {
     try {
       const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-      actions.setSettings(botName, mergedResult, absHosted ? slot : undefined);
+      actions.setSettings(state.projectId, botName, mergedResult, absHosted ? slot : undefined);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);

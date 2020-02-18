@@ -119,7 +119,7 @@ export const TestController: React.FC = () => {
     try {
       const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
       if (luisConfig) {
-        await publishLuis(luisConfig.authoringKey);
+        await publishLuis(luisConfig.authoringKey, state.projectId);
         return true;
       } else {
         throw new Error('Please Set Luis Config');

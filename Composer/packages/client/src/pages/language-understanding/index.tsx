@@ -112,6 +112,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     const payload = {
       id: id, // current opened lu file
       content: newContent,
+      projectId: state.projectId,
     };
     try {
       await actions.updateLuFile(payload);

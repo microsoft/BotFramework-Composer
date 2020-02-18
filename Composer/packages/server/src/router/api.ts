@@ -16,17 +16,17 @@ router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/opened', ProjectController.getProject);
 router.put('/projects/opened', ProjectController.openProject);
 router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
-router.delete('/projects/opened/dialogs/:dialogId', ProjectController.removeDialog);
+router.delete('/projects/opened/dialogs/:projectId/:dialogId', ProjectController.removeDialog);
 router.post('/projects/opened/dialogs', ProjectController.createDialog);
 router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
-router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFile);
+router.delete('/projects/opened/lgFiles/:projectId/:lgFileId', ProjectController.removeLgFile);
 router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
 router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
 router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
-router.get('/projects/opened/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings', ProjectController.updateDefaultSlotEnvSettings);
-router.get('/projects/opened/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings/:slot', ProjectController.updateEnvSettings);
+router.get('/projects/opened/settings/:projectId', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/opened/settings/:projectId', ProjectController.updateDefaultSlotEnvSettings);
+router.get('/projects/opened/settings/:projectId/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/opened/settings/:projectId/:slot', ProjectController.updateEnvSettings);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
