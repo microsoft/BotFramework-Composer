@@ -30,7 +30,7 @@ router.get('/projects/opened/settings/:projectId/:slot', ProjectController.getEn
 router.post('/projects/opened/settings/:projectId/:slot', ProjectController.updateEnvSettings);
 router.post('/projects/opened/luFiles', ProjectController.createLuFile);
 router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
-router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
+router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/recent', ProjectController.getRecentProjects);
 
 // storages

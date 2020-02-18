@@ -137,6 +137,9 @@ async function saveProjectAs(req: Request, res: Response) {
     return;
   }
 
+  const projectId = req.params.projectId;
+  const originalProject = await BotProjectService.getProjectById(projectId);
+
   const { name, description, location, storageId } = req.body;
 
   const locationRef: LocationRef = {
@@ -145,13 +148,14 @@ async function saveProjectAs(req: Request, res: Response) {
   };
 
   try {
-    await BotProjectService.saveProjectAs(locationRef);
-    const currentProject = BotProjectService.getCurrentBotProject();
+    const id = await BotProjectService.saveProjectAs(originalProject, locationRef);
+    const currentProject = await BotProjectService.getProjectById(id);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
       await currentProject.index();
       const project = currentProject.getIndexes();
       res.status(200).json({
+        id,
         ...project,
       });
     } else {

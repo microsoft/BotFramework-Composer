@@ -347,7 +347,7 @@ export class BotProject {
     // ensure saveAs path isn't existed in dst storage, in order to cover or mess up
     // existed bot proj
     if (await dstStorage.exists(locationRef.path)) {
-      throw new Error('already have this folder, please give another name');
+      throw new Error(`Folder ${locationRef.path} already exists.`);
     }
     const dstDir = locationRef.path;
     await dstStorage.mkDir(dstDir, { recursive: true });

@@ -15,16 +15,16 @@ import { Path } from './../utility/path';
 const MAX_RECENT_BOTS = 7;
 
 export class BotProjectService {
-  private static currentBotProject: BotProject | undefined = undefined;
+  // private static currentBotProject: BotProject | undefined = undefined;
   private static recentBotProjects: LocationRef[] = [];
   private static projectLocationMap: {
     [key: string]: string;
   };
 
   private static initialize() {
-    if (BotProjectService.currentBotProject) {
-      return;
-    }
+    // if (BotProjectService.currentBotProject) {
+    //   return;
+    // }
 
     if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
       BotProjectService.recentBotProjects = Store.get('recentBotProjects');
@@ -34,15 +34,16 @@ export class BotProjectService {
       BotProjectService.projectLocationMap = Store.get('projectLocationMap') || {};
     }
 
-    if (BotProjectService.recentBotProjects.length > 0) {
-      BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
-    }
+    // if (BotProjectService.recentBotProjects.length > 0) {
+    //   BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
+    // }
   }
 
   public static getCurrentBotProject(): BotProject | undefined {
-    console.warn('called getCurrentBotPRoject()');
-    BotProjectService.initialize();
-    return BotProjectService.currentBotProject;
+    throw new Error('DEPRECATED');
+    // console.warn('called getCurrentBotPRoject()');
+    // BotProjectService.initialize();
+    // return BotProjectService.currentBotProject;
   }
 
   public static getProjectsDateModifiedDict = async (projects: LocationRef[]): Promise<any> => {
@@ -95,12 +96,16 @@ export class BotProjectService {
     }
 
     // generate an id and store it in the projectLocationMap
-    const projectId = Math.random() * 100000;
-    // eslint-disable-next-line require-atomic-updates
-    BotProjectService.projectLocationMap[projectId] = locationRef.path;
+    const projectId = await BotProjectService.generateProjectId(locationRef.path);
     BotProjectService.addRecentProject(locationRef.path);
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
     return projectId.toString();
+  };
+
+  public static generateProjectId = async (path: string): Promise<string> => {
+    const projectId = (Math.random() * 100000).toString();
+    BotProjectService.projectLocationMap[projectId] = path;
+    return projectId;
   };
 
   public static getProjectById = async (projectId: string) => {
@@ -116,9 +121,9 @@ export class BotProjectService {
   };
 
   private static addRecentProject = (path: string): void => {
-    if (!BotProjectService.currentBotProject) {
-      return;
-    }
+    // if (!BotProjectService.currentBotProject) {
+    //   return;
+    // }
     const currDir = Path.resolve(path);
     const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === Path.resolve(ref.path));
     if (idx > -1) {
@@ -143,14 +148,16 @@ export class BotProjectService {
     Store.set('recentBotProjects', recentBotProjects);
   };
 
-  public static saveProjectAs = async (locationRef: LocationRef) => {
+  public static saveProjectAs = async (sourceProject: BotProject, locationRef: LocationRef): Promise<string> => {
     BotProjectService.initialize();
-    if (typeof BotProjectService.currentBotProject !== 'undefined') {
-      const newCurrentProject = await BotProjectService.currentBotProject.copyTo(locationRef);
-      // eslint-disable-next-line require-atomic-updates
-      BotProjectService.currentBotProject = newCurrentProject;
-      await BotProjectService.currentBotProject.index();
+    if (typeof sourceProject !== 'undefined') {
+      const newCurrentProject = await sourceProject.copyTo(locationRef);
+      await newCurrentProject.index();
+      const projectId = await BotProjectService.generateProjectId(locationRef.path);
       BotProjectService.addRecentProject(locationRef.path);
+      return projectId;
+    } else {
+      return '';
     }
   };
 }

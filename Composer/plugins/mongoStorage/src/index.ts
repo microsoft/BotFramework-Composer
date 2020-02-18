@@ -30,6 +30,11 @@ const fileSchema = new mongoose.Schema({
   },
 });
 
+const cleanPath = (path: string): string => {
+  // if somehow there is a // in the path
+  return path.replace(/\/\//g, '/').replace(/\\\\/g, '\\');
+};
+
 class MongoStorage implements IFileStorage {
   private db: any;
   private files: any;
@@ -54,6 +59,7 @@ class MongoStorage implements IFileStorage {
   }
 
   async stat(path: string): Promise<any> {
+    path = cleanPath(path);
     return new Promise((resolve, reject) => {
       this.files.findOne({ path: path }, (err, file) => {
         if (err) {
@@ -88,7 +94,7 @@ class MongoStorage implements IFileStorage {
                   size: 0, // TODO: ??
                 });
               } else {
-                reject('path not found');
+                reject(`path ${path} not found`);
               }
             } else {
               resolve({
@@ -105,6 +111,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       this.files.findOne({ path: path }, (err, file) => {
         if (err) {
@@ -119,6 +127,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async readDir(path: string): Promise<string[]> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       // find all files where the parent folder matches the specified path
       this.files.find({ folder: path }, 'path', {}, (err, files) => {
@@ -139,6 +149,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async exists(path: string): Promise<boolean> {
+    path = cleanPath(path);
+
     try {
       // eslint-disable-next-line security/detect-non-literal-fs-filename
       await this.stat(path);
@@ -149,6 +161,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       const doc = {
         path: path,
@@ -168,6 +182,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async removeFile(path: string): Promise<void> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       this.files.deleteOne({ path: path }, err => {
         if (err) {
@@ -180,6 +196,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async mkDir(path: string, options?: MakeDirectoryOptions): Promise<void> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       const doc = {
         path: path,
@@ -199,9 +217,11 @@ class MongoStorage implements IFileStorage {
   }
 
   async rmDir(path: string): Promise<void> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       const root = pathLib.dirname(path);
-      const pattern = new RegExp(path + '.*');
+      const pattern = new RegExp(root + '.*');
 
       // remove all files inside this folder, any subfolder, including the folder itself
       this.files.remove({ folder: pattern }, (err, removed) => {
@@ -215,6 +235,8 @@ class MongoStorage implements IFileStorage {
   }
 
   async glob(pattern: string, path: string): Promise<string[]> {
+    path = cleanPath(path);
+
     return new Promise((resolve, reject) => {
       //convert the glob to a regexp
       const regex = globToRegExp(pattern, { globstar: true });
@@ -237,11 +259,17 @@ class MongoStorage implements IFileStorage {
   }
 
   async copyFile(src: string, dest: string): Promise<void> {
+    src = cleanPath(src);
+    dest = cleanPath(dest);
+
     const content = await this.readFile(src);
     return this.writeFile(dest, content);
   }
 
   async rename(oldPath: string, newPath: string): Promise<void> {
+    oldPath = cleanPath(oldPath);
+    newPath = cleanPath(newPath);
+
     return new Promise((resolve, reject) => {
       const update = {
         path: newPath,

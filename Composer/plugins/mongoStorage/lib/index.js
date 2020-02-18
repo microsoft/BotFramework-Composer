@@ -35,6 +35,10 @@ const fileSchema = new mongoose.Schema({
         type: Date,
     },
 });
+const cleanPath = (path) => {
+    // if somehow there is a // in the path
+    return path.replace(/\/\//g, '/').replace(/\\\\/g, '\\');
+};
 class MongoStorage {
     constructor(conn) {
         // connect to Mongo
@@ -54,6 +58,7 @@ class MongoStorage {
     }
     stat(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 this.files.findOne({ path: path }, (err, file) => {
                     if (err) {
@@ -93,7 +98,7 @@ class MongoStorage {
                                     });
                                 }
                                 else {
-                                    reject('path not found');
+                                    reject(`path ${path} not found`);
                                 }
                             }
                             else {
@@ -112,6 +117,7 @@ class MongoStorage {
     }
     readFile(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 this.files.findOne({ path: path }, (err, file) => {
                     if (err) {
@@ -129,6 +135,7 @@ class MongoStorage {
     }
     readDir(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 // find all files where the parent folder matches the specified path
                 this.files.find({ folder: path }, 'path', {}, (err, files) => {
@@ -150,6 +157,7 @@ class MongoStorage {
     }
     exists(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             try {
                 // eslint-disable-next-line security/detect-non-literal-fs-filename
                 yield this.stat(path);
@@ -162,6 +170,7 @@ class MongoStorage {
     }
     writeFile(path, content) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 const doc = {
                     path: path,
@@ -182,6 +191,7 @@ class MongoStorage {
     }
     removeFile(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 this.files.deleteOne({ path: path }, err => {
                     if (err) {
@@ -196,6 +206,7 @@ class MongoStorage {
     }
     mkDir(path, options) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 const doc = {
                     path: path,
@@ -216,9 +227,10 @@ class MongoStorage {
     }
     rmDir(path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 const root = pathLib.dirname(path);
-                const pattern = new RegExp(path + '.*');
+                const pattern = new RegExp(root + '.*');
                 // remove all files inside this folder, any subfolder, including the folder itself
                 this.files.remove({ folder: pattern }, (err, removed) => {
                     if (err) {
@@ -233,6 +245,7 @@ class MongoStorage {
     }
     glob(pattern, path) {
         return __awaiter(this, void 0, void 0, function* () {
+            path = cleanPath(path);
             return new Promise((resolve, reject) => {
                 //convert the glob to a regexp
                 const regex = globToRegExp(pattern, { globstar: true });
@@ -254,12 +267,16 @@ class MongoStorage {
     }
     copyFile(src, dest) {
         return __awaiter(this, void 0, void 0, function* () {
+            src = cleanPath(src);
+            dest = cleanPath(dest);
             const content = yield this.readFile(src);
             return this.writeFile(dest, content);
         });
     }
     rename(oldPath, newPath) {
         return __awaiter(this, void 0, void 0, function* () {
+            oldPath = cleanPath(oldPath);
+            newPath = cleanPath(newPath);
             return new Promise((resolve, reject) => {
                 const update = {
                     path: newPath,
@@ -281,6 +298,5 @@ class MongoStorage {
 exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
     // pass in the custom storage class that will override the default
     yield composer.setStorage(MongoStorage);
-    console.log('I AM LOGGING SOME STUFF!!!');
 });
 //# sourceMappingURL=index.js.map

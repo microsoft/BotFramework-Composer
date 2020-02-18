@@ -114,7 +114,7 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description, formData.location);
+    await saveProjectAs(state.projectId, formData.name, formData.description, formData.location);
   };
 
   const handleSubmit = formData => {
