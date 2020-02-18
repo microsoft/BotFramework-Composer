@@ -8,6 +8,7 @@ import { LuFile } from '@bfc/indexers';
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+import log from './../../logger';
 
 const GENERATEDFOLDER = 'ComposerDialogs/generated';
 const LU_STATUS_FILE = 'luis.status.json';
@@ -27,7 +28,7 @@ export class LuPublisher {
   public status: { [key: string]: LuisStatus } = {};
 
   private builder = new luBuild.Builder(message => {
-    console.log(message);
+    log(message);
   });
 
   constructor(path: string, storage: IFileStorage) {
