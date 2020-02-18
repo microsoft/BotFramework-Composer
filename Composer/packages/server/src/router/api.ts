@@ -13,25 +13,25 @@ const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
 router.get('/projects', ProjectController.getAllProjects);
-router.get('/projects/opened/:projectId', ProjectController.getProjectById);
-// router.get('/projects/opened', ProjectController.getProject);
-router.put('/projects/opened', ProjectController.openProject);
-router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
-router.delete('/projects/opened/dialogs/:projectId/:dialogId', ProjectController.removeDialog);
-router.post('/projects/opened/dialogs', ProjectController.createDialog);
-router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
-router.delete('/projects/opened/lgFiles/:projectId/:lgFileId', ProjectController.removeLgFile);
-router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
-router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
-router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
-router.get('/projects/opened/settings/:projectId', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings/:projectId', ProjectController.updateDefaultSlotEnvSettings);
-router.get('/projects/opened/settings/:projectId/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings/:projectId/:slot', ProjectController.updateEnvSettings);
-router.post('/projects/opened/luFiles', ProjectController.createLuFile);
-router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
-router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/recent', ProjectController.getRecentProjects);
+
+router.get('/projects/:projectId', ProjectController.getProjectById);
+router.put('/projects/open', ProjectController.openProject);
+router.put('/projects/:projectId/dialogs/:dialogId', ProjectController.updateDialog);
+router.delete('/projects/:projectId/dialogs/:dialogId', ProjectController.removeDialog);
+router.post('/projects/:projectId/dialogs', ProjectController.createDialog);
+router.put('/projects/:projectId/lgFiles/:lgFileId', ProjectController.updateLgFile);
+router.delete('/projects/:projectId/lgFiles/:lgFileId', ProjectController.removeLgFile);
+router.post('/projects/:projectId/lgFiles', ProjectController.createLgFile);
+router.put('/projects/:projectId/luFiles/:luFileId', ProjectController.updateLuFile);
+router.delete('/projects/:projectId/luFiles/:luFileId', ProjectController.removeLuFile);
+router.get('/projects/:projectId/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/:projectId/settings', ProjectController.updateDefaultSlotEnvSettings);
+router.get('/projects/:projectId/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/:projectId/settings/:slot', ProjectController.updateEnvSettings);
+router.post('/projects/:projectId/luFiles', ProjectController.createLuFile);
+router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
+router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);

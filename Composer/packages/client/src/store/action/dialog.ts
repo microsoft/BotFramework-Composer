@@ -40,7 +40,7 @@ const getDiff = (dialogs1: DialogInfo[], dialogs2: DialogInfo[]) => {
 
 export const removeDialogBase: ActionCreator = async (store, id, projectId) => {
   try {
-    const response = await httpClient.delete(`/projects/opened/dialogs/${projectId}/${id}`);
+    const response = await httpClient.delete(`/projects/${projectId}/dialogs/${id}`);
     store.dispatch({
       type: ActionTypes.REMOVE_DIALOG,
       payload: { response },
@@ -56,7 +56,7 @@ export const removeDialogBase: ActionCreator = async (store, id, projectId) => {
 
 export const createDialogBase: ActionCreator = async (store, { id, content, projectId }) => {
   try {
-    const response = await httpClient.post(`/projects/opened/dialogs`, { id, content, projectId });
+    const response = await httpClient.post(`/projects/${projectId}/dialogs`, { id, content, projectId });
     const onCreateDialogComplete = store.getState().onCreateDialogComplete;
     if (typeof onCreateDialogComplete === 'function') {
       setTimeout(() => onCreateDialogComplete(id));
@@ -103,7 +103,7 @@ export const createDialog = undoable(
 
 export const debouncedUpdateDialog = debounce(async (store, id, projectId, content) => {
   try {
-    await httpClient.put(`/projects/opened/dialogs/${id}`, { id, projectId, content });
+    await httpClient.put(`/projects/${projectId}/dialogs/${id}`, { id, projectId, content });
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,

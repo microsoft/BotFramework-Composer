@@ -229,8 +229,8 @@ class MongoStorage {
         return __awaiter(this, void 0, void 0, function* () {
             path = cleanPath(path);
             return new Promise((resolve, reject) => {
-                const root = pathLib.dirname(path);
-                const pattern = new RegExp(root + '.*');
+                // const root = pathLib.dirname(path);
+                const pattern = new RegExp(path + '.*');
                 // remove all files inside this folder, any subfolder, including the folder itself
                 this.files.remove({ folder: pattern }, (err, removed) => {
                     if (err) {

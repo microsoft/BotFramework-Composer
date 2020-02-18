@@ -9,7 +9,7 @@ import httpClient from './../../utils/httpUtil';
 
 export const updateLgFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
   try {
-    const response = await httpClient.put(`/projects/opened/lgFiles/${id}`, { id, projectId, content });
+    const response = await httpClient.put(`/projects/${projectId}/lgFiles/${id}`, { id, projectId, content });
     dispatch({
       type: ActionTypes.UPDATE_LG_SUCCESS,
       payload: { response },
@@ -23,9 +23,9 @@ export const updateLgFile: ActionCreator = async ({ dispatch }, { id, projectId,
   }
 };
 
-export const createLgFile: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const createLgFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
   try {
-    const response = await httpClient.post(`/projects/opened/lgFiles`, { id, content });
+    const response = await httpClient.post(`/projects/${projectId}/lgFiles`, { id, content });
     dispatch({
       type: ActionTypes.CREATE_LG_SUCCCESS,
       payload: { response },
@@ -41,7 +41,7 @@ export const createLgFile: ActionCreator = async ({ dispatch }, { id, content })
 
 export const removeLgFile: ActionCreator = async ({ dispatch }, { id, projectId }) => {
   try {
-    const response = await httpClient.delete(`/projects/opened/lgFiles/${projectId}/${id}`);
+    const response = await httpClient.delete(`/projects/${projectId}/lgFiles/${id}`);
     dispatch({
       type: ActionTypes.REMOVE_LG_SUCCCESS,
       payload: { response },

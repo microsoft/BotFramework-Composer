@@ -33,7 +33,7 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 export const fetchProjectById: ActionCreator = async (store, projectId) => {
   console.log('FETCH A PROJECT BY ITS ID', projectId);
   try {
-    const response = await httpClient.get(`/projects/opened/${projectId}`);
+    const response = await httpClient.get(`/projects/${projectId}`);
     console.log('FETCHED PROJECT!', response.data);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -49,19 +49,20 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
 };
 
 export const fetchProject: ActionCreator = async store => {
-  try {
-    const response = await httpClient.get(`/projects/opened`);
-    store.dispatch({
-      type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        response,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    navigateTo('/home');
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
-  }
+  throw new Error('DEPRECATED');
+  // try {
+  //   const response = await httpClient.get(`/projects/open`);
+  //   store.dispatch({
+  //     type: ActionTypes.GET_PROJECT_SUCCESS,
+  //     payload: {
+  //       response,
+  //     },
+  //   });
+  //   return response.data;
+  // } catch (err) {
+  //   navigateTo('/home');
+  //   store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+  // }
 };
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   try {
@@ -85,11 +86,9 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
-    const response = await httpClient.put(`/projects/opened`, data);
-    console.log('gOT BOT PROJECT', response.data);
+    const response = await httpClient.put(`/projects/open`, data);
     const dialogs = response.data.dialogs;
     const projectId = response.data.id;
-    console.log('Project id', projectId);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {

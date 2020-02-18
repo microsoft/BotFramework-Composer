@@ -33,7 +33,7 @@ export const setSettings: ActionCreator = async (
     }
     // set value to server
     const suffix = slot ? `/${slot}` : '';
-    await httpClient.post(`/projects/opened/settings/${projectId}/${suffix}`, { settings });
+    await httpClient.post(`/projects/${projectId}/settings/${suffix}`, { settings });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
@@ -53,7 +53,7 @@ export const setDialogSettingsSlot = async (
 ) => {
   const suffix = slot ? `/${slot}` : '';
   const query = editing ? '' : '?obfuscate=true';
-  const url = `/projects/opened/settings/${projectId}${suffix}${query}`;
+  const url = `/projects/${projectId}/settings${suffix}${query}`;
 
   try {
     const response = await httpClient.get(url);
