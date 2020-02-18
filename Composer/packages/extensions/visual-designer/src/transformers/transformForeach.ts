@@ -27,7 +27,7 @@ export function transformForeach(
   return {
     foreachDetail: foreachDetailNode,
     stepGroup: stepsNode,
-    loopBegin: new IndexedNode(jsonpath, { $type: ObiTypes.LoopIndicator }),
-    loopEnd: new IndexedNode(jsonpath, { $type: ObiTypes.LoopIndicator }),
+    loopBegin: new IndexedNode(`${jsonpath}.begin`, { $type: ObiTypes.LoopIndicator }),
+    loopEnd: new IndexedNode(`${jsonpath}.end`, { $type: ObiTypes.LoopIndicator }),
   };
 }

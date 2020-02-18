@@ -25,7 +25,7 @@ export function transformSwitchCondition(
       ...input,
       $type: ObiTypes.ConditionNode,
     }),
-    choice: new IndexedNode(`${jsonpath}`, {
+    choice: new IndexedNode(`${jsonpath}.choice`, {
       $type: ObiTypes.ChoiceDiamond,
       text: condition,
     }),
