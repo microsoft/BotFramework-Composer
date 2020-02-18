@@ -36,7 +36,7 @@ const DemoMaps = {
 
 class Demo extends Component {
   state = {
-    selectedItem: DemoMaps.VisualSDKDemo.key,
+    selectedItem: DemoMaps.VisualEditorDemo.key,
   };
 
   renderNav() {
