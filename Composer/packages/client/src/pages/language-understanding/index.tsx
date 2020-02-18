@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, Suspense, useCallback } from 'react';
+import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -36,7 +36,7 @@ const LUPage: React.FC<LUPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId = '' } = props;
+  const { fileId } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = fileId === 'all';
 
@@ -52,6 +52,13 @@ const LUPage: React.FC<LUPageProps> = props => {
     }
     return newDialogLinks;
   }, [dialogs]);
+
+  useEffect(() => {
+    const activeDialog = dialogs.find(({ id }) => id === fileId);
+    if (!activeDialog && fileId !== 'all') {
+      navigateTo('/language-understanding/all');
+    }
+  }, [fileId, dialogs]);
 
   const onSelect = useCallback(
     id => {
