@@ -185,14 +185,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const [keyboardStatus, setKeyBoardStatus] = useState('normal');
 
   useEffect((): void => {
-    if (selectionContext.selectedIds.length > 0) {
-      setKeyBoardStatus('selected');
-    } else if (focusedId) {
-      setKeyBoardStatus('focused');
-    } else {
-      setKeyBoardStatus('normal');
-    }
-
     // Notify container at every selection change.
     onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
   }, [focusedId, selectionContext]);
