@@ -118,6 +118,24 @@ This value is used by the built-in authentication middleware to redirect the use
 
 Note that if you specify an alternate URI for the login page, you must use `addAllowedUrl` to whitelist it.
 
+#### PluginLoader.getUserFromRequest(req)`
+
+This is a static method on the PluginLoader class that extracts the user identity information provided by Passport.
+This is for use in the web route implementations to get user and provide it to other components of Composer.
+
+For example:
+
+```
+const RequestHandlerX = async (req, res) => {
+
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  // ... do some stuff
+
+};
+```
+
+
 ### Storage
 
 By default, Composer reads and writes assets to the local filesystem.  Plugins may override this behavior by providing a custom implementation of the `IFileStorage` interface. [See interface definition here](https://github.com/microsoft/BotFramework-Composer/blob/stable/Composer/packages/server/src/models/storage/interface.ts)

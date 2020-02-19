@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { pluginLoader, PluginLoader } from '../services/pluginLoader';
+import { pluginLoader } from '../services/pluginLoader';
 
 export const PublishController = {
   getTypes: async (req, res) => {
@@ -9,8 +9,8 @@ export const PublishController = {
   },
   publish: async (req, res) => {
     const method = req.params.method;
-    const user = PluginLoader.getUserFromRequest(req);
-    const projectId = req.params.projectId;
+    // const user = PluginLoader.getUserFromRequest(req);
+    // const projectId = req.params.projectId;
 
     if (pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
       // get the externally defined method
