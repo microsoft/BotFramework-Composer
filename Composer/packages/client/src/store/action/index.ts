@@ -10,6 +10,7 @@ export * from './lu';
 export * from './navigation';
 export * from './onboarding';
 export * from './project';
+export * from './publisher';
 export * from './setting';
 export * from './storage';
 export * from './user';

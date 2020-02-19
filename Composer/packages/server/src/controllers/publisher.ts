@@ -1,27 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { pluginLoader } from '../services/pluginLoader';
+import { pluginLoader, PluginLoader } from '../services/pluginLoader';
+import { BotProjectService } from '../services/project';
 
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(Object.keys(pluginLoader.extensions.publish));
   },
   publish: async (req, res) => {
-    const method = req.params.method;
-    // const user = PluginLoader.getUserFromRequest(req);
-    // const projectId = req.params.projectId;
+    const target = req.params.target;
+    const user = await PluginLoader.getUserFromRequest(req);
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    if (pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
+    // find publish config by name.
+    const configs = currentProject.settings
+      ? currentProject.settings.publishTargets.filter(t => t.name === target)
+      : [];
+    const config = configs.length ? configs[0] : undefined;
+    const method = config ? config.type : undefined;
+
+    if (config && pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].publish;
 
-      const target = req.body.target;
-
       // call the method
-      const results = await pluginMethod.call(null, target, {});
+      const results = await pluginMethod.call(null, config.configuration, currentProject, user);
       res.json({
-        target: target.name,
+        target: target,
         results: results,
       });
     } else {

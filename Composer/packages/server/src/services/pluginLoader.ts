@@ -43,8 +43,9 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(name: string, plugin: Partial<PublishPlugin>) {
-    this.loader.extensions.publish[name] = plugin;
+  public async addPublishMethod(plugin: Partial<PublishPlugin>) {
+    console.log('registering publish method', this.name);
+    this.loader.extensions.publish[this.name] = plugin;
   }
 
   /**************************************************************************************

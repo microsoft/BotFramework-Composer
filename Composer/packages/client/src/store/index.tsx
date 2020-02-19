@@ -60,6 +60,8 @@ const initialState: State = {
     coachMarkRefs: {},
   },
   clipboardActions: [],
+  publishTypes: [],
+  publishTargets: [],
 };
 
 interface StoreContextValue {

@@ -24,7 +24,7 @@ module.exports = {
     // define this BEFORE turning on the middleware...
     composer.addWebRoute('get', '/login', (req, res) => {
       res.send(
-        'LOGIN REQUIRED <form method="post" action="/login/submit"><input name="username" placeholder="username" /><input name="password" type="password" /><button type="submit">Login</button></form>'
+        'LOGIN REQUIRED <form method="post" action="/login/submit"><input name="username" placeholder="username" value="admin" /><input name="password" type="password" value="secret" /><button type="submit">Login</button></form>'
       );
     });
 
@@ -35,16 +35,5 @@ module.exports = {
     );
 
     composer.addAllowedUrl('/login/submit');
-
-    composer.useUserSerializers(
-      (user, done) => {
-        console.log('SERIALIZE USER!');
-        done(null, JSON.stringify(user));
-      },
-      (user, done) => {
-        console.log('DESERIALIZE USER!');
-        done(null, JSON.parse(user));
-      }
-    );
   },
 };

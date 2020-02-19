@@ -216,7 +216,7 @@ For middleware dealing with authentication, plugins must use `useAuthMiddleware(
 
 ### Publishing
 
-#### `composer.addPublishMethod(name, publishMechanism)`
+#### `composer.addPublishMethod(publishMechanism)`
 
 Provide a new mechanism by which a bot project is transferred from Composer to some external service. The mechanisms can use whatever method necessary to process and transmit the bot project to the desired external service, though it must use a standard signature for the methods.
 

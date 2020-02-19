@@ -262,6 +262,16 @@ const updatePublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setPublishTypes: ReducerFunc = (state, { response }) => {
+  state.publishTypes = response;
+  return state;
+};
+
+const gotPublishStatus: ReducerFunc = (state, payload) => {
+  console.log('Got publish status from remote', payload);
+  return state;
+};
+
 const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   state.visualEditorSelection = selection;
   return state;
@@ -330,9 +340,11 @@ export const reducer = createReducer({
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
+  [ActionTypes.GET_PUBLISH_TYPES_SUCCESS]: setPublishTypes,
   [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
+  [ActionTypes.GET_PUBLISH_STATUS]: gotPublishStatus,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
