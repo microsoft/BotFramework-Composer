@@ -1,7 +1,7 @@
 /// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-declare module '@bfcomposer/bf-lu/lib/parser/luBuild' {
+declare module '@bfcomposer/bf-lu/lib/parser/lubuild' {
   namespace luBuild {
     class Builder {
       private readonly handler: (input: string) => any;

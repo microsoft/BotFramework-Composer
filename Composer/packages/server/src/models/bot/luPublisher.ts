@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import { luBuild } from '@bfcomposer/bf-lu/lib/parser/luBuild';
+import { luBuild } from '@bfcomposer/bf-lu/lib/parser/lubuild';
 import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
