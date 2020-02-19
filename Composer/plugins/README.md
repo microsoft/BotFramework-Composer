@@ -112,11 +112,33 @@ composer.addWebRoute('get','/oauth/callback', someFunction);
 composer.addAllowedUrl('/oauth/callback');
 ```
 
-#### `PlugLoader.loginUri`
+#### `plugLoader.loginUri`
+
+This value is used by the built-in authentication middleware to redirect the user to the login page.  By default, it is set to '/login' but it can be reset by changing this member value.
+
+Note that if you specify an alternate URI for the login page, you must use `addAllowedUrl` to whitelist it.
 
 ### Storage
 
-`composer.setStorage(customStorageClass)`
+By default, Composer reads and writes assets to the local filesystem.  Plugins may override this behavior by providing a custom implementation of the `IFileStorage` interface. [See interface definition here](https://github.com/microsoft/BotFramework-Composer/blob/stable/Composer/packages/server/src/models/storage/interface.ts)
+
+Though this interface is modeled after a filesystem interaction, the implementation of these methods does not require using the filesystem, or a direct implementation of folder and path structure. However, the implementation must respect that structure and respond in the expected ways -- ie, the `glob` method must treat path patterns the same way the filesystem glob would.
+
+#### `composer.setStorage(customStorageClass)`
+
+Provide an iFileStorage-compatible class to Composer.
+
+The class is expected to be in the form:
+
+```
+class CustomStorage implements IFileStorage {
+  constructor(conn: StorageConnection, user?: UserIdentity) {
+    ...
+  }
+  
+  ...
+}
+```
 
 ### Web Server
 
