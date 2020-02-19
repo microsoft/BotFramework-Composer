@@ -58,16 +58,61 @@ export default async (composer: any): Promise<void> => {
 To provide auth and identity services, Composer has in large part adopted [PassportJS](https://passportjs.org) instead of implementing a custom solution.
 Plugins can use one of the [many existing Passport strategies](http://www.passportjs.org/packages/), or provide a custom strategy.
 
-`composer.usePassportStrategy(strategy)`
+#### `composer.usePassportStrategy(strategy)`
 
+Configure a Passport strategy to be used by Composer. This is the equivalent of calling `app.use(passportStrategy)` on an Express app. [See PassportJS docs](http://www.passportjs.org/docs/configure/).
 
-`composer.useAuthMiddleware(middleware)`
+In addition to configuring the strategy, plugins will also need to use `composer.addWebRoute` to expose login, logout and other related routes to the browser.
 
-`composer.useUserSerializers(serialize, deserialize)`
+Calling this method also enables a basic auth middleware that is responsible for gating access to URLs, as well as a simple user serializer/deserializer.  Developers may choose to override these components using the methods below.
 
-`composer.addAllowedUrl(url)`
+#### `composer.useAuthMiddleware(middleware)`
 
-`PlugLoader.loginUri`
+Provide a custom middleware for testing the authentication status of a user. This will override the built-in auth middleware that is enabled by default when calling `usePassportStrategy()`.
+
+Developers may choose to override this middleware for various reasons, such as:
+* Apply different access rules based on URL
+* Do something more than check `req.isAuthenticated` such as validate or refresh tokens, make database calls, provide telemetry, etc
+
+#### `composer.useUserSerializers(serialize, deserialize)`
+
+Provide custom serialize and deserialize functions for storing and retrieving the user profile and identity information in the Composer session.
+
+By default, the entire user profile is serialized to JSON and stored in the session. If this is not desirable, plugins should override these methods and provide alternate methods. 
+
+For example, the below code demonstrates storing only the user ID in the session during serialization, and the use of a database to load the full profile out of a database using that id during deserialization.
+
+```
+const serializeUser = function(user, done) {
+  done(null, user.id);
+};
+
+const deserializeUser = function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+};
+
+composer.useUserSerializers(serializeUser, deserializeUser);
+```
+
+#### `composer.addAllowedUrl(url)`
+
+Allow access to `url` without authentication. `url` can be an express-style route with wildcards (`/auth/:stuff` or `/auth(.*)`)
+
+This is primarily for use with authentication-related URLs. While `/login` is allowed by default, any other URL involved in auth needs to be whitelisted.
+
+For example, when using oauth, there is a secondary URL for receiving the auth callback.  This has to be whitelisted, otherwise access will be denied to the callback URL and it will fail.
+
+```
+// define a callback url
+composer.addWebRoute('get','/oauth/callback', someFunction);
+
+// whitelist the callback
+composer.addAllowedUrl('/oauth/callback');
+```
+
+#### `PlugLoader.loginUri`
 
 ### Storage
 
