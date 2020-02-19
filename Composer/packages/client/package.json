@@ -6,11 +6,6 @@
   "engines": {
     "node": ">=12"
   },
-  "workspaces": {
-    "nohoist": [
-      "@botframework-ui/*"
-    ]
-  },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",

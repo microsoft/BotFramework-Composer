@@ -3,7 +3,7 @@
   "license": "MIT",
   "private": true,
   "resolutions": {
-    "@types/react": "16.9.0"
+    "@types/react": "16.9.16"
   },
   "engines": {
     "node": ">=12"
@@ -17,14 +17,15 @@
     "packages/lib/*",
     "packages/tools",
     "packages/tools/language-servers",
-    "packages/tools/language-servers/*"
+    "packages/tools/language-servers/*",
+    "packages/ui-plugins/*"
   ],
   "scripts": {
     "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client",
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions",
     "build:lib": "yarn workspace @bfc/libs build:all",
-    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/adaptive-form @bfc/visual-designer -c build",
+    "build:extensions": "wsrun -lt -p @bfc/extension @bfc/adaptive-form @bfc/visual-designer @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",

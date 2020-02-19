@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-// import json from '@botframework-ui/json';
-// import prompts from '@botframework-ui/prompts';
+// import json from '@bfc/json';
+import prompts from '@bfc/ui-plugin-prompts';
 
-export default [];
+export default [prompts];
