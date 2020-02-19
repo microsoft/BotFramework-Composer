@@ -39,6 +39,13 @@ router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
 
+// publishing
+router.get('/publish/types', PublishController.getTypes);
+router.post('/publish/:projectId/status/:method', PublishController.status);
+router.post('/publish/:projectId/publish/:method', PublishController.publish);
+router.post('/publish/:projectId/history/:method', PublishController.history);
+router.post('/publish/:projectId/rollback/:method', PublishController.rollback);
+
 // connector
 router.get('/launcher/connect', BotConnectorController.connect);
 router.post('/launcher/sync', BotConnectorController.sync);

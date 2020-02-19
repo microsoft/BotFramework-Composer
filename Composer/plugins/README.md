@@ -160,7 +160,7 @@ These routes are responsible for providing all necessary dependent assets such a
 
 Custom routes are not rendered inside the front-end React application, and currently have no access to that application. They are independent pages -- though nothing prevents them from making calls to the Composer server APIs.
 
-`composer.addWebRoute(method, url, callbackOrMiddleware, callback)`
+#### `composer.addWebRoute(method, url, callbackOrMiddleware, callback)`
 
 This is equivalent to using `app.get()` or `app.post()`. A simple route definition receives 3 parameters - the method, url and handler callback.
 
@@ -170,16 +170,57 @@ Signature for callbacks is `(req, res) => {}`
 
 Signature for middleware is `(req, res, next) => {}`
 
-`composer.addWebMiddleware(middleware)`
+For example:
+
+```
+// simple route
+composer.addWebRoute('get', '/hello', (req, res) => {
+  res.send('HELLO WORLD!');
+});
+
+// route with custom middleware
+composer.addWebRoute('get', '/logout', (req, res, next) => {
+    console.warn('user is logging out!');
+    next();
+  },(req, res) => {
+    req.logout();
+    res.redirect('/login');
+});
+```
+
+#### `composer.addWebMiddleware(middleware)`
 
 Bind an additional custom middleware to the web server. Middleware applied this way will be applied to all routes.
 
 Signature for middleware is `(req, res, next) => {}`
 
+For middleware dealing with authentication, plugins must use `useAuthMiddleware()` as otherwise the built-in auth middleware will still be in place.
 
 ### Publishing
 
-`composer.addPublishMethod(name, publishMechanism)`
+#### `composer.addPublishMethod(name, publishMechanism)`
+
+Provide a new mechanism by which a bot project is transferred from Composer to some external service. The mechanisms can use whatever method necessary to process and transmit the bot project to the desired external service, though it must use a standard signature for the methods.
+
+In most cases, the plugin itself does NOT include the configuration information required to communicate with the external service. Configuration is provided by the Composer application at invocation time.
+
+Once registered as an available method, users can configure specific target instances of that method on a per-bot basis. For example, a user may install a "Publish to PVA" plugin, which implements the necessary protocols for publishing to PVA. Then, in order to actually perform a publish, they would configure an instance of this mechanism, "Publish to HR Bot Production Slot" that includes the necessary configuration information.
+
+Publishing plugins support the following features:
+
+* publish - given a bot project, publish it. Required.
+* getStatus - get the status of the most recent publish. Optional.
+* getHistory - get a list of historical publish actions. Optional.
+* rollback - roll back to a previous publish (as provided by getHistory). Optional.
+
+##### publish(config, project, user)
+
+##### getStatus(config, user)
+
+##### getHistory(config, user)
+
+##### rollback(config, versionIdentifier, user)
+
 
 ### Accessors
 
@@ -188,4 +229,12 @@ Signature for middleware is `(req, res, next) => {}`
 `composer.name`
 
 ## Plugin Roadmap
+
+These features are not currently implemented, but are planned for the near future:
+
+* Eventing - plugins will be able to emit events as well as respond to events emitted by other plugins and by Composer core.
+
+* Front-end plugins - plugins will be able to provide React components that are inserted into the React application at various endpoints.
+
+* Schema extensions - Plugins will be able to amend or update the schema.
 
