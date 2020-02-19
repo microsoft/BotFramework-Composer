@@ -303,5 +303,5 @@ class MongoStorage implements IFileStorage {
 
 export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
-  await composer.setStorage(MongoStorage);
+  await composer.useStorage(MongoStorage);
 }

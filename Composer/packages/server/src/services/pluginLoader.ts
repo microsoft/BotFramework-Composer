@@ -32,7 +32,7 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Storage related features
    *************************************************************************************/
-  public async setStorage(customStorageClass: any) {
+  public async useStorage(customStorageClass: any) {
     if (!this.loader.extensions.storage.customStorageClass) {
       this.loader.extensions.storage.customStorageClass = customStorageClass;
     } else {

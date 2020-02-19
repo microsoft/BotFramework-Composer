@@ -46,7 +46,7 @@ The simplest form of a plugin module is below:
 export default async (composer: any): Promise<void> => {
 
   // call methods (see below) on the composer API
-  // composer.setStorage(...);
+  // composer.useStorage(...);
   // composer.usePassportStrategy(...);
   // composer.addWebRoute(...)
 
@@ -124,9 +124,21 @@ By default, Composer reads and writes assets to the local filesystem.  Plugins m
 
 Though this interface is modeled after a filesystem interaction, the implementation of these methods does not require using the filesystem, or a direct implementation of folder and path structure. However, the implementation must respect that structure and respond in the expected ways -- ie, the `glob` method must treat path patterns the same way the filesystem glob would.
 
-#### `composer.setStorage(customStorageClass)`
+#### `composer.useStorage(customStorageClass)`
 
 Provide an iFileStorage-compatible class to Composer.
+
+The constructor of the class will receive 2 parameters: a StorageConnection configuration, pulled from Composer's global configuration (currently data.json), and a user identity object, as provided by any configured authentication plugin. 
+
+The current behavior of Composer is to instantiate a new instance of the storage accessor class each time it is used. As a result, caution must be taken not to undertake expensive operations each time. For example, if a database connection is required, the connection might be implemented as a static member of the class, inside the plugin's init code and made accessible within the plugin module's scope.
+
+The user identity provided by a configured authentication plugin can be used for purposes such as:
+
+* provide a personalized view of the content
+* gate access to content based on identity
+* create an audit log of changes
+
+If an authentication plugin is not configured, or the user is not logged in, the user identity will be `undefined`.
 
 The class is expected to be in the form:
 
@@ -142,14 +154,32 @@ class CustomStorage implements IFileStorage {
 
 ### Web Server
 
+Plugins can add routes and middlewares to the Express instance.
+
+These routes are responsible for providing all necessary dependent assets such as browser javascript, css, etc.
+
+Custom routes are not rendered inside the front-end React application, and currently have no access to that application. They are independent pages -- though nothing prevents them from making calls to the Composer server APIs.
+
 `composer.addWebRoute(method, url, callbackOrMiddleware, callback)`
 
+This is equivalent to using `app.get()` or `app.post()`. A simple route definition receives 3 parameters - the method, url and handler callback.
+
+If a route-specific middleware is necessary, it should be specified as the 3rd parameter, making the handler callback the 4th.
+
+Signature for callbacks is `(req, res) => {}`
+
+Signature for middleware is `(req, res, next) => {}`
+
 `composer.addWebMiddleware(middleware)`
+
+Bind an additional custom middleware to the web server. Middleware applied this way will be applied to all routes.
+
+Signature for middleware is `(req, res, next) => {}`
 
 
 ### Publishing
 
-`composer.addPublishMEthod(name, publishMechanism)`
+`composer.addPublishMethod(name, publishMechanism)`
 
 ### Accessors
 
