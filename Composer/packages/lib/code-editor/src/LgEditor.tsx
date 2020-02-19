@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
+import { EditorDidMount, monaco } from '@monaco-editor/react';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
-import { RichEditor, RichEditorProps } from './RichEditor';
+import { BaseEditor, BaseEditorProps } from './BaseEditor';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
@@ -22,7 +22,7 @@ export interface LGOption {
   templateId?: string;
 }
 
-export interface LGLSPEditorProps extends RichEditorProps {
+export interface LGLSPEditorProps extends BaseEditorProps {
   lgOption?: LGOption;
   languageServer?:
     | {
@@ -62,13 +62,13 @@ export function LgEditor(props: LGLSPEditorProps) {
   const { lgOption, languageServer, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
-  const editorWillMount = (monaco: typeof monacoEditor) => {
-    registerLGLanguage(monaco);
-    if (typeof props.editorWillMount === 'function') {
-      return props.editorWillMount(monaco);
-    }
-  };
-  const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
+  useEffect(() => {
+    monaco.init().then(instance => {
+      registerLGLanguage(instance);
+    });
+  }, []);
+
+  const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
       window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
     }
@@ -95,19 +95,18 @@ export function LgEditor(props: LGLSPEditorProps) {
     }
 
     if (typeof props.editorDidMount === 'function') {
-      return props.editorDidMount(editor, monaco);
+      return props.editorDidMount(_getValue, editor);
     }
   };
 
   return (
-    <RichEditor
+    <BaseEditor
       placeholder={placeholder}
       helpURL={LG_HELP}
       {...restProps}
-      theme={'lgtheme'}
-      language={'botbuilderlg'}
+      theme="lgtheme"
+      language="botbuilderlg"
       options={options}
-      editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
     />
   );

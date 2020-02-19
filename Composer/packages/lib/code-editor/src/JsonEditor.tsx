@@ -2,27 +2,36 @@
 // Licensed under the MIT License.
 import React, { useState, useEffect } from 'react';
 import { editor } from '@bfcomposer/monaco-editor';
-import { EditorWillMount } from '@bfcomposer/react-monaco-editor';
+import { monaco } from '@monaco-editor/react';
 
 import * as utils from './utils';
-import { RichEditor, RichEditorProps } from './RichEditor';
+import { BaseEditor, BaseEditorProps } from './BaseEditor';
 
-interface JsonEditorProps extends Omit<RichEditorProps, 'language' | 'value' | 'errorMsg' | 'onChange'> {
+interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | 'errorMessage' | 'onChange'> {
   onChange: (jsonData: any) => void;
   value?: object;
   obfuscate?: boolean;
 }
 
-export function JsonEditor(props: JsonEditorProps) {
-  const { options: additionalOptions, value: initialValue, onChange, editorWillMount, obfuscate, ...rest } = props;
+const JsonEditor: React.FC<JsonEditorProps> = props => {
+  const { options: additionalOptions, value: initialValue, onChange, obfuscate, ...rest } = props;
   const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
   const [parseError, setParseError] = useState<string>('');
 
   const options: editor.IEditorConstructionOptions = {
     quickSuggestions: true,
     folding: false,
+    readOnly: obfuscate,
     ...additionalOptions,
   };
+
+  useEffect(() => {
+    monaco.init().then(instance => {
+      instance.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true,
+      });
+    });
+  }, []);
 
   useEffect(() => {
     const result = obfuscate ? utils.obfuscate(initialValue) : initialValue;
@@ -38,7 +47,7 @@ export function JsonEditor(props: JsonEditorProps) {
         onChange(data);
         setParseError('');
       } catch (err) {
-        setParseError('invalid json');
+        setParseError('Invalid json');
       }
     } else {
       onChange(undefined);
@@ -46,26 +55,17 @@ export function JsonEditor(props: JsonEditorProps) {
     }
   };
 
-  const handleMount: EditorWillMount = monaco => {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-    });
-
-    if (typeof editorWillMount === 'function') {
-      editorWillMount(monaco);
-    }
-  };
-
   return (
-    <RichEditor
+    <BaseEditor
       helpURL="https://www.json.org"
       language="json"
       options={options}
       value={value}
       onChange={handleChange}
-      editorWillMount={handleMount}
-      errorMsg={parseError}
+      errorMessage={parseError}
       {...rest}
     />
   );
-}
+};
+
+export { JsonEditor };

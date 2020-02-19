@@ -17,7 +17,6 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -404,10 +403,6 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      new MonacoWebpackPlugin({
-        // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-        languages: ['markdown', 'json'],
-      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

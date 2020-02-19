@@ -7,11 +7,10 @@ import { monaco } from '@monaco-editor/react';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
-import { FieldProps } from '@bfc/extension';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
-import { BaseEditor } from './BaseEditor';
+import { BaseEditor, BaseEditorProps } from './BaseEditor';
 
 // const LG_HELP =
 //   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
@@ -23,7 +22,7 @@ interface LGOption {
   templateId: string;
 }
 
-interface LGLSPEditorProps extends FieldProps {
+interface LGLSPEditorProps extends BaseEditorProps {
   lgOption?: LGOption;
   languageServer?:
     | {

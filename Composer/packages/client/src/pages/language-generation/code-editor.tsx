@@ -64,7 +64,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setErrorMsg(text);
   }, [diagnostics]);
 
-  const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount = (_getValue, lgEditor: editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
   };
 
@@ -147,9 +147,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LgEditor
-      // typescript is unable to reconcile 'on' as part of a union type
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       options={{
         lineNumbers: 'on',
         minimap: 'on',
@@ -159,7 +156,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
+      errorMessage={errorMsg}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,

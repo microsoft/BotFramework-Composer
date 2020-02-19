@@ -63,6 +63,8 @@
     "@bfc/lg-languageserver": "*",
     "@bfcomposer/monaco-editor-webpack-plugin": "^1.7.2",
     "@bfcomposer/react-monaco-editor": "0.30.12",
+    "@emotion/core": "^10.0.27",
+    "@monaco-editor/react": "^3.1.0",
     "@types/node": "^12.12.8",
     "@types/vscode": "^1.40.0",
     "lodash": "^4.17.15",

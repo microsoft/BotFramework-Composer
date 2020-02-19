@@ -4,7 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
 import { JsonEditor } from './JsonEditor';
-import { LgEditor } from './LgEditor';
+// import { LgEditor } from './LgEditor';
 
 const uiSchema: UISchema = {
   [SDKTypes.HttpRequest]: {
@@ -17,7 +17,7 @@ const uiSchema: UISchema = {
   [SDKTypes.TextInput]: {
     properties: {
       prompt: {
-        'ui:field': LgEditor,
+        // 'ui:field': LgEditor,
       },
     },
   },
