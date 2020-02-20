@@ -11,6 +11,11 @@ export interface ElementMeasurerProps {
   style?: React.CSSProperties;
   onResize: (boundary: Boundary) => void;
 }
+
+/**
+ * Notify a ReactNode's size once its size has been changed.
+ * Remember to use it inside the focus border component (ElementWrapper).
+ */
 export const ElementMeasurer: React.FC<ElementMeasurerProps> = ({ children, style, onResize }) => {
   return (
     <Measure
