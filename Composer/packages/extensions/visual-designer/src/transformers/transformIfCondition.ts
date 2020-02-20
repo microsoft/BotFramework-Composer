@@ -19,7 +19,7 @@ export function transformIfCondtion(
       ...input,
       $type: ObiTypes.ConditionNode,
     }),
-    choice: new IndexedNode(`${jsonpath}.choice`, {
+    choice: new IndexedNode(`${jsonpath}`, {
       $type: ObiTypes.ChoiceDiamond,
       text: input.condition,
     }),
