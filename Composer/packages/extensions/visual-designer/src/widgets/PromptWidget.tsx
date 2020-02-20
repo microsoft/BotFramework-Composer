@@ -16,15 +16,14 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
-import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { useSmartLayout } from '../hooks/useSmartLayout';
+import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 
 enum PromptNodes {
-  BotAsks = 'BotAsksNode',
-  UserAnswers = 'UserAnswersNode',
-  InvalidPrompt = 'InvalidPromptyNode',
+  BotAsks = 'botAsksNode',
+  UserAnswers = 'userAnswersNode',
+  InvalidPrompt = 'invalidPromptyNode',
 }
 
 const calculateNodes = (jsonpath: string, data) => {
@@ -36,16 +35,9 @@ const calculateNodes = (jsonpath: string, data) => {
   };
 };
 
-const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap): GraphLayout => {
-  Object.keys(nodeMap).map(nodeName => {
-    const node = nodeMap[nodeName];
-    if (node) {
-      node.boundary = boundaryMap[nodeName] || node.boundary;
-    }
-  });
-
-  const { BotAsks, UserAnswers, InvalidPrompt } = PromptNodes;
-  return baseInputLayouter(nodeMap[BotAsks], nodeMap[UserAnswers], nodeMap[InvalidPrompt]);
+const calculateLayout = (nodeMap: GraphNodeMap<PromptNodes>): GraphLayout => {
+  const { botAsksNode, userAnswersNode, invalidPromptyNode } = nodeMap;
+  return baseInputLayouter(botAsksNode, userAnswersNode, invalidPromptyNode);
 };
 
 export interface PromptWdigetProps extends WidgetContainerProps {

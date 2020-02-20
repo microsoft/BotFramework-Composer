@@ -17,13 +17,13 @@ import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { renderEdge } from '../components/lib/EdgeUtil';
-import { useSmartLayout, GraphNodeMap, BoundaryMap } from '../hooks/useSmartLayout';
+import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 
 enum IfElseNodes {
-  Condition = 'ConditionNode',
-  Choice = 'ChoiceNode',
-  IfBranch = 'IfBranchNode',
-  ElseBranch = 'ElseBranchNode',
+  Condition = 'conditionNode',
+  Choice = 'choiceNode',
+  IfBranch = 'ifBranchNode',
+  ElseBranch = 'elseBranchNode',
 }
 
 const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
@@ -45,12 +45,9 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
   };
 };
 
-const calculateIfElseLayout = (nodeMap: GraphNodeMap<IfElseNodes>, boundaryMap: BoundaryMap<IfElseNodes>) => {
-  Object.values(nodeMap)
-    .filter(x => !!x)
-    .forEach((x: GraphNode) => (x.boundary = boundaryMap[x.id] || x.boundary));
-
-  return ifElseLayouter(nodeMap.ConditionNode, nodeMap.ChoiceNode, nodeMap.IfBranchNode, nodeMap.ElseBranchNode);
+const calculateIfElseLayout = (nodeMap: GraphNodeMap<IfElseNodes>) => {
+  const { conditionNode, choiceNode, ifBranchNode, elseBranchNode } = nodeMap;
+  return ifElseLayouter(conditionNode, choiceNode, ifBranchNode, elseBranchNode);
 };
 
 export interface IfConditionWidgetProps extends WidgetContainerProps {
@@ -68,25 +65,25 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
 
   const { boundary, edges } = layout;
-  const { ConditionNode, ChoiceNode, IfBranchNode, ElseBranchNode } = nodeMap;
+  const { conditionNode, choiceNode, ifBranchNode, elseBranchNode } = nodeMap;
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <OffsetContainer offset={ConditionNode.offset}>
-        <ElementWrapper id={ConditionNode.id} onEvent={onEvent}>
+      <OffsetContainer offset={conditionNode.offset}>
+        <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
           <ElementMeasurer onResize={boundary => updateNodeBoundary(IfElseNodes.Condition, boundary)}>
             {judgement}
           </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
-      <OffsetContainer offset={ChoiceNode.offset}>
+      <OffsetContainer offset={choiceNode.offset}>
         <Diamond
           onClick={() => {
             onEvent(NodeEventTypes.Focus, { id });
           }}
         />
       </OffsetContainer>
-      {[IfBranchNode, ElseBranchNode].map(x => (
+      {[ifBranchNode, elseBranchNode].map(x => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <StepGroup
             key={x.id}
