@@ -7,7 +7,7 @@ import * as DefaultFields from '../components/fields';
 
 /**
  * Resolves field widget in this order:
- *   UISchema field override, schema.$kind, schema.type
+ *   UISchema field override, schema.$role, schema.$kind, schema.type
  * @param schema
  * @param uiOptions
  */
@@ -19,6 +19,13 @@ export function resolveFieldWidget(schema?: JSONSchema4, uiOptions?: UIOptions):
   }
 
   if (schema) {
+    if (schema.$role) {
+      switch (schema.$role) {
+        case 'expression':
+          return DefaultFields.StringField;
+      }
+    }
+
     if (schema.$kind) {
       switch (schema.$kind) {
         case 'Microsoft.IRecognizer':

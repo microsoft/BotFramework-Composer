@@ -21,6 +21,17 @@ describe('resolveFieldWidget', () => {
     });
   });
 
+  describe('schema.$role', () => {
+    it('returns StringField when $role is expression', () => {
+      const schema = {
+        type: 'string' as const,
+        $role: 'expression',
+      };
+
+      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
+    });
+  });
+
   describe('schema.$kind', () => {
     it('returns RecognizerField when $kind is IRecognizer', () => {
       const schema = {
