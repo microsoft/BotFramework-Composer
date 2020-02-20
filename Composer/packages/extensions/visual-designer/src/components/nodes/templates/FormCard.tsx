@@ -16,7 +16,7 @@ const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
   width: boxWidth,
-  height: boxHeight,
+  minHeight: boxHeight,
   fontSize: '12px',
   cursor: 'pointer',
   overflow: 'hidden',
@@ -92,7 +92,8 @@ export const FormCard: FunctionComponent<NodeProps> = ({
         className="card__content"
         css={{
           width: '100%',
-          height: contentHeight,
+          minHeight: contentHeight,
+          display: 'inline-block',
         }}
       >
         <div
@@ -124,9 +125,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
             css={{
               height: '100%',
               width: 'calc(100% - 20px)',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
+              whiteSpace: 'initial',
               fontSize: '12px',
               lineHeight: '19px',
               fontFamily: 'Segoe UI',
