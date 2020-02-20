@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC } from 'react';
+import { FC, useState, useMemo, useEffect } from 'react';
 import { PromptTab } from '@bfc/shared';
 
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
@@ -16,14 +16,36 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
+import { NodeMap, BoundaryMap } from '../components/nodes/types';
+import { GraphLayout } from '../models/GraphLayout';
+import { Boundary, areBoundariesEqual } from '../models/Boundary';
+import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 
-const calculateNodes = (data, jsonpath: string) => {
+enum PromptNodes {
+  BotAsks = 'BotAsksNode',
+  UserAnswers = 'UserAnswersNode',
+  InvalidPrompt = 'InvalidPromptyNode',
+}
+
+const calculateNodes = (jsonpath: string, data) => {
   const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
   return {
-    botAsksNode: GraphNode.fromIndexedJson(botAsks),
-    userAnswersNode: GraphNode.fromIndexedJson(userAnswers),
-    invalidPromptNode: GraphNode.fromIndexedJson(invalidPrompt),
+    [PromptNodes.BotAsks]: GraphNode.fromIndexedJson(botAsks),
+    [PromptNodes.UserAnswers]: GraphNode.fromIndexedJson(userAnswers),
+    [PromptNodes.InvalidPrompt]: GraphNode.fromIndexedJson(invalidPrompt),
   };
+};
+
+const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap): GraphLayout => {
+  Object.keys(nodeMap).map(nodeName => {
+    const node = nodeMap[nodeName];
+    if (node) {
+      node.boundary = boundaryMap[nodeName] || node.boundary;
+    }
+  });
+
+  const { BotAsks, UserAnswers, InvalidPrompt } = PromptNodes;
+  return baseInputLayouter(nodeMap[BotAsks], nodeMap[UserAnswers], nodeMap[InvalidPrompt]);
 };
 
 export interface PromptWdigetProps extends WidgetContainerProps {
@@ -31,9 +53,32 @@ export interface PromptWdigetProps extends WidgetContainerProps {
   userInput: JSX.Element;
 }
 
-export const PromptWidget: FC<PromptWdigetProps> = ({ id, data, onEvent, botAsks, userInput }): JSX.Element => {
-  const nodes = calculateNodes(data, id);
-  const layout = baseInputLayouter(nodes.botAsksNode, nodes.userAnswersNode, nodes.invalidPromptNode);
+export const PromptWidget: FC<PromptWdigetProps> = ({
+  id,
+  data,
+  onEvent,
+  onResize,
+  botAsks,
+  userInput,
+}): JSX.Element => {
+  const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
+  const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
+  const layout = useMemo(() => calculateLayout(nodes, boundaryMap), [nodes, boundaryMap]);
+
+  const accumulatedPatches = {};
+  const patchBoundary = (id, boundary?: Boundary) => {
+    if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
+      accumulatedPatches[id] = boundary;
+      setBoundaryMap({
+        ...boundaryMap,
+        ...accumulatedPatches,
+      });
+    }
+  };
+
+  useEffect(() => {
+    onResize(layout.boundary);
+  }, [layout]);
 
   const { boundary, nodeMap, edges } = layout;
   const { botAsksNode, userAnswersNode, invalidPromptNode: brickNode } = nodeMap;
@@ -42,12 +87,16 @@ export const PromptWidget: FC<PromptWdigetProps> = ({ id, data, onEvent, botAsks
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
-          {botAsks}
+          <ElementMeasurer onResize={boundary => patchBoundary(PromptNodes.BotAsks, boundary)}>
+            {botAsks}
+          </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
-          {userInput}
+          <ElementMeasurer onResize={boundary => patchBoundary(PromptNodes.UserAnswers, boundary)}>
+            {userInput}
+          </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
