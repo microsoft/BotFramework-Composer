@@ -35,7 +35,7 @@ const defaultOptions: monacoEditor.editor.IEditorConstructionOptions = {
 };
 
 const styles = {
-  container: ({ hovered, focused, error }) => {
+  container: ({ hovered, focused, error, height }) => {
     let borderColor = NeutralColors.gray120;
 
     if (hovered) {
@@ -57,12 +57,12 @@ const styles = {
       border-color: ${borderColor};
       transition: border-color 0.1s linear;
       box-sizing: border-box;
-      height: calc(100% - ${error ? 32 : 0}px);
+      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error ? 32 : 0}px);
     `;
   },
 };
 
-export interface BaseEditorProps extends Omit<ControlledEditorProps, 'height'> {
+export interface BaseEditorProps extends ControlledEditorProps {
   errorMessage?: any;
   helpURL?: string;
   hidePlaceholder?: boolean;
@@ -72,7 +72,7 @@ export interface BaseEditorProps extends Omit<ControlledEditorProps, 'height'> {
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
-  const { onChange, editorDidMount, placeholder, value, errorMessage, helpURL, ...rest } = props;
+  const { onChange, editorDidMount, placeholder, value, errorMessage, helpURL, height = '100%', ...rest } = props;
   const options = assignDefined(defaultOptions, props.options);
 
   const [hovered, setHovered] = useState(false);
@@ -125,7 +125,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   return (
     <React.Fragment>
       <div
-        css={styles.container({ hovered, focused, error: !!errorMessage })}
+        css={styles.container({ hovered, focused, error: !!errorMessage, height })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
