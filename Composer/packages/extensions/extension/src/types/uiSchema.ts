@@ -6,6 +6,8 @@ import { FieldWidget } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionFunc<R = any, D = any> = (data: D) => R;
+type RoleSchema = { expression: Omit<UIOptions, 'properties'> };
+type KindSchema = { 'Microsoft.Recognizer': Omit<UIOptions, 'properties'> };
 
 export interface UIOptions {
   'ui:hidden'?: string[] | UIOptionFunc<string[]>;
@@ -18,4 +20,9 @@ export interface UIOptions {
   };
 }
 
-export type UISchema = { [key in SDKTypes]?: UIOptions };
+type SDKTypesSchema = { [key in SDKTypes]?: UIOptions };
+
+export type UISchema = SDKTypesSchema & {
+  $role?: RoleSchema;
+  $kind?: KindSchema;
+};

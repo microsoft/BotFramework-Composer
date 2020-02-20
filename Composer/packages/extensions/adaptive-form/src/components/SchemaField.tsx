@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FieldProps } from '@bfc/extension';
 
 import { resolveFieldWidget, resolveRef, getLabel } from '../utils';
+import FormContext from '../FormContext';
 
 import { ErrorMessage } from './ErrorMessage';
 
@@ -35,6 +36,7 @@ const getPlaceholder = (props: FieldProps): string | undefined => {
 
 const SchemaField: React.FC<FieldProps> = props => {
   const { className, definitions, name, schema: baseSchema, uiOptions, value, rawErrors, hideError } = props;
+  const { uiSchema } = useContext(FormContext);
   const schema = resolveRef(baseSchema, definitions);
 
   if (!schema || name.startsWith('$')) {
@@ -43,7 +45,7 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getLabel(props)} />;
 
-  const FieldWidget = resolveFieldWidget(schema, uiOptions);
+  const FieldWidget = resolveFieldWidget(schema, uiOptions, uiSchema);
   const fieldProps = {
     ...props,
     description: schema.description,

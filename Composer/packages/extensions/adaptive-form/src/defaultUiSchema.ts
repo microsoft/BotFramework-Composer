@@ -3,7 +3,7 @@
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
-import { EditableField } from './components/fields';
+import { EditableField, StringField, RecognizerField } from './components/fields';
 
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 const triggerUiSchema = {
@@ -12,6 +12,16 @@ const triggerUiSchema = {
 };
 
 const DefaultUISchema: UISchema = {
+  $role: {
+    expression: {
+      'ui:field': StringField,
+    },
+  },
+  $kind: {
+    'Microsoft.Recognizer': {
+      'ui:field': RecognizerField,
+    },
+  },
   [SDKTypes.AdaptiveDialog]: {
     'ui:order': ['recognizer', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', 'selector', ...globalHiddenProperties],
@@ -37,22 +47,9 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.BeginDialog]: {
     'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
-    // properties: {
-    // dialog: {
-    //   'ui:widget': 'DialogSelectWidget',
-    // },
-    // options: {
-    //   'ui:field': 'CustomObjectField',
-    // },
-    // },
   },
   [SDKTypes.CancelAllDialogs]: {
     'ui:order': ['dialog', 'property', '*'],
-    // properties: {
-    //   eventValue: {
-    //     'ui:field': 'CustomObjectField',
-    //   },
-    // },
   },
   [SDKTypes.ConditionalSelector]: {
     'ui:hidden': [...globalHiddenProperties],
@@ -181,38 +178,14 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.OAuthInput]: {
     'ui:order': ['connectionName', '*'],
-    // properties: {
-    //   prompt: {
-    //     'ui:widget': 'TextareaWidget',
-    //   },
-    //   unrecognizedPrompt: {
-    //     'ui:widget': 'TextareaWidget',
-    //   },
-    //   invalidPrompt: {
-    //     'ui:widget': 'TextareaWidget',
-    //   },
-    // },
   },
   [SDKTypes.ReplaceDialog]: {
     'ui:hidden': [...globalHiddenProperties],
     'ui:order': ['dialog', 'options', 'includeActivity', '*'],
-    // properties: {
-    //   dialog: {
-    //     'ui:widget': 'DialogSelectWidget',
-    //   },
-    //   options: {
-    //     // 'ui:field': 'CustomObjectField',
-    //   },
-    // },
   },
   [SDKTypes.RepeatDialog]: {
     'ui:hidden': [...globalHiddenProperties],
     'ui:order': ['options', 'includeActivity', '*'],
-    // properties: {
-    //   options: {
-    //     // 'ui:field': 'CustomObjectField',
-    //   },
-    // },
   },
   [SDKTypes.SwitchCondition]: {
     'ui:hidden': ['default', ...globalHiddenProperties],
@@ -224,11 +197,6 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.SendActivity]: {
     'ui:hidden': [...globalHiddenProperties],
-    // properties: {
-    //   activity: {
-    //     // 'ui:field': 'LgEditorField',
-    //   },
-    // },
   },
 };
 

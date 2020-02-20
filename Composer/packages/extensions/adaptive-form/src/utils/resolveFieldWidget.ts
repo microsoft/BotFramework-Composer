@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema4 } from 'json-schema';
-import { UIOptions, FieldWidget } from '@bfc/extension';
+import { UIOptions, FieldWidget, UISchema } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -11,7 +11,11 @@ import * as DefaultFields from '../components/fields';
  * @param schema
  * @param uiOptions
  */
-export function resolveFieldWidget(schema?: JSONSchema4, uiOptions?: UIOptions): FieldWidget {
+export function resolveFieldWidget(
+  schema?: JSONSchema4,
+  uiOptions?: UIOptions,
+  globalUiSchema?: UISchema
+): FieldWidget {
   const FieldOverride = uiOptions?.['ui:field'];
 
   if (typeof FieldOverride === 'function') {
@@ -19,17 +23,17 @@ export function resolveFieldWidget(schema?: JSONSchema4, uiOptions?: UIOptions):
   }
 
   if (schema) {
-    if (schema.$role) {
-      switch (schema.$role) {
-        case 'expression':
-          return DefaultFields.StringField;
-      }
-    }
+    if (globalUiSchema) {
+      const RoleOverride = globalUiSchema?.$role?.[schema.$role]?.['ui:field'];
 
-    if (schema.$kind) {
-      switch (schema.$kind) {
-        case 'Microsoft.IRecognizer':
-          return DefaultFields.RecognizerField;
+      if (RoleOverride) {
+        return RoleOverride;
+      }
+
+      const KindOverride = globalUiSchema?.$kind?.[schema.$kind]?.['ui:field'];
+
+      if (KindOverride) {
+        return KindOverride;
       }
     }
 

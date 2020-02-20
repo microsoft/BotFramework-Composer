@@ -22,24 +22,40 @@ describe('resolveFieldWidget', () => {
   });
 
   describe('schema.$role', () => {
-    it('returns StringField when $role is expression', () => {
+    it('uses global overrides', () => {
       const schema = {
         type: 'string' as const,
         $role: 'expression',
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
+      const globalSchema = {
+        $role: {
+          expression: {
+            'ui:field': DefaultFields.StringField,
+          },
+        },
+      };
+
+      expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.StringField);
     });
   });
 
   describe('schema.$kind', () => {
-    it('returns RecognizerField when $kind is IRecognizer', () => {
+    it('uses global overrides', () => {
       const schema = {
         type: 'string' as const,
-        $kind: 'Microsoft.IRecognizer',
+        $kind: 'Microsoft.Recognizer',
       };
 
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.RecognizerField);
+      const globalSchema = {
+        $kind: {
+          'Microsoft.Recognizer': {
+            'ui:field': DefaultFields.RecognizerField,
+          },
+        },
+      };
+
+      expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);
     });
   });
 

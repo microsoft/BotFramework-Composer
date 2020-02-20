@@ -6,7 +6,9 @@ import isEqual from 'lodash/isEqual';
 import ErrorBoundary from 'react-error-boundary';
 import { AdaptiveDialogSchema } from '@bfc/shared';
 
+import FormContext from '../../FormContext';
 import { resolveBaseSchema, getUISchema, resolveFieldWidget } from '../../utils';
+import { mergeUISchema } from '../../utils/mergeUISchema';
 
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
@@ -34,7 +36,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
   }, [schema, localData]);
 
-  const $uiSchema = useMemo(() => {
+  const globalUiSchema = useMemo(() => {
     const uiSchemas = plugins.reduce<UISchema[]>((acc, plugin) => {
       if (plugin.uiSchema) {
         acc.push(plugin.uiSchema);
@@ -42,8 +44,13 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
 
       return acc;
     }, []);
-    return getUISchema(localData?.$type, ...uiSchemas);
-  }, [localData?.$type]);
+
+    return mergeUISchema(...uiSchemas);
+  }, []);
+
+  const $uiSchema = useMemo(() => {
+    return getUISchema(localData?.$type, globalUiSchema);
+  }, [localData?.$type, globalUiSchema]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
@@ -92,28 +99,30 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
   };
 
-  const Field = resolveFieldWidget($schema, $uiSchema);
+  const Field = resolveFieldWidget($schema, $uiSchema, globalUiSchema);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorInfo}>
       <div key={localData?.$designer?.id}>
-        <FormTitle
-          formData={localData}
-          id={localData.$designer?.id || 'unknown'}
-          schema={$schema}
-          onChange={$designer => handleDataChange({ ...localData, $designer })}
-        />
-        <Field
-          definitions={schema?.definitions}
-          depth={-1}
-          id="root"
-          name="root"
-          rawErrors={errors}
-          schema={$schema}
-          uiOptions={$uiSchema}
-          value={localData}
-          onChange={handleDataChange}
-        />
+        <FormContext.Provider value={{ uiSchema: globalUiSchema }}>
+          <FormTitle
+            formData={localData}
+            id={localData.$designer?.id || 'unknown'}
+            schema={$schema}
+            onChange={$designer => handleDataChange({ ...localData, $designer })}
+          />
+          <Field
+            definitions={schema?.definitions}
+            depth={-1}
+            id="root"
+            name="root"
+            rawErrors={errors}
+            schema={$schema}
+            uiOptions={$uiSchema}
+            value={localData}
+            onChange={handleDataChange}
+          />
+        </FormContext.Provider>
       </div>
     </ErrorBoundary>
   );
