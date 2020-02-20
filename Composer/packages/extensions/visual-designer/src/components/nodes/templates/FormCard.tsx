@@ -100,10 +100,10 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           css={{
             fontWeight: 400,
             paddingLeft: '5px',
-            margin: '3px 5px',
+            margin: '2px 5px',
             fontSize: '14px',
             lineHeight: '19px',
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
           }}
         >
@@ -131,6 +131,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
               fontFamily: 'Segoe UI',
               overflowWrap: 'break-word',
               wordBreak: 'break-all',
+              display: 'contents',
             }}
             title={typeof label === 'string' ? label : ''}
           >
