@@ -204,10 +204,11 @@ async function createDialog(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     const content = JSON.stringify(req.body.content, null, 2) + '\n';
+    const id = req.body.id;
+
     //dir = id
-    const dialogs = await currentProject.createDialog(req.body.id, content);
-    const luFiles = await currentProject.createLuFile(req.body.id, '');
-    res.status(200).json({ dialogs, luFiles });
+    const dialogResources = await currentProject.createDialog(id, content);
+    res.status(200).json(dialogResources);
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -221,9 +222,8 @@ async function removeDialog(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const dialogs = await currentProject.removeDialog(req.params.dialogId);
-    const luFiles = await currentProject.removeLuFile(req.params.dialogId);
-    res.status(200).json({ dialogs, luFiles });
+    const dialogResources = await currentProject.removeDialog(req.params.dialogId);
+    res.status(200).json(dialogResources);
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }

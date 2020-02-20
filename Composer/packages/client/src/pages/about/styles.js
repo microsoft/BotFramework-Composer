@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-
+import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -20,7 +20,8 @@ export const title = css`
   display: block;
   height: 36px;
   margin: 33px 0px 0px 42px;
-  font-size: 36px;
+  font-size: ${FontSizes.xLarge};
+  font-weight: ${FontWeights.semibold};
   line-height: 32px;
 `;
 
@@ -31,12 +32,14 @@ export const body = css`
 `;
 
 export const version = css`
-  font-size: 24px;
+  font-size: ${FontSizes.large};
+  font-weight: ${FontWeights.regular};
   line-height: 32px;
 `;
 
 export const description = css`
-  font-size: 20px;
+  font-size: ${FontSizes.mediumPlus};
+  font-weight: ${FontWeights.regular};
   line-height: 32px;
   width: 50%;
   margin-top: 20px;
@@ -61,6 +64,8 @@ export const DiagnosticsInfoText = css`
 
 export const DiagnosticsInfoTextAlignLeft = css`
   text-align: left;
+  font-size: ${FontSizes.mediumPlus};
+  font-weight: ${FontWeights.semibold};
 `;
 
 export const DiagnosticsInfo = css`
@@ -85,20 +90,25 @@ export const linkRow = css`
 `;
 
 export const link = css`
-  font-size: 20px;
+  font-size: ${FontSizes.mediumPlus};
+  font-weight: ${FontWeights.regular};
   color: #0078d4;
   margin-left: 10px;
+  text-decoration: underline;
 `;
 
 export const helpLink = css`
-  font-size: 24px;
+  font-size: ${FontSizes.mediumPlus};
+  font-weight: ${FontWeights.regular};
   color: #0078d4;
   margin-left: 60px;
+  text-decoration: underline;
 `;
 
 export const icon = {
   icon: {
     color: '#0078d4',
     fontSize: '20px',
+    paddingBottom: '6px',
   },
 };

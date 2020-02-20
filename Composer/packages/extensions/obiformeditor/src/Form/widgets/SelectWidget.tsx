@@ -10,7 +10,7 @@ import { SelectWidgetProps } from '../types';
 import { WidgetLabel } from './WidgetLabel';
 
 export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props => {
-  const { onChange, onFocus, onBlur, value, options, label, schema, id } = props;
+  const { onChange, onFocus, onBlur, value, options, label, schema, id, hideLabel } = props;
   const { description } = schema;
 
   const handleChange = (_, option?: IDropdownOption) => {
@@ -23,7 +23,7 @@ export const SelectWidget: React.FunctionComponent<SelectWidgetProps> = props =>
 
   return (
     <>
-      <WidgetLabel label={label} description={description} id={id} />
+      {!hideLabel && <WidgetLabel label={label} description={description} id={id} />}
       <Dropdown
         id={id}
         onBlur={() => onBlur && onBlur(id, value)}

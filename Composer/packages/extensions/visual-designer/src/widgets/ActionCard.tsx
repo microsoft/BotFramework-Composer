@@ -7,17 +7,24 @@ import { generateSDKTitle } from '@bfc/shared';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
+import { NodeMenu } from '../components/menus/NodeMenu';
 
 export interface ActionCardProps extends WidgetContainerProps {
   title: string;
+  disableSDKTitle?: boolean;
   icon: string;
   content: string | number | JSX.Element;
-  menu: JSX.Element;
+  menu?: JSX.Element | string;
+  children?: JSX.Element;
+  size?: {
+    width: number;
+
+    height: number;
+  };
   colors?: {
     theme: string;
     icon: string;
   };
-  onClick: () => any;
 }
 
 const DefaultCardColor = {
@@ -26,17 +33,30 @@ const DefaultCardColor = {
 };
 
 export const ActionCard: WidgetComponent<ActionCardProps> = ({
+  id,
   data,
+  onEvent,
   title,
+  disableSDKTitle,
   icon,
-  content,
   menu,
-  onClick,
+  content,
+  children,
+  size,
   colors = DefaultCardColor,
 }) => {
-  const header = generateSDKTitle(data, title);
+  const header = disableSDKTitle ? title : generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
   return (
-    <FormCard header={header} corner={menu} icon={icon} label={content} nodeColors={nodeColors} onClick={onClick} />
+    <FormCard
+      header={header}
+      corner={menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
+      icon={icon}
+      label={content}
+      nodeColors={nodeColors}
+      styles={{ ...size }}
+    >
+      {children}
+    </FormCard>
   );
 };

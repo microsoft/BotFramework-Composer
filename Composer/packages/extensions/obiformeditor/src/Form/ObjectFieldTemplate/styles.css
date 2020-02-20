@@ -1,5 +1,6 @@
 .ObjectItemInline {
   flex: 1;
+  min-width: 0;
 }
 
 .ObjectItemInline + .ObjectItemInline {
@@ -9,12 +10,12 @@
 .ObjectItem .ObjectItemField {
   flex: 1;
   overflow: hidden;
-  padding: 0px 18px;
+  padding: 0px 12px;
   margin: 10px 0;
 }
 
 .ObjectItem .ObjectItemField {
-  padding: 0px 18px;
+  padding: 0px 12px;
   margin: 10px 0;
 }
 

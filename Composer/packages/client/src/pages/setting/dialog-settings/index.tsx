@@ -14,7 +14,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
 
-import { hostedSettings, hostedControls, hostedToggle, slotChoice, settingsEditor } from './style';
+import { hostedSettings, hostedControls, hostedControlsTitle, hostedToggle, slotChoice, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -72,7 +72,7 @@ export const DialogSettings = () => {
 
   const hostedControl = () => (
     <div css={hostedControls}>
-      <h1>{hostControlLabels.botSettings}</h1>
+      <div css={hostedControlsTitle}>{hostControlLabels.botSettings}</div>
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
-import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
 
 export interface EditorSchema {
   content?: {
@@ -19,13 +18,13 @@ export interface BotSchemas {
 
 export interface ShellData {
   botName: string;
-  currentDialog: DialogInfo;
+  currentDialog: any;
   data: {
-    $type: string;
+    $type?: string;
     [key: string]: any;
   };
   dialogId: string;
-  dialogs: DialogInfo[];
+  dialogs: any[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -33,8 +32,8 @@ export interface ShellData {
   focusPath: string;
   clipboardActions: any[];
   hosted: boolean;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
+  lgFiles: any[];
+  luFiles: any[];
   schemas: BotSchemas;
 }
 

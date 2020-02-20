@@ -47,12 +47,12 @@ router.post('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
 
 // connector
-router.get('/launcher/connect', BotConnectorController.connect);
-router.post('/launcher/sync', BotConnectorController.sync);
-router.get('/launcher/status', BotConnectorController.status);
-router.get('/launcher/publishHistory', BotConnectorController.getPublishHistory);
-router.post('/launcher/publish', BotConnectorController.publish);
-router.post('/launcher/publish/:label', BotConnectorController.publish);
+router.get('/launcher/:projectId/connect', BotConnectorController.connect);
+router.post('/launcher/:projectId/sync', BotConnectorController.sync);
+router.get('/launcher/:projectId/status', BotConnectorController.status);
+router.get('/launcher/:projectId/publishHistory', BotConnectorController.getPublishHistory);
+router.post('/launcher/:projectId/publish', BotConnectorController.publish);
+router.post('/launcher/:projectId/publish/:label', BotConnectorController.publish);
 
 router.get('/publish/:method', PublishController.publish);
 

@@ -108,5 +108,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "EditArray.lg"
 }

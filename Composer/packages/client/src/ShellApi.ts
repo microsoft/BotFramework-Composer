@@ -8,6 +8,7 @@ import get from 'lodash/get';
 
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
+import * as luUtil from './utils/luUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -131,7 +132,8 @@ export const ShellApi: React.FC = () => {
   function getLgTemplates({ id }, event) {
     if (isEventSourceValid(event) === false) return false;
     if (id === undefined) throw new Error('must have a file id');
-    const file = lgFiles.find(file => file.id === id);
+    const focusedDialogId = focusPath.split('#').shift() || id;
+    const file = lgFiles.find(file => file.id === focusedDialogId);
     if (!file) throw new Error(`lg file ${id} not found`);
     return file.templates;
   }
@@ -165,9 +167,6 @@ export const ShellApi: React.FC = () => {
       templateName,
       template,
     });
-
-    const content = lgUtil.updateTemplate(file.content, templateName, template);
-    return lgUtil.checkLgContent(content, id);
   }
 
   function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {
@@ -212,6 +211,48 @@ export const ShellApi: React.FC = () => {
       projectId,
       templateNames,
     });
+  }
+
+  /**
+   *
+   * @param {
+   * id: string,
+   * intentName: string,
+   * intent: { name: string, body: string }
+   * }
+   *
+   * @param {*} event
+   */
+  async function updateLuIntentHandler({ id, intentName, intent }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const newLuContent = luUtil.updateIntent(file.content, intentName, intent);
+
+    return await updateLuFile({ id, newLuContent });
+  }
+
+  async function addLuIntentHandler({ id, intent }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+
+    const newLuContent = luUtil.addIntent(file.content, intent);
+
+    return await updateLuFile({ id, newLuContent });
+  }
+
+  async function removeLuIntentHandler({ id, intentName }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const file = luFiles.find(file => file.id === id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const newLuContent = luUtil.removeIntent(file.content, intentName);
+
+    return await updateLuFile({ id, newLuContent });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
@@ -315,6 +356,9 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
     apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
+    apiClient.registerApi('addLuIntent', addLuIntentHandler);
+    apiClient.registerApi('updateLuIntent', updateLuIntentHandler);
+    apiClient.registerApi('removeLuIntent', removeLuIntentHandler);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);

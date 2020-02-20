@@ -6,8 +6,11 @@ import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { UserIdentity } from '../../services/pluginLoader';
+import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
+
+const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {
   constructor(basePath: string, user?: UserIdentity) {
@@ -46,6 +49,7 @@ export class DefaultSettingManager extends FileSettingManager {
     const path = this.getPath(slot);
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
+      debug('Storage path does not exist. Creating directory now: %s', dir);
       await this.storage.mkDir(dir, { recursive: true });
     }
     // remove sensitive values before saving to disk

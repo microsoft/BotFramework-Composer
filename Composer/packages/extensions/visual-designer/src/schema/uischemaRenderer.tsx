@@ -3,49 +3,50 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import get from 'lodash/get';
 
-import { uiSchema } from './uischema';
-import { UIWidget, UI_WIDGET_KEY, UIWidgetProp } from './uischema.types';
+import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
-const buildWidgetProp = (data: BaseSchema, rawPropValue: UIWidgetProp) => {
-  if (typeof rawPropValue === 'function') {
-    const dataTransformer = rawPropValue;
-    const element = dataTransformer(data);
-    return element;
-  }
+export interface UIWidgetContext {
+  /** The uniq id of current schema data. Usually a json path. */
+  id: string;
 
-  return rawPropValue;
-};
+  /** Declarative json with a $type field. */
+  data: BaseSchema;
 
-const buildWidgetProps = (data: BaseSchema, rawProps) => {
-  return Object.keys(rawProps).reduce((props, propName) => {
-    const propValue = rawProps[propName];
-    props[propName] = buildWidgetProp(data, propValue);
-    return props;
-  }, {});
-};
+  /** Handle UI events */
+  onEvent: WidgetEventHandler;
+}
 
-const parseWidgetSchema = (data: BaseSchema, widgetSchema: UIWidget) => {
-  const { [UI_WIDGET_KEY]: Widget, ...rawProps } = widgetSchema;
-  const props = buildWidgetProps(data, rawProps);
+const parseWidgetSchema = (widgetSchema: UIWidget) => {
+  const { [UI_WIDGET_KEY]: Widget, ...props } = widgetSchema;
   return {
     Widget,
     props,
   };
 };
 
-const renderWidget = (inputData, schema: UIWidget, contextProps = {}): JSX.Element => {
-  const { Widget, props } = parseWidgetSchema(inputData, schema);
-  return <Widget data={inputData} {...contextProps} {...props} />;
+const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) => {
+  if (typeof rawPropValue === 'function') {
+    const dataTransformer = rawPropValue;
+    const element = dataTransformer(context.data);
+    return element;
+  }
+
+  if (typeof rawPropValue === 'object' && rawPropValue[UI_WIDGET_KEY]) {
+    const widgetSchema = rawPropValue as UIWidget;
+    return renderUIWidget(widgetSchema, context);
+  }
+
+  return rawPropValue;
 };
 
-const renderFallbackElement = (data: BaseSchema) => <></>;
+export const renderUIWidget = (widgetSchema: UIWidget, context: UIWidgetContext): JSX.Element => {
+  const { Widget, props: rawProps } = parseWidgetSchema(widgetSchema);
+  const widgetProps = Object.keys(rawProps).reduce((props, propName) => {
+    const propValue = rawProps[propName];
+    props[propName] = buildWidgetProp(propValue, context);
+    return props;
+  }, {});
 
-export const renderSDKType = (data: BaseSchema, context?: { menu: JSX.Element; onClick }): JSX.Element => {
-  const $type = get(data, '$type');
-  const schema: UIWidget = get(uiSchema, $type);
-  if (!schema) return renderFallbackElement(data);
-
-  return renderWidget(data, schema, context);
+  return <Widget {...context} {...widgetProps} />;
 };

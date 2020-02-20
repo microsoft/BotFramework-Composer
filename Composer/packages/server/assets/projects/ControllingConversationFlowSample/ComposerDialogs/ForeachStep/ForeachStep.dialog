@@ -1,10 +1,10 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "id": "178401"
   },
   "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -72,11 +72,17 @@
           "actions": [
             {
               "$type": "Microsoft.SendActivity",
-              "activity": "@{dialog.foreach.index}: @{dialog.foreach.value}"
+              "$designer": {
+                "id": "006441",
+                "name": "Send a response"
+              },
+              "activity": "@{bfdactivity-006441()}"
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "ForeachStep.lg"
 }

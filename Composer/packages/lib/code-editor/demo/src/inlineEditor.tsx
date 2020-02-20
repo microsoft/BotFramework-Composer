@@ -5,28 +5,17 @@ import React, { useState } from 'react';
 
 import { LgEditor } from '../../src';
 
-const content = `# Greeting1
--Good morning
-
-# Greeting2
--Good afternoon
-
-# Greeting3
--Good evening
-`;
-
 // body will fill in editor
 const template = {
-  name: 'Greeting2',
+  name: 'Greeting',
   body: `-Good afternoon
--[Greeting3]
--[Greeting4]`,
+-@{Exit()}
+-@{Greeting4()}`,
 };
 
 const lgOption = {
-  inline: true,
-  content,
-  template,
+  fileId: 'common',
+  templateId: 'Greeting',
 };
 
 export default function App() {

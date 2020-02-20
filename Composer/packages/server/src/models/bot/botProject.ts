@@ -21,18 +21,26 @@ import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
 import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
+import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
 import { LocationRef, LuisStatus, FileUpdateType } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
+const debug = log.extend('bot-project');
 const DIALOGFOLDER = 'ComposerDialogs';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
+
+interface DialogResources {
+  dialogs: DialogInfo[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+}
 
 export class BotProject {
   public ref: LocationRef;
@@ -67,7 +75,7 @@ export class BotProject {
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
 
-    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir }, user);
+    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir }, this, user);
     this.settingManager = this.environment.getSettingsManager();
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
@@ -76,9 +84,9 @@ export class BotProject {
   public index = async () => {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
-    this.dialogs = this.indexDialog();
-    this.lgFiles = lgIndexer.index(this.files);
-    this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+    this.dialogs = this.indexDialogs();
+    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+    this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
@@ -87,6 +95,7 @@ export class BotProject {
   };
 
   public getIndexes = () => {
+    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     return {
       botName: this.name,
       location: this.dir,
@@ -207,7 +216,7 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<DialogInfo[]> => {
+  public updateDialog = async (id: string, dialogContent: any): Promise<DialogResources> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
@@ -217,20 +226,29 @@ export class BotProject {
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
     await this._updateFile(relativePath, content);
 
-    return this.dialogs;
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
-  public createDialog = async (id: string, content = '', dir: string = this.defaultDir(id)): Promise<DialogInfo[]> => {
+  public createDialog = async (
+    id: string,
+    content = '',
+    dir: string = this.defaultDir(id)
+  ): Promise<DialogResources> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
-    const relativePath = Path.join(dir, `${id.trim()}.dialog`);
-    await this._createFile(relativePath, content);
-    return this.dialogs;
+    const relativePathBase = Path.join(dir, id.trim());
+    await this._createFile(`${relativePathBase}.dialog`, content);
+    await this._createFile(`${relativePathBase}.lu`, '');
+    await this.createLgFile(id, '', dir);
+
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
-  public removeDialog = async (id: string): Promise<DialogInfo[]> => {
+  public removeDialog = async (id: string): Promise<DialogResources> => {
     if (id === 'Main') {
       throw new Error(`Main dialog can't be removed`);
     }
@@ -239,13 +257,17 @@ export class BotProject {
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
-    await this._removeFile(dialog.relativePath);
+    const relativePathBase = dialog.relativePath.replace(/\.dialog$/, '');
+    await this._removeFile(`${relativePathBase}.dialog`);
+    await this._removeFile(`${relativePathBase}.lg`);
+    await this._removeFile(`${relativePathBase}.lu`);
     this._cleanUp(dialog.relativePath);
-    return this.dialogs;
+    const { dialogs, lgFiles, luFiles } = this;
+    return { dialogs, lgFiles, luFiles };
   };
 
   public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
@@ -254,17 +276,23 @@ export class BotProject {
   };
 
   public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
+    // slot with common.lg import
+    let lgInitialContent = '';
+    const lgCommonFile = this.files.find(({ name }) => name === 'common.lg');
+    if (lgCommonFile) {
+      lgInitialContent = `[import](common.lg)`;
+    }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
-    await this._createFile(relativePath, content);
+    await this._createFile(relativePath, [lgInitialContent, content].join('\n'));
     return this.lgFiles;
   };
 
   public removeLgFile = async (id: string): Promise<LgFile[]> => {
-    const lgFile = this.lgFiles.find(lg => lg.id === id);
+    const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
@@ -320,7 +348,7 @@ export class BotProject {
       const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = unpublished.filter(this.isEmpty);
+    const emptyLuFiles = unpublished.filter(this.isLuFileEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
@@ -387,6 +415,7 @@ export class BotProject {
   private _createFile = async (relativePath: string, content: string) => {
     const absolutePath = Path.resolve(this.dir, relativePath);
     await this.ensureDirExists(Path.dirname(absolutePath));
+    debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
     // update this.files which is memory cache of all files
@@ -430,9 +459,29 @@ export class BotProject {
     await this.reindex(relativePath);
   };
 
-  private indexDialog() {
+  private indexDialogs() {
     return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
   }
+
+  /**
+   *  @param source current file id
+   *  @param id imported file path
+   *  for example:
+   *  in AddToDo.lg:
+   *   [import](../common/common.lg)
+   *
+   * source = AddToDo.lg  || AddToDo
+   * id = ../common/common.lg  || common.lg || common
+   */
+  private _lgImportResolver = (source: string, id: string) => {
+    const targetId = Path.basename(id, '.lg');
+    const targetFile = this.lgFiles.find(({ id }) => id === targetId);
+    if (!targetFile) throw new Error('file not found');
+    return {
+      id,
+      content: targetFile.content,
+    };
+  };
 
   // re index according to file change in a certain path
   private reindex = async (filePath: string) => {
@@ -440,13 +489,13 @@ export class BotProject {
     // only call the specific indexer to re-index
     switch (fileExtension) {
       case '.dialog':
-        this.dialogs = this.indexDialog();
+        this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files);
+        this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
         break;
       case '.lu':
-        this.luFiles = (await luIndexer.index(this.files)) as LuFile[]; // ludown parser is async
+        this.luFiles = luIndexer.index(this.files);
         break;
       default:
         throw new Error(`${filePath} is not dialog or lg or lu file`);
@@ -459,6 +508,7 @@ export class BotProject {
       return;
     }
     if (!(await this.fileStorage.exists(dir))) {
+      debug('Creating directory: %s', dir);
       await this.fileStorage.mkDir(dir, { recursive: true });
     }
   };
@@ -497,21 +547,27 @@ export class BotProject {
   // check project stracture is valid or not, if not, try fix it.
   private _checkProjectStructure = async () => {
     const dialogs: DialogInfo[] = this.dialogs;
-    const luFiles: LuFile[] = this.luFiles;
-    const lgFiles: LgFile[] = this.lgFiles;
+    const files: FileInfo[] = this.files;
 
     // ensure each dialog folder have a lu file, e.g.
     /**
      * + AddToDo (folder)
      *   - AddToDo.dialog
      *   - AddToDo.lu                     // if not exist, auto create it
+     *   - AddToDo.lg                     // if not exist, auto create it
      */
     for (const dialog of dialogs) {
+      const dialogDir = Path.dirname(dialog.relativePath);
+      const dialogId = Path.basename(dialog.id);
       // dialog/lu should in the same path folder
       const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
-      const exist = luFiles.findIndex((luFile: LuFile) => luFile.relativePath === targetLuFilePath);
-      if (exist === -1) {
+      if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
         await this._createFile(targetLuFilePath, '');
+      }
+      // dialog/lg should in the same path folder
+      const targetLgFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lg');
+      if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
+        await this.createLgFile(dialogId, '', dialogDir);
       }
     }
 
@@ -525,8 +581,8 @@ export class BotProject {
      */
     for (const dialog of dialogs) {
       const { lgFile, luFile } = dialog;
-      const lgExist = lgFiles.findIndex((file: LgFile) => file.id === lgFile);
-      const luExist = luFiles.findIndex((file: LuFile) => file.id === luFile);
+      const lgExist = files.findIndex(({ name }) => name === `${lgFile}.lg`);
+      const luExist = files.findIndex(({ name }) => name === `${luFile}.lu`);
 
       if (lgFile && lgExist === -1) {
         throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
@@ -535,15 +591,82 @@ export class BotProject {
         throw new Error(`${dialog.id}.dialog referred recognizer ${luFile} not exist`);
       }
     }
+
+    await this._autofixTemplateInCommon();
+    await this._autofixGeneratorInDialog();
   };
 
-  private isEmpty = (LUFile: LuFile) => {
-    if (LUFile === undefined) return true;
-    if (LUFile.content === undefined || LUFile.content === '') return true;
-    if (LUFile.parsedContent === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure === undefined) return true;
-    if (LUFile.parsedContent.LUISJsonStructure.intents.length !== 0) return false;
-    if (LUFile.parsedContent.LUISJsonStructure.utterances.length !== 0) return false;
+  private _buildRNNewlineText = (lineArray: string[]): string => {
+    const lineArrayEndWithRN = lineArray.map(line => {
+      if (line.endsWith('\r\n')) {
+        return line;
+      } else if (line.endsWith('\r')) {
+        return line + '\n';
+      } else {
+        return line + '\r\n';
+      }
+    });
+    return lineArrayEndWithRN.join('');
+  };
+
+  /**
+   * move generated lg template (like bfdactivity-123456) from common.lg into dialog.lg
+   * help migrate old version single-lg bot to multiple-lg
+   * we can disable this code after a period of time, when there is no old version bot.
+   */
+
+  private _autofixTemplateInCommon = async () => {
+    const NEWLINE = '\r\n';
+    const dialogs: DialogInfo[] = this.dialogs;
+    const lgFiles: LgFile[] = this.lgFiles;
+    const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
+    const commonLgFile = lgFiles.find(({ id }) => id === 'common');
+    if (!commonLgFile) return;
+    const lineContentArray = commonLgFile.content.split('\n');
+    for (const dialog of dialogs) {
+      const { lgTemplates } = dialog;
+      const dialogTemplateTexts: string[] = [];
+      for (const lgTemplate of lgTemplates) {
+        const templateName = lgTemplate.name;
+        if (inlineLgNamePattern.test(templateName)) {
+          const template = commonLgFile.templates.find(({ name }) => name === templateName);
+          if (!template?.range) continue;
+          const { startLineNumber, endLineNumber } = template.range;
+          const lineCount = endLineNumber - startLineNumber + 1;
+          const templateText = this._buildRNNewlineText(
+            lineContentArray.splice(startLineNumber - 1, lineCount, ...Array(lineCount))
+          );
+          dialogTemplateTexts.push(templateText);
+        }
+      }
+      const updatedContent =
+        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') +
+        this._buildRNNewlineText(dialogTemplateTexts) +
+        NEWLINE;
+      await this.updateLgFile(dialog.id, updatedContent);
+    }
+    const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
+    await this.updateLgFile('common', updatedCommonContent);
+  };
+
+  /**
+   * each dialog should use it's own lg
+   * e.g ShowToDo.dialog's generator property should be `ShowToDo.lg`.
+   */
+  private _autofixGeneratorInDialog = async () => {
+    const dialogs: DialogInfo[] = this.dialogs;
+    for (const dialog of dialogs) {
+      const { content, id } = dialog;
+      const updatedContent = { ...content, generator: `${id}.lg` };
+      await this.updateDialog(id, updatedContent);
+    }
+  };
+
+  private isLuFileEmpty = (file: LuFile) => {
+    const { content, intents } = file;
+    if (content && intents?.length) {
+      return false;
+    }
     return true;
   };
 

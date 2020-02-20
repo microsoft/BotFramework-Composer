@@ -4,6 +4,46 @@
 
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 
+function createKeywordsProposals(range) {
+  // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
+  // here you could do a server side lookup
+  return [
+    {
+      label: 'IF',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: `IF: @{}
+-
+- ELSEIF: @{}
+    -
+- ELSE:
+    - `,
+      range: range,
+    },
+    {
+      label: 'ELSEIF',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'ELSEIF:@{}',
+      range: range,
+    },
+    {
+      label: 'ELSE',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: 'ELSE:\n',
+      range: range,
+    },
+    {
+      label: 'SWITCH',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: `SWITCH: @{}
+- CASE: @{}
+    -
+- DEFAULT:
+    - `,
+      range: range,
+    },
+  ];
+}
+
 export function registerLGLanguage(monaco: typeof monacoEditor) {
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
     ignoreCase: true,
@@ -73,7 +113,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
-        [/\]\s*$/, 'imports', '@pop'],
+        [/\]\s*\(.*\)$/, 'imports', '@pop'],
         [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['stucture-lg-identifier', 'structure-name']],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/\|/, { token: 'alternative' }],
@@ -111,5 +151,31 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       { token: 'string', foreground: 'DF2C2C' },
       { token: 'structure-name', foreground: '00B7C3' },
     ],
+  });
+
+  monaco.languages.registerCompletionItemProvider('botbuilderlg', {
+    provideCompletionItems: function(model, position) {
+      const lineText = model.getValueInRange({
+        startLineNumber: position.lineNumber,
+        startColumn: 1,
+        endLineNumber: position.lineNumber,
+        endColumn: position.column,
+      });
+      // keywords only be allowed in line start.
+      if (/\s*-\s*\w*$/.test(lineText) === false) {
+        return { suggestions: [] };
+      }
+
+      const word = model.getWordUntilPosition(position);
+      const range = {
+        startLineNumber: position.lineNumber,
+        endLineNumber: position.lineNumber,
+        startColumn: word.startColumn,
+        endColumn: word.endColumn,
+      };
+      return {
+        suggestions: createKeywordsProposals(range),
+      };
+    },
   });
 }

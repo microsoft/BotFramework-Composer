@@ -5,11 +5,13 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
+import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
+import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension } from '../../utils';
+import { getExtension, getFileName, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 
 import createReducer from './createReducer';
@@ -84,6 +86,7 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 const removeDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
+  state.lgFiles = response.data.lgFiles;
   return state;
 };
 
@@ -102,13 +105,40 @@ const createDialogCancel: ReducerFunc = state => {
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.luFiles = response.data.luFiles;
+  state.lgFiles = response.data.lgFiles;
   state.showCreateDialogModal = false;
   delete state.onCreateDialogComplete;
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { response }) => {
-  state.lgFiles = response.data.lgFiles;
+const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
+  const lgFiles = state.lgFiles.map(lgFile => {
+    if (lgFile.id === id) {
+      lgFile.content = content;
+      return lgFile;
+    }
+    return lgFile;
+  });
+  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
+    const targetFileName = getFileName(id);
+    const targetFileId = getBaseName(targetFileName);
+    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
+    if (!targetFile) throw new Error(`file not found`);
+    return { id, content: targetFile.content };
+  };
+
+  state.lgFiles = lgFiles.map(lgFile => {
+    const { check, parse } = lgIndexer;
+    const { id, content } = lgFile;
+    const diagnostics = check(content, id, lgImportresolver);
+    let templates: LgTemplate[] = [];
+    try {
+      templates = parse(content, id);
+    } catch (err) {
+      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+    }
+    return { ...lgFile, templates, diagnostics, content };
+  });
   return state;
 };
 
@@ -328,6 +358,7 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
+  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,

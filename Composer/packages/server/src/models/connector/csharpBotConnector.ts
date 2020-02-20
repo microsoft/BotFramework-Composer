@@ -1,116 +1,197 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { parse as urlParse } from 'url';
+import { ChildProcess, spawn } from 'child_process';
 import fs from 'fs';
 
-import axios from 'axios';
-import archiver from 'archiver';
-import FormData from 'form-data';
-import { FileInfo } from '@bfc/indexers';
+import getPort from 'get-port';
 
-import { BotProjectService } from '../../services/project';
+import envSettings from '../../settings';
 import { DialogSetting } from '../bot/interface';
+import { Path } from '../../utility/path';
+import log from '../../logger';
+import AssetService from '../../services/asset';
+import { IFileStorage } from '../storage/interface';
+import { currentConfig } from '../environment';
+import { BotProject } from '../bot/botProject';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
+const debug = log.extend('bot-runtime');
+const buildDebug = debug.extend('build');
+const runtimeDebugs: { [key: string]: debug.Debugger } = {};
 export class CSharpBotConnector implements IBotConnector {
-  private adminEndpoint: string;
+  public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
-  constructor(adminEndpoint: string, endpoint: string) {
-    this.adminEndpoint = adminEndpoint;
+  static botRuntimes: { [key: string]: ChildProcess } = {};
+  private botProject: BotProject;
+
+  constructor(endpoint: string, project: BotProject) {
     this.endpoint = endpoint;
+    this.botProject = project;
   }
 
-  public status: BotStatus = BotStatus.NotConnected;
-
-  connect = async (_: BotEnvironments, __: string) => {
-    // confirm bot runtime is listening here
-    try {
-      await axios.get(this.adminEndpoint + '/api/admin');
-    } catch (err) {
-      throw new Error(err);
+  static stopAll = (signal: string) => {
+    for (const pid in CSharpBotConnector.botRuntimes) {
+      const runtime = CSharpBotConnector.botRuntimes[pid];
+      runtime.kill(signal);
+      runtimeDebugs[pid]('successfully stopped bot runtime');
+      delete CSharpBotConnector.botRuntimes[pid];
     }
+  };
 
+  private stop = () => {
+    CSharpBotConnector.stopAll('SIGINT');
     this.status = BotStatus.NotConnected;
-
-    return `${this.endpoint}/api/messages`;
   };
 
-  sync = async (config: DialogSetting) => {
-    // archive the project
-    // send to bot runtime service
-    const currentProject = BotProjectService.getCurrentBotProject();
-    if (currentProject === undefined) {
-      throw new Error('no project is opened, nothing to sync');
-    }
-    // call .index() in order to load all the files from storage into memory
-    await currentProject.index();
-    const luisConfig = currentProject.luPublisher.getLuisConfig();
-    await this.createZipFromFiles(currentProject.files, './tmp.zip');
-    const content = fs.readFileSync('./tmp.zip');
-
-    const form = new FormData();
-    form.append('file', content, 'bot.zip');
-
-    if (luisConfig && luisConfig.authoringKey !== null && !currentProject.checkLuisPublished()) {
-      throw new Error('Please publish your Luis models');
-    }
-
-    if (luisConfig) {
-      form.append('endpointKey', luisConfig.endpointKey || luisConfig.authoringKey || '');
-    }
-
-    config = {
-      ...(await currentProject.settingManager.get(currentProject.environment.getDefaultSlot(), false)),
-      ...config,
-    };
-    if (config.MicrosoftAppPassword) {
-      form.append('microsoftAppPassword', config.MicrosoftAppPassword);
-    }
-    try {
-      await axios.post(this.adminEndpoint + '/api/admin', form, { headers: form.getHeaders() });
-    } catch (err) {
-      throw new Error('Unable to sync content to bot runtime');
+  private isOldBot = (dir: string): boolean => {
+    // check bot the bot version through build script existence.
+    if (process.platform === 'win32') {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.ps1'));
+    } else {
+      return !fs.existsSync(Path.resolve(dir, './Scripts/build_runtime.sh'));
     }
   };
 
-  /**
-   * given an array of FileInfo objects (resulting from indexing a project),
-   * create a zip file of the contents. The original files do not have to live on the local filesystem.
-   */
-  createZipFromFiles = (files: FileInfo[], dest: string) => {
+  private migrateBot = async (dir: string, storage: IFileStorage) => {
+    if (this.isOldBot(dir)) {
+      // cover the old bot runtime with new runtime template
+      await AssetService.manager.copyRuntimeTo(dir, storage);
+    }
+  };
+
+  private buildProcess = async (dir: string): Promise<number | null> => {
+    // build bot runtime
     return new Promise((resolve, reject) => {
-      const archive = archiver('zip');
-      const output = fs.createWriteStream(dest);
-
-      archive.pipe(output);
-      for (const f in files) {
-        const file = files[f];
-        archive.append(file.content, { name: file.relativePath });
+      let shell = 'sh';
+      let script = ['./Scripts/build_runtime.sh'];
+      if (process.platform === 'win32') {
+        shell = 'powershell';
+        script = ['-executionpolicy', 'bypass', '-file', './Scripts/build_runtime.ps1'];
       }
-      archive.finalize();
-
-      output.on('close', () => resolve(archive));
-      archive.on('error', err => reject(err));
+      const build = spawn(`${shell}`, script, {
+        cwd: dir,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      let errorMsg = '';
+      buildDebug('building bot runtime: %d', build.pid);
+      build.stdout &&
+        build.stdout.on('data', function(str) {
+          buildDebug('%s', str);
+        });
+      build.stderr &&
+        build.stderr.on('data', function(err) {
+          errorMsg = errorMsg + err.toString();
+        });
+      build.on('exit', function(code) {
+        if (code !== 0) {
+          reject(errorMsg);
+        } else {
+          resolve(code);
+        }
+      });
     });
   };
 
-  /**
-   * given a local folder of files, create a zipfile.
-   * only works with local files (not those managed by a storage provider)
-   * This method is deprecated in favor of createZipFromFiles.
-   */
-  // archiveDirectory = (src: string, dest: string) => {
-  //   return new Promise((resolve, reject) => {
-  //     const archive = archiver('zip');
-  //     const output = fs.createWriteStream(dest);
-  //     archive.pipe(output);
-  //     archive.directory(src, false);
-  //     archive.finalize();
-  //     output.on('close', () => resolve(archive));
-  //     archive.on('error', err => reject(err));
-  //   });
-  // };
+  private getConnectorConfig = (config: DialogSetting) => {
+    const configList: string[] = [];
+    if (config.MicrosoftAppPassword) {
+      configList.push('--MicrosoftAppPassword');
+      configList.push(config.MicrosoftAppPassword);
+    }
+    if (config.luis) {
+      if (config.luis.authoringKey) {
+        configList.push('--luis:endpointKey');
+        configList.push(config.luis.authoringKey);
+      }
+      if (config.luis.authoringRegion) {
+        configList.push('--luis:endpoint');
+        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
+      }
+    }
+
+    return configList;
+  };
+
+  private addListeners = (child: ChildProcess, handler: Function, resolve: Function, reject: Function) => {
+    const currentDebugger = runtimeDebugs[child.pid];
+    let erroutput = '';
+    child.stdout &&
+      child.stdout.on('data', (data: any) => {
+        currentDebugger('%s', data);
+        resolve(child.pid);
+      });
+
+    child.stderr &&
+      child.stderr.on('data', (err: any) => {
+        erroutput += err.toString();
+      });
+
+    child.on('exit', code => {
+      currentDebugger('exit %d', code);
+      handler();
+      if (code !== 0) {
+        currentDebugger('exit %d: %s', code, erroutput);
+        reject(erroutput);
+      }
+    });
+
+    child.on('message', msg => {
+      currentDebugger('%s', msg);
+    });
+  };
+
+  private getBotPathAndStorage = () => {
+    return { dir: Path.join(this.botProject.dir), storage: this.botProject.fileStorage };
+  };
+
+  private start = async (dir: string, config: DialogSetting): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const runtime = spawn(
+        'dotnet',
+        [
+          `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
+          `--urls`,
+          this.endpoint,
+          ...this.getConnectorConfig(config),
+        ],
+        {
+          cwd: dir,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
+      // extend runtime debugger
+      runtimeDebugs[runtime.pid] = debug.extend(`process (${runtime.pid})`);
+      runtimeDebugs[runtime.pid]('bot runtime started');
+      CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
+      this.addListeners(runtime, this.stop, resolve, reject);
+    });
+  };
+
+  connect = async (_: BotEnvironments, __: string) => {
+    const originPort = urlParse(this.endpoint).port;
+    const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
+    this.endpoint = `http://localhost:${port}`;
+    currentConfig.endpoint = this.endpoint;
+    return `http://localhost:${port}/api/messages`;
+  };
+
+  sync = async (config: DialogSetting) => {
+    try {
+      this.stop();
+      const { dir, storage } = this.getBotPathAndStorage();
+      await this.migrateBot(dir, storage);
+      await this.buildProcess(dir);
+      await this.start(dir, config);
+      this.status = BotStatus.Connected;
+    } catch (err) {
+      this.stop();
+      this.status = BotStatus.NotConnected;
+      throw err;
+    }
+  };
 
   getEditingStatus = (): Promise<boolean> => {
     return new Promise(resolve => {
@@ -134,3 +215,10 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
+const cleanup = (signal: NodeJS.Signals) => {
+  CSharpBotConnector.stopAll(signal);
+  process.exit(0);
+};
+(['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
+  process.on(signal, cleanup.bind(null, signal));
+});

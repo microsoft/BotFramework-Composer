@@ -5,8 +5,11 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import StorageService from '../../services/storage';
 import { UserIdentity } from '../../services/pluginLoader';
+import log from '../../logger';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
+
+const debug = log.extend('file-settings-manager');
 
 // TODO: this causes tests to fail
 const subPath = 'ComposerDialogs/settings/appsettings.json';
@@ -21,7 +24,7 @@ export class FileSettingManager implements ISettingManager {
     this.storage = StorageService.getStorageClient('default', user);
   }
 
-  public get = async (slot: string, obfuscate: boolean): Promise<any> => {
+  public get = async (slot = '', obfuscate = false): Promise<any> => {
     this.validateSlot(slot);
 
     const path = this.getPath(slot);
@@ -53,6 +56,7 @@ export class FileSettingManager implements ISettingManager {
 
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
+      debug('Storage path does not exist. Creating directory now: %s', dir);
       await this.storage.mkDir(dir, { recursive: true });
     }
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));

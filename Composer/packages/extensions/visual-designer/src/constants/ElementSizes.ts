@@ -17,8 +17,8 @@ export const LoopIconSize = {
 };
 
 export const IconBrickSize = {
-  width: 16,
-  height: 16,
+  width: 24,
+  height: 24,
 };
 
 export const LoopEdgeMarginLeft = 20;
@@ -26,14 +26,15 @@ export const LoopEdgeMarginLeft = 20;
 export const BoxMargin = 5;
 export const TriggerSize = InitNodeSize;
 
-export const TerminatorSize = { width: 14, height: 14 };
+export const TerminatorSize = { width: 16, height: 16 };
 
 export const ChoiceInputSize = {
-  width: 145,
+  width: 155,
   height: 22,
 };
 
-export const ChoiceInputMarginTop = 5;
+export const ChoiceInputMarginTop = 8;
+export const ChoiceInputMarginBottom = 10;
 
 export const EventNodeSize = {
   width: 240,

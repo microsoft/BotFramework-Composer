@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
-import get from 'lodash/get';
+import { filterTemplateDiagnostics } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
+import isEqual from 'lodash/isEqual';
 
 import { FormContext } from '../types';
 
@@ -44,15 +45,18 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
-  const lgName = new LgMetaData(name, formContext.dialogId || '').toString();
+  // refered lgTemplateId may not equal to dialogId. find in value at first.
+  const singleLgRefMatched = value?.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
+  const lgName = singleLgRefMatched
+    ? singleLgRefMatched[1]
+    : new LgMetaData(name, formContext.dialogId || '').toString();
   const lgFileId = formContext.currentDialog.lgFile || 'common';
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
-  const updateLgTemplate = useMemo(
-    () =>
-      debounce((body: string) => {
-        formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
-      }, 500),
+  const updateLgTemplate = useCallback(
+    (body: string) => {
+      formContext.shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
+    },
     [lgName, lgFileId]
   );
 
@@ -62,6 +66,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       return template.name === lgName;
     })) || {
     name: lgName,
+    parameters: [],
     body: getInitialTemplate(name, value),
     range: {
       startLineNumber: 0,
@@ -69,25 +74,31 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic =
-    lgFile &&
-    lgFile.diagnostics.find(d => {
-      return (
-        d.range &&
-        template.range &&
-        d.range.start.line >= template.range.startLineNumber &&
-        d.range.end.line <= template.range.endLineNumber
-      );
-    });
+  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
 
   const errorMsg = diagnostic
     ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
     : '';
   const [localValue, setLocalValue] = useState(template.body);
+  const sync = useRef(
+    debounce((shellData: any, localData: any) => {
+      if (!isEqual(shellData, localData)) {
+        setLocalValue(shellData);
+      }
+    }, 750)
+  ).current;
+
+  useEffect(() => {
+    sync(template.body, localValue);
+
+    return () => {
+      sync.cancel();
+    };
+  }, [template.body]);
+
   const lgOption = {
-    inline: true,
-    content: get(lgFile, 'content', ''),
-    template,
+    fileId: lgFileId,
+    templateId: lgName,
   };
 
   const onChange = (body: string) => {
@@ -97,19 +108,11 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
         updateLgTemplate(body);
         props.onChange(new LgTemplateRef(lgName).toString());
       } else {
-        updateLgTemplate.flush();
         formContext.shellApi.removeLgTemplate(lgFileId, lgName);
         props.onChange();
       }
     }
   };
-
-  // update the template on mount to get validation
-  useEffect(() => {
-    if (localValue) {
-      updateLgTemplate(localValue);
-    }
-  }, []);
 
   return (
     <LgEditor

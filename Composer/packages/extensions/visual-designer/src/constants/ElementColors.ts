@@ -24,6 +24,7 @@ const Colors = {
   Green20: '#0B6A0B',
   Cyan40: '#005E50',
   Gray20: '#69797E',
+  LightGray: '#545454',
   BlueMagenta30: '#5C2E91',
   BlueMagenta20: '#EEEAF4',
   Magenta10: '#C239B3',

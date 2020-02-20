@@ -3,45 +3,44 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, ComponentClass } from 'react';
+import { FC, useContext } from 'react';
+import { SDKTypes } from '@bfc/shared';
+import get from 'lodash/get';
 
-import { ObiTypes } from '../../constants/ObiTypes';
-import { IfCondition, SwitchCondition, Foreach, BaseInput } from '../nodes/index';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
+import { renderUIWidget } from '../../schema/uischemaRenderer';
+import { UISchemaContext } from '../../store/UISchemaContext';
 
-import { ElementRenderer } from './ElementRenderer';
+import { ElementWrapper } from './ElementWrapper';
 
-const rendererByObiType = {
-  [ObiTypes.IfCondition]: IfCondition,
-  [ObiTypes.SwitchCondition]: SwitchCondition,
-  [ObiTypes.Foreach]: Foreach,
-  [ObiTypes.ForeachPage]: Foreach,
-  [ObiTypes.AttachmentInput]: BaseInput,
-  [ObiTypes.ConfirmInput]: BaseInput,
-  [ObiTypes.DateTimeInput]: BaseInput,
-  [ObiTypes.NumberInput]: BaseInput,
-  [ObiTypes.TextInput]: BaseInput,
-  [ObiTypes.ChoiceInput]: BaseInput,
-};
-const DEFAULT_RENDERER = ElementRenderer;
+/** TODO: (zeye) integrate this array into UISchema */
+const TypesWithoutWrapper = [
+  SDKTypes.IfCondition,
+  SDKTypes.SwitchCondition,
+  SDKTypes.Foreach,
+  SDKTypes.ForeachPage,
+  SDKTypes.AttachmentInput,
+  SDKTypes.ConfirmInput,
+  SDKTypes.DateTimeInput,
+  SDKTypes.NumberInput,
+  SDKTypes.TextInput,
+  SDKTypes.ChoiceInput,
+];
 
-function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
-  const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
-  return renderer;
-}
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
+  const schemaProvider = useContext(UISchemaContext);
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  const ChosenRenderer = chooseRendererByType(data.$type);
+  const $type = get(data, '$type', '');
+  const widgetSchema = schemaProvider.get($type);
 
+  const content = renderUIWidget(widgetSchema, { id, data, onEvent });
+  if (TypesWithoutWrapper.some(x => $type === x)) {
+    return content;
+  }
   return (
-    <ChosenRenderer
-      id={id}
-      data={data}
-      onEvent={onEvent}
-      onResize={size => {
-        onResize(size, 'node');
-      }}
-    />
+    <ElementWrapper id={id} onEvent={onEvent}>
+      {content}
+    </ElementWrapper>
   );
 };
 

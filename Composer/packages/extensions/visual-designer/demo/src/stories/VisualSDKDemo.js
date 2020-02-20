@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { seedNewDialog, SDKTypes } from '@bfc/shared';
 
-import { renderSDKType } from '../../../src/schema/uischemaRenderer';
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
+import { renderUIWidget } from '../../../src/schema/uischemaRenderer';
+import { UISchemaProvider } from '../../../src/schema/uischemaProvider';
+import { uiSchema } from '../../../src/schema/uischema';
 
 import './story.css';
+
+const uiSchemaPrivider = new UISchemaProvider(uiSchema);
 
 export class VisualSDKDemo extends Component {
   state = {
@@ -14,13 +18,17 @@ export class VisualSDKDemo extends Component {
 
   seedInitialActions() {
     const initialTypes = [
+      SDKTypes.SendActivity,
       SDKTypes.EditArray,
       SDKTypes.InitProperty,
       SDKTypes.SetProperties,
       SDKTypes.SetProperty,
       SDKTypes.DeleteProperties,
       SDKTypes.DeleteProperty,
+      SDKTypes.BeginDialog,
       SDKTypes.EndDialog,
+      SDKTypes.RepeatDialog,
+      SDKTypes.ReplaceDialog,
       SDKTypes.CancelAllDialogs,
       SDKTypes.EmitEvent,
     ];
@@ -58,7 +66,13 @@ export class VisualSDKDemo extends Component {
             }}
           />
         </div>
-        <div className="action-preview--visual">{renderSDKType(action)}</div>
+        <div className="action-preview--visual">
+          {renderUIWidget(uiSchemaPrivider.get(action.$type), {
+            id: `actions[${index}]`,
+            data: action,
+            onEvent: () => null,
+          })}
+        </div>
       </div>
     );
   }

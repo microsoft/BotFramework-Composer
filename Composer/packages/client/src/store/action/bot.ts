@@ -8,11 +8,12 @@ import httpClient from './../../utils/httpUtil';
 
 export const connectBot: ActionCreator = async (store, settings) => {
   const state = store.getState();
-  const { botEnvironment } = state;
-  const path = `/launcher/connect?botEnvironment=${botEnvironment}`;
+  const { botEnvironment, projectId } = state;
+  const path = `/launcher/${projectId}/connect?botEnvironment=${botEnvironment}`;
 
   try {
     const res = await httpClient.get(path);
+    await reloadBot(store, settings);
     store.dispatch({
       type: ActionTypes.CONNECT_BOT_SUCCESS,
       payload: {
@@ -21,10 +22,14 @@ export const connectBot: ActionCreator = async (store, settings) => {
       },
     });
   } catch (err) {
-    throw new Error(err.response.data.message);
+    store.dispatch({
+      type: ActionTypes.CONNECT_BOT_FAILURE,
+      payload: {
+        status: 'unConnected',
+      },
+    });
+    throw new Error(err.response?.data?.message || err.message);
   }
-
-  await reloadBot(store, settings);
 };
 
 // return only the connect URL -- do not reload
@@ -35,7 +40,7 @@ export const getConnect: ActionCreator = async (store, env) => {
   if (env) {
     botEnvironment = env;
   }
-  const path = `/launcher/connect?botEnvironment=${botEnvironment}`;
+  const path = `/launcher/${state.projectId}/connect?botEnvironment=${botEnvironment}`;
 
   try {
     const res = await httpClient.get(path);
@@ -52,8 +57,8 @@ export const getConnect: ActionCreator = async (store, env) => {
 };
 
 export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings) => {
-  const { botEnvironment } = getState();
-  const path = `/launcher/sync`;
+  const { botEnvironment, projectId } = getState();
+  const path = `/launcher/${projectId}/sync`;
   try {
     const targetEnvironment = botEnvironment === 'integration' ? 'production' : 'integration';
 
@@ -69,8 +74,9 @@ export const reloadBot: ActionCreator = async ({ dispatch, getState }, settings)
   }
 };
 
-export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
-  const path = `/launcher/publishHistory`;
+export const getPublishHistory: ActionCreator = async ({ dispatch, getState }) => {
+  const { projectId } = getState();
+  const path = `/launcher/${projectId}/publishHistory`;
   try {
     const res = await httpClient.get(path);
     dispatch({
@@ -84,8 +90,10 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const publish: ActionCreator = async ({ dispatch }) => {
-  const path = `/launcher/publish`;
+export const publish: ActionCreator = async ({ dispatch, getState }) => {
+  const { projectId } = getState();
+
+  const path = `/launcher/${projectId}/publish`;
 
   dispatch({
     type: ActionTypes.PUBLISH_BEGIN,
@@ -114,8 +122,10 @@ export const publish: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const publishVersion: ActionCreator = async ({ dispatch }, version) => {
-  const path = `/launcher/publish/${version}`;
+export const publishVersion: ActionCreator = async ({ dispatch, getState }, version) => {
+  const { projectId } = getState();
+
+  const path = `/launcher/${projectId}/publish/${version}`;
 
   dispatch({
     type: ActionTypes.PUBLISH_BEGIN,

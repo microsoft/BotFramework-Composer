@@ -4,7 +4,7 @@
     "id": "126960"
   },
   "autoEndDialog": true,
-  "generator": "common.lg",
+  "generator": "Actions.lg",
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {

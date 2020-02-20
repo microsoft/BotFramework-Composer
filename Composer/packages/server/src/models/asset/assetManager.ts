@@ -10,7 +10,8 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '@src/services/pluginLoader';
+import { UserIdentity } from '../../services/pluginLoader';
+import { IFileStorage } from '../storage/interface';
 
 interface TemplateData {
   [key: string]: {
@@ -157,23 +158,25 @@ export class AssetManager {
     return output;
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
-    if (this.projectTemplates.length === 0) {
-      await this.getProjectTemplates();
-    }
-    if (this.runtimeTemplates.length === 0) {
-      await this.getProjectRuntime();
-    }
+  public async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
       throw new Error(`no such template with id ${templateId}`);
     }
+    // copy Composer data files
+    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+  }
 
+  public async copyRuntimeTo(dstDir: string, dstStorage: IFileStorage) {
     const runtime = find(this.runtimeTemplates, { id: DEFAULT_RUNTIME });
     if (runtime === undefined || runtime.path === undefined) {
       throw new Error(`no such runtime with id ${DEFAULT_RUNTIME}`);
     }
+    // copy runtime code files
+    await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
+  }
 
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
     // user storage maybe diff from template storage
     const dstStorage = StorageService.getStorageClient(ref.storageId, user);
     const dstDir = Path.resolve(ref.path);
@@ -181,12 +184,8 @@ export class AssetManager {
       log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
-
-    // copy Composer data files
-    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
-
-    // copy runtime code files
-    await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
+    await this.copyDataFilesTo(templateId, dstDir, dstStorage);
+    await this.copyRuntimeTo(dstDir, dstStorage);
     return ref;
   }
 }

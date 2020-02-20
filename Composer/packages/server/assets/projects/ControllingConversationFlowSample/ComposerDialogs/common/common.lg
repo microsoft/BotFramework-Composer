@@ -7,27 +7,3 @@
 # helpText
 -```Welcome to the Controlling Conversation sample. Choose from the list below to try.
 You can also type "Cancel" to cancel any dialog or "Endturn" to explicitly accept an input.```
-
-# bfdactivity-623448
--Pushed dialog.ids into a list
-
-# bfdactivity-638869
--Pushed dialog.id into a list
-
-# bfdactivity-164444
--Your age is @{user.age} which satisified the condition that was evaluated
-
-# bfdactivity-619321
--Your age is @{user.age} which did not satisfy the condition that we evaluated
-
-# bfdactivity-097130
--You selected @{user.name}
-
-# bfdactivity-040464
--This is the logic inside the "Susan" switch block.
-
-# bfdactivity-230206
--This is the logic inside the "Nick" switch block.
-
-# bfdactivity-604251
--This is the logic inside the "Tom" switch block.

@@ -12,7 +12,7 @@ import formatMessage from 'format-message';
 
 import { BaseField } from '../fields/BaseField';
 
-import { arrayItemField, arrayItemInputFieldContainer } from './styles';
+import { arrayItemInputFieldContainer } from './styles';
 import ArrayItem from './ArrayItem';
 
 const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
@@ -44,18 +44,17 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
       </div>
       {canAdd && (
         <div css={arrayItemInputFieldContainer}>
-          <div css={arrayItemField}>
-            <TextField
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              value={value}
-              iconProps={{
-                iconName: 'ReturnKey',
-                style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
-              }}
-              data-testid="string-array-text-input"
-            />
-          </div>
+          <TextField
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            value={value}
+            iconProps={{
+              iconName: 'ReturnKey',
+              style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
+            }}
+            styles={{ root: { width: '100%' } }}
+            data-testid="string-array-text-input"
+          />
           <IconButton
             disabled={true}
             menuIconProps={{ iconName: 'MoreVertical' }}

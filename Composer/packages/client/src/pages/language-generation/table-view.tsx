@@ -31,7 +31,7 @@ const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, lgFiles } = state;
   const { fileId } = props;
-  const file = lgFiles.find(({ id }) => id === 'common');
+  const file = lgFiles.find(({ id }) => id === fileId);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
@@ -42,20 +42,8 @@ const TableView: React.FC<TableViewProps> = props => {
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
-    const allTemplates = file.templates;
 
-    if (!activeDialog) {
-      setTemplates(allTemplates);
-    } else {
-      const dialogsTemplates: LgTemplate[] = [];
-      activeDialog.lgTemplates.forEach(item => {
-        const template = allTemplates.find(t => t.name === item);
-        if (template) {
-          dialogsTemplates.push(template);
-        }
-      });
-      setTemplates(dialogsTemplates);
-    }
+    setTemplates(file.templates);
   }, [file, activeDialog]);
 
   const onClickEdit = useCallback(
@@ -133,11 +121,6 @@ const TableView: React.FC<TableViewProps> = props => {
         },
       ];
 
-      // do not allow delete/copy template in particular dialog
-      if (activeDialog) {
-        buttons.splice(1, 2);
-      }
-
       return buttons;
     },
     [activeDialog, templates]
@@ -169,7 +152,6 @@ const TableView: React.FC<TableViewProps> = props => {
           return <div css={formCell}>{item.body}</div>;
         },
       },
-
       {
         key: 'buttons',
         name: '',
@@ -199,7 +181,7 @@ const TableView: React.FC<TableViewProps> = props => {
       // build usedIn map
       templates.forEach(({ name }) => {
         templateUsedInDialogMap[name] = dialogs
-          .filter(dialog => dialog.lgTemplates.includes(name))
+          .filter(dialog => dialog.lgTemplates.map(t => t.name).includes(name))
           .map(dialog => dialog.id);
       });
 
@@ -224,6 +206,25 @@ const TableView: React.FC<TableViewProps> = props => {
       };
 
       tableColums.splice(2, 0, usedInColumn);
+    } else {
+      const beenUsedColumn = {
+        key: 'beenUsed',
+        name: formatMessage('Been used'),
+        fieldName: 'beenUsed',
+        minWidth: 100,
+        maxWidth: 100,
+        isResizable: true,
+        isCollapsable: true,
+        data: 'string',
+        onRender: item => {
+          return activeDialog?.lgTemplates.includes(item.name) ? (
+            <IconButton iconProps={{ iconName: 'Accept' }} />
+          ) : (
+            <div />
+          );
+        },
+      };
+      tableColums.splice(2, 0, beenUsedColumn);
     }
 
     return tableColums;
@@ -243,8 +244,7 @@ const TableView: React.FC<TableViewProps> = props => {
   }, []);
 
   const onRenderDetailsFooter = useCallback(() => {
-    // do not allow add template in particular dialog
-    // cause new tempalte is not used by this dialog yet.
+    // do not allow add template in particular dialog lg, it suppose to be auto generated in form.
     if (activeDialog) return <div />;
 
     return (

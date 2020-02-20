@@ -18,13 +18,8 @@ const placeholder = `> To learn more about the LG file format, read the document
 > ${LG_HELP}`;
 
 export interface LGOption {
-  inline: boolean;
-  content: string;
-  template?: {
-    name: string;
-    parameters?: string[];
-    body: string;
-  };
+  fileId: string;
+  templateId?: string;
 }
 
 export interface LGLSPEditorProps extends RichEditorProps {
@@ -53,17 +48,14 @@ async function initializeDocuments(lgOption: LGOption | undefined, uri: string) 
   const languageClient = window.monacoLGEditorInstance;
   if (languageClient) {
     await languageClient.onReady();
-    if (lgOption && lgOption.inline) {
-      languageClient.sendRequest('initializeDocuments', { ...lgOption, uri });
-    } else {
-      languageClient.sendRequest('initializeDocuments', { uri });
-    }
+    languageClient.sendRequest('initializeDocuments', { uri, lgOption });
   }
 }
 
 export function LgEditor(props: LGLSPEditorProps) {
   const options = {
     quickSuggestions: true,
+    wordBasedSuggestions: false,
     ...props.options,
   };
 

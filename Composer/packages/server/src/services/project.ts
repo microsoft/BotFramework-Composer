@@ -3,6 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
+import { TextFile } from '@bfc/indexers';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -16,7 +17,7 @@ import { UserIdentity } from './pluginLoader';
 const MAX_RECENT_BOTS = 7;
 
 export class BotProjectService {
-  // private static currentBotProject: BotProject | undefined = undefined;
+  private static currentBotProject: BotProject | undefined = undefined;
   private static recentBotProjects: LocationRef[] = [];
   private static projectLocationMap: {
     [key: string]: string;
@@ -38,6 +39,50 @@ export class BotProjectService {
     // if (BotProjectService.recentBotProjects.length > 0) {
     //   BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
     // }
+  }
+
+  public static lgImportResolver(_source: string, id: string): TextFile {
+    BotProjectService.initialize();
+    const targetId = Path.basename(id, '.lg');
+    const targetFile = BotProjectService.currentBotProject?.lgFiles.find(({ id }) => id === targetId);
+    if (!targetFile) throw new Error('lg file not found');
+    return {
+      id,
+      content: targetFile.content,
+    };
+  }
+
+  public static staticMemoryResolver(): string[] {
+    const defaultProperties = [
+      'this.value',
+      'this.turnCount',
+      'this.options',
+      'dialog.eventCounter',
+      'dialog.expectedProperties',
+      'dialog.lastEvent',
+      'dialog.requiredProperties',
+      'dialog.retries',
+      'dialog.lastIntent',
+      'dialog.lastTriggerEvent',
+      'turn.lastresult',
+      'turn.activity',
+      'turn.recognized',
+      'turn.recognized.intent',
+      'turn.recognized.score',
+      'turn.recognized.text',
+      'turn.unrecognizedText',
+      'turn.recognizedEntities',
+      'turn.interrupted',
+      'turn.dialogEvent',
+      'turn.repeatedIds',
+      'turn.activityProcessed',
+    ];
+    const userDefined: string[] =
+      BotProjectService.currentBotProject?.dialogs.reduce((result: string[], dialog) => {
+        result = [...dialog.userDefinedVariables, ...result];
+        return result;
+      }, []) || [];
+    return [...defaultProperties, ...userDefined];
   }
 
   public static getCurrentBotProject(): BotProject | undefined {

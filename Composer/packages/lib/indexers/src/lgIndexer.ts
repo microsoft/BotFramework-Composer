@@ -1,11 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGParser, StaticChecker, Diagnostic as LGDiagnostic, ImportResolver } from 'botbuilder-lg';
+import {
+  LGParser,
+  StaticChecker,
+  Diagnostic as LGDiagnostic,
+  ImportResolver,
+  ImportResolverDelegate,
+} from 'botbuilder-lg';
 import get from 'lodash/get';
 
-import { FileInfo, LgFile, LgTemplate } from './type';
 import { getBaseName } from './utils/help';
+import { LgTemplate, LgFile, FileInfo } from './type';
 import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
 
 const lgStaticChecker = new StaticChecker();
@@ -21,14 +27,12 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-function check(content: string, id: string, path?: string): Diagnostic[] {
-  const lgImportResolver = ImportResolver.fileResolver;
+function check(content: string, id: string, importResolver?: ImportResolverDelegate): Diagnostic[] {
+  const resolver: ImportResolverDelegate = importResolver || ImportResolver.fileResolver;
   let diagnostics: LGDiagnostic[] = [];
-  if (path) {
-    diagnostics = lgStaticChecker.checkText(content, path);
-  } else {
-    diagnostics = lgStaticChecker.checkText(content, path, lgImportResolver);
-  }
+
+  diagnostics = lgStaticChecker.checkText(content, id, resolver);
+
   return diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
   });
@@ -50,21 +54,21 @@ function parse(content: string, id?: string): LgTemplate[] {
   return templates;
 }
 
-function index(files: FileInfo[]): LgFile[] {
+function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
     const { name, relativePath, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      const diagnostics = check(content, id);
+      const diagnostics = check(content, id, importResolver);
       let templates: LgTemplate[] = [];
       try {
-        templates = parse(file.content, '');
+        templates = parse(file.content, id);
       } catch (err) {
         diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-      lgFiles.push({ id, relativePath, content, templates, diagnostics });
+      lgFiles.push({ id, content, relativePath, templates, diagnostics });
     }
   }
   return lgFiles;
