@@ -55,7 +55,7 @@ const styles = {
       padding: ${focused ? 0 : '1px'};
       border-style: solid;
       border-color: ${borderColor};
-      transition: border-color 0.1s linear, height 0.1s linear;
+      transition: border-color 0.1s linear;
       box-sizing: border-box;
       height: calc(100% - ${error ? 32 : 0}px);
     `;
@@ -132,7 +132,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         <MonacoEditor
           {...rest}
           editorDidMount={onEditorMount}
-          height="100%"
           value={value || placeholder}
           onChange={handleChange}
           options={options}
