@@ -46,5 +46,6 @@ module.exports = {
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/tools/language-servers/language-generation',
+    '<rootDir>/packages/ui-plugins/select-dialog',
   ],
 };

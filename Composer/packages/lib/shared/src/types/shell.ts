@@ -8,7 +8,7 @@ import { DialogInfo, LuFile, LgFile } from '@bfc/indexers';
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides: any;
-    SDKOverrifes?: any;
+    SDKOverrides?: any;
   };
 }
 
