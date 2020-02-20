@@ -14,11 +14,12 @@ interface BotAsksProps extends Omit<FieldProps<MicrosoftInputDialog>, 'onChange'
 }
 
 const BotAsks: React.FC<BotAsksProps> = props => {
-  const { onChange, getSchema, uiOptions, ...rest } = props;
+  const { onChange, getSchema, uiOptions, value, ...rest } = props;
 
   return (
     <SchemaField
       {...rest}
+      value={value?.prompt}
       schema={getSchema('prompt')}
       uiOptions={uiOptions.properties?.prompt || {}}
       onChange={onChange('prompt')}

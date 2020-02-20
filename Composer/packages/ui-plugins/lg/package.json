@@ -1,0 +1,50 @@
+{
+  "name": "@bfc/ui-plugin-lg",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer plugin that adds lg editor capibility using the Monaco editor.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "andy.brown@microsoft.com",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "@uifabric/icons": "^7.3.0",
+    "@uifabric/styling": "^7.7.4",
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.5",
+    "@types/vscode": "^1.40.0",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "@uifabric/icons": "^7.3.0",
+    "@uifabric/styling": "^7.7.4",
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {
+    "@bfc/shared": "*",
+    "@bfc/indexers": "*",
+    "@emotion/core": "^10.0.27"
+  }
+}

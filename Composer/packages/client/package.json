@@ -23,6 +23,7 @@
     "@bfc/obiformeditor": "*",
     "@bfc/shared": "*",
     "@bfc/ui-plugin-json": "*",
+    "@bfc/ui-plugin-lg": "*",
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/visual-designer": "*",
     "@bfcomposer/bf-lu": "^1.1.8",
