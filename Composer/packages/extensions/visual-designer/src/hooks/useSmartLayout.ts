@@ -9,8 +9,8 @@ import { GraphNode } from '../models/GraphNode';
 
 // T extends string means an Enum. Reference: https://github.com/microsoft/TypeScript/issues/30611#issuecomment-565384924
 type MapWithEnumKey<KeyType extends string, ValueType> = { [key in KeyType]: ValueType };
-type GraphNodeMap<T extends string> = MapWithEnumKey<T, GraphNode>;
-type BoundaryMap<T extends string> = MapWithEnumKey<T, Boundary>;
+export type GraphNodeMap<T extends string> = MapWithEnumKey<T, GraphNode>;
+export type BoundaryMap<T extends string> = MapWithEnumKey<T, Boundary>;
 
 export function useSmartLayout<T extends string>(
   nodeMap: GraphNodeMap<T>,

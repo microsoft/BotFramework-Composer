@@ -3,42 +3,54 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, useEffect, useState, useMemo } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { areBoundariesEqual, Boundary } from '../models/Boundary';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { renderEdge } from '../components/lib/EdgeUtil';
+import { useSmartLayout, GraphNodeMap, BoundaryMap } from '../hooks/useSmartLayout';
 
-const calculateNodeMap = (path, data): NodeMap => {
+enum IfElseNodes {
+  Condition = 'ConditionNode',
+  Choice = 'ChoiceNode',
+  IfBranch = 'IfBranchNode',
+  ElseBranch = 'ElseBranchNode',
+}
+
+const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
   const result = transformIfCondtion(data, path);
-  if (!result) return {};
+  if (!result)
+    return {
+      [IfElseNodes.Condition]: new GraphNode(),
+      [IfElseNodes.Choice]: new GraphNode(),
+      [IfElseNodes.IfBranch]: new GraphNode(),
+      [IfElseNodes.ElseBranch]: new GraphNode(),
+    };
 
   const { condition, choice, ifGroup, elseGroup } = result;
   return {
-    conditionNode: GraphNode.fromIndexedJson(condition),
-    choiceNode: GraphNode.fromIndexedJson(choice),
-    ifGroupNode: GraphNode.fromIndexedJson(ifGroup),
-    elseGroupNode: GraphNode.fromIndexedJson(elseGroup),
+    [IfElseNodes.Condition]: GraphNode.fromIndexedJson(condition),
+    [IfElseNodes.Choice]: GraphNode.fromIndexedJson(choice),
+    [IfElseNodes.IfBranch]: GraphNode.fromIndexedJson(ifGroup),
+    [IfElseNodes.ElseBranch]: GraphNode.fromIndexedJson(elseGroup),
   };
 };
 
-const calculateLayout = (nodeMap: NodeMap, boundaryMap: BoundaryMap) => {
+const calculateIfElseLayout = (nodeMap: GraphNodeMap<IfElseNodes>, boundaryMap: BoundaryMap<IfElseNodes>) => {
   Object.values(nodeMap)
     .filter(x => !!x)
     .forEach((x: GraphNode) => (x.boundary = boundaryMap[x.id] || x.boundary));
 
-  return ifElseLayouter(nodeMap.conditionNode, nodeMap.choiceNode, nodeMap.ifGroupNode, nodeMap.elseGroupNode);
+  return ifElseLayouter(nodeMap.ConditionNode, nodeMap.ChoiceNode, nodeMap.IfBranchNode, nodeMap.ElseBranchNode);
 };
 
 export interface IfConditionWidgetProps extends WidgetContainerProps {
@@ -52,60 +64,41 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   onResize,
   judgement,
 }) => {
-  const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
-  const initialNodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const layout = useMemo(() => calculateLayout(initialNodeMap, boundaryMap), [initialNodeMap, boundaryMap]);
-  const accumulatedPatches = {};
+  const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
+  const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
 
-  const patchBoundary = (id, boundary?: Boundary) => {
-    if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
-      accumulatedPatches[id] = boundary;
-      setBoundaryMap({
-        ...boundaryMap,
-        ...accumulatedPatches,
-      });
-    }
-  };
-
-  useEffect(() => {
-    onResize(layout.boundary);
-  }, [layout]);
-
-  const { boundary, nodeMap, edges } = layout;
-  const condition = nodeMap.condition || new GraphNode();
-  const choice = nodeMap.choice || new GraphNode();
+  const { boundary, edges } = layout;
+  const { ConditionNode, ChoiceNode, IfBranchNode, ElseBranchNode } = nodeMap;
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <OffsetContainer offset={condition.offset}>
-        <ElementWrapper id={condition.id} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => patchBoundary(condition.id, boundary)}>{judgement}</ElementMeasurer>
+      <OffsetContainer offset={ConditionNode.offset}>
+        <ElementWrapper id={ConditionNode.id} onEvent={onEvent}>
+          <ElementMeasurer onResize={boundary => updateNodeBoundary(IfElseNodes.Condition, boundary)}>
+            {judgement}
+          </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
-      <OffsetContainer offset={choice.offset}>
+      <OffsetContainer offset={ChoiceNode.offset}>
         <Diamond
           onClick={() => {
             onEvent(NodeEventTypes.Focus, { id });
           }}
         />
       </OffsetContainer>
-      {nodeMap
-        ? [nodeMap.if, nodeMap.else]
-            .filter(x => !!x)
-            .map(x => (
-              <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
-                <StepGroup
-                  key={x.id}
-                  id={x.id}
-                  data={x.data}
-                  onEvent={onEvent}
-                  onResize={size => {
-                    patchBoundary(x.id, size);
-                  }}
-                />
-              </OffsetContainer>
-            ))
-        : null}
+      {[IfBranchNode, ElseBranchNode].map(x => (
+        <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
+          <StepGroup
+            key={x.id}
+            id={x.id}
+            data={x.data}
+            onEvent={onEvent}
+            onResize={size => {
+              updateNodeBoundary(IfElseNodes.IfBranch, size);
+            }}
+          />
+        </OffsetContainer>
+      ))}
       <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
