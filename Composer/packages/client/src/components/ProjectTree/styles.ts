@@ -23,17 +23,20 @@ export const searchBox = {
     height: '45px',
   },
 };
-
 export const root = css`
   width: 180px;
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
+  .ms-List-cell {
+    min-height: 36px;
+  }
 `;
 
 export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
   width: 100%;
   position: relative;
+  height: 36px;
   font-size: 12px;
   color: #545454;
   background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
@@ -95,7 +98,7 @@ export const overflowSet = css`
   height: 100%;
   padding-left: 12px;
   box-sizing: border-box;
-  line-height: 40px;
+  line-height: 36px;
   justify-content: space-between;
   & : hover {
     .dialog-more-btn {
