@@ -190,6 +190,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   }, [focusedId, selectionContext]);
 
   useEffect((): void => {
+    if (selectionContext.selectedIds.length > 0) {
+      setKeyBoardStatus('selected');
+    } else if (focusedId) {
+      setKeyBoardStatus('focused');
+    } else {
+      setKeyBoardStatus('normal');
+    }
+
     selection.setItems(nodeIndexGenerator.current.getItemList());
   });
 
