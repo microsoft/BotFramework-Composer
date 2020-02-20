@@ -14,6 +14,7 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { renderEdge } from '../components/lib/EdgeUtil';
@@ -76,7 +77,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
-          {loop}
+          <ElementMeasurer onResize={boundary => patchBoundary(id, boundary)}>{loop}</ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={stepsNode.offset}>

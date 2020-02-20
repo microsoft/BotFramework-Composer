@@ -12,6 +12,7 @@ import { renderUIWidget } from '../../schema/uischemaRenderer';
 import { UISchemaContext } from '../../store/UISchemaContext';
 
 import { ElementWrapper } from './ElementWrapper';
+import { ElementMeasurer } from './ElementMeasurer';
 
 /** TODO: (zeye) integrate this array into UISchema */
 const TypesWithoutWrapper = [
@@ -39,7 +40,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   }
   return (
     <ElementWrapper id={id} onEvent={onEvent}>
-      {content}
+      <ElementMeasurer onResize={boundary => onResize(boundary)}>{content}</ElementMeasurer>
     </ElementWrapper>
   );
 };

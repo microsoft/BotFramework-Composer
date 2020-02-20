@@ -14,6 +14,7 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
+import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -77,7 +78,9 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={nodeMap && nodeMap.conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
-          {judgement}
+          <ElementMeasurer onResize={boundary => patchBoundary(conditionNode.id, boundary)}>
+            {judgement}
+          </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
