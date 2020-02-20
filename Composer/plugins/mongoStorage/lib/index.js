@@ -306,6 +306,6 @@ class MongoStorage {
 }
 exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
     // pass in the custom storage class that will override the default
-    yield composer.setStorage(MongoStorage);
+    yield composer.useStorage(MongoStorage);
 });
 //# sourceMappingURL=index.js.map
