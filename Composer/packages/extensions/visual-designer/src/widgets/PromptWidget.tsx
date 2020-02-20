@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, useState, useMemo, useEffect } from 'react';
+import { FC, useMemo } from 'react';
 import { PromptTab } from '@bfc/shared';
 
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
@@ -18,8 +18,8 @@ import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { NodeMap, BoundaryMap } from '../components/nodes/types';
 import { GraphLayout } from '../models/GraphLayout';
-import { Boundary, areBoundariesEqual } from '../models/Boundary';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
+import { useSmartLayout } from '../hooks/useSmartLayout';
 
 enum PromptNodes {
   BotAsks = 'BotAsksNode',
@@ -61,24 +61,8 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
   botAsks,
   userInput,
 }): JSX.Element => {
-  const [boundaryMap, setBoundaryMap] = useState<BoundaryMap>({});
   const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
-  const layout = useMemo(() => calculateLayout(nodes, boundaryMap), [nodes, boundaryMap]);
-
-  const accumulatedPatches = {};
-  const patchBoundary = (id, boundary?: Boundary) => {
-    if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
-      accumulatedPatches[id] = boundary;
-      setBoundaryMap({
-        ...boundaryMap,
-        ...accumulatedPatches,
-      });
-    }
-  };
-
-  useEffect(() => {
-    onResize(layout.boundary);
-  }, [layout]);
+  const { layout, updateNodeBoundary } = useSmartLayout<PromptNodes>(nodes, calculateLayout, onResize);
 
   const { boundary, nodeMap, edges } = layout;
   const { botAsksNode, userAnswersNode, invalidPromptNode: brickNode } = nodeMap;
@@ -87,14 +71,14 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => patchBoundary(PromptNodes.BotAsks, boundary)}>
+          <ElementMeasurer onResize={boundary => updateNodeBoundary(PromptNodes.BotAsks, boundary)}>
             {botAsks}
           </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => patchBoundary(PromptNodes.UserAnswers, boundary)}>
+          <ElementMeasurer onResize={boundary => updateNodeBoundary(PromptNodes.UserAnswers, boundary)}>
             {userInput}
           </ElementMeasurer>
         </ElementWrapper>
