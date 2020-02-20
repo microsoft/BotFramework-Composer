@@ -7,14 +7,16 @@ import { Boundary, areBoundariesEqual } from '../models/Boundary';
 import { GraphLayout } from '../models/GraphLayout';
 import { GraphNode } from '../models/GraphNode';
 
-// T extends string means an Enum. Reference: https://github.com/microsoft/TypeScript/issues/30611#issuecomment-565384924
+// 'T extends string' means an Enum. Reference: https://github.com/microsoft/TypeScript/issues/30611#issuecomment-565384924
 type MapWithEnumKey<KeyType extends string, ValueType> = { [key in KeyType]: ValueType };
+
+type BoundaryMap<T extends string> = MapWithEnumKey<T, Boundary>;
+
 export type GraphNodeMap<T extends string> = MapWithEnumKey<T, GraphNode>;
-export type BoundaryMap<T extends string> = MapWithEnumKey<T, Boundary>;
 
 export function useSmartLayout<T extends string>(
   nodeMap: GraphNodeMap<T>,
-  layouter: (nodeMap: GraphNodeMap<T>, boundaryMap: BoundaryMap<T>) => GraphLayout,
+  layouter: (nodeMap: GraphNodeMap<T>) => GraphLayout,
   onResize: (boundary: Boundary) => void
 ): {
   layout: GraphLayout;
@@ -32,7 +34,16 @@ export function useSmartLayout<T extends string>(
     }
   };
 
-  const layout = useMemo(() => layouter(nodeMap, boundaryMap), [nodeMap, boundaryMap]);
+  const layout = useMemo(() => {
+    // write updated boundaries to nodes
+    Object.keys(nodeMap).map(nodeName => {
+      const node = nodeMap[nodeName];
+      if (node) {
+        node.boundary = boundaryMap[nodeName] || node.boundary;
+      }
+    });
+    return layouter(nodeMap);
+  }, [nodeMap, boundaryMap]);
 
   useEffect(() => {
     onResize(layout.boundary);
