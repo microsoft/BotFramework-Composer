@@ -22,6 +22,7 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
+    "@bfc/shared": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
+    "@bfc/shared": "*",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.5",
     "@types/vscode": "^1.40.0",
@@ -43,14 +45,7 @@
     "react-dom": "^16.12.0"
   },
   "dependencies": {
-    "@bfc/lg-languageserver": "*",
-    "@bfcomposer/monaco-editor": "^0.18.3",
-    "@emotion/core": "^10.0.27",
-    "@monaco-editor/react": "^3.0.1",
-    "monaco-editor-core": "0.17.0",
-    "monaco-languageclient": "^0.10.0",
-    "normalize-url": "^4.5.0",
-    "reconnecting-websocket": "^3.2.2",
-    "vscode-ws-jsonrpc": "^0.1.1"
+    "@bfc/code-editor": "*",
+    "@emotion/core": "^10.0.27"
   }
 }
