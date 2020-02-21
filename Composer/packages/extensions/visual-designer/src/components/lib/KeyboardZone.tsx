@@ -17,7 +17,6 @@ const KeyNameByModifierAttr = {
 const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface KeyboardZoneProps {
-  when: string;
   onCommand: (action, e: KeyboardEvent) => object | void;
 }
 
@@ -35,7 +34,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   return prefix;
 };
 
-export const KeyboardZone: FC<KeyboardZoneProps> = ({ when, onCommand, children }): JSX.Element => {
+export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JSX.Element => {
   const handleKeyDown = e => {
     if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();

@@ -182,22 +182,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     selectedIds: [],
   });
 
-  const [keyboardStatus, setKeyBoardStatus] = useState('normal');
-
   useEffect((): void => {
     // Notify container at every selection change.
     onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
   }, [focusedId, selectionContext]);
 
   useEffect((): void => {
-    if (selectionContext.selectedIds.length > 0) {
-      setKeyBoardStatus('selected');
-    } else if (focusedId) {
-      setKeyBoardStatus('focused');
-    } else {
-      setKeyBoardStatus('normal');
-    }
-
     selection.setItems(nodeIndexGenerator.current.getItemList());
   });
 
@@ -296,7 +286,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <KeyboardZone onCommand={handleKeyboardCommand} when={keyboardStatus}>
+      <KeyboardZone onCommand={handleKeyboardCommand}>
         <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
           <div
             tabIndex={0}
