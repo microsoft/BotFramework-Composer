@@ -29,7 +29,7 @@ const containerStyle = {
 interface NodeProps {
   header: string;
   corner?: any;
-  label: any;
+  label?: any;
   icon?: string;
   iconSize?: number;
   styles?: object;
@@ -96,33 +96,35 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           height: contentHeight,
         }}
       >
-        <div
-          css={{
-            fontWeight: 400,
-            paddingLeft: '5px',
-            margin: '3px 5px',
-            fontSize: '14px',
-            lineHeight: '19px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          {icon && icon !== ElementIcon.None && (
-            <div
-              css={{
-                width: 16,
-                height: 16,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: '5px',
-              }}
-            >
-              <Icon icon={icon} color={iconColor} size={iconSize || 16} />
-            </div>
-          )}
-          <MultiLineDiv title={typeof label === 'string' ? label : ''}>{label}</MultiLineDiv>
-        </div>
+        {label && (
+          <div
+            css={{
+              fontWeight: 400,
+              paddingLeft: '5px',
+              margin: '3px 5px',
+              fontSize: '14px',
+              lineHeight: '19px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {icon && icon !== ElementIcon.None && (
+              <div
+                css={{
+                  width: 16,
+                  height: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '5px',
+                }}
+              >
+                <Icon icon={icon} color={iconColor} size={iconSize || 16} />
+              </div>
+            )}
+            <MultiLineDiv title={typeof label === 'string' ? label : ''}>{label}</MultiLineDiv>
+          </div>
+        )}
         {children}
       </div>
     </div>

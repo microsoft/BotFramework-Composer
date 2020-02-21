@@ -14,9 +14,10 @@ import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ChoiceInputChoices } from '../widgets/ChoiceInput';
+import { PropertiesWidget } from '../widgets/PropertiesWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
+import { measureChoiceInputDetailBoundary, measurePropertyAssignmentBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -126,8 +127,9 @@ export const uiSchema: UISchema = {
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
-    'ui:widget': ActionCard,
-    content: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
+    'ui:widget': PropertiesWidget,
+    content: data => data.assignments,
+    size: data => measurePropertyAssignmentBoundary(data),
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,

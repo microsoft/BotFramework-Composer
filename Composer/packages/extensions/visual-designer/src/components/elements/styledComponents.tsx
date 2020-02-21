@@ -5,17 +5,22 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { ChoiceInputSize, ChoiceInputMarginTop } from '../../constants/ElementSizes';
+import { ObiColors } from '../../constants/ElementColors';
 
-export interface MultiLineDivProps {
-  color?: string;
-  lineNum?: number;
-}
+import { UIElement, ElementProps, MultiLineDivProps, UI_ELEMENT_KEY } from './styledComponents.types';
 
 const dynamicStyle = props =>
   css`
-    color: ${props.color};
+    color: ${props.color || ObiColors.Black};
   `;
+
+export const parseElementSchema = (element: UIElement) => {
+  const { [UI_ELEMENT_KEY]: ElementComponent, ...props } = element;
+  return {
+    ElementComponent,
+    props,
+  };
+};
 
 export const LinkBtn = styled(Link)`
   ${dynamicStyle}
@@ -25,12 +30,9 @@ export const Span = styled.span`
   ${dynamicStyle}
 `;
 
-export const BorderedDiv = styled.div(props => ({
-  color: props.color,
-  height: ChoiceInputSize.height,
-  width: ChoiceInputSize.width,
-  marginTop: ChoiceInputMarginTop,
-  paddingLeft: '8px',
+export const BorderedDiv = styled.div<ElementProps>(props => ({
+  color: props.color || ObiColors.Black,
+  padding: '2px 0 0 8px',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
@@ -42,7 +44,7 @@ export const BorderedDiv = styled.div(props => ({
 }));
 
 export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
-  color: props.color,
+  color: props.color || ObiColors.Black,
   fontSize: '12px',
   lineHeight: '19px',
   fontFamily: 'Segoe UI',

@@ -36,6 +36,14 @@ export const ChoiceInputSize = {
 export const ChoiceInputMarginTop = 8;
 export const ChoiceInputMarginBottom = 10;
 
+export const PropertyAssignmentSize = {
+  width: 155,
+  height: 16,
+};
+
+export const AssignmentMarginTop = 6;
+export const AssignmentMarginBottom = 8;
+
 export const EventNodeSize = {
   width: 240,
   height: 125,
