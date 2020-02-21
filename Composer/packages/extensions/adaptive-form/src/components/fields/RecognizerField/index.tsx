@@ -2,49 +2,40 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import React, { useContext, useMemo } from 'react';
+import { FieldProps, useShellApi } from '@bfc/extension';
 import { SDKTypes, MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
+import PluginContext from '../../../PluginContext';
 import { Section } from '../../AdaptiveForm/Section';
 
-import { RegexRecognizerField } from './RegexRecognizerField';
 import ToggleEditor from './ToggleEditor';
 
-const recognizerFields = {
-  [SDKTypes.RegexRecognizer]: RegexRecognizerField,
-};
-
-const getToggleTitle = (type: string) => {
-  const labels = {
-    [SDKTypes.RegexRecognizer]: formatMessage('regular expression'),
-  };
-  return labels[type];
-};
-
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { value, onChange } = props;
+  const { value } = props;
+  const { shellApi, ...shellData } = useShellApi();
+  const { recognizers } = useContext(PluginContext);
 
-  const recognizerOptions = [
-    {
-      key: 'none',
-      text: 'None',
-    },
-    // {
-    //   key: 'luis',
-    //   text: 'LUIS',
-    // },
-    {
-      key: SDKTypes.RegexRecognizer,
-      text: formatMessage('Regular Expression'),
-    },
-  ];
+  const options = useMemo(() => {
+    return recognizers.map(r => ({
+      key: r.id,
+      text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
+    }));
+  }, [recognizers]);
+
+  const getToggleTitle = (type: string) => {
+    const title = recognizers.find(r => r.id === type)?.displayName || '';
+
+    return typeof title === 'function' ? title(value) : title;
+  };
+
   // show select for available recognizers
   // available = regex + recognizer with ui:field
   const isRegex = typeof value === 'object' && value.$type === SDKTypes.RegexRecognizer;
 
+  // TODO: how do we determine the recognizer type? Maybe scan the schema?
   const getRecognizerType = (): string => {
     if (typeof value === 'string') {
       return SDKTypes.LuisRecognizer;
@@ -57,24 +48,18 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
     return 'none';
   };
 
+  // TODO: make this configurable in the schema?
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
-      switch (option.key) {
-        case 'none': {
-          onChange(undefined);
-          return;
-        }
-        case SDKTypes.RegexRecognizer: {
-          onChange({ $type: SDKTypes.RegexRecognizer, intents: [] });
-          return;
-        }
-        default:
-          return;
+      const handler = recognizers.find(r => r.id === option.key)?.handleChange;
+
+      if (handler) {
+        handler(props, shellData, shellApi);
       }
     }
   };
 
-  const Field: React.FC<FieldProps> | undefined = recognizerFields[getRecognizerType()];
+  const Field = recognizers.find(r => r.id === getRecognizerType())?.editor;
 
   return (
     <Section
@@ -94,7 +79,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
       <div>
         <Dropdown
           label={formatMessage('Recognizer Type')}
-          options={recognizerOptions}
+          options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={getRecognizerType()}
           onChange={handleChangeRecognizerType}

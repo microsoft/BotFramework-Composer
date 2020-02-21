@@ -8,6 +8,7 @@ const PluginContext = React.createContext<Required<PluginConfig>>({
   uiSchema: {},
   roleSchema: {},
   kindSchema: {},
+  recognizers: [],
 });
 
 export default PluginContext;
