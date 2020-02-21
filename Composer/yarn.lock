@@ -2194,7 +2194,7 @@
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"@bfcomposer/monaco-editor@0.18.4", "@bfcomposer/monaco-editor@^0.18.3":
+"@bfcomposer/monaco-editor@0.18.4":
   version "0.18.4"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.18.4.tgz#2263c2b836dac1098f94dfa476545b5fe5314513"
   integrity sha1-ImPCuDbawQmPlN+kdlRbX+UxRRM=
@@ -2915,7 +2915,7 @@
   resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
   integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
 
-"@monaco-editor/react@^3.0.1", "@monaco-editor/react@^3.1.0":
+"@monaco-editor/react@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-3.1.0.tgz#16c3838fc54af71a80dde3eebb43477a7fbba77b"
   integrity sha512-Y+eay0U7MJgax5Fd0CG9k3tgcy/QkKPXSD7BNB0/w/p4ErQCYB5K/Mvm9bfRVwdJmYWihDa9cHOg53fLpJGiiA==
