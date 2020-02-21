@@ -17,42 +17,36 @@ const schema = {
 const data = 'form data';
 
 describe('getOrderedProperties', () => {
-  it('excludes fields according to ui:hidden', () => {
+  it('excludes fields according to hidden option', () => {
     const expectedResult = ['one', 'three', 'four'];
 
-    expect(getOrderedProperties(schema, { 'ui:hidden': ['two'], 'ui:order': ['two', '*'] }, data)).toEqual(
-      expectedResult
-    );
+    expect(getOrderedProperties(schema, { hidden: ['two'], order: ['two', '*'] }, data)).toEqual(expectedResult);
 
-    expect(getOrderedProperties(schema, { 'ui:hidden': () => ['two'], 'ui:order': ['two', '*'] }, data)).toEqual(
-      expectedResult
-    );
+    expect(getOrderedProperties(schema, { hidden: () => ['two'], order: ['two', '*'] }, data)).toEqual(expectedResult);
   });
 
-  it('sorts according to ui:order', () => {
+  it('sorts according to order option', () => {
     const expectedResult = ['three', 'one', 'four', 'two'];
 
-    expect(getOrderedProperties(schema, { 'ui:order': ['three', '*', 'two'] }, data)).toEqual(expectedResult);
+    expect(getOrderedProperties(schema, { order: ['three', '*', 'two'] }, data)).toEqual(expectedResult);
 
-    expect(getOrderedProperties(schema, { 'ui:order': () => ['three', '*', 'two'] }, data)).toEqual(expectedResult);
+    expect(getOrderedProperties(schema, { order: () => ['three', '*', 'two'] }, data)).toEqual(expectedResult);
   });
 
   it("excludes fields that don't exist in the schema", () => {
     const expectedResult = ['three', 'one', 'four', 'two'];
 
-    expect(getOrderedProperties(schema, { 'ui:order': ['three', '*', 'two', 'five'] }, data)).toEqual(expectedResult);
+    expect(getOrderedProperties(schema, { order: ['three', '*', 'two', 'five'] }, data)).toEqual(expectedResult);
 
-    expect(getOrderedProperties(schema, { 'ui:order': () => ['three', '*', 'two', 'five'] }, data)).toEqual(
-      expectedResult
-    );
+    expect(getOrderedProperties(schema, { order: () => ['three', '*', 'two', 'five'] }, data)).toEqual(expectedResult);
   });
 
-  it('throws an exception if there is no wildcard in ui:order', () => {
-    expect(() => getOrderedProperties(schema, { 'ui:order': ['three', 'two'] }, data)).toThrow('no wildcard');
+  it('throws an exception if there is no wildcard in order option', () => {
+    expect(() => getOrderedProperties(schema, { order: ['three', 'two'] }, data)).toThrow('no wildcard');
   });
 
-  it('throws an exception if there are multiple wildcards in ui:order', () => {
-    expect(() => getOrderedProperties(schema, { 'ui:order': ['three', '*', 'two', '*'] }, data)).toThrow(
+  it('throws an exception if there are multiple wildcards in order option', () => {
+    expect(() => getOrderedProperties(schema, { order: ['three', '*', 'two', '*'] }, data)).toThrow(
       'multiple wildcards'
     );
   });

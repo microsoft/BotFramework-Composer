@@ -22,22 +22,22 @@ describe('mergePluginConfigs', () => {
     const overrides = {
       uiSchema: {
         [SDKTypes.AdaptiveDialog]: {
-          'ui:hidden': ['recognizer'],
+          hidden: ['recognizer'],
           properties: {
             triggers: {
-              'ui:label': 'Foo',
+              label: 'Foo',
             },
           },
         },
       },
       roleSchema: {
         [SDKRoles.expression]: {
-          'ui:label': 'expression label',
+          label: 'expression label',
         },
       },
       kindSchema: {
         [SDKKinds.IDialog]: {
-          'ui:hidden': ['foo'],
+          hidden: ['foo'],
         },
       },
     };

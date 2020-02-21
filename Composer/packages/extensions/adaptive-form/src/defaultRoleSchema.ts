@@ -8,7 +8,7 @@ import { StringField } from './components/fields';
 
 const DefaultRoleSchema: RoleSchema = {
   [SDKRoles.expression]: {
-    'ui:field': StringField,
+    field: StringField,
   },
 };
 

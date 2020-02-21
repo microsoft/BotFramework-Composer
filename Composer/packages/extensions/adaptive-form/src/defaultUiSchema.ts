@@ -7,27 +7,27 @@ import { EditableField } from './components/fields';
 
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 const triggerUiSchema = {
-  'ui:order': ['condition', '*'],
-  'ui:hidden': ['actions', ...globalHiddenProperties],
+  order: ['condition', '*'],
+  hidden: ['actions', ...globalHiddenProperties],
 };
 
 const DefaultUISchema: UISchema = {
   [SDKTypes.AdaptiveDialog]: {
-    'ui:order': ['recognizer', '*'],
-    'ui:hidden': ['triggers', 'autoEndDialog', 'generator', 'selector', ...globalHiddenProperties],
+    order: ['recognizer', '*'],
+    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', ...globalHiddenProperties],
     properties: {
       recognizer: {
-        'ui:hidden': ['entities'],
+        hidden: ['entities'],
         properties: {
           intents: {
             properties: {
               intent: {
-                'ui:label': false,
-                'ui:field': EditableField,
+                label: false,
+                field: EditableField,
               },
               pattern: {
-                'ui:label': false,
-                'ui:field': EditableField,
+                label: false,
+                field: EditableField,
               },
             },
           },
@@ -36,56 +36,56 @@ const DefaultUISchema: UISchema = {
     },
   },
   [SDKTypes.BeginDialog]: {
-    'ui:order': ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
+    order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
   [SDKTypes.CancelAllDialogs]: {
-    'ui:order': ['dialog', 'property', '*'],
+    order: ['dialog', 'property', '*'],
   },
   [SDKTypes.ConditionalSelector]: {
-    'ui:hidden': [...globalHiddenProperties],
+    hidden: [...globalHiddenProperties],
     // properties: {
     //   ifFalse: {
-    //     'ui:field': 'SelectorField',
+    //     field: 'SelectorField',
     //   },
     //   ifTrue: {
-    //     'ui:field': 'SelectorField',
+    //     field: 'SelectorField',
     //   },
     // },
   },
   [SDKTypes.EditActions]: {
     // properties: {
     //   actions: {
-    //     'ui:field': 'StepsField',
+    //     field: 'StepsField',
     //   },
     // },
   },
   [SDKTypes.Foreach]: {
-    'ui:order': ['itemsProperty', '*'],
-    'ui:hidden': ['actions'],
+    order: ['itemsProperty', '*'],
+    hidden: ['actions'],
   },
   [SDKTypes.ForeachPage]: {
-    'ui:order': ['itemsProperty', 'pageSize', '*'],
-    'ui:hidden': ['actions'],
+    order: ['itemsProperty', 'pageSize', '*'],
+    hidden: ['actions'],
   },
   [SDKTypes.HttpRequest]: {
-    'ui:order': ['method', 'url', 'body', 'headers', '*'],
+    order: ['method', 'url', 'body', 'headers', '*'],
     // properties: {
     //   body: {
-    //     // 'ui:field': 'JsonField',
+    //     // field: 'JsonField',
     //   },
     //   headers: {
-    //     // 'ui:field': 'CustomObjectField',
+    //     // field: 'CustomObjectField',
     //   },
     // },
   },
   [SDKTypes.IfCondition]: {
-    'ui:hidden': ['actions', 'elseActions', ...globalHiddenProperties],
+    hidden: ['actions', 'elseActions', ...globalHiddenProperties],
   },
   [SDKTypes.SetProperties]: {
-    // 'ui:field': 'AssignmentsField',
+    // field: 'AssignmentsField',
     // properties: {
     //   assignments: {
-    //     'ui:options': {
+    //     options: {
     //       hideLabel: true,
     //       transparentBorder: true,
     //     },
@@ -126,11 +126,11 @@ const DefaultUISchema: UISchema = {
     ...triggerUiSchema,
   },
   [SDKTypes.OnIntent]: {
-    'ui:order': ['intent', 'condition', 'entities', '*'],
-    'ui:hidden': ['actions', ...globalHiddenProperties],
+    order: ['intent', 'condition', 'entities', '*'],
+    hidden: ['actions', ...globalHiddenProperties],
     // properties: {
     //   intent: {
-    //     'ui:widget': 'IntentWidget',
+    //     widget: 'IntentWidget',
     //   },
     // },
   },
@@ -159,34 +159,34 @@ const DefaultUISchema: UISchema = {
     ...triggerUiSchema,
   },
   [SDKTypes.MostSpecificSelector]: {
-    'ui:hidden': [...globalHiddenProperties],
+    hidden: [...globalHiddenProperties],
     // properties: {
     //   selector: {
-    //     // 'ui:field': 'SelectorField',
+    //     // field: 'SelectorField',
     //   },
     // },
   },
   [SDKTypes.OAuthInput]: {
-    'ui:order': ['connectionName', '*'],
+    order: ['connectionName', '*'],
   },
   [SDKTypes.ReplaceDialog]: {
-    'ui:hidden': [...globalHiddenProperties],
-    'ui:order': ['dialog', 'options', 'includeActivity', '*'],
+    hidden: [...globalHiddenProperties],
+    order: ['dialog', 'options', 'includeActivity', '*'],
   },
   [SDKTypes.RepeatDialog]: {
-    'ui:hidden': [...globalHiddenProperties],
-    'ui:order': ['options', 'includeActivity', '*'],
+    hidden: [...globalHiddenProperties],
+    order: ['options', 'includeActivity', '*'],
   },
   [SDKTypes.SwitchCondition]: {
-    'ui:hidden': ['default', ...globalHiddenProperties],
+    hidden: ['default', ...globalHiddenProperties],
     properties: {
       cases: {
-        'ui:hidden': ['actions'],
+        hidden: ['actions'],
       },
     },
   },
   [SDKTypes.SendActivity]: {
-    'ui:hidden': [...globalHiddenProperties],
+    hidden: [...globalHiddenProperties],
   },
 };
 

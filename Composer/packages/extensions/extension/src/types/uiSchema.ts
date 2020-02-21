@@ -8,11 +8,11 @@ import { FieldWidget } from './form';
 type UIOptionFunc<R = any, D = any> = (data: D) => R;
 
 export interface UIOptions {
-  'ui:hidden'?: string[] | UIOptionFunc<string[]>;
-  'ui:label'?: string | UIOptionFunc<string | undefined> | false;
-  'ui:order'?: string[] | UIOptionFunc;
-  'ui:field'?: FieldWidget;
-  'ui:placeholder'?: string | UIOptionFunc<string, undefined>;
+  hidden?: string[] | UIOptionFunc<string[]>;
+  label?: string | UIOptionFunc<string | undefined> | false;
+  order?: string[] | UIOptionFunc;
+  field?: FieldWidget;
+  placeholder?: string | UIOptionFunc<string, undefined>;
   properties?: {
     [key: string]: UIOptions;
   };

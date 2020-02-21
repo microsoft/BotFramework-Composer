@@ -16,7 +16,7 @@ export function resolveFieldWidget(
   uiOptions?: UIOptions,
   globalConfig?: Required<PluginConfig>
 ): FieldWidget {
-  const FieldOverride = uiOptions?.['ui:field'];
+  const FieldOverride = uiOptions?.field;
 
   if (typeof FieldOverride === 'function') {
     return FieldOverride;
@@ -24,13 +24,13 @@ export function resolveFieldWidget(
 
   if (schema) {
     if (globalConfig) {
-      const RoleOverride = globalConfig?.roleSchema[schema.$role]?.['ui:field'];
+      const RoleOverride = globalConfig?.roleSchema[schema.$role]?.field;
 
       if (RoleOverride) {
         return RoleOverride;
       }
 
-      const KindOverride = globalConfig?.kindSchema[schema.$kind]?.['ui:field'];
+      const KindOverride = globalConfig?.kindSchema[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;

@@ -9,7 +9,7 @@ const uiSchema: UISchema = {
   [SDKTypes.HttpRequest]: {
     properties: {
       body: {
-        'ui:field': JsonField,
+        field: JsonField,
       },
     },
   },

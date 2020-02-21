@@ -18,16 +18,11 @@ describe('getUISchema', () => {
   it('merges overrides into default schema', () => {
     const schema1: UISchema = {
       [SDKTypes.AdaptiveDialog]: {
-        'ui:order': ['*', 'recognizer'],
-        'ui:label': 'First Label',
+        order: ['*', 'recognizer'],
+        label: 'First Label',
       },
     };
-    const schema2: UISchema = {
-      [SDKTypes.AdaptiveDialog]: {
-        'ui:label': 'Second Label',
-      },
-    };
-    expect(getUISchema(SDKTypes.AdaptiveDialog, schema1, schema2)).toMatchInlineSnapshot(`
+    expect(getUISchema(SDKTypes.AdaptiveDialog, schema1)).toMatchInlineSnapshot(`
 Object {
   "ui:label": "First Label",
   "ui:order": Array [

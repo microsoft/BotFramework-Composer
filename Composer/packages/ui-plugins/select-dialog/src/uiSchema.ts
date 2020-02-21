@@ -9,14 +9,14 @@ const uiSchema: UISchema = {
   [SDKTypes.BeginDialog]: {
     properties: {
       dialog: {
-        'ui:field': SelectDialog,
+        field: SelectDialog,
       },
     },
   },
   [SDKTypes.ReplaceDialog]: {
     properties: {
       dialog: {
-        'ui:field': SelectDialog,
+        field: SelectDialog,
       },
     },
   },

@@ -10,7 +10,7 @@ export function getOrderedProperties(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): string[] {
-  const { 'ui:hidden': hidden, 'ui:order': order = ['*'] } = cloneDeep(uiOptions);
+  const { hidden: hidden, order: order = ['*'] } = cloneDeep(uiOptions);
 
   const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
 

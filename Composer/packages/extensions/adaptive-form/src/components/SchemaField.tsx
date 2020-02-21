@@ -19,7 +19,7 @@ const schemaField = {
 
 const getPlaceholder = (props: FieldProps): string | undefined => {
   const { uiOptions, placeholder: propPlaceholder, schema } = props;
-  const placeholderOverride = uiOptions['ui:placeholder'];
+  const placeholderOverride = uiOptions.placeholder;
 
   if (placeholderOverride) {
     return typeof placeholderOverride === 'function' ? placeholderOverride(props.value) : placeholderOverride;
@@ -58,10 +58,8 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : undefined,
   };
 
-  const depth = typeof uiOptions['ui:depth'] === 'number' ? uiOptions['ui:depth'] : props.depth;
-
   return (
-    <div className={className} css={schemaField.container(depth)}>
+    <div className={className} css={schemaField.container(props.depth)}>
       <FieldWidget {...fieldProps} />
       {!hideError && error}
     </div>

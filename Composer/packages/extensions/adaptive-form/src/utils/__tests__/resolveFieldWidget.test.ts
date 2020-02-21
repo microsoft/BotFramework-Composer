@@ -6,10 +6,10 @@ import { resolveFieldWidget } from '../resolveFieldWidget';
 const TestField = () => 'test field';
 
 describe('resolveFieldWidget', () => {
-  describe('ui:field', () => {
+  describe('field', () => {
     it('returns field override if present', () => {
       const uiOptions = {
-        'ui:field': TestField,
+        field: TestField,
       };
 
       const schema = {
@@ -31,7 +31,7 @@ describe('resolveFieldWidget', () => {
       const globalSchema = {
         roleSchema: {
           expression: {
-            'ui:field': DefaultFields.StringField,
+            field: DefaultFields.StringField,
           },
         },
         kindSchema: {},
@@ -52,7 +52,7 @@ describe('resolveFieldWidget', () => {
       const globalSchema = {
         kindSchema: {
           'Microsoft.Recognizer': {
-            'ui:field': DefaultFields.RecognizerField,
+            field: DefaultFields.RecognizerField,
           },
         },
         roleSchema: {},

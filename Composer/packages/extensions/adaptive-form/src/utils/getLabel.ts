@@ -10,7 +10,7 @@ export function getLabel<T extends FieldProps = FieldProps>(props: T): string | 
     return false;
   }
 
-  const { 'ui:label': uiLabel } = uiOptions;
+  const { label: uiLabel } = uiOptions;
 
   if (uiLabel) {
     return typeof uiLabel === 'function' ? uiLabel(value) : uiLabel;

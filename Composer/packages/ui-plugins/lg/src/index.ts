@@ -9,7 +9,7 @@ import { LgField } from './LgField';
 const config: PluginConfig = {
   kindSchema: {
     [SDKKinds.IActivityTemplate]: {
-      'ui:field': LgField,
+      field: LgField,
     },
   },
 };

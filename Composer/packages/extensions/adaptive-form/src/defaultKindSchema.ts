@@ -8,7 +8,7 @@ import { RecognizerField } from './components/fields';
 
 const DefaultKindSchema: KindSchema = {
   [SDKKinds.Recognizer]: {
-    'ui:field': RecognizerField,
+    field: RecognizerField,
   },
 };
 

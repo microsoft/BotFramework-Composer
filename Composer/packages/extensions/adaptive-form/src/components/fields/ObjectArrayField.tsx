@@ -20,7 +20,7 @@ import { ArrayFieldItem } from './ArrayFieldItem';
 
 const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): string | undefined => {
   const { uiOptions } = props;
-  const placeholderOverride = uiOptions.properties?.[propertyName]?.['ui:placeholder'];
+  const placeholderOverride = uiOptions.properties?.[propertyName]?.placeholder;
 
   if (placeholderOverride) {
     return typeof placeholderOverride === 'function' ? placeholderOverride(undefined) : placeholderOverride;
