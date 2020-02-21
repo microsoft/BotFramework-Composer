@@ -65,7 +65,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
 
   const { boundary, edges } = layout;
-  const { conditionNode, choiceNode, ifBranchNode, elseBranchNode } = nodeMap;
+  const { conditionNode, choiceNode } = nodeMap;
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
@@ -83,19 +83,22 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           }}
         />
       </OffsetContainer>
-      {[ifBranchNode, elseBranchNode].map(x => (
-        <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
-          <StepGroup
-            key={x.id}
-            id={x.id}
-            data={x.data}
-            onEvent={onEvent}
-            onResize={size => {
-              updateNodeBoundary(IfElseNodes.IfBranch, size);
-            }}
-          />
-        </OffsetContainer>
-      ))}
+      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map(nodeName => {
+        const node = nodeMap[nodeName];
+        return (
+          <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
+            <StepGroup
+              key={node.id}
+              id={node.id}
+              data={node.data}
+              onEvent={onEvent}
+              onResize={size => {
+                updateNodeBoundary(nodeName, size);
+              }}
+            />
+          </OffsetContainer>
+        );
+      })}
       <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
