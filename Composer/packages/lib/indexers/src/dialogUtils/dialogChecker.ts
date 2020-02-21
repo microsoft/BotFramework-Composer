@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import { FieldNames } from '@bfc/shared';
+import values from 'lodash/values';
 
 import { Diagnostic } from '../diagnostic';
 
@@ -10,14 +11,19 @@ import { ExpressionType } from './validation';
 import { CheckerFunc } from './types';
 import { validate } from './validation';
 
-const createPath = (path: string, type: string): string => {
-  const steps = [FieldNames.Events, FieldNames.Actions, FieldNames.ElseActions];
+export const createPath = (path: string, type: string): string => {
   let list = path.split('.');
-  const matches = list.filter(x => !steps.every(step => !x.startsWith(step)));
+  const matches = list.filter(x => {
+    if (/\[|\]/.test(x)) {
+      const reg = /\[.*\]/;
+      x = x.replace(reg, '');
+      return ~values(FieldNames).indexOf(x);
+    }
+  });
 
   const focused = matches.join('.');
   list = path.split(`${focused}.`);
-  if (list.length !== 2) return path;
+  if (list.length !== 2) return `${path}#${type}`;
 
   return `${list[0]}${focused}#${type}#${list[1]}`;
 };
