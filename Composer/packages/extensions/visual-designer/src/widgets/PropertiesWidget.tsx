@@ -7,21 +7,16 @@ import { generateSDKTitle } from '@bfc/shared';
 
 import { ObiColors } from '../constants/ElementColors';
 import { FormCard } from '../components/nodes/templates/FormCard';
-import { MultiLineDiv } from '../components/elements/styledComponents';
 import { ListOverview } from '../components/common/ListOverView';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeMenu } from '../components/menus/NodeMenu';
-import { UI_ELEMENT_KEY } from '../components/elements/styledComponents.types';
 import { PropertyAssignmentSize, AssignmentMarginTop } from '../constants/ElementSizes';
 
-export const AssignmentList = ({ assignments }) => {
+export const AssignmentList = ({ assignments, elementSchema }) => {
   if (!Array.isArray(assignments)) {
     return null;
   }
   const items = assignments.map(assignment => `${assignment.property} = ${assignment.value}`);
-  const elementSchema = {
-    [UI_ELEMENT_KEY]: MultiLineDiv,
-  };
   return (
     <div data-testid="SetProperties" css={{ padding: '0 0 16px 8px' }}>
       <ListOverview
@@ -40,7 +35,7 @@ export const AssignmentList = ({ assignments }) => {
 };
 export interface PropertiesWidgetProps extends WidgetContainerProps {
   title: string;
-  content: { [key: string]: string }[];
+  content: { [key: string]: any };
   menu?: JSX.Element | string;
   children?: JSX.Element;
   size?: {
@@ -73,7 +68,7 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
 }) => {
   const header = disableSDKTitle ? title : generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
-  const assignments = content;
+  const { assignments, elementSchema } = content;
   return (
     <FormCard
       header={header}
@@ -82,7 +77,7 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
       nodeColors={nodeColors}
       styles={{ ...size }}
     >
-      {assignments && <AssignmentList assignments={assignments} />}
+      {assignments && <AssignmentList assignments={assignments} elementSchema={elementSchema} />}
     </FormCard>
   );
 };

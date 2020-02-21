@@ -18,6 +18,8 @@ import { PropertiesWidget } from '../widgets/PropertiesWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { measureChoiceInputDetailBoundary, measurePropertyAssignmentBoundary } from '../layouters/measureJsonBoundary';
+import { UI_ELEMENT_KEY } from '../components/elements/styledComponents.types';
+import { MultiLineDiv, BorderedDiv } from '../components/elements/styledComponents';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -41,7 +43,10 @@ const BaseInputSchema: UIWidget = {
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
-    children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
+    children: data =>
+      data.$type === SDKTypes.ChoiceInput ? (
+        <ChoiceInputChoices choices={data.choices} elementSchema={{ [UI_ELEMENT_KEY]: BorderedDiv }} />
+      ) : null,
     size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
@@ -128,7 +133,7 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.SetProperties]: {
     'ui:widget': PropertiesWidget,
-    content: data => data.assignments,
+    content: data => ({ assignments: data.assignments, elementSchema: { [UI_ELEMENT_KEY]: MultiLineDiv } }),
     size: data => measurePropertyAssignmentBoundary(data),
   },
   [SDKTypes.DeleteProperty]: {
