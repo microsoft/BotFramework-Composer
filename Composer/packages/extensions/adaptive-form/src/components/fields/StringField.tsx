@@ -11,7 +11,7 @@ import { FieldLabel } from '../FieldLabel';
 export const StringField: React.FC<FieldProps<string>> = function StringField(props) {
   const {
     id,
-    value,
+    value = '',
     onChange,
     depth,
     disabled,
