@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-hooks', 'format-message', 'emotion'],
   settings: {
     react: {
-      version: '16.9.0',
+      version: '16.9.16',
     },
   },
   parserOptions: {
