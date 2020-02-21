@@ -39,13 +39,16 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '/scripts/', '/jestMocks/', '__tests__/setup.(j|t)s', '/cypress/'],
   projects: [
     '<rootDir>/packages/client',
-    '<rootDir>/packages/server',
-    '<rootDir>/packages/extensions/extension',
     '<rootDir>/packages/extensions/adaptive-form',
+    '<rootDir>/packages/extensions/extension',
     '<rootDir>/packages/extensions/visual-designer',
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',
+    '<rootDir>/packages/server',
     '<rootDir>/packages/tools/language-servers/language-generation',
+    '<rootDir>/packages/ui-plugins/json',
+    '<rootDir>/packages/ui-plugins/lg',
+    '<rootDir>/packages/ui-plugins/lu',
     '<rootDir>/packages/ui-plugins/select-dialog',
   ],
 };

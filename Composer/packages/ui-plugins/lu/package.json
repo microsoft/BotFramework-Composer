@@ -1,0 +1,41 @@
+{
+  "name": "@bfc/ui-plugin-lu",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer plugin that adds lu editor capibility using the Monaco editor.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "andy.brown@microsoft.com",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.5",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {
+    "@bfc/shared": "*",
+    "@bfc/indexers": "*",
+    "@emotion/core": "^10.0.27"
+  }
+}
