@@ -103,6 +103,22 @@ export enum SDKTypes {
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
 }
 
+export enum SDKKinds {
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKRoles {
+  expression = 'expression',
+  // TODO
+  // union = 'union',
+  // union_*_ = 'union(*)',
+}
+
 export interface AdaptiveDialogSchema extends JSONSchema4 {
   $schema?: string;
   $role?: string;

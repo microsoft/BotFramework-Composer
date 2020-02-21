@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema4 } from 'json-schema';
-import { UIOptions, FieldWidget, UISchema } from '@bfc/extension';
+import { UIOptions, FieldWidget, PluginConfig } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -14,7 +14,7 @@ import * as DefaultFields from '../components/fields';
 export function resolveFieldWidget(
   schema?: JSONSchema4,
   uiOptions?: UIOptions,
-  globalUiSchema?: UISchema
+  globalConfig?: Required<PluginConfig>
 ): FieldWidget {
   const FieldOverride = uiOptions?.['ui:field'];
 
@@ -23,14 +23,14 @@ export function resolveFieldWidget(
   }
 
   if (schema) {
-    if (globalUiSchema) {
-      const RoleOverride = globalUiSchema?.$role?.[schema.$role]?.['ui:field'];
+    if (globalConfig) {
+      const RoleOverride = globalConfig?.roleSchema[schema.$role]?.['ui:field'];
 
       if (RoleOverride) {
         return RoleOverride;
       }
 
-      const KindOverride = globalUiSchema?.$kind?.[schema.$kind]?.['ui:field'];
+      const KindOverride = globalConfig?.kindSchema[schema.$kind]?.['ui:field'];
 
       if (KindOverride) {
         return KindOverride;

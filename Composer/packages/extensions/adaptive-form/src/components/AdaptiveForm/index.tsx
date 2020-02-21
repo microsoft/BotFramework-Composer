@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect, useMemo } from 'react';
-import { useShellApi, PluginConfig, UISchema, FormErrors } from '@bfc/extension';
+import { useShellApi, PluginConfig, FormErrors } from '@bfc/extension';
 import isEqual from 'lodash/isEqual';
 import ErrorBoundary from 'react-error-boundary';
 import { AdaptiveDialogSchema } from '@bfc/shared';
 
-import FormContext from '../../FormContext';
-import { resolveBaseSchema, getUISchema, resolveFieldWidget } from '../../utils';
-import { mergeUISchema } from '../../utils/mergeUISchema';
+import PluginContext from '../../PluginContext';
+import { resolveBaseSchema, getUISchema, resolveFieldWidget, mergePluginConfigs } from '../../utils';
 
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
@@ -36,21 +35,13 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
   }, [schema, localData]);
 
-  const globalUiSchema = useMemo(() => {
-    const uiSchemas = plugins.reduce<UISchema[]>((acc, plugin) => {
-      if (plugin.uiSchema) {
-        acc.push(plugin.uiSchema);
-      }
-
-      return acc;
-    }, []);
-
-    return mergeUISchema(...uiSchemas);
+  const pluginConfig = useMemo(() => {
+    return mergePluginConfigs(...plugins);
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUISchema(localData?.$type, globalUiSchema);
-  }, [localData?.$type, globalUiSchema]);
+    return getUISchema(localData?.$type, pluginConfig.uiSchema);
+  }, [localData?.$type, pluginConfig]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
@@ -99,12 +90,12 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
   };
 
-  const Field = resolveFieldWidget($schema, $uiSchema, globalUiSchema);
+  const Field = resolveFieldWidget($schema, $uiSchema, pluginConfig);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorInfo}>
       <div key={localData?.$designer?.id}>
-        <FormContext.Provider value={{ uiSchema: globalUiSchema }}>
+        <PluginContext.Provider value={pluginConfig}>
           <FormTitle
             formData={localData}
             id={localData.$designer?.id || 'unknown'}
@@ -122,7 +113,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
             value={localData}
             onChange={handleDataChange}
           />
-        </FormContext.Provider>
+        </PluginContext.Provider>
       </div>
     </ErrorBoundary>
   );

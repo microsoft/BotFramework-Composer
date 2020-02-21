@@ -3,7 +3,7 @@
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
-import { EditableField, StringField, RecognizerField } from './components/fields';
+import { EditableField } from './components/fields';
 
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 const triggerUiSchema = {
@@ -12,16 +12,6 @@ const triggerUiSchema = {
 };
 
 const DefaultUISchema: UISchema = {
-  $role: {
-    expression: {
-      'ui:field': StringField,
-    },
-  },
-  $kind: {
-    'Microsoft.Recognizer': {
-      'ui:field': RecognizerField,
-    },
-  },
   [SDKTypes.AdaptiveDialog]: {
     'ui:order': ['recognizer', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', 'selector', ...globalHiddenProperties],

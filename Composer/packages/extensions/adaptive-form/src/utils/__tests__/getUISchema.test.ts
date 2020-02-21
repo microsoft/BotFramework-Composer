@@ -12,46 +12,7 @@ describe('getUISchema', () => {
   });
 
   it('returns UI schema for $type', () => {
-    expect(getUISchema(SDKTypes.AdaptiveDialog)).toMatchInlineSnapshot(`
-Object {
-  "properties": Object {
-    "recognizer": Object {
-      "properties": Object {
-        "intents": Object {
-          "properties": Object {
-            "intent": Object {
-              "ui:field": [Function],
-              "ui:label": false,
-            },
-            "pattern": Object {
-              "ui:field": [Function],
-              "ui:label": false,
-            },
-          },
-        },
-      },
-      "ui:hidden": Array [
-        "entities",
-      ],
-    },
-  },
-  "ui:hidden": Array [
-    "triggers",
-    "autoEndDialog",
-    "generator",
-    "selector",
-    "$type",
-    "$id",
-    "$copy",
-    "$designer",
-    "id",
-  ],
-  "ui:order": Array [
-    "recognizer",
-    "*",
-  ],
-}
-`);
+    expect(getUISchema(SDKTypes.AdaptiveDialog)).toMatchInlineSnapshot(`Object {}`);
   });
 
   it('merges overrides into default schema', () => {
@@ -68,39 +29,7 @@ Object {
     };
     expect(getUISchema(SDKTypes.AdaptiveDialog, schema1, schema2)).toMatchInlineSnapshot(`
 Object {
-  "properties": Object {
-    "recognizer": Object {
-      "properties": Object {
-        "intents": Object {
-          "properties": Object {
-            "intent": Object {
-              "ui:field": [Function],
-              "ui:label": false,
-            },
-            "pattern": Object {
-              "ui:field": [Function],
-              "ui:label": false,
-            },
-          },
-        },
-      },
-      "ui:hidden": Array [
-        "entities",
-      ],
-    },
-  },
-  "ui:hidden": Array [
-    "triggers",
-    "autoEndDialog",
-    "generator",
-    "selector",
-    "$type",
-    "$id",
-    "$copy",
-    "$designer",
-    "id",
-  ],
-  "ui:label": "Second Label",
+  "ui:label": "First Label",
   "ui:order": Array [
     "*",
     "recognizer",

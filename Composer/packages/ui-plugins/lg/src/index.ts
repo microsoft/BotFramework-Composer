@@ -2,11 +2,16 @@
 // Licensed under the MIT License.
 
 import { PluginConfig } from '@bfc/extension';
+import { SDKKinds } from '@bfc/shared';
 
-import uiSchema from './uiSchema';
+import { LgField } from './LgField';
 
 const config: PluginConfig = {
-  uiSchema,
+  kindSchema: {
+    [SDKKinds.IActivityTemplate]: {
+      'ui:field': LgField,
+    },
+  },
 };
 
 export default config;

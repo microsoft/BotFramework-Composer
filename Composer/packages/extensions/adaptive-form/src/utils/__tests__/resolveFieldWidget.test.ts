@@ -29,11 +29,13 @@ describe('resolveFieldWidget', () => {
       };
 
       const globalSchema = {
-        $role: {
+        roleSchema: {
           expression: {
             'ui:field': DefaultFields.StringField,
           },
         },
+        kindSchema: {},
+        uiSchema: {},
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.StringField);
@@ -48,11 +50,13 @@ describe('resolveFieldWidget', () => {
       };
 
       const globalSchema = {
-        $kind: {
+        kindSchema: {
           'Microsoft.Recognizer': {
             'ui:field': DefaultFields.RecognizerField,
           },
         },
+        roleSchema: {},
+        uiSchema: {},
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);

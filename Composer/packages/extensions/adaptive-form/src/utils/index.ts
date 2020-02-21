@@ -5,6 +5,7 @@ export * from './getAdaptiveType';
 export * from './getLabel';
 export * from './getOrderedProperties';
 export * from './getUISchema';
+export * from './mergePluginConfigs';
 export * from './resolveBaseSchema';
 export * from './resolveFieldWidget';
 export * from './resolvePropertySchema';
