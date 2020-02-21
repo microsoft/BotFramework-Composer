@@ -113,7 +113,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
-        [/\]\s*$/, 'imports', '@pop'],
+        [/\]\s*\(.*\)$/, 'imports', '@pop'],
         [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['stucture-lg-identifier', 'structure-name']],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/\|/, { token: 'alternative' }],

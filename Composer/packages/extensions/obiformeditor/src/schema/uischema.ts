@@ -45,6 +45,15 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
           },
         },
       },
+      entities: {
+        items: {
+          'ui:options': {
+            displayLabel: false,
+            hideLabel: true,
+            hideDescription: true,
+          },
+        },
+      },
     },
     'ui:order': ['recognizer', 'triggers', '*'],
     'ui:hidden': ['triggers', 'autoEndDialog', 'generator', ...globalHidden],

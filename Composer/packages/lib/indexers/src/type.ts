@@ -24,13 +24,18 @@ export interface DialogInfo {
   id: string;
   isRoot: boolean;
   lgFile: string;
-  lgTemplates: string[];
+  lgTemplates: LgTemplateJsonPath[];
   luFile: string;
   luIntents: string[];
   referredDialogs: string[];
   relativePath: string;
   userDefinedVariables: string[];
   triggers: ITrigger[];
+}
+
+export interface LgTemplateJsonPath {
+  name: string;
+  path: string;
 }
 
 export interface Intent {
@@ -83,6 +88,11 @@ export interface LgTemplate {
   range?: CodeRange;
 }
 
+export interface LgParsed {
+  diagnostics: Diagnostic[];
+  templates: LgTemplate[];
+}
+
 export interface LgFile {
   id: string;
   relativePath: string;
@@ -91,6 +101,10 @@ export interface LgFile {
   templates: LgTemplate[];
 }
 
+export interface TextFile {
+  id: string;
+  content: string;
+}
 export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;

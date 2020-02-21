@@ -24,7 +24,7 @@ export const link = (active, disabled) => css`
     }
 
     &:hover {
-      background-color: ${active ? NeutralColors.gray40 : NeutralColors.gray30};
+      background-color: ${NeutralColors.gray50};
     }
 
     &:focus {
@@ -40,7 +40,7 @@ export const link = (active, disabled) => css`
     }
 
     ${active &&
-      `background-color: ${NeutralColors.gray40};
+      `background-color: ${NeutralColors.white};
 
       &::after {
         border-left: 3px solid ${CommunicationColors.primary};

@@ -111,7 +111,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const intents = isRegEx ? regexIntents : luisIntents;
 
   const intentOptions = intents.map(t => {
-    return { key: t.name || t.intent, text: t.name || t.intent };
+    return { key: t.name || t.Name || t.intent, text: t.name || t.Name || t.intent };
   });
 
   const showIntentDropDown = formData.$type === intentTypeKey;

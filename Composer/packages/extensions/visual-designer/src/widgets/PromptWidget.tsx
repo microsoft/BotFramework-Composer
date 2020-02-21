@@ -11,10 +11,11 @@ import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
-import { Edge } from '../components/lib/EdgeComponents';
 import { WidgetContainerProps } from '../schema/uischema.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
+import { renderEdge } from '../components/lib/EdgeUtil';
+import { SVGContainer } from '../components/lib/SVGContainer';
 
 const calculateNodes = (data, jsonpath: string) => {
   const { botAsks, userAnswers, invalidPrompt } = transformBaseInput(data, jsonpath);
@@ -54,7 +55,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({ id, data, onEvent, botAsks
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
-      {edges ? edges.map(x => <Edge key={x.id} {...x} />) : null}
+      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };

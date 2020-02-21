@@ -16,6 +16,7 @@ import {
   flexContent,
   actionButton,
   contentEditor,
+  HeaderText,
 } from '../language-understanding/styles';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
@@ -32,12 +33,11 @@ interface LGPageProps extends RouteComponentProps<{}> {
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { lgFiles, dialogs } = state;
+  const { dialogs } = state;
 
   const path = props.location?.pathname ?? '';
   const { fileId = 'common' } = props;
   const edit = /\/edit(\/)?$/.test(path);
-  const file = lgFiles.find(({ id }) => id === 'common');
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
@@ -59,8 +59,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const onSelect = useCallback(
     id => {
-      let url = `/language-generation/${id}`;
-      if (edit) url += `/edit`;
+      const url = `/language-generation/${id}`;
       navigateTo(url);
     },
     [edit]
@@ -87,7 +86,7 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div>{formatMessage('Bot Responses')}</div>
+        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}
@@ -104,16 +103,14 @@ const LGPage: React.FC<LGPageProps> = props => {
         <div css={projectContainer}>
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>
-        {file && (
-          <div css={contentEditor}>
-            <Suspense fallback={<LoadingSpinner />}>
-              <Router primary={false} component={Fragment}>
-                <CodeEditor path="/edit" fileId={fileId} />
-                <TableView path="/" fileId={fileId} />
-              </Router>
-            </Suspense>
-          </div>
-        )}
+        <div css={contentEditor}>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Router primary={false} component={Fragment}>
+              <CodeEditor path="/edit" fileId={fileId} />
+              <TableView path="/" fileId={fileId} />
+            </Router>
+          </Suspense>
+        </div>
       </div>
     </Fragment>
   );

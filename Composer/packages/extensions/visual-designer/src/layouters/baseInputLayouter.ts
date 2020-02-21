@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { GraphLayout } from '../models/GraphLayout';
-import { EdgeData } from '../models/EdgeData';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 import { ElementInterval, LoopEdgeMarginLeft } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 
@@ -36,52 +36,52 @@ export function baseInputLayouter(
   const baseline2OffsetY = userAnswersNode.offset.y + userAnswersNode.boundary.height + ElementInterval.y / 2;
   const baselineLength = invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX - boundary.axisX;
 
-  const edges: EdgeData[] = [
+  const edges: Edge[] = [
     {
       id: `edges/${botAsksNode.id}/botAsks->userAnswers`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: boundary.axisX,
       y: botAsksNode.boundary.height,
       length: ElementInterval.y,
     },
     {
       id: `edges/${botAsksNode.id}/userAnswers->bottom`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: boundary.axisX,
       y: userAnswersNode.offset.y + userAnswersNode.boundary.height,
       length: ElementInterval.y / 2,
     },
     {
       id: `edges/${invalidPromptNode.id}/baseline1->iconNode|`,
-      direction: 'x',
+      direction: EdgeDirection.Right,
       x: boundary.axisX,
       y: baseline1OffsetY,
       length: baselineLength,
-      dashed: true,
+      options: { dashed: true },
     },
     {
       id: `edges/${invalidPromptNode.id}/baseline2->iconNode|`,
-      direction: 'x',
+      direction: EdgeDirection.Right,
       x: boundary.axisX,
       y: baseline2OffsetY,
       length: baselineLength,
-      dashed: true,
+      options: { dashed: true },
     },
     {
       id: `edges/${invalidPromptNode.id}/baseline1->iconNode`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX,
       y: baseline1OffsetY,
       length: invalidPromptNode.offset.y - baseline1OffsetY,
-      dashed: true,
+      options: { dashed: true },
     },
     {
       id: `edges/${invalidPromptNode.id}/iconNode->baseline2`,
-      direction: 'y',
+      direction: EdgeDirection.Down,
       x: invalidPromptNode.offset.x + invalidPromptNode.boundary.axisX,
       y: invalidPromptNode.offset.y + invalidPromptNode.boundary.height,
       length: baseline2OffsetY - (invalidPromptNode.offset.y + invalidPromptNode.boundary.height),
-      dashed: true,
+      options: { dashed: true },
     },
   ];
 

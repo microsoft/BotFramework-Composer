@@ -13,8 +13,10 @@ import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
+import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
+import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -33,11 +35,13 @@ const BaseInputSchema: UIWidget = {
   },
   userInput: {
     'ui:widget': ActionCard,
-    title: data => `User Answers (${getInputType(data.$type)})`,
+    title: data => `User Input (${getInputType(data.$type)})`,
     disableSDKTitle: true,
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
+    children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
+    size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,

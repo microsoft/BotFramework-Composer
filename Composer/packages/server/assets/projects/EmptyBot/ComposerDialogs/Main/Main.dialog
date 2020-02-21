@@ -1,10 +1,10 @@
 {
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
     "description": "<Fill in the description of your bot here>"
   },
-  "generator": "common.lg",
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
@@ -32,5 +32,7 @@
         }
       ]
     }
-  ]
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "Main.lg"
 }
