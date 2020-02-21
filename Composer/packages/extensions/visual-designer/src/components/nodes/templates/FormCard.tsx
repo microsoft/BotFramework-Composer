@@ -8,6 +8,7 @@ import { FunctionComponent } from 'react';
 import { InitNodeSize } from '../../../constants/ElementSizes';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { Icon } from '../../decorations/icon';
+import { MultiLineDiv } from '../../elements/styledComponents';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;
@@ -120,21 +121,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
               <Icon icon={icon} color={iconColor} size={iconSize || 16} />
             </div>
           )}
-          <div
-            css={{
-              height: '100%',
-              width: 'calc(100% - 20px)',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              fontSize: '12px',
-              lineHeight: '19px',
-              fontFamily: 'Segoe UI',
-            }}
-            title={typeof label === 'string' ? label : ''}
-          >
-            {label}
-          </div>
+          <MultiLineDiv title={typeof label === 'string' ? label : ''}>{label}</MultiLineDiv>
         </div>
         {children}
       </div>

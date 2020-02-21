@@ -13,6 +13,7 @@ import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { NodeProps } from '../components/nodes/nodeProps';
+import { BorderedDiv, MultiLineDiv } from '../components/elements/styledComponents';
 import { getUserAnswersTitle } from '../components/nodes/utils';
 
 export const ChoiceInputChoices = ({ choices }) => {
@@ -21,51 +22,28 @@ export const ChoiceInputChoices = ({ choices }) => {
   }
 
   return (
-    <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 29px' }}>
+    <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 8px' }}>
       {choices.map(({ value }, index) => {
         if (index < 3) {
           return (
-            <div
-              key={index}
-              role="choice"
-              css={{
-                height: ChoiceInputSize.height,
-                width: ChoiceInputSize.width,
-                marginTop: ChoiceInputMarginTop,
-                paddingLeft: '7px',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                fontFamily: 'Segoe UI',
-                fontSize: '12px',
-                lineHeight: '19px',
-                border: '1px solid #B3B0AD',
-                boxSizing: 'border-box',
-                borderRadius: '2px',
-              }}
-              title={typeof value === 'string' ? value : ''}
-            >
+            <BorderedDiv key={index} role="choice" title={typeof value === 'string' ? value : ''}>
               {value}
-            </div>
+            </BorderedDiv>
           );
         }
       })}
       {Array.isArray(choices) && choices.length > 3 ? (
-        <div
+        <MultiLineDiv
           data-testid="hasMore"
           css={{
             height: ChoiceInputSize.height,
             width: ChoiceInputSize.width,
             marginTop: ChoiceInputMarginTop,
             textAlign: 'center',
-            fontFamily: 'Segoe UI',
-            fontSize: '12px',
-            lineHeight: '14px',
-            boxSizing: 'border-box',
           }}
         >
           {`${choices.length - 3} more`}
-        </div>
+        </MultiLineDiv>
       ) : null}
     </div>
   );
