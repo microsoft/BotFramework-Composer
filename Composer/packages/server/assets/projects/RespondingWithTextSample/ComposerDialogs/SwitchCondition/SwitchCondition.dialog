@@ -24,5 +24,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "SwitchCondition.lg"
 }

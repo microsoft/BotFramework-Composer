@@ -165,7 +165,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { id: 'test', content: '' },
+      body: { id: 'common', content: '' },
     } as Request;
     await ProjectController.updateLgFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);

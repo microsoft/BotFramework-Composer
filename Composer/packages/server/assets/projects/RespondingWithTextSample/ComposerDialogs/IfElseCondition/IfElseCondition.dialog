@@ -60,5 +60,6 @@
         }
       ]
     }
-  ]
+  ],
+  "generator": "IfElseCondition.lg"
 }

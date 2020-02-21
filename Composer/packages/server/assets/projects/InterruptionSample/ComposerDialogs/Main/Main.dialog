@@ -7,7 +7,7 @@
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "recognizer": "Main.lu",
-  "generator": "common.lg",
+  "generator": "Main.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",

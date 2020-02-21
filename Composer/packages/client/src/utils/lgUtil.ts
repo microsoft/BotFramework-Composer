@@ -8,22 +8,13 @@
  */
 
 import { LGParser } from 'botbuilder-lg';
-import { lgIndexer, combineMessage, isValid, LgTemplate } from '@bfc/indexers';
+import { lgIndexer, LgTemplate } from '@bfc/indexers';
 
-const { check, parse } = lgIndexer;
+const { parse } = lgIndexer;
 export interface Template {
   name: string;
   parameters?: string[];
   body: string;
-}
-
-export function checkLgContent(content: string, id: string) {
-  // check lg content, make up error message
-  const diagnostics = check(content, id);
-  if (!isValid(diagnostics)) {
-    const errorMsg = combineMessage(diagnostics);
-    throw new Error(errorMsg);
-  }
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {

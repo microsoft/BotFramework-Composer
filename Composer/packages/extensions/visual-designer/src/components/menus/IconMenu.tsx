@@ -84,7 +84,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         componentRef={buttonRef}
         data-testid="iconMenu"
         styles={buttonStyles}
-        menuIconProps={{ iconName, style: { fontSize: iconSize, color } }}
+        menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
         ariaLabel={label}
         {...rest}
