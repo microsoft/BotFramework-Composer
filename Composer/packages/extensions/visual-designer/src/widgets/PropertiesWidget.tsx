@@ -7,7 +7,7 @@ import { generateSDKTitle } from '@bfc/shared';
 
 import { ObiColors } from '../constants/ElementColors';
 import { FormCard } from '../components/nodes/templates/FormCard';
-import { ListOverview } from '../components/common/ListOverView';
+import { ListOverview } from '../components/common/ListOverview';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { PropertyAssignmentSize, AssignmentMarginTop } from '../constants/ElementSizes';

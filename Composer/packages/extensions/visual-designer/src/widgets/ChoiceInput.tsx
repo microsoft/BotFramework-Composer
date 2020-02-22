@@ -12,7 +12,7 @@ import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { NodeProps } from '../components/nodes/nodeProps';
-import { ListOverview } from '../components/common/ListOverView';
+import { ListOverview } from '../components/common/ListOverview';
 import { getUserAnswersTitle } from '../components/nodes/utils';
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../constants/ElementSizes';
 import { UI_ELEMENT_KEY } from '../components/elements/styledComponents.types';
