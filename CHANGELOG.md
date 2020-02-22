@@ -2,6 +2,50 @@
 
 ## Releases
 
+### 02-21-2020
+
+#### Added
+
+- feat: let VisualEditor accept dynamic uischema instead of hardcoding ([#1995](https://github.com/microsoft/BotFramework-Composer/pull/1995)) ([@yeze322](https://github.com/yeze322))
+- feat: multiple lg ([#1861](https://github.com/microsoft/BotFramework-Composer/pull/1861)) ([@zhixzhan](https://github.com/zhixzhan))
+- feat: click on a inline lg template error it will navigate to design page and focus on the specific action ([#1856](https://github.com/microsoft/BotFramework-Composer/pull/1856)) ([@liweitian](https://github.com/liweitian))
+- feat: syntax highlighting for prebuilt entity name and multi entity definition in one line ([#1882](https://github.com/microsoft/BotFramework-Composer/pull/1882)) ([@cosmicshuai](https://github.com/cosmicshuai))
+
+#### Fixed
+
+- fix: update framework and package version in template botproject ([#1939](https://github.com/microsoft/BotFramework-Composer/pull/1939)) ([@VanyLaw](https://github.com/VanyLaw))
+- fix: Updated regex recognizer UI ([#1991](https://github.com/microsoft/BotFramework-Composer/pull/1991)) ([@tdurnford](https://github.com/tdurnford))
+- fix: update dialog property title ([#1966](https://github.com/microsoft/BotFramework-Composer/pull/1966)) ([@tdurnford](https://github.com/tdurnford))
+- fix: LU LSP suggest empty string entities and roles in entering utterance ([#1889](https://github.com/microsoft/BotFramework-Composer/pull/1889)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: use correct widget in ChoiceInput ([#1931](https://github.com/microsoft/BotFramework-Composer/pull/1931)) ([@yeze322](https://github.com/yeze322))
+- fix: find lg template id in value ([#1941](https://github.com/microsoft/BotFramework-Composer/pull/1941)) ([@zhixzhan](https://github.com/zhixzhan))
+- fix: move field descriptions into tooltip ([#1858](https://github.com/microsoft/BotFramework-Composer/pull/1858)) ([@tdurnford](https://github.com/tdurnford))
+- fix: correctly show form errors for switch condition cases ([#2013](https://github.com/microsoft/BotFramework-Composer/pull/2013) & ([#1989](https://github.com/microsoft/BotFramework-Composer/pull/1989)) ([@lei9444](https://github.com/lei9444))
+- fix: includeActivity => activityProcessed ([#1996](https://github.com/microsoft/BotFramework-Composer/pull/1996)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: Fix intent dropdown in trigger wizard ([#1949](https://github.com/microsoft/BotFramework-Composer/pull/1949)) ([@cwhitten](https://github.com/cwhitten))
+- fix: set consistent titlle ([#1940](https://github.com/microsoft/BotFramework-Composer/pull/1940)) ([@yeze322](https://github.com/yeze322))
+
+#### Changed
+
+- style: left nav and dialog tree align ([#1960](https://github.com/microsoft/BotFramework-Composer/pull/1960)) ([@liweitian](https://github.com/liweitian))
+- style: update multiple choice input node style ([#1954](https://github.com/microsoft/BotFramework-Composer/pull/1954)) ([@alanlong9278](https://github.com/alanlong9278))
+- style: Adjusted padding in the Form Editor and RootField fonts ([#1973](https://github.com/microsoft/BotFramework-Composer/pull/1973)) ([@tdurnford](https://github.com/tdurnford))
+- style: update header size and weight ([#1961](https://github.com/microsoft/BotFramework-Composer/pull/1961)) ([@liweitian](https://github.com/liweitian))
+- style: update input node "other" size ([#1950](https://github.com/microsoft/BotFramework-Composer/pull/1950)) ([@alanlong9278](https://github.com/alanlong9278))
+- style: update color ([#1959](https://github.com/microsoft/BotFramework-Composer/pull/1959)) ([@liweitian](https://github.com/liweitian))
+
+#### Other
+
+- chore: add client/build to gitignore ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: enhace the SVG usage in visual editor ([#1987](https://github.com/microsoft/BotFramework-Composer/pull/1987)) ([@yeze322](https://github.com/yeze322))
+- chore: clean unreferenced files in visual editor ([#1981](https://github.com/microsoft/BotFramework-Composer/pull/1981)) ([@yeze322](https://github.com/yeze322))
+- build: add declarationMap compiler option to base ts config ([#1964](https://github.com/microsoft/BotFramework-Composer/pull/1964)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- ci: update cypress libraries ([#1936](https://github.com/microsoft/BotFramework-Composer/pull/1936)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- docs: composer review 1-29 ([#1924](https://github.com/microsoft/BotFramework-Composer/pull/1924)) ([@cwhitten](https://github.com/cwhitten))
+- release: 01-27-2020 ([#1913](https://github.com/microsoft/BotFramework-Composer/pull/1913)) ([@cwhitten](https://github.com/cwhitten))
+- chore: remove the never used 'when' prop in KeyboardZone ([#2000](https://github.com/microsoft/BotFramework-Composer/pull/2000)) ([@yeze322](https://github.com/yeze322))
+- docs: add testing section to contributors doc ([#1955](https://github.com/microsoft/BotFramework-Composer/pull/1955)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+
 ### 01-27-2020
 
 #### Added
