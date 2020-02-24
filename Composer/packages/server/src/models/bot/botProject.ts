@@ -19,8 +19,8 @@ import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
-import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
+import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
@@ -61,7 +61,6 @@ export class BotProject {
   public defaultEditorSchema: {
     [key: string]: string;
   };
-  public environment: IEnvironment;
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
@@ -75,15 +74,14 @@ export class BotProject {
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
 
-    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir }, this, user);
-    this.settingManager = this.environment.getSettingsManager();
+    this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
   public index = async () => {
     this.files = await this._getFiles();
-    this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
+    this.settings = await this.getEnvSettings('', false);
     this.dialogs = this.indexDialogs();
     this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     this.luFiles = luIndexer.index(this.files);
@@ -103,13 +101,12 @@ export class BotProject {
       lgFiles: this.lgFiles,
       luFiles: this.mergeLuStatus(this.luFiles, this.luPublisher.status),
       schemas: this.getSchemas(),
-      botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
     };
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
-    const defaultSlot = this.environment.getDefaultSlot();
+    const defaultSlot = '';
     return await this.settingManager.get(defaultSlot, obfuscate);
   };
 
@@ -125,7 +122,7 @@ export class BotProject {
   };
 
   public updateDefaultSlotEnvSettings = async (config: DialogSetting) => {
-    const defaultSlot = this.environment.getDefaultSlot();
+    const defaultSlot = '';
     await this.updateEnvSettings(defaultSlot, config);
   };
 
