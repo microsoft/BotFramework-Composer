@@ -2142,17 +2142,13 @@
     tslib "^1.10.0"
     uuid "~3.3.3"
 
-"@bfcomposer/bf-lu@^1.1.8", "@bfcomposer/bf-lu@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.8.tgz":
-  version "1.1.8"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.1.8.tgz#a3c7767de038025157bdc8cf9f56b393f1428fd4"
-  integrity sha1-o8d2feA4AlFXvcjPn1azk/FCj9Q=
+"@bfcomposer/bf-lu@^1.2.6":
+  version "1.2.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.2.6.tgz#de8346d6f1ce949abb5627fa8421f7f2d3e69b69"
+  integrity sha1-3oNG1vHOlJq7Vif6hCH38tPmm2k=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "3.0.1"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "1.0.0"
-    "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
-    "@oclif/errors" "~1.2.2"
     antlr4 "^4.7.2"
     chalk "2.4.1"
     console-stream "^0.1.1"

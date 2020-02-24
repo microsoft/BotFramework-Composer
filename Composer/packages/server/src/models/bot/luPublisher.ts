@@ -3,13 +3,16 @@
 
 import isEqual from 'lodash/isEqual';
 import { runBuild } from '@bfcomposer/lubuild';
+import { crossTrain } from '@bfcomposer/bf-lu/lib/parser/lubuild';
 import { LuFile } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 const GENERATEDFOLDER = 'ComposerDialogs/generated';
+const INTERUPTION = 'ComposerDialogs/generated/interuption';
 const LU_STATUS_FILE = 'luis.status.json';
+const CROSS_TRAIN_CONFIG = 'mapping_rules.json';
 const DEFAULT_STATUS = {
   lastUpdateTime: 1,
   lastPublishTime: 0, // means unpublished
@@ -17,6 +20,7 @@ const DEFAULT_STATUS = {
 export class LuPublisher {
   public botDir: string;
   public generatedFolderPath: string;
+  public interuptionFolderPath: string;
   public statusFile: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
@@ -27,6 +31,7 @@ export class LuPublisher {
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
     this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
+    this.interuptionFolderPath = Path.join(this.botDir, INTERUPTION);
     this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
     this.storage = storage;
   }
@@ -80,24 +85,28 @@ export class LuPublisher {
   };
 
   public publish = async (luFiles: LuFile[]) => {
-    const config = this._getConfig(luFiles);
-    if (config.models.length === 0) {
-      throw new Error('No luis file exist');
-    }
-    const curTime = Date.now();
     try {
+      await this._crossTrain();
+
+      const config = await this._getConfig();
+      if (config.models.length === 0) {
+        throw new Error('No luis file exist');
+      }
+
       await runBuild(config);
 
       // update pubish status after sucessfully published
+      const curTime = Date.now();
       luFiles.forEach(f => {
         this.status[f.relativePath].lastPublishTime = curTime;
       });
-      await this.saveStatus();
-    } catch (error) {
-      throw new Error(error?.body?.error?.message ?? 'Error publishing to LUIS.');
-    }
 
-    await this._copyDialogsToTargetFolder(config);
+      await this.saveStatus();
+
+      await this._copyDialogsToTargetFolder(config);
+    } catch (error) {
+      throw new Error(error?.message ?? 'Error publishing to LUIS.');
+    }
   };
 
   public getUnpublisedFiles = (files: LuFile[]) => {
@@ -132,6 +141,31 @@ export class LuPublisher {
       this.config.authoringKey = key;
     }
   };
+
+  public createCrossTrainConfig = async () => {
+    // ToDo: create real tree for cross train. Now add this data to test the bf-lu
+    const test = {
+      '../Main/Main.lu': {
+        rootDialog: true,
+        triggers: {
+          dia1: '../dia1/dia1.lu',
+          dia2: '../dia2/dia2.lu',
+        },
+      },
+    };
+    await this.storage.writeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`, JSON.stringify(test));
+  };
+
+  private async _crossTrain() {
+    await this.createCrossTrainConfig();
+    const result = await crossTrain.train(
+      this.botDir,
+      '_Interuption',
+      `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`
+    );
+    await crossTrain.writeFiles(result.luResult, this.interuptionFolderPath);
+  }
+
   //delete files in generated folder
   private async _deleteGenerated(path: string) {
     if (await this.storage.exists(path)) {
@@ -163,17 +197,15 @@ export class LuPublisher {
     });
   };
 
-  private _getConfig = (luFiles: LuFile[]) => {
+  private _getConfig = async () => {
     const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;
     luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
-    luFiles.forEach(file => {
-      luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
-    });
-
+    const paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
+    luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
     return luConfig;
   };
 }
