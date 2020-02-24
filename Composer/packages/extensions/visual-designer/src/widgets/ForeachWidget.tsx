@@ -18,6 +18,7 @@ import { WidgetContainerProps } from '../schema/uischema.types';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
+import { designerCache } from '../store/DesignerCache';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -68,7 +69,12 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => updateNodeBoundary(ForeachNodes.Foreach, boundary)}>
+          <ElementMeasurer
+            onResize={boundary => {
+              designerCache.cacheBoundary(foreachNode.data, boundary);
+              updateNodeBoundary(ForeachNodes.Foreach, boundary);
+            }}
+          >
             {loop}
           </ElementMeasurer>
         </ElementWrapper>

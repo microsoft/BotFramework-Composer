@@ -18,6 +18,7 @@ import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
+import { designerCache } from '../store/DesignerCache';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -71,7 +72,12 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => updateNodeBoundary(IfElseNodes.Condition, boundary)}>
+          <ElementMeasurer
+            onResize={boundary => {
+              designerCache.cacheBoundary(conditionNode.data, boundary);
+              updateNodeBoundary(IfElseNodes.Condition, boundary);
+            }}
+          >
             {judgement}
           </ElementMeasurer>
         </ElementWrapper>

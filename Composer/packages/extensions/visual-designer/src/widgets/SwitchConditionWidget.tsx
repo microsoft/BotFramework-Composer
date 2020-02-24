@@ -18,6 +18,7 @@ import { WidgetContainerProps } from '../schema/uischema.types';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
+import { designerCache } from '../store/DesignerCache';
 
 enum SwitchNodes {
   Switch = 'switchNode',
@@ -81,7 +82,12 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={switchNode.offset}>
         <ElementWrapper id={switchNode.id} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => updateNodeBoundary(SwitchNodes.Switch, boundary)}>
+          <ElementMeasurer
+            onResize={boundary => {
+              designerCache.cacheBoundary(switchNode.data, boundary);
+              updateNodeBoundary(SwitchNodes.Switch, boundary);
+            }}
+          >
             {judgement}
           </ElementMeasurer>
         </ElementWrapper>

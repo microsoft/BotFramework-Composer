@@ -19,6 +19,7 @@ import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
+import { designerCache } from '../store/DesignerCache';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',
@@ -63,14 +64,24 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => updateNodeBoundary(PromptNodes.BotAsks, boundary)}>
+          <ElementMeasurer
+            onResize={boundary => {
+              designerCache.cacheBoundary(botAsksNode.data, boundary);
+              updateNodeBoundary(PromptNodes.BotAsks, boundary);
+            }}
+          >
             {botAsks}
           </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
-          <ElementMeasurer onResize={boundary => updateNodeBoundary(PromptNodes.UserAnswers, boundary)}>
+          <ElementMeasurer
+            onResize={boundary => {
+              designerCache.cacheBoundary(userAnswersNode.data, boundary);
+              updateNodeBoundary(PromptNodes.UserAnswers, boundary);
+            }}
+          >
             {userInput}
           </ElementMeasurer>
         </ElementWrapper>

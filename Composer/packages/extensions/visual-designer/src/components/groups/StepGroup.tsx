@@ -18,6 +18,7 @@ import { EdgeMenu } from '../menus/EdgeMenu';
 import { SVGContainer } from '../lib/SVGContainer';
 import { renderEdge } from '../lib/EdgeUtil';
 import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
 
 const StepInterval = ElementInterval.y;
 
@@ -59,6 +60,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
                 data={x.data}
                 onEvent={onEvent}
                 onResize={size => {
+                  designerCache.cacheBoundary(x.data, size);
                   updateNodeBoundary(getStepKey(index), size);
                 }}
               />
