@@ -21,7 +21,7 @@ const nodeBorderSelectedStyle = css`
 
 // BotAsks, UserAnswers and InvalidPromptBrick nodes selected style
 const nodeBorderDoubleSelectedStyle = css`
-  outline: 2px solid #0078d4;
+  border: 2px solid #0078d4;
   box-shadow: 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
 export interface ElementWrapperProps {
