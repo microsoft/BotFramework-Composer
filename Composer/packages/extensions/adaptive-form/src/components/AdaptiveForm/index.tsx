@@ -7,7 +7,8 @@ import ErrorBoundary from 'react-error-boundary';
 import { AdaptiveDialogSchema } from '@bfc/shared';
 
 import PluginContext from '../../PluginContext';
-import { resolveBaseSchema, getUISchema, resolveFieldWidget, mergePluginConfigs } from '../../utils';
+import { resolveBaseSchema, getUISchema, mergePluginConfigs } from '../../utils';
+import { SchemaField } from '../SchemaField';
 
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
@@ -40,8 +41,8 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUISchema(localData?.$type, pluginConfig.uiSchema);
-  }, [localData?.$type, pluginConfig]);
+    return getUISchema($schema, pluginConfig.uiSchema);
+  }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
@@ -90,8 +91,6 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
   };
 
-  const Field = resolveFieldWidget($schema, $uiSchema, pluginConfig);
-
   return (
     <ErrorBoundary FallbackComponent={ErrorInfo}>
       <div key={localData?.$designer?.id}>
@@ -102,7 +101,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
             schema={$schema}
             onChange={$designer => handleDataChange({ ...localData, $designer })}
           />
-          <Field
+          <SchemaField
             definitions={schema?.definitions}
             depth={-1}
             id="root"

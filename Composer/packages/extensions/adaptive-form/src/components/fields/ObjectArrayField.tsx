@@ -73,6 +73,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         {map(value, (item, idx) => (
           <ArrayFieldItem
             {...props}
+            transparentBorder
             key={idx}
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema4}

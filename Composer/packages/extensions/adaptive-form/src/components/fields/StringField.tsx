@@ -13,12 +13,12 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     id,
     value = '',
     onChange,
-    depth,
     disabled,
     label,
     description,
     placeholder,
     readonly,
+    transparentBorder,
     onFocus,
     onBlur,
     error,
@@ -52,7 +52,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...(depth > 1
+          ...(transparentBorder
             ? {
                 fieldGroup: {
                   borderColor: 'transparent',

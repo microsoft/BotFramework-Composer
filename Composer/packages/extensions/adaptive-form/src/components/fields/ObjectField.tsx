@@ -7,7 +7,19 @@ import { resolvePropSchema, getOrderedProperties } from '../../utils';
 import SchemaField from '../SchemaField';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const { schema, uiOptions, depth, value, definitions, className, id, onBlur, onFocus, rawErrors } = props;
+  const {
+    schema,
+    uiOptions,
+    depth,
+    value,
+    definitions,
+    className,
+    id,
+    onBlur,
+    onFocus,
+    rawErrors,
+    transparentBorder,
+  } = props;
 
   if (!schema) {
     return null;
@@ -50,6 +62,7 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
                 name={property}
                 rawErrors={rawErrors?.[property]}
                 schema={propSchema}
+                transparentBorder={transparentBorder}
                 uiOptions={(uiOptions.properties?.[property] as UIOptions) ?? {}}
                 value={value && value[property]}
                 onBlur={onBlur}

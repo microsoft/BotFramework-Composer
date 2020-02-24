@@ -28,6 +28,7 @@ export interface FieldProps<T = any> {
   rawErrors?: FormErrors | string | string[] | FormErrors[];
   readonly?: boolean;
   schema: JSONSchema4;
+  transparentBorder?: boolean;
   uiOptions: UIOptions;
   value?: T;
 

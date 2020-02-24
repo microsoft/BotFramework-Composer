@@ -3,8 +3,6 @@
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
-import { EditableField } from './components/fields';
-
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -15,25 +13,6 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.AdaptiveDialog]: {
     order: ['recognizer', '*'],
     hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema', ...globalHiddenProperties],
-    properties: {
-      recognizer: {
-        hidden: ['entities'],
-        properties: {
-          intents: {
-            properties: {
-              intent: {
-                label: false,
-                field: EditableField,
-              },
-              pattern: {
-                label: false,
-                field: EditableField,
-              },
-            },
-          },
-        },
-      },
-    },
   },
   [SDKTypes.BeginDialog]: {
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
@@ -61,11 +40,11 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.Foreach]: {
     order: ['itemsProperty', '*'],
-    hidden: ['actions'],
+    hidden: ['actions', ...globalHiddenProperties],
   },
   [SDKTypes.ForeachPage]: {
     order: ['itemsProperty', 'pageSize', '*'],
-    hidden: ['actions'],
+    hidden: ['actions', ...globalHiddenProperties],
   },
   [SDKTypes.HttpRequest]: {
     order: ['method', 'url', 'body', 'headers', '*'],
@@ -168,6 +147,9 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.OAuthInput]: {
     order: ['connectionName', '*'],
+  },
+  [SDKTypes.RegexRecognizer]: {
+    hidden: ['entities', ...globalHiddenProperties],
   },
   [SDKTypes.ReplaceDialog]: {
     hidden: [...globalHiddenProperties],

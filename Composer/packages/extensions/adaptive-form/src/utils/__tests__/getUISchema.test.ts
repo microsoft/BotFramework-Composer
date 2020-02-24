@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { JSONSchema4 } from 'json-schema';
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
@@ -12,20 +13,35 @@ describe('getUISchema', () => {
   });
 
   it('returns UI schema for $type', () => {
-    expect(getUISchema(SDKTypes.AdaptiveDialog)).toMatchInlineSnapshot(`Object {}`);
+    const schema: JSONSchema4 = {
+      properties: {
+        $kind: {
+          const: SDKTypes.AdaptiveDialog,
+        },
+      },
+    };
+    expect(getUISchema(schema)).toMatchInlineSnapshot(`Object {}`);
   });
 
   it('merges overrides into default schema', () => {
-    const schema1: UISchema = {
+    const schema: JSONSchema4 = {
+      properties: {
+        $kind: {
+          const: SDKTypes.AdaptiveDialog,
+        },
+      },
+    };
+
+    const uiSchema: UISchema = {
       [SDKTypes.AdaptiveDialog]: {
         order: ['*', 'recognizer'],
         label: 'First Label',
       },
     };
-    expect(getUISchema(SDKTypes.AdaptiveDialog, schema1)).toMatchInlineSnapshot(`
+    expect(getUISchema(schema, uiSchema)).toMatchInlineSnapshot(`
 Object {
-  "ui:label": "First Label",
-  "ui:order": Array [
+  "label": "First Label",
+  "order": Array [
     "*",
     "recognizer",
   ],

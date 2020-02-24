@@ -46,6 +46,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
         {items.map((element, idx) => (
           <ArrayFieldItem
             {...props}
+            transparentBorder
             key={idx}
             label={false}
             rawErrors={rawErrors[idx]}

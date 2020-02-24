@@ -5,7 +5,7 @@ import { jsx, css } from '@emotion/core';
 import React, { useContext } from 'react';
 import { FieldProps } from '@bfc/extension';
 
-import { resolveFieldWidget, resolveRef, getLabel } from '../utils';
+import { getUISchema, resolveFieldWidget, resolveRef, getLabel } from '../utils';
 import PluginContext from '../PluginContext';
 
 import { ErrorMessage } from './ErrorMessage';
@@ -35,9 +35,22 @@ const getPlaceholder = (props: FieldProps): string | undefined => {
 };
 
 const SchemaField: React.FC<FieldProps> = props => {
-  const { className, definitions, name, schema: baseSchema, uiOptions, value, rawErrors, hideError } = props;
+  const {
+    className,
+    definitions,
+    name,
+    schema: baseSchema,
+    uiOptions: baseUIOptions = {},
+    value,
+    rawErrors,
+    hideError,
+  } = props;
   const pluginConfig = useContext(PluginContext);
   const schema = resolveRef(baseSchema, definitions);
+  const uiOptions = {
+    ...getUISchema(schema, pluginConfig.uiSchema),
+    ...baseUIOptions,
+  };
 
   if (!schema || name.startsWith('$')) {
     return null;
@@ -48,6 +61,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
   const fieldProps = {
     ...props,
+    uiOptions,
     description: schema.description,
     enumOptions: schema.enum as string[],
     label: getLabel(props),
