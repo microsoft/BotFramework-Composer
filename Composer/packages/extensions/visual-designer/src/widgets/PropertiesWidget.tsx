@@ -11,19 +11,32 @@ import { ListOverview } from '../components/common/ListOverview';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { PropertyAssignmentSize, AssignmentMarginTop } from '../constants/ElementSizes';
+import { MultiLineDiv } from '../components/elements/styledComponents';
 
-export const AssignmentList = ({ assignments, elementSchema }) => {
+export const AssignmentList = ({ assignments }) => {
   if (!Array.isArray(assignments)) {
     return null;
   }
   const items = assignments.map(assignment => `${assignment.property} = ${assignment.value}`);
+  const itemRender = ({ children }) => (
+    <MultiLineDiv
+      role="assignment"
+      lineNum={1}
+      css={{
+        height: PropertyAssignmentSize.height,
+        width: PropertyAssignmentSize.width,
+        marginTop: AssignmentMarginTop,
+      }}
+    >
+      {children}
+    </MultiLineDiv>
+  );
   return (
     <div data-testid="SetProperties" css={{ padding: '0 0 16px 8px' }}>
       <ListOverview
         items={items}
-        elementSchema={elementSchema}
+        ItemRender={itemRender}
         maxCount={3}
-        role="assignment"
         styles={{
           height: PropertyAssignmentSize.height,
           width: PropertyAssignmentSize.width,
@@ -68,7 +81,7 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
 }) => {
   const header = disableSDKTitle ? title : generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
-  const { assignments, elementSchema } = content;
+  const { assignments } = content;
   return (
     <FormCard
       header={header}
@@ -77,7 +90,7 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
       nodeColors={nodeColors}
       styles={{ ...size }}
     >
-      {assignments && <AssignmentList assignments={assignments} elementSchema={elementSchema} />}
+      {assignments && <AssignmentList assignments={assignments} />}
     </FormCard>
   );
 };

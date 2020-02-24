@@ -1,34 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { FC, ComponentClass } from 'react';
 
-import { MultiLineDiv, parseElementSchema } from '../elements/styledComponents';
-import { UIElement } from '../elements/styledComponents.types';
+import { MultiLineDiv } from '../elements/styledComponents';
 
 export interface ListOverviewProps {
   items: string[];
-  elementSchema: UIElement;
+  ItemRender: FC<any> | ComponentClass<any, any>;
   maxCount: number;
-  role: string;
   styles?: Record<string, any>;
 }
-export const ListOverview: React.FC<ListOverviewProps> = ({ items, elementSchema, maxCount, role, styles }) => {
-  const { ElementComponent, props } = parseElementSchema(elementSchema);
+export const ListOverview: React.FC<ListOverviewProps> = ({ items, ItemRender, maxCount, styles }) => {
   return (
     <>
       {items.map((value, index) => {
         if (index < 3) {
           return (
-            <ElementComponent
-              key={index}
-              role={role}
-              title={typeof value === 'string' ? value : ''}
-              {...props}
-              style={styles}
-            >
+            <ItemRender key={index} title={typeof value === 'string' ? value : ''}>
               {value}
-            </ElementComponent>
+            </ItemRender>
           );
         }
       })}

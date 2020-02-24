@@ -15,21 +15,30 @@ import { NodeProps } from '../components/nodes/nodeProps';
 import { ListOverview } from '../components/common/ListOverview';
 import { getUserAnswersTitle } from '../components/nodes/utils';
 import { ChoiceInputSize, ChoiceInputMarginTop } from '../constants/ElementSizes';
-import { UI_ELEMENT_KEY } from '../components/elements/styledComponents.types';
 import { BorderedDiv } from '../components/elements/styledComponents';
 
-export const ChoiceInputChoices = ({ choices, elementSchema }) => {
+export const ChoiceInputChoices = ({ choices }) => {
   if (!Array.isArray(choices)) {
     return null;
   }
-
+  const itemRender = ({ children }) => (
+    <BorderedDiv
+      role="choice"
+      css={{
+        height: ChoiceInputSize.height,
+        width: ChoiceInputSize.width,
+        marginTop: ChoiceInputMarginTop,
+      }}
+    >
+      {children}
+    </BorderedDiv>
+  );
   return (
     <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 8px' }}>
       <ListOverview
         items={choices.map(choice => choice.value)}
-        elementSchema={elementSchema}
+        ItemRender={itemRender}
         maxCount={3}
-        role="choice"
         styles={{
           height: ChoiceInputSize.height,
           width: ChoiceInputSize.width,
@@ -43,10 +52,7 @@ export const ChoiceInputChoices = ({ choices, elementSchema }) => {
 export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
   const boundary = measureJsonBoundary(data);
   const { choices } = data;
-  const elementSchema = {
-    [UI_ELEMENT_KEY]: BorderedDiv,
-  };
-  const children = <ChoiceInputChoices choices={choices} elementSchema={elementSchema} />;
+  const children = <ChoiceInputChoices choices={choices} />;
 
   return (
     <FormCard
