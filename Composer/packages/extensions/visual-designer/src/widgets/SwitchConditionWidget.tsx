@@ -26,7 +26,7 @@ enum SwitchNodes {
 
 type CaseNodeKey = string;
 
-const getCaseKey = (caseIndex: number): string => `cases[${caseIndex}]`;
+const getCaseKey = (caseIndex: number): CaseNodeKey => `cases[${caseIndex}]`;
 
 const calculateNodeMap = (path: string, data): GraphNodeMap<SwitchNodes | CaseNodeKey> => {
   const result = transformSwitchCondition(data, path);
