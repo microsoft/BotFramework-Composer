@@ -21,7 +21,7 @@ export const ChoiceInputChoices = ({ choices }) => {
   if (!Array.isArray(choices)) {
     return null;
   }
-  const itemRender = ({ children }) => (
+  const ItemRender = ({ children }) => (
     <BorderedDiv
       role="choice"
       css={{
@@ -37,7 +37,7 @@ export const ChoiceInputChoices = ({ choices }) => {
     <div data-testid="ChoiceInput" css={{ padding: '0 0 16px 8px' }}>
       <ListOverview
         items={choices.map(choice => choice.value)}
-        ItemRender={itemRender}
+        ItemRender={ItemRender}
         maxCount={3}
         styles={{
           height: ChoiceInputSize.height,
@@ -46,26 +46,5 @@ export const ChoiceInputChoices = ({ choices }) => {
         }}
       />
     </div>
-  );
-};
-
-export const ChoiceInput: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
-  const boundary = measureJsonBoundary(data);
-  const { choices } = data;
-  const children = <ChoiceInputChoices choices={choices} />;
-
-  return (
-    <FormCard
-      nodeColors={NodeColors[DialogGroup.INPUT]}
-      header={getUserAnswersTitle(data._type)}
-      icon={ElementIcon.User}
-      label={data.property || '<property>'}
-      onClick={() => {
-        onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.USER_INPUT });
-      }}
-      styles={{ width: boundary.width, height: boundary.height }}
-    >
-      {children}
-    </FormCard>
   );
 };

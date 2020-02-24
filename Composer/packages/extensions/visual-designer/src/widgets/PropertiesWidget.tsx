@@ -18,7 +18,7 @@ export const AssignmentList = ({ assignments }) => {
     return null;
   }
   const items = assignments.map(assignment => `${assignment.property} = ${assignment.value}`);
-  const itemRender = ({ children }) => (
+  const ItemRender = ({ children }) => (
     <MultiLineDiv
       role="assignment"
       lineNum={1}
@@ -35,7 +35,7 @@ export const AssignmentList = ({ assignments }) => {
     <div data-testid="SetProperties" css={{ padding: '0 0 16px 8px' }}>
       <ListOverview
         items={items}
-        ItemRender={itemRender}
+        ItemRender={ItemRender}
         maxCount={3}
         styles={{
           height: PropertyAssignmentSize.height,
