@@ -14,9 +14,9 @@ const dynamicStyle = props =>
     color: ${props.color || ObiColors.Black};
   `;
 
-export const LinkBtn = styled(Link)`
-  ${dynamicStyle}
-`;
+export const LinkBtn = styled(Link)(props => ({
+  color: props.color || ObiColors.AzureBlue,
+}));
 
 export const Span = styled.span`
   ${dynamicStyle}
@@ -38,7 +38,8 @@ export const BorderedDiv: ElementComponent<ElementProps> = styled.div<ElementPro
 export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
   color: props.color || ObiColors.Black,
   fontSize: '12px',
-  lineHeight: '19px',
+  height: `${(props.lineNum || 1) * 14}px`,
+  lineHeight: '14px',
   fontFamily: 'Segoe UI',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
