@@ -22,9 +22,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private readonly ISourceMap sourceMap;
         private readonly string rootDialogFile;
 
-        private readonly IBotTelemetryClient telemetryClient;
-
-        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap, IBotTelemetryClient telemetryClient)
+        public ComposerBot(string rootDialogFile, ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, ISourceMap sourceMap)
         {
             this.conversationState = conversationState;
             this.userState = userState;
@@ -32,13 +30,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.sourceMap = sourceMap;
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialogFile;
-            this.telemetryClient = telemetryClient;
             LoadRootDialogAsync();
         }
         
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            this.telemetryClient.TrackTrace("Activity:" + turnContext.Activity.Text, Severity.Information, null);
             await this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
             await this.conversationState.SaveChangesAsync(turnContext, false, cancellationToken);
             await this.userState.SaveChangesAsync(turnContext, false, cancellationToken);

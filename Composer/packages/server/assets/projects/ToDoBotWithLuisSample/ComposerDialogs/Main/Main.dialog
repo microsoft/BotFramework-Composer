@@ -42,42 +42,6 @@
               ]
             }
           ]
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "200509",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists",
-          "type": "object"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "192864",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.grocery",
-          "type": "array"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "905432",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.shopping",
-          "type": "array"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "773009",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.todo",
-          "type": "array"
         }
       ]
     },
@@ -200,7 +164,7 @@
           "property": "dialog.item",
           "alwaysPrompt": false,
           "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@itemTitle",
-          "value": "@itemTitle"
+          "value": "=@itemTitle"
         },
         {
           "$type": "Microsoft.IfCondition",
@@ -245,7 +209,7 @@
               "recognizerOptions": {
                 "noValue": false
               },
-              "value": "@listType"
+              "value": "=@listType"
             }
           ]
         },
@@ -257,7 +221,7 @@
           },
           "changeType": "Push",
           "itemsProperty": "user.taskLists[dialog.listType]",
-          "value": "dialog.item"
+          "value": "=dialog.item"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -312,7 +276,7 @@
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@listType",
               "outputFormat": "value",
-              "value": "@listType",
+              "value": "=@listType",
               "choices": [
                 {
                   "value": "Shopping"
@@ -366,7 +330,7 @@
               "property": "dialog.item",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@itemTitle",
-              "value": "@itemTitle"
+              "value": "=@itemTitle"
             },
             {
               "$type": "Microsoft.EditArray",
@@ -377,7 +341,7 @@
               "changeType": "Remove",
               "itemsProperty": "user.taskLists[dialog.listType]",
               "resultProperty": "turn.itemDeleted",
-              "value": "dialog.item"
+              "value": "=dialog.item"
             },
             {
               "$type": "Microsoft.SendActivity",
@@ -444,7 +408,7 @@
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#ViewCollection && !@listType",
               "outputFormat": "value",
-              "value": "@listType",
+              "value": "=@listType",
               "choices": [
                 {
                   "value": "Todo"

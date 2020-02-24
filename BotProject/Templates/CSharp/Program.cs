@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
@@ -15,42 +16,29 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            CreateHostBuilder(args).Build().Run();
         }
-
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
+      
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, builder) =>
             {
-                var env = hostingContext.HostingEnvironment;
-                var luisAuthoringRegion = Environment.GetEnvironmentVariable("LUIS_AUTHORING_REGION") ?? "westus";
-                config
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"luis.settings.{env.EnvironmentName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"luis.settings.{Environment.UserName}.{luisAuthoringRegion}.json", optional: true, reloadOnChange: true);
-                try
-                {
-                    foreach (string filePath in Directory.GetFiles($"ComposerDialogs", "generated/luis.settings.*.json"))
-                    {
-                        config.AddJsonFile(filePath, optional: true, reloadOnChange: true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.Message);
-                }
+                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                       .AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
+                       .UseLuisSettings();
 
+                var env = hostingContext.HostingEnvironment;
                 if (env.IsDevelopment())
                 {
-                    config.AddUserSecrets<Startup>();
-                }
-
-                config
-                    .AddEnvironmentVariables()
-                    .AddCommandLine(args);
-            }).UseStartup<Startup>()
-            .Build();
+                    builder.AddUserSecrets<Startup>();
+                }   
+                
+                builder.AddEnvironmentVariables()
+                       .AddCommandLine(args);
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }
