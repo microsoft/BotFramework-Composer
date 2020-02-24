@@ -44,7 +44,6 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  console.log('SETTING PROJECT ID TO ', response.data.id);
   state.projectId = response.data.id;
   state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
@@ -56,6 +55,11 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.settings = response.data.settings;
   refreshLocalStorage(response.data.botName, state.settings);
   mergeLocalStorage(response.data.botName, state.settings);
+  return state;
+};
+
+const getProjectFailure: ReducerFunc = (state, { error }) => {
+  setError(state, error);
   return state;
 };
 
@@ -208,7 +212,18 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 };
 
 const setError: ReducerFunc = (state, payload) => {
-  state.error = payload;
+  // if the error originated at the server and the server included message, use it...
+  if (payload && payload.response && payload.response.data && payload.response.data.message) {
+    state.error = payload.response.data;
+  } else {
+    state.error = payload;
+  }
+
+  if (state.error) {
+    // warn this error out to the console.
+    console.error('ERROR', state.error);
+  }
+
   return state;
 };
 
@@ -328,7 +343,7 @@ const noOp: ReducerFunc = state => {
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
-  [ActionTypes.GET_PROJECT_FAILURE]: noOp,
+  [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,

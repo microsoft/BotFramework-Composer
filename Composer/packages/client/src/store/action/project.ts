@@ -31,10 +31,8 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 };
 
 export const fetchProjectById: ActionCreator = async (store, projectId) => {
-  console.log('FETCH A PROJECT BY ITS ID', projectId);
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    console.log('FETCHED PROJECT!', response.data);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -44,26 +42,14 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
     return response.data;
   } catch (err) {
     navigateTo('/home');
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error: err } });
   }
 };
 
 export const fetchProject: ActionCreator = async store => {
   throw new Error('DEPRECATED');
-  // try {
-  //   const response = await httpClient.get(`/projects/open`);
-  //   store.dispatch({
-  //     type: ActionTypes.GET_PROJECT_SUCCESS,
-  //     payload: {
-  //       response,
-  //     },
-  //   });
-  //   return response.data;
-  // } catch (err) {
-  //   navigateTo('/home');
-  //   store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
-  // }
 };
+
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/projects/recent`);
@@ -98,7 +84,6 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     if (dialogs && dialogs.length > 0) {
       // navTo(store, 'Main');
       const mainUrl = `/bot/${projectId}/dialogs/Main`;
-      console.log('GO TO MAIN DIALOG', mainUrl, projectId);
       navigateTo(mainUrl);
       startBot(store, true);
     } else {

@@ -14,7 +14,6 @@ import { navTo } from './navigation';
 import { Store } from './../types';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
-import { fetchProject } from './project';
 
 const pickDialog: Pick = (state: State, args: any[], isStackEmpty) => {
   const id = args[0];
@@ -103,14 +102,16 @@ export const createDialog = undoable(
 
 export const debouncedUpdateDialog = debounce(async (store, id, projectId, content) => {
   try {
-    await httpClient.put(`/projects/${projectId}/dialogs/${id}`, { id, projectId, content });
+    const response = await httpClient.put(`/projects/${projectId}/dialogs/${id}`, { id, projectId, content });
+    console.log('got results of updateDialog', response);
+    return response;
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,
       summary: 'UPDATE DIALOG ERROR',
     });
     //if update dialog error, do a full refresh.
-    fetchProject(store);
+    // fetchProject(store);
   }
 }, 500);
 

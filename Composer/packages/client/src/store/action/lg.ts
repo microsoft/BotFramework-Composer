@@ -9,7 +9,6 @@ import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State } from '../types';
 
-import { fetchProject } from './project';
 import { setError } from './error';
 
 //remove editor's debounce and add it to action
@@ -22,7 +21,7 @@ export const debouncedUpdateLg = debounce(async (store, id, projectId, content) 
       summary: 'UPDATE LG ERROR',
     });
     //if update lg error, do a full refresh.
-    fetchProject(store);
+    // fetchProject(store);
   }
 }, 500);
 

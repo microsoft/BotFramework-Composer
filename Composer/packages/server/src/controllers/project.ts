@@ -124,7 +124,7 @@ async function openProject(req: Request, res: Response) {
       });
     } else {
       res.status(404).json({
-        message: 'No such bot project opened',
+        message: 'Cannot open bot project',
       });
     }
   } catch (e) {
@@ -189,7 +189,8 @@ async function updateDialog(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     await currentProject.updateDialog(req.body.id, req.body.content);
-    res.send(204);
+    res.status(204);
+    // res.status(200).json({ timestamp: new Date() });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
