@@ -53,7 +53,9 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<SwitchNodes | CaseNo
 
 const calculateLayout = (nodeMap: GraphNodeMap<SwitchNodes | CaseNodeKey>) => {
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
-  const casesNodes = Object.keys(cases).map(caseName => nodeMap[caseName]);
+  const casesNodes = Object.keys(cases)
+    .sort()
+    .map(caseName => nodeMap[caseName]);
   return switchCaseLayouter(switchNode, choiceNode, casesNodes);
 };
 
