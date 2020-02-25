@@ -7,13 +7,13 @@ import { LgNamePattern } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 
-import { INotification, DialogNotification, LuNotification, LgNotification } from './types';
+import { Notification, DialogNotification, LuNotification, LgNotification } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, lgFiles } = state;
   const memoized = useMemo(() => {
-    const notifactions: INotification[] = [];
+    const notifactions: Notification[] = [];
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
         const location = `${dialog.id}.dialog`;
@@ -43,20 +43,13 @@ export default function useNotifications(filter?: string) {
             //should navigate to design page
             id = `${lgFile.id}#${mappedTemplate.name}`;
           }
-          notifactions.push({
-            type: 'lg',
-            severity: DiagnosticSeverity[diagnostic.severity] || '',
-            location,
-            message: createSingleMessage(diagnostic),
-            diagnostic,
-            id,
-          });
+          notifactions.push(new LgNotification(id, location, diagnostic, dialogs));
         });
     });
     return notifactions;
   }, [dialogs, luFiles, lgFiles]);
 
-  const notifications: INotification[] = !filter ? memoized : memoized.filter(x => x.severity === filter);
+  const notifications: Notification[] = !filter ? memoized : memoized.filter(x => x.severity === filter);
 
   return notifications;
 }

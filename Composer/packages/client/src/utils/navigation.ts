@@ -104,8 +104,10 @@ export function convertPathToUrl(id: string, path?: string): string {
   return uri;
 }
 
-export function toUrlUtil(dialogId: string, path: string): string {
+export function toUrlUtil(path: string): string {
   const tokens = path.split('#');
+  const firstDotIndex = tokens[0].indexOf('.');
+  const dialogId = tokens[0].substring(0, firstDotIndex);
   const focusedPath = parsePathToFocused(tokens[0]);
   const selectedPath = parsePathToSelected(tokens[0]);
   const type = tokens[1];

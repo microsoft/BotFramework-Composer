@@ -30,10 +30,22 @@ export function offsetRange(range: Range, offset: number): Range {
   );
 }
 
+export function isDiagnosticWithInRange(
+  diagnosticStartLine: number,
+  diagnosticEndLine: number,
+  sectionStartLine: number,
+  sectionEndLine: number
+): boolean {
+  return diagnosticStartLine >= sectionStartLine && diagnosticEndLine <= sectionEndLine;
+}
+
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
-    return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+    return (
+      d.range &&
+      isDiagnosticWithInRange(d.range.start.line, d.range.end.line, range.startLineNumber, range.endLineNumber)
+    );
   });
   const offset = range.startLineNumber;
   return filteredDiags.map(d => {
@@ -52,7 +64,10 @@ export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuI
   const { range } = section;
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
-    return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+    return (
+      d.range &&
+      isDiagnosticWithInRange(d.range.start.line, d.range.end.line, range.startLineNumber, range.endLineNumber)
+    );
   });
   const offset = range.startLineNumber;
   return filteredDiags.map(d => {

@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { Diagnostic, createSingleMessage, DialogInfo, LuFile } from '@bfc/indexers';
+import { Diagnostic, createSingleMessage, DialogInfo, LuFile, isDiagnosticWithInRange } from '@bfc/indexers';
 
 import { replaceDialogDiagnosticLabel } from '../../utils';
-
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum NotificationType {
   DIALOG,
   LG,
   LU,
+  GENERAL,
 }
 
 export interface INotification {
@@ -22,66 +22,69 @@ export interface INotification {
   dialogPath?: string; //the data path in dialog
 }
 
-export class DialogNotification implements INotification {
+export abstract class Notification implements INotification {
   id: string;
   severity: string;
-  type: NotificationType;
+  type = NotificationType.GENERAL;
   location: string;
-  message: string;
+  message = '';
   diagnostic: Diagnostic;
   dialogPath?: string;
   constructor(id: string, location: string, diagnostic: Diagnostic) {
     this.id = id;
     this.severity = DiagnosticSeverity[diagnostic.severity] || '';
-    this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.diagnostic = diagnostic;
     this.location = location;
-    this.type = NotificationType.DIALOG;
+  }
+}
+
+export class DialogNotification extends Notification {
+  type = NotificationType.DIALOG;
+  dialogPath?: string;
+  constructor(id: string, location: string, diagnostic: Diagnostic) {
+    super(id, location, diagnostic);
+    this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
 }
 
-export class LgNotification implements INotification {
-  id: string;
-  severity: string;
-  type: NotificationType;
-  location: string;
-  message: string;
-  diagnostic: Diagnostic;
+export class LgNotification extends Notification {
+  type = NotificationType.LG;
   dialogPath?: string;
-  constructor(id: string, location: string, diagnostic: Diagnostic) {
-    this.id = id;
-    this.severity = DiagnosticSeverity[diagnostic.severity] || '';
+  constructor(id: string, location: string, diagnostic: Diagnostic, dialogs: DialogInfo[]) {
+    super(id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
-    this.diagnostic = diagnostic;
-    this.location = location;
-    this.type = NotificationType.LG;
+    this.dialogPath = this.findDialogPath(dialogs, id);
+  }
+  private findDialogPath(dialogs: DialogInfo[], id: string) {
+    const dividerIndex = id.indexOf('#');
+    if (dividerIndex > -1) {
+      const templateId = id.substring(dividerIndex + 1);
+      const lgFile = id.substring(0, dividerIndex);
+      const dialog = dialogs.find(d => d.lgFile === lgFile);
+      const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === templateId) : null;
+      const path = lgTemplate ? lgTemplate.path : '';
+      return path;
+    }
   }
 }
 
-export class LuNotification implements INotification {
-  id: string;
-  severity: string;
-  type: NotificationType;
-  location: string;
-  message: string;
-  diagnostic: Diagnostic;
-  dialogPath?: string;
+export class LuNotification extends Notification {
+  type = NotificationType.LU;
   constructor(id: string, location: string, diagnostic: Diagnostic, luFile: LuFile, dialogs: DialogInfo[]) {
-    this.id = id;
-    this.severity = DiagnosticSeverity[diagnostic.severity] || '';
-    this.message = createSingleMessage(diagnostic);
-    this.diagnostic = diagnostic;
-    this.location = location;
-    this.type = NotificationType.LU;
+    super(id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
+    this.message = createSingleMessage(diagnostic);
   }
 
   private findDialogPath(luFile: LuFile, dialogs: DialogInfo[], d: Diagnostic) {
     const intentName = luFile.intents.find(intent => {
       const { range } = intent;
       if (!range) return false;
-      return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+      return (
+        d.range &&
+        isDiagnosticWithInRange(d.range.start.line, d.range?.end.line, range.startLineNumber, range.endLineNumber)
+      );
     })?.Name;
 
     return dialogs.find(dialog => dialog.id === luFile.id)?.referredLuIntents.find(lu => lu.name === intentName)?.path;
