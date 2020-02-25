@@ -131,7 +131,7 @@ export const FormCard: FunctionComponent<NodeProps> = ({
               fontFamily: 'Segoe UI',
               overflowWrap: 'break-word',
               wordBreak: 'break-all',
-              display: 'contents',
+              display: 'inline-block',
             }}
             title={typeof label === 'string' ? label : ''}
           >
