@@ -337,6 +337,27 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
+const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
+  console.log(`Update timestamp on ${type} ${id} to ${lastModified}`);
+  if (type === 'dialog') {
+    const dialog = state.dialogs.find(d => d.id === id);
+    if (dialog) {
+      dialog.lastModified = lastModified;
+    }
+  } else if (type === 'lg') {
+    const lg = state.lgFiles.find(d => d.id === id);
+    if (lg) {
+      lg.lastModified = lastModified;
+    }
+  } else if (type === 'lu') {
+    const lu = state.luFiles.find(d => d.id === id);
+    if (lu) {
+      lu.lastModified = lastModified;
+    }
+  }
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -365,7 +386,7 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LG_FAILURE]: noOp,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_FAILURE]: noOp,
-  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
+  [ActionTypes.UPDATE_LU_SUCCESS]: noOp,
   [ActionTypes.UPDATE_LU_FAILURE]: noOp,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_FAILURE]: noOp,
@@ -397,4 +418,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
 });

@@ -100,11 +100,22 @@ export const createDialog = undoable(
   (store, { id, content }) => createDialogBase(store, { id, content })
 );
 
-export const debouncedUpdateDialog = debounce(async (store, id, projectId, content) => {
+export const debouncedUpdateDialog = debounce(async (store, id, projectId, content, lastModified) => {
   try {
-    const response = await httpClient.put(`/projects/${projectId}/dialogs/${id}`, { id, projectId, content });
-    console.log('got results of updateDialog', response);
-    return response;
+    const response = await httpClient.put(`/projects/${projectId}/dialogs/${id}`, {
+      id,
+      projectId,
+      content,
+      lastModified,
+    });
+    store.dispatch({
+      type: ActionTypes.UPDATE_TIMESTAMP,
+      payload: {
+        id: id,
+        type: 'dialog',
+        lastModified: response.data.lastModified,
+      },
+    });
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,
@@ -116,8 +127,15 @@ export const debouncedUpdateDialog = debounce(async (store, id, projectId, conte
 }, 500);
 
 export const updateDialogBase: ActionCreator = (store, { id, projectId, content }) => {
-  store.dispatch({ type: ActionTypes.UPDATE_DIALOG, payload: { id, projectId, content } });
-  debouncedUpdateDialog(store, id, projectId, content);
+  const state = store.getState();
+  const dialog = state.dialogs.find(dialog => dialog.id === id);
+  if (dialog) {
+    store.dispatch({
+      type: ActionTypes.UPDATE_DIALOG,
+      payload: { id, projectId, content, lastModified: dialog.lastModified },
+    });
+    debouncedUpdateDialog(store, id, projectId, content, dialog.lastModified);
+  }
 };
 
 export const updateDialog: ActionCreator = undoable(

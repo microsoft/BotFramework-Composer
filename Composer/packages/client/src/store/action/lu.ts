@@ -6,20 +6,50 @@ import { ActionCreator } from '../types';
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
-export const updateLuFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
-  try {
-    const response = await httpClient.put(`/projects/${projectId}/luFiles/${id}`, { id, projectId, content });
-    dispatch({
-      type: ActionTypes.UPDATE_LU_SUCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.UPDATE_LU_FAILURE,
-      payload: null,
-      error: err,
-    });
-    throw new Error(err.response.data.message);
+export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
+  const state = store.getState();
+  const file = state.luFiles.find(l => l.id === id);
+  if (file) {
+    try {
+      const response = await httpClient.put(`/projects/${projectId}/luFiles/${id}`, {
+        id,
+        projectId,
+        content,
+        lastModified: file.lastModified,
+      });
+      // dispatch({
+      //   type: ActionTypes.UPDATE_LU_SUCCESS,
+      //   payload: { response },
+      // });
+      store.dispatch({
+        type: ActionTypes.UPDATE_TIMESTAMP,
+        payload: {
+          id: id,
+          type: 'lu',
+          lastModified: response.data.lastModified,
+        },
+      });
+    } catch (err) {
+      // This requires some special handling because LU files return an error when they can't be parsed
+      // or some other error in the LU system occurs...
+      console.log(err.statusCode);
+      if (err.statusCode === 409) {
+        store.dispatch({
+          type: ActionTypes.SET_ERROR,
+          payload: {
+            message: err.response && err.response.data.message ? err.response.data.message : err,
+            summary: 'UPDATE LU ERROR',
+          },
+        });
+      } else {
+        store.dispatch({
+          type: ActionTypes.UPDATE_LU_FAILURE,
+          payload: null,
+          error: err,
+        });
+        throw new Error(err.response.data.message);
+      }
+    }
   }
 };
 

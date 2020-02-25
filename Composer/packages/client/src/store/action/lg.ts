@@ -12,9 +12,22 @@ import { ActionCreator, State } from '../types';
 import { setError } from './error';
 
 //remove editor's debounce and add it to action
-export const debouncedUpdateLg = debounce(async (store, id, projectId, content) => {
+export const debouncedUpdateLg = debounce(async (store, id, projectId, content, lastModified) => {
   try {
-    await httpClient.put(`/projects/${projectId}/lgFiles/${id}`, { id, projectId, content });
+    const response = await httpClient.put(`/projects/${projectId}/lgFiles/${id}`, {
+      id,
+      projectId,
+      content,
+      lastModified,
+    });
+    store.dispatch({
+      type: ActionTypes.UPDATE_TIMESTAMP,
+      payload: {
+        id: id,
+        type: 'lg',
+        lastModified: response.data.lastModified,
+      },
+    });
   } catch (err) {
     setError(store, {
       message: err.response && err.response.data.message ? err.response.data.message : err,
@@ -26,8 +39,15 @@ export const debouncedUpdateLg = debounce(async (store, id, projectId, content) 
 }, 500);
 
 export const updateLgFile: ActionCreator = async (store, { id, projectId, content }) => {
-  store.dispatch({ type: ActionTypes.UPDATE_LG_SUCCESS, payload: { id, projectId, content } });
-  debouncedUpdateLg(store, id, projectId, content);
+  const state = store.getState();
+  const file = state.lgFiles.find(l => l.id === id);
+  if (file) {
+    store.dispatch({
+      type: ActionTypes.UPDATE_LG_SUCCESS,
+      payload: { id, projectId, content, lastModified: file.lastModified },
+    });
+    debouncedUpdateLg(store, id, projectId, content, file.lastModified);
+  }
 };
 
 export const undoableUpdateLgFile = undoable(
