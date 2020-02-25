@@ -115,7 +115,7 @@ const wss: ws.Server = new ws.Server({
   perMessageDeflate: false,
 });
 
-const { lgImportResolver, staticMemoryResolver } = BotProjectService;
+const { lgImportResolver, luImportResolver, staticMemoryResolver } = BotProjectService;
 
 function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
@@ -129,7 +129,7 @@ function launchLuLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  const server = new LUServer(connection);
+  const server = new LUServer(connection, luImportResolver);
   server.start();
 }
 

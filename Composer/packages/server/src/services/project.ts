@@ -44,6 +44,17 @@ export class BotProjectService {
     };
   }
 
+  public static luImportResolver(_source: string, id: string): any {
+    BotProjectService.initialize();
+    const targetId = Path.basename(id, '.lu');
+    const targetFile = BotProjectService.currentBotProject?.luFiles.find(({ id }) => id === targetId);
+    if (!targetFile) throw new Error('lu file not found');
+    return {
+      id,
+      content: targetFile.content,
+    };
+  }
+
   public static staticMemoryResolver(): string[] {
     const defaultProperties = [
       'this.value',
