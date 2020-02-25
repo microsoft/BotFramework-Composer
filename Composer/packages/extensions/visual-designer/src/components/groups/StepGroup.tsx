@@ -3,10 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useMemo, useEffect, FunctionComponent } from 'react';
+import { useMemo, FunctionComponent } from 'react';
 
 import { GraphNode } from '../../models/GraphNode';
-import { areBoundariesEqual } from '../../models/Boundary';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
@@ -18,46 +17,42 @@ import { GraphLayout } from '../../models/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
 import { SVGContainer } from '../lib/SVGContainer';
 import { renderEdge } from '../lib/EdgeUtil';
+import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
 
 const StepInterval = ElementInterval.y;
 
-const calculateNodes = (groupId: string, data): GraphNode[] => {
+type StepNodeKey = string;
+
+const getStepKey = (stepOrder: number): StepNodeKey => `steps[${stepOrder}]`;
+
+const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
   const steps = transformStepGroup(data, groupId);
-  return steps.map((x): GraphNode => GraphNode.fromIndexedJson(x));
+  const stepNodes = steps.map((x): GraphNode => GraphNode.fromIndexedJson(x));
+  return stepNodes.reduce((result, node, index) => {
+    result[getStepKey(index)] = node;
+    return result;
+  }, {} as GraphNodeMap<StepNodeKey>);
 };
 
-const calculateLayout = (nodes, boundaryMap): GraphLayout => {
-  nodes.forEach((x): void => (x.boundary = boundaryMap[x.id] || x.boundary));
+const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
+  const nodes = Object.keys(nodeMap)
+    .sort()
+    .map(stepName => nodeMap[stepName]);
   return sequentialLayouter(nodes);
 };
 
 export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
-  const [boundaryMap, setBoundaryMap] = useState({});
-  const initialNodes = useMemo((): GraphNode[] => calculateNodes(id, data), [id, data]);
-  const layout = useMemo((): GraphLayout => calculateLayout(initialNodes, boundaryMap), [initialNodes, boundaryMap]);
-  const accumulatedPatches = {};
-
-  const patchBoundary = (id, boundary): void => {
-    if (!boundaryMap[id] || !areBoundariesEqual(boundaryMap[id], boundary)) {
-      accumulatedPatches[id] = boundary;
-      setBoundaryMap({
-        ...boundaryMap,
-        ...accumulatedPatches,
-      });
-    }
-  };
+  const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
+  const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
 
   const { boundary, nodes, edges } = layout;
-
-  useEffect(() => {
-    onResize(layout.boundary);
-  }, [layout]);
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
       {nodes
-        ? nodes.map(x => (
+        ? nodes.map((x, index) => (
             <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
               <StepRenderer
                 key={`stepGroup/${x.id}`}
@@ -65,7 +60,8 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
                 data={x.data}
                 onEvent={onEvent}
                 onResize={size => {
-                  patchBoundary(x.id, size);
+                  designerCache.cacheBoundary(x.data, size);
+                  updateNodeBoundary(getStepKey(index), size);
                 }}
               />
             </OffsetContainer>
