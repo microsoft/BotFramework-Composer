@@ -4,7 +4,7 @@
 import isEqual from 'lodash/isEqual';
 import { runBuild } from '@bfcomposer/lubuild';
 import { crossTrain } from '@bfcomposer/bf-lu/lib/parser/lubuild';
-import { LuFile } from '@bfc/indexers';
+import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
@@ -26,6 +26,7 @@ export class LuPublisher {
   public statusFile: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
+  public crossTrainMapRule: { [key: string]: string } = {};
 
   // key: filePath relative to bot dir
   // value: lastUpdateTime && lastPublishTime
@@ -90,6 +91,8 @@ export class LuPublisher {
     try {
       await this._createGeneratedDir();
 
+      await this.createCrossTrainConfig();
+
       //do cross train before publish
       await this._crossTrain();
 
@@ -148,19 +151,37 @@ export class LuPublisher {
     }
   };
 
-  public createCrossTrainConfig = async () => {
+  public setCrossTrainConfig = async (dialogs: DialogInfo[]) => {
     // ToDo: create real tree for cross train. Now add this data to test the bf-lu
-    const test = {
-      '../Main/Main.lu': {
-        rootDialog: true,
-        triggers: {
-          dia1: '../dia1/dia1.lu',
-          dia2: '../dia2/dia2.lu',
-        },
-      },
-    };
-    await this.storage.writeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`, JSON.stringify(test));
+    const rootDialog = dialogs.find(dialog => dialog.isRoot);
+    if (rootDialog?.intentTriggers.length) {
+      this.crossTrainMapRule = this._createTree(rootDialog, dialogs);
+    }
   };
+
+  //write config to generated folder
+  public async createCrossTrainConfig() {
+    await this.storage.writeFile(
+      `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`,
+      JSON.stringify(this.crossTrainMapRule)
+    );
+  }
+
+  private _createTree(dialog: DialogInfo, dialogs: DialogInfo[]) {
+    let result = {};
+    const key = dialog.relativePath.replace('.dialog', '.lu');
+    dialog.intentTriggers.forEach(temp => {
+      const target = dialogs.find(dialog => dialog.id === temp.dialog);
+      if (target && target.content?.recognizer) {
+        if (!result[key].triggers) result[key].triggers = {};
+        result[key].triggers[temp.intent] = target.relativePath.replace('.dialog', '.lu');
+        result = { ...result, ...this._createTree(target, dialogs) };
+      }
+    });
+
+    if (dialog.isRoot && result[key]) result[key].rootDialog = true;
+    return result;
+  }
 
   private async _createGeneratedDir() {
     if (!(await this.storage.exists(this.generatedFolderPath))) {
@@ -169,7 +190,7 @@ export class LuPublisher {
   }
 
   private async _crossTrain() {
-    await this.createCrossTrainConfig();
+    //await this.createCrossTrainConfig();
     const result = await crossTrain.train(
       this.botDir,
       '_Interuption',

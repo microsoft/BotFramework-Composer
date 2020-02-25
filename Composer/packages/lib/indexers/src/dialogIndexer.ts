@@ -11,7 +11,7 @@ import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
-
+import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -91,7 +91,7 @@ function ExtractLuIntents(dialog): string[] {
 
 // find out all triggers given dialog
 function ExtractTriggers(dialog): ITrigger[] {
-  const trigers: ITrigger[] = [];
+  const triggers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
    * @param value , current node value    *
@@ -114,7 +114,7 @@ function ExtractTriggers(dialog): ITrigger[] {
           } else if (trigger.isIntent && has(rule, 'intent')) {
             trigger.displayName = rule.intent;
           }
-          trigers.push(trigger);
+          triggers.push(trigger);
         }
       });
       return true;
@@ -122,7 +122,7 @@ function ExtractTriggers(dialog): ITrigger[] {
     return false;
   };
   JsonWalk('$', dialog, visitor);
-  return trigers;
+  return triggers;
 }
 
 // find out all referred dialog
@@ -200,6 +200,7 @@ function parse(id: string, content: any, schema: any) {
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
+    intentTriggers: ExtractIntentTriggers(content),
   };
 }
 

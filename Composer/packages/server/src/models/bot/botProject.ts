@@ -353,6 +353,7 @@ export class BotProject {
     }
 
     if (unpublished.length > 0) {
+      await this.luPublisher.setCrossTrainConfig(this.dialogs);
       await this.luPublisher.publish(unpublished);
     }
 
