@@ -20,7 +20,6 @@ export class DefaultSettingManager extends FileSettingManager {
     return {
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
-      environment: 'composer',
       luis: {
         name: '',
         authoringKey: '',
