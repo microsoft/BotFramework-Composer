@@ -2194,11 +2194,6 @@
   dependencies:
     "@types/webpack" "^4.4.19"
 
-"@bfcomposer/monaco-editor@0.18.4":
-  version "0.18.4"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor/-/@bfcomposer/monaco-editor-0.18.4.tgz#2263c2b836dac1098f94dfa476545b5fe5314513"
-  integrity sha1-ImPCuDbawQmPlN+kdlRbX+UxRRM=
-
 "@bfcomposer/react-jsonschema-form@1.6.5":
   version "1.6.5"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-jsonschema-form/-/@bfcomposer/react-jsonschema-form-1.6.5.tgz#afd08049270eb00afe305cc756fd200011e12b4c"
@@ -2209,15 +2204,6 @@
     core-js "^2.5.7"
     lodash.topath "^4.5.2"
     prop-types "^15.5.8"
-
-"@bfcomposer/react-monaco-editor@0.30.12":
-  version "0.30.12"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/react-monaco-editor/-/@bfcomposer/react-monaco-editor-0.30.12.tgz#426afb854d7965ca33f4657b925b395f5918174d"
-  integrity sha1-Qmr7hU15Zcoz9GV7kls5X1kYF00=
-  dependencies:
-    "@bfcomposer/monaco-editor" "0.18.4"
-    "@types/react" "16.9.0"
-    prop-types "^15.7.2"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
@@ -3555,7 +3541,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@16.9.0", "@types/react@16.9.16", "@types/react@^16.9.16":
+"@types/react@*", "@types/react@16.9.16", "@types/react@^16.9.16":
   version "16.9.16"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.16.tgz#4f12515707148b1f53a8eaa4341dae5dfefb066d"
   integrity sha512-dQ3wlehuBbYlfvRXfF5G+5TbZF3xqgkikK7DWAsQXe2KnzV+kjD4W2ea+ThCrKASZn9h98bjjPzoTYzfRqyBkw==
@@ -12869,6 +12855,11 @@ monaco-editor-core@0.17.0, monaco-editor-core@^0.17.0:
   version "0.17.0"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/monaco-editor-core/-/monaco-editor-core-0.17.0.tgz#8d2b7f7e02ac68f68eecc881d7a26457cbc09b49"
   integrity sha1-jSt/fgKsaPaO7MiB16JkV8vAm0k=
+
+monaco-editor@^0.19.0:
+  version "0.19.3"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.19.3.tgz#1c994b3186c00650dbcd034d5370d46bf56c0663"
+  integrity sha512-2n1vJBVQF2Hhi7+r1mMeYsmlf18hjVb6E0v5SoMZyb4aeOmYPKun+CE3gYpiNA1KEvtSdaDHFBqH9d7Wd9vREg==
 
 monaco-languageclient@^0.10.0:
   version "0.10.2"

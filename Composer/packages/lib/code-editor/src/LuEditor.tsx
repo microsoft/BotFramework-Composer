@@ -7,6 +7,7 @@ import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, monaco } from '@monaco-editor/react';
+import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -75,7 +76,6 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 const LuEditor: React.FC<LULSPEditorProps> = props => {
   const options: monacoEditor.editor.IEditorConstructionOptions = {
     quickSuggestions: true,
-    wordBasedSuggestions: false,
     formatOnType: true,
     lineNumbers: 'on',
     minimap: {
@@ -84,7 +84,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     lineDecorationsWidth: undefined,
     glyphMargin: true,
     autoClosingBrackets: 'always',
-    autoIndent: true,
+    autoIndent: 'full',
     lightbulb: {
       enabled: true,
     },
@@ -100,12 +100,6 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     });
   }, []);
 
-  // const editorWillMount = (monaco: typeof monacoEditor) => {
-  //   registerLULanguage(monaco);
-  //   if (typeof props.editorWillMount === 'function') {
-  //     return props.editorWillMount(monaco);
-  //   }
-  // };
   const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
       window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
@@ -123,10 +117,10 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
             window.monacoLUEditorInstance = languageClient;
           }
 
-          // editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, function() {
-          //   const position = editor.getPosition();
-          //   languageClient.sendRequest('labelingExperienceRequest', { uri, position });
-          // });
+          editor.addCommand(monacoCore.KeyMod.Shift | monacoCore.KeyCode.Enter, function() {
+            const position = editor.getPosition();
+            languageClient.sendRequest('labelingExperienceRequest', { uri, position });
+          });
           initializeDocuments(luOption, uri);
           languageClient.onReady().then(() =>
             languageClient.onNotification('addUnlabelUtterance', result => {
@@ -146,7 +140,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     }
 
     if (typeof props.editorDidMount === 'function') {
-      return props.editorDidMount(editor, monaco);
+      return props.editorDidMount(_getValue, editor);
     }
   };
 
