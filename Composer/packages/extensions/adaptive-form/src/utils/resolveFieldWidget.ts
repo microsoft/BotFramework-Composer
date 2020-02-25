@@ -30,7 +30,7 @@ export function resolveFieldWidget(
         return RoleOverride;
       }
 
-      const KindOverride = globalConfig?.kindSchema[schema.$kind]?.field;
+      const KindOverride = globalConfig?.uiSchema[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;

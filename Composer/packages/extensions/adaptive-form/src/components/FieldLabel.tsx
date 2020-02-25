@@ -4,16 +4,19 @@ import React from 'react';
 import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
 interface DescriptionCalloutProps {
   title: string;
   description?: string;
   id?: string;
+  helpLink?: string;
 }
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = function DescriptionCallout(props) {
-  const { description, title, id } = props;
+  const { description, title, id, helpLink } = props;
 
   if (!description) {
     return null;
@@ -31,6 +34,11 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
           <div>
             <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>{title}</h3>
             <p>{description}</p>
+            {helpLink && (
+              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+                {formatMessage('Learn more')}
+              </Link>
+            )}
           </div>
         ),
       }}
@@ -59,11 +67,12 @@ interface FieldLabelProps {
   id?: string;
   label?: string | false;
   description?: string;
+  helpLink?: string;
   inline?: boolean;
 }
 
-export const FieldLabel: React.FC<FieldLabelProps> = function FieldLabel(props) {
-  const { label, description, id, inline } = props;
+const FieldLabel: React.FC<FieldLabelProps> = props => {
+  const { label, description, id, inline, helpLink } = props;
 
   if (!label) {
     return null;
@@ -82,7 +91,9 @@ export const FieldLabel: React.FC<FieldLabelProps> = function FieldLabel(props) 
       }}
     >
       {label}
-      <DescriptionCallout description={description} id={id} title={label} />
+      <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
     </Label>
   );
 };
+
+export { FieldLabel };

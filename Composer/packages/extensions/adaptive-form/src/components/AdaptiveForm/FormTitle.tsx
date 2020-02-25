@@ -8,17 +8,12 @@ import { JSONSchema4 } from 'json-schema';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import startCase from 'lodash/startCase';
+import formatMessage from 'format-message';
+import { UIOptions } from '@bfc/extension';
 
 import { EditableField } from '../fields/EditableField';
 
 import { title as styles } from './styles';
-
-// const overrideDefaults = {
-//   title: undefined,
-//   description: undefined,
-//   helpLink: undefined,
-//   helpLinkText: undefined,
-// };
 
 interface FormTitleProps {
   description?: string;
@@ -28,10 +23,11 @@ interface FormTitleProps {
   onChange?: (data: any) => void;
   schema: JSONSchema4;
   title?: string;
+  uiOptions?: UIOptions;
 }
 
 const FormTitle: React.FC<FormTitleProps> = props => {
-  const { title, name, description, schema, formData } = props;
+  const { title, name, description, schema, formData, uiOptions = {} } = props;
 
   const handleTitleChange = (e: any, newTitle?: string): void => {
     if (props.onChange) {
@@ -53,6 +49,20 @@ const FormTitle: React.FC<FormTitleProps> = props => {
   };
 
   const getDescription = (): string => {
+    const { description: descriptionOverride } = uiOptions;
+
+    if (descriptionOverride) {
+      if (typeof descriptionOverride === 'function') {
+        const result = descriptionOverride(formData);
+
+        if (result) {
+          return result;
+        }
+      } else {
+        return descriptionOverride;
+      }
+    }
+
     return description || schema.description || '';
   };
 
@@ -76,19 +86,15 @@ const FormTitle: React.FC<FormTitleProps> = props => {
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>
           {getDescription()}
-          {/* {sdkOverrides.helpLink && sdkOverrides.helpLinkText && (
-            <>
+          {uiOptions?.helpLink && (
+            <React.Fragment>
               <br />
               <br />
-              <a
-                href={sdkOverrides.helpLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {sdkOverrides.helpLinkText}
+              <a href={uiOptions?.helpLink} target="_blank" rel="noopener noreferrer">
+                {formatMessage('Learn more')}
               </a>
-            </>
-          )} */}
+            </React.Fragment>
+          )}
         </p>
       </div>
 

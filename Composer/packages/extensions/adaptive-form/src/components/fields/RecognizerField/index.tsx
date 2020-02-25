@@ -9,12 +9,12 @@ import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-reac
 import formatMessage from 'format-message';
 
 import PluginContext from '../../../PluginContext';
-import { Section } from '../../AdaptiveForm/Section';
+import { FieldLabel } from '../../FieldLabel';
 
 import ToggleEditor from './ToggleEditor';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { value } = props;
+  const { value, id, label, description, uiOptions } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = useContext(PluginContext);
 
@@ -62,36 +62,40 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const Field = recognizers.find(r => r.id === getRecognizerType())?.editor;
 
   return (
-    <Section
-      description={() => (
-        <React.Fragment>
-          To understand what the user says, your dialog needs a &lsquo;Recognizer&rsquo; that includes example words and
-          sentences that users may use.
-          <br />
-          <br />
-          <a href="https://aka.ms/BFC-Using-LU" rel="noopener noreferrer" target="_blank">
-            {formatMessage('Learn More')}
-          </a>
-        </React.Fragment>
+    <div>
+      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+      <Dropdown
+        label={formatMessage('Recognizer Type')}
+        options={options}
+        responsiveMode={ResponsiveMode.large}
+        selectedKey={getRecognizerType()}
+        onChange={handleChangeRecognizerType}
+      />
+      {value && (
+        <ToggleEditor key={getRecognizerType()} title={getToggleTitle(getRecognizerType())}>
+          {Field && <Field {...props} />}
+        </ToggleEditor>
       )}
-      title="Language Understanding"
-    >
-      <div>
-        <Dropdown
-          label={formatMessage('Recognizer Type')}
-          options={options}
-          responsiveMode={ResponsiveMode.large}
-          selectedKey={getRecognizerType()}
-          onChange={handleChangeRecognizerType}
-        />
-        {value && (
-          <ToggleEditor key={getRecognizerType()} title={getToggleTitle(getRecognizerType())}>
-            {Field && <Field {...props} />}
-          </ToggleEditor>
-        )}
-      </div>
-    </Section>
+    </div>
   );
+
+  // return (
+  //   <Section
+  //     description={() => (
+  //       <React.Fragment>
+  //         To understand what the user says, your dialog needs a &lsquo;Recognizer&rsquo; that includes example words and
+  //         sentences that users may use.
+  //         <br />
+  //         <br />
+  //         <a href="https://aka.ms/BFC-Using-LU" rel="noopener noreferrer" target="_blank">
+  //           {formatMessage('Learn More')}
+  //         </a>
+  //       </React.Fragment>
+  //     )}
+  //     title="Language Understanding"
+  //   >
+  //   </Section>
+  // );
 };
 
 export { RecognizerField };

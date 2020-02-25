@@ -3,6 +3,9 @@
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
+import { RecognizerField } from './components/fields';
+import formatMessage = require('format-message');
+
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -10,9 +13,21 @@ const triggerUiSchema = {
 };
 
 const DefaultUISchema: UISchema = {
+  [SDKTypes.Recognizer]: {
+    field: RecognizerField,
+  },
   [SDKTypes.AdaptiveDialog]: {
     order: ['recognizer', '*'],
     hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema', ...globalHiddenProperties],
+    properties: {
+      recognizer: {
+        label: () => formatMessage('Language Understanding'),
+        description: () =>
+          formatMessage(
+            'To understand what the user says, your dialog needs a &lsquo;Recognizer&rsquo; that includes example words and sentences that users may use.'
+          ),
+      },
+    },
   },
   [SDKTypes.BeginDialog]: {
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
@@ -169,6 +184,7 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.SendActivity]: {
     hidden: [...globalHiddenProperties],
+    order: ['activity', '*'],
   },
 };
 

@@ -51,7 +51,6 @@ export enum SDKTypes {
   IfCondition = 'Microsoft.IfCondition',
   InitProperty = 'Microsoft.InitProperty',
   IpEntityRecognizer = 'Microsoft.IpEntityRecognizer',
-  LanguagePolicy = 'Microsoft.LanguagePolicy',
   LogAction = 'Microsoft.LogAction',
   LuisRecognizer = 'Microsoft.LuisRecognizer',
   MentionEntityRecognizer = 'Microsoft.MentionEntityRecognizer',
@@ -101,6 +100,15 @@ export enum SDKTypes {
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
+
+  /** Kinds */
+
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
 }
 
 export enum SDKKinds {

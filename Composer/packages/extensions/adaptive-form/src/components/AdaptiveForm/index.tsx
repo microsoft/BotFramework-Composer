@@ -100,6 +100,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
             id={localData.$designer?.id || 'unknown'}
             schema={$schema}
             onChange={$designer => handleDataChange({ ...localData, $designer })}
+            uiOptions={$uiSchema}
           />
           <SchemaField
             definitions={schema?.definitions}

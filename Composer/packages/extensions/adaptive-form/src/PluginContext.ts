@@ -7,7 +7,7 @@ import { PluginConfig } from '@bfc/extension';
 const PluginContext = React.createContext<Required<PluginConfig>>({
   uiSchema: {},
   roleSchema: {},
-  kindSchema: {},
+  // kindSchema: {},
   recognizers: [],
 });
 

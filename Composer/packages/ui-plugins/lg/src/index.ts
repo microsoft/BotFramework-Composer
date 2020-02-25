@@ -2,13 +2,21 @@
 // Licensed under the MIT License.
 
 import { PluginConfig } from '@bfc/extension';
-import { SDKKinds } from '@bfc/shared';
+import { SDKTypes } from '@bfc/shared';
 
 import { LgField } from './LgField';
 
 const config: PluginConfig = {
-  kindSchema: {
-    [SDKKinds.IActivityTemplate]: {
+  uiSchema: {
+    [SDKTypes.SendActivity]: {
+      properties: {
+        activity: {
+          description:
+            'What your bot says to the user. This is a template used to create the outgoing message. It can include language generation rules, properties from memory, and other features.\n\nFor example, to define variations that will be chosen at random, write:\n- hello\n- hi',
+        },
+      },
+    },
+    [SDKTypes.IActivityTemplate]: {
       field: LgField,
     },
   },
