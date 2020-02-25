@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
-import { LgTemplate } from '../type';
+import { CodeRange } from '../type';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -28,8 +28,7 @@ export function offsetRange(range: Range, offset: number): Range {
   );
 }
 
-export function filterTemplateDiagnostics(diagnostics: Diagnostic[], template: LgTemplate): Diagnostic[] {
-  const { range } = template;
+export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
     return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
