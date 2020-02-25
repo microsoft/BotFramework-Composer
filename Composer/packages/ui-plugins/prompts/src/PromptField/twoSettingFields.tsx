@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { MicrosoftInputDialog } from '@bfc/shared';
-import { SchemaField, getLabel, ErrorMessage } from '@bfc/adaptive-form';
+import { SchemaField, getUiLabel, ErrorMessage } from '@bfc/adaptive-form';
 
 import { settingsFieldHalf, settingsFields } from './styles';
 import { InputDialogKeys, PromptFieldProps } from './types';
@@ -32,7 +32,7 @@ export const TwoSettingFields: React.FC<TwoSettingFieldsProps> = props => {
         <span css={errorStyles}>
           <ErrorMessage
             error={rawErrors?.[field]}
-            label={getLabel({
+            label={getUiLabel({
               ...props,
               schema: getSchema(field),
               uiOptions: uiOptions?.properties?.[field] || {},

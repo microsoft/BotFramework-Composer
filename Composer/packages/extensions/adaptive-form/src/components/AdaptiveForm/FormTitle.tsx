@@ -27,7 +27,7 @@ interface FormTitleProps {
 }
 
 const FormTitle: React.FC<FormTitleProps> = props => {
-  const { title, name, description, schema, formData, uiOptions = {} } = props;
+  const { name, description, schema, formData, uiOptions = {} } = props;
 
   const handleTitleChange = (e: any, newTitle?: string): void => {
     if (props.onChange) {
@@ -40,8 +40,9 @@ const FormTitle: React.FC<FormTitleProps> = props => {
 
   const getTitle = (): string => {
     const designerName = formData.$designer?.name;
+    const uiLabel = typeof uiOptions?.label === 'function' ? uiOptions.label(formData) : uiOptions.label;
 
-    return designerName || title || schema.title || startCase(name);
+    return designerName || uiLabel || schema.title || startCase(name);
   };
 
   const getSubTitle = (): string => {

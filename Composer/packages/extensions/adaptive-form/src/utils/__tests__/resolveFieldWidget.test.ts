@@ -34,8 +34,8 @@ describe('resolveFieldWidget', () => {
             field: DefaultFields.StringField,
           },
         },
-        kindSchema: {},
         uiSchema: {},
+        recognizers: [],
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.StringField);
@@ -50,13 +50,13 @@ describe('resolveFieldWidget', () => {
       };
 
       const globalSchema = {
-        kindSchema: {
+        roleSchema: {},
+        uiSchema: {
           'Microsoft.Recognizer': {
             field: DefaultFields.RecognizerField,
           },
         },
-        roleSchema: {},
-        uiSchema: {},
+        recognizers: [],
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);

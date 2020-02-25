@@ -25,7 +25,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
   return (
     <TooltipHost
       delay={TooltipDelay.zero}
-      directionalHint={DirectionalHint.leftCenter}
+      directionalHint={DirectionalHint.bottomAutoEdge}
       id={`${id}-description`}
       styles={{ root: { display: 'flex', alignItems: 'center' } }}
       tooltipProps={{

@@ -103,6 +103,7 @@ export const OpenObjectField: React.FC<FieldProps<{
     id,
     label,
     description,
+    uiOptions,
   } = props;
 
   const [name, setName] = useState<string>('');
@@ -138,7 +139,7 @@ export const OpenObjectField: React.FC<FieldProps<{
 
   return (
     <div className="OpenObjectField">
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div css={openObjectField.labelContainer}>
         <div css={openObjectField.label}>
           <FieldLabel id={`${id}.key`} label={'Key'} />

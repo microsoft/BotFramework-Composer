@@ -16,7 +16,7 @@ const styles = css`
 `;
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, onBlur, onFocus, value, label, id, schema } = props;
+  const { onChange, onBlur, onFocus, value, label, id, schema, uiOptions } = props;
   const { description } = schema;
 
   return (
@@ -28,7 +28,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         onChange={(_, checked?: boolean) => onChange(checked)}
         onFocus={() => onFocus && onFocus(id, Boolean(value))}
       />
-      <FieldLabel inline description={description} id={id} label={label} />
+      <FieldLabel inline description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
     </div>
   );
 };

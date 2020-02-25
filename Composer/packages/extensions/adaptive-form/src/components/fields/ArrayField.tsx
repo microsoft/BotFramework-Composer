@@ -16,7 +16,7 @@ import { UnsupportedField } from './UnsupportedField';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ArrayField: React.FC<FieldProps<any[]>> = props => {
-  const { value: items = [], onChange, schema, label, description, id, rawErrors = [] } = props;
+  const { value: items = [], onChange, schema, label, description, id, rawErrors = [], uiOptions } = props;
   const [newValue, setNewValue] = useState<string>();
 
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
@@ -41,7 +41,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
 
   return (
     <div>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div>
         {items.map((element, idx) => (
           <ArrayFieldItem

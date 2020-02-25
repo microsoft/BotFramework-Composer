@@ -8,10 +8,10 @@ import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { FieldProps } from '@bfc/extension';
 import { IChoice } from '@bfc/shared';
-import { SchemaField, FieldLabel, getLabel } from '@bfc/adaptive-form';
+import { SchemaField, FieldLabel, getUiLabel } from '@bfc/adaptive-form';
 
 const Choices: React.FC<FieldProps<IChoice>> = props => {
-  const { id, value, onChange, schema } = props;
+  const { id, value, onChange, schema, uiOptions } = props;
   const currentSchema = useMemo(() => {
     if (schema.type === 'array') {
       return schema;
@@ -82,7 +82,8 @@ const Choices: React.FC<FieldProps<IChoice>> = props => {
               : '')
           }
           id={id}
-          label={getLabel(props)}
+          label={getUiLabel(props)}
+          helpLink={uiOptions?.helpLink}
         />
         {options && options.length > 0 && (
           <Dropdown

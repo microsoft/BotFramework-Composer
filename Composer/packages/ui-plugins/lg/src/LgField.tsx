@@ -33,7 +33,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 };
 
 const LgField: React.FC<FieldProps<string>> = props => {
-  const { label, id, description, value, name } = props;
+  const { label, id, description, value, name, uiOptions } = props;
   const { dialogId, currentDialog, lgFiles, shellApi } = useShellApi();
 
   const singleLgRefMatched = value && value.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
@@ -104,7 +104,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} />
+      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
       <LgEditor
         height={125}
         value={localValue}

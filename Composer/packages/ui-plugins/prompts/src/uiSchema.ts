@@ -8,15 +8,6 @@ import formatMessage from 'format-message';
 import { PromptField } from './PromptField';
 import { SynonymsField } from './SynonymsField';
 
-const PROMPT_TYPES = [
-  SDKTypes.AttachmentInput,
-  SDKTypes.ChoiceInput,
-  SDKTypes.ConfirmInput,
-  SDKTypes.DateTimeInput,
-  SDKTypes.NumberInput,
-  SDKTypes.TextInput,
-];
-
 const choiceSchema = {
   hidden: ['action'],
   properties: {
@@ -33,9 +24,22 @@ const choiceSchema = {
   },
 };
 
-const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
-  schemas[type] = {
+const uiSchema: UISchema = {
+  [SDKTypes.AttachmentInput]: {
+    label: 'Prompt for Attachment',
     field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+    properties: {
+      validations: {
+        label: () => formatMessage('Validation Rules'),
+        placeholder: () => formatMessage('Add new validation rule here'),
+      },
+    },
+  },
+  [SDKTypes.ChoiceInput]: {
+    label: 'Prompt with multi-choice',
+    field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
       validations: {
         label: () => formatMessage('Validation Rules'),
@@ -45,17 +49,56 @@ const promptFieldsSchemas = PROMPT_TYPES.reduce((schemas, type) => {
         placeholder: () => formatMessage('Expression'),
         ...choiceSchema,
       },
+    },
+  },
+  [SDKTypes.ConfirmInput]: {
+    label: 'Prompt for confirmation',
+    field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+    properties: {
+      validations: {
+        label: () => formatMessage('Validation Rules'),
+        placeholder: () => formatMessage('Add new validation rule here'),
+      },
       confirmChoices: {
         label: () => formatMessage('Confirm Choices'),
         ...choiceSchema,
       },
     },
-  };
-  return schemas;
-}, {});
-
-const uiSchema: UISchema = {
-  ...promptFieldsSchemas,
+  },
+  [SDKTypes.DateTimeInput]: {
+    label: 'Prompt for a date',
+    field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+    properties: {
+      validations: {
+        label: () => formatMessage('Validation Rules'),
+        placeholder: () => formatMessage('Add new validation rule here'),
+      },
+    },
+  },
+  [SDKTypes.NumberInput]: {
+    label: 'Prompt for a number',
+    field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+    properties: {
+      validations: {
+        label: () => formatMessage('Validation Rules'),
+        placeholder: () => formatMessage('Add new validation rule here'),
+      },
+    },
+  },
+  [SDKTypes.TextInput]: {
+    label: 'Prompt for text',
+    field: PromptField,
+    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
+    properties: {
+      validations: {
+        label: () => formatMessage('Validation Rules'),
+        placeholder: () => formatMessage('Add new validation rule here'),
+      },
+    },
+  },
 };
 
 export default uiSchema;

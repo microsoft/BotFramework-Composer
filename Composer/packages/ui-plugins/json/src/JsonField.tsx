@@ -15,11 +15,11 @@ const fieldStyle = css`
 `;
 
 const JsonField: React.FC<FieldProps> = props => {
-  const { onChange, value, id, label, description } = props;
+  const { onChange, value, id, label, description, uiOptions } = props;
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div css={fieldStyle}>
         <JsonEditor value={value} onChange={onChange} />
       </div>

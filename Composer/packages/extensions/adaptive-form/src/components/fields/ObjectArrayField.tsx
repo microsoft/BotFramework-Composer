@@ -26,7 +26,7 @@ const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): stri
     return typeof placeholderOverride === 'function' ? placeholderOverride(undefined) : placeholderOverride;
   }
 
-  return formatMessage(`Add new ${propertyName}`);
+  return formatMessage('Add new {propertyName}', { propertyName });
 };
 
 const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
@@ -54,7 +54,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div>
         {orderedProperties.length > 1 && (
           <div css={objectArrayField.objectItemLabel}>

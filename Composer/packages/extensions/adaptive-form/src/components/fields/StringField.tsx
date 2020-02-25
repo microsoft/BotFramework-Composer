@@ -22,6 +22,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     onFocus,
     onBlur,
     error,
+    uiOptions,
   } = props;
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -44,7 +45,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <TextField
         disabled={disabled}
         errorMessage={error}

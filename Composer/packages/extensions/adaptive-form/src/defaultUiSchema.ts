@@ -37,21 +37,20 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.ConditionalSelector]: {
     hidden: [...globalHiddenProperties],
-    // properties: {
-    //   ifFalse: {
-    //     field: 'SelectorField',
-    //   },
-    //   ifTrue: {
-    //     field: 'SelectorField',
-    //   },
-    // },
+  },
+  [SDKTypes.DebugBreak]: {
+    label: 'Debug Breack',
   },
   [SDKTypes.EditActions]: {
-    // properties: {
-    //   actions: {
-    //     field: 'StepsField',
-    //   },
-    // },
+    label: 'Modify active dialog',
+  },
+  [SDKTypes.EditArray]: {
+    label: 'Edit an Array Property',
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.EmitEvent]: {
+    label: 'Emit a custom event',
+    helpLink: 'https://aka.ms/bfc-custom-events',
   },
   [SDKTypes.Foreach]: {
     order: ['itemsProperty', '*'],
@@ -63,28 +62,25 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.HttpRequest]: {
     order: ['method', 'url', 'body', 'headers', '*'],
-    // properties: {
-    //   body: {
-    //     // field: 'JsonField',
-    //   },
-    //   headers: {
-    //     // field: 'CustomObjectField',
-    //   },
-    // },
   },
   [SDKTypes.IfCondition]: {
     hidden: ['actions', 'elseActions', ...globalHiddenProperties],
   },
+  [SDKTypes.SetProperty]: {
+    label: 'Set a Property',
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
   [SDKTypes.SetProperties]: {
-    // field: 'AssignmentsField',
-    // properties: {
-    //   assignments: {
-    //     options: {
-    //       hideLabel: true,
-    //       transparentBorder: true,
-    //     },
-    //   },
-    // },
+    label: 'Set Properties',
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.DeleteProperty]: {
+    label: 'Delete a Property',
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.DeleteProperties]: {
+    label: 'Delete Properties',
+    helpLink: 'https://aka.ms/bfc-using-memory',
   },
   [SDKTypes.OnActivity]: {
     ...triggerUiSchema,

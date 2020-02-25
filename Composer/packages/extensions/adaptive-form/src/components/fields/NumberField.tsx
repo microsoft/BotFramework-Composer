@@ -17,7 +17,7 @@ const getFloat = (value: string, step: number) => {
 };
 
 export const NumberField: React.FC<FieldProps> = function NumberField(props) {
-  const { description, disabled, id, label, onChange, readonly, schema, value } = props;
+  const { description, disabled, id, label, onChange, readonly, schema, value, uiOptions } = props;
 
   const { type } = schema;
 
@@ -34,7 +34,7 @@ export const NumberField: React.FC<FieldProps> = function NumberField(props) {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <SpinButton
         disabled={Boolean(schema.const) || readonly || disabled}
         step={step}

@@ -20,6 +20,7 @@ export const SelectDialog: React.FC<FieldProps> = ({
   onChange,
   onFocus,
   value = '',
+  uiOptions,
 }) => {
   const {
     currentDialog: { id: currentDialogId },
@@ -83,7 +84,7 @@ export const SelectDialog: React.FC<FieldProps> = ({
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <ComboBox
         autoComplete="off"
         id={id}

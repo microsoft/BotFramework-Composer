@@ -8,7 +8,7 @@ import { FieldLabel } from '@bfc/adaptive-form';
 import { BaseEditor } from './BaseEditor';
 
 const JsonEditor: React.FC<FieldProps> = props => {
-  const { onChange, value, id, label, description } = props;
+  const { onChange, value, id, label, description, uiOptions } = props;
   const [localValue, setLocalValue] = useState(JSON.stringify(value, null, 4));
   const [invalid, setInvalid] = useState(false);
 
@@ -29,7 +29,7 @@ const JsonEditor: React.FC<FieldProps> = props => {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <BaseEditor height="275px" invalid={invalid} language="json" value={localValue || ''} onChange={handleChange} />
     </>
   );

@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// @ts-nocheck
+
 import React from 'react';
 import { cleanup, fireEvent, getAllByRole, render } from 'react-testing-library';
 import { Extension } from '@bfc/extension';

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UISchema } from '@bfc/extension';
 import { SDKTypes, SDKRoles, SDKKinds } from '@bfc/shared';
 
 import { mergePluginConfigs } from '../mergePluginConfigs';
