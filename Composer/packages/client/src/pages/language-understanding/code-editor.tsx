@@ -29,7 +29,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { fileId } = props;
   const file = luFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-  const [errorMsg, setErrorMsg] = useState('');
+  const [httpErrorMsg, setHttpErrorMsg] = useState('');
   const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
   const search = props.location?.search ?? '';
@@ -55,12 +55,11 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setContent(value);
   }, [file, sectionId]);
 
-  useEffect(() => {
+  const errorMsg = useMemo(() => {
     const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
     const isInvalid = !isValid(currentDiagnostics);
-    const text = isInvalid ? combineMessage(diagnostics) : '';
-    setErrorMsg(text);
-  }, [diagnostics]);
+    return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
+  }, [diagnostics, httpErrorMsg]);
 
   const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
     setLuEditor(luEditor);
@@ -125,7 +124,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
             const { diagnostics } = parse(newContent, id);
             setDiagnostics(diagnostics);
           } catch (error) {
-            setErrorMsg(error.message);
+            setHttpErrorMsg(error.error);
           }
         } else {
           const { diagnostics } = parse(value, id);
