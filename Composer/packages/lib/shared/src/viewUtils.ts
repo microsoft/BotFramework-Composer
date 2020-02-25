@@ -91,7 +91,6 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       SDKTypes.HttpRequest,
       SDKTypes.EmitEvent,
-      SDKTypes.OAuthInput,
       SDKTypes.QnAMakerDialog,
       //  SDKTypes.CodeStep
     ],
