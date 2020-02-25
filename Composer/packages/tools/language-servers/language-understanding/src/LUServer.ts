@@ -20,18 +20,18 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
+import { parser } from '@bfcomposer/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
 import { ImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
-
-const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
 
 // define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
 const { parse } = luIndexer;
+const { parseFile } = parser;
 
 export class LUServer {
   protected workspaceRoot: URI | undefined;
@@ -169,7 +169,7 @@ export class LUServer {
       const { intents: sections, diagnostics: bfIndexerDiags } = parse(content, id);
       const diagnostics = convertDiagnostics(bfIndexerDiags, document);
 
-      return { sections, diagnostics };
+      return { sections, diagnostics, content };
     };
     const luDocument: LUDocument = {
       uri,
@@ -218,7 +218,8 @@ export class LUServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const lineCount = document.lineCount;
-    const text = document.getText();
+    const luDoc = this.getLUDocument(document);
+    const text = luDoc?.index().content || document.getText();
     const lines = text.split('\n');
     const position = params.position;
     const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -370,7 +371,8 @@ export class LUServer {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
-    const text = document.getText();
+    const luDoc = this.getLUDocument(document);
+    const text = luDoc?.index().content || document.getText();
     const lines = text.split('\n');
     const curLineNumber = params.position.line;
     //const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
