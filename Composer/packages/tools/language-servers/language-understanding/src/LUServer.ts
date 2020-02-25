@@ -307,12 +307,14 @@ export class LUServer {
       .join('\n');
     const completionList: CompletionItem[] = [];
     if (util.isEntityType(curLineContent)) {
+      const triggerChar = curLineContent[position.character - 1];
+      const extraWhiteSpace = triggerChar === '@' ? ' ' : '';
       const entityTypes: string[] = EntityTypesObj.EntityType;
       entityTypes.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
-          insertText: `${entity}`,
+          insertText: `${extraWhiteSpace}${entity}`,
           documentation: `Enitity type: ${entity}`,
         };
 
@@ -322,11 +324,13 @@ export class LUServer {
 
     if (util.isPrebuiltEntity(curLineContent)) {
       const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
+      const triggerChar = curLineContent[position.character - 1];
+      const extraWhiteSpace = triggerChar !== ' ' ? ' ' : '';
       prebuiltTypes.forEach(entity => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
-          insertText: `${entity}`,
+          insertText: `${extraWhiteSpace}${entity}`,
           documentation: `Prebuilt enitity: ${entity}`,
         };
 
