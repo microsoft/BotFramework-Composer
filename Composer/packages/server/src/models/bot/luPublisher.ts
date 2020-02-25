@@ -9,6 +9,7 @@ import { LuFile } from '@bfc/indexers';
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+
 const GENERATEDFOLDER = 'ComposerDialogs/generated';
 const INTERUPTION = 'ComposerDialogs/generated/interuption';
 const LU_STATUS_FILE = 'luis.status.json';
@@ -17,6 +18,7 @@ const DEFAULT_STATUS = {
   lastUpdateTime: 1,
   lastPublishTime: 0, // means unpublished
 };
+
 export class LuPublisher {
   public botDir: string;
   public generatedFolderPath: string;
@@ -86,14 +88,20 @@ export class LuPublisher {
 
   public publish = async (luFiles: LuFile[]) => {
     try {
+      await this._createGeneratedDir();
+
+      //do cross train before publish
       await this._crossTrain();
 
-      const config = await this._getConfig();
+      const config = await this._getConfig(luFiles);
       if (config.models.length === 0) {
         throw new Error('No luis file exist');
       }
 
       await runBuild(config);
+
+      //remove the cross train result
+      await this._cleanCrossTrain();
 
       // update pubish status after sucessfully published
       const curTime = Date.now();
@@ -102,8 +110,6 @@ export class LuPublisher {
       });
 
       await this.saveStatus();
-
-      await this._copyDialogsToTargetFolder(config);
     } catch (error) {
       throw new Error(error?.message ?? 'Error publishing to LUIS.');
     }
@@ -131,7 +137,7 @@ export class LuPublisher {
   public setLuisConfig = async (config: ILuisConfig) => {
     if (!isEqual(config, this.config)) {
       this.config = config;
-      await this._deleteGenerated(this.generatedFolderPath);
+      await this._deleteDir(this.generatedFolderPath);
       this.resetStatus();
     }
   };
@@ -156,6 +162,12 @@ export class LuPublisher {
     await this.storage.writeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`, JSON.stringify(test));
   };
 
+  private async _createGeneratedDir() {
+    if (!(await this.storage.exists(this.generatedFolderPath))) {
+      await this.storage.mkDir(this.generatedFolderPath);
+    }
+  }
+
   private async _crossTrain() {
     await this.createCrossTrainConfig();
     const result = await crossTrain.train(
@@ -167,45 +179,44 @@ export class LuPublisher {
   }
 
   //delete files in generated folder
-  private async _deleteGenerated(path: string) {
+  private async _deleteDir(path: string) {
     if (await this.storage.exists(path)) {
       const files = await this.storage.readDir(path);
       for (const file of files) {
         const curPath = Path.join(path, file);
         if ((await this.storage.stat(curPath)).isDir) {
-          await this._deleteGenerated(curPath);
+          await this._deleteDir(curPath);
         } else {
           await this.storage.removeFile(curPath);
         }
       }
+      await this.storage.rmDir(path);
     }
   }
 
-  private _copyDialogsToTargetFolder = async (config: any) => {
-    const defaultLanguage = config.defaultLanguage;
-    await config.models.forEach(async (filePath: string) => {
-      const baseName = Path.basename(filePath, '.lu');
-      const rootPath = Path.dirname(filePath);
-      const currentPath = `${filePath}.dialog`;
-      const targetPath = Path.join(this.generatedFolderPath, `${baseName}.lu.dialog`);
-      const currentVariantPath = Path.join(rootPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-      const targetVariantPath = Path.join(this.generatedFolderPath, `${baseName}.${defaultLanguage}.lu.dialog`);
-      await this.storage.copyFile(currentPath, targetPath);
-      await this.storage.copyFile(currentVariantPath, targetVariantPath);
-      await this.storage.removeFile(currentPath);
-      await this.storage.removeFile(currentVariantPath);
-    });
-  };
-
-  private _getConfig = async () => {
+  private _getConfig = async (luFiles: LuFile[]) => {
     const luConfig: any = { ...this.config };
     luConfig.models = [];
     luConfig.autodelete = true;
     luConfig.dialogs = true;
     luConfig.force = false;
     luConfig.folder = this.generatedFolderPath;
+    //add all lu file after cross train
     const paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
     luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
+
+    //add the lu file that are not in crossTrain config.
+    luFiles.forEach(file => {
+      if (~paths.indexOf(`${file.id}.lu`)) {
+        luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
+      }
+    });
+
     return luConfig;
   };
+
+  private async _cleanCrossTrain() {
+    await this.storage.removeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`);
+    await this._deleteDir(this.interuptionFolderPath);
+  }
 }
