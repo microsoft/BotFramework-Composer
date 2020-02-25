@@ -9,7 +9,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { styles } from './styles';
-import processGif from './deploy-deploy-output.gif';
+import processGif from './deploy-deploy-output.png';
 
 export const DeployWizardStep3 = props => {
   const { closeModal, botValues } = props;
@@ -50,7 +50,7 @@ export const DeployWizardStep3 = props => {
           <img
             style={styles.gif}
             src={processGif}
-            alt={formatMessage('Animation showing the command line tool output')}
+            alt={formatMessage('This image shows the command line tool output')}
           />
         </StackItem>
       </Stack>
