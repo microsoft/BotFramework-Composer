@@ -18,20 +18,28 @@ import {
   TextEdit,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
+import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
+import { luIndexer } from '@bfc/indexers';
+import { parser } from '@bfcomposer/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';
+import { ImportResolverDelegate, LUOption, LUDocument, generageDiagnostic, convertDiagnostics } from './utils';
 
-const parseFile = require('@bfcomposer/bf-lu/lib/parser/lufile/parseFileContents.js').parseFile;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const validateLUISBlob = require('@bfcomposer/bf-lu/lib/parser/luis/luisValidator');
+// define init methods call from client
 const LABELEXPERIENCEREQUEST = 'labelingExperienceRequest';
+const InitializeDocumentsMethodName = 'initializeDocuments';
+
+const { parse } = luIndexer;
+const { parseFile } = parser;
+
 export class LUServer {
   protected workspaceRoot: URI | undefined;
   protected readonly documents = new TextDocuments();
   protected readonly pendingValidationRequests = new Map<string, number>();
+  protected LUDocuments: LUDocument[] = [];
 
-  constructor(protected readonly connection: IConnection) {
+  constructor(protected readonly connection: IConnection, protected readonly importResolver?: ImportResolverDelegate) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -66,12 +74,114 @@ export class LUServer {
     this.connection.onRequest((method, params) => {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
+      } else if (InitializeDocumentsMethodName === method) {
+        const { uri, luOption }: { uri: string; luOption?: LUOption } = params;
+        const textDocument = this.documents.get(uri);
+        if (textDocument) {
+          this.addLUDocument(textDocument, luOption);
+          this.validateLuOption(textDocument, luOption);
+          this.validate(textDocument);
+        }
       }
     });
   }
 
   start() {
     this.connection.listen();
+  }
+
+  protected validateLuOption(document: TextDocument, luOption?: LUOption) {
+    if (!luOption) return;
+
+    const diagnostics: string[] = [];
+
+    if (!this.importResolver) {
+      diagnostics.push('[Error luOption] importResolver is required but not exist.');
+    } else {
+      const { fileId, sectionId } = luOption;
+      const luFile = this.getLUDocument(document)?.index();
+      if (!luFile) {
+        diagnostics.push(`[Error luOption] File ${fileId}.lu do not exist`);
+      } else if (sectionId) {
+        const { sections } = luFile;
+        const section = sections.find(({ Name }) => Name === sectionId);
+        if (!section) diagnostics.push(`Section ${fileId}.lu#${sectionId} do not exist`);
+      }
+    }
+    this.connection.console.log(diagnostics.join('\n'));
+    this.sendDiagnostics(
+      document,
+      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+    );
+  }
+
+  protected getImportResolver(document: TextDocument) {
+    const editorContent = document.getText();
+    const internalImportResolver = () => {
+      return {
+        id: document.uri,
+        content: editorContent,
+      };
+    };
+    const { fileId, sectionId } = this.getLUDocument(document) || {};
+
+    if (this.importResolver && fileId) {
+      const resolver = this.importResolver;
+      return (source: string, id: string) => {
+        const luFile = resolver(source, id);
+        if (!luFile) {
+          this.sendDiagnostics(document, [
+            generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
+          ]);
+        }
+        let { content } = luFile;
+        /**
+         * source is . means use as file resolver, not import resolver
+         * if inline editor, server file write may have delay than webSocket updated LSP server
+         * so here build the full content from server file content and editor content
+         */
+        if (source === '.' && sectionId) {
+          content = updateIntent(luFile.content, sectionId, { Name: sectionId, Body: editorContent });
+        }
+        return { id, content };
+      };
+    }
+
+    return internalImportResolver;
+  }
+
+  protected addLUDocument(document: TextDocument, luOption?: LUOption) {
+    const { uri } = document;
+    const { fileId, sectionId } = luOption || {};
+    const index = () => {
+      const importResolver: ImportResolverDelegate = this.getImportResolver(document);
+      let content: string = document.getText();
+      // if inline mode, composite local with server resolved file.
+      if (this.importResolver && fileId && sectionId) {
+        try {
+          content = importResolver('.', `${fileId}.lu`).content;
+        } catch (error) {
+          // ignore if file not exist
+        }
+      }
+
+      const id = fileId || uri;
+      const { intents: sections, diagnostics: bfIndexerDiags } = parse(content, id);
+      const diagnostics = convertDiagnostics(bfIndexerDiags, document);
+
+      return { sections, diagnostics, content };
+    };
+    const luDocument: LUDocument = {
+      uri,
+      fileId,
+      sectionId,
+      index,
+    };
+    this.LUDocuments.push(luDocument);
+  }
+
+  protected getLUDocument(document: TextDocument): LUDocument | undefined {
+    return this.LUDocuments.find(({ uri }) => uri === document.uri);
   }
 
   protected labelingExperienceHandler(params: any): void {
@@ -108,7 +218,8 @@ export class LUServer {
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
     const lineCount = document.lineCount;
-    const text = document.getText();
+    const luDoc = this.getLUDocument(document);
+    const text = luDoc?.index().content || document.getText();
     const lines = text.split('\n');
     const position = params.position;
     const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -234,43 +345,6 @@ export class LUServer {
       return Promise.reject(error.responseText || getErrorStatusDescription(error.status) || error.toString());
     }
   }
-
-  private async validateLuBody(content: string): Promise<{ parsedContent: any; errors: any }> {
-    const errors: Diagnostic[] = [];
-    let parsedContent: any;
-    const log = false;
-    const locale = 'en-us';
-    try {
-      parsedContent = await parseFile(content, log, locale);
-      if (parsedContent !== undefined) {
-        try {
-          validateLUISBlob(parsedContent.LUISJsonStructure);
-        } catch (e) {
-          e.diagnostics.forEach(diag => {
-            const range = Range.create(0, 0, 0, 1);
-            const message = diag.Message;
-            const severity = DiagnosticSeverity.Error;
-            errors.push(Diagnostic.create(range, message, severity));
-          });
-        }
-      }
-    } catch (e) {
-      e.diagnostics.forEach(diag => {
-        const range = Range.create(
-          diag.Range.Start.Line - 1,
-          diag.Range.Start.Character,
-          diag.Range.End.Line - 1,
-          diag.Range.End.Character
-        );
-        const message = diag.Message;
-        const severity = DiagnosticSeverity.Error;
-        errors.push(Diagnostic.create(range, message, severity));
-      });
-    }
-
-    return Promise.resolve({ parsedContent, errors });
-  }
-
   private async extractLUISContent(text: string): Promise<any> {
     let parsedContent: any;
     const log = false;
@@ -297,7 +371,8 @@ export class LUServer {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const curLineContent = document.getText(range);
-    const text = document.getText();
+    const luDoc = this.getLUDocument(document);
+    const text = luDoc?.index().content || document.getText();
     const lines = text.split('\n');
     const curLineNumber = params.position.line;
     //const textBeforeCurLine = lines.slice(0, curLineNumber).join('\n');
@@ -526,16 +601,42 @@ export class LUServer {
   }
 
   protected doValidate(document: TextDocument): void {
-    if (document.getText().length === 0) {
+    const text = document.getText();
+    const luDoc = this.getLUDocument(document);
+    if (!luDoc) {
+      return;
+    }
+    const { fileId, sectionId } = luDoc;
+    const luFile = luDoc.index();
+    if (!luFile) {
+      return;
+    }
+
+    if (text.length === 0) {
       this.cleanDiagnostics(document);
       return;
     }
 
-    const text = document.getText();
-    this.validateLuBody(text).then(result => {
-      const diagnostics: Diagnostic[] = result.errors;
-      this.sendDiagnostics(document, diagnostics);
-    });
+    const { diagnostics } = luFile;
+
+    // if inline editor, concat new content for validate
+    if (fileId && sectionId) {
+      const sectionDiags = checkSection(
+        {
+          Name: sectionId,
+          Body: text,
+        },
+        true
+      );
+      // error in section.
+      if (isValid(sectionDiags) === false) {
+        const lspDiagnostics = convertDiagnostics(sectionDiags, document, 1);
+        this.sendDiagnostics(document, lspDiagnostics);
+        return;
+      }
+    }
+    const lspDiagnostics = convertDiagnostics(diagnostics, document);
+    this.sendDiagnostics(document, lspDiagnostics);
   }
 
   protected cleanDiagnostics(document: TextDocument): void {

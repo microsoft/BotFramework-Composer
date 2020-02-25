@@ -3,7 +3,7 @@
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 
-import { updateIntent, addIntent, removeIntent } from '../../src/utils/luUtil';
+import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
 
 const { luParser, luSectionTypes } = sectionHandler;
 
@@ -79,6 +79,51 @@ describe('LU Section CRUD test', () => {
     expect(luresource.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
   });
 
+  it('update section with invalid lu syntax', () => {
+    const intentName = 'CheckEmail';
+
+    const validFileContent = `#CheckEmail
+- check my email
+- show my emails`;
+
+    const validIntent = {
+      Name: 'CheckEmail',
+      Body: `- check my email
+- show my emails
+`,
+    };
+
+    const invalidFileContent = `#CheckEmail
+- check my email
+- show my emails
+@`;
+
+    const invalidIntent = {
+      Name: 'CheckEmail',
+      Body: `- check my email
+- show my emails
+@`,
+    };
+
+    const invalidIntent4 = {
+      Name: 'CheckEmail',
+      Body: `- check my email
+- show my emails
+
+# UnexpectedIntentDefination
+- unexpected intent body
+`,
+    };
+    // intent invalid
+    const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
+    expect(updatedContent2).toEqual(validFileContent);
+    const updatedContent4 = updateIntent(validFileContent, intentName, invalidIntent4);
+    expect(updatedContent4).toEqual(validFileContent);
+    // file invalid
+    const updatedContent3 = updateIntent(invalidFileContent, intentName, validIntent);
+    expect(updatedContent3).toEqual(invalidFileContent);
+  });
+
   it('delete section test', () => {
     const intentName = 'CheckEmail';
     const fileContentUpdated = removeIntent(fileContent, intentName);
@@ -110,6 +155,30 @@ describe('LU Nested Section CRUD test', () => {
 
 @ simple todoSubject`;
 
+  it('update IntentSection test', () => {
+    const intentName = 'CheckTodo';
+    const intent = {
+      Name: 'CheckTodo',
+      Body: `## CheckUnreadTodo
+  - please check my unread todo
+  - show my unread todos
+
+  @ simple todoTitle
+  `,
+    };
+
+    const fileContentUpdated = updateIntent(fileContent, intentName, intent);
+    const luresource = luParser.parse(fileContentUpdated);
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+    expect(Sections[1].Name).toEqual('CheckTodo');
+    expect(Sections[1].SimpleIntentSections.length).toEqual(1);
+  });
+
   it('parse Nested section test', () => {
     const luresource = luParser.parse(fileContent);
     const { Sections, Errors, Content } = luresource;
@@ -134,10 +203,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-- show my completed todos
+    - show my completed todos
 
-@ simple todoTime
-`,
+    @ simple todoTime
+    `,
     };
 
     const fileContentUpdated = addIntent(fileContent, intent);
@@ -164,10 +233,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyTodo/CheckCompletedTodo',
       Body: `- check my completed todo
-- show my completed todos
+    - show my completed todos
 
-@ simple todoTime
-`,
+    @ simple todoTime
+    `,
     };
 
     const fileContentUpdated = addIntent(fileContent, intent);
@@ -196,11 +265,11 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
+    - please show my unread todos
 
-@ simple todoTitle
-@ simple todoContent
-`,
+    @ simple todoTitle
+    @ simple todoContent
+    `,
     };
 
     const fileContentUpdated = updateIntent(fileContent, intentName, intent);
@@ -236,10 +305,10 @@ describe('LU Nested Section CRUD test', () => {
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
-- please show my unread todos
+  - please show my unread todos
 
-@ simple todoContent
-`,
+  @ simple todoContent
+  `,
     };
 
     const fileContentUpdated = updateIntent(fileContent, intentName, intent);
