@@ -24,10 +24,6 @@ export class BotProjectService {
   };
 
   private static initialize() {
-    // if (BotProjectService.currentBotProject) {
-    //   return;
-    // }
-
     if (!BotProjectService.recentBotProjects || BotProjectService.recentBotProjects.length === 0) {
       BotProjectService.recentBotProjects = Store.get('recentBotProjects');
     }
@@ -35,10 +31,6 @@ export class BotProjectService {
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
       BotProjectService.projectLocationMap = Store.get('projectLocationMap') || {};
     }
-
-    // if (BotProjectService.recentBotProjects.length > 0) {
-    //   BotProjectService.currentBotProject = new BotProject(BotProjectService.recentBotProjects[0]);
-    // }
   }
 
   public static lgImportResolver(_source: string, id: string): TextFile {
@@ -86,10 +78,7 @@ export class BotProjectService {
   }
 
   public static getCurrentBotProject(): BotProject | undefined {
-    throw new Error('DEPRECATED');
-    // console.warn('called getCurrentBotPRoject()');
-    // BotProjectService.initialize();
-    // return BotProjectService.currentBotProject;
+    throw new Error('getCurrentBotProject is DEPRECATED');
   }
 
   public static getProjectsDateModifiedDict = async (projects: LocationRef[], user?: UserIdentity): Promise<any> => {
@@ -157,15 +146,24 @@ export class BotProjectService {
     return projectId;
   };
 
+  private static removeProjectIdFromCache = (projectId: string): void => {
+    delete BotProjectService.projectLocationMap[projectId];
+    Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+  };
+
   public static getProjectById = async (projectId: string, user?: UserIdentity) => {
     BotProjectService.initialize();
     if (!BotProjectService.projectLocationMap[projectId]) {
       throw new Error('project not found in cache');
     } else {
-      const project = new BotProject(
-        { storageId: 'default', path: BotProjectService.projectLocationMap[projectId] },
-        user
-      );
+      const path = BotProjectService.projectLocationMap[projectId];
+      // check to make sure the project is still there!
+      if (!(await StorageService.checkBlob('default', path, user))) {
+        BotProjectService.deleteRecentProject(path);
+        BotProjectService.removeProjectIdFromCache(projectId);
+        throw new Error(`file not exist ${path}`);
+      }
+      const project = new BotProject({ storageId: 'default', path: path }, user);
       project.id = projectId;
       await project.index();
       return project;
