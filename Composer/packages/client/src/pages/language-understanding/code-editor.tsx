@@ -60,7 +60,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
   }, [diagnostics, httpErrorMsg]);
 
-  const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount = (_getValue, luEditor: MonacoEditor.editor.IStandaloneCodeEditor) => {
     setLuEditor(luEditor);
   };
 
@@ -157,7 +157,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
+      errorMessage={errorMsg}
       luOption={luOption}
       languageServer={{
         path: lspServerPath,

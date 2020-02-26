@@ -147,10 +147,12 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   return (
     <LgEditor
       options={{
-        lineNumbers: 'on',
-        minimap: 'on',
+        lineNumbers: 'on' as 'on',
+        minimap: {
+          enabled: true,
+        },
         lineDecorationsWidth: undefined,
-        lineNumbersMinChars: false,
+        lineNumbersMinChars: undefined,
       }}
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
