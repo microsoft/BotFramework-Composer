@@ -32,7 +32,7 @@ export const AssignmentList = ({ assignments }) => {
     </MultiLineDiv>
   );
   return (
-    <div data-testid="SetProperties" css={{ padding: '0 0 16px 8px' }}>
+    <div data-testid="SetProperties" css={{ padding: '0 0 8px 8px' }}>
       <ListOverview
         items={items}
         ItemRender={ItemRender}

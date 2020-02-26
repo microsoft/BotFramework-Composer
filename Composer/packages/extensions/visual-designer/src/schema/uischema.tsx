@@ -17,7 +17,6 @@ import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { PropertiesWidget } from '../widgets/PropertiesWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { measureChoiceInputDetailBoundary, measurePropertyAssignmentBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -42,7 +41,6 @@ const BaseInputSchema: UIWidget = {
     menu: 'none',
     content: data => data.property || '<property>',
     children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
-    size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
@@ -129,7 +127,6 @@ export const uiSchema: UISchema = {
   [SDKTypes.SetProperties]: {
     'ui:widget': PropertiesWidget,
     content: data => ({ assignments: data.assignments }),
-    size: data => measurePropertyAssignmentBoundary(data),
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,
