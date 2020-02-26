@@ -150,7 +150,7 @@ export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: stri
 export const suggestionAllEntityTypes = [
   'entities',
   'regex_entities',
-  'Pattern.anyEntities',
+  'patternAnyEntities',
   'preBuiltEntities',
   'closedLists',
   'phraseLists',
@@ -169,7 +169,7 @@ export const suggestionNoPatternAnyEntityTypes = [
 export const suggestionNoCompositeEntityTypes = [
   'entities',
   'regex_entities',
-  'Pattern.anyEntities',
+  'patternAnyEntities',
   'preBuiltEntities',
   'closedLists',
   'phraseLists',
