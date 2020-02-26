@@ -2,67 +2,167 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { combineMessage, isValid, LuFile } from '@bfc/indexers';
+import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { luIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
+import querystring from 'query-string';
+
+import { StoreContext } from '../../store';
+import * as luUtil from '../../utils/luUtil';
+
+const { parse } = luIndexer;
+
+const lspServerPath = '/lu-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  file: LuFile;
-  onChange: (value: string) => {};
-  errorMsg: string;
+  fileId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
-  const { file, errorMsg: updateErrorMsg } = props;
-  const onChange = debounce(props.onChange, 500);
-  const diagnostics = get(file, 'diagnostics', []);
-  const [content, setContent] = useState(get(file, 'content', ''));
+  const { actions, state } = useContext(StoreContext);
+  const { luFiles } = state;
+  const { fileId } = props;
+  const file = luFiles?.find(({ id }) => id === fileId);
+  const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
+  const [httpErrorMsg, setHttpErrorMsg] = useState('');
+  const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
-  const fileId = file && file.id;
+  const search = props.location?.search ?? '';
+  const searchSectionName = querystring.parse(search).t;
+  const sectionId = Array.isArray(searchSectionName)
+    ? searchSectionName[0]
+    : typeof searchSectionName === 'string'
+    ? searchSectionName
+    : undefined;
+  const intent = sectionId && file ? file.intents.find(({ Name }) => Name === sectionId) : undefined;
+
+  const hash = props.location?.hash ?? '';
+  const hashLine = querystring.parse(hash).L;
+  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : undefined;
+
+  const inlineMode = !!intent;
+  const [content, setContent] = useState(intent?.Body || file?.content);
+
   useEffect(() => {
-    // reset content with file.content's initial state
-    if (isEmpty(file)) return;
-    setContent(file.content);
-  }, [fileId]);
-
-  // local content maybe invalid and should always sync real-time
-  // file.content assume to be load from server
-  const _onChange = value => {
+    // reset content with file.content initial state
+    if (!file || isEmpty(file) || content) return;
+    const value = intent ? intent.Body : file.content;
     setContent(value);
-    // TODO: validate before request update server like lg, when luParser is ready
-    onChange(value);
+  }, [file, sectionId]);
+
+  const errorMsg = useMemo(() => {
+    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
+    const isInvalid = !isValid(currentDiagnostics);
+    return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
+  }, [diagnostics, httpErrorMsg]);
+
+  const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
+    setLuEditor(luEditor);
   };
 
-  // diagnostics is load file error,
-  // updateErrorMsg is save file return error.
-  const isInvalid = !isValid(file.diagnostics) || updateErrorMsg !== '';
-  const errorMsg = isInvalid ? `${combineMessage(diagnostics)}\n ${updateErrorMsg}` : '';
+  useEffect(() => {
+    if (luEditor && line !== undefined) {
+      window.requestAnimationFrame(() => {
+        luEditor.revealLine(line);
+        luEditor.focus();
+        luEditor.setPosition({ lineNumber: line, column: 1 });
+      });
+    }
+  }, [line, luEditor]);
+
+  const updateLuIntent = useMemo(
+    () =>
+      debounce((Body: string) => {
+        if (!file || !intent) return;
+        const { Name } = intent;
+        const payload = {
+          file,
+          intentName: Name,
+          intent: {
+            Name,
+            Body,
+          },
+        };
+        actions.updateLuIntent(payload);
+      }, 500),
+    [file, intent]
+  );
+
+  const updateLuFile = useMemo(
+    () =>
+      debounce((content: string) => {
+        if (!file) return;
+        const { id } = file;
+        const payload = {
+          id,
+          content,
+        };
+        actions.updateLuFile(payload);
+      }, 500),
+    [file]
+  );
+
+  const updateDiagnostics = useMemo(
+    () =>
+      debounce((value: string) => {
+        if (!file) return;
+        const { id } = file;
+        if (inlineMode) {
+          if (!intent) return;
+          const { Name } = intent;
+          const { content } = file;
+          try {
+            const newContent = luUtil.updateIntent(content, Name, {
+              Name,
+              Body: value,
+            });
+            const { diagnostics } = parse(newContent, id);
+            setDiagnostics(diagnostics);
+          } catch (error) {
+            setHttpErrorMsg(error.error);
+          }
+        } else {
+          const { diagnostics } = parse(value, id);
+          setDiagnostics(diagnostics);
+        }
+      }, 1000),
+    [file, intent]
+  );
+
+  const _onChange = useCallback(
+    value => {
+      setContent(value);
+      updateDiagnostics(value);
+      if (!file) return;
+      if (inlineMode) {
+        updateLuIntent(value);
+      } else {
+        updateLuFile(value);
+      }
+    },
+    [file, intent]
+  );
+
+  const luOption = {
+    fileId,
+    sectionId: intent?.Name,
+  };
 
   return (
     <LuEditor
-      // typescript is unable to reconcile 'on' as part of a union type
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      options={{
-        lineNumbers: 'on',
-        minimap: 'on',
-        lineDecorationsWidth: undefined,
-        lineNumbersMinChars: false,
-        glyphMargin: true,
-        autoClosingBrackets: 'always',
-        wordBasedSuggestions: false,
-        autoIndent: true,
-        formatOnType: true,
-        lightbulb: {
-          enabled: true,
-        },
-      }}
-      errorMsg={errorMsg}
+      hidePlaceholder={inlineMode}
+      editorDidMount={editorDidMount}
       value={content}
+      errorMsg={errorMsg}
+      luOption={luOption}
+      languageServer={{
+        path: lspServerPath,
+      }}
       onChange={_onChange}
     />
   );
