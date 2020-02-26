@@ -29,10 +29,10 @@
           ],
           "property": "user.profile.name",
           "defaultValue": "'Human'",
-          "value": "@userName",
+          "value": "=@userName",
           "alwaysPrompt": false,
           "allowInterruptions": "true",
-          "outputFormat": "trim(this.value)"
+          "outputFormat": "=trim(this.value)"
         },
         {
           "$type": "Microsoft.NumberInput",
@@ -40,8 +40,8 @@
             "name": "Prompt for a number",
             "id": "005947"
           },
-          "prompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
-          "unrecognizedPrompt": "Hello {user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "prompt": "Hello ${user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
+          "unrecognizedPrompt": "Hello ${user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "invalidPrompt": "${bfdinvalidPrompt-005947()}",
           "maxTurnCount": 3,
           "validations": [
@@ -50,7 +50,7 @@
           ],
           "property": "user.profile.age",
           "defaultValue": "30",
-          "value": "@userAge",
+          "value": "=@userAge",
           "alwaysPrompt": false,
           "allowInterruptions": "true",
           "defaultLocale": "en-us"
@@ -152,7 +152,7 @@
                 "id": "142109"
               },
               "property": "user.profile.name",
-              "value": "'Human'"
+              "value": "Human"
             }
           ]
         }
