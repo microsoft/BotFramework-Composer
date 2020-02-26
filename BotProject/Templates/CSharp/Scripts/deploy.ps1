@@ -56,13 +56,13 @@ if (Test-Path $zipPath) {
 dotnet user-secrets init
 
 # Perform dotnet publish step ahead of zipping up
-$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
+$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp3.1')
 dotnet publish -c release -o $publishFolder -v q > $logFile
 
 
 # Copy bot files to running folder
-$remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
-$localBotPath = $(Join-Path $projFolder "ComposerDialogs")
+$remoteBotPath = $(Join-Path $publishFolder "ComposerDeployDialogs")
+$localBotPath = $(Join-Path $projFolder "ComposerDeployDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 
 if ($botPath) {
@@ -72,6 +72,9 @@ if ($botPath) {
 else {
 	Copy-Item -Path $localBotPath -Recurse -Destination $publishFolder -Container -Force
 }
+
+# We use ComposerDeployDialogs for deployment
+dotnet user-secrets set "bot" "ComposerDeployDialogs"
 
 # Merge from custom config files
 $customConfigFiles = Get-ChildItem -Path $remoteBotPath -Include "appsettings.json" -Recurse -Force
