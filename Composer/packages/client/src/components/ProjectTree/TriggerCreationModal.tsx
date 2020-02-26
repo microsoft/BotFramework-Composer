@@ -222,6 +222,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               value={formData.triggerPhrases}
               errorMsg={formData.errors.triggerPhrases}
               hidePlaceholder={true}
+              luOption={{
+                fileId: dialogId,
+                sectionId: formData.intent || 'newSection',
+              }}
               height={150}
             />
           )}

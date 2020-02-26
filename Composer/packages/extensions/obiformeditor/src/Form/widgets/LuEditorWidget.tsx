@@ -67,7 +67,21 @@ export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
     }
   }, []);
 
-  return <LuEditor onChange={onChange} value={localValue} errorMsg={errorMsg} hidePlaceholder={true} height={height} />;
+  const luOption = {
+    fileId: luFileId,
+    sectionId: luIntent?.Name,
+  };
+
+  return (
+    <LuEditor
+      onChange={onChange}
+      value={localValue}
+      errorMsg={errorMsg}
+      hidePlaceholder={true}
+      luOption={luOption}
+      height={height}
+    />
+  );
 };
 
 export default LuEditorWidget;
