@@ -167,14 +167,21 @@ export class LuPublisher {
     );
   }
 
+  private _createPath(dialogPath: string) {
+    const path = dialogPath.replace('.dialog', '.lu');
+    const absolutePath = Path.join(this.botDir, path);
+    const relativePath = Path.relative(this.generatedFolderPath, absolutePath);
+    return relativePath;
+  }
+
   private _createTree(dialog: DialogInfo, dialogs: DialogInfo[]) {
     let result = {};
-    const key = dialog.relativePath.replace('.dialog', '.lu');
+    const key = this._createPath(dialog.relativePath);
     dialog.intentTriggers.forEach(temp => {
       const target = dialogs.find(dialog => dialog.id === temp.dialog);
       if (target && target.content?.recognizer) {
-        if (!result[key].triggers) result[key].triggers = {};
-        result[key].triggers[temp.intent] = target.relativePath.replace('.dialog', '.lu');
+        if (!result[key]) result[key] = { triggers: {} };
+        result[key].triggers[temp.intent] = this._createPath(target.relativePath);
         result = { ...result, ...this._createTree(target, dialogs) };
       }
     });

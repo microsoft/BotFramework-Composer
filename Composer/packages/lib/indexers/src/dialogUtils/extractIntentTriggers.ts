@@ -16,8 +16,9 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
         intent: value.intent,
         dialog: value.actions[0].dialog,
       });
+      return true;
     }
-    return true;
+    return false;
   };
   JsonWalk('$', value, visitor);
 
