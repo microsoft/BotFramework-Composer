@@ -4,9 +4,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useCallback } from 'react';
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import {
-  ControlledEditor as MonacoEditor,
+  ControlledEditor as Editor,
   EditorDidMount,
   ControlledEditorProps,
   ControlledEditorOnChange,
@@ -17,7 +17,7 @@ import formatMessage from 'format-message';
 
 import { assignDefined } from './utils/common';
 
-const defaultOptions: monacoEditor.editor.IEditorConstructionOptions = {
+const defaultOptions: MonacoEditor.editor.IEditorConstructionOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
   fontFamily: 'Segoe UI',
@@ -62,7 +62,7 @@ const styles = {
   },
 };
 
-export interface BaseEditorProps extends ControlledEditorProps {
+export interface BaseEditorProps extends Omit<ControlledEditorProps, 'onChange'> {
   errorMessage?: any;
   helpURL?: string;
   hidePlaceholder?: boolean;
@@ -77,7 +77,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | undefined>();
+  const [editor, setEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | undefined>();
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
@@ -129,7 +129,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <MonacoEditor
+        <Editor
           {...rest}
           editorDidMount={onEditorMount}
           value={value || placeholder}

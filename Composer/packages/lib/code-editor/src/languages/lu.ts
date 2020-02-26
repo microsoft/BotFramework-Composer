@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
-export function registerLULanguage(monaco: typeof monacoEditor) {
+export function registerLULanguage(monaco: typeof MonacoEditor) {
   monaco.languages.setMonarchTokensProvider('lu', {
     tokenizer: {
       root: [

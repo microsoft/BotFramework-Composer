@@ -3,11 +3,10 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LgEditor } from '@bfc/code-editor';
+import { LgEditor, MonacoEditor } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -31,7 +30,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const file = lgFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
-  const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  const [lgEditor, setLgEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | null>(null);
 
   const search = props.location?.search ?? '';
   const searchTemplateName = querystring.parse(search).t;
@@ -64,7 +63,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setErrorMsg(text);
   }, [diagnostics]);
 
-  const editorDidMount = (_getValue, lgEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount = (_getValue, lgEditor: MonacoEditor.editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
   };
 

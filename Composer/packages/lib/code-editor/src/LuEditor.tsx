@@ -7,7 +7,7 @@ import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, monaco } from '@monaco-editor/react';
-import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -74,7 +74,7 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 }
 
 const LuEditor: React.FC<LULSPEditorProps> = props => {
-  const options: monacoEditor.editor.IEditorConstructionOptions = {
+  const options: MonacoEditor.editor.IEditorConstructionOptions = {
     quickSuggestions: true,
     formatOnType: true,
     lineNumbers: 'on',

@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 
 function createKeywordsProposals(range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
@@ -44,7 +44,7 @@ function createKeywordsProposals(range) {
   ];
 }
 
-export function registerLGLanguage(monaco: typeof monacoEditor) {
+export function registerLGLanguage(monaco: typeof MonacoEditor) {
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
     ignoreCase: true,
     brackets: [

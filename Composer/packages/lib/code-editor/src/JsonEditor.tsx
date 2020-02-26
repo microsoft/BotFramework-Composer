@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect } from 'react';
-import { editor } from '@bfcomposer/monaco-editor';
+import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import { monaco } from '@monaco-editor/react';
 
 import * as utils from './utils';
@@ -18,7 +18,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
   const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
   const [parseError, setParseError] = useState<string>('');
 
-  const options: editor.IEditorConstructionOptions = {
+  const options: MonacoEditor.editor.IEditorConstructionOptions = {
     quickSuggestions: true,
     folding: false,
     readOnly: obfuscate,
