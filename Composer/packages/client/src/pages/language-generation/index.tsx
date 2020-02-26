@@ -59,7 +59,7 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && dialogs.length) {
+    if (!activeDialog && dialogs.length && fileId !== 'common') {
       navigateTo('/language-generation/common');
     }
   }, [fileId, dialogs]);

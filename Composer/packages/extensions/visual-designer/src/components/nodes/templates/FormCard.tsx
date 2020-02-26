@@ -16,7 +16,7 @@ const contentHeight = boxHeight - headerHeight;
 
 const containerStyle = {
   width: boxWidth,
-  height: boxHeight,
+  minHeight: boxHeight,
   fontSize: '12px',
   cursor: 'pointer',
   overflow: 'hidden',
@@ -92,17 +92,18 @@ export const FormCard: FunctionComponent<NodeProps> = ({
         className="card__content"
         css={{
           width: '100%',
-          height: contentHeight,
+          minHeight: contentHeight,
+          display: 'inline-block',
         }}
       >
         <div
           css={{
             fontWeight: 400,
             paddingLeft: '5px',
-            margin: '3px 5px',
+            margin: '2px 5px',
             fontSize: '14px',
             lineHeight: '19px',
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
           }}
         >
@@ -123,13 +124,13 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           <div
             css={{
               height: '100%',
-              width: 'calc(100% - 20px)',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
+              whiteSpace: 'initial',
               fontSize: '12px',
               lineHeight: '19px',
               fontFamily: 'Segoe UI',
+              overflowWrap: 'break-word',
+              wordBreak: 'break-all',
+              display: 'inline-block',
             }}
             title={typeof label === 'string' ? label : ''}
           >
