@@ -90,13 +90,14 @@ describe('LU Section CRUD test', () => {
       Name: 'CheckEmail',
       Body: `- check my email
 - show my emails
-@`,
+`,
     };
 
     const invalidFileContent = `#CheckEmail
-    - check my email
-    - show my emails
-    @`;
+- check my email
+- show my emails
+@`;
+
     const invalidIntent = {
       Name: 'CheckEmail',
       Body: `- check my email
@@ -104,10 +105,20 @@ describe('LU Section CRUD test', () => {
 @`,
     };
 
+    const invalidIntent4 = {
+      Name: 'CheckEmail',
+      Body: `- check my email
+- show my emails
+
+# UnexpectedIntentDefination
+- unexpected intent body
+`,
+    };
     // intent invalid
     const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
     expect(updatedContent2).toEqual(validFileContent);
-
+    const updatedContent4 = updateIntent(validFileContent, intentName, invalidIntent4);
+    expect(updatedContent4).toEqual(validFileContent);
     // file invalid
     const updatedContent3 = updateIntent(invalidFileContent, intentName, validIntent);
     expect(updatedContent3).toEqual(invalidFileContent);
