@@ -124,7 +124,6 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           <div
             css={{
               height: '100%',
-              width: 'calc(100% - 20px)',
               whiteSpace: 'initial',
               fontSize: '12px',
               lineHeight: '19px',
