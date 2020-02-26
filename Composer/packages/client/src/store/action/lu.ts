@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import debounce from 'lodash/debounce';
+
 import { ActionCreator } from '../types';
 
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
-export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
+export const debouncedUpdateLuFile: ActionCreator = debounce(async (store, id, projectId, content, lastModified) => {
   const state = store.getState();
   const file = state.luFiles.find(l => l.id === id);
   if (file) {
@@ -32,7 +34,11 @@ export const updateLuFile: ActionCreator = async (store, { id, projectId, conten
     } catch (err) {
       // This requires some special handling because LU files return an error when they can't be parsed
       // or some other error in the LU system occurs...
-      console.log(err.statusCode);
+      // TODO: DEBOUNCe THE LU UPDATE
+      // ALSO, note that the update_lu_Failure *may actually write the file* and cause it to be out of sync...
+      // this seems to fail sometimes when it attempts to delete generated files... which is not related to writing the file successfully...
+      // and there are some rush conditions!!
+      console.log('UPDATE LU ERROR', JSON.stringify(err));
       if (err.statusCode === 409) {
         store.dispatch({
           type: ActionTypes.SET_ERROR,
@@ -50,6 +56,14 @@ export const updateLuFile: ActionCreator = async (store, { id, projectId, conten
         throw new Error(err.response.data.message);
       }
     }
+  }
+}, 500);
+
+export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
+  const state = store.getState();
+  const file = state.luFiles.find(l => l.id === id);
+  if (file) {
+    debouncedUpdateLuFile(store, id, projectId, content, file.lastModified);
   }
 };
 
