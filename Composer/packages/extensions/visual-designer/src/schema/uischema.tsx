@@ -117,10 +117,6 @@ export const uiSchema: UISchema = {
     'ui:widget': ActionCard,
     content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
   },
-  [SDKTypes.InitProperty]: {
-    'ui:widget': ActionCard,
-    content: data => `{${data.property || '?'}} = new ${data.type || '?'}`,
-  },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
