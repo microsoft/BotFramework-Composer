@@ -16,6 +16,7 @@ import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
+import { designerCache } from '../store/DesignerCache';
 
 import {
   calculateIfElseBoundary,
@@ -80,6 +81,11 @@ function measureBaseInputBoundary(data): Boundary {
 export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
+
+  const cachedBoundary = designerCache.loadBounary(json);
+  if (cachedBoundary) {
+    return cachedBoundary;
+  }
 
   switch (json.$type) {
     case ObiTypes.ChoiceDiamond:
