@@ -217,7 +217,6 @@ export class LUServer {
     const lastLineContent = this.getLastLineContent(params);
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
-    const lineCount = document.lineCount;
     const luDoc = this.getLUDocument(document);
     const text = luDoc?.index().content || document.getText();
     const lines = text.split('\n');
