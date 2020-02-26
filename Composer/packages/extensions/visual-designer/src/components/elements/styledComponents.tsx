@@ -43,7 +43,18 @@ export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
   fontFamily: 'Segoe UI',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
+  wordBreak: 'break-word',
   display: '-webkit-box',
   '-webkit-line-clamp': `${props.lineNum || 1}`,
   '-webkit-box-orient': 'vertical',
+}));
+
+export const SingleLineDiv = styled.div<ElementProps>(props => ({
+  color: props.color || ObiColors.Black,
+  fontSize: '12px',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  lineHeight: '14px',
+  fontFamily: 'Segoe UI',
 }));

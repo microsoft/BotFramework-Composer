@@ -11,7 +11,7 @@ import { ListOverview } from '../components/common/ListOverview';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { PropertyAssignmentSize, AssignmentMarginTop } from '../constants/ElementSizes';
-import { MultiLineDiv } from '../components/elements/styledComponents';
+import { SingleLineDiv } from '../components/elements/styledComponents';
 
 export const AssignmentList = ({ assignments }) => {
   if (!Array.isArray(assignments)) {
@@ -19,9 +19,8 @@ export const AssignmentList = ({ assignments }) => {
   }
   const items = assignments.map(assignment => `${assignment.property} = ${assignment.value}`);
   const ItemRender = ({ children }) => (
-    <MultiLineDiv
+    <SingleLineDiv
       role="assignment"
-      lineNum={1}
       css={{
         height: PropertyAssignmentSize.height,
         width: PropertyAssignmentSize.width,
@@ -29,7 +28,7 @@ export const AssignmentList = ({ assignments }) => {
       }}
     >
       {children}
-    </MultiLineDiv>
+    </SingleLineDiv>
   );
   return (
     <div data-testid="SetProperties" css={{ padding: '0 0 8px 8px' }}>
