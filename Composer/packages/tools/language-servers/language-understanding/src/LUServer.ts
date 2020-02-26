@@ -52,7 +52,7 @@ export class LUServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['@', ' ', '{', ':', '['],
+            triggerCharacters: ['@', ' ', '{', ':', '[', '('],
           },
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
@@ -107,7 +107,7 @@ export class LUServer {
     const lastLineContent = this.getLastLineContent(params);
     const edits: TextEdit[] = [];
     const curLineNumber = params.position.line;
-    const lineCount = document.lineCount;
+    //const lineCount = document.lineCount;
     const text = document.getText();
     const lines = text.split('\n');
     const position = params.position;
@@ -118,12 +118,7 @@ export class LUServer {
     const inputState = this.getInputLineState(params);
 
     const pos = params.position;
-    if (
-      key === '\n' &&
-      inputState === 'utterance' &&
-      lastLineContent.trim() !== '-' &&
-      curLineNumber === lineCount - 1
-    ) {
+    if (key === '\n' && inputState === 'utterance' && lastLineContent.trim() !== '-') {
       const newPos = Position.create(pos.line + 1, 0);
       const item: TextEdit = TextEdit.insert(newPos, '- ');
       edits.push(item);
@@ -146,21 +141,23 @@ export class LUServer {
       }
     }
 
-    if (
-      key === '\n' &&
-      inputState === 'listEntity' &&
-      lastLineContent.trim() !== '-' &&
-      curLineNumber === lineCount - 1
-    ) {
-      const newPos = Position.create(pos.line + 1, 0);
+    if (key === '\n' && inputState === 'listEntity' && lastLineContent.trim() !== '-') {
+      const newPos = Position.create(pos.line, 0);
       let insertStr = '';
+      const indentLevel = this.getIndentLevel(lastLineContent);
       if (lastLineContent.trim().endsWith(':') || lastLineContent.trim().endsWith('=')) {
-        insertStr = '\t-';
+        insertStr = '\t'.repeat(indentLevel + 1) + '-';
       } else {
-        insertStr = '-';
+        insertStr = '\t'.repeat(indentLevel) + '-';
       }
+
       const item: TextEdit = TextEdit.insert(newPos, insertStr);
       edits.push(item);
+
+      //delete redundent \t from autoIndent
+      const deleteRange = Range.create(pos.line, pos.character - indentLevel, pos.line, pos.character);
+      const deleteItem: TextEdit = TextEdit.del(deleteRange);
+      edits.push(deleteItem);
     }
 
     if (lastLineContent.trim() === '-') {
@@ -186,10 +183,31 @@ export class LUServer {
     }
   }
 
+  private getIndentLevel(lineContent: string): number {
+    if (lineContent.includes('-')) {
+      const tabStr = lineContent.split('-')[0];
+      let numOfTab = 0;
+      let validIndentStr = true;
+      tabStr.split('').forEach(u => {
+        if (u === '\t') {
+          numOfTab += 1;
+        } else {
+          validIndentStr = false;
+        }
+      });
+
+      if (validIndentStr) {
+        return numOfTab;
+      }
+    }
+
+    return 0;
+  }
+
   private getInputLineState(params: DocumentOnTypeFormattingParams): LineState {
     const document = this.documents.get(params.textDocument.uri);
     const position = params.position;
-    const regListEnity = /^\s*@\s*list\s*.*$/;
+    const regListEnity = /^\s*@\s*(list|phraseList)\s*.*$/;
     const regUtterance = /^\s*#.*$/;
     const regDashLine = /^\s*-.*$/;
     const mlEntity = /^\s*@\s*ml\s*.*$/;
@@ -366,6 +384,17 @@ export class LUServer {
       };
 
       completionList.push(item2);
+    }
+
+    if (util.isPhraseListEntity(curLineContent)) {
+      const item = {
+        label: 'interchangeable synonyms?',
+        kind: CompletionItemKind.Keyword,
+        insertText: `interchangeable`,
+        documentation: `interchangeable synonyms as part of the entity definition`,
+      };
+
+      completionList.push(item);
     }
 
     // completion for entities and patterns, use the text without current line due to usually it will cause parser errors, the luisjson will be undefined
