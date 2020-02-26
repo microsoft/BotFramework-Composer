@@ -55,6 +55,7 @@ export interface LuParsed {
 export enum LuSectionTypes {
   SIMPLEINTENTSECTION = 'simpleIntentSection',
   NESTEDINTENTSECTION = 'nestedIntentSection',
+  MODELINFOSECTION = 'modelInfoSection',
 }
 
 export interface LuEntity {
@@ -66,6 +67,7 @@ export interface LuIntentSection {
   Body: string;
   Entities?: LuEntity[];
   Children?: LuIntentSection[];
+  range?: CodeRange;
 }
 
 export interface LuFile {

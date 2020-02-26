@@ -16,7 +16,6 @@ import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -41,7 +40,6 @@ const BaseInputSchema: UIWidget = {
     menu: 'none',
     content: data => data.property || '<property>',
     children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
-    size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
