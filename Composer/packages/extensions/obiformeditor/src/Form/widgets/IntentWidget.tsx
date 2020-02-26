@@ -10,7 +10,7 @@ import { DialogInfo } from '@bfc/indexers';
 import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
-import LuEditorWidget from './LuEditorWidget';
+import { LuEditorWidget } from './LuEditorWidget';
 
 const EMPTY_OPTION = { key: '', text: '' };
 

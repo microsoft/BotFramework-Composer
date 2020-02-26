@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import debounce from 'lodash/debounce';
 import { LuIntentSection } from '@bfc/shared';
@@ -16,72 +16,81 @@ interface LuEditorWidgetProps {
   onChange: (template?: string) => void;
 }
 
-export const LuEditorWidget: React.FC<LuEditorWidgetProps> = props => {
-  const { formContext, name, height = 250 } = props;
-  const luFileId = formContext.currentDialog.id;
-  const luFile: LuFile | null = formContext.luFiles.find(f => f.id === luFileId);
-  const luIntent: LuIntentSection = (luFile && luFile.intents.find(intent => intent.Name === name)) || {
-    Name: name,
-    Body: '',
+export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
+  constructor(props) {
+    super(props);
+    this.debounceUpdate = debounce(this.updateLuIntent, 500);
+    this.name = this.props.name;
+    this.formContext = this.props.formContext;
+    this.luFileId = this.formContext.currentDialog.id;
+    this.luFile = this.formContext.luFiles.find(f => f.id === this.luFileId);
+    this.luIntent = (this.luFile && this.luFile.intents.find(intent => intent.Name === this.name)) || {
+      Name: this.name,
+      Body: '',
+    };
+  }
+
+  formContext: FormContext;
+  name: string;
+  luFileId: string;
+  luFile: LuFile | null;
+  luIntent: LuIntentSection;
+  state = { localValue: '' };
+  debounceUpdate;
+  updateLuIntent = (body: string) => {
+    this.formContext.shellApi.updateLuIntent(this.luFileId, this.name, { Name: this.name, Body: body }).catch(() => {});
   };
 
-  const updateLuIntent = useMemo(
-    () =>
-      debounce((body: string) => {
-        formContext.shellApi.updateLuIntent(luFileId, name, { Name: name, Body: body }).catch(() => {});
-      }, 500),
-    [name, luFileId]
-  );
-
-  const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
-
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
-
-  const [localValue, setLocalValue] = useState(luIntent.Body);
-
-  // updating localValue when getting newest luIntent Data
-  // it will be deleted after leilei's pr: fix: Undo / redo behavior on LG resources
-  useEffect(() => {
-    if (!localValue) {
-      setLocalValue(luIntent.Body);
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const name = nextProps.name;
+    const formContext = nextProps.formContext;
+    const luFileId = formContext.currentDialog.id;
+    const luFile = formContext.luFiles.find(f => f.id === luFileId);
+    const luIntent = (luFile && luFile.intents.find(intent => intent.Name === name)) || {
+      Name: name,
+      Body: '',
+    };
+    if (prevState !== luIntent.Body) {
+      return {
+        localValue: luIntent.Body,
+      };
     }
-  }, [luIntent.Body]);
-  const onChange = (body: string) => {
-    setLocalValue(body);
-    if (luFileId) {
+    return null;
+  }
+
+  onChange = (body: string) => {
+    this.setState({
+      localValue: body,
+    });
+    if (this.luFileId) {
       if (body) {
-        updateLuIntent(body);
+        this.updateLuIntent(body);
       } else {
-        updateLuIntent.flush();
-        formContext.shellApi.removeLuIntent(luFileId, name);
+        this.formContext.shellApi.removeLuIntent(this.luFileId, this.name);
       }
     }
   };
+  render() {
+    const diagnostic = this.luFile && filterSectionDiagnostics(this.luFile.diagnostics, this.luIntent)[0];
 
-  // update the template on mount to get validation
-  useEffect(() => {
-    if (localValue) {
-      updateLuIntent(localValue);
-    }
-  }, []);
+    const errorMsg = diagnostic
+      ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+      : '';
+    const luOption = {
+      fileId: this.luFileId,
+      sectionId: this.luIntent?.Name,
+    };
+    const height = this.props.height || 250;
 
-  const luOption = {
-    fileId: luFileId,
-    sectionId: luIntent?.Name,
-  };
-
-  return (
-    <LuEditor
-      onChange={onChange}
-      value={localValue}
-      errorMsg={errorMsg}
-      hidePlaceholder={true}
-      luOption={luOption}
-      height={height}
-    />
-  );
-};
-
-export default LuEditorWidget;
+    return (
+      <LuEditor
+        onChange={this.onChange}
+        value={this.state.localValue}
+        errorMsg={errorMsg}
+        hidePlaceholder={true}
+        luOption={luOption}
+        height={height}
+      />
+    );
+  }
+}
