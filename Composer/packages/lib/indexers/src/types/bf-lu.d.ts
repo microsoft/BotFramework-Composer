@@ -10,6 +10,7 @@ declare module '@bfcomposer/bf-lu/lib/parser' {
     namespace luParser {
       function parse(content: string): any;
     }
-    function sectionOperator(resource: any): any;
+    function sectionOperator(resource: any): void;
+    const luSectionTypes: any;
   }
 }
