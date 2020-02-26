@@ -51,18 +51,15 @@ export class DialogNotification extends Notification {
 export class LgNotification extends Notification {
   type = NotificationType.LG;
   dialogPath?: string;
-  constructor(id: string, location: string, diagnostic: Diagnostic, dialogs: DialogInfo[]) {
+  constructor(id: string, lgTemplateName: string, location: string, diagnostic: Diagnostic, dialogs: DialogInfo[]) {
     super(id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
-    this.dialogPath = this.findDialogPath(dialogs, id);
+    this.dialogPath = this.findDialogPath(dialogs, id, lgTemplateName);
   }
-  private findDialogPath(dialogs: DialogInfo[], id: string) {
-    const dividerIndex = id.indexOf('#');
-    if (dividerIndex > -1) {
-      const templateId = id.substring(dividerIndex + 1);
-      const lgFile = id.substring(0, dividerIndex);
-      const dialog = dialogs.find(d => d.lgFile === lgFile);
-      const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === templateId) : null;
+  private findDialogPath(dialogs: DialogInfo[], id: string, lgTemplateName: string) {
+    if (lgTemplateName) {
+      const dialog = dialogs.find(d => d.lgFile === id);
+      const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';
       return path;
     }

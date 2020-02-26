@@ -20,7 +20,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const notifications = useNotifications(filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
-      let url = `/language-generation/common/edit#L=${item.diagnostic.range?.start.line || 0}`;
+      let url = `/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
       if (item.dialogPath) {
         url = toUrlUtil(item.dialogPath);

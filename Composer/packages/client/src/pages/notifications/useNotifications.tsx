@@ -37,13 +37,14 @@ export default function useNotifications(filter?: string) {
               get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
               get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
           );
-          let id = lgFile.id;
+          const id = lgFile.id;
           const location = `${lgFile.id}.lg`;
+          let lgTemplateName = '';
           if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
             //should navigate to design page
-            id = `${lgFile.id}#${mappedTemplate.name}`;
+            lgTemplateName = mappedTemplate.name;
           }
-          notifactions.push(new LgNotification(id, location, diagnostic, dialogs));
+          notifactions.push(new LgNotification(id, lgTemplateName, location, diagnostic, dialogs));
         });
     });
     return notifactions;
