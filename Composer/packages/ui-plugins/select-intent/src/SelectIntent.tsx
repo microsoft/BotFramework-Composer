@@ -23,7 +23,7 @@ function regexIntentOptions(currentDialog: DialogInfo): IDropdownOption[] {
     content: { recognizer },
   } = currentDialog;
   return (recognizer?.intents || []).reduce(
-    (acc, { intent }) => (!!intent ? [...acc, { key: intent, text: intent }] : acc),
+    (acc, { intent }) => (intent ? [...acc, { key: intent, text: intent }] : acc),
     [EMPTY_OPTION]
   );
 }
