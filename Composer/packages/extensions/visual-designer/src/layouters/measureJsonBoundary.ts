@@ -4,6 +4,8 @@
 import { ObiTypes } from '../constants/ObiTypes';
 import { Boundary } from '../models/Boundary';
 import {
+  StandardNodeWidth,
+  HeaderHeight,
   DiamondSize,
   InitNodeSize,
   LoopIconSize,
@@ -123,6 +125,14 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case ObiTypes.InvalidPromptBrick:
       boundary = new Boundary(IconBrickSize.width, IconBrickSize.height);
+      break;
+    case ObiTypes.EndDialog:
+    case ObiTypes.EndTurn:
+    case ObiTypes.RepeatDialog:
+    case ObiTypes.CancelAllDialogs:
+    case ObiTypes.LogAction:
+    case ObiTypes.TraceActivity:
+      boundary = new Boundary(StandardNodeWidth, HeaderHeight);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
