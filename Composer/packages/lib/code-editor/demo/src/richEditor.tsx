@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { RichEditor } from '../../src';
 
-const LU_HELP = 'https://aka.ms/lu-file-format#lu-file-format';
+const LU_HELP = 'https://aka.ms/lu-file-format';
 
 const content = `# Greeting
 -Good morning

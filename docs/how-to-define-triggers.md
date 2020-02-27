@@ -49,7 +49,7 @@ Follow the steps to define an **Intent recognized** trigger with a LUIS recogniz
 
    ![luis recognizer](./media/events-triggers/luis-recognizer.png)
 
-2. In the Language Understanding editor, create intents with sample [utterances](concept-language-understanding.md#utterances) following the [.lu file format](https://aka.ms/lu-file-format#lu-file-format).
+2. In the Language Understanding editor, create intents with sample [utterances](concept-language-understanding.md#utterances) following the [.lu file format](https://aka.ms/lu-file-format).
 
    Below is a screenshot showing the **text editor** in a dialogs properties panel. This example captures two simple _intents_ ("Greeting" and "BookFlight") each with a list of example _utterances_ that capture ways users might express these two intents. You can use - or + or \* to denote lists. Numbered lists are not supported.
 
