@@ -78,9 +78,6 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     quickSuggestions: true,
     formatOnType: true,
     lineNumbers: 'on',
-    minimap: {
-      enabled: true,
-    },
     lineDecorationsWidth: undefined,
     glyphMargin: true,
     autoClosingBrackets: 'always',
