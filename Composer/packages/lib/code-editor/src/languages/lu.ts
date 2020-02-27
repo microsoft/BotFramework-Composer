@@ -41,7 +41,7 @@ export function registerLULanguage(monaco: typeof MonacoEditor) {
         ],
         [
           // eslint-disable-next-line security/detect-unsafe-regex
-          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*[\w_]+)/,
+          /(@\s*)(ml|prebuilt|regex|list|composite|Pattern\.Any|phraseList)(\s*[\w_]+)/,
           ['intent-indentifier', 'entity-type', 'entity-name'],
         ],
         [/(@\s*)(\s*[\w_]+)/, ['intent-indentifier', 'entity-name']],
