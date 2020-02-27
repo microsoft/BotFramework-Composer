@@ -71,7 +71,7 @@ Once intents have been defined in the Language Understanding configuration of a 
 
 ![Specify an intent to handle](./Assets/intent-handler.png)
 
-In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. [Read more about the full capabilities of LUIS recognizers here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+In addition to specifying intents and utterances, it is also possible to train LUIS to recognize named entities and patterns. [Read more about the full capabilities of LUIS recognizers here](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md)
 
 Extracted entities are passed along to any triggered actions or child dialogs using the syntax memory path `@[Entity Name]`. For example, given an intent definition like below:
 
@@ -117,7 +117,7 @@ TODO: clean this up
 
 ## Further Reading
 
-- [LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [LU file format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md)
 - [LUIS.ai docs](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/home)
 - [Adaptive Dialog Events](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/recognizers-rules-steps-reference.md#Rules)
 - [Messaging processing pipeline in adaptive dialogs](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/anatomy-and-runtime-behavior.md#runtime-behavior-adaptive-dialog)

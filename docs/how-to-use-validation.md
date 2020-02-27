@@ -1,6 +1,6 @@
 # Linting and validation
 
-As an integrated development tool, Bot Framework Composer supports validation of data when you author an [.lg](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) template, an [.lu](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) template, and [expressions](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to fill in property fields. Error indicators will show in both inline editors and corresponding all-up views (**Bot Responses** and **User Input**). The **Notifications** page (click **Notifications** icon on the left navigation pane) displays an aggregation of all errors and warnings. With the help of linting and validation, your bot-authoring experience will be improved and you can easily build a functional bot that can "run".  
+As an integrated development tool, Bot Framework Composer supports validation of data when you author an [.lg](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) template, an [.lu](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md) template, and [expressions](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to fill in property fields. Error indicators will show in both inline editors and corresponding all-up views (**Bot Responses** and **User Input**). The **Notifications** page (click **Notifications** icon on the left navigation pane) displays an aggregation of all errors and warnings. With the help of linting and validation, your bot-authoring experience will be improved and you can easily build a functional bot that can "run".  
 
 > [!NOTE]
 > We are still working to improve the implementation of linting and validation in Composer. More user scenarios will be updated. 
@@ -30,7 +30,7 @@ Click **Bot Responses** on the left navigation pane, you will find the error is 
 
 
 ## .lu files
-When you author an [.lu template](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) that has syntax errors, the entire lu inline editor will be in red frame. To diagnose and fix the error, you can read the error message beneath the editor and click `here` to refer to the syntax documentation. 
+When you author an [.lu template](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md) that has syntax errors, the entire lu inline editor will be in red frame. To diagnose and fix the error, you can read the error message beneath the editor and click `here` to refer to the syntax documentation. 
 
 ![lu-inline-error](./media/validation/lu-inline-error.png)
 

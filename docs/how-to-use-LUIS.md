@@ -10,7 +10,7 @@ Language Understanding Intelligent Service ([LUIS](https://www.luis.ai/home)) is
 ## How to add LUIS 
 To determine user's intent, in Composer you define the **Intent recognized** trigger, and then specify the actions to take when an intent is recognized (and optionally **entities**). For more details please read the [events and triggers](./concept-events-and-triggers.md) article. 
 
-Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of Language Understanding data authored in [.lu format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
+Composer currently supports two types of recognizers: LUIS recognizer (default) and Regular expression recognizer. You can only choose one type of recognizer for each dialog. Besides the recognizer, each dialog may contain a set of Language Understanding data authored in [.lu format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md).  
 
 In this section, we will cover the steps to use LUIS as recognizer in your bot. These steps include the following: set a recognizer type for each dialog, author Language Understanding training data, publish your Language Understanding (LU) data, and test them in emulator. 
 
@@ -24,7 +24,7 @@ In Composer, each dialog can have one type of recognizer and might contain a set
 ![luis_recognizer](./media/tutorial-weatherbot/07/luis-recognizer.png)
 
 ### Author LU
-You can author Language Understanding (LU) in the inline editor and follow the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). An LU file usually consists of an intent with matching example utterances. You can author as many intents as you want to include in the dialog. The following screenshot shows two intents: **Greeting** and **CheckWeather** with the respective matching utterances. 
+You can author Language Understanding (LU) in the inline editor and follow the [.lu file format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md). An LU file usually consists of an intent with matching example utterances. You can author as many intents as you want to include in the dialog. The following screenshot shows two intents: **Greeting** and **CheckWeather** with the respective matching utterances. 
 
 ![author_lu](./media/add_luis/author_lu.png)
 

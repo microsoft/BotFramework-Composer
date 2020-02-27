@@ -9,7 +9,7 @@ In this article, we will cover some details of how LUIS recognizer extracts the 
 - LUIS authoring key (how to get [here](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2#programmatic-key))
 
 ## LUIS for entity extraction
-In addition to specifying intents and utterances as instructed in the [how to use LUIS in Composer](howto-using-LUIS.md) article, it is also possible to train LUIS to recognize named entities. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).  
+In addition to specifying intents and utterances as instructed in the [how to use LUIS in Composer](howto-using-LUIS.md) article, it is also possible to train LUIS to recognize named entities. Read more about the full capabilities of LUIS recognizers [here](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md).  
 
 Extracted entities are passed along to any triggered actions or child dialogs using the syntax `@{Entity Name}`. For example, given an intent definition like below: 
 
@@ -59,7 +59,7 @@ When triggered, if LUIS is able to identify a city, the city name will be made a
 ```
 
 ## Entities of different types
-In Composer, you can also define entities of different types. In this section, we focus on the following entity types and their definitions. For more entity types read [here](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md). 
+In Composer, you can also define entities of different types. In this section, we focus on the following entity types and their definitions. For more entity types read [here](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md). 
 
 | Type                                                                                                                | Description                                                 |
 | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -204,5 +204,5 @@ And test the model using an example utterance such as "add an apple to my shoppi
 
 # Further reading
 - [Entities and their purpose in LUIS](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-entity-types)
-- [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [.lu file format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md)
 

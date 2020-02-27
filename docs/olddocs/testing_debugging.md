@@ -78,7 +78,7 @@ Attempting to save changes that do not match the LU file format results in an er
 
 ![LU format error](./Assets/testing-debugging-luformaterror.png)
 
-Seeing this error means that you have badly formatted lu data. Refer to the [LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) for troubleshooting.
+Seeing this error means that you have badly formatted lu data. Refer to the [LU file format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md) for troubleshooting.
 
 _Saving LG data_
 

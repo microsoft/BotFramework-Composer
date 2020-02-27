@@ -19,7 +19,7 @@ On the right-hand side of the page, select **BF Language Understanding** for **R
 
 In the text editor, type in the intents and utterances, then click **Save**.
 
-**Note**: You should use the correct file format to edit the recognizer (see example below). Follow this [link](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md#lu-file-format) to learn more about the LU format.
+**Note**: You should use the correct file format to edit the recognizer (see example below). Follow this [link](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md#lu-file-format) to learn more about the LU format.
 
 ![screenshot: editing the LU](Assets/LU.png)
 

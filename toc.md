@@ -47,7 +47,7 @@
 - [Bot Framework Adaptive Dialog](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog)
 - [Language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language)
-- [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [.lu file format](https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md)
 - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
 
 ## Related projects
