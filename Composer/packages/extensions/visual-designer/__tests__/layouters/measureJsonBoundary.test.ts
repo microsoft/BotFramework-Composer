@@ -11,6 +11,7 @@ import {
   ChoiceInputSize,
   ChoiceInputMarginTop,
   ChoiceInputMarginBottom,
+  StandardNodeWidth,
 } from '../../src/constants/ElementSizes';
 
 describe('measureJsonBoundary', () => {
@@ -31,7 +32,7 @@ describe('measureJsonBoundary', () => {
       new Boundary(LoopIconSize.width, LoopIconSize.height)
     );
     expect(measureJsonBoundary({ $type: ObiTypes.LogAction })).toEqual(
-      new Boundary(InitNodeSize.width, InitNodeSize.height)
+      new Boundary(StandardNodeWidth, InitNodeSize.height)
     );
   });
   it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
