@@ -44,27 +44,30 @@ export default function useNotifications(filter?: string) {
     });
     lgFiles.forEach(lgFile => {
       const lgTemplates = get(lgFile, 'templates', []);
-      lgFile.diagnostics.map(diagnostic => {
-        const mappedTemplate = lgTemplates.find(
-          t =>
-            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
-        );
-        let id = lgFile.id;
-        const location = `${lgFile.id}.lg`;
-        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
-          //should navigate to design page
-          id = `${lgFile.id}#${mappedTemplate.name}`;
-        }
-        notifactions.push({
-          type: 'lg',
-          severity: DiagnosticSeverity[diagnostic.severity] || '',
-          location,
-          message: createSingleMessage(diagnostic),
-          diagnostic,
-          id,
+      lgFile.diagnostics
+        // only report diagnostics belong to itself.
+        .filter(({ source, message }) => message.includes(`source: ${source}`))
+        .map(diagnostic => {
+          const mappedTemplate = lgTemplates.find(
+            t =>
+              get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
+              get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+          );
+          let id = lgFile.id;
+          const location = `${lgFile.id}.lg`;
+          if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
+            //should navigate to design page
+            id = `${lgFile.id}#${mappedTemplate.name}`;
+          }
+          notifactions.push({
+            type: 'lg',
+            severity: DiagnosticSeverity[diagnostic.severity] || '',
+            location,
+            message: createSingleMessage(diagnostic),
+            diagnostic,
+            id,
+          });
         });
-      });
     });
     return notifactions;
   }, [dialogs, luFiles, lgFiles]);
