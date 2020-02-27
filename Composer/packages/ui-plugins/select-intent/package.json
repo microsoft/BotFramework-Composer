@@ -1,0 +1,45 @@
+{
+  "name": "@bfc/ui-plugin-select-intent",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Botframework Composer plugin that adds a custom form UI for selecting an intent.",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc",
+    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "prepare": "yarn build"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "v-thdurn@microsoft.com",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/extension": "*",
+    "@bfc/adaptive-form": "*",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "@uifabric/icons": "^7.3.0",
+    "@uifabric/styling": "^7.7.4",
+    "format-message": "^6.2.3",
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@bfc/extension": "*",
+    "@bfc/adaptive-form": "*",
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.5",
+    "format-message": "^6.2.3",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.27"
+  }
+}

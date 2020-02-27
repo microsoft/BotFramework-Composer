@@ -31,15 +31,23 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.BeginDialog]: {
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
+    hidden: [...globalHiddenProperties],
   },
   [SDKTypes.CancelAllDialogs]: {
     order: ['dialog', 'property', '*'],
+    hidden: [...globalHiddenProperties],
   },
   [SDKTypes.ConditionalSelector]: {
     hidden: [...globalHiddenProperties],
   },
   [SDKTypes.DebugBreak]: {
     label: 'Debug Breack',
+  },
+  [SDKTypes.DeleteProperty]: {
+    hidden: [...globalHiddenProperties],
+  },
+  [SDKTypes.DeleteProperties]: {
+    hidden: [...globalHiddenProperties],
   },
   [SDKTypes.EditActions]: {
     label: 'Modify active dialog',
@@ -52,6 +60,15 @@ const DefaultUISchema: UISchema = {
     label: 'Emit a custom event',
     helpLink: 'https://aka.ms/bfc-custom-events',
   },
+  [SDKTypes.EditArray]: {
+    hidden: [...globalHiddenProperties],
+  },
+  [SDKTypes.EndDialog]: {
+    hidden: [...globalHiddenProperties],
+  },
+  [SDKTypes.EndTurn]: {
+    hidden: [...globalHiddenProperties],
+  },
   [SDKTypes.Foreach]: {
     order: ['itemsProperty', '*'],
     hidden: ['actions', ...globalHiddenProperties],
@@ -62,6 +79,7 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.HttpRequest]: {
     order: ['method', 'url', 'body', 'headers', '*'],
+    hidden: [...globalHiddenProperties],
   },
   [SDKTypes.IfCondition]: {
     hidden: ['actions', 'elseActions', ...globalHiddenProperties],
@@ -169,6 +187,12 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.RepeatDialog]: {
     hidden: [...globalHiddenProperties],
     order: ['options', 'includeActivity', '*'],
+  },
+  [SDKTypes.SetProperty]: {
+    hidden: [...globalHiddenProperties],
+  },
+  [SDKTypes.SetProperties]: {
+    hidden: [...globalHiddenProperties],
   },
   [SDKTypes.SwitchCondition]: {
     hidden: ['default', ...globalHiddenProperties],

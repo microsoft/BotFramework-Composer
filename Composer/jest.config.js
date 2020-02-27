@@ -50,5 +50,6 @@ module.exports = {
     '<rootDir>/packages/ui-plugins/lg',
     '<rootDir>/packages/ui-plugins/lu',
     '<rootDir>/packages/ui-plugins/select-dialog',
+    '<rootDir>/packages/ui-plugins/select-intent',
   ],
 };
