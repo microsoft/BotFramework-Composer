@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { ObiColors } from '../../constants/ElementColors';
+import { ChoiceInputSize } from '../../constants/ElementSizes';
 
 import { ElementProps, MultiLineDivProps, ElementComponent } from './styledComponents.types';
 
@@ -24,6 +25,8 @@ export const Span = styled.span`
 
 export const BorderedDiv: ElementComponent<ElementProps> = styled.div<ElementProps>(props => ({
   color: props.color || ObiColors.Black,
+  width: ChoiceInputSize.width,
+  height: ChoiceInputSize.height,
   padding: '2px 0 0 8px',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
@@ -38,8 +41,8 @@ export const BorderedDiv: ElementComponent<ElementProps> = styled.div<ElementPro
 export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
   color: props.color || ObiColors.Black,
   fontSize: '12px',
-  height: `${(props.lineNum || 1) * 14}px`,
-  lineHeight: '14px',
+  height: `${(props.lineNum || 1) * 19}px`,
+  lineHeight: '19px',
   fontFamily: 'Segoe UI',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -55,6 +58,7 @@ export const SingleLineDiv = styled.div<ElementProps>(props => ({
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
-  lineHeight: '14px',
+  lineHeight: '19px',
+  height: '19px',
   fontFamily: 'Segoe UI',
 }));

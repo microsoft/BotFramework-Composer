@@ -13,10 +13,16 @@ import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
-import { ChoiceInputChoices } from '../widgets/ChoiceInput';
-import { PropertiesWidget } from '../widgets/PropertiesWidget';
+import { ListOverviewWidget } from '../widgets/ListOverviewWidget';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
+import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
+import {
+  PropertyAssignmentSize,
+  AssignmentMarginTop,
+  ChoiceInputMarginTop,
+  ChoiceInputSize,
+} from '../constants/ElementSizes';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -40,7 +46,6 @@ const BaseInputSchema: UIWidget = {
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
-    children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
@@ -48,6 +53,25 @@ const BaseInputSchema: UIWidget = {
   },
 };
 
+const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
+  userInput: {
+    'ui:widget': ListOverviewWidget(BorderedDiv),
+    title: data => `User Input (${getInputType(data.$type)})`,
+    disableSDKTitle: true,
+    icon: ElementIcon.User,
+    menu: 'none',
+    content: data => data.property || '<property>',
+    items: data => (data.choices && Array.isArray(data.choices) ? data.choices.map(choice => choice.value) : []),
+    itemSize: {
+      marginTop: ChoiceInputMarginTop,
+      ...ChoiceInputSize,
+    },
+    colors: {
+      theme: ObiColors.LightBlue,
+      icon: ObiColors.AzureBlue,
+    },
+  },
+});
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
@@ -102,7 +126,7 @@ export const uiSchema: UISchema = {
   [SDKTypes.DateTimeInput]: BaseInputSchema,
   [SDKTypes.NumberInput]: BaseInputSchema,
   [SDKTypes.TextInput]: BaseInputSchema,
-  [SDKTypes.ChoiceInput]: BaseInputSchema,
+  [SDKTypes.ChoiceInput]: ChoiceInputSchema,
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
@@ -121,12 +145,19 @@ export const uiSchema: UISchema = {
     content: data => `{${data.property || '?'}} = new ${data.type || '?'}`,
   },
   [SDKTypes.SetProperty]: {
-    'ui:widget': ActionCard,
+    'ui:widget': ListOverviewWidget(SingleLineDiv),
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
-    'ui:widget': PropertiesWidget,
-    content: data => ({ assignments: data.assignments }),
+    'ui:widget': ListOverviewWidget(SingleLineDiv),
+    items: data =>
+      data.assignments && Array.isArray(data.assignments)
+        ? data.assignments.map(assignment => `${assignment.property} = ${assignment.value}`)
+        : [],
+    itemSize: {
+      marginTop: AssignmentMarginTop,
+      ...PropertyAssignmentSize,
+    },
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,
