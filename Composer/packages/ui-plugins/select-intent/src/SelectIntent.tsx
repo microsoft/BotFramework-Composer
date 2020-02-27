@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { DialogInfo, LuFile } from '@bfc/indexers';
+import { DialogInfo, LuFile } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 const EMPTY_OPTION = { key: '', text: '' };
