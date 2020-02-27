@@ -8,7 +8,7 @@ const Colors = {
   Black: '#000000',
   AzureGray: '#3C3C41',
   AzureGray2: '#656565',
-  AzureGray3: '#EBEBEB',
+  AzureGray3: '#D7D7D7',
   Gray80: '#B3B0AD',
   Gray60: '#C8C6C4',
 
