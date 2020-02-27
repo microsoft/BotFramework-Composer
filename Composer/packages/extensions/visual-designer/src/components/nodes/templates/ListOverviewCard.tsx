@@ -8,6 +8,7 @@ import { FunctionComponent } from 'react';
 import { InitNodeSize } from '../../../constants/ElementSizes';
 import { ElementIcon } from '../../../utils/obiPropertyResolver';
 import { Icon } from '../../decorations/icon';
+import { SingleLineDiv } from '../../elements/styledComponents';
 
 const boxWidth = InitNodeSize.width;
 const boxHeight = InitNodeSize.height;
@@ -28,7 +29,7 @@ const containerStyle = {
 interface NodeProps {
   header: string;
   corner?: any;
-  label: any;
+  label?: any;
   icon?: string;
   iconSize?: number;
   styles?: object;
@@ -36,7 +37,7 @@ interface NodeProps {
   onClick?: () => void;
   children?: any;
 }
-export const FormCard: FunctionComponent<NodeProps> = ({
+export const ListOverviewCard: FunctionComponent<NodeProps> = ({
   header,
   corner,
   label,
@@ -96,47 +97,35 @@ export const FormCard: FunctionComponent<NodeProps> = ({
           display: 'inline-block',
         }}
       >
-        <div
-          css={{
-            fontWeight: 400,
-            paddingLeft: '5px',
-            margin: '2px 5px',
-            fontSize: '14px',
-            lineHeight: '19px',
-            display: 'inline-flex',
-            alignItems: 'center',
-          }}
-        >
-          {icon && icon !== ElementIcon.None && (
-            <div
-              css={{
-                width: 16,
-                height: 16,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: '5px',
-              }}
-            >
-              <Icon icon={icon} color={iconColor} size={iconSize || 16} />
-            </div>
-          )}
+        {label && (
           <div
             css={{
-              height: '100%',
-              whiteSpace: 'initial',
-              fontSize: '12px',
+              fontWeight: 400,
+              paddingLeft: '5px',
+              margin: '3px 5px',
+              fontSize: '14px',
               lineHeight: '19px',
-              fontFamily: 'Segoe UI',
-              overflowWrap: 'break-word',
-              wordBreak: 'break-all',
-              display: 'inline-block',
+              display: 'flex',
+              alignItems: 'center',
             }}
-            title={typeof label === 'string' ? label : ''}
           >
-            {label}
+            {icon && icon !== ElementIcon.None && (
+              <div
+                css={{
+                  width: 16,
+                  height: 16,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '5px',
+                }}
+              >
+                <Icon icon={icon} color={iconColor} size={iconSize || 16} />
+              </div>
+            )}
+            <SingleLineDiv title={typeof label === 'string' ? label : ''}>{label}</SingleLineDiv>
           </div>
-        </div>
+        )}
         {children}
       </div>
     </div>

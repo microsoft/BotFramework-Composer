@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { generateSDKTitle } from '@bfc/shared';
+import { generateSDKTitle, SDKTypes } from '@bfc/shared';
 
 import { FormCard } from '../components/nodes/templates/FormCard';
+import { ListOverviewCard } from '../components/nodes/templates/ListOverviewCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
@@ -47,8 +48,9 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
 }) => {
   const header = disableSDKTitle ? title : generateSDKTitle(data, title);
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
+  const CardRender = data.$type === SDKTypes.ChoiceInput ? ListOverviewCard : FormCard;
   return (
-    <FormCard
+    <CardRender
       header={header}
       corner={menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
@@ -57,6 +59,6 @@ export const ActionCard: WidgetComponent<ActionCardProps> = ({
       styles={{ ...size }}
     >
       {children}
-    </FormCard>
+    </CardRender>
   );
 };

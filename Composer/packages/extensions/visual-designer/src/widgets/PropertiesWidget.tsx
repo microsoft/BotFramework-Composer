@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 
 import { ObiColors } from '../constants/ElementColors';
-import { FormCard } from '../components/nodes/templates/FormCard';
+import { ListOverviewCard } from '../components/nodes/templates/ListOverviewCard';
 import { ListOverview } from '../components/common/ListOverview';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeMenu } from '../components/menus/NodeMenu';
@@ -82,7 +82,7 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
   const { assignments } = content;
   return (
-    <FormCard
+    <ListOverviewCard
       header={header}
       corner={menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
       icon={icon}
@@ -90,6 +90,6 @@ export const PropertiesWidget: WidgetComponent<PropertiesWidgetProps> = ({
       styles={{ ...size }}
     >
       {assignments && <AssignmentList assignments={assignments} />}
-    </FormCard>
+    </ListOverviewCard>
   );
 };
