@@ -185,7 +185,7 @@ export class AssetManager {
       throw new Error('already have this folder, please give another name');
     }
     await this.copyDataFilesTo(templateId, dstDir, dstStorage);
-    await this.copyRuntimeTo(dstDir, dstStorage);
+    // await this.copyRuntimeTo(dstDir, dstStorage);
     return ref;
   }
 }

@@ -10,10 +10,11 @@ export const PublishController = {
   },
   publish: async (req, res) => {
     const target = req.params.target;
+    console.log(target);
     const user = await PluginLoader.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-
+    console.log(currentProject);
     // find publish config by name.
     const configs = currentProject.settings
       ? currentProject.settings.publishTargets.filter(t => t.name === target)
@@ -26,7 +27,7 @@ export const PublishController = {
       const pluginMethod = pluginLoader.extensions.publish[method].publish;
 
       // call the method
-      const results = await pluginMethod.call(null, config.configuration, currentProject, user);
+      const results = await pluginMethod.call(null, { botId: projectId, version: '1' }, currentProject.files, user);
       res.json({
         target: target,
         results: results,
