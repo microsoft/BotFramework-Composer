@@ -8,7 +8,8 @@
  */
 
 import { LGParser } from 'botbuilder-lg';
-import { lgIndexer, LgTemplate } from '@bfc/indexers';
+import { lgIndexer } from '@bfc/indexers';
+import { LgTemplate } from '@bfc/shared';
 
 const { parse } = lgIndexer;
 export interface Template {

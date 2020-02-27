@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
-import { CodeRange } from '../type';
+import { Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;

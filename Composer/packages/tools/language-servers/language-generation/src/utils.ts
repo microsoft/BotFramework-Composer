@@ -9,7 +9,8 @@ import {
   StaticChecker,
   LGParser,
 } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
+import { offsetRange } from '@bfc/indexers';
+import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
 
 const staticChecker = new StaticChecker();
 

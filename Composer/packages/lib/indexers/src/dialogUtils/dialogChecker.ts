@@ -2,10 +2,8 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { FieldNames } from '@bfc/shared';
+import { FieldNames, Diagnostic } from '@bfc/shared';
 import values from 'lodash/values';
-
-import { Diagnostic } from '../diagnostic';
 
 import { ExpressionType } from './validation';
 import { CheckerFunc } from './types';

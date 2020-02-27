@@ -3,7 +3,7 @@
 
 import clonedeep from 'lodash/cloneDeep';
 import reject from 'lodash/reject';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
 import { ActionCreator, State } from '../types';

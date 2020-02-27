@@ -9,10 +9,9 @@ import {
   ImportResolverDelegate,
 } from 'botbuilder-lg';
 import get from 'lodash/get';
+import { LgTemplate, LgFile, FileInfo, Diagnostic, DiagnosticSeverity, Position, Range } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
-import { LgTemplate, LgFile, FileInfo } from './type';
-import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
 
 const lgStaticChecker = new StaticChecker();
 

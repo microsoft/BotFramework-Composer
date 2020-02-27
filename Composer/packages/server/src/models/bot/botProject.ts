@@ -3,17 +3,8 @@
 
 import fs from 'fs';
 
-import { getNewDesigner } from '@bfc/shared';
-import {
-  FileInfo,
-  DialogInfo,
-  LgFile,
-  LuFile,
-  dialogIndexer,
-  lgIndexer,
-  luIndexer,
-  createSingleMessage,
-} from '@bfc/indexers';
+import { getNewDesigner, FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';

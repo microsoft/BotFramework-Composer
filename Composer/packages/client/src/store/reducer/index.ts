@@ -3,9 +3,8 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { dialogIndexer } from '@bfc/indexers';
-import { SensitiveProperties } from '@bfc/shared';
-import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
+import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
+import { SensitiveProperties, Diagnostic, DiagnosticSeverity, LgTemplate } from '@bfc/shared';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes } from '../../constants';

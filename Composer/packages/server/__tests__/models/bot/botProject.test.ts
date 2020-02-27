@@ -4,8 +4,7 @@
 import fs from 'fs';
 
 import rimraf from 'rimraf';
-import { seedNewDialog } from '@bfc/shared';
-import { DialogInfo } from '@bfc/indexers';
+import { seedNewDialog, DialogInfo } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';

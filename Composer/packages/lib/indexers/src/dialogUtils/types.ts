@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic } from '../diagnostic';
+import { Diagnostic } from '@bfc/shared';
 
 export interface ISearchTarget {
   type: string;

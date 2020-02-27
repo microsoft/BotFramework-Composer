@@ -3,7 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
-import { TextFile } from '@bfc/indexers';
+import { TextFile } from '@bfc/shared';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';

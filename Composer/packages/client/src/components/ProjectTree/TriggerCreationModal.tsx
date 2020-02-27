@@ -11,7 +11,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import get from 'lodash/get';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/shared';
 
 import {
   addNewTrigger,

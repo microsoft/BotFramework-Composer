@@ -4,8 +4,7 @@
 import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { RegexRecognizer } from '@bfc/shared';
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { RegexRecognizer, LuFile, DialogInfo } from '@bfc/shared';
 
 import { BFDWidgetProps, FormContext } from '../types';
 

@@ -3,10 +3,19 @@
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
 import get from 'lodash/get';
+import {
+  FileInfo,
+  LuFile,
+  LuParsed,
+  LuSectionTypes,
+  LuIntentSection,
+  Diagnostic,
+  Position,
+  Range,
+  DiagnosticSeverity,
+} from '@bfc/shared';
 
-import { FileInfo, LuFile, LuParsed, LuSectionTypes, LuIntentSection } from './type';
 import { getBaseName } from './utils/help';
-import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
 
 const { luParser } = sectionHandler;

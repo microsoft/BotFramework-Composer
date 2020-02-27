@@ -3,13 +3,11 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs } from '@bfc/shared';
+import { extractLgTemplateRefs, ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath, Diagnostic } from '@bfc/shared';
 
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
-import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 
 // find out all lg templates given dialog

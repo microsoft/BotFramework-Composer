@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 import { ExpressionEngine, ReturnType } from 'botframework-expressions';
 import formatMessage from 'format-message';
-
-import { Diagnostic } from '../diagnostic';
+import { Diagnostic } from '@bfc/shared';
 
 export const ExpressionType = {
   number: 'number',

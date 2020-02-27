@@ -10,8 +10,7 @@ import merge from 'lodash/merge';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import { appschema, ShellData, ShellApi } from '@bfc/shared';
-import { Diagnostic } from '@bfc/indexers';
+import { appschema, ShellData, ShellApi, Diagnostic } from '@bfc/shared';
 
 import Form from './Form';
 import { uiSchema } from './schema/uischema';

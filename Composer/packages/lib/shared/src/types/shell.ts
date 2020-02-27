@@ -3,7 +3,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { LGTemplate } from 'botbuilder-lg';
-import { DialogInfo, LuFile, LgFile } from '@bfc/indexers';
+
+import { DialogInfo, LuFile, LgFile } from './indexers';
 
 export interface EditorSchema {
   content?: {
