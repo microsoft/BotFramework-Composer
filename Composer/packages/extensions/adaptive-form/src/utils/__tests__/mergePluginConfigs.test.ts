@@ -6,14 +6,14 @@ import { SDKTypes, SDKRoles, SDKKinds } from '@bfc/shared';
 import { mergePluginConfigs } from '../mergePluginConfigs';
 import DefaultUISchema from '../../defaultUiSchema';
 import DefaultRoleSchema from '../../defaultRoleSchema';
-import DefaultKindSchema from '../../defaultKindSchema';
+import DefaultRecognizers from '../../defaultRecognizers';
 
 describe('mergePluginConfigs', () => {
   it('returns default ui schema when no overrides', () => {
     expect(mergePluginConfigs()).toEqual({
       uiSchema: DefaultUISchema,
       roleSchema: DefaultRoleSchema,
-      kindSchema: DefaultKindSchema,
+      recognizers: DefaultRecognizers,
     });
   });
 
@@ -45,56 +45,58 @@ describe('mergePluginConfigs', () => {
 Object {
   "kindSchema": Object {
     "Microsoft.IDialog": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "foo",
       ],
     },
-    "Microsoft.Recognizer": Object {
-      "ui:field": [Function],
-    },
   },
+  "recognizers": Array [
+    Object {
+      "displayName": [Function],
+      "handleChange": [Function],
+      "id": "none",
+    },
+    Object {
+      "displayName": [Function],
+      "editor": [Function],
+      "handleChange": [Function],
+      "id": "Microsoft.RegexRecognizer",
+    },
+  ],
   "roleSchema": Object {
     "expression": Object {
-      "ui:field": [Function],
-      "ui:label": "expression label",
+      "field": [Function],
+      "label": "expression label",
     },
   },
   "uiSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
-      "properties": Object {
-        "recognizer": Object {
-          "properties": Object {
-            "intents": Object {
-              "properties": Object {
-                "intent": Object {
-                  "ui:field": [Function],
-                  "ui:label": false,
-                },
-                "pattern": Object {
-                  "ui:field": [Function],
-                  "ui:label": false,
-                },
-              },
-            },
-          },
-          "ui:hidden": Array [
-            "entities",
-          ],
-        },
-        "triggers": Object {
-          "ui:label": "Foo",
-        },
-      },
-      "ui:hidden": Array [
+      "hidden": Array [
         "recognizer",
       ],
-      "ui:order": Array [
+      "order": Array [
         "recognizer",
         "*",
       ],
+      "properties": Object {
+        "recognizer": Object {
+          "description": [Function],
+          "label": [Function],
+        },
+        "triggers": Object {
+          "label": "Foo",
+        },
+      },
     },
     "Microsoft.BeginDialog": Object {
-      "ui:order": Array [
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
         "dialog",
         "options",
         "resultProperty",
@@ -103,14 +105,21 @@ Object {
       ],
     },
     "Microsoft.CancelAllDialogs": Object {
-      "ui:order": Array [
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
         "dialog",
         "property",
         "*",
       ],
     },
     "Microsoft.ConditionalSelector": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "$type",
         "$id",
         "$copy",
@@ -118,28 +127,89 @@ Object {
         "id",
       ],
     },
-    "Microsoft.EditActions": Object {},
-    "Microsoft.Foreach": Object {
-      "ui:hidden": Array [
-        "actions",
+    "Microsoft.DebugBreak": Object {
+      "label": "Debug Breack",
+    },
+    "Microsoft.DeleteProperties": Object {
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Delete Properties",
+    },
+    "Microsoft.DeleteProperty": Object {
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Delete a Property",
+    },
+    "Microsoft.EditActions": Object {
+      "label": "Modify active dialog",
+    },
+    "Microsoft.EditArray": Object {
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
       ],
-      "ui:order": Array [
+    },
+    "Microsoft.EmitEvent": Object {
+      "helpLink": "https://aka.ms/bfc-custom-events",
+      "label": "Emit a custom event",
+    },
+    "Microsoft.EndDialog": Object {
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+    },
+    "Microsoft.EndTurn": Object {
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+    },
+    "Microsoft.Foreach": Object {
+      "hidden": Array [
+        "actions",
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
         "itemsProperty",
         "*",
       ],
     },
     "Microsoft.ForeachPage": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "itemsProperty",
         "pageSize",
         "*",
       ],
     },
     "Microsoft.HttpRequest": Object {
-      "ui:order": Array [
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
         "method",
         "url",
         "body",
@@ -148,7 +218,7 @@ Object {
       ],
     },
     "Microsoft.IfCondition": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "elseActions",
         "$type",
@@ -159,7 +229,7 @@ Object {
       ],
     },
     "Microsoft.MostSpecificSelector": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "$type",
         "$id",
         "$copy",
@@ -168,13 +238,13 @@ Object {
       ],
     },
     "Microsoft.OAuthInput": Object {
-      "ui:order": Array [
+      "order": Array [
         "connectionName",
         "*",
       ],
     },
     "Microsoft.OnActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -182,13 +252,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnBeginDialog": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -196,13 +266,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnCancelDialog": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -210,13 +280,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnCondition": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -224,13 +294,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnConversationUpdateActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -238,13 +308,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnCustomEvent": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -252,13 +322,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnDialogEvent": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -266,13 +336,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnEndOfConversationActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -280,13 +350,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnError": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -294,13 +364,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnEventActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -308,13 +378,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnHandoffActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -322,13 +392,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnIntent": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -336,7 +406,7 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "intent",
         "condition",
         "entities",
@@ -344,7 +414,7 @@ Object {
       ],
     },
     "Microsoft.OnInvokeActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -352,13 +422,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnMessageActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -366,13 +436,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnMessageDeleteActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -380,13 +450,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnMessageReactionActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -394,13 +464,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnMessageUpdateActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -408,13 +478,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnRepromptDialog": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -422,13 +492,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnTypingActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -436,13 +506,13 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
     "Microsoft.OnUnknownIntent": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "actions",
         "$type",
         "$id",
@@ -450,34 +520,47 @@ Object {
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "condition",
         "*",
       ],
     },
-    "Microsoft.RepeatDialog": Object {
-      "ui:hidden": Array [
+    "Microsoft.Recognizer": Object {
+      "field": [Function],
+    },
+    "Microsoft.RegexRecognizer": Object {
+      "hidden": Array [
+        "entities",
         "$type",
         "$id",
         "$copy",
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+    },
+    "Microsoft.RepeatDialog": Object {
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
         "options",
         "includeActivity",
         "*",
       ],
     },
     "Microsoft.ReplaceDialog": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
         "$type",
         "$id",
         "$copy",
         "$designer",
         "id",
       ],
-      "ui:order": Array [
+      "order": Array [
         "dialog",
         "options",
         "includeActivity",
@@ -485,7 +568,20 @@ Object {
       ],
     },
     "Microsoft.SendActivity": Object {
-      "ui:hidden": Array [
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+      "order": Array [
+        "activity",
+        "*",
+      ],
+    },
+    "Microsoft.SetProperties": Object {
+      "hidden": Array [
         "$type",
         "$id",
         "$copy",
@@ -493,16 +589,17 @@ Object {
         "id",
       ],
     },
-    "Microsoft.SetProperties": Object {},
+    "Microsoft.SetProperty": Object {
+      "hidden": Array [
+        "$type",
+        "$id",
+        "$copy",
+        "$designer",
+        "id",
+      ],
+    },
     "Microsoft.SwitchCondition": Object {
-      "properties": Object {
-        "cases": Object {
-          "ui:hidden": Array [
-            "actions",
-          ],
-        },
-      },
-      "ui:hidden": Array [
+      "hidden": Array [
         "default",
         "$type",
         "$id",
@@ -510,6 +607,13 @@ Object {
         "$designer",
         "id",
       ],
+      "properties": Object {
+        "cases": Object {
+          "hidden": Array [
+            "actions",
+          ],
+        },
+      },
     },
   },
 }

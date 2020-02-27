@@ -26,6 +26,8 @@
     "@bfc/ui-plugin-lg": "*",
     "@bfc/ui-plugin-lu": "*",
     "@bfc/ui-plugin-prompts": "*",
+    "@bfc/ui-plugin-select-intent": "*",
+    "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/visual-designer": "*",
     "@bfcomposer/bf-lu": "^1.1.8",
     "@emotion/core": "^10.0.7",
