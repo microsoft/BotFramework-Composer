@@ -40,7 +40,7 @@
             "id": "026341"
           },
           "property": "user.age",
-          "value": "=9+9"
+          "value": "18"
         },
         {
           "$type": "Microsoft.SendActivity",

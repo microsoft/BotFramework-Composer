@@ -212,8 +212,7 @@ namespace Tests
             resourceExplorer.AddFolder(folderPath);
             adapter
                 .UseStorage(storage)
-                .UseState(userState, convoState)
-                
+                .UseState(userState, convoState)               
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("Main.dialog");
