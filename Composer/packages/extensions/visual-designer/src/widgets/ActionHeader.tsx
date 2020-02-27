@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
@@ -6,9 +9,6 @@ import { WidgetComponent, WidgetContainerProps } from '../schema/uischema.types'
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
-
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title: string;
