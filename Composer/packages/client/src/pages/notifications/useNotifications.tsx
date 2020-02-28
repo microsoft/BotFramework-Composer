@@ -50,7 +50,7 @@ export default function useNotifications(filter?: string) {
     return notifactions;
   }, [dialogs, luFiles, lgFiles]);
 
-  const notifications: Notification[] = !filter ? memoized : memoized.filter(x => x.severity === filter);
+  const notifications: Notification[] = filter ? memoized.filter(x => x.severity === filter) : memoized;
 
   return notifications;
 }

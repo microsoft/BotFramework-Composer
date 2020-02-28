@@ -30,22 +30,15 @@ export function offsetRange(range: Range, offset: number): Range {
   );
 }
 
-export function isDiagnosticWithInRange(
-  diagnosticStartLine: number,
-  diagnosticEndLine: number,
-  sectionStartLine: number,
-  sectionEndLine: number
-): boolean {
-  return diagnosticStartLine >= sectionStartLine && diagnosticEndLine <= sectionEndLine;
+export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange): boolean {
+  if (!diagnostic.range) return false;
+  return diagnostic.range.start.line >= range.startLineNumber && diagnostic.range.end.line <= range.endLineNumber;
 }
 
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
-    return (
-      d.range &&
-      isDiagnosticWithInRange(d.range.start.line, d.range.end.line, range.startLineNumber, range.endLineNumber)
-    );
+    return d.range && isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
   return filteredDiags.map(d => {
@@ -64,10 +57,7 @@ export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuI
   const { range } = section;
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
-    return (
-      d.range &&
-      isDiagnosticWithInRange(d.range.start.line, d.range.end.line, range.startLineNumber, range.endLineNumber)
-    );
+    return isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
   return filteredDiags.map(d => {

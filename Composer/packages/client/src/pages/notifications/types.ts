@@ -40,7 +40,6 @@ export abstract class Notification implements INotification {
 
 export class DialogNotification extends Notification {
   type = NotificationType.DIALOG;
-  dialogPath?: string;
   constructor(id: string, location: string, diagnostic: Diagnostic) {
     super(id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
@@ -50,7 +49,6 @@ export class DialogNotification extends Notification {
 
 export class LgNotification extends Notification {
   type = NotificationType.LG;
-  dialogPath?: string;
   constructor(id: string, lgTemplateName: string, location: string, diagnostic: Diagnostic, dialogs: DialogInfo[]) {
     super(id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
@@ -78,10 +76,7 @@ export class LuNotification extends Notification {
     const intentName = luFile.intents.find(intent => {
       const { range } = intent;
       if (!range) return false;
-      return (
-        d.range &&
-        isDiagnosticWithInRange(d.range.start.line, d.range?.end.line, range.startLineNumber, range.endLineNumber)
-      );
+      return isDiagnosticWithInRange(d, range);
     })?.Name;
 
     return dialogs.find(dialog => dialog.id === luFile.id)?.referredLuIntents.find(lu => lu.name === intentName)?.path;
