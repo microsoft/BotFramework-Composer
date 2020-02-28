@@ -12,7 +12,7 @@ import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
 import { RichEditor, RichEditorProps } from './RichEditor';
 
-const LU_HELP = 'https://github.com/microsoft/botframework-cli/blob/master/packages/luis/docs/lu-file-format.md';
+const LU_HELP = 'https://aka.ms/lu-file-format';
 const placeholder = `> To learn more about the LU file format, read the documentation at
 > ${LU_HELP}`;
 
