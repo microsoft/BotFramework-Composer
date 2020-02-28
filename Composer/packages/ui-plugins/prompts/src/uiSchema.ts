@@ -26,10 +26,12 @@ const choiceSchema = {
 
 const uiSchema: UISchema = {
   [SDKTypes.AttachmentInput]: {
-    label: 'Prompt for Attachment',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt for Attachment'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),
@@ -37,10 +39,12 @@ const uiSchema: UISchema = {
     },
   },
   [SDKTypes.ChoiceInput]: {
-    label: 'Prompt with multi-choice',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt with multi-choice'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),
@@ -52,10 +56,12 @@ const uiSchema: UISchema = {
     },
   },
   [SDKTypes.ConfirmInput]: {
-    label: 'Prompt for confirmation',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt for confirmation'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),
@@ -67,10 +73,12 @@ const uiSchema: UISchema = {
     },
   },
   [SDKTypes.DateTimeInput]: {
-    label: 'Prompt for a date',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt for a date'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),
@@ -78,10 +86,12 @@ const uiSchema: UISchema = {
     },
   },
   [SDKTypes.NumberInput]: {
-    label: 'Prompt for a number',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt for a number'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),
@@ -89,10 +99,12 @@ const uiSchema: UISchema = {
     },
   },
   [SDKTypes.TextInput]: {
-    label: 'Prompt for text',
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
+      prompt: {
+        label: () => formatMessage('Prompt for text'),
+      },
       validations: {
         label: () => formatMessage('Validation Rules'),
         placeholder: () => formatMessage('Add new validation rule here'),

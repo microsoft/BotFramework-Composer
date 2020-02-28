@@ -16,27 +16,9 @@ export const tabs: Partial<IPivotStyles> = {
     flex: 1,
   },
   itemContainer: {
-    padding: '24px 18px',
+    padding: '12px 18px',
   },
 };
-
-export const tabsContainer = css`
-  border-bottom: 1px solid #c8c6c4;
-`;
-
-export const settingsContainer = css`
-  padding: 10px 18px;
-
-  label: PromptSettings;
-`;
-
-export const settingsHeader = css`
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0 0 11px;
-
-  label: PromptSettingsHeader;
-`;
 
 export const settingsFields = css`
   display: flex;
@@ -54,6 +36,6 @@ export const settingsFieldHalf = css`
   label: SettingsFieldHalf;
 
   & + & {
-    margin-left: 36px;
+    margin-left: 16px;
   }
 `;
