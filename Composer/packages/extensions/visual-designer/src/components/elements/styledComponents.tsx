@@ -52,7 +52,7 @@ export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
 }));
 
 export const SingleLineDiv = styled.div<DivProps>(props => ({
-  width: props.width,
+  width: props.width || 150,
   height: props.height || '19px',
   color: props.color || ObiColors.Black,
   fontSize: '12px',
