@@ -16,6 +16,7 @@ export interface ActionCardProps extends WidgetContainerProps {
   content: string | number | JSX.Element;
   menu?: JSX.Element | string;
   children?: JSX.Element;
+  template?: JSX.Element;
   size?: {
     width: number;
 

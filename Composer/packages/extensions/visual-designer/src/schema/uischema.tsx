@@ -13,17 +13,12 @@ import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
-import { ListOverviewWidget } from '../widgets/ListOverviewWidget';
 import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
-import {
-  PropertyAssignmentSize,
-  AssignmentMarginTop,
-  ChoiceInputMarginTop,
-  ChoiceInputSize,
-} from '../constants/ElementSizes';
+import { PropertyAssignmentSize, ChoiceInputSize } from '../constants/ElementSizes';
+import { ListOverview } from '../components/common/ListOverview';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -56,16 +51,18 @@ const BaseInputSchema: UIWidget = {
 
 const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
   userInput: {
-    'ui:widget': ListOverviewWidget(BorderedDiv),
+    'ui:widget': ActionCard,
     title: data => `User Input (${getInputType(data.$type)})`,
     disableSDKTitle: true,
     icon: ElementIcon.User,
     menu: 'none',
-    content: data => data.property || '<property>',
-    items: data => (data.choices && Array.isArray(data.choices) ? data.choices.map(choice => choice.value) : []),
-    itemSize: {
-      marginTop: ChoiceInputMarginTop,
-      ...ChoiceInputSize,
+    content: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
+    children: data => {
+      const items = Array.isArray(data.choices) ? data.choices.map(choice => choice.value) : [];
+      const ItemRender = props => (
+        <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} {...props} />
+      );
+      return <ListOverview items={items} ItemRender={ItemRender} maxCount={3} />;
     },
     colors: {
       theme: ObiColors.LightBlue,
@@ -150,14 +147,21 @@ export const uiSchema: UISchema = {
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
-    'ui:widget': ListOverviewWidget(SingleLineDiv),
-    items: data =>
-      data.assignments && Array.isArray(data.assignments)
+    'ui:widget': ActionCard,
+    content: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
+    children: data => {
+      const items = Array.isArray(data.assignments)
         ? data.assignments.map(assignment => `${assignment.property} = ${assignment.value}`)
-        : [],
-    itemSize: {
-      marginTop: AssignmentMarginTop,
-      ...PropertyAssignmentSize,
+        : [];
+      const ItemRender = props => (
+        <SingleLineDiv
+          width={PropertyAssignmentSize.width}
+          height={PropertyAssignmentSize.height}
+          style={{ paddingLeft: '3px' }}
+          {...props}
+        />
+      );
+      return <ListOverview items={items} ItemRender={ItemRender} maxCount={3} />;
     },
   },
   [SDKTypes.DeleteProperty]: {

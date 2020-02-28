@@ -6,9 +6,8 @@ import styled from '@emotion/styled';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { ObiColors } from '../../constants/ElementColors';
-import { ChoiceInputSize } from '../../constants/ElementSizes';
 
-import { ElementProps, MultiLineDivProps, ElementComponent } from './styledComponents.types';
+import { MultiLineDivProps, DivProps } from './styledComponents.types';
 
 const dynamicStyle = props =>
   css`
@@ -23,10 +22,10 @@ export const Span = styled.span`
   ${dynamicStyle}
 `;
 
-export const BorderedDiv: ElementComponent<ElementProps> = styled.div<ElementProps>(props => ({
+export const BorderedDiv = styled.div<DivProps>(props => ({
   color: props.color || ObiColors.Black,
-  width: ChoiceInputSize.width,
-  height: ChoiceInputSize.height,
+  width: props.width,
+  height: props.height,
   padding: '2px 0 0 8px',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
@@ -52,13 +51,14 @@ export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
   '-webkit-box-orient': 'vertical',
 }));
 
-export const SingleLineDiv = styled.div<ElementProps>(props => ({
+export const SingleLineDiv = styled.div<DivProps>(props => ({
+  width: props.width,
+  height: props.height || '19px',
   color: props.color || ObiColors.Black,
   fontSize: '12px',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   lineHeight: '19px',
-  height: '19px',
   fontFamily: 'Segoe UI',
 }));

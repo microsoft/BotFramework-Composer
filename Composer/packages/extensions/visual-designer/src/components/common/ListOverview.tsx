@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FC, ComponentClass } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { FC, ComponentClass } from 'react';
 
-import { MultiLineDiv } from '../elements/styledComponents';
+import { SingleLineDiv } from '../elements/styledComponents';
 
 export interface ListOverviewProps {
   items: string[];
@@ -11,29 +13,27 @@ export interface ListOverviewProps {
   maxCount: number;
   styles?: Record<string, any>;
 }
-export const ListOverview: React.FC<ListOverviewProps> = ({ items, ItemRender, maxCount, styles }) => {
+export const ListOverview: FC<ListOverviewProps> = ({ items, ItemRender, maxCount, styles }) => {
   return (
-    <>
-      {items.map((value, index) => {
-        if (index < 3) {
-          return (
-            <ItemRender key={index} title={typeof value === 'string' ? value : ''}>
-              {value}
-            </ItemRender>
-          );
-        }
+    <div css={{ padding: '0 0 8px 8px' }}>
+      {items.slice(0, 3).map((value, index) => {
+        return (
+          <ItemRender key={index} title={typeof value === 'string' ? value : ''} css={{ marginTop: '8px' }}>
+            {value}
+          </ItemRender>
+        );
       })}
       {items.length > maxCount ? (
-        <MultiLineDiv
+        <SingleLineDiv
           data-testid="hasMore"
           style={{
-            ...styles,
+            marginTop: '8px',
             textAlign: 'center',
           }}
         >
           {`${items.length - 3} more`}
-        </MultiLineDiv>
+        </SingleLineDiv>
       ) : null}
-    </>
+    </div>
   );
 };

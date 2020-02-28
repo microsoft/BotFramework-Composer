@@ -44,7 +44,7 @@ export const PropertyAssignmentSize = {
   height: 16,
 };
 
-export const AssignmentMarginTop = 6;
+export const AssignmentMarginTop = 8;
 export const AssignmentMarginBottom = 8;
 
 export const EventNodeSize = {
