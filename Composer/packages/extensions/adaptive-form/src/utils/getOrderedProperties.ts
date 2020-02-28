@@ -4,15 +4,18 @@ import { JSONSchema4 } from 'json-schema';
 import { UIOptions } from '@bfc/extension';
 import cloneDeep from 'lodash/cloneDeep';
 
+const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
+
 export function getOrderedProperties(
   schema: JSONSchema4,
   uiOptions: UIOptions,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): string[] {
-  const { hidden: hidden, order: order = ['*'] } = cloneDeep(uiOptions);
+  const { hidden, order: order = ['*'] } = cloneDeep(uiOptions);
 
   const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
+  globalHiddenProperties.forEach(f => hiddenFieldSet.add(f));
 
   const filterFields = (field: string) => {
     return field === '*' || (!hiddenFieldSet.has(field) && schema.properties?.[field]);
