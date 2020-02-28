@@ -29,7 +29,7 @@ import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
-const DIALOGFOLDER = 'ComposerDialogs';
+const DIALOGFOLDER = '';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
