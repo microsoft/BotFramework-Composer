@@ -150,7 +150,8 @@
     },
     "Microsoft.OAuthInput": {
       "title": "OAuth Login",
-      "helpLink": "https://aka.ms/bfc-using-oauth"
+      "helpLink": "https://aka.ms/bfc-using-oauth",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.OnActivity": {
       "title": "Activities",

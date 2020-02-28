@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useEffect, useState, useMemo, Suspense } from 'react';
+import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { RouteComponentProps, Router } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { projectContainer } from '../design/styles';
@@ -26,20 +27,18 @@ import {
 } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface DefineConversationProps {
+interface LUPageProps extends RouteComponentProps<{}> {
+  fileId?: string;
   path: string;
 }
 
-const LUPage: React.FC<DefineConversationProps> = props => {
-  const { state, actions } = useContext(StoreContext);
-  const { luFiles, dialogs } = state;
-  const [editMode, setEditMode] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const fileId = props['*'];
-  const isRoot = fileId === '';
-  const activeDialog = dialogs.find(item => item.id === fileId);
-
-  const luFile = luFiles.length && activeDialog ? luFiles.find(luFile => luFile.id === activeDialog.id) : null;
+const LUPage: React.FC<LUPageProps> = props => {
+  const { state } = useContext(StoreContext);
+  const { dialogs } = state;
+  const path = props.location?.pathname ?? '';
+  const { fileId = '' } = props;
+  const edit = /\/edit(\/)?$/.test(path);
+  const isRoot = fileId === 'all';
 
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -55,49 +54,28 @@ const LUPage: React.FC<DefineConversationProps> = props => {
   }, [dialogs]);
 
   useEffect(() => {
-    // root view merge all lu file into one list, we can't edit multi file.
-    if (isRoot) {
-      setEditMode(false);
-    }
-
-    // fall back to the all-up page if we don't have an active dialog
-    if (!isRoot && !activeDialog && dialogs.length) {
-      navigateTo('/language-understanding');
+    const activeDialog = dialogs.find(({ id }) => id === fileId);
+    if (!activeDialog && fileId !== 'all' && dialogs.length) {
+      navigateTo('/language-understanding/all');
     }
   }, [fileId, dialogs]);
 
-  useEffect(() => {
-    setErrorMsg('');
-  }, [luFile]);
+  const onSelect = useCallback(
+    id => {
+      const url = `/language-understanding/${id}`;
+      navigateTo(url);
+    },
+    [edit]
+  );
 
-  function onSelect(id) {
-    if (id === '_all') {
-      navigateTo('/language-understanding');
-    } else {
-      navigateTo(`/language-understanding/${id}`);
-    }
-    setEditMode(false);
-  }
-
-  async function onChange(newContent: string) {
-    const id = activeDialog ? activeDialog.id : undefined;
-    const payload = {
-      id: id, // current opened lu file
-      content: newContent,
-    };
-    try {
-      await actions.updateLuFile(payload);
-    } catch (error) {
-      setErrorMsg(error.message);
-    }
-  }
-
-  // #TODO: get line number from lu parser, then deep link to code editor this
-  // Line
-  function onTableViewClickEdit({ fileId = '' }) {
-    navigateTo(`language-understanding/${fileId}`);
-    setEditMode(true);
-  }
+  const onToggleEditMode = useCallback(
+    (_e, checked) => {
+      let url = `/language-understanding/${fileId}`;
+      if (checked) url += `/edit`;
+      navigateTo(url);
+    },
+    [fileId]
+  );
 
   const toolbarItems = [
     {
@@ -118,19 +96,20 @@ const LUPage: React.FC<DefineConversationProps> = props => {
             css={actionButton}
             onText={formatMessage('Edit mode')}
             offText={formatMessage('Edit mode')}
-            checked={editMode}
-            disabled={isRoot && editMode === false}
-            onChange={() => setEditMode(!editMode)}
+            defaultChecked={false}
+            checked={!!edit}
+            disabled={isRoot && edit === false}
+            onChange={onToggleEditMode}
           />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
           <div
-            css={dialogItem(!activeDialog)}
+            css={dialogItem(isRoot)}
             key={'_all'}
             onClick={() => {
-              onSelect('_all');
+              onSelect('all');
             }}
           >
             {'All'}
@@ -138,13 +117,12 @@ const LUPage: React.FC<DefineConversationProps> = props => {
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>
         <div css={contentEditor}>
-          {editMode ? (
-            <Suspense fallback={<LoadingSpinner />}>
-              <CodeEditor file={luFile} onChange={onChange} errorMsg={errorMsg} />
-            </Suspense>
-          ) : (
-            <TableView activeDialog={activeDialog} onClickEdit={onTableViewClickEdit} />
-          )}
+          <Suspense fallback={<LoadingSpinner />}>
+            <Router primary={false} component={Fragment}>
+              <CodeEditor path="/edit" fileId={fileId} />
+              <TableView path="/" fileId={fileId} />
+            </Router>
+          </Suspense>
         </div>
       </div>
     </Fragment>

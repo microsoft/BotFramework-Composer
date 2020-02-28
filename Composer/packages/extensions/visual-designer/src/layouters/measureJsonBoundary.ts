@@ -4,6 +4,8 @@
 import { ObiTypes } from '../constants/ObiTypes';
 import { Boundary } from '../models/Boundary';
 import {
+  StandardNodeWidth,
+  HeaderHeight,
   DiamondSize,
   InitNodeSize,
   LoopIconSize,
@@ -16,6 +18,7 @@ import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
+import { designerCache } from '../store/DesignerCache';
 
 import {
   calculateIfElseBoundary,
@@ -81,6 +84,11 @@ export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
   if (!json || !json.$type) return boundary;
 
+  const cachedBoundary = designerCache.loadBounary(json);
+  if (cachedBoundary) {
+    return cachedBoundary;
+  }
+
   switch (json.$type) {
     case ObiTypes.ChoiceDiamond:
       boundary = new Boundary(DiamondSize.width, DiamondSize.height);
@@ -117,6 +125,14 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case ObiTypes.InvalidPromptBrick:
       boundary = new Boundary(IconBrickSize.width, IconBrickSize.height);
+      break;
+    case ObiTypes.EndDialog:
+    case ObiTypes.EndTurn:
+    case ObiTypes.RepeatDialog:
+    case ObiTypes.CancelAllDialogs:
+    case ObiTypes.LogAction:
+    case ObiTypes.TraceActivity:
+      boundary = new Boundary(StandardNodeWidth, HeaderHeight);
       break;
     default:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
