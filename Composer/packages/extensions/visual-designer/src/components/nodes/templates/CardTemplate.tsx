@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 
-import { StandardNodeWidth, HeaderHeight } from '../../../constants/ElementSizes';
+import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
 import { ObiColors } from '../../../constants/ElementColors';
 
 const containerCSS = css`
@@ -67,11 +67,25 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       className="CardNode__Body"
       css={css`
         ${fullWidthSection};
+        min-height: ${StandardSectionHeight}px;
         padding: 2px 8px;
       `}
       onClick={onClickBody}
     >
-      {body}
+      <div
+        css={{
+          paddingTop: '3px',
+          whiteSpace: 'initial',
+          fontSize: '12px',
+          lineHeight: '14px',
+          fontFamily: 'Segoe UI',
+          overflowWrap: 'break-word',
+          wordBreak: 'break-all',
+          display: 'inline-block',
+        }}
+      >
+        {body}
+      </div>
     </div>
   );
 
@@ -80,6 +94,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       className="CardNode__Footer"
       css={css`
         ${fullWidthSection};
+        min-height: ${StandardSectionHeight}px;
         padding: 2px 8px;
         border-top: 1px solid ${ObiColors.AzureGray3};
       `}
