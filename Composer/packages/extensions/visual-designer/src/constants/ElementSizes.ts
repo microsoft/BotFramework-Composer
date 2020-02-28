@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export const StandardNodeWidth = 200;
+export const HeaderHeight = 24;
+
 export const InitNodeSize = {
-  width: 200,
+  width: StandardNodeWidth,
   height: 48,
 };
 
