@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export const EntityTypesObj = {
-  EntityType: ['ml', 'prebuilt', 'regex', 'list', 'composite', 'patternany', 'phraselist'],
+  EntityType: ['ml', 'prebuilt', 'regex', 'list', 'composite', 'Pattern.any', 'phraseList'],
   Prebuilt: [
     'age',
     'datetimeV2',
