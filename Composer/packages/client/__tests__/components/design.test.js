@@ -11,7 +11,6 @@ import { TriggerCreationModal } from './../../src/components/ProjectTree/Trigger
 import { ProjectTree } from './../../src/components/ProjectTree';
 import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
 
-//jest.mock('./../../src/components/ProjectTree/TriggerCreationModal');
 jest.mock('@bfc/code-editor', () => {
   return {
     LuEditor: () => <div></div>,
