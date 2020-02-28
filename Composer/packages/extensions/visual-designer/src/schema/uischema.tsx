@@ -17,6 +17,7 @@ import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
+import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -113,16 +114,25 @@ export const uiSchema: UISchema = {
     getRefContent: data => dialogRef => <>Switch to {dialogRef}</>,
   },
   [SDKTypes.EditArray]: {
-    'ui:widget': ActionCard,
-    content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
   },
   [SDKTypes.InitProperty]: {
-    'ui:widget': ActionCard,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
     content: data => `{${data.property || '?'}} = new ${data.type || '?'}`,
   },
   [SDKTypes.SetProperty]: {
-    'ui:widget': ActionCard,
-    content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
     'ui:widget': ActionCard,
