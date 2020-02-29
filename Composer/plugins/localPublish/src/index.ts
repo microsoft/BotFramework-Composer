@@ -18,7 +18,6 @@ const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(fs.rmdir);
 const copyFile = promisify(fs.copyFile);
-const rename = promisify(fs.rename);
 
 interface RunningBot {
   process: ChildProcess;
@@ -31,8 +30,8 @@ interface PublishConfig {
 
 class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
-  private readonly baseDir = './';
-  private readonly templatePath = path.resolve(this.baseDir, 'template', 'CSharp');
+  private readonly baseDir = path.resolve(__dirname, '../');
+  private readonly templatePath = path.resolve(this.baseDir, 'template', 'CSharp.zip');
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
@@ -40,14 +39,15 @@ class LocalPublisher {
       console.log('PUBLISH ', config);
       const { botId, version } = config;
       await this.initBot(botId);
-      await this.saveContent(config, project, user);
-      const url = await this.setBot(botId, version, project);
-
+      await this.saveContent(config, project.files, user);
+      const url = await this.setBot(botId, version, project.files);
+      console.log(url);
       return {
         status: 200,
         result: {
           jobId: new uuid(),
           version: version,
+          endpoint: url,
         },
       };
     } catch (error) {
@@ -69,20 +69,37 @@ class LocalPublisher {
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
   private botExist = async (botId: string) => {
-    const status = await stat(this.getBotDir(botId));
-    return status.isDirectory();
+    try {
+      const status = await stat(this.getBotDir(botId));
+      return status.isDirectory();
+    } catch (error) {
+      return false;
+    }
+  };
+  private dirExist = async (dirPath: string) => {
+    try {
+      const status = await stat(dirPath);
+      return status.isDirectory();
+    } catch (error) {
+      return false;
+    }
   };
 
   private initBot = async (botId: string) => {
-    if (!this.botExist(botId)) {
+    const isExist = await this.botExist(botId);
+    if (!isExist) {
       const botDir = this.getBotDir(botId);
+      console.log(botDir);
       // create bot dir
-      await mkDir(botDir);
+      await mkDir(botDir, { recursive: true });
       // copy runtime template in folder
-      await this.copyDir(this.templatePath, botDir);
+      //await this.copyDir(this.templatePath, botDir);
+      const zip = new AdmZip(this.templatePath);
+      zip.extractAllTo(botDir, true);
+
       // create ComposerDialogs and histroy folder
-      mkDir(this.getBotAssetsDir(botId));
-      mkDir(this.getHistoryDir(botId));
+      mkDir(this.getBotAssetsDir(botId), { recursive: true });
+      mkDir(this.getHistoryDir(botId), { recursive: true });
 
       execSync('dotnet user-secrets init', { cwd: botDir });
       execSync('dotnet build', { cwd: botDir });
@@ -91,7 +108,8 @@ class LocalPublisher {
 
   private saveContent = async (config: any, project: any, user: any) => {
     const dstPath = this.getDownloadPath(config.botId, config.version);
-    await this.zipBot(dstPath, project);
+    const zipFilePath = await this.zipBot(dstPath, project);
+    console.log('zip success');
   };
 
   // start bot in current version
@@ -107,6 +125,7 @@ class LocalPublisher {
     await this.restoreBot(botId, version);
     try {
       await this.startBot(botId, port);
+      return `http://localhost:${port}`;
     } catch (error) {
       this.stopBot(botId);
     }
@@ -152,12 +171,13 @@ class LocalPublisher {
   };
 
   private restoreBot = async (botId: string, version: string) => {
-    const dstPath = this.getDownloadPath(botId, version);
-    await this.unZipBot(dstPath);
+    const srcPath = this.getDownloadPath(botId, version);
+    const dstPath = this.getBotAssetsDir(botId);
+    await this.unZipBot(srcPath, dstPath);
   };
   private zipBot = async (dstPath: string, project: any) => {
     // delete previous and create new
-    if ((await stat(dstPath)).isFile) {
+    if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
     return new Promise((resolve, reject) => {
@@ -174,16 +194,19 @@ class LocalPublisher {
       }
       archive.finalize();
       output.on('close', () => resolve(dstPath));
-      output.on('error', err => reject(err));
+      output.on('error', err => {
+        console.error('zip failed');
+        reject(err);
+      });
     });
   };
 
-  private unZipBot = async (dstPath: string) => {
-    if (!(await stat(dstPath)).isFile) {
+  private unZipBot = async (srcPath: string, dstPath: string) => {
+    if (!fs.existsSync(srcPath)) {
       throw new Error('no such version bot');
     }
-    const zip = new AdmZip(dstPath);
-    zip.extractAllTo(this.getBotAssetsDir, true);
+    const zip = new AdmZip(srcPath);
+    zip.extractAllTo(dstPath, true);
   };
 
   private stopBot = (botId: string) => {
@@ -191,17 +214,17 @@ class LocalPublisher {
     delete LocalPublisher.runningBots[botId];
   };
   private copyDir = async (srcDir: string, dstDir: string) => {
-    if (!(await stat(srcDir)).isDirectory) {
+    if (!(await this.dirExist(srcDir))) {
       throw new Error(`no such dir ${srcDir}`);
     }
-    if (!(await stat(dstDir)).isDirectory) {
+    if (!(await this.dirExist(dstDir))) {
       await mkDir(dstDir, { recursive: true });
     }
     const paths = await readDir(srcDir);
-    for (const path of paths) {
-      const srcPath = `${srcDir}/${path}`;
-      const dstPath = `${dstDir}/${path}`;
-      if ((await stat(srcPath)).isFile) {
+    for (const subPath of paths) {
+      const srcPath = path.resolve(srcDir, subPath);
+      const dstPath = path.resolve(dstDir, subPath);
+      if (!(await stat(srcPath)).isDirectory()) {
         // copy files
         await copyFile(srcPath, dstPath);
       } else {
@@ -224,3 +247,12 @@ export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
 };
+
+// stop all the runningBot when process exit
+const cleanup = (signal: NodeJS.Signals) => {
+  LocalPublisher.stopAll();
+  process.exit(0);
+};
+(['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
+  process.on(signal, cleanup.bind(null, signal));
+});

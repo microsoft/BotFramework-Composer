@@ -39,7 +39,10 @@ const STATE = {
   RELOADING: 1,
   SUCCESS: 2,
 };
-
+const defaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+};
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
@@ -50,7 +53,7 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
   const connected = botStatus === BotStatus.connected;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter(n => n.severity === 'Error').length;
@@ -136,8 +139,8 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      const sensitiveSettings = settingsStorage.get(botName);
-      await (connected ? reloadBot(sensitiveSettings) : connectBot(sensitiveSettings));
+      // const sensitiveSettings = settingsStorage.get(botName);
+      await publishToTarget(state.projectId, defaultPublishConfig);
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);

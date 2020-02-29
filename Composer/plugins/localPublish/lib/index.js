@@ -30,24 +30,25 @@ const removeFile = util_1.promisify(fs_1.default.unlink);
 const mkDir = util_1.promisify(fs_1.default.mkdir);
 const rmDir = util_1.promisify(fs_1.default.rmdir);
 const copyFile = util_1.promisify(fs_1.default.copyFile);
-const rename = util_1.promisify(fs_1.default.rename);
 class LocalPublisher {
     constructor() {
-        this.baseDir = './';
-        this.templatePath = path_1.default.resolve(this.baseDir, 'template', 'CSharp');
+        this.baseDir = path_1.default.resolve(__dirname, '../');
+        this.templatePath = path_1.default.resolve(this.baseDir, 'template', 'CSharp.zip');
         // config include botId and version, project is content(ComposerDialogs)
         this.publish = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('PUBLISH ', config, project);
+                console.log('PUBLISH ', config);
                 const { botId, version } = config;
                 yield this.initBot(botId);
-                this.saveContent(config, project, user);
-                const url = this.setBot(botId, version, project);
+                yield this.saveContent(config, project.files, user);
+                const url = yield this.setBot(botId, version, project.files);
+                console.log(url);
                 return {
                     status: 200,
                     result: {
                         jobId: new uuid_1.v4(),
                         version: version,
+                        endpoint: url,
                     },
                 };
             }
@@ -68,26 +69,45 @@ class LocalPublisher {
         this.getHistoryDir = (botId) => path_1.default.resolve(this.getBotDir(botId), 'history');
         this.getDownloadPath = (botId, version) => path_1.default.resolve(this.getHistoryDir(botId), `${version}.zip`);
         this.botExist = (botId) => __awaiter(this, void 0, void 0, function* () {
-            const status = yield stat(this.getBotDir(botId));
-            return status.isDirectory();
+            try {
+                const status = yield stat(this.getBotDir(botId));
+                return status.isDirectory();
+            }
+            catch (error) {
+                return false;
+            }
+        });
+        this.dirExist = (dirPath) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const status = yield stat(dirPath);
+                return status.isDirectory();
+            }
+            catch (error) {
+                return false;
+            }
         });
         this.initBot = (botId) => __awaiter(this, void 0, void 0, function* () {
-            if (!this.botExist(botId)) {
+            const isExist = yield this.botExist(botId);
+            if (!isExist) {
                 const botDir = this.getBotDir(botId);
+                console.log(botDir);
                 // create bot dir
-                yield mkDir(botDir);
+                yield mkDir(botDir, { recursive: true });
                 // copy runtime template in folder
-                yield this.copyDir(this.templatePath, botDir);
+                //await this.copyDir(this.templatePath, botDir);
+                const zip = new adm_zip_1.default(this.templatePath);
+                zip.extractAllTo(botDir, true);
                 // create ComposerDialogs and histroy folder
-                mkDir(this.getBotAssetsDir(botId));
-                mkDir(this.getHistoryDir(botId));
+                mkDir(this.getBotAssetsDir(botId), { recursive: true });
+                mkDir(this.getHistoryDir(botId), { recursive: true });
                 child_process_1.execSync('dotnet user-secrets init', { cwd: botDir });
                 child_process_1.execSync('dotnet build', { cwd: botDir });
             }
         });
         this.saveContent = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             const dstPath = this.getDownloadPath(config.botId, config.version);
-            yield this.zipBot(dstPath, project);
+            const zipFilePath = yield this.zipBot(dstPath, project);
+            console.log('zip success');
         });
         // start bot in current version
         this.setBot = (botId, version, project = undefined) => __awaiter(this, void 0, void 0, function* () {
@@ -103,6 +123,7 @@ class LocalPublisher {
             yield this.restoreBot(botId, version);
             try {
                 yield this.startBot(botId, port);
+                return `http://localhost:${port}`;
             }
             catch (error) {
                 this.stopBot(botId);
@@ -139,12 +160,13 @@ class LocalPublisher {
             });
         };
         this.restoreBot = (botId, version) => __awaiter(this, void 0, void 0, function* () {
-            const dstPath = this.getDownloadPath(botId, version);
-            yield this.unZipBot(dstPath);
+            const srcPath = this.getDownloadPath(botId, version);
+            const dstPath = this.getBotAssetsDir(botId);
+            yield this.unZipBot(srcPath, dstPath);
         });
         this.zipBot = (dstPath, project) => __awaiter(this, void 0, void 0, function* () {
             // delete previous and create new
-            if ((yield stat(dstPath)).isFile) {
+            if (fs_1.default.existsSync(dstPath)) {
                 yield removeFile(dstPath);
             }
             return new Promise((resolve, reject) => {
@@ -161,15 +183,18 @@ class LocalPublisher {
                 }
                 archive.finalize();
                 output.on('close', () => resolve(dstPath));
-                output.on('error', err => reject(err));
+                output.on('error', err => {
+                    console.error('zip failed');
+                    reject(err);
+                });
             });
         });
-        this.unZipBot = (dstPath) => __awaiter(this, void 0, void 0, function* () {
-            if (!(yield stat(dstPath)).isFile) {
+        this.unZipBot = (srcPath, dstPath) => __awaiter(this, void 0, void 0, function* () {
+            if (!fs_1.default.existsSync(srcPath)) {
                 throw new Error('no such version bot');
             }
-            const zip = new adm_zip_1.default(dstPath);
-            zip.extractAllTo(this.getBotAssetsDir, true);
+            const zip = new adm_zip_1.default(srcPath);
+            zip.extractAllTo(dstPath, true);
         });
         this.stopBot = (botId) => {
             var _a;
@@ -177,17 +202,17 @@ class LocalPublisher {
             delete LocalPublisher.runningBots[botId];
         };
         this.copyDir = (srcDir, dstDir) => __awaiter(this, void 0, void 0, function* () {
-            if (!(yield stat(srcDir)).isDirectory) {
+            if (!(yield this.dirExist(srcDir))) {
                 throw new Error(`no such dir ${srcDir}`);
             }
-            if (!(yield stat(dstDir)).isDirectory) {
+            if (!(yield this.dirExist(dstDir))) {
                 yield mkDir(dstDir, { recursive: true });
             }
             const paths = yield readDir(srcDir);
-            for (const path of paths) {
-                const srcPath = `${srcDir}/${path}`;
-                const dstPath = `${dstDir}/${path}`;
-                if ((yield stat(srcPath)).isFile) {
+            for (const subPath of paths) {
+                const srcPath = path_1.default.resolve(srcDir, subPath);
+                const dstPath = path_1.default.resolve(dstDir, subPath);
+                if (!(yield stat(srcPath)).isDirectory()) {
                     // copy files
                     yield copyFile(srcPath, dstPath);
                 }
@@ -211,5 +236,13 @@ const publisher = new LocalPublisher();
 exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
     // pass in the custom storage class that will override the default
     yield composer.addPublishMethod(publisher);
+});
+// stop all the runningBot when process exit
+const cleanup = (signal) => {
+    LocalPublisher.stopAll();
+    process.exit(0);
+};
+['SIGINT', 'SIGTERM', 'SIGQUIT'].forEach((signal) => {
+    process.on(signal, cleanup.bind(null, signal));
 });
 //# sourceMappingURL=index.js.map
