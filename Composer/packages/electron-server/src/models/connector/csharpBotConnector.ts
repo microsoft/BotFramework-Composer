@@ -32,7 +32,7 @@ export class CSharpBotConnector implements IBotConnector {
   static stopAll = (signal: string) => {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
-      runtime.kill(signal);
+      runtime.kill(signal as any);
       runtimeDebugs[pid]('successfully stopped bot runtime');
       delete CSharpBotConnector.botRuntimes[pid];
     }

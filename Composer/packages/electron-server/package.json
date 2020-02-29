@@ -1,24 +1,27 @@
 {
-  "name": "@bfc/server",
+  "name": "@bfc/electron-server",
   "license": "MIT",
+  "author": "Microsoft Corporation",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./build/main.js",
   "engines": {
     "node": ">=12"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
-    "start": "node build/server.js",
-    "start:dev": "nodemon",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "pack": "electron-builder --dir",
+    "copy-templates":"node ./scripts/copy-templates.js",
+    "dist": "electron-builder",
+    "start": "electron .",
+    "start:dev": "electron .",
+    "//test": "jest",
+    "//test:watch": "jest --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
   },
-  "author": "",
   "nodemonConfig": {
     "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/server.ts",
     "watch": [
@@ -43,8 +46,10 @@
     "@types/lru-cache": "^5.1.0",
     "@types/mock-fs": "^3.6.30",
     "@types/morgan": "^1.7.35",
-    "@types/node": "^11.9.6",
+    "@types/node": "^13.7.7",
     "@types/rimraf": "^2.0.2",
+    "electron": "8.0.2",
+    "electron-builder": "^22.3.2",
     "mock-fs": "^4.10.1",
     "nodemon": "^1.18.11",
     "rimraf": "^2.6.3",
@@ -83,5 +88,78 @@
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"
+  },
+  "build": {
+    "asar": true,
+    "asarUnpack":[
+      "assets/**",
+      "build/templates/**"
+    ],
+    "appId": "com.microsoft.botframework.composer",
+    "files": [
+      "**/*",
+      "./build/**",
+      "!data.json",
+      "!tmp.zip",
+      "!./dist/**",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "./build/public/composerfavicon.ico",
+      "artifactName": "BotFramework-Composer-${version}-windows-setup.${ext}"
+    },
+    "nsis": {
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "packElevateHelper": true,
+      "unicode": true,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Bot Framework Composer (preview)",
+      "oneClick": false
+    },
+    "mac": {
+      "artifactName": "BotFramework-Composer-${version}-mac.${ext}",
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "Bot Framework Composer Installer",
+      "contents": [
+        {
+          "x": 140,
+          "y": 244
+        },
+        {
+          "x": 380,
+          "y": 244,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "electronDownload": {
+      "version": "8.0.2"
+    }
   }
 }
