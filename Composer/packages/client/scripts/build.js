@@ -169,4 +169,9 @@ function copyPublicFolder() {
     dereference: true,
     filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
   });
+
+  fs.copySync(paths.appPublic, paths.appElectronBuild, {
+    dereference: true,
+    filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
+  });
 }
