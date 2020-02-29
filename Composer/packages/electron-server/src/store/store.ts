@@ -18,6 +18,7 @@ const dataStorePath =
 let initData = isHostedInAzure ? abhInitData : localInitData;
 
 if (fs.existsSync(dataStorePath)) {
+  log('reading data from: ' + dataStorePath);
   const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
   initData = runMigrations(userData);
 } else {
