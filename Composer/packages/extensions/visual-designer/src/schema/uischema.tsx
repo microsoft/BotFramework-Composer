@@ -58,11 +58,15 @@ const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
     menu: 'none',
     content: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
     children: data => {
-      const items = Array.isArray(data.choices) ? data.choices.map(choice => choice.value) : [];
-      const ItemRender = props => (
-        <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} {...props} />
-      );
-      return <ListOverview items={items} ItemRender={ItemRender} maxCount={3} />;
+      const renderItem = item => {
+        const content = item.value;
+        return (
+          <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={content}>
+            {content}
+          </BorderedDiv>
+        );
+      };
+      return <ListOverview items={data.choices} renderItem={renderItem} maxCount={3} />;
     },
     colors: {
       theme: ObiColors.LightBlue,
@@ -150,18 +154,20 @@ export const uiSchema: UISchema = {
     'ui:widget': ActionCard,
     content: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
     children: data => {
-      const items = Array.isArray(data.assignments)
-        ? data.assignments.map(assignment => `${assignment.property} = ${assignment.value}`)
-        : [];
-      const ItemRender = props => (
-        <SingleLineDiv
-          width={PropertyAssignmentSize.width}
-          height={PropertyAssignmentSize.height}
-          style={{ paddingLeft: '3px' }}
-          {...props}
-        />
-      );
-      return <ListOverview items={items} ItemRender={ItemRender} maxCount={3} />;
+      const renderItem = item => {
+        const content = `${item.property} = ${item.value}`;
+        return (
+          <SingleLineDiv
+            width={PropertyAssignmentSize.width}
+            height={PropertyAssignmentSize.height}
+            title={content}
+            style={{ paddingLeft: '3px' }}
+          >
+            {content}
+          </SingleLineDiv>
+        );
+      };
+      return <ListOverview items={data.assignments} renderItem={renderItem} maxCount={3} />;
     },
   },
   [SDKTypes.DeleteProperty]: {
