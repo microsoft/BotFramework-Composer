@@ -89,6 +89,17 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
         errorMsg={errorMsg}
         hidePlaceholder={true}
         luOption={luOption}
+        options={{
+          lineNumbers: 'off',
+          minimap: {
+            enabled: false,
+          },
+          lineDecorationsWidth: 10,
+          lineNumbersMinChars: 0,
+          glyphMargin: false,
+          folding: false,
+          renderLineHighlight: 'none',
+        }}
         height={height}
       />
     );
