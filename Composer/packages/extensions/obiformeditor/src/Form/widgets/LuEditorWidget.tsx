@@ -50,7 +50,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
       Name: name,
       Body: '',
     };
-    if (prevState !== luIntent.Body) {
+    if (!prevState.localValue) {
       return {
         localValue: luIntent.Body,
       };
