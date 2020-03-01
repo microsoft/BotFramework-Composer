@@ -3,6 +3,23 @@
 
 import { LGTemplate as LgTemplate } from 'botbuilder-lg';
 
+export interface LuIntentSection {
+  Name: string;
+  Body: string;
+  Entities?: LuEntity[];
+  Children?: LuIntentSection[];
+  range?: CodeRange;
+}
+
+export interface CodeRange {
+  startLineNumber: number;
+  endLineNumber: number;
+}
+
+export interface LuEntity {
+  Name: string;
+}
+
 export interface EditorSchema {
   content?: {
     fieldTemplateOverrides?: any;
@@ -53,6 +70,9 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  addLuIntent: (id: string, intent: LuIntentSection | null) => Promise<void>;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
+  removeLuIntent: (id: string, intentName: string) => Promise<void>;
   createDialog: () => Promise<string>;
   validateExpression: (expression?: string) => Promise<boolean>;
   // TODO: fix these types
