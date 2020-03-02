@@ -8,7 +8,7 @@ import { SensitiveProperties } from '@bfc/shared';
 import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
@@ -314,6 +314,8 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 
 const gotPublishStatus: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
+  state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+  state.botStatus = BotStatus.connected;
   return state;
 };
 

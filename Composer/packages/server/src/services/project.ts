@@ -17,7 +17,7 @@ import { UserIdentity } from './pluginLoader';
 const MAX_RECENT_BOTS = 7;
 
 export class BotProjectService {
-  private static currentBotProject: BotProject | undefined = undefined;
+  private static currentBotProjects: { [key: string]: BotProject } = {};
   private static recentBotProjects: LocationRef[] = [];
   private static projectLocationMap: {
     [key: string]: string;
@@ -29,14 +29,14 @@ export class BotProjectService {
     }
 
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
-      BotProjectService.projectLocationMap = Store.get('projectLocationMap') || {};
+      BotProjectService.projectLocationMap = Store.get('projectLocationMap', {});
     }
   }
 
-  public static lgImportResolver(_source: string, id: string): TextFile {
+  public static lgImportResolver(_source: string, id: string, projectId: string): TextFile {
     BotProjectService.initialize();
     const targetId = Path.basename(id, '.lg');
-    const targetFile = BotProjectService.currentBotProject?.lgFiles.find(({ id }) => id === targetId);
+    const targetFile = BotProjectService.currentBotProjects[projectId]?.lgFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('lg file not found');
     return {
       id,
@@ -44,7 +44,7 @@ export class BotProjectService {
     };
   }
 
-  public static staticMemoryResolver(): string[] {
+  public static staticMemoryResolver(projectId: string): string[] {
     const defaultProperties = [
       'this.value',
       'this.turnCount',
@@ -70,7 +70,7 @@ export class BotProjectService {
       'turn.activityProcessed',
     ];
     const userDefined: string[] =
-      BotProjectService.currentBotProject?.dialogs.reduce((result: string[], dialog) => {
+      BotProjectService.currentBotProjects[projectId]?.dialogs.reduce((result: string[], dialog) => {
         result = [...dialog.userDefinedVariables, ...result];
         return result;
       }, []) || [];
@@ -153,6 +153,7 @@ export class BotProjectService {
 
   public static getProjectById = async (projectId: string, user?: UserIdentity) => {
     BotProjectService.initialize();
+
     if (!BotProjectService.projectLocationMap[projectId]) {
       throw new Error('project not found in cache');
     } else {
@@ -166,6 +167,9 @@ export class BotProjectService {
       const project = new BotProject({ storageId: 'default', path: path }, user);
       project.id = projectId;
       await project.index();
+      // update KV store
+      // eslint-disable-next-line require-atomic-updates
+      BotProjectService.currentBotProjects[projectId] = project;
       return project;
     }
   };

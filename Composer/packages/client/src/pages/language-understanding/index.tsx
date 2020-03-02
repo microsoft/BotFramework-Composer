@@ -32,7 +32,7 @@ interface DefineConversationProps {
 
 const LUPage: React.FC<DefineConversationProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { luFiles, dialogs } = state;
+  const { luFiles, dialogs, projectId } = state;
   const [editMode, setEditMode] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const fileId = props['*'];
@@ -62,9 +62,9 @@ const LUPage: React.FC<DefineConversationProps> = props => {
 
     // fall back to the all-up page if we don't have an active dialog
     if (!isRoot && !activeDialog && dialogs.length) {
-      navigateTo(`/bot/${state.projectId}/language-understanding`);
+      navigateTo(`/bot/${projectId}/language-understanding`);
     }
-  }, [fileId, dialogs]);
+  }, [fileId, dialogs, projectId]);
 
   useEffect(() => {
     setErrorMsg('');
@@ -72,9 +72,9 @@ const LUPage: React.FC<DefineConversationProps> = props => {
 
   function onSelect(id) {
     if (id === '_all') {
-      navigateTo(`/bot/${state.projectId}/language-understanding`);
+      navigateTo(`/bot/${projectId}/language-understanding`);
     } else {
-      navigateTo(`/bot/${state.projectId}/language-understanding/${id}`);
+      navigateTo(`/bot/${projectId}/language-understanding/${id}`);
     }
     setEditMode(false);
   }
@@ -84,7 +84,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
     const payload = {
       id: id, // current opened lu file
       content: newContent,
-      projectId: state.projectId,
+      projectId,
     };
     try {
       await actions.updateLuFile(payload);
@@ -96,7 +96,7 @@ const LUPage: React.FC<DefineConversationProps> = props => {
   // #TODO: get line number from lu parser, then deep link to code editor this
   // Line
   function onTableViewClickEdit({ fileId = '' }) {
-    navigateTo(`/bot/${state.projectId}/language-understanding/${fileId}`);
+    navigateTo(`/bot/${projectId}/language-understanding/${fileId}`);
     setEditMode(true);
   }
 

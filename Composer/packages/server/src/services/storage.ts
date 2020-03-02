@@ -104,7 +104,7 @@ class StorageService {
 
   private isBotFolder = async (storage: IFileStorage, path: string) => {
     // locate Main.dialog
-    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
+    const mainPath = Path.join(path, 'Main', 'Main.dialog');
     const isbot = await storage.exists(mainPath);
     return isbot;
   };

@@ -43,6 +43,7 @@ const links = [
 const SettingPage: React.FC<RouteComponentProps> = () => {
   const [active, setActive] = useState();
   const { state } = useContext(StoreContext);
+  const { projectId } = state;
   const makeProjectLink = (id, path) => {
     return `/bot/${id}${path}`;
   };
@@ -88,7 +89,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
                   selectedKey={active}
                   onLinkClick={(e, item) => {
                     if (item && item.key) {
-                      navigateTo(makeProjectLink(state.projectId, item.key));
+                      navigateTo(makeProjectLink(projectId, item.key));
                     }
                   }}
                 />

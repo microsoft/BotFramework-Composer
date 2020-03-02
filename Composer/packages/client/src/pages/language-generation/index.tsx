@@ -33,7 +33,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
 
   const path = props.location?.pathname ?? '';
   const { fileId = 'common' } = props;
@@ -59,19 +59,19 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   const onSelect = useCallback(
     id => {
-      const url = `/bot/${state.projectId}/language-generation/${id}`;
+      const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/bot/${state.projectId}/language-generation/${fileId}`;
+      let url = `/bot/${projectId}/language-generation/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [fileId, projectId]
   );
 
   const toolbarItems = [
@@ -106,7 +106,7 @@ const LGPage: React.FC<LGPageProps> = props => {
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
             <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
+              <CodeEditor path="/edit/*" fileId={fileId} />
               <TableView path="/" fileId={fileId} />
             </Router>
           </Suspense>
