@@ -41,7 +41,6 @@ const STATE = {
 };
 const defaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
 };
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
@@ -139,8 +138,8 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setFetchState(STATE.RELOADING);
     try {
-      // const sensitiveSettings = settingsStorage.get(botName);
-      await publishToTarget(state.projectId, defaultPublishConfig);
+      const sensitiveSettings = settingsStorage.get(botName);
+      await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
