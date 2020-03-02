@@ -23,7 +23,7 @@ import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, LuisStatus, FileUpdateType } from './interface';
+import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
@@ -89,7 +89,6 @@ export class BotProject {
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
     }
-    await this.luPublisher.loadStatus(this.luFiles.map(f => f.relativePath));
   };
 
   public getIndexes = () => {
@@ -99,7 +98,7 @@ export class BotProject {
       location: this.dir,
       dialogs: this.dialogs,
       lgFiles: this.lgFiles,
-      luFiles: this.mergeLuStatus(this.luFiles, this.luPublisher.status),
+      luFiles: this.luFiles,
       schemas: this.getSchemas(),
       botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
@@ -131,25 +130,6 @@ export class BotProject {
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
     await this.luPublisher.setLuisConfig(config.luis);
-  };
-
-  // merge the status managed by luPublisher to the LuFile structure to keep a
-  // unified interface
-  private mergeLuStatus = (
-    luFiles: LuFile[],
-    luStatus: {
-      [key: string]: LuisStatus;
-    }
-  ) => {
-    return luFiles.map(x => {
-      if (!luStatus[x.relativePath]) {
-        throw new Error(`No luis status for lu file ${x.relativePath}`);
-      }
-      return {
-        ...x,
-        status: luStatus[x.relativePath],
-      };
-    });
   };
 
   public getSchemas = () => {
@@ -305,9 +285,8 @@ export class BotProject {
     }
 
     await this._updateFile(luFile.relativePath, content);
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
 
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
+    return this.luFiles;
   };
 
   public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LuFile[]> => {
@@ -319,8 +298,7 @@ export class BotProject {
 
     // TODO: validate before save
     await this._createFile(relativePath, content);
-    await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status); // return a merged LUFile always
+    return this.luFiles; // return a merged LUFile always
   };
 
   public removeLuFile = async (id: string): Promise<LuFile[]> => {
@@ -331,42 +309,31 @@ export class BotProject {
 
     await this._removeFile(luFile.relativePath);
 
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
     await this._cleanUp(luFile.relativePath);
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
+    return this.luFiles;
   };
 
   public publishLuis = async (authoringKey: string) => {
     this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luFiles.filter(this.isReferred);
-    const unpublished = this.luPublisher.getUnpublisedFiles(referred);
 
-    const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
+    const invalidLuFile = referred.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = unpublished.filter(this.isLuFileEmpty);
+    const emptyLuFiles = referred.filter(this.isLuFileEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    if (unpublished.length > 0) {
+    if (referred.length > 0) {
       await this.luPublisher.setCrossTrainConfig(this.dialogs);
-      await this.luPublisher.publish(unpublished);
+      await this.luPublisher.publish(referred);
     }
 
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
-  };
-
-  public checkLuisPublished = () => {
-    const referredLuFiles = this.luFiles.filter(this.isReferred);
-    if (referredLuFiles.length <= 0) {
-      return true;
-    } else {
-      return this.luPublisher.checkLuisPublised(referredLuFiles);
-    }
+    return this.luFiles;
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

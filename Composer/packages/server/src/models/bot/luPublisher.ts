@@ -3,89 +3,36 @@
 
 import isEqual from 'lodash/isEqual';
 import { runBuild } from '@bfcomposer/lubuild';
-import { crossTrain } from '@bfcomposer/bf-lu/lib/parser/lubuild';
 import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
-import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
+import { ILuisConfig } from './interface';
 
-const GENERATEDFOLDER = 'ComposerDialogs/generated';
-const INTERUPTION = 'ComposerDialogs/generated/interuption';
-const LU_STATUS_FILE = 'luis.status.json';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const crossTrain = require('@bfcomposer/bf-lu/lib/parser/cross-train/cross-train.js');
+
+const DIALOGS_FOLDER = 'ComposerDialogs';
+const GENERATEDFOLDER = 'generated';
+const INTERUPTION = 'interuption';
 const CROSS_TRAIN_CONFIG = 'mapping_rules.json';
-const DEFAULT_STATUS = {
-  lastUpdateTime: 1,
-  lastPublishTime: 0, // means unpublished
-};
 
 export class LuPublisher {
   public botDir: string;
+  public dialogsDir: string;
   public generatedFolderPath: string;
   public interuptionFolderPath: string;
-  public statusFile: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public crossTrainMapRule: { [key: string]: string } = {};
 
-  // key: filePath relative to bot dir
-  // value: lastUpdateTime && lastPublishTime
-  public status: { [key: string]: LuisStatus } = {};
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
-    this.generatedFolderPath = Path.join(this.botDir, GENERATEDFOLDER);
-    this.interuptionFolderPath = Path.join(this.botDir, INTERUPTION);
-    this.statusFile = Path.join(this.generatedFolderPath, LU_STATUS_FILE);
+    this.dialogsDir = Path.join(this.botDir, DIALOGS_FOLDER);
+    this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
+    this.interuptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
   }
-
-  // load luis status from luis.status.json
-  public loadStatus = async (files: string[] = []) => {
-    if (await this.storage.exists(this.statusFile)) {
-      const content = await this.storage.readFile(this.statusFile);
-      this.status = JSON.parse(content);
-    }
-
-    // make sure all LU file have an initial value
-    files.forEach(f => {
-      if (!this.status[f]) {
-        this.status[f] = { ...DEFAULT_STATUS }; // use ... ensure don't referred to the same object
-      }
-    });
-    return this.status;
-  };
-
-  // reset status when config changed, because status don't represent the current config
-  public resetStatus = () => {
-    for (const key in this.status) {
-      this.status[key] = { ...DEFAULT_STATUS };
-    }
-  };
-
-  public saveStatus = async () => {
-    if (!(await this.storage.exists(this.generatedFolderPath))) {
-      await this.storage.mkDir(this.generatedFolderPath);
-    }
-    await this.storage.writeFile(this.statusFile, JSON.stringify(this.status, null, 2));
-  };
-
-  public onFileChange = async (relativePath: string, type: FileUpdateType) => {
-    switch (type) {
-      case FileUpdateType.CREATE:
-        this.status[relativePath] = {
-          lastUpdateTime: Date.now(),
-          lastPublishTime: 0, // unpublished
-        };
-        break;
-      case FileUpdateType.UPDATE:
-        this.status[relativePath].lastUpdateTime = Date.now();
-        break;
-      case FileUpdateType.DELETE:
-        delete this.status[relativePath];
-        break;
-    }
-    await this.saveStatus();
-  };
 
   public publish = async (luFiles: LuFile[]) => {
     try {
@@ -105,34 +52,9 @@ export class LuPublisher {
 
       //remove the cross train result
       await this._cleanCrossTrain();
-
-      // update pubish status after sucessfully published
-      const curTime = Date.now();
-      luFiles.forEach(f => {
-        this.status[f.relativePath].lastPublishTime = curTime;
-      });
-
-      await this.saveStatus();
     } catch (error) {
-      throw new Error(error?.message ?? 'Error publishing to LUIS.');
+      throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS.');
     }
-  };
-
-  public getUnpublisedFiles = (files: LuFile[]) => {
-    // unpublished means either
-    // 1. there is no status tracking
-    // 2. the status shows that lastPublishTime < lastUpdateTime
-    return files.filter(f => {
-      return (
-        !this.status[f.relativePath] ||
-        this.status[f.relativePath].lastPublishTime <= this.status[f.relativePath].lastUpdateTime
-      );
-    });
-  };
-
-  public checkLuisPublised = (files: LuFile[]) => {
-    const unpublished = this.getUnpublisedFiles(files);
-    return unpublished.length === 0;
   };
 
   public getLuisConfig = () => this.config;
@@ -141,7 +63,6 @@ export class LuPublisher {
     if (!isEqual(config, this.config)) {
       this.config = config;
       await this._deleteDir(this.generatedFolderPath);
-      this.resetStatus();
     }
   };
 
@@ -199,7 +120,7 @@ export class LuPublisher {
   private async _crossTrain() {
     //await this.createCrossTrainConfig();
     const result = await crossTrain.train(
-      this.botDir,
+      this.dialogsDir,
       '_Interuption',
       `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`
     );
