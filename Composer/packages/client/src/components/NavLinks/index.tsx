@@ -6,7 +6,7 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 
-import { dialogItem } from '../../pages/language-understanding/styles';
+import { dialogItemSelected, dialogItemNotSelected } from '../../pages/language-understanding/styles';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 interface NavLinksProps {
   navLinks: any[];
@@ -26,7 +26,7 @@ export const NavLinks: React.FC<NavLinksProps> = props => {
             onClick={() => {
               onSelect(dialog.id);
             }}
-            styles={dialogItem(fileId === dialog.id)}
+            styles={fileId === dialog.id ? dialogItemSelected : dialogItemNotSelected}
             text={dialog.name}
             ariaLabel={dialog.id + 'language understanding file'}
             ariaHidden={false}

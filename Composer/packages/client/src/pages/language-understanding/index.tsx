@@ -22,7 +22,8 @@ import {
   flexContent,
   actionButton,
   contentEditor,
-  dialogItem,
+  dialogItemSelected,
+  dialogItemNotSelected,
   HeaderText,
 } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -111,7 +112,7 @@ const LUPage: React.FC<LUPageProps> = props => {
             onClick={() => {
               onSelect('all');
             }}
-            styles={dialogItem(isRoot)}
+            styles={isRoot ? dialogItemSelected : dialogItemNotSelected}
             text={'All'}
           />
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
