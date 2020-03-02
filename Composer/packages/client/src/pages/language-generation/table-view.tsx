@@ -29,7 +29,7 @@ interface TableViewProps extends RouteComponentProps<{}> {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles } = state;
+  const { dialogs, lgFiles, projectId } = state;
   const { fileId } = props;
   const file = lgFiles.find(({ id }) => id === fileId);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
@@ -44,40 +44,40 @@ const TableView: React.FC<TableViewProps> = props => {
     if (!file || isEmpty(file)) return;
 
     setTemplates(file.templates);
-  }, [file, activeDialog]);
+  }, [file, activeDialog, projectId]);
 
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
       const { name } = template;
-      navigateTo(`/bots/${state.projectId}/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
+      navigateTo(`/bot/${projectId}/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
     },
-    [fileId]
+    [fileId, projectId]
   );
 
   const onCreateNewTemplate = useCallback(() => {
     const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
       file,
-      projectId: state.projectId,
+      projectId,
       template: {
         name: newName,
         body: '-TemplateValue',
       },
     };
     createLgTemplate(payload);
-  }, [templates, file]);
+  }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
     index => {
       const payload = {
         file,
-        projectId: state.projectId,
+        projectId,
         templateName: templates[index].name,
       };
 
       removeLgTemplate(payload);
     },
-    [templates, file]
+    [templates, file, projectId]
   );
 
   const onCopyTemplate = useCallback(
@@ -86,13 +86,13 @@ const TableView: React.FC<TableViewProps> = props => {
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
         file,
-        projectId: state.projectId,
+        projectId,
         fromTemplateName: name,
         toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
     },
-    [templates, file]
+    [templates, file, projectId]
   );
 
   const getTemplatesMoreButtons = useCallback(
@@ -195,7 +195,7 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           const usedDialogsLinks = templateUsedInDialogMap[item.name].map(id => {
             return (
-              <div key={id} onClick={() => navigateTo(`/bot/${state.projectId}/dialogs/${id}`)}>
+              <div key={id} onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}>
                 <Link>{id}</Link>
               </div>
             );
@@ -228,7 +228,7 @@ const TableView: React.FC<TableViewProps> = props => {
     }
 
     return tableColums;
-  }, [activeDialog, templates]);
+  }, [activeDialog, templates, projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (

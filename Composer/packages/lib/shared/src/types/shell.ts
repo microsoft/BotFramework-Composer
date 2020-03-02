@@ -18,6 +18,7 @@ export interface BotSchemas {
 
 export interface ShellData {
   botName: string;
+  projectId: string;
   currentDialog: any;
   data: {
     $type?: string;

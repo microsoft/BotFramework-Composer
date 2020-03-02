@@ -46,7 +46,7 @@ const FileTargetTypes = {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
 
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName, projectId } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -87,6 +87,7 @@ export const ShellApi: React.FC = () => {
     return {
       data: getData(sourceWindow),
       botName,
+      projectId,
       dialogs,
       focusPath,
       schemas,
