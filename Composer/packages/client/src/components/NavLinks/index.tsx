@@ -5,9 +5,9 @@
 
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { dialogItemSelected, dialogItemNotSelected } from '../../pages/language-understanding/styles';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 interface NavLinksProps {
   navLinks: any[];
   fileId: string;
@@ -19,7 +19,7 @@ export const NavLinks: React.FC<NavLinksProps> = props => {
 
   return (
     <Fragment>
-      {navLinks.map((dialog, index) => {
+      {navLinks.map(dialog => {
         return (
           <DefaultButton
             key={dialog.id}

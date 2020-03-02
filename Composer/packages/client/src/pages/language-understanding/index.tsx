@@ -7,6 +7,7 @@ import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+
 import { StoreContext } from '../../store';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
