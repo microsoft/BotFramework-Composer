@@ -131,14 +131,19 @@ export const consoleStyle = css`
   margin-bottom: 20px;
 `;
 
-export const dialogItem = selected => css`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: ${selected ? NeutralColors.gray20 : NeutralColors.white};
-  font-weight: ${selected ? FontWeights.semibold : FontWeights.semilight};
-  height: 32px;
-  font-size: ${FontSizes.small};
-  padding-left: 18px;
-  cursor: pointer;
-`;
+export const dialogItem = selected => {
+  return {
+    root: {
+      background: selected ? NeutralColors.gray20 : NeutralColors.white,
+      fontWeight: selected ? FontWeights.semibold : FontWeights.semilight,
+      height: '32px',
+      fontSize: FontSizes.small,
+      paddingLeft: '16px',
+      paddingRight: 0,
+      border: 0,
+      textAlign: 'left',
+      marginLeft: 0,
+      marginRight: 0,
+    },
+  };
+};
