@@ -103,10 +103,6 @@ export class CSharpBotConnector implements IBotConnector {
         configList.push('--luis:endpointKey');
         configList.push(config.luis.authoringKey);
       }
-      if (config.luis.authoringRegion) {
-        configList.push('--luis:endpoint');
-        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
-      }
     }
 
     return configList;

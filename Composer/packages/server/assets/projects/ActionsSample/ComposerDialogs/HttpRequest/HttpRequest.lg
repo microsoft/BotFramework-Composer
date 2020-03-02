@@ -1,10 +1,10 @@
 [import](common.lg)
 
 # bfdactivity-229784
--Great! Your pet's name is @{user.petname}
+-Great! Your pet's name is ${user.petname}
 
 # bfdactivity-200761
--Done! You have added a pet named "@{user.postResponse.content.name}" with id "@{user.postResponse.content.id}"
+-Done! You have added a pet named "${user.postResponse.content.name}" with id "${user.postResponse.content.id}"
 
 # bfdactivity-212615
--Great! I found your pet named "@{user.getResponse.content.name}"
+-Great! I found your pet named "${user.getResponse.content.name}"
