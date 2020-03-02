@@ -12,11 +12,8 @@ import compression from 'compression';
 import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
-
-// import { LGServer } from '@bfc/lg-languageserver';
+import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
-
-import { LGServer } from '../../tools/language-servers/language-generation/src/LGServer';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';

@@ -126,7 +126,6 @@ function ExtensionContainer() {
     apiClient.connect();
 
     apiClient.registerApi('reset', newShellData => {
-      console.log(newShellData);
       setShellData(newShellData);
     });
 
@@ -148,8 +147,6 @@ function ExtensionContainer() {
     });
 
     shellApi.getState().then(result => {
-      console.log(1);
-      console.log(result);
       setShellData(result);
     });
 
