@@ -31,7 +31,7 @@ interface PublishConfig {
 class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
-  private readonly templatePath = path.resolve(this.baseDir, 'template', 'CSharp.zip');
+  private readonly templatePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
@@ -93,9 +93,10 @@ class LocalPublisher {
       // create bot dir
       await mkDir(botDir, { recursive: true });
       // copy runtime template in folder
-      //await this.copyDir(this.templatePath, botDir);
-      const zip = new AdmZip(this.templatePath);
-      zip.extractAllTo(botDir, true);
+      await this.copyDir(this.templatePath, botDir);
+      // unzip runtime template to bot folder
+      // const zip = new AdmZip(this.templatePath);
+      // zip.extractAllTo(botDir, true);
 
       // create ComposerDialogs and histroy folder
       mkDir(this.getBotAssetsDir(botId), { recursive: true });

@@ -33,7 +33,7 @@ const copyFile = util_1.promisify(fs_1.default.copyFile);
 class LocalPublisher {
     constructor() {
         this.baseDir = path_1.default.resolve(__dirname, '../');
-        this.templatePath = path_1.default.resolve(this.baseDir, 'template', 'CSharp.zip');
+        this.templatePath = path_1.default.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
         // config include botId and version, project is content(ComposerDialogs)
         this.publish = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             try {
@@ -94,9 +94,10 @@ class LocalPublisher {
                 // create bot dir
                 yield mkDir(botDir, { recursive: true });
                 // copy runtime template in folder
-                //await this.copyDir(this.templatePath, botDir);
-                const zip = new adm_zip_1.default(this.templatePath);
-                zip.extractAllTo(botDir, true);
+                yield this.copyDir(this.templatePath, botDir);
+                // unzip runtime template to bot folder
+                // const zip = new AdmZip(this.templatePath);
+                // zip.extractAllTo(botDir, true);
                 // create ComposerDialogs and histroy folder
                 mkDir(this.getBotAssetsDir(botId), { recursive: true });
                 mkDir(this.getHistoryDir(botId), { recursive: true });
