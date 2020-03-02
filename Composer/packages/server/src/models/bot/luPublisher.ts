@@ -156,7 +156,7 @@ export class LuPublisher {
 
     //add the lu file that are not in crossTrain config.
     luFiles.forEach(file => {
-      if (~paths.indexOf(`${file.id}.lu`)) {
+      if (paths.indexOf(`${file.id}.lu`) === -1) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
     });
