@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { LuIntentSection } from '@bfc/shared';
+
 import { Diagnostic } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils/types';
 
@@ -18,6 +20,11 @@ export interface ITrigger {
   isIntent: boolean;
 }
 
+export interface ReferredLuIntents {
+  name: string;
+  path: string;
+}
+
 export interface DialogInfo {
   content: any;
   diagnostics: Diagnostic[];
@@ -27,7 +34,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
-  luIntents: string[];
+  referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   relativePath: string;
   userDefinedVariables: string[];
@@ -62,14 +69,6 @@ export enum LuSectionTypes {
 
 export interface LuEntity {
   Name: string;
-}
-
-export interface LuIntentSection {
-  Name: string;
-  Body: string;
-  Entities?: LuEntity[];
-  Children?: LuIntentSection[];
-  range?: CodeRange;
 }
 
 export interface LuFile {

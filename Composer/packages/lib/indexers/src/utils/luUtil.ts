@@ -9,8 +9,9 @@
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
+import { LuIntentSection } from '@bfc/shared';
 
-import { LuIntentSection, LuSectionTypes } from '../type';
+import { LuSectionTypes } from '../type';
 import { luIndexer } from '../luIndexer';
 import { Diagnostic } from '../diagnostic';
 const { parse } = luIndexer;
