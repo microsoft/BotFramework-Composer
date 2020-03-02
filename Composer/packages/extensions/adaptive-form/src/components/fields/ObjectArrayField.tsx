@@ -59,13 +59,15 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         {orderedProperties.length > 1 && (
           <div css={objectArrayField.objectItemLabel}>
             {orderedProperties.map((key, index) => {
-              const { description, title } = properties[key];
+              if (typeof key === 'string') {
+                const { description, title } = properties[key];
 
-              return (
-                <div key={index} css={objectArrayField.objectItemValueLabel}>
-                  <FieldLabel description={description} id={`${id}.${key}`} inline={true} label={title} />
-                </div>
-              );
+                return (
+                  <div key={index} css={objectArrayField.objectItemValueLabel}>
+                    <FieldLabel description={description} id={`${id}.${key}`} inline={true} label={title} />
+                  </div>
+                );
+              }
             })}
             <div style={{ width: '32px' }} />
           </div>
@@ -84,29 +86,35 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
       </div>
       <div css={objectArrayField.inputFieldContainer}>
         <div css={objectArrayField.arrayItemField}>
-          {orderedProperties.map((property, index, allProperties) => (
-            <div key={index} css={objectArrayField.objectItemInputField}>
-              <TextField
-                autoComplete="off"
-                iconProps={{
-                  ...(index === allProperties.length - 1
-                    ? {
-                        iconName: 'ReturnKey',
-                        style: {
-                          color: SharedColors.cyanBlue10,
-                          opacity: 0.6,
-                        },
-                      }
-                    : {}),
-                }}
-                placeholder={getNewPlaceholder(props, property)}
-                styles={{ field: { padding: '0 24px 0 8px' } }}
-                value={newObject[property] || ''}
-                onChange={handleNewObjectChange(property)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-          ))}
+          {orderedProperties
+            .filter(p => !Array.isArray(p))
+            .map((property, index, allProperties) => {
+              if (typeof property === 'string') {
+                return (
+                  <div key={index} css={objectArrayField.objectItemInputField}>
+                    <TextField
+                      autoComplete="off"
+                      iconProps={{
+                        ...(index === allProperties.length - 1
+                          ? {
+                              iconName: 'ReturnKey',
+                              style: {
+                                color: SharedColors.cyanBlue10,
+                                opacity: 0.6,
+                              },
+                            }
+                          : {}),
+                      }}
+                      placeholder={getNewPlaceholder(props, property)}
+                      styles={{ field: { padding: '0 24px 0 8px' } }}
+                      value={newObject[property] || ''}
+                      onChange={handleNewObjectChange(property)}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                );
+              }
+            })}
         </div>
         <IconButton
           disabled

@@ -78,24 +78,6 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
       )}
     </div>
   );
-
-  // return (
-  //   <Section
-  //     description={() => (
-  //       <React.Fragment>
-  //         To understand what the user says, your dialog needs a &lsquo;Recognizer&rsquo; that includes example words and
-  //         sentences that users may use.
-  //         <br />
-  //         <br />
-  //         <a href="https://aka.ms/BFC-Using-LU" rel="noopener noreferrer" target="_blank">
-  //           {formatMessage('Learn More')}
-  //         </a>
-  //       </React.Fragment>
-  //     )}
-  //     title="Language Understanding"
-  //   >
-  //   </Section>
-  // );
 };
 
 export { RecognizerField };

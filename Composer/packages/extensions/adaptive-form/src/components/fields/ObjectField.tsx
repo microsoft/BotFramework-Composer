@@ -1,25 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React from 'react';
-import { UIOptions, FieldProps } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension';
 
-import { resolvePropSchema, getOrderedProperties } from '../../utils';
-import SchemaField from '../SchemaField';
+import { getOrderedProperties } from '../../utils';
+import { FormRow } from '../FormRow';
 
 const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
-  const {
-    schema,
-    uiOptions,
-    depth,
-    value,
-    definitions,
-    className,
-    id,
-    onBlur,
-    onFocus,
-    rawErrors,
-    transparentBorder,
-  } = props;
+  const { schema, uiOptions, depth, value, ...rest } = props;
 
   if (!schema) {
     return null;
@@ -47,32 +35,17 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
 
   return (
     <React.Fragment>
-      {orderedProperties
-        .map(property => {
-          const propSchema = resolvePropSchema(schema, property, definitions);
-          if (propSchema) {
-            return (
-              <SchemaField
-                key={`${id}.${property}`}
-                className={className}
-                definitions={definitions}
-                depth={newDepth}
-                id={`${id}.${property}`}
-                label={props.label === false ? false : undefined}
-                name={property}
-                rawErrors={rawErrors?.[property]}
-                schema={propSchema}
-                transparentBorder={transparentBorder}
-                uiOptions={(uiOptions.properties?.[property] as UIOptions) ?? {}}
-                value={value && value[property]}
-                onBlur={onBlur}
-                onChange={handleChange(property)}
-                onFocus={onFocus}
-              />
-            );
-          }
-        })
-        .filter(Boolean)}
+      {orderedProperties.map(row => (
+        <FormRow
+          key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
+          {...rest}
+          schema={schema}
+          uiOptions={uiOptions}
+          row={row}
+          depth={newDepth}
+          onChange={handleChange}
+        />
+      ))}
     </React.Fragment>
   );
 };

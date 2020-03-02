@@ -27,7 +27,7 @@ export interface UIOptions {
   /** Label override. */
   label?: string | UIOptionFunc<string | undefined> | false;
   /** Set order of fields. Use * for all other fields. */
-  order?: string[] | UIOptionFunc<string[]>;
+  order?: (string | [string, string])[] | UIOptionFunc<(string | [string, string])[]>;
   /** Placeholder override. If undefined, schema.examples are used. */
   placeholder?: string | UIOptionFunc<string, undefined>;
   /** Define ui options on fields that are children of this field. */
