@@ -41,7 +41,6 @@ const STATE = {
 };
 const defaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
 };
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);

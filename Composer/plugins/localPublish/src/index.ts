@@ -33,16 +33,18 @@ class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
   private readonly templatePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
+
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
     try {
-      console.log('PUBLISH ', config);
-      const { botId, version, settings } = config;
+      const { settings } = config;
+      const botId = project.id;
+      const version = 'default';
+
       await this.initBot(botId);
-      await this.saveContent(config, project.files, user);
+      await this.saveContent(botId, version, project.files, user);
       const url = await this.setBot(botId, version, settings, project.files);
-      console.log(url);
       return {
         status: 200,
         result: {
@@ -90,7 +92,6 @@ class LocalPublisher {
     const isExist = await this.botExist(botId);
     if (!isExist) {
       const botDir = this.getBotDir(botId);
-      console.log(botDir);
       // create bot dir
       await mkDir(botDir, { recursive: true });
       // copy runtime template in folder
@@ -108,10 +109,9 @@ class LocalPublisher {
     }
   };
 
-  private saveContent = async (config: any, project: any, user: any) => {
-    const dstPath = this.getDownloadPath(config.botId, config.version);
+  private saveContent = async (botId: string, version: string, project: any, user: any) => {
+    const dstPath = this.getDownloadPath(botId, version);
     const zipFilePath = await this.zipBot(dstPath, project);
-    console.log('zip success');
   };
 
   // start bot in current version
@@ -214,7 +214,6 @@ class LocalPublisher {
       archive.finalize();
       output.on('close', () => resolve(dstPath));
       output.on('error', err => {
-        console.error('zip failed');
         reject(err);
       });
     });

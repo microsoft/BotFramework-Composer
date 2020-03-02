@@ -21,18 +21,15 @@ export const PublishController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
-    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [
-      {
-        ...defaultPublishConfig,
-        configuration: {
-          botId: projectId,
-          version: '1',
-          settings: merge({}, currentProject.settings, sensitiveSetting),
-        },
-      },
-    ];
+    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
+
+    // append config from client(like sensitive settings)
+    config.configuration = {
+      ...config.configuration,
+      settings: merge({}, currentProject.settings, sensitiveSetting),
+    };
 
     if (config && pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
       // get the externally defined method

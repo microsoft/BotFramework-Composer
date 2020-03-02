@@ -37,10 +37,12 @@ class LocalPublisher {
         // config include botId and version, project is content(ComposerDialogs)
         this.publish = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('PUBLISH ', config);
-                const { botId, version, settings } = config;
+                console.log(this.templatePath);
+                const { settings } = config;
+                const botId = project.id;
+                const version = 'default';
                 yield this.initBot(botId);
-                yield this.saveContent(config, project.files, user);
+                yield this.saveContent(botId, version, project.files, user);
                 const url = yield this.setBot(botId, version, settings, project.files);
                 console.log(url);
                 return {
@@ -105,8 +107,8 @@ class LocalPublisher {
                 child_process_1.execSync('dotnet build', { cwd: botDir });
             }
         });
-        this.saveContent = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
-            const dstPath = this.getDownloadPath(config.botId, config.version);
+        this.saveContent = (botId, version, project, user) => __awaiter(this, void 0, void 0, function* () {
+            const dstPath = this.getDownloadPath(botId, version);
             const zipFilePath = yield this.zipBot(dstPath, project);
             console.log('zip success');
         });
@@ -203,7 +205,6 @@ class LocalPublisher {
                 archive.finalize();
                 output.on('close', () => resolve(dstPath));
                 output.on('error', err => {
-                    console.error('zip failed');
                     reject(err);
                 });
             });
