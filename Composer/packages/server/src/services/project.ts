@@ -29,7 +29,7 @@ export class BotProjectService {
     }
 
     if (!BotProjectService.projectLocationMap || Object.keys(BotProjectService.projectLocationMap).length === 0) {
-      BotProjectService.projectLocationMap = Store.get('projectLocationMap') || {};
+      BotProjectService.projectLocationMap = Store.get('projectLocationMap', {});
     }
   }
 
