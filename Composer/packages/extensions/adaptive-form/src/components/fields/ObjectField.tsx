@@ -39,6 +39,7 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
         <FormRow
           key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
           {...rest}
+          value={value}
           schema={schema}
           uiOptions={uiOptions}
           row={row}
