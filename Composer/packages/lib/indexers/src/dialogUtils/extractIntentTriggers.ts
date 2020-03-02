@@ -11,7 +11,7 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
   const triggers: IIntentTrigger[] = [];
 
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    if (value.$type === SDKTypes.OnIntent && value.actions[0]?.$type === SDKTypes.BeginDialog) {
+    if (value.$type === SDKTypes.OnIntent && value.actions?.[0]?.$type === SDKTypes.BeginDialog) {
       triggers.push({
         intent: value.intent,
         dialog: value.actions[0].dialog,
