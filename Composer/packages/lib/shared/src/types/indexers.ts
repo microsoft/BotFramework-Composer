@@ -17,6 +17,11 @@ export interface ITrigger {
   isIntent: boolean;
 }
 
+export interface ReferredLuIntents {
+  name: string;
+  path: string;
+}
+
 export interface DialogInfo {
   content: any;
   diagnostics: Diagnostic[];
@@ -26,7 +31,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
-  luIntents: string[];
+  referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   relativePath: string;
   userDefinedVariables: string[];
@@ -47,6 +52,14 @@ export interface Utterance {
   text: string;
 }
 
+export interface LuIntentSection {
+  Name: string;
+  Body: string;
+  Entities?: LuEntity[];
+  Children?: LuIntentSection[];
+  range?: CodeRange;
+}
+
 export interface LuParsed {
   intents: LuIntentSection[];
   diagnostics: Diagnostic[];
@@ -60,14 +73,6 @@ export enum LuSectionTypes {
 
 export interface LuEntity {
   Name: string;
-}
-
-export interface LuIntentSection {
-  Name: string;
-  Body: string;
-  Entities?: LuEntity[];
-  Children?: LuIntentSection[];
-  range?: CodeRange;
 }
 
 export interface LuFile {

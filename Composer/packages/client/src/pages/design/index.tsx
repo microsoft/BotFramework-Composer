@@ -122,14 +122,19 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = dialog => {
-    const payload = {
+  const onTriggerCreationSubmit = (dialog, luFile) => {
+    const dialogPayload = {
       id: dialog.id,
       content: dialog.content,
     };
+    const luFilePayload = {
+      id: luFile.id,
+      content: luFile.content,
+    };
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateDialog(payload);
+    actions.updateLuFile(luFilePayload);
+    actions.updateDialog(dialogPayload);
   };
 
   function handleSelect(id, selected = '') {

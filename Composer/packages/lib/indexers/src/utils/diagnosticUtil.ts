@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
+import { LuIntentSection, Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -27,10 +27,15 @@ export function offsetRange(range: Range, offset: number): Range {
   );
 }
 
+export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange): boolean {
+  if (!diagnostic.range) return false;
+  return diagnostic.range.start.line >= range.startLineNumber && diagnostic.range.end.line <= range.endLineNumber;
+}
+
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter(d => {
-    return d.range && d.range.start.line >= range.startLineNumber && d.range.end.line <= range.endLineNumber;
+    return d.range && isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
   return filteredDiags.map(d => {
@@ -40,6 +45,22 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
         ...d,
         range: offsetRange(range, offset),
       };
+    }
+    return d;
+  });
+}
+
+export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuIntentSection): Diagnostic[] {
+  const { range } = section;
+  if (!range) return diagnostics;
+  const filteredDiags = diagnostics.filter(d => {
+    return isDiagnosticWithInRange(d, range);
+  });
+  const offset = range.startLineNumber;
+  return filteredDiags.map(d => {
+    const { range } = d;
+    if (range) {
+      d.range = offsetRange(range, offset);
     }
     return d;
   });
