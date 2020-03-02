@@ -26,6 +26,7 @@ interface RunningBot {
 interface PublishConfig {
   botId: string;
   version: string;
+  settings: any;
 }
 
 class LocalPublisher {
@@ -37,10 +38,10 @@ class LocalPublisher {
   publish = async (config: PublishConfig, project, user) => {
     try {
       console.log('PUBLISH ', config);
-      const { botId, version } = config;
+      const { botId, version, settings } = config;
       await this.initBot(botId);
       await this.saveContent(config, project.files, user);
-      const url = await this.setBot(botId, version, project.files);
+      const url = await this.setBot(botId, version, settings, project.files);
       console.log(url);
       return {
         status: 200,
@@ -114,7 +115,7 @@ class LocalPublisher {
   };
 
   // start bot in current version
-  private setBot = async (botId: string, version: string, project: any = undefined) => {
+  private setBot = async (botId: string, version: string, settings: any, project: any = undefined) => {
     // get port, and stop previous bot if exist
     let port;
     if (LocalPublisher.runningBots[botId]) {
@@ -125,19 +126,19 @@ class LocalPublisher {
     }
     await this.restoreBot(botId, version);
     try {
-      await this.startBot(botId, port);
+      await this.startBot(botId, port, settings);
       return `http://localhost:${port}`;
     } catch (error) {
       this.stopBot(botId);
     }
   };
 
-  private startBot = async (botId: string, port: number): Promise<string> => {
+  private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
     const botDir = this.getBotDir(botId);
     return new Promise((resolve, reject) => {
       const process = spawn(
         'dotnet',
-        ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://localhost:${port}`],
+        ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://localhost:${port}`, ...this.getConfig(settings)],
         {
           cwd: botDir,
           stdio: ['ignore', 'pipe', 'pipe'],
@@ -147,7 +148,24 @@ class LocalPublisher {
       this.addListeners(process, resolve, reject);
     });
   };
-
+  private getConfig = (config: any) => {
+    const configList: string[] = [];
+    if (config.MicrosoftAppPassword) {
+      configList.push('--MicrosoftAppPassword');
+      configList.push(config.MicrosoftAppPassword);
+    }
+    if (config.luis) {
+      if (config.luis.authoringKey) {
+        configList.push('--luis:endpointKey');
+        configList.push(config.luis.authoringKey);
+      }
+      if (config.luis.authoringRegion) {
+        configList.push('--luis:endpoint');
+        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
+      }
+    }
+    return configList;
+  };
   private addListeners = (child: ChildProcess, resolve: Function, reject: Function) => {
     let erroutput = '';
     child.stdout &&

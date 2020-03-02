@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import merge from 'lodash/merge';
+
 import { pluginLoader, PluginLoader } from '../services/pluginLoader';
 import { BotProjectService } from '../services/project';
 const defaultPublishConfig = {
@@ -14,12 +16,20 @@ export const PublishController = {
   publish: async (req, res) => {
     const target = req.params.target;
     const user = await PluginLoader.getUserFromRequest(req);
+    const sensitiveSetting = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
     const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [
-      { ...defaultPublishConfig, configuration: { botId: projectId, version: '1' } },
+      {
+        ...defaultPublishConfig,
+        configuration: {
+          botId: projectId,
+          version: '1',
+          settings: merge({}, currentProject.settings, sensitiveSetting),
+        },
+      },
     ];
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;

@@ -38,10 +38,10 @@ class LocalPublisher {
         this.publish = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log('PUBLISH ', config);
-                const { botId, version } = config;
+                const { botId, version, settings } = config;
                 yield this.initBot(botId);
                 yield this.saveContent(config, project.files, user);
-                const url = yield this.setBot(botId, version, project.files);
+                const url = yield this.setBot(botId, version, settings, project.files);
                 console.log(url);
                 return {
                     status: 200,
@@ -111,7 +111,7 @@ class LocalPublisher {
             console.log('zip success');
         });
         // start bot in current version
-        this.setBot = (botId, version, project = undefined) => __awaiter(this, void 0, void 0, function* () {
+        this.setBot = (botId, version, settings, project = undefined) => __awaiter(this, void 0, void 0, function* () {
             // get port, and stop previous bot if exist
             let port;
             if (LocalPublisher.runningBots[botId]) {
@@ -123,17 +123,17 @@ class LocalPublisher {
             }
             yield this.restoreBot(botId, version);
             try {
-                yield this.startBot(botId, port);
+                yield this.startBot(botId, port, settings);
                 return `http://localhost:${port}`;
             }
             catch (error) {
                 this.stopBot(botId);
             }
         });
-        this.startBot = (botId, port) => __awaiter(this, void 0, void 0, function* () {
+        this.startBot = (botId, port, settings) => __awaiter(this, void 0, void 0, function* () {
             const botDir = this.getBotDir(botId);
             return new Promise((resolve, reject) => {
-                const process = child_process_1.spawn('dotnet', ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://localhost:${port}`], {
+                const process = child_process_1.spawn('dotnet', ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://localhost:${port}`, ...this.getConfig(settings)], {
                     cwd: botDir,
                     stdio: ['ignore', 'pipe', 'pipe'],
                 });
@@ -141,6 +141,24 @@ class LocalPublisher {
                 this.addListeners(process, resolve, reject);
             });
         });
+        this.getConfig = (config) => {
+            const configList = [];
+            if (config.MicrosoftAppPassword) {
+                configList.push('--MicrosoftAppPassword');
+                configList.push(config.MicrosoftAppPassword);
+            }
+            if (config.luis) {
+                if (config.luis.authoringKey) {
+                    configList.push('--luis:endpointKey');
+                    configList.push(config.luis.authoringKey);
+                }
+                if (config.luis.authoringRegion) {
+                    configList.push('--luis:endpoint');
+                    configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
+                }
+            }
+            return configList;
+        };
         this.addListeners = (child, resolve, reject) => {
             let erroutput = '';
             child.stdout &&
