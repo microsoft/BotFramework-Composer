@@ -7,7 +7,7 @@ import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 
 import { dialogItem } from '../../pages/language-understanding/styles';
-
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 interface NavLinksProps {
   navLinks: any[];
   fileId: string;
@@ -19,17 +19,18 @@ export const NavLinks: React.FC<NavLinksProps> = props => {
 
   return (
     <Fragment>
-      {navLinks.map(dialog => {
+      {navLinks.map((dialog, index) => {
         return (
-          <div
-            css={dialogItem(fileId === dialog.id)}
+          <DefaultButton
             key={dialog.id}
             onClick={() => {
               onSelect(dialog.id);
             }}
-          >
-            {dialog.name}
-          </div>
+            styles={dialogItem(fileId === dialog.id)}
+            text={dialog.name}
+            ariaLabel={dialog.id + 'language understanding file'}
+            ariaHidden={false}
+          />
         );
       })}
     </Fragment>

@@ -6,7 +6,7 @@ import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect 
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
-
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { StoreContext } from '../../store';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
@@ -106,15 +106,14 @@ const LUPage: React.FC<LUPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          <div
-            css={dialogItem(isRoot)}
+          <DefaultButton
             key={'_all'}
             onClick={() => {
               onSelect('all');
             }}
-          >
-            {'All'}
-          </div>
+            styles={dialogItem(isRoot)}
+            text={'All'}
+          />
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>
         <div css={contentEditor}>
