@@ -18,14 +18,20 @@ Bot Framework Composer is designed to be a hosted web app. Currently, you need t
     git clone https://github.com/microsoft/BotFramework-Composer.git
     ```
 
-2. After cloning the repository, navigate to the **Bot Framework Composer** folder. Then run the following commands to navigate to the **Composer** folder and get all required packages:
+2. After cloning the repository, navigate to the **Bot Framework Composer** folder.
+
+    ```
+    cd BotFramework-Composer
+    ```
+
+3. Run the following commands to navigate to the **Composer** folder and get all required packages:
 
     ```
     cd Composer
     yarn 
     ```
 
-3. Next, run the following command to build the Composer application, this command can take several minutes to finish:
+4. Next, run the following command to build the Composer application, this command can take several minutes to finish:
 
     ```
     yarn build 
@@ -34,13 +40,13 @@ Bot Framework Composer is designed to be a hosted web app. Currently, you need t
    > [!NOTE]
    > If you are having trouble installing or building Composer run `yarn tableflip`. This will remove all of the Composer application's dependencies (node_modules) and then it reinstalls and rebuilds all of its dependencies. Once completed, run `yarn install` and `yarn build` again. This process generally takes 5-10 minutes.
 
-4. Again using Yarn, start the Composer authoring application and the bot runtime:
+5. Again using Yarn, start the Composer authoring application and the bot runtime:
 
     ```
     yarn startall
     ```
 
-5. Once you see **Composer now running at:** appear in your terminal, you can run Composer in your browser using the address http://localhost:3000.
+6. Once you see **Composer now running at:** appear in your terminal, you can run Composer in your browser using the address http://localhost:3000.
 
     ![browser address](./media/setup-yarn/address.png)
 
