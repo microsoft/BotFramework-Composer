@@ -3,7 +3,6 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
-import { Diagnostic } from '@bfc/indexers';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
@@ -77,13 +76,11 @@ interface NavigationState {
   breadcrumb: BreadcrumbItem[];
 }
 
-export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
+export function convertPathToUrl(id: string, path?: string): string {
   //path is like main.trigers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-  const { path, source } = diagnostic;
-  if (!source) return '';
 
-  let uri = `/dialogs/${source}`;
+  let uri = `/dialogs/${id}`;
   if (!path) return uri;
 
   const items = path.split('#');
@@ -107,8 +104,10 @@ export function convertDialogDiagnosticToUrl(diagnostic: Diagnostic): string {
   return uri;
 }
 
-export function toUrlUtil(dialogId: string, path: string): string {
+export function toUrlUtil(path: string): string {
   const tokens = path.split('#');
+  const firstDotIndex = tokens[0].indexOf('.');
+  const dialogId = tokens[0].substring(0, firstDotIndex);
   const focusedPath = parsePathToFocused(tokens[0]);
   const selectedPath = parsePathToSelected(tokens[0]);
   const type = tokens[1];
