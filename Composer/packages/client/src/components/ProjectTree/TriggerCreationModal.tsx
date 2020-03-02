@@ -132,7 +132,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const onTriggerPhrasesChange = (body: string) => {
     const errors = formData.errors;
-    const content = '#' + formData.intent + '\n' + body;
+    const content = '#' + formData.intent + '\n\r' + body;
     const { diagnostics } = luIndexer.parse(content);
     errors.triggerPhrases = combineMessage(diagnostics);
     setFormData({ ...formData, triggerPhrases: body, errors });
