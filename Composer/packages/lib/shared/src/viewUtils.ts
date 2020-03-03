@@ -69,7 +69,6 @@ export const dialogGroups: DialogGroupsMap = {
     types: [
       SDKTypes.SetProperty,
       SDKTypes.SetProperties,
-      SDKTypes.InitProperty,
       SDKTypes.DeleteProperty,
       SDKTypes.DeleteProperties,
       SDKTypes.EditArray,

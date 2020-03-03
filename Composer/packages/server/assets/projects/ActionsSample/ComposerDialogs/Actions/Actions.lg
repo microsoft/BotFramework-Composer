@@ -10,10 +10,10 @@
 -Step 3
 
 # bfdactivity-797905
--user.age is set to @{user.age}
+-user.age is set to ${user.age}
 
 # bfdactivity-166131
--user.age is set to @{user.age}
+-user.age is set to ${user.age}
 
 # bfdactivity-643043
 -user.age is set to null
