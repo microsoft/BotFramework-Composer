@@ -12,7 +12,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { StoreContext } from '../../../store';
 
 import { styles } from './styles';
-import processGif from './deploy-create-output.gif';
+import processGif from './deploy-create-output.png';
 
 export const DeployWizardStep2 = props => {
   const { state } = useContext(StoreContext);
@@ -57,7 +57,7 @@ export const DeployWizardStep2 = props => {
           <img
             style={styles.gif}
             src={processGif}
-            alt={formatMessage('Animation showing the command line tool output')}
+            alt={formatMessage('This image shows the command line tool output')}
           />
         </StackItem>
       </Stack>

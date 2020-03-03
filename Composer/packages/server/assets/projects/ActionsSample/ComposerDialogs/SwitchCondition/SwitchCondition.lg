@@ -1,7 +1,7 @@
 [import](common.lg)
 
 # bfdactivity-160914
--You select: @{user.style}
+-You select: ${user.style}
 
 # bfdactivity-576002
 -You select: 1

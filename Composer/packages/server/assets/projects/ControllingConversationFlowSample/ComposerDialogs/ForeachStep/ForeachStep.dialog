@@ -13,30 +13,13 @@
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
-          "$designer": {
-            "id": "810905"
-          },
-          "condition": "dialog.ids == null",
-          "actions": [
-            {
-              "$type": "Microsoft.InitProperty",
-              "$designer": {
-                "id": "931303"
-              },
-              "property": "dialog.ids",
-              "type": "array"
-            }
-          ]
-        },
-        {
           "$type": "Microsoft.EditArray",
           "$designer": {
             "id": "077820"
           },
           "changeType": "Push",
           "itemsProperty": "dialog.ids",
-          "value": "10000+1000+100+10+1"
+          "value": "=10000+1000+100+10+1"
         },
         {
           "$type": "Microsoft.EditArray",
@@ -45,7 +28,7 @@
           },
           "changeType": "Push",
           "itemsProperty": "dialog.ids",
-          "value": "200*200"
+          "value": "=200*200"
         },
         {
           "$type": "Microsoft.EditArray",
@@ -54,14 +37,14 @@
           },
           "changeType": "Push",
           "itemsProperty": "dialog.ids",
-          "value": "888888/4"
+          "value": "=888888/4"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "638869"
           },
-          "activity": "@{bfdactivity-638869()}"
+          "activity": "${bfdactivity-638869()}"
         },
         {
           "$type": "Microsoft.Foreach",
@@ -76,7 +59,7 @@
                 "id": "006441",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-006441()}"
+              "activity": "${bfdactivity-006441()}"
             }
           ]
         }

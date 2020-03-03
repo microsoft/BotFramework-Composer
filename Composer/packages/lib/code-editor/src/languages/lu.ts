@@ -10,6 +10,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*#/, { token: 'intent', next: '@intent' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
+        [/^\s*-/, { token: 'utterrance-indentifier', next: '@utterrance' }],
       ],
 
       intent: [
@@ -24,7 +25,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         [/^\s*>\s*[\s\S]*$/, { token: 'comments' }],
         [/^\s*-/, { token: 'utterrance-indentifier', next: 'utterrance' }],
         [/^\s*@/, { token: 'entity-identifier', goBack: 1, next: '@entityMode' }],
-        [/({)(\s*[\w.@:\s]*\s*)(=)(\s*[\w.]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
+        [/({)(\s*[\w.@:\s]*\s*)(=)(\s*[\w.\s]*\s*)(})/, ['lb', 'pattern', 'equal', 'entity-name', 'rb']],
         [/({\s*@)(\s*[\w.]*\s*)(})/, ['lb', 'entity-name', 'rb']],
         // eslint-disable-next-line security/detect-unsafe-regex
         [/\s*\[[\w\s.]+\]\(.{1,2}\/[\w.*]+(#[\w.?]+)?\)/, 'import-desc'],
@@ -40,7 +41,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
         ],
         [
           // eslint-disable-next-line security/detect-unsafe-regex
-          /(@\s*)(ml|prebuilt|regex|list|composite|patternany|phraselist)(\s*[\w_]+)/,
+          /(@\s*)(ml|prebuilt|regex|list|composite|Pattern\.Any|phraseList)(\s*[\w_]+)/,
           ['intent-indentifier', 'entity-type', 'entity-name'],
         ],
         [/(@\s*)(\s*[\w_]+)/, ['intent-indentifier', 'entity-name']],

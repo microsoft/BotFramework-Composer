@@ -13,13 +13,13 @@
 - Sure, I've cancelled that.
 
 # bfdactivity-031899
-- @{user.profile.name}
+- ${user.profile.name}
 
 # bfdactivity-309274
 - ```
 Here's what I know about you -
-- @{NameReadBack()}
-- @{AgeReadBack()}
+- ${NameReadBack()}
+- ${AgeReadBack()}
 ```
 
 # bfdactivity-912837

@@ -2,10 +2,10 @@
 - nice to talk to you!
 
 # LGComposition(user)
-- @{user.name} @{Greeting()}
+- ${user.name} ${Greeting()}
 
 # LGWithParam(user)
-- Hello @{user.name}, nice to talk to you!
+- Hello ${user.name}, nice to talk to you!
 
 # SimpleText
 - Hi, this is simple text
@@ -18,18 +18,18 @@
 ```
 
 # greetInAWeek
-- SWITCH: @{dayOfWeek(utcNow())}
-- CASE: @{0}
+- SWITCH: ${dayOfWeek(utcNow())}
+- CASE: ${0}
     - Happy Sunday!
--CASE: @{6}
+-CASE: ${6}
     - Happy Saturday!
 -DEFAULT:
     - Working day!
 
 # timeOfDayGreeting(timeOfDay)
-- IF: @{timeOfDay == 'morning'}
+- IF: ${timeOfDay == 'morning'}
     - good morning
-- ELSEIF: @{timeOfDay == 'afternoon'}
+- ELSEIF: ${timeOfDay == 'afternoon'}
     - good afternoon
 - ELSE:
     - good evening

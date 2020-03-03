@@ -12,18 +12,13 @@ import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
 import { RichEditor, RichEditorProps } from './RichEditor';
 
-const LU_HELP = 'https://github.com/microsoft/botframework-cli/blob/master/packages/lu/docs/lu-file-format.md';
+const LU_HELP = 'https://aka.ms/lu-file-format';
 const placeholder = `> To learn more about the LU file format, read the documentation at
 > ${LU_HELP}`;
 
 export interface LUOption {
-  inline: boolean;
-  content: string;
-  template?: {
-    name: string;
-    parameters?: string[];
-    body: string;
-  };
+  fileId: string;
+  sectionId?: string;
 }
 
 export interface LULSPEditorProps extends RichEditorProps {
@@ -69,15 +64,34 @@ function convertEdit(serverEdit: ServerEdit) {
   };
 }
 
+async function initializeDocuments(luOption: LUOption | undefined, uri: string) {
+  const languageClient = window.monacoLUEditorInstance;
+  if (languageClient) {
+    await languageClient.onReady();
+    languageClient.sendRequest('initializeDocuments', { uri, luOption });
+  }
+}
+
 export function LuEditor(props: LULSPEditorProps) {
-  const options = {
+  const options: monacoEditor.editor.IEditorConstructionOptions = {
     quickSuggestions: true,
     wordBasedSuggestions: false,
     formatOnType: true,
+    lineNumbers: 'on',
+    minimap: {
+      enabled: true,
+    },
+    lineDecorationsWidth: undefined,
+    glyphMargin: true,
+    autoClosingBrackets: 'always',
+    autoIndent: true,
+    lightbulb: {
+      enabled: true,
+    },
     ...props.options,
   };
 
-  const { languageServer, ...restProps } = props;
+  const { luOption, languageServer, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
   const editorWillMount = (monaco: typeof monacoEditor) => {
@@ -107,6 +121,7 @@ export function LuEditor(props: LULSPEditorProps) {
             const position = editor.getPosition();
             languageClient.sendRequest('labelingExperienceRequest', { uri, position });
           });
+          initializeDocuments(luOption, uri);
           languageClient.onReady().then(() =>
             languageClient.onNotification('addUnlabelUtterance', result => {
               const edits = result.edits.map(e => {
@@ -119,6 +134,9 @@ export function LuEditor(props: LULSPEditorProps) {
           connection.onClose(() => disposable.dispose());
         },
       });
+    } else {
+      const uri = get(editor.getModel(), 'uri._formatted', '');
+      initializeDocuments(luOption, uri);
     }
 
     if (typeof props.editorDidMount === 'function') {

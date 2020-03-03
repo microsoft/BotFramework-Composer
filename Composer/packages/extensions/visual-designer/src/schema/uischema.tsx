@@ -14,9 +14,9 @@ import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ChoiceInputChoices } from '../widgets/ChoiceInput';
+import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { measureChoiceInputDetailBoundary } from '../layouters/measureJsonBoundary';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -41,7 +41,6 @@ const BaseInputSchema: UIWidget = {
     menu: 'none',
     content: data => data.property || '<property>',
     children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
-    size: data => measureChoiceInputDetailBoundary(data),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
@@ -117,10 +116,6 @@ export const uiSchema: UISchema = {
     'ui:widget': ActionCard,
     content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
   },
-  [SDKTypes.InitProperty]: {
-    'ui:widget': ActionCard,
-    content: data => `{${data.property || '?'}} = new ${data.type || '?'}`,
-  },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
@@ -138,16 +133,16 @@ export const uiSchema: UISchema = {
     content: data => `Delete ${Array.isArray(data.properties) ? data.properties.length : 0} properties`,
   },
   [SDKTypes.EndDialog]: {
-    'ui:widget': ActionCard,
-    content: 'End this dialog',
+    'ui:widget': ActionHeader,
+  },
+  [SDKTypes.RepeatDialog]: {
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.CancelAllDialogs]: {
-    'ui:widget': ActionCard,
-    content: 'Cancel all active dialogs',
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.EndTurn]: {
-    'ui:widget': ActionCard,
-    content: 'Wait for another message',
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.EmitEvent]: {
     'ui:widget': ActionCard,
@@ -158,12 +153,10 @@ export const uiSchema: UISchema = {
     content: data => data.url,
   },
   [SDKTypes.TraceActivity]: {
-    'ui:widget': ActionCard,
-    content: data => data.name,
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.LogAction]: {
-    'ui:widget': ActionCard,
-    content: data => data.text,
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.EditActions]: {
     'ui:widget': ActionCard,
