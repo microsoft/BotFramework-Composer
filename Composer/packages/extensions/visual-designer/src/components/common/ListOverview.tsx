@@ -8,10 +8,10 @@ import { SingleLineDiv } from '../elements/styledComponents';
 export interface ListOverviewProps<T> {
   items: T[];
   renderItem: (item: T) => JSX.Element;
-  maxCount: number;
+  maxCount?: number;
 }
 
-export const ListOverview: FC<ListOverviewProps<any>> = ({ items, renderItem, maxCount }) => {
+export const ListOverview: FC<ListOverviewProps<any>> = ({ items, renderItem, maxCount = 3 }) => {
   if (!Array.isArray(items) || !items.length) {
     return null;
   }
