@@ -13,10 +13,12 @@ import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
 import { ForeachWidget } from '../widgets/ForeachWidget';
-import { ChoiceInputChoices } from '../widgets/ChoiceInput';
 import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
+import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
+import { PropertyAssignmentSize, ChoiceInputSize } from '../constants/ElementSizes';
+import { ListOverview } from '../components/common/ListOverview';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -40,7 +42,6 @@ const BaseInputSchema: UIWidget = {
     icon: ElementIcon.User,
     menu: 'none',
     content: data => data.property || '<property>',
-    children: data => (data.$type === SDKTypes.ChoiceInput ? <ChoiceInputChoices choices={data.choices} /> : null),
     colors: {
       theme: ObiColors.LightBlue,
       icon: ObiColors.AzureBlue,
@@ -48,6 +49,31 @@ const BaseInputSchema: UIWidget = {
   },
 };
 
+const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
+  userInput: {
+    'ui:widget': ActionCard,
+    title: data => `User Input (${getInputType(data.$type)})`,
+    disableSDKTitle: true,
+    icon: ElementIcon.User,
+    menu: 'none',
+    content: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
+    children: data => {
+      const renderItem = item => {
+        const content = item.value;
+        return (
+          <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={content}>
+            {content}
+          </BorderedDiv>
+        );
+      };
+      return <ListOverview items={data.choices} renderItem={renderItem} maxCount={3} />;
+    },
+    colors: {
+      theme: ObiColors.LightBlue,
+      icon: ObiColors.AzureBlue,
+    },
+  },
+});
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
@@ -102,7 +128,7 @@ export const uiSchema: UISchema = {
   [SDKTypes.DateTimeInput]: BaseInputSchema,
   [SDKTypes.NumberInput]: BaseInputSchema,
   [SDKTypes.TextInput]: BaseInputSchema,
-  [SDKTypes.ChoiceInput]: BaseInputSchema,
+  [SDKTypes.ChoiceInput]: ChoiceInputSchema,
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
@@ -123,6 +149,22 @@ export const uiSchema: UISchema = {
   [SDKTypes.SetProperties]: {
     'ui:widget': ActionCard,
     content: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
+    children: data => {
+      const renderItem = item => {
+        const content = `${item.property} = ${item.value}`;
+        return (
+          <SingleLineDiv
+            width={PropertyAssignmentSize.width}
+            height={PropertyAssignmentSize.height}
+            title={content}
+            style={{ paddingLeft: '3px' }}
+          >
+            {content}
+          </SingleLineDiv>
+        );
+      };
+      return <ListOverview items={data.assignments} renderItem={renderItem} maxCount={3} />;
+    },
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,
