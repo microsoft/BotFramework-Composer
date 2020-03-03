@@ -28,6 +28,7 @@ import {
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
+  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
@@ -94,7 +95,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
-
+  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
@@ -118,6 +119,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     onDismiss();
   };
 
+  const onSelectIntent = (e, option) => {
+    setFormData({ ...formData, intent: option.key });
+  };
+
   const onSelectTriggerType = (e, option) => {
     setFormData({ ...initialFormData, $type: option.key });
   };
@@ -138,11 +143,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
+  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
+  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
 
-  const showIntentFields = formData.$type === intentTypeKey;
+  const showIntentFields = formData.$type === intentTypeKey && !isRegEx;
+  const showRegExDropDown = formData.$type === intentTypeKey && isRegEx;
   const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
   const showMessageDropDown = formData.$type === messageTypeKey;
@@ -172,6 +181,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             data-testid={'triggerTypeDropDown'}
             defaultSelectedKey={intentTypeKey}
           />
+
+          {showRegExDropDown && (
+            <Dropdown
+              label={formatMessage('Which intent do you want to handle? (Optional)')}
+              options={regexIntents}
+              styles={dropdownStyles}
+              onChange={onSelectIntent}
+              disabled={regexIntents.length === 0}
+              placeholder={regexIntents.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
+            />
+          )}
 
           {showEventDropDown && (
             <Dropdown
