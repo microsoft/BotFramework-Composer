@@ -115,11 +115,6 @@
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "helpLinkText": "Learn more"
     },
-    "Microsoft.InitProperty": {
-      "title": "Initialize Property",
-      "helpLink": "https://aka.ms/bfc-using-memory",
-      "helpLinkText": "Learn more"
-    },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
