@@ -103,7 +103,9 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       {footer}
     </div>
   );
-
+  const renderSeparateline = () => (
+    <div style={{ borderBottom: '1px solid grey', height: 1, width: StandardNodeWidth }}></div>
+  );
   return (
     <div
       className="CardNode"
@@ -123,6 +125,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
     >
       {renderHeader(header)}
       {body && renderBody(body)}
+      {body && footer && renderSeparateline()}
       {footer && renderFooter(footer)}
     </div>
   );
