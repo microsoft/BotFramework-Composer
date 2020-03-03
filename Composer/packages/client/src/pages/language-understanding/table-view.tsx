@@ -16,7 +16,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { isValid, LuFile } from '@bfc/indexers';
+import { LuFile } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
@@ -43,10 +43,6 @@ const TableView: React.FC<TableViewProps> = props => {
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
-
-  function checkErrors(files: LuFile[]): LuFile[] {
-    return files.filter(file => !isValid(file.diagnostics));
-  }
 
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {

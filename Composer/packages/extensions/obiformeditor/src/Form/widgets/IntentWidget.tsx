@@ -91,7 +91,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
           selectedKey={value || null}
           responsiveMode={ResponsiveMode.large}
           disabled={disabled || options.length === 1}
-          placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
+          placeholder={options.length > 1 ? placeholder : formatMessage('No intents or recognizer type is not LUIS')}
         />
       )}
       {isLuisSelected && <LuEditorWidget formContext={formContext} onChange={onChange} name={value} height={316} />}
