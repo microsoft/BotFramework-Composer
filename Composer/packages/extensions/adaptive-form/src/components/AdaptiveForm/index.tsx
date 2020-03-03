@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect, useMemo } from 'react';
-import { useShellApi, PluginConfig, FormErrors } from '@bfc/extension';
+import { useShellApi, PluginConfig, FormErrors, JSONSchema7 } from '@bfc/extension';
 import isEqual from 'lodash/isEqual';
 import ErrorBoundary from 'react-error-boundary';
-import { AdaptiveDialogSchema } from '@bfc/shared';
 
 import PluginContext from '../../PluginContext';
 import { resolveBaseSchema, getUISchema, mergePluginConfigs } from '../../utils';
@@ -14,7 +13,7 @@ import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
 
 export interface AdaptiveFormProps {
-  schema?: AdaptiveDialogSchema;
+  schema?: JSONSchema7;
   formData?: any;
   plugins: PluginConfig[];
 }

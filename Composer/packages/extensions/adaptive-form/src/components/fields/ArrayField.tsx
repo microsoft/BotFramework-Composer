@@ -35,7 +35,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
 
   const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
 
-  if (!itemSchema) {
+  if (!itemSchema || itemSchema === true) {
     return <UnsupportedField {...props} />;
   }
 

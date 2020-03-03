@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema6, JSONSchema4 } from 'json-schema';
+import { JSONSchema6 } from 'json-schema';
 
 // All of the known SDK types. Update this list when we take a schema update.
 // To get this list copy the output of the following commands in a node repl from the project root:
@@ -125,22 +125,6 @@ export enum SDKRoles {
   // TODO
   // union = 'union',
   // union_*_ = 'union(*)',
-}
-
-export interface AdaptiveDialogSchema extends JSONSchema4 {
-  $schema?: string;
-  $role?: string;
-  $type?: SDKTypes;
-  $copy?: string;
-  $id?: string;
-  $designer?: {
-    id: string;
-    [key: string]: any;
-  };
-  description?: string;
-  definitions?: any;
-  title?: string;
-  __additional_property?: boolean;
 }
 
 export interface OBISchema extends JSONSchema6 {

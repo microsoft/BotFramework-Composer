@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { FieldProps } from '@bfc/extension';
 import map from 'lodash/map';
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -17,6 +17,7 @@ import { FieldLabel } from '../FieldLabel';
 
 import { objectArrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
+import { UnsupportedField } from './UnsupportedField';
 
 const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): string | undefined => {
   const { uiOptions } = props;
@@ -33,8 +34,12 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const { value = [], schema, id, onChange, className, uiOptions, label, description } = props;
   const { items } = schema;
   const itemSchema = Array.isArray(items) ? items[0] : items;
-  const properties = itemSchema?.properties || {};
+  const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
   const [newObject, setNewObject] = useState({});
+
+  if (!itemSchema || itemSchema === true) {
+    return <UnsupportedField {...props} />;
+  }
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
@@ -60,13 +65,20 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           <div css={objectArrayField.objectItemLabel}>
             {orderedProperties.map((key, index) => {
               if (typeof key === 'string') {
-                const { description, title } = properties[key];
+                const propSchema = properties[key];
 
-                return (
-                  <div key={index} css={objectArrayField.objectItemValueLabel}>
-                    <FieldLabel description={description} id={`${id}.${key}`} inline={true} label={title} />
-                  </div>
-                );
+                if (propSchema && propSchema !== true) {
+                  return (
+                    <div key={index} css={objectArrayField.objectItemValueLabel}>
+                      <FieldLabel
+                        description={propSchema.description}
+                        id={`${id}.${key}`}
+                        inline
+                        label={propSchema.title}
+                      />
+                    </div>
+                  );
+                }
               }
             })}
             <div style={{ width: '32px' }} />
@@ -78,7 +90,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
             transparentBorder
             key={idx}
             id={`${id}.${idx}`}
-            schema={itemSchema as JSONSchema4}
+            schema={itemSchema as JSONSchema7}
             value={item}
             {...getArrayItemProps(value, idx, onChange)}
           />

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema4 } from 'json-schema';
-import { UISchema } from '@bfc/extension';
+import { UISchema, JSONSchema7 } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
 import { getUISchema } from '../getUISchema';
@@ -13,7 +12,7 @@ describe('getUISchema', () => {
   });
 
   it('returns UI schema for $type', () => {
-    const schema: JSONSchema4 = {
+    const schema: JSONSchema7 = {
       properties: {
         $kind: {
           const: SDKTypes.AdaptiveDialog,
@@ -24,7 +23,7 @@ describe('getUISchema', () => {
   });
 
   it('merges overrides into default schema', () => {
-    const schema: JSONSchema4 = {
+    const schema: JSONSchema7 = {
       properties: {
         $kind: {
           const: SDKTypes.AdaptiveDialog,

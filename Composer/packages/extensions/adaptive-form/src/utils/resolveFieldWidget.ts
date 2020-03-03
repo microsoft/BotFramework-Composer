@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema4 } from 'json-schema';
-import { UIOptions, FieldWidget, PluginConfig } from '@bfc/extension';
+import { UIOptions, FieldWidget, PluginConfig, JSONSchema7 } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -12,7 +11,7 @@ import * as DefaultFields from '../components/fields';
  * @param uiOptions
  */
 export function resolveFieldWidget(
-  schema?: JSONSchema4,
+  schema?: JSONSchema7,
   uiOptions?: UIOptions,
   globalConfig?: Required<PluginConfig>
 ): FieldWidget {
@@ -24,17 +23,21 @@ export function resolveFieldWidget(
 
   if (schema) {
     if (globalConfig) {
-      const RoleOverride = globalConfig?.roleSchema[schema.$role]?.field;
+      const RoleOverride = schema.$role && globalConfig?.roleSchema[schema.$role]?.field;
 
       if (RoleOverride) {
         return RoleOverride;
       }
 
-      const KindOverride = globalConfig?.uiSchema[schema.$kind]?.field;
+      const KindOverride = schema.$kind && globalConfig?.uiSchema[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;
       }
+    }
+
+    if (schema.oneOf && Array.isArray(schema.oneOf)) {
+      return DefaultFields.OneOfField;
     }
 
     switch (schema.type) {
@@ -48,9 +51,9 @@ export function resolveFieldWidget(
       case 'array': {
         const { items } = schema;
 
-        if (Array.isArray(items) && items[0].type === 'object') {
+        if (Array.isArray(items) && typeof items[0] === 'object' && items[0].type === 'object') {
           return DefaultFields.ObjectArrayField;
-        } else if (!Array.isArray(items) && items?.type === 'object') {
+        } else if (!Array.isArray(items) && typeof items === 'object' && items?.type === 'object') {
           return DefaultFields.ObjectArrayField;
         }
 

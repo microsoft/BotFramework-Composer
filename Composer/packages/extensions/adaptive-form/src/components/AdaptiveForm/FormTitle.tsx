@@ -4,12 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { JSONSchema4 } from 'json-schema';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import startCase from 'lodash/startCase';
 import formatMessage from 'format-message';
-import { UIOptions } from '@bfc/extension';
+import { UIOptions, JSONSchema7 } from '@bfc/extension';
 
 import { EditableField } from '../fields/EditableField';
 
@@ -21,7 +20,7 @@ interface FormTitleProps {
   id: string;
   name?: string;
   onChange?: (data: any) => void;
-  schema: JSONSchema4;
+  schema: JSONSchema7;
   title?: string;
   uiOptions?: UIOptions;
 }

@@ -46,7 +46,7 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
     return placeholder;
   }
 
-  if (schema && (schema.examples || []).length > 0) {
+  if (schema && Array.isArray(schema.examples) && schema.examples.length > 0) {
     return `ex. ${schema.examples.join(', ')}`;
   }
 }

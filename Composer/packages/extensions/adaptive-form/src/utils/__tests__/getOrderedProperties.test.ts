@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema4 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 
 import { getOrderedProperties } from '../getOrderedProperties';
 
@@ -15,7 +15,7 @@ const schema = {
     six: { type: 'object' },
     $kind: { type: 'string' },
   },
-} as JSONSchema4;
+} as JSONSchema7;
 const data = 'form data';
 
 describe('getOrderedProperties', () => {

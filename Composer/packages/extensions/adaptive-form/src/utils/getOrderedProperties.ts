@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { JSONSchema4 } from 'json-schema';
-import { UIOptions } from '@bfc/extension';
+import { UIOptions, JSONSchema7 } from '@bfc/extension';
 import cloneDeep from 'lodash/cloneDeep';
 
 const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
@@ -9,7 +8,7 @@ const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
 type OrderConfig = (string | [string, string])[];
 
 export function getOrderedProperties(
-  schema: JSONSchema4,
+  schema: JSONSchema7,
   uiOptions: UIOptions,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
