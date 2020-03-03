@@ -3,8 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
