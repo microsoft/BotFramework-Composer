@@ -76,7 +76,6 @@ const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
     body: data => (
       <ListOverview
         items={data.choices}
-        maxCount={3}
         renderItem={item => (
           <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={item.value}>
             {item.value}
@@ -166,24 +165,29 @@ export const uiSchema: UISchema = {
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
-    'ui:widget': ActionCard,
-    content: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
-    children: data => {
-      const renderItem = item => {
-        const content = `${item.property} = ${item.value}`;
-        return (
-          <SingleLineDiv
-            width={PropertyAssignmentSize.width}
-            height={PropertyAssignmentSize.height}
-            title={content}
-            style={{ paddingLeft: '3px' }}
-          >
-            {content}
-          </SingleLineDiv>
-        );
-      };
-      return <ListOverview items={data.assignments} renderItem={renderItem} maxCount={3} />;
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
     },
+    body: data => (
+      <ListOverview
+        items={data.assignments}
+        renderItem={item => {
+          const content = `${item.property} = ${item.value}`;
+          return (
+            <SingleLineDiv
+              width={PropertyAssignmentSize.width}
+              height={PropertyAssignmentSize.height}
+              title={content}
+              style={{ paddingLeft: '3px' }}
+            >
+              {content}
+            </SingleLineDiv>
+          );
+        }}
+      />
+    ),
+    footer: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,
