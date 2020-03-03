@@ -223,8 +223,6 @@ export class BotProject {
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
     const lastModified = await this._updateFile(relativePath, content);
     return lastModified;
-    // const { dialogs, lgFiles, luFiles } = this;
-    // return { dialogs, lgFiles, luFiles };
   };
 
   public createDialog = async (
@@ -264,8 +262,6 @@ export class BotProject {
   };
 
   public updateLgFile = async (id: string, content: string): Promise<string> => {
-    console.log('UPDATE LG', id);
-
     const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
@@ -299,8 +295,6 @@ export class BotProject {
   };
 
   public updateLuFile = async (id: string, content: string): Promise<string> => {
-    console.log('UPDATE LU', id);
-
     const luFile = this.luFiles.find(lu => lu.id === id);
     if (luFile === undefined) {
       throw new Error(`no such lu file ${id}`);
@@ -445,7 +439,6 @@ export class BotProject {
 
     // only write if the file has actually changed
     if (this.files[index].content !== content) {
-      console.log('UPDATE FILE', relativePath);
       await this.fileStorage.writeFile(absolutePath, content);
     }
 
