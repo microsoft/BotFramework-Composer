@@ -16,15 +16,15 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { isValid, DialogInfo, LuFile } from '@bfc/indexers';
+import { LuFile } from '@bfc/indexers';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 
 import { formCell, luPhraseCell } from './styles';
-interface TableViewProps {
-  activeDialog: DialogInfo | undefined;
-  onClickEdit: ({ fileId: string }) => void;
+interface TableViewProps extends RouteComponentProps<{}> {
+  fileId: string;
 }
 
 interface Intent {
@@ -37,48 +37,12 @@ interface Intent {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
-  const { activeDialog, onClickEdit } = props;
+  const { dialogs, luFiles, projectId } = state;
+  const { fileId } = props;
+  const activeDialog = dialogs.find(({ id }) => id === fileId);
+
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
-
-  useEffect(() => {
-    if (isEmpty(luFiles)) return;
-
-    const errorFiles = checkErrors(luFiles);
-    if (errorFiles.length !== 0) {
-      onClickEdit({ fileId: errorFiles[0].id });
-      return;
-    }
-
-    const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
-      const items: Intent[] = [];
-      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
-      get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
-        const state = getIntentState(luFile);
-
-        items.push({
-          name,
-          phrases,
-          fileId: luFile.id,
-          used: luDialog ? luDialog.luIntents.includes(name) : false, // used by it's dialog or not
-          state,
-        });
-      });
-      return result.concat(items);
-    }, []);
-
-    if (!activeDialog) {
-      setIntents(allIntents);
-    } else {
-      const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
-      setIntents(dialogIntents);
-    }
-  }, [luFiles, activeDialog]);
-
-  function checkErrors(files: LuFile[]): LuFile[] {
-    return files.filter(file => !isValid(file.diagnostics));
-  }
 
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
@@ -92,13 +56,42 @@ const TableView: React.FC<TableViewProps> = props => {
     }
   }
 
+  useEffect(() => {
+    if (isEmpty(luFiles)) return;
+
+    const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
+      const items: Intent[] = [];
+      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
+      get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
+        const state = getIntentState(luFile);
+
+        items.push({
+          name,
+          phrases,
+          fileId: luFile.id,
+          used: !!luDialog && luDialog.referredLuIntents.some(lu => lu.name === name), // used by it's dialog or not
+          state,
+        });
+      });
+      return result.concat(items);
+    }, []);
+
+    if (!activeDialog) {
+      setIntents(allIntents);
+    } else {
+      const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
+      setIntents(dialogIntents);
+    }
+  }, [luFiles, activeDialog, projectId]);
+
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
       {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          onClickEdit(intents[index]);
+          const { name, fileId } = intents[index];
+          navigateTo(`/bot/${projectId}/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];
@@ -114,8 +107,13 @@ const TableView: React.FC<TableViewProps> = props => {
         minWidth: 100,
         maxWidth: 150,
         data: 'string',
-        onRender: item => {
-          return <div css={formCell}>#{item.name}</div>;
+        onRender: (item: Intent) => {
+          let displayName = `#${item.name}`;
+          if (item.name.includes('/')) {
+            const [, childName] = item.name.split('/');
+            displayName = `##${childName}`;
+          }
+          return <div css={formCell}>{displayName}</div>;
         },
       },
       {

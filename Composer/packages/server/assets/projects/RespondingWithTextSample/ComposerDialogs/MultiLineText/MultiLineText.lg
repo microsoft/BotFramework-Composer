@@ -1,4 +1,4 @@
 [import](common.lg)
 
 # bfdactivity-458516
-- @{multilineText()}
+- ${multilineText()}

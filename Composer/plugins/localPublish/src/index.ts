@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
 
+import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import getPort from 'get-port';
@@ -16,7 +17,7 @@ const readDir = promisify(fs.readdir);
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
-const rmDir = promisify(fs.rmdir);
+const rmDir = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 
 interface RunningBot {
@@ -37,29 +38,21 @@ class LocalPublisher {
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
-    try {
-      const { settings } = config;
-      const botId = project.id;
-      const version = 'default';
+    const { settings } = config;
+    const botId = project.id;
+    const version = 'default';
 
-      await this.initBot(botId);
-      await this.saveContent(botId, version, project.files, user);
-      const url = await this.setBot(botId, version, settings, project.files);
-      return {
-        status: 200,
-        result: {
-          jobId: new uuid(),
-          version: version,
-          endpoint: url,
-        },
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        status: 500,
-        message: error.message,
-      };
-    }
+    await this.initBot(botId);
+    await this.saveContent(botId, version, project.files, user);
+    const url = await this.setBot(botId, version, settings, project.files);
+    return {
+      status: 200,
+      result: {
+        jobId: new uuid(),
+        version: version,
+        endpoint: url,
+      },
+    };
   };
   getStatus = async config => { };
   history = async config => { };
@@ -103,9 +96,14 @@ class LocalPublisher {
       // create ComposerDialogs and histroy folder
       mkDir(this.getBotAssetsDir(botId), { recursive: true });
       mkDir(this.getHistoryDir(botId), { recursive: true });
-
-      execSync('dotnet user-secrets init', { cwd: botDir });
-      execSync('dotnet build', { cwd: botDir });
+      try {
+        execSync('dotnet user-secrets init', { cwd: botDir });
+        execSync('dotnet build', { cwd: botDir });
+      } catch (error) {
+        // delete the folder to make sure build again.
+        rmDir(botDir);
+        throw new Error(error.toString());
+      }
     }
   };
 

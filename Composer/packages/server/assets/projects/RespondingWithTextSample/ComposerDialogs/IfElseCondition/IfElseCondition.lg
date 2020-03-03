@@ -4,4 +4,4 @@
 - what the time of day
 
 # bfdactivity-749181
-- @{timeOfDayGreeting(user.timeofday)}
+- ${timeOfDayGreeting(user.timeofday)}

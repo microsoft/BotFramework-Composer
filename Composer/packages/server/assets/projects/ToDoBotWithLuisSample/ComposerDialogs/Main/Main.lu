@@ -1,3 +1,5 @@
+> !# @enableSections = true
+
 > Entity definitions 
 $ itemTitle : simple
 
@@ -30,6 +32,20 @@ $ listType : grocery =
 - vegetables
 - household items
 - house hold items
+
+> Sample for nested section
+# CheckTodo
+## CheckUnreadTodo
+- check my unread todo
+- show my unread todos
+
+@ simple todoTitle
+
+## CheckDeletedTodo
+- check my deleted todo
+- show my deleted todos
+
+@ simple todoSubject
 
 > Help intent and related utterances.
 # Help

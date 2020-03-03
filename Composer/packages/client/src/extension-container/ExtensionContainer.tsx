@@ -98,6 +98,18 @@ const shellApi: ShellApi = {
     });
   },
 
+  addLuIntent: (id, intent) => {
+    return apiClient.apiCall('addLuIntent', { id, intent });
+  },
+
+  updateLuIntent: (id, intentName, intent) => {
+    return apiClient.apiCall('updateLuIntent', { id, intentName, intent });
+  },
+
+  removeLuIntent: (id, intentName) => {
+    return apiClient.apiCall('removeLuIntent', { id, intentName });
+  },
+
   createDialog: () => {
     return apiClient.apiCall('createDialog');
   },

@@ -120,7 +120,7 @@ describe('lg lsp server', () => {
 
   it('didChange', async () => {
     // didChange
-    const newContent = `${content}-@{G\\r\\n`;
+    const newContent = `${content}-\${G\\r\\n`;
     const payload = `{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"inmemory://model/1","version":3},"contentChanges":[{"text": "${newContent}"}]}}`;
     await send(payload, [
       response => {

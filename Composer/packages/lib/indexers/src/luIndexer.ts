@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
+import get from 'lodash/get';
+import { LuIntentSection } from '@bfc/shared';
 
 import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
 import { getBaseName } from './utils/help';
@@ -28,32 +30,52 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
 
 function parse(content: string, id = ''): LuParsed {
   const { Sections, Errors } = luParser.parse(content);
-  const intents = Sections.map(section => {
+  const intents: LuIntentSection[] = [];
+  Sections.forEach(section => {
     const { Name, Body, SectionType } = section;
+    const range = {
+      startLineNumber: get(section, 'ParseTree.start.line', 0),
+      endLineNumber: get(section, 'ParseTree.stop.line', 0),
+    };
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
-      return {
+      intents.push({
         Name,
         Body,
         Entities,
-      };
+        range,
+      });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map(subSection => {
         const { Name, Body } = subSection;
+        const range = {
+          startLineNumber: get(subSection, 'ParseTree.start.line', 0),
+          endLineNumber: get(subSection, 'ParseTree.stop.line', 0),
+        };
         const Entities = subSection.Entities.map(({ Name }) => Name);
         return {
           Name,
           Body,
           Entities,
+          range,
         };
       });
-      return {
+      intents.push({
         Name,
         Body,
         Children,
-      };
+        range,
+      });
+      intents.push(
+        ...Children.map(subSection => {
+          return {
+            ...subSection,
+            Name: `${section.Name}/${subSection.Name}`,
+          };
+        })
+      );
     }
-  }).filter(item => item !== undefined);
+  });
   const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
   return {
     intents,
