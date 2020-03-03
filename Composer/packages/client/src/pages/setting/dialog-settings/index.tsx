@@ -72,7 +72,7 @@ export const DialogSettings = () => {
 
   const hostedControl = () => (
     <div css={hostedControls}>
-      <div css={hostedControlsTitle}>{hostControlLabels.botSettings}</div>
+      <h1 css={hostedControlsTitle}>{hostControlLabels.botSettings}</h1>
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;

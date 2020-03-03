@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -33,7 +33,7 @@ export const rightPage = css`
 
 export const title = css`
   display: block;
-  font-size: 28px;
+  font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
   margin: 0;
