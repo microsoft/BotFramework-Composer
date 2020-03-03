@@ -1,6 +1,6 @@
 # help
 [Activity
-    Text = @{helpText()}
+    Text = ${helpText()}
 	SuggestedActions = IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog
 ]
 

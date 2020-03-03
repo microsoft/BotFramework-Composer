@@ -1401,11 +1401,6 @@ export const appschema: OBISchema = {
           $ref: '#/definitions/Microsoft.IfCondition',
         },
         {
-          title: 'Microsoft.InitProperty',
-          description: 'Define and initialize a property to be an array or object.',
-          $ref: '#/definitions/Microsoft.InitProperty',
-        },
-        {
           title: 'Microsoft.LogAction',
           description:
             'Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).',
@@ -1697,28 +1692,6 @@ export const appschema: OBISchema = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-    },
-    'Microsoft.InitProperty': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'Initialize property',
-      description: 'Define and initialize a property to be an array or object.',
-      type: 'object',
-      properties: {
-        ...$properties(SDKTypes.InitProperty),
-        property: {
-          $role: 'expression',
-          title: 'Property',
-          description: 'Property (named location to store information).',
-          examples: ['user.age'],
-          type: 'string',
-        },
-        type: {
-          type: 'string',
-          title: 'Type',
-          description: 'Type of value.',
-          enum: ['object', 'array'],
         },
       },
     },

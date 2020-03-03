@@ -1,7 +1,7 @@
 [import](common.lg)
 
 # bfdactivity-097130()
--You selected @{user.name}
+-You selected ${user.name}
 
 # bfdactivity-040464()
 -This is the logic inside the "Susan" switch block.

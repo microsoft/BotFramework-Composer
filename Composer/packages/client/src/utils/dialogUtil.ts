@@ -21,14 +21,16 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $type: string;
-  intent: string;
   specifiedType: string;
+  intent: string;
+  triggerPhrases: string;
 }
 
 export interface TriggerFormDataErrors {
   $type?: string;
   intent?: string;
   specifiedType?: string;
+  triggerPhrases?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -67,7 +69,6 @@ export function insert(content, path: string, position: number | undefined, data
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
-
   const newStep = {
     $type: data.$type,
     ...seedNewDialog(data.$type, {}, optionalAttributes),
