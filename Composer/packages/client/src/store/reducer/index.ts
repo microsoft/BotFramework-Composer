@@ -358,7 +358,6 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
 };
 
 const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
-  console.log(`Update timestamp on ${type} ${id} to ${lastModified}`);
   if (type === 'dialog') {
     const dialog = state.dialogs.find(d => d.id === id);
     if (dialog) {
