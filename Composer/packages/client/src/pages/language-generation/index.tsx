@@ -60,9 +60,9 @@ const LGPage: React.FC<LGPageProps> = props => {
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
     if (!activeDialog && dialogs.length && fileId !== 'common') {
-      navigateTo('/language-generation/common');
+      navigateTo(`/bot/${projectId}/language-generation/common`);
     }
-  }, [fileId, dialogs]);
+  }, [fileId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {

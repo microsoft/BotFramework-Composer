@@ -37,7 +37,7 @@ interface Intent {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, projectId } = state;
   const { fileId } = props;
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
@@ -63,12 +63,6 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(luFiles)) return;
 
-    const errorFiles = checkErrors(luFiles);
-    if (errorFiles.length !== 0) {
-      navigateTo(`/language-understanding/${errorFiles[0].id}/edit`);
-      return;
-    }
-
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
       const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
@@ -92,7 +86,7 @@ const TableView: React.FC<TableViewProps> = props => {
       const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog]);
+  }, [luFiles, activeDialog, projectId]);
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
@@ -101,7 +95,7 @@ const TableView: React.FC<TableViewProps> = props => {
         name: 'Edit',
         onClick: () => {
           const { name, fileId } = intents[index];
-          navigateTo(`/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(`/bot/${projectId}/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];

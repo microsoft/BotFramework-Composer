@@ -35,7 +35,7 @@ const Routes = props => {
           />
           <Redirect
             from="/bot/:projectId/language-understanding"
-            to="/bot/:projectId/language-generation/all"
+            to="/bot/:projectId/language-understanding/all"
             noThrow
           />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />

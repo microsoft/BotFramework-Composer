@@ -5,6 +5,7 @@ import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'v
 import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
 
 export interface LUOption {
+  projectId: string;
   fileId: string;
   sectionId: string;
 }
@@ -17,6 +18,7 @@ export interface Template {
 
 export interface LUDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   sectionId?: string;
   index: () => any;

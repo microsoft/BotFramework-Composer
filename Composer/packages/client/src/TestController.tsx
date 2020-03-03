@@ -149,7 +149,7 @@ export const TestController: React.FC = () => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo('/notifications/');
+    navigateTo(`/bot/${state.projectId}/notifications/`);
   }
 
   return (

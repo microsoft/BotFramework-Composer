@@ -77,6 +77,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
       ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
       : '';
     const luOption = {
+      projectId: this.formContext.projectId,
       fileId: this.luFileId,
       sectionId: this.luIntent?.Name,
     };

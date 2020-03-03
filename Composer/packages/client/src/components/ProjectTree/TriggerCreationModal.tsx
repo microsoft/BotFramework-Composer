@@ -92,7 +92,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, projectId } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
 
   const onClickSubmitButton = e => {
@@ -223,6 +223,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               errorMsg={formData.errors.triggerPhrases}
               hidePlaceholder={true}
               luOption={{
+                projectId,
                 fileId: dialogId,
                 sectionId: formData.intent || 'newSection',
               }}

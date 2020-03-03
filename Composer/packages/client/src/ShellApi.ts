@@ -115,10 +115,9 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id: dialogId,
       content: updatedDialog,
-      projectId: state.projectId,
+      projectId,
     };
     dialogsMap[dialogId] = updatedDialog;
-    console.log('update dialog from handlevaluechange');
     updateDialog(payload);
 
     //make sure focusPath always valid
@@ -232,7 +231,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.updateIntent(file.content, intentName, intent);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function addLuIntentHandler({ id, intent }, event) {
@@ -242,7 +241,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.addIntent(file.content, intent);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function removeLuIntentHandler({ id, intentName }, event) {
@@ -253,7 +252,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.removeIntent(file.content, intentName);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
@@ -262,7 +261,7 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id,
       content,
-      projectId: state.projectId,
+      projectId,
     };
 
     switch ([fileTargetType, fileChangeType].join(',')) {
@@ -288,7 +287,7 @@ export const ShellApi: React.FC = () => {
       const payload = {
         id: dialogId,
         content: cleanedData,
-        projectId: state.projectId,
+        projectId,
       };
       updateDialog(payload);
     }
@@ -387,14 +386,14 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -403,7 +402,7 @@ export const ShellApi: React.FC = () => {
       const subTitle = schemaError.join('\n');
       OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
     }
-  }, [schemas]);
+  }, [schemas, projectId]);
 
   return null;
 };

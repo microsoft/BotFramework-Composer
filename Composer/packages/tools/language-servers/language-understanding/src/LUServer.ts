@@ -39,7 +39,17 @@ export class LUServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LUDocuments: LUDocument[] = [];
 
-  constructor(protected readonly connection: IConnection, protected readonly importResolver?: ImportResolverDelegate) {
+  constructor(
+    protected readonly connection: IConnection,
+    protected readonly importResolver?: (
+      source: string,
+      resourceId: string,
+      projectId: string
+    ) => {
+      content: string;
+      id: string;
+    }
+  ) {
     this.documents.listen(this.connection);
     this.documents.onDidChangeContent(change => this.validate(change.document));
     this.documents.onDidClose(event => {
@@ -123,12 +133,12 @@ export class LUServer {
         content: editorContent,
       };
     };
-    const { fileId, sectionId } = this.getLUDocument(document) || {};
+    const { fileId, sectionId, projectId } = this.getLUDocument(document) || {};
 
-    if (this.importResolver && fileId) {
+    if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
-        const luFile = resolver(source, id);
+        const luFile = resolver(source, id, projectId);
         if (!luFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
@@ -152,7 +162,7 @@ export class LUServer {
 
   protected addLUDocument(document: TextDocument, luOption?: LUOption) {
     const { uri } = document;
-    const { fileId, sectionId } = luOption || {};
+    const { fileId, sectionId, projectId } = luOption || {};
     const index = () => {
       const importResolver: ImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
@@ -173,6 +183,7 @@ export class LUServer {
     };
     const luDocument: LUDocument = {
       uri,
+      projectId,
       fileId,
       sectionId,
       index,

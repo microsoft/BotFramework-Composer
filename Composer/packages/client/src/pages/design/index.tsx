@@ -180,6 +180,7 @@ function DesignPage(props) {
     };
     const luFilePayload = {
       id: luFile.id,
+      projectId,
       content: luFile.content,
     };
     const index = get(dialog, 'content.triggers', []).length - 1;
