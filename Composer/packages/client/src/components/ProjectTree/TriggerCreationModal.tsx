@@ -36,7 +36,7 @@ import { StoreContext } from '../../store';
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
+const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $type, specifiedType, intent, triggerPhrases } = data;
 
@@ -58,7 +58,7 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
     );
   }
 
-  if ($type === intentTypeKey && !triggerPhrases) {
+  if ($type === intentTypeKey && !isRegEx && !triggerPhrases) {
     errors.triggerPhrases = formatMessage('Please input trigger phrases');
   }
   if (data.errors.triggerPhrases) {
@@ -67,7 +67,7 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   return errors;
 };
 
-interface LuFilePayload {
+export interface LuFilePayload {
   id: string;
   content: string;
 }
@@ -76,7 +76,7 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload: LuFilePayload) => void;
+  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
 const initialFormData: TriggerFormData = {
@@ -96,9 +96,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
   const onClickSubmitButton = e => {
     e.preventDefault();
-    const errors = validateForm(formData);
+    const errors = validateForm(formData, isRegEx);
 
     if (Object.keys(errors).length) {
       setFormData({
@@ -109,13 +110,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
 
     const content = get(luFile, 'content', '');
-    const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
-    const updateLuFile = {
-      id: dialogId,
-      content: newContent,
-    };
     const newDialog = addNewTrigger(dialogs, dialogId, formData);
-    onSubmit(newDialog, updateLuFile);
+    if (formData.$type === intentTypeKey && !isRegEx) {
+      const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
+      const updateLuFile = {
+        id: dialogId,
+        content: newContent,
+      };
+      onSubmit(newDialog, updateLuFile);
+    } else {
+      onSubmit(newDialog);
+    }
     onDismiss();
   };
 
@@ -143,8 +148,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
-  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+  const regexIntents: IDropdownOption[] = get(dialogFile, 'content.recognizer.intents', []).map(regexIntent => {
+    return { key: regexIntent.intent, text: regexIntent.intent };
+  });
 
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
