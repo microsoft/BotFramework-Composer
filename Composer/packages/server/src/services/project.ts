@@ -17,7 +17,7 @@ import { UserIdentity } from './pluginLoader';
 const MAX_RECENT_BOTS = 7;
 
 export class BotProjectService {
-  private static currentBotProjects: { [key: string]: BotProject } = {};
+  private static currentBotProjects: BotProject[] = [];
   private static recentBotProjects: LocationRef[] = [];
   private static projectLocationMap: {
     [key: string]: string;
@@ -36,7 +36,9 @@ export class BotProjectService {
   public static lgImportResolver(_source: string, id: string, projectId: string): TextFile {
     BotProjectService.initialize();
     const targetId = Path.basename(id, '.lg');
-    const targetFile = BotProjectService.currentBotProjects[projectId]?.lgFiles.find(({ id }) => id === targetId);
+    const targetFile = BotProjectService.currentBotProjects
+      .find(({ id }) => id === projectId)
+      ?.lgFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('lg file not found');
     return {
       id,
@@ -47,7 +49,9 @@ export class BotProjectService {
   public static luImportResolver(_source: string, id: string, projectId: string): any {
     BotProjectService.initialize();
     const targetId = Path.basename(id, '.lu');
-    const targetFile = BotProjectService.currentBotProjects[projectId]?.luFiles.find(({ id }) => id === targetId);
+    const targetFile = BotProjectService.currentBotProjects
+      .find(({ id }) => id === projectId)
+      ?.luFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('lu file not found');
     return {
       id,
@@ -178,10 +182,22 @@ export class BotProjectService {
       const project = new BotProject({ storageId: 'default', path: path }, user);
       project.id = projectId;
       await project.index();
-      // update KV store
-      // eslint-disable-next-line require-atomic-updates
-      BotProjectService.currentBotProjects[projectId] = project;
+      // update current indexed bot projects
+      BotProjectService.updateCurrentProjects(project);
       return project;
+    }
+  };
+
+  private static updateCurrentProjects = (project: BotProject): void => {
+    const { id } = project;
+    const idx = BotProjectService.currentBotProjects.findIndex(item => item.id === id);
+    if (idx > -1) {
+      BotProjectService.currentBotProjects.splice(idx, 1);
+    }
+    BotProjectService.currentBotProjects.unshift(project);
+
+    if (BotProjectService.currentBotProjects.length > MAX_RECENT_BOTS) {
+      BotProjectService.currentBotProjects = BotProjectService.currentBotProjects.slice(0, MAX_RECENT_BOTS);
     }
   };
 
