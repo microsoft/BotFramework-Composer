@@ -2,15 +2,17 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import { runBuild } from '@bfcomposer/lubuild';
 import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
 import { ILuisConfig } from './interface';
+import log from './../../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrain = require('@bfcomposer/bf-lu/lib/parser/cross-train/cross-train.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
 
 const DIALOGS_FOLDER = 'ComposerDialogs';
 const GENERATEDFOLDER = 'generated';
@@ -25,6 +27,10 @@ export class LuPublisher {
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public crossTrainMapRule: { [key: string]: string } = {};
+
+  private builder = new luBuild.Builder(message => {
+    log(message);
+  });
 
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
@@ -48,7 +54,7 @@ export class LuPublisher {
         throw new Error('No luis file exist');
       }
 
-      await runBuild(config);
+      await this._runBuild(config);
 
       //remove the cross train result
       await this._cleanCrossTrain();
@@ -127,6 +133,27 @@ export class LuPublisher {
     await crossTrain.writeFiles(result.luResult, this.interuptionFolderPath);
   }
 
+  private async _runBuild(luFiles: LuFile[]) {
+    const config = await this._getConfig(luFiles);
+    if (config.models.length === 0) {
+      throw new Error('No luis file exist');
+    }
+    const loadResult = await this._loadLuConatents(config.models);
+    const buildResult = await this.builder.build(
+      loadResult.luContents,
+      loadResult.recognizers,
+      config.authoringKey,
+      config.region,
+      config.botName,
+      config.suffix,
+      config.fallbackLocal,
+      false,
+      loadResult.multiRecognizers,
+      loadResult.settings
+    );
+    await this.builder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+  }
+
   //delete files in generated folder
   private async _deleteDir(path: string) {
     if (await this.storage.exists(path)) {
@@ -144,12 +171,19 @@ export class LuPublisher {
   }
 
   private _getConfig = async (luFiles: LuFile[]) => {
-    const luConfig: any = { ...this.config };
+    if (!this.config) {
+      throw new Error('Please complete your Luis settings');
+    }
+
+    const luConfig: any = {
+      authoringKey: this.config.authoringKey || '',
+      region: this.config.authoringRegion || '',
+      botName: this.config.name || '',
+      suffix: this.config.environment || '',
+      fallbackLocal: this.config.defaultLanguage || 'en-us',
+    };
+
     luConfig.models = [];
-    luConfig.autodelete = true;
-    luConfig.dialogs = true;
-    luConfig.force = false;
-    luConfig.folder = this.generatedFolderPath;
     //add all lu file after cross train
     const paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
     luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
@@ -160,8 +194,16 @@ export class LuPublisher {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
     });
-
     return luConfig;
+  };
+
+  private _loadLuConatents = async (paths: string[]) => {
+    return await this.builder.loadContents(
+      paths,
+      this.config?.defaultLanguage || '',
+      this.config?.environment || '',
+      this.config?.authoringRegion || ''
+    );
   };
 
   private async _cleanCrossTrain() {

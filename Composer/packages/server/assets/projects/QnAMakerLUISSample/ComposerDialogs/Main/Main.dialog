@@ -36,7 +36,7 @@
                     "id": "266608",
                     "name": "Send a response"
                   },
-                  "activity": "@{bfdactivity-266608()}"
+                  "activity": "${bfdactivity-266608()}"
                 }
               ]
             }
@@ -57,7 +57,7 @@
             "id": "771838",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-771838()}"
+          "activity": "${bfdactivity-771838()}"
         }
       ],
       "intent": "Help"
@@ -74,9 +74,9 @@
             "id": "284337",
             "name": "Connect to QnA Knowledgebase"
           },
-          "knowledgeBaseId": "settings.qna.knowledgebaseid",
-          "endpointKey": "settings.qna.endpointkey",
-          "hostname": "settings.qna.hostname",
+          "knowledgeBaseId": "=settings.qna.knowledgebaseid",
+          "endpointKey": "=settings.qna.endpointkey",
+          "hostname": "=settings.qna.hostname",
           "noAnswer": "Sorry, I did not find an answer.",
           "threshold": 0.3,
           "activeLearningCardTitle": "Did you mean:",
@@ -98,7 +98,7 @@
             "id": "313066",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-313066()}"
+          "activity": "${bfdactivity-313066()}"
         }
       ],
       "intent": "BuySurface"
