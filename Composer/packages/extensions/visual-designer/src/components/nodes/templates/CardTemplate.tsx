@@ -96,15 +96,27 @@ export const CardTemplate: FC<CardTemplateProps> = ({
         ${fullWidthSection};
         min-height: ${StandardSectionHeight}px;
         padding: 2px 8px;
-        border-top: 1px solid ${ObiColors.AzureGray3};
       `}
       onClick={onClickFooter}
     >
-      {footer}
+      <div
+        css={{
+          paddingTop: '3px',
+          whiteSpace: 'initial',
+          fontSize: '12px',
+          lineHeight: '14px',
+          fontFamily: 'Segoe UI',
+          overflowWrap: 'break-word',
+          wordBreak: 'break-all',
+          display: 'inline-block',
+        }}
+      >
+        {footer}
+      </div>
     </div>
   );
   const renderSeparateline = () => (
-    <div style={{ borderBottom: '1px solid grey', height: 1, width: StandardNodeWidth }}></div>
+    <div style={{ borderBottom: `1px solid ${ObiColors.AzureGray3}`, height: 1, width: StandardNodeWidth }}></div>
   );
   return (
     <div
