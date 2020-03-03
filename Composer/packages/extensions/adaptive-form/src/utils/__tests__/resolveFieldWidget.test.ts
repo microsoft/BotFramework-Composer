@@ -6,7 +6,7 @@ import { resolveFieldWidget } from '../resolveFieldWidget';
 const TestField = () => 'test field';
 
 describe('resolveFieldWidget', () => {
-  describe('field', () => {
+  describe('ui option field', () => {
     it('returns field override if present', () => {
       const uiOptions = {
         field: TestField,
@@ -60,6 +60,23 @@ describe('resolveFieldWidget', () => {
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);
+    });
+  });
+
+  describe('schema: oneOf', () => {
+    it('returns OneOfField', () => {
+      const schema = {
+        oneOf: [
+          {
+            type: 'number' as const,
+          },
+          {
+            type: 'string' as const,
+          },
+        ],
+      };
+
+      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OneOfField);
     });
   });
 

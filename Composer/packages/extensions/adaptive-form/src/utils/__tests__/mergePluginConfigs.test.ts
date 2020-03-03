@@ -65,7 +65,6 @@ Object {
   ],
   "roleSchema": Object {
     "expression": Object {
-      "field": [Function],
       "label": "expression label",
     },
   },
@@ -89,13 +88,6 @@ Object {
       },
     },
     "Microsoft.BeginDialog": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "dialog",
         "options",
@@ -105,26 +97,10 @@ Object {
       ],
     },
     "Microsoft.CancelAllDialogs": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "dialog",
         "property",
         "*",
-      ],
-    },
-    "Microsoft.ConditionalSelector": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
     },
     "Microsoft.DebugBreak": Object {
@@ -142,44 +118,16 @@ Object {
       "label": "Modify active dialog",
     },
     "Microsoft.EditArray": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Edit an Array Property",
     },
     "Microsoft.EmitEvent": Object {
       "helpLink": "https://aka.ms/bfc-custom-events",
       "label": "Emit a custom event",
     },
-    "Microsoft.EndDialog": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
-    },
-    "Microsoft.EndTurn": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
-    },
     "Microsoft.Foreach": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "itemsProperty",
@@ -189,11 +137,6 @@ Object {
     "Microsoft.ForeachPage": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "itemsProperty",
@@ -202,13 +145,6 @@ Object {
       ],
     },
     "Microsoft.HttpRequest": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "method",
         "url",
@@ -221,20 +157,6 @@ Object {
       "hidden": Array [
         "actions",
         "elseActions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
-    },
-    "Microsoft.MostSpecificSelector": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
     },
     "Microsoft.OAuthInput": Object {
@@ -246,11 +168,6 @@ Object {
     "Microsoft.OnActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -260,11 +177,6 @@ Object {
     "Microsoft.OnBeginDialog": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -274,11 +186,6 @@ Object {
     "Microsoft.OnCancelDialog": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -288,11 +195,6 @@ Object {
     "Microsoft.OnCondition": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -302,11 +204,6 @@ Object {
     "Microsoft.OnConversationUpdateActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -316,11 +213,6 @@ Object {
     "Microsoft.OnCustomEvent": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -330,11 +222,6 @@ Object {
     "Microsoft.OnDialogEvent": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -344,11 +231,6 @@ Object {
     "Microsoft.OnEndOfConversationActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -358,11 +240,6 @@ Object {
     "Microsoft.OnError": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -372,11 +249,6 @@ Object {
     "Microsoft.OnEventActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -386,11 +258,6 @@ Object {
     "Microsoft.OnHandoffActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -400,11 +267,6 @@ Object {
     "Microsoft.OnIntent": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "intent",
@@ -416,11 +278,6 @@ Object {
     "Microsoft.OnInvokeActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -430,11 +287,6 @@ Object {
     "Microsoft.OnMessageActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -444,11 +296,6 @@ Object {
     "Microsoft.OnMessageDeleteActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -458,11 +305,6 @@ Object {
     "Microsoft.OnMessageReactionActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -472,11 +314,6 @@ Object {
     "Microsoft.OnMessageUpdateActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -486,11 +323,6 @@ Object {
     "Microsoft.OnRepromptDialog": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -500,11 +332,6 @@ Object {
     "Microsoft.OnTypingActivity": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -514,11 +341,6 @@ Object {
     "Microsoft.OnUnknownIntent": Object {
       "hidden": Array [
         "actions",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "order": Array [
         "condition",
@@ -531,21 +353,9 @@ Object {
     "Microsoft.RegexRecognizer": Object {
       "hidden": Array [
         "entities",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
     },
     "Microsoft.RepeatDialog": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "options",
         "includeActivity",
@@ -553,13 +363,6 @@ Object {
       ],
     },
     "Microsoft.ReplaceDialog": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "dialog",
         "options",
@@ -568,44 +371,22 @@ Object {
       ],
     },
     "Microsoft.SendActivity": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
       "order": Array [
         "activity",
         "*",
       ],
     },
     "Microsoft.SetProperties": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Set Properties",
     },
     "Microsoft.SetProperty": Object {
-      "hidden": Array [
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
-      ],
+      "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": "Set a Property",
     },
     "Microsoft.SwitchCondition": Object {
       "hidden": Array [
         "default",
-        "$type",
-        "$id",
-        "$copy",
-        "$designer",
-        "id",
       ],
       "properties": Object {
         "cases": Object {

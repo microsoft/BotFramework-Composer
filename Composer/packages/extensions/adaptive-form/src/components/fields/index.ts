@@ -6,6 +6,7 @@ export * from './EditableField';
 export * from './NumberField';
 export * from './ObjectArrayField';
 export * from './ObjectField';
+export * from './OneOfField';
 export * from './OpenObjectField';
 export * from './RecognizerField';
 export * from './SelectField';
