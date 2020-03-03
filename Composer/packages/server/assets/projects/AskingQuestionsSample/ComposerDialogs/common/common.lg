@@ -12,21 +12,8 @@ I can show you examples on how to use actions, You can enter number 01-07
 # ShowImage(contentUrl, contentType)
 [HeroCard
     title = Here is the attachment
-    image = @{contentUrl}
+    image = ${contentUrl}
 ]
-
-# ShowEmailSummary(user)
-- IF: @{count(user.getGraphEmails.value) == 1}
-  - You have\s@{count(user.getGraphEmails.value)} email. This email is @{ShowEmail(user.getGraphEmails.value[0])}.
-- ELSEIF: @{count(user.getGraphEmails.value) >= 2}
-  - You have @{count(user.getGraphEmails.value)} emails, the first email is @{ShowEmail(user.getGraphEmails.value[0])}.
-- ELSEIF: @{count(user.getGraphEmails.value) == 0}
-  - You don't have any email.
-- ELSE:
-  - You should not be here.
-
-# ShowEmail(email)
-- @{email.subject}
 
 # Welcome
 -Welcome to input samples.

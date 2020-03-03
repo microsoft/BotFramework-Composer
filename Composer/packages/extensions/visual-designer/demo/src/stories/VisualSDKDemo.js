@@ -20,7 +20,6 @@ export class VisualSDKDemo extends Component {
     const initialTypes = [
       SDKTypes.SendActivity,
       SDKTypes.EditArray,
-      SDKTypes.InitProperty,
       SDKTypes.SetProperties,
       SDKTypes.SetProperty,
       SDKTypes.DeleteProperties,
