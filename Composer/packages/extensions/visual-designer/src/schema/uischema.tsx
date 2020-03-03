@@ -26,14 +26,20 @@ import { UISchema, UIWidget } from './uischema.types';
 const BaseInputSchema: UIWidget = {
   'ui:widget': PromptWidget,
   botAsks: {
-    'ui:widget': ActivityRenderer,
-    title: data => `Bot Asks (${getInputType(data.$type)})`,
-    field: 'prompt',
-    defaultContent: '<prompt>',
-    icon: ElementIcon.MessageBot,
-    colors: {
-      theme: ObiColors.BlueMagenta20,
-      icon: ObiColors.BlueMagenta30,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+      title: data => `Bot Asks (${getInputType(data.$type)})`,
+      icon: ElementIcon.MessageBot,
+      colors: {
+        theme: ObiColors.BlueMagenta20,
+        icon: ObiColors.BlueMagenta30,
+      },
+    },
+    body: {
+      'ui:widget': ActivityRenderer,
+      field: 'prompt',
+      defaultContent: '<prompt>',
     },
   },
   userInput: {
@@ -122,12 +128,18 @@ export const uiSchema: UISchema = {
     },
   },
   [SDKTypes.SendActivity]: {
-    'ui:widget': ActivityRenderer,
-    field: 'activity',
-    icon: ElementIcon.MessageBot,
-    colors: {
-      theme: ObiColors.BlueMagenta20,
-      icon: ObiColors.BlueMagenta30,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+      icon: ElementIcon.MessageBot,
+      colors: {
+        theme: ObiColors.BlueMagenta20,
+        icon: ObiColors.BlueMagenta30,
+      },
+    },
+    body: {
+      'ui:widget': ActivityRenderer,
+      field: 'activity',
     },
   },
   [SDKTypes.AttachmentInput]: BaseInputSchema,
