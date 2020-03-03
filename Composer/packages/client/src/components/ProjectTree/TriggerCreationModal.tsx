@@ -51,13 +51,13 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
     errors.$type = formatMessage('Please select a trigger type');
   }
 
-  if (!intent || !nameRegex.test(intent)) {
+  if ($type === intentTypeKey && (!intent || !nameRegex.test(intent))) {
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
   }
 
-  if (!triggerPhrases) {
+  if ($type === intentTypeKey && !triggerPhrases) {
     errors.triggerPhrases = formatMessage('Please input trigger phrases');
   }
   if (data.errors.triggerPhrases) {
