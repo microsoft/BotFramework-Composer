@@ -13,39 +13,35 @@ import useNotifications from './useNotifications';
 import { NotificationList } from './NotificationList';
 import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
-import { INotification } from './types';
+import { INotification, NotificationType } from './types';
 import { navigateTo } from './../../utils';
-import { convertDialogDiagnosticToUrl, toUrlUtil } from './../../utils/navigation';
+import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
-  const [filter, setFilter] = useState('');
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { projectId } = state;
+  const [filter, setFilter] = useState('');
   const notifications = useNotifications(filter);
   const navigations = {
-    lg: (item: INotification) => {
-      let url = `/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
-      const dividerIndex = item.id.indexOf('#');
+    [NotificationType.LG]: (item: INotification) => {
+      let url = `/bot/${projectId}/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
-      if (dividerIndex > -1) {
-        const templateId = item.id.substring(dividerIndex + 1);
-        const lgFile = item.id.substring(0, dividerIndex);
-        const dialog = dialogs.find(d => d.lgFile === lgFile);
-        const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === templateId) : null;
-        const path = lgTemplate ? lgTemplate.path : '';
-        if (path && dialog) {
-          url = toUrlUtil(dialog.id, path);
-        }
+      if (item.dialogPath) {
+        url = toUrlUtil(item.dialogPath);
       }
       navigateTo(url);
     },
-    lu: (item: INotification) => {
-      navigateTo(`/dialogs/${item.id}`);
+    [NotificationType.LU]: (item: INotification) => {
+      let uri = `/bot/${projectId}/language-understanding/${item.id}`;
+      if (item.dialogPath) {
+        uri = convertPathToUrl(item.id, item.dialogPath);
+      }
+      navigateTo(uri);
     },
-    dialog: (item: INotification) => {
+    [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const uri = convertDialogDiagnosticToUrl(item.diagnostic);
+      const uri = convertPathToUrl(item.id, item.dialogPath);
       navigateTo(uri);
     },
   };

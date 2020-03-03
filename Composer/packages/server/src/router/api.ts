@@ -5,7 +5,6 @@ import express, { Router, Request, Response, NextFunction, RequestHandler } from
 
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
-import { BotConnectorController } from '../controllers/connector';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 
@@ -45,14 +44,6 @@ router.post('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.post('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
-
-// connector
-router.get('/launcher/:projectId/connect', BotConnectorController.connect);
-router.post('/launcher/:projectId/sync', BotConnectorController.sync);
-router.get('/launcher/:projectId/status', BotConnectorController.status);
-router.get('/launcher/:projectId/publishHistory', BotConnectorController.getPublishHistory);
-router.post('/launcher/:projectId/publish', BotConnectorController.publish);
-router.post('/launcher/:projectId/publish/:label', BotConnectorController.publish);
 
 router.get('/publish/:method', PublishController.publish);
 

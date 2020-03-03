@@ -46,7 +46,7 @@ const FileTargetTypes = {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
 
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName, projectId } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -87,6 +87,7 @@ export const ShellApi: React.FC = () => {
     return {
       data: getData(sourceWindow),
       botName,
+      projectId,
       dialogs,
       focusPath,
       schemas,
@@ -114,10 +115,9 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id: dialogId,
       content: updatedDialog,
-      projectId: state.projectId,
+      projectId,
     };
     dialogsMap[dialogId] = updatedDialog;
-    console.log('update dialog from handlevaluechange');
     updateDialog(payload);
 
     //make sure focusPath always valid
@@ -229,9 +229,9 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const newLuContent = luUtil.updateIntent(file.content, intentName, intent);
+    const content = luUtil.updateIntent(file.content, intentName, intent);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function addLuIntentHandler({ id, intent }, event) {
@@ -239,9 +239,9 @@ export const ShellApi: React.FC = () => {
     const file = luFiles.find(file => file.id === id);
     if (!file) throw new Error(`lu file ${id} not found`);
 
-    const newLuContent = luUtil.addIntent(file.content, intent);
+    const content = luUtil.addIntent(file.content, intent);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function removeLuIntentHandler({ id, intentName }, event) {
@@ -250,9 +250,9 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const newLuContent = luUtil.removeIntent(file.content, intentName);
+    const content = luUtil.removeIntent(file.content, intentName);
 
-    return await updateLuFile({ id, newLuContent });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
@@ -261,7 +261,7 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id,
       content,
-      projectId: state.projectId,
+      projectId,
     };
 
     switch ([fileTargetType, fileChangeType].join(',')) {
@@ -287,7 +287,7 @@ export const ShellApi: React.FC = () => {
       const payload = {
         id: dialogId,
         content: cleanedData,
-        projectId: state.projectId,
+        projectId,
       };
       updateDialog(payload);
     }
@@ -386,14 +386,14 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -402,7 +402,7 @@ export const ShellApi: React.FC = () => {
       const subTitle = schemaError.join('\n');
       OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
     }
-  }, [schemas]);
+  }, [schemas, projectId]);
 
   return null;
 };

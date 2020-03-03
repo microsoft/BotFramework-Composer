@@ -119,7 +119,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -172,15 +172,21 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = dialog => {
-    const payload = {
+  const onTriggerCreationSubmit = (dialog, luFile) => {
+    const dialogPayload = {
       id: dialog.id,
-      projectId: state.projectId,
+      projectId,
       content: dialog.content,
+    };
+    const luFilePayload = {
+      id: luFile.id,
+      projectId,
+      content: luFile.content,
     };
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateDialog(payload);
+    actions.updateLuFile(luFilePayload);
+    actions.updateDialog(dialogPayload);
   };
 
   function handleSelect(id, selected = '') {
@@ -307,7 +313,7 @@ function DesignPage(props) {
   async function onSubmit(data: { name: string; description: string }) {
     const content = { ...getNewDesigner(data.name, data.description), generator: `${data.name}.lg` };
     const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
-    await actions.createDialog({ id: data.name, content: seededContent, projectId: state.projectId });
+    await actions.createDialog({ id: data.name, content: seededContent, projectId });
   }
 
   async function handleDeleteDialog(id) {
@@ -331,14 +337,14 @@ function DesignPage(props) {
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, state.projectId);
+      await removeDialog(id, projectId);
     }
   }
 
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
-      await updateDialog({ id, projectId: state.projectId, content });
+      await updateDialog({ id, projectId, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;

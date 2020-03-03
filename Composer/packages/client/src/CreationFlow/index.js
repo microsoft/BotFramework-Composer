@@ -123,7 +123,7 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigateTo(`/bot/${state.projectId}/dialogs/Main`);
+        //navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);

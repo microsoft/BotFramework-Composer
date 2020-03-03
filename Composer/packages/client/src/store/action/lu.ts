@@ -1,61 +1,39 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import clonedeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 
-import { ActionCreator } from '../types';
+import * as luUtil from '../../utils/luUtil';
+import { undoable } from '../middlewares/undo';
+import { ActionCreator, State } from '../types';
 
-import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
-
-export const debouncedUpdateLuFile: ActionCreator = debounce(async (store, id, projectId, content, lastModified) => {
-  const state = store.getState();
-  const file = state.luFiles.find(l => l.id === id);
-  if (file) {
-    try {
-      const response = await httpClient.put(`/projects/${projectId}/luFiles/${id}`, {
-        id,
-        projectId,
-        content,
-        lastModified: file.lastModified,
-      });
-      // dispatch({
-      //   type: ActionTypes.UPDATE_LU_SUCCESS,
-      //   payload: { response },
-      // });
-      store.dispatch({
-        type: ActionTypes.UPDATE_TIMESTAMP,
-        payload: {
-          id: id,
-          type: 'lu',
-          lastModified: response.data.lastModified,
-        },
-      });
-    } catch (err) {
-      // This requires some special handling because LU files return an error when they can't be parsed
-      // or some other error in the LU system occurs...
-      // TODO: DEBOUNCe THE LU UPDATE
-      // ALSO, note that the update_lu_Failure *may actually write the file* and cause it to be out of sync...
-      // this seems to fail sometimes when it attempts to delete generated files... which is not related to writing the file successfully...
-      // and there are some rush conditions!!
-      console.log('UPDATE LU ERROR', JSON.stringify(err));
-      if (err.statusCode === 409) {
-        store.dispatch({
-          type: ActionTypes.SET_ERROR,
-          payload: {
-            message: err.response && err.response.data.message ? err.response.data.message : err,
-            summary: 'UPDATE LU ERROR',
-          },
-        });
-      } else {
-        store.dispatch({
-          type: ActionTypes.UPDATE_LU_FAILURE,
-          payload: null,
-          error: err,
-        });
-        throw new Error(err.response.data.message);
-      }
-    }
+import { ActionTypes } from './../../constants/index';
+import { setError } from './error';
+//remove editor's debounce and add it to action
+export const debouncedUpdateLu = debounce(async (store, id, projectId, content, lastModified) => {
+  try {
+    const response = await httpClient.put(`/projects/${projectId}/luFiles/${id}`, {
+      id,
+      projectId,
+      content,
+      lastModified,
+    });
+    store.dispatch({
+      type: ActionTypes.UPDATE_TIMESTAMP,
+      payload: {
+        id: id,
+        type: 'lu',
+        lastModified: response.data.lastModified,
+      },
+    });
+  } catch (err) {
+    setError(store, {
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'UPDATE LU ERROR',
+    });
+    //if update lu error, do a full refresh.
+    // fetchProject(store);
   }
 }, 500);
 
@@ -63,9 +41,26 @@ export const updateLuFile: ActionCreator = async (store, { id, projectId, conten
   const state = store.getState();
   const file = state.luFiles.find(l => l.id === id);
   if (file) {
-    debouncedUpdateLuFile(store, id, projectId, content, file.lastModified);
+    store.dispatch({ type: ActionTypes.UPDATE_LU_SUCCESS, payload: { id, content } });
+    debouncedUpdateLu(store, id, projectId, content, file.lastModified);
   }
 };
+
+export const undoableUpdateLuFile = undoable(
+  updateLuFile,
+  (state: State, args: any[], isEmpty) => {
+    if (isEmpty) {
+      const id = args[0].id;
+      const projectId = args[0].projectId;
+      const content = clonedeep(state.luFiles.find(luFile => luFile.id === id)?.content);
+      return [{ id, projectId, content }];
+    } else {
+      return args;
+    }
+  },
+  updateLuFile,
+  updateLuFile
+);
 
 export const createLuFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
   try {
@@ -99,6 +94,21 @@ export const removeLuFile: ActionCreator = async ({ dispatch }, { id, projectId 
       error: err,
     });
   }
+};
+
+export const updateLuIntent: ActionCreator = async (store, { projectId, file, intentName, intent }) => {
+  const newContent = luUtil.updateIntent(file.content, intentName, intent);
+  return await undoableUpdateLuFile(store, { id: file.id, projectId, content: newContent });
+};
+
+export const createLuIntent: ActionCreator = async (store, { projectId, file, intent }) => {
+  const newContent = luUtil.addIntent(file.content, intent);
+  return await undoableUpdateLuFile(store, { id: file.id, projectId, content: newContent });
+};
+
+export const removeLuIntent: ActionCreator = async (store, { projectId, file, intentName }) => {
+  const newContent = luUtil.removeIntent(file.content, intentName);
+  return await undoableUpdateLuFile(store, { id: file.id, projectId, content: newContent });
 };
 
 export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey, projectId) => {

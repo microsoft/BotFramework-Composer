@@ -5,10 +5,10 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
-import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer } from '@bfc/indexers';
+import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
@@ -146,8 +146,22 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const updateLuTemplate: ReducerFunc = (state, { response }) => {
-  state.luFiles = response.data.luFiles;
+const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
+  const luFiles = state.luFiles.map(luFile => {
+    if (luFile.id === id) {
+      luFile.content = content;
+      return luFile;
+    }
+    return luFile;
+  });
+
+  state.luFiles = luFiles.map(luFile => {
+    const { parse } = luIndexer;
+    const { id, content } = luFile;
+    const { intents, diagnostics } = parse(content, id);
+    return { ...luFile, intents, diagnostics, content };
+  });
+
   return state;
 };
 
@@ -314,6 +328,12 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 
 const gotPublishStatus: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
+  if (payload.results?.status == 200) {
+    state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+    state.botStatus = BotStatus.connected;
+  } else {
+    state.botStatus = BotStatus.unConnected;
+  }
   return state;
 };
 

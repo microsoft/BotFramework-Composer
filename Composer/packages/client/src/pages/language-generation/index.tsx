@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -33,10 +33,10 @@ interface LGPageProps extends RouteComponentProps<{}> {
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
 
   const path = props.location?.pathname ?? '';
-  const { fileId = 'common' } = props;
+  const { fileId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -57,21 +57,28 @@ const LGPage: React.FC<LGPageProps> = props => {
     return newDialogLinks;
   }, [dialogs]);
 
+  useEffect(() => {
+    const activeDialog = dialogs.find(({ id }) => id === fileId);
+    if (!activeDialog && dialogs.length && fileId !== 'common') {
+      navigateTo(`/bot/${projectId}/language-generation/common`);
+    }
+  }, [fileId, dialogs, projectId]);
+
   const onSelect = useCallback(
     id => {
-      const url = `/bot/${state.projectId}/language-generation/${id}`;
+      const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/bot/${state.projectId}/language-generation/${fileId}`;
+      let url = `/bot/${projectId}/language-generation/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [fileId, projectId]
   );
 
   const toolbarItems = [
@@ -106,7 +113,7 @@ const LGPage: React.FC<LGPageProps> = props => {
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
             <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
+              <CodeEditor path="/edit/*" fileId={fileId} />
               <TableView path="/" fileId={fileId} />
             </Router>
           </Suspense>

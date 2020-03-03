@@ -4,7 +4,7 @@ This document will explain different techniques you can use to test & debug your
 
 **Pre-requisites:**
 
-[Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2)
+[Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest)
 
 [Bot Framework Composer](https://github.com/Microsoft/BotFramework-Composer#installing-bot-framework-composer)
 
@@ -78,7 +78,7 @@ Attempting to save changes that do not match the LU file format results in an er
 
 ![LU format error](./Assets/testing-debugging-luformaterror.png)
 
-Seeing this error means that you have badly formatted lu data. Refer to the [LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) for troubleshooting.
+Seeing this error means that you have badly formatted lu data. Refer to the [LU file format](https://aka.ms/lu-file-format) for troubleshooting.
 
 _Saving LG data_
 

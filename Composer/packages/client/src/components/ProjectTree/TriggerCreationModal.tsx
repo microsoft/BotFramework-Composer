@@ -7,11 +7,14 @@ import React, { useState, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { DialogInfo, luIndexer, combineMessage } from '@bfc/indexers';
 import get from 'lodash/get';
-import { DialogInfo } from '@bfc/indexers';
+import { LuEditor } from '@bfc/code-editor';
 
 import {
   addNewTrigger,
@@ -25,15 +28,16 @@ import {
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
-  regexRecognizerKey,
 } from '../../utils/dialogUtil';
+import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, dialogWindow } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
+const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, specifiedType } = data;
+  const { $type, specifiedType, intent, triggerPhrases } = data;
 
   if ($type === eventTypeKey && !specifiedType) {
     errors.specifiedType = formatMessage('Please select a event type');
@@ -46,21 +50,40 @@ const validateForm = (data: TriggerFormData): TriggerFormDataErrors => {
   if (!$type) {
     errors.$type = formatMessage('Please select a trigger type');
   }
+
+  if (!intent || !nameRegex.test(intent)) {
+    errors.intent = formatMessage(
+      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+    );
+  }
+
+  if (!triggerPhrases) {
+    errors.triggerPhrases = formatMessage('Please input trigger phrases');
+  }
+  if (data.errors.triggerPhrases) {
+    errors.triggerPhrases = data.errors.triggerPhrases;
+  }
   return errors;
 };
+
+interface LuFilePayload {
+  id: string;
+  content: string;
+}
 
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo) => void;
+  onSubmit: (dialog: DialogInfo, luFilePayload: LuFilePayload) => void;
 }
 
 const initialFormData: TriggerFormData = {
   errors: {},
   $type: intentTypeKey,
-  intent: '',
   specifiedType: '',
+  intent: '',
+  triggerPhrases: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -69,9 +92,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, projectId } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
-  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData);
@@ -83,8 +106,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       });
       return;
     }
+
+    const content = get(luFile, 'content', '');
+    const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
+    const updateLuFile = {
+      id: dialogId,
+      content: newContent,
+    };
     const newDialog = addNewTrigger(dialogs, dialogId, formData);
-    onSubmit(newDialog);
+    onSubmit(newDialog, updateLuFile);
     onDismiss();
   };
 
@@ -92,29 +122,27 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...initialFormData, $type: option.key });
   };
 
-  const onSelectIntent = (e, option) => {
-    setFormData({ ...formData, intent: option.key });
-  };
-
   const onSelectSpecifiedTypeType = (e, option) => {
     setFormData({ ...formData, specifiedType: option.key });
+  };
+
+  const onNameChange = (e, name) => {
+    setFormData({ ...formData, intent: name });
+  };
+
+  const onTriggerPhrasesChange = (body: string) => {
+    const errors = formData.errors;
+    const content = '#' + formData.intent + '\n' + body;
+    const { diagnostics } = luIndexer.parse(content);
+    errors.triggerPhrases = combineMessage(diagnostics);
+    setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
 
-  const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
-
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
-  const luisIntents = get(luFile, 'intents', []);
-  const intents = isRegEx ? regexIntents : luisIntents;
-
-  const intentOptions = intents.map(t => {
-    return { key: t.name || t.Name || t.intent, text: t.name || t.Name || t.intent };
-  });
-
-  const showIntentDropDown = formData.$type === intentTypeKey;
+  const showIntentFields = formData.$type === intentTypeKey;
   const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
   const showMessageDropDown = formData.$type === messageTypeKey;
@@ -178,15 +206,39 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'messageTypeDropDown'}
             />
           )}
-          {showIntentDropDown && (
-            <Dropdown
-              label={formatMessage('Which intent do you want to handle? (Optional)')}
-              options={intentOptions}
-              styles={dropdownStyles}
-              onChange={onSelectIntent}
-              disabled={intentOptions.length === 0}
-              placeholder={intentOptions.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
+          {showIntentFields && (
+            <TextField
+              label={formatMessage('What is the name of this trigger')}
+              styles={intent}
+              onChange={onNameChange}
               errorMessage={formData.errors.intent}
+              data-testid="TriggerName"
+            />
+          )}
+          {showIntentFields && <Label>{formatMessage('Trigger Phrases')}</Label>}
+          {showIntentFields && (
+            <LuEditor
+              onChange={onTriggerPhrasesChange}
+              value={formData.triggerPhrases}
+              errorMsg={formData.errors.triggerPhrases}
+              hidePlaceholder={true}
+              luOption={{
+                projectId,
+                fileId: dialogId,
+                sectionId: formData.intent || 'newSection',
+              }}
+              options={{
+                lineNumbers: 'off',
+                minimap: {
+                  enabled: false,
+                },
+                lineDecorationsWidth: 10,
+                lineNumbersMinChars: 0,
+                glyphMargin: false,
+                folding: false,
+                renderLineHighlight: 'none',
+              }}
+              height={150}
             />
           )}
         </Stack>

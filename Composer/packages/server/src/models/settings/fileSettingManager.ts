@@ -12,7 +12,7 @@ import { ISettingManager, OBFUSCATED_VALUE } from '.';
 const debug = log.extend('file-settings-manager');
 
 // TODO: this causes tests to fail
-const subPath = 'ComposerDialogs/settings/appsettings.json';
+const subPath = 'settings/appsettings.json';
 
 export class FileSettingManager implements ISettingManager {
   private basePath: string;
