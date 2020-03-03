@@ -313,8 +313,12 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 
 const gotPublishStatus: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
-  state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
-  state.botStatus = BotStatus.connected;
+  if (payload.results?.status == 200) {
+    state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+    state.botStatus = BotStatus.connected;
+  } else {
+    state.botStatus = BotStatus.unConnected;
+  }
   return state;
 };
 

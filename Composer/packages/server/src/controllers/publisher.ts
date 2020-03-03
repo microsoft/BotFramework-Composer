@@ -35,12 +35,19 @@ export const PublishController = {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].publish;
 
-      // call the method
-      const results = await pluginMethod.call(null, config.configuration, currentProject, user);
-      res.json({
-        target: target,
-        results: results,
-      });
+      try {
+        // call the method
+        const results = await pluginMethod.call(null, config.configuration, currentProject, user);
+        res.json({
+          target: target,
+          results: results,
+        });
+      } catch (err) {
+        res.status(400).json({
+          statusCode: '400',
+          message: err.message,
+        });
+      }
     } else {
       res.json({
         statusCode: '400',

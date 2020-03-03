@@ -29,12 +29,13 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
       payload: response.data,
     });
   } catch (err) {
-    // dispatch({
-    //   type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
-    //   payload: {
-    //     error: err,
-    //   },
-    // });
+    throw new Error(err.response.data.message);
+    //   dispatch({
+    //     type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
+    //     payload: {
+    //       error: err,
+    //     },
+    //   });
   }
 };
 
