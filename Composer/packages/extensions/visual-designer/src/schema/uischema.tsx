@@ -19,6 +19,7 @@ import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
 import { PropertyAssignmentSize, ChoiceInputSize } from '../constants/ElementSizes';
 import { ListOverview } from '../components/common/ListOverview';
+import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
 import { UISchema, UIWidget } from './uischema.types';
 
@@ -36,42 +37,48 @@ const BaseInputSchema: UIWidget = {
     },
   },
   userInput: {
-    'ui:widget': ActionCard,
-    title: data => `User Input (${getInputType(data.$type)})`,
-    disableSDKTitle: true,
-    icon: ElementIcon.User,
-    menu: 'none',
-    content: data => data.property || '<property>',
-    colors: {
-      theme: ObiColors.LightBlue,
-      icon: ObiColors.AzureBlue,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+      title: data => `User Input (${getInputType(data.$type)})`,
+      disableSDKTitle: true,
+      icon: ElementIcon.User,
+      menu: 'none',
+      colors: {
+        theme: ObiColors.LightBlue,
+        icon: ObiColors.AzureBlue,
+      },
     },
+    footer: data => data.property || '<property>',
   },
 };
 
 const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
   userInput: {
-    'ui:widget': ActionCard,
-    title: data => `User Input (${getInputType(data.$type)})`,
-    disableSDKTitle: true,
-    icon: ElementIcon.User,
-    menu: 'none',
-    content: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
-    children: data => {
-      const renderItem = item => {
-        const content = item.value;
-        return (
-          <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={content}>
-            {content}
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+      title: data => `User Input (${getInputType(data.$type)})`,
+      disableSDKTitle: true,
+      icon: ElementIcon.User,
+      menu: 'none',
+      colors: {
+        theme: ObiColors.LightBlue,
+        icon: ObiColors.AzureBlue,
+      },
+    },
+    body: data => (
+      <ListOverview
+        items={data.choices}
+        maxCount={3}
+        renderItem={item => (
+          <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={item.value}>
+            {item.value}
           </BorderedDiv>
-        );
-      };
-      return <ListOverview items={data.choices} renderItem={renderItem} maxCount={3} />;
-    },
-    colors: {
-      theme: ObiColors.LightBlue,
-      icon: ObiColors.AzureBlue,
-    },
+        )}
+      />
+    ),
+    footer: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
   },
 });
 export const uiSchema: UISchema = {
