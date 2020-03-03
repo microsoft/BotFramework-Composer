@@ -13,6 +13,9 @@ import {
   ChoiceInputMarginTop,
   ChoiceInputMarginBottom,
   IconBrickSize,
+  AssignmentMarginTop,
+  PropertyAssignmentSize,
+  AssignmentMarginBottom,
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
@@ -75,6 +78,20 @@ export function measureChoiceInputDetailBoundary(data): Boundary {
   return new Boundary(width, height);
 }
 
+export function measurePropertyAssignmentBoundary(data): Boundary {
+  const width = InitNodeSize.width;
+  const height = Math.max(
+    InitNodeSize.height / 2 +
+      (data.assignments && Array.isArray(data.assignments)
+        ? (data.assignments.length < 4
+            ? data.assignments.length * (PropertyAssignmentSize.height + AssignmentMarginTop)
+            : 4 * (PropertyAssignmentSize.height + AssignmentMarginTop)) + AssignmentMarginBottom
+        : 0),
+    InitNodeSize.height
+  );
+  return new Boundary(width, height);
+}
+
 function measureBaseInputBoundary(data): Boundary {
   const { botAsks, userAnswers } = transformBaseInput(data, '');
   return calculateBaseInputBoundary(measureJsonBoundary(botAsks.json), measureJsonBoundary(userAnswers.json));
@@ -125,6 +142,9 @@ export function measureJsonBoundary(json): Boundary {
       break;
     case ObiTypes.InvalidPromptBrick:
       boundary = new Boundary(IconBrickSize.width, IconBrickSize.height);
+      break;
+    case ObiTypes.SetProperties:
+      boundary = measurePropertyAssignmentBoundary(json);
       break;
     case ObiTypes.EndDialog:
     case ObiTypes.EndTurn:
