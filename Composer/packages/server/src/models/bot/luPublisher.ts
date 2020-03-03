@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
+import keys from 'lodash/keys';
 import { LuFile, DialogInfo } from '@bfc/indexers';
 
 import { Path } from './../../utility/path';
@@ -44,17 +45,10 @@ export class LuPublisher {
     try {
       await this._createGeneratedDir();
 
-      await this.createCrossTrainConfig();
-
       //do cross train before publish
       await this._crossTrain();
 
-      const config = await this._getConfig(luFiles);
-      if (config.models.length === 0) {
-        throw new Error('No luis file exist');
-      }
-
-      await this._runBuild(config);
+      await this._runBuild(luFiles);
 
       //remove the cross train result
       await this._cleanCrossTrain();
@@ -78,7 +72,7 @@ export class LuPublisher {
     }
   };
 
-  public setCrossTrainConfig = async (dialogs: DialogInfo[]) => {
+  public setCrossTrainConfig = (dialogs: DialogInfo[]) => {
     // ToDo: create real tree for cross train. Now add this data to test the bf-lu
     const rootDialog = dialogs.find(dialog => dialog.isRoot);
     if (rootDialog?.intentTriggers.length) {
@@ -87,7 +81,7 @@ export class LuPublisher {
   };
 
   //write config to generated folder
-  public async createCrossTrainConfig() {
+  private async _createCrossTrainConfig() {
     await this.storage.writeFile(
       `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`,
       JSON.stringify(this.crossTrainMapRule)
@@ -123,8 +117,13 @@ export class LuPublisher {
     }
   }
 
+  private _needCrossTrain() {
+    return !!keys(this.crossTrainMapRule).length;
+  }
+
   private async _crossTrain() {
-    //await this.createCrossTrainConfig();
+    if (!this._needCrossTrain()) return;
+    await this._createCrossTrainConfig();
     const result = await crossTrain.train(
       this.dialogsDir,
       '_Interuption',
@@ -185,8 +184,11 @@ export class LuPublisher {
 
     luConfig.models = [];
     //add all lu file after cross train
-    const paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
-    luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
+    let paths: string[] = [];
+    if (this._needCrossTrain()) {
+      paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
+      luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
+    }
 
     //add the lu file that are not in crossTrain config.
     luFiles.forEach(file => {
@@ -207,6 +209,7 @@ export class LuPublisher {
   };
 
   private async _cleanCrossTrain() {
+    if (!this._needCrossTrain()) return;
     await this.storage.removeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`);
     await this._deleteDir(this.interuptionFolderPath);
   }
