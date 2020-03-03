@@ -15,18 +15,10 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
 import { NavLinks } from '../../components/NavLinks';
+import { dialogItemSelected, dialogItemNotSelected } from '../../components/NavLinks/styles';
 
 import TableView from './table-view';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  dialogItemSelected,
-  dialogItemNotSelected,
-  HeaderText,
-} from './styles';
+import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor, HeaderText } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
@@ -114,7 +106,9 @@ const LUPage: React.FC<LUPageProps> = props => {
               onSelect('all');
             }}
             styles={isRoot ? dialogItemSelected : dialogItemNotSelected}
-            text={'All'}
+            text={formatMessage('All')}
+            ariaLabel={formatMessage('all language understanding files')}
+            ariaHidden={false}
           />
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
         </div>

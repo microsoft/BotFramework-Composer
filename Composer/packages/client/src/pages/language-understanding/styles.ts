@@ -131,32 +131,3 @@ export const consoleStyle = css`
   padding: 15px;
   margin-bottom: 20px;
 `;
-
-export const dialogItemNotSelected: IButtonStyles = {
-  root: {
-    background: NeutralColors.white,
-    fontWeight: FontWeights.semilight,
-    height: '32px',
-    fontSize: FontSizes.small,
-    paddingLeft: '16px',
-    paddingRight: 0,
-    border: 0,
-    textAlign: 'left',
-    marginLeft: 0,
-    marginRight: 0,
-  },
-};
-export const dialogItemSelected: IButtonStyles = {
-  root: {
-    background: NeutralColors.gray20,
-    fontWeight: FontWeights.semibold,
-    height: '32px',
-    fontSize: FontSizes.small,
-    paddingLeft: '16px',
-    paddingRight: 0,
-    border: 0,
-    textAlign: 'left',
-    marginLeft: 0,
-    marginRight: 0,
-  },
-};
