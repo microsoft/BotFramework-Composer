@@ -13,9 +13,9 @@ export interface ArrowLineProps {
 export const ArrowLine: React.FC<ArrowLineProps> = ({ width, arrowsize, color }) => {
   const points = [
     { x: 0, y: 0 },
-    { x: width / 2 - arrowsize, y: 0 },
+    { x: width / 2 - (arrowsize + 2), y: 0 },
     { x: width / 2, y: arrowsize },
-    { x: width / 2 + arrowsize, y: 0 },
+    { x: width / 2 + (arrowsize + 2), y: 0 },
     { x: width, y: 0 },
   ];
   const pointsString = points.map(p => `${p.x},${p.y}`).join(' ');
