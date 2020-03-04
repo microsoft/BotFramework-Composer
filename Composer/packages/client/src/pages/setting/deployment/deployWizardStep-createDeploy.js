@@ -20,11 +20,12 @@ import { regionOptions } from './luisRegions.js';
 export const DeployWizardStepCreate = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
-  const { botName, location } = state;
+  const { botName, projectId } = state;
   const [disable, setDisable] = useState(false);
+
   const [formData, setFormData] = useState({
     name: botName,
-    location: location,
+    location: `${process.env.LOCAL_PUBLISH_PATH}/${projectId}`, // use plugin localtion to support deployment
     secret: '',
     environment: '',
     region: regionOptions[0],
