@@ -9,3 +9,9 @@ export const StandardFontCSS = css`
   font-family: Segoe UI;
   color: black;
 `;
+
+export const EllipsisCSS = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
