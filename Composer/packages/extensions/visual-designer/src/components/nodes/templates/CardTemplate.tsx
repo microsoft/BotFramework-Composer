@@ -24,8 +24,6 @@ const fullWidthSection = css`
   box-sizing: border-box;
 `;
 
-const SeparatorHeight = 8;
-
 export interface CardTemplateProps {
   header: ReactNode;
   body?: ReactNode;
@@ -77,8 +75,8 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       className="CardNode__Footer"
       css={css`
         ${fullWidthSection};
-        min-height: ${StandardSectionHeight - SeparatorHeight}px;
-        padding: 0px 8px;
+        min-height: ${StandardSectionHeight}px;
+        padding: 7px 8px;
       `}
       onClick={onClickFooter}
     >
@@ -91,11 +89,11 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       className="Separator"
       css={css`
         display: block;
-        height: ${SeparatorHeight}px;
+        height: 0px;
         overflow: visible;
       `}
     >
-      <ArrowLine width={StandardNodeWidth} arrowsize={SeparatorHeight} color={ObiColors.AzureGray3} />
+      <ArrowLine width={StandardNodeWidth} arrowsize={8} color={ObiColors.AzureGray3} />
     </div>
   );
 
