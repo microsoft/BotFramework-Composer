@@ -153,11 +153,8 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKTypes.ReplaceDialog]: {
-    'ui:widget': CardTemplate,
-    header: {
-      'ui:widget': ActionHeader,
-    },
-    body: {
+    'ui:widget': ActionCard,
+    content: {
       'ui:widget': DialogRef,
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
