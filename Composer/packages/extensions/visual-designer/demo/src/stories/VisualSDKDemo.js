@@ -35,9 +35,9 @@ export class VisualSDKDemo extends Component {
     return initalActions;
   }
 
-  appendActionPreview($type) {
+  insertActionPreview($type) {
     this.setState({
-      actions: [...this.state.actions, seedNewDialog($type)],
+      actions: [seedNewDialog($type), ...this.state.actions],
     });
   }
 
@@ -51,7 +51,7 @@ export class VisualSDKDemo extends Component {
         <div className="action-preview--raw">
           <JsonBlock
             styles={{
-              width: '200px',
+              width: '300px',
               height: '80px',
               fontSize: '8px',
             }}
@@ -65,7 +65,7 @@ export class VisualSDKDemo extends Component {
             }}
           />
         </div>
-        <div className="action-preview--visual">
+        <div className="action-preview--visual" style={{ marginLeft: 20 }}>
           {renderUIWidget(uiSchemaPrivider.get(action.$type), {
             id: `actions[${index}]`,
             data: action,
@@ -78,9 +78,9 @@ export class VisualSDKDemo extends Component {
 
   renderActionFactory() {
     return (
-      <div style={{ height: 100, margin: 20 }}>
+      <div style={{ width: '100%', height: 100, margin: 20 }}>
         <h3>Create action by $type</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.appendActionPreview($type)} />
+        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.insertActionPreview($type)} />
       </div>
     );
   }
@@ -90,8 +90,8 @@ export class VisualSDKDemo extends Component {
       <div className="story-container">
         <h1 className="story-title">Visual SDK Demo</h1>
         <div className="story-content" style={{ display: 'flex', flexFlow: 'wrap' }}>
-          {this.state.actions.map((action, index) => this.renderActionPreview(action, index))}
           {this.renderActionFactory()}
+          {this.state.actions.map((action, index) => this.renderActionPreview(action, index))}
         </div>
       </div>
     );
