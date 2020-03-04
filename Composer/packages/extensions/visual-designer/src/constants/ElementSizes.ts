@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const StandardNodeWidth = 200;
-export const StandardSectionHeight = 24;
+export const StandardNodeWidth = 300;
+export const StandardSectionHeight = 30;
 export const HeaderHeight = StandardSectionHeight;
 
 export const InitNodeSize = {
   width: StandardNodeWidth,
-  height: 48,
+  height: StandardSectionHeight * 2,
 };
 
 export const DiamondSize = {
