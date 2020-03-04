@@ -8,7 +8,6 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
       }
@@ -38,7 +37,7 @@
           "$designer": {
             "id": "150220"
           },
-          "activity": "@{bfdactivity-150220()}"
+          "activity": "${bfdactivity-150220()}"
         },
         {
           "$type": "Microsoft.EndTurn",
@@ -51,7 +50,7 @@
           "$designer": {
             "id": "451180"
           },
-          "activity": "@{bfdactivity-451180()}"
+          "activity": "${bfdactivity-451180()}"
         }
       ]
     }

@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 import get from 'lodash/get';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 
+import { LinkBtn } from '../components/elements/styledComponents';
 import { FormCard } from '../components/nodes/templates/FormCard';
 import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { ObiColors } from '../constants/ElementColors';
@@ -39,14 +39,14 @@ export const DialogRefCard: WidgetComponent<DialogRefCardProps> = ({
   const nodeColors = { themeColor: colors.theme, iconColor: colors.icon };
   const calleeDialog = typeof dialog === 'object' ? get(dialog, '$ref') : dialog;
   const dialogRef = (
-    <Link
+    <LinkBtn
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
       }}
     >
       {calleeDialog}
-    </Link>
+    </LinkBtn>
   );
   return (
     <FormCard
