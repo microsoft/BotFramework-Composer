@@ -85,6 +85,7 @@ export class BotProject {
     this.dialogs = this.indexDialogs();
     this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     this.luFiles = luIndexer.index(this.files);
+    await this._reformProjectStructure();
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
@@ -526,7 +527,6 @@ export class BotProject {
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
-        // skip lg files for now
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
           const content: string = await this.fileStorage.readFile(realFilePath);
           fileList.push({
@@ -540,6 +540,119 @@ export class BotProject {
     }
 
     return fileList;
+  };
+
+  /**
+   * Reform bot project structure
+   * /[dialog]
+        [dialog].dialog
+        /language-generation
+            /[locale]
+                 [dialog].[locale].lg
+        /language-understanding
+            /[locale]
+                 [dialog].[locale].lu
+  * 
+  */
+  private _reformProjectStructure = async () => {
+    // Define the project structure
+    const BotStructureTemplate = {
+      folder: '/',
+      entry: '${BOTNAME}.dialog',
+      schema: 'sdk.schema',
+      common: {
+        lg: 'language-generation/${LOCALE}/common.${LOCALE}.lg',
+      },
+      dialogs: {
+        folder: 'dialogs/${DIALOGNAME}',
+        entry: '${DIALOGNAME}.dialog',
+        lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+        lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+      },
+    };
+
+    // const camelToDash = (str: string) => {
+    //   return str
+    //     .split(/(?=[A-Z])/)
+    //     .join('-')
+    //     .toLowerCase();
+    // };
+
+    const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
+      str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
+
+    const BOTNAME = this.name.toLowerCase();
+
+    const TemplateVariables = {
+      BOTNAME,
+      LOCALE: 'en-us',
+      DIALOGNAME: '',
+    };
+
+    const files: { [key: string]: string }[] = [];
+
+    // Reform all files according to above defined structure.
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
+    for (const pattern of patterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        const realFilePath: string = Path.join(root, filePath);
+        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+          const content: string = await this.fileStorage.readFile(realFilePath);
+          const name = Path.basename(filePath);
+          // convert file name from camel to dash
+          // const fileId = camelToDash(name.split('.')[0]);
+          const fileId = name.split('.')[0].toLowerCase();
+          let destinationPath;
+          let rootPath = '';
+          const fileType = Path.extname(filePath);
+
+          // wrap with dialogs/[dialogId]
+          if (fileId !== 'main' && fileId !== 'common') {
+            rootPath = Path.join(rootPath, BotStructureTemplate.dialogs.folder);
+          }
+          // rename Main.lg/dialog/lu to BotName.lg/dialog/lu
+          const dialogName = fileId === 'main' ? BOTNAME : fileId;
+          TemplateVariables.DIALOGNAME = dialogName;
+
+          if (fileType === '.dialog') {
+            destinationPath = templateInterpolate(
+              Path.join(rootPath, BotStructureTemplate.dialogs.entry),
+              TemplateVariables
+            );
+          } else if (fileType === '.lg') {
+            if (name === 'common.lg') {
+              destinationPath = templateInterpolate(BotStructureTemplate.common.lg, TemplateVariables);
+            } else {
+              destinationPath = templateInterpolate(
+                Path.join(rootPath, BotStructureTemplate.dialogs.lg),
+                TemplateVariables
+              );
+            }
+          } else if (fileType === '.lu') {
+            destinationPath = templateInterpolate(
+              Path.join(rootPath, BotStructureTemplate.dialogs.lu),
+              TemplateVariables
+            );
+          } else if (fileType === '.schema') {
+            destinationPath = templateInterpolate(BotStructureTemplate.schema, TemplateVariables);
+          }
+
+          files.push({ destinationPath, content });
+        }
+      }
+    }
+
+    // move /TodoSample-0/ComposerDialogs to /TodoSample-0/todosample-0/
+    const targetBotPath = Path.join(Path.dirname(this.dataDir), BOTNAME);
+    for (const file of files) {
+      const { destinationPath, content } = file;
+      const absolutePath = Path.join(targetBotPath, destinationPath);
+      console.log(absolutePath);
+      await this.ensureDirExists(Path.dirname(absolutePath));
+      await this.fileStorage.writeFile(absolutePath, content);
+    }
   };
 
   // check project stracture is valid or not, if not, try fix it.
