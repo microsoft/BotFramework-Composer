@@ -193,20 +193,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             data-testid={'triggerTypeDropDown'}
             defaultSelectedKey={intentTypeKey}
           />
-
-          {/* {showRegExDropDown && (
-            <Dropdown
-              label={formatMessage('Which intent do you want to handle?')}
-              options={regexIntents}
-              styles={dropdownStyles}
-              onChange={onSelectIntent}
-              disabled={regexIntents.length === 0}
-              placeholder={regexIntents.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
-              errorMessage={formData.errors.intent}
-              data-testid={'RegExDropDown'}
-            />
-          )} */}
-
           {showEventDropDown && (
             <Dropdown
               placeholder={formatMessage('Select a event type')}
