@@ -35,7 +35,10 @@ class LocalPublisher {
   private readonly baseDir = path.resolve(__dirname, '../');
   private readonly templatePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
 
-  constructor() { }
+  constructor() {
+    // set plugin path
+    process.env.LOCAL_PUBLISH_PATH = this.getBotsDir();
+  }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
     const { settings } = config;

@@ -4,9 +4,6 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/launcher/connect?botEnvironment=production', 'OK');
-    cy.route('POST', '/api/launcher/sync', 'OK');
-    cy.route('POST', 'api/projects/opened/settings', 'OK');
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
   });
@@ -16,7 +13,7 @@ context('Luis Deploy', () => {
 
     cy.route({
       method: 'POST',
-      url: '/api/projects/opened/luFiles/publish',
+      url: 'api/projects/*/luFiles/publish',
       status: 200,
       response: 'fixture:luPublish/success',
     });
@@ -39,7 +36,7 @@ context('Luis Deploy', () => {
 
     cy.route({
       method: 'POST',
-      url: '/api/projects/opened/luFiles/publish',
+      url: 'api/projects/*/luFiles/publish',
       status: 400,
       response: 'fixture:luPublish/error',
     });

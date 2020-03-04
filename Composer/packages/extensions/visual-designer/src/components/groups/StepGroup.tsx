@@ -25,6 +25,7 @@ const StepInterval = ElementInterval.y;
 type StepNodeKey = string;
 
 const getStepKey = (stepOrder: number): StepNodeKey => `steps[${stepOrder}]`;
+const parseStepIndex = (stepKey: string): number => parseInt(stepKey.replace(/steps\[(\d+)\]/, '$1'));
 
 const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
   const steps = transformStepGroup(data, groupId);
@@ -37,7 +38,7 @@ const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
 
 const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   const nodes = Object.keys(nodeMap)
-    .sort()
+    .sort((a, b) => parseStepIndex(a) - parseStepIndex(b))
     .map(stepName => nodeMap[stepName]);
   return sequentialLayouter(nodes);
 };

@@ -91,6 +91,8 @@ function getClientEnvironment(publicUrl) {
           .replace('\n', ''),
         SDK_PACKAGE_VERSION: '4.7.0-preview-191208-1', // TODO: change this when Composer supports custom schema/custom runtime
         COMPOSER_VERSION: 'Preview 2.0',
+        LOCAL_PUBLISH_PATH:
+          process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../plugins/localPublish/hostedBots'),
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

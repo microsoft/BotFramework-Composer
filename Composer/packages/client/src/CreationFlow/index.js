@@ -17,7 +17,7 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  const [bots, setBots] = useState([]);
+  const [files, setFiles] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
@@ -47,13 +47,7 @@ export function CreationFlow(props) {
   useEffect(() => {
     const allFilesInFolder = get(focusedStorageFolder, 'children', []);
 
-    const botsInCurrentFolder = allFilesInFolder.filter(file => {
-      if (file.type === FileTypes.BOT) {
-        return file;
-      }
-    });
-
-    setBots(botsInCurrentFolder);
+    setFiles(allFilesInFolder);
     if (Object.keys(focusedStorageFolder).length) {
       setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
     }
@@ -167,7 +161,7 @@ export function CreationFlow(props) {
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
           currentPath={currentPath}
-          bots={bots}
+          files={files}
         />
       ),
     },
