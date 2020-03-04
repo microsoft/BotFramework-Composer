@@ -8,7 +8,7 @@ import get from 'lodash/get';
 
 import { ActionCard } from '../widgets/ActionCard';
 import { ActivityRenderer } from '../widgets/ActivityRenderer';
-import { DialogRefCard } from '../widgets/DialogRefCard';
+import { DialogRef } from '../widgets/DialogRef';
 import { PromptWidget } from '../widgets/PromptWidget';
 import { IfConditionWidget } from '../widgets/IfConditionWidget';
 import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
@@ -132,13 +132,25 @@ export const uiSchema: UISchema = {
   [SDKTypes.TextInput]: BaseInputSchema,
   [SDKTypes.ChoiceInput]: BaseInputSchema,
   [SDKTypes.BeginDialog]: {
-    'ui:widget': DialogRefCard,
-    dialog: data => data.dialog,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: {
+      'ui:widget': DialogRef,
+      dialog: data => data.dialog,
+    },
   },
   [SDKTypes.ReplaceDialog]: {
-    'ui:widget': DialogRefCard,
-    dialog: data => data.dialog,
-    getRefContent: data => dialogRef => <>Switch to {dialogRef}</>,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: {
+      'ui:widget': DialogRef,
+      dialog: data => data.dialog,
+      getRefContent: data => dialogRef => <>Switch to {dialogRef}</>,
+    },
   },
   [SDKTypes.EditArray]: {
     'ui:widget': ActionCard,
