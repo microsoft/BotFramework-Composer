@@ -194,7 +194,6 @@ async function updateDialog(req: Request, res: Response) {
       res.status(409).json({ message: 'This content was updated since it was loaded. Please reload.' });
     } else {
       const lastModified = await currentProject.updateDialog(req.body.id, req.body.content);
-      // res.status(204);
       res.status(200).json({ lastModified: lastModified });
     }
   } else {

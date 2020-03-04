@@ -118,11 +118,10 @@ export const debouncedUpdateDialog = debounce(async (store, id, projectId, conte
     });
   } catch (err) {
     setError(store, {
+      status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
       summary: 'UPDATE DIALOG ERROR',
     });
-    //if update dialog error, do a full refresh.
-    // fetchProject(store);
   }
 }, 500);
 

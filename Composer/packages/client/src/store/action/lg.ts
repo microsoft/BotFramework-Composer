@@ -30,11 +30,10 @@ export const debouncedUpdateLg = debounce(async (store, id, projectId, content, 
     });
   } catch (err) {
     setError(store, {
+      status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
       summary: 'UPDATE LG ERROR',
     });
-    //if update lg error, do a full refresh.
-    // fetchProject(store);
   }
 }, 500);
 

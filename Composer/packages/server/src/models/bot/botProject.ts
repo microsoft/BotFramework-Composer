@@ -303,7 +303,6 @@ export class BotProject {
     const lastModified = await this._updateFile(luFile.relativePath, content);
     await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
     return lastModified;
-    // return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
   public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LuFile[]> => {
@@ -412,7 +411,7 @@ export class BotProject {
     debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
-    // TODO: we should get the lastmodified from the writeFile operation
+    // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
     const stats = await this.fileStorage.stat(absolutePath);
 
@@ -442,7 +441,7 @@ export class BotProject {
       await this.fileStorage.writeFile(absolutePath, content);
     }
 
-    // TODO: we should get the lastmodified from the writeFile operation
+    // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
     const stats = await this.fileStorage.stat(absolutePath);
 
