@@ -48,6 +48,10 @@ const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataE
     errors.specifiedType = formatMessage('Please select an activity type');
   }
 
+  if ($type === messageTypeKey && !specifiedType) {
+    errors.specifiedType = formatMessage('Please select a message type');
+  }
+
   if (!$type) {
     errors.$type = formatMessage('Please select a trigger type');
   }
@@ -196,6 +200,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               onChange={onSelectIntent}
               disabled={regexIntents.length === 0}
               placeholder={regexIntents.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
+              errorMessage={formData.errors.intent}
+              data-testid={'RegExDropDown'}
             />
           )}
 

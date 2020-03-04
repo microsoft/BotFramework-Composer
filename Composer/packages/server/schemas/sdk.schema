@@ -351,9 +351,9 @@
             "$ref": "#/definitions/Microsoft.OnInvokeActivity"
         },
         {
-            "title": "Microsoft.OnMessageActivity",
-            "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
-            "$ref": "#/definitions/Microsoft.OnMessageActivity"
+            "title": "Microsoft.OnMessageReceivedActivity",
+            "description": "Actions to perform on receipt of an activity with type 'MessageReceived'. Overrides Intent trigger.",
+            "$ref": "#/definitions/Microsoft.OnMessageReceivedActivity"
         },
         {
             "title": "Microsoft.OnMessageDeleteActivity",
@@ -4891,9 +4891,9 @@
                     "$ref": "#/definitions/Microsoft.OnInvokeActivity"
                 },
                 {
-                    "title": "Microsoft.OnMessageActivity",
+                    "title": "Microsoft.OnMessageReceivedActivity",
                     "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
-                    "$ref": "#/definitions/Microsoft.OnMessageActivity"
+                    "$ref": "#/definitions/Microsoft.OnMessageReceivedActivity"
                 },
                 {
                     "title": "Microsoft.OnMessageDeleteActivity",
@@ -8184,7 +8184,7 @@
                 }
             ]
         },
-        "Microsoft.OnMessageActivity": {
+        "Microsoft.OnMessageReceivedActivity": {
             "$role": "union(Microsoft.ITriggerCondition)",
             "title": "On Message activity",
             "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
@@ -8195,7 +8195,7 @@
                     "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.OnMessageActivity"
+                    "const": "Microsoft.OnMessageReceivedActivity"
                 },
                 "$copy": {
                     "title": "$copy",
