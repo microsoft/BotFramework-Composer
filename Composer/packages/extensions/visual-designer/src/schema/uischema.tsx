@@ -82,7 +82,6 @@ export const uiSchema: UISchema = {
     'ui:widget': IfConditionWidget,
     judgement: {
       'ui:widget': ActionCard,
-      title: formatMessage('Branch'),
       content: data => data.condition,
     },
   },
@@ -90,7 +89,6 @@ export const uiSchema: UISchema = {
     'ui:widget': SwitchConditionWidget,
     judgement: {
       'ui:widget': ActionCard,
-      title: formatMessage('Branch'),
       content: data => data.condition,
     },
   },
@@ -98,7 +96,6 @@ export const uiSchema: UISchema = {
     'ui:widget': ForeachWidget,
     loop: {
       'ui:widget': ActionCard,
-      title: formatMessage('Loop: For Each'),
       content: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
     },
   },
@@ -106,7 +103,6 @@ export const uiSchema: UISchema = {
     'ui:widget': ForeachWidget,
     loop: {
       'ui:widget': ActionCard,
-      title: formatMessage('Loop: For Each Page'),
       content: data => {
         const pageSizeString = get(data, 'pageSize', '?');
         const propString = get(data, 'itemsProperty', '?');
