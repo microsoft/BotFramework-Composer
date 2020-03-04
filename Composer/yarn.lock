@@ -2724,7 +2724,7 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@microsoft/bf-cli-command@1.0.0":
+"@microsoft/bf-cli-command@4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.7.0.tgz#20e63188fcda218d7c198551aec9535e457064c6"
   integrity sha512-3wDT52Hgr3rtbcy46p65kWaTs9dAuJcUidsHKpSTBjyVtnRAQyBt6Usn4IA4lSTED6TinIQ7ZGNq4OH3ZXLrHw==
@@ -2741,17 +2741,17 @@
 
 "@microsoft/bf-cli-command@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz":
   version "1.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz#0d681e93690c4e872bf1181a3ff02f094830929e"
-  integrity sha1-DWgek2kMTocr8RgaP/AvCUgwkp4=
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz#01e2c234d8269efdc00935af5c18c74facdc0226"
   dependencies:
-    "@oclif/command" "~1.5.13"
-    "@oclif/config" "~1.12.12"
+    "@oclif/command" "~1.5.19"
+    "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
     applicationinsights "^1.0.8"
     chalk "2.4.1"
     cli-ux "~4.9.3"
     debug "^4.1.1"
     fs-extra "^7.0.1"
+    tslib "~1.10.0"
 
 "@microsoft/load-themed-styles@^1.7.13":
   version "1.9.5"
