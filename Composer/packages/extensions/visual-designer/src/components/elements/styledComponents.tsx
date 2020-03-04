@@ -8,7 +8,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { DivProps } from './styledComponents.types';
-import { StandardFontCSS } from './sharedCSS';
+import { StandardFontCSS, EllipsisCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
   css`
@@ -23,32 +23,25 @@ export const Span = styled.span`
   ${dynamicStyle}
 `;
 
-export const BorderedDiv = styled.div<DivProps>(props => ({
-  color: props.color || ObiColors.Black,
-  width: props.width,
-  height: props.height,
-  padding: '2px 0 0 8px',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  fontFamily: 'Segoe UI',
-  fontSize: '12px',
-  lineHeight: '14px',
-  border: '1px solid #C4C4C4',
-  boxSizing: 'border-box',
-}));
+export const BorderedDiv = styled.div<DivProps>(
+  css`
+    ${StandardFontCSS};
+    ${EllipsisCSS};
+    padding: 2px 0 0 8px;
+    border: 1px solid #c4c4c4;
+    box-sizing: border-box;
+  `,
+  props => ({
+    color: props.color || ObiColors.Black,
+    width: props.width,
+    height: props.height,
+  })
+);
 
-export const SingleLineDiv = styled.div<DivProps>(props => ({
-  width: props.width || 150,
-  height: props.height || '19px',
-  color: props.color || ObiColors.Black,
-  fontSize: '12px',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  lineHeight: '19px',
-  fontFamily: 'Segoe UI',
-}));
+export const SingleLineDiv = styled.div<DivProps>`
+  ${StandardFontCSS};
+  ${EllipsisCSS};
+`;
 
 export const TextDiv = styled.div`
   ${StandardFontCSS};
