@@ -34,7 +34,7 @@ const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) =
   if (typeof rawPropValue === 'function') {
     const dataTransformer = rawPropValue;
     const element = dataTransformer(context.data);
-    return element;
+    return <>{element}</>;
   }
 
   if (typeof rawPropValue === 'object' && rawPropValue[UI_WIDGET_KEY]) {
