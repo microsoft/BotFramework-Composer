@@ -66,7 +66,11 @@ const BaseInputSchema: UIWidget = {
         />
       ) : null,
     footer: data =>
-      data.property ? `${data.property} ${(<FixedInfo>= Input({getInputType(data.$type)})</FixedInfo>)}` : null,
+      data.property ? (
+        <>
+          {data.property} <FixedInfo>= Input({getInputType(data.$type)})</FixedInfo>
+        </>
+      ) : null,
   },
 };
 
@@ -139,9 +143,18 @@ export const uiSchema: UISchema = {
     body: {
       'ui:widget': DialogRef,
       dialog: data => data.dialog,
-      getRefContent: data => dialogRef => `${dialogRef} ${(<FixedInfo>(Dialog)</FixedInfo>)}`,
+      getRefContent: data => dialogRef => (
+        <>
+          {dialogRef} <FixedInfo>(Dialog)</FixedInfo>
+        </>
+      ),
     },
-    footer: data => (data.property ? `${data.property} ${(<FixedInfo>= Return value</FixedInfo>)}` : null),
+    footer: data =>
+      data.property ? (
+        <>
+          {data.property} <FixedInfo>= Return value</FixedInfo>
+        </>
+      ) : null,
   },
   [SDKTypes.ReplaceDialog]: {
     'ui:widget': CardTemplate,
@@ -151,7 +164,11 @@ export const uiSchema: UISchema = {
     body: {
       'ui:widget': DialogRef,
       dialog: data => data.dialog,
-      getRefContent: data => dialogRef => `${dialogRef} ${(<FixedInfo>(Dialog)</FixedInfo>)}`,
+      getRefContent: data => dialogRef => (
+        <>
+          {dialogRef} <FixedInfo>(Dialog)</FixedInfo>
+        </>
+      ),
     },
   },
   [SDKTypes.EditArray]: {
@@ -159,12 +176,23 @@ export const uiSchema: UISchema = {
     header: {
       'ui:widget': ActionHeader,
     },
-    body: data => `${(<FixedInfo>{data.changeType}</FixedInfo>)} ${data.itemsProperty || '?'}`,
-    footer: data => (data.resultProperty ? `${data.resultProperty} ${(<FixedInfo>= Result</FixedInfo>)}` : null),
+    body: data => (
+      <>
+        <FixedInfo>{data.changeType} </FixedInfo>
+        {data.itemsProperty || '?'}
+      </>
+    ),
+    footer: data =>
+      data.resultProperty ? (
+        <>
+          {data.resultProperty}
+          <FixedInfo> = Result</FixedInfo>
+        </>
+      ) : null,
   },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
-    content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
+    content: data => `${data.property || '?'} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
     'ui:widget': ActionCard,
@@ -199,17 +227,31 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.CancelAllDialogs]: {
     'ui:widget': ActionCard,
-    content: data => (data.eventName ? `${data.eventName} ${(<FixedInfo>(Event)</FixedInfo>)}` : null),
+    content: data =>
+      data.eventName ? (
+        <>
+          {data.eventName}
+          <FixedInfo> (Event)</FixedInfo>
+        </>
+      ) : null,
   },
   [SDKTypes.EndTurn]: {
     'ui:widget': ActionHeader,
   },
   [SDKTypes.EmitEvent]: {
     'ui:widget': ActionCard,
-    content: data => `${data.eventName} ${(<FixedInfo>(Event)</FixedInfo>)}`,
+    content: data => (
+      <>
+        {data.eventName}
+        <FixedInfo> (Event)</FixedInfo>
+      </>
+    ),
   },
   [SDKTypes.HttpRequest]: {
     'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
     body: data => (
       <SingleLineDiv>
         <FixedInfo>{data.method} </FixedInfo>
@@ -217,7 +259,12 @@ export const uiSchema: UISchema = {
       </SingleLineDiv>
     ),
     footer: data =>
-      data.resultProperty ? `${data.resultProperty} ${(<FixedInfo>= Result property</FixedInfo>)}` : null,
+      data.resultProperty ? (
+        <>
+          {data.resultProperty}
+          <FixedInfo> = Result property</FixedInfo>
+        </>
+      ) : null,
   },
   [SDKTypes.TraceActivity]: {
     'ui:widget': ActionHeader,
@@ -239,6 +286,11 @@ export const uiSchema: UISchema = {
       'ui:widget': ActionHeader,
     },
     body: data => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
-    footer: data => `${data.tokenProperty} ${(<FixedInfo>= Token Property</FixedInfo>)}`,
+    footer: data => (
+      <>
+        {data.tokenProperty}
+        <FixedInfo> = Token Property</FixedInfo>
+      </>
+    ),
   },
 };

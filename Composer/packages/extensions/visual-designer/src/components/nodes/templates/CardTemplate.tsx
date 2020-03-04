@@ -76,7 +76,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       css={css`
         ${fullWidthSection};
         min-height: ${StandardSectionHeight}px;
-        padding: 7px 8px;
+        padding: 8px 8px;
       `}
       onClick={onClickFooter}
     >
