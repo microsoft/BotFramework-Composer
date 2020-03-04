@@ -17,7 +17,6 @@ import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
-import { PropertyAssignmentSize, ChoiceInputSize } from '../constants/ElementSizes';
 import { ListOverview } from '../components/common/ListOverview';
 import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
@@ -60,7 +59,7 @@ const BaseInputSchema: UIWidget = {
         <ListOverview
           items={data.choices}
           renderItem={item => (
-            <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={item.value}>
+            <BorderedDiv height={20} title={item.value}>
               {item.value}
             </BorderedDiv>
           )}
@@ -168,15 +167,11 @@ export const uiSchema: UISchema = {
     body: data => (
       <ListOverview
         items={data.assignments}
+        itemPadding={8}
         renderItem={item => {
           const content = `${item.property} = ${item.value}`;
           return (
-            <SingleLineDiv
-              width={PropertyAssignmentSize.width}
-              height={PropertyAssignmentSize.height}
-              title={content}
-              style={{ paddingLeft: '3px' }}
-            >
+            <SingleLineDiv height={16} title={content}>
               {content}
             </SingleLineDiv>
           );

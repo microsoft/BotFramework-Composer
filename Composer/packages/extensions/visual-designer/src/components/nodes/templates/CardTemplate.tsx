@@ -68,7 +68,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       `}
       onClick={onClickBody}
     >
-      <TextDiv>{body}</TextDiv>
+      <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
 
@@ -82,7 +82,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       `}
       onClick={onClickFooter}
     >
-      <TextDiv>{footer}</TextDiv>
+      <TextDiv css={{ width: '100%' }}>{footer}</TextDiv>
     </div>
   );
 

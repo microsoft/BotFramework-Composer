@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { FC } from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
+import { FC } from 'react';
 
 import { SingleLineDiv } from '../elements/styledComponents';
 
@@ -9,17 +11,28 @@ export interface ListOverviewProps<T> {
   items: T[];
   renderItem: (item: T) => JSX.Element;
   maxCount?: number;
+  itemPadding?: number;
 }
 
-export const ListOverview: FC<ListOverviewProps<any>> = ({ items, renderItem, maxCount = 3 }) => {
+export const ListOverview: FC<ListOverviewProps<any>> = ({
+  items,
+  renderItem,
+  maxCount = 3,
+  itemPadding: itemInterval = 4,
+}) => {
   if (!Array.isArray(items) || !items.length) {
     return null;
   }
   return (
-    <div style={{ padding: '0 0 8px 8px' }}>
+    <div
+      className="ListOverview"
+      css={css`
+        width: 100%;
+      `}
+    >
       {items.slice(0, maxCount).map((item, index) => {
         return (
-          <div style={{ marginTop: '8px' }} key={index}>
+          <div style={{ marginTop: index ? itemInterval : 0 }} key={index}>
             {renderItem(item)}
           </div>
         );
@@ -27,9 +40,10 @@ export const ListOverview: FC<ListOverviewProps<any>> = ({ items, renderItem, ma
       {items.length > maxCount ? (
         <SingleLineDiv
           data-testid="hasMore"
-          style={{
-            marginTop: '8px',
+          css={{
+            marginTop: '3px',
             textAlign: 'center',
+            color: '#757575',
           }}
         >
           {`${items.length - maxCount} more`}
