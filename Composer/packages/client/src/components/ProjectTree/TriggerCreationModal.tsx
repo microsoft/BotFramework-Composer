@@ -62,10 +62,6 @@ const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataE
     );
   }
 
-  // if ($type === intentTypeKey && isRegEx && !intent) {
-  //   errors.triggerPhrases = formatMessage('Please input trigger phrases');
-  // }
-
   if ($type === intentTypeKey && !isRegEx && !triggerPhrases) {
     errors.triggerPhrases = formatMessage('Please input trigger phrases');
   }
