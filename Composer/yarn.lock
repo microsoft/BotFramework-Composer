@@ -2724,7 +2724,7 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@microsoft/bf-cli-command@4.7.0":
+"@microsoft/bf-cli-command@1.0.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.7.0.tgz#20e63188fcda218d7c198551aec9535e457064c6"
   integrity sha512-3wDT52Hgr3rtbcy46p65kWaTs9dAuJcUidsHKpSTBjyVtnRAQyBt6Usn4IA4lSTED6TinIQ7ZGNq4OH3ZXLrHw==
@@ -2739,9 +2739,9 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-cli-command@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz":
-  version "1.0.0"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.0.tgz#01e2c234d8269efdc00935af5c18c74facdc0226"
+"@microsoft/bf-cli-command@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz":
+  version "1.0.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz#5c7f650015f839d80a7739bc70f8cd5fa90a1e48"
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
