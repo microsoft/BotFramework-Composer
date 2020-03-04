@@ -3,6 +3,7 @@
 
 import fs from 'fs';
 
+import has from 'lodash/has';
 import { getNewDesigner } from '@bfc/shared';
 import {
   FileInfo,
@@ -13,6 +14,8 @@ import {
   lgIndexer,
   luIndexer,
   createSingleMessage,
+  JsonWalk,
+  VisitorFunc,
 } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
@@ -28,7 +31,7 @@ import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
-const DIALOGFOLDER = 'ComposerDialogs';
+const DIALOGFOLDER = '';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -80,12 +83,13 @@ export class BotProject {
   }
 
   public index = async () => {
+    await this._reformProjectStructure();
+
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
     this.dialogs = this.indexDialogs();
     this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     this.luFiles = luIndexer.index(this.files);
-    await this._reformProjectStructure();
     await this._checkProjectStructure();
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
@@ -555,11 +559,14 @@ export class BotProject {
   * 
   */
   private _reformProjectStructure = async () => {
+    let isOldBotStructure = false;
+
     // Define the project structure
     const BotStructureTemplate = {
       folder: '/',
       entry: '${BOTNAME}.dialog',
-      schema: 'sdk.schema',
+      schema: '${FILENAME}',
+      settings: 'settings/${FILENAME}',
       common: {
         lg: 'language-generation/${LOCALE}/common.${LOCALE}.lg',
       },
@@ -582,74 +589,97 @@ export class BotProject {
       str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
 
     const BOTNAME = this.name.toLowerCase();
+    const LOCALE = 'en-us';
 
     const TemplateVariables = {
       BOTNAME,
-      LOCALE: 'en-us',
+      LOCALE,
       DIALOGNAME: '',
     };
 
     const files: { [key: string]: string }[] = [];
 
     // Reform all files according to above defined structure.
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema', '**/*.json'];
     for (const pattern of patterns) {
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(pattern, root);
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
-          const content: string = await this.fileStorage.readFile(realFilePath);
+          let content: string = await this.fileStorage.readFile(realFilePath);
           const name = Path.basename(filePath);
-          // convert file name from camel to dash
-          // const fileId = camelToDash(name.split('.')[0]);
+          const dirPath = Path.dirname(realFilePath);
+
+          // mark as old bot structure, then will continue do move.
+          if (name === 'Main.dialog') {
+            isOldBotStructure = true;
+          }
+
+          // convert file name from camel to lowercase
           const fileId = name.split('.')[0].toLowerCase();
-          let destinationPath;
-          let rootPath = '';
+          let targetRelativePath;
+          let pathEndPoint = '';
           const fileType = Path.extname(filePath);
 
-          // wrap with dialogs/[dialogId]
+          // wrap path dialogs/[dialogId]
           if (fileId !== 'main' && fileId !== 'common') {
-            rootPath = Path.join(rootPath, BotStructureTemplate.dialogs.folder);
+            pathEndPoint = Path.join(pathEndPoint, BotStructureTemplate.dialogs.folder);
           }
-          // rename Main.lg/dialog/lu to BotName.lg/dialog/lu
+          // rename Main.* to botname.*
           const dialogName = fileId === 'main' ? BOTNAME : fileId;
           TemplateVariables.DIALOGNAME = dialogName;
 
           if (fileType === '.dialog') {
-            destinationPath = templateInterpolate(
-              Path.join(rootPath, BotStructureTemplate.dialogs.entry),
+            content = this._autofixReferInDialog(LOCALE, dialogName, content);
+
+            targetRelativePath = templateInterpolate(
+              Path.join(pathEndPoint, BotStructureTemplate.dialogs.entry),
               TemplateVariables
             );
           } else if (fileType === '.lg') {
             if (name === 'common.lg') {
-              destinationPath = templateInterpolate(BotStructureTemplate.common.lg, TemplateVariables);
+              targetRelativePath = templateInterpolate(BotStructureTemplate.common.lg, TemplateVariables);
             } else {
-              destinationPath = templateInterpolate(
-                Path.join(rootPath, BotStructureTemplate.dialogs.lg),
+              targetRelativePath = templateInterpolate(
+                Path.join(pathEndPoint, BotStructureTemplate.dialogs.lg),
                 TemplateVariables
               );
             }
           } else if (fileType === '.lu') {
-            destinationPath = templateInterpolate(
-              Path.join(rootPath, BotStructureTemplate.dialogs.lu),
+            targetRelativePath = templateInterpolate(
+              Path.join(pathEndPoint, BotStructureTemplate.dialogs.lu),
               TemplateVariables
             );
           } else if (fileType === '.schema') {
-            destinationPath = templateInterpolate(BotStructureTemplate.schema, TemplateVariables);
+            targetRelativePath = templateInterpolate(BotStructureTemplate.schema, { FILENAME: name });
+          } else if (fileType === '.json') {
+            targetRelativePath = templateInterpolate(BotStructureTemplate.settings, { FILENAME: name });
           }
 
-          files.push({ destinationPath, content });
+          files.push({ targetRelativePath, realFilePath, dirPath, content });
         }
       }
     }
 
-    // move /TodoSample-0/ComposerDialogs to /TodoSample-0/todosample-0/
-    const targetBotPath = Path.join(Path.dirname(this.dataDir), BOTNAME);
+    if (isOldBotStructure === false) {
+      return;
+    }
+
+    // move files from /coolbot/ComposerDialogs/* to /coolbot/*
+    const targetBotPath = this.dataDir;
     for (const file of files) {
-      const { destinationPath, content } = file;
-      const absolutePath = Path.join(targetBotPath, destinationPath);
-      console.log(absolutePath);
+      const { targetRelativePath, realFilePath, content, dirPath } = file;
+      const absolutePath = Path.join(targetBotPath, targetRelativePath);
+      console.log('move file from: \n', realFilePath, '\n to: \n', absolutePath);
+      await this.fileStorage.removeFile(realFilePath);
+
+      try {
+        await this.fileStorage.rmDir(dirPath);
+      } catch (_error) {
+        // pass , dir may not empty
+      }
+
       await this.ensureDirExists(Path.dirname(absolutePath));
       await this.fileStorage.writeFile(absolutePath, content);
     }
@@ -660,25 +690,26 @@ export class BotProject {
     const dialogs: DialogInfo[] = this.dialogs;
     const files: FileInfo[] = this.files;
 
-    // ensure each dialog folder have a lu file, e.g.
+    // ensure each dialog have a lg/lu file,
     /**
-     * + AddToDo (folder)
-     *   - AddToDo.dialog
-     *   - AddToDo.lu                     // if not exist, auto create it
-     *   - AddToDo.lg                     // if not exist, auto create it
+     * + addtodo (folder)
+     *   - addtodo.dialog
+     *   - language-understanding
+     *      /en-us/addtodo.en-us.lu  // if not exist, auto create it
+     *   - language-generation
+     *      /en-us/addtodo.en-us.lg  // if not exist, auto create it
      */
+    const locale = 'en-us';
     for (const dialog of dialogs) {
-      const dialogDir = Path.dirname(dialog.relativePath);
       const dialogId = Path.basename(dialog.id);
-      // dialog/lu should in the same path folder
-      const targetLuFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lu');
+      const dialogDir = Path.dirname(dialog.relativePath);
+      const targetLuFilePath = Path.join(dialogDir, `language-understanding/${locale}/${dialogId}.${locale}.lu`);
       if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
         await this._createFile(targetLuFilePath, '');
       }
-      // dialog/lg should in the same path folder
-      const targetLgFilePath = dialog.relativePath.replace(new RegExp(/\.dialog$/), '.lg');
+      const targetLgFilePath = Path.join(dialogDir, `language-generation/${locale}/${dialogId}.${locale}.lg`);
       if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
-        await this.createLgFile(dialogId, '', dialogDir);
+        await this._createFile(targetLgFilePath, '');
       }
     }
 
@@ -771,6 +802,31 @@ export class BotProject {
       const updatedContent = { ...content, generator: `${id}.lg` };
       await this.updateDialog(id, updatedContent);
     }
+  };
+
+  /**
+   * fix dialog referrence.
+   * - "dialog": 'AddTodos'
+   * + "dialog": 'addtodos'
+   */
+  private _autofixReferInDialog = (locale: string, dialogId: string, content: string) => {
+    const dialogJson = JSON.parse(content);
+
+    // fix dialog referrence
+    const visitor: VisitorFunc = (_path: string, value: any) => {
+      if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+        const dialogName = value.dialog;
+        value.dialog = dialogName.toLowerCase();
+      }
+      return false;
+    };
+
+    JsonWalk('/', dialogJson, visitor);
+
+    // fix lg referrence
+    dialogJson.generator = `${dialogId}.${locale}.lg`;
+
+    return JSON.stringify(dialogJson, null, 2);
   };
 
   private isLuFileEmpty = (file: LuFile) => {
