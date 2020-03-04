@@ -248,8 +248,6 @@ async function updateLgFile(req: Request, res: Response) {
       const lastModified = await currentProject.updateLgFile(req.body.id, req.body.content);
       res.status(200).json({ lastModified: lastModified });
     }
-    // const lgFiles = await currentProject.updateLgFile(req.body.id, req.body.content);
-    // res.status(200).json({ lgFiles });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
