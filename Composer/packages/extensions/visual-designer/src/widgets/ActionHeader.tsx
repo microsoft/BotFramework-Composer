@@ -17,7 +17,7 @@ export interface ActionHeaderProps extends WidgetContainerProps {
   disableSDKTitle?: boolean;
   icon?: string;
   menu?: JSX.Element | 'none';
-  colors: {
+  colors?: {
     theme: string;
     icon: string;
   };
