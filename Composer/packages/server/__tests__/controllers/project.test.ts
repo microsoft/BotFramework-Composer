@@ -29,7 +29,7 @@ afterAll(() => {
   }
 });
 
-describe('getProject', () => {
+describe.skip('getProject', () => {
   it('should get no project', async () => {
     const mockReq = {
       params: {},
@@ -55,7 +55,7 @@ describe('getProject', () => {
   });
 });
 
-describe('open bot operation', () => {
+describe.skip('open bot operation', () => {
   it('should fail to open an unexisting bot', async () => {
     const mockReq = {
       params: {},
@@ -80,7 +80,7 @@ describe('open bot operation', () => {
   });
 });
 
-describe('should save as bot', () => {
+describe.skip('should save as bot', () => {
   const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/');
   it('saveProjectAs', async () => {
     const mockReq = {
@@ -94,7 +94,7 @@ describe('should save as bot', () => {
   });
 });
 
-describe('should get recent projects', () => {
+describe.skip('should get recent projects', () => {
   it('should get recent projects', async () => {
     const mockReq = {
       params: {},
@@ -106,7 +106,7 @@ describe('should get recent projects', () => {
   });
 });
 
-describe('create a Empty Bot project', () => {
+describe.skip('create a Empty Bot project', () => {
   it('should create a new project', async () => {
     const newBotDir = Path.resolve(__dirname, '../mocks/samplebots/');
     const name = 'newBot';
@@ -120,7 +120,7 @@ describe('create a Empty Bot project', () => {
   });
 });
 //current opened bot is the newBot
-describe('dialog operation', () => {
+describe.skip('dialog operation', () => {
   it('should update dialog', async () => {
     const mockReq = {
       params: {},
@@ -151,7 +151,7 @@ describe('dialog operation', () => {
   });
 });
 
-describe('lg operation', () => {
+describe.skip('lg operation', () => {
   beforeAll(async () => {
     const mockReq = {
       params: {},
@@ -192,7 +192,7 @@ describe('lg operation', () => {
   });
 });
 
-describe('lu operation', () => {
+describe.skip('lu operation', () => {
   beforeAll(async () => {
     const mockReq = {
       params: {},
@@ -233,7 +233,7 @@ describe('lu operation', () => {
   });
 });
 
-describe('setting operation', () => {
+describe.skip('setting operation', () => {
   const defaultSetting = {
     MicrosoftAppId: '',
     luis: {
