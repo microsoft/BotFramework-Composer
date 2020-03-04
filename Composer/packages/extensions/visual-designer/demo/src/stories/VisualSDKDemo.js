@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seedNewDialog, SDKTypes } from '@bfc/shared';
+import { seedNewDialog, SDKTypes, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
@@ -18,18 +18,13 @@ export class VisualSDKDemo extends Component {
 
   seedInitialActions() {
     const initialTypes = [
-      SDKTypes.SendActivity,
-      SDKTypes.EditArray,
-      SDKTypes.SetProperties,
-      SDKTypes.SetProperty,
-      SDKTypes.DeleteProperties,
-      SDKTypes.DeleteProperty,
-      SDKTypes.BeginDialog,
-      SDKTypes.EndDialog,
-      SDKTypes.RepeatDialog,
-      SDKTypes.ReplaceDialog,
-      SDKTypes.CancelAllDialogs,
-      SDKTypes.EmitEvent,
+      ...dialogGroups[DialogGroup.RESPONSE].types,
+      ...dialogGroups[DialogGroup.INPUT].types,
+      ...dialogGroups[DialogGroup.BRANCHING].types,
+      ...dialogGroups[DialogGroup.MEMORY].types,
+      ...dialogGroups[DialogGroup.STEP].types,
+      ...dialogGroups[DialogGroup.CODE].types,
+      ...dialogGroups[DialogGroup.LOG].types,
     ];
     const initalActions = initialTypes.map(t => seedNewDialog(t));
     return initalActions;
