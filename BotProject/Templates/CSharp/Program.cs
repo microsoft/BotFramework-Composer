@@ -39,7 +39,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 else
                 {
                     //Azure Deploy
-                    builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
+                    builder.AddJsonFile("appsettings.Deployment.json", optional: true, reloadOnChange: true);
                 }
 
                 if (!env.IsDevelopment())

@@ -24,9 +24,9 @@ else {
 	New-Item -Path $logFile | Out-Null
 }
 
-if (-not (Test-Path (Join-Path $projDir 'appsettings.Production.json')))
+if (-not (Test-Path (Join-Path $projDir 'appsettings.Deployment.json')))
 {
-	Write-Host "! Could not find an 'appsettings.Production.json' file in the current directory." -ForegroundColor DarkRed
+	Write-Host "! Could not find an 'appsettings.Deployment.json' file in the current directory." -ForegroundColor DarkRed
 	Write-Host "+ Please re-run this script from your project directory." -ForegroundColor Magenta
 	Break
 }
@@ -152,10 +152,10 @@ if ($outputs)
 	$outputMap = @{}
 	$outputs.PSObject.Properties | Foreach-Object { $outputMap[$_.Name] = $_.Value }
 
-	# Update appsettings.Production.json
-	Write-Host "> Updating appsettings.Production.json ..."
-	if (Test-Path $(Join-Path $projDir appsettings.Production.json)) {
-		$settings = Get-Content $(Join-Path $projDir appsettings.Production.json) | ConvertFrom-Json
+	# Update appsettings.Deployment.json
+	Write-Host "> Updating appsettings.Deployment.json ..."
+	if (Test-Path $(Join-Path $projDir appsettings.Deployment.json)) {
+		$settings = Get-Content $(Join-Path $projDir appsettings.Deployment.json) | ConvertFrom-Json
 	}
 	else {
 		$settings = New-Object PSObject
@@ -167,7 +167,7 @@ if ($outputs)
 	$settings | Add-Member -Type NoteProperty -Force -Name 'bot' -Value "ComposerDialogs"
 
 	foreach ($key in $outputMap.Keys) { $settings | Add-Member -Type NoteProperty -Force -Name $key -Value $outputMap[$key].value }
-	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.Production.json)
+	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $projDir appsettings.Deployment.json)
 
 	Write-Host "> Done."
 	Write-Host "- App Id: $appId"
