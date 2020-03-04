@@ -8,6 +8,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { MultiLineDivProps, DivProps } from './styledComponents.types';
+import { StandardFontCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
   css`
@@ -62,3 +63,11 @@ export const SingleLineDiv = styled.div<DivProps>(props => ({
   lineHeight: '19px',
   fontFamily: 'Segoe UI',
 }));
+
+export const TextDiv = styled.div`
+  ${StandardFontCSS};
+  white-space: initial;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  display: inline-block;
+`;

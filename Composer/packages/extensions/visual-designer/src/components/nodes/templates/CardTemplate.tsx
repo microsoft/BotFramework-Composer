@@ -8,6 +8,7 @@ import { FC, ReactNode } from 'react';
 import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
 import { ObiColors } from '../../../constants/ElementColors';
 import { ArrowLine } from '../../lib/ArrowLine';
+import { TextDiv } from '../../elements/styledComponents';
 
 const containerCSS = css`
   font-size: 12px;
@@ -16,13 +17,6 @@ const containerCSS = css`
   background-color: white;
   border-radius: 2px 2px 0 0;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const headerCSS = css`
-  font-family: Segoe UI;
-  font-size: 12px;
-  line-height: 14px;
-  color: black;
 `;
 
 const fullWidthSection = css`
@@ -55,7 +49,6 @@ export const CardTemplate: FC<CardTemplateProps> = ({
     <div
       className="CardNode__Header"
       css={css`
-        ${headerCSS};
         ${fullWidthSection};
         height: ${HeaderHeight}px;
       `}
@@ -71,24 +64,11 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       css={css`
         ${fullWidthSection};
         min-height: ${StandardSectionHeight}px;
-        padding: 2px 8px;
+        padding: 7px 8px;
       `}
       onClick={onClickBody}
     >
-      <div
-        css={{
-          paddingTop: '3px',
-          whiteSpace: 'initial',
-          fontSize: '12px',
-          lineHeight: '14px',
-          fontFamily: 'Segoe UI',
-          overflowWrap: 'break-word',
-          wordBreak: 'break-all',
-          display: 'inline-block',
-        }}
-      >
-        {body}
-      </div>
+      <TextDiv>{body}</TextDiv>
     </div>
   );
 
@@ -102,19 +82,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       `}
       onClick={onClickFooter}
     >
-      <div
-        css={{
-          whiteSpace: 'initial',
-          fontSize: '12px',
-          lineHeight: '14px',
-          fontFamily: 'Segoe UI',
-          overflowWrap: 'break-word',
-          wordBreak: 'break-all',
-          display: 'inline-block',
-        }}
-      >
-        {footer}
-      </div>
+      <TextDiv>{footer}</TextDiv>
     </div>
   );
 

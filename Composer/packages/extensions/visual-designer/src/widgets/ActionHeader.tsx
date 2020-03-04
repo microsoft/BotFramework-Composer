@@ -11,6 +11,7 @@ import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
+import { StandardFontCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title: string;
@@ -30,18 +31,13 @@ const DefaultColors = {
 
 const container = css`
   cursor: pointer;
-  font-family: Segoe UI;
-  font-size: 12px;
-  line-height: 14px;
-  color: black;
   position: relative;
   display: flex;
   align-items: center;
 `;
 
 const headerText = css`
-  font-size: 12px;
-  font-family: Segoe UI;
+  ${StandardFontCSS}
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre;
