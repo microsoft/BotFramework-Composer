@@ -11,12 +11,12 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
   dialog: string | object;
-  getRefContent?: (dialogRef: JSX.Element) => JSX.Element;
+  getRefContent?: (dialogRef: JSX.Element | null) => JSX.Element;
 }
 
 export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, dialog, getRefContent }) => {
   const calleeDialog = typeof dialog === 'object' ? get(dialog, '$ref') : dialog;
-  const dialogRef = (
+  const dialogRef = calleeDialog ? (
     <LinkBtn
       onClick={e => {
         e.stopPropagation();
@@ -25,6 +25,6 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
     >
       {calleeDialog}
     </LinkBtn>
-  );
+  ) : null;
   return typeof getRefContent === 'function' ? getRefContent(dialogRef) : dialogRef;
 };

@@ -178,8 +178,7 @@ export const uiSchema: UISchema = {
     },
     body: data => (
       <>
-        <FixedInfo>{data.changeType} </FixedInfo>
-        {data.itemsProperty || '?'}
+        <FixedInfo>{data.changeType || '?'}</FixedInfo> {data.itemsProperty || '?'}
       </>
     ),
     footer: data =>

@@ -119,7 +119,8 @@ export const CardTemplate: FC<CardTemplateProps> = ({
     >
       {renderHeader(header)}
       {renderBody(displayedBody)}
-      {showFooter ? [renderSeparateline(), renderFooter(footer)] : null}
+      {showFooter ? renderSeparateline() : null}
+      {showFooter ? renderFooter(footer) : null}
     </div>
   );
 };
