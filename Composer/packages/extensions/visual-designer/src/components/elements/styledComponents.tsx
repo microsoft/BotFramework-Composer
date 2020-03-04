@@ -8,7 +8,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { DivProps } from './styledComponents.types';
-import { StandardFontCSS, EllipsisCSS } from './sharedCSS';
+import { StandardFontCSS, TruncatedCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
   css`
@@ -26,7 +26,7 @@ export const Span = styled.span`
 export const BorderedDiv = styled.div<DivProps>(
   css`
     ${StandardFontCSS};
-    ${EllipsisCSS};
+    ${TruncatedCSS};
     padding: 2px 0 0 8px;
     border: 1px solid #c4c4c4;
     box-sizing: border-box;
@@ -40,7 +40,7 @@ export const BorderedDiv = styled.div<DivProps>(
 
 export const SingleLineDiv = styled.div<DivProps>`
   ${StandardFontCSS};
-  ${EllipsisCSS};
+  ${TruncatedCSS};
 `;
 
 export const TextDiv = styled.div`

@@ -11,7 +11,7 @@ import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
-import { StandardFontCSS, EllipsisCSS } from '../components/elements/sharedCSS';
+import { StandardFontCSS, TruncatedCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title: string;
@@ -38,7 +38,7 @@ const container = css`
 
 const headerText = css`
   ${StandardFontCSS};
-  ${EllipsisCSS};
+  ${TruncatedCSS};
 `;
 
 export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({

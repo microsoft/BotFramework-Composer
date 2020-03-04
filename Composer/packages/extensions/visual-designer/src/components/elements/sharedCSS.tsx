@@ -10,7 +10,7 @@ export const StandardFontCSS = css`
   color: black;
 `;
 
-export const EllipsisCSS = css`
+export const TruncatedCSS = css`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
