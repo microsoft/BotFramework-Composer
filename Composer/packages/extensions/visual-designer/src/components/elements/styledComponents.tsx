@@ -59,3 +59,8 @@ export const Text = styled.span(
       color: ${color};
     `
 );
+
+export const FixedInfo = styled.span`
+  ${StandardFontCSS};
+  color: #757575;
+`;

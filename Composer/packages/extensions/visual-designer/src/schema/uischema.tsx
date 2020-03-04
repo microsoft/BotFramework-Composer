@@ -16,7 +16,7 @@ import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { SingleLineDiv, BorderedDiv, Text } from '../components/elements/styledComponents';
+import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/styledComponents';
 import { ListOverview } from '../components/common/ListOverview';
 import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
@@ -66,9 +66,7 @@ const BaseInputSchema: UIWidget = {
         />
       ) : null,
     footer: data =>
-      data.property
-        ? [<Text>{data.property}</Text>, <Text color="#757575"> = Input({getInputType(data.$type)})</Text>]
-        : null,
+      data.property ? `${data.property} ${(<FixedInfo>= Input({getInputType(data.$type)})</FixedInfo>)}` : null,
   },
 };
 
@@ -141,7 +139,9 @@ export const uiSchema: UISchema = {
     body: {
       'ui:widget': DialogRef,
       dialog: data => data.dialog,
+      getRefContent: data => dialogRef => `${dialogRef} ${(<FixedInfo>(Dialog)</FixedInfo>)}`,
     },
+    footer: data => (data.property ? `${data.property} ${(<FixedInfo>= Return value</FixedInfo>)}` : null),
   },
   [SDKTypes.ReplaceDialog]: {
     'ui:widget': CardTemplate,
@@ -151,12 +151,16 @@ export const uiSchema: UISchema = {
     body: {
       'ui:widget': DialogRef,
       dialog: data => data.dialog,
-      getRefContent: data => dialogRef => <>Switch to {dialogRef}</>,
+      getRefContent: data => dialogRef => `${dialogRef} ${(<FixedInfo>(Dialog)</FixedInfo>)}`,
     },
   },
   [SDKTypes.EditArray]: {
-    'ui:widget': ActionCard,
-    content: data => `${data.changeType} {${data.itemsProperty || '?'}}`,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: data => `${(<FixedInfo>{data.changeType}</FixedInfo>)} ${data.itemsProperty || '?'}`,
+    footer: data => (data.resultProperty ? `${data.resultProperty} ${(<FixedInfo>= Result</FixedInfo>)}` : null),
   },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
@@ -194,18 +198,26 @@ export const uiSchema: UISchema = {
     'ui:widget': ActionHeader,
   },
   [SDKTypes.CancelAllDialogs]: {
-    'ui:widget': ActionHeader,
+    'ui:widget': ActionCard,
+    content: data => (data.eventName ? `${data.eventName} ${(<FixedInfo>(Event)</FixedInfo>)}` : null),
   },
   [SDKTypes.EndTurn]: {
     'ui:widget': ActionHeader,
   },
   [SDKTypes.EmitEvent]: {
     'ui:widget': ActionCard,
-    content: data => data.eventName,
+    content: data => `${data.eventName} ${(<FixedInfo>(Event)</FixedInfo>)}`,
   },
   [SDKTypes.HttpRequest]: {
-    'ui:widget': ActionCard,
-    content: data => data.url,
+    'ui:widget': CardTemplate,
+    body: data => (
+      <SingleLineDiv>
+        <FixedInfo>{data.method} </FixedInfo>
+        {data.url}
+      </SingleLineDiv>
+    ),
+    footer: data =>
+      data.resultProperty ? `${data.resultProperty} ${(<FixedInfo>= Result property</FixedInfo>)}` : null,
   },
   [SDKTypes.TraceActivity]: {
     'ui:widget': ActionHeader,
@@ -222,7 +234,11 @@ export const uiSchema: UISchema = {
     content: data => data.hostname,
   },
   [SDKTypes.OAuthInput]: {
-    'ui:widget': ActionCard,
-    content: data => data.tokenProperty,
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: data => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
+    footer: data => `${data.tokenProperty} ${(<FixedInfo>= Token Property</FixedInfo>)}`,
   },
 };
