@@ -35,6 +35,8 @@ const container = css`
   line-height: 14px;
   color: black;
   position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const headerText = css`
@@ -97,9 +99,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
           {headerContent}
         </div>
       </div>
-      <div css={{ position: 'absolute', top: 4, right: 0 }}>
-        {menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
-      </div>
+      <div>{menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}</div>
     </div>
   );
 };
