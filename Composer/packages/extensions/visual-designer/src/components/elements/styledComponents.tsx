@@ -7,7 +7,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { ObiColors } from '../../constants/ElementColors';
 
-import { MultiLineDivProps, DivProps } from './styledComponents.types';
+import { DivProps } from './styledComponents.types';
 import { StandardFontCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
@@ -36,20 +36,6 @@ export const BorderedDiv = styled.div<DivProps>(props => ({
   lineHeight: '14px',
   border: '1px solid #C4C4C4',
   boxSizing: 'border-box',
-}));
-
-export const MultiLineDiv = styled.div<MultiLineDivProps>(props => ({
-  color: props.color || ObiColors.Black,
-  fontSize: '12px',
-  height: `${(props.lineNum || 1) * 19}px`,
-  lineHeight: '19px',
-  fontFamily: 'Segoe UI',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  wordBreak: 'break-word',
-  display: '-webkit-box',
-  '-webkit-line-clamp': `${props.lineNum || 1}`,
-  '-webkit-box-orient': 'vertical',
 }));
 
 export const SingleLineDiv = styled.div<DivProps>(props => ({
