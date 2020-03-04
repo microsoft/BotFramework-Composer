@@ -25,10 +25,10 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles } = state;
+  const { lgFiles, locale } = state;
   const { lgImportresolver } = resolvers;
   const { fileId } = props;
-  const file = lgFiles?.find(({ id }) => id === fileId);
+  const file = lgFiles.find(({ id }) => id === `${fileId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);

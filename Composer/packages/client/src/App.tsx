@@ -114,13 +114,13 @@ const bottomLinks = [
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, creationFlowStatus } = state;
+  const { botName, creationFlowStatus, locale } = state;
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   return (
     <Fragment>
-      <Header botName={botName} />
+      <Header botName={`${botName}(${locale})`} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>

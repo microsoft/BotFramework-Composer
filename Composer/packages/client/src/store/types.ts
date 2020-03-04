@@ -51,6 +51,7 @@ export interface State {
   location: string;
   botEnvironment: string;
   botEndpoint: string;
+  locale: string;
   remoteEndpoints: { [key: string]: string };
   /** the data path for FormEditor */
   focusPath: string;

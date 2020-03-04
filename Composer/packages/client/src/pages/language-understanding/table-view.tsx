@@ -37,7 +37,7 @@ interface Intent {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, locale } = state;
   const { fileId } = props;
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
@@ -71,7 +71,7 @@ const TableView: React.FC<TableViewProps> = props => {
 
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
-      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
+      const luDialog = dialogs.find(dialog => luFile.id === `${dialog.id}.${locale}`);
       get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(luFile);
 

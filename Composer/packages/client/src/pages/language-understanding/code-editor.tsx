@@ -25,9 +25,9 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
-  const { luFiles } = state;
+  const { luFiles, locale } = state;
   const { fileId } = props;
-  const file = luFiles?.find(({ id }) => id === fileId);
+  const file = luFiles.find(({ id }) => id === `${fileId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
   const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
