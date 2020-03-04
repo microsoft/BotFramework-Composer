@@ -11,14 +11,13 @@ import { ILuisConfig } from './interface';
 import log from './../../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const crossTrain = require('@bfcomposer/bf-lu/lib/parser/cross-train/cross-train.js');
+const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
 
 const DIALOGS_FOLDER = 'ComposerDialogs';
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
-const CROSS_TRAIN_CONFIG = 'mapping_rules.json';
 
 export class LuPublisher {
   public botDir: string;
@@ -46,7 +45,7 @@ export class LuPublisher {
       await this._createGeneratedDir();
 
       //do cross train before publish
-      await this._crossTrain();
+      await this._crossTrain(luFiles);
 
       await this._runBuild(luFiles);
 
@@ -80,13 +79,13 @@ export class LuPublisher {
     }
   };
 
-  //write config to generated folder
-  private async _createCrossTrainConfig() {
-    await this.storage.writeFile(
-      `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`,
-      JSON.stringify(this.crossTrainMapRule)
-    );
-  }
+  // //write config to generated folder
+  // private async _createCrossTrainConfig() {
+  //   await this.storage.writeFile(
+  //     `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`,
+  //     JSON.stringify(this.crossTrainMapRule)
+  //   );
+  // }
 
   private _createPath(dialogPath: string) {
     const path = dialogPath.replace('.dialog', '.lu');
@@ -95,6 +94,7 @@ export class LuPublisher {
     return relativePath;
   }
 
+  //generate the cross-train config
   private _createTree(dialog: DialogInfo, dialogs: DialogInfo[]) {
     let result = {};
     const key = this._createPath(dialog.relativePath);
@@ -121,15 +121,29 @@ export class LuPublisher {
     return !!keys(this.crossTrainMapRule).length;
   }
 
-  private async _crossTrain() {
+  private async _crossTrain(luFiles: LuFile[]) {
     if (!this._needCrossTrain()) return;
-    await this._createCrossTrainConfig();
-    const result = await crossTrain.train(
-      this.dialogsDir,
-      '_Interuption',
-      `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`
+    const luContents = luFiles.map(file => {
+      return { content: file.content, path: Path.join(this.botDir, file.relativePath) };
+    });
+    const configContent = crossTrainer.getConfigObject(
+      { path: this.interuptionFolderPath, content: JSON.stringify(this.crossTrainMapRule) },
+      '_Interuption'
     );
-    await crossTrain.writeFiles(result.luResult, this.interuptionFolderPath);
+    const result = await crossTrainer.crossTrain(luContents, [], configContent);
+
+    await this._writeFiles(result.luResult);
+  }
+
+  private async _writeFiles(crossTrainResult) {
+    if (!(await this.storage.exists(this.interuptionFolderPath))) {
+      await this.storage.mkDir(this.interuptionFolderPath);
+    }
+    for (const key of crossTrainResult.keys()) {
+      const fileName = Path.basename(key);
+      const newFileId = Path.join(this.interuptionFolderPath, fileName);
+      await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
+    }
   }
 
   private async _runBuild(luFiles: LuFile[]) {
@@ -190,7 +204,7 @@ export class LuPublisher {
       luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
     }
 
-    //add the lu file that are not in crossTrain config.
+    //add the lu file that are not in interuption folder.
     luFiles.forEach(file => {
       if (!~paths.indexOf(`${file.id}.lu`)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
@@ -210,7 +224,6 @@ export class LuPublisher {
 
   private async _cleanCrossTrain() {
     if (!this._needCrossTrain()) return;
-    await this.storage.removeFile(`${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`);
     await this._deleteDir(this.interuptionFolderPath);
   }
 }
