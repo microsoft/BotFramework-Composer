@@ -209,7 +209,17 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.DeleteProperties]: {
     'ui:widget': ActionCard,
-    content: data => `Delete ${Array.isArray(data.properties) ? data.properties.length : 0} properties`,
+    content: data => (
+      <ListOverview
+        items={data.properties}
+        itemPadding={8}
+        renderItem={item => (
+          <SingleLineDiv height={16} title={item}>
+            {item}
+          </SingleLineDiv>
+        )}
+      />
+    ),
   },
   [SDKTypes.EndDialog]: {
     'ui:widget': ActionHeader,
