@@ -8,7 +8,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { DivProps } from './styledComponents.types';
-import { StandardFontCSS, TruncatedCSS } from './sharedCSS';
+import { StandardFontCSS, TruncatedCSS, MultilineCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
   css`
@@ -46,8 +46,16 @@ export const SingleLineDiv = styled.div<DivProps>`
 
 export const TextDiv = styled.div`
   ${StandardFontCSS};
-  white-space: initial;
-  overflow-wrap: break-word;
-  word-break: break-all;
+  ${MultilineCSS};
   display: inline-block;
 `;
+
+export const Text = styled.span(
+  css`
+    ${StandardFontCSS};
+  `,
+  ({ color }) =>
+    css`
+      color: ${color};
+    `
+);

@@ -16,7 +16,7 @@ import { ForeachWidget } from '../widgets/ForeachWidget';
 import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
-import { SingleLineDiv, BorderedDiv } from '../components/elements/styledComponents';
+import { SingleLineDiv, BorderedDiv, Text } from '../components/elements/styledComponents';
 import { ListOverview } from '../components/common/ListOverview';
 import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
@@ -65,7 +65,10 @@ const BaseInputSchema: UIWidget = {
           )}
         />
       ) : null,
-    footer: data => data.property || '<property>',
+    footer: data =>
+      data.property
+        ? [<Text>{data.property}</Text>, <Text color="#757575"> = Input({getInputType(data.$type)})</Text>]
+        : null,
   },
 };
 
@@ -160,11 +163,8 @@ export const uiSchema: UISchema = {
     content: data => `{${data.property || '?'}} = ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
-    'ui:widget': CardTemplate,
-    header: {
-      'ui:widget': ActionHeader,
-    },
-    body: data => (
+    'ui:widget': ActionCard,
+    content: data => (
       <ListOverview
         items={data.assignments}
         itemPadding={8}
@@ -178,7 +178,6 @@ export const uiSchema: UISchema = {
         }}
       />
     ),
-    footer: data => `Set ${Array.isArray(data.assignments) ? data.assignments.length : 0} property values`,
   },
   [SDKTypes.DeleteProperty]: {
     'ui:widget': ActionCard,

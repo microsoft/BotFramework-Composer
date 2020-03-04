@@ -15,3 +15,9 @@ export const TruncatedCSS = css`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
+
+export const MultilineCSS = css`
+  white-space: initial;
+  overflow-wrap: break-word;
+  word-break: break-all;
+`;
