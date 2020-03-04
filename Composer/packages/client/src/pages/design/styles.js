@@ -62,6 +62,7 @@ export const editorWrapper = css`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  overflow: hidden;
 `;
 
 export const visualPanel = css`
