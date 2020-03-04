@@ -55,7 +55,7 @@ const BaseInputSchema: UIWidget = {
       },
     },
     body: data =>
-      data.$type === SDKTypes.ChoiceInput ? (
+      data.$type === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
           renderItem={item => (
