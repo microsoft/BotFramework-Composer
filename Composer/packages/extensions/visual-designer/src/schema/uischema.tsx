@@ -55,37 +55,21 @@ const BaseInputSchema: UIWidget = {
         icon: ObiColors.AzureBlue,
       },
     },
+    body: data =>
+      data.$type === SDKTypes.ChoiceInput ? (
+        <ListOverview
+          items={data.choices}
+          renderItem={item => (
+            <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={item.value}>
+              {item.value}
+            </BorderedDiv>
+          )}
+        />
+      ) : null,
     footer: data => data.property || '<property>',
   },
 };
 
-const ChoiceInputSchema: UIWidget = Object.assign({}, BaseInputSchema, {
-  userInput: {
-    'ui:widget': CardTemplate,
-    header: {
-      'ui:widget': ActionHeader,
-      title: data => `User Input (${getInputType(data.$type)})`,
-      disableSDKTitle: true,
-      icon: ElementIcon.User,
-      menu: 'none',
-      colors: {
-        theme: ObiColors.LightBlue,
-        icon: ObiColors.AzureBlue,
-      },
-    },
-    body: data => (
-      <ListOverview
-        items={data.choices}
-        renderItem={item => (
-          <BorderedDiv width={ChoiceInputSize.width} height={ChoiceInputSize.height} title={item.value}>
-            {item.value}
-          </BorderedDiv>
-        )}
-      />
-    ),
-    footer: data => <SingleLineDiv>{data.property || '<property>'}</SingleLineDiv>,
-  },
-});
 export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
@@ -146,7 +130,7 @@ export const uiSchema: UISchema = {
   [SDKTypes.DateTimeInput]: BaseInputSchema,
   [SDKTypes.NumberInput]: BaseInputSchema,
   [SDKTypes.TextInput]: BaseInputSchema,
-  [SDKTypes.ChoiceInput]: ChoiceInputSchema,
+  [SDKTypes.ChoiceInput]: BaseInputSchema,
   [SDKTypes.BeginDialog]: {
     'ui:widget': DialogRefCard,
     dialog: data => data.dialog,
