@@ -17,7 +17,7 @@ import get from 'lodash/get';
 import { LuEditor } from '@bfc/code-editor';
 
 import {
-  addNewTrigger,
+  generateNewDialog,
   getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
@@ -38,7 +38,7 @@ import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, specifiedType, intent, triggerPhrases } = data;
+  const { $type, specifiedType, intent, triggerPhrases, regexEx } = data;
 
   if ($type === eventTypeKey && !specifiedType) {
     errors.specifiedType = formatMessage('Please select a event type');
@@ -60,6 +60,10 @@ const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataE
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
+  }
+
+  if ($type === intentTypeKey && isRegEx && !regexEx) {
+    errors.regexEx = formatMessage('Please input regEx pattern');
   }
 
   if ($type === intentTypeKey && !isRegEx && !triggerPhrases) {
@@ -89,6 +93,7 @@ const initialFormData: TriggerFormData = {
   specifiedType: '',
   intent: '',
   triggerPhrases: '',
+  regexEx: '',
 };
 
 const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
@@ -114,7 +119,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
 
     const content = get(luFile, 'content', '');
-    const newDialog = addNewTrigger(dialogs, dialogId, formData);
+    const newDialog = generateNewDialog(dialogs, dialogId, formData);
     if (formData.$type === intentTypeKey && !isRegEx) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
@@ -126,10 +131,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
       onSubmit(newDialog);
     }
     onDismiss();
-  };
-
-  const onSelectIntent = (e, option) => {
-    setFormData({ ...formData, intent: option.key });
   };
 
   const onSelectTriggerType = (e, option) => {
@@ -144,6 +145,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, intent: name });
   };
 
+  const onChangeRegEx = (e, pattern) => {
+    setFormData({ ...formData, regexEx: pattern });
+  };
+
   const onTriggerPhrasesChange = (body: string) => {
     const errors = formData.errors;
     const content = '#' + formData.intent + '\n' + body;
@@ -152,16 +157,13 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
-  const regexIntents: IDropdownOption[] = get(dialogFile, 'content.recognizer.intents', []).map(regexIntent => {
-    return { key: regexIntent.intent, text: regexIntent.intent };
-  });
-
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
 
-  const showIntentFields = formData.$type === intentTypeKey && !isRegEx;
+  const showIntentName = formData.$type === intentTypeKey;
   const showRegExDropDown = formData.$type === intentTypeKey && isRegEx;
+  const showTriggerPhrase = formData.$type === intentTypeKey && !isRegEx;
   const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
   const showMessageDropDown = formData.$type === messageTypeKey;
@@ -192,7 +194,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             defaultSelectedKey={intentTypeKey}
           />
 
-          {showRegExDropDown && (
+          {/* {showRegExDropDown && (
             <Dropdown
               label={formatMessage('Which intent do you want to handle?')}
               options={regexIntents}
@@ -203,7 +205,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               errorMessage={formData.errors.intent}
               data-testid={'RegExDropDown'}
             />
-          )}
+          )} */}
 
           {showEventDropDown && (
             <Dropdown
@@ -238,7 +240,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'messageTypeDropDown'}
             />
           )}
-          {showIntentFields && (
+          {showIntentName && (
             <TextField
               label={formatMessage('What is the name of this trigger')}
               styles={intent}
@@ -247,8 +249,28 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid="TriggerName"
             />
           )}
-          {showIntentFields && <Label>{formatMessage('Trigger Phrases')}</Label>}
-          {showIntentFields && (
+
+          {showRegExDropDown && (
+            <TextField
+              label={formatMessage('Please input regex pattern')}
+              onChange={onChangeRegEx}
+              errorMessage={formData.errors.intent}
+              data-testid={'RegExDropDown'}
+            />
+
+            // <Dropdown
+            //   label={formatMessage('Which intent do you want to handle?')}
+            //   options={regexIntents}
+            //   styles={dropdownStyles}
+            //   onChange={onSelectIntent}
+            //   disabled={regexIntents.length === 0}
+            //   placeholder={regexIntents.length === 0 ? formatMessage('No intents configured for this dialog') : ''}
+            //   errorMessage={formData.errors.intent}
+            //   data-testid={'RegExDropDown'}
+            // />
+          )}
+          {showTriggerPhrase && <Label>{formatMessage('Trigger Phrases')}</Label>}
+          {showTriggerPhrase && (
             <LuEditor
               onChange={onTriggerPhrasesChange}
               value={formData.triggerPhrases}
