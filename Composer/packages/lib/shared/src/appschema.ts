@@ -2325,13 +2325,14 @@ export const appschema: OBISchema = {
         },
       },
     },
-    'Microsoft.OnMessageActivity': {
+    'Microsoft.OnMessageReceivedActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
-      title: 'On Message activity',
-      description: "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
+      title: 'On MessageRecieved activity',
+      description:
+        "Actions to perform on receipt of an activity with type 'MessageRecieved'. Overrides Intent trigger.",
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.OnMessageActivity),
+        ...$properties(SDKTypes.OnMessageReceivedActivity),
         condition: {
           $role: 'expression',
           title: 'Condition',
