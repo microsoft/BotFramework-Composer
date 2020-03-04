@@ -145,7 +145,7 @@ export const uiSchema: UISchema = {
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
-          {dialogRef} <FixedInfo>(Dialog)</FixedInfo>
+          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
         </>
       ),
     },
@@ -166,7 +166,7 @@ export const uiSchema: UISchema = {
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
-          {dialogRef} <FixedInfo>(Dialog)</FixedInfo>
+          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
         </>
       ),
     },
@@ -230,7 +230,7 @@ export const uiSchema: UISchema = {
     content: data =>
       data.eventName ? (
         <>
-          {data.eventName}
+          {data.eventName || '?'}
           <FixedInfo> (Event)</FixedInfo>
         </>
       ) : null,
@@ -242,7 +242,7 @@ export const uiSchema: UISchema = {
     'ui:widget': ActionCard,
     content: data => (
       <>
-        {data.eventName}
+        {data.eventName || '?'}
         <FixedInfo> (Event)</FixedInfo>
       </>
     ),
@@ -286,11 +286,12 @@ export const uiSchema: UISchema = {
       'ui:widget': ActionHeader,
     },
     body: data => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
-    footer: data => (
-      <>
-        {data.tokenProperty}
-        <FixedInfo> = Token Property</FixedInfo>
-      </>
-    ),
+    footer: data =>
+      data.tokenProperty ? (
+        <>
+          {data.tokenProperty}
+          <FixedInfo> = Token Property</FixedInfo>
+        </>
+      ) : null,
   },
 };
