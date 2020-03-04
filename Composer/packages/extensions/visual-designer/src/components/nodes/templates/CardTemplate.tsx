@@ -7,6 +7,7 @@ import { FC, ReactNode } from 'react';
 
 import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
 import { ObiColors } from '../../../constants/ElementColors';
+import { ArrowLine } from '../../lib/ArrowLine';
 
 const containerCSS = css`
   font-size: 12px;
@@ -115,9 +116,20 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       </div>
     </div>
   );
+
   const renderSeparateline = () => (
-    <div style={{ borderBottom: `1px solid ${ObiColors.AzureGray3}`, height: 1, width: StandardNodeWidth }}></div>
+    <div
+      className="Separator"
+      css={css`
+        display: block;
+        height: 0px;
+        overflow: visible;
+      `}
+    >
+      <ArrowLine width={StandardNodeWidth} arrowsize={8} color={ObiColors.AzureGray3} />
+    </div>
   );
+
   return (
     <div
       className="CardNode"
