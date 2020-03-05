@@ -9,12 +9,16 @@ import { WidgetComponent, WidgetContainerProps } from '../schema/uischema.types'
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
+import { ElementIcon } from '../utils/obiPropertyResolver';
+import { Icon } from '../components/decorations/icon';
+import { StandardFontCSS, TruncatedCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title: string;
   disableSDKTitle?: boolean;
+  icon?: string;
   menu?: JSX.Element | 'none';
-  colors: {
+  colors?: {
     theme: string;
     icon: string;
   };
@@ -27,19 +31,14 @@ const DefaultColors = {
 
 const container = css`
   cursor: pointer;
-  font-family: Segoe UI;
-  font-size: 12px;
-  line-height: 14px;
-  color: black;
+  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
-const header = css`
-  font-size: 12px;
-  font-family: Segoe UI;
-  line-height: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  whitespace: pre;
+const headerText = css`
+  ${StandardFontCSS};
+  ${TruncatedCSS};
 `;
 
 export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
@@ -48,6 +47,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   onEvent,
   title,
   disableSDKTitle,
+  icon,
   menu,
   colors = DefaultColors,
 }) => {
@@ -64,16 +64,36 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
     >
       <div
         css={css`
-          ${header};
           width: calc(100% - 40px);
           padding: 4px 8px;
+          display: flex;
         `}
       >
-        {headerContent}
+        {icon && icon !== ElementIcon.None && (
+          <div
+            css={{
+              width: 16,
+              height: 16,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: '5px',
+            }}
+          >
+            <Icon icon={icon} color={colors.icon} size={16} />
+          </div>
+        )}
+        <div
+          css={css`
+            ${headerText};
+            line-height: 16px;
+            transform: translateY(-1px);
+          `}
+        >
+          {headerContent}
+        </div>
       </div>
-      <div css={{ position: 'absolute', top: 4, right: 0 }}>
-        {menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}
-      </div>
+      <div>{menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}</div>
     </div>
   );
 };
