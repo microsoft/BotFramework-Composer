@@ -6,9 +6,8 @@ import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
-import { FieldProps, ChangeHandler } from '@bfc/extension';
+import { FieldProps, ChangeHandler, JSONSchema7 } from '@bfc/extension';
 import { IChoiceOption } from '@bfc/shared';
-import { JSONSchema4 } from 'json-schema';
 import { SchemaField } from '@bfc/adaptive-form';
 
 interface ChoiceOptionsProps extends Omit<FieldProps<IChoiceOption>, 'onChange'> {
@@ -18,7 +17,7 @@ interface ChoiceOptionsProps extends Omit<FieldProps<IChoiceOption>, 'onChange'>
 export const ChoiceOptions: React.FC<ChoiceOptionsProps> = props => {
   const { id, schema, value, onChange, ...rest } = props;
 
-  const optionSchema = (field: keyof IChoiceOption): JSONSchema4 => {
+  const optionSchema = (field: keyof IChoiceOption): JSONSchema7 => {
     return get(schema, ['properties', field]);
   };
 

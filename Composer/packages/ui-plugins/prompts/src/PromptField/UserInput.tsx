@@ -5,15 +5,15 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
-import { JSONSchema4 } from 'json-schema';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 import { SchemaField } from '@bfc/adaptive-form';
+import { JSONSchema7 } from '@bfc/extension';
 
 import { PromptFieldProps } from './types';
 import { ChoiceInputSettings } from './ChoiceInputSettings';
 import { ConfirmInputSettings } from './ConfirmInputSettings';
 
-const getOptions = (enumSchema: JSONSchema4) => {
+const getOptions = (enumSchema: JSONSchema7) => {
   if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
     return [];
   }

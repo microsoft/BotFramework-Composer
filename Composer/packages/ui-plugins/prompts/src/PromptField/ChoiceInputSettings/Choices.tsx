@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { IChoice } from '@bfc/shared';
 import { SchemaField, FieldLabel, getUiLabel } from '@bfc/adaptive-form';
 
@@ -18,23 +18,26 @@ const Choices: React.FC<FieldProps<IChoice>> = props => {
     }
 
     if (!schema.anyOf && schema.items) {
-      return Array.isArray(schema.items) ? schema.items[0] : schema.items;
+      const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
+      if (typeof itemSchema === 'object') {
+        return itemSchema;
+      }
     }
 
     if (Array.isArray(schema.anyOf)) {
       if (typeof value === 'string') {
-        return schema.anyOf.find(s => s.type === 'string');
+        return schema.anyOf.find(s => typeof s === 'object' && s.type === 'string') as JSONSchema7;
       }
 
       return schema.anyOf.find(s => {
-        if (s.type === 'array') {
+        if (typeof s === 'object' && s.type === 'array') {
           if (Array.isArray(s.items)) {
-            return s.items.some(i => i.type === 'object');
+            return s.items.some(i => typeof i === 'object' && i.type === 'object');
           } else {
-            return s.items?.type === 'object';
+            return typeof s.items === 'object' && s.items?.type === 'object';
           }
         }
-      });
+      }) as JSONSchema7;
     }
   }, [schema, value]);
 
