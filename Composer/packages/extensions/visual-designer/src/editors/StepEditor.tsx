@@ -13,7 +13,7 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
-import { useWindowDimensions } from '../utils/hooks';
+import { useWindowDimensions } from '../hooks/useWindowDimensions';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
