@@ -4,7 +4,7 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import { useLgTemplate } from '../utils/hooks';
+import { useLgTemplate } from '../utils/useLgTemplate';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
 export interface ActivityRenderer extends WidgetContainerProps {
