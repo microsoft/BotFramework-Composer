@@ -20,6 +20,7 @@ const validTypes = [
   'chore',
   'revert',
   'release',
+  'a11y',
 ];
 
 const typeList = validTypes.map(t => `  - ${t}`).join('\n');
