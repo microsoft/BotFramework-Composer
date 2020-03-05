@@ -33,8 +33,11 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       }
 
       if (template && template.body) {
-        const [firstLine] = template.body.split('\n');
-        setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
+        const templateText = template.body
+          .split('\n')
+          .map(line => (line.startsWith('-') ? line.substring(1) : line))
+          .join('\n');
+        setTemplateText(templateText);
       } else {
         setTemplateText('');
       }
