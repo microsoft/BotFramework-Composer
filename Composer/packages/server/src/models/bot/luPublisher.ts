@@ -19,6 +19,13 @@ const DIALOGS_FOLDER = 'ComposerDialogs';
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
 
+interface ICrossTrainConfig {
+  rootIds: string[];
+  triggerRules: { [key: string]: any };
+  intentName: string;
+  verbose: boolean;
+}
+
 export class LuPublisher {
   public botDir: string;
   public dialogsDir: string;
@@ -26,7 +33,12 @@ export class LuPublisher {
   public interuptionFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
-  public crossTrainMapRule: { [key: string]: string } = {};
+  public crossTrainMapRule: ICrossTrainConfig = {
+    rootIds: [],
+    triggerRules: {},
+    intentName: '_Interruption',
+    verbose: true,
+  };
 
   private builder = new luBuild.Builder(message => {
     log(message);
@@ -71,44 +83,48 @@ export class LuPublisher {
     }
   };
 
-  public setCrossTrainConfig = (dialogs: DialogInfo[]) => {
-    // ToDo: create real tree for cross train. Now add this data to test the bf-lu
-    const rootDialog = dialogs.find(dialog => dialog.isRoot);
-    if (rootDialog?.intentTriggers.length) {
-      this.crossTrainMapRule = this._createTree(rootDialog, dialogs);
-    }
-  };
-
-  // //write config to generated folder
-  // private async _createCrossTrainConfig() {
-  //   await this.storage.writeFile(
-  //     `${this.generatedFolderPath}/${CROSS_TRAIN_CONFIG}`,
-  //     JSON.stringify(this.crossTrainMapRule)
-  //   );
-  // }
-
-  private _createPath(dialogPath: string) {
-    const path = dialogPath.replace('.dialog', '.lu');
-    const absolutePath = Path.join(this.botDir, path);
-    const relativePath = Path.relative(this.generatedFolderPath, absolutePath);
-    return relativePath;
-  }
-
   //generate the cross-train config
-  private _createTree(dialog: DialogInfo, dialogs: DialogInfo[]) {
-    let result = {};
-    const key = this._createPath(dialog.relativePath);
-    dialog.intentTriggers.forEach(temp => {
-      const target = dialogs.find(dialog => dialog.id === temp.dialog);
-      if (target && target.content?.recognizer) {
-        if (!result[key]) result[key] = { triggers: {} };
-        result[key].triggers[temp.intent] = this._createPath(target.relativePath);
-        result = { ...result, ...this._createTree(target, dialogs) };
+  public createCrossTrainConfig = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
+    const triggerRules = {};
+    const countMap = {};
+
+    //map all referred lu files
+    luFiles.forEach(file => {
+      countMap[file.id] = 0;
+    });
+
+    dialogs.forEach(dialog => {
+      const { intentTriggers } = dialog;
+      const fileId = this._createConfigId(dialog.id);
+      if (intentTriggers.length) {
+        intentTriggers.forEach(item => {
+          const used = item.dialogs.filter(dialog => {
+            if (typeof countMap[dialog] === 'number') {
+              countMap[dialog]++;
+              return true;
+            }
+            return false;
+          });
+          if (used.length) {
+            const result = used.reduce((result, temp) => {
+              const id = this._createConfigId(temp);
+              result[id] = item.intent;
+              return result;
+            }, {});
+            triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+          }
+        });
       }
     });
 
-    if (dialog.isRoot && result[key]) result[key].rootDialog = true;
-    return result;
+    this.crossTrainMapRule.rootIds = keys(countMap)
+      .filter(key => (countMap[key] === 0 || key === 'Main') && triggerRules[this._createConfigId(key)])
+      .map(item => this._createConfigId(item));
+    this.crossTrainMapRule.triggerRules = triggerRules;
+  };
+
+  private _createConfigId(fileId) {
+    return `${fileId}.lu`;
   }
 
   private async _createGeneratedDir() {
@@ -118,19 +134,16 @@ export class LuPublisher {
   }
 
   private _needCrossTrain() {
-    return !!keys(this.crossTrainMapRule).length;
+    return !!this.crossTrainMapRule.rootIds.length;
   }
 
   private async _crossTrain(luFiles: LuFile[]) {
     if (!this._needCrossTrain()) return;
     const luContents = luFiles.map(file => {
-      return { content: file.content, path: Path.join(this.botDir, file.relativePath) };
+      return { content: file.content, id: this._createConfigId(file.id) };
     });
-    const configContent = crossTrainer.getConfigObject(
-      { path: this.interuptionFolderPath, content: JSON.stringify(this.crossTrainMapRule) },
-      '_Interuption'
-    );
-    const result = await crossTrainer.crossTrain(luContents, [], configContent);
+
+    const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainMapRule);
 
     await this._writeFiles(result.luResult);
   }

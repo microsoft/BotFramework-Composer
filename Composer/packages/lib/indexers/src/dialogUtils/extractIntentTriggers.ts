@@ -12,10 +12,26 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
 
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     if (value?.$type === SDKTypes.OnIntent && value.actions?.[0]?.$type === SDKTypes.BeginDialog) {
-      triggers.push({
-        intent: value.intent,
-        dialog: value.actions[0].dialog,
-      });
+      if (value.intent) {
+        const dialogs: string[] = [];
+
+        const visitor: VisitorFunc = (path: string, value: any): boolean => {
+          if (value?.$type === SDKTypes.BeginDialog) {
+            if (value.dialog) {
+              dialogs.push(value.dialog);
+            }
+            return true;
+          }
+          return false;
+        };
+        JsonWalk('$', value, visitor);
+        if (dialogs.length) {
+          triggers.push({
+            intent: value.intent,
+            dialogs,
+          });
+        }
+      }
       return true;
     }
     return false;

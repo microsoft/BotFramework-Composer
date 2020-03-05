@@ -25,7 +25,7 @@ export interface IExpressionProperties {
 
 export interface IIntentTrigger {
   intent: string;
-  dialog: string;
+  dialogs: string[];
 }
 
 export type CheckerFunc = (path: string, value: any, type: string, schema: any) => Diagnostic[] | null; // error msg
