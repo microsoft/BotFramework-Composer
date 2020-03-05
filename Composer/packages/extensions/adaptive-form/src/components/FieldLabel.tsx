@@ -27,7 +27,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
       delay={TooltipDelay.zero}
       directionalHint={DirectionalHint.bottomAutoEdge}
       id={`${id}-description`}
-      styles={{ root: { display: 'flex', alignItems: 'center' } }}
+      styles={{ root: { display: 'inline-block' } }}
       tooltipProps={{
         styles: { root: { width: '288px', padding: '17px 28px' } },
         onRenderContent: () => (

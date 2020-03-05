@@ -1,35 +1,57 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React from 'react';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { FieldProps } from '@bfc/extension';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { FieldLabel } from '../FieldLabel';
 
-const styles = css`
-  display: flex;
-  align-items: center;
-
-  label: BooleanField;
-`;
-
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, onBlur, onFocus, value, label, id, schema, uiOptions } = props;
+  const { onChange, value, label, id, schema, uiOptions } = props;
   const { description } = schema;
 
+  const options: IDropdownOption[] = [
+    {
+      key: 'none',
+      text: '',
+    },
+    {
+      key: 'true',
+      text: 'true',
+    },
+    {
+      key: 'false',
+      text: 'false',
+    },
+  ];
+
+  const handleChange = (e, option?: IDropdownOption) => {
+    if (option) {
+      const optionValue = option.key === 'none' ? undefined : option.key === 'true';
+      onChange(optionValue);
+    }
+  };
+
+  const selectedKey = typeof value === 'boolean' ? value.toString() : '';
+
   return (
-    <div css={styles}>
-      <Checkbox
-        checked={Boolean(value)}
-        id={id}
-        onBlur={() => onBlur && onBlur(id, Boolean(value))}
-        onChange={(_, checked?: boolean) => onChange(checked)}
-        onFocus={() => onFocus && onFocus(id, Boolean(value))}
-      />
+    <React.Fragment>
       <FieldLabel inline description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
-    </div>
+      <Dropdown
+        id={id}
+        options={options}
+        responsiveMode={ResponsiveMode.large}
+        selectedKey={selectedKey}
+        onChange={handleChange}
+        styles={{
+          root: { width: '100%' },
+          label: { fontSize: '10px', fontWeight: '400' },
+          errorMessage: { display: 'none' },
+        }}
+      />
+    </React.Fragment>
   );
 };
 

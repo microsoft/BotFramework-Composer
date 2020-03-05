@@ -145,3 +145,10 @@ export const objectArrayField = {
     padding: 7px 0;
   `,
 };
+
+export const oneOfField = {
+  label: css`
+    display: flex;
+    justify-content: space-between;
+  `,
+};

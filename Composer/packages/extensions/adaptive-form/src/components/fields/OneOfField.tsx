@@ -8,12 +8,15 @@ import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { FieldLabel } from '../FieldLabel';
+import { resolveRef, resolveFieldWidget } from '../../utils';
+import { usePluginConfig } from '../../hooks';
 
 import { oneOfField } from './styles';
 
 const OneOfField: React.FC<FieldProps> = props => {
   const { schema, value } = props;
   const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
+  const pluginConfig = usePluginConfig();
 
   const oneOf = schema.oneOf;
   const options =
@@ -21,10 +24,12 @@ const OneOfField: React.FC<FieldProps> = props => {
     (oneOf
       .map(s => {
         if (typeof s === 'object') {
+          const resolved = resolveRef(s, props.definitions);
+
           return {
-            key: s.type as React.ReactText,
-            text: s.type === 'string' ? 'expression' : (s.type as string),
-            data: { schema: s },
+            key: resolved.type as React.ReactText,
+            text: resolved.title || resolved.type,
+            data: { schema: resolved },
           } as IDropdownOption;
         }
       })
@@ -44,8 +49,11 @@ const OneOfField: React.FC<FieldProps> = props => {
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
       setSelectedSchema(option.data.schema);
+      props.onChange(undefined);
     }
   };
+
+  const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, pluginConfig);
 
   return (
     <React.Fragment>
@@ -60,12 +68,13 @@ const OneOfField: React.FC<FieldProps> = props => {
             onChange={handleTypeChange}
             styles={{
               caretDownWrapper: { height: '24px', lineHeight: '24px' },
-              root: { padding: '7px 0', width: '100px' },
+              root: { padding: '7px 0', width: '130px' },
               title: { height: '24px', lineHeight: '20px' },
             }}
           />
         )}
       </div>
+      <Field {...props} schema={selectedSchema || {}} label={false} depth={props.depth - 1} />
     </React.Fragment>
   );
 };
