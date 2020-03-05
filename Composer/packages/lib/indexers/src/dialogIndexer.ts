@@ -215,7 +215,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
-          const isRoot = id === 'Main';
+          const isRoot = id === botName.toLowerCase();
           const dialog = {
             id,
             isRoot,

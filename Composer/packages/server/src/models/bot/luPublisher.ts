@@ -10,7 +10,7 @@ import { IFileStorage } from './../storage/interface';
 import { ILuisConfig, LuisStatus, FileUpdateType } from './interface';
 import log from './../../logger';
 
-const GENERATEDFOLDER = 'ComposerDialogs/generated';
+const GENERATEDFOLDER = 'generated';
 const LU_STATUS_FILE = 'luis.status.json';
 const DEFAULT_STATUS = {
   lastUpdateTime: 1,

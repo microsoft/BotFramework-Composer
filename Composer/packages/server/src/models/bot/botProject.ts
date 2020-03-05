@@ -783,22 +783,23 @@ export class BotProject {
       }
     }
 
-    await this._autofixTemplateInCommon();
+    // This two function help migration now can be disabled or removed
+    // await this._autofixTemplateInCommon();
     // await this._autofixGeneratorInDialog();
   };
 
-  private _buildRNNewlineText = (lineArray: string[]): string => {
-    const lineArrayEndWithRN = lineArray.map(line => {
-      if (line.endsWith('\r\n')) {
-        return line;
-      } else if (line.endsWith('\r')) {
-        return line + '\n';
-      } else {
-        return line + '\r\n';
-      }
-    });
-    return lineArrayEndWithRN.join('');
-  };
+  // private _buildRNNewlineText = (lineArray: string[]): string => {
+  //   const lineArrayEndWithRN = lineArray.map(line => {
+  //     if (line.endsWith('\r\n')) {
+  //       return line;
+  //     } else if (line.endsWith('\r')) {
+  //       return line + '\n';
+  //     } else {
+  //       return line + '\r\n';
+  //     }
+  //   });
+  //   return lineArrayEndWithRN.join('');
+  // };
 
   /**
    * move generated lg template (like bfdactivity-123456) from common.lg into dialog.lg
@@ -806,41 +807,41 @@ export class BotProject {
    * we can disable this code after a period of time, when there is no old version bot.
    */
 
-  private _autofixTemplateInCommon = async () => {
-    const NEWLINE = '\r\n';
-    const dialogs: DialogInfo[] = this.dialogs;
-    const lgFiles: LgFile[] = this.lgFiles;
-    const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
-    const commonLgFileId = `common.${this.locale}`;
-    const commonLgFile = lgFiles.find(({ id }) => id === commonLgFileId);
-    if (!commonLgFile) return;
-    const lineContentArray = commonLgFile.content.split('\n');
-    for (const dialog of dialogs) {
-      const { lgTemplates } = dialog;
-      const dialogTemplateTexts: string[] = [];
-      for (const lgTemplate of lgTemplates) {
-        const templateName = lgTemplate.name;
-        if (inlineLgNamePattern.test(templateName)) {
-          const template = commonLgFile.templates.find(({ name }) => name === templateName);
-          if (!template?.range) continue;
-          const { startLineNumber, endLineNumber } = template.range;
-          const lineCount = endLineNumber - startLineNumber + 1;
-          const templateText = this._buildRNNewlineText(
-            lineContentArray.splice(startLineNumber - 1, lineCount, ...Array(lineCount))
-          );
-          dialogTemplateTexts.push(templateText);
-        }
-      }
-      const targetLgFileId = `${dialog.id}.${this.locale}`;
-      const updatedContent =
-        (lgFiles.find(({ id }) => id === targetLgFileId)?.content || '') +
-        this._buildRNNewlineText(dialogTemplateTexts) +
-        NEWLINE;
-      await this.updateLgFile(targetLgFileId, updatedContent);
-    }
-    const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
-    await this.updateLgFile(commonLgFileId, updatedCommonContent);
-  };
+  // private _autofixTemplateInCommon = async () => {
+  //   const NEWLINE = '\r\n';
+  //   const dialogs: DialogInfo[] = this.dialogs;
+  //   const lgFiles: LgFile[] = this.lgFiles;
+  //   const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
+  //   const commonLgFileId = `common.${this.locale}`;
+  //   const commonLgFile = lgFiles.find(({ id }) => id === commonLgFileId);
+  //   if (!commonLgFile) return;
+  //   const lineContentArray = commonLgFile.content.split('\n');
+  //   for (const dialog of dialogs) {
+  //     const { lgTemplates } = dialog;
+  //     const dialogTemplateTexts: string[] = [];
+  //     for (const lgTemplate of lgTemplates) {
+  //       const templateName = lgTemplate.name;
+  //       if (inlineLgNamePattern.test(templateName)) {
+  //         const template = commonLgFile.templates.find(({ name }) => name === templateName);
+  //         if (!template?.range) continue;
+  //         const { startLineNumber, endLineNumber } = template.range;
+  //         const lineCount = endLineNumber - startLineNumber + 1;
+  //         const templateText = this._buildRNNewlineText(
+  //           lineContentArray.splice(startLineNumber - 1, lineCount, ...Array(lineCount))
+  //         );
+  //         dialogTemplateTexts.push(templateText);
+  //       }
+  //     }
+  //     const targetLgFileId = `${dialog.id}.${this.locale}`;
+  //     const updatedContent =
+  //       (lgFiles.find(({ id }) => id === targetLgFileId)?.content || '') +
+  //       this._buildRNNewlineText(dialogTemplateTexts) +
+  //       NEWLINE;
+  //     await this.updateLgFile(targetLgFileId, updatedContent);
+  //   }
+  //   const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
+  //   await this.updateLgFile(commonLgFileId, updatedCommonContent);
+  // };
 
   /**
    * each dialog should use it's own lg
