@@ -221,3 +221,19 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, c
   targetArray.currentData.splice(arrayIndex, 0, ...copiedNodes);
   return dialog;
 }
+
+export const getParentPaths = (actionPath: string): string[] => {
+  if (!actionPath) return [];
+  const selectors = actionPath.split('.');
+  // exclude the path of current action
+  selectors.pop();
+  if (!selectors.length) return [];
+
+  let path = selectors[0];
+  const results = [path];
+  for (let i = 1; i < selectors.length; i++) {
+    path = `${path}.${selectors[i]}`;
+    results.push(path);
+  }
+  return results;
+};

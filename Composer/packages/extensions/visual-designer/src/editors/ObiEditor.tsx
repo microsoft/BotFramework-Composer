@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -20,12 +21,14 @@ import {
   appendNodesAfter,
   pasteNodes,
   deleteNodes,
+  getParentPaths,
 } from '../utils/jsonTracker';
 import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
+import { designerCache } from '../store/DesignerCache';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -59,6 +62,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
+  const trackLayoutChange = (actionPath: string) => {
+    const affectedPaths = getParentPaths(actionPath);
+    for (const path of affectedPaths) {
+      const json = get(data, path);
+      designerCache.uncacheBoundary(json);
+    }
+  };
+
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
     let handler;
     switch (eventName) {
@@ -79,12 +90,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = ({ caller, callee }) => onOpen(callee, caller);
         break;
       case NodeEventTypes.Delete:
+        trackLayoutChange(eventData.id);
         handler = e => {
           onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
           onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
+        trackLayoutChange(eventData.id);
         if (eventData.$type === 'PASTE') {
           handler = e => {
             // TODO: clean this along with node deletion.
@@ -129,6 +142,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.CutSelection:
+        trackLayoutChange(eventData.id);
         handler = e => {
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           onChange(dialog);
@@ -137,6 +151,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.DeleteSelection:
+        trackLayoutChange(eventData.id);
         handler = e => {
           const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
           onChange(dialog);
@@ -144,6 +159,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.AppendSelection:
+        trackLayoutChange(eventData.id);
         handler = e => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
