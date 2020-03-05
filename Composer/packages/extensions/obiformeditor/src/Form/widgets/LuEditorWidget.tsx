@@ -22,7 +22,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
     this.debounceUpdate = debounce(this.updateLuIntent, 500);
     this.name = this.props.name;
     this.formContext = this.props.formContext;
-    this.luFileId = this.formContext.currentDialog.id;
+    this.luFileId = this.formContext.currentDialog.luFile;
     this.luFile = this.formContext.luFiles.find(f => f.id === this.luFileId);
     this.luIntent = (this.luFile && this.luFile.intents.find(intent => intent.Name === this.name)) || {
       Name: this.name,

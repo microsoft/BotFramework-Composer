@@ -92,8 +92,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
-  const luFile = luFiles.find(lu => lu.id === dialogId);
+  const { dialogs, luFiles, locale } = state;
+  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -108,9 +108,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
 
     const content = get(luFile, 'content', '');
+    const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
     const updateLuFile = {
-      id: dialogId,
+      id: luFileId,
       content: newContent,
     };
     const newDialog = addNewTrigger(dialogs, dialogId, formData);

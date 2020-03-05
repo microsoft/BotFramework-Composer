@@ -44,9 +44,29 @@ interface DialogResources {
   luFiles: LuFile[];
 }
 
+// Define the project structure
+const BotStructureTemplate = {
+  folder: '',
+  entry: '${BOTNAME}.dialog',
+  schema: '${FILENAME}',
+  settings: 'settings/${FILENAME}',
+  common: {
+    lg: 'language-generation/${LOCALE}/common.${LOCALE}.lg',
+  },
+  dialogs: {
+    folder: 'dialogs/${DIALOGNAME}',
+    entry: '${DIALOGNAME}.dialog',
+    lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
+    lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+  },
+};
+
+const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
+  str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
+
 export class BotProject {
   public ref: LocationRef;
-
+  public locale: string;
   public name: string;
   public dir: string;
   public dataDir: string;
@@ -67,6 +87,7 @@ export class BotProject {
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef) {
     this.ref = ref;
+    this.locale = 'en-us'; // default to en-us
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
     this.dataDir = Path.join(this.dir, DIALOGFOLDER);
     this.name = Path.basename(this.dir);
@@ -236,16 +257,29 @@ export class BotProject {
   public createDialog = async (
     id: string,
     content = '',
-    dir: string = this.defaultDir(id)
+    dir: string = this.defaultDir(id, '.dialog')
   ): Promise<DialogResources> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog) {
       throw new Error(`${id} dialog already exist`);
     }
-    const relativePathBase = Path.join(dir, id.trim());
-    await this._createFile(`${relativePathBase}.dialog`, content);
-    await this._createFile(`${relativePathBase}.lu`, '');
-    await this.createLgFile(id, '', dir);
+
+    const DIALOGNAME = id;
+    const LOCALE = this.locale;
+    const dialogFilePath = Path.join(dir, `${id.trim()}.dialog`);
+    const lgFilePathDir = Path.join(
+      dir,
+      Path.dirname(templateInterpolate(BotStructureTemplate.dialogs.lg, { DIALOGNAME, LOCALE }))
+    );
+    const luFilePathDir = Path.join(
+      dir,
+      Path.dirname(templateInterpolate(BotStructureTemplate.dialogs.lu, { DIALOGNAME, LOCALE }))
+    );
+
+    const updateContent = this._autofixReferInDialog(LOCALE, id, content);
+    await this._createFile(dialogFilePath, updateContent);
+    await this.createLuFile(`${id}.${LOCALE}`, '', luFilePathDir);
+    await this.createLgFile(`${id}.${LOCALE}`, '', lgFilePathDir);
 
     const { dialogs, lgFiles, luFiles } = this;
     return { dialogs, lgFiles, luFiles };
@@ -260,11 +294,22 @@ export class BotProject {
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
     }
-    const relativePathBase = dialog.relativePath.replace(/\.dialog$/, '');
-    await this._removeFile(`${relativePathBase}.dialog`);
-    await this._removeFile(`${relativePathBase}.lg`);
-    await this._removeFile(`${relativePathBase}.lu`);
-    this._cleanUp(dialog.relativePath);
+    const DIALOGNAME = id;
+    const LOCALE = this.locale;
+    const dialogFolder = Path.dirname(dialog.relativePath);
+    const dialogFilePath = dialog.relativePath;
+    const lgFilePath = Path.join(
+      dialogFolder,
+      templateInterpolate(BotStructureTemplate.dialogs.lg, { DIALOGNAME, LOCALE })
+    );
+    const luFilePath = Path.join(
+      dialogFolder,
+      templateInterpolate(BotStructureTemplate.dialogs.lu, { DIALOGNAME, LOCALE })
+    );
+    await this._removeFile(dialogFilePath);
+    await this._removeFile(lgFilePath);
+    await this._removeFile(luFilePath);
+    this._cleanUp(dialogFolder);
     const { dialogs, lgFiles, luFiles } = this;
     return { dialogs, lgFiles, luFiles };
   };
@@ -278,16 +323,21 @@ export class BotProject {
     return this.lgFiles;
   };
 
-  public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LgFile[]> => {
+  public createLgFile = async (
+    id: string,
+    content: string,
+    dir: string = this.defaultDir(id, '.lg')
+  ): Promise<LgFile[]> => {
     const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile) {
       throw new Error(`${id} lg file already exist`);
     }
     // slot with common.lg import
     let lgInitialContent = '';
-    const lgCommonFile = this.files.find(({ name }) => name === 'common.lg');
+    const commonLgFileName = `common.${this.locale}.lg`;
+    const lgCommonFile = this.files.find(({ name }) => name === commonLgFileName);
     if (lgCommonFile) {
-      lgInitialContent = `[import](common.lg)`;
+      lgInitialContent = `[import](${commonLgFileName})`;
     }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     await this._createFile(relativePath, [lgInitialContent, content].join('\n'));
@@ -315,7 +365,11 @@ export class BotProject {
     return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
   };
 
-  public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LuFile[]> => {
+  public createLuFile = async (
+    id: string,
+    content: string,
+    dir: string = this.defaultDir(id, '.lu')
+  ): Promise<LuFile[]> => {
     const luFile = this.luFiles.find(lu => lu.id === id);
     if (luFile) {
       throw new Error(`${id} lu file already exist`);
@@ -411,7 +465,29 @@ export class BotProject {
     }
   };
 
-  private defaultDir = (id: string) => Path.join(DIALOGFOLDER, id);
+  private defaultDir = (id: string, fileType: string) => {
+    const DIALOGNAME = id;
+    const LOCALE = this.locale;
+    const folder = BotStructureTemplate.dialogs.folder;
+    let dir = BotStructureTemplate.folder;
+    if (fileType === '.dialog') {
+      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.entry)), {
+        DIALOGNAME,
+        LOCALE,
+      });
+    } else if (fileType === '.lg') {
+      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.lg)), {
+        DIALOGNAME,
+        LOCALE,
+      });
+    } else if (fileType === '.lu') {
+      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.lu)), {
+        DIALOGNAME,
+        LOCALE,
+      });
+    }
+    return dir;
+  };
 
   // create a file with relativePath and content relativePath is a path relative
   // to root dir instead of dataDir dataDir is not aware at this layer
@@ -561,35 +637,8 @@ export class BotProject {
   private _reformProjectStructure = async () => {
     let isOldBotStructure = false;
 
-    // Define the project structure
-    const BotStructureTemplate = {
-      folder: '/',
-      entry: '${BOTNAME}.dialog',
-      schema: '${FILENAME}',
-      settings: 'settings/${FILENAME}',
-      common: {
-        lg: 'language-generation/${LOCALE}/common.${LOCALE}.lg',
-      },
-      dialogs: {
-        folder: 'dialogs/${DIALOGNAME}',
-        entry: '${DIALOGNAME}.dialog',
-        lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
-        lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
-      },
-    };
-
-    // const camelToDash = (str: string) => {
-    //   return str
-    //     .split(/(?=[A-Z])/)
-    //     .join('-')
-    //     .toLowerCase();
-    // };
-
-    const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
-      str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
-
     const BOTNAME = this.name.toLowerCase();
-    const LOCALE = 'en-us';
+    const LOCALE = this.locale;
 
     const TemplateVariables = {
       BOTNAME,
@@ -699,7 +748,7 @@ export class BotProject {
      *   - language-generation
      *      /en-us/addtodo.en-us.lg  // if not exist, auto create it
      */
-    const locale = 'en-us';
+    const locale = this.locale;
     for (const dialog of dialogs) {
       const dialogId = Path.basename(dialog.id);
       const dialogDir = Path.dirname(dialog.relativePath);
@@ -762,7 +811,8 @@ export class BotProject {
     const dialogs: DialogInfo[] = this.dialogs;
     const lgFiles: LgFile[] = this.lgFiles;
     const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
-    const commonLgFile = lgFiles.find(({ id }) => id === 'common');
+    const commonLgFileId = `common.${this.locale}`;
+    const commonLgFile = lgFiles.find(({ id }) => id === commonLgFileId);
     if (!commonLgFile) return;
     const lineContentArray = commonLgFile.content.split('\n');
     for (const dialog of dialogs) {
@@ -781,14 +831,15 @@ export class BotProject {
           dialogTemplateTexts.push(templateText);
         }
       }
+      const targetLgFileId = `${dialog.id}.${this.locale}`;
       const updatedContent =
-        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') +
+        (lgFiles.find(({ id }) => id === targetLgFileId)?.content || '') +
         this._buildRNNewlineText(dialogTemplateTexts) +
         NEWLINE;
-      await this.updateLgFile(dialog.id, updatedContent);
+      await this.updateLgFile(targetLgFileId, updatedContent);
     }
     const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
-    await this.updateLgFile('common', updatedCommonContent);
+    await this.updateLgFile(commonLgFileId, updatedCommonContent);
   };
 
   /**
