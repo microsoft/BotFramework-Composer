@@ -10,11 +10,13 @@ import { JSONSchema6 } from 'json-schema';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 
 import { TextWidget, SelectWidget } from '../../widgets';
+import { LuEditorWidget } from '../../widgets/LuEditorWidget';
 
 import { field } from './styles';
 import { GetSchema, PromptFieldChangeHandler } from './types';
 import { ChoiceInputSettings } from './ChoiceInput';
 import { ConfirmInputSettings } from './ConfirmInput';
+import { DialogInfo } from '@bfc/indexers/lib/type';
 
 const getOptions = (enumSchema: JSONSchema6) => {
   if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
@@ -24,16 +26,28 @@ const getOptions = (enumSchema: JSONSchema6) => {
   return enumSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
+const usesLuisRecognizer = ({ content }: DialogInfo) => {
+  return typeof content?.recognizer === 'string';
+};
+
 interface UserInputProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
 export const UserInput: React.FC<UserInputProps> = props => {
-  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { formContext, onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { const: type } = getSchema('$type');
+  const [, promptType] = (type as string).split('.');
+  const intentName = `${promptType}.response-${formData?.$designer?.id}`;
 
   return (
     <Fragment>
+      {usesLuisRecognizer(formContext.currentDialog) && (
+        <div css={field}>
+          <LuEditorWidget name={intentName} formContext={formContext} />
+        </div>
+      )}
       <div css={field}>
         <TextWidget
           onChange={onChange('property')}
