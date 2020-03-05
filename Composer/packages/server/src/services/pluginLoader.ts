@@ -62,7 +62,7 @@ export class ComposerPluginRegistration {
   public addWebRoute(
     type: string,
     url: string,
-    callback_or_middleware: (req: any, res: any, next?: any) => void,
+    callbackOrMiddleware: (req: any, res: any, next?: any) => void,
     callback?: (req: any, res: any) => void
   ) {
     if (!this.loader.webserver) {
@@ -71,16 +71,16 @@ export class ComposerPluginRegistration {
       if (callback) {
         switch (type.toLowerCase()) {
           case 'get':
-            this.loader.webserver.get(url, callback_or_middleware, callback);
+            this.loader.webserver.get(url, callbackOrMiddleware, callback);
             break;
           case 'put':
-            this.loader.webserver.put(url, callback_or_middleware, callback);
+            this.loader.webserver.put(url, callbackOrMiddleware, callback);
             break;
           case 'post':
-            this.loader.webserver.post(url, callback_or_middleware, callback);
+            this.loader.webserver.post(url, callbackOrMiddleware, callback);
             break;
           case 'delete':
-            this.loader.webserver.delete(url, callback_or_middleware, callback);
+            this.loader.webserver.delete(url, callbackOrMiddleware, callback);
             break;
           default:
             throw new Error(`Unhandled web route type ${type}`);
@@ -88,16 +88,16 @@ export class ComposerPluginRegistration {
       } else {
         switch (type.toLowerCase()) {
           case 'get':
-            this.loader.webserver.get(url, callback_or_middleware);
+            this.loader.webserver.get(url, callbackOrMiddleware);
             break;
           case 'put':
-            this.loader.webserver.put(url, callback_or_middleware);
+            this.loader.webserver.put(url, callbackOrMiddleware);
             break;
           case 'post':
-            this.loader.webserver.post(url, callback_or_middleware);
+            this.loader.webserver.post(url, callbackOrMiddleware);
             break;
           case 'delete':
-            this.loader.webserver.delete(url, callback_or_middleware);
+            this.loader.webserver.delete(url, callbackOrMiddleware);
             break;
           default:
             throw new Error(`Unhandled web route type ${type}`);

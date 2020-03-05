@@ -47,7 +47,9 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
 };
 
 export const fetchProject: ActionCreator = async store => {
-  throw new Error('DEPRECATED');
+  const state = store.getState();
+  const projectId = state.projectId;
+  return fetchProjectById(store, projectId);
 };
 
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
