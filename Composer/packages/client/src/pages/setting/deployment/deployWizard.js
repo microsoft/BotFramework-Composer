@@ -57,9 +57,9 @@ export const DeployWizard = props => {
       children: <DeployWizardStep2 botValues={botValues} nextStep={completeStep2} closeModal={resetModal} />,
     },
     {
-      title: formatMessage('Deploy your Bot'),
+      title: formatMessage('Publish your Bot'),
       subText:
-        'Deploy your bot code and Composer assets to Azure using the command below. Run this any time you want to update your bot on Azure.',
+        'Publish your bot code and Composer assets to Azure using the command below. Run this any time you want to update your bot on Azure.',
       children: <DeployWizardStep3 botValues={botValues} closeModal={resetModal} />,
     },
   ];
