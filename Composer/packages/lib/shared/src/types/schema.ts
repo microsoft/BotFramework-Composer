@@ -49,7 +49,6 @@ export enum SDKTypes {
   HashtagEntityRecognizer = 'Microsoft.HashtagEntityRecognizer',
   HttpRequest = 'Microsoft.HttpRequest',
   IfCondition = 'Microsoft.IfCondition',
-  InitProperty = 'Microsoft.InitProperty',
   IpEntityRecognizer = 'Microsoft.IpEntityRecognizer',
   LogAction = 'Microsoft.LogAction',
   LuisRecognizer = 'Microsoft.LuisRecognizer',

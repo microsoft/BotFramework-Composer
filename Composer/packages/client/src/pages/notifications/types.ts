@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { Diagnostic, createSingleMessage, DialogInfo, LuFile, isDiagnosticWithInRange } from '@bfc/indexers';
+import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
+import { Diagnostic, DialogInfo, LuFile } from '@bfc/shared';
 
 import { replaceDialogDiagnosticLabel } from '../../utils';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'

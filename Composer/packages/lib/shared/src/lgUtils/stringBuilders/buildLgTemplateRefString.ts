@@ -11,5 +11,5 @@ import buildLgParamString from './buildLgParamString';
  */
 export default function buildLgTemplateRefString(lgTemplateRef: LgTemplateRef): LgTemplateRefString {
   const { name, parameters } = lgTemplateRef;
-  return `@{${name}${buildLgParamString(parameters)}}`;
+  return `\${${name}${buildLgParamString(parameters)}}`;
 }

@@ -221,7 +221,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             <LuEditor
               onChange={onTriggerPhrasesChange}
               value={formData.triggerPhrases}
-              errorMsg={formData.errors.triggerPhrases}
+              errorMessage={formData.errors.triggerPhrases}
               hidePlaceholder={true}
               luOption={{
                 fileId: dialogId,
