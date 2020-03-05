@@ -236,7 +236,7 @@ export class BotProject {
       }
 
       mainDialog.content.$designer = newDesigner;
-      await this.updateDialog('Main', mainDialog.content);
+      await this.updateDialog(mainDialog.id, mainDialog.content);
     }
   };
 
@@ -862,23 +862,28 @@ export class BotProject {
    * + "dialog": 'addtodos'
    */
   private _autofixReferInDialog = (locale: string, dialogId: string, content: string) => {
-    const dialogJson = JSON.parse(content);
+    try {
+      const dialogJson = JSON.parse(content);
 
-    // fix dialog referrence
-    const visitor: VisitorFunc = (_path: string, value: any) => {
-      if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
-        const dialogName = value.dialog;
-        value.dialog = dialogName.toLowerCase();
-      }
-      return false;
-    };
+      // fix dialog referrence
+      const visitor: VisitorFunc = (_path: string, value: any) => {
+        if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+          const dialogName = value.dialog;
+          value.dialog = dialogName.toLowerCase();
+        }
+        return false;
+      };
 
-    JsonWalk('/', dialogJson, visitor);
+      JsonWalk('/', dialogJson, visitor);
 
-    // fix lg referrence
-    dialogJson.generator = `${dialogId}.${locale}.lg`;
+      // fix lg referrence
+      dialogJson.generator = `${dialogId}.${locale}.lg`;
 
-    return JSON.stringify(dialogJson, null, 2);
+      return JSON.stringify(dialogJson, null, 2);
+    } catch (_error) {
+      // pass, content may be empty
+      return content;
+    }
   };
 
   private isLuFileEmpty = (file: LuFile) => {
