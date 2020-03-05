@@ -879,6 +879,11 @@ export class BotProject {
       // fix lg referrence
       dialogJson.generator = `${dialogId}.${locale}.lg`;
 
+      // fix lu referrence
+      if (dialogJson.recognizer) {
+        dialogJson.recognizer = `${dialogId}.${locale}.lu`;
+      }
+
       return JSON.stringify(dialogJson, null, 2);
     } catch (_error) {
       // pass, content may be empty
