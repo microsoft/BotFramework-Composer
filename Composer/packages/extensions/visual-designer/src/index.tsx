@@ -15,7 +15,7 @@ import { SelfHostContext } from './store/SelfHostContext';
 import { UISchemaContext } from './store/UISchemaContext';
 import { UISchemaProvider } from './schema/uischemaProvider';
 import { uiSchema } from './schema/uischema';
-import { queryLgTemplateFromFiles } from './utils/useLgTemplate';
+import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
