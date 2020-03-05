@@ -3,7 +3,7 @@
   "license": "MIT",
   "private": true,
   "resolutions": {
-    "@types/react": "16.9.16"
+    "@types/react": "16.9.23"
   },
   "engines": {
     "node": ">=12"

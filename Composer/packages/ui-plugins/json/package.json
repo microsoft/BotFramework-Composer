@@ -27,22 +27,22 @@
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
   },
   "devDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
     "@bfc/shared": "*",
-    "@types/react": "^16.9.16",
-    "@types/react-dom": "^16.9.5",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
     "@types/vscode": "^1.40.0",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
     "office-ui-fabric-react": "^7.71.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
   },
   "dependencies": {
     "@bfc/code-editor": "*",
