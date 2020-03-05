@@ -720,7 +720,6 @@ export class BotProject {
     for (const file of files) {
       const { targetRelativePath, realFilePath, content, dirPath } = file;
       const absolutePath = Path.join(targetBotPath, targetRelativePath);
-      console.log('move file from: \n', realFilePath, '\n to: \n', absolutePath);
       await this.fileStorage.removeFile(realFilePath);
 
       try {
