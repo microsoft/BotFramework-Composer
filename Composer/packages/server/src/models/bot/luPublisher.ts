@@ -84,6 +84,29 @@ export class LuPublisher {
   };
 
   //generate the cross-train config
+  /* the config is like
+  {
+      rootIds: [
+        'main.lu',
+        'main.fr-fr.lu'
+      ],
+      triggerRules: {
+        'main.lu': {
+          'dia1.lu': 'dia1_trigger',
+          'dia2.lu': 'dia2_trigger'
+        },
+        'dia2.lu': {
+          'dia3.lu': 'dia3_trigger',
+          'dia4.lu': 'dia4_trigger'
+        },
+        'main.fr-fr.lu': {
+          'dia1.fr-fr.lu': 'dia1_trigger'
+        }
+      },
+      intentName: '_Interruption',
+      verbose: true
+    }
+  */
   public createCrossTrainConfig = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
     const triggerRules = {};
     const countMap = {};
@@ -97,6 +120,7 @@ export class LuPublisher {
       const { intentTriggers } = dialog;
       const fileId = this._createConfigId(dialog.id);
       if (intentTriggers.length) {
+        //find the trigger's dialog that use a recognizer
         intentTriggers.forEach(item => {
           const used = item.dialogs.filter(dialog => {
             if (typeof countMap[dialog] === 'number') {
