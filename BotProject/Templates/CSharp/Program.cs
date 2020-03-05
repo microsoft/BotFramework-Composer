@@ -34,12 +34,12 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 if (env.IsDevelopment())
                 {
                     // Local Debug
-                    builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+                    builder.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
                 }
                 else
                 {
                     //Azure Deploy
-                    builder.AddJsonFile("appsettings.Deployment.json", optional: true, reloadOnChange: true);
+                    builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 }
 
                 if (!env.IsDevelopment())

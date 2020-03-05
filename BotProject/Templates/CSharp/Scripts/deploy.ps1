@@ -74,7 +74,7 @@ else {
 }
 
 # Try to get luis config from appsettings
-$settings = Get-Content $(Join-Path $projFolder appsettings.Deployment.json) | ConvertFrom-Json
+$settings = Get-Content $(Join-Path $projFolder appsettings.deployment.json) | ConvertFrom-Json
 $luisSettings = $settings.luis
 
 if (-not $luisAuthoringKey) {
@@ -138,8 +138,8 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	Set-Location -Path $projFolder
 
 	# change setting file in publish folder
-	if (Test-Path $(Join-Path $publishFolder appsettings.Deployment.json)) {
-		$settings = Get-Content $(Join-Path $publishFolder appsettings.Deployment.json) | ConvertFrom-Json
+	if (Test-Path $(Join-Path $publishFolder appsettings.deployment.json)) {
+		$settings = Get-Content $(Join-Path $publishFolder appsettings.deployment.json) | ConvertFrom-Json
 	}
 	else {
 		$settings = New-Object PSObject
@@ -166,7 +166,7 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 
 	$settings | Add-Member -Type NoteProperty -Force -Name 'luis' -Value $luisConfig
 
-	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.Deployment.json)
+	$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.deployment.json)
 
 	$tokenResponse = (az account get-access-token) | ConvertFrom-Json
 	$token = $tokenResponse.accessToken
