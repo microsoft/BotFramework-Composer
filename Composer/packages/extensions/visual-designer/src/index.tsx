@@ -10,11 +10,12 @@ import formatMessage from 'format-message';
 import { ShellData, ShellApi } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
-import { NodeRendererContext } from './store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { UISchemaContext } from './store/UISchemaContext';
 import { UISchemaProvider } from './schema/uischemaProvider';
 import { uiSchema } from './schema/uischema';
+import { queryLgTemplateFromFiles } from './utils/useLgTemplate';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -36,6 +37,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   data: inputData,
   shellApi,
   hosted,
+  lgFiles,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -68,12 +70,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  const nodeContext = {
+  const nodeContext: NodeRendererContextValue = {
     focusedId,
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
+    getLgBodySync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,

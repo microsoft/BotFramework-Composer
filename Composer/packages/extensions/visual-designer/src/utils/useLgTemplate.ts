@@ -1,55 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { LgTemplateRef } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
-export const useLgTemplate = (str?: string, dialogId?: string) => {
-  const { getLgTemplates } = useContext(NodeRendererContext);
-  const [templateText, setTemplateText] = useState('');
-  let cancelled = false;
+export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): string | undefined => {
+  if (!Array.isArray(lgFiles)) return;
 
-  const updateTemplateText = async () => {
-    const lgTemplateRef = LgTemplateRef.parse(str || '');
-    const templateId = lgTemplateRef ? lgTemplateRef.name : '';
-
-    if (templateId && dialogId) {
-      // this is an LG template, go get it's content
-      if (!getLgTemplates || typeof getLgTemplates !== 'function') {
-        setTemplateText(str || '');
-        return;
-      }
-
-      const templates = getLgTemplates ? await getLgTemplates('common') : [];
-      const [template] = templates.filter(({ name }) => {
-        return name === templateId;
-      });
-
-      if (cancelled) {
-        return;
-      }
-
-      if (template && template.body) {
-        const [firstLine] = template.body.split('\n');
-        setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
-      } else {
-        setTemplateText('');
-      }
-    } else if (!templateId) {
-      // fallback to str passed in
-      setTemplateText(str || '');
+  const allTemplates: any[] = [];
+  for (const file of lgFiles) {
+    const templates = get(file, 'templates');
+    if (Array.isArray(templates)) {
+      allTemplates.push(...templates);
     }
-  };
+  }
 
-  useEffect(() => {
-    updateTemplateText();
+  const result = allTemplates.find(x => get(x, 'name') === lgTemplateName);
+  return result ? get(result, 'body') : undefined;
+};
 
-    return () => {
-      cancelled = true;
-    };
-  });
+const normalizeLgBody = (body: string): string => {
+  if (!body) return '';
+  const [firstLine] = body.split('\n');
+  return firstLine.startsWith('-') ? firstLine.substring(1) : firstLine;
+};
 
-  return templateText;
+export const useLgTemplate = (str?: string) => {
+  const { getLgBodySync } = useContext(NodeRendererContext);
+
+  const lgTemplateRef = LgTemplateRef.parse(str || '');
+  const templateId = lgTemplateRef ? lgTemplateRef.name : '';
+
+  // fallback to input string
+  if (!templateId) return str;
+
+  const lgBody = getLgBodySync(templateId) || '';
+  return normalizeLgBody(lgBody);
 };

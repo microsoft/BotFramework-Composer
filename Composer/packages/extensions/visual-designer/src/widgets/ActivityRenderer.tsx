@@ -14,10 +14,9 @@ export interface ActivityRenderer extends WidgetContainerProps {
 }
 
 export const ActivityRenderer: React.FC<ActivityRenderer> = ({ data, field, defaultContent }) => {
-  const designerId = get(data, '$designer.id');
   const activityTemplate = get(data, field, '');
 
-  const templateText = useLgTemplate(activityTemplate, designerId);
+  const templateText = useLgTemplate(activityTemplate);
   const displayedText = templateText || defaultContent;
   return <>{displayedText}</>;
 };

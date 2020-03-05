@@ -11,11 +11,12 @@ type ShellApiFuncs =
   | 'removeLgTemplates'
   | 'updateLgTemplate';
 
-interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
+export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
   focusedId?: string;
   focusedEvent?: string;
   focusedTab?: string;
   clipboardActions: any[];
+  getLgBodySync: (lgTemplateName: string) => string | undefined;
 }
 
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
@@ -23,6 +24,7 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   focusedEvent: '',
   focusedTab: '',
   clipboardActions: [],
+  getLgBodySync: () => '',
   getLgTemplates: () => Promise.resolve([]),
   copyLgTemplate: () => Promise.resolve(''),
   removeLgTemplate: () => Promise.resolve(),
