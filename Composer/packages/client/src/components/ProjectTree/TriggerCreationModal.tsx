@@ -228,7 +228,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           )}
           {showIntentName && (
             <TextField
-              label={formatMessage('What is the name of this trigger')}
+              label={
+                isRegEx
+                  ? formatMessage('What is the name of this trigger (RegexEx)')
+                  : formatMessage('What is the name of this trigger (Luis)')
+              }
               styles={intent}
               onChange={onNameChange}
               errorMessage={formData.errors.intent}
@@ -244,7 +248,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'RegExDropDown'}
             />
           )}
-          {showTriggerPhrase && <Label>{formatMessage('Trigger Phrases')}</Label>}
+          {showTriggerPhrase && <Label>{formatMessage('Trigger phrases')}</Label>}
           {showTriggerPhrase && (
             <LuEditor
               onChange={onTriggerPhrasesChange}
