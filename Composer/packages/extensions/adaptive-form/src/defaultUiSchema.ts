@@ -20,7 +20,7 @@ const DefaultUISchema: UISchema = {
         label: () => formatMessage('Language Understanding'),
         description: () =>
           formatMessage(
-            'To understand what the user says, your dialog needs a &lsquo;Recognizer&rsquo; that includes example words and sentences that users may use.'
+            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
           ),
       },
     },
@@ -29,12 +29,24 @@ const DefaultUISchema: UISchema = {
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
   [SDKTypes.CancelAllDialogs]: { order: ['dialog', 'property', '*'] },
-  [SDKTypes.DebugBreak]: { label: 'Debug Breack' },
-  [SDKTypes.DeleteProperties]: { label: 'Delete Properties', helpLink: 'https://aka.ms/bfc-using-memory' },
-  [SDKTypes.DeleteProperty]: { label: 'Delete a Property', helpLink: 'https://aka.ms/bfc-using-memory' },
-  [SDKTypes.EditActions]: { label: 'Modify active dialog' },
-  [SDKTypes.EditArray]: { label: 'Edit an Array Property', helpLink: 'https://aka.ms/bfc-using-memory' },
-  [SDKTypes.EmitEvent]: { label: 'Emit a custom event', helpLink: 'https://aka.ms/bfc-custom-events' },
+  [SDKTypes.DebugBreak]: { label: () => formatMessage('Debug Break') },
+  [SDKTypes.DeleteProperties]: {
+    label: () => formatMessage('Delete Properties'),
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.DeleteProperty]: {
+    label: () => formatMessage('Delete a Property'),
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.EditActions]: { label: () => formatMessage('Modify active dialog') },
+  [SDKTypes.EditArray]: {
+    label: () => formatMessage('Edit an Array Property'),
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.EmitEvent]: {
+    label: () => formatMessage('Emit a custom event'),
+    helpLink: 'https://aka.ms/bfc-custom-events',
+  },
   [SDKTypes.Foreach]: { order: ['itemsProperty', '*'], hidden: ['actions'] },
   [SDKTypes.ForeachPage]: { order: ['itemsProperty', 'pageSize', '*'], hidden: ['actions'] },
   [SDKTypes.HttpRequest]: { order: ['method', 'url', 'body', 'headers', '*'] },
@@ -70,8 +82,11 @@ const DefaultUISchema: UISchema = {
     order: ['dialog', 'options', 'includeActivity', '*'],
   },
   [SDKTypes.SendActivity]: { order: ['activity', '*'] },
-  [SDKTypes.SetProperties]: { label: 'Set Properties', helpLink: 'https://aka.ms/bfc-using-memory' },
-  [SDKTypes.SetProperty]: { label: 'Set a Property', helpLink: 'https://aka.ms/bfc-using-memory' },
+  [SDKTypes.SetProperties]: {
+    label: () => formatMessage('Set Properties'),
+    helpLink: 'https://aka.ms/bfc-using-memory',
+  },
+  [SDKTypes.SetProperty]: { label: () => formatMessage('Set a Property'), helpLink: 'https://aka.ms/bfc-using-memory' },
   [SDKTypes.SwitchCondition]: {
     hidden: ['default'],
     properties: { cases: { hidden: ['actions'] } },
