@@ -14,6 +14,7 @@ describe('luis status management', () => {
   it('will get luis status', async () => {
     const luPublisher = new LuPublisher(botDir, storage);
     const status = await luPublisher.loadStatus(['bot1/a.lu', 'bot1/b.lu', 'bot1/Main.lu']);
+
     expect(status['bot1/a.lu'].lastUpdateTime).toBe(1);
     expect(status['bot1/a.lu'].lastPublishTime).toBe(0);
   });
@@ -38,11 +39,13 @@ describe('get unpublishedFiles', () => {
         diagnostics: [],
         id: 'a',
         relativePath: 'bot1/a.lu',
+        lastModified: 'January 1 2020',
         content: '',
         intents: [],
       },
       {
         diagnostics: [],
+        lastModified: 'January 1 2020',
         id: 'b',
         relativePath: 'bot1/b.lu',
         content: '',
