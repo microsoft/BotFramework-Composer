@@ -138,6 +138,15 @@ function DesignPage(props) {
   const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    if (!currentDialog) {
+      const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+      rootDialog && navTo(rootDialog.id);
+      return;
+    }
+  }, [dialogId, dialogs]);
+
+  useEffect(() => {
     if (match) {
       const { dialogId } = match;
       const params = new URLSearchParams(location.search);
