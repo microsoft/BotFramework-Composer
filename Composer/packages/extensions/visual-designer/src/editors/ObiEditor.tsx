@@ -147,7 +147,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.CutSelection:
-        trackActionChange(eventData.actionIds);
+        trackActionListChange(eventData.actionIds);
         handler = e => {
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           onChange(dialog);
