@@ -28,6 +28,7 @@ export const root = css`
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
