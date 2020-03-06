@@ -19,7 +19,7 @@ const declareElementAttributes = (id: string) => {
     [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
   };
 };
-export const NodeMenu = ({ id, onEvent }): JSX.Element => {
+export const NodeMenu = ({ id, onEvent }) => {
   const menuItems = [
     {
       key: 'delete',
@@ -35,6 +35,7 @@ export const NodeMenu = ({ id, onEvent }): JSX.Element => {
 
   return (
     <div
+      data-name="nodeMenu"
       css={{
         marginRight: '1px',
       }}

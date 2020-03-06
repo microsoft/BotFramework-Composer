@@ -44,7 +44,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates, removeLuIntent } = useContext(
     NodeRendererContext
   );
 
@@ -57,6 +57,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       .filter(x => !!x);
     const lgFileId = path;
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
+  };
+
+  const deleteLuIntents = (luIntents: string[]) => {
+    return Promise.all(luIntents.map(intent => removeLuIntent(path, intent)));
   };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -80,7 +84,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         handler = e => {
-          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
+          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
           onFocusSteps([]);
         };
         break;
@@ -138,7 +142,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
-          const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
+          const dialog = deleteNodes(data, e.actionIds, nodes =>
+            deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+          );
           onChange(dialog);
           onFocusSteps([]);
         };
