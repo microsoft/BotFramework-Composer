@@ -27,6 +27,7 @@ import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
+import { navigateTo } from '../../utils';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -139,12 +140,13 @@ function DesignPage(props) {
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
-    if (!currentDialog) {
-      const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
-      rootDialog && navTo(rootDialog.id);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    if (!currentDialog && rootDialog) {
+      const { search } = location;
+      navigateTo(`/dialogs/${rootDialog.id}${search}`);
       return;
     }
-  }, [dialogId, dialogs]);
+  }, [dialogId, dialogs, location]);
 
   useEffect(() => {
     if (match) {

@@ -27,7 +27,9 @@ const Onboarding: React.FC = () => {
     },
   } = useContext(StoreContext);
 
-  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets());
+  const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
+
+  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets(rootDialogId));
   const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [hideModal, setHideModal] = useState(true);
@@ -67,7 +69,7 @@ const Onboarding: React.FC = () => {
   }, [currentSet, currentStep, setTeachingBubble]);
 
   useEffect(() => {
-    const sets = defaultStepSets()
+    const sets = defaultStepSets(rootDialogId)
       .map(stepSet => ({
         ...stepSet,
         steps: stepSet.steps.filter(({ targetId }) => {
@@ -82,14 +84,14 @@ const Onboarding: React.FC = () => {
       .filter(({ steps }) => steps.length);
 
     setStepSets(sets);
-  }, [dialogs]);
+  }, [dialogs, rootDialogId]);
 
   useEffect(() => {
-    setHideModal(pathname !== '/dialogs/Main');
+    setHideModal(pathname.startsWith(`/dialogs/${rootDialogId}`) === false);
     if (currentSet === 0) {
       setCurrentStep(pathname === '/home' ? 0 : -1);
     }
-  }, [pathname]);
+  }, [pathname, rootDialogId]);
 
   const nextSet = useCallback(() => {
     setCurrentSet(current => {

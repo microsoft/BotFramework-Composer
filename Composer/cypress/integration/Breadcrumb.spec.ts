@@ -31,7 +31,7 @@ context('breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
     });
-    hasBreadcrumbItems(cy, ['addtodo']);
+    hasBreadcrumbItems(cy, ['Addtodo']);
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
@@ -47,7 +47,7 @@ context('breadcrumb', () => {
       cy.findByText('Dialog started').click();
     });
 
-    hasBreadcrumbItems(cy, ['addtodo', 'Dialog started']);
+    hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
   });
 
   it('can show action name in breadcrumb', () => {
