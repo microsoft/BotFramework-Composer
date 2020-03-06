@@ -626,7 +626,6 @@ export class BotProject {
         if ((await this.fileStorage.stat(realFilePath)).isFile) {
           let content: string = await this.fileStorage.readFile(realFilePath);
           const name = Path.basename(filePath);
-          const dirPath = Path.dirname(realFilePath);
 
           // mark as old bot structure, then will continue do move.
           if (name === 'Main.dialog') {
@@ -638,13 +637,24 @@ export class BotProject {
           let targetRelativePath;
           let pathEndPoint = '';
           const fileType = Path.extname(filePath);
+          let dialogName = fileId === 'main' ? BOTNAME : fileId;
+
+          // nested dialogs
+          // e.g foo/bar/bar.dialog
+          // - > foo/dialogs/bar.dialog
+          // TODO: need optimize.
+          const filePathDirs = filePath.replace('ComposerDialogs/', '').split('/');
+          if (filePathDirs.length > 2) {
+            dialogName = filePathDirs[filePathDirs.length - 2].toLowerCase();
+            const parrentDialogName = filePathDirs[filePathDirs.length - 3].toLowerCase();
+            pathEndPoint = Path.join(pathEndPoint, 'dialogs', parrentDialogName);
+          }
 
           // wrap path dialogs/[dialogId]
           if (fileId !== 'main' && fileId !== 'common') {
             pathEndPoint = Path.join(pathEndPoint, BotStructureTemplate.dialogs.folder);
           }
           // rename Main.* to botname.*
-          const dialogName = fileId === 'main' ? BOTNAME : fileId;
           TemplateVariables.DIALOGNAME = dialogName;
 
           if (fileType === '.dialog') {
@@ -674,7 +684,7 @@ export class BotProject {
             targetRelativePath = templateInterpolate(BotStructureTemplate.settings, { FILENAME: name });
           }
 
-          files.push({ targetRelativePath, realFilePath, dirPath, content });
+          files.push({ targetRelativePath, realFilePath, content });
         }
       }
     }
@@ -686,11 +696,12 @@ export class BotProject {
     // move files from /coolbot/ComposerDialogs/* to /coolbot/*
     const targetBotPath = this.dataDir;
     for (const file of files) {
-      const { targetRelativePath, realFilePath, content, dirPath } = file;
+      const { targetRelativePath, realFilePath, content } = file;
       const absolutePath = Path.join(targetBotPath, targetRelativePath);
       await this.fileStorage.removeFile(realFilePath);
 
       try {
+        const dirPath = Path.dirname(realFilePath);
         await this.fileStorage.rmDir(dirPath);
       } catch (_error) {
         // pass , dir may not empty
@@ -715,19 +726,19 @@ export class BotProject {
      *   - language-generation
      *      /en-us/addtodo.en-us.lg  // if not exist, auto create it
      */
-    const locale = this.locale;
-    for (const dialog of dialogs) {
-      const dialogId = Path.basename(dialog.id);
-      const dialogDir = Path.dirname(dialog.relativePath);
-      const targetLuFilePath = Path.join(dialogDir, `language-understanding/${locale}/${dialogId}.${locale}.lu`);
-      if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
-        await this._createFile(targetLuFilePath, '');
-      }
-      const targetLgFilePath = Path.join(dialogDir, `language-generation/${locale}/${dialogId}.${locale}.lg`);
-      if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
-        await this._createFile(targetLgFilePath, '');
-      }
-    }
+    // const locale = this.locale;
+    // for (const dialog of dialogs) {
+    //   const dialogId = Path.basename(dialog.id);
+    //   const dialogDir = Path.dirname(dialog.relativePath);
+    //   const targetLuFilePath = Path.join(dialogDir, `language-understanding/${locale}/${dialogId}.${locale}.lu`);
+    //   if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
+    //     await this._createFile(targetLuFilePath, '');
+    //   }
+    //   const targetLgFilePath = Path.join(dialogDir, `language-generation/${locale}/${dialogId}.${locale}.lg`);
+    //   if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
+    //     await this._createFile(targetLgFilePath, '');
+    //   }
+    // }
 
     // ensure dialog referred *.lg, *.lu exist, e.g
     /**

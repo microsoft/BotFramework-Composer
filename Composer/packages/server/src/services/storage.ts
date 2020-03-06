@@ -101,9 +101,14 @@ class StorageService {
   };
 
   private isBotFolder = async (storage: IFileStorage, path: string) => {
-    // locate *.dialog
+    // locate new structure bot:
     const dialogFiles = await storage.glob('*.dialog', path);
-    return dialogFiles.length > 0;
+    const isNewBot = dialogFiles.length > 0;
+
+    // locate old structire bot: Main.dialog
+    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
+    const isOldBot = fs.existsSync(mainPath);
+    return isNewBot || isOldBot;
   };
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
