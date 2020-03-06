@@ -26,7 +26,7 @@
       "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
-          "dialog": "TellJokeDialog"
+          "dialog": "replacedialog.telljokedialog"
         }
       ],
       "intent": "JokeIntent"
@@ -39,7 +39,7 @@
       "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
-          "dialog": "FortuneTellerDialog"
+          "dialog": "replacedialog.fortunetellerdialog"
         }
       ],
       "intent": "FortuneTellerIntent"
@@ -81,5 +81,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "replace.en-us.lg"
+  "generator": "replacedialog.en-us.lg"
 }

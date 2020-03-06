@@ -4,7 +4,8 @@
     "id": "126960"
   },
   "autoEndDialog": true,
-  "defaultResultProperty": "dialog.result",
+  "generator": "actions.en-us.lg",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
       "$type": "Microsoft.OnBeginDialog",
@@ -82,7 +83,5 @@
         }
       ]
     }
-  ],
-  "generator": "actions.en-us.lg",
-  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
+  ]
 }

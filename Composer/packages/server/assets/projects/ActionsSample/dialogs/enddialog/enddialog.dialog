@@ -1,12 +1,16 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "id": "323744"
+    "id": "727878"
   },
-  "autoEndDialog": true,
+  "autoEndDialog": false,
   "recognizer": {
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
+      {
+        "intent": "JokeIntent",
+        "pattern": "(?i)joke"
+      },
       {
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
@@ -15,42 +19,67 @@
   },
   "triggers": [
     {
-      "$type": "Microsoft.OnIntent",
-      "$designer": {
-        "id": "241317"
-      },
+      "$type": "Microsoft.OnCustomEvent",
+      "event": "cancelDialog",
       "actions": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
+          "$type": "Microsoft.SendActivity",
+          "activity": "ok."
+        },
+        {
+          "$type": "Microsoft.EndDialog"
         }
-      ],
-      "intent": "CancelIntent"
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "intent": "JokeIntent",
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "dialog": "enddialog.telljoke"
+        }
+      ]
     },
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "120822"
+        "id": "917307"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$type": "Microsoft.IfCondition",
           "$designer": {
-            "id": "150220"
+            "id": "964165"
           },
-          "activity": "${bfdactivity-150220()}"
+          "condition": "user.name == null",
+          "actions": [
+            {
+              "$type": "Microsoft.TextInput",
+              "$designer": {
+                "id": "543141"
+              },
+              "property": "user.name",
+              "prompt": "Hello, I'm Zoidberg. What is your name?",
+              "maxTurnCount": 3,
+              "alwaysPrompt": false,
+              "allowInterruptions": "true"
+            }
+          ]
         },
         {
-          "$type": "Microsoft.EndTurn",
+          "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "889445"
-          }
+            "id": "604381"
+          },
+          "activity": "${bfdactivity-604381()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "451180"
+            "id": "338063"
           },
-          "activity": "${bfdactivity-451180()}"
+          "activity": "${bfdactivity-338063()}"
         }
       ]
     }
