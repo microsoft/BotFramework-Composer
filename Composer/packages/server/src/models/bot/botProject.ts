@@ -317,7 +317,7 @@ export class BotProject {
     const commonLgFileName = `common.${this.locale}.lg`;
     const lgCommonFile = this.files.find(({ name }) => name === commonLgFileName);
     if (lgCommonFile) {
-      lgInitialContent = `[import](${commonLgFileName})`;
+      lgInitialContent = `[import](common.lg)`;
     }
     const relativePath = Path.join(dir, `${id.trim()}.lg`);
     await this._createFile(relativePath, [lgInitialContent, content].join('\n'));

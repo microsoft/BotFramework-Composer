@@ -1,4 +1,4 @@
-[import](common.en-us.lg)
+[import](common.lg)
 
 # bfdactivity-164444()
 -Your age is ${user.age} which satisified the condition that was evaluated

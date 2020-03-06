@@ -1,4 +1,4 @@
-[import](common.en-us.lg)
+[import](common.lg)
 
 # bfdactivity-303304
 -Hello, your age is ${user.age}!
