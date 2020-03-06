@@ -28,7 +28,7 @@ import {
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  dialogId?: string;
   path: string;
 }
 
@@ -36,9 +36,9 @@ const LUPage: React.FC<LUPageProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId = '' } = props;
+  const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
-  const isRoot = fileId === 'all';
+  const isRoot = dialogId === 'all';
 
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -54,11 +54,11 @@ const LUPage: React.FC<LUPageProps> = props => {
   }, [dialogs]);
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && fileId !== 'all' && dialogs.length) {
+    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    if (!activeDialog && dialogId !== 'all' && dialogs.length) {
       navigateTo('/language-understanding/all');
     }
-  }, [fileId, dialogs]);
+  }, [dialogId, dialogs]);
 
   const onSelect = useCallback(
     id => {
@@ -70,11 +70,11 @@ const LUPage: React.FC<LUPageProps> = props => {
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-understanding/${fileId}`;
+      let url = `/language-understanding/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [dialogId]
   );
 
   const toolbarItems = [
@@ -115,13 +115,13 @@ const LUPage: React.FC<LUPageProps> = props => {
           >
             {'All'}
           </div>
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
+          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
         </div>
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
             <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
-              <TableView path="/" fileId={fileId} />
+              <CodeEditor path="/edit" dialogId={dialogId} />
+              <TableView path="/" dialogId={dialogId} />
             </Router>
           </Suspense>
         </div>

@@ -20,14 +20,14 @@ const { parse } = luIndexer;
 const lspServerPath = '/lu-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
   const { luFiles, locale } = state;
-  const { fileId } = props;
-  const file = luFiles.find(({ id }) => id === `${fileId}.${locale}`);
+  const { dialogId } = props;
+  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
   const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
@@ -149,7 +149,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const luOption = {
-    fileId,
+    fileId: file?.id,
     sectionId: intent?.Name,
   };
 

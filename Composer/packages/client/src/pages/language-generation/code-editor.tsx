@@ -20,15 +20,15 @@ const { check } = lgIndexer;
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
   const { lgFiles, locale } = state;
   const { lgImportresolver } = resolvers;
-  const { fileId } = props;
-  const file = lgFiles.find(({ id }) => id === `${fileId}.${locale}`);
+  const { dialogId } = props;
+  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
@@ -141,7 +141,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const lgOption = {
-    fileId,
+    fileId: file?.id,
     templateId: template?.name,
   };
 

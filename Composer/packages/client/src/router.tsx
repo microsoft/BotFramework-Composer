@@ -49,9 +49,9 @@ const Routes = props => {
                   <Redirect from="/" to={resolveToBasePath(BASEPATH, 'dialogs/Main')} noThrow />
                   <SettingPage path="setting/*" />
                   <Redirect from="language-understanding" to="language-understanding/all" noThrow />
-                  <LUPage path="language-understanding/:fileId/*" />
+                  <LUPage path="language-understanding/:dialogId/*" />
                   <Redirect from="language-generation" to="language-generation/common" noThrow />
-                  <LGPage path="language-generation/:fileId/*" />
+                  <LGPage path="language-generation/:dialogId/*" />
                   <Notifications path="notifications" />
                   <Home path="home" />
                   <About path="about" />
