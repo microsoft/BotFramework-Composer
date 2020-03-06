@@ -33,11 +33,15 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       }
 
       if (template && template.body) {
-        const templateText = template.body
-          .split('\n')
-          .map(line => (line.startsWith('-') ? line.substring(1) : line))
-          .join('\n');
-        setTemplateText(templateText);
+        const templateTexts = template.body.split('\n').map(line => (line.startsWith('-') ? line.substring(1) : line));
+        let showText = '';
+
+        if (templateTexts[0] && templateTexts[0] === '[activity') {
+          showText = templateTexts.find(text => text.includes('Text = '))?.split('Text = ')[1] || '';
+        } else {
+          showText = templateTexts.join('\n');
+        }
+        setTemplateText(showText);
       } else {
         setTemplateText('');
       }
