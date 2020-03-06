@@ -223,7 +223,7 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, c
 }
 
 export const getParentPaths = (actionPath: string): string[] => {
-  if (!actionPath) return [];
+  if (typeof actionPath !== 'string') return [];
   const selectors = actionPath.split('.');
   // exclude the path of current action
   selectors.pop();

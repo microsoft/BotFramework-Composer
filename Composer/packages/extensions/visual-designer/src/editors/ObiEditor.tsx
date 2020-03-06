@@ -62,12 +62,17 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
-  const trackLayoutChange = (actionPath: string) => {
+  const trackActionChange = (actionPath: string) => {
     const affectedPaths = getParentPaths(actionPath);
     for (const path of affectedPaths) {
       const json = get(data, path);
       designerCache.uncacheBoundary(json);
     }
+  };
+
+  const trackActionListChange = (actionPaths: string[]) => {
+    if (!Array.isArray(actionPaths)) return;
+    actionPaths.forEach(x => trackActionChange(x));
   };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -90,14 +95,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = ({ caller, callee }) => onOpen(callee, caller);
         break;
       case NodeEventTypes.Delete:
-        trackLayoutChange(eventData.id);
+        trackActionChange(eventData.id);
         handler = e => {
           onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates)));
           onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
-        trackLayoutChange(eventData.id);
+        trackActionChange(eventData.id);
         if (eventData.$type === 'PASTE') {
           handler = e => {
             // TODO: clean this along with node deletion.
@@ -142,7 +147,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.CutSelection:
-        trackLayoutChange(eventData.id);
+        trackActionChange(eventData.actionIds);
         handler = e => {
           const { dialog, cutData } = cutNodes(data, e.actionIds);
           onChange(dialog);
@@ -151,7 +156,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.DeleteSelection:
-        trackLayoutChange(eventData.id);
+        trackActionListChange(eventData.actionIds);
         handler = e => {
           const dialog = deleteNodes(data, e.actionIds, nodes => deleteActions(nodes, deleteLgTemplates));
           onChange(dialog);
@@ -159,7 +164,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.AppendSelection:
-        trackLayoutChange(eventData.id);
+        trackActionListChange(eventData.target);
         handler = e => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
