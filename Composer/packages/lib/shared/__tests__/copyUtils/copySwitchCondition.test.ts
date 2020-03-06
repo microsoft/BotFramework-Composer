@@ -12,7 +12,7 @@ describe('#copySwitchCondition', () => {
       default: [
         {
           $type: 'Microsoft.BeginDialog',
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
         {
           $type: 'Microsoft.IfCondition',
@@ -30,7 +30,7 @@ describe('#copySwitchCondition', () => {
           actions: [
             {
               $type: 'Microsoft.BeginDialog',
-              dialog: 'AddToDo',
+              dialog: 'addtodo',
             },
           ],
         },
@@ -60,7 +60,7 @@ describe('#copySwitchCondition', () => {
           $designer: {
             id: '5678',
           },
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
         {
           $type: 'Microsoft.IfCondition',
@@ -87,7 +87,7 @@ describe('#copySwitchCondition', () => {
               $designer: {
                 id: '5678',
               },
-              dialog: 'AddToDo',
+              dialog: 'addtodo',
             },
           ],
         },

@@ -38,7 +38,7 @@ describe('<ProjectTree/>', () => {
         openNewTriggerModal={openNewTriggerModal}
       />
     );
-    const node = await findByText('AddToDo');
+    const node = await findByText('addtodo');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
