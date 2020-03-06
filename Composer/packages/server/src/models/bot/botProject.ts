@@ -514,14 +514,20 @@ export class BotProject {
    *  @param source current file id
    *  @param id imported file path
    *  for example:
-   *  in AddToDo.lg:
+   *  in todosample.en-us.lg:
    *   [import](../common/common.lg)
    *
-   * source = AddToDo.lg  || AddToDo
-   * id = ../common/common.lg  || common.lg || common
+   *  resolve to common.en-us.lg
+   *
+   *  source = todosample.en-us  || AddToDo
+   *  id = ../common/common.lg  || common.lg || common
    */
   private _lgImportResolver = (source: string, id: string) => {
-    const targetId = Path.basename(id, '.lg');
+    const locale = source.split('.').length > 1 ? source.split('.').pop() : '';
+    let targetId = Path.basename(id, '.lg');
+    if (locale) {
+      targetId += `.${locale}`;
+    }
     const targetFile = this.lgFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('file not found');
     return {
@@ -750,8 +756,8 @@ export class BotProject {
      */
     for (const dialog of dialogs) {
       const { lgFile, luFile } = dialog;
-      const lgExist = files.findIndex(({ name }) => name === `${lgFile}.lg`);
-      const luExist = files.findIndex(({ name }) => name === `${luFile}.lu`);
+      const lgExist = files.findIndex(({ name }) => name.startsWith(`${lgFile}.`));
+      const luExist = files.findIndex(({ name }) => name.startsWith(`${luFile}.`));
 
       if (lgFile && lgExist === -1) {
         throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);

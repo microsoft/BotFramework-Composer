@@ -6,7 +6,7 @@ import once from 'lodash/once';
 import { ImportResolverDelegate, ImportResolver } from 'botbuilder-lg';
 
 import { prepareAxios } from '../utils/auth';
-import { getFileName, getBaseName } from '../utils/fileUtil';
+import { getFileName, getBaseName, getExtension } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -105,9 +105,13 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     actions: boundActions,
     dispatch: interceptDispatch,
     resolvers: {
-      lgImportresolver: function(_source: string, id: string) {
+      lgImportresolver: function(source: string, id: string) {
+        const locale = getExtension(source);
         const targetFileName = getFileName(id);
-        const targetFileId = getBaseName(targetFileName);
+        let targetFileId = getBaseName(targetFileName);
+        if (locale) {
+          targetFileId += `.${locale}`;
+        }
         const targetFile = getState().lgFiles.find(({ id }) => id === targetFileId);
         if (!targetFile) throw new Error(`${id} lg file not found`);
         return { id, content: targetFile.content };
