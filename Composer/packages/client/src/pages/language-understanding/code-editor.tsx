@@ -149,7 +149,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const luOption = {
-    fileId: file?.id,
+    fileId: file?.id || dialogId,
     sectionId: intent?.Name,
   };
 

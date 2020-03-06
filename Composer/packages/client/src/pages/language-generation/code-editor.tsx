@@ -141,7 +141,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const lgOption = {
-    fileId: file?.id,
+    fileId: file?.id || dialogId,
     templateId: template?.name,
   };
 
