@@ -56,7 +56,7 @@ if (Test-Path $zipPath) {
 dotnet user-secrets init
 
 # Perform dotnet publish step ahead of zipping up
-$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp2.2')
+$publishFolder = $(Join-Path $projFolder 'bin\Release\netcoreapp3.1')
 dotnet publish -c release -o $publishFolder -v q > $logFile
 
 
