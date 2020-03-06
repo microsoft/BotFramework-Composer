@@ -9,6 +9,7 @@ import { LuFile, filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection } from '@bfc/shared';
 
 import { FormContext } from '../types';
+
 import { WidgetLabel } from './WidgetLabel';
 
 interface LuEditorWidgetProps {
