@@ -56,5 +56,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "telljoke.en-us.lg"
+  "generator": "enddialog.telljoke.en-us.lg"
 }
