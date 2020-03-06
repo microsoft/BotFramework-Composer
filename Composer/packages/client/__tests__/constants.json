@@ -1,8 +1,8 @@
 {"dialogs": [
   {
-      "id": "AddToDo",
+      "id": "addtodo",
       "isRoot": false,
-      "displayName": "AddToDo",
+      "displayName": "addtodo",
       "content": {
           "$type": "Microsoft.AdaptiveDialog",
           "$designer": {
@@ -28,9 +28,9 @@
       ]
   },
   {
-      "id": "ClearToDos",
+      "id": "cleartodo",
       "isRoot": false,
-      "displayName": "ClearToDos",
+      "displayName": "cleartodo",
       "content": {
           "$type": "Microsoft.AdaptiveDialog",
           "$designer": {
@@ -59,9 +59,9 @@
       ]
   },
   {
-      "id": "DeleteToDo",
+      "id": "deletetodo",
       "isRoot": false,
-      "displayName": "DeleteToDo",
+      "displayName": "deletetodo",
       "content": {
           "$type": "Microsoft.AdaptiveDialog",
           "$designer": {
@@ -89,7 +89,7 @@
       ]
   },
   {
-      "id": "Main",
+      "id": "todobot",
       "isRoot": true,
       "displayName": "ToDoBot.Main",
       "content": {
@@ -216,9 +216,9 @@
       ]
   },
   {
-      "id": "ShowToDos",
+      "id": "showtodos",
       "isRoot": false,
-      "displayName": "ShowToDos",
+      "displayName": "showtodos",
       "content": {
           "$type": "Microsoft.AdaptiveDialog",
           "$designer": {
