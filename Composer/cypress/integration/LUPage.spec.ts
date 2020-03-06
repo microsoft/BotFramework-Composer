@@ -2,16 +2,16 @@
 // Licensed under the MIT License.
 
 context('LU Page', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can open language understanding page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-
+    cy.wait(1000);
     // left nav tree
-    cy.contains('ToDoBotWithLuisSample.Main');
+    cy.contains('__TestToDoBotWithLuisSample.Main');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').should('not.exist');

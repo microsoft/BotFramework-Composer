@@ -49,7 +49,7 @@ export const PublishController = {
         });
       }
     } else {
-      res.json({
+      res.status(400).json({
         statusCode: '400',
         message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
       });
@@ -70,7 +70,7 @@ export const PublishController = {
         results: results,
       });
     } else {
-      res.json({
+      res.status(400).json({
         statusCode: '400',
         message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
       });

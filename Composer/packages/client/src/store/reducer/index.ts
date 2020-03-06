@@ -339,12 +339,14 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 
 const gotPublishStatus: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
-  if (payload.results?.status == 200) {
-    state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
-    state.botStatus = BotStatus.connected;
-  } else {
-    state.botStatus = BotStatus.unConnected;
-  }
+  state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+  state.botStatus = BotStatus.connected;
+
+  return state;
+};
+
+const getPublishStatusFail: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.unConnected;
   return state;
 };
 
@@ -442,6 +444,7 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
   [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
   [ActionTypes.GET_PUBLISH_STATUS]: gotPublishStatus,
+  [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatusFail,
   [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,

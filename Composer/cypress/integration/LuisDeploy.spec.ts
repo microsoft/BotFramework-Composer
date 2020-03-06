@@ -4,13 +4,15 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
+    cy.route('POST', '/api/publish/*/publish/default', 'OK');
+    cy.route('POST', '/api/projects/*/settings', 'OK');
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can deploy luis success', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-
+    cy.wait(1000);
     cy.route({
       method: 'POST',
       url: 'api/projects/*/luFiles/publish',
