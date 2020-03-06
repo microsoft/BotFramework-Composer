@@ -152,6 +152,8 @@ export class CSharpBotConnector implements IBotConnector {
           `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
           `--urls`,
           this.endpoint,
+          `--environment`,
+          `development`,
           ...this.getConnectorConfig(config),
         ],
         {

@@ -8,6 +8,7 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers/lib/type';
 
 import { TextWidget, SelectWidget } from '../../widgets';
 import { LuEditorWidget } from '../../widgets/LuEditorWidget';
@@ -16,7 +17,6 @@ import { field } from './styles';
 import { GetSchema, PromptFieldChangeHandler } from './types';
 import { ChoiceInputSettings } from './ChoiceInput';
 import { ConfirmInputSettings } from './ConfirmInput';
-import { DialogInfo } from '@bfc/indexers/lib/type';
 
 const getOptions = (enumSchema: JSONSchema6) => {
   if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
