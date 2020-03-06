@@ -658,7 +658,7 @@ export class BotProject {
           TemplateVariables.DIALOGNAME = dialogName;
 
           if (fileType === '.dialog') {
-            content = this._autofixReferInDialog(LOCALE, dialogName, content);
+            content = this._autofixReferInDialog(dialogName, content);
 
             targetRelativePath = templateInterpolate(
               Path.join(pathEndPoint, BotStructureTemplate.dialogs.entry),
