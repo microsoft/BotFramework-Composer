@@ -260,12 +260,11 @@ export const appschema: OBISchema = {
           additionalProperties: true,
         },
         activityProcessed: {
-          $role: 'expression',
-          type: 'string',
+          type: 'boolean',
           title: 'Activity Processed',
           description: 'When set to false, the dialog that is called can process the current activity.',
-          default: 'true',
-          examples: ['true'],
+          default: true,
+          examples: [true],
         },
         resultProperty: {
           $role: 'expression',
