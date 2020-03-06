@@ -847,7 +847,7 @@ export class BotProject {
       dialogJson.generator = `${dialogId}.${locale}.lg`;
 
       // fix lu referrence
-      if (dialogJson.recognizer) {
+      if (typeof dialogJson.recognizer === 'string') {
         dialogJson.recognizer = `${dialogId}.${locale}.lu`;
       }
 

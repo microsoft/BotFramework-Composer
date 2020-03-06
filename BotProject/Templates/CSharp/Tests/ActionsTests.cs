@@ -215,7 +215,7 @@ namespace Tests
                 .UseState(userState, convoState)               
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource("actionsample.dialog");
+            var resource = resourceExplorer.GetResource("actionssample.dialog");
             var dialog = resourceExplorer.LoadType<Dialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                 .UseResourceExplorer(resourceExplorer)

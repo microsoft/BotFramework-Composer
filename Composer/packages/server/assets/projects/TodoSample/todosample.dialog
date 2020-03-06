@@ -6,7 +6,36 @@
   },
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "todosample.en-us.lu",
+  "recognizer": {
+    "$kind": "Microsoft.RegexRecognizer",
+    "id": "regex",
+    "intents": [
+      {
+        "intent": "AddIntent",
+        "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      },
+      {
+        "intent": "ClearIntent",
+        "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)"
+      },
+      {
+        "intent": "DeleteIntent",
+        "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?"
+      },
+      {
+        "intent": "ShowIntent",
+        "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)"
+      },
+      {
+        "intent": "HelpIntent",
+        "pattern": "(?i)help"
+      },
+      {
+        "intent": "CancelIntent",
+        "pattern": "(?i)cancel|never mind"
+      }
+    ]
+  },
   "generator": "todosample.en-us.lg",
   "triggers": [
     {
