@@ -37,7 +37,7 @@
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "enddialog.telljoke"
+          "dialog": "telljoke"
         }
       ]
     },

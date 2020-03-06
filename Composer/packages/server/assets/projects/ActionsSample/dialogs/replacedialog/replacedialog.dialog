@@ -26,7 +26,7 @@
       "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
-          "dialog": "replacedialog.telljokedialog"
+          "dialog": "telljokedialog"
         }
       ],
       "intent": "JokeIntent"
@@ -39,7 +39,7 @@
       "actions": [
         {
           "$type": "Microsoft.ReplaceDialog",
-          "dialog": "replacedialog.fortunetellerdialog"
+          "dialog": "fortunetellerdialog"
         }
       ],
       "intent": "FortuneTellerIntent"
