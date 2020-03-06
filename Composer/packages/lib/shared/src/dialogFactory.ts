@@ -118,12 +118,20 @@ export const deepCopyAction = async (
   });
 };
 
-export const deleteAction = (data: MicrosoftIDialog, deleteLgTemplates: (templates: string[]) => any) => {
-  return deleteAdaptiveAction(data, deleteLgTemplates);
+export const deleteAction = (
+  data: MicrosoftIDialog,
+  deleteLgTemplates: (templates: string[]) => any,
+  deleteLuIntents: (luIntents: string[]) => any
+) => {
+  return deleteAdaptiveAction(data, deleteLgTemplates, deleteLuIntents);
 };
 
-export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (templates: string[]) => any) => {
-  return deleteAdaptiveActionList(inputs, deleteLgTemplates);
+export const deleteActions = (
+  inputs: MicrosoftIDialog[],
+  deleteLgTemplates: (templates: string[]) => any,
+  deleteLuIntents: (luIntents: string[]) => any
+) => {
+  return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
 export const seedNewDialog = (
