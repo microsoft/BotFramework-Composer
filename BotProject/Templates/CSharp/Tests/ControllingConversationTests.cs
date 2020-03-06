@@ -84,6 +84,7 @@ namespace Tests
             var convoState = new ConversationState(storage);
             var userState = new UserState(storage);
             var adapter = new TestAdapter(TestAdapter.CreateConversation(TestContext.TestName), sendTrace);
+            adapter.Locale = "en-us";
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
