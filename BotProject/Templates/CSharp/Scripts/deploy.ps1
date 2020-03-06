@@ -121,8 +121,8 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	}
 	else {
 		Write-Host "bf luis:build does not exist, use the following command to install:"
-		Write-Host "1. npm config set registry https://botbuilder.myget.org/F/botbuilder-declarative/npm/"
-		Write-Host "2. npm install -g @microsoft/botframework-cli"
+		Write-Host "1. npm config set registry https://botbuilder.myget.org/F/botframework-cli/npm/"
+		Write-Host "2. npm install -g @microsoft/botframework-cli@4.8.0-preview.110925"
 		Write-Host "3. npm config set registry http://registry.npmjs.org"
 		Break
 	}
