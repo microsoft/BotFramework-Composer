@@ -14,11 +14,6 @@ export interface ILuisSettings {
   };
 }
 
-export interface LuisStatus {
-  lastUpdateTime: number;
-  lastPublishTime: number;
-}
-
 // we will probably also use this interface to consolidate the processing of lu\lg\dialog
 export enum FileUpdateType {
   CREATE = 'create',
@@ -40,8 +35,6 @@ export interface IOperationLUFile {
   relativePath?: string;
   content?: string;
   intents: [];
-  lastUpdateTime?: number;
-  lastPublishTime?: number;
   [key: string]: any;
 }
 
