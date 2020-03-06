@@ -85,5 +85,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "enddialog.en-us.lg"
+  "generator": "enddialog.lg"
 }
