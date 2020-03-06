@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Diagnostic } from '@bfc/shared';
-
 export interface ISearchTarget {
   type: string;
   value: string;
@@ -27,5 +25,3 @@ export interface IIntentTrigger {
   intent: string;
   dialogs: string[];
 }
-
-export type CheckerFunc = (path: string, value: any, type: string, schema: any) => Diagnostic[] | null; // error msg

@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { SDKTypes } from '@bfc/shared';
+import { SDKTypes, IIntentTrigger } from '@bfc/shared';
 
 import { VisitorFunc, JsonWalk } from '../utils/jsonWalk';
-
-import { IIntentTrigger } from './types';
 
 // find out all properties from given dialog
 function ExtractIntentTriggers(value: any): IIntentTrigger[] {

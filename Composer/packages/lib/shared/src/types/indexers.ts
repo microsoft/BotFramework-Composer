@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Diagnostic } from './diagnostic';
-import { IIntentTrigger } from './dialogUtils/types';
+import { IIntentTrigger } from './dialogUtils';
 
 export interface FileInfo {
   name: string;
