@@ -2735,6 +2735,27 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
+"@microsoft/bf-lu@https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.8.0-preview.110925.tgz":
+  version "4.8.0-preview.110925"
+  uid "8905960d5858aa9f4d94c150fdc80ac4b6947e94"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.8.0-preview.110925.tgz#8905960d5858aa9f4d94c150fdc80ac4b6947e94"
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "3.0.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.15"
+    node-fetch "^2.1.2"
+    semver "^5.5.1"
+    tslib "^1.10.0"
+
 "@microsoft/load-themed-styles@^1.7.13":
   version "1.9.5"
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.9.5.tgz#b9f063bafa568e356b4d99a5b522d0bab60bda85"
