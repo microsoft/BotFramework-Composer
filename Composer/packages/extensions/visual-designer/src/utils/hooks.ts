@@ -7,6 +7,8 @@ import { LgTemplateRef } from '@bfc/shared';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
+import { normalizeLgTemplate } from './normalizeLgTemplate';
+
 export const useLgTemplate = (str?: string, dialogId?: string) => {
   const { getLgTemplates } = useContext(NodeRendererContext);
   const [templateText, setTemplateText] = useState('');
@@ -33,15 +35,7 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       }
 
       if (template && template.body) {
-        const templateTexts = template.body.split('\n').map(line => (line.startsWith('-') ? line.substring(1) : line));
-        let showText = '';
-
-        if (templateTexts[0] && templateTexts[0].trim() === '[Activity') {
-          showText = templateTexts.find(text => text.includes('Text = '))?.split('Text = ')[1] || '';
-        } else {
-          showText = templateTexts.join('\n');
-        }
-        setTemplateText(showText);
+        setTemplateText(normalizeLgTemplate(template));
       } else {
         setTemplateText('');
       }
