@@ -64,6 +64,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
     undo,
     redo,
   } = shellApi;
@@ -81,6 +82,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
   };
 
   return (

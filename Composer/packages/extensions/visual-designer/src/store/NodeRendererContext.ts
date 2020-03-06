@@ -9,7 +9,8 @@ type ShellApiFuncs =
   | 'copyLgTemplate'
   | 'removeLgTemplate'
   | 'removeLgTemplates'
-  | 'updateLgTemplate';
+  | 'updateLgTemplate'
+  | 'removeLuIntent';
 
 export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
   focusedId?: string;
@@ -30,4 +31,5 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   removeLgTemplate: () => Promise.resolve(),
   removeLgTemplates: () => Promise.resolve(),
   updateLgTemplate: () => Promise.resolve(),
+  removeLuIntent: () => Promise.resolve(),
 });

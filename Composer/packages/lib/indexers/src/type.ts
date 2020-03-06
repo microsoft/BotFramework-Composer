@@ -4,6 +4,7 @@
 import { LuIntentSection } from '@bfc/shared';
 
 import { Diagnostic } from './diagnostic';
+import { IIntentTrigger } from './dialogUtils/types';
 
 export interface FileInfo {
   name: string;
@@ -38,6 +39,7 @@ export interface DialogInfo {
   relativePath: string;
   userDefinedVariables: string[];
   triggers: ITrigger[];
+  intentTriggers: IIntentTrigger[];
 }
 
 export interface LgTemplateJsonPath {
