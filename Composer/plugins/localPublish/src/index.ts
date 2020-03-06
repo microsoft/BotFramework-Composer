@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
 
+import glob from 'globby';
 import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
@@ -44,10 +45,9 @@ class LocalPublisher {
     const { settings } = config;
     const botId = project.id;
     const version = 'default';
-
     await this.initBot(botId);
-    await this.saveContent(botId, version, project.files, user);
-    const url = await this.setBot(botId, version, settings, project.files);
+    await this.saveContent(botId, version, project.dataDir, user);
+    const url = await this.setBot(botId, version, settings, project.dataDir);
     return {
       status: 200,
       result: {
@@ -110,9 +110,9 @@ class LocalPublisher {
     }
   };
 
-  private saveContent = async (botId: string, version: string, project: any, user: any) => {
+  private saveContent = async (botId: string, version: string, srcDir: string, user: any) => {
     const dstPath = this.getDownloadPath(botId, version);
-    const zipFilePath = await this.zipBot(dstPath, project);
+    const zipFilePath = await this.zipBot(dstPath, srcDir);
   };
 
   // start bot in current version
@@ -195,22 +195,19 @@ class LocalPublisher {
     const dstPath = this.getBotAssetsDir(botId);
     await this.unZipBot(srcPath, dstPath);
   };
-  private zipBot = async (dstPath: string, project: any) => {
+  private zipBot = async (dstPath: string, srcDir: string) => {
     // delete previous and create new
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
+    const files = await glob('**/*', { cwd: srcDir, dot: true });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
       archive.pipe(output);
-      for (const f in project) {
-        const file = project[f];
-        // trim the beginning "ComposerDialogs"
-        const name = file.relativePath.startsWith('ComposerDialogs')
-          ? file.relativePath.substring(16)
-          : file.relativePath;
-        archive.append(file.content, { name: name });
+
+      for (const file of files) {
+        archive.append(fs.createReadStream(path.join(srcDir, file)), { name: file });
       }
       archive.finalize();
       output.on('close', () => resolve(dstPath));
