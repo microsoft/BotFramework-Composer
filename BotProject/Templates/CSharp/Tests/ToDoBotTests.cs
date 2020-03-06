@@ -76,7 +76,7 @@ namespace Tests
                 .UseState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource("Main.dialog");
+            var resource = resourceExplorer.GetResource("todosample.dialog");
             var dialog = resourceExplorer.LoadType<Dialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                 .UseResourceExplorer(resourceExplorer)
