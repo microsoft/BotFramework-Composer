@@ -35,11 +35,12 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
     case SDKTypes.ConfirmInput:
     case SDKTypes.DateTimeInput:
     case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
+    case SDKTypes.TextInput: {
       const [, promptType] = action.$type.split('.');
       const intentName = `${promptType}.response-${action?.$designer?.id}`;
       promptType && intentName && outputTemplates.push(intentName);
       break;
+    }
   }
 };
 
