@@ -3,17 +3,8 @@
 
 import fs from 'fs';
 
-import { getNewDesigner } from '@bfc/shared';
-import {
-  FileInfo,
-  DialogInfo,
-  LgFile,
-  LuFile,
-  dialogIndexer,
-  lgIndexer,
-  luIndexer,
-  createSingleMessage,
-} from '@bfc/indexers';
+import { FileInfo, DialogInfo, LgFile, LuFile, getNewDesigner } from '@bfc/shared';
+import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -513,6 +504,12 @@ export class BotProject {
     }
 
     const schemasDir = Path.join(this.dir, 'Schemas');
+
+    if (!(await this.fileStorage.exists(schemasDir))) {
+      debug('No schemas directory found.');
+      return [];
+    }
+
     const schemas: FileInfo[] = [];
     const paths = await this.fileStorage.glob('*.schema', schemasDir);
 
