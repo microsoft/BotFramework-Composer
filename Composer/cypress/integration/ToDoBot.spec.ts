@@ -5,6 +5,7 @@ context('ToDo Bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    cy.wait(5000);
   });
 
   it('can open the main dialog', () => {

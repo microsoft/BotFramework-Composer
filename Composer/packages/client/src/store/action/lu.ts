@@ -9,25 +9,40 @@ import { ActionCreator, State } from '../types';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
-import { fetchProject } from './project';
 import { setError } from './error';
 //remove editor's debounce and add it to action
-export const debouncedUpdateLu = debounce(async (store, id, projectId, content) => {
+export const debouncedUpdateLu = debounce(async (store, id, projectId, content, lastModified) => {
   try {
-    await httpClient.put(`/projects/${projectId}/luFiles/${id}`, { id, projectId, content });
+    const response = await httpClient.put(`/projects/${projectId}/luFiles/${id}`, {
+      id,
+      projectId,
+      content,
+      lastModified,
+    });
+    store.dispatch({
+      type: ActionTypes.UPDATE_TIMESTAMP,
+      payload: {
+        id: id,
+        type: 'lu',
+        lastModified: response.data.lastModified,
+      },
+    });
   } catch (err) {
     setError(store, {
+      status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
       summary: 'UPDATE LU ERROR',
     });
-    //if update lu error, do a full refresh.
-    fetchProject(store);
   }
 }, 500);
 
 export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
-  store.dispatch({ type: ActionTypes.UPDATE_LU_SUCCESS, payload: { id, content } });
-  debouncedUpdateLu(store, id, projectId, content);
+  const state = store.getState();
+  const file = state.luFiles.find(l => l.id === id);
+  if (file) {
+    store.dispatch({ type: ActionTypes.UPDATE_LU_SUCCESS, payload: { id, content } });
+    debouncedUpdateLu(store, id, projectId, content, file.lastModified);
+  }
 };
 
 export const undoableUpdateLuFile = undoable(

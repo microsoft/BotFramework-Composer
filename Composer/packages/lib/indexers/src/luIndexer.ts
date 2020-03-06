@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
+import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
 import { LuIntentSection } from '@bfc/shared';
 
@@ -92,7 +92,7 @@ function index(files: FileInfo[]): LuFile[] {
     const { name, content, relativePath } = file;
     const id = getBaseName(name);
     const { intents, diagnostics } = parse(content, id);
-    return { id, relativePath, content, intents, diagnostics };
+    return { id, relativePath, content, intents, diagnostics, lastModified: file.lastModified };
   });
 
   return luFiles;

@@ -24,7 +24,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
-import { LocationRef, LuisStatus, FileUpdateType } from './interface';
+import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
@@ -89,7 +89,6 @@ export class BotProject {
     if (this.settings) {
       await this.luPublisher.setLuisConfig(this.settings.luis);
     }
-    await this.luPublisher.loadStatus(this.luFiles.map(f => f.relativePath));
   };
 
   public getIndexes = () => {
@@ -99,7 +98,7 @@ export class BotProject {
       location: this.dir,
       dialogs: this.dialogs,
       lgFiles: this.lgFiles,
-      luFiles: this.mergeLuStatus(this.luFiles, this.luPublisher.status),
+      luFiles: this.luFiles,
       schemas: this.getSchemas(),
       settings: this.settings,
     };
@@ -130,25 +129,6 @@ export class BotProject {
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
     await this.luPublisher.setLuisConfig(config.luis);
-  };
-
-  // merge the status managed by luPublisher to the LuFile structure to keep a
-  // unified interface
-  private mergeLuStatus = (
-    luFiles: LuFile[],
-    luStatus: {
-      [key: string]: LuisStatus;
-    }
-  ) => {
-    return luFiles.map(x => {
-      if (!luStatus[x.relativePath]) {
-        throw new Error(`No luis status for lu file ${x.relativePath}`);
-      }
-      return {
-        ...x,
-        status: luStatus[x.relativePath],
-      };
-    });
   };
 
   public getSchemas = () => {
@@ -213,7 +193,7 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<DialogResources> => {
+  public updateDialog = async (id: string, dialogContent: any): Promise<string> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
@@ -221,10 +201,8 @@ export class BotProject {
 
     const relativePath = dialog.relativePath;
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
-    await this._updateFile(relativePath, content);
-
-    const { dialogs, lgFiles, luFiles } = this;
-    return { dialogs, lgFiles, luFiles };
+    const lastModified = await this._updateFile(relativePath, content);
+    return lastModified;
   };
 
   public createDialog = async (
@@ -263,13 +241,12 @@ export class BotProject {
     return { dialogs, lgFiles, luFiles };
   };
 
-  public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
+  public updateLgFile = async (id: string, content: string): Promise<string> => {
     const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    await this._updateFile(lgFile.relativePath, content);
-    return this.lgFiles;
+    return await this._updateFile(lgFile.relativePath, content);
   };
 
   public createLgFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LgFile[]> => {
@@ -304,9 +281,8 @@ export class BotProject {
     }
 
     await this._updateFile(luFile.relativePath, content);
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.UPDATE);
 
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
+    return this.luFiles;
   };
 
   public createLuFile = async (id: string, content: string, dir: string = this.defaultDir(id)): Promise<LuFile[]> => {
@@ -318,8 +294,7 @@ export class BotProject {
 
     // TODO: validate before save
     await this._createFile(relativePath, content);
-    await this.luPublisher.onFileChange(relativePath, FileUpdateType.CREATE); // let publisher know that some files changed
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status); // return a merged LUFile always
+    return this.luFiles; // return a merged LUFile always
   };
 
   public removeLuFile = async (id: string): Promise<LuFile[]> => {
@@ -330,41 +305,31 @@ export class BotProject {
 
     await this._removeFile(luFile.relativePath);
 
-    await this.luPublisher.onFileChange(luFile.relativePath, FileUpdateType.DELETE);
     await this._cleanUp(luFile.relativePath);
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
+    return this.luFiles;
   };
 
   public publishLuis = async (authoringKey: string) => {
     this.luPublisher.setAuthoringKey(authoringKey);
     const referred = this.luFiles.filter(this.isReferred);
-    const unpublished = this.luPublisher.getUnpublisedFiles(referred);
 
-    const invalidLuFile = unpublished.filter(file => file.diagnostics.length !== 0);
+    const invalidLuFile = referred.filter(file => file.diagnostics.length !== 0);
     if (invalidLuFile.length !== 0) {
       const msg = this.generateErrorMessage(invalidLuFile);
       throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
     }
-    const emptyLuFiles = unpublished.filter(this.isLuFileEmpty);
+    const emptyLuFiles = referred.filter(this.isLuFileEmpty);
     if (emptyLuFiles.length !== 0) {
       const msg = emptyLuFiles.map(file => file.id).join(' ');
       throw new Error(`You have the following empty LuFile(s): ` + msg);
     }
 
-    if (unpublished.length > 0) {
-      await this.luPublisher.publish(unpublished);
+    if (referred.length > 0) {
+      this.luPublisher.createCrossTrainConfig(this.dialogs, referred);
+      await this.luPublisher.publish(referred);
     }
 
-    return this.mergeLuStatus(this.luFiles, this.luPublisher.status);
-  };
-
-  public checkLuisPublished = () => {
-    const referredLuFiles = this.luFiles.filter(this.isReferred);
-    if (referredLuFiles.length <= 0) {
-      return true;
-    } else {
-      return this.luPublisher.checkLuisPublised(referredLuFiles);
-    }
+    return this.luFiles;
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {
@@ -415,12 +380,17 @@ export class BotProject {
     debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
+    // TODO: we should get the lastModified from the writeFile operation
+    // instead of calling stat again which could be expensive
+    const stats = await this.fileStorage.stat(absolutePath);
+
     // update this.files which is memory cache of all files
     this.files.push({
       name: Path.basename(relativePath),
       content: content,
       path: absolutePath,
       relativePath: relativePath,
+      lastModified: stats.lastModified,
     });
 
     await this.reindex(relativePath);
@@ -433,12 +403,21 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
-
     const absolutePath = `${this.dir}/${relativePath}`;
-    await this.fileStorage.writeFile(absolutePath, content);
+
+    // only write if the file has actually changed
+    if (this.files[index].content !== content) {
+      await this.fileStorage.writeFile(absolutePath, content);
+    }
+
+    // TODO: we should get the lastModified from the writeFile operation
+    // instead of calling stat again which could be expensive
+    const stats = await this.fileStorage.stat(absolutePath);
 
     this.files[index].content = content;
     await this.reindex(relativePath);
+
+    return stats.lastModified;
   };
 
   // remove file in this project this function will gurantee the memory cache
@@ -521,18 +500,19 @@ export class BotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob(pattern, root);
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
-        // skip lg files for now
-        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+        const stats = await this.fileStorage.stat(realFilePath);
+        if (stats.isFile) {
           const content: string = await this.fileStorage.readFile(realFilePath);
           fileList.push({
             name: Path.basename(filePath),
             content: content,
             path: realFilePath,
             relativePath: Path.relative(this.dir, realFilePath),
+            lastModified: stats.lastModified,
           });
         }
       }
@@ -636,11 +616,13 @@ export class BotProject {
           dialogTemplateTexts.push(templateText);
         }
       }
-      const updatedContent =
-        (lgFiles.find(({ id }) => id === dialog.id)?.content || '') +
-        this._buildRNNewlineText(dialogTemplateTexts) +
-        NEWLINE;
-      await this.updateLgFile(dialog.id, updatedContent);
+      if (dialogTemplateTexts.length) {
+        const updatedContent =
+          (lgFiles.find(({ id }) => id === dialog.id)?.content || '') +
+          this._buildRNNewlineText(dialogTemplateTexts) +
+          NEWLINE;
+        await this.updateLgFile(dialog.id, updatedContent);
+      }
     }
     const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
     await this.updateLgFile('common', updatedCommonContent);

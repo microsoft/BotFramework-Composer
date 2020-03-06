@@ -4,12 +4,14 @@
 import { LuIntentSection } from '@bfc/shared';
 
 import { Diagnostic } from './diagnostic';
+import { IIntentTrigger } from './dialogUtils/types';
 
 export interface FileInfo {
   name: string;
   content: string;
   path: string;
   relativePath: string;
+  lastModified: string;
 }
 
 export interface ITrigger {
@@ -29,6 +31,7 @@ export interface DialogInfo {
   diagnostics: Diagnostic[];
   displayName: string;
   id: string;
+  lastModified: string;
   isRoot: boolean;
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
@@ -38,6 +41,7 @@ export interface DialogInfo {
   relativePath: string;
   userDefinedVariables: string[];
   triggers: ITrigger[];
+  intentTriggers: IIntentTrigger[];
 }
 
 export interface LgTemplateJsonPath {
@@ -73,6 +77,7 @@ export interface LuFile {
   id: string;
   relativePath: string;
   content: string;
+  lastModified: string;
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
   [key: string]: any;
@@ -98,6 +103,7 @@ export interface LgFile {
   id: string;
   relativePath: string;
   content: string;
+  lastModified: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }

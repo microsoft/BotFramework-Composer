@@ -22,6 +22,7 @@ export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {
+  status?: number;
   summary: string;
   message: string;
 }

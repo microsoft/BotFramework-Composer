@@ -28,7 +28,7 @@ export const DeployWizardStep3 = props => {
       <Stack horizontal gap="2rem" styles={styles.stackinput}>
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
-            label={formatMessage('Deploy Bot Script')}
+            label={formatMessage('Publish Bot Script')}
             styles={styles.textarea}
             value={scriptValue}
             readOnly={true}
@@ -44,7 +44,7 @@ export const DeployWizardStep3 = props => {
         <StackItem grow={1}>
           <p>
             {formatMessage(
-              'Copy the commands above, and paste them into your terminal.  The output will look like the screenshot below. Note that it may take several minutes for the deploy to complete.'
+              'Copy the commands above, and paste them into your terminal.  The output will look like the screenshot below. Note that it may take several minutes for the publish to complete.'
             )}
           </p>
           <img

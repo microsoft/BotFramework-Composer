@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import formatMessage from 'format-message';
 import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
 import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
@@ -227,10 +228,20 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload && payload.response && payload.response.data && payload.response.data.message) {
-    state.error = payload.response.data;
+  if (payload && payload.status && payload.status === 409) {
+    state.error = {
+      status: 409,
+      message: formatMessage(
+        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
+      ),
+      summary: formatMessage('Modification Rejected'),
+    };
   } else {
-    state.error = payload;
+    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+      state.error = payload.response.data;
+    } else {
+      state.error = payload;
+    }
   }
 
   if (state.error) {
@@ -357,6 +368,26 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
+const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
+  if (type === 'dialog') {
+    const dialog = state.dialogs.find(d => d.id === id);
+    if (dialog) {
+      dialog.lastModified = lastModified;
+    }
+  } else if (type === 'lg') {
+    const lg = state.lgFiles.find(d => d.id === id);
+    if (lg) {
+      lg.lastModified = lastModified;
+    }
+  } else if (type === 'lu') {
+    const lu = state.luFiles.find(d => d.id === id);
+    if (lu) {
+      lu.lastModified = lastModified;
+    }
+  }
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -385,7 +416,7 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LG_FAILURE]: noOp,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_FAILURE]: noOp,
-  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
+  [ActionTypes.UPDATE_LU_SUCCESS]: noOp,
   [ActionTypes.UPDATE_LU_FAILURE]: noOp,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_FAILURE]: noOp,
@@ -417,4 +448,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
 });

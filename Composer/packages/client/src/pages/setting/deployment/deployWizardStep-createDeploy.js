@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import React, { Fragment, useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -25,7 +27,7 @@ export const DeployWizardStepCreate = props => {
 
   const [formData, setFormData] = useState({
     name: botName,
-    location: `${process.env.LOCAL_PUBLISH_PATH}/${projectId}`, // use plugin localtion to support deployment
+    location: path.join(process.env.LOCAL_PUBLISH_PATH, projectId).replace(/\\/g, '/'), // use plugin localtion to support deployment
     secret: '',
     environment: '',
     region: regionOptions[0],
