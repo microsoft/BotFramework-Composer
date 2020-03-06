@@ -5,7 +5,7 @@
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "qnamakerluissample.en-us.lu",
+  "recognizer": "qnamakerluissample.lu",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
@@ -105,5 +105,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "qnamakerluissample.en-us.lg"
+  "generator": "qnamakerluissample.lg"
 }

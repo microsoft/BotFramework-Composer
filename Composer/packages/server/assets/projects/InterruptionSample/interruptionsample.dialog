@@ -6,8 +6,8 @@
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "interruptionsample.en-us.lu",
-  "generator": "interruptionsample.en-us.lg",
+  "recognizer": "interruptionsample.lu",
+  "generator": "interruptionsample.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",

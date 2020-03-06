@@ -42,5 +42,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "confirminput.en-us.lg"
+  "generator": "confirminput.lg"
 }

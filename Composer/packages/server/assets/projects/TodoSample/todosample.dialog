@@ -36,7 +36,7 @@
       }
     ]
   },
-  "generator": "todosample.en-us.lg",
+  "generator": "todosample.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",

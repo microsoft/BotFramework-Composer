@@ -23,5 +23,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "simpletext.en-us.lg"
+  "generator": "simpletext.lg"
 }

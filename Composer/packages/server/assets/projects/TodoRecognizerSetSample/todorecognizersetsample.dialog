@@ -6,8 +6,8 @@
   },
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "todorecognizersetsample.en-us.lu",
-  "generator": "todorecognizersetsample.en-us.lg",
+  "recognizer": "todorecognizersetsample.lu",
+  "generator": "todorecognizersetsample.lg",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",

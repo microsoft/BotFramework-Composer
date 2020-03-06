@@ -6,7 +6,7 @@
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
-  "recognizer": "todobotwithluissample.en-us.lu",
+  "recognizer": "todobotwithluissample.lu",
   "triggers": [
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
@@ -462,5 +462,5 @@
     }
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
-  "generator": "todobotwithluissample.en-us.lg"
+  "generator": "todobotwithluissample.lg"
 }

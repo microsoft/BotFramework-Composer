@@ -256,7 +256,7 @@ export class BotProject {
       Path.dirname(templateInterpolate(BotStructureTemplate.dialogs.lu, { DIALOGNAME, LOCALE }))
     );
 
-    const updateContent = this._autofixReferInDialog(LOCALE, id, content);
+    const updateContent = this._autofixReferInDialog(id, content);
     await this._createFile(dialogFilePath, updateContent);
     await this.createLuFile(`${id}.${LOCALE}`, '', luFilePathDir);
     await this.createLgFile(`${id}.${LOCALE}`, '', lgFilePathDir);
@@ -839,7 +839,7 @@ export class BotProject {
    * - "dialog": 'AddTodos'
    * + "dialog": 'addtodos'
    */
-  private _autofixReferInDialog = (locale: string, dialogId: string, content: string) => {
+  private _autofixReferInDialog = (dialogId: string, content: string) => {
     try {
       const dialogJson = JSON.parse(content);
 
@@ -855,11 +855,11 @@ export class BotProject {
       JsonWalk('/', dialogJson, visitor);
 
       // fix lg referrence
-      dialogJson.generator = `${dialogId}.${locale}.lg`;
+      dialogJson.generator = `${dialogId}.lg`;
 
       // fix lu referrence
       if (typeof dialogJson.recognizer === 'string') {
-        dialogJson.recognizer = `${dialogId}.${locale}.lu`;
+        dialogJson.recognizer = `${dialogId}.lu`;
       }
 
       return JSON.stringify(dialogJson, null, 2);

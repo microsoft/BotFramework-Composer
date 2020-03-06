@@ -42,6 +42,6 @@
       ]
     }
   ],
-  "generator": "showtodos.en-us.lg",
+  "generator": "showtodos.lg",
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
 }
