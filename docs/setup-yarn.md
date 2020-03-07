@@ -9,7 +9,7 @@ Bot Framework Composer is designed to be a hosted web app. Currently, you need t
 - [Node.js](https://nodejs.org/dist/v12.13.0/): version 12.13.0
 - [Yarn](https://yarnpkg.com/en/docs/install): latest stable version
 - [Bot Framework Emulator](https://github.com/microsoft/BotFramework-Emulator/releases/latest): latest stable version
-- [.NET Core SDK 2.2](https://dotnet.microsoft.com/download/dotnet-core/2.2): required to test your bot
+- [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/current): required to test your bot
 
 ## Installation instructions
 1. To start, open a terminal and clone the Composer GitHub repository. You will use this terminal for the rest of the steps in this section.

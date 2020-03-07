@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser';
 
 import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
 

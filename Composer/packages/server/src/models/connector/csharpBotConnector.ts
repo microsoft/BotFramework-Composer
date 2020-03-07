@@ -103,10 +103,6 @@ export class CSharpBotConnector implements IBotConnector {
         configList.push('--luis:endpointKey');
         configList.push(config.luis.authoringKey);
       }
-      if (config.luis.authoringRegion) {
-        configList.push('--luis:endpoint');
-        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
-      }
     }
 
     return configList;
@@ -156,6 +152,8 @@ export class CSharpBotConnector implements IBotConnector {
           `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
           `--urls`,
           this.endpoint,
+          `--environment`,
+          `development`,
           ...this.getConnectorConfig(config),
         ],
         {

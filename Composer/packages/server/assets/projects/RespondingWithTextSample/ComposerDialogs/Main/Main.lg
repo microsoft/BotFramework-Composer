@@ -1,7 +1,7 @@
 [import](common.lg)
 
 # bfdactivity-551445
--@{help()}
+-${help()}
 
 # bfdactivity-576166
 -Welcome to the Message Samples. You can use this sample to explore different capabilities of sending messages to users.

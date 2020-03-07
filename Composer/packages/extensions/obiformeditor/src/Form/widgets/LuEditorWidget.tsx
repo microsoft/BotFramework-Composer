@@ -2,18 +2,22 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { LuEditor } from '@bfc/code-editor';
 import debounce from 'lodash/debounce';
-import { LuIntentSection } from '@bfc/shared';
+import formatMessage from 'format-message';
+import { LuEditor } from '@bfc/code-editor';
 import { LuFile, filterSectionDiagnostics } from '@bfc/indexers';
+import { LuIntentSection } from '@bfc/shared';
 
 import { FormContext } from '../types';
+
+import { WidgetLabel } from './WidgetLabel';
 
 interface LuEditorWidgetProps {
   formContext: FormContext;
   name: string;
   height?: number | string;
-  onChange: (template?: string) => void;
+  onChange?: (template?: string) => void;
+  prompt?: boolean;
 }
 
 export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
@@ -33,7 +37,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
   formContext: FormContext;
   name: string;
   luFileId: string;
-  luFile: LuFile | null;
+  luFile?: LuFile;
   luIntent: LuIntentSection;
   state = { localValue: '' };
   debounceUpdate;
@@ -64,44 +68,52 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
     });
     if (this.luFileId) {
       if (body) {
-        this.updateLuIntent(body);
+        this.debounceUpdate(body);
       } else {
         this.formContext.shellApi.removeLuIntent(this.luFileId, this.name);
       }
     }
   };
+
   render() {
-    const diagnostic = this.luFile && filterSectionDiagnostics(this.luFile.diagnostics, this.luIntent)[0];
+    const { height = 250 } = this.props;
+    const { luFile, luFileId, luIntent, name } = this;
+    const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
 
     const errorMsg = diagnostic
       ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
       : '';
-    const luOption = {
-      fileId: this.luFileId,
-      sectionId: this.luIntent?.Name,
-    };
-    const height = this.props.height || 250;
+
+    const label = prompt
+      ? formatMessage('Expected responses (intent: {name})', { name })
+      : formatMessage('Trigger phrases (intent: {name})', { name });
 
     return (
-      <LuEditor
-        onChange={this.onChange}
-        value={this.state.localValue}
-        errorMsg={errorMsg}
-        hidePlaceholder={true}
-        luOption={luOption}
-        options={{
-          lineNumbers: 'off',
-          minimap: {
-            enabled: false,
-          },
-          lineDecorationsWidth: 10,
-          lineNumbersMinChars: 0,
-          glyphMargin: false,
-          folding: false,
-          renderLineHighlight: 'none',
-        }}
-        height={height}
-      />
+      <>
+        <WidgetLabel label={label} />
+        <LuEditor
+          onChange={this.onChange}
+          value={this.state.localValue}
+          errorMsg={errorMsg}
+          hidePlaceholder={true}
+          luOption={{
+            fileId: luFileId,
+            sectionId: luIntent?.Name,
+          }}
+          options={{
+            lineNumbers: 'off',
+            minimap: {
+              enabled: false,
+            },
+            lineDecorationsWidth: 10,
+            lineNumbersMinChars: 0,
+            glyphMargin: false,
+            folding: false,
+            renderLineHighlight: 'none',
+          }}
+          height={height}
+        />
+      </>
     );
   }
 }

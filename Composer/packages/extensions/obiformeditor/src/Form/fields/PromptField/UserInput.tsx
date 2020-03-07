@@ -8,8 +8,10 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import formatMessage from 'format-message';
 import { JSONSchema6 } from 'json-schema';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers/lib/type';
 
 import { TextWidget, SelectWidget } from '../../widgets';
+import { LuEditorWidget } from '../../widgets/LuEditorWidget';
 
 import { field } from './styles';
 import { GetSchema, PromptFieldChangeHandler } from './types';
@@ -24,13 +26,20 @@ const getOptions = (enumSchema: JSONSchema6) => {
   return enumSchema.enum.map(o => ({ label: o as string, value: o as string }));
 };
 
+const usesLuisRecognizer = ({ content }: DialogInfo) => {
+  return typeof content?.recognizer === 'string';
+};
+
 interface UserInputProps extends FieldProps<MicrosoftInputDialog> {
   onChange: PromptFieldChangeHandler;
   getSchema: GetSchema;
 }
 
 export const UserInput: React.FC<UserInputProps> = props => {
-  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { formContext, onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { const: type } = getSchema('$type');
+  const [, promptType] = (type as string).split('.');
+  const intentName = `${promptType}.response-${formData?.$designer?.id}`;
 
   return (
     <Fragment>
@@ -56,6 +65,22 @@ export const UserInput: React.FC<UserInputProps> = props => {
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
           />
+        </div>
+      )}
+      <div css={field}>
+        <TextWidget
+          onChange={onChange('value')}
+          schema={getSchema('value')}
+          id={idSchema.value.__id}
+          value={formData.value}
+          label={formatMessage('Value')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.value && errorSchema.value.__errors}
+        />
+      </div>
+      {usesLuisRecognizer(formContext.currentDialog) && type !== SDKTypes.AttachmentInput && (
+        <div css={field}>
+          <LuEditorWidget name={intentName} formContext={formContext} prompt />
         </div>
       )}
       {getSchema('defaultLocale') && (
