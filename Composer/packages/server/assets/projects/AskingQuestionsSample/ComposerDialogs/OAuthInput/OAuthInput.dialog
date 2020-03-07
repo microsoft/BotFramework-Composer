@@ -39,7 +39,7 @@
           "method": "GET",
           "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
           "headers": {
-            "Authorization": "Bearer {user.token.token}"
+            "Authorization": "Bearer ${user.token.token}"
           },
           "resultProperty": "user.getGraphEmails"
         },
@@ -48,7 +48,7 @@
           "$designer": {
             "id": "991558"
           },
-          "activity": "@{bfdactivity-991558()}"
+          "activity": "${bfdactivity-991558()}"
         }
       ]
     }

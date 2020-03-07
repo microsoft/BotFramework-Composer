@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -36,7 +36,7 @@ const LGPage: React.FC<LGPageProps> = props => {
   const { dialogs } = state;
 
   const path = props.location?.pathname ?? '';
-  const { fileId = 'common' } = props;
+  const { fileId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -56,6 +56,13 @@ const LGPage: React.FC<LGPageProps> = props => {
     });
     return newDialogLinks;
   }, [dialogs]);
+
+  useEffect(() => {
+    const activeDialog = dialogs.find(({ id }) => id === fileId);
+    if (!activeDialog && dialogs.length && fileId !== 'common') {
+      navigateTo('/language-generation/common');
+    }
+  }, [fileId, dialogs]);
 
   const onSelect = useCallback(
     id => {

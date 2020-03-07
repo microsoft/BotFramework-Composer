@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seedNewDialog, SDKTypes } from '@bfc/shared';
+import { seedNewDialog, SDKTypes, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
@@ -18,27 +18,21 @@ export class VisualSDKDemo extends Component {
 
   seedInitialActions() {
     const initialTypes = [
-      SDKTypes.SendActivity,
-      SDKTypes.EditArray,
-      SDKTypes.InitProperty,
-      SDKTypes.SetProperties,
-      SDKTypes.SetProperty,
-      SDKTypes.DeleteProperties,
-      SDKTypes.DeleteProperty,
-      SDKTypes.BeginDialog,
-      SDKTypes.EndDialog,
-      SDKTypes.RepeatDialog,
-      SDKTypes.ReplaceDialog,
-      SDKTypes.CancelAllDialogs,
-      SDKTypes.EmitEvent,
+      ...dialogGroups[DialogGroup.RESPONSE].types,
+      ...dialogGroups[DialogGroup.INPUT].types,
+      ...dialogGroups[DialogGroup.BRANCHING].types,
+      ...dialogGroups[DialogGroup.MEMORY].types,
+      ...dialogGroups[DialogGroup.STEP].types,
+      ...dialogGroups[DialogGroup.CODE].types,
+      ...dialogGroups[DialogGroup.LOG].types,
     ];
     const initalActions = initialTypes.map(t => seedNewDialog(t));
     return initalActions;
   }
 
-  appendActionPreview($type) {
+  insertActionPreview($type) {
     this.setState({
-      actions: [...this.state.actions, seedNewDialog($type)],
+      actions: [seedNewDialog($type), ...this.state.actions],
     });
   }
 
@@ -52,7 +46,7 @@ export class VisualSDKDemo extends Component {
         <div className="action-preview--raw">
           <JsonBlock
             styles={{
-              width: '200px',
+              width: '300px',
               height: '80px',
               fontSize: '8px',
             }}
@@ -66,7 +60,7 @@ export class VisualSDKDemo extends Component {
             }}
           />
         </div>
-        <div className="action-preview--visual">
+        <div className="action-preview--visual" style={{ marginLeft: 20 }}>
           {renderUIWidget(uiSchemaPrivider.get(action.$type), {
             id: `actions[${index}]`,
             data: action,
@@ -79,9 +73,9 @@ export class VisualSDKDemo extends Component {
 
   renderActionFactory() {
     return (
-      <div style={{ height: 100, margin: 20 }}>
+      <div style={{ width: '100%', height: 100, margin: 20 }}>
         <h3>Create action by $type</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.appendActionPreview($type)} />
+        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.insertActionPreview($type)} />
       </div>
     );
   }
@@ -91,8 +85,8 @@ export class VisualSDKDemo extends Component {
       <div className="story-container">
         <h1 className="story-title">Visual SDK Demo</h1>
         <div className="story-content" style={{ display: 'flex', flexFlow: 'wrap' }}>
-          {this.state.actions.map((action, index) => this.renderActionPreview(action, index))}
           {this.renderActionFactory()}
+          {this.state.actions.map((action, index) => this.renderActionPreview(action, index))}
         </div>
       </div>
     );

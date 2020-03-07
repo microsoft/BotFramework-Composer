@@ -37,47 +37,11 @@
                     "id": "037171",
                     "name": "Send a response"
                   },
-                  "activity": "@{bfdactivity-037171()}"
+                  "activity": "${bfdactivity-037171()}"
                 }
               ]
             }
           ]
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "200509",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists",
-          "type": "object"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "192864",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.grocery",
-          "type": "array"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "905432",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.shopping",
-          "type": "array"
-        },
-        {
-          "$type": "Microsoft.InitProperty",
-          "$designer": {
-            "id": "773009",
-            "name": "Initialize a Property"
-          },
-          "property": "user.taskLists.todo",
-          "type": "array"
         }
       ]
     },
@@ -94,7 +58,7 @@
             "id": "113335",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-113335()}"
+          "activity": "${bfdactivity-113335()}"
         }
       ],
       "intent": "Help"
@@ -112,7 +76,7 @@
             "id": "183920",
             "name": "Confirmation"
           },
-          "prompt": "@{bfdprompt-183920()}",
+          "prompt": "${bfdprompt-183920()}",
           "maxTurnCount": 3,
           "property": "turn.cancelConfirmation",
           "defaultValue": "false",
@@ -141,7 +105,7 @@
                 "id": "304360",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-304360()}"
+              "activity": "${bfdactivity-304360()}"
             },
             {
               "$type": "Microsoft.CancelAllDialogs",
@@ -158,7 +122,7 @@
                 "id": "470975",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-470975()}"
+              "activity": "${bfdactivity-470975()}"
             }
           ]
         }
@@ -178,7 +142,7 @@
             "id": "456012",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-456012()}"
+          "activity": "${bfdactivity-456012()}"
         }
       ],
       "intent": "Greeting"
@@ -195,12 +159,12 @@
             "id": "069270",
             "name": "Text input"
           },
-          "prompt": "@{bfdprompt-069270()}",
+          "prompt": "${bfdprompt-069270()}",
           "maxTurnCount": 3,
           "property": "dialog.item",
           "alwaysPrompt": false,
           "allowInterruptions": "turn.recognized.score > 0.7 && !#AddItem && !@itemTitle",
-          "value": "@itemTitle"
+          "value": "=@itemTitle"
         },
         {
           "$type": "Microsoft.IfCondition",
@@ -216,7 +180,7 @@
                 "id": "781953",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-781953()}",
+              "prompt": "${bfdprompt-781953()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
@@ -245,7 +209,7 @@
               "recognizerOptions": {
                 "noValue": false
               },
-              "value": "@listType"
+              "value": "=@listType"
             }
           ]
         },
@@ -257,7 +221,7 @@
           },
           "changeType": "Push",
           "itemsProperty": "user.taskLists[dialog.listType]",
-          "value": "dialog.item"
+          "value": "=dialog.item"
         },
         {
           "$type": "Microsoft.SendActivity",
@@ -265,7 +229,7 @@
             "id": "775572",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-775572()}"
+          "activity": "${bfdactivity-775572()}"
         },
         {
           "$type": "Microsoft.DeleteProperty",
@@ -306,13 +270,13 @@
                 "id": "637111",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-637111()}",
+              "prompt": "${bfdprompt-637111()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@listType",
               "outputFormat": "value",
-              "value": "@listType",
+              "value": "=@listType",
               "choices": [
                 {
                   "value": "Shopping"
@@ -350,23 +314,23 @@
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "id": "684852",
+                "id": "212971",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-212971()}"
+              "activity": "${bfdactivity-212971()}"
             },
             {
               "$type": "Microsoft.TextInput",
               "$designer": {
-                "id": "038757",
+                "id": "879447",
                 "name": "Text input"
               },
-              "prompt": "@{bfdprompt-879447()}",
+              "prompt": "${bfdprompt-879447()}",
               "maxTurnCount": 3,
               "property": "dialog.item",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#DeleteItem && !@itemTitle",
-              "value": "@itemTitle"
+              "value": "=@itemTitle"
             },
             {
               "$type": "Microsoft.EditArray",
@@ -377,25 +341,25 @@
               "changeType": "Remove",
               "itemsProperty": "user.taskLists[dialog.listType]",
               "resultProperty": "turn.itemDeleted",
-              "value": "dialog.item"
+              "value": "=dialog.item"
             },
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "id": "593087",
+                "id": "056974",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-056974()}"
+              "activity": "${bfdactivity-056974()}"
             }
           ],
           "elseActions": [
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "id": "253146",
+                "id": "084161",
                 "name": "Send a response"
               },
-              "activity": "@{bfdactivity-084161()}"
+              "activity": "${bfdactivity-084161()}"
             }
           ]
         },
@@ -438,13 +402,13 @@
                 "id": "059540",
                 "name": "Multiple choice"
               },
-              "prompt": "@{bfdprompt-059540()}",
+              "prompt": "${bfdprompt-059540()}",
               "maxTurnCount": 3,
               "property": "dialog.listType",
               "alwaysPrompt": false,
               "allowInterruptions": "turn.recognized.score > 0.7 && !#ViewCollection && !@listType",
               "outputFormat": "value",
-              "value": "@listType",
+              "value": "=@listType",
               "choices": [
                 {
                   "value": "Todo"
@@ -483,7 +447,7 @@
             "id": "052697",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-052697()}"
+          "activity": "${bfdactivity-052697()}"
         },
         {
           "$type": "Microsoft.DeleteProperty",
