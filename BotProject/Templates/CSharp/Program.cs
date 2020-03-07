@@ -24,12 +24,25 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, builder) =>
             {
-                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                       .AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
-                       .UseLuisConfigAdaptor()
-                       .UseLuisSettings();
                 var env = hostingContext.HostingEnvironment;
+
+                builder.AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile("appsetting.json", optional: true, reloadOnChange: true)
+                    .UseLuisConfigAdaptor()
+                    .UseLuisSettings();
+
                 if (env.IsDevelopment())
+                {
+                    // Local Debug
+                    builder.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
+                }
+                else
+                {
+                    //Azure Deploy
+                    builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
+                }
+
+                if (!env.IsDevelopment())
                 {
                     builder.AddUserSecrets<Startup>();
                 }
