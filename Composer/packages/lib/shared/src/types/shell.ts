@@ -73,7 +73,7 @@ export interface ShellApi {
   addLuIntent: (id: string, intent: LuIntentSection | null) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => Promise<void>;
-  createDialog: () => Promise<string>;
+  createDialog: (actions: any) => Promise<string>;
   validateExpression: (expression?: string) => Promise<boolean>;
   // TODO: fix these types
   addCoachMarkRef: any;

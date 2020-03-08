@@ -6,6 +6,8 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import querystring from 'query-string';
+import { SDKTypes } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -37,6 +39,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onClipboardChange,
   onOpen,
   onChange,
+  onCreateDialog,
   onSelect,
   undo,
   redo,
@@ -140,6 +143,30 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           onClipboardChange(cutData);
         };
         break;
+      case NodeEventTypes.MoveSelection:
+        handler = e => {
+          const copiedActions = copyNodes(data, e.actionIds);
+          onCreateDialog(copiedActions).then(d => {
+            const startIndex = e.actionIds[0].indexOf('actions[');
+            const position = parseInt(e.actionIds[0][startIndex + 8]);
+            const deleteResult = deleteNodes(data, e.actionIds, nodes =>
+              deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+            );
+            const queryString = querystring.parseUrl(parent.location.href);
+            const insertResult = insert(
+              deleteResult,
+              `${queryString.query.selected}.actions`,
+              position,
+              SDKTypes.BeginDialog,
+              {
+                dialog: d,
+              }
+            );
+            onChange(insertResult);
+          });
+          onFocusSteps([]);
+        };
+        break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
           const dialog = deleteNodes(data, e.actionIds, nodes =>
@@ -239,6 +266,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).cutSelection = () =>
     dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+  (window as any).moveSelection = () =>
+    dispatchEvent(NodeEventTypes.MoveSelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).deleteSelection = () =>
     dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
@@ -352,6 +381,7 @@ interface ObiEditorProps {
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
   onClipboardChange: (actions: any[]) => void;
+  onCreateDialog: (actions: any[]) => Promise<string>;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
   onSelect: (ids: string[]) => any;
