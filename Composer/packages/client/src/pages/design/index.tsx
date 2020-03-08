@@ -389,6 +389,7 @@ function DesignPage(props) {
                     hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
                     ref={addRef}
+                    title={'visual editor'}
                   />
                   {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>
@@ -397,6 +398,7 @@ function DesignPage(props) {
                   name="FormEditor"
                   css={formEditor}
                   src={`${rootPath}/extensionContainer.html`}
+                  title={'form editor'}
                 />
               </div>
             </Fragment>
