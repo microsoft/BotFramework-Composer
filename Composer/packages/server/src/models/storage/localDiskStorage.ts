@@ -63,7 +63,7 @@ export class LocalDiskStorage implements IFileStorage {
     await rmDir(path);
   }
 
-  async glob(pattern: string, path: string): Promise<string[]> {
+  async glob(pattern: string | string[], path: string): Promise<string[]> {
     return await glob(pattern, { cwd: path, dot: true });
   }
 
