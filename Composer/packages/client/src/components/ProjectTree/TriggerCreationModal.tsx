@@ -230,7 +230,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             <TextField
               label={
                 isRegEx
-                  ? formatMessage('What is the name of this trigger (RegexEx)')
+                  ? formatMessage('What is the name of this trigger (RegEx)')
                   : formatMessage('What is the name of this trigger (Luis)')
               }
               styles={intent}
