@@ -244,12 +244,12 @@ export const ShellApi: React.FC = () => {
     return await updateLuFile({ id, content });
   }
 
-  async function updateRegExIntentHandler(dialogId, intent, pattern, event) {
+  async function updateRegExIntentHandler({ id, intentName, pattern }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const dialog = dialogs.find(dialog => dialog.id === dialogId);
+    const dialog = dialogs.find(dialog => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
-    const newDialog = updateRegExIntent(dialog, intent, pattern);
-    return await updateDialog({ dialogId, content: newDialog.content });
+    const newDialog = updateRegExIntent(dialog, intentName, pattern);
+    return await updateDialog({ id, content: newDialog.content });
   }
 
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
