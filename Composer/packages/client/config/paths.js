@@ -66,6 +66,7 @@ module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
   appBuild: resolveApp('../server/build/public'),
+  appDist: resolveApp('dist'),
   appElectronBuild: resolveApp('../electron-server/build/public'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),

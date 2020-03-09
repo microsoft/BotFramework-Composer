@@ -14,8 +14,6 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
-const path = require('path');
-
 const chalk = require('react-dev-utils/chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
@@ -165,13 +163,14 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  // copy to dist folder
+  fs.copySync(paths.appPublic, paths.appDist, {
     dereference: true,
     filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
   });
 
-  fs.copySync(paths.appPublic, paths.appElectronBuild, {
-    dereference: true,
-    filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
-  });
+  // fs.copySync(paths.appPublic, paths.appElectronBuild, {
+  //   dereference: true,
+  //   filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
+  // });
 }
