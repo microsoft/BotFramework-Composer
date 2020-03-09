@@ -10,9 +10,6 @@ import { MicrosoftIRecognizer, LuFile } from '@bfc/shared';
 
 import { BaseField } from '../BaseField';
 
-import ToggleEditor from './ToggleEditor';
-import RegexEditor from './RegexEditor';
-
 import './styles.css';
 
 export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
@@ -126,13 +123,6 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           responsiveMode={ResponsiveMode.large}
           onRenderTitle={onRenderTitle}
         />
-        <ToggleEditor key={getSelectedType()} title={'regular expression editor'} loaded={Boolean(isRegex)}>
-          {() => {
-            if (isRegex) {
-              return <RegexEditor {...props} />;
-            }
-          }}
-        </ToggleEditor>
       </BaseField>
     </div>
   );

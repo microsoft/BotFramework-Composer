@@ -112,6 +112,10 @@ const shellApi: ShellApi = {
     return apiClient.apiCall('removeLuIntent', { id, intentName });
   },
 
+  updateRegExIntent: (id, intentName, pattern) => {
+    return apiClient.apiCall('updateRegExIntent', { id, intentName, pattern });
+  },
+
   createDialog: () => {
     return apiClient.apiCall('createDialog');
   },

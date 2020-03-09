@@ -23,6 +23,7 @@ export interface TriggerFormData {
   specifiedType: string;
   intent: string;
   triggerPhrases: string;
+  regexEx: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -30,6 +31,7 @@ export interface TriggerFormDataErrors {
   intent?: string;
   specifiedType?: string;
   triggerPhrases?: string;
+  regexEx?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -59,8 +61,15 @@ export function getFriendlyName(data) {
   return data.$type;
 }
 
-export function insert(content, path: string, position: number | undefined, data: TriggerFormData) {
+export function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
+  const insertAt = typeof position === 'undefined' ? current.length : position;
+  current.splice(insertAt, 0, data);
+  set(content, path, current);
+  return content;
+}
+
+export function generateNewTrigger(data: TriggerFormData) {
   const optionalAttributes: { intent?: string; event?: string } = {};
   if (data.specifiedType) {
     data.$type = data.specifiedType;
@@ -72,21 +81,50 @@ export function insert(content, path: string, position: number | undefined, data
     $type: data.$type,
     ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
-
-  const insertAt = typeof position === 'undefined' ? current.length : position;
-
-  current.splice(insertAt, 0, newStep);
-
-  set(content, path, current);
-
-  return content;
+  return newStep;
 }
 
-export function addNewTrigger(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
-  const dialogCopy = getDialog(dialogs, dialogId);
-  if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
-  insert(dialogCopy.content, 'triggers', undefined, data);
+export function generateRegexExpression(intent: string, pattern: string) {
+  return { intent, pattern };
+}
+
+export function createNewTrigger(dialog: DialogInfo, data: TriggerFormData): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const trigger = generateNewTrigger(data);
+  insert(dialogCopy.content, 'triggers', undefined, trigger);
   return dialogCopy;
+}
+
+export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+  const regex = generateRegexExpression(intent, pattern);
+  const dialogCopy = cloneDeep(dialog);
+  insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
+  return dialogCopy;
+}
+
+export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+  let dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find(ri => ri.intent === intent);
+  if (!targetIntent) {
+    dialogCopy = createRegExIntent(dialog, intent, pattern);
+  } else {
+    targetIntent.pattern = pattern;
+  }
+  return dialogCopy;
+}
+
+export function generateNewDialog(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
+  //add new trigger
+  const dialog = dialogs.find(dialog => dialog.id === dialogId);
+  if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
+  let updatedDialog = createNewTrigger(dialog, data);
+
+  //add regex expression
+  if (data.regexEx) {
+    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regexEx);
+  }
+  return updatedDialog;
 }
 
 export function createSelectedPath(selected: number) {

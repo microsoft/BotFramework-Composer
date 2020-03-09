@@ -43,11 +43,6 @@ export const UserInput: React.FC<UserInputProps> = props => {
 
   return (
     <Fragment>
-      {usesLuisRecognizer(formContext.currentDialog) && (
-        <div css={field}>
-          <LuEditorWidget name={intentName} formContext={formContext} />
-        </div>
-      )}
       <div css={field}>
         <TextWidget
           onChange={onChange('property')}
@@ -70,6 +65,22 @@ export const UserInput: React.FC<UserInputProps> = props => {
             formContext={props.formContext}
             rawErrors={errorSchema.outputFormat && errorSchema.outputFormat.__errors}
           />
+        </div>
+      )}
+      <div css={field}>
+        <TextWidget
+          onChange={onChange('value')}
+          schema={getSchema('value')}
+          id={idSchema.value.__id}
+          value={formData.value}
+          label={formatMessage('Value')}
+          formContext={props.formContext}
+          rawErrors={errorSchema.value && errorSchema.value.__errors}
+        />
+      </div>
+      {usesLuisRecognizer(formContext.currentDialog) && type !== SDKTypes.AttachmentInput && (
+        <div css={field}>
+          <LuEditorWidget name={intentName} formContext={formContext} prompt />
         </div>
       )}
       {getSchema('defaultLocale') && (
