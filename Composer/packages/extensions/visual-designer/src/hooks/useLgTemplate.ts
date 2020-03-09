@@ -2,15 +2,17 @@
 // Licensed under the MIT License.
 
 import { useContext } from 'react';
+import { LGTemplate } from 'botbuilder-lg';
 import { LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { normalizeLgTemplate } from '../utils/normalizeLgTemplate';
 
-export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): string | undefined => {
+export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): LGTemplate | undefined => {
   if (!Array.isArray(lgFiles)) return;
 
-  const allTemplates: any[] = [];
+  const allTemplates: LGTemplate[] = [];
   for (const file of lgFiles) {
     const templates = get(file, 'templates');
     if (Array.isArray(templates)) {
@@ -19,17 +21,11 @@ export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): 
   }
 
   const result = allTemplates.find(x => get(x, 'name') === lgTemplateName);
-  return result ? get(result, 'body') : undefined;
-};
-
-const normalizeLgBody = (body: string): string => {
-  if (!body) return '';
-  const [firstLine] = body.split('\n');
-  return firstLine.startsWith('-') ? firstLine.substring(1) : firstLine;
+  return result;
 };
 
 export const useLgTemplate = (str?: string) => {
-  const { getLgBodySync } = useContext(NodeRendererContext);
+  const { getLgTemplateSync } = useContext(NodeRendererContext);
 
   const lgTemplateRef = LgTemplateRef.parse(str || '');
   const templateId = lgTemplateRef ? lgTemplateRef.name : '';
@@ -37,6 +33,6 @@ export const useLgTemplate = (str?: string) => {
   // fallback to input string
   if (!templateId) return str;
 
-  const lgBody = getLgBodySync(templateId) || '';
-  return normalizeLgBody(lgBody);
+  const lgTemplate = getLgTemplateSync(templateId);
+  return lgTemplate ? normalizeLgTemplate(lgTemplate) : '';
 };

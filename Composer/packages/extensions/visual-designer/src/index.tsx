@@ -77,7 +77,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
-    getLgBodySync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
+    getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
