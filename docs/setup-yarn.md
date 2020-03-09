@@ -17,6 +17,11 @@ Bot Framework Composer is designed to be a hosted web app. Currently, you need t
     ```
     git clone https://github.com/microsoft/BotFramework-Composer.git
     ```
+    
+    ```
+    Until further notice its better to clone the 'master' branch
+    git clone --single-branch --branch master https://github.com/microsoft/BotFramework-Composer.git
+    ```
 
 2. After cloning the repository, navigate to the **Bot Framework Composer** folder. Then run the following commands to navigate to the **Composer** folder and get all required packages:
 
