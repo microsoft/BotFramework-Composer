@@ -20,7 +20,7 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
-import { parser } from '@bfcomposer/bf-lu/lib/parser';
+import { parser } from '@microsoft/bf-lu/lib/parser';
 
 import { EntityTypesObj, LineState } from './entityEnum';
 import * as util from './matchingPattern';

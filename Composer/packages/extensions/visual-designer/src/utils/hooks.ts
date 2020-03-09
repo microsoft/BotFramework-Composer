@@ -7,6 +7,8 @@ import { LgTemplateRef } from '@bfc/shared';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
+import { normalizeLgTemplate } from './normalizeLgTemplate';
+
 export const useLgTemplate = (str?: string, dialogId?: string) => {
   const { getLgTemplates } = useContext(NodeRendererContext);
   const [templateText, setTemplateText] = useState('');
@@ -33,8 +35,7 @@ export const useLgTemplate = (str?: string, dialogId?: string) => {
       }
 
       if (template && template.body) {
-        const [firstLine] = template.body.split('\n');
-        setTemplateText(firstLine.startsWith('-') ? firstLine.substring(1) : firstLine);
+        setTemplateText(normalizeLgTemplate(template));
       } else {
         setTemplateText('');
       }

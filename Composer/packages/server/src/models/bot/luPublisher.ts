@@ -11,9 +11,9 @@ import { ILuisConfig } from './interface';
 import log from './../../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
+const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';

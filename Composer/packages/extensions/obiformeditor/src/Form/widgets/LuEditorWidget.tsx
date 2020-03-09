@@ -17,6 +17,7 @@ interface LuEditorWidgetProps {
   name: string;
   height?: number | string;
   onChange?: (template?: string) => void;
+  prompt?: boolean;
 }
 
 export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
@@ -83,7 +84,9 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
       ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
       : '';
 
-    const label = formatMessage('Trigger phrases (intent: #{name})', { name });
+    const label = prompt
+      ? formatMessage('Expected responses (intent: {name})', { name })
+      : formatMessage('Trigger phrases (intent: {name})', { name });
 
     return (
       <>

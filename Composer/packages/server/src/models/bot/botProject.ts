@@ -495,7 +495,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.schema', '**/*.json'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
@@ -504,21 +504,56 @@ export class BotProject {
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
-        const stats = await this.fileStorage.stat(realFilePath);
-        if (stats.isFile) {
-          const content: string = await this.fileStorage.readFile(realFilePath);
-          fileList.push({
-            name: Path.basename(filePath),
-            content: content,
-            path: realFilePath,
-            relativePath: Path.relative(this.dir, realFilePath),
-            lastModified: stats.lastModified,
-          });
+        const fileInfo = await this._getFileInfo(realFilePath);
+        if (fileInfo) {
+          fileList.push(fileInfo);
         }
       }
     }
 
+    const schemas = await this._getSchemas();
+    fileList.push(...schemas);
+
     return fileList;
+  };
+
+  private _getSchemas = async (): Promise<FileInfo[]> => {
+    if (!(await this.exists())) {
+      throw new Error(`${this.dir} is not a valid path`);
+    }
+
+    const schemasDir = Path.join(this.dir, 'Schemas');
+
+    if (!(await this.fileStorage.exists(schemasDir))) {
+      debug('No schemas directory found.');
+      return [];
+    }
+
+    const schemas: FileInfo[] = [];
+    const paths = await this.fileStorage.glob('*.schema', schemasDir);
+
+    for (const path of paths) {
+      const fileInfo = await this._getFileInfo(Path.join(schemasDir, path));
+      if (fileInfo) {
+        schemas.push(fileInfo);
+      }
+    }
+
+    return schemas;
+  };
+
+  private _getFileInfo = async (path: string): Promise<FileInfo | undefined> => {
+    const stats = await this.fileStorage.stat(path);
+    if (stats.isFile) {
+      const content: string = await this.fileStorage.readFile(path);
+      return {
+        name: Path.basename(path),
+        content: content,
+        path: path,
+        relativePath: Path.relative(this.dir, path),
+        lastModified: stats.lastModified,
+      };
+    }
   };
 
   // check project stracture is valid or not, if not, try fix it.

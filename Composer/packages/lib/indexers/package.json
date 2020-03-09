@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@bfc/shared": "*",
-    "@bfcomposer/bf-lu": "^1.2.9",
+    "@microsoft/bf-lu": "4.8.0-preview.110925",
     "botbuilder-lg": "^4.8.0-preview.106823",
     "botframework-expressions": "^4.8.0-preview.106476",
     "lodash": "^4.17.15"
