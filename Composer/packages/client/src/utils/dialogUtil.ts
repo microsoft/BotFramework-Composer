@@ -104,11 +104,14 @@ export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
-  const dialogCopy = cloneDeep(dialog);
+  let dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
   const targetIntent = regexIntents.find(ri => ri.intent === intent);
-  if (!targetIntent) throw new Error(`regEx ${intent} does not exist`);
-  targetIntent.pattern = pattern;
+  if (!targetIntent) {
+    dialogCopy = createRegExIntent(dialog, intent, pattern);
+  } else {
+    targetIntent.pattern = pattern;
+  }
   return dialogCopy;
 }
 
