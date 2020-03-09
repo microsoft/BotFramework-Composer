@@ -27,7 +27,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       let url = `/bot/${projectId}/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
       if (item.dialogPath) {
-        url = toUrlUtil(item.dialogPath);
+        url = toUrlUtil(projectId, item.dialogPath);
       }
       navigateTo(url);
     },
@@ -41,7 +41,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const uri = convertPathToUrl(item.id, item.dialogPath);
+      const uri = convertPathToUrl(projectId, item.id, item.dialogPath);
       navigateTo(uri);
     },
   };

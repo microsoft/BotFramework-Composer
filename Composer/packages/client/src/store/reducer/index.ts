@@ -418,7 +418,7 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LG_FAILURE]: noOp,
   [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
   [ActionTypes.REMOVE_LG_FAILURE]: noOp,
-  [ActionTypes.UPDATE_LU_SUCCESS]: noOp,
+  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
   [ActionTypes.UPDATE_LU_FAILURE]: noOp,
   [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.CREATE_LU_FAILURE]: noOp,

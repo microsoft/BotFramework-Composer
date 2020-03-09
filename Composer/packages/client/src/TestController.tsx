@@ -149,7 +149,7 @@ export const TestController: React.FC = () => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo(`/bot/${state.projectId}/notifications/`);
+    navigateTo(`/bot/${state.projectId}/notifications`);
   }
 
   return (
@@ -184,7 +184,7 @@ export const TestController: React.FC = () => {
         )}
         <div ref={addRef}>
           {showError && (
-            <div style={{ float: 'left' }} onClick={handleErrorButtonClick}>
+            <div style={{ float: 'left' }} onClick={handleErrorButtonClick} data-testid="notifications-info-button">
               <span css={errorCount}>{errorLength}</span>
               <IconButton iconProps={{ iconName: 'ErrorBadge' }} css={errorButton} title="Error" ariaLabel="Error" />
             </div>
