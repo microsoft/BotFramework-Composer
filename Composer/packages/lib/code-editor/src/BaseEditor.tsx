@@ -3,14 +3,9 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
-import {
-  ControlledEditor as Editor,
-  EditorDidMount,
-  ControlledEditorProps,
-  ControlledEditorOnChange,
-} from '@monaco-editor/react';
+import Editor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import formatMessage from 'format-message';
@@ -62,7 +57,7 @@ const styles = {
   },
 };
 
-export interface BaseEditorProps extends Omit<ControlledEditorProps, 'onChange'> {
+export interface BaseEditorProps extends EditorProps {
   errorMessage?: any;
   helpURL?: string;
   hidePlaceholder?: boolean;
@@ -72,7 +67,17 @@ export interface BaseEditorProps extends Omit<ControlledEditorProps, 'onChange'>
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
-  const { onChange, editorDidMount, placeholder, value, errorMessage, helpURL, height = '100%', ...rest } = props;
+  const {
+    onChange,
+    editorDidMount,
+    placeholder,
+    hidePlaceholder,
+    value,
+    errorMessage,
+    helpURL,
+    height = '100%',
+    ...rest
+  } = props;
   const options = assignDefined(defaultOptions, props.options);
 
   const [hovered, setHovered] = useState(false);
@@ -104,12 +109,19 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     }
   }, [editor]);
 
-  const handleChange: ControlledEditorOnChange = useCallback(
-    (ev, value) => {
-      onChange(value || '');
-    },
-    [onChange]
-  );
+  useEffect(() => {
+    if (editor) {
+      console.log('changing onChange handler');
+      const disposable = editor.onDidChangeModelContent(() => {
+        console.log('Changing editor:', editor.getValue());
+        onChange(editor.getValue());
+      });
+
+      return () => {
+        disposable.dispose();
+      };
+    }
+  }, [onChange, editor]);
 
   const errorHelp =
     errorMessage &&
@@ -132,8 +144,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         <Editor
           {...rest}
           editorDidMount={onEditorMount}
-          value={value || placeholder}
-          onChange={handleChange}
+          value={value || hidePlaceholder ? '' : placeholder}
           options={options}
         />
       </div>
