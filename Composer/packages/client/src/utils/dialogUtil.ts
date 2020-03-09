@@ -96,14 +96,14 @@ export function createNewTrigger(dialog: DialogInfo, data: TriggerFormData): Dia
   return dialogCopy;
 }
 
-export function createRegEx(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
   insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
   return dialogCopy;
 }
 
-export function updateRegEx(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
   const targetIntent = regexIntents.find(ri => ri.intent === intent);
@@ -120,7 +120,7 @@ export function generateNewDialog(dialogs: DialogInfo[], dialogId: string, data:
 
   //add regex expression
   if (data.regexEx) {
-    updatedDialog = createRegEx(updatedDialog, data.intent, data.regexEx);
+    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regexEx);
   }
   return updatedDialog;
 }
