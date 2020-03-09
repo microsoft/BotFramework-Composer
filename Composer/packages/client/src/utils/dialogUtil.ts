@@ -85,23 +85,44 @@ export function generateNewTrigger(data: TriggerFormData) {
   return newStep;
 }
 
-export function generateRegexExpression(data: TriggerFormData) {
-  return { intent: data.intent, pattern: data.regexEx };
+export function generateRegexExpression(intent: string, pattern: string) {
+  return { intent, pattern };
+}
+
+export function createNewTrigger(dialog: DialogInfo, data: TriggerFormData): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const trigger = generateNewTrigger(data);
+  insert(dialogCopy.content, 'triggers', undefined, trigger);
+  return dialogCopy;
+}
+
+export function createRegEx(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+  const regex = generateRegexExpression(intent, pattern);
+  const dialogCopy = cloneDeep(dialog);
+  insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
+  return dialogCopy;
+}
+
+export function updateRegEx(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find(ri => ri.intent === intent);
+  if (!targetIntent) throw new Error(`regEx ${intent} does not exist`);
+  targetIntent.pattern = pattern;
+  return dialogCopy;
 }
 
 export function generateNewDialog(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   //add new trigger
-  const dialogCopy = getDialog(dialogs, dialogId);
-  if (!dialogCopy) throw new Error(`dialog ${dialogId} does not exist`);
-  const trigger = generateNewTrigger(data);
-  insert(dialogCopy.content, 'triggers', undefined, trigger);
+  const dialog = dialogs.find(dialog => dialog.id === dialogId);
+  if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
+  let updatedDialog = createNewTrigger(dialog, data);
 
   //add regex expression
   if (data.regexEx) {
-    const regex = generateRegexExpression(data);
-    insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
+    updatedDialog = createRegEx(updatedDialog, data.intent, data.regexEx);
   }
-  return dialogCopy;
+  return updatedDialog;
 }
 
 export function createSelectedPath(selected: number) {

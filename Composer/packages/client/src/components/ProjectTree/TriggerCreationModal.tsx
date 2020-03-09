@@ -36,7 +36,11 @@ import { StoreContext } from '../../store';
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataErrors => {
+const validateForm = (
+  data: TriggerFormData,
+  isRegEx: boolean,
+  regExIntents: [{ intent: string; pattern: string }]
+): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $type, specifiedType, intent, triggerPhrases, regexEx } = data;
 
@@ -60,6 +64,10 @@ const validateForm = (data: TriggerFormData, isRegEx: boolean): TriggerFormDataE
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
+  }
+
+  if ($type === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
+    errors.intent = `regEx ${intent} is already defined`;
   }
 
   if ($type === intentTypeKey && isRegEx && !regexEx) {
@@ -106,9 +114,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const luFile = luFiles.find(lu => lu.id === dialogId);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
+  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const onClickSubmitButton = e => {
     e.preventDefault();
-    const errors = validateForm(formData, isRegEx);
+    const errors = validateForm(formData, isRegEx, regexIntents);
 
     if (Object.keys(errors).length) {
       setFormData({
@@ -244,7 +253,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             <TextField
               label={formatMessage('Please input regex pattern')}
               onChange={onChangeRegEx}
-              errorMessage={formData.errors.intent}
+              errorMessage={formData.errors.regexEx}
               data-testid={'RegExDropDown'}
             />
           )}
