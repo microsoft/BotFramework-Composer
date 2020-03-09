@@ -20,7 +20,7 @@
     "@bfc/extensions": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
-    "@microsoft/bf-lu": "4.8.0-preview.110925",
+    "@microsoft/bf-lu": "4.8.0-preview.111952",
     "@emotion/core": "^10.0.7",
     "@reach/router": "^1.2.1",
     "axios": "^0.18.0",

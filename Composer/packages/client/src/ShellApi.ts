@@ -9,6 +9,7 @@ import get from 'lodash/get';
 import { isExpression } from './utils';
 import * as lgUtil from './utils/lgUtil';
 import * as luUtil from './utils/luUtil';
+import { updateRegExIntent } from './utils/dialogUtil';
 import { StoreContext } from './store';
 import ApiClient from './messenger/ApiClient';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
@@ -255,6 +256,14 @@ export const ShellApi: React.FC = () => {
     return await updateLuFile({ id, projectId, content });
   }
 
+  async function updateRegExIntentHandler({ id, intentName, pattern }, event) {
+    if (isEventSourceValid(event) === false) return false;
+    const dialog = dialogs.find(dialog => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateRegExIntent(dialog, intentName, pattern);
+    return await updateDialog({ id, content: newDialog.content });
+  }
+
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
     if (isEventSourceValid(event) === false) return false;
 
@@ -359,6 +368,7 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('addLuIntent', addLuIntentHandler);
     apiClient.registerApi('updateLuIntent', updateLuIntentHandler);
     apiClient.registerApi('removeLuIntent', removeLuIntentHandler);
+    apiClient.registerApi('updateRegExIntent', updateRegExIntentHandler);
     apiClient.registerApi('navTo', navTo);
     apiClient.registerApi('onFocusEvent', focusEvent);
     apiClient.registerApi('onFocusSteps', focusSteps);

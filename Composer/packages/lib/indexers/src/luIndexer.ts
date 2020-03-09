@@ -15,7 +15,7 @@ const { luParser } = sectionHandler;
 function convertLuDiagnostic(d: any, source: string): Diagnostic {
   const severityMap = {
     ERROR: DiagnosticSeverity.Error,
-    WARNING: DiagnosticSeverity.Warning,
+    WARN: DiagnosticSeverity.Warning,
     INFORMATION: DiagnosticSeverity.Information,
     HINT: DiagnosticSeverity.Hint,
   };
