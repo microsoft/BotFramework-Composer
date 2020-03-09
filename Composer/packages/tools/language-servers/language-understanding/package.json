@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "@microsoft/bf-cli-command": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz",
-        "@bfcomposer/bf-lu": "^1.2.9",
+        "@microsoft/bf-lu": "4.8.0-preview.110925",
         "@types/node": "^12.0.4",
         "express": "^4.15.2",
         "monaco-editor-core": "^0.17.0",

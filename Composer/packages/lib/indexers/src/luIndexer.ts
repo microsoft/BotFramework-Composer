@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser/composerindex';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
 import { LuIntentSection } from '@bfc/shared';
 
