@@ -176,6 +176,7 @@ const mockShellApi = [
   'addLuIntent',
   'updateLuIntent',
   'removeLuIntent',
+  'updateRegExIntent',
   'validateExpression',
   'onFocusSteps',
   'onFocusEvent',
