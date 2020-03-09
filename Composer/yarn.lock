@@ -2120,27 +2120,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bfcomposer/bf-lu@^1.2.9":
-  version "1.2.9"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.2.9.tgz#b2fec0d8f1c3d4d0e526a5bdbf9e5c9b3ab5b71d"
-  integrity sha1-sv7A2PHD1NDlJqW9v55cmzq1tx0=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "3.0.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "^2.1.2"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
 "@bfcomposer/monaco-editor-webpack-plugin@^1.7.2":
   version "1.7.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/monaco-editor-webpack-plugin/-/@bfcomposer/monaco-editor-webpack-plugin-1.7.2.tgz#f00ac5cec496dc3d44713d9142956b3336033eab"
@@ -2734,6 +2713,27 @@
     debug "^4.1.1"
     fs-extra "^7.0.1"
     tslib "~1.10.0"
+
+"@microsoft/bf-lu@4.8.0-preview.110925":
+  version "4.8.0-preview.110925"
+  uid "8905960d5858aa9f4d94c150fdc80ac4b6947e94"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.8.0-preview.110925.tgz#8905960d5858aa9f4d94c150fdc80ac4b6947e94"
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "3.0.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.15"
+    node-fetch "^2.1.2"
+    semver "^5.5.1"
+    tslib "^1.10.0"
 
 "@microsoft/load-themed-styles@^1.7.13":
   version "1.9.5"
