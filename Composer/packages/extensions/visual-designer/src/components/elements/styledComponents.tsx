@@ -47,6 +47,7 @@ export const SingleLineDiv = styled.div<DivProps>`
 export const TextDiv = styled.div`
   ${StandardFontCSS};
   ${MultilineCSS};
+  white-space: pre-wrap;
   line-height: 16px;
   display: inline-block;
 `;
