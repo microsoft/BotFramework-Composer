@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { resolve } from 'path';
-
+import { start } from '@bfc/server';
 import { mkdirp } from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
 
@@ -45,14 +45,14 @@ async function run() {
   console.log('starting server');
   // TODO: race condition with store being started
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { start } = require('./server');
+  //const { start } = require('./server');
   await start();
   console.log('beginning app start up');
 
   // TODO: fix race condition
   // this isn't working for some reason, but since we are awaiting the other calls, main seems to work
   // app.on('ready', main);
-  main();
+  main(); // might be fs calls locking up (node 13 histogram for event loop)
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {

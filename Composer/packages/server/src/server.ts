@@ -26,6 +26,7 @@ import pluginLoader from './services/pluginLoader';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
+const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
 const app: Express = express();
 app.set('view engine', 'ejs');
 app.set('view options', { delimiter: '?' });
@@ -79,12 +80,8 @@ pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).
     next();
   });
 
-  app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
+  app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));
   app.use(morgan('dev'));
-
-  app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
-    res.send('fortest');
-  });
 
   // only register the login route if the auth provider defines one
   if (login) {
@@ -107,13 +104,15 @@ pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).
   });
 
   app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
-    res.render(path.resolve(__dirname, './public/extensionContainer.ejs'), { __nonce__: req.__nonce__ });
+    res.render(path.resolve(clientDirectory, 'extensionContainer.ejs'), { __nonce__: req.__nonce__ });
   });
-
+  
   app.get('*', function(req, res) {
-    res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
+    res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
+});
 
+export async function start() {
   const port = process.env.PORT || 5000;
   const server = app.listen(port, () => {
     if (process.env.NODE_ENV === 'production') {
@@ -166,4 +165,4 @@ pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).
       });
     }
   });
-});
+}
