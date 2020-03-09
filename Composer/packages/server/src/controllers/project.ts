@@ -188,14 +188,8 @@ async function updateDialog(req: Request, res: Response) {
   const user = await PluginLoader.getUserFromRequest(req);
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    // prevent content overwrite
-    const dialog = currentProject.dialogs.find(d => d.id === req.body.id);
-    if (dialog && new Date(dialog.lastModified).getTime() > new Date(req.body.lastModified).getTime()) {
-      res.status(409).json({ message: 'This content was updated since it was loaded. Please reload.' });
-    } else {
-      const lastModified = await currentProject.updateDialog(req.body.id, req.body.content);
-      res.status(200).json({ lastModified: lastModified });
-    }
+    const lastModified = await currentProject.updateDialog(req.body.id, req.body.content);
+    res.status(200).json({ lastModified: lastModified });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -241,13 +235,8 @@ async function updateLgFile(req: Request, res: Response) {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const file = currentProject.lgFiles.find(d => d.id === req.body.id);
-    if (file && new Date(file.lastModified).getTime() > new Date(req.body.lastModified).getTime()) {
-      res.status(409).json({ message: 'This content was updated since it was loaded. Please reload.' });
-    } else {
-      const lastModified = await currentProject.updateLgFile(req.body.id, req.body.content);
-      res.status(200).json({ lastModified: lastModified });
-    }
+    const lastModified = await currentProject.updateLgFile(req.body.id, req.body.content);
+    res.status(200).json({ lastModified: lastModified });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -292,13 +281,8 @@ async function updateLuFile(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const file = currentProject.luFiles.find(d => d.id === req.body.id);
-      if (file && new Date(file.lastModified).getTime() > new Date(req.body.lastModified).getTime()) {
-        res.status(409).json({ message: 'This content was updated since it was loaded. Please reload.' });
-      } else {
-        const lastModified = await currentProject.updateLuFile(req.body.id, req.body.content);
-        res.status(200).json({ lastModified: lastModified });
-      }
+      const lastModified = await currentProject.updateLuFile(req.body.id, req.body.content);
+      res.status(200).json({ lastModified: lastModified });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
