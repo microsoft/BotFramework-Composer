@@ -46,8 +46,8 @@ namespace Tests
         public async Task ToDoBotTest()
         {
             await BuildTestFlow()
-            .SendConversationUpdate()
-                .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
+            // .SendConversationUpdate()
+            //     .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
             .Send("add a todo named first")
                 .AssertReply("Successfully added a todo named first")
             .Send("add a todo named second")
@@ -71,7 +71,6 @@ namespace Tests
             var convoState = new ConversationState(storage);
             var userState = new UserState(storage);
             var adapter = new TestAdapter(TestAdapter.CreateConversation(TestContext.TestName), sendTrace);
-            adapter.Locale = "en-us";
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)

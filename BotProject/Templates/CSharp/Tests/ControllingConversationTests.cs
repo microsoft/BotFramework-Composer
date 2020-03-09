@@ -46,8 +46,8 @@ namespace Tests
         public async Task ControllingConversationBotTest()
         {
             await BuildTestFlow()
-            .SendConversationUpdate()
-                .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
+            // .SendConversationUpdate()
+            //     .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, What's your age?")
             .Send("18")
@@ -84,7 +84,6 @@ namespace Tests
             var convoState = new ConversationState(storage);
             var userState = new UserState(storage);
             var adapter = new TestAdapter(TestAdapter.CreateConversation(TestContext.TestName), sendTrace);
-            adapter.Locale = "en-us";
             adapter
                 .UseStorage(storage)
                 .UseState(userState, convoState)
