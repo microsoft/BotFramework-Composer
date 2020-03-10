@@ -4,15 +4,15 @@
 import { PluginConfig } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 
-import { LuField } from './LuField';
+import { LuisIntentEditor } from './LuisIntentEditor';
 
 const config: PluginConfig = {
   recognizers: [
     {
       id: SDKTypes.LuisRecognizer,
       displayName: 'LUIS',
-      editor: LuField,
-      handleChange: (props, shellData, shellApi) => {
+      editor: LuisIntentEditor,
+      handleChange: (props, shellData) => {
         const { luFiles, dialogId } = shellData;
         const luFile = luFiles.find(f => f.id === dialogId);
 

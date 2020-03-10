@@ -9,6 +9,7 @@ export * from './ObjectField';
 export * from './OneOfField';
 export * from './OpenObjectField';
 export * from './RecognizerField';
+export * from './IntentField';
 export * from './SelectField';
 export * from './StringField';
 export * from './UnsupportedField';

@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 import { UISchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
+import formatMessage from 'format-message';
 
-import { RecognizerField } from './components/fields';
-import formatMessage = require('format-message');
+import { RecognizerField, IntentField } from './components/fields';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -66,6 +66,11 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.OnIntent]: {
     order: ['intent', 'condition', 'entities', '*'],
     hidden: ['actions'],
+    properties: {
+      intent: {
+        field: IntentField,
+      },
+    },
   },
   [SDKTypes.OnInvokeActivity]: { ...triggerUiSchema },
   [SDKTypes.OnMessageActivity]: { ...triggerUiSchema },
