@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import Editor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
@@ -83,6 +83,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | undefined>();
+  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
@@ -111,9 +112,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
   useEffect(() => {
     if (editor) {
-      console.log('changing onChange handler');
       const disposable = editor.onDidChangeModelContent(() => {
-        console.log('Changing editor:', editor.getValue());
         onChange(editor.getValue());
       });
 
@@ -141,12 +140,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor
-          {...rest}
-          editorDidMount={onEditorMount}
-          value={value || hidePlaceholder ? '' : placeholder}
-          options={options}
-        />
+        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={options} />
       </div>
       {!!errorHelp && (
         <MessageBar
