@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Set Node Version
         uses: actions/setup-node@v1
         with:
@@ -56,17 +56,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Set Dotnet Version
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "3.0.100" # SDK Version to use.
+          dotnet-version: "3.1.102" # SDK Version to use.
       - name: dotnet build
         run: dotnet build
-        working-directory: BotProject/CSharp
+        working-directory: BotProject/Templates/CSharp
       - name: dotnet test
         run: dotnet test
-        working-directory: BotProject/CSharp
+        working-directory: BotProject/Templates/CSharp
 
   docker-build:
     name: Docker Build
@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: docker-compose build
         run: docker-compose build
       - name: Health check

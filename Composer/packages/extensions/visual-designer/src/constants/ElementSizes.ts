@@ -1,9 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export const StandardNodeWidth = 300;
+export const StandardSectionHeight = 30;
+export const HeaderHeight = StandardSectionHeight;
+
 export const InitNodeSize = {
-  width: 200,
-  height: 48,
+  width: StandardNodeWidth,
+  height: StandardSectionHeight * 2,
 };
 
 export const DiamondSize = {
@@ -35,6 +39,14 @@ export const ChoiceInputSize = {
 
 export const ChoiceInputMarginTop = 8;
 export const ChoiceInputMarginBottom = 10;
+
+export const PropertyAssignmentSize = {
+  width: 155,
+  height: 16,
+};
+
+export const AssignmentMarginTop = 8;
+export const AssignmentMarginBottom = 8;
 
 export const EventNodeSize = {
   width: 240,

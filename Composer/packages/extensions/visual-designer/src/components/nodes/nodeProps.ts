@@ -9,7 +9,7 @@ export interface NodeProps {
   data: any;
   focused?: boolean;
   onEvent: (action, id, ...rest) => object | void;
-  onResize: (boundary?: Boundary, id?) => object | void;
+  onResize: (boundary: Boundary, id?) => object | void;
 
   isRoot?: boolean;
 }

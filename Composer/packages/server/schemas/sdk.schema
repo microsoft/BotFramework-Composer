@@ -351,9 +351,9 @@
             "$ref": "#/definitions/Microsoft.OnInvokeActivity"
         },
         {
-            "title": "Microsoft.OnMessageActivity",
-            "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
-            "$ref": "#/definitions/Microsoft.OnMessageActivity"
+            "title": "Microsoft.OnMessageReceivedActivity",
+            "description": "Actions to perform on receipt of an activity with type 'MessageReceived'. Overrides Intent trigger.",
+            "$ref": "#/definitions/Microsoft.OnMessageReceivedActivity"
         },
         {
             "title": "Microsoft.OnMessageDeleteActivity",
@@ -999,7 +999,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -1008,7 +1008,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -1072,7 +1072,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -1089,7 +1089,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -1527,7 +1527,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -1536,7 +1536,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -1600,7 +1600,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -1617,7 +1617,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -1939,7 +1939,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -1948,7 +1948,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -2012,7 +2012,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -2029,7 +2029,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -2552,7 +2552,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -2561,7 +2561,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -2625,7 +2625,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -2642,7 +2642,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -4891,9 +4891,9 @@
                     "$ref": "#/definitions/Microsoft.OnInvokeActivity"
                 },
                 {
-                    "title": "Microsoft.OnMessageActivity",
+                    "title": "Microsoft.OnMessageReceivedActivity",
                     "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
-                    "$ref": "#/definitions/Microsoft.OnMessageActivity"
+                    "$ref": "#/definitions/Microsoft.OnMessageReceivedActivity"
                 },
                 {
                     "title": "Microsoft.OnMessageDeleteActivity",
@@ -5763,7 +5763,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -5772,7 +5772,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -5836,7 +5836,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -5853,7 +5853,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -8184,7 +8184,7 @@
                 }
             ]
         },
-        "Microsoft.OnMessageActivity": {
+        "Microsoft.OnMessageReceivedActivity": {
             "$role": "union(Microsoft.ITriggerCondition)",
             "title": "On Message activity",
             "description": "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
@@ -8195,7 +8195,7 @@
                     "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
                     "type": "string",
                     "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.OnMessageActivity"
+                    "const": "Microsoft.OnMessageReceivedActivity"
                 },
                 "$copy": {
                     "title": "$copy",
@@ -11520,7 +11520,7 @@
                 "unrecognizedPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Unrecognized prompt",
-                    "description": "Message to send if user response is not recognized.",
+                    "description": "Message to send when the recognizer does not understand the user input.",
                     "examples": [
                         "Sorry, I do not understand '{turn.activity.text'}. Let's try again. What is your birth date?"
                     ],
@@ -11529,7 +11529,7 @@
                 "invalidPrompt": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Invalid prompt",
-                    "description": "Message to send if user response is invalid. Relies on specified validation expressions.",
+                    "description": "Message to send when the user input does not meet any validation expression.",
                     "examples": [
                         "Sorry, '{this.value}' does not work. I need a number between 1-150. What is your age?"
                     ],
@@ -11593,7 +11593,7 @@
                         "string"
                     ],
                     "title": "Default value",
-                    "description": "Expression to examine on each turn of the conversation as possible value to the property.",
+                    "description": "'Property' will be set to the value of this expression when max turn count is exceeded.",
                     "examples": [
                         "@userName",
                         "coalesce(@number, @partySize)"
@@ -11610,7 +11610,7 @@
                         "string"
                     ],
                     "title": "Value",
-                    "description": "Gets or sets a value expression which can be used to intialize the input prompt.",
+                    "description": "'Property' will be set to the value of this expression unless it evaluates to null.",
                     "examples": [
                         "@userName"
                     ]
@@ -11648,7 +11648,7 @@
                     "description": "Expression to format the output.",
                     "examples": [
                         "=toUpper(this.value)",
-                        "@{toUpper(this.value)}"
+                        "${toUpper(this.value)}"
                     ]
                 }
             },

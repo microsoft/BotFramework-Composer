@@ -63,9 +63,6 @@
     "Microsoft.IfCondition": {
       "title": "Branch: If/Else"
     },
-    "Microsoft.InitProperty": {
-      "title": "Initialize Property"
-    },
     "Microsoft.OnIntent": {
       "title": "Intent"
     },

@@ -49,7 +49,7 @@
             "condition": "user.todos == null",
             "actions": [
               {
-                "$type": "Microsoft.InitProperty",
+                "$type": "Microsoft.SetProperty",
                 "$designer": {
                   "createdAt": "2019-07-16T20:01:05.970Z",
                   "updatedAt": "2019-07-16T20:01:13.866Z",

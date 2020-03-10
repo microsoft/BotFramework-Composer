@@ -115,11 +115,6 @@
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "helpLinkText": "Learn more"
     },
-    "Microsoft.InitProperty": {
-      "title": "Initialize Property",
-      "helpLink": "https://aka.ms/bfc-using-memory",
-      "helpLinkText": "Learn more"
-    },
     "Microsoft.LanguagePolicy": {
       "title": "LanguagePolicy"
     },
@@ -150,7 +145,8 @@
     },
     "Microsoft.OAuthInput": {
       "title": "OAuth Login",
-      "helpLink": "https://aka.ms/bfc-using-oauth"
+      "helpLink": "https://aka.ms/bfc-using-oauth",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.OnActivity": {
       "title": "Activities",
@@ -203,8 +199,8 @@
       "title": "Conversation invoked",
       "subtitle": "Invoke activity"
     },
-    "Microsoft.OnMessageActivity": {
-      "title": "Message events",
+    "Microsoft.OnMessageReceivedActivity": {
+      "title": "Message recieved",
       "subtitle": "Message recieved activity"
     },
     "Microsoft.OnMessageDeleteActivity": {

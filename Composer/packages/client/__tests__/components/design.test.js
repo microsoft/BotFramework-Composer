@@ -10,6 +10,13 @@ import { dialogs } from '../constants.json';
 import { TriggerCreationModal } from './../../src/components/ProjectTree/TriggerCreationModal';
 import { ProjectTree } from './../../src/components/ProjectTree';
 import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
+
+jest.mock('@bfc/code-editor', () => {
+  return {
+    LuEditor: () => <div></div>,
+  };
+});
+
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
     const dialogId = 'Main';

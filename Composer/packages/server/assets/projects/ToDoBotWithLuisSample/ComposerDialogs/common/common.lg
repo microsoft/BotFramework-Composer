@@ -22,59 +22,59 @@
 
 # Welcome-Message
 [Activity
-    Text = @{Welcome-Prefix()}, I'm the Todo sample bot. @{Welcome-Suffix()}
-    @{Welcome-Actions()}
+    Text = ${Welcome-Prefix()}, I'm the Todo sample bot. ${Welcome-Suffix()}
+    ${Welcome-Actions()}
 ]
 
 > This template uses pre-built functions to construct a response.
 # Delete-Items-readback
-- IF: @{turn.itemDeleted}
-    - ```I have removed **@{dialog.item}** from your @{dialog.listType} list.
-    You have **@{count(user.taskLists[dialog.listType])}** items in your @{dialog.listType} list.
+- IF: ${turn.itemDeleted}
+    - ```I have removed **${dialog.item}** from your ${dialog.listType} list.
+    You have **${count(user.taskLists[dialog.listType])}** items in your ${dialog.listType} list.
  ```
  - ELSE :
-    - Sorry, I did not find **@{dialog.item}** in your todo list
+    - Sorry, I did not find **${dialog.item}** in your todo list
 
 # Items-Ordinality (list)
-- IF: @{list == null || count(list) == 1}
+- IF: ${list == null || count(list) == 1}
     - item
 - ELSE:
     - items
 
 # Items-readback
-- IF : @{toLower(dialog.listType) == 'all' }
-    - @{Show-all-lists()}
+- IF : ${toLower(dialog.listType) == 'all' }
+    - ${Show-all-lists()}
 - ELSE :
-    - @{List-readback (user.taskLists, dialog.listType)}
+    - ${List-readback (user.taskLists, dialog.listType)}
 
 # Show-all-lists
 - ```
 ## Shopping list
-@{List-readback (user.taskLists, 'shopping')}
+${List-readback (user.taskLists, 'shopping')}
 
 ## Grocery list
-@{List-readback (user.taskLists, 'grocery')}
+${List-readback (user.taskLists, 'grocery')}
 
 ## Todo list
-@{List-readback (user.taskLists, 'todo')}
+${List-readback (user.taskLists, 'todo')}
 ```
 
 > This template uses a foreach prebuilt function to call a template. The template helps with putting together each item in a line prefixed with `-`
 > This way, clients that support multi-line markdown for text can render the items as a list.
 # List-readback (collection, type)
-- IF: @{collection != null && collection[type] != null && count(collection[type]) != 0}
+- IF: ${collection != null && collection[type] != null && count(collection[type]) != 0}
     - ```
-You have @{count(collection[type])} @{Items-Ordinality(collection[type])} in your @{type} collection.
-    - @{join(foreach(collection[type], item, todo-line(item)), '')}
+You have ${count(collection[type])} ${Items-Ordinality(collection[type])} in your ${type} collection.
+    - ${join(foreach(collection[type], item, todo-line(item)), '')}
 ```
 - ELSE:
     - ```
-You do not have any items in your @{type} list.
+You do not have any items in your ${type} list.
 ```
 
 # todo-line (item)
 - ```
-- @{item}```
+- ${item}```
 
 # Help-prefix
 - Sure
@@ -83,6 +83,6 @@ You do not have any items in your @{type} list.
 
 # Add-Todo-Text
 - ```
-@{Help-prefix()}, I have added **@{dialog.item}** to your @{dialog.listType} list. 
-You have **@{count(user.taskLists[dialog.listType])}** items in your @{dialog.listType} list.
+${Help-prefix()}, I have added **${dialog.item}** to your ${dialog.listType} list. 
+You have **${count(user.taskLists[dialog.listType])}** items in your ${dialog.listType} list.
 ```

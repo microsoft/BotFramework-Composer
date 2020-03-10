@@ -82,8 +82,8 @@ export function isSeperatedEntityDef(content: string): boolean {
 }
 
 export function isEntityName(content: string): boolean {
-  const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist)\s*([\w._]+|"[\w._\s]+")\s*$/;
-  const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|patternany|phraselist|intent)\s*$/;
+  const hasNameEntifyDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|Pattern\.any|phraseList)\s*([\w._]+|"[\w._\s]+")\s*$/;
+  const hasTypeEntityDef = /^\s*@\s*(ml|list|regex|prebuilt|composite|Pattern\.any|phraseList|intent)\s*$/;
   const hasNameEntifyDef2 = /^\s*@\s*([\w._]+|"[\w._\s]+")\s*$/;
   return hasNameEntifyDef.test(content) || (!hasTypeEntityDef.test(content) && hasNameEntifyDef2.test(content));
 }
@@ -93,6 +93,12 @@ export function isCompositeEntity(content: string): boolean {
   const compositePatternDef2 = /^\s*@\s*composite\s*[\w]*\s*=\s*\[\s*.*\s*\]\s*$/;
   return compositePatternDef.test(content) || compositePatternDef2.test(content);
 }
+
+export function isPhraseListEntity(content: string): boolean {
+  const phraseListEntityPatternDef = /^\s*@\s*phraseList\s*[\w]+\s*\(\s*$/;
+  return phraseListEntityPatternDef.test(content);
+}
+
 export function matchedEnterPattern(content: string): boolean {
   const regexPatternDef = /^\s*-.*{\s*$/;
   const regexPatternDef2 = /^\s*-.*{\s*}$/;
@@ -147,7 +153,7 @@ export const suggestionAllEntityTypes = [
   'patternAnyEntities',
   'preBuiltEntities',
   'closedLists',
-  'phraselists',
+  'phraseLists',
   'composites',
 ];
 
@@ -156,7 +162,7 @@ export const suggestionNoPatternAnyEntityTypes = [
   'regex_entities',
   'preBuiltEntities',
   'closedLists',
-  'phraselists',
+  'phraseLists',
   'composites',
 ];
 
@@ -166,7 +172,7 @@ export const suggestionNoCompositeEntityTypes = [
   'patternAnyEntities',
   'preBuiltEntities',
   'closedLists',
-  'phraselists',
+  'phraseLists',
 ];
 
 export function getSuggestionRoles(luisJson: any, suggestionEntityTypes: string[]): string[] {

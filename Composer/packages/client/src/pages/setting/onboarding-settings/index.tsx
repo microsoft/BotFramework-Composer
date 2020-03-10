@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useCallback, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 
 import { StoreContext } from '../../../store';
 
@@ -35,6 +36,9 @@ export const OnboardingSettings = () => {
         onChange={onChange}
         onText={formatMessage('Enabled')}
       />
+      <Link href="https://aka.ms/bfc-onboarding" target="_blank" rel="noopener noreferrer">
+        {formatMessage('Learn more')}
+      </Link>
     </div>
   );
 };

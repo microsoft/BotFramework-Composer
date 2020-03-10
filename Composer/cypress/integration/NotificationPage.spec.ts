@@ -13,7 +13,7 @@ context('Notification Page', () => {
 
     cy.get('.toggleEditMode button').as('switchButton');
     cy.get('@switchButton').click();
-    cy.get('textarea').type('test lg syntax error');
+    cy.get('textarea').type('test lg syntax error#');
 
     cy.visitPage('Notifications');
 

@@ -8,12 +8,10 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "JokeIntent",
         "pattern": "(?i)joke"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "FortuneTellerIntent",
         "pattern": "(?i)fortune|future"
       }
@@ -66,7 +64,7 @@
               },
               "property": "user.name",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
-              "maxTurnCount": 2147483647,
+              "maxTurnCount": 3,
               "alwaysPrompt": false,
               "allowInterruptions": "true"
             }
@@ -77,7 +75,7 @@
           "$designer": {
             "id": "120128"
           },
-          "activity": "@{bfdactivity-120128()}"
+          "activity": "${bfdactivity-120128()}"
         }
       ]
     }

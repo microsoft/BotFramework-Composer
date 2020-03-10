@@ -62,6 +62,7 @@ export const editorWrapper = css`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  overflow: hidden;
 `;
 
 export const visualPanel = css`
@@ -113,9 +114,9 @@ export const middleTriggerContainer = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #e5e5e5;
+  background: #f6f6f6;
   width: 100%;
-  margin-top: 48px;
+  margin-top: 55px;
   height: calc(100% - 48px);
   position: absolute;
 `;

@@ -1,8 +1,8 @@
 > All cards can be defined and managed through .lg files.
 > All cards use the chatdown notation - see here - https://github.com/Microsoft/botbuilder-tools/tree/master/packages/Chatdown#message-commands
 > Multi-line text are enclosed in ```
-> Multi-line text can include inline expressions enclosed in @{expression}.
-> @{TemplateName()} is an inline expression that uses the lgTemplate pre-built function to evaluate a template by name.
+> Multi-line text can include inline expressions enclosed in ${expression}.
+> ${TemplateName()} is an inline expression that uses the lgTemplate pre-built function to evaluate a template by name.
 
 # HeroCard
 [HeroCard
@@ -10,20 +10,20 @@
     subtitle = Microsoft Bot Framework
     text = Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.
     image = https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg
-    buttons = @{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    buttons = ${cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
 ]
 
 # HeroCardWithMemory(name)
 [Herocard
-    title=@{TitleText(name)}
-    subtitle=@{SubText()}
-    text=@{DescriptionText()}
-    images=@{CardImages()}
-    buttons=@{cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
+    title=${TitleText(name)}
+    subtitle=${SubText()}
+    text=${DescriptionText()}
+    images=${CardImages()}
+    buttons=${cardActionTemplate('imBack', 'Show more cards', 'Show more cards')}
 ]
 
 # TitleText(name)
-- Hello, @{name}
+- Hello, ${name}
 
 # SubText
 - What is your favorite?
@@ -40,10 +40,10 @@
 
 # cardActionTemplate(type, title, value)
 [CardAction
-    Type = @{if(type == null, 'imBack', type)}
-    Title = @{title}
-    Value = @{value}
-    Text = @{title}
+    Type = ${if(type == null, 'imBack', type)}
+    Title = ${title}
+    Value = ${value}
+    Text = ${title}
 ]
 
 # ThumbnailCard
@@ -58,7 +58,7 @@
 # SigninCard
 [SigninCard
     text = BotFramework Sign-in Card
-    buttons = @{cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')}
+    buttons = ${cardActionTemplate('signin', 'Sign-in', 'https://login.microsoftonline.com/')}
 ]
 
 # AnimationCard
@@ -96,7 +96,7 @@
 
 # AdaptiveCard
 [Activity
-    Attachments = @{json(adaptivecardjson())}
+    Attachments = ${json(adaptivecardjson())}
 ]
 
 
@@ -112,8 +112,8 @@
 
 # AllCards
 [Activity
-    Attachments = @{HeroCard()} | @{ThumbnailCard()} | @{SigninCard()} | @{AnimationCard()} | @{VideoCard()} | @{AudioCard()} | @{AdaptiveCard()}
-    AttachmentLayout = @{AttachmentLayoutType()}
+    Attachments = ${HeroCard()} | ${ThumbnailCard()} | ${SigninCard()} | ${AnimationCard()} | ${VideoCard()} | ${AudioCard()} | ${AdaptiveCard()}
+    AttachmentLayout = ${AttachmentLayoutType()}
 ]
 
 
@@ -148,17 +148,17 @@
     },
     {
       "type": "TextBlock",
-      "text": "@{PassengerName()}",
+      "text": "${PassengerName()}",
       "separator": true
     },
     {
       "type": "TextBlock",
-      "text": "@{PassengerName()}",
+      "text": "${PassengerName()}",
       "spacing": "none"
     },
     {
       "type": "TextBlock",
-      "text": "@{PassengerName()}",
+      "text": "${PassengerName()}",
       "spacing": "none"
     },
     {

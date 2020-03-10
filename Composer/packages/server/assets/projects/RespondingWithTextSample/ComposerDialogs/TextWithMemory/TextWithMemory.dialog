@@ -18,14 +18,14 @@
             "id": "765039"
           },
           "property": "user.message",
-          "value": "'This is a text saved in memory.'"
+          "value": "This is a text saved in memory."
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "822060"
           },
-          "activity": "@{bfdactivity-822060()}"
+          "activity": "${bfdactivity-822060()}"
         }
       ]
     }

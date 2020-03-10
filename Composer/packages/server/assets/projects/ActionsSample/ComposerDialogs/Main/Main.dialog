@@ -10,62 +10,50 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "Actions",
         "pattern": "Actions|01"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EndTurn",
         "pattern": "EndTurn|02"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "IfCondition",
         "pattern": "IfCondition|03"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EditArray",
         "pattern": "EditArray|04"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EndDialog",
         "pattern": "EndDialog|05"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "HttpRequest",
         "pattern": "HttpRequest|06"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "SwitchCondition",
         "pattern": "SwitchCondition|07"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "RepeatDialog",
         "pattern": "RepeatDialog|08"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "TraceAndLog",
         "pattern": "TraceAndLog|trace|log|09"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EditActions",
         "pattern": "EditActions|10"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "ReplaceDialog",
         "pattern": "ReplaceDialog|11"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EmitEvent",
         "pattern": "EmitEvent|12"
       },
@@ -74,7 +62,6 @@
         "pattern": "QnAMaker|13"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
       }
@@ -263,7 +250,7 @@
           "$designer": {
             "id": "347762"
           },
-          "activity": "@{bfdactivity-640616()}"
+          "activity": "${bfdactivity-640616()}"
         }
       ]
     },
@@ -288,7 +275,7 @@
                 "id": "641773",
                 "name": "Branch: if/else"
               },
-              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "condition": "=string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
                   "$type": "Microsoft.SendActivity",
@@ -296,7 +283,7 @@
                     "id": "640616",
                     "name": "Send a response"
                   },
-                  "activity": "@{bfdactivity-640616()}"
+                  "activity": "${bfdactivity-640616()}"
                 }
               ]
             }

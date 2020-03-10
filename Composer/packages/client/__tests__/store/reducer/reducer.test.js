@@ -31,7 +31,7 @@ describe('test all reducer handlers', () => {
         payload: {
           id: 'common.lg',
           content: ` # bfdactivity-003038
-        - You said '@{turn.activity.text}'`,
+        - You said '\${turn.activity.text}'`,
         },
       }
     );

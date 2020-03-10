@@ -18,21 +18,21 @@
           "$designer": {
             "id": "166131"
           },
-          "activity": "@{bfdactivity-522200()}"
+          "activity": "${bfdactivity-522200()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "350559"
           },
-          "activity": "@{bfdactivity-350559()}"
+          "activity": "${bfdactivity-350559()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "309397"
           },
-          "activity": "@{bfdactivity-309397()}"
+          "activity": "${bfdactivity-309397()}"
         },
         {
           "$type": "Microsoft.SetProperty",
@@ -40,14 +40,14 @@
             "id": "026341"
           },
           "property": "user.age",
-          "value": "9+9"
+          "value": "18"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "643043"
           },
-          "activity": "@{bfdactivity-797905()}"
+          "activity": "${bfdactivity-797905()}"
         },
         {
           "$type": "Microsoft.DeleteProperty",
@@ -68,7 +68,7 @@
               "$designer": {
                 "id": "166131"
               },
-              "activity": "@{bfdactivity-166131()}"
+              "activity": "${bfdactivity-166131()}"
             }
           ],
           "elseActions": [
@@ -77,7 +77,7 @@
               "$designer": {
                 "id": "643043"
               },
-              "activity": "@{bfdactivity-643043()}"
+              "activity": "${bfdactivity-643043()}"
             }
           ]
         }

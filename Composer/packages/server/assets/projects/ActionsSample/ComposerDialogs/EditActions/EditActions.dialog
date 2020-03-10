@@ -17,12 +17,13 @@
           "$designer": {
             "id": "250234"
           },
-          "changeType": "Insertactions",
+          "changeType": "insertActions",
           "actions": [
             {
               "$type": "Microsoft.TextInput",
               "prompt": "Hello, I'm Zoidberg. What is your name?",
-              "property": "user.name"
+              "property": "user.name",
+	      "alwaysPrompt": "true"
             }
           ]
         },
@@ -31,7 +32,7 @@
           "$designer": {
             "id": "443878"
           },
-          "changeType": "Appendactions",
+          "changeType": "appendActions",
           "actions": [
             {
               "$type": "Microsoft.SendActivity",
@@ -44,7 +45,7 @@
           "$designer": {
             "id": "644042"
           },
-          "activity": "@{bfdactivity-644042()}"
+          "activity": "${bfdactivity-644042()}"
         }
       ]
     }

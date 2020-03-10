@@ -1,4 +1,4 @@
 [import](common.lg)
 
 # bfdactivity-004212
--You select: @{user.style}
+-You select: ${user.style}

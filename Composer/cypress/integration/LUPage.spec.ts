@@ -14,10 +14,7 @@ context('LU Page', () => {
     cy.contains('ToDoBotWithLuisSample.Main');
     cy.contains('All');
 
-    cy.get('.toggleEditMode button').as('switchButton');
-
-    // all multiple file, edit mode button is disabled.
-    cy.get('@switchButton').should('be.disabled');
+    cy.get('.toggleEditMode button').should('not.exist');
 
     // by default is table view
     cy.findByTestId('LUEditor')
@@ -28,7 +25,7 @@ context('LU Page', () => {
     cy.findByTestId('LUEditor').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample.Main').click();
     });
-
+    cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode
     cy.get('@switchButton').click();
     cy.findByTestId('LUEditor')

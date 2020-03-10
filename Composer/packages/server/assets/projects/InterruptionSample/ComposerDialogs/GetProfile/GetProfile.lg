@@ -2,7 +2,7 @@
 
 # bfdactivity-296924
 [Activity
-    Text = Hello @{user.profile.name}, I have your age as @{user.profile.age}.
+    Text = Hello ${user.profile.name}, I have your age as ${user.profile.age}.
 	SuggestedActions = Reset profile
 ]
 
@@ -26,12 +26,12 @@
 
 # bfdinvalidPrompt-362298
 [Activity
-    Text = Sorry, '@{this.value}' does not work. I'm looking for 2-150 characters. What is your name?
+    Text = Sorry, '${this.value}' does not work. I'm looking for 2-150 characters. What is your name?
 	SuggestedActions = Why? | No name | Cancel | Reset profile
 ]
 
 # bfdinvalidPrompt-005947
 [Activity
-    Text = Sorry, @{this.value} does not work. I'm looking for a value between 1-150. What is your age?
+    Text = Sorry, ${this.value} does not work. I'm looking for a value between 1-150. What is your age?
 	SuggestedActions = Why? | Reset profile | Cancel | No age
 ]

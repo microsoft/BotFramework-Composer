@@ -11,34 +11,25 @@ function createKeywordsProposals(range) {
     {
       label: 'IF',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: `IF: @{}
--
-- ELSEIF: @{}
-    -
-- ELSE:
-    - `,
+      insertText: ['IF: ${}', '- ELSEIF: ${}', '    -', '- ELSE:', '    -'].join('\r\n'),
       range: range,
     },
     {
       label: 'ELSEIF',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: 'ELSEIF:@{}',
+      insertText: 'ELSEIF:${}',
       range: range,
     },
     {
       label: 'ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: 'ELSE:\n',
+      insertText: 'ELSE:\r\n',
       range: range,
     },
     {
       label: 'SWITCH',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: `SWITCH: @{}
-- CASE: @{}
-    -
-- DEFAULT:
-    - `,
+      insertText: ['SWITCH: ${}', '- CASE: ${}', '    -', '- DEFAULT:', '    -'].join('\r\n'),
       range: range,
     },
   ];
@@ -94,11 +85,11 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         //template_body
         [/^\s*-/, { token: 'template-body-identifier', next: '@template_body' }],
         //expression
-        [/@\{/, { token: 'expression', next: '@expression' }],
+        [/\$\{/, { token: 'expression', next: '@expression' }],
       ],
       fence_block: [
         [/`{3}\s*/, { token: 'fence-block', next: '@pop' }],
-        [/@\{/, { token: 'expression', next: '@expression' }],
+        [/\$\{/, { token: 'expression', next: '@expression' }],
         [/./, 'fence-block'],
       ],
       expression: [
@@ -109,7 +100,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/(\s*'[^']*?'\s*)(,|\))/, ['string', 'delimeter']],
         [/(\s*"[^"]*?"\s*)(,|\))/, ['string', 'delimeter']],
         [/(\s*[^},'"(]*\s*)(,|\))/, ['other-expression', 'delimeter']],
-        [/[^@}]*$/, { token: 'expression.content', next: '@pop' }],
+        [/[^$}]*$/, { token: 'expression.content', next: '@pop' }],
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
@@ -117,7 +108,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['stucture-lg-identifier', 'structure-name']],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/\|/, { token: 'alternative' }],
-        [/@\{/, { token: 'expression', next: '@expression' }],
+        [/\$\{/, { token: 'expression', next: '@expression' }],
       ],
     },
   });

@@ -32,9 +32,11 @@ describe('parse', () => {
 `;
     const { intents, diagnostics }: any = parse(content);
     expect(diagnostics.length).toEqual(0);
-    expect(intents.length).toEqual(2);
-    expect(intents[1].Name).toEqual('Greeting');
+    expect(intents.length).toEqual(4);
     expect(intents[0].Name).toEqual('CheckTodo');
+    expect(intents[1].Name).toEqual('CheckTodo/CheckUnreadTodo');
+    expect(intents[2].Name).toEqual('CheckTodo/CheckDeletedTodo');
+    expect(intents[3].Name).toEqual('Greeting');
     expect(intents[0].Children.length).toEqual(2);
     expect(intents[0].Children[0].Name).toEqual('CheckUnreadTodo');
     expect(intents[0].Children[0].Entities.length).toEqual(1);

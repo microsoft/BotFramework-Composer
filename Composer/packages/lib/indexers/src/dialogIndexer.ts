@@ -5,13 +5,14 @@ import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 import { extractLgTemplateRefs } from '@bfc/shared';
 
+import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath } from './type';
+import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath, ReferredLuIntents } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
-
+import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -70,8 +71,8 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
 }
 
 // find out all lu intents given dialog
-function ExtractLuIntents(dialog): string[] {
-  const intents: string[] = [];
+function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
+  const intents: ReferredLuIntents[] = [];
   /**    *
    * @param path , jsonPath string
    * @param value , current node value    *
@@ -81,17 +82,20 @@ function ExtractLuIntents(dialog): string[] {
     // it's a valid schema dialog node.
     if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
       const intentName = value.intent;
-      intents.push(intentName);
+      intents.push({
+        name: intentName,
+        path: createPath(path, value.$type),
+      });
     }
     return false;
   };
-  JsonWalk('$', dialog, visitor);
+  JsonWalk(id, dialog, visitor);
   return uniq(intents);
 }
 
 // find out all triggers given dialog
 function ExtractTriggers(dialog): ITrigger[] {
-  const trigers: ITrigger[] = [];
+  const triggers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
    * @param value , current node value    *
@@ -114,7 +118,7 @@ function ExtractTriggers(dialog): ITrigger[] {
           } else if (trigger.isIntent && has(rule, 'intent')) {
             trigger.displayName = rule.intent;
           }
-          trigers.push(trigger);
+          triggers.push(trigger);
         }
       });
       return true;
@@ -122,7 +126,7 @@ function ExtractTriggers(dialog): ITrigger[] {
     return false;
   };
   JsonWalk('$', dialog, visitor);
-  return trigers;
+  return triggers;
 }
 
 // find out all referred dialog
@@ -195,11 +199,12 @@ function parse(id: string, content: any, schema: any) {
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
-    luIntents: ExtractLuIntents(content),
     userDefinedVariables: ExtractMemoryPaths(content),
+    referredLuIntents: ExtractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
+    intentTriggers: ExtractIntentTriggers(content),
   };
 }
 

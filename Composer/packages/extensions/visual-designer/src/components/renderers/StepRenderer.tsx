@@ -12,6 +12,7 @@ import { renderUIWidget } from '../../schema/uischemaRenderer';
 import { UISchemaContext } from '../../store/UISchemaContext';
 
 import { ElementWrapper } from './ElementWrapper';
+import { ElementMeasurer } from './ElementMeasurer';
 
 /** TODO: (zeye) integrate this array into UISchema */
 const TypesWithoutWrapper = [
@@ -27,19 +28,19 @@ const TypesWithoutWrapper = [
   SDKTypes.ChoiceInput,
 ];
 
-export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent }): JSX.Element => {
+export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const schemaProvider = useContext(UISchemaContext);
 
   const $type = get(data, '$type', '');
   const widgetSchema = schemaProvider.get($type);
 
-  const content = renderUIWidget(widgetSchema, { id, data, onEvent });
+  const content = renderUIWidget(widgetSchema, { id, data, onEvent, onResize });
   if (TypesWithoutWrapper.some(x => $type === x)) {
     return content;
   }
   return (
     <ElementWrapper id={id} onEvent={onEvent}>
-      {content}
+      <ElementMeasurer onResize={boundary => onResize(boundary)}>{content}</ElementMeasurer>
     </ElementWrapper>
   );
 };

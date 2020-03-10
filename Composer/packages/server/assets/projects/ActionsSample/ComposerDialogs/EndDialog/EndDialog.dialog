@@ -8,12 +8,10 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "JokeIntent",
         "pattern": "(?i)joke"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CancelIntent",
         "pattern": "(?i)cancel|never mind"
       }
@@ -74,14 +72,14 @@
           "$designer": {
             "id": "604381"
           },
-          "activity": "@{bfdactivity-604381()}"
+          "activity": "${bfdactivity-604381()}"
         },
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
             "id": "338063"
           },
-          "activity": "@{bfdactivity-338063()}"
+          "activity": "${bfdactivity-338063()}"
         }
       ]
     }

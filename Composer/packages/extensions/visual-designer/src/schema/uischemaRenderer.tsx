@@ -4,6 +4,8 @@
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
 
+import { Boundary } from '../models/Boundary';
+
 import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
 export interface UIWidgetContext {
@@ -15,6 +17,9 @@ export interface UIWidgetContext {
 
   /** Handle UI events */
   onEvent: WidgetEventHandler;
+
+  /** Report widget boundary */
+  onResize: (boundary: Boundary) => void;
 }
 
 const parseWidgetSchema = (widgetSchema: UIWidget) => {

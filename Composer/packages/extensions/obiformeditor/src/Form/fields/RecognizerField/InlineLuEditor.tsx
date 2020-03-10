@@ -20,8 +20,12 @@ const InlineLuEditor: React.FC<InlineLuEditorProps> = props => {
     setLocalContent(value);
     onSave(value);
   };
-
-  return <LuEditor value={localContent} onChange={commitChanges} errorMsg={errorMsg} height={450} />;
+  const luOption = {
+    fileId: file.id,
+  };
+  return (
+    <LuEditor value={localContent} onChange={commitChanges} errorMsg={errorMsg} height={450} luOption={luOption} />
+  );
 };
 
 export default InlineLuEditor;

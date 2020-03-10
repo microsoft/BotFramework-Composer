@@ -10,7 +10,6 @@ import { MicrosoftInputDialog } from '@bfc/shared';
 
 import { WidgetLabel } from '../../widgets/WidgetLabel';
 import { LgEditorWidget } from '../../widgets/LgEditorWidget';
-import { TextWidget } from '../../widgets';
 
 import { Validations } from './Validations';
 import { field } from './styles';
@@ -22,7 +21,7 @@ interface OtherProps extends FieldProps<MicrosoftInputDialog> {
 }
 
 export const Other: React.FC<OtherProps> = props => {
-  const { onChange, getSchema, idSchema, formData, errorSchema } = props;
+  const { onChange, getSchema, idSchema, formData } = props;
 
   return (
     <React.Fragment>
@@ -54,17 +53,6 @@ export const Other: React.FC<OtherProps> = props => {
           value={formData.invalidPrompt}
           formContext={props.formContext}
           height={125}
-        />
-      </div>
-      <div css={field}>
-        <TextWidget
-          onChange={onChange('value')}
-          schema={getSchema('value')}
-          id={idSchema.value.__id}
-          value={formData.value}
-          label={formatMessage('Value')}
-          formContext={props.formContext}
-          rawErrors={errorSchema.value && errorSchema.value.__errors}
         />
       </div>
       <div css={field}>

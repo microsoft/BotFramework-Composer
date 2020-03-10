@@ -28,6 +28,7 @@ export const root = css`
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
@@ -137,7 +138,7 @@ export const dropdownStyles = {
     fontWeight: FontWeights.semibold,
   },
   dropdown: {
-    width: '300px',
+    width: '400px',
   },
   root: {
     paddingBottom: '20px',
@@ -148,7 +149,7 @@ export const dialogWindow = css`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 250px;
+  min-height: 300px;
 `;
 
 export const textFieldlabel = {
@@ -162,11 +163,17 @@ export const textFieldlabel = {
 };
 
 export const intent = {
-  fieldGroup: {
-    width: 200,
-  },
   root: {
-    height: '90px',
+    width: '400px',
+    paddingBottom: '20px',
   },
-  subComponentStyles: textFieldlabel,
+};
+
+export const triggerPhrases = {
+  root: {
+    width: '400px',
+  },
+  fieldGroup: {
+    height: 80,
+  },
 };

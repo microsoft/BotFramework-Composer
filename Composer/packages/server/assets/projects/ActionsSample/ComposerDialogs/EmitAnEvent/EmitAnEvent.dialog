@@ -12,12 +12,10 @@
     "$type": "Microsoft.RegexRecognizer",
     "intents": [
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "EmitEvent",
         "pattern": "emit"
       },
       {
-        "$type": "Microsoft.IntentPattern",
         "intent": "CowboyIntent",
         "pattern": "moo"
       }
@@ -57,7 +55,7 @@
             "id": "576334",
             "name": "Send a response"
           },
-          "activity": "@{bfdactivity-576334()}"
+          "activity": "${bfdactivity-576334()}"
         }
       ]
     }

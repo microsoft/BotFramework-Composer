@@ -260,12 +260,11 @@ export const appschema: OBISchema = {
           additionalProperties: true,
         },
         activityProcessed: {
-          $role: 'expression',
-          type: 'string',
+          type: 'boolean',
           title: 'Activity Processed',
           description: 'When set to false, the dialog that is called can process the current activity.',
-          default: 'true',
-          examples: ['true'],
+          default: true,
+          examples: [true],
         },
         resultProperty: {
           $role: 'expression',
@@ -1401,11 +1400,6 @@ export const appschema: OBISchema = {
           $ref: '#/definitions/Microsoft.IfCondition',
         },
         {
-          title: 'Microsoft.InitProperty',
-          description: 'Define and initialize a property to be an array or object.',
-          $ref: '#/definitions/Microsoft.InitProperty',
-        },
-        {
           title: 'Microsoft.LogAction',
           description:
             'Log a message to the host application. Send a TraceActivity to Bot Framework Emulator (optional).',
@@ -1697,28 +1691,6 @@ export const appschema: OBISchema = {
             $type: 'Microsoft.IDialog',
             $ref: '#/definitions/Microsoft.IDialog',
           },
-        },
-      },
-    },
-    'Microsoft.InitProperty': {
-      $role: 'unionType(Microsoft.IDialog)',
-      title: 'Initialize property',
-      description: 'Define and initialize a property to be an array or object.',
-      type: 'object',
-      properties: {
-        ...$properties(SDKTypes.InitProperty),
-        property: {
-          $role: 'expression',
-          title: 'Property',
-          description: 'Property (named location to store information).',
-          examples: ['user.age'],
-          type: 'string',
-        },
-        type: {
-          type: 'string',
-          title: 'Type',
-          description: 'Type of value.',
-          enum: ['object', 'array'],
         },
       },
     },
@@ -2352,13 +2324,14 @@ export const appschema: OBISchema = {
         },
       },
     },
-    'Microsoft.OnMessageActivity': {
+    'Microsoft.OnMessageReceivedActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
-      title: 'On Message activity',
-      description: "Actions to perform on receipt of an activity with type 'Message'. Overrides Intent trigger.",
+      title: 'On MessageRecieved activity',
+      description:
+        "Actions to perform on receipt of an activity with type 'MessageRecieved'. Overrides Intent trigger.",
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.OnMessageActivity),
+        ...$properties(SDKTypes.OnMessageReceivedActivity),
         condition: {
           $role: 'expression',
           title: 'Condition',

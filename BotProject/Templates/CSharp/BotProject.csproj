@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
@@ -13,7 +14,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -21,16 +21,16 @@
     <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bot.Builder" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.7.2-preview" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.7.2-preview" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.7.2-preview" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.7.2" />
-    <PackageReference Include="Microsoft.Bot.Connector" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Bot.Builder" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.8.0-preview-200227-109209" />
+    <PackageReference Include="Microsoft.Bot.Connector" Version="4.8.0-preview-200227-109209" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.66">
       <PrivateAssets>all</PrivateAssets>

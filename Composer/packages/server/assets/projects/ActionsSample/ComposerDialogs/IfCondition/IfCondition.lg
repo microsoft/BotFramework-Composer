@@ -1,4 +1,4 @@
 [import](common.lg)
 
 # bfdactivity-485963
--Hello @{user.name}, nice to talk to you!
+-Hello ${user.name}, nice to talk to you!

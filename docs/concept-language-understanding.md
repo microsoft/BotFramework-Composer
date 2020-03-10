@@ -4,7 +4,7 @@ Language Understanding (LU) is used by a bot to understand language naturally an
 
 LU has the following characteristics when used in the Bot Framework Composer:
 
-- LU content can be authored in an inline editor or in **User Input** using the [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+- LU content can be authored in an inline editor or in **User Input** using the [.lu file format][100].
 - LU content is training data for recognizers.
 - Composer currently supports LU technologies such as LUIS and Regular Expression.
 
@@ -48,7 +48,7 @@ You may have noticed that LU format is very similar to LG format but there are s
 
 ### Entities
 
-Entities are a collection of objects, each consisting of data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include zero or more entities, while an utterance usually represents one intent. In Composer, all entities are defined and managed inline. Entities in the [.lu file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md) are denoted using {\<entityName\>=\<labelled value\>} notation. For example:
+Entities are a collection of objects, each consisting of data extracted from an utterance such as places, time, and people. Entities and intents are both important data extracted from utterances, but they are different. An intent indicates what the user is trying to do. An utterance may include zero or more entities, while an utterance usually represents one intent. In Composer, all entities are defined and managed inline. Entities in the [.lu file format][100] are denoted using {\<entityName\>=\<labelled value\>} notation. For example:
 
     # BookFlight
     - book a flight to {toCity=seattle}
@@ -58,7 +58,7 @@ The example above shows the definition of a `BookFlight` intent with two example
 
 ### Example
 
-The table below shows an example of an intent with its corresponding utterances and entities. All three utterances share the same intent _BookFlight_ each with a different entity. There are different types of entities, you can find more information in this article on the [LU file format](https://github.com/microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+The table below shows an example of an intent with its corresponding utterances and entities. All three utterances share the same intent _BookFlight_ each with a different entity. There are different types of entities, you can find more information in this article on the [LU file format][100].
 
 | Intent     | Utterances                                    | Entity                  |
 | ---------- | --------------------------------------------- | ----------------------- |
@@ -84,13 +84,13 @@ To enable your bot to understand user's input contextually and conversationally 
 To author proper LU content in Composer, you need to know:
 
 - [LU concepts](https://aka.ms/botbuilder-luis-concept?view=azure-bot-service-4.0)
-- [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [.lu file format][100]
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 To create the LU content, follow these steps:
 
 - Set up a **Recognizer** for a specific dialog (per dialog per recognizer).
-- Author LU content as training data in [.lu format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+- Author LU content as training data in [.lu format][100].
 - Create **Intent** triggers to wire up the LU content.
 - Publish LU content (for LUIS).
 
@@ -103,7 +103,7 @@ Composer currently supports two types of recognizers: LUIS (by default) and Regu
 
 #### Author LU content
 
-After you set up the recognizer type, you can customize your LU content in the editor using the [.lu format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md).
+After you set up the recognizer type, you can customize your LU content in the editor using the [.lu format][100].
 
 For this example define two intents: **Greeting** and **CheckWeather** with some example utterances inline:
 
@@ -143,7 +143,7 @@ Any time you select **Start Bot** (or **Restart Bot**), Composer will evaluate i
 
 - [What is LUIS](https://aka.ms/luis-what-is-luis)
 - [Language Understanding](https://aka.ms/botbuilder-luis-concept?view=azure-bot-service-4.0)
-- [.lu file format](https://github.com/Microsoft/botbuilder-tools/blob/master/packages/Ludown/docs/lu-file-format.md)
+- [.lu file format][100]
 - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Using LUIS for language understanding](https://github.com/microsoft/BotFramework-Composer/blob/kaiqb/Ignite2019/docs/howto-using-LUIS.md)
 - [Extract data from utterance text with intents and entities](https://aka.ms/luis-concept-data-extraction?tabs=V2)
@@ -152,3 +152,5 @@ Any time you select **Start Bot** (or **Restart Bot**), Composer will evaluate i
 
 - Learn how to [use validation](./how-to-use-validation.md)
 - Learn how to [send messages to users](how-to-send-messages.md)
+
+[100]:http://aka.ms/lu-file-format

@@ -354,7 +354,7 @@ export class LGServer {
       }
 
       if (char === '{' && i >= 1 && state[state.length - 1] !== SINGLE && state[state.length - 1] !== DOUBLE) {
-        if (lineContent.charAt(i - 1) === '@') {
+        if (lineContent.charAt(i - 1) === '$') {
           state.push(EXPRESSION);
         }
       }

@@ -4,4 +4,4 @@
 -Pushed dialog.id into a list
 
 # bfdactivity-006441()
-- @{dialog.foreach.index}: @{dialog.foreach.value}
+- ${dialog.foreach.index}: ${dialog.foreach.value}

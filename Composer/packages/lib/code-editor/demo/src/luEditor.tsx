@@ -5,214 +5,212 @@ import React, { useState } from 'react';
 
 import { LuEditor } from '../../src';
 
-const content = `> Entity definitions
-$ itemTitle : simple
-
-> Add a Phrase List with todo variations. Mark them as interchangeable.
-$ todoItem : PhraseList interchangeable
-   - todo
-   - todos
-   - to dos
-   - todo list
-   - todos list
-   - item list
-   - items collection
-   - collection
-   - list
-
-> Add a list entity to detect list tye
-$ listType : todo =
-- to do
-- todos
-- laundry
-
-$ listType : shopping =
-- shopping
-- shop
-- shoppers
-
-$ listType : grocery =
-- groceries
-- fruits
-- vegetables
-- household items
-- house hold items
-
-> Help intent and related utterances.
-# Help
-- What can I say?
-- Who are you?
-- I need help
-- Not sure what I can do
-- What do you want me to say?
-- What can you do?
-- What can you help with?
-- help please
-- What are my options?
-- well, I do not know what my todo's title is
-- I do not know
-- can you please help?
-
-> Greeting intent and related utterances
+const content = `> ## Intent definition
 # Greeting
 - hi
 - hello
-- hiya
-- how are you?
-- how do you do?
 
-> Cancel intent and related utterances
-# Cancel
-- cancel
-- cancel all
-- stop that
-- do not do it
-- abort
-- please stop what you are doing
-- I changed my mind
-- cancel add todo
-- cancel that
-- I do not want to add a todo
-- No todo for me
-- Cancel this
-- cancel delete todo
-- Let's just leave it as is
-- I do not wish to delete my todo anymore
-- Keep my todos as is
-- No todo for me
+> ## Machine learned entity
+@ ml name firstName, lastName
+# getUserName
+- my name is {username=vishwac}
 
-> Add item
-# AddItem
-- Add todo
-- add a to do item
-- Please remind me to {itemTitle=buy milk}
-- Please remember that I need to {itemTitle=buy milk}
-- I need you to remember that {itemTitle=my wife's birthday is Jan 9th}
-- Add a todo named {itemTitle=send report over this weekend}
-- Add {itemTitle=get a new car} to the todo list
-- Add {itemTitle=write a spec} to the list
-- Add {itemTitle=finish this demo} to my todo list
-- add a todo item {itemTitle=vacuuming by october 3rd}
-- add {itemTitle=call my mother} to my todo list
-- add {itemTitle=due date august to peanut butter jelly bread milk} on todos list
-- add {itemTitle=go running} to my todos
-- add to my todos list {itemTitle=mail the insurance forms out by saturday}
-- can i add {itemTitle=shirts} on the todos list
-- could i add {itemTitle=medicine} to the todos list
-- would you add {itemTitle=heavy cream} to the todos list
-- add {itemTitle} to my todo list
-- add a to do that {itemTitle=purchase a nice sweater}
-- add a to do to {itemTitle=buy shoes}
-- add an task of {itemTitle=chores to do around the house}
-- add {itemTitle=go to whole foods} in my to do list
-- add {itemTitle=reading} to my to do list
-- add this thing in to do list
-- add to my to do list {itemTitle=pick up clothes}
-- add to my to do list {itemTitle=print papers for 10 copies this afternoon}
-- create to do
-- create to do that {itemTitle=read a book tonight}
-- create to do to {itemTitle=go running in the park}
-- put {itemTitle=hikes} on my to do list
-- remind me to {itemTitle = pick up dry cleaning}
-- new to do
-- add another one
-- add
-> Add patterns
-- Please remember [to] {itemTitle}
-- I need you to remember [that] {itemTitle}
-- Add a todo named {itemTitle}
-- Add {itemTitle} to the list
-- [Please] add {itemTitle} to the todo list
-- Add {itemTitle} to my todo
-- add {itemTitle} to my to do list
-- add {itemTitle} to my to dos
-- add a to do that buy {itemTitle}
-- add a to do that purchase {itemTitle}
-- add a to do that shop {itemTitle}
-- add a to do to {itemTitle}
-- add to do that {itemTitle}
-- add to do to {itemTitle}
-- create a to do to {itemTitle}
-- create to do to {itemTitle}
-- remind me to {itemTitle}
+> Without an explicit entity definition, 'userName' defaults to 'ml' entity type.
 
-# DeleteItem
-- Remove todo
-- Mark {itemTitle = buy milk} as complete
-- Flag {itemTitle = first one} as done
-- Remove {itemTitle = finish this demo} from the todo list
-- remove another one
-- remove
-- clear my todo named {itemTitle = get a new car}
-- I'm done with the first todo
-- I finished the las todo
-- Remove the first todo
-- Delete todo
-- Clear my todos
-- Delete all my todos
-- Remove all my todo
-- Forget the list
-- Purge the todo list
-- can you delete {itemTitle=todo1}
-- can you delete {itemTitle=xxx} item
-- delete {itemTitle=eggs} from list
-- delete off {itemTitle=pancake mix} on the shopping list
-- delete {itemTitle=shampoo} from shopping list
-- delete {itemTitle=shirts} from list
-- delete task {itemTitle=go fishing}
-- delete task {itemTitle=go to cinema tonight}
-- delete the item {itemTitle=buy socks} from my todo list
-- delete the second task in my shopping list
-- delete the task {itemTitle=house cleanup this weekend}
-- delete the task that {itemTitle=hit the gym every morning}
-- delete the to do {itemTitle=meet my friends tomorrow}
-- delete the to do that {itemTitle=daily practice piano}
-- delete the to do that {itemTitle=meet john when he come here the next friday}
-- delete to do {itemTitle=buy milk}
-- delete to do {itemTitle=go shopping}
-- delete to do that {itemTitle=go hiking tomorrow}
-- erase {itemTitle=bananas} from shopping list
-- erase {itemTitle=peanuts} on the shopping list
-- remove {itemTitle=asprin} from shopping list
-- remove {itemTitle=black shoes} from shopping list
-- remove {itemTitle=class} from todo list
-- remove {itemTitle=salad vegetables} from grocery list
-- remove task {itemTitle=buy dog food}
-- remove task {itemTitle=go shopping}
-- remove task that {itemTitle=go hiking this weekend}
-- remove task that {itemTitle=lawn mowing}
-- remove the item {itemTitle=paris} from my list
-- remove the task that {itemTitle=go to library after work}
-- remove the to do {itemTitle=physical examination}
-- remove the to do that {itemTitle=pick tom up at six p.m.}
-- remove to do {itemTitle=go to the gym}
-- remove to do that {itemTitle=go to the dentist tomorrow morning}
-> Add patterns
-- I did {itemTitle}
-- I completed {itemTitle}
-- Delete {itemTitle}
-- Mark {itemTitle} as complete
-- Remove {itemTitle} from my [todo] list
-- [Please] delete {itemTitle} from the list
+> ## Prebuilt entity
+@ prebuilt number numOfGuests
+@ prebuilt datetimeV2 fromDate, toDate
+@ prebuilt age userAge
 
-# ViewCollection
-- show my todo
-- can you please show my todos?
-- please show my todo list
-- todo list please
-- I need to see my todo list
-- can you show me the list?
-- please show the list
-- what do i have on my todo?
-- what is on my list?
-- do i have anything left on my todo list?
-- I hope I do not have any todo left
-- do i have any tasks left?
-- hit me up with more items
-- view my todos
-- can you show my todo
-- see todo
-- I would like to see my todos list`;
+> ## List entity
+@ list color favColor, screenColor
+@ color =
+    - red
+        - deep red
+        - light red
+ 
+> Alternate definition
+
+@ list color2 favColor2, screenColor2 =
+    - red
+        - deep red
+        - light red
+
+> ## Composite entity        
+@ composite deviceTemperature from, to
+@ deviceTemperature =
+    - child1, child2
+
+> Alternate definition
+
+@ composite deviceTemperature from, to = [child1, child2] 
+# setThermostat
+> This utterance labels ‘thermostat to 72’ as composite entity deviceTemperature
+    - Please set {deviceTemperature = thermostat to 72}
+> This is an example utterance that labels ‘owen’ as customDevice (ml entity) and wraps ‘owen to 72’ with the ‘deviceTemperature’ composite entity
+    - Set {deviceTemperature = {customDevice = owen} to 72}
+
+> Define a composite entity ‘deviceTemperature’ that has device (list entity), customDevice (ml entity), temperature (pre-built entity) as children
+
+@ composite deviceTemperature = [device, customDevice, temperature]
+
+@ list device = 
+	- thermostat :
+		- Thermostat
+		- Heater
+		- AC
+		- Air conditioner
+	- refrigterator : 
+		- Fridge
+    	- Cooler
+
+@ ml customDevice
+
+@ prebuilt temperature
+
+> ## Regex entity
+@ regex hrf-number from, to
+@ hrf-number = /hrf-[0-9]{6}/
+
+> Alternate definition
+
+@ regex hrf-number from, to = /hrf-[0-9]{6}/
+
+> ## Roles
+> # ml entity definition with roles
+
+@ ml name role1, role2
+
+> this is the same as 
+
+@ ml name hasRoles role1, role2
+
+> this is also the same as 
+
+@ ml name
+@ name hasRoles role1, role2
+
+> Also same as 
+
+@ ml name
+@ name hasRole role1
+@ name hasRole role2
+
+# AskForUserName
+- {userName:firstName=vishwac} {userName:lastName=kannan}
+- I'm {userName:firstName=vishwac}
+- my first name is {userName:firstName=vishwac}
+- {userName=vishwac} is my name
+
+> This definition is same as including an explicit defintion for userName with 'lastName', 'firstName' as roles
+
+> @ ml userName hasRoles lastName, firstName
+
+> In patterns, you can use roles using the {<entityName>:<roleName>} notation. Here's an example:
+# getUserName
+- call me {name:userName}
+- I'm {name:userName}
+- my name is {name:userName}
+
+> roles can be specified for list entity types as well - in this case fromCity and toCity are added as roles to the 'city' list entity defined further below
+
+# BookFlight
+- book flight from {city:fromCity} to {city:toCity}
+- [can you] get me a flight from {city:fromCity} to {city:toCity}
+- get me a flight to {city:toCity}
+- I need to fly from {city:fromCity}
+
+$city:Seattle=
+- Seattle
+- Tacoma
+- SeaTac
+- SEA
+
+$city:Portland=
+- Portland
+- PDX
+
+> ## Patterns
+# DeleteAlarm
+- delete the {alarmTime} alarm
+# DeleteAlarm2
+- delete the {alarmTime=7AM} alarm
+
+> ## Phrase list definition
+@ phraseList Want
+@ phraseList Want =
+    - require, need, desire, know
+
+
+> You can also break up the phrase list values into an actual list
+
+@ phraseList Want =
+    - require
+	- need
+	- desire
+  - know
+
+  
+> ## Utterances
+# getUserProfile
+- my name is vishwac and I'm 36 years old
+    - my name is {@userProfile = vishwac and I'm 36 years old}
+    - my name is {@firstName = vishwac} and I'm 36 years old
+    - my name is vishwac and I'm {@userAge = 36} years old
+- i'm {@userProfile = {@firstName = vishwac}}
+
+@ ml userProfile
+    - @personName firstName
+    - @personName lastName
+
+@ prebuilt personName
+
+
+> ## External references
+> You can include references to other .lu files
+
+[All LU files](./all.lu)
+
+> References to other files can have wildcards in them
+
+[en-us](./en-us/*)
+
+> References to other lu files can include sub-folders as well. 
+> /** indicates to the parser to recursively look for .lu files in all subfolders as well.
+
+[all LU files](../**)
+
+> You can include deep references to intents defined in a .lu file in utterances
+
+# None
+- [None uttearnces](./all.lu#Help)
+
+> With the above statement, the parser will parse all.lu and extract out all utterances associated with the 'Help' intent and add them under 'None' intent as defined in this file.
+
+> NOTE: This **only** works for utterances as entities that are referenced by the uttearnces in the 'Help' intent will not be brought forward to this .lu file.
+
+# All utterances
+> you can use the *utterances* wild card to include all utterances from a lu file. This includes utterances across all intents defined in that .lu file. 
+- [all.lu](./all.lu#*utterances*)
+> you can use the *patterns* wild card to include all patterns from a lu file. 
+> - [all.lu](./all.lu#*patterns*)
+> you can use the *utterancesAndPatterns* wild card to include all utterances and patterns from a lu file. 
+> - [all.lu](./all.lu#*utterancesAndPatterns*)
+
+> You can include wild cards with deep references to QnA maker questions defined in a .qna file in utterances
+
+# None
+- [QnA questions](./*#?)
+
+> With the above statement, the parser will parse **all** .lu files under ./, extract out all questions from QnA pairs in those files and add them under 'None' intent as defined in this file.
+
+> You can include deep references to QnA maker questions defined in a .qna file in utterances
+
+# None
+- [QnA questions](./qna1.qna#?)
+
+> With the above statement, the parser will parse qna1.lu and extract out all questions from QnA pairs in that file and add them under 'None' intent as defined in this file.
+`;
 
 export default function App() {
   const [value, setValue] = useState(content);
@@ -224,10 +222,44 @@ export default function App() {
   const props = {
     value,
     onChange,
+    // options: {
+    //   lineNumbers: 'on',
+    //   minimap: {
+    //     enabled: true,
+    //   },
+    //   // minimap: 'on',
+    //   lineDecorationsWidth: undefined,
+    //   lineNumbersMinChars: false,
+    //   glyphMargin: true,
+    //   autoClosingBrackets: 'always',
+    //   autoIndent: true,
+    //   lightbulb: {
+    //     enabled: true,
+    //   },
+    // },
     languageServer: {
-      port: 5003,
+      port: 5000,
       path: '/lu-language-server',
     },
   };
-  return <LuEditor {...props} />;
+
+  return (
+    <LuEditor
+      {...props}
+      options={{
+        lineNumbers: 'on',
+        minimap: 'on',
+        lineDecorationsWidth: undefined,
+        lineNumbersMinChars: false,
+        glyphMargin: true,
+        autoClosingBrackets: 'always',
+        wordBasedSuggestions: false,
+        autoIndent: true,
+        formatOnType: true,
+        lightbulb: {
+          enabled: true,
+        },
+      }}
+    />
+  );
 }
