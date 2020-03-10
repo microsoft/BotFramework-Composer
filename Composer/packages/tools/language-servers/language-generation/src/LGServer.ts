@@ -167,6 +167,7 @@ export class LGServer {
         content: editorContent,
       };
     };
+
     const { fileId, templateId } = this.getLGDocument(document) || {};
 
     if (this.importResolver && fileId) {
@@ -218,6 +219,8 @@ export class LGServer {
         lgImports.forEach(u => {
           templates.push(...u.templates);
         });
+
+        console.log(templates);
       } catch (_error) {
         // ignore
       }
@@ -441,13 +444,12 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const lgFile = this.getLGDocument(document)?.index();
-    if (!lgFile) {
+    const lgFile = LGParser.parseText(document.getText(), '', this.getImportResolver(document));
+    if (!lgFile || lgFile.allTemplates.length === 0) {
       return Promise.resolve(null);
     }
-    const { templates } = lgFile;
 
-    const completionTemplateList: CompletionItem[] = templates.map(template => {
+    const completionTemplateList: CompletionItem[] = lgFile.allTemplates.map(template => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,
