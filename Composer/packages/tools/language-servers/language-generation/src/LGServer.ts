@@ -214,13 +214,7 @@ export class LGServer {
       const diagnostics = check(content, id, importResolver);
       let templates: LgTemplate[] = [];
       try {
-        templates = parse(content, id);
-        const lgImports = LGParser.parseText(content, id, importResolver).references;
-        lgImports.forEach(u => {
-          templates.push(...u.templates);
-        });
-
-        console.log(templates);
+        templates = LGParser.parseText(content, id, importResolver).allTemplates;
       } catch (_error) {
         // ignore
       }
