@@ -5,7 +5,7 @@ import { RecognizerSchema } from '@bfc/extension';
 import { SDKTypes } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-// import { RegexRecognizerField } from './components/fields/RecognizerField/RegexRecognizerField';
+import { RegexIntentField } from './components/fields/RegexIntentField';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
@@ -16,7 +16,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: SDKTypes.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
-    // editor: RegexRecognizerField,
+    editor: RegexIntentField,
     handleChange: props => {
       props.onChange({ $type: SDKTypes.RegexRecognizer, intents: [] });
     },

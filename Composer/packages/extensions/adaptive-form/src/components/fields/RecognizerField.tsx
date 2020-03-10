@@ -8,8 +8,8 @@ import { SDKTypes, MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
-import PluginContext from '../../../PluginContext';
-import { FieldLabel } from '../../FieldLabel';
+import PluginContext from '../../PluginContext';
+import { FieldLabel } from '../FieldLabel';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { value, id, label, description, uiOptions } = props;

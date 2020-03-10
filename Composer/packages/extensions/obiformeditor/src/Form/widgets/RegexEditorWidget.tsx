@@ -4,8 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { RegexRecognizer } from '@bfc/shared';
-import { DialogInfo } from '@bfc/indexers';
+import { RegexRecognizer, DialogInfo } from '@bfc/shared';
 import { useState } from 'react';
 
 import { FormContext } from '../types';
