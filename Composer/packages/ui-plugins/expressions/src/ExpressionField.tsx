@@ -3,14 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-// import { TooltipHost, TooltipDelay, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-// import { IconButton } from 'office-ui-fabric-react/lib/Button';
-// import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-// import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -30,19 +26,22 @@ const styles = {
   `,
 };
 
-const ExpressionField: React.FC<FieldProps> = props => {
-  const { id, value = '', label, description, schema, uiOptions } = props;
+const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undefined => {
+  const { type, oneOf } = schema;
 
-  const pluginConfig = usePluginConfig();
-  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
+  if (type && Array.isArray(type)) {
+    return type.map(t => ({
+      key: t,
+      text: t,
+      data: { schema: { ...schema, type: t } },
+    }));
+  }
 
-  const oneOf = schema.oneOf;
-  const options =
-    oneOf &&
-    (oneOf
+  if (oneOf && Array.isArray(oneOf)) {
+    return oneOf
       .map(s => {
         if (typeof s === 'object') {
-          const resolved = resolveRef(s, props.definitions);
+          const resolved = resolveRef(s, definitions);
 
           return {
             key: resolved.type as React.ReactText,
@@ -51,7 +50,17 @@ const ExpressionField: React.FC<FieldProps> = props => {
           } as IDropdownOption;
         }
       })
-      .filter(Boolean) as IDropdownOption[]);
+      .filter(Boolean) as IDropdownOption[];
+  }
+};
+
+const ExpressionField: React.FC<FieldProps> = props => {
+  const { id, value = '', label, description, schema, uiOptions, definitions } = props;
+
+  const pluginConfig = usePluginConfig();
+  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
+
+  const options = useMemo(() => getOptions(schema, definitions), []);
 
   useEffect(() => {
     if (options) {
@@ -61,6 +70,8 @@ const ExpressionField: React.FC<FieldProps> = props => {
         const selected = options.find(o => typeof value === o.key);
         setSelectedSchema(selected?.data.schema || options[0].data.schema);
       }
+    } else {
+      setSelectedSchema(schema);
     }
   }, []);
 
@@ -82,7 +93,15 @@ const ExpressionField: React.FC<FieldProps> = props => {
   };
 
   const renderField = () => {
-    if (selectedSchema?.type === 'string') {
+    if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
+      return null;
+    }
+
+    if (selectedSchema.type === 'string') {
+      return <ExpressionEditor {...props} />;
+    }
+
+    if (['array', 'object'].includes(selectedSchema.type)) {
       return <ExpressionEditor {...props} />;
     }
 
