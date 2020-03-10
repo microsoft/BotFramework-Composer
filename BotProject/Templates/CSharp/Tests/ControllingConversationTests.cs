@@ -42,11 +42,22 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
         [TestMethod]
         public async Task ControllingConversationBotTest()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, What's your age?")

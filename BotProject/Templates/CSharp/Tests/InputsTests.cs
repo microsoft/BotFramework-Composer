@@ -43,11 +43,22 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
         [TestMethod]
         public async Task Inputs_01TextInput()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, I'm Zoidberg. What is your name? (This can't be interrupted)")
@@ -62,7 +73,7 @@ namespace Tests
         public async Task Inputs_02NumberInput()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("02")
                 .AssertReply("What is your age?")
@@ -78,7 +89,7 @@ namespace Tests
         public async Task Inputs_03ConfirmInput()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine))
             .Send("03")
                 .AssertReply("yes or no (1) Yes or (2) No")
@@ -93,7 +104,7 @@ namespace Tests
         public async Task Inputs_04ChoiceInput()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine)).Send("04")
                 .AssertReply("Please select a value from below:\n\n   1. Test1\n   2. Test2\n   3. Test3")
             .Send("Test1")
@@ -105,7 +116,7 @@ namespace Tests
         public async Task Inputs_06DateTimeInput()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine)).Send("06")
                 .AssertReply("Please enter a date.")
             .Send("June 1st")

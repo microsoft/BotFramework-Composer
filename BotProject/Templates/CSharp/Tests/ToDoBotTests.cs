@@ -42,11 +42,23 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
+
         [TestMethod]
         public async Task ToDoBotTest()
         {
             await BuildTestFlow()
-            // .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
             .Send("add a todo named first")
                 .AssertReply("Successfully added a todo named first")
