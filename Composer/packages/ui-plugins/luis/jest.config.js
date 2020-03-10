@@ -5,7 +5,7 @@
 const path = require('path');
 
 module.exports = {
-  displayName: 'ui-plugin/json',
+  displayName: 'ui-plugin/luis',
   preset: 'ts-jest/presets/js-with-ts',
   moduleNameMapper: {
     // use commonjs modules for test so they do not need to be compiled

@@ -25,7 +25,7 @@
     "@bfc/ui-plugin-expressions": "*",
     "@bfc/ui-plugin-json": "*",
     "@bfc/ui-plugin-lg": "*",
-    "@bfc/ui-plugin-lu": "*",
+    "@bfc/ui-plugin-luis": "*",
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-intent": "*",
     "@bfc/ui-plugin-select-dialog": "*",

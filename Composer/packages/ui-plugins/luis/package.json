@@ -1,5 +1,5 @@
 {
-  "name": "@bfc/ui-plugin-lu",
+  "name": "@bfc/ui-plugin-luis",
   "version": "0.0.0",
   "private": true,
   "description": "Botframework Composer plugin that adds lu editor capibility using the Monaco editor.",
