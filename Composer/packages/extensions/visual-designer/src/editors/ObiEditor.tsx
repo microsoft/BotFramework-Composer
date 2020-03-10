@@ -6,7 +6,6 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
-import querystring from 'query-string';
 import { SDKTypes } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -146,22 +145,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.MoveSelection:
         handler = e => {
           const copiedActions = copyNodes(data, e.actionIds);
-          onCreateDialog(copiedActions).then(d => {
-            const startIndex = e.actionIds[0].indexOf('actions[');
+          onCreateDialog(copiedActions).then(newDialog => {
+            // get insert position of BeginDialog
+            const startIndex = parseInt(e.actionIds[0].replace(/.*\w\[\d+\]\.\w+\[(\d+)\]/, '$1'));
+            console.log('rrr', e.actionIds[0].replace(/.*\w\[\d+\]\.\w+\[(\d+)\]/, '$1'));
             const position = parseInt(e.actionIds[0][startIndex + 8]);
+            console.log('pp', position);
             const deleteResult = deleteNodes(data, e.actionIds, nodes =>
               deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
             );
-            const queryString = querystring.parseUrl(parent.location.href);
-            const insertResult = insert(
-              deleteResult,
-              `${queryString.query.selected}.actions`,
-              position,
-              SDKTypes.BeginDialog,
-              {
-                dialog: d,
-              }
-            );
+            const insertResult = insert(deleteResult, `${focusedEvent}.actions`, position, SDKTypes.BeginDialog, {
+              dialog: newDialog,
+            });
             onChange(insertResult);
           });
           onFocusSteps([]);
