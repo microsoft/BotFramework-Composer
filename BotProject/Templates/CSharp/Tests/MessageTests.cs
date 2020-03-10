@@ -51,7 +51,7 @@ namespace Tests
         {
             await BuildTestFlow()
             // .SendConversationUpdate()
-            //     .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. LGWithParam\n   4. LGComposition\n   5. Structured LG\n   6. MultiLineText\n   7. IfElseCondition\n   8. SwitchCondition")
+                .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. LGWithParam\n   4. LGComposition\n   5. Structured LG\n   6. MultiLineText\n   7. IfElseCondition\n   8. SwitchCondition")
             .Send("1")
                 .AssertReplyOneOf(new string[] { "Hi, this is simple text", "Hey, this is simple text", "Hello, this is simple text" })
                 .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. LGWithParam\n   4. LGComposition\n   5. Structured LG\n   6. MultiLineText\n   7. IfElseCondition\n   8. SwitchCondition")

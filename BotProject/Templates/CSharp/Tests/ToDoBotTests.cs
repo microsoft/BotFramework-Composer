@@ -47,7 +47,7 @@ namespace Tests
         {
             await BuildTestFlow()
             // .SendConversationUpdate()
-            //     .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
+                .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
             .Send("add a todo named first")
                 .AssertReply("Successfully added a todo named first")
             .Send("add a todo named second")
