@@ -11,8 +11,6 @@ import formatMessage from 'format-message';
 import PluginContext from '../../../PluginContext';
 import { FieldLabel } from '../../FieldLabel';
 
-import ToggleEditor from './ToggleEditor';
-
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const { value, id, label, description, uiOptions } = props;
   const { shellApi, ...shellData } = useShellApi();
@@ -25,30 +23,19 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
     }));
   }, [recognizers]);
 
-  const getToggleTitle = (type: string) => {
-    const title = recognizers.find(r => r.id === type)?.displayName || '';
-
-    return typeof title === 'function' ? title(value) : title;
-  };
-
-  // show select for available recognizers
-  // available = regex + recognizer with ui:field
-  const isRegex = typeof value === 'object' && value.$type === SDKTypes.RegexRecognizer;
-
   // TODO: how do we determine the recognizer type? Maybe scan the schema?
   const getRecognizerType = (): string => {
     if (typeof value === 'string') {
       return SDKTypes.LuisRecognizer;
     }
 
-    if (isRegex) {
+    if (typeof value === 'object' && value.$type === SDKTypes.RegexRecognizer) {
       return SDKTypes.RegexRecognizer;
     }
 
     return 'none';
   };
 
-  // TODO: make this configurable in the schema?
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
       const handler = recognizers.find(r => r.id === option.key)?.handleChange;
@@ -59,10 +46,8 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
     }
   };
 
-  const Field = recognizers.find(r => r.id === getRecognizerType())?.editor;
-
   return (
-    <div>
+    <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
       <Dropdown
         label={formatMessage('Recognizer Type')}
@@ -71,12 +56,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
         selectedKey={getRecognizerType()}
         onChange={handleChangeRecognizerType}
       />
-      {value && (
-        <ToggleEditor key={getRecognizerType()} title={getToggleTitle(getRecognizerType())}>
-          {Field && <Field {...props} />}
-        </ToggleEditor>
-      )}
-    </div>
+    </React.Fragment>
   );
 };
 
