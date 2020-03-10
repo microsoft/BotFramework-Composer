@@ -77,7 +77,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
     getLgTemplates,
-    copyLgTemplate,
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,

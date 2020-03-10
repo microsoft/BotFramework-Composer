@@ -114,6 +114,10 @@ const shellApi: ShellApi = {
     return apiClient.apiCall('createDialog', { actions });
   },
 
+  updateRegExIntent: (id, intentName, pattern) => {
+    return apiClient.apiCall('updateRegExIntent', { id, intentName, pattern });
+  },
+
   validateExpression: expression => {
     return apiClient.apiCall('isExpression', { expression });
   },

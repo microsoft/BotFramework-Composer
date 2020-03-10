@@ -2,6 +2,57 @@
 
 ## Releases
 
+### 03-09-2020
+
+#### Added
+
+- feat: Remove input LU when deconstructing prompts ([#2180](https://github.com/microsoft/BotFramework-Composer/pull/2180)) ([@tdurnford](https://github.com/tdurnford))
+- feat: Add cross train before luis publish ([#2069](https://github.com/microsoft/BotFramework-Composer/pull/2069)) ([@cwhitten](https://github.com/cwhitten))
+- feat: Added inline lu to prompts ([#2159](https://github.com/microsoft/BotFramework-Composer/pull/2159)) ([@cwhitten](https://github.com/cwhitten))
+- feat: implement new action design to improve readability ([#2136](https://github.com/microsoft/BotFramework-Composer/pull/2136)) ([@cwhitten](https://github.com/cwhitten))
+- feat: repaint ui for setProperties in visual editor ([#2017](https://github.com/microsoft/BotFramework-Composer/pull/2017)) ([@alanlong9278](https://github.com/alanlong9278))
+- feat: Update package and schema to 200216 ([#1997](https://github.com/microsoft/BotFramework-Composer/pull/1997)) ([@luhan2017](https://github.com/luhan2017))
+- feat: update new trigger modal according to design ([#1786](https://github.com/microsoft/BotFramework-Composer/pull/1786)) ([@liweitian](https://github.com/liweitian))
+- feat: display 6 actions as contentless node ([#2108](https://github.com/microsoft/BotFramework-Composer/pull/2108)) ([@yeze322](https://github.com/yeze322))
+- feat: support multi-line node block in Visual Editor ([#2005](https://github.com/microsoft/BotFramework-Composer/pull/2005)) ([@yeze322](https://github.com/yeze322))
+- feat: add more help links ([#2070](https://github.com/microsoft/BotFramework-Composer/pull/2070)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- feat: support inline LU section editing ([#1994](https://github.com/microsoft/BotFramework-Composer/pull/1994)) ([@zhixzhan](https://github.com/zhixzhan))
+
+#### Fixed
+
+- fix: trigger creation bug ([#2151](https://github.com/microsoft/BotFramework-Composer/pull/2151)) ([@liweitian](https://github.com/liweitian))
+- fix: lu build bug when training empty intents ([#2201](https://github.com/microsoft/BotFramework-Composer/pull/2201)) ([@lei9444](https://github.com/lei9444))
+- fix: use nightly build to replace the private bf-lu package ([#2190](https://github.com/microsoft/BotFramework-Composer/pull/2190)) ([@lei9444](https://github.com/lei9444))
+- fix: Moved value field to user tab and removed inline lu from attachment input ([#2194](https://github.com/microsoft/BotFramework-Composer/pull/2194)) ([@tdurnford](https://github.com/tdurnford))
+- fix: load schema files when loading bot project ([#2170](https://github.com/microsoft/BotFramework-Composer/pull/2170)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- fix: deployment script, decouple debugging and deployment settings ([#2153](https://github.com/microsoft/BotFramework-Composer/pull/2153)) ([@zidaneymar](https://github.com/zidaneymar))
+- fix: Double scroll bars in dialog's properties pane ([#2163](https://github.com/microsoft/BotFramework-Composer/pull/2163)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: lg template display wrong in visual & form editor ([#2191](https://github.com/microsoft/BotFramework-Composer/pull/2191)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: remove edit button in lu all up view ([#2146](https://github.com/microsoft/BotFramework-Composer/pull/2146)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: Use header tag for trigger in visual editor ([#2128](https://github.com/microsoft/BotFramework-Composer/pull/2128)) ([@cwhitten](https://github.com/cwhitten))
+- fix: update lu format link ([#2107](https://github.com/microsoft/BotFramework-Composer/pull/2107)) ([@liweitian](https://github.com/liweitian))
+- fix: resolve known bugs in LU LSP. ([#2098](https://github.com/microsoft/BotFramework-Composer/pull/2098)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: no longer show duplicate lg error notifications ([#2100](https://github.com/microsoft/BotFramework-Composer/pull/2100)) ([@zhixzhan](https://github.com/zhixzhan))
+- fix: replace animated screenshots with a static screenshot ([#2045](https://github.com/microsoft/BotFramework-Composer/pull/2045)) ([@benbrown](https://github.com/benbrown))
+- fix: support copy actions across dialogs ([#2198](https://github.com/microsoft/BotFramework-Composer/pull/2198)) ([@yeze322](https://github.com/yeze322))
+- fix: Default ActivityProcessed to true (bool) ([#2189](https://github.com/microsoft/BotFramework-Composer/pull/2189)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: add name for nodeMenu, arrow and endNode ([#2131](https://github.com/microsoft/BotFramework-Composer/pull/2131)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: add role, name, posinset for paste in edgeMenu ([#2126](https://github.com/microsoft/BotFramework-Composer/pull/2126)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: fix 'sort()' function of steps and cases in visual editor ([#2166](https://github.com/microsoft/BotFramework-Composer/pull/2166)) ([@yeze322](https://github.com/yeze322))
+
+#### Changed
+
+- style: fix hover state nodes ui ([#2065](https://github.com/microsoft/BotFramework-Composer/pull/2065)) ([@alanlong9278](https://github.com/alanlong9278))
+
+#### Other
+
+- ci: add a11y pr title prefix for accessibility prs ([#2171](https://github.com/microsoft/BotFramework-Composer/pull/2171)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- docs: update docs to fix LU file format link ([#2071](https://github.com/microsoft/BotFramework-Composer/pull/2071)) ([@vishwacsena](https://github.com/vishwacsena))
+- chore: merge stable release into master ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- docs: clarify setup ([#2145](https://github.com/microsoft/BotFramework-Composer/pull/2145)) ([@DaraOladapo](https://github.com/DaraOladapo))
+- docs: update dotnet requirement in setup docs ([#2160](https://github.com/microsoft/BotFramework-Composer/pull/2160)) ([@vkacherov](https://github.com/vkacherov))
+- samples: Update HttpRequest sample ([#2161](https://github.com/microsoft/BotFramework-Composer/pull/2161)) ([@luhan2017](https://github.com/luhan2017))
+
 ### 02-21-2020
 
 #### Added
