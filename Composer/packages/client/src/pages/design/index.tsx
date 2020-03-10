@@ -12,12 +12,13 @@ import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -182,18 +183,21 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog, luFile) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
       content: dialog.content,
     };
-    const luFilePayload = {
-      id: luFile.id,
-      content: luFile.content,
-    };
+    if (luFile) {
+      const luFilePayload = {
+        id: luFile.id,
+        content: luFile.content,
+      };
+      actions.updateLuFile(luFilePayload);
+    }
+
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateLuFile(luFilePayload);
     actions.updateDialog(dialogPayload);
   };
 
