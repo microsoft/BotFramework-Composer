@@ -96,26 +96,25 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
-const initialFormData: TriggerFormData = {
-  errors: {},
-  $type: intentTypeKey,
-  specifiedType: '',
-  intent: '',
-  triggerPhrases: '',
-  regexEx: '',
-};
-
-const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
-
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const [formData, setFormData] = useState(initialFormData);
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+  const isNone = !get(dialogFile, 'content.recognizer');
+  const initialFormData: TriggerFormData = {
+    errors: {},
+    $type: isNone ? '' : intentTypeKey,
+    specifiedType: '',
+    intent: '',
+    triggerPhrases: '',
+    regexEx: '',
+  };
+  const [formData, setFormData] = useState(initialFormData);
+
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData, isRegEx, regexIntents);
@@ -170,7 +169,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
-
+  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  if (isNone) {
+    triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== intentTypeKey);
+  }
   const showIntentName = formData.$type === intentTypeKey;
   const showRegExDropDown = formData.$type === intentTypeKey && isRegEx;
   const showTriggerPhrase = formData.$type === intentTypeKey && !isRegEx;
@@ -201,7 +203,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$type}
             data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={intentTypeKey}
+            defaultSelectedKey={formData.$type}
           />
           {showEventDropDown && (
             <Dropdown
