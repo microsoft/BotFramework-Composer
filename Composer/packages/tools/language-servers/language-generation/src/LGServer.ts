@@ -445,7 +445,7 @@ export class LGServer {
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const lgFile = LGParser.parseText(document.getText(), '', this.getImportResolver(document));
-    if (!lgFile || lgFile.allTemplates.length === 0) {
+    if (!lgFile) {
       return Promise.resolve(null);
     }
 
