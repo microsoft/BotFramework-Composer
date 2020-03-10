@@ -33,7 +33,7 @@ import {
   updateTemplate,
 } from './utils';
 
-const { check, parse } = lgIndexer;
+const { check } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -438,12 +438,13 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const lgFile = LGParser.parseText(document.getText(), '', this.getImportResolver(document));
+    const lgFile = this.getLGDocument(document)?.index();
     if (!lgFile) {
       return Promise.resolve(null);
     }
 
-    const completionTemplateList: CompletionItem[] = lgFile.allTemplates.map(template => {
+    const { templates } = lgFile;
+    const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,

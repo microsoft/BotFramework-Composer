@@ -1,20 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  LGParser,
-  StaticChecker,
-  Diagnostic as LGDiagnostic,
-  ImportResolver,
-  ImportResolverDelegate,
-} from 'botbuilder-lg';
+import { LGParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
 
 import { getBaseName } from './utils/help';
 import { LgTemplate, LgFile, FileInfo } from './type';
 import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
-
-const lgStaticChecker = new StaticChecker();
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -28,10 +20,10 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
 }
 
 function check(content: string, id: string, importResolver?: ImportResolverDelegate): Diagnostic[] {
-  const resolver: ImportResolverDelegate = importResolver || ImportResolver.fileResolver;
+  const resolver: ImportResolverDelegate = importResolver || LGParser.defaultFileResolver;
   let diagnostics: LGDiagnostic[] = [];
 
-  diagnostics = lgStaticChecker.checkText(content, id, resolver);
+  diagnostics = LGParser.parseText(content, id, resolver).diagnostics;
 
   return diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
@@ -39,8 +31,8 @@ function check(content: string, id: string, importResolver?: ImportResolverDeleg
 }
 
 function parse(content: string, id?: string): LgTemplate[] {
-  const resource = LGParser.parse(content, id);
-  const templates = resource.templates.map(t => {
+  const lgFile = LGParser.parseText(content, id);
+  const templates = lgFile.templates.map(t => {
     return {
       name: t.name,
       body: t.body,
