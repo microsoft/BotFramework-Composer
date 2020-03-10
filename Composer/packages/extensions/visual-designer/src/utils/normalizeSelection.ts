@@ -3,8 +3,11 @@
 
 export const normalizeSelection = (selectedIds: string[]): string[] => {
   if (!Array.isArray(selectedIds)) return [];
+
+  // filter invalid ids such as 'actions[0].diamond'
+  const validIds = selectedIds.filter(id => id.match(/.*\w+\[\d+\]$/));
   // events[0] < events[0].actions[0] < events[1] < events[1].actions[0]
-  const ascendingIds = sortActionIds(selectedIds);
+  const ascendingIds = sortActionIds(validIds);
 
   for (let i = 0; i < ascendingIds.length; i++) {
     const parentId = ascendingIds[i];

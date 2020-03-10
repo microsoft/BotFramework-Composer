@@ -4,15 +4,22 @@
 import { normalizeSelection, sortActionIds } from '../../src/utils/normalizeSelection';
 
 describe('normalizeSelection', () => {
-  it('can filter out child ids', () => {
-    const selectedIds1 = ['actions[0]', 'actions[0].a', 'actions[0].b'];
+  it('should filter out child ids', () => {
+    const selectedIds1 = ['actions[0]', 'actions[0].actions[0]', 'actions[0].actions[1]'];
     expect(normalizeSelection(selectedIds1)).toEqual(['actions[0]']);
 
-    const selectedIds2 = ['actions[0]', 'actions[0].a', 'actions[0].b', 'actions[1]', 'actions[1].a'];
+    const selectedIds2 = ['actions[0]', 'actions[0].actions[0]', 'actions[0].actions[1]', 'actions[1]', 'actions[1].a'];
     expect(normalizeSelection(selectedIds2)).toEqual(['actions[0]', 'actions[1]']);
+  });
 
-    const selectedIds3 = ['actions[0]', 'actions[0].a', 'actions[0].b', 'actions[1]', 'actions[1].a', 'actions[2].a'];
-    expect(normalizeSelection(selectedIds3)).toEqual(['actions[0]', 'actions[1]', 'actions[2].a']);
+  it('should keep orphan child ids', () => {
+    const selectedIds = ['actions[0]', 'actions[0].actions[0]', 'actions[1].actions[0]'];
+    expect(normalizeSelection(selectedIds)).toEqual(['actions[0]', 'actions[1].actions[0]']);
+  });
+
+  it('should throw invalid ids', () => {
+    const selectedIds = ['action[0].a', 'actions[0].diamond', 'actions', 'actions[0].ifelse'];
+    expect(normalizeSelection(selectedIds)).toEqual([]);
   });
 });
 
