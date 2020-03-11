@@ -147,17 +147,19 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = e => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
+          // Using copy-paste-delete pattern here is safer than using cut-paste
+          // since create new dialog may be cancelled or failed
           const copiedActions = copyNodes(data, e.actionIds);
           onCreateDialog(copiedActions).then(newDialog => {
-            // defense modal cancellatin
+            // defense modal cancellation
             if (!newDialog) return;
 
-            // delete old data
+            // delete old actions (they are already moved to new dialog)
             const deleteResult = deleteNodes(data, e.actionIds, nodes =>
               deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
             );
 
-            // insert a BeginDialog action
+            // insert a BeginDialog action points to newly created dialog
             const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
             if (indexes === null || indexes.length !== 3) return;
 
