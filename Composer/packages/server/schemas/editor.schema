@@ -199,8 +199,8 @@
       "title": "Conversation invoked",
       "subtitle": "Invoke activity"
     },
-    "Microsoft.OnMessageActivity": {
-      "title": "Message events",
+    "Microsoft.OnMessageReceivedActivity": {
+      "title": "Message recieved",
       "subtitle": "Message recieved activity"
     },
     "Microsoft.OnMessageDeleteActivity": {
