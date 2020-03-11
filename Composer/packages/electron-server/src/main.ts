@@ -9,7 +9,7 @@ import { app, BrowserWindow } from 'electron';
 import settings from './settings';
 
 function main() {
-  console.log('starting electron app');
+  console.log('Starting electron app');
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
@@ -21,7 +21,9 @@ function main() {
   });
 
   // and load the index.html of the app.
-  win.loadURL(`http://localhost:5000/`);
+  const CONTENT_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'http://localhost:5000/';
+  console.log('Loading project from: ', CONTENT_URL);
+  win.loadURL(CONTENT_URL);
 
   win.maximize();
   win.show();
@@ -39,21 +41,6 @@ async function createTempStore() {
 }
 
 async function run() {
-  console.log('Creating temp store');
-  await createTempStore();
-  console.log(`Composer settings: ${JSON.stringify(settings, null, ' ')}`);
-  console.log('starting server');
-  // TODO: race condition with store being started
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //const { start } = require('./server');
-  await start();
-  console.log('beginning app start up');
-
-  // TODO: fix race condition
-  // this isn't working for some reason, but since we are awaiting the other calls, main seems to work
-  // app.on('ready', main);
-  main(); // might be fs calls locking up (node 13 histogram for event loop)
-
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
@@ -70,6 +57,20 @@ async function run() {
       main();
     }
   });
+
+  console.log('Waiting for app to be ready...');
+  await app.whenReady();
+  console.log('App ready');
+
+  console.log('Creating temp store');
+  await createTempStore();
+  console.log(`Composer settings: ${JSON.stringify(settings, null, ' ')}`);
+
+  console.log('Starting server');
+  await start();
+  console.log('Beginning app start up');
+
+  main();
 }
 
 run()
@@ -78,5 +79,5 @@ run()
     app.quit();
   })
   .then(() => {
-    console.log('run completed');
+    console.log('Run completed');
   });

@@ -12,12 +12,10 @@
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
     "pack": "electron-builder --dir",
-    "copy-templates":"node ./scripts/copy-templates.js",
+    "copy-templates": "node ./scripts/copy-templates.js",
     "dist": "electron-builder",
     "start": "electron .",
-    "start:dev": "electron .",
-    "//test": "jest",
-    "//test:watch": "jest --watch",
+    "start:dev": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
@@ -71,6 +69,7 @@
     "body-parser": "^1.18.3",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
+    "cross-env": "^7.0.2",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
     "ejs": "^2.7.1",
@@ -93,7 +92,7 @@
   },
   "build": {
     "asar": true,
-    "asarUnpack":[
+    "asarUnpack": [
       "assets/**",
       "build/templates/**"
     ],

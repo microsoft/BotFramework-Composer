@@ -10,7 +10,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
-    "start": "node build/server.js",
+    "start": "node build/init.js",
     "start:dev": "nodemon",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -20,7 +20,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/server.ts",
+    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
     "watch": [
       "src"
     ],
