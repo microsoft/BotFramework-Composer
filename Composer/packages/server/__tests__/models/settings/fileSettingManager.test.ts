@@ -7,7 +7,7 @@ import { Path } from '../../../src/utility/path';
 const dir = './mocks';
 const defaultDir = Path.join(__dirname, dir);
 
-describe.skip('get', () => {
+describe('get', () => {
   it('return values', async () => {
     const sm = new FileSettingManager(defaultDir);
     const result = await sm.get('', false);
