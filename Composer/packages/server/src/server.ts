@@ -41,7 +41,7 @@ app.use(pluginLoader.passport.session());
 pluginLoader.useExpress(app);
 
 // load all the plugins that exist in the folder
-pluginLoader.loadPluginsFromFolder(__dirname + '/../../../plugins').then(() => {
+pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).then(() => {
   const { login, authorize } = getAuthProvider();
 
   const CS_POLICIES = [
