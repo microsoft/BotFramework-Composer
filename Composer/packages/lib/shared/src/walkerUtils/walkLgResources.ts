@@ -5,16 +5,16 @@ import get from 'lodash/get';
 
 import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
 import { SDKTypes } from '../types';
+import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
 
-type LgFieldHandler = (nodeId: string, lgType: string, lgString: string) => any;
+type LgFieldHandler = (action, lgFieldName: string, lgString: string) => any;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
   if (!action || !action.$type) return;
 
-  const actionId = get(action, '$designer.id', '');
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(actionId, fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(action, fieldName, action[fieldName]);
   };
 
   switch (action.$type) {
@@ -35,6 +35,10 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   }
 };
 
-export const walkLgResources = (action, handleLgResource: LgFieldHandler) => {
+export const walkLgResourcesInAction = (action, handleLgResource: LgFieldHandler) => {
   walkAdaptiveAction(action, action => findLgFields(action, handleLgResource));
+};
+
+export const walkLgResourcesInActionList = (actioList: any[], handleLgResource: LgFieldHandler) => {
+  walkAdaptiveActionList(actioList, action => findLgFields(action, handleLgResource));
 };
