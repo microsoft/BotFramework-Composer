@@ -15,7 +15,7 @@
         {
           "$type": "Microsoft.EditArray",
           "$designer": {
-            "id": "832307"
+            "id": "832300"
           },
           "changeType": "Clear",
           "itemsProperty": "user.todos",
@@ -24,7 +24,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "id": "983761"
+            "id": "983700"
           },
           "condition": "dialog.cleared",
           "actions": [
@@ -40,7 +40,7 @@
             {
               "$type": "Microsoft.SendActivity",
               "$designer": {
-                "id": "983766"
+                "id": "983761"
               },
               "activity": "${bfdactivity-983761()}"
             }
