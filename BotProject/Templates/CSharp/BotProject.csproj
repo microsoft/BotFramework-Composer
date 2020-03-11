@@ -21,6 +21,7 @@
     <CodeAnalysisRuleSet>BotProject.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.8.0-preview-200308-111775" />
     <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.8.0-preview-200308-111775" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.8.0-preview-200308-111775" />
