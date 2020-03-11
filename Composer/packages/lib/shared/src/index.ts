@@ -13,3 +13,4 @@ export * from './appschema';
 export * from './types';
 export * from './constant';
 export * from './lgUtils';
+export * from './walkerUtils';
