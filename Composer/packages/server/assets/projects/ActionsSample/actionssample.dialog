@@ -209,7 +209,7 @@
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
-          "dialog": "replace"
+          "dialog": "replacedialog"
         }
       ],
       "intent": "ReplaceDialog"
