@@ -6,7 +6,9 @@ import get from 'lodash/get';
 
 import { getBaseName } from './utils/help';
 import { LgTemplate, LgFile, FileInfo } from './type';
-import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
+import { Diagnostic, Position, Range } from './diagnostic';
+
+const { defaultFileResolver } = LGParser;
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -19,19 +21,12 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-function check(content: string, id: string, importResolver?: ImportResolverDelegate): Diagnostic[] {
-  const resolver: ImportResolverDelegate = importResolver || LGParser.defaultFileResolver;
-  let diagnostics: LGDiagnostic[] = [];
-
-  diagnostics = LGParser.parseText(content, id, resolver).diagnostics;
-
-  return diagnostics.map((d: LGDiagnostic) => {
-    return convertLGDiagnostic(d, id);
-  });
-}
-
-function parse(content: string, id?: string): LgTemplate[] {
-  const lgFile = LGParser.parseText(content, id);
+function parse(
+  content: string,
+  id = '',
+  importResolver: ImportResolverDelegate = defaultFileResolver
+): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
+  const lgFile = LGParser.parseText(content, id, importResolver);
   const templates = lgFile.templates.map(t => {
     return {
       name: t.name,
@@ -43,7 +38,10 @@ function parse(content: string, id?: string): LgTemplate[] {
       },
     };
   });
-  return templates;
+  const diagnostics = lgFile.diagnostics.map((d: LGDiagnostic) => {
+    return convertLGDiagnostic(d, id);
+  });
+  return { templates, diagnostics };
 }
 
 function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
@@ -53,13 +51,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     const { name, relativePath, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      const diagnostics = check(content, id, importResolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(file.content, id);
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
+      const { templates, diagnostics } = parse(content, id, importResolver);
       lgFiles.push({ id, content, relativePath, templates, diagnostics });
     }
   }
@@ -69,5 +61,4 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
 export const lgIndexer = {
   index,
   parse,
-  check,
 };

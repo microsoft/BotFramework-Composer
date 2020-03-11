@@ -3,7 +3,7 @@
 
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
-import { ImportResolverDelegate, ImportResolver } from 'botbuilder-lg';
+import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { prepareAxios } from '../utils/auth';
 import { getFileName, getBaseName } from '../utils/fileUtil';
@@ -73,7 +73,7 @@ export const StoreContext = React.createContext<StoreContextValue>({
   state: initialState,
   dispatch: () => {},
   actions: {} as ActionHandlers,
-  resolvers: { lgImportresolver: ImportResolver.fileResolver },
+  resolvers: { lgImportresolver: LGParser.defaultFileResolver },
 });
 
 interface StoreProviderProps {
