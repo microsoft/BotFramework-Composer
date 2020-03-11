@@ -151,19 +151,23 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedDat
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $type, extra = {}) {
-  const dialog = cloneDeep(inputDialog);
-  const current = get(dialog, path, []);
+export function insert(inputDialog, path, position, $type) {
   const newStep = {
     $type,
-    ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }, extra),
+    ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }),
   };
+  return insertAction(inputDialog, path, position, newStep);
+}
+
+export function insertAction(inputDialog, arrayPath: string, position: number, newAction) {
+  const dialog = cloneDeep(inputDialog);
+  const current = get(dialog, arrayPath, []);
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 
-  current.splice(insertAt, 0, newStep);
+  current.splice(insertAt, 0, newAction);
 
-  set(dialog, path, current);
+  set(dialog, arrayPath, current);
 
   return dialog;
 }

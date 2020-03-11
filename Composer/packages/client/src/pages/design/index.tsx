@@ -11,8 +11,9 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { getNewDesigner, seedNewDialog } from '@bfc/shared';
+import { seedNewDialog } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
+import set from 'lodash/set';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -324,8 +325,14 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const content = { ...getNewDesigner(data.name, data.description), generator: `${data.name}.lg` };
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content, state.actionsSeed);
+    const seededContent = seedNewDialog(
+      'Microsoft.AdaptiveDialog',
+      { name: data.name, description: data.description },
+      {
+        generator: `${data.name}.lg`,
+      }
+    );
+    set(seededContent, 'triggers[0].actions', state.actionsSeed || []);
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 

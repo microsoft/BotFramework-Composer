@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, seedNewDialog } from '@bfc/shared';
 import { SDKTypes } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -21,6 +21,7 @@ import {
   appendNodesAfter,
   pasteNodes,
   deleteNodes,
+  insertAction,
 } from '../utils/jsonTracker';
 import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
@@ -144,19 +145,26 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.MoveSelection:
         handler = e => {
+          if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
+
           const copiedActions = copyNodes(data, e.actionIds);
           onCreateDialog(copiedActions).then(newDialog => {
-            // get insert position of BeginDialog
-            const startIndex = parseInt(e.actionIds[0].replace(/.*\w\[\d+\]\.\w+\[(\d+)\]/, '$1'));
-            console.log('rrr', e.actionIds[0].replace(/.*\w\[\d+\]\.\w+\[(\d+)\]/, '$1'));
-            const position = parseInt(e.actionIds[0][startIndex + 8]);
-            console.log('pp', position);
+            // defense modal cancellatin
+            if (!newDialog) return;
+
+            // delete old data
             const deleteResult = deleteNodes(data, e.actionIds, nodes =>
               deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
             );
-            const insertResult = insert(deleteResult, `${focusedEvent}.actions`, position, SDKTypes.BeginDialog, {
-              dialog: newDialog,
-            });
+
+            // insert a BeginDialog action
+            const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
+            if (indexes === null || indexes.length !== 3) return;
+
+            const [, arrayPath, actionIndexStr] = indexes;
+            const startIndex = parseInt(actionIndexStr);
+            const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+            const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
             onChange(insertResult);
           });
           onFocusSteps([]);
