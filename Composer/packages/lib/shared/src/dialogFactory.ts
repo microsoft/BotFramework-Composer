@@ -23,17 +23,16 @@ const initialInputDialog = {
 };
 
 const initialDialogShape = {
-  [SDKTypes.AdaptiveDialog]: seededActions => ({
+  [SDKTypes.AdaptiveDialog]: {
     $type: SDKTypes.AdaptiveDialog,
     triggers: [
       {
         $type: SDKTypes.OnBeginDialog,
         ...getNewDesigner('BeginDialog', ''),
-        actions: [...seededActions],
       },
     ],
-  }),
-  [SDKTypes.OnConversationUpdateActivity]: () => ({
+  },
+  [SDKTypes.OnConversationUpdateActivity]: {
     $type: 'Microsoft.OnConversationUpdateActivity',
     actions: [
       {
@@ -56,16 +55,16 @@ const initialDialogShape = {
         ],
       },
     ],
-  }),
-  [SDKTypes.SendActivity]: () => ({
+  },
+  [SDKTypes.SendActivity]: {
     activity: '',
-  }),
-  [SDKTypes.AttachmentInput]: () => initialInputDialog,
-  [SDKTypes.ChoiceInput]: () => initialInputDialog,
-  [SDKTypes.ConfirmInput]: () => initialInputDialog,
-  [SDKTypes.DateTimeInput]: () => initialInputDialog,
-  [SDKTypes.NumberInput]: () => initialInputDialog,
-  [SDKTypes.TextInput]: () => initialInputDialog,
+  },
+  [SDKTypes.AttachmentInput]: initialInputDialog,
+  [SDKTypes.ChoiceInput]: initialInputDialog,
+  [SDKTypes.ConfirmInput]: initialInputDialog,
+  [SDKTypes.DateTimeInput]: initialInputDialog,
+  [SDKTypes.NumberInput]: initialInputDialog,
+  [SDKTypes.TextInput]: initialInputDialog,
 };
 
 export function getNewDesigner(name: string, description: string) {
@@ -138,8 +137,7 @@ export const deleteActions = (
 export const seedNewDialog = (
   $type: string,
   designerAttributes: Partial<DesignerAttributes> = {},
-  optionalAttributes: object = {},
-  seededActions: unknown[] = []
+  optionalAttributes: object = {}
 ): object => {
   return {
     $type,
@@ -148,7 +146,7 @@ export const seedNewDialog = (
       ...designerAttributes,
     },
     ...seedDefaults($type),
-    ...(initialDialogShape[$type] ? initialDialogShape[$type](seededActions) : {}),
+    ...(initialDialogShape[$type] || {}),
     ...optionalAttributes,
   };
 };
