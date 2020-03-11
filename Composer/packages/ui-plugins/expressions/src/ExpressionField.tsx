@@ -11,18 +11,10 @@ import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-reac
 import { ExpressionEditor } from './ExpressionEditor';
 
 const styles = {
-  label: css`
+  container: css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-  `,
-  fieldWrapper: css`
-    display: flex;
-  `,
-  field: css`
-    display: flex;
-    align-items: center;
-    flex: 1;
   `,
 };
 
@@ -111,8 +103,8 @@ const ExpressionField: React.FC<FieldProps> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
-      <div css={styles.fieldWrapper}>
+      <div css={styles.container}>
+        <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
         {options && options.length > 1 && (
           <Dropdown
             id={`${props.id}-type`}
@@ -122,12 +114,14 @@ const ExpressionField: React.FC<FieldProps> = props => {
             onChange={handleTypeChange}
             onRenderTitle={renderTypeTitle}
             styles={{
-              root: { width: '110px', flexBasis: 'auto', marginRight: '10px' },
+              caretDownWrapper: { height: '24px', lineHeight: '24px' },
+              root: { flexBasis: 'auto', padding: '5px 0', width: '110px' },
+              title: { height: '24px', lineHeight: '20px' },
             }}
           />
         )}
-        <div css={styles.field}>{renderField()}</div>
       </div>
+      {renderField()}
     </React.Fragment>
   );
 };

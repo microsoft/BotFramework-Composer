@@ -11,7 +11,7 @@ import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { getNewDesigner, seedNewDialog } from '@bfc/shared';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogInfo } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
