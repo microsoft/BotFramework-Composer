@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -44,9 +44,20 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates, removeLuIntent } = useContext(
+  const { focusedId, focusedEvent, clipboardActions, getLgTemplates, removeLgTemplates, removeLuIntent } = useContext(
     NodeRendererContext
   );
+
+  const dereferenceLg = async (lgText: string): Promise<string> => {
+    const inputLgRef = LgTemplateRef.parse(lgText);
+    if (!inputLgRef) return lgText;
+
+    const lgTemplates = await getLgTemplates(inputLgRef.name);
+    if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
+
+    const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
+    return targetTemplate ? targetTemplate.body : lgText;
+  };
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -91,25 +102,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            // TODO: clean this along with node deletion.
-            const copyLgTemplateToNewNode = async (lgText: string, newNodeId: string) => {
-              const inputLgRef = LgTemplateRef.parse(lgText);
-              if (!inputLgRef) return lgText;
-
-              const inputLgMetaData = LgMetaData.parse(inputLgRef.name);
-              if (!inputLgMetaData) return lgText;
-
-              inputLgMetaData.designerId = newNodeId;
-              const newLgName = inputLgMetaData.toString();
-              const newLgTemplateRefString = new LgTemplateRef(newLgName).toString();
-
-              const lgFileId = path;
-              await copyLgTemplate(lgFileId, inputLgRef.name, newLgName);
-              return newLgTemplateRefString;
-            };
-            pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
-              onChange(dialog);
-            });
+            const dialog = pasteNodes(data, e.id, e.position, clipboardActions);
+            onChange(dialog);
           };
         } else {
           handler = e => {
@@ -128,16 +122,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
-          const copiedActions = copyNodes(data, e.actionIds);
-          onClipboardChange(copiedActions);
+          copyNodes(data, e.actionIds, dereferenceLg).then(copiedNodes => onClipboardChange(copiedNodes));
         };
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
-          const { dialog, cutData } = cutNodes(data, e.actionIds);
-          onChange(dialog);
-          onFocusSteps([]);
-          onClipboardChange(cutData);
+          cutNodes(data, e.actionIds, dereferenceLg, nodes =>
+            deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+          ).then(({ dialog, cutData }) => {
+            onChange(dialog);
+            onFocusSteps([]);
+            onClipboardChange(cutData);
+          });
         };
         break;
       case NodeEventTypes.DeleteSelection:
