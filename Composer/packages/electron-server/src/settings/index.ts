@@ -20,11 +20,12 @@ interface Settings {
   appDataPath: string;
 }
 
+const serverBuildDir = Path.join(require.resolve('@bfc/server'), '..');
 const envSettings: { [env: string]: Settings } = {
   development: {
     botAdminEndpoint: botEndpoint,
     botEndpoint: botEndpoint,
-    assetsLibray: Path.resolve(__dirname, '../../assets'),
+    assetsLibray: Path.join(serverBuildDir, '../assets'), // TODO: Move assets to /server/build/ for when package is distributed?
     botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
     runtimeFolder,
     runtimeFrameworkVersion,
