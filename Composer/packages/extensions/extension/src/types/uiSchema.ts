@@ -39,8 +39,12 @@ export interface UIOptions {
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
 export type UISchema = { [key in SDKTypes]?: UIOptions };
 export type RecognizerSchema = {
+  /** Unique id to identify recognizer (SDK $kind) */
   id: string;
+  /** Display name used in the UI */
   displayName: string | UIOptionFunc<string>;
+  /** An inline editor to edit an intent */
   editor?: FieldWidget;
-  handleChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  /** Invoked when changing the recognizer type */
+  handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
 };

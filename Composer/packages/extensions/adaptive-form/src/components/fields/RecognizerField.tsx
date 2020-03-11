@@ -38,7 +38,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
-      const handler = recognizers.find(r => r.id === option.key)?.handleChange;
+      const handler = recognizers.find(r => r.id === option.key)?.handleRecognizerChange;
 
       if (handler) {
         handler(props, shellData, shellApi);
