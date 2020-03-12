@@ -35,12 +35,11 @@ export class BotProjectService {
 
   public static lgImportResolver(source: string, id: string): TextFile {
     BotProjectService.initialize();
-    const locale = source.split('.').length > 1 ? source.split('.').pop() : '';
     let targetId = Path.basename(id, '.lg');
-    if (locale) {
+    if (targetId.lastIndexOf('.') === -1) {
+      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
       targetId += `.${locale}`;
     }
-
     const targetFile = BotProjectService.currentBotProject?.lgFiles.find(({ id }) => id === targetId);
     if (!targetFile) throw new Error('lg file not found');
     return {
@@ -51,9 +50,9 @@ export class BotProjectService {
 
   public static luImportResolver(source: string, id: string): any {
     BotProjectService.initialize();
-    const locale = source.split('.').length > 1 ? source.split('.').pop() : '';
     let targetId = Path.basename(id, '.lu');
-    if (locale) {
+    if (targetId.lastIndexOf('.') === -1) {
+      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
       targetId += `.${locale}`;
     }
     const targetFile = BotProjectService.currentBotProject?.luFiles.find(({ id }) => id === targetId);

@@ -18,13 +18,13 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   const [loading, setLoading] = useState(false);
 
   const {
-    formContext: { luFiles, shellApi, currentDialog },
+    formContext: { luFiles, shellApi, currentDialog, locale },
     onChange,
   } = props;
 
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
   const currentDialogId = currentDialog.id;
-  const selectedFile: LuFile | void = luFiles.find(f => f.id === currentDialogId);
+  const selectedFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
 
   const handleChange = (_, option?: IDropdownOption): void => {
     if (option) {

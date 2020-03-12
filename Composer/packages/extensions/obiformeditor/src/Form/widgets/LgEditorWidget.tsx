@@ -50,7 +50,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const lgName = singleLgRefMatched
     ? singleLgRefMatched[1]
     : new LgMetaData(name, formContext.dialogId || '').toString();
-  const lgFileId = formContext.currentDialog.lgFile || 'common';
+  const lgFileId = `${formContext.currentDialog.lgFile}.${formContext.locale}`;
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(

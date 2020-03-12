@@ -45,9 +45,9 @@ const FileTargetTypes = {
 };
 
 export const ShellApi: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
-
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
+  const { state, actions, resolvers } = useContext(StoreContext);
+  const { lgFileResolver, luFileResolver } = resolvers;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName, locale } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -87,6 +87,7 @@ export const ShellApi: React.FC = () => {
 
     return {
       data: getData(sourceWindow),
+      locale,
       botName,
       dialogs,
       focusPath,
@@ -132,7 +133,7 @@ export const ShellApi: React.FC = () => {
     if (isEventSourceValid(event) === false) return false;
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = focusPath.split('#').shift() || id;
-    const file = lgFiles.find(file => file.id === focusedDialogId);
+    const file = lgFileResolver(focusedDialogId);
     if (!file) throw new Error(`lg file ${id} not found`);
     return file.templates;
   }
@@ -152,7 +153,7 @@ export const ShellApi: React.FC = () => {
    */
   async function updateLgTemplateHandler({ id, templateName, template }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = lgFiles.find(file => file.id === id);
+    const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
@@ -167,7 +168,7 @@ export const ShellApi: React.FC = () => {
 
   function copyLgTemplateHandler({ id, fromTemplateName, toTemplateName }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = lgFiles.find(file => file.id === id);
+    const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
@@ -180,7 +181,7 @@ export const ShellApi: React.FC = () => {
 
   function removeLgTemplateHandler({ id, templateName }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = lgFiles.find(file => file.id === id);
+    const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
@@ -192,7 +193,7 @@ export const ShellApi: React.FC = () => {
 
   function removeLgTemplatesHandler({ id, templateNames }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = lgFiles.find(file => file.id === id);
+    const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
 
@@ -214,7 +215,7 @@ export const ShellApi: React.FC = () => {
    */
   async function updateLuIntentHandler({ id, intentName, intent }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = luFiles.find(file => file.id === id);
+    const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
@@ -225,7 +226,7 @@ export const ShellApi: React.FC = () => {
 
   async function addLuIntentHandler({ id, intent }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = luFiles.find(file => file.id === id);
+    const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
 
     const content = luUtil.addIntent(file.content, intent);
@@ -235,7 +236,7 @@ export const ShellApi: React.FC = () => {
 
   async function removeLuIntentHandler({ id, intentName }, event) {
     if (isEventSourceValid(event) === false) return false;
-    const file = luFiles.find(file => file.id === id);
+    const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
@@ -255,8 +256,10 @@ export const ShellApi: React.FC = () => {
   async function fileHandler(fileTargetType, fileChangeType, { id, content }, event) {
     if (isEventSourceValid(event) === false) return false;
 
+    const fileId = id.lastIndexOf('.') > 0 ? id : `${id}.${locale}`;
+
     const payload = {
-      id,
+      id: fileId,
       content,
     };
 
@@ -342,6 +345,8 @@ export const ShellApi: React.FC = () => {
       return getState(source.name);
     });
     apiClient.registerApi('saveData', handleValueChange);
+    apiClient.registerApi('lgFileResolver', lgFileResolver);
+    apiClient.registerApi('luFileResolver', luFileResolver);
     apiClient.registerApi('updateLuFile', ({ id, content }, event) => fileHandler(LU, UPDATE, { id, content }, event));
     apiClient.registerApi('updateLgFile', ({ id, content }, event) => fileHandler(LG, UPDATE, { id, content }, event));
     apiClient.registerApi('createLuFile', ({ id, content }, event) => fileHandler(LU, CREATE, { id, content }, event));
