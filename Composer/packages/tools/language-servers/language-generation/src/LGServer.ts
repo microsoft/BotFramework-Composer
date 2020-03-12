@@ -18,7 +18,7 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver, LgTemplate } from '@bfc/indexers';
+import { filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
@@ -32,8 +32,6 @@ import {
   LGCursorState,
   updateTemplate,
 } from './utils';
-
-const { check } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -211,15 +209,9 @@ export class LGServer {
       }
 
       const id = fileId || uri;
-      const diagnostics = check(content, id, importResolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = LGParser.parseText(content, id, importResolver).allTemplates;
-      } catch (_error) {
-        // ignore
-      }
+      const { allTemplates, diagnostics } = LGParser.parseText(content, id, importResolver);
 
-      return { templates, diagnostics };
+      return { templates: allTemplates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
@@ -546,7 +538,7 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = check(text, fileId || uri, this.getImportResolver(document));
+    const lgDiagnostics = LGParser.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }
