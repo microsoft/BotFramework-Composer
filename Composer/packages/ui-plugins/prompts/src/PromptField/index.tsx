@@ -7,11 +7,11 @@ import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivo
 import get from 'lodash/get';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { SchemaField } from '@bfc/adaptive-form';
+import { PromptTab } from '@bfc/shared';
 
 import { tabs } from './styles';
 import { BotAsks } from './BotAsks';
 import { UserInput } from './UserInput';
-import { PromptSettings } from './PromptSettings';
 import { GetSchema, PromptFieldChangeHandler, InputDialogKeys } from './types';
 
 const OTHER_FIELDS: InputDialogKeys[] = [
@@ -20,9 +20,13 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'invalidPrompt',
   'value',
   'defaultValueResponse',
+  'maxTurnCount',
+  'defaultValue',
+  'allowInterruptions',
+  'alwaysPrompt',
 ];
 
-const PromptField: React.FC<FieldProps> = ({ description, label, ...props }) => {
+const PromptField: React.FC<FieldProps> = props => {
   const { shellApi, focusedSteps, focusedTab } = useShellApi();
 
   const getSchema: GetSchema = field => {
@@ -44,14 +48,14 @@ const PromptField: React.FC<FieldProps> = ({ description, label, ...props }) => 
   return (
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={tabs} onLinkClick={handleTabChange}>
-        <PivotItem headerText={formatMessage('Bot Asks')} itemKey="botAsks">
+        <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
           <BotAsks {...props} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('User Input')} itemKey="userInput">
+        <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
           <UserInput {...props} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
-        <PivotItem headerText={formatMessage('Other')} itemKey="other">
-          {OTHER_FIELDS.map(f => (
+        <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
+          {OTHER_FIELDS.filter(f => getSchema(f)).map(f => (
             <SchemaField
               key={f}
               depth={props.depth}
@@ -64,7 +68,6 @@ const PromptField: React.FC<FieldProps> = ({ description, label, ...props }) => 
               onChange={updateField(f)}
             />
           ))}
-          <PromptSettings {...props} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
       </Pivot>
     </div>
