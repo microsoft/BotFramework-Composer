@@ -187,6 +187,7 @@ export const StaticChoices = props => {
               placeholder={formatMessage('Add new option here')}
               autoComplete="off"
               errorMessage={errorMsg}
+              ariaLabel={formatMessage('Value')}
             />
           </div>
           <div css={choiceItemValue}>
@@ -200,6 +201,7 @@ export const StaticChoices = props => {
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
+              ariaLabel={formatMessage('Synonyms')}
             />
           </div>
           <div>

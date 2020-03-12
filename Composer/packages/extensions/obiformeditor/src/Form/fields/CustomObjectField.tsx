@@ -166,6 +166,7 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
+              ariaLabel={formatMessage('Key')}
             />
           </div>
           <div css={customObjectFieldItem}>
@@ -182,6 +183,7 @@ export const CustomObjectField: React.FC<FieldProps> = props => {
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
+              ariaLabel={formatMessage('Value')}
             />
           </div>
           <IconButton
