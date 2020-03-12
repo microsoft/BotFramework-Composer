@@ -12,6 +12,7 @@ import {
   LgMetaData,
   seedNewDialog,
   ExternalResourceHandlerAsync,
+  walkLgResourcesInActionList,
 } from '@bfc/shared';
 import { SDKTypes } from '@bfc/shared';
 
@@ -176,11 +177,27 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           // since create new dialog may be cancelled or failed
           copyNodes(data, e.actionIds, dereferenceLg)
             .then(copiedActions => {
-              return onCreateDialog(copiedActions);
+              const lgTemplatesToBeCreated: { name: string; body: string }[] = [];
+              walkLgResourcesInActionList(copiedActions, (designerId, actionData, fieldName, lgStr) => {
+                if (!lgStr) return '';
+
+                const lgName = new LgMetaData(fieldName, designerId).toString();
+                const refString = new LgTemplateRef(lgName).toString();
+
+                lgTemplatesToBeCreated.push({ name: lgName, body: lgStr });
+                actionData[fieldName] = refString;
+                return refString;
+              });
+              return onCreateDialog(copiedActions).then(dialogName => ({ dialogName, lgTemplatesToBeCreated }));
             })
-            .then(newDialog => {
+            .then(async ({ dialogName: newDialog, lgTemplatesToBeCreated }) => {
               // defense modal cancellation
               if (!newDialog) return;
+
+              // create lg templates for actions in new dialog
+              for (const { name, body } of lgTemplatesToBeCreated) {
+                await updateLgTemplate(newDialog, name, body);
+              }
 
               // delete old actions (they are already moved to new dialog)
               const deleteResult = deleteNodes(data, e.actionIds, nodes =>
