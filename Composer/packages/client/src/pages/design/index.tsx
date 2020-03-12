@@ -13,7 +13,6 @@ import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { seedNewDialog, SDKTypes } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
-import set from 'lodash/set';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';

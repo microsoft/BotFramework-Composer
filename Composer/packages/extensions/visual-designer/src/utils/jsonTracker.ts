@@ -228,7 +228,7 @@ export async function pasteNodes(
   arrayPath: string,
   arrayIndex: number,
   clipboardNodes: any[],
-  handleLgField: ExternalResourceHandlerAsync<string
+  handleLgField: ExternalResourceHandlerAsync<string>
 ) {
   // Considering a scenario that copy one time but paste multiple times,
   // it requires seeding all $designer.id again by invoking deepCopy.
