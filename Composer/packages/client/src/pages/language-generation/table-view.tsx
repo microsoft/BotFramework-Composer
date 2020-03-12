@@ -8,7 +8,6 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -172,38 +171,7 @@ const TableView: React.FC<TableViewProps> = props => {
     ];
 
     // all view, show used in column
-    if (!activeDialog) {
-      const templateUsedInDialogMap = {};
-
-      // build usedIn map
-      templates.forEach(({ name }) => {
-        templateUsedInDialogMap[name] = dialogs
-          .filter(dialog => dialog.lgTemplates.map(t => t.name).includes(name))
-          .map(dialog => dialog.id);
-      });
-
-      const usedInColumn = {
-        key: 'usedIn',
-        name: formatMessage('Used in:'),
-        fieldName: 'usedIn',
-        minWidth: 100,
-        maxWidth: 200,
-        data: 'string',
-        onRender: item => {
-          const usedDialogsLinks = templateUsedInDialogMap[item.name].map(id => {
-            return (
-              <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
-                <Link>{id}</Link>
-              </div>
-            );
-          });
-
-          return <div>{usedDialogsLinks}</div>;
-        },
-      };
-
-      tableColums.splice(2, 0, usedInColumn);
-    } else {
+    if (activeDialog) {
       const beenUsedColumn = {
         key: 'beenUsed',
         name: formatMessage('Been used'),
@@ -214,7 +182,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          return activeDialog?.lgTemplates.includes(item.name) ? (
+          return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <IconButton iconProps={{ iconName: 'Accept' }} />
           ) : (
             <div />
