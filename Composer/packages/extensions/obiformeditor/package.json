@@ -61,7 +61,7 @@
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
     "autoprefixer": "^9.5.1",
-    "botframework-expressions": "^4.8.0-preview.106476",
+    "adaptive-expressions": "^4.8.0-preview-110700",
     "codemirror": "^5.44.0",
     "copyfiles": "^2.1.0",
     "css-loader": "^2.1.1",

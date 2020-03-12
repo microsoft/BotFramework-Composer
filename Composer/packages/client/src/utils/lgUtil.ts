@@ -35,7 +35,7 @@ export function updateTemplate(
   templateName: string,
   { name, parameters = [], body }: LgTemplate
 ): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   // add if not exist
   if (resource.templates.findIndex(t => t.name === templateName) === -1) {
     return resource.addTemplate(name, parameters, body).toString();
@@ -46,7 +46,7 @@ export function updateTemplate(
 
 // if name exist, throw error.
 export function addTemplate(content: string, { name, parameters = [], body }: LgTemplate): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   return resource.addTemplate(name, parameters, body).toString();
 }
 
@@ -55,7 +55,7 @@ export function addTemplateAnyway(
   content: string,
   { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate
 ): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   const newName = increaseNameUtilNotExist(resource.templates, name);
 
   return resource.addTemplate(newName, parameters, body).toString();
@@ -63,7 +63,7 @@ export function addTemplateAnyway(
 
 // if toTemplateName exist, throw error.
 export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error('fromTemplateName no exist');
@@ -74,7 +74,7 @@ export function copyTemplate(content: string, fromTemplateName: string, toTempla
 
 // if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
 export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     return resource.toString();
@@ -90,12 +90,12 @@ export function copyTemplateAnyway(content: string, fromTemplateName: string, to
 }
 
 export function removeTemplate(content: string, templateName: string): string {
-  const resource = LGParser.parse(content);
+  const resource = LGParser.parseText(content);
   return resource.deleteTemplate(templateName).toString();
 }
 
 export function removeTemplates(content: string, templateNames: string[]): string {
-  let resource = LGParser.parse(content);
+  let resource = LGParser.parseText(content);
   templateNames.forEach(templateName => {
     resource = resource.deleteTemplate(templateName);
   });
