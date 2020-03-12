@@ -1,18 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
-import { SDKTypes } from '../types';
-import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
+import get from 'lodash/get';
 
-type LgFieldHandler = (action, lgFieldName: string, lgString: string) => any;
+import { ExternalResourceHandler } from '../copyUtils/ExternalApi';
+import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
+import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
+import { SDKTypes } from '../types';
+
+type LgFieldHandler = ExternalResourceHandler<string>;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
   if (!action || !action.$type) return;
 
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(action, fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(get(action, '$designer.id'), action, fieldName, action[fieldName]);
   };
 
   switch (action.$type) {
