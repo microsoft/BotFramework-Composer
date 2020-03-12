@@ -24,38 +24,8 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
   };
 
   const onInit: OnInit = monaco => {
-    const schema = {
-      type: 'array',
-      items: {
-        title: 'Choice',
-        type: 'object',
-        properties: {
-          property: {
-            $role: 'expression',
-            type: 'string',
-            title: 'Property',
-            description: 'Property (named location to store information).',
-            examples: ['user.age'],
-          },
-          value: {
-            $role: 'expression',
-            type: ['object', 'array', 'number', 'integer', 'boolean', 'string'],
-            title: 'Value',
-            description: 'New value or expression.',
-            examples: [{ foo: 'bar' }, "='milk'", '=dialog.favColor', "=dialog.favColor == 'red'"],
-          },
-        },
-      },
-    };
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
-      schemas: [
-        {
-          uri: 'some-unique-uri',
-          schema,
-          fileMatch: ['*'],
-        },
-      ],
     });
 
     if (typeof onInitProp === 'function') {

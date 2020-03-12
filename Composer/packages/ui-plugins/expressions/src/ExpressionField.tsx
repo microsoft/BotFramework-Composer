@@ -7,6 +7,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { JsonEditor, OnInit } from '@bfc/code-editor';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -15,6 +16,11 @@ const styles = {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    label: ExpressionField;
+  `,
+  field: css`
+    min-height: 66px;
   `,
 };
 
@@ -63,7 +69,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
         setSelectedSchema(selected?.data.schema || options[0].data.schema);
       }
     } else {
-      setSelectedSchema(schema);
+      setSelectedSchema({ ...schema, $role: undefined });
     }
   }, []);
 
@@ -94,11 +100,34 @@ const ExpressionField: React.FC<FieldProps> = props => {
     }
 
     if (['array', 'object'].includes(selectedSchema.type)) {
-      return <ExpressionEditor {...props} />;
+      const onInit: OnInit = monaco => {
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+          validate: true,
+          schemas: [
+            {
+              uri: props.id,
+              schema: selectedSchema,
+              fileMatch: ['*'],
+            },
+          ],
+        });
+      };
+      // TODO: get default from schema
+      const defaultValue = selectedSchema.type === 'object' ? {} : [];
+
+      return (
+        <JsonEditor
+          key={selectedSchema.type}
+          onChange={props.onChange}
+          value={value || defaultValue}
+          onInit={onInit}
+          height={100}
+        />
+      );
     }
 
     const Field = resolveFieldWidget(selectedSchema || {}, uiOptions, pluginConfig);
-    return <Field {...props} schema={selectedSchema || {}} label={false} />;
+    return <Field key={selectedSchema.type} {...props} schema={selectedSchema || {}} label={false} />;
   };
 
   return (

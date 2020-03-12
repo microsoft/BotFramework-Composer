@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@bfc/adaptive-form": "*",
+    "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@emotion/core": "^10.0.27"
   }
