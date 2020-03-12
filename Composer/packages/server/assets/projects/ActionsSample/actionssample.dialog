@@ -248,7 +248,7 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "347762"
+            "id": "640616"
           },
           "activity": "${bfdactivity-640616()}"
         }
@@ -280,10 +280,10 @@
                 {
                   "$type": "Microsoft.SendActivity",
                   "$designer": {
-                    "id": "640616",
+                    "id": "640617",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-640616()}"
+                  "activity": "${bfdactivity-640617()}"
                 }
               ]
             }

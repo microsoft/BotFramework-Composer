@@ -15,7 +15,7 @@
         {
           "$type": "Microsoft.IfCondition",
           "$designer": {
-            "id": "719594"
+            "id": "719500"
           },
           "condition": "user.name == null",
           "actions": [
