@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, seedNewDialog } from '@bfc/shared';
-import { SDKTypes } from '@bfc/shared';
+import { SDKTypes } from '@bfc/shared'
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -47,9 +47,41 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, copyLgTemplate, removeLgTemplates, removeLuIntent } = useContext(
-    NodeRendererContext
-  );
+  const {
+    focusedId,
+    focusedEvent,
+    clipboardActions,
+    getLgTemplates,
+    updateLgTemplate,
+    removeLgTemplates,
+    removeLuIntent,
+  } = useContext(NodeRendererContext);
+
+  const dereferenceLg: ExternalResourceCopyHandlerAsync<string> = async (
+    actionId: string,
+    actionData: any,
+    lgFieldName: string,
+    lgText?: string
+  ): Promise<string> => {
+    if (!lgText) return '';
+
+    const inputLgRef = LgTemplateRef.parse(lgText);
+    if (!inputLgRef) return lgText;
+
+    const lgTemplates = await getLgTemplates(inputLgRef.name);
+    if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
+
+    const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
+    return targetTemplate ? targetTemplate.body : lgText;
+  };
+
+  const buildLgReference: ExternalResourceCopyHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
+    if (!fieldText) return '';
+    const newLgTemplateName = new LgMetaData(fieldName, nodeId).toString();
+    const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
+    await updateLgTemplate(path, newLgTemplateName, fieldText);
+    return newLgTemplateRefStr;
+  };
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -94,23 +126,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            // TODO: clean this along with node deletion.
-            const copyLgTemplateToNewNode = async (lgText: string, newNodeId: string) => {
-              const inputLgRef = LgTemplateRef.parse(lgText);
-              if (!inputLgRef) return lgText;
-
-              const inputLgMetaData = LgMetaData.parse(inputLgRef.name);
-              if (!inputLgMetaData) return lgText;
-
-              inputLgMetaData.designerId = newNodeId;
-              const newLgName = inputLgMetaData.toString();
-              const newLgTemplateRefString = new LgTemplateRef(newLgName).toString();
-
-              const lgFileId = path;
-              await copyLgTemplate(lgFileId, inputLgRef.name, newLgName);
-              return newLgTemplateRefString;
-            };
-            pasteNodes(data, e.id, e.position, clipboardActions, copyLgTemplateToNewNode).then(dialog => {
+            pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
             });
           };
@@ -131,16 +147,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
-          const copiedActions = copyNodes(data, e.actionIds);
-          onClipboardChange(copiedActions);
+          copyNodes(data, e.actionIds, dereferenceLg).then(copiedNodes => onClipboardChange(copiedNodes));
         };
         break;
       case NodeEventTypes.CutSelection:
         handler = e => {
-          const { dialog, cutData } = cutNodes(data, e.actionIds);
-          onChange(dialog);
-          onFocusSteps([]);
-          onClipboardChange(cutData);
+          cutNodes(data, e.actionIds, dereferenceLg, nodes =>
+            deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+          ).then(({ dialog, cutData }) => {
+            onChange(dialog);
+            onFocusSteps([]);
+            onClipboardChange(cutData);
+          });
         };
         break;
       case NodeEventTypes.MoveSelection:

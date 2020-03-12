@@ -3,7 +3,21 @@
 
 import { DesignerData } from '../types';
 
+export type ExternalResourceCopyHandler<CopiedType> = (
+  actionId: string,
+  actionData: any,
+  resourceFieldName: string,
+  resourceValue?: CopiedType
+) => CopiedType;
+
+export type ExternalResourceCopyHandlerAsync<CopiedType> = (
+  actionId: string,
+  actionData: any,
+  resourceFieldName: string,
+  resourceValue?: CopiedType
+) => Promise<CopiedType>;
+
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
-  copyLgTemplate: (lgTemplateName: string, newNodeId: string) => Promise<string>;
+  copyLgTemplate: ExternalResourceCopyHandlerAsync<string>;
 }
