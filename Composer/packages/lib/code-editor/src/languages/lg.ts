@@ -4,7 +4,7 @@
 
 import { Monaco } from '@monaco-editor/react';
 
-function createKeywordsProposals(range) {
+function createKeywordsProposals(monaco: Monaco, range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
   // here you could do a server side lookup
   return [
@@ -165,7 +165,7 @@ export function registerLGLanguage(monaco: Monaco) {
         endColumn: word.endColumn,
       };
       return {
-        suggestions: createKeywordsProposals(range),
+        suggestions: createKeywordsProposals(monaco, range),
       };
     },
   });
