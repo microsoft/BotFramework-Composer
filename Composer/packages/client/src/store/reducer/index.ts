@@ -8,7 +8,7 @@ import { SensitiveProperties } from '@bfc/shared';
 import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
@@ -47,6 +47,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = response.data.botName;
+  state.botStatus = response.data.location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
