@@ -213,7 +213,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes) {
+function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNodes: any[]) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -227,4 +227,9 @@ export function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes) {
 
   targetArray.currentData.splice(arrayIndex, 0, ...newNodes);
   return dialog;
+}
+
+export function pasteNodes(inputDialog, arrayPath: string, arrayIndex: number, clipboardNodes: any[]) {
+  const newNodes = [...clipboardNodes];
+  return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
