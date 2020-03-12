@@ -106,7 +106,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.OnUnknownIntent,
       SDKTypes.OnDialogEvent,
       SDKTypes.OnActivity,
-      SDKTypes.OnMessageActivity,
+      SDKTypes.OnMessageEventActivity,
       SDKTypes.OnCustomEvent,
     ],
   },

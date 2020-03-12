@@ -199,7 +199,7 @@
       "title": "Conversation invoked",
       "subtitle": "Invoke activity"
     },
-    "Microsoft.OnMessageReceivedActivity": {
+    "Microsoft.OnMessageActivity": {
       "title": "Message recieved",
       "subtitle": "Message recieved activity"
     },

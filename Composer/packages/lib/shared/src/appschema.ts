@@ -2324,7 +2324,7 @@ export const appschema: OBISchema = {
         },
       },
     },
-    'Microsoft.OnMessageReceivedActivity': {
+    'Microsoft.OnMessageActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
       title: 'On MessageRecieved activity',
       description:
