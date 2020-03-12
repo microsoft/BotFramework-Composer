@@ -34,6 +34,7 @@ export enum DialogGroup {
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
+  DIALOG = 'DIALOG',
   OTHER = 'OTHER',
 }
 
@@ -149,9 +150,13 @@ export const dialogGroups: DialogGroupsMap = {
       SDKTypes.TrueSelector,
     ],
   },
+  [DialogGroup.DIALOG]: {
+    label: 'Dialogs',
+    types: [SDKTypes.AdaptiveDialog, SDKTypes.SkillDialog],
+  },
   [DialogGroup.OTHER]: {
     label: 'Other',
-    types: [SDKTypes.AdaptiveDialog, SDKTypes.LanguagePolicy, SDKTypes.QnAMakerDialog],
+    types: [SDKTypes.LanguagePolicy, SDKTypes.QnAMakerDialog],
   },
 };
 

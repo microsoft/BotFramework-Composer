@@ -6,15 +6,22 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { SDKTypes } from '@bfc/shared';
 
 import { DialogCreationCopy } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper/index';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
+import { dropdownStyles } from '../notifications/styles';
+import { getDialogTypes } from '../../utils/dialogUtil';
 
 import { name, description, styles as wizardStyles } from './styles';
 
+const dialogTypes = getDialogTypes();
+
 interface DialogFormData {
+  $type: string;
   name: string;
   description: string;
 }
@@ -32,7 +39,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
-  const initialFormData: DialogFormData = { name: '', description: '' };
+  const initialFormData: DialogFormData = { $type: SDKTypes.AdaptiveDialog, name: '', description: '' };
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
@@ -81,6 +88,20 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
         <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+          <StackItem>
+            <Dropdown
+              label={formatMessage('What is the type of this dialog?')}
+              options={dialogTypes}
+              styles={dropdownStyles}
+              onChange={(e, option) => {
+                setFormData({
+                  ...formData,
+                  $type: (option?.key || SDKTypes.AdaptiveDialog) as string,
+                });
+              }}
+              defaultSelectedKey={SDKTypes.AdaptiveDialog}
+            />
+          </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               label={formatMessage('Name')}

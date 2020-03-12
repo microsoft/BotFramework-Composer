@@ -161,6 +161,22 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
   return dialogCopy.content;
 }
 
+export function getDialogTypes(): IDropdownOption[] {
+  const dialogTypes: IDropdownOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG].types.map(t => {
+      let name = t as string;
+      const labelOverrides = ConceptLabels[t];
+
+      if (labelOverrides && labelOverrides.title) {
+        name = labelOverrides.title;
+      }
+
+      return { key: t, text: name || t };
+    }),
+  ];
+  return dialogTypes;
+}
+
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
     ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
