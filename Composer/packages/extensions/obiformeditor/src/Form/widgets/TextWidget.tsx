@@ -130,6 +130,10 @@ export function TextWidget(props: ITextWidgetProps) {
             },
           },
         }}
+        ariaLabel={
+          // if we hide the widget label above, ARIA will need the label to exist here instead
+          hideLabel ? label : undefined
+        }
         {...sharedProps}
       />
     </>
