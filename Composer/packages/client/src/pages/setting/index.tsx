@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Link, RouteComponentProps } from '@reach/router';
@@ -18,6 +18,7 @@ import { TestController } from '../../TestController';
 
 import Routes from './router';
 import { title, fileList, contentEditor, linkItem } from './styles';
+import { useLocation } from '../../utils/hooks';
 
 const settingLabels = {
   title: formatMessage('Configuration'),
@@ -38,22 +39,13 @@ const links = [
 ];
 
 const SettingPage: React.FC<RouteComponentProps> = () => {
-  const [active, setActive] = useState();
+  const {
+    location: { pathname: active },
+  } = useLocation();
 
   function onRenderLink(link) {
     return (
-      <Link
-        to={link.key}
-        css={linkItem(link.disabled)}
-        tabIndex={-1}
-        getProps={linkProps => {
-          if (linkProps.isCurrent && active !== link.key) {
-            setActive(link.key);
-          }
-          return {};
-        }}
-        onClick={() => {}}
-      >
+      <Link to={link.key} css={linkItem(link.disabled)} tabIndex={-1} onClick={() => {}}>
         {link.name}
       </Link>
     );
