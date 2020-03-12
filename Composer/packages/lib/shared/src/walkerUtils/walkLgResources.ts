@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import get from 'lodash/get';
-
 import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
 import { SDKTypes } from '../types';
 import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
