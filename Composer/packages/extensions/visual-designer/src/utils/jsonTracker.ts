@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyAction, generateSDKTitle } from '@bfc/shared';
+import { seedNewDialog, deepCopyActions, generateSDKTitle } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -172,17 +172,7 @@ type DereferenceLgHandler = (lgTemplateName: string) => Promise<string>;
 
 export async function copyNodes(inputDialog, nodeIds: string[], dereferenceLg: DereferenceLgHandler): Promise<any[]> {
   const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
-
-  // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
-  //        so we have to call them sequentially
-  // TODO: copy them parralleled via Promise.all() after optimizing lg api.
-  const copiedNodes: any[] = [];
-  for (const node of nodes) {
-    // Deep copy nodes with external resources
-    const copy = await deepCopyAction(node, dereferenceLg);
-    copiedNodes.push(copy);
-  }
-  return copiedNodes;
+  return deepCopyActions(nodes, dereferenceLg);
 }
 
 export async function cutNodes(
@@ -230,6 +220,8 @@ function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNode
 }
 
 export function pasteNodes(inputDialog, arrayPath: string, arrayIndex: number, clipboardNodes: any[]) {
-  const newNodes = [...clipboardNodes];
+  // Considering a scenario that copy one time but paste multiple times,
+  // it requires seeding all $designer.id again by invoking deepCopy.
+  const newNodes = deepCopyActions(clipboardNodes);
   return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
