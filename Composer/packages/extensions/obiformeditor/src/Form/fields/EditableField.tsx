@@ -46,8 +46,6 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
     borderColor = localValue || transparentBorder ? 'transparent' : NeutralColors.gray30;
   }
 
-  console.log(ariaLabel);
-
   return (
     <div onMouseEnter={() => setEditing(true)} onMouseLeave={() => !hasFocus && setEditing(false)}>
       <TextField

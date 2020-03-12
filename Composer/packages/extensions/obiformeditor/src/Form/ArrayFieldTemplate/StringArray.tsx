@@ -54,7 +54,7 @@ const StringArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
             }}
             styles={{ root: { width: '100%' } }}
             data-testid="string-array-text-input"
-            ariaLabel={formatMessage('Value')}
+            ariaLabel={formatMessage('String value')}
           />
           <IconButton
             disabled={true}
