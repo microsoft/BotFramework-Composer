@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -48,7 +48,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     NodeRendererContext
   );
 
-  const dereferenceLg = async (lgText: string): Promise<string> => {
+  const dereferenceLg: ExternalResourceCopyHandlerAsync<string> = async (
+    actionId: string,
+    actionData: any,
+    lgFieldName: string,
+    lgText?: string
+  ): Promise<string> => {
+    if (!lgText) return '';
+
     const inputLgRef = LgTemplateRef.parse(lgText);
     if (!inputLgRef) return lgText;
 
@@ -102,7 +109,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            const dialog = pasteNodes(data, e.id, e.position, clipboardActions);
+            const dialog = pasteNodes(data, e.id, e.position, clipboardActions, dereferenceLg);
             onChange(dialog);
           };
         } else {
