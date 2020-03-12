@@ -3,14 +3,13 @@
 
 import React from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount } from '@monaco-editor/react';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
-import { BaseEditor, BaseEditorProps } from './BaseEditor';
+import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
@@ -62,7 +61,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
-  const onInit = monaco => {
+  const onInit: OnInit = monaco => {
     registerLGLanguage(monaco);
 
     if (typeof onInitProp === 'function') {
@@ -72,7 +71,7 @@ export function LgEditor(props: LGLSPEditorProps) {
 
   const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
+      window.monacoServiceInstance = MonacoServices.install(editor as any);
     }
 
     if (!window.monacoLGEditorInstance) {

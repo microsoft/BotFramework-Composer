@@ -3,14 +3,13 @@
 
 import React, { useRef } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import { KeyCode, KeyMod } from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
-import { EditorDidMount } from '@monaco-editor/react';
+import { EditorDidMount, Monaco } from '@monaco-editor/react';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
-import { BaseEditor, BaseEditorProps } from './BaseEditor';
+import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 const LU_HELP = 'https://aka.ms/lu-file-format';
 const placeholder = `> To learn more about the LU file format, read the documentation at
@@ -73,7 +72,7 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 }
 
 const LuEditor: React.FC<LULSPEditorProps> = props => {
-  const monacoRef = useRef<any>();
+  const monacoRef = useRef<Monaco>();
   const options = {
     quickSuggestions: true,
     formatOnType: true,
@@ -91,7 +90,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
   const { luOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
-  const onInit = monaco => {
+  const onInit: OnInit = monaco => {
     registerLULanguage(monaco);
     monacoRef.current = monaco;
 
@@ -117,12 +116,13 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
             window.monacoLUEditorInstance = languageClient;
           }
 
-          console.log('[BFC] monacoRef', monacoRef);
-
-          editor.addCommand(KeyMod.Shift | KeyCode.Enter, function() {
-            const position = editor.getPosition();
-            languageClient.sendRequest('labelingExperienceRequest', { uri, position });
-          });
+          const m = monacoRef.current;
+          if (m) {
+            editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function() {
+              const position = editor.getPosition();
+              languageClient.sendRequest('labelingExperienceRequest', { uri, position });
+            });
+          }
           initializeDocuments(luOption, uri);
           languageClient.onReady().then(() =>
             languageClient.onNotification('addUnlabelUtterance', result => {

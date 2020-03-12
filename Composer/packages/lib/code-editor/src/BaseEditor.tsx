@@ -56,6 +56,8 @@ const styles = {
   },
 };
 
+export type OnInit = (instance: Monaco) => void;
+
 export interface BaseEditorProps extends EditorProps {
   errorMessage?: any;
   helpURL?: string;
@@ -63,7 +65,7 @@ export interface BaseEditorProps extends EditorProps {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
-  onInit?: (instance: Monaco) => void;
+  onInit?: OnInit;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {

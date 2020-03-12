@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 
 import * as utils from './utils';
-import { BaseEditor, BaseEditorProps } from './BaseEditor';
+import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | 'errorMessage' | 'onChange'> {
   onChange: (jsonData: any) => void;
@@ -23,7 +23,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     ...additionalOptions,
   };
 
-  const onInit = monaco => {
+  const onInit: OnInit = monaco => {
     const schema = {
       type: 'array',
       items: {
