@@ -267,5 +267,19 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     },
     'ui:hidden': [...globalHidden],
   },
+  [SDKTypes.SkillDialog]: {
+    'ui:hidden': [...globalHidden],
+    'ui:order': [
+      'botId',
+      'skillEndpoint',
+      'skillHostEndpoint',
+      'skillAppId',
+      'activity',
+      'resultProperty',
+      'activity',
+      'activityProcessed',
+      '*',
+    ],
+  },
   ...promptFieldsSchemas,
 };

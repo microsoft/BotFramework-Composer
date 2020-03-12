@@ -152,6 +152,27 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
+  [SDKTypes.SkillDialog]: {
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: {
+      'ui:widget': DialogRef,
+      dialog: data => data.dialog,
+      getRefContent: data => dialogRef => (
+        <>
+          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
+        </>
+      ),
+    },
+    footer: data =>
+      data.property ? (
+        <>
+          {data.property} <FixedInfo>= Return value</FixedInfo>
+        </>
+      ) : null,
+  },
   [SDKTypes.ReplaceDialog]: {
     'ui:widget': ActionCard,
     content: {

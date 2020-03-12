@@ -88,6 +88,7 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.CODE]: {
     label: 'Access external resources',
     types: [
+      SDKTypes.SkillDialog,
       SDKTypes.HttpRequest,
       SDKTypes.EmitEvent,
       SDKTypes.OAuthInput,

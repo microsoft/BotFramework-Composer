@@ -93,6 +93,7 @@ export enum SDKTypes {
   SendActivity = 'Microsoft.SendActivity',
   SetProperty = 'Microsoft.SetProperty',
   SetProperties = 'Microsoft.SetProperties',
+  SkillDialog = 'Microsoft.SkillDialog',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',

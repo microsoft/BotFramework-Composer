@@ -270,6 +270,10 @@
       "helpLink": "https://aka.ms/bfc-using-memory",
       "helpLinkText": "Learn more"
     },
+    "Microsoft.SkillDialog": {
+      "description": "Call a remote Bot Framework Skill",
+      "title": "Call a remote Skill"
+    },
     "Microsoft.SwitchCondition": {
       "title": "Branch: Switch",
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
