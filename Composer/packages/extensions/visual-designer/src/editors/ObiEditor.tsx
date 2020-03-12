@@ -5,7 +5,15 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceHandlerAsync } from '@bfc/shared';
+import {
+  deleteAction,
+  deleteActions,
+  LgTemplateRef,
+  LgMetaData,
+  seedNewDialog,
+  ExternalResourceHandlerAsync,
+} from '@bfc/shared';
+import { SDKTypes } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -20,6 +28,7 @@ import {
   appendNodesAfter,
   pasteNodes,
   deleteNodes,
+  insertAction,
 } from '../utils/jsonTracker';
 import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
@@ -37,6 +46,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onClipboardChange,
   onOpen,
   onChange,
+  onCreateDialog,
   onSelect,
   undo,
   redo,
@@ -158,6 +168,38 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           });
         };
         break;
+      case NodeEventTypes.MoveSelection:
+        handler = e => {
+          if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
+
+          // Using copy-paste-delete pattern here is safer than using cut-paste
+          // since create new dialog may be cancelled or failed
+          copyNodes(data, e.actionIds, dereferenceLg)
+            .then(copiedActions => {
+              return onCreateDialog(copiedActions);
+            })
+            .then(newDialog => {
+              // defense modal cancellation
+              if (!newDialog) return;
+
+              // delete old actions (they are already moved to new dialog)
+              const deleteResult = deleteNodes(data, e.actionIds, nodes =>
+                deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+              );
+
+              // insert a BeginDialog action points to newly created dialog
+              const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
+              if (indexes === null || indexes.length !== 3) return;
+
+              const [, arrayPath, actionIndexStr] = indexes;
+              const startIndex = parseInt(actionIndexStr);
+              const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+              const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
+              onChange(insertResult);
+            });
+          onFocusSteps([]);
+        };
+        break;
       case NodeEventTypes.DeleteSelection:
         handler = e => {
           const dialog = deleteNodes(data, e.actionIds, nodes =>
@@ -257,6 +299,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).cutSelection = () =>
     dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+  (window as any).moveSelection = () =>
+    dispatchEvent(NodeEventTypes.MoveSelection, { actionIds: getClipboardTargetsFromContext() });
   (window as any).deleteSelection = () =>
     dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
 
@@ -370,6 +414,7 @@ interface ObiEditorProps {
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
   onClipboardChange: (actions: any[]) => void;
+  onCreateDialog: (actions: any[]) => Promise<string>;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
   onSelect: (ids: string[]) => any;

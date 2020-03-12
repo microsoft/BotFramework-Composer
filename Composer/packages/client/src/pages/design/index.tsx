@@ -11,8 +11,9 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { getNewDesigner, seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, SDKTypes } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
+import set from 'lodash/set';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -257,6 +258,18 @@ function DesignPage(props) {
     },
     {
       type: 'action',
+      text: formatMessage('Move'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Share',
+        },
+        onClick: () => VisualEditorAPI.moveSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
@@ -312,8 +325,14 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const content = { ...getNewDesigner(data.name, data.description), generator: `${data.name}.lg` };
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
+    const seededContent = seedNewDialog(
+      SDKTypes.AdaptiveDialog,
+      { name: data.name, description: data.description },
+      {
+        generator: `${data.name}.lg`,
+      },
+      state.actionsSeed || []
+    );
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 

@@ -24,15 +24,16 @@ const initialInputDialog = {
 };
 
 const initialDialogShape = {
-  [SDKTypes.AdaptiveDialog]: {
+  [SDKTypes.AdaptiveDialog]: seededActions => ({
     $type: SDKTypes.AdaptiveDialog,
     triggers: [
       {
         $type: SDKTypes.OnBeginDialog,
         ...getNewDesigner('BeginDialog', ''),
+        actions: [...seededActions],
       },
     ],
-  },
+  }),
   [SDKTypes.OnConversationUpdateActivity]: {
     $type: 'Microsoft.OnConversationUpdateActivity',
     actions: [
@@ -145,10 +146,19 @@ export const deleteActions = (
   return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
+const seedInitialDialogShape = ($type: string, seededParams?) => {
+  const shape = initialDialogShape[$type];
+  if (typeof shape === 'function' && seededParams !== undefined) {
+    return shape(seededParams) || {};
+  }
+  return shape || {};
+};
+
 export const seedNewDialog = (
   $type: string,
   designerAttributes: Partial<DesignerAttributes> = {},
-  optionalAttributes: object = {}
+  optionalAttributes: object = {},
+  seededParams?: object
 ): object => {
   return {
     $type,
@@ -157,7 +167,7 @@ export const seedNewDialog = (
       ...designerAttributes,
     },
     ...seedDefaults($type),
-    ...(initialDialogShape[$type] || {}),
+    ...seedInitialDialogShape($type, seededParams),
     ...optionalAttributes,
   };
 };
