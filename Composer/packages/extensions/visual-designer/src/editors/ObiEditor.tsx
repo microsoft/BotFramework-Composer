@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -44,9 +44,15 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, getLgTemplates, removeLgTemplates, removeLuIntent } = useContext(
-    NodeRendererContext
-  );
+  const {
+    focusedId,
+    focusedEvent,
+    clipboardActions,
+    getLgTemplates,
+    updateLgTemplate,
+    removeLgTemplates,
+    removeLuIntent,
+  } = useContext(NodeRendererContext);
 
   const dereferenceLg: ExternalResourceCopyHandlerAsync<string> = async (
     actionId: string,
@@ -64,6 +70,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
     const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
     return targetTemplate ? targetTemplate.body : lgText;
+  };
+
+  const buildLgReference: ExternalResourceCopyHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
+    if (!fieldText) return '';
+    const newLgTemplateName = new LgMetaData(fieldName, nodeId).toString();
+    const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
+    await updateLgTemplate(path, newLgTemplateName, fieldText);
+    return newLgTemplateRefStr;
   };
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
@@ -109,8 +123,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         if (eventData.$type === 'PASTE') {
           handler = e => {
-            const dialog = pasteNodes(data, e.id, e.position, clipboardActions, dereferenceLg);
-            onChange(dialog);
+            pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
+              onChange(dialog);
+            });
           };
         } else {
           handler = e => {
