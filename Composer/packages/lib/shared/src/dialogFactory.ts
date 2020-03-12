@@ -9,7 +9,7 @@ import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
 import { SDKTypes } from './types';
-import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi'
+import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
 
 interface DesignerAttributes {
   name: string;
