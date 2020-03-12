@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
+import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceHandlerAsync } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -54,7 +54,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     removeLuIntent,
   } = useContext(NodeRendererContext);
 
-  const dereferenceLg: ExternalResourceCopyHandlerAsync<string> = async (
+  const dereferenceLg: ExternalResourceHandlerAsync<string> = async (
     actionId: string,
     actionData: any,
     lgFieldName: string,
@@ -72,7 +72,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return targetTemplate ? targetTemplate.body : lgText;
   };
 
-  const buildLgReference: ExternalResourceCopyHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
+  const buildLgReference: ExternalResourceHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
     if (!fieldText) return '';
     const newLgTemplateName = new LgMetaData(fieldName, nodeId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
