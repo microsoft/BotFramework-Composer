@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, SDKTypes } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
 import set from 'lodash/set';
 
@@ -326,13 +326,13 @@ function DesignPage(props) {
 
   async function onSubmit(data: { name: string; description: string }) {
     const seededContent = seedNewDialog(
-      'Microsoft.AdaptiveDialog',
+      SDKTypes.AdaptiveDialog,
       { name: data.name, description: data.description },
       {
         generator: `${data.name}.lg`,
-      }
+      },
+      state.actionsSeed || []
     );
-    set(seededContent, 'triggers[0].actions', state.actionsSeed || []);
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 
