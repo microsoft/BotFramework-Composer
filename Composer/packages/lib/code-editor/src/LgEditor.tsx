@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
-import { EditorDidMount, monaco } from '@monaco-editor/react';
+import { EditorDidMount } from '@monaco-editor/react';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -59,14 +59,16 @@ export function LgEditor(props: LGLSPEditorProps) {
     ...props.options,
   };
 
-  const { lgOption, languageServer, ...restProps } = props;
+  const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
-  useEffect(() => {
-    monaco.init().then(instance => {
-      registerLGLanguage(instance);
-    });
-  }, []);
+  const onInit = monaco => {
+    registerLGLanguage(monaco);
+
+    if (typeof onInitProp === 'function') {
+      onInitProp(monaco);
+    }
+  };
 
   const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
@@ -104,6 +106,7 @@ export function LgEditor(props: LGLSPEditorProps) {
       placeholder={placeholder}
       helpURL={LG_HELP}
       {...restProps}
+      onInit={onInit}
       theme="lgtheme"
       language="botbuilderlg"
       options={options}

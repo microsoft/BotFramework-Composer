@@ -4,15 +4,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useMemo } from 'react';
-import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
-import Editor, { EditorDidMount, EditorProps } from '@monaco-editor/react';
+import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import formatMessage from 'format-message';
 
 import { assignDefined } from './utils/common';
 
-const defaultOptions: MonacoEditor.editor.IEditorConstructionOptions = {
+const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
   fontFamily: 'Segoe UI',
@@ -64,6 +63,7 @@ export interface BaseEditorProps extends EditorProps {
   onChange: (newValue: string) => void;
   placeholder?: string;
   value?: string;
+  onInit?: (instance: Monaco) => void;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
@@ -76,13 +76,14 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     errorMessage,
     helpURL,
     height = '100%',
+    onInit,
     ...rest
   } = props;
   const options = assignDefined(defaultOptions, props.options);
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [editor, setEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | undefined>();
+  const [editor, setEditor] = useState<any>();
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
@@ -92,6 +93,12 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
       editorDidMount(getValue, editor);
     }
   };
+
+  useEffect(() => {
+    monaco.init().then(instance => {
+      typeof onInit === 'function' && onInit(instance);
+    });
+  }, []);
 
   useEffect(() => {
     if (editor) {

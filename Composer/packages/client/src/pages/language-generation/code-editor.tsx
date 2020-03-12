@@ -3,7 +3,7 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LgEditor, MonacoEditor } from '@bfc/code-editor';
+import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
@@ -30,7 +30,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const file = lgFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
-  const [lgEditor, setLgEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | null>(null);
+  const [lgEditor, setLgEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
   const searchTemplateName = querystring.parse(search).t;
@@ -63,7 +63,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setErrorMsg(text);
   }, [diagnostics]);
 
-  const editorDidMount = (_getValue, lgEditor: MonacoEditor.editor.IStandaloneCodeEditor) => {
+  const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);
   };
 

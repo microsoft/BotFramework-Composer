@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect } from 'react';
-import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
-import { monaco } from '@monaco-editor/react';
 
 import * as utils from './utils';
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
@@ -14,24 +12,47 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
-  const { options: additionalOptions, value: initialValue, onChange, obfuscate, ...rest } = props;
+  const { options: additionalOptions, value: initialValue, onChange, obfuscate, onInit: onInitProp, ...rest } = props;
   const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
   const [parseError, setParseError] = useState<string>('');
 
-  const options: MonacoEditor.editor.IEditorConstructionOptions = {
+  const options = {
     quickSuggestions: true,
     folding: false,
     readOnly: obfuscate,
     ...additionalOptions,
   };
 
-  useEffect(() => {
-    monaco.init().then(instance => {
-      instance.languages.json.jsonDefaults.setDiagnosticsOptions({
-        validate: true,
-      });
+  const onInit = monaco => {
+    const schema = {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          property: {
+            type: 'string',
+            description: 'a property name',
+          },
+          value: {
+            type: ['string', 'number', 'boolean'],
+          },
+        },
+      },
+    };
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      validate: true,
+      schemas: [
+        {
+          uri: 'some-unique-uri',
+          schema,
+        },
+      ],
     });
-  }, []);
+
+    if (typeof onInitProp === 'function') {
+      onInitProp(monaco);
+    }
+  };
 
   useEffect(() => {
     const result = obfuscate ? utils.obfuscate(initialValue) : initialValue;
@@ -63,6 +84,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
       value={value}
       onChange={handleChange}
       errorMessage={parseError}
+      onInit={onInit}
       {...rest}
     />
   );

@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import * as monacoCore from 'monaco-editor-core';
+import { KeyCode, KeyMod } from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
-import { EditorDidMount, monaco } from '@monaco-editor/react';
-import * as MonacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+import { EditorDidMount } from '@monaco-editor/react';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -74,32 +73,36 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
 }
 
 const LuEditor: React.FC<LULSPEditorProps> = props => {
-  const options: MonacoEditor.editor.IEditorConstructionOptions = {
+  const monacoRef = useRef<any>();
+  const options = {
     quickSuggestions: true,
     formatOnType: true,
-    lineNumbers: 'on',
+    lineNumbers: 'on' as const,
     lineDecorationsWidth: undefined,
     glyphMargin: true,
-    autoClosingBrackets: 'always',
-    autoIndent: 'full',
+    autoClosingBrackets: 'always' as const,
+    autoIndent: 'full' as const,
     lightbulb: {
       enabled: true,
     },
     ...props.options,
   };
 
-  const { luOption, languageServer, ...restProps } = props;
+  const { luOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
-  useEffect(() => {
-    monaco.init().then(instance => {
-      registerLULanguage(instance);
-    });
-  }, []);
+  const onInit = monaco => {
+    registerLULanguage(monaco);
+    monacoRef.current = monaco;
+
+    if (typeof onInitProp === 'function') {
+      onInitProp(monaco);
+    }
+  };
 
   const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
+      window.monacoServiceInstance = MonacoServices.install(editor as any);
     }
 
     if (!window.monacoLUEditorInstance) {
@@ -114,7 +117,9 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
             window.monacoLUEditorInstance = languageClient;
           }
 
-          editor.addCommand(monacoCore.KeyMod.Shift | monacoCore.KeyCode.Enter, function() {
+          console.log('[BFC] monacoRef', monacoRef);
+
+          editor.addCommand(KeyMod.Shift | KeyCode.Enter, function() {
             const position = editor.getPosition();
             languageClient.sendRequest('labelingExperienceRequest', { uri, position });
           });
@@ -146,6 +151,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
       placeholder={placeholder}
       helpURL={LU_HELP}
       {...restProps}
+      onInit={onInit}
       theme="lu"
       language="lu"
       options={options}

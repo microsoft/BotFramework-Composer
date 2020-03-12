@@ -3,7 +3,7 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LuEditor, MonacoEditor } from '@bfc/code-editor';
+import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
@@ -29,7 +29,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const file = luFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
-  const [luEditor, setLuEditor] = useState<MonacoEditor.editor.IStandaloneCodeEditor | null>(null);
+  const [luEditor, setLuEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
   const searchSectionName = querystring.parse(search).t;
@@ -60,7 +60,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
   }, [diagnostics, httpErrorMsg]);
 
-  const editorDidMount = (_getValue, luEditor: MonacoEditor.editor.IStandaloneCodeEditor) => {
+  const editorDidMount: EditorDidMount = (_getValue, luEditor) => {
     setLuEditor(luEditor);
   };
 
