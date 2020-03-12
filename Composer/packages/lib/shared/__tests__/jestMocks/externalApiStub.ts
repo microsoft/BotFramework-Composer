@@ -5,5 +5,5 @@ import { ExternalApi } from '../../src/copyUtils/ExternalApi';
 
 export const externalApiStub: ExternalApi = {
   getDesignerId: () => ({ id: '5678' }),
-  copyLgTemplate: (id, data, fieldName, fieldValue) => Promise.resolve(fieldValue || ''),
+  transformLgField: (id, data, fieldName, fieldValue) => Promise.resolve(fieldValue || ''),
 };

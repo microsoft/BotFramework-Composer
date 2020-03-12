@@ -3,14 +3,14 @@
 
 import { DesignerData } from '../types';
 
-export type ExternalResourceCopyHandler<CopiedType> = (
+export type ExternalResourceHandler<CopiedType> = (
   actionId: string,
   actionData: any,
   resourceFieldName: string,
   resourceValue?: CopiedType
 ) => CopiedType;
 
-export type ExternalResourceCopyHandlerAsync<CopiedType> = (
+export type ExternalResourceHandlerAsync<CopiedType> = (
   actionId: string,
   actionData: any,
   resourceFieldName: string,
@@ -19,5 +19,5 @@ export type ExternalResourceCopyHandlerAsync<CopiedType> = (
 
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
-  copyLgTemplate: ExternalResourceCopyHandlerAsync<string>;
+  transformLgField: ExternalResourceHandlerAsync<string>;
 }

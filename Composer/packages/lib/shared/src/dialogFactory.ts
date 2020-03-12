@@ -9,7 +9,8 @@ import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
 import { SDKTypes } from './types';
-import { ExternalResourceCopyHandlerAsync } from './copyUtils/ExternalApi';
+import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
+
 interface DesignerAttributes {
   name: string;
   description: string;
@@ -110,14 +111,14 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-export const deepCopyAction = async (data, copyLgTemplate: ExternalResourceCopyHandlerAsync<string>) => {
+export const deepCopyAction = async (data, copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
-    copyLgTemplate,
+    transformLgField: copyLgTemplate,
   });
 };
 
-export const deepCopyActions = async (actions: any[], copyLgTemplate: ExternalResourceCopyHandlerAsync<string>) => {
+export const deepCopyActions = async (actions: any[], copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
   // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
   //        so we have to call them sequentially
   // TODO: copy them parralleled via Promise.all() after optimizing lg api.

@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyActions, generateSDKTitle, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
+import { seedNewDialog, deepCopyActions, generateSDKTitle, ExternalResourceHandlerAsync } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -172,7 +172,7 @@ export function insertAction(inputDialog, arrayPath: string, position: number, n
   return dialog;
 }
 
-type DereferenceLgHandler = ExternalResourceCopyHandlerAsync<string>;
+type DereferenceLgHandler = ExternalResourceHandlerAsync<string>;
 
 export async function copyNodes(inputDialog, nodeIds: string[], dereferenceLg: DereferenceLgHandler): Promise<any[]> {
   const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
@@ -228,7 +228,7 @@ export async function pasteNodes(
   arrayPath: string,
   arrayIndex: number,
   clipboardNodes: any[],
-  handleLgField: ExternalResourceCopyHandlerAsync<string>
+  handleLgField: ExternalResourceHandlerAsync<string>
 ) {
   // Considering a scenario that copy one time but paste multiple times,
   // it requires seeding all $designer.id again by invoking deepCopy.

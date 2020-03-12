@@ -5,8 +5,16 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { SDKTypes } from '@bfc/shared'
-import { deleteAction, deleteActions, LgTemplateRef, LgMetaData, ExternalResourceCopyHandlerAsync } from '@bfc/shared';
+import {
+  deleteAction,
+  deleteActions,
+  LgTemplateRef,
+  LgMetaData,
+  seedNewDialog,
+  ExternalResourceHandlerAsync,
+  walkLgResourcesInActionList,
+} from '@bfc/shared';
+import { SDKTypes } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -57,7 +65,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     removeLuIntent,
   } = useContext(NodeRendererContext);
 
-  const dereferenceLg: ExternalResourceCopyHandlerAsync<string> = async (
+  const dereferenceLg: ExternalResourceHandlerAsync<string> = async (
     actionId: string,
     actionData: any,
     lgFieldName: string,
@@ -75,7 +83,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return targetTemplate ? targetTemplate.body : lgText;
   };
 
-  const buildLgReference: ExternalResourceCopyHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
+  const buildLgReference: ExternalResourceHandlerAsync<string> = async (nodeId, data, fieldName, fieldText) => {
     if (!fieldText) return '';
     const newLgTemplateName = new LgMetaData(fieldName, nodeId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
@@ -167,26 +175,48 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
           // Using copy-paste-delete pattern here is safer than using cut-paste
           // since create new dialog may be cancelled or failed
-          const copiedActions = copyNodes(data, e.actionIds);
-          onCreateDialog(copiedActions).then(newDialog => {
-            // defense modal cancellation
-            if (!newDialog) return;
+          copyNodes(data, e.actionIds, dereferenceLg)
+            .then(copiedActions => {
+              const lgTemplatesToBeCreated: { name: string; body: string }[] = [];
+              walkLgResourcesInActionList(copiedActions, (designerId, actionData, fieldName, lgStr) => {
+                if (!lgStr) return '';
 
-            // delete old actions (they are already moved to new dialog)
-            const deleteResult = deleteNodes(data, e.actionIds, nodes =>
-              deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
-            );
+                const lgName = new LgMetaData(fieldName, designerId).toString();
+                const refString = new LgTemplateRef(lgName).toString();
 
-            // insert a BeginDialog action points to newly created dialog
-            const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
-            if (indexes === null || indexes.length !== 3) return;
+                lgTemplatesToBeCreated.push({ name: lgName, body: lgStr });
+                actionData[fieldName] = refString;
+                return refString;
+              });
+              return onCreateDialog(copiedActions).then(dialogName => ({ dialogName, lgTemplatesToBeCreated }));
+            })
+            .then(async ({ dialogName: newDialog, lgTemplatesToBeCreated }) => {
+              // defense modal cancellation
+              if (!newDialog) return;
 
-            const [, arrayPath, actionIndexStr] = indexes;
-            const startIndex = parseInt(actionIndexStr);
-            const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
-            const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
-            onChange(insertResult);
-          });
+              // create lg templates for actions in new dialog
+              for (const { name, body } of lgTemplatesToBeCreated) {
+                await updateLgTemplate(newDialog, name, body);
+              }
+
+              // delete old actions (they are already moved to new dialog)
+
+              // HACK: https://github.com/microsoft/BotFramework-Composer/issues/2247
+              const postponedDeleteLgTemplates = templates => setTimeout(() => deleteLgTemplates(templates), 501);
+              const deleteResult = deleteNodes(data, e.actionIds, nodes =>
+                deleteActions(nodes, postponedDeleteLgTemplates, deleteLuIntents)
+              );
+
+              // insert a BeginDialog action points to newly created dialog
+              const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
+              if (indexes === null || indexes.length !== 3) return;
+
+              const [, arrayPath, actionIndexStr] = indexes;
+              const startIndex = parseInt(actionIndexStr);
+              const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+              const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
+              onChange(insertResult);
+            });
           onFocusSteps([]);
         };
         break;
