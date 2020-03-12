@@ -27,14 +27,22 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     const schema = {
       type: 'array',
       items: {
+        title: 'Choice',
         type: 'object',
         properties: {
           property: {
+            $role: 'expression',
             type: 'string',
-            description: 'a property name',
+            title: 'Property',
+            description: 'Property (named location to store information).',
+            examples: ['user.age'],
           },
           value: {
-            type: ['string', 'number', 'boolean'],
+            $role: 'expression',
+            type: ['object', 'array', 'number', 'integer', 'boolean', 'string'],
+            title: 'Value',
+            description: 'New value or expression.',
+            examples: [{ foo: 'bar' }, "='milk'", '=dialog.favColor', "=dialog.favColor == 'red'"],
           },
         },
       },
@@ -45,6 +53,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
         {
           uri: 'some-unique-uri',
           schema,
+          fileMatch: ['*'],
         },
       ],
     });
