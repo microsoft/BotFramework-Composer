@@ -85,6 +85,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
             root: { margin: '7px 0 7px 0' },
           }}
           onBlur={handleBlur}
+          ariaLabel={formatMessage('Value')}
         />
       </div>
       <div css={choiceItemValue}>
@@ -97,6 +98,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           }}
           options={{ transparentBorder: true }}
           onBlur={handleBlur}
+          ariaLabel={formatMessage('Synonyms')}
         />
       </div>
       <div>

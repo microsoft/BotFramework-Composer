@@ -59,6 +59,7 @@ const ObjectItem = ({
             root: { margin: '7px 0 7px 0' },
           }}
           errorMessage={errorMessage}
+          ariaLabel={formatMessage('Key')}
         />
       </div>
       <div css={customObjectFieldItem}>
@@ -71,6 +72,7 @@ const ObjectItem = ({
           styles={{
             root: { margin: '7px 0 7px 0' },
           }}
+          ariaLabel={formatMessage('Value')}
         />
       </div>
       <IconButton
