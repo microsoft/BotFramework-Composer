@@ -4,7 +4,7 @@
 import { jsx } from '@emotion/core';
 import React, { useContext, useMemo } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { SDKTypes, MicrosoftIRecognizer } from '@bfc/shared';
+import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
@@ -23,18 +23,16 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
     }));
   }, [recognizers]);
 
-  // TODO: how do we determine the recognizer type? Maybe scan the schema?
-  const getRecognizerType = (): string => {
-    if (typeof value === 'string') {
-      return SDKTypes.LuisRecognizer;
+  const selectedType = useMemo(() => {
+    const selected = recognizers.filter(r => r.isSelected(value)).map(r => r.id);
+
+    if (selected.length !== 1) {
+      console.error(`Unable to determine selected recognizer. Value: ${value}. Recognizers: [${selected.join(', ')}]`);
+      return;
     }
 
-    if (typeof value === 'object' && value.$type === SDKTypes.RegexRecognizer) {
-      return SDKTypes.RegexRecognizer;
-    }
-
-    return 'none';
-  };
+    return selected[0];
+  }, [value]);
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
@@ -49,13 +47,17 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   return (
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
-      <Dropdown
-        label={formatMessage('Recognizer Type')}
-        options={options}
-        responsiveMode={ResponsiveMode.large}
-        selectedKey={getRecognizerType()}
-        onChange={handleChangeRecognizerType}
-      />
+      {selectedType ? (
+        <Dropdown
+          label={formatMessage('Recognizer Type')}
+          options={options}
+          responsiveMode={ResponsiveMode.large}
+          selectedKey={selectedType}
+          onChange={handleChangeRecognizerType}
+        />
+      ) : (
+        `Unable to determine recognizer type from data: ${value}`
+      )}
     </React.Fragment>
   );
 };

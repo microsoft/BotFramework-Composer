@@ -12,7 +12,10 @@ const config: PluginConfig = {
       id: SDKTypes.LuisRecognizer,
       displayName: 'LUIS',
       editor: LuisIntentEditor,
-      handleChange: (props, shellData) => {
+      isSelected: data => {
+        return typeof data === 'string' && data.endsWith('.lu');
+      },
+      handleRecognizerChange: (props, shellData) => {
         const { luFiles, dialogId } = shellData;
         const luFile = luFiles.find(f => f.id === dialogId);
 

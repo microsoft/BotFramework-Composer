@@ -43,8 +43,10 @@ export type RecognizerSchema = {
   id: string;
   /** Display name used in the UI */
   displayName: string | UIOptionFunc<string>;
-  /** An inline editor to edit an intent */
+  /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
   editor?: FieldWidget;
+  /** A function invoked with the form data to determine if this is the currently selected recognizer */
+  isSelected: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
   handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
 };
