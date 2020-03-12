@@ -132,10 +132,11 @@ export const updateDialog: ActionCreator = undoable(
   updateDialogBase
 );
 
-export const createDialogBegin: ActionCreator = ({ dispatch }, onComplete) => {
+export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }, onComplete) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {
+      actionsSeed: actions,
       onComplete,
     },
   });

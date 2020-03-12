@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 describe('copySendActivity', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    copyLgTemplate: (id, data, fieldName, fieldValue) => Promise.resolve(fieldValue + '(copy)'),
+    transformLgField: (id, data, fieldName, fieldValue) => Promise.resolve(fieldValue + '(copy)'),
   };
 
   it('can copy SendActivity', async () => {
