@@ -200,8 +200,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               }
 
               // delete old actions (they are already moved to new dialog)
+
+              // HACK: https://github.com/microsoft/BotFramework-Composer/issues/2247
+              const postponedDeleteLgTemplates = templates => setTimeout(() => deleteLgTemplates(templates), 501);
               const deleteResult = deleteNodes(data, e.actionIds, nodes =>
-                deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
+                deleteActions(nodes, postponedDeleteLgTemplates, deleteLuIntents)
               );
 
               // insert a BeginDialog action points to newly created dialog
