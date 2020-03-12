@@ -12800,16 +12800,6 @@ monaco-languageclient@^0.10.0:
     vscode-languageclient "^5.3.0-next"
     vscode-uri "^1.0.5"
 
-monaco-languageclient@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/monaco-languageclient/-/monaco-languageclient-0.11.0.tgz#0968ec143c98bf2c9fa69c2a84ac9ad5448e039d"
-  integrity sha512-aqvgI+gX5K711eCJ3ggsMIeJ5fv7LnhxgzkMPRxSrkp+5/KLKY80V/m7PzDvWri+zF5cZ6InIPSmAAekn4oRzA==
-  dependencies:
-    glob-to-regexp "^0.3.0"
-    vscode-jsonrpc "^4.1.0-next"
-    vscode-languageclient "^5.3.0-next"
-    vscode-uri "^1.0.5"
-
 morgan@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
