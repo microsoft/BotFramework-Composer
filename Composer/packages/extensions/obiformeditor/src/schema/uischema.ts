@@ -270,6 +270,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.SkillDialog]: {
     activity: {
       'ui:field': 'LgEditorField',
+      'ui:title': 'Activity',
     },
     'ui:hidden': [...globalHidden],
     'ui:order': [
