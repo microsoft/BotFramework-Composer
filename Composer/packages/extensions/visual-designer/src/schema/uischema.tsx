@@ -159,7 +159,7 @@ export const uiSchema: UISchema = {
     },
     body: data => (
       <SingleLineDiv>
-        <FixedInfo>Host: </FixedInfo>
+        <FixedInfo>Host </FixedInfo>
         {data.skillEndpoint || '?'}
       </SingleLineDiv>
     ),
