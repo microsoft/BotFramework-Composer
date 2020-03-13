@@ -183,9 +183,9 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
-            <IconButton iconProps={{ iconName: 'Accept' }} />
+            <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used')} />
           ) : (
-            <div />
+            <div aria-label={formatMessage('Unused')} />
           );
         },
       };
