@@ -2751,7 +2751,7 @@ export const appschema: OBISchema = {
       description: 'Begin a remote skill dialog.',
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.SendActivity),
+        ...$properties(SDKTypes.SkillDialog),
         id: {
           type: 'string',
           title: 'Id',
@@ -2793,7 +2793,7 @@ export const appschema: OBISchema = {
           examples: ['https://myskill.contoso.com/api/messages/'],
         },
         activity: {
-          $type: 'Microsoft.IActivityTemplate',
+          $kind: 'Microsoft.IActivityTemplate',
           title: 'Activity',
           description: 'The activity to send to the skill.',
           $ref: '#/definitions/Microsoft.IActivityTemplate',
