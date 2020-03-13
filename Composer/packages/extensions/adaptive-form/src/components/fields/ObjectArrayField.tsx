@@ -15,7 +15,7 @@ import formatMessage from 'format-message';
 import { getArrayItemProps, getOrderedProperties } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
-import { objectArrayField } from './styles';
+import { arrayItem, objectArrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
@@ -57,6 +57,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   };
 
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
+
   return (
     <div className={className}>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
@@ -86,6 +87,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         )}
         {map(value, (item, idx) => (
           <ArrayFieldItem
+            css={arrayItem.container}
             {...props}
             transparentBorder
             key={idx}

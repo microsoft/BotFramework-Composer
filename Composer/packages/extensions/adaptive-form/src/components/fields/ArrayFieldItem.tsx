@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, FieldWidget } from '@bfc/extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes } from '@uifabric/styling';
@@ -23,7 +23,20 @@ interface ArrayFieldItemProps extends FieldProps {
 }
 
 const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
-  const { canMoveUp, canMoveDown, canRemove, onReorder, onRemove, index, depth, onBlur, value, ...rest } = props;
+  const {
+    canMoveUp,
+    canMoveDown,
+    canRemove,
+    className,
+    onReorder,
+    onRemove,
+    index,
+    depth,
+    onBlur,
+    uiOptions,
+    value,
+    ...rest
+  } = props;
 
   // This needs to return true to dismiss the menu after a click.
   const fabricMenuItemClickHandler = fn => e => {
@@ -64,10 +77,19 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
       onBlur(rest.id, value);
     }
   };
+  const ArrayField = (uiOptions?.properties?.arrayField as FieldWidget) || SchemaField;
 
   return (
-    <div css={arrayItem.container}>
-      <SchemaField {...rest} css={arrayItem.field} depth={depth + 1} label={false} value={value} onBlur={handleBlur} />
+    <div className={className}>
+      <ArrayField
+        {...rest}
+        css={arrayItem.field}
+        depth={depth + 1}
+        label={false}
+        uiOptions={uiOptions}
+        value={value}
+        onBlur={handleBlur}
+      />
       <IconButton
         ariaLabel="Item Actions"
         menuIconProps={{ iconName: 'MoreVertical' }}

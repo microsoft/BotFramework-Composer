@@ -8,6 +8,8 @@ import { FieldWidget, FieldProps } from './form';
 type UIOptionFunc<R = any, D = any> = (data: D) => R;
 
 export interface UIOptions {
+  /* Array field override */
+  arrayField?: FieldWidget;
   /** Description override. */
   description?: string | UIOptionFunc<string | undefined>;
   /** Field widget override. */
