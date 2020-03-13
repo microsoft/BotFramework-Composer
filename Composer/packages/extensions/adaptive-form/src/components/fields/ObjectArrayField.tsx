@@ -57,11 +57,13 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   };
 
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
-
+  console.log(orderedProperties, itemSchema.properties);
   const stackArrayItems = useMemo(
     () =>
       orderedProperties.length > 2 ||
-      Object.values(itemSchema.properties || {}).some(({ $role }: any) => $role === 'expression'),
+      !!Object.entries(itemSchema.properties || {}).filter(
+        ([key, { $role }]: any) => orderedProperties.includes(key) && $role === 'expression'
+      ).length,
     [itemSchema, orderedProperties]
   );
 
