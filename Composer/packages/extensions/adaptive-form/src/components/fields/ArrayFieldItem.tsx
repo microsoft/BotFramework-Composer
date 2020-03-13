@@ -77,15 +77,16 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
       onBlur(rest.id, value);
     }
   };
-  const ArrayField = (uiOptions?.properties?.arrayField as FieldWidget) || SchemaField;
+
+  const ArrayField = (uiOptions?.arrayField as FieldWidget) || SchemaField;
 
   return (
-    <div className={className}>
+    <div css={arrayItem.container}>
       <ArrayField
         {...rest}
-        css={arrayItem.field}
+        css={arrayItem.field(uiOptions.stackArrayItems)}
         depth={depth + 1}
-        label={false}
+        label={!uiOptions.stackArrayItems ? false : undefined}
         uiOptions={uiOptions}
         value={value}
         onBlur={handleBlur}

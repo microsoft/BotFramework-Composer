@@ -36,6 +36,8 @@ export interface UIOptions {
   properties?: {
     [key: string]: UIOptions;
   };
+  /** Displays array item fields in a stacked view instead of inline */
+  stackArrayItems?: boolean;
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };

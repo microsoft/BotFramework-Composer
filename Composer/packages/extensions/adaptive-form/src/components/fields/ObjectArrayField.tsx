@@ -15,7 +15,7 @@ import formatMessage from 'format-message';
 import { getArrayItemProps, getOrderedProperties } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
-import { arrayItem, objectArrayField } from './styles';
+import { objectArrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
@@ -62,7 +62,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
     <div className={className}>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div>
-        {orderedProperties.length > 1 && (
+        {orderedProperties.length > 1 && !uiOptions.stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>
             {orderedProperties.map((key, index) => {
               if (typeof key === 'string') {
@@ -87,7 +87,6 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         )}
         {map(value, (item, idx) => (
           <ArrayFieldItem
-            css={arrayItem.container}
             {...props}
             transparentBorder
             key={idx}

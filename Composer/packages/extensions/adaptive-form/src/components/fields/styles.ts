@@ -28,17 +28,25 @@ export const arrayItem = {
     label: ArrayFieldItemContainer;
   `,
 
-  field: css`
-    display: flex;
-    flex: 1;
-    margin: 0;
+  field: stacked =>
+    !stacked
+      ? css`
+          display: flex;
+          flex: 1;
+          margin: 0;
 
-    & + & {
-      margin-left: 16px;
-    }
+          & + & {
+            margin-left: 16px;
+          }
 
-    label: ArrayFieldItemField;
-  `,
+          label: ArrayFieldItemField;
+        `
+      : css`
+          flex: 1;
+          margin: 0;
+
+          label: ArrayFieldItemField;
+        `,
 };
 
 export const objectItemLabel = css`
