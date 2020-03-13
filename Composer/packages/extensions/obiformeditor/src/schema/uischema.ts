@@ -197,6 +197,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:widget': 'TextareaWidget',
     },
     'ui:order': ['connectionName', '*'],
+    'ui:hidden': ['alwaysPrompt'],
   },
   [SDKTypes.QnAMakerDialog]: {
     strictFilters: {

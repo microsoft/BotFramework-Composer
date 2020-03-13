@@ -1967,6 +1967,13 @@ export const appschema: OBISchema = {
           examples: ['dialog.token'],
           type: 'string',
         },
+        alwaysPrompt: {
+          type: 'boolean',
+          title: 'Always prompt',
+          description: "Collect information even if the specified 'property' is not empty.",
+          default: true,
+          examples: [false],
+        },
       },
     },
     'Microsoft.OnActivity': {
