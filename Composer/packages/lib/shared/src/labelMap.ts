@@ -171,11 +171,11 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Conversation invoked'),
     subtitle: formatMessage('Invoke activity'),
   },
-  [SDKTypes.OnMessageActivity]: {
+  [SDKTypes.OnMessageEventActivity]: {
     title: formatMessage('Message events'),
-    subtitle: formatMessage('Message recieved activity'),
+    subtitle: formatMessage('Message activity'),
   },
-  [SDKTypes.OnMessageReceivedActivity]: {
+  [SDKTypes.OnMessageActivity]: {
     title: formatMessage('Message received'),
     subtitle: formatMessage('Message recieved activity'),
   },
