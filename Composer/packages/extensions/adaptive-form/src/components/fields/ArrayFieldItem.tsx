@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps, FieldWidget } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes } from '@uifabric/styling';
@@ -18,6 +18,7 @@ interface ArrayFieldItemProps extends FieldProps {
   canMoveUp: boolean;
   canMoveDown: boolean;
   canRemove: boolean;
+  stackArrayItems?: boolean;
   onReorder: (aIdx: number) => void;
   onRemove: () => void;
 }
@@ -33,6 +34,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     index,
     depth,
     onBlur,
+    stackArrayItems,
     transparentBorder,
     uiOptions,
     value,
@@ -79,16 +81,14 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     }
   };
 
-  const ArrayField = (uiOptions?.arrayField as FieldWidget) || SchemaField;
-
   return (
     <div css={arrayItem.container}>
-      <ArrayField
+      <SchemaField
         {...rest}
-        css={arrayItem.field(uiOptions.stackArrayItems)}
+        css={arrayItem.field(stackArrayItems)}
         depth={depth + 1}
-        label={!uiOptions.stackArrayItems ? false : undefined}
-        transparentBorder={!uiOptions.stackArrayItems ? transparentBorder : undefined}
+        label={!stackArrayItems ? false : undefined}
+        transparentBorder={!stackArrayItems ? transparentBorder : undefined}
         uiOptions={uiOptions}
         value={value}
         onBlur={handleBlur}

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FieldProps } from '@bfc/extension';
 import map from 'lodash/map';
 import { JSONSchema7 } from 'json-schema';
@@ -58,11 +58,18 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
 
+  const stackArrayItems = useMemo(
+    () =>
+      orderedProperties.length > 2 ||
+      Object.values(itemSchema.properties || {}).some(({ $role }: any) => $role === 'expression'),
+    [itemSchema, orderedProperties]
+  );
+
   return (
     <div className={className}>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div>
-        {orderedProperties.length > 1 && !uiOptions.stackArrayItems && (
+        {orderedProperties.length > 1 && !stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>
             {orderedProperties.map((key, index) => {
               if (typeof key === 'string') {
@@ -87,11 +94,12 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         )}
         {map(value, (item, idx) => (
           <ArrayFieldItem
-            {...props}
-            transparentBorder
             key={idx}
+            {...props}
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema7}
+            stackArrayItems={stackArrayItems}
+            transparentBorder
             value={item}
             {...getArrayItemProps(value, idx, onChange)}
           />

@@ -8,8 +8,6 @@ import { FieldWidget, FieldProps } from './form';
 type UIOptionFunc<R = any, D = any> = (data: D) => R;
 
 export interface UIOptions {
-  /* Array field override */
-  arrayField?: FieldWidget;
   /** Description override. */
   description?: string | UIOptionFunc<string | undefined>;
   /** Field widget override. */
@@ -36,8 +34,6 @@ export interface UIOptions {
   properties?: {
     [key: string]: UIOptions;
   };
-  /** Displays array item fields in a stacked view instead of inline */
-  stackArrayItems?: boolean;
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
