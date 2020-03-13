@@ -268,6 +268,9 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     'ui:hidden': [...globalHidden],
   },
   [SDKTypes.SkillDialog]: {
+    activity: {
+      'ui:field': 'LgEditorField',
+    },
     'ui:hidden': [...globalHidden],
     'ui:order': [
       'botId',
