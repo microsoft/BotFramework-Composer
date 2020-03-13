@@ -361,9 +361,9 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('onSelect', onSelect);
     apiClient.registerApi('onCopy', onCopy);
     apiClient.registerApi('isExpression', ({ expression }) => isExpression(expression));
-    apiClient.registerApi('createDialog', () => {
+    apiClient.registerApi('createDialog', actionsSeed => {
       return new Promise(resolve => {
-        actions.createDialogBegin((newDialog: string | null) => {
+        actions.createDialogBegin(actionsSeed, (newDialog: string | null) => {
           resolve(newDialog);
         });
       });
