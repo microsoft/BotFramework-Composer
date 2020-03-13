@@ -1,18 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import get from 'lodash/get';
 
+import { ExternalResourceHandler } from '../copyUtils/ExternalApi';
 import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
-import { SDKTypes } from '../types';
 import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
+import { SDKTypes } from '../types';
 
-type LgFieldHandler = (action, lgFieldName: string, lgString: string) => any;
+type LgFieldHandler = ExternalResourceHandler<string>;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
   if (!action || !action.$type) return;
 
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(action, fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(get(action, '$designer.id'), action, fieldName, action[fieldName]);
   };
 
   switch (action.$type) {
@@ -37,6 +39,6 @@ export const walkLgResourcesInAction = (action, handleLgResource: LgFieldHandler
   walkAdaptiveAction(action, action => findLgFields(action, handleLgResource));
 };
 
-export const walkLgResourcesInActionList = (actioList: any[], handleLgResource: LgFieldHandler) => {
-  walkAdaptiveActionList(actioList, action => findLgFields(action, handleLgResource));
+export const walkLgResourcesInActionList = (actionList: any[], handleLgResource: LgFieldHandler) => {
+  walkAdaptiveActionList(actionList, action => findLgFields(action, handleLgResource));
 };

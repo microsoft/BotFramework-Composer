@@ -108,6 +108,7 @@ const ObjectArray: React.FunctionComponent<ArrayFieldTemplateProps> = props => {
                           }
                         : {}),
                     }}
+                    ariaLabel={property}
                     data-testid="object-array-text-input"
                   />
                 </div>
