@@ -26,6 +26,7 @@ export interface ShellData {
     $type: string;
     [key: string]: any;
   };
+  designerId: string;
   dialogId: string;
   dialogs: DialogInfo[];
   focusedEvent: string;

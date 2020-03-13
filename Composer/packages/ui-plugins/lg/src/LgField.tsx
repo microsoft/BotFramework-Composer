@@ -34,10 +34,10 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
-  const { dialogId, currentDialog, lgFiles, shellApi } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi } = useShellApi();
 
   const singleLgRefMatched = value && value.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
-  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, dialogId || '').toString();
+  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
   const lgFileId = currentDialog.lgFile || 'common';
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
 
@@ -91,7 +91,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   const onChange = (body: string) => {
     setLocalValue(body);
-    if (dialogId) {
+    if (designerId) {
       if (body) {
         updateLgTemplate(body);
         props.onChange(new LgTemplateRef(lgName).toString());

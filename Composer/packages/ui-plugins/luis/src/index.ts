@@ -16,13 +16,13 @@ const config: PluginConfig = {
         return typeof data === 'string' && data.endsWith('.lu');
       },
       handleRecognizerChange: (props, shellData) => {
-        const { luFiles, dialogId } = shellData;
-        const luFile = luFiles.find(f => f.id === dialogId);
+        const { luFiles, currentDialog } = shellData;
+        const luFile = luFiles.find(f => f.id === currentDialog.id);
 
         if (luFile) {
           props.onChange(luFile.id);
         } else {
-          alert(`NO LU FILE WITH NAME ${dialogId}`);
+          alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
         }
       },
     },

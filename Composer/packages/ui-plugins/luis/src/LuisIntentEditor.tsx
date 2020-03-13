@@ -9,8 +9,8 @@ import { LuIntentSection } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value: intentName } = props;
-  const { dialogId, luFiles, shellApi } = useShellApi();
-  const luFile = luFiles.find(f => f.id === dialogId);
+  const { currentDialog, luFiles, shellApi } = useShellApi();
+  const luFile = luFiles.find(f => f.id === currentDialog.id);
   const [luIntent, setLuIntent] = useState<LuIntentSection>(
     (luFile && luFile.intents.find(intent => intent.Name === intentName)) ||
       ({
