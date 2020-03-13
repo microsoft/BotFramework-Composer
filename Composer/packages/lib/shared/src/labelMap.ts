@@ -228,6 +228,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKTypes.SetProperties]: {
     title: formatMessage('Set properties'),
   },
+  [SDKTypes.SkillDialog]: {
+    title: formatMessage('Begin a skill dialog'),
+    description: formatMessage('Begin a remote skill dialog.'),
+  },
   [SDKTypes.SwitchCondition]: {
     title: formatMessage('Branch: switch (multiple options)'),
   },
