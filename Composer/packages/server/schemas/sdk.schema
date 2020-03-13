@@ -903,7 +903,7 @@
                         "https://myskill.contoso.com/api/messages/"
                     ]
                 },
-                "activity ": {
+                "activity": {
                     "$kind": "Microsoft.IActivityTemplate",
                     "title": "Activity",
                     "description": "The activity to send to the skill.",
