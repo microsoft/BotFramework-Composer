@@ -42,6 +42,7 @@ export const VisualEditorAPI = (() => {
     hasElementSelected: () => visualEditorFrameAPI.invoke('hasElementSelected').catch(() => false),
     copySelection: () => visualEditorFrameAPI.invoke('copySelection'),
     cutSelection: () => visualEditorFrameAPI.invoke('cutSelection'),
+    moveSelection: () => visualEditorFrameAPI.invoke('moveSelection'),
     deleteSelection: () => visualEditorFrameAPI.invoke('deleteSelection'),
   };
 })();
