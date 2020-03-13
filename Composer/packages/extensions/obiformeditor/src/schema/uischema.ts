@@ -159,7 +159,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.OnInvokeActivity]: {
     ...triggerUiSchema,
   },
-  [SDKTypes.OnMessageReceivedActivity]: {
+  [SDKTypes.OnMessageActivity]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnMessageDeleteActivity]: {
