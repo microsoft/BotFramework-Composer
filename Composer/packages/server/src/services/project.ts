@@ -169,7 +169,7 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity) => {
     BotProjectService.initialize();
 
-    if (!BotProjectService.projectLocationMap[projectId]) {
+    if (!BotProjectService.projectLocationMap?.[projectId]) {
       throw new Error('project not found in cache');
     } else {
       const path = BotProjectService.projectLocationMap[projectId];

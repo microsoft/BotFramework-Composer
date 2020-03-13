@@ -2771,8 +2771,6 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-<<<<<<< HEAD
-=======
 "@nodelib/fs.walk@^1.2.3":
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.walk/-/fs.walk-1.2.4.tgz#011b9202a70a6366e436ca5c065844528ab04976"
@@ -2781,7 +2779,6 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
->>>>>>> origin/master
 "@oclif/command@^1.5.13", "@oclif/command@~1.5.19":
   version "1.5.19"
   resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.19.tgz#13f472450eb83bd6c6871a164c03eadb5e1a07ed"

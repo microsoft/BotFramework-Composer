@@ -83,17 +83,24 @@ async function getProject(req: Request, res: Response) {
 async function getProjectById(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined && (await currentProject.exists())) {
-    await currentProject.index();
-    const project = currentProject.getIndexes();
-    res.status(200).json({
-      id: projectId,
-      ...project,
-    });
-  } else {
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      await currentProject.index();
+      const project = currentProject.getIndexes();
+      res.status(200).json({
+        id: projectId,
+        ...project,
+      });
+    } else {
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
+    }
+  } catch (error) {
     res.status(404).json({
-      message: 'No such bot project opened',
+      message: error.message,
     });
   }
 }
