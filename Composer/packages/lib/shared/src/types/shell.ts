@@ -77,7 +77,7 @@ export interface ShellApi {
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => Promise<void>;
-  createDialog: () => Promise<string>;
+  createDialog: (actions: any) => Promise<string>;
   validateExpression: (expression?: string) => Promise<boolean>;
   // TODO: fix these types
   addCoachMarkRef: any;

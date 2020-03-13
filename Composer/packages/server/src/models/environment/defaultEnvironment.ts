@@ -4,7 +4,7 @@
 import { ISettingManager } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import { IBotConnector } from '../connector';
-import { CSharpBotConnector } from '../connector/csharpBotConnector';
+import { CSharpBotConnector, localConnector } from '../connector/csharpBotConnector';
 
 import { IEnvironmentConfig, IEnvironment } from '.';
 
@@ -18,7 +18,7 @@ export class DefaultEnvironment implements IEnvironment {
   public constructor(config: IEnvironmentConfig) {
     this.config = config;
     this.settingManager = new DefaultSettingManager(this.config.basePath);
-    this.botConnector = new CSharpBotConnector(this.config.endpoint);
+    this.botConnector = localConnector;
   }
 
   public getEnvironmentName(_: string): string | undefined {
