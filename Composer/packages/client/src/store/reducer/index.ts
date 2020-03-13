@@ -16,7 +16,7 @@ import {
 } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
@@ -76,6 +76,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = botName;
+  state.botStatus = response.data.location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
@@ -117,8 +118,9 @@ const removeDialog: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const createDialogBegin: ReducerFunc = (state, { onComplete }) => {
+const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
   state.showCreateDialogModal = true;
+  state.actionsSeed = actionsSeed;
   state.onCreateDialogComplete = onComplete;
   return state;
 };
@@ -134,6 +136,7 @@ const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
   state.lgFiles = response.data.lgFiles;
   state.showCreateDialogModal = false;
+  state.actionsSeed = [];
   delete state.onCreateDialogComplete;
   return state;
 };
