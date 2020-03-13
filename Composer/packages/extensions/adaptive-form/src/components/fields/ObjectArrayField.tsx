@@ -57,7 +57,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   };
 
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
-  console.log(orderedProperties, itemSchema.properties);
+
   const stackArrayItems = useMemo(
     () =>
       orderedProperties.length > 2 ||
