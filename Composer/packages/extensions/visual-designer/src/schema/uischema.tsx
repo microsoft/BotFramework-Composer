@@ -157,19 +157,17 @@ export const uiSchema: UISchema = {
     header: {
       'ui:widget': ActionHeader,
     },
-    body: {
-      'ui:widget': DialogRef,
-      dialog: data => data.dialog,
-      getRefContent: data => dialogRef => (
-        <>
-          {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
-        </>
-      ),
-    },
+    body: data => (
+      <SingleLineDiv>
+        <FixedInfo>Host: </FixedInfo>
+        {data.skillEndpoint || '?'}
+      </SingleLineDiv>
+    ),
     footer: data =>
-      data.property ? (
+      data.resultProperty ? (
         <>
-          {data.property} <FixedInfo>= Return value</FixedInfo>
+          {data.resultProperty}
+          <FixedInfo> = Result</FixedInfo>
         </>
       ) : null,
   },
