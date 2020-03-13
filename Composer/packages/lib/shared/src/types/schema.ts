@@ -74,7 +74,7 @@ export enum SDKTypes {
   OnIntent = 'Microsoft.OnIntent',
   OnInvokeActivity = 'Microsoft.OnInvokeActivity',
   OnMessageEventActivity = 'Microsoft.OnMessageEventActivity',
-  OnMessageReceivedActivity = 'Microsoft.OnMessageActivity',
+  OnMessageActivity = 'Microsoft.OnMessageActivity',
   OnMessageDeleteActivity = 'Microsoft.OnMessageDeleteActivity',
   OnMessageReactionActivity = 'Microsoft.OnMessageReactionActivity',
   OnMessageUpdateActivity = 'Microsoft.OnMessageUpdateActivity',

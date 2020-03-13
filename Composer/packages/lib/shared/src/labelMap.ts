@@ -175,7 +175,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Message events'),
     subtitle: formatMessage('Message activity'),
   },
-  [SDKTypes.OnMessageReceivedActivity]: {
+  [SDKTypes.OnMessageActivity]: {
     title: formatMessage('Message received'),
     subtitle: formatMessage('Message recieved activity'),
   },

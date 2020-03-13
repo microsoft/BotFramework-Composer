@@ -2331,7 +2331,7 @@ export const appschema: OBISchema = {
         "Actions to perform on receipt of an activity with type 'MessageRecieved'. Overrides Intent trigger.",
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.OnMessageReceivedActivity),
+        ...$properties(SDKTypes.OnMessageActivity),
         condition: {
           $role: 'expression',
           title: 'Condition',
