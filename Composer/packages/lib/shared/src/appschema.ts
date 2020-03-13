@@ -2037,7 +2037,7 @@ export const appschema: OBISchema = {
           description: 'Time out setting for the OAuth signin card.',
           default: '900000',
         },
-        tokenProperty: {
+        property: {
           $role: 'expression',
           title: 'Token property',
           description: 'Property to store the OAuth token result.',
