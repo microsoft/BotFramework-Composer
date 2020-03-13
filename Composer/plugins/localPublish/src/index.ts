@@ -29,20 +29,19 @@ interface PublishConfig {
   botId: string;
   version: string;
   settings: any;
+  templatePath: string;
 }
 
 class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
-  private readonly templatePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
+  private templatePath;
 
-  constructor() {
-    // set plugin path
-    process.env.LOCAL_PUBLISH_PATH = this.getBotsDir();
-  }
+  constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
-    const { settings } = config;
+    const { settings, templatePath } = config;
+    this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
     await this.initBot(botId);
@@ -61,7 +60,7 @@ class LocalPublisher {
   history = async config => { };
   rollback = async (config, versionId) => { };
 
-  private getBotsDir = () => path.resolve(this.baseDir, 'hostedBots');
+  private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);
   private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId), 'ComposerDialogs');
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
@@ -123,7 +122,7 @@ class LocalPublisher {
       port = LocalPublisher.runningBots[botId].port;
       this.stopBot(botId);
     } else {
-      port = await getPort({ host: 'localhost', port: parseInt('3979') });
+      port = await getPort({ host: 'localhost', port: getPort.makeRange(3979, 5000) });
     }
     await this.restoreBot(botId, version);
     try {
@@ -139,7 +138,7 @@ class LocalPublisher {
     return new Promise((resolve, reject) => {
       const process = spawn(
         'dotnet',
-        ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://localhost:${port}`, ...this.getConfig(settings)],
+        ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
         {
           cwd: botDir,
           stdio: ['ignore', 'pipe', 'pipe'],

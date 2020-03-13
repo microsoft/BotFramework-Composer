@@ -1,14 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import merge from 'lodash/merge';
 
 import { pluginLoader, PluginLoader } from '../services/pluginLoader';
 import { BotProjectService } from '../services/project';
+import { runtimeFolder } from '../settings/env';
 const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
 };
+const DEFAULT_RUNTIME = 'CSharp';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(Object.keys(pluginLoader.extensions.publish));
@@ -29,6 +33,7 @@ export const PublishController = {
     config.configuration = {
       ...config.configuration,
       settings: merge({}, currentProject.settings, sensitiveSetting),
+      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
 
     if (config && pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
