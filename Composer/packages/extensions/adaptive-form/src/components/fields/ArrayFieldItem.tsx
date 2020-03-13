@@ -33,6 +33,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     index,
     depth,
     onBlur,
+    transparentBorder,
     uiOptions,
     value,
     ...rest
@@ -87,6 +88,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
         css={arrayItem.field(uiOptions.stackArrayItems)}
         depth={depth + 1}
         label={!uiOptions.stackArrayItems ? false : undefined}
+        transparentBorder={!uiOptions.stackArrayItems ? transparentBorder : undefined}
         uiOptions={uiOptions}
         value={value}
         onBlur={handleBlur}
