@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useLayoutEffect, useMemo } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
@@ -60,7 +60,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
 
   const options = useMemo(() => getOptions(schema, definitions), []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (options) {
       if (!value) {
         setSelectedSchema(options[0].data.schema);
