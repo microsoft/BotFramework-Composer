@@ -5,12 +5,13 @@
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo } from 'react';
 import { FieldProps } from '@bfc/extension';
-import map from 'lodash/map';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import map from 'lodash/map';
 
 import { getArrayItemProps, getOrderedProperties } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
@@ -54,6 +55,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         setNewObject({});
       }
     }
+  };
+
+  const handleAdd = () => {
+    onChange(value.concat({}));
   };
 
   const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
@@ -108,52 +113,60 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
         ))}
       </div>
       <div css={objectArrayField.inputFieldContainer}>
-        <div css={objectArrayField.arrayItemField}>
-          {orderedProperties
-            .filter(p => !Array.isArray(p))
-            .map((property, index, allProperties) => {
-              if (typeof property === 'string') {
-                return (
-                  <div key={index} css={objectArrayField.objectItemInputField}>
-                    <TextField
-                      autoComplete="off"
-                      iconProps={{
-                        ...(index === allProperties.length - 1
-                          ? {
-                              iconName: 'ReturnKey',
-                              style: {
-                                color: SharedColors.cyanBlue10,
-                                opacity: 0.6,
-                              },
-                            }
-                          : {}),
-                      }}
-                      placeholder={getNewPlaceholder(props, property)}
-                      styles={{ field: { padding: '0 24px 0 8px' } }}
-                      value={newObject[property] || ''}
-                      onChange={handleNewObjectChange(property)}
-                      onKeyDown={handleKeyDown}
-                    />
-                  </div>
-                );
-              }
-            })}
-        </div>
-        <IconButton
-          disabled
-          ariaLabel="Item Actions"
-          menuIconProps={{ iconName: 'MoreVertical' }}
-          styles={{
-            menuIcon: {
-              backgroundColor: NeutralColors.white,
-              color: NeutralColors.gray130,
-              fontSize: FontSizes.size16,
-            },
-            rootDisabled: {
-              backgroundColor: NeutralColors.white,
-            },
-          }}
-        />
+        {!stackArrayItems ? (
+          <React.Fragment>
+            <div css={objectArrayField.arrayItemField}>
+              {orderedProperties
+                .filter(p => !Array.isArray(p))
+                .map((property, index, allProperties) => {
+                  if (typeof property === 'string') {
+                    return (
+                      <div key={index} css={objectArrayField.objectItemInputField}>
+                        <TextField
+                          autoComplete="off"
+                          iconProps={{
+                            ...(index === allProperties.length - 1
+                              ? {
+                                  iconName: 'ReturnKey',
+                                  style: {
+                                    color: SharedColors.cyanBlue10,
+                                    opacity: 0.6,
+                                  },
+                                }
+                              : {}),
+                          }}
+                          placeholder={getNewPlaceholder(props, property)}
+                          styles={{ field: { padding: '0 24px 0 8px' } }}
+                          value={newObject[property] || ''}
+                          onChange={handleNewObjectChange(property)}
+                          onKeyDown={handleKeyDown}
+                        />
+                      </div>
+                    );
+                  }
+                })}
+            </div>
+            <IconButton
+              disabled
+              ariaLabel="Item Actions"
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              styles={{
+                menuIcon: {
+                  backgroundColor: NeutralColors.white,
+                  color: NeutralColors.gray130,
+                  fontSize: FontSizes.size16,
+                },
+                rootDisabled: {
+                  backgroundColor: NeutralColors.white,
+                },
+              }}
+            />
+          </React.Fragment>
+        ) : (
+          <DefaultButton type="button" onClick={handleAdd}>
+            {formatMessage('Add')}
+          </DefaultButton>
+        )}
       </div>
     </div>
   );
