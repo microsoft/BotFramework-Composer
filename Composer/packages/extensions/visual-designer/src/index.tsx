@@ -35,6 +35,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   clipboardActions,
   data: inputData,
   shellApi,
+  schemas,
   hosted,
 }): JSX.Element => {
   const dataCache = useRef({});
@@ -81,6 +82,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    schemas,
   };
 
   return (
