@@ -69,6 +69,7 @@ export const RootField: React.FC<RootFieldProps> = props => {
           onChange={handleTitleChange}
           styles={{ field: { fontWeight: FontWeights.semibold }, root: { margin: '5px 0 7px -9px' } }}
           fontSize={FontSizes.size20}
+          ariaLabel={formatMessage('Title')}
         />
         <p className={classnames('RootFieldSubtitle', FontClassNames.smallPlus)}>{getSubTitle()}</p>
         {sdkOverrides.description !== false && (description || schema.description) && (

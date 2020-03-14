@@ -43,7 +43,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
-export const messageTypeKey: string = SDKTypes.OnMessageActivity;
+export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 
 export function getFriendlyName(data) {
@@ -89,7 +89,7 @@ export function generateRegexExpression(intent: string, pattern: string) {
   return { intent, pattern };
 }
 
-export function createNewTrigger(dialog: DialogInfo, data: TriggerFormData): DialogInfo {
+export function createTrigger(dialog: DialogInfo, data: TriggerFormData): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
   const trigger = generateNewTrigger(data);
   insert(dialogCopy.content, 'triggers', undefined, trigger);
@@ -115,11 +115,23 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
   return dialogCopy;
 }
 
+//it is possible that we cannot find a RegEx. Because it will clear all regEx when we
+//switch to another recognizer type
+export function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const index = regexIntents.findIndex(ri => ri.intent === intent);
+  if (index > -1) {
+    regexIntents.splice(index, 1);
+  }
+  return dialogCopy;
+}
+
 export function generateNewDialog(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
   //add new trigger
   const dialog = dialogs.find(dialog => dialog.id === dialogId);
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
-  let updatedDialog = createNewTrigger(dialog, data);
+  let updatedDialog = createTrigger(dialog, data);
 
   //add regex expression
   if (data.regexEx) {
@@ -137,11 +149,16 @@ export function createFocusedPath(selected: number, focused: number) {
 }
 
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
-  const dialogCopy = getDialog(dialogs, dialogId);
+  let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const content = dialogCopy.content;
-  content.triggers.splice(index, 1);
-  return content;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$type', '') === regexRecognizerKey;
+  if (isRegEx) {
+    const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
+    dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
+  }
+  const triggers = get(dialogCopy, 'content.triggers');
+  triggers.splice(index, 1);
+  return dialogCopy.content;
 }
 
 export function getTriggerTypes(): IDropdownOption[] {

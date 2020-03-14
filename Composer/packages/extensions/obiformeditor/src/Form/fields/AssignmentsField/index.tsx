@@ -215,6 +215,7 @@ export const AssignmentsField: React.FC<BFDFieldProps> = props => {
               onChange={handleNewassignmentEdit('property')}
               placeholder={formatMessage('Property (named location to store information).')}
               autoComplete="off"
+              ariaLabel={formatMessage('Property')}
             />
           </div>
           <div css={assignmentItemValue}>
@@ -229,6 +230,7 @@ export const AssignmentsField: React.FC<BFDFieldProps> = props => {
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
+              ariaLabel={formatMessage('Value')}
             />
           </div>
           <div>
