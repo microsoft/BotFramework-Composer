@@ -39,6 +39,8 @@ const TableView: React.FC<TableViewProps> = props => {
 
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
   useEffect(() => {
     if (!file || isEmpty(file)) return;
 
@@ -87,6 +89,7 @@ const TableView: React.FC<TableViewProps> = props => {
         toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
+      setFocusedIndex(templates.length);
     },
     [templates, file]
   );
@@ -229,6 +232,7 @@ const TableView: React.FC<TableViewProps> = props => {
         <DetailsList
           componentRef={listRef}
           items={templates}
+          initialFocusedIndex={focusedIndex}
           styles={{
             root: {
               overflowX: 'hidden',
