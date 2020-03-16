@@ -37,6 +37,7 @@ interface FileSelectorProps {
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
+  validDiskNames: string[];
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
@@ -47,6 +48,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     currentPath,
     onCurrentPathUpdate,
     storageFileLoadingStatus,
+    validDiskNames,
   } = props;
   // for detail file list in open panel
   const tableColums = [
@@ -186,15 +188,18 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter(p => p !== '');
 
-  const breadcrumbItems = pathItems
+  let currentDisk = '';
+  let breadcrumbItems = pathItems
     .map((item, index) => {
       let itemPath = getNavItemPath(pathItems, separator, 0, index);
+      if (itemPath[itemPath.length - 1] === ':') {
+        currentDisk = `${itemPath}/`;
+      }
 
       // put a leading / back on the path if it started as a unix style path
       itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
       // add a trailing / if the last path is something like c:
       itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
-
       return {
         text: itemPath, // displayed text
         key: itemPath, // value returned
@@ -202,6 +207,16 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       };
     })
     .reverse();
+  const disks = validDiskNames.map(n => {
+    return {
+      text: n,
+      key: n,
+      title: n,
+    };
+  });
+  breadcrumbItems = breadcrumbItems.concat(disks);
+  const dupIndex = breadcrumbItems.findIndex(item => item.key === currentDisk);
+  breadcrumbItems.splice(dupIndex, 1);
 
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
