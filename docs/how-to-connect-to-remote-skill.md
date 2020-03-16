@@ -5,7 +5,7 @@ In the Bot Framework Composer, you can use the **Begin a skill dialog** action t
 ## Prerequisites: 
 - [Microsoft Azure subscription](https://azure.microsoft.com)
 - [A basic bot built using Composer](quickstart-create-bot.md)
-- A remote skill which your bot can connect to [SkillSample](https://github.com/microsoft/botbuilder-dotnet/tree/master/FunctionalTests/Skills/SimpleBotToBot/EchoSkillBot)
+- A remote skill which your bot can connect to, please refer to [SkillSample](https://github.com/microsoft/botbuilder-dotnet/tree/master/FunctionalTests/Skills/SimpleBotToBot/EchoSkillBot) to setup your remote bot.
 
 ## Create the Azure Bot Service registration
 
@@ -13,7 +13,7 @@ If you've already got an Azure Bot Service channel registration, you can skip th
 
 If you don't have an Azure Bot Service channel registration, follow [these instructions to create a registration in the Azure portal](https://docs.microsoft.com/azure/bot-service/bot-service-quickstart-registration?view=azure-bot-service-3.0).
 
-Make sure you note the **app ID** and **app password** that is generated during this process. You'll need these values in this [configure the oauth connection settings in Composer](#configure-the-oauth-connection-settings-in-composer) step.
+Make sure you note the **app ID** and **app password** that is generated during this process. You'll need these values in this [Configure the settings in Composer](#Configure the settings in Composer) step.
 
 ## Run ngrok 
 Open a terminal instance and run ngrok with the following command to create a new tunnel (you may need to navigate to where the ngrok executable lives on your filesystem) the port specified is the same port your bot is running on:
@@ -47,7 +47,6 @@ Then, add the `Begin a skill dialog` action to your dialog.  In the properties p
 
 In the `Activity` field, configure the activity you want to send to the remote skill, it can be either message or event type depending on the remote skill manifest defination. See the below screenshot
 
-![Begin-a-skill-properties](./media/skill/Begin-a-skill-event.png)
-![Begin-a-skill-properties](./media/skill/Begin-a-skill-message.png)
+![Begin-a-skill-properties](./media/skill/Begin-a-skill.png)
 
 Your bot is now configured to connect to a remote skill!
