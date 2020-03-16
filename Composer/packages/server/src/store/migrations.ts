@@ -36,9 +36,15 @@ const migrations: Migration[] = [
     run: data => set(data, 'storageConnections[0].defaultPath', settings.botsFolder),
   },
   {
+<<<<<<< HEAD
     name: 'Re-init when version update',
     condition: data => !data.version || data.version != initData.version,
     run: data => initData,
+=======
+    name: 'Add Disk info on Windows',
+    condition: () => settings.isWindows,
+    run: data => set(data, 'storageConnections[0].validDiskNames', settings.validDiskNames),
+>>>>>>> add disk names
   },
 ];
 

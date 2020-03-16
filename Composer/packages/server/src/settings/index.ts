@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import os from 'os';
+import fs from 'fs';
 
 import merge from 'lodash/merge';
 
@@ -18,7 +19,11 @@ interface Settings {
   runtimeFrameworkVersion: string;
   botsFolder: string;
   appDataPath: string;
+  isWindows: boolean;
+  validDiskNames: string[];
 }
+
+const diskNames = ['C:/', 'D:/', 'E:/', 'F:/', 'G:/', 'H:/', 'I:/', 'J:/', 'K:/'];
 
 const envSettings: { [env: string]: Settings } = {
   development: {
@@ -29,6 +34,8 @@ const envSettings: { [env: string]: Settings } = {
     runtimeFolder,
     runtimeFrameworkVersion,
     appDataPath,
+    isWindows: os.platform() === 'win32',
+    validDiskNames: diskNames.filter(d => fs.existsSync(d)),
   },
 };
 
