@@ -6,9 +6,10 @@ import { jsx, css } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
+import { createStepMenu, DialogGroup, SDKTypes, appschema } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -29,7 +30,15 @@ const buildEdgeMenuItemsFromClipboardContext = (
   onClick,
   filter?: (t: SDKTypes) => boolean
 ): IContextualMenu[] => {
-  const { clipboardActions } = context;
+  const { clipboardActions, schemas } = context;
+  const appschemaDefinitions = get(appschema, 'definitions', {});
+  const botprojectDefinitions = get(schemas, 'sdk.content.definitions', {});
+  const extraTypes = Object.keys(botprojectDefinitions)
+    .filter(x => !appschemaDefinitions[x])
+    .filter(x => x.indexOf('Microsoft.test.') === -1)
+    .filter(x => x.indexOf('Microsoft.On') === -1);
+  console.log('visual picked', extraTypes);
+
   const menuItems = createStepMenu(
     [
       DialogGroup.RESPONSE,
@@ -42,7 +51,8 @@ const buildEdgeMenuItemsFromClipboardContext = (
     ],
     true,
     (e, item) => onClick(item ? item.$type : null),
-    filter
+    filter,
+    extraTypes
   );
 
   const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;

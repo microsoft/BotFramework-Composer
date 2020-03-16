@@ -82,8 +82,16 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
       </div>
     );
   }
+  const appschemaDefinitions = get(appschema, 'definitions', {});
+  const botprojectDefinitions = get(schemas, 'sdk.content.definitions', {});
+  const extraTypes = Object.keys(botprojectDefinitions).filter(x => !appschemaDefinitions[x]);
+  const extraDefinitions = extraTypes.reduce((result, $type) => {
+    result[$type] = botprojectDefinitions[$type];
+    return result;
+  }, {});
+  console.log('picked', extraTypes, extraDefinitions);
+  const definitions = Object.assign({}, appschemaDefinitions, extraDefinitions);
 
-  const definitions = appschema.definitions || {};
   const typeDef: JSONSchema6Definition = definitions[type];
 
   if (!typeDef) {

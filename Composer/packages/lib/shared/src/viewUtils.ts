@@ -191,7 +191,8 @@ export const createStepMenu = (
     e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
     item: IContextualMenuItem
   ) => void,
-  filter?: (x: SDKTypes) => boolean
+  filter?: (x: SDKTypes) => boolean,
+  extraTypes?: string[]
 ): IContextualMenuItem[] => {
   if (subMenu) {
     const stepMenuItems = stepLabels.map(x => {
@@ -226,6 +227,21 @@ export const createStepMenu = (
       };
       return menuItem;
     });
+    if (Array.isArray(extraTypes) && extraTypes.length) {
+      stepMenuItems.push({
+        key: 'Extra',
+        text: 'Extra',
+        name: 'Extra',
+        subMenuProps: {
+          items: extraTypes.map($type => ({
+            key: $type,
+            name: $type,
+            $type,
+          })),
+          onItemClick: menuItemHandler(handleType),
+        },
+      });
+    }
 
     return stepMenuItems;
   } else {

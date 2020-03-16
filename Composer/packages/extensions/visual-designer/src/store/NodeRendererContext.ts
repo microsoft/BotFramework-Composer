@@ -16,6 +16,7 @@ interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
   focusedId?: string;
   focusedEvent?: string;
   focusedTab?: string;
+  schemas: any;
   clipboardActions: any[];
 }
 
@@ -24,6 +25,7 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   focusedEvent: '',
   focusedTab: '',
   clipboardActions: [],
+  schemas: {},
   getLgTemplates: () => Promise.resolve([]),
   copyLgTemplate: () => Promise.resolve(''),
   removeLgTemplate: () => Promise.resolve(),
