@@ -37,6 +37,7 @@ const initialState: State = {
   lgFiles: [],
   schemas: { editor: {} },
   luFiles: [],
+  actionsSeed: [],
   designPageLocation: {
     projectId: '',
     dialogId: '',

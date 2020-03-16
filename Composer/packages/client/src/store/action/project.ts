@@ -7,7 +7,7 @@ import { ActionCreator } from '../types';
 
 import { ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
-import { startBot } from './bot';
+import { startBot } from './publisher';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';

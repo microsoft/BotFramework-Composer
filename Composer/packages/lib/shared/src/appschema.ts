@@ -1960,12 +1960,19 @@ export const appschema: OBISchema = {
           description: 'Time out setting for the OAuth signin card.',
           default: '900000',
         },
-        tokenProperty: {
+        property: {
           $role: 'expression',
           title: 'Token property',
           description: 'Property to store the OAuth token result.',
           examples: ['dialog.token'],
           type: 'string',
+        },
+        alwaysPrompt: {
+          type: 'boolean',
+          title: 'Always prompt',
+          description: "Collect information even if the specified 'property' is not empty.",
+          default: true,
+          examples: [false],
         },
       },
     },
@@ -2324,14 +2331,14 @@ export const appschema: OBISchema = {
         },
       },
     },
-    'Microsoft.OnMessageReceivedActivity': {
+    'Microsoft.OnMessageActivity': {
       $role: 'unionType(Microsoft.ITriggerCondition)',
       title: 'On MessageRecieved activity',
       description:
         "Actions to perform on receipt of an activity with type 'MessageRecieved'. Overrides Intent trigger.",
       type: 'object',
       properties: {
-        ...$properties(SDKTypes.OnMessageReceivedActivity),
+        ...$properties(SDKTypes.OnMessageActivity),
         condition: {
           $role: 'expression',
           title: 'Condition',

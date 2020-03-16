@@ -9,8 +9,8 @@ import glob from 'globby';
 import rimraf from 'rimraf';
 import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
-import getPort from 'get-port';
 import AdmZip from 'adm-zip';
+import portfinder from 'portfinder';
 
 const stat = promisify(fs.stat);
 const readFile = promisify(fs.readFile);
@@ -56,7 +56,17 @@ class LocalPublisher {
       },
     };
   };
-  getStatus = async config => { };
+  getStatus = async (botId: string) => {
+    if (LocalPublisher.runningBots[botId]) {
+      return {
+        botStatus: 'connected',
+      };
+    } else {
+      return {
+        botStatus: 'unConnected',
+      };
+    }
+  };
   history = async config => { };
   rollback = async (config, versionId) => { };
 
@@ -122,7 +132,7 @@ class LocalPublisher {
       port = LocalPublisher.runningBots[botId].port;
       this.stopBot(botId);
     } else {
-      port = await getPort({ host: 'localhost', port: getPort.makeRange(3979, 5000) });
+      port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
     }
     await this.restoreBot(botId, version);
     try {
