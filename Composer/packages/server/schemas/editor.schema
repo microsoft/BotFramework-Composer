@@ -299,6 +299,11 @@
       "helpLinkText": "Learn more",
       "helpLinkLabel": "Learn more about conversation flow and memory"
     },
+    "Microsoft.SkillDialog": {
+      "title": "Call a remote skill",
+      "helpLink": "https://aka.ms/bfc-call-skill",
+      "helpLinkText": "Learn more"
+    },
     "Microsoft.SwitchCondition": {
       "title": "Branch: Switch",
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
