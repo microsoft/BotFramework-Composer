@@ -7,7 +7,7 @@ import React, { useState, useLayoutEffect, useMemo } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
-import { JsonEditor, OnInit } from '@bfc/code-editor';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -100,28 +100,29 @@ const ExpressionField: React.FC<FieldProps> = props => {
     }
 
     if (['array', 'object'].includes(selectedSchema.type)) {
-      const onInit: OnInit = monaco => {
-        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-          validate: true,
-          schemas: [
-            {
-              uri: props.id,
-              schema: selectedSchema,
-              fileMatch: ['*'],
-            },
-          ],
-        });
-      };
+      // const onInit: OnInit = monaco => {
+      //   monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      //     validate: true,
+      //     schemas: [
+      //       {
+      //         uri: props.id,
+      //         schema: selectedSchema,
+      //         fileMatch: ['*'],
+      //       },
+      //     ],
+      //   });
+      // };
       // TODO: get default from schema
       const defaultValue = selectedSchema.type === 'object' ? {} : [];
 
       return (
         <JsonEditor
           key={selectedSchema.type}
+          id={props.id}
           onChange={props.onChange}
           value={value || defaultValue}
-          onInit={onInit}
           height={100}
+          schema={selectedSchema}
         />
       );
     }

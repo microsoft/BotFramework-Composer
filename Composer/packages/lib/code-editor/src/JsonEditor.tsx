@@ -9,10 +9,20 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   onChange: (jsonData: any) => void;
   value?: object;
   obfuscate?: boolean;
+  schema?: any;
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
-  const { options: additionalOptions, value: initialValue, onChange, obfuscate, onInit: onInitProp, ...rest } = props;
+  const {
+    options: additionalOptions,
+    value: initialValue,
+    onChange,
+    obfuscate,
+    onInit: onInitProp,
+    schema,
+    id,
+    ...rest
+  } = props;
   const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
   const [parseError, setParseError] = useState<string>('');
 
@@ -24,9 +34,24 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
   };
 
   const onInit: OnInit = monaco => {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+    const diagnosticOptions: any = {
       validate: true,
-    });
+    };
+
+    if (schema) {
+      const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
+      const uri = btoa(JSON.stringify(schema));
+      diagnosticOptions.schemas = [
+        ...otherSchemas.filter(s => s.uri !== uri),
+        {
+          uri,
+          schema,
+          fileMatch: [uri],
+        },
+      ];
+    }
+
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
 
     if (typeof onInitProp === 'function') {
       onInitProp(monaco);
@@ -57,6 +82,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
 
   return (
     <BaseEditor
+      id={id}
       helpURL="https://www.json.org"
       language="json"
       options={options}

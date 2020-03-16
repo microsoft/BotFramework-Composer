@@ -59,6 +59,7 @@ const styles = {
 export type OnInit = (instance: Monaco) => void;
 
 export interface BaseEditorProps extends EditorProps {
+  id?: string;
   errorMessage?: any;
   helpURL?: string;
   hidePlaceholder?: boolean;
