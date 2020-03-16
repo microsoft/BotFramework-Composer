@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
 import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
 
@@ -17,6 +17,19 @@ describe('LU Section CRUD test', () => {
 - show my emails
 `;
 
+  const fileContentError1 = `# Greeting
+> not start with  -
+hi
+- hello
+
+# CheckEmail
+- check my email
+- show my emails
+
+# Foo
+> nothing in body
+`;
+
   it('parse section test', () => {
     const luresource = luParser.parse(fileContent);
     const { Sections, Errors, Content } = luresource;
@@ -30,6 +43,17 @@ describe('LU Section CRUD test', () => {
     expect(luresource.Sections[0].UtteranceAndEntitiesMap.length).toEqual(2);
     expect(luresource.Sections[0].UtteranceAndEntitiesMap[0].utterance).toEqual('hi');
     expect(luresource.Sections[0].UtteranceAndEntitiesMap[1].utterance).toEqual('hello');
+  });
+
+  it('parse section with syntax error test', () => {
+    const luresource = luParser.parse(fileContentError1);
+    const { Sections, Errors, Content } = luresource;
+
+    expect(Content).toEqual(fileContentError1);
+    expect(Errors.length).toEqual(2);
+    expect(Sections.length).toEqual(3);
+    expect(Sections[0].Errors.length).toEqual(1);
+    expect(Sections[2].Errors.length).toEqual(1);
   });
 
   it('add simpleIntentSection test', () => {
@@ -79,7 +103,7 @@ describe('LU Section CRUD test', () => {
     expect(luresource.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
   });
 
-  it('update section with invalid lu syntax', () => {
+  it('update section with syntax error: missing -', () => {
     const intentName = 'CheckEmail';
 
     const validFileContent = `#CheckEmail
@@ -94,9 +118,33 @@ describe('LU Section CRUD test', () => {
     };
 
     const invalidFileContent = `#CheckEmail
-- check my email
+check my email
 - show my emails
-@`;
+`;
+
+    const invalidIntent = {
+      Name: 'CheckEmail',
+      Body: `check my email
+- show my emails
+`,
+    };
+
+    // when intent invalid, after update can still be parsed
+    const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
+    const updatedContent2Parsed = luParser.parse(updatedContent2);
+    expect(updatedContent2).toEqual(invalidFileContent);
+    expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
+    // when file invalid, update with valid intent should fix error.
+    const updatedContent3 = updateIntent(updatedContent2, intentName, validIntent);
+    expect(updatedContent3).toEqual(validFileContent);
+  });
+
+  it('update section with syntax error: end with empty entity @', () => {
+    const intentName = 'CheckEmail';
+
+    const validFileContent = `#CheckEmail
+- check my email
+- show my emails`;
 
     const invalidIntent = {
       Name: 'CheckEmail',
@@ -105,7 +153,23 @@ describe('LU Section CRUD test', () => {
 @`,
     };
 
-    const invalidIntent4 = {
+    // when intent invalid, after update can still be parsed
+    const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
+    const updatedContent2Parsed = luParser.parse(updatedContent2);
+    expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
+    // TODO: update back should fix error.
+    // const updatedContent3 = updateIntent(updatedContent2, intentName, validIntent);
+    // expect(updatedContent3).toEqual(validFileContent);
+  });
+
+  it('update section with syntax error: include # IntentName in body', () => {
+    const intentName = 'CheckEmail';
+
+    const validFileContent = `#CheckEmail
+- check my email
+- show my emails`;
+
+    const invalidIntent = {
       Name: 'CheckEmail',
       Body: `- check my email
 - show my emails
@@ -114,14 +178,9 @@ describe('LU Section CRUD test', () => {
 - unexpected intent body
 `,
     };
-    // intent invalid
+    // should not do update
     const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
     expect(updatedContent2).toEqual(validFileContent);
-    const updatedContent4 = updateIntent(validFileContent, intentName, invalidIntent4);
-    expect(updatedContent4).toEqual(validFileContent);
-    // file invalid
-    const updatedContent3 = updateIntent(invalidFileContent, intentName, validIntent);
-    expect(updatedContent3).toEqual(invalidFileContent);
   });
 
   it('delete section test', () => {

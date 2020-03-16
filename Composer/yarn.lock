@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@azure/cognitiveservices-luis-authoring@3.0.1":
-  version "3.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/cognitiveservices-luis-authoring/-/@azure/cognitiveservices-luis-authoring-3.0.1.tgz#9b89c480e7c19f112121b52c9b5f73542d3fc1ee"
-  integrity sha1-m4nEgOfBnxEhIbUsm19zVC0/we4=
+"@azure/cognitiveservices-luis-authoring@4.0.0-preview.1":
+  version "4.0.0-preview.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/cognitiveservices-luis-authoring/-/@azure/cognitiveservices-luis-authoring-4.0.0-preview.1.tgz#79de764893dc997d95713bb6a0487d887dc78f40"
+  integrity sha1-ed52SJPcmX2VcTu2oEh9iH3Hj0A=
   dependencies:
     "@azure/ms-rest-js" "^2.0.3"
     tslib "^1.10.0"
@@ -2714,13 +2714,14 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-lu@4.8.0-preview.111952":
-  version "4.8.0-preview.111952"
-  uid d1707a5f150ab204e67122f8b1d5796ad7f656c9
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.8.0-preview.111952.tgz#d1707a5f150ab204e67122f8b1d5796ad7f656c9"
+"@microsoft/bf-lu@^4.9.0-preview.113431":
+  version "4.9.0-preview.113431"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.113431.tgz#1ff1382c0ec1029263362099410cda2cc991ca45"
+  integrity sha1-H/E4LA7BApJjNiCZQQzaLMmRykU=
   dependencies:
-    "@azure/cognitiveservices-luis-authoring" "3.0.1"
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
+    "@types/node-fetch" "~2.5.5"
     antlr4 "^4.7.2"
     chalk "2.4.1"
     console-stream "^0.1.1"
@@ -2731,7 +2732,7 @@
     globby "^10.0.1"
     intercept-stdout "^0.1.2"
     lodash "^4.17.15"
-    node-fetch "^2.1.2"
+    node-fetch "~2.6.0"
     semver "^5.5.1"
     tslib "^1.10.0"
 
@@ -3310,6 +3311,14 @@
   integrity sha1-UkW22IQfw6Ygi4IpERm8EcTgzkQ=
   dependencies:
     "@types/node" "*"
+
+"@types/node-fetch@~2.5.5":
+  version "2.5.5"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@types/node-fetch/-/@types/node-fetch-2.5.5.tgz#cd264e20a81f4600a6c52864d38e7fef72485e92"
+  integrity sha1-zSZOIKgfRgCmxShk045/73JIXpI=
+  dependencies:
+    "@types/node" "*"
+    form-data "^3.0.0"
 
 "@types/node@*", "@types/node@^11.9.6":
   version "11.11.4"
@@ -5815,6 +5824,13 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.7.tgz#2d1d24317afb8abe95d6d2c0b07b57813539d828"
   integrity sha512-brWl9y6vOB1xYPZcpZde3N9zDByXTosAeMDo4p1wzo6UMOX4vumB+TP1RZ76sfE6Md68Q0NJSrE/gbezd4Ul+w==
+  dependencies:
+    delayed-stream "~1.0.0"
+
+combined-stream@^1.0.8:
+  version "1.0.8"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
+  integrity sha1-w9RaizT9cwYxoRCoolIGgrMdWn8=
   dependencies:
     delayed-stream "~1.0.0"
 
@@ -8703,6 +8719,15 @@ form-data@^2.5.0:
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
+    mime-types "^2.1.12"
+
+form-data@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/form-data/-/form-data-3.0.0.tgz#31b7e39c85f1355b7139ee0c647cf0de7f83c682"
+  integrity sha1-MbfjnIXxNVtxOe4MZHzw3n+DxoI=
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
 format-message-estree-util@^6.1.0:
@@ -12330,7 +12355,7 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-fetch@^2.1.2, node-fetch@^2.6.0:
+node-fetch@^2.1.2, node-fetch@^2.6.0, node-fetch@~2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==

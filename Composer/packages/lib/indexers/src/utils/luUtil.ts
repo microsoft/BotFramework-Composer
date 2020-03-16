@@ -60,12 +60,10 @@ export function checkSection(intent: LuIntentSection, enableSections = true): Di
   return parse(text).diagnostics;
 }
 
-export function checkSingleSectionValid(intent: LuIntentSection, enableSections = true): boolean {
+export function checkIsSingleSection(intent: LuIntentSection, enableSections = true): boolean {
   const text = textFromIntent(intent, false, enableSections);
-  const { Sections, Errors } = luParser.parse(text);
-  return (
-    isValid(Errors) && Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1
-  );
+  const { Sections } = luParser.parse(text);
+  return Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1;
 }
 
 function updateInSections(
@@ -102,12 +100,11 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
   let targetSectionContent;
   const updatedSectionContent = textFromIntent(intent);
   const resource = luParser.parse(content);
-  const { Sections, Errors } = resource;
-  // if has error, do nothing.
-  if (intent && checkSingleSectionValid(intent) === false) return content;
-  if (isValid(Errors) === false) return content;
+  const { Sections } = resource;
+  // // if not a single section, do nothing.
+  if (intent && checkIsSingleSection(intent) === false) return content;
   // if intent is null, do remove
-  // if remove target not exist return origin content;
+  // and if remove target not exist return origin content;
   if (!intent || isEmpty(intent)) {
     if (intentName.includes('/')) {
       const [parrentName, childName] = intentName.split('/');
