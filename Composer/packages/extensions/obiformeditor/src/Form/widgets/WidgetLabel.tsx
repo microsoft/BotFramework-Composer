@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
@@ -49,17 +49,25 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
       styles={{ root: { display: 'flex', alignItems: 'center' } }}
       id={`${id}-description`}
     >
-      <IconButton
-        iconProps={{
-          iconName: 'Unknown',
-        }}
+      <Icon
+        iconName="Unknown"
         styles={{
-          root: { width: '20px', minWidth: '20px', height: '20px' },
-          rootHovered: { backgroundColor: 'transparent' },
-          rootChecked: { backgroundColor: 'transparent' },
-          icon: { color: NeutralColors.gray160, fontSize: '12px', marginBottom: '-2px' },
+          root: {
+            width: '20px',
+            minWidth: '20px',
+            height: '20px',
+
+            color: NeutralColors.gray160,
+            fontSize: '12px',
+
+            marginBottom: '-10px',
+            marginLeft: '4px',
+          },
         }}
-        aria-labelledby={`${id}-description`}
+        aria-label={
+          // append a semicolon so the screen-reader pauses instead of making a confusing run-on
+          `;${description}`
+        }
       />
     </TooltipHost>
   );
