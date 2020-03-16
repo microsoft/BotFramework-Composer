@@ -1,0 +1,13 @@
+[import](common.lg)
+
+# bfdprompt-282825()
+- What would you like to add?
+
+# bfdprompt-878594()
+- Pick a list to add the item to..
+
+# bfdactivity-139532()
+- Sure. I've added **${dialog.itemTitle}** to **${dialog.listType}** list. You have ${count(user.lists[dialog.listType])} items in your list.
+
+
+
