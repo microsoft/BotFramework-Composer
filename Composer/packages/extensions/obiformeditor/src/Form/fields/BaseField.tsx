@@ -38,6 +38,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
   let descriptionOverride;
   let helpLink;
   let helpLinkText;
+  let helpLinkLabel;
   let key = idSchema.__id;
 
   if (schema.title) {
@@ -46,6 +47,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
     descriptionOverride = get(SDKOverrides, 'description');
     helpLink = get(SDKOverrides, 'helpLink');
     helpLinkText = get(SDKOverrides, 'helpLinkText');
+    helpLinkLabel = get(SDKOverrides, 'helpLinkLabel');
   }
 
   // use dialogId as the key because the focusPath may not be enough
@@ -81,6 +83,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
           description={getDescription()}
           helpLink={helpLink}
           helpLinkText={helpLinkText}
+          helpLinkLabel={helpLinkLabel}
           id={key}
         />
       )}
