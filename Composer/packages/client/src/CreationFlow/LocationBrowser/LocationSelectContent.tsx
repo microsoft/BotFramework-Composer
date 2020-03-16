@@ -24,7 +24,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
 
   const currentStorageIndex = useRef(0);
-
+  const validDiskNames = storages[currentStorageIndex.current].validDiskNames;
   const onSelectionChanged = item => {
     if (item) {
       const type = item.fileType;
@@ -54,6 +54,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
         focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onSelectionChanged={onSelectionChanged}
+        validDiskNames={validDiskNames}
       />
     </Fragment>
   );
