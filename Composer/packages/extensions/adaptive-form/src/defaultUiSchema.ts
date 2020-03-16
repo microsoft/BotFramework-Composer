@@ -90,11 +90,6 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.SetProperties]: {
     label: () => formatMessage('Set Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
-    properties: {
-      assignments: {
-        stackArrayItems: true,
-      },
-    },
   },
   [SDKTypes.SetProperty]: { label: () => formatMessage('Set a Property'), helpLink: 'https://aka.ms/bfc-using-memory' },
   [SDKTypes.SwitchCondition]: {
