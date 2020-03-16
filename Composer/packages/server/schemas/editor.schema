@@ -271,8 +271,9 @@
       "helpLinkText": "Learn more"
     },
     "Microsoft.SkillDialog": {
-      "description": "Call a remote Bot Framework Skill",
-      "title": "Call a remote Skill"
+      "title": "Call a remote skill",
+      "helpLink": "https://aka.ms/bfc-call-skill",
+      "helpLinkText": "Learn more"
     },
     "Microsoft.SwitchCondition": {
       "title": "Branch: Switch",
