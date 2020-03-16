@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce';
 
 import { ActionCreator, State } from '../types';
 import { undoable, Pick } from '../middlewares/undo';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
 
 import { ActionTypes } from './../../constants/index';
 import { navTo } from './navigation';
@@ -41,6 +42,7 @@ const getDiff = (dialogs1: DialogInfo[], dialogs2: DialogInfo[]) => {
 export const removeDialogBase: ActionCreator = async (store, id) => {
   try {
     const response = await httpClient.delete(`/projects/opened/dialogs/${id}`);
+    luFileStatusStorage.removeFile(store.getState().botName, id);
     store.dispatch({
       type: ActionTypes.REMOVE_DIALOG,
       payload: { response },

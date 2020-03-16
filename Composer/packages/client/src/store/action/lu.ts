@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State } from '../types';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
@@ -26,6 +27,7 @@ export const debouncedUpdateLu = debounce(async (store, id, content) => {
 }, 500);
 
 export const updateLuFile: ActionCreator = async (store, { id, content }) => {
+  luFileStatusStorage.updateFile(store.getState().botName, id);
   store.dispatch({ type: ActionTypes.UPDATE_LU_SUCCESS, payload: { id, content } });
   debouncedUpdateLu(store, id, content);
 };
@@ -45,9 +47,10 @@ export const undoableUpdateLuFile = undoable(
   updateLuFile
 );
 
-export const createLuFile: ActionCreator = async ({ dispatch }, { id, content }) => {
+export const createLuFile: ActionCreator = async ({ dispatch, getState }, { id, content }) => {
   try {
     const response = await httpClient.post(`/projects/opened/luFiles`, { id, content });
+    luFileStatusStorage.createFile(getState().botName, id);
     dispatch({
       type: ActionTypes.CREATE_LU_SUCCCESS,
       payload: { response },
@@ -63,9 +66,10 @@ export const createLuFile: ActionCreator = async ({ dispatch }, { id, content })
   }
 };
 
-export const removeLuFile: ActionCreator = async ({ dispatch }, { id }) => {
+export const removeLuFile: ActionCreator = async ({ dispatch, getState }, { id }) => {
   try {
     const response = await httpClient.delete(`/projects/opened/luFiles/${id}`);
+    luFileStatusStorage.removeFile(getState().botName, id);
     dispatch({
       type: ActionTypes.REMOVE_LU_SUCCCESS,
       payload: { response },
@@ -94,9 +98,10 @@ export const removeLuIntent: ActionCreator = async (store, { file, intentName })
   return await undoableUpdateLuFile(store, { id: file.id, content: newContent });
 };
 
-export const publishLuis: ActionCreator = async ({ dispatch }, authoringKey) => {
+export const publishLuis: ActionCreator = async ({ dispatch, getState }, authoringKey) => {
   try {
     const response = await httpClient.post(`/projects/opened/luFiles/publish`, { authoringKey });
+    luFileStatusStorage.publishAll(getState().botName);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },
