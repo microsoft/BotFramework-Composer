@@ -8,6 +8,7 @@ const mockResponse = {
   data: {
     dialogs: ['test dialogs'],
     lgFiles: ['test lgFiles'],
+    luFiles: ['test luFiles'],
     schemas: 'test schemas',
   },
 };
