@@ -10,10 +10,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
-    "prep:dist:electron": "yarn build && node scripts/prepDistElectron.js",
     "typecheck": "tsc --noEmit"
   },
   "proxy": "http://localhost:5000",
@@ -95,6 +95,7 @@
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
     "react-testing-library": "^6.0.1",
+    "rimraf": "2.6.3",
     "style-loader": "1.0.0",
     "terser-webpack-plugin": "2.2.1",
     "url-loader": "2.2.0",
