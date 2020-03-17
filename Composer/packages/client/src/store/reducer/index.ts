@@ -358,10 +358,8 @@ const publishFailure: ReducerFunc = (state, payload) => {
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
-    console.log('set connect');
     state.botStatus = BotStatus.connected;
   } else {
-    console.log('set un connect');
     state.botStatus = BotStatus.unConnected;
   }
   return state;
