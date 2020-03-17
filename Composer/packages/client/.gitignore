@@ -1,7 +1,1 @@
 build/
-dist/
-public/static
-public/*.ejs
-public/*.js
-public/*.map
-public/asset-manifest.json

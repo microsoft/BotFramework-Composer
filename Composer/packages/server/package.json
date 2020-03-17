@@ -10,6 +10,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
+    "prep:dist:electron": "yarn build --outDir ../electron-server/dist && node scripts/copyAssets.js",
     "start": "node build/init.js",
     "start:dev": "nodemon",
     "test": "jest",
@@ -45,6 +46,7 @@
     "@types/morgan": "^1.7.35",
     "@types/node": "^11.9.6",
     "@types/rimraf": "^2.0.2",
+    "fs-extra": "7.0.1",
     "mock-fs": "^4.10.1",
     "nodemon": "^1.18.11",
     "rimraf": "^2.6.3",
