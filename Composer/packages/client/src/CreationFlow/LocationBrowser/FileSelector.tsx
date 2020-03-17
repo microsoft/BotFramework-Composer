@@ -199,7 +199,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       };
     })
     .reverse();
-  console.log(breadcrumbItems, currentPath);
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };
