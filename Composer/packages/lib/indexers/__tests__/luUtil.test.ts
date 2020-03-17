@@ -357,14 +357,14 @@ describe('LU Nested Section CRUD test', () => {
     );
   });
 
-  it('update nestedIntentSection with unexpected # include', () => {
+  it('update nestedIntentSection and escape # in body', () => {
     const intentName = 'CheckTodo/CheckUnreadTodo';
     const intent = {
       Name: 'CheckMyUnreadTodo',
       Body: `- please check my unread todo
 - please show my unread todos
-# Oops!
-## Oops!
+# Oops
+## Oops
 @ simple todoTitle
 @ simple todoContent
 `,
@@ -389,8 +389,46 @@ describe('LU Nested Section CRUD test', () => {
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[0].utterance).toEqual(
       'please check my unread todo'
     );
-    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# Oops!');
-    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[3].utterance).toEqual('\\## Oops!');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# Oops');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[3].utterance).toEqual('\\## Oops');
+  });
+
+  it('update nestedIntentSection with # ## ### in body', () => {
+    const intentName = 'CheckTodo';
+    const intentBody1 = `# Oops
+## Oops
+### Oops
+`;
+
+    const fileContentUpdated1 = updateIntent(fileContent, intentName, { Name: intentName, Body: intentBody1 });
+    const luresource1 = luParser.parse(fileContentUpdated1);
+    expect(luresource1.Sections.length).toBeGreaterThan(0);
+    expect(luresource1.Errors.length).toBeGreaterThan(0);
+
+    const intentBody2 = `## Oops
+    ### Oops
+    `;
+    const fileContentUpdated2 = updateIntent(fileContent, intentName, { Name: intentName, Body: intentBody2 });
+    const luresource2 = luParser.parse(fileContentUpdated2);
+    expect(luresource2.Sections.length).toEqual(2);
+    expect(luresource2.Errors.length).toBeGreaterThan(0);
+    expect(luresource2.Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(luresource2.Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+
+    // if nestedSection not enable
+    const fileContent3 = `# Greeting
+- hi
+
+# CheckTodo
+- please check my todo
+`;
+    const intentBody3 = `## Oops
+### Oops
+`;
+    const fileContentUpdated3 = updateIntent(fileContent3, intentName, { Name: intentName, Body: intentBody3 });
+    const luresource3 = luParser.parse(fileContentUpdated3);
+    expect(luresource3.Sections.length).toBeGreaterThan(0);
+    expect(luresource3.Errors.length).toBeGreaterThan(0);
   });
 
   /**
