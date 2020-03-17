@@ -38,8 +38,9 @@ const getDiff = (dialogs1: DialogInfo[], dialogs2: DialogInfo[]) => {
   }
 };
 
-export const removeDialogBase: ActionCreator = async (store, id, projectId) => {
+export const removeDialogBase: ActionCreator = async (store, id) => {
   try {
+    const projectId = store.getState().projectId;
     const response = await httpClient.delete(`/projects/${projectId}/dialogs/${id}`);
     luFileStatusStorage.removeFile(store.getState().botName, id);
     store.dispatch({
@@ -55,8 +56,9 @@ export const removeDialogBase: ActionCreator = async (store, id, projectId) => {
   }
 };
 
-export const createDialogBase: ActionCreator = async (store, { id, content, projectId }) => {
+export const createDialogBase: ActionCreator = async (store, { id, content }) => {
   try {
+    const projectId = store.getState().projectId;
     const response = await httpClient.post(`/projects/${projectId}/dialogs`, { id, content, projectId });
     const onCreateDialogComplete = store.getState().onCreateDialogComplete;
     if (typeof onCreateDialogComplete === 'function') {
@@ -81,12 +83,11 @@ export const removeDialog = undoable(
   pickDialog,
   async (store: Store, { dialogs }) => {
     const target = getDiff(store.getState().dialogs, dialogs);
-    const projectId = store.getState().projectId;
     if (target) {
-      await createDialogBase(store, { projectId, ...target });
+      await createDialogBase(store, { ...target });
     }
   },
-  (store, { id, projectId }) => removeDialogBase(store, id, projectId)
+  (store, { id }) => removeDialogBase(store, id)
 );
 
 export const createDialog = undoable(
@@ -94,9 +95,8 @@ export const createDialog = undoable(
   pickDialog,
   async (store: Store, { dialogs }) => {
     const target = getDiff(dialogs, store.getState().dialogs);
-    const projectId = store.getState().projectId;
     if (target) {
-      await removeDialogBase(store, target.id, projectId);
+      await removeDialogBase(store, target.id);
     }
   },
   (store, { id, content }) => createDialogBase(store, { id, content })
@@ -127,8 +127,9 @@ export const debouncedUpdateDialog = debounce(async (store, id, projectId, conte
   }
 }, 500);
 
-export const updateDialogBase: ActionCreator = (store, { id, projectId, content }) => {
+export const updateDialogBase: ActionCreator = (store, { id, content }) => {
   const state = store.getState();
+  const projectId = state.projectId;
   const dialog = state.dialogs.find(dialog => dialog.id === id);
   if (dialog) {
     store.dispatch({
