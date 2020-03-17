@@ -73,6 +73,10 @@ export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
   return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
 }
 
+export function findWarnings(diagnostics: Diagnostic[]): Diagnostic[] {
+  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Warning);
+}
+
 export function isValid(diagnostics: Diagnostic[]): boolean {
   return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
 }

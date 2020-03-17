@@ -4,7 +4,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { LgMetaData, LgTemplateRef } from '@bfc/shared';
-import { filterTemplateDiagnostics } from '@bfc/indexers';
+import { filterTemplateDiagnostics, findErrors, findWarnings, Diagnostic } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 
@@ -74,11 +74,20 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
+  const combineMessage = (diagnostics: Diagnostic[]): string => {
+    const diagnostic = diagnostics[0];
+    return diagnostic
+      ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+      : '';
+  };
 
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
+  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
+
+  const errors = findErrors(diagnostics);
+  const warnings = findWarnings(diagnostics);
+  const errorMsg = combineMessage(errors);
+  const warningMsg = combineMessage(warnings);
+
   const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
     debounce((shellData: any, localData: any) => {
@@ -120,6 +129,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       value={localValue}
       lgOption={lgOption}
       errorMsg={errorMsg}
+      warningMsg={warningMsg}
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{

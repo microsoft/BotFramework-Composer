@@ -15,13 +15,24 @@ export interface RichEditorProps extends BaseEditorProps {
   hidePlaceholder?: boolean; // default false
   placeholder?: string; // empty placeholder
   errorMsg?: string; // error text show below editor
+  warningMsg?: string; // warning text show below editor
   helpURL?: string; //  help link show below editor
   height?: number | string;
 }
 
 export function RichEditor(props: RichEditorProps) {
-  const { errorMsg, helpURL, placeholder, hidePlaceholder = false, height, editorDidMount, ...rest } = props;
-  const isInvalid = !!errorMsg;
+  const {
+    errorMsg,
+    warningMsg,
+    helpURL,
+    placeholder,
+    hidePlaceholder = false,
+    height,
+    editorDidMount,
+    ...rest
+  } = props;
+  const hasError = !!errorMsg;
+  const hasWarning = !!warningMsg;
   const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -51,8 +62,8 @@ export function RichEditor(props: RichEditorProps) {
     }
   }, [editor]);
 
-  const errorHelp = formatMessage.rich('{errorMsg}. Refer to the syntax documentation<a>here</a>.', {
-    errorMsg,
+  const messageHelp = formatMessage.rich('{msg}. Refer to the syntax documentation<a>here</a>.', {
+    msg: errorMsg || warningMsg,
     a: ({ children }) => (
       <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
         {children}
@@ -78,7 +89,11 @@ export function RichEditor(props: RichEditorProps) {
     borderColor = SharedColors.cyanBlue10;
   }
 
-  if (isInvalid) {
+  if (hasWarning) {
+    borderColor = SharedColors.yellow10;
+  }
+
+  if (hasError) {
     borderColor = SharedColors.red20;
   }
 
@@ -99,15 +114,15 @@ export function RichEditor(props: RichEditorProps) {
       >
         <BaseEditor {...rest} editorDidMount={onEditorMount} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
-      {isInvalid && (
+      {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={MessageBarType.error}
+          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
           isMultiline={false}
           dismissButtonAriaLabel={formatMessage('Close')}
           truncated
           overflowButtonAriaLabel={formatMessage('See more')}
         >
-          {errorHelp}
+          {messageHelp}
         </MessageBar>
       )}
     </Fragment>

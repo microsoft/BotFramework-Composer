@@ -5,7 +5,7 @@ import React from 'react';
 import debounce from 'lodash/debounce';
 import formatMessage from 'format-message';
 import { LuEditor } from '@bfc/code-editor';
-import { LuFile, filterSectionDiagnostics } from '@bfc/indexers';
+import { LuFile, filterSectionDiagnostics, findErrors, findWarnings, Diagnostic } from '@bfc/indexers';
 import { LuIntentSection } from '@bfc/shared';
 
 import { FormContext } from '../types';
@@ -78,11 +78,19 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
   render() {
     const { height = 250 } = this.props;
     const { luFile, luFileId, luIntent, name } = this;
-    const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
 
-    const errorMsg = diagnostic
-      ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-      : '';
+    const combineMessage = (diagnostics: Diagnostic[]): string => {
+      const diagnostic = diagnostics[0];
+      return diagnostic
+        ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
+        : '';
+    };
+
+    const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
+    const errors = findErrors(diagnostics);
+    const warnings = findWarnings(diagnostics);
+    const errorMsg = combineMessage(errors);
+    const warningMsg = combineMessage(warnings);
 
     const label = prompt
       ? formatMessage('Expected responses (intent: {name})', { name })
@@ -95,6 +103,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
           onChange={this.onChange}
           value={this.state.localValue}
           errorMsg={errorMsg}
+          warningMsg={warningMsg}
           hidePlaceholder={true}
           luOption={{
             fileId: luFileId,
