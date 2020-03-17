@@ -34,24 +34,39 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
   };
 
   const onInit: OnInit = monaco => {
-    const diagnosticOptions: any = {
-      validate: true,
-    };
+    const disposable = monaco.editor.onDidCreateModel(model => {
+      const diagnosticOptions: any = {
+        validate: true,
+      };
 
-    if (schema) {
-      const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
-      const uri = btoa(JSON.stringify(schema));
-      diagnosticOptions.schemas = [
-        ...otherSchemas.filter(s => s.uri !== uri),
-        {
-          uri,
-          schema,
-          fileMatch: [uri],
-        },
-      ];
-    }
+      if (schema) {
+        const uri = btoa(JSON.stringify(schema));
+        const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
+        const currentSchema = otherSchemas.find(s => s.uri === uri);
 
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
+        /**
+         * Because we mutate the global language settings, we need to
+         * add new schemas / new models to existing schemas.
+         * This lets us have multiple editors active using different schemas
+         * by taking advantage of the `fileMatch` property + the model's uri.
+         */
+        diagnosticOptions.schemas = [
+          ...otherSchemas.filter(s => s.uri !== uri),
+          {
+            uri,
+            schema,
+            fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
+          },
+        ];
+      }
+
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
+
+      if (disposable) {
+        // only do this once per model being created
+        disposable.dispose();
+      }
+    });
 
     if (typeof onInitProp === 'function') {
       onInitProp(monaco);
