@@ -3,16 +3,26 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { dialogIndexer } from '@bfc/indexers';
 import { SensitiveProperties } from '@bfc/shared';
-import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
+import {
+  Diagnostic,
+  DiagnosticSeverity,
+  LgTemplate,
+  lgIndexer,
+  luIndexer,
+  LuFile,
+  DialogInfo,
+  dialogIndexer,
+} from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { getReferredFiles } from '../../utils/luUtil';
 
 import createReducer from './createReducer';
 
@@ -43,17 +53,37 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
+const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
+  const status = luFileStatusStorage.get(botName);
+  return luFiles.map(luFile => {
+    if (typeof status[luFile.id] === 'boolean') {
+      return { ...luFile, published: status[luFile.id] };
+    } else {
+      return { ...luFile, published: false };
+    }
+  });
+};
+
+const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
+  getReferredFiles(luFiles, dialogs).forEach(luFile => {
+    luFileStatusStorage.checkFileStatus(botName, luFile.id);
+  });
+  return updateLuFilesStatus(botName, luFiles);
+};
+
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+  const { dialogs, botName, luFiles } = response.data;
+  state.dialogs = dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
-  state.botName = response.data.botName;
+  state.botName = botName;
+  state.botStatus = response.data.location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = response.data.settings;
-  refreshLocalStorage(response.data.botName, state.settings);
-  mergeLocalStorage(response.data.botName, state.settings);
+  refreshLocalStorage(botName, state.settings);
+  mergeLocalStorage(botName, state.settings);
   return state;
 };
 
@@ -83,13 +113,14 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 
 const removeDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
   state.lgFiles = response.data.lgFiles;
   return state;
 };
 
-const createDialogBegin: ReducerFunc = (state, { onComplete }) => {
+const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
   state.showCreateDialogModal = true;
+  state.actionsSeed = actionsSeed;
   state.onCreateDialogComplete = onComplete;
   return state;
 };
@@ -102,9 +133,10 @@ const createDialogCancel: ReducerFunc = state => {
 
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
   state.lgFiles = response.data.lgFiles;
   state.showCreateDialogModal = false;
+  state.actionsSeed = [];
   delete state.onCreateDialogComplete;
   return state;
 };
@@ -149,13 +181,15 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
     return luFile;
   });
 
-  state.luFiles = luFiles.map(luFile => {
-    const { parse } = luIndexer;
-    const { id, content } = luFile;
-    const { intents, diagnostics } = parse(content, id);
-    return { ...luFile, intents, diagnostics, content };
-  });
-
+  state.luFiles = updateLuFilesStatus(
+    state.botName,
+    luFiles.map(luFile => {
+      const { parse } = luIndexer;
+      const { id, content } = luFile;
+      const { intents, diagnostics } = parse(content, id);
+      return { ...luFile, intents, diagnostics, content };
+    })
+  );
   return state;
 };
 

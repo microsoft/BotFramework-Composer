@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 describe('shallowCopyAdaptiveAction', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    copyLgTemplate: (id, data, field, value) => Promise.resolve(value + '(copy)'),
+    transformLgField: (id, data, field, value) => Promise.resolve(value + '(copy)'),
   };
 
   it('can copy TextInput', async () => {
