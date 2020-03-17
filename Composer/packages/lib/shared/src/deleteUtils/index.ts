@@ -13,6 +13,7 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 
   switch (action.$type) {
     case SDKTypes.SendActivity:
+    case SDKTypes.SkillDialog:
       outputTemplates.push(action.activity);
       break;
     case SDKTypes.AttachmentInput:

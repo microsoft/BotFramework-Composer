@@ -19,6 +19,7 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
 
   switch (action.$type) {
     case SDKTypes.SendActivity:
+    case SDKTypes.SkillDialog:
       onFound('activity');
       break;
     case SDKTypes.AttachmentInput:
