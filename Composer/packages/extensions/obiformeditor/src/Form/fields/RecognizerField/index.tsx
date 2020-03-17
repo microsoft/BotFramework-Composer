@@ -64,6 +64,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           return;
         }
         default:
+          onChange({ $type: option.key });
           return;
       }
     }

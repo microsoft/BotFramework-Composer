@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import get from 'lodash/get';
+
 import { SDKTypes, OBISchema } from './types';
 
 export const FIELDS_TO_HIDE = ['$id', '$type', '$copy', '$designer', 'selector', 'id', 'tags'];
@@ -3050,4 +3052,34 @@ export const appschema: OBISchema = {
       },
     },
   },
+};
+
+export const mergeDefinitions = (baseDefinition, extraDefinitions) => {
+  const extraTypes = Object.keys(extraDefinitions).filter(x => !baseDefinition[x]);
+  const diff = extraTypes.reduce((result, $type) => {
+    result[$type] = JSON.parse(JSON.stringify(extraDefinitions[$type]).replace('$kind', '$type'));
+    return result;
+  }, {});
+
+  return {
+    extraTypes,
+    mergedDefinitions: {
+      ...baseDefinition,
+      ...diff,
+    },
+  };
+};
+
+export const mergeSchemas = (baseSchema, extraSchema) => {
+  const baseDefs = get(baseSchema, 'definitions', {});
+  const extraDefs = get(extraSchema, 'definitions', {});
+  const { extraTypes, mergedDefinitions } = mergeDefinitions(baseDefs, extraDefs);
+
+  return {
+    extraTypes,
+    mergedSchema: {
+      ...baseSchema,
+      definitions: mergedDefinitions,
+    },
+  };
 };

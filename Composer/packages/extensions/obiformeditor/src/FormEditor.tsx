@@ -10,7 +10,7 @@ import merge from 'lodash/merge';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import { appschema, ShellData, ShellApi } from '@bfc/shared';
+import { appschema, ShellData, ShellApi, mergeSchemas } from '@bfc/shared';
 import { Diagnostic } from '@bfc/indexers';
 
 import Form from './Form';
@@ -82,15 +82,9 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
       </div>
     );
   }
-  const appschemaDefinitions = get(appschema, 'definitions', {});
-  const botprojectDefinitions = get(schemas, 'sdk.content.definitions', {});
-  const extraTypes = Object.keys(botprojectDefinitions).filter(x => !appschemaDefinitions[x]);
-  const extraDefinitions = extraTypes.reduce((result, $type) => {
-    result[$type] = botprojectDefinitions[$type];
-    return result;
-  }, {});
-  console.log('picked', extraTypes, extraDefinitions);
-  const definitions = Object.assign({}, appschemaDefinitions, extraDefinitions);
+
+  const { mergedSchema } = mergeSchemas(appschema, get(schemas, 'sdk.content', {}));
+  const definitions = get(mergedSchema, 'definitions', {});
 
   const typeDef: JSONSchema6Definition = definitions[type];
 
