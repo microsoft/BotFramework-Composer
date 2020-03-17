@@ -22,7 +22,7 @@ const initialState: State = {
   botName: '',
   location: '', // the path to the bot project
   botEnvironment: 'production',
-  botEndpoint: '',
+  botEndpoints: {},
   remoteEndpoints: {},
   focusPath: '', // the data path for FormEditor
   recentProjects: [],

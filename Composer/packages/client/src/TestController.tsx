@@ -51,8 +51,8 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
+  const { botEndpoints, botName, botStatus, dialogs, toStartBot, luFiles, settings, projectId } = state;
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus } = actions;
   const connected = botStatus === BotStatus.connected;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter(n => n.severity === 'Error').length;
@@ -62,6 +62,12 @@ export const TestController: React.FC = () => {
     toStartBot && handleClick();
     startBot(false);
   }, [toStartBot]);
+
+  useEffect(() => {
+    if (projectId) {
+      getPublishStatus(projectId, defaultPublishConfig);
+    }
+  }, [projectId]);
 
   function isLuisConfigComplete(config) {
     let complete = true;
@@ -163,7 +169,7 @@ export const TestController: React.FC = () => {
             onClick={async () => {
               return Promise.resolve(
                 openInEmulator(
-                  botEndpoint || 'http://localhost:3979/api/messages',
+                  botEndpoints[projectId] || 'http://localhost:3979/api/messages',
                   settings.MicrosoftAppId && settings.MicrosoftAppPassword
                     ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                     : { MicrosoftAppPassword: '', MicrosoftAppId: '' }

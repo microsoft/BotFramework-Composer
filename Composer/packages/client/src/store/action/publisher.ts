@@ -30,7 +30,6 @@ export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
 };
 
 export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, target) => {
-  console.log('PUBLISHING TO TARGET!', target);
   try {
     const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, target.sensitiveSettings);
     dispatch({
@@ -48,13 +47,10 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
   }
 };
 
+// get bot status from target publisher
 export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, target) => {
-  console.log('GET TARGET STATUS!', target);
   try {
     const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-    console.log('get status in client');
-    console.log(response);
-
     dispatch({
       type: ActionTypes.GET_PUBLISH_STATUS,
       payload: response.data,

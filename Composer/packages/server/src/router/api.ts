@@ -40,7 +40,7 @@ router.get('/storages/:storageId/blobs', StorageController.getBlob);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);
-router.post('/publish/:projectId/status/:target', PublishController.status);
+router.get('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
 router.post('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
