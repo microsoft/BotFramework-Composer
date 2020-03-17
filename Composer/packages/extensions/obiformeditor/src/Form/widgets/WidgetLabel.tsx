@@ -50,26 +50,27 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
       styles={{ root: { display: 'flex', alignItems: 'center' } }}
       id={`${id}-description`}
     >
-      <Icon
-        iconName="Unknown"
-        styles={{
-          root: {
-            width: '20px',
-            minWidth: '20px',
-            height: '20px',
+      <div tabIndex={0}>
+        <Icon
+          iconName="Unknown"
+          styles={{
+            root: {
+              width: '12px',
+              minWidth: '12px',
+              height: '12px',
 
-            color: NeutralColors.gray160,
-            fontSize: '12px',
+              padding: '0px 3px',
 
-            marginBottom: '-10px',
-            marginLeft: '4px',
-          },
-        }}
-        aria-label={
-          // append a semicolon so the screen-reader pauses instead of making a confusing run-on
-          `;${description}`
-        }
-      />
+              color: NeutralColors.gray160,
+              fontSize: '12px',
+            },
+          }}
+          aria-label={
+            // add a semicolon so the screen-reader pauses instead of making a confusing run-on
+            `;${description}`
+          }
+        />
+      </div>
     </TooltipHost>
   );
 };
