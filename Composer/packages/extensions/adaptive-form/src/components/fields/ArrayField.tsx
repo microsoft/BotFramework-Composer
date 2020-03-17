@@ -4,8 +4,10 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { SharedColors } from '@uifabric/fluent-theme';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { getArrayItemProps } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
@@ -67,6 +69,23 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
             value={newValue}
             onChange={handleNewChange}
             onKeyDown={handleKeyDown}
+            ariaLabel={formatMessage('New value')}
+            styles={{ root: { width: '100%' } }}
+          />
+          <IconButton
+            disabled
+            menuIconProps={{ iconName: 'MoreVertical' }}
+            ariaLabel={formatMessage('Item Actions')}
+            styles={{
+              menuIcon: {
+                backgroundColor: NeutralColors.white,
+                color: NeutralColors.gray130,
+                fontSize: FontSizes.size16,
+              },
+              rootDisabled: {
+                backgroundColor: NeutralColors.white,
+              },
+            }}
           />
         </div>
       </div>

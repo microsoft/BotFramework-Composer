@@ -10,6 +10,7 @@ export const arrayField = {
     flex: 1;
     margin-top: 0;
     margin-bottom: 0;
+    display: flex;
   `,
 
   inputFieldContainer: css`
