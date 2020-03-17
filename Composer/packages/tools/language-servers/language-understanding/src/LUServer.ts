@@ -72,9 +72,7 @@ export class LUServer {
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
     this.connection.onRequest((method, params) => {
-      console.log(method);
       if (method === LABELEXPERIENCEREQUEST) {
-        console.log('inside');
         this.labelingExperienceHandler(params);
       } else if (InitializeDocumentsMethodName === method) {
         const { uri, luOption }: { uri: string; luOption?: LUOption } = params;
