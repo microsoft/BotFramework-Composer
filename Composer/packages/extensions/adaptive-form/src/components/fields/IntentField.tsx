@@ -25,13 +25,13 @@ function recognizerType({ content }: DialogInfo): string | null {
 }
 
 const IntentField: React.FC<FieldProps> = props => {
-  const { id, description, uiOptions, value } = props;
+  const { id, description, uiOptions, value, onChange } = props;
   const { currentDialog } = useShellApi();
   const { recognizers } = usePluginConfig();
   const type = recognizerType(currentDialog);
 
-  const handleChange = (...args) => {
-    console.log('[BFC] intent field change', ...args);
+  const handleChange = () => {
+    onChange(value);
   };
 
   const Editor = recognizers.find(r => r.id === type)?.editor;
