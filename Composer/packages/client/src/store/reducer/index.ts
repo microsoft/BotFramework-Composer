@@ -77,7 +77,6 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
-  state.botStatus = BotStatus.unConnected;
   state.botName = botName;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
