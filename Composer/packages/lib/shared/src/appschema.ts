@@ -2752,6 +2752,67 @@ export const appschema: OBISchema = {
         },
       },
     },
+    'Microsoft.SkillDialog': {
+      $role: 'implements(Microsoft.IDialog)',
+      title: 'Begin a skill dialog',
+      description: 'Begin a remote skill dialog.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.SkillDialog),
+        id: {
+          type: 'string',
+          title: 'Id',
+          description: 'Optional id for the skill dialog',
+        },
+        resultProperty: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Property',
+          description: 'Property to store any value returned by the dialog that is called.',
+          examples: ['dialog.userName'],
+        },
+        botId: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Skill host bot ID',
+          description: 'The Microsoft App ID that will be calling the skill.',
+          default: '=settings.MicrosoftAppId',
+        },
+        skillHostEndpoint: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Skill host',
+          description: 'The callback Url for the skill host.',
+          default: '=settings.skillHostEndpoint',
+          examples: ['https://mybot.contoso.com/api/skills/'],
+        },
+        skillAppId: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Skill App ID',
+          description: 'The Microsoft App ID for the skill.',
+        },
+        skillEndpoint: {
+          $role: 'expression',
+          type: 'string',
+          title: 'Skill endpoint ',
+          description: 'The /api/messages endpoint for the skill.',
+          examples: ['https://myskill.contoso.com/api/messages/'],
+        },
+        activity: {
+          $kind: 'Microsoft.IActivityTemplate',
+          title: 'Activity',
+          description: 'The activity to send to the skill.',
+          $ref: '#/definitions/Microsoft.IActivityTemplate',
+        },
+      },
+      additionalProperties: false,
+      patternProperties: {
+        '^\\$': {
+          type: 'string',
+        },
+      },
+    },
     'Microsoft.SetProperty': {
       $role: 'unionType(Microsoft.IDialog)',
       title: 'Set property',
