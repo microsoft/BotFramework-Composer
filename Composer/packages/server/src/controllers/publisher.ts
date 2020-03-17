@@ -61,17 +61,23 @@ export const PublishController = {
     }
   },
   status: async (req, res) => {
-    const method = req.params.method;
+    const target = req.params.target;
+    const user = await PluginLoader.getUserFromRequest(req);
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    // find publish config by name.
+    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
+    const config = configs.length ? configs[0] : undefined;
+    const method = config ? config.type : undefined;
     if (pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].getStatus) {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].getStatus;
 
-      const target = req.body.target;
-
       // call the method
-      const results = await pluginMethod.call(null, target, {});
+      const results = await pluginMethod.call(null, projectId, {});
       res.json({
-        target: target.name,
+        target: target,
         results: results,
       });
     } else {

@@ -77,8 +77,8 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
+  state.botStatus = BotStatus.unConnected;
   state.botName = botName;
-  state.botStatus = response.data.location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
@@ -346,7 +346,7 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 
 const publishSuccess: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
-  state.botEndpoint = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+  state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
   state.botStatus = BotStatus.connected;
 
   return state;
@@ -359,8 +359,10 @@ const publishFailure: ReducerFunc = (state, payload) => {
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
+    console.log('set connect');
     state.botStatus = BotStatus.connected;
   } else {
+    console.log('set un connect');
     state.botStatus = BotStatus.unConnected;
   }
   return state;
