@@ -52,7 +52,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     schema,
     value,
     error: error || undefined,
-    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : undefined,
+    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
   };
 
   return (
