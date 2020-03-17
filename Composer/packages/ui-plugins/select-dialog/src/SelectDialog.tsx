@@ -54,7 +54,7 @@ export const SelectDialog: React.FC<FieldProps> = ({
     if (option) {
       if (option.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Create a new dialog'));
-        createDialog().then(newDialog => {
+        createDialog([]).then(newDialog => {
           if (newDialog) {
             onChange(newDialog);
             setTimeout(() => navTo(newDialog), 500);
