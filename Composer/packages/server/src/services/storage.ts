@@ -70,6 +70,20 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    if (filePath === 'This PC') {
+      const diskNames = ['C:/', 'D:/', 'E:/', 'F:/', 'G:/', 'H:/', 'I:/', 'J:/', 'K:/'].filter(n => fs.existsSync(n));
+      return {
+        name: '',
+        parent: 'This PC',
+        children: diskNames.map(d => {
+          return {
+            name: d,
+            type: 'folder',
+            path: d,
+          };
+        }),
+      };
+    }
     const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
