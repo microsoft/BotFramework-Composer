@@ -159,7 +159,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
   [SDKTypes.OnInvokeActivity]: {
     ...triggerUiSchema,
   },
-  [SDKTypes.OnMessageReceivedActivity]: {
+  [SDKTypes.OnMessageActivity]: {
     ...triggerUiSchema,
   },
   [SDKTypes.OnMessageDeleteActivity]: {
@@ -197,6 +197,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:widget': 'TextareaWidget',
     },
     'ui:order': ['connectionName', '*'],
+    'ui:hidden': ['alwaysPrompt'],
   },
   [SDKTypes.QnAMakerDialog]: {
     strictFilters: {
@@ -266,6 +267,23 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
       'ui:field': 'LgEditorField',
     },
     'ui:hidden': [...globalHidden],
+  },
+  [SDKTypes.SkillDialog]: {
+    activity: {
+      'ui:field': 'LgEditorField',
+      'ui:title': 'Activity',
+    },
+    'ui:hidden': [...globalHidden],
+    'ui:order': [
+      'botId',
+      'skillEndpoint',
+      'skillHostEndpoint',
+      'skillAppId',
+      'activity',
+      'activityProcessed',
+      'resultProperty',
+      '*',
+    ],
   },
   ...promptFieldsSchemas,
 };

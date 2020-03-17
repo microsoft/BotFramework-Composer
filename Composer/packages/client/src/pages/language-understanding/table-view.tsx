@@ -52,9 +52,9 @@ const TableView: React.FC<TableViewProps> = props => {
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
       return formatMessage('Error');
-    } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
+    } else if (!file.published) {
       return formatMessage('Not yet published');
-    } else if (file.status && file.status.lastPublishTime > file.status.lastUpdateTime) {
+    } else if (file.published) {
       return formatMessage('Published');
     } else {
       return formatMessage('Unknown State'); // It's a bug in most cases.

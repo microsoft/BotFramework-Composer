@@ -42,7 +42,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
-  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : undefined;
+  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
 
   const inlineMode = !!intent;
   const [content, setContent] = useState(intent?.Body || file?.content);
@@ -65,7 +65,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   };
 
   useEffect(() => {
-    if (luEditor && line !== undefined) {
+    if (luEditor) {
       window.requestAnimationFrame(() => {
         luEditor.revealLine(line);
         luEditor.focus();

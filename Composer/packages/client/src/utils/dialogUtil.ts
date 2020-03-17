@@ -42,7 +42,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKTypes.OnDialogEvent;
 export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
-export const messageTypeKey: string = SDKTypes.OnMessageActivity;
+export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 
 export function getFriendlyName(data) {

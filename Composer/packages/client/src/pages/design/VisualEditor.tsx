@@ -78,6 +78,7 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
         hidden={triggerButtonVisible || !selected}
         src={`${rootPath}/extensionContainer.html`}
         ref={addRef}
+        title={formatMessage('visual editor')}
       />
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>

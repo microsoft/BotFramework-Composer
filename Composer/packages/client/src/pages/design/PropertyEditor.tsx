@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import formatMessage from 'format-message';
 
 import { BASEPATH } from '../../constants';
 
@@ -19,6 +20,7 @@ const PropertyEditor: React.FC = () => {
       name="FormEditor"
       css={formEditor}
       src={`${rootPath}/extensionContainer.html`}
+      title={formatMessage('form editor')}
     />
   );
 };
