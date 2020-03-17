@@ -4,17 +4,17 @@
   "author": "Microsoft Corporation",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/main.js",
+  "main": "./build/main.js",
   "engines": {
     "node": ">=12"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
+    "clean": "rimraf build",
     "pack": "electron-builder --dir",
     "copy-templates": "node ./scripts/copy-templates.js",
     "dist": "electron-builder",
-    "prep:dist:electron": "node scripts/prep.js && yarn build --outDir dist",
     "start": "electron .",
     "start:dev": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
@@ -95,15 +95,15 @@
   "build": {
     "asar": true,
     "asarUnpack": [
-      "dist/assets/**",
-      "dist/templates/**"
+      "build/assets/**",
+      "build/templates/**"
     ],
     "directories": {
-      "output": "packaged"
+      "output": "dist"
     },
     "appId": "com.microsoft.botframework.composer",
     "files": [
-      "./dist/**",
+      "./build/**",
       "!data.json",
       "!tmp.zip",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
