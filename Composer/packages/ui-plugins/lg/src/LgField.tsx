@@ -106,7 +106,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
       <LgEditor
-        height={125}
+        height={100}
         value={localValue}
         onChange={onChange}
         errorMessage={errorMsg}
