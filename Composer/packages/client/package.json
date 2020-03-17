@@ -1,7 +1,7 @@
 {
   "name": "@bfc/client",
   "license": "MIT",
-  "main": "dist/index.ejs",
+  "main": "build/public/index.ejs",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -13,6 +13,7 @@
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
+    "prep:dist:electron": "yarn build && node scripts/prepDistElectron.js",
     "typecheck": "tsc --noEmit"
   },
   "proxy": "http://localhost:5000",

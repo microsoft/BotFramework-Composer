@@ -62,7 +62,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
     // Merge with the public folder
-    copyPublicFolder();
+    //copyPublicFolder();
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -91,6 +91,8 @@ checkBrowsers(paths.appPath, isInteractive)
         );
         console.log();
       }
+      // Merge with the public folder
+      copyPublicFolder();
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
@@ -163,8 +165,8 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  // copy to dist folder
-  fs.copySync(paths.appPublic, paths.appDist, {
+  // copy to build/public folder
+  fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
     filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),
   });
