@@ -28,11 +28,22 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undef
   const { type, oneOf } = schema;
 
   if (type && Array.isArray(type)) {
-    return type.map(t => ({
+    const options: IDropdownOption[] = type.map(t => ({
       key: t,
       text: t,
       data: { schema: { ...schema, type: t } },
     }));
+
+    type.length > 2 &&
+      options.push({
+        key: 'expression',
+        text: 'expression',
+        data: { schema: { ...schema, type: 'string' } },
+      });
+
+    options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
+
+    return options;
   }
 
   if (oneOf && Array.isArray(oneOf)) {
@@ -43,7 +54,7 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undef
 
           return {
             key: resolved.type as React.ReactText,
-            text: resolved.title || resolved.type,
+            text: resolved.title?.toLowerCase() || resolved.type,
             data: { schema: resolved },
           } as IDropdownOption;
         }
@@ -57,15 +68,29 @@ const ExpressionField: React.FC<FieldProps> = props => {
 
   const pluginConfig = usePluginConfig();
   const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const options = useMemo(() => getOptions(schema, definitions), []);
 
   useLayoutEffect(() => {
     if (options) {
-      if (!value) {
-        setSelectedSchema(options[0].data.schema);
+      if (typeof value === 'undefined') {
+        const expression = options.find(({ key }) => key === 'expression');
+        const {
+          data: { schema },
+        } = expression || options[0];
+
+        setSelectedSchema(schema);
+        setSelectedType(expression ? 'expression' : schema.type);
       } else {
-        const selected = options.find(o => typeof value === o.key);
+        const selected = options.find(o => (Array.isArray(value) ? 'array' : typeof value) === o.key);
+
+        setSelectedType(
+          selected?.data.schema.type === 'string' && value.startsWith('=')
+            ? 'expression'
+            : selected?.data.schema.type || options[0].data.schema.type
+        );
+
         setSelectedSchema(selected?.data.schema || options[0].data.schema);
       }
     } else {
@@ -76,18 +101,15 @@ const ExpressionField: React.FC<FieldProps> = props => {
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
       setSelectedSchema(option.data.schema);
+      setSelectedType(option.text);
+
       props.onChange(undefined);
     }
   };
 
   const renderTypeTitle = (options?: IDropdownOption[]) => {
     const option = options && options[0];
-
-    if (option) {
-      return <React.Fragment>{option.text}</React.Fragment>;
-    }
-
-    return null;
+    return option ? <React.Fragment>{option.text}</React.Fragment> : null;
   };
 
   const renderField = () => {
@@ -95,24 +117,11 @@ const ExpressionField: React.FC<FieldProps> = props => {
       return null;
     }
 
-    if (selectedSchema.type === 'string') {
+    if (selectedType === 'expression') {
       return <ExpressionEditor {...props} />;
     }
 
     if (['array', 'object'].includes(selectedSchema.type)) {
-      // const onInit: OnInit = monaco => {
-      //   monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      //     validate: true,
-      //     schemas: [
-      //       {
-      //         uri: props.id,
-      //         schema: selectedSchema,
-      //         fileMatch: ['*'],
-      //       },
-      //     ],
-      //   });
-      // };
-      // TODO: get default from schema
       const defaultValue = selectedSchema.type === 'object' ? {} : [];
 
       return (
@@ -140,7 +149,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
             id={`${props.id}-type`}
             options={options}
             responsiveMode={ResponsiveMode.large}
-            selectedKey={selectedSchema?.type}
+            selectedKey={selectedType}
             onChange={handleTypeChange}
             onRenderTitle={renderTypeTitle}
             styles={{
