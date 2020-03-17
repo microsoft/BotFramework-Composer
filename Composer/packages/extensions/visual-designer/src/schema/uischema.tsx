@@ -76,7 +76,7 @@ const BaseInputSchema: UIWidget = {
 
 export const uiSchema: UISchema = {
   default: {
-    'ui:widget': ActionCard,
+    'ui:widget': ActionHeader,
   },
   [SDKTypes.IfCondition]: {
     'ui:widget': IfConditionWidget,
