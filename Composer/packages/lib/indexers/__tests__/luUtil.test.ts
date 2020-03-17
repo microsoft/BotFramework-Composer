@@ -117,11 +117,6 @@ hi
 `,
     };
 
-    const invalidFileContent = `#CheckEmail
-check my email
-- show my emails
-`;
-
     const invalidIntent = {
       Name: 'CheckEmail',
       Body: `check my email
@@ -132,11 +127,13 @@ check my email
     // when intent invalid, after update can still be parsed
     const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
     const updatedContent2Parsed = luParser.parse(updatedContent2);
-    expect(updatedContent2).toEqual(invalidFileContent);
+    expect(updatedContent2Parsed.Sections.length).toEqual(1);
     expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
     // when file invalid, update with valid intent should fix error.
     const updatedContent3 = updateIntent(updatedContent2, intentName, validIntent);
-    expect(updatedContent3).toEqual(validFileContent);
+    const updatedContent3Parsed = luParser.parse(updatedContent3);
+    expect(updatedContent3Parsed.Sections.length).toEqual(1);
+    expect(updatedContent3Parsed.Errors.length).toEqual(0);
   });
 
   it('update section with syntax error: end with empty entity @', () => {
@@ -175,12 +172,17 @@ check my email
 - show my emails
 
 # UnexpectedIntentDefination
-- unexpected intent body
 `,
     };
-    // should not do update
+    // should auto escape # to \#
     const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
-    expect(updatedContent2).toEqual(validFileContent);
+    const { Sections, Errors } = luParser.parse(updatedContent2);
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(1);
+    expect(Sections[0].Errors.length).toEqual(0);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(Sections[0].UtteranceAndEntitiesMap.length).toEqual(3);
+    expect(Sections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# UnexpectedIntentDefination');
   });
 
   it('delete section test', () => {
@@ -353,6 +355,42 @@ describe('LU Nested Section CRUD test', () => {
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[1].utterance).toEqual(
       'please show my unread todos'
     );
+  });
+
+  it('update nestedIntentSection with unexpected # include', () => {
+    const intentName = 'CheckTodo/CheckUnreadTodo';
+    const intent = {
+      Name: 'CheckMyUnreadTodo',
+      Body: `- please check my unread todo
+- please show my unread todos
+# Oops!
+## Oops!
+@ simple todoTitle
+@ simple todoContent
+`,
+    };
+
+    const fileContentUpdated = updateIntent(fileContent, intentName, intent);
+    const luresource = luParser.parse(fileContentUpdated);
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+    expect(Sections[1].Name).toEqual('CheckTodo');
+    expect(Sections[1].SimpleIntentSections.length).toEqual(2);
+    expect(Sections[1].SimpleIntentSections[0].Name).toEqual('CheckMyUnreadTodo');
+    expect(Sections[1].SimpleIntentSections[0].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(Sections[1].SimpleIntentSections[0].Errors.length).toEqual(0);
+    expect(Sections[1].SimpleIntentSections[0].Entities.length).toEqual(2);
+    expect(Sections[1].SimpleIntentSections[0].Entities[1].Name).toEqual('todoContent');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap.length).toEqual(4);
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[0].utterance).toEqual(
+      'please check my unread todo'
+    );
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# Oops!');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[3].utterance).toEqual('\\## Oops!');
   });
 
   /**
