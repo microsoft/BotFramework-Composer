@@ -60,7 +60,7 @@ export function BaseField<T = any>(props: BaseFieldProps<T>): JSX.Element {
       return null;
     }
 
-    return titleOverride || title || uiSchema['ui:title'] || schema.title || startCase(name);
+    return uiSchema['ui:title'] || titleOverride || title || schema.title || startCase(name);
   };
 
   const getDescription = () => {
