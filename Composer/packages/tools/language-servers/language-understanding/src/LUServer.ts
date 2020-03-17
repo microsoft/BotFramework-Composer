@@ -72,7 +72,9 @@ export class LUServer {
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
     this.connection.onRequest((method, params) => {
+      console.log(method);
       if (method === LABELEXPERIENCEREQUEST) {
+        console.log('inside');
         this.labelingExperienceHandler(params);
       } else if (InitializeDocumentsMethodName === method) {
         const { uri, luOption }: { uri: string; luOption?: LUOption } = params;
@@ -193,11 +195,9 @@ export class LUServer {
     const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
     const curLineContent = document.getText(range);
     // eslint-disable-next-line security/detect-unsafe-regex
-    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:\s]+\s*=\s*[\w.]+\}[^{}]*)+$/;
-
+    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:\s]+\s*=\s*[\w.\s]+\}[^{}]*)+$/;
     if (labeledUtterRegex.test(curLineContent)) {
       const newText = util.removeLabelsInUtterance(curLineContent);
-
       const newPos = Position.create(position.lineNumber, 0);
       const newUnlalbelText = newText + '\n';
       const editPreviousLine: TextEdit = TextEdit.insert(newPos, newUnlalbelText);
@@ -229,7 +229,7 @@ export class LUServer {
 
     const pos = params.position;
     if (key === '\n' && inputState === 'utterance' && lastLineContent.trim() !== '-') {
-      const newPos = Position.create(pos.line + 1, 0);
+      const newPos = Position.create(pos.line, 0);
       const item: TextEdit = TextEdit.insert(newPos, '- ');
       edits.push(item);
     }
