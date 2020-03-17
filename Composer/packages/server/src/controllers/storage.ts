@@ -29,7 +29,7 @@ async function getBlob(req: Request, res: Response) {
       throw new Error('path missing from query');
     }
     const reqpath = decodeURI(req.query.path);
-    if (!Path.isAbsolute(reqpath)) {
+    if (!Path.isAbsolute(reqpath) && reqpath !== 'This PC') {
       throw new Error('path must be absolute');
     }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath, user));

@@ -32,12 +32,10 @@ import { dropdown, loading, detailListContainer, detailListClass, fileSelectorCo
 
 interface FileSelectorProps {
   focusedStorageFolder: StorageFolder;
-  currentPath: string;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
-  validDiskNames: string[];
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
@@ -45,12 +43,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     onSelectionChanged,
     focusedStorageFolder,
     checkShowItem,
-    currentPath,
     onCurrentPathUpdate,
     storageFileLoadingStatus,
-    validDiskNames,
   } = props;
   // for detail file list in open panel
+  const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const tableColums = [
     {
       key: 'column1',
@@ -129,7 +126,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       isPadded: true,
     },
   ];
-
+  const diskRootPattern = /[a-zA-Z]:\/$/;
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
     const files = focusedStorageFolder.children.reduce((result, file) => {
@@ -148,12 +145,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       return result;
     }, [] as any[]);
     // add parent folder
+    const p = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
     files.unshift({
       name: '..',
       value: '..',
       fileType: 'folder',
       iconName: 'folder',
-      filePath: focusedStorageFolder.parent,
+      filePath: diskRootPattern.test(p) || p === 'This PC' ? 'This PC' : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder]);
@@ -187,15 +185,9 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter(p => p !== '');
-
-  let currentDisk = '';
-  let breadcrumbItems = pathItems
+  const breadcrumbItems = pathItems
     .map((item, index) => {
       let itemPath = getNavItemPath(pathItems, separator, 0, index);
-      if (itemPath[itemPath.length - 1] === ':') {
-        currentDisk = `${itemPath}/`;
-      }
-
       // put a leading / back on the path if it started as a unix style path
       itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
       // add a trailing / if the last path is something like c:
@@ -207,17 +199,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       };
     })
     .reverse();
-  const disks = validDiskNames.map(n => {
-    return {
-      text: n,
-      key: n,
-      title: n,
-    };
-  });
-  breadcrumbItems = breadcrumbItems.concat(disks);
-  const dupIndex = breadcrumbItems.findIndex(item => item.key === currentDisk);
-  breadcrumbItems.splice(dupIndex, 1);
-
+  console.log(breadcrumbItems, currentPath);
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };

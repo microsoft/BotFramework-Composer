@@ -36,20 +36,19 @@ interface Files {
 interface DefineConversationProps {
   onSubmit: (formData: FormData) => void;
   onDismiss: () => void;
-  onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  focusedStorageFolder?: StorageFolder;
-  currentPath?: string;
+  focusedStorageFolder: StorageFolder;
   files?: Files[];
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, currentPath, files } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, files } = props;
   const { state } = useContext(StoreContext);
   const { templateId } = state;
-
+  const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -157,13 +156,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
             />
           </StackItem>
         </Stack>
-        {focusedStorageFolder && onCurrentPathUpdate && currentPath && (
-          <LocationSelectContent
-            onCurrentPathUpdate={onCurrentPathUpdate}
-            focusedStorageFolder={focusedStorageFolder}
-            currentPath={currentPath}
-          />
-        )}
+        <LocationSelectContent onCurrentPathUpdate={onCurrentPathUpdate} focusedStorageFolder={focusedStorageFolder} />
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
