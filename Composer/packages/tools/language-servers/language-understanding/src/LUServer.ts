@@ -193,11 +193,9 @@ export class LUServer {
     const range = Range.create(position.lineNumber - 1, 0, position.lineNumber - 1, position.column);
     const curLineContent = document.getText(range);
     // eslint-disable-next-line security/detect-unsafe-regex
-    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:\s]+\s*=\s*[\w.]+\}[^{}]*)+$/;
-
+    const labeledUtterRegex = /^\s*-([^{}]*\s*\{[\w.@:\s]+\s*=\s*[\w.\s]+\}[^{}]*)+$/;
     if (labeledUtterRegex.test(curLineContent)) {
       const newText = util.removeLabelsInUtterance(curLineContent);
-
       const newPos = Position.create(position.lineNumber, 0);
       const newUnlalbelText = newText + '\n';
       const editPreviousLine: TextEdit = TextEdit.insert(newPos, newUnlalbelText);
@@ -229,7 +227,7 @@ export class LUServer {
 
     const pos = params.position;
     if (key === '\n' && inputState === 'utterance' && lastLineContent.trim() !== '-') {
-      const newPos = Position.create(pos.line + 1, 0);
+      const newPos = Position.create(pos.line, 0);
       const item: TextEdit = TextEdit.insert(newPos, '- ');
       edits.push(item);
     }

@@ -32,8 +32,10 @@ class LuFileStatusStorage {
   }
 
   public removeFile(botName: string, fileId: string) {
-    delete this._all[botName][fileId];
-    this.storage.set(KEY, this._all);
+    if (typeof this._all[botName]?.[fileId] !== 'undefined') {
+      delete this._all[botName][fileId];
+      this.storage.set(KEY, this._all);
+    }
   }
 
   public createFile(botName: string, fileId: string) {
