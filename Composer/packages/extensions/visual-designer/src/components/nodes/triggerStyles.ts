@@ -32,6 +32,7 @@ export const titleStyle: any = {
 };
 
 export const titleContentStyle = {
+  fontSize: '18px',
   fontWeight: 600,
   margin: '0px',
 };
