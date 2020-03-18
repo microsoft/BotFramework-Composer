@@ -35,6 +35,12 @@ const PromptField: React.FC<FieldProps> = props => {
     return fieldSchema;
   };
 
+  const getError = field => {
+    if (typeof props.rawErrors === 'object') {
+      return props.rawErrors[field];
+    }
+  };
+
   const updateField: PromptFieldChangeHandler = field => data => {
     props.onChange({ ...props.value, [field]: data });
   };
@@ -49,10 +55,10 @@ const PromptField: React.FC<FieldProps> = props => {
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={tabs} onLinkClick={handleTabChange}>
         <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
-          <BotAsks {...props} getSchema={getSchema} onChange={updateField} />
+          <BotAsks {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
         </PivotItem>
         <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
-          <UserInput {...props} getSchema={getSchema} onChange={updateField} />
+          <UserInput {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
         </PivotItem>
         <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
           {OTHER_FIELDS.filter(f => getSchema(f)).map(f => (
@@ -61,7 +67,7 @@ const PromptField: React.FC<FieldProps> = props => {
               depth={props.depth}
               id={`${props.id}.${f}`}
               name={f}
-              rawErrors={props.rawErrors}
+              rawErrors={getError(f)}
               schema={getSchema(f)}
               uiOptions={props.uiOptions.properties?.[f] || {}}
               value={props.value?.[f]}

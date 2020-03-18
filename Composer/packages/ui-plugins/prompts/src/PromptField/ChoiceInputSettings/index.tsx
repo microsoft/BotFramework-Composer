@@ -22,7 +22,7 @@ const styles = {
 };
 
 export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = props => {
-  const { getSchema, value, id, onChange, uiOptions, ...rest } = props;
+  const { getSchema, value, id, onChange, uiOptions, getError, ...rest } = props;
 
   return (
     <Fragment>
@@ -36,6 +36,7 @@ export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = prop
         onBlur={() => {}}
         onChange={onChange('choices')}
         onFocus={() => {}}
+        rawErrors={getError('choices')}
       />
       <SchemaField
         {...rest}
@@ -49,6 +50,7 @@ export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = prop
         onBlur={() => {}}
         onChange={onChange('choiceOptions')}
         onFocus={() => {}}
+        rawErrors={getError('choiceOptions')}
       />
       <SchemaField
         {...rest}
@@ -58,6 +60,7 @@ export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = prop
         uiOptions={uiOptions.properties?.appendChoices || {}}
         value={value?.appendChoices}
         onChange={onChange('appendChoices')}
+        rawErrors={getError('appendChoices')}
       />
     </Fragment>
   );

@@ -11,7 +11,7 @@ import { IChoice } from '@bfc/shared';
 import { SchemaField, FieldLabel, getUiLabel } from '@bfc/adaptive-form';
 
 const Choices: React.FC<FieldProps<IChoice>> = props => {
-  const { id, value, onChange, schema, uiOptions } = props;
+  const { id, value, onChange, schema, uiOptions, rawErrors } = props;
   const currentSchema = useMemo(() => {
     if (schema.type === 'array') {
       return schema;
@@ -109,6 +109,7 @@ const Choices: React.FC<FieldProps<IChoice>> = props => {
           placeholder={currentSchema.description}
           schema={currentSchema}
           value={value}
+          rawErrors={rawErrors}
         />
       )}
     </React.Fragment>

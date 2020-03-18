@@ -22,7 +22,7 @@ const getOptions = (enumSchema: JSONSchema7) => {
 };
 
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, getSchema, value, id, uiOptions, ...rest } = props;
+  const { onChange, getSchema, value, id, uiOptions, getError, ...rest } = props;
 
   return (
     <Fragment>
@@ -34,6 +34,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
         uiOptions={uiOptions.properties?.property || {}}
         value={value?.property}
         onChange={onChange('property')}
+        rawErrors={getError('property')}
       />
       {getSchema('outputFormat') && (
         <SchemaField
@@ -44,6 +45,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           uiOptions={uiOptions.properties?.outputFormat || {}}
           value={value?.outputFormat}
           onChange={onChange('outputFormat')}
+          rawErrors={getError('outputFormat')}
         />
       )}
       {getSchema('defaultLocale') && (
@@ -55,6 +57,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           uiOptions={uiOptions.properties?.defaultLocale || {}}
           value={((value as unknown) as ChoiceInput).defaultLocale}
           onChange={onChange('defaultLocale')}
+          rawErrors={getError('defaultLocale')}
         />
       )}
       {getSchema('style') && (
@@ -67,6 +70,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           uiOptions={uiOptions.properties?.style || {}}
           value={((value as unknown) as ChoiceInput).style}
           onChange={onChange('style')}
+          rawErrors={getError('style')}
         />
       )}
       {value?.$type === SDKTypes.ChoiceInput && (
