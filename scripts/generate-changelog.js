@@ -6,7 +6,9 @@ const PULL_URL = "https://github.com/microsoft/BotFramework-Composer/pull";
 const AUTHORS = {
   "Andy Brown": "a-b-r-o-w-n",
   "Ben Brown": "benbrown",
+  "Ben Yackley": "beyackle",
   "Chris Whitten": "cwhitten",
+  Corina: "corinagum",
   "Dong Lei": "boydc2014",
   "Hongyang Du (hond)": "Danieladu",
   "Kamran Iqbal": "Kaiqb",
