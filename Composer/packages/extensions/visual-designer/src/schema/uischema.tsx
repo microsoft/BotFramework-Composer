@@ -203,7 +203,7 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
-    content: data => `${data.property || '?'} = ${data.value || '?'}`,
+    content: data => `${data.property || '?'} : ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
     'ui:widget': ActionCard,
@@ -212,7 +212,7 @@ export const uiSchema: UISchema = {
         items={data.assignments}
         itemPadding={8}
         renderItem={item => {
-          const content = `${item.property} = ${item.value}`;
+          const content = `${item.property} : ${item.value}`;
           return (
             <SingleLineDiv height={16} title={content}>
               {content}
