@@ -52,7 +52,7 @@ const EditableField: React.FC<EditableFieldProps> = props => {
 
   let borderColor: string | undefined = undefined;
 
-  if (!editing) {
+  if (!editing && !error) {
     borderColor = localValue || transparentBorder || depth > 1 ? 'transparent' : NeutralColors.gray30;
   }
 

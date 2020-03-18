@@ -28,7 +28,6 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     canMoveUp,
     canMoveDown,
     canRemove,
-    className,
     onReorder,
     onRemove,
     index,
@@ -83,16 +82,18 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
 
   return (
     <div css={arrayItem.container}>
-      <SchemaField
-        {...rest}
-        css={arrayItem.field(stackArrayItems)}
-        depth={depth + 1}
-        label={!stackArrayItems ? false : undefined}
-        transparentBorder={!stackArrayItems ? transparentBorder : undefined}
-        uiOptions={uiOptions}
-        value={value}
-        onBlur={handleBlur}
-      />
+      <div css={arrayItem.field(!!stackArrayItems)}>
+        <SchemaField
+          {...rest}
+          css={arrayItem.schemaFieldOverride}
+          depth={depth + 1}
+          label={!stackArrayItems ? false : undefined}
+          transparentBorder={!stackArrayItems ? transparentBorder : undefined}
+          uiOptions={uiOptions}
+          value={value}
+          onBlur={handleBlur}
+        />
+      </div>
       <IconButton
         ariaLabel="Item Actions"
         menuIconProps={{ iconName: 'MoreVertical' }}

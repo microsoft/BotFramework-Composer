@@ -52,6 +52,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
             key={idx}
             label={false}
             rawErrors={rawErrors[idx]}
+            error={rawErrors[idx]}
             schema={itemSchema}
             value={element}
             {...getArrayItemProps(items, idx, onChange)}

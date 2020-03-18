@@ -137,29 +137,41 @@ const ExpressionField: React.FC<FieldProps> = props => {
     }
 
     const Field = resolveFieldWidget(selectedSchema || {}, uiOptions, pluginConfig);
-    return <Field key={selectedSchema.type} {...props} schema={selectedSchema || {}} label={false} />;
+    return (
+      <Field
+        key={selectedSchema.type}
+        {...props}
+        schema={selectedSchema || {}}
+        label={false}
+        css={{ label: 'ExpressionFieldValue' }}
+      />
+    );
   };
+
+  const shouldRenderContainer = label || (options && options.length > 1);
 
   return (
     <React.Fragment>
-      <div css={styles.container}>
-        <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
-        {options && options.length > 1 && (
-          <Dropdown
-            id={`${props.id}-type`}
-            options={options}
-            responsiveMode={ResponsiveMode.large}
-            selectedKey={selectedType}
-            onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
-            styles={{
-              caretDownWrapper: { height: '24px', lineHeight: '24px' },
-              root: { flexBasis: 'auto', padding: '5px 0', width: '110px' },
-              title: { height: '24px', lineHeight: '20px' },
-            }}
-          />
-        )}
-      </div>
+      {shouldRenderContainer && (
+        <div css={styles.container}>
+          <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+          {options && options.length > 1 && (
+            <Dropdown
+              id={`${props.id}-type`}
+              options={options}
+              responsiveMode={ResponsiveMode.large}
+              selectedKey={selectedType}
+              onChange={handleTypeChange}
+              onRenderTitle={renderTypeTitle}
+              styles={{
+                caretDownWrapper: { height: '24px', lineHeight: '24px' },
+                root: { flexBasis: 'auto', padding: '5px 0', width: '110px' },
+                title: { height: '24px', lineHeight: '20px' },
+              }}
+            />
+          )}
+        </div>
+      )}
       {renderField()}
     </React.Fragment>
   );

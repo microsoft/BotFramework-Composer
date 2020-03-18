@@ -56,11 +56,11 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
           ...(transparentBorder
             ? {
                 fieldGroup: {
-                  borderColor: 'transparent',
+                  borderColor: error ? undefined : 'transparent',
                   transition: 'border-color 0.1s linear',
                   selectors: {
                     ':hover': {
-                      borderColor: NeutralColors.gray30,
+                      borderColor: error ? undefined : NeutralColors.gray30,
                     },
                   },
                 },
