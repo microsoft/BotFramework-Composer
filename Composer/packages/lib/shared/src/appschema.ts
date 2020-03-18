@@ -1488,6 +1488,11 @@ export const appschema: OBISchema = {
           $ref: '#/definitions/Microsoft.LuisRecognizer',
         },
         {
+          title: 'Microsoft.SpacyRecognizer',
+          description: 'Spacy recognizer.',
+          $ref: '#/definitions/Microsoft.SpacyRecognizer',
+        },
+        {
           title: 'Microsoft.MultiLanguageRecognizer',
           description: 'Configure one recognizer per language and the specify the language fallback policy.',
           $ref: '#/definitions/Microsoft.MultiLanguageRecognizer',
@@ -1739,6 +1744,24 @@ export const appschema: OBISchema = {
       type: 'object',
       properties: {
         ...$properties(SDKTypes.LuisRecognizer),
+        applicationId: {
+          type: 'string',
+        },
+        endpoint: {
+          type: 'string',
+        },
+        endpointKey: {
+          type: 'string',
+        },
+      },
+    },
+    'Microsoft.SpacyRecognizer': {
+      $role: 'unionType(Microsoft.IRecognizer)',
+      title: 'Spacy Recognizer',
+      description: 'Spacy recognizer.',
+      type: 'object',
+      properties: {
+        ...$properties(SDKTypes.SpacyRecognizer),
         applicationId: {
           type: 'string',
         },
