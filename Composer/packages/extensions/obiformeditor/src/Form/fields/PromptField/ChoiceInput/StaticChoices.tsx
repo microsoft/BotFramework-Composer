@@ -85,6 +85,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
             root: { margin: '7px 0 7px 0' },
           }}
           onBlur={handleBlur}
+          ariaLabel={formatMessage('Value')}
         />
       </div>
       <div css={choiceItemValue}>
@@ -97,6 +98,7 @@ const ChoiceItem: React.FC<ChoiceItemProps> = props => {
           }}
           options={{ transparentBorder: true }}
           onBlur={handleBlur}
+          ariaLabel={formatMessage('Synonyms')}
         />
       </div>
       <div>
@@ -185,6 +187,7 @@ export const StaticChoices = props => {
               placeholder={formatMessage('Add new option here')}
               autoComplete="off"
               errorMessage={errorMsg}
+              ariaLabel={formatMessage('Value')}
             />
           </div>
           <div css={choiceItemValue}>
@@ -198,6 +201,7 @@ export const StaticChoices = props => {
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
+              ariaLabel={formatMessage('Synonyms')}
             />
           </div>
           <div>

@@ -9,6 +9,8 @@ import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
 import { SDKTypes } from './types';
+import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
+
 interface DesignerAttributes {
   name: string;
   description: string;
@@ -23,15 +25,16 @@ const initialInputDialog = {
 };
 
 const initialDialogShape = {
-  [SDKTypes.AdaptiveDialog]: {
+  [SDKTypes.AdaptiveDialog]: seededActions => ({
     $type: SDKTypes.AdaptiveDialog,
     triggers: [
       {
         $type: SDKTypes.OnBeginDialog,
         ...getNewDesigner('BeginDialog', ''),
+        actions: [...seededActions],
       },
     ],
-  },
+  }),
   [SDKTypes.OnConversationUpdateActivity]: {
     $type: 'Microsoft.OnConversationUpdateActivity',
     actions: [
@@ -108,14 +111,24 @@ export const seedDefaults = (type: string) => {
   return assignDefaults(properties);
 };
 
-export const deepCopyAction = async (
-  data,
-  copyLgTemplateToNewNode: (lgTemplateName: string, newNodeId: string) => Promise<string>
-) => {
+export const deepCopyAction = async (data, copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
-    copyLgTemplate: copyLgTemplateToNewNode,
+    transformLgField: copyLgTemplate,
   });
+};
+
+export const deepCopyActions = async (actions: any[], copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
+  // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
+  //        so we have to call them sequentially
+  // TODO: copy them parralleled via Promise.all() after optimizing lg api.
+  const copiedActions: any[] = [];
+  for (const action of actions) {
+    // Deep copy nodes with external resources
+    const copy = await deepCopyAction(action, copyLgTemplate);
+    copiedActions.push(copy);
+  }
+  return copiedActions;
 };
 
 export const deleteAction = (
@@ -134,10 +147,19 @@ export const deleteActions = (
   return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
+const seedInitialDialogShape = ($type: string, seededParams?) => {
+  const shape = initialDialogShape[$type];
+  if (typeof shape === 'function' && seededParams !== undefined) {
+    return shape(seededParams) || {};
+  }
+  return shape || {};
+};
+
 export const seedNewDialog = (
   $type: string,
   designerAttributes: Partial<DesignerAttributes> = {},
-  optionalAttributes: object = {}
+  optionalAttributes: object = {},
+  seededParams?: object
 ): object => {
   return {
     $type,
@@ -146,7 +168,7 @@ export const seedNewDialog = (
       ...designerAttributes,
     },
     ...seedDefaults($type),
-    ...(initialDialogShape[$type] || {}),
+    ...seedInitialDialogShape($type, seededParams),
     ...optionalAttributes,
   };
 };

@@ -11,10 +11,11 @@ interface EditableFieldProps extends ITextFieldProps {
   placeholder?: string;
   fontSize?: string;
   options?: any;
+  ariaLabel?: string;
 }
 
 export const EditableField: React.FC<EditableFieldProps> = props => {
-  const { styles = {}, placeholder, fontSize, onChange, onBlur, value, options = {}, ...rest } = props;
+  const { styles = {}, placeholder, fontSize, onChange, onBlur, value, ariaLabel, options = {}, ...rest } = props;
   const { transparentBorder } = options;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
@@ -77,6 +78,7 @@ export const EditableField: React.FC<EditableFieldProps> = props => {
         onFocus={() => setHasFocus(true)}
         onChange={handleChange}
         autoComplete="off"
+        ariaLabel={ariaLabel}
         {...rest}
       />
     </div>

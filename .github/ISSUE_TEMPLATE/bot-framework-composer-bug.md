@@ -4,7 +4,7 @@ about:
   Create a report for a bug you found in the Bot Framework Composer (including
   documentation)
 title: ""
-labels: "Needs-triage, Type: bug"
+labels: "Needs-triage, Type: Bug"
 assignees: ""
 ---
 
