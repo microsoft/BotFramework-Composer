@@ -12,7 +12,8 @@
     {
       "$type": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
-        "id": "376720"
+        "id": "376720",
+        "name": "WelcomeUser"
       },
       "actions": [
         {
