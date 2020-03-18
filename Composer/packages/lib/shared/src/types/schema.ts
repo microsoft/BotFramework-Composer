@@ -94,7 +94,7 @@ export enum SDKTypes {
   SetProperty = 'Microsoft.SetProperty',
   SetProperties = 'Microsoft.SetProperties',
   SkillDialog = 'Microsoft.SkillDialog',
-  SpacyRecognizer = 'Microsoft.SpaceRecognizer',
+  SpacyRecognizer = 'Microsoft.SpacyRecognizer',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',

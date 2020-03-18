@@ -45,6 +45,7 @@ export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
 export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
+export const spacyRecognizerKey: string = SDKTypes.SpacyRecognizer;
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {

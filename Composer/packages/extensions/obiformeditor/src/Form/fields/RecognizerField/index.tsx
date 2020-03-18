@@ -23,6 +23,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
   } = props;
 
   const isRegex = typeof formData === 'object' && formData.$type === 'Microsoft.RegexRecognizer';
+  const isSpacy = typeof formData === 'string' && formData === 'Microsoft.SpacyRecognizer';
   const currentDialogId = currentDialog.id;
   const selectedFile: LuFile | void = luFiles.find(f => f.id === currentDialogId);
 
@@ -63,6 +64,10 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
           onChange({ $type: 'Microsoft.RegexRecognizer' });
           return;
         }
+        case 'spacy': {
+          onChange('Microsoft.SpacyRecognizer');
+          return;
+        }
         default:
           return;
       }
@@ -78,18 +83,25 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
       text: 'LUIS',
     },
     {
+      key: 'spacy',
+      text: 'Spacy',
+    },
+    {
       key: 'regex',
       text: formatMessage('Regular Expression'),
     },
   ];
 
   const getSelectedType = (): string => {
-    if (typeof props.formData === 'string') {
-      return 'luis';
-    }
-
     if (isRegex) {
       return 'regex';
+    }
+    if (isSpacy) {
+      return 'spacy';
+    }
+
+    if (typeof props.formData === 'string') {
+      return 'luis';
     }
 
     return 'none';
