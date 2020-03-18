@@ -6,12 +6,14 @@ import { MicrosoftIDialog, SDKTypes } from '../types';
 import { walkAdaptiveAction } from './walkAdaptiveAction';
 import { walkAdaptiveActionList } from './walkAdaptiveActionList';
 
+// TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
   if (!action || !action.$type) return;
 
   switch (action.$type) {
     case SDKTypes.SendActivity:
+    case SDKTypes.SkillDialog:
       outputTemplates.push(action.activity);
       break;
     case SDKTypes.AttachmentInput:
@@ -25,6 +27,7 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   }
 };
 
+// TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
   if (!action || !action.$type) return;

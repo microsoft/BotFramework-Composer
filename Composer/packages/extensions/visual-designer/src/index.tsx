@@ -59,6 +59,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onSelect,
     onCopy,
     saveData,
+    createDialog,
     updateLgTemplate,
     getLgTemplates,
     copyLgTemplate,
@@ -100,6 +101,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
+                onCreateDialog={createDialog}
                 onOpen={x => navTo(x)}
                 onChange={x => saveData(x)}
                 onSelect={onSelect}

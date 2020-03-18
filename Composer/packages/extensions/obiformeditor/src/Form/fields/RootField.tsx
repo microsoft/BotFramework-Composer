@@ -19,6 +19,7 @@ const overrideDefaults = {
   description: undefined,
   helpLink: undefined,
   helpLinkText: undefined,
+  helpLinkLabel: undefined,
 };
 
 interface RootFieldProps {
@@ -68,16 +69,22 @@ export const RootField: React.FC<RootFieldProps> = props => {
           onChange={handleTitleChange}
           styles={{ field: { fontWeight: FontWeights.semibold }, root: { margin: '5px 0 7px -9px' } }}
           fontSize={FontSizes.size20}
+          ariaLabel={formatMessage('Title')}
         />
         <p className={classnames('RootFieldSubtitle', FontClassNames.smallPlus)}>{getSubTitle()}</p>
         {sdkOverrides.description !== false && (description || schema.description) && (
           <p className={classnames('RootFieldDescription', FontClassNames.smallPlus)}>
             {getDescription()}
-            {sdkOverrides.helpLink && sdkOverrides.helpLinkText && (
+            {sdkOverrides.helpLink && sdkOverrides.helpLinkText && sdkOverrides.helpLinkLabel && (
               <>
                 <br />
                 <br />
-                <a href={sdkOverrides.helpLink} target="_blank" rel="noopener noreferrer">
+                <a
+                  aria-label={sdkOverrides.helpLinkLabel}
+                  href={sdkOverrides.helpLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {sdkOverrides.helpLinkText}
                 </a>
               </>
