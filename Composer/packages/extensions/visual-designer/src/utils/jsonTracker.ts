@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyAction, generateSDKTitle } from '@bfc/shared';
+import { seedNewDialog, deepCopyActions, generateSDKTitle, ExternalResourceHandlerAsync } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -117,7 +117,7 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
   return dialog;
 }
 
-export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedData?: (removedData: any) => any) {
+export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNodes?: (nodes: any[]) => any) {
   const dialog = cloneDeep(inputDialog);
 
   const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
@@ -144,38 +144,49 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedDat
   });
 
   // invoke callback handler
-  if (callbackOnRemovedData && typeof callbackOnRemovedData === 'function') {
-    deletedNodes.forEach(x => callbackOnRemovedData(x));
+  if (callbackOnRemovedNodes && typeof callbackOnRemovedNodes === 'function') {
+    callbackOnRemovedNodes(deletedNodes);
   }
 
   return dialog;
 }
 
 export function insert(inputDialog, path, position, $type) {
-  const dialog = cloneDeep(inputDialog);
-  const current = get(dialog, path, []);
   const newStep = {
     $type,
     ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }),
   };
+  return insertAction(inputDialog, path, position, newStep);
+}
+
+export function insertAction(inputDialog, arrayPath: string, position: number, newAction) {
+  const dialog = cloneDeep(inputDialog);
+  const current = get(dialog, arrayPath, []);
 
   const insertAt = typeof position === 'undefined' ? current.length : position;
 
-  current.splice(insertAt, 0, newStep);
+  current.splice(insertAt, 0, newAction);
 
-  set(dialog, path, current);
+  set(dialog, arrayPath, current);
 
   return dialog;
 }
 
-export function copyNodes(inputDialog, nodeIds: string[]): any[] {
+type DereferenceLgHandler = ExternalResourceHandlerAsync<string>;
+
+export async function copyNodes(inputDialog, nodeIds: string[], dereferenceLg: DereferenceLgHandler): Promise<any[]> {
   const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
-  return JSON.parse(JSON.stringify(nodes));
+  return deepCopyActions(nodes, dereferenceLg);
 }
 
-export function cutNodes(inputDialog, nodeIds: string[]) {
-  const nodesData = copyNodes(inputDialog, nodeIds);
-  const newDialog = deleteNodes(inputDialog, nodeIds);
+export async function cutNodes(
+  inputDialog,
+  nodeIds: string[],
+  dereferenceLg: DereferenceLgHandler,
+  callbackOnCutNodes?: (nodes: any[]) => any
+) {
+  const nodesData = await copyNodes(inputDialog, nodeIds, dereferenceLg);
+  const newDialog = deleteNodes(inputDialog, nodeIds, callbackOnCutNodes);
 
   return { dialog: newDialog, cutData: nodesData };
 }
@@ -196,7 +207,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, copyLgTemplate) {
+function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNodes: any[]) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -208,18 +219,21 @@ export async function pasteNodes(inputDialog, arrayPath, arrayIndex, newNodes, c
     return inputDialog;
   }
 
-  // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
-  //        so we have to call them sequentially
-  // TODO: copy them parralleled via Promise.all() after optimizing lg api.
-  const copiedNodes: any[] = [];
-  for (const node of newNodes) {
-    // Deep copy nodes with external resources
-    const copy = await deepCopyAction(node, copyLgTemplate);
-    copiedNodes.push(copy);
-  }
-
-  targetArray.currentData.splice(arrayIndex, 0, ...copiedNodes);
+  targetArray.currentData.splice(arrayIndex, 0, ...newNodes);
   return dialog;
+}
+
+export async function pasteNodes(
+  inputDialog,
+  arrayPath: string,
+  arrayIndex: number,
+  clipboardNodes: any[],
+  handleLgField: ExternalResourceHandlerAsync<string>
+) {
+  // Considering a scenario that copy one time but paste multiple times,
+  // it requires seeding all $designer.id again by invoking deepCopy.
+  const newNodes = await deepCopyActions(clipboardNodes, handleLgField);
+  return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
 
 export const getParentPaths = (actionPath: string): string[] => {
