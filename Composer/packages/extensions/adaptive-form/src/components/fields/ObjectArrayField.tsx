@@ -108,6 +108,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
             stackArrayItems={stackArrayItems}
             transparentBorder
             value={item}
+            allowReorder={!stackArrayItems}
             {...getArrayItemProps(value, idx, onChange)}
           />
         ))}

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
@@ -24,7 +24,7 @@ const styles = {
   `,
 };
 
-const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undefined => {
+const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
   const { type, oneOf } = schema;
 
   if (type && Array.isArray(type)) {
@@ -53,7 +53,7 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undef
           const resolved = resolveRef(s, definitions);
 
           return {
-            key: resolved.type as React.ReactText,
+            key: resolved.title?.toLowerCase() || resolved.type,
             text: resolved.title?.toLowerCase() || resolved.type,
             data: { schema: resolved },
           } as IDropdownOption;
@@ -61,48 +61,53 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] | undef
       })
       .filter(Boolean) as IDropdownOption[];
   }
+
+  return [
+    {
+      key: 'expression',
+      text: 'expression',
+      data: { schema: { ...schema, type: 'string' } },
+    },
+  ];
+};
+
+const getSchema = (value: any | undefined, options: IDropdownOption[]): JSONSchema7 => {
+  if (typeof value === 'undefined') {
+    return options[0].data.schema;
+  } else {
+    const selected = options.find(({ key }) => (Array.isArray(value) ? 'array' : typeof value) === key);
+    const expression = !selected && options.length > 2 && options.find(({ key }) => key === 'expression');
+
+    return selected?.data.schema || (expression && expression?.data.schema) || options[0].data.schema;
+  }
+};
+
+const getSelectedType = (value: any | undefined, schema: JSONSchema7, options?: IDropdownOption[]): string => {
+  if (schema?.type === 'string' && options?.find(({ key }) => key === 'expression')) {
+    if (
+      (options.length > 2 && !value) ||
+      (typeof value === 'string' && value.startsWith('=')) ||
+      !options?.find(({ key }) => key === 'string')
+    ) {
+      return 'expression';
+    }
+  }
+  return schema?.type as string;
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
   const { id, value = '', label, description, schema, uiOptions, definitions } = props;
-
+  const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
-  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  const options = useMemo(() => getOptions(schema, definitions), []);
-
-  useLayoutEffect(() => {
-    if (options) {
-      if (typeof value === 'undefined') {
-        const expression = options.find(({ key }) => key === 'expression');
-        const {
-          data: { schema },
-        } = expression || options[0];
-
-        setSelectedSchema(schema);
-        setSelectedType(expression ? 'expression' : schema.type);
-      } else {
-        const selected = options.find(o => (Array.isArray(value) ? 'array' : typeof value) === o.key);
-
-        setSelectedType(
-          selected?.data.schema.type === 'string' && value.startsWith('=')
-            ? 'expression'
-            : selected?.data.schema.type || options[0].data.schema.type
-        );
-
-        setSelectedSchema(selected?.data.schema || options[0].data.schema);
-      }
-    } else {
-      setSelectedSchema({ ...schema, $role: undefined });
-    }
-  }, []);
+  const options = useMemo(() => getOptions(expressionSchema, definitions), []);
+  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7>(getSchema(value, options));
+  const [selectedType, setSelectedType] = useState<string>(getSelectedType(value, selectedSchema, options));
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
       setSelectedSchema(option.data.schema);
-      setSelectedType(option.text);
-
+      setSelectedType(option.key as string);
       props.onChange(undefined);
     }
   };
