@@ -34,7 +34,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
-  const { designerId, currentDialog, lgFiles, shellApi } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi, projectId } = useShellApi();
 
   const singleLgRefMatched = value && value.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
@@ -85,6 +85,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
   }, [template.body]);
 
   const lgOption = {
+    projectId,
     fileId: lgFileId,
     templateId: lgName,
   };
