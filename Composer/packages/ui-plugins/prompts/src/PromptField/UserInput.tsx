@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import formatMessage from 'format-message';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { PromptFieldProps } from './types';
 import { ChoiceInputSettings } from './ChoiceInputSettings';
@@ -22,7 +22,7 @@ const getOptions = (enumSchema: JSONSchema7) => {
 };
 
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, getSchema, value, id, uiOptions, getError, label, description, schema = {}, ...rest } = props;
+  const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
   const { recognizers } = usePluginConfig();
 
@@ -37,9 +37,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   return (
     <Fragment>
       <SchemaField
-        {...rest}
+        name="property"
+        definitions={definitions}
+        depth={depth}
         id={`${id}.property`}
-        label={formatMessage('Property to fill')}
         schema={getSchema('property')}
         uiOptions={uiOptions.properties?.property || {}}
         value={value?.property}
@@ -48,9 +49,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
       />
       {getSchema('outputFormat') && (
         <SchemaField
-          {...rest}
+          name="outputFormat"
+          definitions={definitions}
+          depth={depth}
           id={`${id}.outputFormat`}
-          label={formatMessage('Output Format')}
           schema={getSchema('outputFormat')}
           uiOptions={uiOptions.properties?.outputFormat || {}}
           value={value?.outputFormat}
@@ -59,7 +61,9 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
         />
       )}
       <SchemaField
-        {...rest}
+        name="value"
+        definitions={definitions}
+        depth={depth}
         id={`${id}.value`}
         schema={getSchema('value')}
         uiOptions={uiOptions.properties?.value || {}}
@@ -75,9 +79,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
       )}
       {getSchema('defaultLocale') && (
         <SchemaField
-          {...rest}
-          id={`${id}.defaultLlocale`}
-          label={formatMessage('Default locale')}
+          name="defaultLocale"
+          definitions={definitions}
+          depth={depth}
+          id={`${id}.defaultLocale`}
           schema={getSchema('defaultLocale')}
           uiOptions={uiOptions.properties?.defaultLocale || {}}
           value={((value as unknown) as ChoiceInput).defaultLocale}
@@ -87,10 +92,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
       )}
       {getSchema('style') && (
         <SchemaField
-          {...rest}
+          name="style"
+          definitions={definitions}
+          depth={depth}
           enumOptions={getOptions(getSchema('style'))}
           id={`${id}.style`}
-          label={formatMessage('List style')}
           schema={getSchema('style')}
           uiOptions={uiOptions.properties?.style || {}}
           value={((value as unknown) as ChoiceInput).style}

@@ -22,13 +22,15 @@ const styles = {
 };
 
 export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = props => {
-  const { getSchema, value, id, onChange, uiOptions, getError, ...rest } = props;
+  const { getSchema, value, id, onChange, uiOptions, getError, definitions, depth } = props;
 
   return (
     <Fragment>
       <Choices
-        {...rest}
         id={`${id}.choices`}
+        name="choices"
+        definitions={definitions}
+        depth={depth}
         label={formatMessage('Choice Options')}
         schema={getSchema('choices')}
         uiOptions={uiOptions.properties?.choices || {}}
@@ -39,8 +41,8 @@ export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = prop
         rawErrors={getError('choices')}
       />
       <SchemaField
-        {...rest}
         css={styles.choiceOptions}
+        definitions={definitions}
         depth={0}
         id={`${id}.choiceOptions`}
         name="choiceOptions"
@@ -53,8 +55,10 @@ export const ChoiceInputSettings: React.FC<PromptFieldProps<ChoiceInput>> = prop
         rawErrors={getError('choiceOptions')}
       />
       <SchemaField
-        {...rest}
         id={`${id}.appendChoices`}
+        name="appendChoices"
+        definitions={definitions}
+        depth={depth}
         label={formatMessage('Append choices')}
         schema={getSchema('appendChoices')}
         uiOptions={uiOptions.properties?.appendChoices || {}}

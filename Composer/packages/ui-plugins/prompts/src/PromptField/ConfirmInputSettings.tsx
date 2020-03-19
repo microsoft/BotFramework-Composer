@@ -9,7 +9,7 @@ import { Choices } from './ChoiceInputSettings/Choices';
 import { ChoiceOptions } from './ChoiceInputSettings/ChoiceOptions';
 
 const ConfirmInputSettings: React.FC<PromptFieldProps<ConfirmInput>> = props => {
-  const { getSchema, value, onChange, id, uiOptions, getError, ...rest } = props;
+  const { getSchema, value, onChange, id, uiOptions, getError, depth, definitions } = props;
 
   const updateChoiceOptions = (field: keyof IChoiceOption) => (data: any) => {
     const updater = onChange('choiceOptions');
@@ -19,7 +19,9 @@ const ConfirmInputSettings: React.FC<PromptFieldProps<ConfirmInput>> = props => 
   return (
     <>
       <Choices
-        {...rest}
+        name="confirmChoices"
+        definitions={definitions}
+        depth={depth}
         id={`${id}.confirmChoices`}
         schema={getSchema('confirmChoices')}
         uiOptions={uiOptions.properties?.confirmChoices || {}}
@@ -30,7 +32,9 @@ const ConfirmInputSettings: React.FC<PromptFieldProps<ConfirmInput>> = props => 
         rawErrors={getError('confirmChoices')}
       />
       <ChoiceOptions
-        {...rest}
+        name="choiceOptions"
+        definitions={definitions}
+        depth={depth}
         id={`${id}.choiceOptions`}
         schema={getSchema('choiceOptions')}
         uiOptions={uiOptions.properties?.choiceOptions || {}}

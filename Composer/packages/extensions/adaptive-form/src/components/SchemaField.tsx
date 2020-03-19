@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useContext } from 'react';
+import React from 'react';
 import { FieldProps } from '@bfc/extension';
 
 import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
-import PluginContext from '../PluginContext';
+import { usePluginConfig } from '../hooks';
 
 import { ErrorMessage } from './ErrorMessage';
 
@@ -28,7 +28,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
   } = props;
-  const pluginConfig = useContext(PluginContext);
+  const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions = {
     ...getUISchema(schema, pluginConfig.uiSchema),
