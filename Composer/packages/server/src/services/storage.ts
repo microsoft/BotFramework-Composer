@@ -3,6 +3,8 @@
 
 import * as fs from 'fs';
 
+import { thisPC } from '@bfc/shared';
+
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
@@ -70,11 +72,11 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
-    if (filePath === 'This PC') {
+    if (filePath === thisPC) {
       const diskNames = ['C:/', 'D:/', 'E:/', 'F:/', 'G:/', 'H:/', 'I:/', 'J:/', 'K:/'].filter(n => fs.existsSync(n));
       return {
         name: '',
-        parent: 'This PC',
+        parent: thisPC,
         children: diskNames.map(d => {
           return {
             name: d,
