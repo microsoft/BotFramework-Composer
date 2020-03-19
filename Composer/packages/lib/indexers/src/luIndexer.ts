@@ -100,7 +100,7 @@ function index(files: FileInfo[]): LuFile[] {
     const { name, content, relativePath } = file;
     const id = getBaseName(name);
     const { intents, diagnostics } = parse(content, id);
-    return { id, relativePath, content, intents, diagnostics };
+    return { id, relativePath, content, intents, diagnostics, lastModified: file.lastModified };
   });
 
   return luFiles;

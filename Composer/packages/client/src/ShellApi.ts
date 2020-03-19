@@ -47,7 +47,7 @@ const FileTargetTypes = {
 export const ShellApi: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
 
-  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName } = state;
+  const { dialogs, schemas, lgFiles, luFiles, designPageLocation, focusPath, breadcrumb, botName, projectId } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgFile = actions.updateLgFile;
@@ -89,6 +89,7 @@ export const ShellApi: React.FC = () => {
     return {
       data,
       botName,
+      projectId,
       dialogs,
       focusPath,
       schemas,
@@ -117,6 +118,7 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id: dialogId,
       content: updatedDialog,
+      projectId,
     };
     dialogsMap[dialogId] = updatedDialog;
     updateDialog(payload);
@@ -158,10 +160,13 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
 
+    const projectId = state.projectId;
+
     lgUtil.checkSingleLgTemplate(template);
 
     await updateLgTemplate({
       file,
+      projectId,
       templateName,
       template,
     });
@@ -173,8 +178,11 @@ export const ShellApi: React.FC = () => {
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
 
+    const projectId = state.projectId;
+
     return actions.copyLgTemplate({
       file,
+      projectId,
       fromTemplateName,
       toTemplateName,
     });
@@ -185,9 +193,11 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
+    const projectId = state.projectId;
 
     return actions.removeLgTemplate({
       file,
+      projectId,
       templateName,
     });
   }
@@ -197,9 +207,11 @@ export const ShellApi: React.FC = () => {
     const file = lgFiles.find(file => file.id === id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
+    const projectId = state.projectId;
 
     return actions.removeLgTemplates({
       file,
+      projectId,
       templateNames,
     });
   }
@@ -222,7 +234,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.updateIntent(file.content, intentName, intent);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function addLuIntentHandler({ id, intent }, event) {
@@ -232,7 +244,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.addIntent(file.content, intent);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function removeLuIntentHandler({ id, intentName }, event) {
@@ -243,7 +255,7 @@ export const ShellApi: React.FC = () => {
 
     const content = luUtil.removeIntent(file.content, intentName);
 
-    return await updateLuFile({ id, content });
+    return await updateLuFile({ id, projectId, content });
   }
 
   async function updateRegExIntentHandler({ id, intentName, pattern }, event) {
@@ -260,6 +272,7 @@ export const ShellApi: React.FC = () => {
     const payload = {
       id,
       content,
+      projectId,
     };
 
     switch ([fileTargetType, fileChangeType].join(',')) {
@@ -285,6 +298,7 @@ export const ShellApi: React.FC = () => {
       const payload = {
         id: dialogId,
         content: cleanedData,
+        projectId,
       };
       updateDialog(payload);
     }
@@ -384,14 +398,14 @@ export const ShellApi: React.FC = () => {
       const editorWindow = window.frames[VISUAL_EDITOR];
       apiClient.apiCall('reset', getState(VISUAL_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     if (window.frames[FORM_EDITOR]) {
       const editorWindow = window.frames[FORM_EDITOR];
       apiClient.apiCall('reset', getState(FORM_EDITOR), editorWindow);
     }
-  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab]);
+  }, [dialogs, lgFiles, luFiles, focusPath, selected, focused, promptTab, projectId]);
 
   useEffect(() => {
     const schemaError = get(schemas, 'diagnostics', []);
@@ -400,7 +414,7 @@ export const ShellApi: React.FC = () => {
       const subTitle = schemaError.join('\n');
       OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
     }
-  }, [schemas]);
+  }, [schemas, projectId]);
 
   return null;
 };

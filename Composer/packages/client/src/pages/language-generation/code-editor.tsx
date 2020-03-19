@@ -24,7 +24,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles } = state;
+  const { lgFiles, projectId } = state;
   const { lgImportresolver } = resolvers;
   const { fileId } = props;
   const file = lgFiles?.find(({ id }) => id === fileId);
@@ -53,7 +53,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = template ? template.body : file.content;
     setContent(value);
-  }, [file, templateId]);
+  }, [fileId, templateId, projectId]);
 
   useEffect(() => {
     const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
@@ -84,6 +84,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { name, parameters } = template;
         const payload = {
           file,
+          projectId,
           templateName: name,
           template: {
             name,
@@ -93,7 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         };
         actions.updateLgTemplate(payload);
       }, 500),
-    [file, template]
+    [file, template, projectId]
   );
 
   const updateLgFile = useMemo(
@@ -103,11 +104,12 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { id } = file;
         const payload = {
           id,
+          projectId,
           content,
         };
         actions.updateLgFile(payload);
       }, 500),
-    [file]
+    [file, projectId]
   );
 
   const _onChange = useCallback(
@@ -136,10 +138,11 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         updateLgFile(value);
       }
     },
-    [file, template]
+    [file, template, projectId]
   );
 
   const lgOption = {
+    projectId,
     fileId,
     templateId: template?.name,
   };

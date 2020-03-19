@@ -17,6 +17,7 @@ const placeholder = `> To learn more about the LG file format, read the document
 > ${LG_HELP}`;
 
 export interface LGOption {
+  projectId?: string;
   fileId: string;
   templateId?: string;
 }

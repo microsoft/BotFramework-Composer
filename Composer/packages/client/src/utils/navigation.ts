@@ -64,8 +64,11 @@ export function getUrlSearch(selected: string, focused: string): string {
   return result;
 }
 
-export function checkUrl(currentUri: string, { dialogId, selected, focused, promptTab }: DesignPageLocation) {
-  let lastUri = `/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+export function checkUrl(
+  currentUri: string,
+  { dialogId, projectId, selected, focused, promptTab }: DesignPageLocation
+) {
+  let lastUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
   if (promptTab) {
     lastUri += `#${promptTab}`;
   }
@@ -76,11 +79,11 @@ interface NavigationState {
   breadcrumb: BreadcrumbItem[];
 }
 
-export function convertPathToUrl(id: string, path?: string): string {
+export function convertPathToUrl(projectId: string, dialogId: string, path?: string): string {
   //path is like main.trigers[0].actions[0]
   //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
 
-  let uri = `/dialogs/${id}`;
+  let uri = `/bot/${projectId}/dialogs/${dialogId}`;
   if (!path) return uri;
 
   const items = path.split('#');
@@ -104,7 +107,7 @@ export function convertPathToUrl(id: string, path?: string): string {
   return uri;
 }
 
-export function toUrlUtil(path: string): string {
+export function toUrlUtil(projectId: string, path: string): string {
   const tokens = path.split('#');
   const firstDotIndex = tokens[0].indexOf('.');
   const dialogId = tokens[0].substring(0, firstDotIndex);
@@ -116,10 +119,13 @@ export function toUrlUtil(path: string): string {
   if (!focusedPath || !selectedPath) {
     return '';
   }
-  return `dialogs/${dialogId}?selected=${selectedPath}&focused=${focusedPath}${fragment ? '#' + fragment : ''}`;
+  return `/bot/${projectId}/dialogs/${dialogId}?selected=${selectedPath}&focused=${focusedPath}${
+    fragment ? '#' + fragment : ''
+  }`;
 }
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
+  console.log('ABOUT TO Navigate to ', mapNavPath, navigateOpts);
   navigate(mapNavPath, navigateOpts);
 }

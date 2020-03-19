@@ -16,7 +16,6 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { isValid } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import { LuFile } from '@bfc/shared';
 
@@ -38,16 +37,12 @@ interface Intent {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, projectId } = state;
   const { fileId } = props;
   const activeDialog = dialogs.find(({ id }) => id === fileId);
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
-
-  function checkErrors(files: LuFile[]): LuFile[] {
-    return files.filter(file => !isValid(file.diagnostics));
-  }
 
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
@@ -63,12 +58,6 @@ const TableView: React.FC<TableViewProps> = props => {
 
   useEffect(() => {
     if (isEmpty(luFiles)) return;
-
-    const errorFiles = checkErrors(luFiles);
-    if (errorFiles.length !== 0) {
-      navigateTo(`/language-understanding/${errorFiles[0].id}/edit`);
-      return;
-    }
 
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
@@ -93,7 +82,7 @@ const TableView: React.FC<TableViewProps> = props => {
       const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog]);
+  }, [luFiles, activeDialog, projectId]);
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
@@ -102,7 +91,7 @@ const TableView: React.FC<TableViewProps> = props => {
         name: 'Edit',
         onClick: () => {
           const { name, fileId } = intents[index];
-          navigateTo(`/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(`/bot/${projectId}/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];

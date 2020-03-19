@@ -67,7 +67,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
       } catch (err) {
         diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-      lgFiles.push({ id, content, relativePath, templates, diagnostics });
+      lgFiles.push({ id, content, relativePath, templates, diagnostics, lastModified: file.lastModified });
     }
   }
   return lgFiles;

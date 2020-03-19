@@ -21,14 +21,15 @@
     "packages/ui-plugins/*"
   ],
   "scripts": {
-    "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod",
+    "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod && yarn build:plugins",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client",
-    "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions",
+    "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:extensions": "wsrun -lt -p @bfc/extension @bfc/adaptive-form @bfc/visual-designer @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
+    "build:plugins": "cd plugins/localPublish && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "node scripts/update.js && yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",

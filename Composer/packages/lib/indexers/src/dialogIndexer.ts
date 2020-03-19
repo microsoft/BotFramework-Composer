@@ -229,6 +229,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
+            lastModified: file.lastModified,
             ...parse(id, dialogJson, schema),
           };
           dialogs.push(dialog);

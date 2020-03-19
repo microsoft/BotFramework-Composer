@@ -16,6 +16,7 @@ const placeholder = `> To learn more about the LU file format, read the document
 > ${LU_HELP}`;
 
 export interface LUOption {
+  projectId?: string;
   fileId: string;
   sectionId?: string;
 }

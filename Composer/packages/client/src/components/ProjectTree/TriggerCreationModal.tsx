@@ -99,7 +99,7 @@ interface TriggerCreationModalProps {
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
+  const { dialogs, luFiles, projectId } = state;
   const luFile = luFiles.find(lu => lu.id === dialogId);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
@@ -268,6 +268,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               errorMessage={formData.errors.triggerPhrases}
               hidePlaceholder={true}
               luOption={{
+                projectId,
                 fileId: dialogId,
                 sectionId: formData.intent || 'newSection',
               }}

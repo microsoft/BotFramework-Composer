@@ -4,6 +4,7 @@
 import { Request, Response } from 'express';
 
 import StorageService from '../services/storage';
+import { PluginLoader } from '../services/pluginLoader';
 import { Path } from '../utility/path';
 
 function getStorageConnections(req: Request, res: Response) {
@@ -21,6 +22,8 @@ function updateCurrentPath(req: Request, res: Response) {
 
 async function getBlob(req: Request, res: Response) {
   const storageId = req.params.storageId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
   try {
     if (!req.query.path) {
       throw new Error('path missing from query');
@@ -29,7 +32,7 @@ async function getBlob(req: Request, res: Response) {
     if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
-    res.status(200).json(await StorageService.getBlob(storageId, reqpath));
+    res.status(200).json(await StorageService.getBlob(storageId, reqpath, user));
   } catch (e) {
     res.status(400).json({
       message: e instanceof Error ? e.message : e,

@@ -3,11 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import { Link, RouteComponentProps } from '@reach/router';
 
+import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
 import { isAbsHosted } from '../../utils/envUtil';
@@ -15,10 +16,10 @@ import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
 import { TestController } from '../../TestController';
+import { useLocation } from '../../utils/hooks';
 
 import Routes from './router';
 import { title, fileList, contentEditor, linkItem } from './styles';
-import { useLocation } from '../../utils/hooks';
 
 const settingLabels = {
   title: formatMessage('Configuration'),
@@ -33,6 +34,8 @@ const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings, url: '' },
   { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
   { key: '/setting/onboarding-settings', name: settingLabels.onboarding, url: '' },
+  // { key: '/setting/publish', name: settingLabels.publish, url: '' },
+
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
   // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
@@ -43,6 +46,11 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     location: { pathname: active },
   } = useLocation();
 
+  const { state } = useContext(StoreContext);
+  const { projectId } = state;
+  const makeProjectLink = (id, path) => {
+    return `/bot/${id}${path}`;
+  };
   function onRenderLink(link) {
     return (
       <Link to={link.key} css={linkItem(link.disabled)} tabIndex={-1} onClick={() => {}}>
@@ -74,7 +82,7 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
                   selectedKey={active}
                   onLinkClick={(e, item) => {
                     if (item && item.key) {
-                      navigateTo(item.key);
+                      navigateTo(makeProjectLink(projectId, item.key));
                     }
                   }}
                 />

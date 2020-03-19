@@ -28,6 +28,7 @@ export enum LGCursorState {
 }
 
 export interface LGOption {
+  projectId: string;
   fileId: string;
   templateId: string;
 }
@@ -40,6 +41,7 @@ export interface Template {
 
 export interface LGDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   templateId?: string;
   index: () => LgParsed;

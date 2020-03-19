@@ -6,6 +6,7 @@ import { offsetRange } from '@bfc/indexers';
 import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic } from '@bfc/shared';
 
 export interface LUOption {
+  projectId: string;
   fileId: string;
   sectionId: string;
 }
@@ -18,6 +19,7 @@ export interface Template {
 
 export interface LUDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   sectionId?: string;
   index: () => any;
