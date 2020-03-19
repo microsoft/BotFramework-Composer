@@ -39,7 +39,9 @@ const STATE = {
   RELOADING: 1,
   SUCCESS: 2,
 };
-
+const defaultPublishConfig = {
+  name: 'default',
+};
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,8 +51,8 @@ export const TestController: React.FC = () => {
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoint, botName, botStatus, dialogs, toStartBot, luFiles, settings } = state;
-  const { connectBot, reloadBot, onboardingAddCoachMarkRef, publishLuis, startBot } = actions;
+  const { botEndpoints, botName, botStatus, dialogs, toStartBot, luFiles, settings, projectId } = state;
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus } = actions;
   const connected = botStatus === BotStatus.connected;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter(n => n.severity === 'Error').length;
@@ -60,6 +62,12 @@ export const TestController: React.FC = () => {
     toStartBot && handleClick();
     startBot(false);
   }, [toStartBot]);
+
+  useEffect(() => {
+    if (projectId) {
+      getPublishStatus(projectId, defaultPublishConfig);
+    }
+  }, [projectId]);
 
   function isLuisConfigComplete(config) {
     let complete = true;
@@ -119,7 +127,7 @@ export const TestController: React.FC = () => {
     try {
       const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
       if (luisConfig) {
-        await publishLuis(luisConfig.authoringKey);
+        await publishLuis(luisConfig.authoringKey, state.projectId);
         return true;
       } else {
         throw new Error('Please Set Luis Config');
@@ -137,7 +145,7 @@ export const TestController: React.FC = () => {
     setFetchState(STATE.RELOADING);
     try {
       const sensitiveSettings = settingsStorage.get(botName);
-      await (connected ? reloadBot(sensitiveSettings) : connectBot(sensitiveSettings));
+      await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
@@ -147,7 +155,7 @@ export const TestController: React.FC = () => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo('/notifications/');
+    navigateTo(`/bot/${state.projectId}/notifications`);
   }
 
   return (
@@ -161,7 +169,7 @@ export const TestController: React.FC = () => {
             onClick={async () => {
               return Promise.resolve(
                 openInEmulator(
-                  botEndpoint || 'http://localhost:3979/api/messages',
+                  botEndpoints[projectId] || 'http://localhost:3979/api/messages',
                   settings.MicrosoftAppId && settings.MicrosoftAppPassword
                     ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
                     : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
@@ -182,7 +190,7 @@ export const TestController: React.FC = () => {
         )}
         <div ref={addRef}>
           {showError && (
-            <div style={{ float: 'left' }} onClick={handleErrorButtonClick}>
+            <div style={{ float: 'left' }} onClick={handleErrorButtonClick} data-testid="notifications-info-button">
               <span css={errorCount}>{errorLength}</span>
               <IconButton iconProps={{ iconName: 'ErrorBadge' }} css={errorButton} title="Error" ariaLabel="Error" />
             </div>
