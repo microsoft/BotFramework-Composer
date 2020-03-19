@@ -9,13 +9,13 @@
     {
       "$type": "Microsoft.OnBeginDialog",
       "$designer": {
-        "id": "250235"
+        "id": "250234"
       },
       "actions": [
         {
           "$type": "Microsoft.EditActions",
           "$designer": {
-            "id": "250234"
+            "id": "250235"
           },
           "changeType": "insertActions",
           "actions": [
