@@ -21,10 +21,12 @@ interface TwoSettingFieldsProps extends FieldProps<MicrosoftInputDialog> {
 }
 export const TwoSettingFields: React.FC<TwoSettingFieldsProps> = props => {
   const { fields, formData, idSchema, getSchema, onChange, errorSchema } = props;
+  const errs: (JSX.Element | string | undefined)[] = [];
   const [errorMessage, setErrorMessage] = useState<JSX.Element | string | undefined>();
 
-  const onValidate = (err?: JSX.Element | string) => {
-    setErrorMessage(err);
+  const onValidate = (index: number, err?: JSX.Element | string | undefined) => {
+    errs[index] = err;
+    setErrorMessage(errs.find(err => err || null));
   };
 
   return (
@@ -40,7 +42,9 @@ export const TwoSettingFields: React.FC<TwoSettingFieldsProps> = props => {
             formContext={props.formContext}
             rawErrors={errorSchema[settingField.name] && errorSchema[settingField.name].__errors}
             hiddenErrMessage={true}
-            onValidate={onValidate}
+            onValidate={errMsg => {
+              onValidate(index, errMsg);
+            }}
           />
         </div>
       ))}
