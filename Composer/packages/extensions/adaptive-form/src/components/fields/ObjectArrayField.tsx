@@ -13,7 +13,7 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
 
-import { getArrayItemProps, getOrderedProperties } from '../../utils';
+import { getArrayItemProps, getOrderedProperties, generateArrayItems, ArrayItem, createArrayItem } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
 import { objectArrayField } from './styles';
@@ -37,13 +37,15 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const itemSchema = Array.isArray(items) ? items[0] : items;
   const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
   const [newObject, setNewObject] = useState({});
-
-  if (!itemSchema || itemSchema === true) {
-    return <UnsupportedField {...props} />;
-  }
+  const [itemCache, setItemCache] = useState<ArrayItem[]>(generateArrayItems(value));
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
+  };
+
+  const handleChange = (items: ArrayItem[]) => {
+    setItemCache(items);
+    onChange(items.map(i => i.value));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -51,26 +53,34 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
       event.preventDefault();
 
       if (Object.keys(newObject).length) {
-        onChange(value.concat([newObject]));
+        handleChange(itemCache.concat([createArrayItem(newObject)]));
         setNewObject({});
       }
     }
   };
 
   const handleAdd = () => {
-    onChange(value.concat({}));
+    handleChange(itemCache.concat(createArrayItem({})));
   };
 
-  const orderedProperties = getOrderedProperties(itemSchema || {}, uiOptions, value);
+  const orderedProperties = getOrderedProperties(
+    itemSchema && typeof itemSchema !== 'boolean' ? itemSchema : {},
+    uiOptions,
+    value
+  );
 
   const stackArrayItems = useMemo(
     () =>
       orderedProperties.length > 2 ||
-      !!Object.entries(itemSchema.properties || {}).filter(
+      !!Object.entries(properties).filter(
         ([key, { $role }]: any) => orderedProperties.includes(key) && $role === 'expression'
       ).length,
     [itemSchema, orderedProperties]
   );
+
+  if (!itemSchema || itemSchema === true) {
+    return <UnsupportedField {...props} />;
+  }
 
   return (
     <div className={className}>
@@ -99,17 +109,16 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
             <div style={{ width: '32px' }} />
           </div>
         )}
-        {map(value, (item, idx) => (
+        {map(itemCache, (item, idx) => (
           <ArrayFieldItem
-            key={idx}
+            key={item.id}
             {...props}
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema7}
             stackArrayItems={stackArrayItems}
             transparentBorder
-            value={item}
-            allowReorder={!stackArrayItems}
-            {...getArrayItemProps(value, idx, onChange)}
+            value={item.value}
+            {...getArrayItemProps(itemCache, idx, handleChange)}
           />
         ))}
       </div>

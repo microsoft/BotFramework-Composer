@@ -1,14 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ChangeHandler } from '@bfc/extension';
+import { generateUniqueId } from '@bfc/shared';
+
+type ArrayChangeHandler = (items: ArrayItem[]) => void;
+
+export interface ArrayItem {
+  id: string;
+  value: any;
+}
+
+export const generateArrayItems = (value: any[]): ArrayItem[] => {
+  return value.map(i => ({
+    id: generateUniqueId(),
+    value: i,
+  }));
+};
+
+export const createArrayItem = (value: any): ArrayItem => {
+  return {
+    id: generateUniqueId(),
+    value,
+  };
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getArrayItemProps = <T = any>(value: T[], index: number, onChange: ChangeHandler<T[]>) => {
-  const onItemChange = (newValue: T) => {
-    const updated = value.map((item, i) => {
+export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: ArrayChangeHandler) => {
+  const onItemChange = (newValue: any) => {
+    const updated = items.map((item, i) => {
       if (index === i) {
-        return newValue;
+        return { ...item, value: newValue };
       }
 
       return item;
@@ -17,7 +38,7 @@ export const getArrayItemProps = <T = any>(value: T[], index: number, onChange: 
   };
 
   const onReorder = (aIdx: number) => {
-    const copy = [...value];
+    const copy = [...items];
     const tmp = copy[index];
     copy[index] = copy[aIdx];
     copy[aIdx] = tmp;
@@ -25,13 +46,13 @@ export const getArrayItemProps = <T = any>(value: T[], index: number, onChange: 
   };
 
   const onRemove = () => {
-    const newData = value.slice(0, index).concat(value.slice(index + 1));
+    const newData = items.slice(0, index).concat(items.slice(index + 1));
     onChange(newData);
   };
 
   return {
     canRemove: true,
-    canMoveDown: index < value.length - 1,
+    canMoveDown: index < items.length - 1,
     canMoveUp: index > 0,
     index,
     onChange: onItemChange,
