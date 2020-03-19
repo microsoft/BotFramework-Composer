@@ -15,7 +15,6 @@ const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrain
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 
-const DIALOGS_FOLDER = 'ComposerDialogs';
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
 
@@ -46,7 +45,7 @@ export class LuPublisher {
 
   constructor(path: string, storage: IFileStorage) {
     this.botDir = path;
-    this.dialogsDir = Path.join(this.botDir, DIALOGS_FOLDER);
+    this.dialogsDir = this.botDir;
     this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
     this.interuptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
@@ -60,7 +59,6 @@ export class LuPublisher {
       await this._crossTrain(luFiles);
 
       await this._runBuild(luFiles);
-
       //remove the cross train result
       await this._cleanCrossTrain();
     } catch (error) {
@@ -70,10 +68,9 @@ export class LuPublisher {
 
   public getLuisConfig = () => this.config;
 
-  public setLuisConfig = async (config: ILuisConfig) => {
+  public setLuisConfig = (config: ILuisConfig) => {
     if (!isEqual(config, this.config)) {
       this.config = config;
-      await this._deleteDir(this.generatedFolderPath);
     }
   };
 
@@ -152,9 +149,9 @@ export class LuPublisher {
   }
 
   private async _createGeneratedDir() {
-    if (!(await this.storage.exists(this.generatedFolderPath))) {
-      await this.storage.mkDir(this.generatedFolderPath);
-    }
+    // clear previous folder
+    await this._deleteDir(this.generatedFolderPath);
+    await this.storage.mkDir(this.generatedFolderPath);
   }
 
   private _needCrossTrain() {

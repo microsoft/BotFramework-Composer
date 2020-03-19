@@ -8,6 +8,8 @@ import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
 
+import { UserIdentity } from './pluginLoader';
+
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {
   return fileBlacklist.filter(badFile => badFile === file).length === 0;
@@ -21,14 +23,14 @@ class StorageService {
     this.ensureDefaultBotFoldersExist();
   }
 
-  public getStorageClient = (storageId: string): IFileStorage => {
+  public getStorageClient = (storageId: string, user?: UserIdentity): IFileStorage => {
     const conn = this.storageConnections.find(s => {
       return s.id === storageId;
     });
     if (conn === undefined) {
       throw new Error(`no storage connection with id ${storageId}`);
     }
-    return StorageFactory.createStorageClient(conn);
+    return StorageFactory.createStorageClient(conn, user);
   };
 
   public createStorageConnection = (connection: StorageConnection) => {
@@ -54,21 +56,21 @@ class StorageService {
     return connections;
   };
 
-  public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
-    const storageClient = this.getStorageClient(storageId);
+  public checkBlob = async (storageId: string, filePath: string, user?: UserIdentity): Promise<boolean> => {
+    const storageClient = this.getStorageClient(storageId, user);
     return await storageClient.exists(filePath);
   };
 
-  public getBlobDateModified = async (storageId: string, filePath: string) => {
-    const storageClient = this.getStorageClient(storageId);
+  public getBlobDateModified = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     return stat.lastModified;
   };
 
   // return connent for file
   // return children for dir
-  public getBlob = async (storageId: string, filePath: string) => {
-    const storageClient = this.getStorageClient(storageId);
+  public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
       // NOTE: this behavior is not correct, we should NOT parse this file as json
@@ -100,10 +102,10 @@ class StorageService {
     });
   };
 
-  private isBotFolder = (path: string) => {
+  private isBotFolder = async (storage: IFileStorage, path: string) => {
     // locate Main.dialog
-    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
-    const isbot = fs.existsSync(mainPath);
+    const mainPath = Path.join(path, 'Main', 'Main.dialog');
+    const isbot = await storage.exists(mainPath);
     return isbot;
   };
 
@@ -121,7 +123,7 @@ class StorageService {
         }
         return {
           name: childName,
-          type: childStat.isDir ? (this.isBotFolder(childAbsPath) ? 'bot' : 'folder') : 'file',
+          type: childStat.isDir ? ((await this.isBotFolder(storage, childAbsPath)) ? 'bot' : 'folder') : 'file',
           path: childAbsPath,
           lastModified: childStat.lastModified, // just keep the previous interface
           size: childStat.size, // just keep the previous interface

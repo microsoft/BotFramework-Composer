@@ -27,7 +27,8 @@ const Onboarding = React.lazy(() => import('./Onboarding'));
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (botLoaded: boolean) => {
+const topLinks = (projectId: string) => {
+  const botLoaded = !!projectId;
   let links = [
     {
       to: '/home',
@@ -37,7 +38,7 @@ const topLinks = (botLoaded: boolean) => {
       disabled: false,
     },
     {
-      to: '/dialogs/Main',
+      to: `/bot/${projectId}/dialogs/Main`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design Flow'),
       exact: false,
@@ -51,14 +52,14 @@ const topLinks = (botLoaded: boolean) => {
     //   disabled: true, // will delete
     // },
     {
-      to: '/language-generation',
+      to: `/bot/${projectId}/language-generation`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
       exact: false,
       disabled: !botLoaded,
     },
     {
-      to: '/language-understanding',
+      to: `/bot/${projectId}/language-understanding`,
       iconName: 'People',
       labelName: formatMessage('User Input'),
       exact: false,
@@ -72,14 +73,14 @@ const topLinks = (botLoaded: boolean) => {
     //   disabled: true,
     // },
     {
-      to: '/notifications',
+      to: `/bot/${projectId}/notifications`,
       iconName: 'Warning',
       labelName: formatMessage('Notifications'),
       exact: true,
       disabled: !botLoaded,
     },
     {
-      to: '/setting/',
+      to: `/bot/${projectId}/setting/`,
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
       exact: false,
@@ -114,7 +115,7 @@ const bottomLinks = [
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, creationFlowStatus } = state;
+  const { botName, projectId, creationFlowStatus } = state;
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
@@ -136,7 +137,7 @@ export const App: React.FC = () => {
               ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            {topLinks(!!botName).map((link, index) => {
+            {topLinks(projectId).map((link, index) => {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
