@@ -3,6 +3,7 @@ Param(
 	[string] $environment,
 	[string] $luisAuthoringKey,
 	[string] $luisAuthoringRegion,
+  [string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
@@ -31,6 +32,9 @@ if (-not $environment) {
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
 }
 
+if (-not $language) {
+	$language = "en-us"
+}
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -107,7 +111,7 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	# Generate Luconfig.json file
 	$luconfigjson = @{
 		"name"            = $name;
-		"defaultLanguage" = "en-us";
+		"defaultLanguage" = $language;
 		"models"          = $noneEmptyModels
 	}
 	
