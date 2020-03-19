@@ -46,15 +46,21 @@ const buildEdgeMenuItemsFromClipboardContext = (
   );
 
   const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
+  const menuItemCount = menuItems.length;
   menuItems.unshift(
     {
       key: 'Paste',
       name: 'Paste',
+      ariaLabel: 'Paste',
       disabled: !enablePaste,
       onRender: () => {
         return (
           <button
             disabled={!enablePaste}
+            role="menuitem"
+            name="Paste"
+            aria-posinset={1}
+            aria-setsize={menuItemCount + 1}
             css={css`
               color: ${enablePaste ? '#0078D4' : '#BDBDBD'};
               background: #fff;

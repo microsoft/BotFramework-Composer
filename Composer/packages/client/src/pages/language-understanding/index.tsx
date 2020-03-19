@@ -91,16 +91,17 @@ const LUPage: React.FC<LUPageProps> = props => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
         <div css={flexContent}>
-          <Toggle
-            className={'toggleEditMode'}
-            css={actionButton}
-            onText={formatMessage('Edit mode')}
-            offText={formatMessage('Edit mode')}
-            defaultChecked={false}
-            checked={!!edit}
-            disabled={isRoot && edit === false}
-            onChange={onToggleEditMode}
-          />
+          {(!isRoot || edit) && (
+            <Toggle
+              className={'toggleEditMode'}
+              css={actionButton}
+              onText={formatMessage('Edit mode')}
+              offText={formatMessage('Edit mode')}
+              defaultChecked={false}
+              checked={!!edit}
+              onChange={onToggleEditMode}
+            />
+          )}
         </div>
       </div>
       <div css={ContentStyle} data-testid="LUEditor">

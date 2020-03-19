@@ -28,6 +28,7 @@ enum SwitchNodes {
 type CaseNodeKey = string;
 
 const getCaseKey = (caseIndex: number): CaseNodeKey => `cases[${caseIndex}]`;
+const parseCaseIndex = (caseKey: CaseNodeKey): number => parseInt(caseKey.replace(/cases\[(\d+)\]/, '$1'));
 
 const calculateNodeMap = (path: string, data): GraphNodeMap<SwitchNodes | CaseNodeKey> => {
   const result = transformSwitchCondition(data, path);
@@ -55,7 +56,7 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<SwitchNodes | CaseNo
 const calculateLayout = (nodeMap: GraphNodeMap<SwitchNodes | CaseNodeKey>) => {
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
   const casesNodes = Object.keys(cases)
-    .sort()
+    .sort((a, b) => parseCaseIndex(a) - parseCaseIndex(b))
     .map(caseName => nodeMap[caseName]);
   return switchCaseLayouter(switchNode, choiceNode, casesNodes);
 };

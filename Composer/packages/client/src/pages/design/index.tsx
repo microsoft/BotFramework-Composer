@@ -11,13 +11,14 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { getNewDesigner, seedNewDialog } from '@bfc/shared';
+import { seedNewDialog, SDKTypes } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
 import { BASEPATH, DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -171,18 +172,21 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog, luFile) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
       content: dialog.content,
     };
-    const luFilePayload = {
-      id: luFile.id,
-      content: luFile.content,
-    };
+    if (luFile) {
+      const luFilePayload = {
+        id: luFile.id,
+        content: luFile.content,
+      };
+      actions.updateLuFile(luFilePayload);
+    }
+
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateLuFile(luFilePayload);
     actions.updateDialog(dialogPayload);
   };
 
@@ -253,6 +257,18 @@ function DesignPage(props) {
     },
     {
       type: 'action',
+      text: formatMessage('Move'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Share',
+        },
+        onClick: () => VisualEditorAPI.moveSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
@@ -308,8 +324,14 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const content = { ...getNewDesigner(data.name, data.description), generator: `${data.name}.lg` };
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
+    const seededContent = seedNewDialog(
+      SDKTypes.AdaptiveDialog,
+      { name: data.name, description: data.description },
+      {
+        generator: `${data.name}.lg`,
+      },
+      state.actionsSeed || []
+    );
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 
@@ -389,6 +411,7 @@ function DesignPage(props) {
                     hidden={triggerButtonVisible || !selected}
                     src={`${rootPath}/extensionContainer.html`}
                     ref={addRef}
+                    title={formatMessage('visual editor')}
                   />
                   {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
                 </div>
@@ -397,6 +420,7 @@ function DesignPage(props) {
                   name="FormEditor"
                   css={formEditor}
                   src={`${rootPath}/extensionContainer.html`}
+                  title={formatMessage('form editor')}
                 />
               </div>
             </Fragment>

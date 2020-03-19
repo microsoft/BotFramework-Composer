@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
 import { LuIntentSection } from '@bfc/shared';
 
@@ -15,7 +15,7 @@ const { luParser } = sectionHandler;
 function convertLuDiagnostic(d: any, source: string): Diagnostic {
   const severityMap = {
     ERROR: DiagnosticSeverity.Error,
-    WARNING: DiagnosticSeverity.Warning,
+    WARN: DiagnosticSeverity.Warning,
     INFORMATION: DiagnosticSeverity.Information,
     HINT: DiagnosticSeverity.Hint,
   };

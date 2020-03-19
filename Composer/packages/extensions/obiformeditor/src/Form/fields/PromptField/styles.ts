@@ -21,10 +21,6 @@ export const tabs: Partial<IPivotStyles> = {
   },
 };
 
-export const tabsContainer = css`
-  border-bottom: 1px solid #c8c6c4;
-`;
-
 export const validationItemInput = css`
   display: flex;
   align-items: center;

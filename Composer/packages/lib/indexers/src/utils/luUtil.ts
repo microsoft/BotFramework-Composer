@@ -7,7 +7,7 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 
-import { sectionHandler } from '@bfcomposer/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
 import { LuIntentSection } from '@bfc/shared';
 

@@ -11,10 +11,16 @@ import { notificationHeader, notificationHeaderText, dropdownStyles } from './st
 
 const createOptions = (): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [
-    { key: formatMessage('Show All Notifications'), text: formatMessage('All'), data: '', isSelected: true },
+    {
+      key: formatMessage('Show All Notifications'),
+      text: formatMessage('All'),
+      ariaLabel: formatMessage('Show All Notifications'),
+      data: '',
+      isSelected: true,
+    },
   ];
   DiagnosticSeverity.forEach(item => {
-    return defaultOptions.push({ key: item, text: item, data: item });
+    return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Notifications` });
   });
   return defaultOptions;
 };

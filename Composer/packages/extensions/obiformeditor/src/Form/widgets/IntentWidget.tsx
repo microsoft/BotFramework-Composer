@@ -4,71 +4,50 @@
 import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { RegexRecognizer } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
 
 import { BFDWidgetProps } from '../types';
 
 import { WidgetLabel } from './WidgetLabel';
 import { LuEditorWidget } from './LuEditorWidget';
+import { RegexEditorWidget } from './RegexEditorWidget';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
 enum RecognizerType {
+  'none',
   'regex',
   'luis',
 }
 
-function recognizerType(currentDialog: DialogInfo): RecognizerType | null {
-  const recognizer = currentDialog.content.recognizer;
-  if (!recognizer) {
-    return null;
+function recognizerType({ content }: DialogInfo): RecognizerType | null {
+  const { recognizer } = content;
+
+  if (recognizer) {
+    if (typeof recognizer === 'object' && recognizer.$type === 'Microsoft.RegexRecognizer') {
+      return RecognizerType.regex;
+    } else if (typeof recognizer === 'string') {
+      return RecognizerType.luis;
+    }
   }
 
-  if (typeof recognizer === 'object' && recognizer.$type === 'Microsoft.RegexRecognizer') {
-    return RecognizerType.regex;
-  } else if (typeof recognizer === 'string') {
-    return RecognizerType.luis;
-  }
-
-  return null;
-}
-
-function regexIntentOptions(currentDialog: DialogInfo): IDropdownOption[] {
-  const recognizer = currentDialog.content.recognizer as RegexRecognizer;
-  let options: IDropdownOption[] = [EMPTY_OPTION];
-
-  if (!recognizer) {
-    return options;
-  }
-
-  if (recognizer.intents) {
-    options = options.concat(recognizer.intents.map(i => ({ key: i.intent, text: i.intent })));
-  }
-
-  return options;
+  return RecognizerType.none;
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
   const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
   const { description } = schema;
   const { currentDialog } = formContext;
-  let options: IDropdownOption[] = [];
-  let widgetLabel = label;
-  let isLuisSelected = false;
 
-  switch (recognizerType(currentDialog)) {
+  const type = recognizerType(currentDialog);
+  let options: IDropdownOption[] = [];
+
+  switch (type) {
     case RecognizerType.regex:
-      options = regexIntentOptions(currentDialog);
-      isLuisSelected = false;
-      break;
     case RecognizerType.luis:
-      widgetLabel = `Trigger phrases(intent name: #${value || ''})`;
-      isLuisSelected = true;
       break;
     default:
       options = [EMPTY_OPTION];
-      isLuisSelected = false;
       break;
   }
 
@@ -80,21 +59,24 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
 
   return (
     <>
-      <WidgetLabel label={widgetLabel} description={description} id={id} />
-      {!isLuisSelected && (
-        <Dropdown
-          id={id.replace(/\.|#/g, '')}
-          onBlur={() => onBlur && onBlur(id, value)}
-          onChange={handleChange}
-          onFocus={() => onFocus && onFocus(id, value)}
-          options={options}
-          selectedKey={value || null}
-          responsiveMode={ResponsiveMode.large}
-          disabled={disabled || options.length === 1}
-          placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
-        />
+      {type === RecognizerType.none && (
+        <>
+          <WidgetLabel label={label} description={description} id={id} />
+          <Dropdown
+            id={id.replace(/\.|#/g, '')}
+            onBlur={() => onBlur && onBlur(id, value)}
+            onChange={handleChange}
+            onFocus={() => onFocus && onFocus(id, value)}
+            options={options}
+            selectedKey={value || null}
+            responsiveMode={ResponsiveMode.large}
+            disabled={disabled || options.length === 1}
+            placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
+          />
+        </>
       )}
-      {isLuisSelected && <LuEditorWidget formContext={formContext} onChange={onChange} name={value} height={316} />}
+      {type === RecognizerType.luis && <LuEditorWidget formContext={formContext} name={value} height={316} />}
+      {type === RecognizerType.regex && <RegexEditorWidget formContext={formContext} name={value} />}
     </>
   );
 };

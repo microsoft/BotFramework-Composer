@@ -14,6 +14,7 @@ import {
   titleStyle,
   subtitleStyle,
   triggerIconStyle,
+  titleContentStyle,
 } from './triggerStyles';
 
 function getLabel(data: any): string {
@@ -39,9 +40,11 @@ export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
       <div css={triggerContentStyle}>
         <div css={titleStyle}>
           <Icon iconName="Flow" style={triggerIconStyle} />
-          <span>{name}</span>
+          <h1 css={titleContentStyle}>{name}</h1>
         </div>
-        <div css={subtitleStyle}>{label}</div>
+        <div css={subtitleStyle} className="trigger__content-label">
+          {label}
+        </div>
       </div>
     </div>
   );

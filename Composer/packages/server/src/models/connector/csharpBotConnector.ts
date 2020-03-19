@@ -25,8 +25,8 @@ export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
   static botRuntimes: { [key: string]: ChildProcess } = {};
-  constructor(endpoint: string) {
-    this.endpoint = endpoint;
+  constructor() {
+    this.endpoint = currentConfig.endpoint;
   }
 
   static stopAll = (signal: string) => {
@@ -152,6 +152,8 @@ export class CSharpBotConnector implements IBotConnector {
           `bin/Debug/${envSettings.runtimeFrameworkVersion}/BotProject.dll`,
           `--urls`,
           this.endpoint,
+          `--environment`,
+          `development`,
           ...this.getConnectorConfig(config),
         ],
         {
@@ -168,11 +170,17 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   connect = async (_: BotEnvironments, __: string) => {
-    const originPort = urlParse(this.endpoint).port;
-    const port = await getPort({ host: 'localhost', port: parseInt(originPort || '3979') });
-    this.endpoint = `http://localhost:${port}`;
-    currentConfig.endpoint = this.endpoint;
-    return `http://localhost:${port}/api/messages`;
+    const port = urlParse(this.endpoint).port;
+    if (this.status === BotStatus.NotConnected) {
+      // check the port availability
+      const hostname = urlParse(this.endpoint).hostname;
+      const newPort = await getPort({ host: 'localhost', port: parseInt(port || '3979') });
+      this.endpoint = `http://${hostname}:${newPort}`;
+      this.status = BotStatus.Connected;
+      return `http://localhost:${newPort}/api/messages`;
+    } else {
+      return `http://localhost:${port}/api/messages`;
+    }
   };
 
   sync = async (config: DialogSetting) => {
@@ -213,6 +221,8 @@ export class CSharpBotConnector implements IBotConnector {
     });
   };
 }
+
+export const localConnector = new CSharpBotConnector();
 const cleanup = (signal: NodeJS.Signals) => {
   CSharpBotConnector.stopAll(signal);
   process.exit(0);

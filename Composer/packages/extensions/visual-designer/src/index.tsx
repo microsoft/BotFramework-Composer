@@ -57,11 +57,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onSelect,
     onCopy,
     saveData,
+    createDialog,
     updateLgTemplate,
     getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
     undo,
     redo,
   } = shellApi;
@@ -75,9 +77,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
     getLgTemplates,
-    copyLgTemplate,
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
   };
 
   return (
@@ -95,6 +98,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
+                onCreateDialog={createDialog}
                 onOpen={x => navTo(x)}
                 onChange={x => saveData(x)}
                 onSelect={onSelect}

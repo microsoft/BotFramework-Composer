@@ -39,7 +39,7 @@
           "method": "GET",
           "url": "https://graph.microsoft.com/beta/me/mailFolders/inbox/messages",
           "headers": {
-            "Authorization": "Bearer {user.token.token}"
+            "Authorization": "Bearer ${user.token.token}"
           },
           "resultProperty": "user.getGraphEmails"
         },
