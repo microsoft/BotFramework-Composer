@@ -16,7 +16,7 @@
         {
           "$type": "Microsoft.SendActivity",
           "$designer": {
-            "id": "166131"
+            "id": "522200"
           },
           "activity": "${bfdactivity-522200()}"
         },
