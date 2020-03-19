@@ -25,9 +25,9 @@
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.8.0" />
     <PackageReference Include="Microsoft.Bot.Builder.ApplicationInsights" Version="4.8.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Azure" Version="4.8.0" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.8.0-rc5-preview" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.8.0-rc5-preview" />
-    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.8.0-rc5-preview" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Adaptive" Version="4.8.0-rc0" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Debugging" Version="4.8.0-rc0" />
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs.Declarative" Version="4.8.0-rc0" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.ApplicationInsights.Core" Version="4.8.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.8.0" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.8.0" />
