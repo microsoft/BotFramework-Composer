@@ -4,11 +4,12 @@ services:
     build: Composer
     ports:
       - "3000:3000"
-      - "3979:3979"
+      - "3979-5000:3979-5000"
     volumes:
       - ~/Documents/Composer:/Bots
       - ./BotProject:/BotProject
       - ./.appdata:/appdata
+      - ./Composer/plugins/localPublish/hostedBots:/app/Composer/plugins/localPublish/hostedBots
     environment:
       COMPOSER_BOTS_FOLDER: /Bots
       COMPOSER_RUNTIME_FOLDER: /BotProject/Templates
