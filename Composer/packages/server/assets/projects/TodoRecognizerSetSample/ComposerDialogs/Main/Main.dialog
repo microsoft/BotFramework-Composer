@@ -7,16 +7,16 @@
     "autoEndDialog": false,
     "defaultResultProperty": "dialog.result",
     "recognizer": {
-        "$kind": "Microsoft.RecognizerSet",
+        "$type": "Microsoft.RecognizerSet",
         "recognizers": [
             {
-                "$kind": "Microsoft.MultiLanguageRecognizer",
+                "$type": "Microsoft.MultiLanguageRecognizer",
                 "recognizers": {
                     "en-us": {
-                        "$kind": "Microsoft.CrossTrainedRecognizerSet",
+                        "$type": "Microsoft.CrossTrainedRecognizerSet",
                         "recognizers": [
                             {
-                                "$kind": "Microsoft.RegexRecognizer",
+                                "$type": "Microsoft.RegexRecognizer",
 								"id": "regex",
                                 "intents": [
                                     {
@@ -50,7 +50,7 @@
                 }
             },
             {
-                "$kind": "Microsoft.ValueRecognizer"
+                "$type": "Microsoft.ValueRecognizer"
             }
         ]
     },
