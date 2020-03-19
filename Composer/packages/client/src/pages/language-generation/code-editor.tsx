@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, combineMessage, findErrors, findWarnings, filterTemplateDiagnostics } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -31,7 +31,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const file = lgFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
-  const [warningMsg, setWarningMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
 
   const search = props.location?.search ?? '';
@@ -57,14 +56,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setContent(value);
   }, [file, templateId]);
 
-  useEffect(() => {
-    const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
-
-    const errors = findErrors(currentDiagnostics);
-    const warnings = findWarnings(currentDiagnostics);
-    setErrorMsg(combineMessage(errors));
-    setWarningMsg(combineMessage(warnings));
-  }, [diagnostics]);
+  const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
   const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
@@ -161,8 +153,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
-      warningMsg={warningMsg}
+      diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,

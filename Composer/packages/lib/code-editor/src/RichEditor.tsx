@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { EditorDidMount } from '@bfcomposer/react-monaco-editor';
 import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { Diagnostic, findErrors, findWarnings, combineSimpleMessage } from '@bfc/indexers';
 
 import { BaseEditor, BaseEditorProps } from './BaseEditor';
 import { processSize } from './utils/common';
@@ -16,6 +17,7 @@ export interface RichEditorProps extends BaseEditorProps {
   placeholder?: string; // empty placeholder
   errorMsg?: string; // error text show below editor
   warningMsg?: string; // warning text show below editor
+  diagnostics?: Diagnostic[]; // indexer generic diagnostic
   helpURL?: string; //  help link show below editor
   height?: number | string;
 }
@@ -24,6 +26,7 @@ export function RichEditor(props: RichEditorProps) {
   const {
     errorMsg,
     warningMsg,
+    diagnostics = [],
     helpURL,
     placeholder,
     hidePlaceholder = false,
@@ -31,11 +34,23 @@ export function RichEditor(props: RichEditorProps) {
     editorDidMount,
     ...rest
   } = props;
-  const hasError = !!errorMsg;
-  const hasWarning = !!warningMsg;
+
   const [editor, setEditor] = useState<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+
+  const errorMsgFromDiagnostics = useMemo(() => {
+    const errors = findErrors(diagnostics);
+    return errors.length ? combineSimpleMessage(errors) : '';
+  }, [diagnostics]);
+
+  const warningMsgFromDiagnostics = useMemo(() => {
+    const warnings = findWarnings(diagnostics);
+    return warnings.length ? combineSimpleMessage(warnings) : '';
+  }, [diagnostics]);
+
+  const hasError = !!errorMsg || !!errorMsgFromDiagnostics;
+  const hasWarning = !!warningMsg || !!warningMsgFromDiagnostics;
 
   const onEditorMount: EditorDidMount = (editor, monaco) => {
     setEditor(editor);
@@ -63,7 +78,7 @@ export function RichEditor(props: RichEditorProps) {
   }, [editor]);
 
   const messageHelp = formatMessage.rich('{msg}. Refer to the syntax documentation<a>here</a>.', {
-    msg: errorMsg || warningMsg,
+    msg: errorMsg || errorMsgFromDiagnostics || warningMsg || warningMsgFromDiagnostics,
     a: ({ children }) => (
       <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
         {children}

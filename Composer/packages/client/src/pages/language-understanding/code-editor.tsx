@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { luIndexer, combineMessage, findErrors, findWarnings, filterTemplateDiagnostics } from '@bfc/indexers';
+import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -55,17 +55,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setContent(value);
   }, [file, sectionId]);
 
-  const errorMsg = useMemo(() => {
-    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
-    const errors = findErrors(currentDiagnostics);
-    return errors.length ? combineMessage(errors) : httpErrorMsg;
-  }, [diagnostics, httpErrorMsg]);
-
-  const warningMsg = useMemo(() => {
-    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
-    const warnings = findWarnings(currentDiagnostics);
-    return combineMessage(warnings);
-  }, [diagnostics]);
+  const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
   const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
     setLuEditor(luEditor);
@@ -164,8 +154,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
-      warningMsg={warningMsg}
+      diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{
         path: lspServerPath,

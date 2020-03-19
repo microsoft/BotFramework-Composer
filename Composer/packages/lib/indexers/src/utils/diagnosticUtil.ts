@@ -23,6 +23,21 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
   }, '');
 }
 
+export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
+  const diagnostic = diagnostics[0];
+  if (diagnostic) {
+    let msg = '';
+    if (diagnostic.range) {
+      const { start, end } = diagnostic.range;
+      const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
+      msg += position;
+    }
+    const [, errorInfo] = diagnostic.message.split('error message: ');
+    return msg + errorInfo;
+  }
+  return '';
+}
+
 export function offsetRange(range: Range, offset: number): Range {
   return new Range(
     new Position(range.start.line - offset, range.start.character),
