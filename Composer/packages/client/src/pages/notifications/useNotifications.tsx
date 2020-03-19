@@ -11,7 +11,7 @@ import { Notification, DialogNotification, LuNotification, LgNotification } from
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, lgFiles } = state;
+  const { dialogs, luFiles, lgFiles, projectId } = state;
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
     dialogs.forEach(dialog => {
@@ -48,9 +48,8 @@ export default function useNotifications(filter?: string) {
         });
     });
     return notifactions;
-  }, [dialogs, luFiles, lgFiles]);
+  }, [dialogs, luFiles, lgFiles, projectId]);
 
   const notifications: Notification[] = filter ? memoized.filter(x => x.severity === filter) : memoized;
-
   return notifications;
 }

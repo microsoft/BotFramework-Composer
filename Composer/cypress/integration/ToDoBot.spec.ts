@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 context('ToDo Bot', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    cy.wait(5000);
   });
 
   it('can open the main dialog', () => {

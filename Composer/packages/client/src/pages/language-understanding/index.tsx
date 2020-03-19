@@ -34,7 +34,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
 
 const LUPage: React.FC<LUPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
   const { fileId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
@@ -56,25 +56,25 @@ const LUPage: React.FC<LUPageProps> = props => {
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
     if (!activeDialog && fileId !== 'all' && dialogs.length) {
-      navigateTo('/language-understanding/all');
+      navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
-  }, [fileId, dialogs]);
+  }, [fileId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {
-      const url = `/language-understanding/${id}`;
+      const url = `/bot/${projectId}/language-understanding/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-understanding/${fileId}`;
+      let url = `/bot/${projectId}/language-understanding/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [fileId, projectId]
   );
 
   const toolbarItems = [

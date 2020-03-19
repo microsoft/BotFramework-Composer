@@ -18,10 +18,11 @@ import { ActionType } from './action/types';
 
 const initialState: State = {
   dialogs: [],
+  projectId: '',
   botName: '',
   location: '', // the path to the bot project
   botEnvironment: 'production',
-  botEndpoint: '',
+  botEndpoints: {},
   remoteEndpoints: {},
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
@@ -38,6 +39,7 @@ const initialState: State = {
   luFiles: [],
   actionsSeed: [],
   designPageLocation: {
+    projectId: '',
     dialogId: '',
     focused: '',
     selected: '',
@@ -61,6 +63,8 @@ const initialState: State = {
     coachMarkRefs: {},
   },
   clipboardActions: [],
+  publishTypes: [],
+  publishTargets: [],
 };
 
 interface StoreContextValue {
