@@ -98,6 +98,10 @@ const shellApi: ShellApi = {
     });
   },
 
+  getLuSection: (id, sectionId) => {
+    return apiClient.apiCall('getLuSection', { id, sectionId });
+  },
+
   addLuIntent: (id, intent) => {
     return apiClient.apiCall('addLuIntent', { id, intent });
   },

@@ -206,7 +206,7 @@ export const ShellApi: React.FC = () => {
    *
    * @param {
    * id: string,         // lu file id, if undefined, use current focused dialog id.
-   * sectionId: string,  // intent name, "checkTodo" or nexted "checkTodo/checkUnreadTodo"
+   * sectionId: string,  // intent name, "checkTodo" or nested "checkTodo/checkUnreadTodo"
    * }
    * @param event
    *

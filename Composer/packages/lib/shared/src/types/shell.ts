@@ -70,6 +70,7 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  getLuSection: (id: string, sectionId: string) => Promise<LuIntentSection | undefined>;
   addLuIntent: (id: string, intent: LuIntentSection | null) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => Promise<void>;
