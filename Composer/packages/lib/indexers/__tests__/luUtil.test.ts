@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
-import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
+import { luIndexer } from '../src/luIndexer';
+import { updateIntent, addIntent, removeIntent, getInSections } from '../src/utils/luUtil';
 
 const { luParser, luSectionTypes } = sectionHandler;
 
@@ -197,6 +198,18 @@ describe('LU Nested Section CRUD test', () => {
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap.length).toEqual(2);
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[0].utterance).toEqual('check my unread todo');
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[1].utterance).toEqual('show my unread todos');
+  });
+
+  it('get nested section test', () => {
+    const { intents } = luIndexer.parse(fileContent);
+
+    const checkTodoIntent = getInSections(intents, 'CheckTodo');
+    expect(checkTodoIntent?.Name).toEqual('CheckTodo');
+    expect(checkTodoIntent?.Children?.length).toEqual(2);
+
+    const checkUnreadTodoIntent = getInSections(intents, 'CheckTodo/CheckUnreadTodo');
+    expect(checkUnreadTodoIntent?.Name).toEqual('CheckUnreadTodo');
+    expect(checkUnreadTodoIntent?.Entities?.length).toEqual(1);
   });
 
   it('add nestedIntentSection test', () => {

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useContext, useMemo } from 'react';
-import { ShellData } from '@bfc/shared';
+import { ShellData, LuIntentSection } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
@@ -205,6 +205,25 @@ export const ShellApi: React.FC = () => {
   /**
    *
    * @param {
+   * id: string,         // lu file id, if undefined, use current focused dialog id.
+   * sectionId: string,  // intent name, "checkTodo" or nexted "checkTodo/checkUnreadTodo"
+   * }
+   * @param event
+   *
+   */
+  function getLuSection({ id, sectionId }, event): LuIntentSection | undefined {
+    if (isEventSourceValid(event) === false) return;
+    if (id === undefined) throw new Error('must have a file id');
+    const focusedDialogId = id || focusPath.split('#').shift();
+    const file = luFiles.find(file => file.id === focusedDialogId);
+    if (!file) throw new Error(`lu file ${id} not found`);
+
+    return luUtil.getInSections(file.intents, sectionId);
+  }
+
+  /**
+   *
+   * @param {
    * id: string,
    * intentName: string,
    * intent: { name: string, body: string }
@@ -350,7 +369,8 @@ export const ShellApi: React.FC = () => {
     apiClient.registerApi('copyLgTemplate', copyLgTemplateHandler);
     apiClient.registerApi('removeLgTemplate', removeLgTemplateHandler);
     apiClient.registerApi('removeLgTemplates', removeLgTemplatesHandler);
-    apiClient.registerApi('getLgTemplates', ({ id }, event) => getLgTemplates({ id }, event));
+    apiClient.registerApi('getLgTemplates', getLgTemplates);
+    apiClient.registerApi('getLuSection', getLuSection);
     apiClient.registerApi('addLuIntent', addLuIntentHandler);
     apiClient.registerApi('updateLuIntent', updateLuIntentHandler);
     apiClient.registerApi('removeLuIntent', removeLuIntentHandler);

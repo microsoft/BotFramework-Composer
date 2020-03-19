@@ -68,6 +68,15 @@ export function checkSingleSectionValid(intent: LuIntentSection, enableSections 
   );
 }
 
+export function getInSections(sections: LuIntentSection[], intentName: string): LuIntentSection | undefined {
+  if (intentName.includes('/')) {
+    const [parrentName, childName] = intentName.split('/');
+    return sections.find(({ Name }) => Name === parrentName)?.Children?.find(({ Name }) => Name === childName);
+  } else {
+    return sections.find(({ Name }) => Name === intentName);
+  }
+}
+
 function updateInSections(
   sections: LuIntentSection[],
   intentName: string,
