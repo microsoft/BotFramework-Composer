@@ -1,10 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { getArrayItemProps } from '../arrayUtils';
+import { ArrayItem, getArrayItemProps } from '../arrayUtils';
 
 describe('getArrayItemProps', () => {
   let onChange: jest.Mock;
-  const value = [1, 2, 3];
+  const value: ArrayItem[] = [
+    { id: '1', value: 1 },
+    { id: '2', value: 2 },
+    { id: '3', value: 3 },
+  ];
 
   beforeEach(() => {
     onChange = jest.fn();
