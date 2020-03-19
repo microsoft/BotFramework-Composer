@@ -9,5 +9,5 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "__tests__/**/*.test.ts", "../client/src/adapter/connection.ts", "../client/src/adapter/lazy.ts", "../client/src/adapter/protocol.ts", "../client/src/adapter/immutable.ts", "../client/src/adapter/sagas.ts", "../client/src/adapter/reducers.ts", "../client/src/adapter/client.ts"]
+  "include": ["src/**/*.ts", "__tests__/**/*.test.ts"]
 }
