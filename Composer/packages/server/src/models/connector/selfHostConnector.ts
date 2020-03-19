@@ -5,6 +5,7 @@ import { resolve } from 'path';
 
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
+import * as transport from '../../adapter/transport';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 import { MockHostBotConnector } from './mockHostConnector';
@@ -81,6 +82,10 @@ export class SelfHostBotConnector implements IBotConnector {
       //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dest: resolve(process.env.HOME!, 'site/artifacts/bot'),
     });
+  };
+
+  public getDebugger = async (): Promise<transport.IAddress | null> => {
+    return Promise.resolve(null);
   };
 
   public publish = async (config: BotConfig, label: string | undefined) => {

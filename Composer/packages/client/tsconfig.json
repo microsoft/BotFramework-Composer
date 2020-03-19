@@ -4,6 +4,7 @@
     "outDir": "build",
     "allowJs": true,
     "module": "esnext",
+    "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]

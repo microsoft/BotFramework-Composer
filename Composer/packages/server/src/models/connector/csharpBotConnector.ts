@@ -4,6 +4,7 @@
 import { parse as urlParse } from 'url';
 import { ChildProcess, spawn } from 'child_process';
 import fs from 'fs';
+import * as http from 'http';
 
 import getPort from 'get-port';
 
@@ -13,16 +14,22 @@ import { Path } from '../../utility/path';
 import log from '../../logger';
 import AssetService from '../../services/asset';
 import { IFileStorage } from '../storage/interface';
+import * as transport from '../../adapter/transport';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory } from './interface';
 
+interface BotRuntime {
+  child: ChildProcess;
+  address: Promise<transport.IAddress>;
+  logger: debug.Debugger;
+}
+
 const debug = log.extend('bot-runtime');
 const buildDebug = debug.extend('build');
-const runtimeDebugs: { [key: string]: debug.Debugger } = {};
 export class CSharpBotConnector implements IBotConnector {
   public status: BotStatus = BotStatus.NotConnected;
   private endpoint: string;
-  static botRuntimes: { [key: string]: ChildProcess } = {};
+  static botRuntimes: { [key: string]: BotRuntime } = {};
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
@@ -30,8 +37,8 @@ export class CSharpBotConnector implements IBotConnector {
   static stopAll = (signal: string) => {
     for (const pid in CSharpBotConnector.botRuntimes) {
       const runtime = CSharpBotConnector.botRuntimes[pid];
-      runtime.kill(signal);
-      runtimeDebugs[pid]('successfully stopped bot runtime');
+      runtime.child.kill(signal);
+      runtime.logger('successfully stopped bot runtime');
       delete CSharpBotConnector.botRuntimes[pid];
     }
   };
@@ -110,12 +117,12 @@ export class CSharpBotConnector implements IBotConnector {
     return configList;
   };
 
-  private addListeners = (child: ChildProcess, handler: Function, resolve: Function, reject: Function) => {
-    const currentDebugger = runtimeDebugs[child.pid];
+  private addListeners = (runtime: BotRuntime, handler: Function, resolve: Function, reject: Function) => {
+    const { child, logger } = runtime;
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
-        currentDebugger('%s', data);
+        logger('%s', data);
         resolve(child.pid);
       });
 
@@ -125,16 +132,16 @@ export class CSharpBotConnector implements IBotConnector {
       });
 
     child.on('exit', code => {
-      currentDebugger('exit %d', code);
+      logger('exit %d', code);
       handler();
       if (code !== 0) {
-        currentDebugger('exit %d: %s', code, erroutput);
+        logger('exit %d: %s', code, erroutput);
         reject(erroutput);
       }
     });
 
     child.on('message', msg => {
-      currentDebugger('%s', msg);
+      logger('%s', msg);
     });
   };
 
@@ -147,19 +154,30 @@ export class CSharpBotConnector implements IBotConnector {
   };
 
   private start = async (dir: string, config: DialogSetting): Promise<string> => {
+    const child = spawn(
+      'dotnet',
+      ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
+      {
+        cwd: dir,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
+    );
+
+    // extend runtime debugger
+    const logger = debug.extend(`process (${process.pid})`);
+    logger('bot runtime started');
+
+    const { started, address } = transport.outputFor(child, logger);
+
+    // wait until the server has started
+    await started;
+
+    // poke the bot to instantiate the debug adapter
+    await http.get(`${this.endpoint}/api/messages`);
+
+    const runtime: BotRuntime = { child, logger, address };
+    CSharpBotConnector.botRuntimes[process.pid] = runtime;
     return new Promise((resolve, reject) => {
-      const runtime = spawn(
-        'dotnet',
-        ['bin/Debug/netcoreapp2.1/BotProject.dll', `--urls`, this.endpoint, ...this.getConnectorConfig(config)],
-        {
-          cwd: dir,
-          stdio: ['ignore', 'pipe', 'pipe'],
-        }
-      );
-      // extend runtime debugger
-      runtimeDebugs[runtime.pid] = debug.extend(`process (${runtime.pid})`);
-      runtimeDebugs[runtime.pid]('bot runtime started');
-      CSharpBotConnector.botRuntimes[runtime.pid] = runtime;
       this.addListeners(runtime, this.stop, resolve, reject);
     });
   };
@@ -201,6 +219,15 @@ export class CSharpBotConnector implements IBotConnector {
         integration: undefined,
       });
     });
+  };
+
+  getDebugger = async (): Promise<transport.IAddress | null> => {
+    for (const pid in CSharpBotConnector.botRuntimes) {
+      const runtime = CSharpBotConnector.botRuntimes[pid];
+      return await runtime.address;
+    }
+
+    return null;
   };
 
   publish = (_: BotConfig, __: string): Promise<void> => {

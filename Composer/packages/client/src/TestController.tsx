@@ -16,6 +16,7 @@ import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
 import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
+import { DebuggerContainer } from './adapter/DebuggerContainer';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
@@ -43,6 +44,7 @@ const STATE = {
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
+  const [debugging, setDebugging] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
@@ -172,6 +174,16 @@ export const TestController: React.FC = () => {
             {formatMessage('Test in Emulator')}
           </ActionButton>
         )}
+        {connected && !showError && fetchState === STATE.SUCCESS && (
+          <ActionButton
+            iconProps={{
+              iconName: 'OpenInNewTab',
+            }}
+            onClick={() => setDebugging(true)}
+          >
+            {formatMessage('Debug')}
+          </ActionButton>
+        )}
         {fetchState !== STATE.SUCCESS && (
           <Spinner
             size={SpinnerSize.small}
@@ -241,6 +253,7 @@ export const TestController: React.FC = () => {
           botName={botName}
         />
       ) : null}
+      {debugging ? <DebuggerContainer onAbort={() => setDebugging(false)} /> : null}
     </Fragment>
   );
 };

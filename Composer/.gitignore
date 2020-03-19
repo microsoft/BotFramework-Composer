@@ -6,3 +6,9 @@ cypress/results
 cypress/videos
 
 TestBots/
+
+packages/client/build/
+packages/extensions/sample-json-editor/es
+packages/extensions/sample-json-editor/lib
+packages/lib/shared-menus/es
+packages/lib/shared-menus/lib

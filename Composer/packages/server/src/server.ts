@@ -4,12 +4,15 @@
 import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
+import * as http from 'http';
+import * as net from 'net';
+import * as url from 'url';
 
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import compression from 'compression';
-import * as ws from 'ws';
+import WebSocket from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
@@ -21,6 +24,7 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import * as transport from './adapter/transport';
 
 const app: Express = express();
 app.set('view engine', 'ejs');
@@ -110,7 +114,7 @@ const server = app.listen(port, () => {
   }
 });
 
-const wss: ws.Server = new ws.Server({
+const wss: WebSocket.Server = new WebSocket.Server({
   noServer: true,
   perMessageDeflate: false,
 });
@@ -152,5 +156,34 @@ attachLSPServer(wss, server, '/lu-language-server', webSocket => {
     webSocket.on('open', () => {
       launchLuLanguageServer(webSocket);
     });
+  }
+});
+
+async function launchDebugServer(socket: WebSocket) {
+  try {
+    const project = BotProjectService.getCurrentBotProject();
+    if (project !== undefined) {
+      const connector = project.environment.getBotConnector();
+
+      const stream = WebSocket.createWebSocketStream(socket, {});
+      const client: transport.Client = { socket, stream };
+
+      const address = await connector.getDebugger();
+      if (address !== null) {
+        await transport.copyStream(client, address);
+      } else {
+        throw new Error();
+      }
+    }
+  } finally {
+    socket.close();
+  }
+}
+
+// https://github.com/Microsoft/vscode-debugadapter-node/issues/58
+server.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
+  const pathname = request.url ? url.parse(request.url).pathname : undefined;
+  if (pathname === '/debug-server') {
+    wss.handleUpgrade(request, socket, head, launchDebugServer);
   }
 });

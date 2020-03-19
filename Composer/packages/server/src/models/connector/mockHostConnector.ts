@@ -3,6 +3,7 @@
 
 import { ClaimNames } from '../../constants';
 import { absHostRoot } from '../../settings/env';
+import * as transport from '../../adapter/transport';
 
 import { BotConfig, BotEnvironments, BotStatus, IBotConnector, IPublishHistory, IPublishVersion } from './interface';
 
@@ -54,6 +55,10 @@ export class MockHostBotConnector implements IBotConnector {
 
   public getPublishHistory = async (): Promise<IPublishHistory> => {
     return Promise.resolve(this.history);
+  };
+
+  public getDebugger = async (): Promise<transport.IAddress | null> => {
+    return Promise.resolve(null);
   };
 
   public publish = async (config: BotConfig, label?: string) => {

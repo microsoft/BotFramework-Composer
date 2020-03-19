@@ -3,6 +3,7 @@
 
 import { ClaimNames } from '../../constants';
 import { ILuisConfig } from '../bot/interface';
+import * as transport from '../../adapter/transport';
 
 export enum BotStatus {
   NotConnected,
@@ -51,4 +52,5 @@ export interface IBotConnector {
   publish(config: BotConfig, label: string): Promise<void>;
   getEditingStatus(): Promise<boolean>; // gets whether the editor has unsaved changes
   getPublishHistory(): Promise<IPublishHistory>; // gets a list of builds that are in production, inttegration, or can be published
+  getDebugger(): Promise<transport.IAddress | null>;
 }
