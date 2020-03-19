@@ -89,6 +89,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               onChange={updateForm('name')}
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
+              required
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
