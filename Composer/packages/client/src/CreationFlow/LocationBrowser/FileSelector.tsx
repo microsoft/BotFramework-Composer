@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import path from 'path';
 
+import { thisPC } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -151,7 +152,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       value: '..',
       fileType: 'folder',
       iconName: 'folder',
-      filePath: diskRootPattern.test(p) || p === 'This PC' ? 'This PC' : focusedStorageFolder.parent,
+      filePath: diskRootPattern.test(p) || p === thisPC ? thisPC : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder]);
