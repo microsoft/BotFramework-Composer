@@ -9,6 +9,7 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import startCase from 'lodash/startCase';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
+import { ConceptLabels } from '@bfc/shared';
 
 import { EditableField } from '../fields/EditableField';
 
@@ -27,6 +28,7 @@ interface FormTitleProps {
 
 const FormTitle: React.FC<FormTitleProps> = props => {
   const { name, description, schema, formData, uiOptions = {} } = props;
+  const labelOverrides = ConceptLabels[formData.$type];
 
   const handleTitleChange = (e: any, newTitle?: string): void => {
     if (props.onChange) {
@@ -37,15 +39,15 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     }
   };
 
+  const uiLabel = typeof uiOptions?.label === 'function' ? uiOptions.label(formData) : uiOptions.label;
   const getTitle = (): string => {
     const designerName = formData.$designer?.name;
-    const uiLabel = typeof uiOptions?.label === 'function' ? uiOptions.label(formData) : uiOptions.label;
 
-    return designerName || uiLabel || schema.title || startCase(name);
+    return designerName || uiLabel || labelOverrides?.title || schema.title || startCase(name);
   };
 
   const getSubTitle = (): string => {
-    return formData.$type;
+    return labelOverrides?.subtitle || uiLabel || formData.$type;
   };
 
   const getDescription = (): string => {
@@ -63,7 +65,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
       }
     }
 
-    return description || schema.description || '';
+    return labelOverrides?.description || description || schema.description || '';
   };
 
   return (
