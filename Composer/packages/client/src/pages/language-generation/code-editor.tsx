@@ -153,6 +153,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
+      errorMsg={errorMsg}
       diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{

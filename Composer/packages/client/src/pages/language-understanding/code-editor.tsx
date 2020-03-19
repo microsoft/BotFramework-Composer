@@ -154,6 +154,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
+      errorMsg={httpErrorMsg}
       diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{
