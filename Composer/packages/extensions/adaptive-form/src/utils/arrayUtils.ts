@@ -2,22 +2,30 @@
 // Licensed under the MIT License.
 
 import { generateUniqueId } from '@bfc/shared';
+import { ChangeHandler } from '@bfc/extension';
+import { useState } from 'react';
 
 type ArrayChangeHandler = (items: ArrayItem[]) => void;
 
-export interface ArrayItem {
+interface ArrayItem {
   id: string;
   value: any;
 }
 
-export const generateArrayItems = (value: any[]): ArrayItem[] => {
+interface ArrayItemState {
+  arrayItems: ArrayItem[];
+  handleChange: ArrayChangeHandler;
+  addItem: (newItem: any) => void;
+}
+
+const generateArrayItems = (value: any[]): ArrayItem[] => {
   return value.map(i => ({
     id: generateUniqueId(),
     value: i,
   }));
 };
 
-export const createArrayItem = (value: any): ArrayItem => {
+const createArrayItem = (value: any): ArrayItem => {
   return {
     id: generateUniqueId(),
     value,
@@ -60,3 +68,18 @@ export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: A
     onRemove,
   };
 };
+
+export function useArrayItems(items: any[], onChange: ChangeHandler<any[]>): ArrayItemState {
+  const [cache, setCache] = useState<ArrayItem[]>(generateArrayItems(items));
+
+  const handleChange = (newItems: ArrayItem[]) => {
+    setCache(newItems);
+    onChange(newItems.map(i => i.value));
+  };
+
+  const addItem = (newItem: any) => {
+    handleChange(cache.concat([createArrayItem(newItem)]));
+  };
+
+  return { arrayItems: cache, handleChange, addItem };
+}

@@ -13,7 +13,7 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
 
-import { getArrayItemProps, getOrderedProperties, generateArrayItems, ArrayItem, createArrayItem } from '../../utils';
+import { getArrayItemProps, getOrderedProperties, useArrayItems } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
 import { objectArrayField } from './styles';
@@ -37,15 +37,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const itemSchema = Array.isArray(items) ? items[0] : items;
   const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
   const [newObject, setNewObject] = useState({});
-  const [itemCache, setItemCache] = useState<ArrayItem[]>(generateArrayItems(value));
+  const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
-  };
-
-  const handleChange = (items: ArrayItem[]) => {
-    setItemCache(items);
-    onChange(items.map(i => i.value));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -53,14 +48,14 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
       event.preventDefault();
 
       if (Object.keys(newObject).length) {
-        handleChange(itemCache.concat([createArrayItem(newObject)]));
+        addItem(newObject);
         setNewObject({});
       }
     }
   };
 
   const handleAdd = () => {
-    handleChange(itemCache.concat(createArrayItem({})));
+    addItem({});
   };
 
   const orderedProperties = getOrderedProperties(
@@ -109,7 +104,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
             <div style={{ width: '32px' }} />
           </div>
         )}
-        {map(itemCache, (item, idx) => (
+        {map(arrayItems, (item, idx) => (
           <ArrayFieldItem
             key={item.id}
             {...props}
@@ -118,7 +113,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
             stackArrayItems={stackArrayItems}
             transparentBorder
             value={item.value}
-            {...getArrayItemProps(itemCache, idx, handleChange)}
+            {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
         ))}
       </div>

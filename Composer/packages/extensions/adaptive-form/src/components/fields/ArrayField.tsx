@@ -9,7 +9,7 @@ import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 
-import { getArrayItemProps } from '../../utils';
+import { getArrayItemProps, useArrayItems } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
 import { arrayField } from './styles';
@@ -18,8 +18,9 @@ import { UnsupportedField } from './UnsupportedField';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ArrayField: React.FC<FieldProps<any[]>> = props => {
-  const { value: items = [], onChange, schema, label, description, id, rawErrors = [], uiOptions } = props;
+  const { value = [], onChange, schema, label, description, id, rawErrors = [], uiOptions } = props;
   const [newValue, setNewValue] = useState<string>();
+  const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
 
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
     setNewValue(newValue || '');
@@ -29,7 +30,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
       event.preventDefault();
 
       if (newValue) {
-        onChange([...items, newValue]);
+        addItem(newValue);
         setNewValue('');
       }
     }
@@ -45,17 +46,17 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
     <div>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <div>
-        {items.map((element, idx) => (
+        {arrayItems.map((element, idx) => (
           <ArrayFieldItem
             {...props}
+            key={element.id}
             transparentBorder
-            key={idx}
             label={false}
             rawErrors={rawErrors[idx]}
             error={rawErrors[idx]}
             schema={itemSchema}
             value={element}
-            {...getArrayItemProps(items, idx, onChange)}
+            {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
         ))}
       </div>
