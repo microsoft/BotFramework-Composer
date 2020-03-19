@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, ITextFieldProps, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { JSONSchema6 } from 'json-schema';
 import formatMessage from 'format-message';
 import get from 'lodash/get';
@@ -26,21 +27,15 @@ interface ExpresionWidgetProps extends ITextFieldProps {
   options?: any;
 }
 
-const getDefaultErrorMessage = errMessage => {
-  return formatMessage.rich('{errMessage}. Refer to the syntax documentation<a>here</a>', {
-    errMessage,
-    a: ({ children }) => (
-      <a
-        key="a"
-        href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {children}
-      </a>
-    ),
-  });
-};
+const syntaxLink = (
+  <Link
+    href="https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {formatMessage('Refer to the syntax documentation here.')}
+  </Link>
+);
 
 export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
   const {
@@ -71,17 +66,18 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         messageBarType={MessageBarType.error}
         isMultiline={false}
         dismissButtonAriaLabel={formatMessage('Close')}
-        truncated
         overflowButtonAriaLabel={formatMessage('See more')}
       >
-        {getDefaultErrorMessage(`${label} ${errMessage}`)}
+        {label}
+        {errMessage}
+        {syntaxLink}
       </MessageBar>
     ) : (
       ''
     );
 
     if (hiddenErrMessage) {
-      onValidate && onValidate(messageBar);
+      onValidate?.(messageBar);
       // return span so text field shows error border
       return errMessage ? <span /> : '';
     } else {

@@ -45,6 +45,7 @@ interface LgEditorWidgetProps {
 
 export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const { formContext, name, value, height = 250 } = props;
+
   // refered lgTemplateId may not equal to dialogId. find in value at first.
   const singleLgRefMatched = value?.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
   const lgName = singleLgRefMatched

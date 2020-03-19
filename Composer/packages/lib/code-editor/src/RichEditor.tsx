@@ -3,6 +3,7 @@
 
 import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { EditorDidMount } from '@bfcomposer/react-monaco-editor';
@@ -77,14 +78,11 @@ export function RichEditor(props: RichEditorProps) {
     }
   }, [editor]);
 
-  const messageHelp = formatMessage.rich('{msg}. Refer to the syntax documentation<a>here</a>.', {
-    msg: errorMsg || errorMsgFromDiagnostics || warningMsg || warningMsgFromDiagnostics,
-    a: ({ children }) => (
-      <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
-        {children}
-      </a>
-    ),
-  });
+  const syntaxLink = (
+    <Link href={helpURL} target="_blank" rel="noopener noreferrer">
+      {formatMessage('Refer to the syntax documentation here.')}
+    </Link>
+  );
 
   const getHeight = () => {
     if (height === null || height === undefined) {
@@ -131,13 +129,13 @@ export function RichEditor(props: RichEditorProps) {
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          isMultiline={false}
+          messageBarType={MessageBarType.error}
+          isMultiline={true}
           dismissButtonAriaLabel={formatMessage('Close')}
-          truncated
           overflowButtonAriaLabel={formatMessage('See more')}
         >
-          {messageHelp}
+          {errorMsg}
+          {syntaxLink}
         </MessageBar>
       )}
     </Fragment>
