@@ -93,15 +93,19 @@ const ExpressionField: React.FC<FieldProps> = props => {
   const pluginConfig = usePluginConfig();
 
   const options = useMemo(() => getOptions(expressionSchema, definitions), []);
-  const { key, data } = useMemo(() => getSelectedOption(value, options) || ({} as IDropdownOption), []);
+  const initialSelectedOption = useMemo(() => getSelectedOption(value, options) || ({} as IDropdownOption), []);
 
-  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7>(data.schema);
-  const [selectedKey, setSelectedKey] = useState<string>(key as string);
+  const [
+    {
+      key: selectedKey,
+      data: { schema: selectedSchema },
+    },
+    setSelectedOption,
+  ] = useState<IDropdownOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
-      setSelectedSchema(option.data.schema);
-      setSelectedKey(option.key as string);
+      setSelectedOption(option);
       props.onChange(undefined);
     }
   };
