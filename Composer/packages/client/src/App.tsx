@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -137,18 +138,20 @@ export const App: React.FC = () => {
               ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            {topLinks(projectId).map((link, index) => {
-              return (
-                <NavItem
-                  key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
-                  iconName={link.iconName}
-                  labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
-                />
-              );
-            })}
+            <Nav
+              ariaLabel={formatMessage('Navigation')}
+              groups={[
+                {
+                  links: topLinks(projectId).map((link, index) => ({
+                    name: link.labelName,
+                    ariaLabel: link.labelName,
+                    icon: link.iconName,
+                    url: mapNavItemTo(link.to),
+                    disabled: link.disabled,
+                  })),
+                },
+              ]}
+            />
           </div>
           <div css={leftNavBottom}>
             <div css={divider(sideBarExpand)} />{' '}

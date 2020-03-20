@@ -6,7 +6,6 @@ import { jsx } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import { Link, LinkGetProps } from '@reach/router';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 
 import { StoreContext } from '../../store';
 
@@ -38,32 +37,30 @@ export const NavItem: React.FC<INavItemProps> = props => {
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   return (
-    <FocusZone allowFocusRoot={true} disabled={disabled}>
-      <Link
-        to={to}
-        css={link(active, disabled)}
-        getProps={(props: LinkGetProps) => {
-          const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
-          setActive(isActive);
-          return {};
-        }}
-        data-testid={'LeftNav-CommandBarButton' + labelName}
-        aria-disabled={disabled}
-        aria-label={labelName}
-        ref={addRef}
-      >
-        <div css={outer} aria-hidden="true">
-          <CommandBarButton
-            iconProps={{
-              iconName,
-            }}
-            text={labelName}
-            styles={commandBarButton(active)}
-            disabled={disabled}
-            ariaHidden
-          />
-        </div>
-      </Link>
-    </FocusZone>
+    <Link
+      to={to}
+      css={link(active, disabled)}
+      getProps={(props: LinkGetProps) => {
+        const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
+        setActive(isActive);
+        return {};
+      }}
+      data-testid={'LeftNav-CommandBarButton' + labelName}
+      aria-disabled={disabled}
+      aria-label={labelName}
+      ref={addRef}
+    >
+      <div css={outer} aria-hidden="true">
+        <CommandBarButton
+          iconProps={{
+            iconName,
+          }}
+          text={labelName}
+          styles={commandBarButton(active)}
+          disabled={disabled}
+          ariaHidden
+        />
+      </div>
+    </Link>
   );
 };
