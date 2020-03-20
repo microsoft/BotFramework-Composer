@@ -7,30 +7,29 @@ import path from 'path';
 import log from '../logger';
 import settings from '../settings';
 
-import localInitData from './data.template';
-import abhInitData from './abh-template.json';
-import { runMigrations } from './migrations';
+import initData from './data.template';
 
-const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
-const dataStorePath =
-  isHostedInAzure && process.env.HOME ? path.resolve(process.env.HOME, './site/data.json') : settings.appDataPath;
+const dataStorePath = settings.appDataPath;
 
-let initData = isHostedInAzure ? abhInitData : localInitData;
+const updateStore = () => {
+  if (fs.existsSync(dataStorePath)) {
+    const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
 
-if (fs.existsSync(dataStorePath)) {
-  const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
-  initData = runMigrations(userData);
-} else {
-  log('Database not found. Seeding data.json with: %O', initData);
-}
+    function compareKeys(a, b) {
+      var aKeys = Object.keys(a).sort();
+      var bKeys = Object.keys(b).sort();
+      return JSON.stringify(aKeys) === JSON.stringify(bKeys);
+    }
 
-fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+    if (!compareKeys(initData, userData)) {
+      // it's safe to assume when keys are different, the user data is using an obsolete version
+      log('data store version mismatch detected, re-init data store with latest data schema');
+      fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
+    }
+  }
+};
 
-if (isHostedInAzure) {
-  // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
-  // always find the file, add one more io to kick the  virtual file system
-  fs.appendFileSync(dataStorePath, ' ');
-}
+updateStore();
 
 interface KVStore {
   get(key: string, defaultValue?: any): any;
