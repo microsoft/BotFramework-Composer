@@ -33,7 +33,7 @@ if (isHostedInAzure) {
 }
 
 interface KVStore {
-  get(key: string): any;
+  get(key: string, defaultValue?: any): any;
   set(key: string, value: any): void;
 }
 
@@ -41,11 +41,15 @@ class JsonStore implements KVStore {
   private data: any;
   private filePath: string;
 
-  get = (key: string): any => {
+  get = (key: string, defaultValue?: any): any => {
     this.readStore();
 
     if (key in this.data) {
       return this.data[key];
+    } else if (defaultValue) {
+      // when default value is present, save it
+      this.set(key, defaultValue);
+      return defaultValue;
     } else {
       throw Error(`no such key ${key} in store`);
     }

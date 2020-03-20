@@ -77,8 +77,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
 
   render() {
     const { height = 250 } = this.props;
-    const { luFile, luFileId, luIntent, name } = this;
-
+    const { luFile, luFileId, luIntent, name, formContext } = this;
     const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
     const label = prompt
@@ -94,6 +93,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
           diagnostics={diagnostics}
           hidePlaceholder={true}
           luOption={{
+            projectId: formContext.projectId,
             fileId: luFileId,
             sectionId: luIntent?.Name,
           }}

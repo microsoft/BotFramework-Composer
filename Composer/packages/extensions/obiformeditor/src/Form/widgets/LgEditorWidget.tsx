@@ -94,6 +94,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   }, [template.body]);
 
   const lgOption = {
+    projectId: formContext.projectId,
     fileId: lgFileId,
     templateId: lgName,
   };

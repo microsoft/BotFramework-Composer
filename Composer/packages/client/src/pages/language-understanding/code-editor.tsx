@@ -25,7 +25,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
-  const { luFiles } = state;
+  const { luFiles, projectId } = state;
   const { fileId } = props;
   const file = luFiles?.find(({ id }) => id === fileId);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
@@ -53,7 +53,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = intent ? intent.Body : file.content;
     setContent(value);
-  }, [file, sectionId]);
+  }, [file, sectionId, projectId]);
 
   const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
@@ -77,6 +77,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         if (!file || !intent) return;
         const { Name } = intent;
         const payload = {
+          projectId,
           file,
           intentName: Name,
           intent: {
@@ -86,7 +87,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         };
         actions.updateLuIntent(payload);
       }, 500),
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const updateLuFile = useMemo(
@@ -95,12 +96,13 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         if (!file) return;
         const { id } = file;
         const payload = {
+          projectId,
           id,
           content,
         };
         actions.updateLuFile(payload);
       }, 500),
-    [file]
+    [file, projectId]
   );
 
   const updateDiagnostics = useMemo(
@@ -127,7 +129,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           setDiagnostics(diagnostics);
         }
       }, 1000),
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const _onChange = useCallback(
@@ -141,10 +143,11 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         updateLuFile(value);
       }
     },
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const luOption = {
+    projectId,
     fileId,
     sectionId: intent?.Name,
   };

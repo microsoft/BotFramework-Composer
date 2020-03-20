@@ -14,4 +14,5 @@ export default {
     },
   ],
   recentBotProjects: [],
+  projectLocationMap: {},
 };
