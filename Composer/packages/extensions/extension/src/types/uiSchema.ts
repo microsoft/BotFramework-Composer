@@ -5,11 +5,13 @@ import { SDKTypes, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
 import { FieldWidget, FieldProps } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type UIOptionFunc<R = any, D = any> = (data: D) => R;
+type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type UIOptionFunc<R, D> = (data: D) => R;
 
 export interface UIOptions {
   /** Description override. */
-  description?: string | UIOptionFunc<string | undefined>;
+  description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
   field?: FieldWidget;
   /** Url to docs. Rendered below field description. */
@@ -23,17 +25,19 @@ export interface UIOptions {
    *   }
    * }
    */
-  hidden?: string[] | UIOptionFunc<string[]>;
+  hidden?: UIOptionValue<string[]>;
   /** Label override. */
-  label?: string | UIOptionFunc<string | undefined> | false;
+  label?: UIOptionValue<string | false | undefined>;
   /** Set order of fields. Use * for all other fields. */
-  order?: (string | [string, string])[] | UIOptionFunc<(string | [string, string])[]>;
+  order?: UIOptionValue<(string | [string, string])[]>;
   /** Placeholder override. If undefined, schema.examples are used. */
-  placeholder?: string | UIOptionFunc<string, undefined>;
+  placeholder?: UIOptionValue<string, undefined>;
   /** Define ui options on fields that are children of this field. */
   properties?: {
     [key: string]: UIOptions;
   };
+  /** subtitle rendered in form title */
+  subtitle?: UIOptionValue<string>;
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
@@ -42,7 +46,7 @@ export type RecognizerSchema = {
   /** Unique id to identify recognizer (SDK $kind) */
   id: string;
   /** Display name used in the UI */
-  displayName: string | UIOptionFunc<string>;
+  displayName: UIOptionValue<string>;
   /** An inline editor to edit an intent. If none provided, users will not be able to edit. */
   editor?: FieldWidget;
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
