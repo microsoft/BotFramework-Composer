@@ -73,18 +73,45 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
 
 const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined => {
   const expressionOption = options.find(({ key }) => key === 'expression');
-  const typeOption = options.find(({ key }) => (Array.isArray(value) ? 'array' : typeof value) === key) || options[0];
+  const valueType = Array.isArray(value) ? 'array' : typeof value;
 
-  if (typeof value === 'undefined' || !value) {
-    return options.length > 2 ? expressionOption : typeOption;
+  // if its an array, we know it's not an expression
+  if (valueType === 'array') {
+    const item = value[0];
+    const firstArrayOption = options.find(o => o.data.schema.type === 'array');
+
+    // if there is nothing in the array, default to the first array type
+    if (!item) {
+      return firstArrayOption;
+    }
+
+    // else, find the option with an item schema that matches item type
+    return (
+      options.find(o => {
+        const {
+          data: { schema },
+        } = o;
+
+        const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
+        return itemSchema && typeof item === itemSchema.type;
+      }) || firstArrayOption
+    );
+  }
+
+  // if the value if undefined, either default to expression or the first option
+  if (!value) {
+    return options.length > 2 ? expressionOption : options[0];
+    // else if the value is a string and starts with '=' it is an expression
   } else if (
     expressionOption &&
-    typeof value === 'string' &&
+    valueType === 'string' &&
     (value.startsWith('=') || !options.find(({ key }) => key === 'string'))
   ) {
     return expressionOption;
   }
-  return typeOption;
+
+  // lastly, attempt to find the option based on value type
+  return options.find(o => o.data.schema.type === valueType) || options[0];
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
@@ -125,7 +152,10 @@ const ExpressionField: React.FC<FieldProps> = props => {
     }
 
     // return a json editor for open ended obejcts
-    if (selectedSchema.type === 'object' && !selectedSchema.properties) {
+    if (
+      (selectedSchema.type === 'object' && !selectedSchema.properties) ||
+      (selectedSchema.type === 'array' && !selectedSchema.items)
+    ) {
       return (
         <JsonEditor
           key={selectedSchema.type}
@@ -167,7 +197,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
               onRenderTitle={renderTypeTitle}
               styles={{
                 caretDownWrapper: { height: '24px', lineHeight: '24px' },
-                root: { flexBasis: 'auto', padding: '5px 0', width: '110px' },
+                root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
                 title: { height: '24px', lineHeight: '20px' },
               }}
             />
