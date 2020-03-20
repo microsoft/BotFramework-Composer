@@ -124,15 +124,14 @@ const ExpressionField: React.FC<FieldProps> = props => {
       return <ExpressionEditor {...props} />;
     }
 
-    if (['array', 'object'].includes(selectedSchema.type)) {
-      const defaultValue = selectedSchema.type === 'object' ? {} : [];
-
+    // return a json editor for open ended obejcts
+    if (selectedSchema.type === 'object' && !selectedSchema.properties) {
       return (
         <JsonEditor
           key={selectedSchema.type}
           id={props.id}
           onChange={props.onChange}
-          value={value || defaultValue}
+          value={value || {}}
           height={100}
           schema={selectedSchema}
         />
