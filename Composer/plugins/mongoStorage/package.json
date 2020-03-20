@@ -1,0 +1,21 @@
+{
+  "name": "mongoStorage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "extendsComposer": false,
+  "author": "benbro@microsoft.com",
+  "license": "MIT",
+  "dependencies": {
+    "glob-to-regexp": "^0.4.1",
+    "mongoose": "^5.8.5"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.3.14",
+    "@types/mongoose": "^5.5.38"
+  }
+}

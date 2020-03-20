@@ -7,7 +7,7 @@
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
   "recognizer": {
-    "$kind": "Microsoft.RegexRecognizer",
+    "$type": "Microsoft.RegexRecognizer",
     "id": "regex",
     "intents": [
       {

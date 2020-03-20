@@ -7,7 +7,7 @@ import { ActionCreator } from '../types';
 
 import { ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
-import { startBot } from './bot';
+import { startBot } from './publisher';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
@@ -30,9 +30,9 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
-export const fetchProject: ActionCreator = async store => {
+export const fetchProjectById: ActionCreator = async (store, projectId) => {
   try {
-    const response = await httpClient.get(`/projects/opened`);
+    const response = await httpClient.get(`/projects/${projectId}`);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -42,8 +42,14 @@ export const fetchProject: ActionCreator = async store => {
     return response.data;
   } catch (err) {
     navigateTo('/home');
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error: err } });
   }
+};
+
+export const fetchProject: ActionCreator = async store => {
+  const state = store.getState();
+  const projectId = state.projectId;
+  return fetchProjectById(store, projectId);
 };
 
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
@@ -68,8 +74,9 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
-    const response = await httpClient.put(`/projects/opened`, data);
+    const response = await httpClient.put(`/projects/open`, data);
     const dialogs = response.data.dialogs;
+    const projectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -77,10 +84,13 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       },
     });
     if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
+      // navTo(store, 'Main');
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+      navigateTo(mainUrl);
       startBot(store, true);
+    } else {
+      navigate(BASEPATH);
     }
-    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -98,7 +108,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   }
 };
 
-export const saveProjectAs: ActionCreator = async (store, name, description, location) => {
+export const saveProjectAs: ActionCreator = async (store, projectId, name, description, location) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -108,7 +118,7 @@ export const saveProjectAs: ActionCreator = async (store, name, description, loc
       description,
       location,
     };
-    const response = await httpClient.post(`/projects/opened/project/saveAs`, data);
+    const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
     const dialogs = response.data.dialogs;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
