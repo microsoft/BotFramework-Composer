@@ -11,6 +11,7 @@ export interface FormContext
   rootId: string;
   dialogOptions: { value: string; label: string }[];
   dialogId?: string;
+  projectId: string;
   isRoot: boolean;
   formErrors: any;
 }

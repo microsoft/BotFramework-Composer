@@ -2,6 +2,48 @@
 
 ## Releases
 
+### 03-18-2020
+
+#### Added
+
+- feat: enable composer to call a remote skill ([#2233](https://github.com/microsoft/BotFramework-Composer/pull/2233)) ([@luhan2017](https://github.com/luhan2017))
+- feat: Move ([#2206](https://github.com/microsoft/BotFramework-Composer/pull/2206)) ([@cwhitten](https://github.com/cwhitten))
+- feat: add luis authoring region in deployment script ([#2229](https://github.com/microsoft/BotFramework-Composer/pull/2229)) ([@zidaneymar](https://github.com/zidaneymar))
+- feat: add default alwaysPrompt value in OAuthInput step ([#2266](https://github.com/microsoft/BotFramework-Composer/pull/2266)) ([@alanlong9278](https://github.com/alanlong9278))
+
+#### Fixed
+
+- a11y: #2109 Improve UX and accessibility of deploy dialogs ([#2294](https://github.com/microsoft/BotFramework-Composer/pull/2294)) ([@corinagum](https://github.com/corinagum))
+- fix: ErrorMessage can not be displayed in two expression field ([#2278](https://github.com/microsoft/BotFramework-Composer/pull/2278)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: Some editting bugs in Lu editor ([#2285](https://github.com/microsoft/BotFramework-Composer/pull/2285)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: composer crashed when delete the dialog ([#2290](https://github.com/microsoft/BotFramework-Composer/pull/2290)) ([@lei9444](https://github.com/lei9444))
+- fix: use ':' instead of '=' for prefix ([#2275](https://github.com/microsoft/BotFramework-Composer/pull/2275)) ([@alanlong9278](https://github.com/alanlong9278))
+- a11y: #2133 add labels to Learn more links ([#2205](https://github.com/microsoft/BotFramework-Composer/pull/2205)) ([@corinagum](https://github.com/corinagum))
+- a11y: Accessibility in lg/lu page ([#2265](https://github.com/microsoft/BotFramework-Composer/pull/2265)) ([@zhixzhan](https://github.com/zhixzhan))
+- fix: schema mismatch for message received ([#2248](https://github.com/microsoft/BotFramework-Composer/pull/2248)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: add luis publish status in client ([#2256](https://github.com/microsoft/BotFramework-Composer/pull/2256)) ([@lei9444](https://github.com/lei9444))
+- a11y: Accessibility issue ([#2197](https://github.com/microsoft/BotFramework-Composer/pull/2197)) ([@liweitian](https://github.com/liweitian))
+- a11y: add ariaLabel props to EditableField and TextFields ([#2259](https://github.com/microsoft/BotFramework-Composer/pull/2259)) ([@beyackle](https://github.com/beyackle))
+- fix: beenUsed status in lg all up view ([#2245](https://github.com/microsoft/BotFramework-Composer/pull/2245)) ([@zhixzhan](https://github.com/zhixzhan))
+- a11y: adjust id numbers in dialog samples ([#2239](https://github.com/microsoft/BotFramework-Composer/pull/2239)) ([@beyackle](https://github.com/beyackle))
+- a11y: make dialog name required ([#2295](https://github.com/microsoft/BotFramework-Composer/pull/2295)) ([@beyackle](https://github.com/beyackle))
+- a11y: replace h4 with h1 ([#2271](https://github.com/microsoft/BotFramework-Composer/pull/2271)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: sync oauth input property in form editor ([#2246](https://github.com/microsoft/BotFramework-Composer/pull/2246)) ([@alanlong9278](https://github.com/alanlong9278))
+- a11y: add SR labels to Bot Responses "used" column ([#2263](https://github.com/microsoft/BotFramework-Composer/pull/2263)) ([@beyackle](https://github.com/beyackle))
+- fix: reset bot connection status when loading a new bot ([#2255](https://github.com/microsoft/BotFramework-Composer/pull/2255)) ([@VanyLaw](https://github.com/VanyLaw))
+
+#### Changed
+
+- chore: update to 4.8 sdk release ([#2296](https://github.com/microsoft/BotFramework-Composer/pull/2296)) ([@luhan2017](https://github.com/luhan2017))
+- refactor: support lg templates cross-file copy during Visual Editor copy / paste ([#2236](https://github.com/microsoft/BotFramework-Composer/pull/2236)) ([@yeze322](https://github.com/yeze322))
+
+#### Other
+
+- chore: update bug issue template to create correct label ([#2303](https://github.com/microsoft/BotFramework-Composer/pull/2303)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: change templates to use $type over $kind ([#2302](https://github.com/microsoft/BotFramework-Composer/pull/2302)) ([@cwhitten](https://github.com/cwhitten))
+- chore: merge stable into master ([#2223](https://github.com/microsoft/BotFramework-Composer/pull/2223)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: deploy to publish ([#2227](https://github.com/microsoft/BotFramework-Composer/pull/2227)) ([@cwhitten](https://github.com/cwhitten))
+
 ### 03-09-2020
 
 #### Added

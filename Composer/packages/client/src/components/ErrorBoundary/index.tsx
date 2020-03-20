@@ -30,6 +30,7 @@ interface ErrorBoundaryState {
   error: {
     message?: React.ReactNode;
     summary?: string;
+    status?: number;
   };
 }
 
@@ -81,8 +82,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     window.removeEventListener('error', this.eventHandler);
   }
 
+  closeErrorPopup() {
+    // if this is an error resulting in an http 409 rejection, reload the project data automatically.
+    if (this.context.state.error && this.context.state.error.status && this.context.state.error.status === 409) {
+      this.context.actions.fetchProject();
+    }
+    // reset the error state which will close the popup.
+    this.context.actions.setError(null);
+  }
+
   render() {
-    const { state, actions } = this.context;
+    const { state } = this.context;
     return (
       <div>
         {state.error ? (
@@ -90,7 +100,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             error={state.error.message}
             title={state.error.summary}
             onDismiss={() => {
-              actions.setError(null);
+              this.closeErrorPopup();
             }}
           />
         ) : null}
