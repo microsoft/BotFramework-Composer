@@ -113,6 +113,8 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.OnCancelDialog]: { ...triggerUiSchema },
   [SDKTypes.OnCondition]: { ...triggerUiSchema },
   [SDKTypes.OnConversationUpdateActivity]: {
+    label: 'Greeting',
+    description: 'Handle the events fired when a user begins a new conversation with the bot.',
     helpLink:
       'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
     ...triggerUiSchema,
@@ -143,7 +145,10 @@ const DefaultUISchema: UISchema = {
   [SDKTypes.QnAMakerDialog]: {
     helpLink: 'https://aka.ms/bfc-using-QnA',
   },
-  [SDKTypes.Recognizer]: { field: RecognizerField },
+  [SDKTypes.Recognizer]: {
+    field: RecognizerField,
+    helpLink: 'https://aka.ms/BFC-Using-LU',
+  },
   [SDKTypes.RegexRecognizer]: { hidden: ['entities'] },
   [SDKTypes.RepeatDialog]: {
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
@@ -178,9 +183,6 @@ const DefaultUISchema: UISchema = {
   },
   [SDKTypes.TraceActivity]: {
     helpLink: 'https://aka.ms/bfc-debugging-bots',
-  },
-  [SDKTypes.Recognizer]: {
-    helpLink: 'https://aka.ms/BFC-Using-LU',
   },
 };
 
