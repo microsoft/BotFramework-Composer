@@ -10,6 +10,7 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
+import { UserIdentity } from '../../services/pluginLoader';
 import { IFileStorage } from '../storage/interface';
 
 interface TemplateData {
@@ -163,7 +164,7 @@ export class AssetManager {
       throw new Error(`no such template with id ${templateId}`);
     }
     // copy Composer data files
-    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
+    await copyDir(template.path + '/ComposerDialogs', this.templateStorage, dstDir, dstStorage);
   }
 
   public async copyRuntimeTo(dstDir: string, dstStorage: IFileStorage) {
@@ -175,16 +176,16 @@ export class AssetManager {
     await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
     // user storage maybe diff from template storage
-    const dstStorage = StorageService.getStorageClient(ref.storageId);
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
     const dstDir = Path.resolve(ref.path);
     if (await dstStorage.exists(dstDir)) {
       log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
     await this.copyDataFilesTo(templateId, dstDir, dstStorage);
-    await this.copyRuntimeTo(dstDir, dstStorage);
+    // await this.copyRuntimeTo(dstDir, dstStorage);
     return ref;
   }
 }

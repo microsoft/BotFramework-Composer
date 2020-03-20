@@ -1,18 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StorageConnection, IFileStorage } from './interface';
+import { pluginLoader, UserIdentity } from '../../services/pluginLoader';
+
 import { LocalDiskStorage } from './localDiskStorage';
-import { AzureBlobStorage } from './azureBlobStorage';
+import { StorageConnection, IFileStorage } from './interface';
+
 export class StorageFactory {
-  public static createStorageClient(conn: StorageConnection): IFileStorage {
-    switch (conn.type) {
-      case 'LocalDisk':
-        return new LocalDiskStorage();
-      case 'AzureBlobStorage':
-        return new AzureBlobStorage(conn);
-      default:
-        throw new Error(`unknow storage type ${conn.type}`);
+  public static createStorageClient(conn: StorageConnection, user?: UserIdentity): IFileStorage {
+    if (pluginLoader.extensions.storage && pluginLoader.extensions.storage.customStorageClass) {
+      const customStorageClass = pluginLoader.extensions.storage.customStorageClass;
+      if (customStorageClass) {
+        return new customStorageClass(conn, user) as IFileStorage;
+      }
     }
+
+    // otherwise...
+    return new LocalDiskStorage();
   }
 }
