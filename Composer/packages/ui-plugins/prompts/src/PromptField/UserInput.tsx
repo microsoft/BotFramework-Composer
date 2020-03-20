@@ -6,8 +6,8 @@ import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
-import { SchemaField } from '@bfc/adaptive-form';
-import { JSONSchema7 } from '@bfc/extension';
+import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
+import { JSONSchema7, useShellApi } from '@bfc/extension';
 
 import { PromptFieldProps } from './types';
 import { ChoiceInputSettings } from './ChoiceInputSettings';
@@ -22,7 +22,17 @@ const getOptions = (enumSchema: JSONSchema7) => {
 };
 
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
-  const { onChange, getSchema, value, id, uiOptions, getError, ...rest } = props;
+  const { onChange, getSchema, value, id, uiOptions, getError, label, description, schema = {}, ...rest } = props;
+  const { currentDialog, designerId } = useShellApi();
+  const { recognizers } = usePluginConfig();
+
+  const { const: kind } = (schema?.properties?.['$kind'] as any) || {};
+  const [, promptType] = ((kind as string) || '').split('.');
+  const intentName = `${promptType}.response-${designerId}`;
+
+  const type = recognizerType(currentDialog);
+  const Editor: any = recognizers.find(r => r.id === type)?.editor;
+  const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
     <Fragment>
@@ -47,6 +57,21 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           onChange={onChange('outputFormat')}
           rawErrors={getError('outputFormat')}
         />
+      )}
+      <SchemaField
+        {...rest}
+        id={`${id}.value`}
+        schema={getSchema('value')}
+        uiOptions={uiOptions.properties?.value || {}}
+        value={value?.value}
+        onChange={onChange('value')}
+        rawErrors={getError('value')}
+      />
+      {Editor && kind !== SDKTypes.AttachmentInput && (
+        <React.Fragment>
+          <FieldLabel id={`${id}.intent`} label={intentLabel} />
+          <Editor {...props} onChange={() => {}} />
+        </React.Fragment>
       )}
       {getSchema('defaultLocale') && (
         <SchemaField

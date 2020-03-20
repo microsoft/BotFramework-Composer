@@ -10,7 +10,7 @@ import { usePluginConfig } from '../../hooks';
 import { FieldLabel } from '../FieldLabel';
 
 // TODO: extend recognizer config to support this
-function recognizerType({ content }: DialogInfo): string | null {
+export function recognizerType({ content }: DialogInfo): string | null {
   const { recognizer } = content;
 
   if (recognizer) {

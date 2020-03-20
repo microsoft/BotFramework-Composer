@@ -18,7 +18,6 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'unrecognizedPrompt',
   'validations',
   'invalidPrompt',
-  'value',
   'defaultValueResponse',
   'maxTurnCount',
   'defaultValue',

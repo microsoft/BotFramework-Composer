@@ -8,9 +8,17 @@ import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
-  const { onChange, value: intentName } = props;
-  const { currentDialog, luFiles, shellApi } = useShellApi();
+  const { onChange, value, schema } = props;
+  const { currentDialog, designerId, luFiles, shellApi } = useShellApi();
   const luFile = luFiles.find(f => f.id === currentDialog.id);
+
+  let intentName = value;
+  if (typeof intentName === 'object') {
+    const { $kind }: any = schema?.properties || {};
+    const [, promptType] = $kind.const.split('.');
+    promptType && (intentName = `${promptType}.response-${designerId}`);
+  }
+
   const [luIntent, setLuIntent] = useState<LuIntentSection>(
     (luFile && luFile.intents.find(intent => intent.Name === intentName)) ||
       ({
@@ -24,6 +32,10 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   }
 
   const commitChanges = newValue => {
+    if (!intentName) {
+      return;
+    }
+
     const newIntent = { Name: intentName, Body: newValue };
     setLuIntent(newIntent);
     shellApi.updateLuIntent(luFile.id, intentName, newIntent);
