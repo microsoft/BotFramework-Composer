@@ -8,28 +8,19 @@ import log from '../logger';
 import settings from '../settings';
 
 import initData from './data.template';
+import { runMigrations } from './migrations';
 
 const dataStorePath = settings.appDataPath;
 
-const updateStore = () => {
+const migrateStore = () => {
   if (fs.existsSync(dataStorePath)) {
     const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
-
-    const compareKeys = (a, b) => {
-      const aKeys = Object.keys(a).sort();
-      const bKeys = Object.keys(b).sort();
-      return JSON.stringify(aKeys) === JSON.stringify(bKeys);
-    };
-
-    if (!compareKeys(initData, userData)) {
-      // it's safe to assume when keys are different, the user data is using an obsolete version
-      log('data store version mismatch detected, re-init data store with latest data schema');
-      fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
-    }
+    const migratedData = runMigrations(userData);
+    fs.writeFileSync(dataStorePath, JSON.stringify(migratedData, null, 2) + '\n');
   }
 };
 
-updateStore();
+migrateStore();
 
 interface KVStore {
   get(key: string, defaultValue?: any): any;
