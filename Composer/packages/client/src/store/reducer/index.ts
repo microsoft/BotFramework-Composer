@@ -3,9 +3,18 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { dialogIndexer } from '@bfc/indexers';
+import formatMessage from 'format-message';
 import { SensitiveProperties } from '@bfc/shared';
-import { Diagnostic, DiagnosticSeverity, LgTemplate, lgIndexer, luIndexer } from '@bfc/indexers';
+import {
+  Diagnostic,
+  DiagnosticSeverity,
+  LgTemplate,
+  lgIndexer,
+  luIndexer,
+  LuFile,
+  DialogInfo,
+  dialogIndexer,
+} from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
@@ -13,6 +22,8 @@ import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getFileName, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { getReferredFiles } from '../../utils/luUtil';
 
 import createReducer from './createReducer';
 
@@ -43,18 +54,42 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
+const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
+  const status = luFileStatusStorage.get(botName);
+  return luFiles.map(luFile => {
+    if (typeof status[luFile.id] === 'boolean') {
+      return { ...luFile, published: status[luFile.id] };
+    } else {
+      return { ...luFile, published: false };
+    }
+  });
+};
+
+const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
+  getReferredFiles(luFiles, dialogs).forEach(luFile => {
+    luFileStatusStorage.checkFileStatus(botName, luFile.id);
+  });
+  return updateLuFilesStatus(botName, luFiles);
+};
+
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
+  const { dialogs, botName, luFiles, id } = response.data;
+  state.projectId = id;
+  state.dialogs = dialogs;
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
-  state.botName = response.data.botName;
-  state.botStatus = response.data.location === state.location ? state.botStatus : BotStatus.unConnected;
+  state.botName = botName;
   state.location = response.data.location;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = response.data.settings;
-  refreshLocalStorage(response.data.botName, state.settings);
-  mergeLocalStorage(response.data.botName, state.settings);
+  refreshLocalStorage(botName, state.settings);
+  mergeLocalStorage(botName, state.settings);
+  return state;
+};
+
+const getProjectFailure: ReducerFunc = (state, { error }) => {
+  setError(state, error);
   return state;
 };
 
@@ -84,7 +119,7 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 
 const removeDialog: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
   state.lgFiles = response.data.lgFiles;
   return state;
 };
@@ -104,7 +139,7 @@ const createDialogCancel: ReducerFunc = state => {
 
 const createDialogSuccess: ReducerFunc = (state, { response }) => {
   state.dialogs = response.data.dialogs;
-  state.luFiles = response.data.luFiles;
+  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
   state.lgFiles = response.data.lgFiles;
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
@@ -152,24 +187,15 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
     return luFile;
   });
 
-  state.luFiles = luFiles.map(luFile => {
-    const { parse } = luIndexer;
-    const { id, content } = luFile;
-    const { intents, diagnostics } = parse(content, id);
-    return { ...luFile, intents, diagnostics, content };
-  });
-
-  return state;
-};
-
-const setBotStatus: ReducerFunc = (state, { status, botEndpoint }) => {
-  state.botEndpoint = botEndpoint || state.botEndpoint;
-  state.botStatus = status;
-  return state;
-};
-
-const updateRemoteEndpoint: ReducerFunc = (state, { slot, botEndpoint }) => {
-  state.remoteEndpoints[slot] = botEndpoint;
+  state.luFiles = updateLuFilesStatus(
+    state.botName,
+    luFiles.map(luFile => {
+      const { parse } = luIndexer;
+      const { id, content } = luFile;
+      const { intents, diagnostics } = parse(content, id);
+      return { ...luFile, intents, diagnostics, content };
+    })
+  );
   return state;
 };
 
@@ -223,11 +249,35 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 };
 
 const setError: ReducerFunc = (state, payload) => {
-  state.error = payload;
+  // if the error originated at the server and the server included message, use it...
+  if (payload && payload.status && payload.status === 409) {
+    state.error = {
+      status: 409,
+      message: formatMessage(
+        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
+      ),
+      summary: formatMessage('Modification Rejected'),
+    };
+  } else {
+    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+      state.error = payload.response.data;
+    } else {
+      state.error = payload;
+    }
+  }
+
+  if (state.error) {
+    // warn this error out to the console.
+    console.error('ERROR', state.error);
+  }
+
   return state;
 };
 
-const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused, breadcrumb, promptTab }) => {
+const setDesignPageLocation: ReducerFunc = (
+  state,
+  { projectId, dialogId, selected, focused, breadcrumb, promptTab }
+) => {
   //generate focusedPath. This will remove when all focusPath related is removed
   state.focusPath = dialogId + '#';
   if (focused) {
@@ -240,7 +290,7 @@ const setDesignPageLocation: ReducerFunc = (state, { dialogId, selected, focused
   breadcrumb.push({ dialogId, selected, focused });
 
   state.breadcrumb = breadcrumb;
-  state.designPageLocation = { dialogId, selected, focused, promptTab };
+  state.designPageLocation = { dialogId, projectId, selected, focused, promptTab };
   return state;
 };
 
@@ -288,18 +338,29 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
-const setPublishVersions: ReducerFunc = (state, { versions } = {}) => {
-  state.publishVersions = versions;
+const setPublishTypes: ReducerFunc = (state, { response }) => {
+  state.publishTypes = response;
   return state;
 };
 
-const updatePublishStatus: ReducerFunc = (state, payload) => {
-  if (payload.versions) {
-    state.publishStatus = 'ok';
-  } else if (payload.error) {
-    state.publishStatus = payload.error;
-  } else if (payload.start === true) {
-    state.publishStatus = 'start';
+const publishSuccess: ReducerFunc = (state, payload) => {
+  console.log('Got publish status from remote', payload);
+  state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
+  state.botStatus = BotStatus.connected;
+
+  return state;
+};
+
+const publishFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.unConnected;
+  return state;
+};
+
+const getPublishStatus: ReducerFunc = (state, payload) => {
+  if (payload.results?.botStatus === 'connected') {
+    state.botStatus = BotStatus.connected;
+  } else {
+    state.botStatus = BotStatus.unConnected;
   }
   return state;
 };
@@ -324,13 +385,33 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
+const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
+  if (type === 'dialog') {
+    const dialog = state.dialogs.find(d => d.id === id);
+    if (dialog) {
+      dialog.lastModified = lastModified;
+    }
+  } else if (type === 'lg') {
+    const lg = state.lgFiles.find(d => d.id === id);
+    if (lg) {
+      lg.lastModified = lastModified;
+    }
+  } else if (type === 'lu') {
+    const lu = state.luFiles.find(d => d.id === id);
+    if (lu) {
+      lu.lastModified = lastModified;
+    }
+  }
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
-  [ActionTypes.GET_PROJECT_FAILURE]: noOp,
+  [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
@@ -359,8 +440,6 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.CONNECT_BOT_SUCCESS]: setBotStatus,
-  [ActionTypes.CONNECT_BOT_FAILURE]: setBotStatus,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
@@ -372,14 +451,14 @@ export const reducer = createReducer({
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
-  [ActionTypes.GET_PUBLISH_VERSIONS_SUCCESS]: setPublishVersions,
-  [ActionTypes.PUBLISH_SUCCESS]: updatePublishStatus,
-  [ActionTypes.PUBLISH_ERROR]: updatePublishStatus,
-  [ActionTypes.PUBLISH_BEGIN]: updatePublishStatus,
-  [ActionTypes.GET_ENDPOINT_SUCCESS]: updateRemoteEndpoint,
+  [ActionTypes.GET_PUBLISH_TYPES_SUCCESS]: setPublishTypes,
+  [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
+  [ActionTypes.PUBLISH_FAILED]: publishFailure,
+  [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
 });

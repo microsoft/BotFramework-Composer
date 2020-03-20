@@ -28,7 +28,7 @@ interface FormDataError {
   name?: string;
 }
 
-interface Bots {
+interface Files {
   name: '';
   path: '';
 }
@@ -40,13 +40,13 @@ interface DefineConversationProps {
   onGetErrorMessage?: (text: string) => void;
   focusedStorageFolder?: StorageFolder;
   currentPath?: string;
-  bots?: Bots[];
+  files?: Files[];
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, currentPath, bots } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, currentPath, files } = props;
   const { state } = useContext(StoreContext);
   const { templateId } = state;
 
@@ -58,9 +58,9 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
       i++;
       defaultName = `${bot}-${i}`;
     } while (
-      bots &&
-      bots.find(bot => {
-        return bot.name === defaultName;
+      files &&
+      files.find(file => {
+        return file.name.toLowerCase() === defaultName.toLowerCase();
       }) &&
       i < MAXTRYTIMES
     );
@@ -94,9 +94,9 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
         : '';
     if (
       name &&
-      bots &&
-      bots.find(bot => {
-        return bot.path === newBotPath;
+      files &&
+      files.find(bot => {
+        return bot.path.toLowerCase() === newBotPath.toLowerCase();
       })
     ) {
       errors.name = formatMessage('Duplication of names');
@@ -116,7 +116,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
       setDisable(false);
     }
     setFormDataErrors(errors);
-  }, [bots, formData.name]);
+  }, [files, formData.name]);
 
   const handleSubmit = e => {
     e.preventDefault();

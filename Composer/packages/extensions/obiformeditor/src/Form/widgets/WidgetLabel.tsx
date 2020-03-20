@@ -13,10 +13,11 @@ interface DescriptionCalloutProps {
   id?: string;
   helpLink?: string;
   helpLinkText?: string;
+  helpLinkLabel?: string;
 }
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
-  const { description, title, id, helpLink, helpLinkText } = props;
+  const { description, title, id, helpLink, helpLinkText, helpLinkLabel } = props;
 
   if (!description) {
     return null;
@@ -31,11 +32,11 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = props => {
             <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>{title}</h3>
             <p>
               {description}
-              {helpLink && helpLinkText && (
+              {helpLink && helpLinkText && helpLinkLabel && (
                 <>
                   <br />
                   <br />
-                  <a href={helpLink} target="_blank" rel="noopener noreferrer">
+                  <a aria-label={helpLinkLabel} href={helpLink} target="_blank" rel="noopener noreferrer">
                     {helpLinkText}
                   </a>
                 </>
@@ -72,10 +73,11 @@ interface WidgetLabelProps {
   inline?: boolean;
   helpLink?: string;
   helpLinkText?: string;
+  helpLinkLabel?: string;
 }
 
 export const WidgetLabel: React.FC<WidgetLabelProps> = props => {
-  const { label, description, id, inline, helpLink, helpLinkText } = props;
+  const { label, description, id, inline, helpLink, helpLinkText, helpLinkLabel } = props;
 
   if (!label) {
     return null;
@@ -100,6 +102,8 @@ export const WidgetLabel: React.FC<WidgetLabelProps> = props => {
         id={id}
         helpLink={helpLink}
         helpLinkText={helpLinkText}
+        helpLinkLabel={helpLinkLabel}
+        aria-label={helpLinkLabel}
       />
     </Label>
   );
