@@ -22,6 +22,7 @@ export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {
+  status?: number;
   summary: string;
   message: string;
 }
@@ -47,10 +48,11 @@ export interface StorageFolder extends File {
 
 export interface State {
   dialogs: DialogInfo[];
+  projectId: string;
   botName: string;
   location: string;
   botEnvironment: string;
-  botEndpoint: string;
+  botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
   /** the data path for FormEditor */
   focusPath: string;
@@ -91,6 +93,8 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
+  publishTypes: string[];
+  publishTargets: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
@@ -117,6 +121,7 @@ export interface DialogSetting {
 }
 
 export interface DesignPageLocation {
+  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;
