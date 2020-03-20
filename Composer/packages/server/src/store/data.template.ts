@@ -4,6 +4,7 @@
 import settings from '../settings';
 
 export default {
+  version: 1,
   storageConnections: [
     {
       id: 'default',

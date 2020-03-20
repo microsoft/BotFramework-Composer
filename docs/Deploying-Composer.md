@@ -106,22 +106,9 @@ This command builds the Composer app. The build process can take few minutes.
 ```
 yarn start
 ```
-This command starts the Composer authoring application and the CSharp Bot runtime. 
+This command starts the Composer authoring application and the CSharp Bot runtime which is running on http://localhost:3979/api/messages.
 
- To use Composer, open a browser and navigate to http://localhost:3000
-
-#### Run the Bot Project 
-
-To test the bot you are creating using the Composer you need to run the Bot Project that comes with the Composer. 
-
-Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **BotProject\CSharp** folder. Run the following command:
-```
-dotnet run
-```
-This will build and run a Bot Framework bot that the Composer connects to.
-
-The bot is running on http://localhost:3979/api/messages.
-
+To use Composer, open a browser and navigate to http://localhost:3000
 
 Alternatively you can use one command to start both the Composer and the Bot runtime
 ```

@@ -9,6 +9,8 @@ import set from 'lodash/set';
 import log from '../logger';
 import settings from '../settings';
 
+import initData from './data.template';
+
 interface Migration {
   /**
    * Migration label. Will be printed to the console in debug.
@@ -32,6 +34,11 @@ const migrations: Migration[] = [
     name: 'Add defaultPath',
     condition: data => get(data, 'storageConnections.0.defaultPath') !== settings.botsFolder,
     run: data => set(data, 'storageConnections[0].defaultPath', settings.botsFolder),
+  },
+  {
+    name: 'Re-init when version update',
+    condition: data => !data.version || data.version != initData.version,
+    run: data => initData,
   },
 ];
 

@@ -3,7 +3,7 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs } from '@bfc/shared';
+import { extractLgTemplateRefs, SDKTypes } from '@bfc/shared';
 
 import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
@@ -43,7 +43,7 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
       }
       // look for other $type
       switch (value.$type) {
-        case 'Microsoft.SendActivity':
+        case SDKTypes.SendActivity:
           targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $type, do here
         case 'location':
@@ -80,7 +80,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
+    if (has(value, '$type') && value.$type === SDKTypes.OnIntent) {
       const intentName = value.intent;
       intents.push({
         name: intentName,
@@ -111,7 +111,7 @@ function ExtractTriggers(dialog): ITrigger[] {
             id: `triggers[${index}]`,
             displayName: '',
             type: rule.$type,
-            isIntent: rule.$type === 'Microsoft.OnIntent',
+            isIntent: rule.$type === SDKTypes.OnIntent,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;
@@ -139,7 +139,7 @@ function ExtractReferredDialogs(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+    if (has(value, '$type') && value.$type === SDKTypes.BeginDialog) {
       const dialogName = value.dialog;
       dialogs.push(dialogName);
     }
