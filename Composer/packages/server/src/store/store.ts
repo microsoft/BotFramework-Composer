@@ -15,11 +15,11 @@ const updateStore = () => {
   if (fs.existsSync(dataStorePath)) {
     const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
 
-    function compareKeys(a, b) {
-      var aKeys = Object.keys(a).sort();
-      var bKeys = Object.keys(b).sort();
+    const compareKeys = (a, b) => {
+      const aKeys = Object.keys(a).sort();
+      const bKeys = Object.keys(b).sort();
       return JSON.stringify(aKeys) === JSON.stringify(bKeys);
-    }
+    };
 
     if (!compareKeys(initData, userData)) {
       // it's safe to assume when keys are different, the user data is using an obsolete version
