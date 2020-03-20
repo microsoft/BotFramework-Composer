@@ -3,14 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useState, useCallback, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
-import { NavItem } from './components/NavItem';
 import { BASEPATH } from './constants';
 import Routes from './router';
 import { StoreContext } from './store';
@@ -118,7 +118,30 @@ export const App: React.FC = () => {
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { botName, projectId, creationFlowStatus } = state;
   const { setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = (x: string) => resolveToBasePath(BASEPATH, x);
+
+  const {
+    actions: { onboardingAddCoachMarkRef },
+  } = useContext(StoreContext);
+
+  const addRef = name => useCallback(ref => onboardingAddCoachMarkRef({ [`nav${name.replace(' ', '')}`]: ref }), []);
+
+  const makeIconLink = link => ({
+    name: link.labelName,
+    ariaLabel: link.labelName,
+    iconProps: {
+      iconName: link.iconName,
+      componentRef: addRef(link.labelName),
+      styles: {
+        root: {
+          fontSize: FontSizes.size16,
+          paddingLeft: '8px',
+        },
+      },
+    },
+    url: mapNavItemTo(link.to),
+    disabled: link.disabled,
+  });
 
   return (
     <Fragment>
@@ -142,31 +165,21 @@ export const App: React.FC = () => {
               ariaLabel={formatMessage('Navigation')}
               groups={[
                 {
-                  links: topLinks(projectId).map((link, index) => ({
-                    name: link.labelName,
-                    ariaLabel: link.labelName,
-                    icon: link.iconName,
-                    url: mapNavItemTo(link.to),
-                    disabled: link.disabled,
-                  })),
+                  links: topLinks(projectId).map(makeIconLink),
                 },
               ]}
             />
           </div>
           <div css={leftNavBottom}>
             <div css={divider(sideBarExpand)} />{' '}
-            {bottomLinks.map((link, index) => {
-              return (
-                <NavItem
-                  key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
-                  iconName={link.iconName}
-                  labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
-                />
-              );
-            })}
+            <Nav
+              ariaLabel={formatMessage('Navigation')}
+              groups={[
+                {
+                  links: bottomLinks.map(makeIconLink),
+                },
+              ]}
+            />
           </div>
         </nav>
         <div css={rightPanel}>
