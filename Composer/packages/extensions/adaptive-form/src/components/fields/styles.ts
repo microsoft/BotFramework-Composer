@@ -29,25 +29,26 @@ export const arrayItem = {
     label: ArrayFieldItemContainer;
   `,
 
-  field: (stacked: boolean) => css`
+  field: css`
+    display: flex;
+    flex: 1 1 0%;
+    /* prevents field from overflowing when error present */
+    min-width: 0px;
+
+    label: ArrayFieldItemField;
+  `,
+
+  schemaFieldOverride: (stacked: boolean) => css`
     display: flex;
     flex-direction: ${stacked ? 'column' : 'row'};
-    flex: 1 1 0%;
+    flex: 1;
+    margin: 0;
     /* prevents field from overflowing when error present */
     min-width: 0px;
 
     & + & {
       margin-left: ${stacked ? 0 : '16px'};
     }
-
-    label: ArrayFieldItemField;
-  `,
-
-  schemaFieldOverride: css`
-    flex: 1;
-    margin: 0;
-    /* prevents field from overflowing when error present */
-    min-width: 0px;
   `,
 };
 

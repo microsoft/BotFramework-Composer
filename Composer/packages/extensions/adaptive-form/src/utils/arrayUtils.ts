@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 type ArrayChangeHandler = (items: ArrayItem[]) => void;
 
-interface ArrayItem {
+export interface ArrayItem {
   id: string;
   value: any;
 }

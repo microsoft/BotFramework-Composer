@@ -82,10 +82,10 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
 
   return (
     <div css={arrayItem.container}>
-      <div css={arrayItem.field(!!stackArrayItems)}>
+      <div css={arrayItem.field}>
         <SchemaField
           {...rest}
-          css={arrayItem.schemaFieldOverride}
+          css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
           depth={depth + 1}
           label={!stackArrayItems ? false : undefined}
           transparentBorder={!stackArrayItems ? transparentBorder : undefined}
