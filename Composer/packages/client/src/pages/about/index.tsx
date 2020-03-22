@@ -14,7 +14,7 @@ export const About: React.FC<RouteComponentProps> = () => {
   return (
     <div css={about.outline}>
       <div css={about.content}>
-        <div css={about.title}> {formatMessage(`About`)} </div>
+        <h1 css={about.title}> {formatMessage(`About`)} </h1>
         <div css={about.body}>
           <div css={about.version}>{formatMessage(`Release: `) + (process.env.COMPOSER_VERSION || 'Unknown')}</div>
           <div css={about.description}>
@@ -76,7 +76,12 @@ export const About: React.FC<RouteComponentProps> = () => {
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
-            <IconButton styles={about.icon} iconProps={{ iconName: 'BlockedSite' }} />
+            <IconButton
+              styles={about.icon}
+              ariaLabel={formatMessage('Terms of User Button')}
+              iconProps={{ iconName: 'BlockedSite' }}
+              tabIndex={-1}
+            />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
               tabIndex={-1}
@@ -86,7 +91,12 @@ export const About: React.FC<RouteComponentProps> = () => {
             </Link>
           </div>
           <div css={about.linkRow}>
-            <IconButton styles={about.icon} iconProps={{ iconName: 'Lock' }} />
+            <IconButton
+              styles={about.icon}
+              ariaLabel={formatMessage('Privacy button')}
+              iconProps={{ iconName: 'Lock' }}
+              tabIndex={-1}
+            />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
               tabIndex={-1}
