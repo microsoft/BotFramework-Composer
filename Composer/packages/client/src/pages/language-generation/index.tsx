@@ -64,6 +64,23 @@ const LGPage: React.FC<LGPageProps> = props => {
     }
   }, [dialogId, dialogs, projectId]);
 
+  useEffect(() => {
+    const handleUserKeyPress = event => {
+      const { keyCode } = event;
+      //when press esc and in edit mode
+      if (keyCode === 27 && edit) {
+        const url = `/bot/${projectId}/language-generation/${fileId}`;
+        navigateTo(url);
+      }
+    };
+
+    window.addEventListener('keydown', handleUserKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleUserKeyPress);
+    };
+  });
+
   const onSelect = useCallback(
     id => {
       const url = `/bot/${projectId}/language-generation/${id}`;
