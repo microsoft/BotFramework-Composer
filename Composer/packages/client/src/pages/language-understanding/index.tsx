@@ -89,7 +89,7 @@ const LUPage: React.FC<LUPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('User Input')}</div>
+        <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
         <div css={flexContent}>
           {(!isRoot || edit) && (
             <Toggle
