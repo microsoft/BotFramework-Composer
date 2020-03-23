@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import Path from 'path';
-
+import { thisPC } from '@bfc/shared';
 import React, { useState, Fragment, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -26,6 +26,7 @@ interface FormData {
 
 interface FormDataError {
   name?: string;
+  location?: string;
 }
 
 interface Files {
@@ -80,8 +81,10 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
   const validateForm = (data: FormData) => {
     const errors: FormDataError = {};
-    const { name } = data;
-
+    const { name, location } = data;
+    if (location === thisPC) {
+      errors.location = formatMessage('Cannot save bot here');
+    }
     if (!name || !nameRegex.test(name)) {
       errors.name = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
