@@ -121,7 +121,7 @@ const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -151,10 +151,11 @@ function DesignPage(props) {
 
   useEffect(() => {
     if (match) {
-      const { dialogId } = match;
+      const { dialogId, projectId } = match;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
+        projectId: projectId,
         selected: params.get('selected'),
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
@@ -186,12 +187,14 @@ function DesignPage(props) {
   const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
+      projectId,
       content: dialog.content,
     };
     if (luFile) {
       const luFilePayload = {
         id: luFile.id,
         content: luFile.content,
+        projectId,
       };
       actions.updateLuFile(luFilePayload);
     }
@@ -367,14 +370,14 @@ function DesignPage(props) {
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id);
+      await removeDialog(id, projectId);
     }
   }
 
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
-      await updateDialog({ id, content });
+      await updateDialog({ id, projectId, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;

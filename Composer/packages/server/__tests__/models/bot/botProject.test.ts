@@ -56,7 +56,8 @@ describe('updateDialog', () => {
   it('should update a file at a path', async () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
-    const { dialogs } = await proj.updateDialog('a', newValue);
+    await proj.updateDialog('a', newValue);
+    const dialogs = proj.dialogs;
     const aDialog = dialogs.find((f: { id: string }) => f.id === 'a');
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
@@ -175,7 +176,8 @@ describe('lg operations', () => {
     await proj.createLgFile(id, content);
 
     content = '# hello \n - hello2';
-    const lgFiles = await proj.updateLgFile(id, content);
+    await proj.updateLgFile(id, content);
+    const lgFiles = proj.lgFiles;
     const result = lgFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
@@ -244,7 +246,8 @@ describe('lu operations', () => {
     await proj.createLuFile(id, content);
     content = '## hello \n - hello2';
 
-    const luFiles = await proj.updateLuFile(id, content);
+    await proj.updateLuFile(id, content);
+    const luFiles = proj.luFiles;
     const result = luFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
@@ -261,7 +264,8 @@ describe('lu operations', () => {
 
     content = 'hello \n hello3';
 
-    const luFiles = await proj.updateLuFile(id, content);
+    await proj.updateLuFile(id, content);
+    const luFiles = proj.luFiles;
     const result = luFiles.find(f => f.id === id);
     expect(result?.diagnostics?.length).toBeGreaterThan(0);
   });

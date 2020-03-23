@@ -28,7 +28,7 @@ interface TableViewProps extends RouteComponentProps<{}> {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles, locale } = state;
+  const { dialogs, lgFiles, projectId, locale } = state;
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
@@ -39,42 +39,46 @@ const TableView: React.FC<TableViewProps> = props => {
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
   useEffect(() => {
     if (!file || isEmpty(file)) return;
 
     setTemplates(file.templates);
-  }, [file, activeDialog]);
+  }, [file, activeDialog, projectId]);
 
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
       const { name } = template;
-      navigateTo(`/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+      navigateTo(`/bot/${projectId}/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
-    [dialogId]
+    [dialogId, projectId]
   );
 
   const onCreateNewTemplate = useCallback(() => {
     const newName = increaseNameUtilNotExist(templates, 'TemplateName');
     const payload = {
       file,
+      projectId,
       template: {
         name: newName,
         body: '-TemplateValue',
       },
     };
     createLgTemplate(payload);
-  }, [templates, file]);
+  }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
     index => {
       const payload = {
         file,
+        projectId,
         templateName: templates[index].name,
       };
 
       removeLgTemplate(payload);
     },
-    [templates, file]
+    [templates, file, projectId]
   );
 
   const onCopyTemplate = useCallback(
@@ -83,12 +87,14 @@ const TableView: React.FC<TableViewProps> = props => {
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
         file,
+        projectId,
         fromTemplateName: name,
         toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
+      setFocusedIndex(templates.length);
     },
-    [templates, file]
+    [templates, file, projectId]
   );
 
   const getTemplatesMoreButtons = useCallback(
@@ -193,7 +199,7 @@ const TableView: React.FC<TableViewProps> = props => {
     }
 
     return tableColums;
-  }, [activeDialog, templates]);
+  }, [activeDialog, templates, projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -229,6 +235,7 @@ const TableView: React.FC<TableViewProps> = props => {
         <DetailsList
           componentRef={listRef}
           items={templates}
+          initialFocusedIndex={focusedIndex}
           styles={{
             root: {
               overflowX: 'hidden',
