@@ -6,7 +6,6 @@ import { EditableField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
 import { PromptField } from './PromptField';
-import { SynonymsField } from './SynonymsField';
 
 const choiceSchema = {
   hidden: ['action'],
@@ -18,8 +17,11 @@ const choiceSchema = {
     },
     synonyms: {
       label: () => formatMessage('Synonyms (Optional)'),
-      field: SynonymsField,
-      formatData: value => (typeof value === 'string' ? value.split(', ') : value),
+      field: EditableField,
+      serializer: {
+        get: value => (Array.isArray(value) ? value.join(', ') : value),
+        set: value => (typeof value === 'string' ? value.split(', ') : value),
+      },
       placeholder: () => formatMessage('Add multiple comma-separated synonyms'),
     },
   },

@@ -43,11 +43,12 @@ const SchemaField: React.FC<FieldProps> = props => {
   const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
   const handleChange = (newValue: any) => {
-    const { formatData } = uiOptions;
-    const formattedValue = typeof formatData === 'function' ? formatData(newValue) : newValue;
-
-    onChange(formattedValue);
+    const deserializedValue =
+      typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
+    onChange(deserializedValue);
   };
+
+  const serializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
   const fieldProps = {
@@ -58,7 +59,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     placeholder: getUiPlaceholder({ ...props, uiOptions }),
     description: getUiDescription({ ...props, uiOptions }),
     schema,
-    value,
+    value: serializedValue,
     error: error || undefined,
     rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
     onChange: handleChange,

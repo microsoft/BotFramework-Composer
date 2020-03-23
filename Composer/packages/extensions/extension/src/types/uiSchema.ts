@@ -14,8 +14,6 @@ export interface UIOptions {
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
   field?: FieldWidget;
-  /** called before the form's onChange. Use this to apply additional data processing */
-  formatData?: (data: any) => any;
   /** Url to docs. Rendered below field description. */
   helpLink?: string;
   /**
@@ -37,6 +35,13 @@ export interface UIOptions {
   /** Define ui options on fields that are children of this field. */
   properties?: {
     [key: string]: UIOptions;
+  };
+  /** Use the serializer to apply additional data processing.
+   * `get` is called to retrieve the value that is passed to SchemaField
+   * `set` is called prior to the `onChange` handler  */
+  serializer?: {
+    get: (value: any) => any;
+    set: (value: any) => any;
   };
   /** subtitle rendered in form title */
   subtitle?: UIOptionValue<string>;
