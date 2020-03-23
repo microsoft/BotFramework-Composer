@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import formatMessage from 'format-message';
+import cloneDeep from 'lodash/cloneDeep';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -39,6 +40,7 @@ const defaultOptions: ICheckOption[] = [
     id: 'regex',
   },
 ];
+
 const defaultRecoginzerSet = {
   $type: 'Microsoft.RecognizerSet',
   recognizers: [
@@ -68,15 +70,17 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     onChange,
   } = props;
 
-  let recognizers =
-    typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet'
-      ? formData.recognizers[0].recognizers['en-us'].recognizers
-      : [
-          {
-            $type: 'Microsoft.ValueRecognizer',
-            id: 'value',
-          },
-        ];
+  let recognizers: Record<string, any>[] = [];
+  if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
+    formData.recognizers[0].recognizers['en-us'].recognizers.forEach(recog => {
+      recognizers.push(recog);
+    });
+  } else {
+    recognizers.push({
+      $type: 'Microsoft.ValueRecognizer',
+      id: 'value',
+    });
+  }
   const currentDialogId = currentDialog.id;
   const selectedFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
   const [checkOptions, setCheckOptions] = useState(
@@ -96,7 +100,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     }
   }, [formData]);
   const handleChange = (id: string, checked?: boolean): void => {
-    const finalRecognizerSet = defaultRecoginzerSet;
+    const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
     switch (id) {
       case 'luis': {
         if (checked) {
