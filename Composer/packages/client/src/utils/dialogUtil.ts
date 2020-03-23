@@ -99,13 +99,28 @@ export function createTrigger(dialog: DialogInfo, data: TriggerFormData): Dialog
 export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
-  insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
+  const recgIndex = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).findIndex(
+    recog => recog.$type === SDKTypes.RegexRecognizer
+  );
+  insert(
+    dialogCopy.content,
+    `recognizer.recognizers[0].recognizers['en-us'].recognizers[${recgIndex}].intents`,
+    undefined,
+    regex
+  );
   return dialogCopy;
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   let dialogCopy = cloneDeep(dialog);
-  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const recgIndex = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).findIndex(
+    recog => recog.$type === SDKTypes.RegexRecognizer
+  );
+  const regexIntents = get(
+    dialogCopy,
+    `content.recognizer.recognizers[0].recognizers['en-us'].recognizers[${recgIndex}].intents`,
+    []
+  );
   const targetIntent = regexIntents.find(ri => ri.intent === intent);
   if (!targetIntent) {
     dialogCopy = createRegExIntent(dialog, intent, pattern);
@@ -119,7 +134,14 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 //switch to another recognizer type
 export function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const recgIndex = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).findIndex(
+    recog => recog.$type === SDKTypes.RegexRecognizer
+  );
+  const regexIntents = get(
+    dialogCopy,
+    `content.recognizer.recognizers[0].recognizers['en-us'].recognizers[${recgIndex}].intents`,
+    []
+  );
   const index = regexIntents.findIndex(ri => ri.intent === intent);
   if (index > -1) {
     regexIntents.splice(index, 1);

@@ -8,6 +8,7 @@ import { FieldProps } from '@bfcomposer/react-jsonschema-form';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { LuFile } from '@bfc/indexers';
+import { SDKTypes } from '@bfc/shared';
 
 import { BaseField } from '../BaseField';
 import { WidgetLabel } from '../../widgets/WidgetLabel';
@@ -51,7 +52,7 @@ const defaultRecoginzerSet = {
           $type: 'Microsoft.CrossTrainedRecognizerSet',
           recognizers: [
             {
-              $type: 'Microsoft.ValueRecognizer',
+              $type: SDKTypes.ValueRecognizer,
               id: 'value',
             },
           ],
@@ -77,7 +78,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     });
   } else {
     recognizers.push({
-      $type: 'Microsoft.ValueRecognizer',
+      $type: SDKTypes.ValueRecognizer,
       id: 'value',
     });
   }
@@ -106,7 +107,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
         if (checked) {
           if (selectedFile) {
             recognizers.push({
-              $type: 'Microsoft.LuisRecognizer',
+              $type: SDKTypes.LuisRecognizer,
               id: 'luis',
             });
           } else {
@@ -121,7 +122,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
              * lu and lg files so this code path shouldn't be executed.
              */
             recognizers.push({
-              $type: 'Microsoft.LuisRecognizer',
+              $type: SDKTypes.LuisRecognizer,
               id: 'luis',
             });
             createLuFile(currentDialogId);
@@ -134,7 +135,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
       case 'regex': {
         if (checked) {
           recognizers.push({
-            $type: 'Microsoft.RegexRecognizer',
+            $type: SDKTypes.RegexRecognizer,
             id: 'regex',
           });
         } else {
