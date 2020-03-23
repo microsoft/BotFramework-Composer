@@ -25,7 +25,13 @@ const styles = {
 };
 
 const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
-  const { type, oneOf } = schema;
+  const { type, oneOf, enum: enumOptions } = schema;
+
+  const expressionOption = {
+    key: 'expression',
+    text: 'expression',
+    data: { schema: { ...schema, type: 'string' } },
+  };
 
   if (type && Array.isArray(type)) {
     const options: IDropdownOption[] = type.map(t => ({
@@ -34,12 +40,7 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
       data: { schema: { ...schema, type: t } },
     }));
 
-    type.length > 2 &&
-      options.push({
-        key: 'expression',
-        text: 'expression',
-        data: { schema: { ...schema, type: 'string' } },
-      });
+    type.length > 2 && options.push(expressionOption);
 
     options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
 
@@ -62,13 +63,19 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
       .filter(Boolean) as IDropdownOption[];
   }
 
-  return [
-    {
-      key: 'expression',
-      text: 'expression',
-      data: { schema: { ...schema, type: 'string' } },
-    },
-  ];
+  // this could either be an expression or an enum value
+  if (Array.isArray(enumOptions)) {
+    return [
+      {
+        key: 'dropdown',
+        text: 'dropdown',
+        data: { schema: { ...schema, $role: undefined } },
+      },
+      expressionOption,
+    ];
+  }
+
+  return [expressionOption];
 };
 
 const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined => {
