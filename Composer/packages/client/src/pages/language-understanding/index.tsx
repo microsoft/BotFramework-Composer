@@ -34,7 +34,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
 
 const LUPage: React.FC<LUPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
@@ -56,25 +56,25 @@ const LUPage: React.FC<LUPageProps> = props => {
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogId !== 'all' && dialogs.length) {
-      navigateTo('/language-understanding/all');
+      navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
-  }, [dialogId, dialogs]);
+  }, [dialogId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {
-      const url = `/language-understanding/${id}`;
+      const url = `/bot/${projectId}/language-understanding/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-understanding/${dialogId}`;
+      let url = `/bot/${projectId}/language-understanding/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [dialogId]
+    [dialogId, projectId]
   );
 
   const toolbarItems = [
@@ -89,7 +89,7 @@ const LUPage: React.FC<LUPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('User Input')}</div>
+        <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
         <div css={flexContent}>
           {(!isRoot || edit) && (
             <Toggle

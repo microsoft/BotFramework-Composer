@@ -5,6 +5,7 @@ import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
+import { UserIdentity } from '../../services/pluginLoader';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
@@ -12,8 +13,8 @@ import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {
-  constructor(basePath: string) {
-    super(basePath);
+  constructor(basePath: string, user?: UserIdentity) {
+    super(basePath, user);
   }
 
   protected createDefaultSettings = (): any => {

@@ -58,6 +58,7 @@ export const content = css`
 
 export const showDesign = show => css`
   display: ${show ? 'block' : 'none'} !important;
+  height: 100%;
 `;
 
 export const leftNavBottom = () => css`

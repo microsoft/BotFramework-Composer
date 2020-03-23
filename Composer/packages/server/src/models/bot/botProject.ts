@@ -20,9 +20,10 @@ import {
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
+import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
-import { IEnvironment, EnvironmentProvider } from '../environment';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
+import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 
 import { IFileStorage } from './../storage/interface';
@@ -67,6 +68,8 @@ const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
 export class BotProject {
   public ref: LocationRef;
   public locale: string;
+  // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
+  public id: string | undefined;
   public name: string;
   public dir: string;
   public dataDir: string;
@@ -82,10 +85,9 @@ export class BotProject {
   public defaultEditorSchema: {
     [key: string]: string;
   };
-  public environment: IEnvironment;
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
-  constructor(ref: LocationRef) {
+  constructor(ref: LocationRef, user?: UserIdentity) {
     this.ref = ref;
     this.locale = 'en-us'; // default to en-us
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
@@ -97,9 +99,8 @@ export class BotProject {
       fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
     );
 
-    this.environment = EnvironmentProvider.getCurrentWithOverride({ basePath: this.dir });
-    this.settingManager = this.environment.getSettingsManager();
-    this.fileStorage = StorageService.getStorageClient(this.ref.storageId);
+    this.settingManager = new DefaultSettingManager(this.dir);
+    this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
 
@@ -107,7 +108,7 @@ export class BotProject {
     await this._reformProjectStructure();
 
     this.files = await this._getFiles();
-    this.settings = await this.getEnvSettings(this.environment.getDefaultSlot(), false);
+    this.settings = await this.getEnvSettings('', false);
     this.dialogs = this.indexDialogs();
     this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
     this.luFiles = luIndexer.index(this.files);
@@ -126,13 +127,12 @@ export class BotProject {
       lgFiles: this.lgFiles,
       luFiles: this.luFiles,
       schemas: this.getSchemas(),
-      botEnvironment: this.environment.getEnvironmentName(this.name),
       settings: this.settings,
     };
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
-    const defaultSlot = this.environment.getDefaultSlot();
+    const defaultSlot = '';
     return await this.settingManager.get(defaultSlot, obfuscate);
   };
 
@@ -148,7 +148,7 @@ export class BotProject {
   };
 
   public updateDefaultSlotEnvSettings = async (config: DialogSetting) => {
-    const defaultSlot = this.environment.getDefaultSlot();
+    const defaultSlot = '';
     await this.updateEnvSettings(defaultSlot, config);
   };
 
@@ -220,7 +220,7 @@ export class BotProject {
     }
   };
 
-  public updateDialog = async (id: string, dialogContent: any): Promise<DialogResources> => {
+  public updateDialog = async (id: string, dialogContent: any): Promise<string> => {
     const dialog = this.dialogs.find(d => d.id === id);
     if (dialog === undefined) {
       throw new Error(`no such dialog ${id}`);
@@ -228,10 +228,8 @@ export class BotProject {
 
     const relativePath = dialog.relativePath;
     const content = JSON.stringify(dialogContent, null, 2) + '\n';
-    await this._updateFile(relativePath, content);
-
-    const { dialogs, lgFiles, luFiles } = this;
-    return { dialogs, lgFiles, luFiles };
+    const lastModified = await this._updateFile(relativePath, content);
+    return lastModified;
   };
 
   public createDialog = async (
@@ -294,13 +292,12 @@ export class BotProject {
     return { dialogs, lgFiles, luFiles };
   };
 
-  public updateLgFile = async (id: string, content: string): Promise<LgFile[]> => {
+  public updateLgFile = async (id: string, content: string): Promise<string> => {
     const lgFile = this.files.find(lg => lg.name === `${id}.lg`);
     if (lgFile === undefined) {
       throw new Error(`no such lg file ${id}`);
     }
-    await this._updateFile(lgFile.relativePath, content);
-    return this.lgFiles;
+    return await this._updateFile(lgFile.relativePath, content);
   };
 
   public createLgFile = async (
@@ -401,7 +398,7 @@ export class BotProject {
     // ensure saveAs path isn't existed in dst storage, in order to cover or mess up
     // existed bot proj
     if (await dstStorage.exists(locationRef.path)) {
-      throw new Error('already have this folder, please give another name');
+      throw new Error(`Folder ${locationRef.path} already exists.`);
     }
     const dstDir = locationRef.path;
     await dstStorage.mkDir(dstDir, { recursive: true });
@@ -411,9 +408,9 @@ export class BotProject {
     return locationRef;
   };
 
-  public copyTo = async (locationRef: LocationRef) => {
+  public copyTo = async (locationRef: LocationRef, user?: UserIdentity) => {
     const newProjRef = await this.cloneFiles(locationRef);
-    return new BotProject(newProjRef);
+    return new BotProject(newProjRef, user);
   };
 
   public async exists(): Promise<boolean> {
@@ -465,12 +462,17 @@ export class BotProject {
     debug('Creating file: %s', absolutePath);
     await this.fileStorage.writeFile(absolutePath, content);
 
+    // TODO: we should get the lastModified from the writeFile operation
+    // instead of calling stat again which could be expensive
+    const stats = await this.fileStorage.stat(absolutePath);
+
     // update this.files which is memory cache of all files
     this.files.push({
       name: Path.basename(relativePath),
       content: content,
       path: absolutePath,
       relativePath: relativePath,
+      lastModified: stats.lastModified,
     });
 
     await this.reindex(relativePath);
@@ -483,12 +485,21 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
-
     const absolutePath = `${this.dir}/${relativePath}`;
-    await this.fileStorage.writeFile(absolutePath, content);
+
+    // only write if the file has actually changed
+    if (this.files[index].content !== content) {
+      await this.fileStorage.writeFile(absolutePath, content);
+    }
+
+    // TODO: we should get the lastModified from the writeFile operation
+    // instead of calling stat again which could be expensive
+    const stats = await this.fileStorage.stat(absolutePath);
 
     this.files[index].content = content;
     await this.reindex(relativePath);
+
+    return stats.lastModified;
   };
 
   // remove file in this project this function will gurantee the memory cache
@@ -742,13 +753,15 @@ export class BotProject {
   };
 
   private _getFileInfo = async (path: string): Promise<FileInfo | undefined> => {
-    if ((await this.fileStorage.stat(path)).isFile) {
+    const stats = await this.fileStorage.stat(path);
+    if (stats.isFile) {
       const content: string = await this.fileStorage.readFile(path);
       return {
         name: Path.basename(path),
         content: content,
         path: path,
         relativePath: Path.relative(this.dir, path),
+        lastModified: stats.lastModified,
       };
     }
   };

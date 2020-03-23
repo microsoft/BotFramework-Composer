@@ -44,7 +44,7 @@ export const Deployment = () => {
   return (
     <Fragment>
       <div style={styles.page}>
-        <div style={styles.header}>{instructions.title}</div>
+        <h1 style={styles.header}>{instructions.title}</h1>
         <p>{instructions.description}</p>
         <Stack horizontal gap="2rem" styles={{ root: { marginBottom: '1rem' } }}>
           <DefaultButton onClick={openWizardCreate} text={instructions.button1} />

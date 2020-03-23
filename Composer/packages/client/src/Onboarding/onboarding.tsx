@@ -26,7 +26,7 @@ export interface IStepSet {
   title?: string;
 }
 
-export const stepSets = (rootDialogId: string): IStepSet[] => [
+export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] => [
   {
     id: 'setUpBot',
     steps: [{ id: 'setUpYourBot', targetId: 'project' }],
@@ -35,40 +35,66 @@ export const stepSets = (rootDialogId: string): IStepSet[] => [
   {
     id: 'basics',
     steps: [
-      { id: 'mainDialog', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'mainDialog' },
-      { id: 'trigger', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'newTrigger' },
+      {
+        id: 'mainDialog',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'mainDialog',
+      },
+      {
+        id: 'trigger',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'newTrigger',
+      },
       {
         id: 'userInput',
-        navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'navUserInput',
       },
       {
         id: 'actions',
         location: 'visualEditor',
-        navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'action',
       },
-      { id: 'botResponses', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'navBotResponses' },
+      {
+        id: 'botResponses',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'navBotResponses',
+      },
     ],
     title: formatMessage('Learn the basics'),
   },
   {
     id: 'welcomeMessage',
     steps: [
-      { id: 'welcomeMessage', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'newTrigger' },
+      {
+        id: 'welcomeMessage',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'newTrigger',
+      },
     ],
     title: formatMessage('Add welcome message'),
   },
   {
     id: 'intent trigger',
     steps: [
-      { id: 'intentTrigger', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'newTrigger' },
+      {
+        id: 'intentTrigger',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'newTrigger',
+      },
     ],
     title: formatMessage('Add an intent trigger'),
   },
   {
     id: 'testBot',
-    steps: [{ id: 'startBot', navigateTo: `/dialogs/${rootDialogId}?selected=triggers[0]`, targetId: 'startBot' }],
+    steps: [
+      {
+        id: 'startBot',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'startBot',
+      },
+    ],
     title: formatMessage('Test your bot'),
   },
 ];

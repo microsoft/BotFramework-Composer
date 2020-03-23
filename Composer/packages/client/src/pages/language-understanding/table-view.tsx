@@ -38,7 +38,7 @@ interface Intent {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, locale } = state;
+  const { dialogs, luFiles, locale, projectId } = state;
   const { dialogId } = props;
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
@@ -48,9 +48,9 @@ const TableView: React.FC<TableViewProps> = props => {
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
       return formatMessage('Error');
-    } else if (file.status && file.status.lastUpdateTime >= file.status.lastPublishTime) {
+    } else if (!file.published) {
       return formatMessage('Not yet published');
-    } else if (file.status && file.status.lastPublishTime > file.status.lastUpdateTime) {
+    } else if (file.published) {
       return formatMessage('Published');
     } else {
       return formatMessage('Unknown State'); // It's a bug in most cases.
@@ -84,7 +84,7 @@ const TableView: React.FC<TableViewProps> = props => {
       const dialogIntents = allIntents.filter(t => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog]);
+  }, [luFiles, activeDialog, projectId]);
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
@@ -93,7 +93,7 @@ const TableView: React.FC<TableViewProps> = props => {
         name: 'Edit',
         onClick: () => {
           const { name, dialogId } = intents[index];
-          navigateTo(`/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
+          navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];

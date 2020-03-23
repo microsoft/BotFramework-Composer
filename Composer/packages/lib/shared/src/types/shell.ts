@@ -36,6 +36,7 @@ export interface BotSchemas {
 export interface ShellData {
   locale: string;
   botName: string;
+  projectId: string;
   currentDialog: any;
   data: {
     $type?: string;
