@@ -124,7 +124,8 @@ export const App: React.FC = () => {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
 
-  const addRef = name => useCallback(ref => onboardingAddCoachMarkRef({ [`nav${name.replace(' ', '')}`]: ref }), []);
+  const addRef = (name: string) =>
+    useCallback(ref => onboardingAddCoachMarkRef({ [`nav${name.replace(' ', '')}`]: ref }), []);
 
   const makeIconLink = link => ({
     name: link.labelName,
