@@ -64,10 +64,10 @@ const LUPage: React.FC<LUPageProps> = props => {
       }
     };
 
-    window.addEventListener('keydown', handleUserKeyPress);
+    document.addEventListener('keydown', handleUserKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleUserKeyPress);
+      document.removeEventListener('keydown', handleUserKeyPress);
     };
   });
 
