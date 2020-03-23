@@ -6,7 +6,6 @@ import { jsx } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import { Link, LinkGetProps } from '@reach/router';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 
 import { StoreContext } from '../../store';
 
