@@ -4,7 +4,7 @@
 import React from 'react';
 import get from 'lodash/get';
 
-import { useLgTemplate } from '../utils/hooks';
+import { useLgTemplate } from '../hooks/useLgTemplate';
 import { WidgetContainerProps } from '../schema/uischema.types';
 
 export interface ActivityRenderer extends WidgetContainerProps {
@@ -14,10 +14,9 @@ export interface ActivityRenderer extends WidgetContainerProps {
 }
 
 export const ActivityRenderer: React.FC<ActivityRenderer> = ({ data, field, defaultContent }) => {
-  const designerId = get(data, '$designer.id');
   const activityTemplate = get(data, field, '');
 
-  const templateText = useLgTemplate(activityTemplate, designerId);
+  const templateText = useLgTemplate(activityTemplate);
   const displayedText = templateText || defaultContent;
   return <>{displayedText}</>;
 };
