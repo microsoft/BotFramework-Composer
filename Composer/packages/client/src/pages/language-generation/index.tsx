@@ -93,7 +93,7 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
+        <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}

@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext } from 'react';
 import formatMessage from 'format-message';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
-import { Link, RouteComponentProps } from '@reach/router';
+import { Nav, INavLinkGroup } from 'office-ui-fabric-react/lib/Nav';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar';
@@ -18,7 +18,7 @@ import { MainContent } from '../../components/MainContent/index';
 import { TestController } from '../../TestController';
 
 import Routes from './router';
-import { title, fileList, contentEditor, linkItem } from './styles';
+import { title, fileList, contentEditor } from './styles';
 
 const settingLabels = {
   title: formatMessage('Configuration'),
@@ -41,30 +41,11 @@ const links = [
 ];
 
 const SettingPage: React.FC<RouteComponentProps> = () => {
-  const [active, setActive] = useState();
   const { state } = useContext(StoreContext);
   const { projectId } = state;
   const makeProjectLink = (id, path) => {
     return `/bot/${id}${path}`;
   };
-  function onRenderLink(link) {
-    return (
-      <Link
-        to={link.key}
-        css={linkItem(link.disabled)}
-        tabIndex={-1}
-        getProps={linkProps => {
-          if (linkProps.isCurrent && active !== link.key) {
-            setActive(link.key);
-          }
-          return {};
-        }}
-        onClick={() => {}}
-      >
-        {link.name}
-      </Link>
-    );
-  }
 
   const toolbarItems = [
     {
@@ -74,6 +55,10 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
     },
   ];
 
+  const _onRenderGroupHeader = (group: INavLinkGroup | undefined) => {
+    return <div css={title}>{group?.name}</div>;
+  };
+
   return (
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
@@ -81,19 +66,18 @@ const SettingPage: React.FC<RouteComponentProps> = () => {
         <Fragment>
           <div css={fileList}>
             <Tree variant="large">
-              <div>
-                <div css={title}>{settingLabels.title}</div>
-                <Nav
-                  groups={[{ links }]}
-                  onRenderLink={onRenderLink}
-                  selectedKey={active}
-                  onLinkClick={(e, item) => {
-                    if (item && item.key) {
-                      navigateTo(makeProjectLink(projectId, item.key));
-                    }
-                  }}
-                />
-              </div>
+              <Nav
+                onRenderGroupHeader={_onRenderGroupHeader}
+                groups={[
+                  {
+                    name: settingLabels.title,
+                    links,
+                  },
+                ]}
+                onLinkClick={(e, item) => {
+                  navigateTo(makeProjectLink(projectId, item?.key));
+                }}
+              />
             </Tree>
           </div>
           <Conversation css={contentEditor}>

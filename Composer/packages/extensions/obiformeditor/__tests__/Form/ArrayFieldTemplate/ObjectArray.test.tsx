@@ -38,10 +38,10 @@ describe('<ObjectArray />', () => {
   });
 
   it('renders a DescriptionField in tooltip', async () => {
-    const { baseElement, findAllByRole } = renderDefault();
-    const [icon] = await findAllByRole('presentation');
+    const { baseElement } = renderDefault();
+    const icon = baseElement.querySelector('[data-icon-name="Unknown"]');
 
-    fireEvent.mouseOver(icon);
+    if (icon !== null) fireEvent.mouseOver(icon);
 
     expect(baseElement).toHaveTextContent('My array description.');
   });
