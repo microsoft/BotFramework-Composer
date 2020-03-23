@@ -36,6 +36,20 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
+  useEffect(() => {
+    const handleUserKeyPress = event => {
+      const { keyCode } = event;
+      if (keyCode === 9) {
+        const errors = validateForm(formData);
+        setFormDataErrors(errors);
+      }
+    };
+    document.addEventListener('keydown', handleUserKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleUserKeyPress);
+    };
+  }, []);
+
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
@@ -55,12 +69,22 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
         );
       }
       if (dialogs.some(dialog => dialog.id === name)) {
-        errors.name = formatMessage('Duplicaton of dialog name');
+        errors.name = formatMessage('Duplication of dialog name');
       }
     } else {
       errors.name = formatMessage('Please input a name');
     }
     return errors;
+  };
+
+  const onNameChange = (e, name) => {
+    const newFormData = {
+      ...formData,
+      name,
+    };
+    const errors = validateForm(newFormData);
+    setFormDataErrors(errors);
+    setFormData(newFormData);
   };
 
   const handleSubmit = e => {
@@ -86,9 +110,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               label={formatMessage('Name')}
               value={formData.name}
               styles={name}
-              onChange={updateForm('name')}
+              onChange={onNameChange}
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
+              autoFocus
               required
             />
           </StackItem>
