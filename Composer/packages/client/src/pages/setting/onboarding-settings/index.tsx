@@ -26,7 +26,7 @@ export const OnboardingSettings = () => {
 
   return (
     <div css={onboardingSettings}>
-      <div css={onboardingTitle}>{formatMessage('Onboarding')}</div>
+      <h1 css={onboardingTitle}>{formatMessage('Onboarding')}</h1>
       <p>{formatMessage('Enabling Onboarding will restart the product tour.')}</p>
       <Toggle
         data-testid="onboardingToggle"
