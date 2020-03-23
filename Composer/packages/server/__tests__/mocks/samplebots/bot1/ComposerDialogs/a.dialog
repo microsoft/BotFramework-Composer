@@ -1,3 +1,4 @@
 {
-  "old": "value"
+  "old": "value",
+  "generator": "a.lg"
 }

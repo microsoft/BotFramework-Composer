@@ -36,7 +36,7 @@ const initialDialogShape = {
     ],
   }),
   [SDKTypes.OnConversationUpdateActivity]: {
-    $type: 'Microsoft.OnConversationUpdateActivity',
+    $type: SDKTypes.OnConversationUpdateActivity,
     actions: [
       {
         $type: SDKTypes.Foreach,

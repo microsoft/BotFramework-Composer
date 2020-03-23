@@ -34,7 +34,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
 
   return (
     <div css={notificationHeader}>
-      <div css={notificationHeaderText}>{formatMessage('Notifications')}</div>
+      <h1 css={notificationHeaderText}>{formatMessage('Notifications')}</h1>
       <Dropdown
         onChange={(event, option) => {
           if (option) onChange(option.data);
