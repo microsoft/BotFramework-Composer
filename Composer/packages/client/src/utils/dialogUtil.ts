@@ -8,6 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ExpressionEngine } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DialogInfo } from '@bfc/indexers';
+import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -45,6 +46,23 @@ export const intentTypeKey: string = SDKTypes.OnIntent;
 export const activityTypeKey: string = SDKTypes.OnActivity;
 export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
+export const LuisRecognizerKey: string = SDKTypes.LuisRecognizer;
+export const ValueRecognizerKey: string = SDKTypes.ValueRecognizer;
+
+export const recognizerSet = {
+  [regexRecognizerKey]: {
+    key: regexRecognizerKey,
+    text: formatMessage('Regular Expression'),
+  },
+  [LuisRecognizerKey]: {
+    key: LuisRecognizerKey,
+    text: formatMessage('LUIS'),
+  },
+  [ValueRecognizerKey]: {
+    key: ValueRecognizerKey,
+    text: formatMessage('Value'),
+  },
+};
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
