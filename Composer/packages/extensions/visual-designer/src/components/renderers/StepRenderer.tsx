@@ -31,11 +31,11 @@ const TypesWithoutWrapper = [
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const schemaProvider = useContext(UISchemaContext);
 
-  const $type = get(data, '$type', '');
-  const widgetSchema = schemaProvider.get($type);
+  const $kind = get(data, '$kind', '');
+  const widgetSchema = schemaProvider.get($kind);
 
   const content = renderUIWidget(widgetSchema, { id, data, onEvent, onResize });
-  if (TypesWithoutWrapper.some(x => $type === x)) {
+  if (TypesWithoutWrapper.some(x => $kind === x)) {
     return content;
   }
   return (

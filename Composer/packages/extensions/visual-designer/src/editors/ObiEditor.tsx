@@ -132,7 +132,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.Insert:
-        if (eventData.$type === 'PASTE') {
+        if (eventData.$kind === 'PASTE') {
           handler = e => {
             pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
@@ -140,7 +140,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
         } else {
           handler = e => {
-            const dialog = insert(data, e.id, e.position, e.$type);
+            const dialog = insert(data, e.id, e.position, e.$kind);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
           };
@@ -148,7 +148,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.InsertEvent:
         handler = e => {
-          const dialog = insert(data, e.id, e.position, e.$type);
+          const dialog = insert(data, e.id, e.position, e.$kind);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
         };

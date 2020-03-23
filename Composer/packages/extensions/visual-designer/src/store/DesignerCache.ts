@@ -16,8 +16,8 @@ export class DesignerCache {
     const designerId = get(actionData, '$designer.id', '');
     if (!designerId) return null;
 
-    const $type = get(actionData, '$type');
-    return `${$type}-${designerId}`;
+    const $kind = get(actionData, '$kind');
+    return `${$kind}-${designerId}`;
   }
 
   cacheBoundary(actionData: BaseSchema, boundary: Boundary): boolean {

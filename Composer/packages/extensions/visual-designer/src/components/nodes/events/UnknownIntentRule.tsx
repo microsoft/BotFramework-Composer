@@ -14,7 +14,7 @@ function renderTitle(data): string {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else {
-    // data.$type.split('.')[1]
+    // data.$kind.split('.')[1]
     return formatMessage('Handle Unknown Intent');
   }
 }

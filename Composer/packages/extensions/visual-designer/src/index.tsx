@@ -123,7 +123,7 @@ VisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
-  data: { $type: '' },
+  data: { $kind: '' },
   shellApi: ({
     navTo: () => {},
     onFocusEvent: () => {},

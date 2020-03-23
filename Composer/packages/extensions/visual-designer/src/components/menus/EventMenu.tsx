@@ -13,7 +13,7 @@ interface EventMenuProps {
 
 export const EventMenu: React.FC<EventMenuProps> = ({ label, onClick, ...rest }): JSX.Element => {
   const eventMenuItems = createStepMenu([DialogGroup.EVENTS], false, (e, item): any =>
-    onClick(item ? item.$type : null)
+    onClick(item ? item.$kind : null)
   );
 
   return (

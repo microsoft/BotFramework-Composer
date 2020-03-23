@@ -5,8 +5,8 @@ import { DialogGroup, getDialogGroupByType } from '@bfc/shared';
 
 import { NodeColors } from '../constants/ElementColors';
 
-export function getElementColor($type) {
-  const nodeGroup = getDialogGroupByType($type);
+export function getElementColor($kind) {
+  const nodeGroup = getDialogGroupByType($kind);
 
   if (NodeColors[nodeGroup]) {
     return NodeColors[nodeGroup];
@@ -24,7 +24,7 @@ export enum ElementIcon {
   None = 'None',
 }
 
-export function getElementIcon($type): ElementIcon {
-  const dialgGroup = getDialogGroupByType($type) as string;
+export function getElementIcon($kind): ElementIcon {
+  const dialgGroup = getDialogGroupByType($kind) as string;
   return dialgGroup === 'Response' ? ElementIcon.MessageBot : ElementIcon.None;
 }

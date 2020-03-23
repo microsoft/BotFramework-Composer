@@ -151,10 +151,10 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $type) {
+export function insert(inputDialog, path, position, $kind) {
   const newStep = {
-    $type,
-    ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }),
+    $kind,
+    ...seedNewDialog($kind, { name: generateSDKTitle({ $kind }) }),
   };
   return insertAction(inputDialog, path, position, newStep);
 }

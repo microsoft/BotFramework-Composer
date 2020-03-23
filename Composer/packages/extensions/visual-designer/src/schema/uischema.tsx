@@ -28,7 +28,7 @@ const BaseInputSchema: UIWidget = {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
-      title: data => `Bot Asks (${getInputType(data.$type)})`,
+      title: data => `Bot Asks (${getInputType(data.$kind)})`,
       icon: ElementIcon.MessageBot,
       colors: {
         theme: ObiColors.BlueMagenta20,
@@ -45,7 +45,7 @@ const BaseInputSchema: UIWidget = {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
-      title: data => `User Input (${getInputType(data.$type)})`,
+      title: data => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: ElementIcon.User,
       menu: 'none',
@@ -55,7 +55,7 @@ const BaseInputSchema: UIWidget = {
       },
     },
     body: data =>
-      data.$type === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
+      data.$kind === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
           renderItem={item => (
@@ -68,7 +68,7 @@ const BaseInputSchema: UIWidget = {
     footer: data =>
       data.property ? (
         <>
-          {data.property} <FixedInfo>= Input({getInputType(data.$type)})</FixedInfo>
+          {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
         </>
       ) : null,
   },
