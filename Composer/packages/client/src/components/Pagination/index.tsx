@@ -6,9 +6,9 @@ import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState, useEffect } from 'react';
+import formatMessage from 'format-message';
 
 import { container, dropdownStyles, text } from './style';
-import formatMessage from 'format-message';
 
 export interface IPaginationProps {
   pageCount: number;
