@@ -19,6 +19,7 @@ export interface ITrigger {
   displayName: string;
   type: string;
   isIntent: boolean;
+  recognizerType: string;
 }
 
 export interface ReferredLuIntents {
