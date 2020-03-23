@@ -12,8 +12,8 @@ import { moreButton, overflowSet, test, navItem, itemText } from './styles';
 interface ITreeItemProps {
   link: any;
   isActive: boolean;
-  isSubItemActive: boolean;
-  depth: number;
+  isSubItemActive?: boolean;
+  depth: number | undefined;
   onDelete: (id: string) => void;
   onSelect: (id: string) => void;
 }
@@ -47,7 +47,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
   return (
     <div
       tabIndex={1}
-      css={navItem(isActive, isSubItemActive)}
+      css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
       }}
