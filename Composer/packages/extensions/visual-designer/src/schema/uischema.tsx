@@ -67,7 +67,9 @@ const BaseInputSchema: UIWidget = {
             );
           }}
         />
-      ) : null,
+      ) : (
+        <>{data.choices}</>
+      ),
     footer: data =>
       data.property ? (
         <>
