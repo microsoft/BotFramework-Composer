@@ -38,32 +38,30 @@ export const NavItem: React.FC<INavItemProps> = props => {
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   return (
-    <FocusZone allowFocusRoot={true} disabled={disabled}>
-      <Link
-        to={to}
-        css={link(active, disabled)}
-        getProps={(props: LinkGetProps) => {
-          const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
-          setActive(isActive);
-          return {};
-        }}
-        data-testid={'LeftNav-CommandBarButton' + labelName}
-        aria-disabled={disabled}
-        aria-label={labelName}
-        ref={addRef}
-      >
-        <div css={outer} aria-hidden="true">
-          <CommandBarButton
-            iconProps={{
-              iconName,
-            }}
-            text={labelName}
-            styles={commandBarButton(active)}
-            disabled={disabled}
-            ariaHidden
-          />
-        </div>
-      </Link>
-    </FocusZone>
+    <Link
+      to={to}
+      css={link(active, disabled)}
+      getProps={(props: LinkGetProps) => {
+        const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
+        setActive(isActive);
+        return {};
+      }}
+      data-testid={'LeftNav-CommandBarButton' + labelName}
+      aria-disabled={disabled}
+      aria-label={labelName}
+      ref={addRef}
+    >
+      <div css={outer} aria-hidden="true" tabIndex={-1}>
+        <CommandBarButton
+          iconProps={{
+            iconName,
+          }}
+          text={labelName}
+          styles={commandBarButton(active)}
+          disabled={disabled}
+          ariaHidden
+        />
+      </div>
+    </Link>
   );
 };
