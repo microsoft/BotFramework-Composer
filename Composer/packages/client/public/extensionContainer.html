@@ -61,5 +61,13 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- https://github.com/facebook/react-devtools/issues/76 -->
+    <script>
+      if (window.parent !== window) {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    }
+    </script>
+
   </body>
 </html>
