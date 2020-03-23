@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { DebugProtocol as DP } from 'vscode-debugprotocol';
+import { DesignerData } from '@bfc/shared';
 
 const make = <T>() => (null as unknown) as T;
 
@@ -187,9 +188,15 @@ export const actionFrom = (from: From, message: DP.ProtocolMessage, requestBySeq
   }
 };
 
+type Nullable<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
 interface Extension {
   item: string;
   more: string;
+  designer: DesignerData;
 }
 
-export const extensionFor = (range: DP.StackFrame | DP.Breakpoint): Extension => (range as unknown) as Extension;
+export const extensionFor = (range: DP.StackFrame | DP.Breakpoint): Nullable<Extension> =>
+  (range as unknown) as Nullable<Extension>;
