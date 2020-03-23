@@ -3,11 +3,11 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useRef, Suspense } from 'react';
-import { Router, Match, Redirect } from '@reach/router';
+import React, { Fragment, useContext, useEffect, Suspense } from 'react';
+import { Router, Redirect } from '@reach/router';
 
 import { About } from './pages/about';
-import { showDesign, data } from './styles';
+import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
@@ -22,48 +22,61 @@ const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
 
 const Routes = props => {
+  return (
+    <div css={data}>
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router basepath={BASEPATH} {...props}>
+          {/* <!-- this is out here, instead of inside ProjectRouter, to allow for a specific place in the DOM. --> */}
+          <DialogRouter path="/bot/:projectId/dialogs/:dialogId/*" {...props} />
+          <Redirect
+            from="/bot/:projectId/language-generation"
+            to="/bot/:projectId/language-generation/common"
+            noThrow
+          />
+          <Redirect
+            from="/bot/:projectId/language-understanding"
+            to="/bot/:projectId/language-understanding/all"
+            noThrow
+          />
+          <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
+          <ProjectRouter path="/bot/:projectId">
+            <SettingPage path="setting/*" />
+            <LUPage path="language-understanding/:fileId/*" />
+            <LGPage path="language-generation/:fileId/*" />
+            <Notifications path="notifications" />
+          </ProjectRouter>
+          <Home path="home" />
+          <About path="about" />
+          <NotFound default />
+        </Router>
+      </Suspense>
+    </div>
+  );
+};
+
+const DialogRouter = props => {
+  const match = { dialogId: props.dialogId, projectId: props.projectId };
   const { actions } = useContext(StoreContext);
-  const Content = props.component;
-  const parentProps = props;
-  const shouldRenderDesignPage = useRef(false);
 
   useEffect(() => {
-    actions.fetchProject();
+    actions.fetchProjectById(props.projectId);
   }, []);
 
   return (
-    <Match path={resolveToBasePath(BASEPATH, '/dialogs/:dialogId/*')} {...props}>
-      {({ match, navigate, location }) => {
-        if (match) {
-          shouldRenderDesignPage.current = true;
-        }
-
-        return (
-          <div css={data}>
-            <Suspense fallback={<LoadingSpinner />}>
-              <Content css={showDesign(match)}>
-                {shouldRenderDesignPage.current && <DesignPage match={match} navigate={navigate} location={location} />}
-              </Content>
-              {!match && (
-                <Router basepath={BASEPATH} {...parentProps}>
-                  <Redirect from="/" to={resolveToBasePath(BASEPATH, 'dialogs/Main')} noThrow />
-                  <SettingPage path="setting/*" />
-                  <Redirect from="language-understanding" to="language-understanding/all" noThrow />
-                  <LUPage path="language-understanding/:fileId/*" />
-                  <Redirect from="language-generation" to="language-generation/common" noThrow />
-                  <LGPage path="language-generation/:fileId/*" />
-                  <Notifications path="notifications" />
-                  <Home path="home" />
-                  <About path="about" />
-                  <NotFound default />
-                </Router>
-              )}
-            </Suspense>
-          </div>
-        );
-      }}
-    </Match>
+    <Fragment>
+      <DesignPage match={match} {...props} />
+    </Fragment>
   );
+};
+
+const ProjectRouter = props => {
+  const { actions } = useContext(StoreContext);
+
+  useEffect(() => {
+    actions.fetchProjectById(props.projectId);
+  }, []);
+
+  return <Fragment>{props.children}</Fragment>;
 };
 
 export default Routes;

@@ -52,7 +52,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
       const { templates, diagnostics } = parse(content, id, importResolver);
-      lgFiles.push({ id, content, relativePath, templates, diagnostics });
+      lgFiles.push({ id, content, relativePath, templates, diagnostics, lastModified: file.lastModified });
     }
   }
   return lgFiles;

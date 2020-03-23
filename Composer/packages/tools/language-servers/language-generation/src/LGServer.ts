@@ -47,7 +47,14 @@ export class LGServer {
 
   constructor(
     protected readonly connection: IConnection,
-    protected readonly importResolver?: ImportResolverDelegate,
+    protected readonly importResolver?: (
+      source: string,
+      resourceId: string,
+      projectId: string
+    ) => {
+      content: string;
+      id: string;
+    },
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
@@ -119,7 +126,11 @@ export class LGServer {
       return;
     }
 
-    const memoryFileInfo: string[] | undefined = this.memoryResolver(uri);
+    const document = this.documents.get(uri);
+    if (!document) return;
+    const projectId = this.getLGDocument(document)?.projectId;
+    if (!projectId) return;
+    const memoryFileInfo: string[] | undefined = this.memoryResolver(projectId);
     if (!memoryFileInfo || memoryFileInfo.length === 0) {
       return;
     }
@@ -165,13 +176,12 @@ export class LGServer {
         content: editorContent,
       };
     };
+    const { fileId, templateId, projectId } = this.getLGDocument(document) || {};
 
-    const { fileId, templateId } = this.getLGDocument(document) || {};
-
-    if (this.importResolver && fileId) {
+    if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
-        const lgFile = resolver(source, id);
+        const lgFile = resolver(source, id, projectId);
         if (!lgFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
@@ -195,7 +205,7 @@ export class LGServer {
 
   protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
     const { uri } = document;
-    const { fileId, templateId } = lgOption || {};
+    const { fileId, templateId, projectId } = lgOption || {};
     const index = () => {
       const importResolver: ImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
@@ -215,6 +225,7 @@ export class LGServer {
     };
     const lgDocument: LGDocument = {
       uri,
+      projectId,
       fileId,
       templateId,
       index,
