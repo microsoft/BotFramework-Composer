@@ -164,7 +164,7 @@ export class AssetManager {
       throw new Error(`no such template with id ${templateId}`);
     }
     // copy Composer data files
-    await copyDir(template.path + '/ComposerDialogs', this.templateStorage, dstDir, dstStorage);
+    await copyDir(template.path, this.templateStorage, dstDir, dstStorage);
   }
 
   public async copyRuntimeTo(dstDir: string, dstStorage: IFileStorage) {
