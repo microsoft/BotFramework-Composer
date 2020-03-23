@@ -58,11 +58,14 @@ const BaseInputSchema: UIWidget = {
       data.$type === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
-          renderItem={item => (
-            <BorderedDiv height={20} title={item.value}>
-              {item.value}
-            </BorderedDiv>
-          )}
+          renderItem={item => {
+            const value = typeof item === 'object' ? item.value : item;
+            return (
+              <BorderedDiv height={20} title={value}>
+                {value}
+              </BorderedDiv>
+            );
+          }}
         />
       ) : null,
     footer: data =>
