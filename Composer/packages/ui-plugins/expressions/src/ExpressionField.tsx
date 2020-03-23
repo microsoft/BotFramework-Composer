@@ -175,7 +175,8 @@ const ExpressionField: React.FC<FieldProps> = props => {
         key={selectedSchema.type}
         {...props}
         schema={selectedSchema || {}}
-        label={false}
+        // allow object fields to render their labels
+        label={selectedSchema.type !== 'object' ? false : undefined}
         css={{ label: 'ExpressionFieldValue' }}
       />
     );
