@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { FieldProps } from '@bfc/extension';
+import startCase from 'lodash/startCase';
 
 export function getUiLabel(props: FieldProps): string | false | undefined {
   const { uiOptions, schema, name, value, label } = props;
@@ -18,7 +19,7 @@ export function getUiLabel(props: FieldProps): string | false | undefined {
     return false;
   }
 
-  return label || schema?.title || name;
+  return label || startCase(schema?.title || name);
 }
 
 export function getUiDescription(props: FieldProps): string | undefined {
