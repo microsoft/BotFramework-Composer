@@ -88,6 +88,7 @@ export enum SDKTypes {
   RandomSelector = 'Microsoft.RandomSelector',
   RegExEntityRecognizer = 'Microsoft.RegExEntityRecognizer',
   RegexRecognizer = 'Microsoft.RegexRecognizer',
+  ValueRecognizer = 'Microsoft.ValueRecognizer',
   RepeatDialog = 'Microsoft.RepeatDialog',
   ReplaceDialog = 'Microsoft.ReplaceDialog',
   SendActivity = 'Microsoft.SendActivity',
