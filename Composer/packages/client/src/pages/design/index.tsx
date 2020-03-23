@@ -144,7 +144,7 @@ function DesignPage(props) {
     const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
     if (!currentDialog && rootDialog) {
       const { search } = location;
-      navigateTo(`/dialogs/${rootDialog.id}${search}`);
+      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
   }, [dialogId, dialogs, location]);

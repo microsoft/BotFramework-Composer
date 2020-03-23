@@ -150,7 +150,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'emptybot', content: '' },
+      body: { id: 'bot1', content: '' },
     } as Request;
     await ProjectController.updateDialog(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
