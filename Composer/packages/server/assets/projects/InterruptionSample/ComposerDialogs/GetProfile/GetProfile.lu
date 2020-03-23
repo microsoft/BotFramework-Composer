@@ -22,9 +22,9 @@
 - {personName:userName}
 - {age:userAge}
 - I'm {age:userAge} years old
-
-$prebuilt : personName Role=userName
-$prebuilt : age Role=userAge
+ 
+@ prebuilt  personName userName
+@ prebuilt  age userAge
 
 
 > Add interruption intent with examples of utterances that this dialog should not handle.
