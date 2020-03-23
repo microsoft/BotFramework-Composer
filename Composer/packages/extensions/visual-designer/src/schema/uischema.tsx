@@ -216,8 +216,9 @@ export const uiSchema: UISchema = {
       <ListOverview
         items={data.assignments}
         itemPadding={8}
-        renderItem={item => {
-          const content = `${item.property} : ${item.value}`;
+        renderItem={({ property, value }) => {
+          const v = typeof value === 'object' ? JSON.stringify(value) : value;
+          const content = `${property} : ${v}`;
           return (
             <SingleLineDiv height={16} title={content}>
               {content}
