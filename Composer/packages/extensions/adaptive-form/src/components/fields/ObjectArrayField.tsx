@@ -48,7 +48,12 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
       event.preventDefault();
 
       if (Object.keys(newObject).length) {
-        addItem(newObject);
+        const formattedData = Object.entries(newObject).reduce((obj, [key, value]) => {
+          const formatData = uiOptions?.properties?.[key].formatData;
+          return { ...obj, [key]: typeof formatData === 'function' ? formatData(value) : value };
+        }, {});
+
+        addItem(formattedData);
         setNewObject({});
       }
     }

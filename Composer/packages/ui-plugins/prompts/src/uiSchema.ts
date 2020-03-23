@@ -10,13 +10,6 @@ import { SynonymsField } from './SynonymsField';
 
 const choiceSchema = {
   hidden: ['action'],
-  formatData: values =>
-    Array.isArray(values)
-      ? values.map(({ value, synonyms }) => ({
-          value,
-          synonyms: typeof synonyms === 'string' ? synonyms.split(', ') : synonyms,
-        }))
-      : values,
   properties: {
     value: {
       label: () => formatMessage('Choice Name'),
@@ -26,6 +19,7 @@ const choiceSchema = {
     synonyms: {
       label: () => formatMessage('Synonyms (Optional)'),
       field: SynonymsField,
+      formatData: value => (typeof value === 'string' ? value.split(', ') : value),
       placeholder: () => formatMessage('Add multiple comma-separated synonyms'),
     },
   },

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect } from 'react';
 import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension';
 import { useState } from 'react';
@@ -79,14 +78,8 @@ export function useArrayItems(items: any[], onChange: ChangeHandler<any[]>): Arr
   };
 
   const addItem = (newItem: any) => {
-    onChange([...cache.map(({ value }) => value), newItem]);
+    handleChange(cache.concat(createArrayItem(newItem)));
   };
-
-  useEffect(() => {
-    if (items.length > cache.length) {
-      setCache(cache.concat([createArrayItem(items[items.length - 1])]));
-    }
-  }, [items]);
 
   return { arrayItems: cache, handleChange, addItem };
 }
