@@ -112,6 +112,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               onChange={onNameChange}
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
+              autoFocus
               required
             />
           </StackItem>
