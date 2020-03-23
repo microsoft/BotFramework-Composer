@@ -81,9 +81,10 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
   const selectedFile: LuFile | void = luFiles.find(f => f.id === currentDialogId);
   const [checkOptions, setCheckOptions] = useState(
     defaultOptions.map(opt => {
-      if (recognizers.find(recog => recog.id === id)) {
+      if (recognizers.find(recog => recog.id === opt.id)) {
         opt.checked = true;
       }
+      return opt;
     })
   );
 
