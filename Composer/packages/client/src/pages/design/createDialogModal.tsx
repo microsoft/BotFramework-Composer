@@ -34,7 +34,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { onSubmit, onDismiss, isOpen } = props;
   const initialFormData: DialogFormData = { name: '', description: '' };
   const [formData, setFormData] = useState(initialFormData);
-  const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
+  const [hasErrors, setErrors] = useState(true);
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -43,37 +43,35 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     });
   };
 
-  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = (data: DialogFormData) => {
-    const errors: { name?: string } = {};
-    const { name } = data;
-
+  const _onGetErrorMessage = (name: string) => {
     if (name) {
       if (!nameRegex.test(name)) {
-        errors.name = formatMessage(
+        setErrors(true);
+        return formatMessage(
           'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
         );
       }
       if (dialogs.some(dialog => dialog.id === name)) {
-        errors.name = formatMessage('Duplicaton of dialog name');
+        setErrors(true);
+        return formatMessage('Duplicaton of dialog name');
       }
     } else {
-      errors.name = formatMessage('Please input a name');
+      setErrors(true);
+      return formatMessage('Please input a name');
     }
-    return errors;
+    setErrors(false);
+    return '';
   };
+
+  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
   const handleSubmit = e => {
     e.preventDefault();
-    const errors = validateForm(formData);
-    if (Object.keys(errors).length) {
-      setFormDataErrors(errors);
-      return;
-    }
 
-    onSubmit({
-      ...formData,
-    });
+    if (!hasErrors)
+      onSubmit({
+        ...formData,
+      });
   };
 
   return (
@@ -87,7 +85,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               value={formData.name}
               styles={name}
               onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
+              onGetErrorMessage={_onGetErrorMessage}
               data-testid="NewDialogName"
               required
             />
