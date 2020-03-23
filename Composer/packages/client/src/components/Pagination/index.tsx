@@ -8,6 +8,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState, useEffect } from 'react';
 
 import { container, dropdownStyles, text } from './style';
+import formatMessage from 'format-message';
 
 export interface IPaginationProps {
   pageCount: number;
@@ -57,6 +58,7 @@ export const Pagination: React.FC<IPaginationProps> = props => {
         styles={dropdownStyles}
         selectedKey={`page${index + 1}`}
         onChange={handlePageSelected}
+        ariaLabel={formatMessage('Page number')}
       />
       <span css={text}>of {pageCount}</span>
       <DefaultButton text="Next >" allowDisabledFocus onClick={hangleNextClick} disabled={index === pageCount - 1} />
