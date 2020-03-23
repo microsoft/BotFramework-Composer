@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -36,6 +36,19 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
+  useEffect(() => {
+    const handleUserKeyPress = event => {
+      const { keyCode } = event;
+      if (keyCode === 9) {
+        const errors = validateForm(formData);
+        setFormDataErrors(errors);
+      }
+    };
+    document.addEventListener('keydown', handleUserKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleUserKeyPress);
+    };
+  }, []);
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
