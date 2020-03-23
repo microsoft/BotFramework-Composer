@@ -14,6 +14,8 @@ export interface UIOptions {
   description?: UIOptionValue<string | undefined>;
   /** Field widget override. */
   field?: FieldWidget;
+  /** called before the form's onChange. Use this to apply additional data processing */
+  formatData?: (data: any) => any;
   /** Url to docs. Rendered below field description. */
   helpLink?: string;
   /**

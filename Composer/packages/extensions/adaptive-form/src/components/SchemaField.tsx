@@ -27,6 +27,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     value,
     rawErrors,
     hideError,
+    onChange,
   } = props;
   const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
@@ -41,6 +42,13 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
+  const handleChange = (newValue: any) => {
+    const { formatData } = uiOptions;
+    const formattedValue = typeof formatData === 'function' ? formatData(newValue) : newValue;
+
+    onChange(formattedValue);
+  };
+
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
   const fieldProps = {
     ...props,
@@ -53,6 +61,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     value,
     error: error || undefined,
     rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    onChange: handleChange,
   };
 
   return (
