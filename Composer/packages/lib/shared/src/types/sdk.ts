@@ -187,7 +187,7 @@ export interface RegexRecognizer extends BaseSchema {
   intents: IntentPattern[];
 }
 
-export type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string;
+export type MicrosoftIRecognizer = LuisRecognizer | RegexRecognizer | string | Record<string, any>;
 
 /**
  * Rules
