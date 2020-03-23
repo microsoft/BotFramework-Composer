@@ -156,12 +156,13 @@ const ExpressionField: React.FC<FieldProps> = props => {
       (selectedSchema.type === 'object' && !selectedSchema.properties) ||
       (selectedSchema.type === 'array' && !selectedSchema.items)
     ) {
+      const defaultValue = selectedSchema.type === 'object' ? {} : [];
       return (
         <JsonEditor
           key={selectedSchema.type}
           id={props.id}
           onChange={props.onChange}
-          value={value || {}}
+          value={value || defaultValue}
           height={100}
           schema={selectedSchema}
         />
