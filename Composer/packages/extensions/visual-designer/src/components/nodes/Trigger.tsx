@@ -40,7 +40,7 @@ export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
       <div css={triggerContentStyle}>
         <div css={titleStyle}>
           <Icon iconName="Flow" style={triggerIconStyle} />
-          <h4 css={titleContentStyle}>{name}</h4>
+          <h1 css={titleContentStyle}>{name}</h1>
         </div>
         <div css={subtitleStyle} className="trigger__content-label">
           {label}

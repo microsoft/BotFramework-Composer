@@ -7,33 +7,23 @@ import path from 'path';
 import log from '../logger';
 import settings from '../settings';
 
-import localInitData from './data.template';
-import abhInitData from './abh-template.json';
+import initData from './data.template';
 import { runMigrations } from './migrations';
 
-const isHostedInAzure = !!process.env.WEBSITE_NODE_DEFAULT_VERSION;
-const dataStorePath =
-  isHostedInAzure && process.env.HOME ? path.resolve(process.env.HOME, './site/data.json') : settings.appDataPath;
+const dataStorePath = settings.appDataPath;
 
-let initData = isHostedInAzure ? abhInitData : localInitData;
+const migrateStore = () => {
+  if (fs.existsSync(dataStorePath)) {
+    const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
+    const migratedData = runMigrations(userData);
+    fs.writeFileSync(dataStorePath, JSON.stringify(migratedData, null, 2) + '\n');
+  }
+};
 
-if (fs.existsSync(dataStorePath)) {
-  const userData = JSON.parse(fs.readFileSync(dataStorePath, 'utf-8'));
-  initData = runMigrations(userData);
-} else {
-  log('Database not found. Seeding data.json with: %O', initData);
-}
-
-fs.writeFileSync(dataStorePath, JSON.stringify(initData, null, 2) + '\n');
-
-if (isHostedInAzure) {
-  // for some very odd reason on Azure webapp, fs.readFileSync after writeFileSync doesn't
-  // always find the file, add one more io to kick the  virtual file system
-  fs.appendFileSync(dataStorePath, ' ');
-}
+migrateStore();
 
 interface KVStore {
-  get(key: string): any;
+  get(key: string, defaultValue?: any): any;
   set(key: string, value: any): void;
 }
 
@@ -41,11 +31,15 @@ class JsonStore implements KVStore {
   private data: any;
   private filePath: string;
 
-  get = (key: string): any => {
+  get = (key: string, defaultValue?: any): any => {
     this.readStore();
 
     if (key in this.data) {
       return this.data[key];
+    } else if (defaultValue) {
+      // when default value is present, save it
+      this.set(key, defaultValue);
+      return defaultValue;
     } else {
       throw Error(`no such key ${key} in store`);
     }

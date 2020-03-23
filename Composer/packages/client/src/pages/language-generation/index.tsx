@@ -33,7 +33,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
 
   const path = props.location?.pathname ?? '';
   const { fileId = '' } = props;
@@ -60,25 +60,25 @@ const LGPage: React.FC<LGPageProps> = props => {
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === fileId);
     if (!activeDialog && dialogs.length && fileId !== 'common') {
-      navigateTo('/language-generation/common');
+      navigateTo(`/bot/${projectId}/language-generation/common`);
     }
-  }, [fileId, dialogs]);
+  }, [fileId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {
-      const url = `/language-generation/${id}`;
+      const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-generation/${fileId}`;
+      let url = `/bot/${projectId}/language-generation/${fileId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [fileId, projectId]
   );
 
   const toolbarItems = [
@@ -93,7 +93,7 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
+        <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}
@@ -113,7 +113,7 @@ const LGPage: React.FC<LGPageProps> = props => {
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
             <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
+              <CodeEditor path="/edit/*" fileId={fileId} />
               <TableView path="/" fileId={fileId} />
             </Router>
           </Suspense>
