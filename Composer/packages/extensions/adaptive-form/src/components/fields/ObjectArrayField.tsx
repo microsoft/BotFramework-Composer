@@ -49,8 +49,8 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
       if (Object.keys(newObject).length) {
         const formattedData = Object.entries(newObject).reduce((obj, [key, value]) => {
-          const deserializeValue = uiOptions?.properties?.[key]?.serializer?.set;
-          return { ...obj, [key]: typeof deserializeValue === 'function' ? deserializeValue(value) : value };
+          const serializeValue = uiOptions?.properties?.[key]?.serializer?.set;
+          return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
         }, {});
 
         addItem(formattedData);
