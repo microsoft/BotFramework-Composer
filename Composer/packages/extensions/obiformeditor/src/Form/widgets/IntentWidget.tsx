@@ -5,6 +5,7 @@ import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { SDKTypes } from '@bfc/shared';
+import { DialogInfo } from '@bfc/indexers';
 
 import { BFDWidgetProps } from '../types';
 
@@ -14,29 +15,19 @@ import { RegexEditorWidget } from './RegexEditorWidget';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
-interface IntentWidgetProps extends BFDWidgetProps {
-  recognizerType?: string;
+function recognizerType({ triggers }: DialogInfo, id: string): string | undefined {
+  const triggerId = id.substring(id.indexOf('#.') + 2, id.indexOf(']_') + 1);
+  return triggers.find(trigger => trigger.id === triggerId)?.recognizerType;
 }
 
-export const IntentWidget: React.FC<IntentWidgetProps> = props => {
-  const {
-    disabled,
-    onChange,
-    id,
-    onFocus,
-    onBlur,
-    value,
-    formContext,
-    placeholder,
-    label,
-    schema,
-    recognizerType,
-  } = props;
+export const IntentWidget: React.FC<BFDWidgetProps> = props => {
+  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
   const { description } = schema;
+  const { currentDialog } = formContext;
 
   let options: IDropdownOption[] = [];
-
-  switch (recognizerType) {
+  const type = recognizerType(currentDialog, id);
+  switch (type) {
     case SDKTypes.RegexRecognizer:
     case SDKTypes.LuisRecognizer:
       break;
@@ -53,7 +44,7 @@ export const IntentWidget: React.FC<IntentWidgetProps> = props => {
 
   return (
     <>
-      {recognizerType === SDKTypes.ValueRecognizer && (
+      {type === SDKTypes.ValueRecognizer && (
         <>
           <WidgetLabel label={label} description={description} id={id} />
           <Dropdown
@@ -69,10 +60,8 @@ export const IntentWidget: React.FC<IntentWidgetProps> = props => {
           />
         </>
       )}
-      {recognizerType === SDKTypes.LuisRecognizer && (
-        <LuEditorWidget formContext={formContext} name={value} height={316} />
-      )}
-      {recognizerType === SDKTypes.RegexRecognizer && <RegexEditorWidget formContext={formContext} name={value} />}
+      {type === SDKTypes.LuisRecognizer && <LuEditorWidget formContext={formContext} name={value} height={316} />}
+      {type === SDKTypes.RegexRecognizer && <RegexEditorWidget formContext={formContext} name={value} />}
     </>
   );
 };
