@@ -4,7 +4,7 @@
 import React from 'react';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import { DialogInfo } from '@bfc/indexers';
+import { SDKTypes } from '@bfc/shared';
 
 import { BFDWidgetProps } from '../types';
 
@@ -14,37 +14,31 @@ import { RegexEditorWidget } from './RegexEditorWidget';
 
 const EMPTY_OPTION = { key: '', text: '' };
 
-enum RecognizerType {
-  'none',
-  'regex',
-  'luis',
+interface IntentWidgetProps extends BFDWidgetProps {
+  recognizerType?: string;
 }
 
-function recognizerType({ content }: DialogInfo): RecognizerType | null {
-  const { recognizer } = content;
-
-  if (recognizer) {
-    if (typeof recognizer === 'object' && recognizer.$type === 'Microsoft.RegexRecognizer') {
-      return RecognizerType.regex;
-    } else if (typeof recognizer === 'string') {
-      return RecognizerType.luis;
-    }
-  }
-
-  return RecognizerType.none;
-}
-
-export const IntentWidget: React.FC<BFDWidgetProps> = props => {
-  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
+export const IntentWidget: React.FC<IntentWidgetProps> = props => {
+  const {
+    disabled,
+    onChange,
+    id,
+    onFocus,
+    onBlur,
+    value,
+    formContext,
+    placeholder,
+    label,
+    schema,
+    recognizerType,
+  } = props;
   const { description } = schema;
-  const { currentDialog } = formContext;
 
-  const type = recognizerType(currentDialog);
   let options: IDropdownOption[] = [];
 
-  switch (type) {
-    case RecognizerType.regex:
-    case RecognizerType.luis:
+  switch (recognizerType) {
+    case SDKTypes.RegexRecognizer:
+    case SDKTypes.LuisRecognizer:
       break;
     default:
       options = [EMPTY_OPTION];
@@ -59,7 +53,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
 
   return (
     <>
-      {type === RecognizerType.none && (
+      {recognizerType === SDKTypes.ValueRecognizer && (
         <>
           <WidgetLabel label={label} description={description} id={id} />
           <Dropdown
@@ -75,8 +69,10 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
           />
         </>
       )}
-      {type === RecognizerType.luis && <LuEditorWidget formContext={formContext} name={value} height={316} />}
-      {type === RecognizerType.regex && <RegexEditorWidget formContext={formContext} name={value} />}
+      {recognizerType === SDKTypes.LuisRecognizer && (
+        <LuEditorWidget formContext={formContext} name={value} height={316} />
+      )}
+      {recognizerType === SDKTypes.RegexRecognizer && <RegexEditorWidget formContext={formContext} name={value} />}
     </>
   );
 };
