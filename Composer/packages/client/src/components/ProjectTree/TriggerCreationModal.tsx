@@ -103,25 +103,24 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { dialogs, luFiles, locale, projectId } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
-  const [recognizerType, setRecognizerType] = useState(ValueRecognizerKey);
   const recognizerTypes: IDropdownOption[] = get(
     dialogFile,
     `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`,
     []
   ).map(r => recognizerSet[r.$type]);
-  const isRegEx = recognizerType === regexRecognizerKey;
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
-  const isNone = recognizerType === ValueRecognizerKey;
   const initialFormData: TriggerFormData = {
     errors: {},
     $type: '',
+    recognizerType: ValueRecognizerKey,
     specifiedType: '',
     intent: '',
     triggerPhrases: '',
     regexEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-
+  const isRegEx = formData.recognizerType === regexRecognizerKey;
+  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+  const isNone = formData.recognizerType === ValueRecognizerKey;
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData, isRegEx, regexIntents);
@@ -151,7 +150,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    setFormData({ ...initialFormData, $type: option.key });
+    const data = { ...initialFormData, recognizerType: formData.recognizerType, $type: option.key };
+    setFormData(data);
   };
 
   const onSelectSpecifiedTypeType = (e, option) => {
@@ -167,8 +167,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onChangeRecognizerType = (e, type) => {
-    setRecognizerType(type.key);
-    setFormData({ ...initialFormData, $type: type.key === ValueRecognizerKey ? '' : intentTypeKey });
+    setFormData({
+      ...initialFormData,
+      recognizerType: type.key,
+      $type: type.key === ValueRecognizerKey ? '' : intentTypeKey,
+    });
   };
 
   const onTriggerPhrasesChange = (body: string) => {
@@ -215,7 +218,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             styles={dropdownStyles}
             onChange={onChangeRecognizerType}
             data-testid={'triggerRecognizerTypesDropDown'}
-            defaultSelectedKey={recognizerType}
+            selectedKey={formData.recognizerType}
             required
           />
           <Dropdown

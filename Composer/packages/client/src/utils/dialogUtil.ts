@@ -21,6 +21,7 @@ interface DialogsMap {
 
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
+  recognizerType: string;
   $type: string;
   specifiedType: string;
   intent: string;
@@ -98,6 +99,7 @@ export function generateNewTrigger(data: TriggerFormData) {
   }
   const newStep = {
     $type: data.$type,
+    recognizerType: data.recognizerType,
     ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
   return newStep;
