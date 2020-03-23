@@ -10,7 +10,7 @@ import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
 
 import { PromptFieldProps } from './types';
-import { ConfirmInputSettings } from './ConfirmInputSettings';
+import { ChoiceInputSettings } from './ChoiceInputSettings';
 
 const getOptions = (enumSchema: JSONSchema7) => {
   if (!enumSchema || !enumSchema.enum || !Array.isArray(enumSchema.enum)) {
@@ -103,24 +103,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           rawErrors={getError('style')}
         />
       )}
-      {getSchema('choices') && (
-        <SchemaField
-          name="choices"
-          definitions={definitions}
-          depth={depth}
-          id={`${id}.choices`}
-          schema={getSchema('choices')}
-          uiOptions={uiOptions.properties?.choices || {}}
-          value={((value as unknown) as ChoiceInput).choices}
-          onChange={onChange('choices')}
-          rawErrors={getError('choices')}
-        />
+      {value?.$type === SDKTypes.ChoiceInput && (
+        <ChoiceInputSettings {...props} value={(value as unknown) as ChoiceInput} choiceProperty="choices" />
       )}
-      {/* {value?.$type === SDKTypes.ChoiceInput && (
-        <ChoiceInputSettings {...props} value={(value as unknown) as ChoiceInput} />
-      )} */}
       {value?.$type === SDKTypes.ConfirmInput && (
-        <ConfirmInputSettings {...props} value={(value as unknown) as ConfirmInput} />
+        <ChoiceInputSettings {...props} value={(value as unknown) as ConfirmInput} choiceProperty="confirmChoices" />
       )}
     </Fragment>
   );
