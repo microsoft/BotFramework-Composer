@@ -4,9 +4,10 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, ImportResolver } from 'botbuilder-lg';
+import { LgFile, LuFile } from '@bfc/indexers';
 
 import { prepareAxios } from '../utils/auth';
-import { getFileName, getBaseName } from '../utils/fileUtil';
+import { getFileName, getBaseName, getExtension } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -18,10 +19,12 @@ import { ActionType } from './action/types';
 
 const initialState: State = {
   dialogs: [],
+  projectId: '',
   botName: '',
   location: '', // the path to the bot project
   botEnvironment: 'production',
-  botEndpoint: '',
+  locale: 'en-us',
+  botEndpoints: {},
   remoteEndpoints: {},
   focusPath: '', // the data path for FormEditor
   recentProjects: [],
@@ -38,6 +41,7 @@ const initialState: State = {
   luFiles: [],
   actionsSeed: [],
   designPageLocation: {
+    projectId: '',
     dialogId: '',
     focused: '',
     selected: '',
@@ -61,20 +65,30 @@ const initialState: State = {
     coachMarkRefs: {},
   },
   clipboardActions: [],
+  publishTypes: [],
+  publishTargets: [],
 };
 
 interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
   actions: BoundActionHandlers;
-  resolvers: { lgImportresolver: ImportResolverDelegate };
+  resolvers: {
+    lgImportresolver: ImportResolverDelegate;
+    lgFileResolver: (id: string) => LgFile | undefined;
+    luFileResolver: (id: string) => LuFile | undefined;
+  };
 }
 
 export const StoreContext = React.createContext<StoreContextValue>({
   state: initialState,
   dispatch: () => {},
   actions: {} as ActionHandlers,
-  resolvers: { lgImportresolver: ImportResolver.fileResolver },
+  resolvers: {
+    lgImportresolver: ImportResolver.fileResolver,
+    lgFileResolver: () => undefined,
+    luFileResolver: () => undefined,
+  },
 });
 
 interface StoreProviderProps {
@@ -105,13 +119,29 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     actions: boundActions,
     dispatch: interceptDispatch,
     resolvers: {
-      lgImportresolver: function(_source: string, id: string) {
+      lgImportresolver: function(source: string, id: string) {
+        const locale = getExtension(source);
         const targetFileName = getFileName(id);
-        const targetFileId = getBaseName(targetFileName);
+        let targetFileId = getBaseName(targetFileName);
+        if (locale) {
+          targetFileId += `.${locale}`;
+        }
         const targetFile = getState().lgFiles.find(({ id }) => id === targetFileId);
         if (!targetFile) throw new Error(`${id} lg file not found`);
         return { id, content: targetFile.content };
       } as ImportResolverDelegate,
+      lgFileResolver: function(id: string) {
+        const state = getState();
+        const { locale, lgFiles } = state;
+        const fileId = id.includes('.') ? id : `${id}.${locale}`;
+        return lgFiles.find(({ id }) => id === fileId);
+      },
+      luFileResolver: function(id: string) {
+        const state = getState();
+        const { locale, luFiles } = state;
+        const fileId = id.includes('.') ? id : `${id}.${locale}`;
+        return luFiles.find(({ id }) => id === fileId);
+      },
     },
   };
 

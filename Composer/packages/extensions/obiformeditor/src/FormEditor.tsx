@@ -142,6 +142,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
         uiSchema={dialogUiSchema}
         formContext={{
           shellApi,
+          locale: props.locale,
           dialogOptions,
           editorSchema: schemas.editor,
           rootId: props.focusPath,
@@ -149,6 +150,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
           lgFiles: props.lgFiles,
           currentDialog: props.currentDialog,
           dialogId: get(data, '$designer.id'),
+          projectId: props.projectId,
           isRoot: props.focusPath.endsWith('#'),
           focusedEvent: props.focusedEvent,
           focusedSteps: props.focusedSteps,

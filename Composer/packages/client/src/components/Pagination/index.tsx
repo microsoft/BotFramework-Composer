@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState, useEffect } from 'react';
+import formatMessage from 'format-message';
 
 import { container, dropdownStyles, text } from './style';
 
@@ -57,6 +58,7 @@ export const Pagination: React.FC<IPaginationProps> = props => {
         styles={dropdownStyles}
         selectedKey={`page${index + 1}`}
         onChange={handlePageSelected}
+        ariaLabel={formatMessage('Page number')}
       />
       <span css={text}>of {pageCount}</span>
       <DefaultButton text="Next >" allowDisabledFocus onClick={hangleNextClick} disabled={index === pageCount - 1} />

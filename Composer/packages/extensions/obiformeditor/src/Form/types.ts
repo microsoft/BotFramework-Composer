@@ -5,12 +5,16 @@ import { WidgetProps, FieldProps, ObjectFieldTemplateProps } from '@bfcomposer/r
 import { ShellData, EditorSchema, ShellApi, OBISchema } from '@bfc/shared';
 
 export interface FormContext
-  extends Pick<ShellData, 'luFiles' | 'lgFiles' | 'currentDialog' | 'focusedEvent' | 'focusedSteps' | 'focusedTab'> {
+  extends Pick<
+    ShellData,
+    'locale' | 'luFiles' | 'lgFiles' | 'currentDialog' | 'focusedEvent' | 'focusedSteps' | 'focusedTab'
+  > {
   editorSchema: EditorSchema;
   shellApi: ShellApi;
   rootId: string;
   dialogOptions: { value: string; label: string }[];
   dialogId?: string;
+  projectId: string;
   isRoot: boolean;
   formErrors: any;
 }

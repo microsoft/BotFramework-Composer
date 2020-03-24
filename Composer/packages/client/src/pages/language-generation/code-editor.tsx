@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -20,15 +20,15 @@ const { check } = lgIndexer;
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles } = state;
+  const { lgFiles, locale, projectId } = state;
   const { lgImportresolver } = resolvers;
-  const { fileId } = props;
-  const file = lgFiles?.find(({ id }) => id === fileId);
+  const { dialogId } = props;
+  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
@@ -54,15 +54,9 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = template ? template.body : file.content;
     setContent(value);
-  }, [file, templateId]);
+  }, [file, templateId, projectId]);
 
-  useEffect(() => {
-    const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
-
-    const isInvalid = !isValid(currentDiagnostics);
-    const text = isInvalid ? combineMessage(currentDiagnostics) : '';
-    setErrorMsg(text);
-  }, [diagnostics]);
+  const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
   const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
@@ -85,6 +79,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { name, parameters } = template;
         const payload = {
           file,
+          projectId,
           templateName: name,
           template: {
             name,
@@ -94,7 +89,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         };
         actions.updateLgTemplate(payload);
       }, 500),
-    [file, template]
+    [file, template, projectId]
   );
 
   const updateLgFile = useMemo(
@@ -104,11 +99,12 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const { id } = file;
         const payload = {
           id,
+          projectId,
           content,
         };
         actions.updateLgFile(payload);
       }, 500),
-    [file]
+    [file, projectId]
   );
 
   const _onChange = useCallback(
@@ -137,11 +133,12 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         updateLgFile(value);
       }
     },
-    [file, template]
+    [file, template, projectId]
   );
 
   const lgOption = {
-    fileId,
+    projectId,
+    fileId: file?.id || dialogId,
     templateId: template?.name,
   };
 
@@ -160,6 +157,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       editorDidMount={editorDidMount}
       value={content}
       errorMsg={errorMsg}
+      diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,
