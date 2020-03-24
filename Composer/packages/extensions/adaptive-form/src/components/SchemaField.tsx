@@ -15,6 +15,9 @@ const schemaField = {
     margin: 10px ${depth === 0 ? 18 : 0}px;
     label: SchemaFieldContainer;
   `,
+  field: css`
+    width: 100%;
+  `,
 };
 
 const SchemaField: React.FC<FieldProps> = props => {
@@ -67,8 +70,10 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   return (
     <div className={className} css={schemaField.container(props.depth)}>
-      <FieldWidget {...fieldProps} />
-      {!hideError && error}
+      <div css={schemaField.field}>
+        <FieldWidget {...fieldProps} />
+        {!hideError && error}
+      </div>
     </div>
   );
 };
