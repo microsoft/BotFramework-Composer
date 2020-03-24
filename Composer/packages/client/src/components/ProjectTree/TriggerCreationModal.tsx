@@ -15,7 +15,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogInfo, luIndexer, combineMessage } from '@bfc/indexers';
 import get from 'lodash/get';
 import { LuEditor } from '@bfc/code-editor';
-import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
+import { Pivot, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import {
   generateNewDialog,
