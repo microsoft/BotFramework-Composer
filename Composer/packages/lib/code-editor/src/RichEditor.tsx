@@ -102,12 +102,32 @@ export function RichEditor(props: RichEditorProps) {
     borderColor = SharedColors.cyanBlue10;
   }
 
+  let errorMessage: JSX.Element | null = null;
+
+  const commonProps = {
+    isMultiline: true,
+    dismissButtonAriaLabel: formatMessage('Close'),
+    overflowButtonAriaLabel: formatMessage('See more'),
+  };
+
   if (hasWarning) {
     borderColor = SharedColors.yellow10;
+    errorMessage = (
+      <MessageBar messageBarType={MessageBarType.warning} {...commonProps}>
+        {warningMsg || warningMsgFromDiagnostics}
+        {syntaxLink}
+      </MessageBar>
+    );
   }
 
   if (hasError) {
     borderColor = SharedColors.red20;
+    errorMessage = (
+      <MessageBar messageBarType={MessageBarType.error} {...commonProps}>
+        {errorMsg || errorMsgFromDiagnostics}
+        {syntaxLink}
+      </MessageBar>
+    );
   }
 
   return (
@@ -127,17 +147,7 @@ export function RichEditor(props: RichEditorProps) {
       >
         <BaseEditor {...rest} editorDidMount={onEditorMount} placeholder={hidePlaceholder ? undefined : placeholder} />
       </div>
-      {(hasError || hasWarning) && (
-        <MessageBar
-          messageBarType={MessageBarType.error}
-          isMultiline={true}
-          dismissButtonAriaLabel={formatMessage('Close')}
-          overflowButtonAriaLabel={formatMessage('See more')}
-        >
-          {errorMsg || errorMsgFromDiagnostics}
-          {syntaxLink}
-        </MessageBar>
-      )}
+      {errorMessage}
     </Fragment>
   );
 }

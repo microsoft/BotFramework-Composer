@@ -26,22 +26,23 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
 export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
   const diagnostic = diagnostics[0];
   if (diagnostic) {
-    let msg = '';
+    let outputMessage = '';
     if (diagnostic.range) {
       const { start, end } = diagnostic.range;
       const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
-      msg += position;
+      outputMessage += position;
     }
-    if (diagnostic.message.includes('error message:')) {
-      const [, errorInfo] = diagnostic.message.split('error message: ');
-      return msg + errorInfo;
-    } else if (diagnostic.message.includes(']')) {
+    const diagnosticMessage = diagnostic.message;
+    if (diagnosticMessage.includes('error message:')) {
+      const [, errorInfo] = diagnosticMessage.split('error message: ');
+      return outputMessage + errorInfo;
+    } else if (diagnosticMessage.includes(']')) {
       // properly handle messages containing brackets
-      const [, errorInfo] = diagnostic.message.split(']');
-      return msg + errorInfo;
+      const [, errorInfo] = diagnosticMessage.split(']');
+      return outputMessage + errorInfo;
     } else {
-      // this is some other weird case, so just print the whole message
-      return msg + diagnostic.message;
+      // this is some other case, so just print the whole message
+      return outputMessage + diagnosticMessage;
     }
   }
   return '';
