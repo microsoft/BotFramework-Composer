@@ -30,7 +30,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const intentName = `${promptType}.response-${designerId}`;
 
   const type = recognizerType(currentDialog);
-  const Editor: any = recognizers.find(r => r.id === type)?.editor;
+  const Editor: any = type === SDKTypes.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
