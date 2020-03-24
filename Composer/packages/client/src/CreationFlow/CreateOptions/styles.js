@@ -41,9 +41,3 @@ export const optionRoot = css`
   width: 100%;
   height: 100%;
 `;
-
-export const placeholder = css`
-  line-height: 30px;
-  height: 30px;
-  padding-left: 5px;
-`;

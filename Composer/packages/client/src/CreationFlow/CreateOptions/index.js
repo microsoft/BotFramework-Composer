@@ -10,13 +10,30 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 
-import { choiceGroup, templateItem, optionRoot, optionIcon, placeholder } from './styles';
+import { choiceGroup, templateItem, optionRoot, optionIcon } from './styles';
 
 export function CreateOptions(props) {
   const [option, setOption] = useState('create');
   const { templates, onDismiss, onNext } = props;
   const emptyBotKey = templates[1].id;
   const [template, setTemplate] = useState(emptyBotKey);
+
+  const handleChange = (event, option) => {
+    setOption(option.key);
+  };
+
+  const handleItemChange = (event, option) => {
+    setTemplate(option);
+  };
+
+  const handleJumpToNext = () => {
+    if (option === 'Create from template') {
+      onNext(template);
+    } else {
+      onNext(emptyBotKey);
+    }
+  };
+
   function SelectOption(props) {
     const { checked, text, key } = props;
     return (
@@ -55,32 +72,14 @@ export function CreateOptions(props) {
           onChange={handleItemChange}
           required={true}
         />
-        <div css={placeholder}>
-          {checked && template ? template.description : formatMessage("Select a template to see it's description.")}
-        </div>
       </Fragment>
     );
   }
 
-  const handleChange = (event, option) => {
-    setOption(option.key);
-  };
-
-  const handleItemChange = (event, option) => {
-    setTemplate(option.key);
-  };
-
-  const handleJumpToNext = () => {
-    if (option === 'Create from template') {
-      onNext(template);
-    } else {
-      onNext(emptyBotKey);
-    }
-  };
-
   return (
     <Fragment>
       <ChoiceGroup
+        label={formatMessage('Choose how to create your bot')}
         defaultSelectedKey="Create from scratch"
         options={[
           {
