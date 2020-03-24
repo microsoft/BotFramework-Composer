@@ -15,7 +15,7 @@ import querystring from 'query-string';
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check } = lgIndexer;
+const { parse } = lgIndexer;
 
 const lspServerPath = '/lg-language-server';
 
@@ -122,13 +122,13 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
             parameters,
             body: value,
           });
-          setDiagnostics(check(newContent, id, lgImportresolver));
+          setDiagnostics(parse(newContent, id, lgImportresolver).diagnostics);
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        const diags = check(value, id, lgImportresolver);
+        const diags = parse(value, id, lgImportresolver).diagnostics;
         setDiagnostics(diags);
         updateLgFile(value);
       }
