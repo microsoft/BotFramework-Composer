@@ -34,7 +34,9 @@ export interface BotSchemas {
 }
 
 export interface ShellData {
+  locale: string;
   botName: string;
+  projectId: string;
   currentDialog: any;
   data: {
     $type?: string;
@@ -64,6 +66,8 @@ export interface ShellApi {
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (luFile: { id: string; content: string }) => Promise<void>;
   updateLgFile: (id: string, content: string) => Promise<void>;
+  lgFileResolver: (id: string) => Promise<any>;
+  luFileResolver: (id: string) => Promise<any>;
   getLgTemplates: (id: string) => Promise<LgTemplate[]>;
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<string>;
   createLgTemplate: (id: string, template: Partial<LgTemplate>, position: number) => Promise<void>;

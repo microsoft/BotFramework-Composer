@@ -13,12 +13,12 @@ context('Notification Page', () => {
 
     cy.get('.toggleEditMode button').as('switchButton');
     cy.get('@switchButton').click();
-    cy.get('textarea').type('test lg syntax error#');
+    cy.get('textarea').type('#');
 
-    cy.visitPage('Notifications');
+    cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('common.lg')
+      cy.findAllByText('common.en-us.lg')
         .should('exist')
         .first()
         .click();
@@ -35,12 +35,12 @@ context('Notification Page', () => {
     });
 
     cy.get('.toggleEditMode button').click();
-    cy.get('textarea').type('test lu syntax error');
+    cy.get('textarea').type('t');
 
-    cy.visitPage('Notifications');
+    cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('Main.lu')
+      cy.findAllByText('todobotwithluissample.en-us.lu')
         .should('exist')
         .first()
         .click();
@@ -65,10 +65,10 @@ context('Notification Page', () => {
       cy.get('.ObjectItem input').type('()');
     });
 
-    cy.visitPage('Notifications');
+    cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('Main.dialog')
+      cy.findAllByText('todobotwithluissample.dialog')
         .should('exist')
         .first()
         .click();

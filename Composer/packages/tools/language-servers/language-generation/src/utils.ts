@@ -2,16 +2,8 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import {
-  DiagnosticSeverity as LGDiagnosticSeverity,
-  ImportResolver,
-  Diagnostic as LGDiagnostic,
-  StaticChecker,
-  LGParser,
-} from 'botbuilder-lg';
+import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, LGParser } from 'botbuilder-lg';
 import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
-
-const staticChecker = new StaticChecker();
 
 // state should map to tokenizer state
 export enum LGCursorState {
@@ -27,6 +19,7 @@ export enum LGCursorState {
 }
 
 export interface LGOption {
+  projectId: string;
   fileId: string;
   templateId: string;
 }
@@ -39,6 +32,7 @@ export interface Template {
 
 export interface LGDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   templateId?: string;
   index: () => LgParsed;
@@ -123,19 +117,19 @@ export function textFromTemplate(template: Template): string {
 
 export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
-  return staticChecker.checkText(text, '', ImportResolver.fileResolver).filter(diagnostic => {
+  return LGParser.parseText(text, '').diagnostics.filter(diagnostic => {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
 }
 
 export function updateTemplate(content: string, name: string, body: string): string {
-  const resource = LGParser.parse(content);
-  const template = resource.templates.find(t => t.name === name);
+  const lgFile = LGParser.parseText(content);
+  const template = lgFile.templates.find(t => t.name === name);
   // add if not exist
   if (!template) {
-    return resource.addTemplate(name, [], body).toString();
+    return lgFile.addTemplate(name, [], body).toString();
   } else {
-    return resource.updateTemplate(name, name, template.parameters, body).toString();
+    return lgFile.updateTemplate(name, name, template.parameters, body).toString();
   }
 }

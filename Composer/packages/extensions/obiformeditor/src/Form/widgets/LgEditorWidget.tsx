@@ -50,7 +50,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   const lgName = singleLgRefMatched
     ? singleLgRefMatched[1]
     : new LgMetaData(name, formContext.dialogId || '').toString();
-  const lgFileId = formContext.currentDialog.lgFile || 'common';
+  const lgFileId = `${formContext.currentDialog.lgFile}.${formContext.locale}`;
   const lgFile = formContext.lgFiles && formContext.lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
@@ -74,11 +74,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
+  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
   const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
     debounce((shellData: any, localData: any) => {
@@ -97,6 +94,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
   }, [template.body]);
 
   const lgOption = {
+    projectId: formContext.projectId,
     fileId: lgFileId,
     templateId: lgName,
   };
@@ -119,7 +117,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       onChange={onChange}
       value={localValue}
       lgOption={lgOption}
-      errorMsg={errorMsg}
+      diagnostics={diagnostics}
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{

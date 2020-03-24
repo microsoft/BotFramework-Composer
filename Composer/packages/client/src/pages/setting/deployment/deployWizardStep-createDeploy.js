@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { Fragment, useContext, useState } from 'react';
+import path from 'path';
+
+import React, { Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,16 +22,49 @@ import { regionOptions } from './luisRegions.js';
 export const DeployWizardStepCreate = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
-  const { botName, location } = state;
+  const { botName, projectId } = state;
   const [disable, setDisable] = useState(false);
+
   const [formData, setFormData] = useState({
     name: botName,
-    location: location,
+    location: path.join(process.env.LOCAL_PUBLISH_PATH, projectId).replace(/\\/g, '/'), // use plugin localtion to support deployment
     secret: '',
     environment: '',
     region: regionOptions[0],
     errors: {},
   });
+
+  const nameRef = useRef(null);
+  const focusNameRef = () => nameRef.current.focus();
+  const environmentRef = useRef(null);
+  const focusEnvironmentRef = () => environmentRef.current.focus();
+  const appSecretRef = useRef(null);
+  const focusAppSecretRef = () => appSecretRef.current.focus();
+  const regionRef = useRef(null);
+  const focusRegionRef = () => regionRef.current.focus();
+
+  useEffect(() => {
+    if (!formData.name || !formData.environment || !formData.secret || !formData.region) {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
+  }, [formData.name, formData.environment, formData.appSecretRef, formData.region]);
+
+  const nextEnabled = () => {
+    if (
+      Object.keys(formData.errors).length ||
+      !formData.name ||
+      !formData.environment ||
+      !formData.secret ||
+      !Object.keys(formData.region).length
+    ) {
+      setDisable(true);
+      return false;
+    }
+    setDisable(false);
+    return true;
+  };
 
   const updateForm = field => (e, newValue) => {
     setFormData({
@@ -40,39 +75,103 @@ export const DeployWizardStepCreate = props => {
     setDisable(false);
   };
 
-  const validateForm = () => {
-    const errors = {};
-
+  const setAppSecretErrors = () => {
+    let appSecretErrors;
     if (validateSecret(formData.secret) !== true) {
-      errors.secret = validateSecret(formData.secret);
+      appSecretErrors = validateSecret(formData.secret);
     }
-    if (validateName(formData.name) !== true) {
-      errors.name = validateName(formData.name);
+    if (appSecretErrors) {
+      setFormData({
+        ...formData,
+        errors: {
+          ...formData.errors,
+          secret: appSecretErrors,
+        },
+      });
     }
+
+    return nextEnabled();
+  };
+
+  const setEnvironmentErrors = () => {
+    let environmentError;
     if (validateEnvironment(formData.environment) !== true) {
-      errors.environment = validateEnvironment(formData.environment);
+      environmentError = validateEnvironment(formData.environment);
     }
-    if (validateRegion(formData.region) !== true) {
-      errors.region = validateRegion(formData.region);
+    if (environmentError) {
+      setFormData({
+        ...formData,
+        errors: {
+          ...formData.errors,
+          environment: environmentError,
+        },
+      });
     }
 
-    setFormData({
-      ...formData,
-      errors,
-    });
+    return nextEnabled();
+  };
 
-    if (Object.keys(errors).length) {
-      setDisable(true);
-      return false;
+  const setNameErrors = () => {
+    let nameError;
+    if (validateName(formData.name) !== true) {
+      nameError = validateName(formData.name);
     }
-    setDisable(false);
-    return true;
+    if (nameError) {
+      setFormData({
+        ...formData,
+        errors: {
+          ...formData.errors,
+          name: nameError,
+        },
+      });
+    }
+    return nextEnabled();
+  };
+
+  const setRegionErrors = () => {
+    let regionError;
+    if (validateName(formData.region) !== true) {
+      regionError = validateRegion(formData.region);
+    }
+    if (regionError) {
+      setFormData({
+        ...formData,
+        errors: {
+          ...formData.errors,
+          region: regionError,
+        },
+      });
+    }
+    return nextEnabled();
+  };
+
+  const validateForm = () => {
+    const nameErrors = setNameErrors();
+
+    const environmentErrors = setEnvironmentErrors();
+
+    const appSecretErrors = setAppSecretErrors();
+
+    const regionErrors = setRegionErrors();
+
+    return nameErrors && environmentErrors && appSecretErrors && regionErrors;
   };
 
   const submit = e => {
     e.preventDefault();
+
     if (validateForm()) {
       nextStep(formData);
+    } else {
+      if (formData.errors.name) {
+        focusNameRef();
+      } else if (formData.errors.environment) {
+        focusEnvironmentRef();
+      } else if (formData.errors.secret) {
+        focusAppSecretRef();
+      } else {
+        focusRegionRef();
+      }
     }
   };
 
@@ -82,13 +181,17 @@ export const DeployWizardStepCreate = props => {
         <Stack horizontal gap="2rem" styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
+              autoFocus={true}
               label={formatMessage('Bot Display Name')}
               styles={styles.input}
               defaultValue={botName}
+              onBlur={useCallback(() => setNameErrors())}
               onChange={updateForm('name')}
               errorMessage={formData.errors.name}
               data-testid="displayname"
+              componentRef={nameRef}
               required
+              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -100,10 +203,13 @@ export const DeployWizardStepCreate = props => {
             <TextField
               label={formatMessage('Environment Name')}
               styles={styles.input}
+              onBlur={useCallback(() => setEnvironmentErrors())}
               onChange={updateForm('environment')}
               errorMessage={formData.errors.environment}
               data-testid="displayname"
+              componentRef={environmentRef}
               required
+              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -116,10 +222,13 @@ export const DeployWizardStepCreate = props => {
               label={formatMessage('App Secret')}
               styles={styles.input}
               mask="****************"
+              onBlur={useCallback(() => setAppSecretErrors())}
               onChange={updateForm('secret')}
               errorMessage={formData.errors.secret}
               data-testid="appsecret"
+              componentRef={appSecretRef}
               required
+              aria-required
               autoComplete={'off'}
               maxLength={16}
             />
@@ -140,10 +249,13 @@ export const DeployWizardStepCreate = props => {
               styles={styles.input}
               options={regionOptions}
               defaultSelectedKey={regionOptions[0].key}
+              onBlur={useCallback(() => setRegionErrors())}
               onChange={updateForm('region')}
               errorMessage={formData.errors.region}
               data-testid="region"
+              componentRef={regionRef}
               required
+              aria-required
               autoComplete={'on'}
             />
           </StackItem>

@@ -16,7 +16,7 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { isValid, LuFile } from '@bfc/indexers';
+import { LuFile } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
@@ -24,29 +24,26 @@ import { navigateTo } from '../../utils';
 
 import { formCell, luPhraseCell } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 interface Intent {
   name: string;
   phrases: string;
   fileId: string;
+  dialogId: string;
   used: boolean;
   state: string;
 }
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles } = state;
-  const { fileId } = props;
-  const activeDialog = dialogs.find(({ id }) => id === fileId);
+  const { dialogs, luFiles, locale, projectId } = state;
+  const { dialogId } = props;
+  const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
-
-  function checkErrors(files: LuFile[]): LuFile[] {
-    return files.filter(file => !isValid(file.diagnostics));
-  }
 
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
@@ -63,15 +60,9 @@ const TableView: React.FC<TableViewProps> = props => {
   useEffect(() => {
     if (isEmpty(luFiles)) return;
 
-    const errorFiles = checkErrors(luFiles);
-    if (errorFiles.length !== 0) {
-      navigateTo(`/language-understanding/${errorFiles[0].id}/edit`);
-      return;
-    }
-
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
-      const luDialog = dialogs.find(dialog => luFile.id === dialog.id);
+      const luDialog = dialogs.find(dialog => luFile.id === `${dialog.id}.${locale}`);
       get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(luFile);
 
@@ -79,6 +70,7 @@ const TableView: React.FC<TableViewProps> = props => {
           name,
           phrases,
           fileId: luFile.id,
+          dialogId: luDialog?.id || '',
           used: !!luDialog && luDialog.referredLuIntents.some(lu => lu.name === name), // used by it's dialog or not
           state,
         });
@@ -89,10 +81,10 @@ const TableView: React.FC<TableViewProps> = props => {
     if (!activeDialog) {
       setIntents(allIntents);
     } else {
-      const dialogIntents = allIntents.filter(t => t.fileId === activeDialog.id);
+      const dialogIntents = allIntents.filter(t => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
-  }, [luFiles, activeDialog]);
+  }, [luFiles, activeDialog, projectId]);
 
   const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
     const buttons = [
@@ -100,8 +92,8 @@ const TableView: React.FC<TableViewProps> = props => {
         key: 'edit',
         name: 'Edit',
         onClick: () => {
-          const { name, fileId } = intents[index];
-          navigateTo(`/language-understanding/${fileId}/edit?t=${encodeURIComponent(name)}`);
+          const { name, dialogId } = intents[index];
+          navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
         },
       },
     ];
@@ -148,7 +140,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          const id = item.fileId;
+          const id = item.dialogId;
           return (
             <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
               <Link>{id}</Link>

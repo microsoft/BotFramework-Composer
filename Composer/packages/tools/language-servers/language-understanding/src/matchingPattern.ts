@@ -210,7 +210,7 @@ export function extractEntityNameInUseFeature(lineContent: string): string {
 }
 
 export function removeLabelsInUtterance(lineContent: string): string {
-  const entityLabelRegex = /\{\s*[\w.@:\s]+\s*=\s*[\w.]+\s*\}/g;
+  const entityLabelRegex = /\{\s*[\w.@:\s]+\s*=\s*[\w.@:\s]+\s*\}/g;
   let match: RegExpMatchArray | null;
   let resultStr = '';
   let startIdx = 0;

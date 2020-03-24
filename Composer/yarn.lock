@@ -2714,10 +2714,9 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-lu@^4.9.0-preview.113431":
-  version "4.9.0-preview.113431"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.113431.tgz#1ff1382c0ec1029263362099410cda2cc991ca45"
-  integrity sha1-H/E4LA7BApJjNiCZQQzaLMmRykU=
+"@microsoft/bf-lu@4.8.0-preview.111952":
+  version "4.8.0-preview.111952"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.8.0-preview.111952.tgz#d1707a5f150ab204e67122f8b1d5796ad7f656c9"
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -3967,10 +3966,26 @@ acorn@^7.1.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.0.tgz#949d36f2c292535da602283586c2477c57eb2d6c"
   integrity sha512-kL5CuoXA/dgxlBbVrflsflzQ3PAas7RYZB52NOm/6839iVYJgKMJ3cQJD+t2i5+qFa8h3MDpEOJiS64E8JLnSQ==
 
-adaptive-expressions@4.8.0-preview.106823:
-  version "4.8.0-preview.106823"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.8.0-preview.106823.tgz#f5fe72797fd0c2a4eb12afaab85da0756e0ae4b5"
-  integrity sha1-9f5yeX/QwqTrEq+quF2gdW4K5LU=
+adaptive-expressions@4.8.0-preview-109324:
+  version "4.8.0-preview-109324"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.8.0-preview-109324.tgz#daf8abac37a25f519f73019343bc3a1f797e3048"
+  integrity sha512-TNEZUISxfJ8jj7K0mLmkAKgiakhLhyUglFIZhb4m+oSPCN7BtkE7cUkhTSYXyvlO5n3zYW9vimlC1C4BfnpJug==
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.12"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.1"
+    jspath "^0.4.0"
+    lodash "^4.17.15"
+    lru-cache "^5.1.1"
+    moment "2.24.0"
+    moment-timezone "^0.5.25"
+
+adaptive-expressions@^4.8.0-preview-110700:
+  version "4.8.0-preview-110700"
+  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.8.0-preview-110700.tgz#eaf78b477ed8d24bd936a8cb0b71116d2b0aaef1"
+  integrity sha512-gsxatiSJONlNsveoqeqcalb75SB3VryhiJitCel5uCF2awi7qiW7jGzQ0OVRNUzNhggw8EpHrxvPbk+NrQy7Iw==
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     "@types/lru-cache" "^5.1.0"
@@ -4913,45 +4928,30 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-botbuilder-core@4.8.0-preview.106823:
-  version "4.8.0-preview.106823"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-core/-/botbuilder-core-4.8.0-preview.106823.tgz#ab1dec97e67ba0504669cc0eec4741a531d5b687"
-  integrity sha1-qx3sl+Z7oFBGacwO7EdBpTHVtoc=
+botbuilder-core@4.8.0-preview-109324:
+  version "4.8.0-preview-109324"
+  resolved "https://registry.yarnpkg.com/botbuilder-core/-/botbuilder-core-4.8.0-preview-109324.tgz#b4c6080bfc85520f923bafb8ce2ca42563402464"
+  integrity sha512-P5VpfDWnb1dAnapOfNm4tSO94ApE3EE/F7dARBEjrMpPfhaqY8uDhDOh+BUy9wYYXqNSBOpIdnVo5TAAmfi9Sg==
   dependencies:
     assert "^1.4.1"
-    botframework-schema "4.8.0-preview.106823"
+    botframework-schema "4.8.0-preview-109324"
 
-botbuilder-lg@^4.8.0-preview.106823:
-  version "4.8.0-preview.106823"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.8.0-preview.106823.tgz#9b144401c75493243def5c3c3347021c60dbbbbd"
-  integrity sha1-mxREAcdUkyQ971w8M0cCHGDbu70=
+botbuilder-lg@^4.8.0-preview-109324:
+  version "4.8.0-preview-109324"
+  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.8.0-preview-109324.tgz#7ee7e0e97e7c272a81266b1dbda6dfe0858b5f17"
+  integrity sha512-Ej4ywr7wkUhj5FT0Yx5vOY3TXJrQqVCo+W/xWxEGsrp2NJeWmAiz2kc4LI7QC6XN5fPypVV10iaerGDgEU1Wxg==
   dependencies:
-    adaptive-expressions "4.8.0-preview.106823"
+    adaptive-expressions "4.8.0-preview-109324"
     antlr4ts "0.5.0-alpha.1"
-    botbuilder-core "4.8.0-preview.106823"
+    botbuilder-core "4.8.0-preview-109324"
     lodash "^4.17.11"
+    path "^0.12.7"
     uuid "^3.3.3"
 
-botframework-expressions@^4.8.0-preview.106476:
-  version "4.8.0-preview.106476"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-expressions/-/botframework-expressions-4.8.0-preview.106476.tgz#984c155efbac673a0ad9945220691040b93996f9"
-  integrity sha1-mEwVXvusZzoK2ZRSIGkQQLk5lvk=
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.12"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.1"
-    jspath "^0.4.0"
-    lodash "^4.17.15"
-    lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
-
-botframework-schema@4.8.0-preview.106823:
-  version "4.8.0-preview.106823"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-schema/-/botframework-schema-4.8.0-preview.106823.tgz#e9766d34c2e031e90d0950c51352c3848e368102"
-  integrity sha1-6XZtNMLgMekNCVDFE1LDhI42gQI=
+botframework-schema@4.8.0-preview-109324:
+  version "4.8.0-preview-109324"
+  resolved "https://registry.yarnpkg.com/botframework-schema/-/botframework-schema-4.8.0-preview-109324.tgz#e65ce6219b050e7f2e992a5cfbebf45f17d7dd04"
+  integrity sha512-ee4SejGhDWZSWP0SM6WnPA2o9tR3H8pvk0m2E4sWqy3nqmxfFsu7+5UDv364UIaPZxvcI99bA4cm288EE9+DRA==
 
 boxen@^1.2.1:
   version "1.3.0"
@@ -7334,6 +7334,11 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
+depd@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
+  integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
+
 des.js@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/des.js/-/des.js-1.0.0.tgz#c074d2e2aa6a8a9a07dbd61f9a15c2cd83ec8ecc"
@@ -8211,6 +8216,20 @@ expect@^24.5.0:
     jest-message-util "^24.5.0"
     jest-regex-util "^24.3.0"
 
+express-session@^1.17.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.17.0.tgz#9b50dbb5e8a03c3537368138f072736150b7f9b3"
+  integrity sha512-t4oX2z7uoSqATbMfsxWMbNjAL0T5zpvcJCk3Z9wnPPN7ibddhnmDZXHfEcoBMG2ojKXZoCyPMc5FbtK+G7SoDg==
+  dependencies:
+    cookie "0.4.0"
+    cookie-signature "1.0.6"
+    debug "2.6.9"
+    depd "~2.0.0"
+    on-headers "~1.0.2"
+    parseurl "~1.3.3"
+    safe-buffer "5.2.0"
+    uid-safe "~2.1.5"
+
 express@^4.15.2, express@^4.17.1:
   version "4.17.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
@@ -8960,11 +8979,6 @@ get-own-enumerable-property-symbols@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-3.0.0.tgz#b877b49a5c16aefac3655f2ed2ea5b684df8d203"
   integrity sha512-CIJYJC4GGF06TakLg8z4GQKvDsx9EMspVxOYih7LerEL/WosUnFIww45CGfxfeKHqlg3twgUrYRT1O3WQqjGCg==
-
-get-port@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.npmjs.org/get-port/-/get-port-5.1.0.tgz#a8f6510d0000f07d5c65653a4b0ae648fe832683"
-  integrity sha512-bjioH1E9bTQUvgaB6VycVy1QVbTZI41yTnF9qkZz6ixgy/uhCH6D63bKeZ6Code/07JYA61MeI94jSdHss8PNA==
 
 get-stdin@^6.0.0:
   version "6.0.0"
@@ -13184,6 +13198,19 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+passport-strategy@1.x.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
+  integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
+
+passport@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/passport/-/passport-0.4.1.tgz#941446a21cb92fc688d97a0861c38ce9f738f270"
+  integrity sha512-IxXgZZs8d7uFSt3eqNjM9NQ3g3uQCW5avD8mRNoXV99Yig50vjuaez6dQK2qC0kVWPRTujxY0dWgGfT09adjYg==
+  dependencies:
+    passport-strategy "1.x.x"
+    pause "0.0.1"
+
 password-prompt@^1.0.7:
   version "1.1.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/password-prompt/-/password-prompt-1.1.2.tgz#85b2f93896c5bd9e9f2d6ff0627fa5af3dc00923"
@@ -13254,6 +13281,11 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
 
+path-to-regexp@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.1.0.tgz#0b18f88b7a0ce0bfae6a25990c909ab86f512427"
+  integrity sha512-h9DqehX3zZZDCEm+xbfU0ZmwCGFCAAraPJWMXJ4+v32NjZJilVg3k1TcKsRgIb8IQ/izZSaydDc1OhJCZvs2Dw==
+
 path-type@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-2.0.0.tgz#f012ccb8415b7096fc2daa1054c3d72389594c73"
@@ -13268,10 +13300,22 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
+pause@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
+  integrity sha1-HUCLP9t2kjuVQ9lvtMnf1TXZy10=
 path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+path@^0.12.7:
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
+  integrity sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=
+  dependencies:
+    process "^0.11.1"
+    util "^0.10.3"
 
 pbkdf2@^3.0.3:
   version "3.0.17"
@@ -14172,7 +14216,7 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
   integrity sha512-MtEC1TqN0EU5nephaJ4rAtThHtC86dNN9qCuEhtshvpVBkAW5ZO7BASN9REnF9eoXGcRub+pFuKEpOHE+HbEMw==
 
-process@^0.11.10:
+process@^0.11.1, process@^0.11.10:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
@@ -14385,6 +14429,11 @@ ramda@0.24.1:
   version "0.24.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
   integrity sha1-w7d1UZfzW43DUCIoJixMkd22uFc=
+
+random-bytes@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/random-bytes/-/random-bytes-1.0.0.tgz#4f68a1dc0ae58bd3fb95848c30324db75d64360b"
+  integrity sha1-T2ih3Arli9P7lYSMMDJNt11kNgs=
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
@@ -15173,6 +15222,11 @@ safe-buffer@5.1.2, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, s
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
+
+safe-buffer@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.0.tgz#b74daec49b1148f88c64b68d49b1e815c1f2f519"
+  integrity sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==
 
 safe-regex@^1.1.0:
   version "1.1.0"
@@ -16750,6 +16804,13 @@ uglifyjs-webpack-plugin@^2.2.0:
     webpack-sources "^1.4.0"
     worker-farm "^1.7.0"
 
+uid-safe@~2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/uid-safe/-/uid-safe-2.1.5.tgz#2b3d5c7240e8fc2e58f8aa269e5ee49c0857bd3a"
+  integrity sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==
+  dependencies:
+    random-bytes "~1.0.0"
+
 undefsafe@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.2.tgz#225f6b9e0337663e0d8e7cfd686fc2836ccace76"
@@ -17001,6 +17062,13 @@ util@0.10.3:
   integrity sha1-evsa/lCAUkZInj23/g7TeTNqwPk=
   dependencies:
     inherits "2.0.1"
+
+util@^0.10.3:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/util/-/util-0.10.4.tgz#3aa0125bfe668a4672de58857d3ace27ecb76901"
+  integrity sha512-0Pm9hTQ3se5ll1XihRic3FDIku70C+iHUdT/W926rSgHV5QgXsYbKZN8MSC3tJtSkhuROzvsQjAaFENRXr+19A==
+  dependencies:
+    inherits "2.0.3"
 
 util@^0.11.0:
   version "0.11.1"
