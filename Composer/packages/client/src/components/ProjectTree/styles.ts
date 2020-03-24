@@ -99,7 +99,7 @@ export const moreMenu: Partial<ICalloutContentStyles> = {
   },
 };
 
-export const test: Partial<IContextualMenuStyles> = {
+export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
     menuItem: {},
     callout: moreMenu,

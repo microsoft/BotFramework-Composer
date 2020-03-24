@@ -7,7 +7,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { moreButton, overflowSet, test, navItem, itemText } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -36,7 +36,7 @@ const onRenderOverflowButton = (isRoot: boolean) => {
         data-testid="dialogMoreButton"
         styles={moreButton}
         menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: overflowItems, styles: test }}
+        menuProps={{ items: overflowItems, styles: menuStyle }}
       />
     ) : null;
   };
