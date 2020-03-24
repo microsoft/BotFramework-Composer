@@ -118,7 +118,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
   }
 
   // lastly, attempt to find the option based on value type
-  return options.find(o => o.data.schema.type === valueType) || options[0];
+  return options.find(({ data, key }) => data.schema.type === valueType && key !== 'expression') || options[0];
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
