@@ -23,21 +23,21 @@ import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles, projectId } = state;
-  const { fileId } = props;
-  const file = lgFiles.find(({ id }) => id === fileId);
+  const { dialogs, lgFiles, projectId, locale } = state;
+  const { dialogId } = props;
+  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
-  const activeDialog = dialogs.find(({ id }) => id === fileId);
+  const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
 
@@ -50,9 +50,9 @@ const TableView: React.FC<TableViewProps> = props => {
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
       const { name } = template;
-      navigateTo(`/bot/${projectId}/language-generation/${fileId}/edit?t=${encodeURIComponent(name)}`);
+      navigateTo(`/bot/${projectId}/language-generation/${dialogId}/edit?t=${encodeURIComponent(name)}`);
     },
-    [fileId, projectId]
+    [dialogId, projectId]
   );
 
   const onCreateNewTemplate = useCallback(() => {

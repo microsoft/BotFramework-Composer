@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { luIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
+import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -20,14 +20,14 @@ const { parse } = luIndexer;
 const lspServerPath = '/lu-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
-  const { luFiles, projectId } = state;
-  const { fileId } = props;
-  const file = luFiles?.find(({ id }) => id === fileId);
+  const { luFiles, locale, projectId } = state;
+  const { dialogId } = props;
+  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
   const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
@@ -55,11 +55,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setContent(value);
   }, [file, sectionId, projectId]);
 
-  const errorMsg = useMemo(() => {
-    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
-    const isInvalid = !isValid(currentDiagnostics);
-    return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
-  }, [diagnostics, httpErrorMsg]);
+  const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
   const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
     setLuEditor(luEditor);
@@ -152,7 +148,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const luOption = {
     projectId,
-    fileId,
+    fileId: file?.id || dialogId,
     sectionId: intent?.Name,
   };
 
@@ -161,7 +157,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
+      errorMsg={httpErrorMsg}
+      diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{
         path: lspServerPath,

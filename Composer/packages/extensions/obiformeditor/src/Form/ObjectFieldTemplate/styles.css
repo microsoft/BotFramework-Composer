@@ -9,7 +9,6 @@
 
 .ObjectItem .ObjectItemField {
   flex: 1;
-  overflow: hidden;
   padding: 0px 12px;
   margin: 10px 0;
 }

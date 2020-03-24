@@ -12,7 +12,7 @@ describe('#copyIfCondition', () => {
       actions: [
         {
           $type: 'Microsoft.BeginDialog',
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
       ],
       elseActions: [
@@ -35,7 +35,7 @@ describe('#copyIfCondition', () => {
           $designer: {
             id: '5678',
           },
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
       ],
       elseActions: [
