@@ -23,8 +23,6 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
   const state = getState();
   const currentUri = `/bot/${state.projectId}/dialogs/${dialogId}`;
 
-  console.log('NAV TO ', currentUri);
-
   if (checkUrl(currentUri, state.designPageLocation)) return;
   //if dialog change we should flush some debounced functions
   debouncedUpdateDialog.flush();
@@ -38,7 +36,6 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
   const { dialogId, projectId } = state.designPageLocation;
   const { breadcrumb } = state;
   let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
-  console.log('select to ', currentUri);
 
   currentUri = `${currentUri}?selected=${selectPath}`;
 
@@ -52,7 +49,6 @@ export const focusTo: ActionCreator = ({ getState }, focusPath, fragment) => {
   let { breadcrumb } = state;
 
   let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
-  console.log('focus to ', currentUri);
 
   if (focusPath) {
     const targetSelected = getSelected(focusPath);
@@ -78,7 +74,6 @@ export const setectAndfocus: ActionCreator = (store, dialogId, selectPath, focus
   const search = getUrlSearch(selectPath, focusPath);
   if (search) {
     const currentUri = `/bot/${store.getState().projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
-    console.log('setectandfocus', currentUri);
 
     if (checkUrl(currentUri, store.getState().designPageLocation)) return;
     navigateTo(currentUri, { state: { breadcrumb } });
