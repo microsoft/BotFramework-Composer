@@ -27,7 +27,11 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
     const selected = recognizers.filter(r => r.isSelected(value)).map(r => r.id);
 
     if (selected.length !== 1) {
-      console.error(`Unable to determine selected recognizer. Value: ${value}. Recognizers: [${selected.join(', ')}]`);
+      console.error(
+        `Unable to determine selected recognizer.\n
+         Value: ${JSON.stringify(value)}.\n
+         Selected Recognizers: [${selected.join(', ')}]`
+      );
       return;
     }
 
