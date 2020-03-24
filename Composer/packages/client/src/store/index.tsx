@@ -3,7 +3,7 @@
 
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
-import { ImportResolverDelegate, ImportResolver } from 'botbuilder-lg';
+import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 import { LgFile, LuFile } from '@bfc/indexers';
 
 import { prepareAxios } from '../utils/auth';
@@ -16,6 +16,8 @@ import { CreationFlowStatus, BotStatus } from './../constants';
 import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc, StorageFolder } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
+
+const { defaultFileResolver } = LGParser;
 
 const initialState: State = {
   dialogs: [],
@@ -85,7 +87,7 @@ export const StoreContext = React.createContext<StoreContextValue>({
   dispatch: () => {},
   actions: {} as ActionHandlers,
   resolvers: {
-    lgImportresolver: ImportResolver.fileResolver,
+    lgImportresolver: defaultFileResolver,
     lgFileResolver: () => undefined,
     luFileResolver: () => undefined,
   },
