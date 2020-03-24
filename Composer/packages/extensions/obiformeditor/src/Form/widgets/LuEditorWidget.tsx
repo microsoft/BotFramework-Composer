@@ -78,11 +78,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
   render() {
     const { height = 250 } = this.props;
     const { luFile, luFileId, luIntent, name, formContext } = this;
-    const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
-
-    const errorMsg = diagnostic
-      ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-      : '';
+    const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
     const label = prompt
       ? formatMessage('Expected responses (intent: {name})', { name })
@@ -94,7 +90,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
         <LuEditor
           onChange={this.onChange}
           value={this.state.localValue}
-          errorMsg={errorMsg}
+          diagnostics={diagnostics}
           hidePlaceholder={true}
           luOption={{
             projectId: formContext.projectId,

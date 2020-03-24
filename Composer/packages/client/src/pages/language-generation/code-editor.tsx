@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { lgIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -56,13 +56,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     setContent(value);
   }, [fileId, templateId, projectId]);
 
-  useEffect(() => {
-    const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
-
-    const isInvalid = !isValid(currentDiagnostics);
-    const text = isInvalid ? combineMessage(currentDiagnostics) : '';
-    setErrorMsg(text);
-  }, [diagnostics]);
+  const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
   const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
     setLgEditor(lgEditor);
@@ -163,6 +157,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       editorDidMount={editorDidMount}
       value={content}
       errorMsg={errorMsg}
+      diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,
