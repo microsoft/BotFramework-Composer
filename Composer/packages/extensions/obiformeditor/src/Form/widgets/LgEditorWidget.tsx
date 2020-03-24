@@ -74,11 +74,8 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
     },
   };
 
-  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
+  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
   const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
     debounce((shellData: any, localData: any) => {
@@ -120,7 +117,7 @@ export const LgEditorWidget: React.FC<LgEditorWidgetProps> = props => {
       onChange={onChange}
       value={localValue}
       lgOption={lgOption}
-      errorMsg={errorMsg}
+      diagnostics={diagnostics}
       hidePlaceholder={true}
       helpURL={LG_HELP}
       languageServer={{
