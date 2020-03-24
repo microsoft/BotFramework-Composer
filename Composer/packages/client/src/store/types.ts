@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { PromptTab, BotSchemas, ProjectTemplate } from '@bfc/shared';
-import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
+import { DialogInfo, LgFile, LuFile, FileInfo } from '@bfc/indexers';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -47,6 +47,7 @@ export interface StorageFolder extends File {
 }
 
 export interface State {
+  files: FileInfo[];
   dialogs: DialogInfo[];
   projectId: string;
   botName: string;

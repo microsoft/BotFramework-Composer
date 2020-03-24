@@ -31,14 +31,14 @@ export interface DialogInfo {
   diagnostics: Diagnostic[];
   displayName: string;
   id: string;
-  lastModified: string;
+  //lastModified: string;
   isRoot: boolean;
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
-  relativePath: string;
+  //relativePath: string;
   userDefinedVariables: string[];
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
@@ -75,9 +75,9 @@ export interface LuEntity {
 
 export interface LuFile {
   id: string;
-  relativePath: string;
+  //  relativePath: string;
   content: string;
-  lastModified: string;
+  //  lastModified: string;
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
   [key: string]: any;
@@ -101,9 +101,7 @@ export interface LgParsed {
 
 export interface LgFile {
   id: string;
-  relativePath: string;
   content: string;
-  lastModified: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }

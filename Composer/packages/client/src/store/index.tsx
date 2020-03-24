@@ -12,11 +12,21 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc, StorageFolder } from './types';
+import {
+  State,
+  ActionHandlers,
+  BoundActionHandlers,
+  MiddlewareApi,
+  MiddlewareFunc,
+  StorageFolder,
+  Store,
+} from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
+import { filePersistenceMiddleware } from './middlewares/persistence';
 
 const initialState: State = {
+  files: [],
   dialogs: [],
   projectId: '',
   botName: '',
@@ -86,9 +96,14 @@ interface StoreProviderProps {
 }
 
 const prepareAxiosWithStore = once(prepareAxios);
-export const applyMiddleware = (middlewareApi: MiddlewareApi, ...middlewares: MiddlewareFunc[]) => {
+export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) => {
+  let dispatch: React.Dispatch<ActionType> = () => {};
+  const middlewareApi: MiddlewareApi = {
+    getState: store.getState,
+    dispatch: (...args) => dispatch(...args),
+  };
   const chain = middlewares.map(middleware => middleware(middlewareApi));
-  const dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(middlewareApi.dispatch);
+  dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(store.dispatch);
   return dispatch;
 };
 
@@ -101,7 +116,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     return stateRef.current;
   };
 
-  const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware);
+  const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware, filePersistenceMiddleware);
   // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
   const boundActions = bindActions({ dispatch: interceptDispatch, getState }, actions);
   const value = {

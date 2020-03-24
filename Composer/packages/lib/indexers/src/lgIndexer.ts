@@ -58,7 +58,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
-    const { name, relativePath, content } = file;
+    const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
       const diagnostics = check(content, id, importResolver);
@@ -68,7 +68,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
       } catch (err) {
         diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
       }
-      lgFiles.push({ id, content, relativePath, templates, diagnostics, lastModified: file.lastModified });
+      lgFiles.push({ id, content, templates, diagnostics });
     }
   }
   return lgFiles;

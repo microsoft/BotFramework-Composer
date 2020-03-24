@@ -35,10 +35,9 @@ export class BotProjectService {
 
   public static lgImportResolver(_source: string, id: string, projectId: string): TextFile {
     BotProjectService.initialize();
-    const targetId = Path.basename(id, '.lg');
     const targetFile = BotProjectService.currentBotProjects
       .find(({ id }) => id === projectId)
-      ?.lgFiles.find(({ id }) => id === targetId);
+      ?.files.find(({ name }) => name === id);
     if (!targetFile) throw new Error('lg file not found');
     return {
       id,
@@ -48,10 +47,9 @@ export class BotProjectService {
 
   public static luImportResolver(_source: string, id: string, projectId: string): any {
     BotProjectService.initialize();
-    const targetId = Path.basename(id, '.lu');
     const targetFile = BotProjectService.currentBotProjects
       .find(({ id }) => id === projectId)
-      ?.luFiles.find(({ id }) => id === targetId);
+      ?.files.find(({ name }) => name === id);
     if (!targetFile) throw new Error('lu file not found');
     return {
       id,
@@ -180,8 +178,8 @@ export class BotProjectService {
         throw new Error(`file not exist ${path}`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user);
+      await project.init();
       project.id = projectId;
-      await project.index();
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
       return project;
@@ -236,8 +234,7 @@ export class BotProjectService {
   ): Promise<string> => {
     BotProjectService.initialize();
     if (typeof sourceProject !== 'undefined') {
-      const newCurrentProject = await sourceProject.copyTo(locationRef, user);
-      await newCurrentProject.index();
+      await sourceProject.copyTo(locationRef, user);
       const projectId = await BotProjectService.generateProjectId(locationRef.path);
       BotProjectService.addRecentProject(locationRef.path);
       return projectId;

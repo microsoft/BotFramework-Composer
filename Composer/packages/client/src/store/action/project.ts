@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { navigate } from '@reach/router';
+import { indexer } from '@bfc/indexers';
 
 import { ActionCreator } from '../types';
 
@@ -33,13 +34,14 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 export const fetchProjectById: ActionCreator = async (store, projectId) => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
+    const result = indexer.index(response.data.files, response.data.botName, response.data.schemas.sdk.content);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
-        response,
+        ...response.data,
+        ...result,
       },
     });
-    return response.data;
   } catch (err) {
     navigateTo('/home');
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error: err } });
@@ -75,12 +77,15 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       path: absolutePath,
     };
     const response = await httpClient.put(`/projects/open`, data);
-    const dialogs = response.data.dialogs;
+    const { files, botName, schemas } = response.data;
+    const result = indexer.index(files, botName, schemas.sdk.content);
+    const dialogs = result.dialogs;
     const projectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
-        response,
+        ...response.data,
+        ...result,
       },
     });
     if (dialogs && dialogs.length > 0) {

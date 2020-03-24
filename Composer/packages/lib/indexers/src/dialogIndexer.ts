@@ -5,14 +5,15 @@ import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 import { extractLgTemplateRefs } from '@bfc/shared';
 
-import { createPath } from './dialogUtils/dialogChecker';
-import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath, ReferredLuIntents } from './type';
-import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
-import { getBaseName } from './utils/help';
-import { Diagnostic } from './diagnostic';
-import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
+import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
+import { checkerFuncs } from './dialogUtils/dialogChecker';
+import { createPath } from './dialogUtils/dialogChecker';
+import { Diagnostic } from './diagnostic';
+import { DialogInfo, FileInfo, ITrigger, LgTemplateJsonPath, ReferredLuIntents } from './type';
+import { getBaseName } from './utils/help';
+import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
+
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -190,12 +191,16 @@ function validate(id: string, content, schema: any): Diagnostic[] {
   }
 }
 
-function parse(id: string, content: any, schema: any) {
+function parse(id: string, content: any, schema: any, botName: string): DialogInfo {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
+  const isRoot = id === 'Main';
 
   return {
+    id,
     content,
+    isRoot,
+    displayName: isRoot ? `${botName}.Main` : id,
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
@@ -216,16 +221,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
-          const isRoot = id === 'Main';
-          const dialog = {
-            id,
-            isRoot,
-            displayName: isRoot ? `${botName}.Main` : id,
-            content: dialogJson,
-            relativePath: file.relativePath,
-            lastModified: file.lastModified,
-            ...parse(id, dialogJson, schema),
-          };
+          const dialog = parse(id, dialogJson, schema, botName);
           dialogs.push(dialog);
         }
       } catch (e) {

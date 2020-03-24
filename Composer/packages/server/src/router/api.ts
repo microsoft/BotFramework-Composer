@@ -16,19 +16,22 @@ router.get('/projects/recent', ProjectController.getRecentProjects);
 
 router.get('/projects/:projectId', ProjectController.getProjectById);
 router.put('/projects/open', ProjectController.openProject);
-router.put('/projects/:projectId/dialogs/:dialogId', ProjectController.updateDialog);
-router.delete('/projects/:projectId/dialogs/:dialogId', ProjectController.removeDialog);
-router.post('/projects/:projectId/dialogs', ProjectController.createDialog);
-router.put('/projects/:projectId/lgFiles/:lgFileId', ProjectController.updateLgFile);
-router.delete('/projects/:projectId/lgFiles/:lgFileId', ProjectController.removeLgFile);
-router.post('/projects/:projectId/lgFiles', ProjectController.createLgFile);
-router.put('/projects/:projectId/luFiles/:luFileId', ProjectController.updateLuFile);
-router.delete('/projects/:projectId/luFiles/:luFileId', ProjectController.removeLuFile);
+router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
+router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
+router.post('/projects/:projectId/files', ProjectController.createFile);
+// router.put('/projects/:projectId/dialogs/:dialogId', ProjectController.updateDialog);
+// router.delete('/projects/:projectId/dialogs/:dialogId', ProjectController.removeDialog);
+// router.post('/projects/:projectId/dialogs', ProjectController.createDialog);
+// router.put('/projects/:projectId/lgFiles/:lgFileId', ProjectController.updateLgFile);
+// router.delete('/projects/:projectId/lgFiles/:lgFileId', ProjectController.removeLgFile);
+// router.post('/projects/:projectId/lgFiles', ProjectController.createLgFile);
+// router.put('/projects/:projectId/luFiles/:luFileId', ProjectController.updateLuFile);
+// router.delete('/projects/:projectId/luFiles/:luFileId', ProjectController.removeLuFile);
 router.get('/projects/:projectId/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
 router.post('/projects/:projectId/settings', ProjectController.updateDefaultSlotEnvSettings);
 router.get('/projects/:projectId/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
 router.post('/projects/:projectId/settings/:slot', ProjectController.updateEnvSettings);
-router.post('/projects/:projectId/luFiles', ProjectController.createLuFile);
+//router.post('/projects/:projectId/luFiles', ProjectController.createLuFile);
 router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 

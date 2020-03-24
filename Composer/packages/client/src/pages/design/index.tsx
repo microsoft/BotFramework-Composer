@@ -201,12 +201,6 @@ function DesignPage(props) {
     }
   }
 
-  const onCreateDialogComplete = newDialog => {
-    if (newDialog) {
-      navTo(newDialog);
-    }
-  };
-
   const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
   const toolbarItems = [
@@ -394,7 +388,7 @@ function DesignPage(props) {
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAdd={() => actions.createDialogBegin({})}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           openNewTriggerModal={openNewTriggerModal}

@@ -14,6 +14,7 @@ import {
   LuFile,
   DialogInfo,
   dialogIndexer,
+  LgFile,
 } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
@@ -24,6 +25,7 @@ import { getExtension, getFileName, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import filePersistence from '../middlewares/persistence/FilePersistence';
 
 import createReducer from './createReducer';
 
@@ -72,19 +74,24 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
   return updateLuFilesStatus(botName, luFiles);
 };
 
-const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  const { dialogs, botName, luFiles, id } = response.data;
+const getProjectSuccess: ReducerFunc = (state, payload) => {
+  const { files, dialogs, botName, luFiles, botEnvironment, location, lgFiles, schemas, settings, id } = payload;
   state.projectId = id;
   state.dialogs = dialogs;
-  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
+  state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
-  state.location = response.data.location;
-  state.lgFiles = response.data.lgFiles;
-  state.schemas = response.data.schemas;
+  state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
+  state.location = location;
+  state.lgFiles = lgFiles;
+  state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
-  state.settings = response.data.settings;
+  state.settings = settings;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
+  filePersistence.clear();
+  files.forEach(file => {
+    filePersistence.attach(file.name, id, file);
+  });
   return state;
 };
 
@@ -109,41 +116,68 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
-      return { ...dialog, ...result };
+      return dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content, state.botName);
     }
     return dialog;
   });
   return state;
 };
 
-const removeDialog: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
-  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
-  state.lgFiles = response.data.lgFiles;
+const removeDialog: ReducerFunc = (state, { id }) => {
+  state.dialogs = state.dialogs.filter(dialog => dialog.id !== id);
   return state;
 };
 
-const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
+const createDialogBegin: ReducerFunc = (state, { actionsSeed }) => {
   state.showCreateDialogModal = true;
   state.actionsSeed = actionsSeed;
-  state.onCreateDialogComplete = onComplete;
   return state;
 };
 
 const createDialogCancel: ReducerFunc = state => {
   state.showCreateDialogModal = false;
-  delete state.onCreateDialogComplete;
   return state;
 };
 
-const createDialogSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
-  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
-  state.lgFiles = response.data.lgFiles;
+const createDialog: ReducerFunc = (state, { id, content }) => {
+  const dialog = dialogIndexer.parse(id, content, state.schemas.sdk.content, state.botName);
+  state.dialogs.push(dialog);
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
-  delete state.onCreateDialogComplete;
+  return state;
+};
+
+const lgImportresolver = (files: LgFile[]): ImportResolverDelegate => {
+  const lgFiles = files;
+  return function(_source: string, id: string) {
+    const targetFileName = getFileName(id);
+    const targetFileId = getBaseName(targetFileName);
+    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
+    if (!targetFile) throw new Error(`file not found`);
+    return { id, content: targetFile.content };
+  };
+};
+
+const createLgFile: ReducerFunc = (state, { id, content }) => {
+  const { check, parse } = lgIndexer;
+  const resolver = lgImportresolver(state.lgFiles);
+  const diagnostics = check(content, id, resolver);
+  let templates: LgTemplate[] = [];
+  try {
+    templates = parse(content, id);
+  } catch (err) {
+    diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
+  }
+  const lgFile = { id, templates, diagnostics, content };
+  state.lgFiles.push(lgFile);
+  return state;
+};
+
+const removeLgFile: ReducerFunc = (state, { id }) => {
+  const index = state.lgFiles.findIndex(file => file.id === id);
+  if (~index) {
+    state.lgFiles.splice(index, 1);
+  }
   return state;
 };
 
@@ -155,18 +189,13 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
-    const targetFileName = getFileName(id);
-    const targetFileId = getBaseName(targetFileName);
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
-    if (!targetFile) throw new Error(`file not found`);
-    return { id, content: targetFile.content };
-  };
+
+  const resolver = lgImportresolver(lgFiles);
 
   state.lgFiles = lgFiles.map(lgFile => {
     const { check, parse } = lgIndexer;
     const { id, content } = lgFile;
-    const diagnostics = check(content, id, lgImportresolver);
+    const diagnostics = check(content, id, resolver);
     let templates: LgTemplate[] = [];
     try {
       templates = parse(content, id);
@@ -175,6 +204,21 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return { ...lgFile, templates, diagnostics, content };
   });
+  return state;
+};
+
+const createLuFile: ReducerFunc = (state, { id, content }) => {
+  const { parse } = luIndexer;
+  const luFile = { id, content, ...parse(content, id) };
+  state.luFiles.push(luFile);
+  return state;
+};
+
+const removeLuFile: ReducerFunc = (state, { id }) => {
+  const index = state.luFiles.findIndex(file => file.id === id);
+  if (~index) {
+    state.luFiles.splice(index, 1);
+  }
   return state;
 };
 
@@ -418,7 +462,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
-  [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
+  [ActionTypes.CREATE_DIALOG]: createDialog,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG]: removeDialog,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
@@ -429,15 +473,15 @@ export const reducer = createReducer({
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
   [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
   [ActionTypes.UPDATE_LG_FAILURE]: noOp,
-  [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.CREATE_LG_SUCCCESS]: createLgFile,
   [ActionTypes.CREATE_LG_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
+  [ActionTypes.REMOVE_LG_SUCCCESS]: removeLgFile,
   [ActionTypes.REMOVE_LG_FAILURE]: noOp,
   [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
   [ActionTypes.UPDATE_LU_FAILURE]: noOp,
-  [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.CREATE_LU_SUCCCESS]: createLuFile,
   [ActionTypes.CREATE_LU_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.REMOVE_LU_SUCCCESS]: removeLuFile,
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
