@@ -6,6 +6,7 @@ import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect 
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { StoreContext } from '../../store';
 import { projectContainer } from '../design/styles';
@@ -14,17 +15,10 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
 import { NavLinks } from '../../components/NavLinks';
+import { dialogItemSelected, dialogItemNotSelected } from '../../components/NavLinks/styles';
 
 import TableView from './table-view';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  dialogItem,
-  HeaderText,
-} from './styles';
+import { ContentHeaderStyle, ContentStyle, flexContent, actionButton, contentEditor, HeaderText } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
@@ -106,15 +100,16 @@ const LUPage: React.FC<LUPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
-          <div
-            css={dialogItem(isRoot)}
+          <DefaultButton
             key={'_all'}
             onClick={() => {
               onSelect('all');
             }}
-          >
-            {'All'}
-          </div>
+            styles={isRoot ? dialogItemSelected : dialogItemNotSelected}
+            text={formatMessage('All')}
+            ariaLabel={formatMessage('all language understanding files')}
+            ariaHidden={false}
+          />
           <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
         </div>
         <div css={contentEditor}>

@@ -5,9 +5,10 @@
 
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
 
-import { dialogItem } from '../../pages/language-understanding/styles';
-
+import { dialogItemSelected, dialogItemNotSelected } from './styles';
 interface NavLinksProps {
   navLinks: any[];
   fileId: string;
@@ -21,15 +22,16 @@ export const NavLinks: React.FC<NavLinksProps> = props => {
     <Fragment>
       {navLinks.map(dialog => {
         return (
-          <div
-            css={dialogItem(fileId === dialog.id)}
+          <DefaultButton
             key={dialog.id}
             onClick={() => {
               onSelect(dialog.id);
             }}
-          >
-            {dialog.name}
-          </div>
+            styles={fileId === dialog.id ? dialogItemSelected : dialogItemNotSelected}
+            text={dialog.name}
+            ariaLabel={formatMessage('language understanding file')}
+            ariaHidden={false}
+          />
         );
       })}
     </Fragment>
