@@ -62,7 +62,13 @@ context('Notification Page', () => {
 
     cy.withinEditor('FormEditor', () => {
       cy.findByText('Condition').should('exist');
-      cy.get('.ObjectItem input').type('()');
+      cy.findByTestId('expression-type-dropdown-Condition')
+        .focus()
+        .type('{downarrow}')
+        .should('contain.text', 'expression');
+      cy.get('#root\\.condition')
+        .click()
+        .type('()');
     });
 
     cy.get('[data-testid="notifications-info-button"]').click();
