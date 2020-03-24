@@ -1,0 +1,35 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "593555"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "822789"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "765039"
+          },
+          "property": "user.message",
+          "value": "This is a text saved in memory."
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "822060"
+          },
+          "activity": "${bfdactivity-822060()}"
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "textwithmemory.lg"
+}

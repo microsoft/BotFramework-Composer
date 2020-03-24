@@ -26,7 +26,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
     this.debounceUpdate = debounce(this.updateLuIntent, 500);
     this.name = this.props.name;
     this.formContext = this.props.formContext;
-    this.luFileId = this.formContext.currentDialog.id;
+    this.luFileId = `${this.formContext.currentDialog.luFile}.${this.formContext.locale}`;
     this.luFile = this.formContext.luFiles.find(f => f.id === this.luFileId);
     this.luIntent = (this.luFile && this.luFile.intents.find(intent => intent.Name === this.name)) || {
       Name: this.name,
@@ -48,7 +48,7 @@ export class LuEditorWidget extends React.Component<LuEditorWidgetProps> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const name = nextProps.name;
     const formContext = nextProps.formContext;
-    const luFileId = formContext.currentDialog.id;
+    const luFileId = `${formContext.currentDialog.id}.${formContext.locale}`;
     const luFile = formContext.luFiles.find(f => f.id === luFileId);
     const luIntent = (luFile && luFile.intents.find(intent => intent.Name === name)) || {
       Name: name,
