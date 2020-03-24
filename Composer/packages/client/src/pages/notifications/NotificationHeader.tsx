@@ -42,6 +42,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
         options={createOptions()}
         styles={dropdownStyles}
         data-testid="notifications-dropdown"
+        ariaLabel={formatMessage('Notification type')}
       />
     </div>
   );
