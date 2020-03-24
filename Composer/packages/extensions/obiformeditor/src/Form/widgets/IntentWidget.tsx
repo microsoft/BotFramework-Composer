@@ -2,66 +2,56 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { SDKTypes } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
+import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivot';
 
 import { BFDWidgetProps } from '../types';
+import { tabs } from '../fields/PromptField/styles';
+import { IRecognizerType } from '../fields/RecognizerField/types';
 
-import { WidgetLabel } from './WidgetLabel';
 import { LuEditorWidget } from './LuEditorWidget';
 import { RegexEditorWidget } from './RegexEditorWidget';
+import { WidgetLabel } from './WidgetLabel';
 
-const EMPTY_OPTION = { key: '', text: '' };
-
-function recognizerType({ triggers }: DialogInfo, id: string): string | undefined {
-  const triggerId = id.substring(id.indexOf('#.') + 2, id.indexOf(']_') + 1);
-  return triggers.find(trigger => trigger.id === triggerId)?.recognizerType;
+function recognizerType({ content }: DialogInfo): SDKTypes[] {
+  const recognizers: IRecognizerType[] = content.recognizer.recognizers[0].recognizers?.['en-us'].recognizers || [];
+  return recognizers.map(recog => recog.$type);
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
-  const { disabled, onChange, id, onFocus, onBlur, value, formContext, placeholder, label, schema } = props;
-  const { description } = schema;
+  const { value, formContext, label } = props;
   const { currentDialog } = formContext;
 
-  let options: IDropdownOption[] = [];
-  const type = recognizerType(currentDialog, id);
-  switch (type) {
-    case SDKTypes.RegexRecognizer:
-    case SDKTypes.LuisRecognizer:
-      break;
-    default:
-      options = [EMPTY_OPTION];
-      break;
-  }
-
-  const handleChange = (_e, option): void => {
-    if (option) {
-      onChange(option.key);
-    }
-  };
+  const types = recognizerType(currentDialog);
 
   return (
     <>
-      {type === SDKTypes.ValueRecognizer && (
-        <>
-          <WidgetLabel label={label} description={description} id={id} />
-          <Dropdown
-            id={id.replace(/\.|#/g, '')}
-            onBlur={() => onBlur && onBlur(id, value)}
-            onChange={handleChange}
-            onFocus={() => onFocus && onFocus(id, value)}
-            options={options}
-            selectedKey={value || null}
-            responsiveMode={ResponsiveMode.large}
-            disabled={disabled || options.length === 1}
-            placeholder={options.length > 1 ? placeholder : formatMessage('No intents configured for this dialog')}
-          />
-        </>
-      )}
-      {type === SDKTypes.LuisRecognizer && <LuEditorWidget formContext={formContext} name={value} height={316} />}
-      {type === SDKTypes.RegexRecognizer && <RegexEditorWidget formContext={formContext} name={value} />}
+      <WidgetLabel label={label} />
+      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.ValueRecognizer}>
+        <PivotItem headerText={formatMessage('Value')} itemKey={SDKTypes.ValueRecognizer}>
+          <div>Intent name: {value}</div>
+        </PivotItem>
+        <PivotItem
+          headerText={formatMessage('Luis')}
+          itemKey={SDKTypes.LuisRecognizer}
+          headerButtonProps={{
+            disabled: !types.find(type => type === SDKTypes.LuisRecognizer),
+          }}
+        >
+          <LuEditorWidget formContext={formContext} name={value} height={316} />
+        </PivotItem>
+        <PivotItem
+          headerText={formatMessage('Regex')}
+          itemKey={SDKTypes.RegexRecognizer}
+          headerButtonProps={{
+            disabled: !types.find(type => type === SDKTypes.RegexRecognizer),
+          }}
+        >
+          <RegexEditorWidget formContext={formContext} name={value} />
+        </PivotItem>
+      </Pivot>
     </>
   );
 };
