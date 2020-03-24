@@ -112,7 +112,6 @@ function ExtractTriggers(dialog): ITrigger[] {
             displayName: '',
             type: rule.$type,
             isIntent: rule.$type === SDKTypes.OnIntent,
-            recognizerType: rule.recognizerType,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;

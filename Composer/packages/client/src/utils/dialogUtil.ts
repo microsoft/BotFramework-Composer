@@ -50,20 +50,20 @@ export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 export const LuisRecognizerKey: string = SDKTypes.LuisRecognizer;
 export const ValueRecognizerKey: string = SDKTypes.ValueRecognizer;
 
-export const recognizerSet = {
-  [regexRecognizerKey]: {
-    key: regexRecognizerKey,
-    text: formatMessage('Regular Expression'),
-  },
-  [LuisRecognizerKey]: {
-    key: LuisRecognizerKey,
-    text: formatMessage('LUIS'),
-  },
-  [ValueRecognizerKey]: {
+export const recognizerTypes = [
+  {
     key: ValueRecognizerKey,
     text: formatMessage('Value'),
   },
-};
+  {
+    key: LuisRecognizerKey,
+    text: formatMessage('LUIS'),
+  },
+  {
+    key: regexRecognizerKey,
+    text: formatMessage('Regular Expression'),
+  },
+];
 
 export function getFriendlyName(data) {
   if (get(data, '$designer.name')) {
@@ -99,7 +99,6 @@ export function generateNewTrigger(data: TriggerFormData) {
   }
   const newStep = {
     $type: data.$type,
-    recognizerType: data.recognizerType,
     ...seedNewDialog(data.$type, {}, optionalAttributes),
   };
   return newStep;

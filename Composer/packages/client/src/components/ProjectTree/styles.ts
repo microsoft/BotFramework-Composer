@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
@@ -184,3 +184,22 @@ export const triggerPhrases = {
     height: 80,
   },
 };
+
+export const tabItem = (enable, selected) => css`
+  height: 40px;
+  margin-right: 20px;
+  font-size: 14px;
+  text-align: center;
+  &:hover {
+    background: ${NeutralColors.gray20};
+  }
+  &:focus {
+    outline: none;
+  }
+  background: ${enable ? 'transparent' : NeutralColors.gray10};
+  color: ${enable ? NeutralColors.black : NeutralColors.gray90};
+  font-weight: ${FontWeights.semibold};
+  border: ${selected ? `${SharedColors.blue10} solid` : ''};
+  border-width: 0 0 2px 0;
+  cursor: ${enable ? 'pointer' : 'default'};
+`;
