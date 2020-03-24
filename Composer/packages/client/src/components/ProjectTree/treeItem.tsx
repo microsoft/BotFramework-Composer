@@ -3,13 +3,22 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { OverflowSet } from 'office-ui-fabric-react/lib/OverflowSet';
+import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { moreButton, overflowSet, moreMenu, navItem, itemText } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText } from './styles';
 
-const onRenderItem = item => {
+interface ITreeItemProps {
+  link: any;
+  isActive: boolean;
+  isSubItemActive?: boolean;
+  depth: number | undefined;
+  onDelete: (id: string) => void;
+  onSelect: (id: string) => void;
+}
+
+const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
     <div css={itemText(item.depth)}>
       {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
@@ -18,24 +27,27 @@ const onRenderItem = item => {
   );
 };
 
-const onRenderOverflowButton = overflowItems => {
-  return (
-    <IconButton
-      className="dialog-more-btn"
-      data-testid="dialogMoreButton"
-      styles={moreButton}
-      menuIconProps={{ iconName: 'MoreVertical' }}
-      menuProps={{ items: overflowItems, styles: { subComponentStyles: { callout: moreMenu } } }}
-    />
-  );
+const onRenderOverflowButton = (isRoot: boolean) => {
+  const showIcon = !isRoot;
+  return overflowItems => {
+    return showIcon ? (
+      <IconButton
+        className="dialog-more-btn"
+        data-testid="dialogMoreButton"
+        styles={moreButton}
+        menuIconProps={{ iconName: 'MoreVertical' }}
+        menuProps={{ items: overflowItems, styles: menuStyle }}
+      />
+    ) : null;
+  };
 };
 
-export const TreeItem = props => {
+export const TreeItem: React.FC<ITreeItemProps> = props => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
       tabIndex={1}
-      css={navItem(isActive, isSubItemActive)}
+      css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
       }}
@@ -63,7 +75,7 @@ export const TreeItem = props => {
         css={overflowSet}
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
-        onRenderOverflowButton={link.isRoot ? () => {} : onRenderOverflowButton}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
       />
     </div>
   );
