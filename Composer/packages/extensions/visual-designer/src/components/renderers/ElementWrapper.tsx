@@ -3,8 +3,9 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext } from 'react';
+import { FC, useContext, ReactNode, ReactElement } from 'react';
 import classnames from 'classnames';
+import { generateSDKTitle } from '@bfc/shared';
 
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -26,7 +27,29 @@ const nodeBorderDoubleSelectedStyle = css`
 export interface ElementWrapperProps {
   id: string;
   tab?: string;
+  ariaLabel?: string;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
+}
+
+function checkHasProps(node: ReactNode): node is ReactElement {
+  return (node as ReactElement).props != null;
+}
+
+function extractNodeTitle(node: ReactNode): string {
+  if (node == null || typeof node !== 'object') {
+    return '';
+  }
+  if (checkHasProps(node)) {
+    const { props } = node;
+    if (props?.data != null) {
+      return generateSDKTitle(props.data);
+    } else if (props?.children != null) {
+      return extractNodeTitle(props.children);
+    } else {
+      return '';
+    }
+  }
+  return '';
 }
 
 export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, children }): JSX.Element => {
@@ -49,6 +72,10 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, chil
     };
   };
 
+  console.log(children);
+
+  const ariaLabel = extractNodeTitle(children);
+
   return (
     <div
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
@@ -67,6 +94,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, chil
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
+      aria-label={ariaLabel}
     >
       {children}
     </div>
