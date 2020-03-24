@@ -220,7 +220,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
           const dialog = {
             id,
             isRoot,
-            displayName: isRoot ? `${botName}.Main` : id,
+            displayName: isRoot ? `${botName}` : id,
             content: dialogJson,
             relativePath: file.relativePath,
             lastModified: file.lastModified,
