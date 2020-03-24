@@ -20,15 +20,15 @@ const { check } = lgIndexer;
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles, projectId } = state;
+  const { lgFiles, locale, projectId } = state;
   const { lgImportresolver } = resolvers;
-  const { fileId } = props;
-  const file = lgFiles?.find(({ id }) => id === fileId);
+  const { dialogId } = props;
+  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
@@ -54,7 +54,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = template ? template.body : file.content;
     setContent(value);
-  }, [fileId, templateId, projectId]);
+  }, [file, templateId, projectId]);
 
   const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
@@ -138,7 +138,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const lgOption = {
     projectId,
-    fileId,
+    fileId: file?.id || dialogId,
     templateId: template?.name,
   };
 
