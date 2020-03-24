@@ -369,6 +369,11 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setBotStatus: ReducerFunc = (state, payload) => {
+  state.botStatus = payload;
+  return state;
+};
+
 const setVisualEditorSelection: ReducerFunc = (state, { selection }) => {
   state.visualEditorSelection = selection;
   return state;
@@ -465,4 +470,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
+  [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
 });

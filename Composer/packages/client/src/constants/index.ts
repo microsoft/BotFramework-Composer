@@ -90,6 +90,7 @@ export enum ActionTypes {
   GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
   // GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
   UPDATE_TIMESTAMP = 'UPDATE_TIMESTAMP',
+  UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
 }
 
 export const Tips = {
@@ -143,6 +144,8 @@ export const OpenStatus = {
 export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
+  publishing = 'publishing',
+  reloading = 'loading',
 }
 
 export enum CreationFlowStatus {

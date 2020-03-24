@@ -34,26 +34,22 @@ const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAp
   document.body.appendChild(i);
 };
 
-const STATE = {
-  PUBLISHING: 0,
-  RELOADING: 1,
-  SUCCESS: 2,
-};
 const defaultPublishConfig = {
   name: 'default',
 };
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
-  const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, toStartBot, luFiles, settings, projectId } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus } = actions;
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus, setBotStatus } = actions;
   const connected = botStatus === BotStatus.connected;
+  const publishing = botStatus === BotStatus.publishing;
+  const reloading = botStatus === BotStatus.reloading;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter(n => n.severity === 'Error').length;
   const showError = errorLength > 0;
@@ -123,7 +119,7 @@ export const TestController: React.FC = () => {
   }
 
   async function handlePublish() {
-    setFetchState(STATE.PUBLISHING);
+    setBotStatus(BotStatus.publishing);
     try {
       const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
       if (luisConfig) {
@@ -135,22 +131,21 @@ export const TestController: React.FC = () => {
     } catch (err) {
       setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
+      setBotStatus(BotStatus.unConnected);
       return false;
-    } finally {
-      setFetchState(STATE.SUCCESS);
     }
   }
 
   async function handleLoadBot() {
-    setFetchState(STATE.RELOADING);
+    setBotStatus(BotStatus.reloading);
     try {
       const sensitiveSettings = settingsStorage.get(botName);
       await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
+      setBotStatus(BotStatus.connected);
     } catch (err) {
       setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
-    } finally {
-      setFetchState(STATE.SUCCESS);
+      setBotStatus(BotStatus.unConnected);
     }
   }
 
@@ -161,7 +156,7 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        {connected && !showError && fetchState === STATE.SUCCESS && (
+        {connected && !showError && (
           <ActionButton
             iconProps={{
               iconName: 'OpenInNewTab',
@@ -180,10 +175,10 @@ export const TestController: React.FC = () => {
             {formatMessage('Test in Emulator')}
           </ActionButton>
         )}
-        {fetchState !== STATE.SUCCESS && (
+        {(publishing || reloading) && (
           <Spinner
             size={SpinnerSize.small}
-            label={fetchState === STATE.PUBLISHING ? formatMessage('Publishing') : formatMessage('Reloading')}
+            label={publishing ? formatMessage('Publishing') : formatMessage('Reloading')}
             ariaLive="assertive"
             labelPosition="left"
           />
