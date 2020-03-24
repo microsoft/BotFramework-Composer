@@ -9,13 +9,11 @@ import { MergeWithCustomizer } from 'lodash';
 
 import DefaultUISchema from '../defaultUiSchema';
 import DefaultRoleSchema from '../defaultRoleSchema';
-// import DefaultKindSchema from '../defaultKindSchema';
 import DefaultRecognizers from '../defaultRecognizers';
 
 const defaults: PluginConfig = {
   uiSchema: DefaultUISchema,
   roleSchema: DefaultRoleSchema,
-  // kindSchema: DefaultKindSchema,
   recognizers: DefaultRecognizers,
 };
 
