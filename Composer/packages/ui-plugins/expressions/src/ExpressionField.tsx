@@ -8,6 +8,7 @@ import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
+import formatMessage from 'format-message';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -209,6 +210,8 @@ const ExpressionField: React.FC<FieldProps> = props => {
                 root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
                 title: { height: '24px', lineHeight: '20px' },
               }}
+              data-testid={`expression-type-dropdown-${label}`}
+              ariaLabel={formatMessage('select property type')}
             />
           )}
         </div>
