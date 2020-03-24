@@ -110,7 +110,7 @@ const LUPage: React.FC<LUPageProps> = props => {
             ariaLabel={formatMessage('all language understanding files')}
             ariaHidden={false}
           />
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
+          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
         </div>
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
