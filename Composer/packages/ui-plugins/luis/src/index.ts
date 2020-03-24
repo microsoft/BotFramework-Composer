@@ -20,7 +20,7 @@ const config: PluginConfig = {
         const luFile = luFiles.find(f => f.id === currentDialog.id);
 
         if (luFile) {
-          props.onChange(luFile.id);
+          props.onChange(`${luFile.id}.lu`);
         } else {
           alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
         }
