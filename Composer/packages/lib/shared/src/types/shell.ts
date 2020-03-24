@@ -2,9 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LGTemplate } from 'botbuilder-lg';
-
-import { DialogInfo, LuFile, LgFile, LuIntentSection } from './indexers';
+import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
 
 export interface EditorSchema {
   content?: {
@@ -20,6 +18,7 @@ export interface BotSchemas {
 }
 
 export interface ShellData {
+  locale: string;
   botName: string;
   currentDialog: DialogInfo;
   projectId: string;
@@ -53,9 +52,11 @@ export interface ShellApi {
   createLuFile: (id: string) => Promise<void>;
   updateLuFile: (luFile: { id: string; content: string }) => Promise<void>;
   updateLgFile: (id: string, content: string) => Promise<void>;
-  getLgTemplates: (id: string) => Promise<LGTemplate[]>;
+  lgFileResolver: (id: string) => Promise<any>;
+  luFileResolver: (id: string) => Promise<any>;
+  getLgTemplates: (id: string) => Promise<LgTemplate[]>;
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<string>;
-  createLgTemplate: (id: string, template: Partial<LGTemplate>, position: number) => Promise<void>;
+  createLgTemplate: (id: string, template: Partial<LgTemplate>, position: number) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;

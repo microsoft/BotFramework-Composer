@@ -33,9 +33,13 @@ export class BotProjectService {
     }
   }
 
-  public static lgImportResolver(_source: string, id: string, projectId: string): TextFile {
+  public static lgImportResolver(source: string, id: string, projectId: string): TextFile {
     BotProjectService.initialize();
-    const targetId = Path.basename(id, '.lg');
+    let targetId = Path.basename(id, '.lg');
+    if (targetId.lastIndexOf('.') === -1) {
+      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
+      targetId += `.${locale}`;
+    }
     const targetFile = BotProjectService.currentBotProjects
       .find(({ id }) => id === projectId)
       ?.lgFiles.find(({ id }) => id === targetId);
@@ -46,9 +50,13 @@ export class BotProjectService {
     };
   }
 
-  public static luImportResolver(_source: string, id: string, projectId: string): any {
+  public static luImportResolver(source: string, id: string, projectId: string): any {
     BotProjectService.initialize();
-    const targetId = Path.basename(id, '.lu');
+    let targetId = Path.basename(id, '.lu');
+    if (targetId.lastIndexOf('.') === -1) {
+      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
+      targetId += `.${locale}`;
+    }
     const targetFile = BotProjectService.currentBotProjects
       .find(({ id }) => id === projectId)
       ?.luFiles.find(({ id }) => id === targetId);

@@ -60,6 +60,14 @@ const shellApi: ShellApi = {
     return apiClient.apiCall('onCopy', actions);
   },
 
+  lgFileResolver: (id: string) => {
+    return apiClient.apiCall('lgFileResolver', id);
+  },
+
+  luFileResolver: (id: string) => {
+    return apiClient.apiCall('lgFileResolver', id);
+  },
+
   createLuFile: id => {
     return apiClient.apiCall('createLuFile', { id });
   },

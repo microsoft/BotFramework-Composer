@@ -18,8 +18,8 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid } from '@bfc/indexers';
-import { MemoryResolver, LgTemplate } from '@bfc/shared';
+import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
+import { MemoryResolver } from '@bfc/shared';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
@@ -33,8 +33,6 @@ import {
   LGCursorState,
   updateTemplate,
 } from './utils';
-
-const { check, parse } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
@@ -222,21 +220,9 @@ export class LGServer {
       }
 
       const id = fileId || uri;
-      const diagnostics = check(content, id, importResolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(content, id);
-        const { imports } = LGParser.parse(content, id);
-        imports.forEach(({ id }) => {
-          const importedContent = importResolver('.', id).content;
-          const importedTemplates = parse(importedContent, '');
-          templates.push(...importedTemplates);
-        });
-      } catch (_error) {
-        // ignore
-      }
+      const { allTemplates, diagnostics } = LGParser.parseText(content, id, importResolver);
 
-      return { templates, diagnostics };
+      return { templates: allTemplates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
@@ -460,8 +446,8 @@ export class LGServer {
     if (!lgFile) {
       return Promise.resolve(null);
     }
-    const { templates } = lgFile;
 
+    const { templates } = lgFile;
     const completionTemplateList: CompletionItem[] = templates.map(template => {
       return {
         label: template.name,
@@ -564,7 +550,7 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = check(text, fileId || uri, this.getImportResolver(document));
+    const lgDiagnostics = LGParser.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }

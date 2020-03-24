@@ -1,0 +1,78 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "847208"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "455902"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "834603"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "=10000+1000+100+10+1"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "048190"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "=200*200"
+        },
+        {
+          "$type": "Microsoft.EditArray",
+          "$designer": {
+            "id": "434590"
+          },
+          "changeType": "Push",
+          "itemsProperty": "dialog.ids",
+          "value": "=888888/4"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "623448"
+          },
+          "activity": "${bfdactivity-623448()}"
+        },
+        {
+          "$type": "Microsoft.ForeachPage",
+          "$designer": {
+            "id": "993283"
+          },
+          "pageSize": 2,
+          "itemsProperty": "dialog.ids",
+          "actions": [
+            {
+              "$type": "Microsoft.Foreach",
+              "itemsProperty": "dialog.foreach.page",
+              "actions": [
+                {
+                  "$type": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "636747",
+                    "name": "Send a response"
+                  },
+                  "activity": "${bfdactivity-636747()}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "foreachpagestep.lg"
+}

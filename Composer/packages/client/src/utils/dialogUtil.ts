@@ -5,7 +5,7 @@ import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog, Dial
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'botframework-expressions';
+import { ExpressionEngine } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { getFocusPath } from './navigation';

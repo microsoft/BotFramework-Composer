@@ -5,7 +5,7 @@ import { PrimaryButton, DefaultButton, DirectionalHint } from 'office-ui-fabric-
 import debounce from 'lodash/debounce';
 import nanoid from 'nanoid';
 import { initializeIcons } from '@uifabric/icons';
-import { ExpressionEngine } from 'botframework-expressions';
+import { ExpressionEngine } from 'adaptive-expressions';
 import { seedNewDialog, ShellApi, LuFile, DialogInfo } from '@bfc/shared';
 
 import Example from '../../src';

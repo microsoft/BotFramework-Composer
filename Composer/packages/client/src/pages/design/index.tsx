@@ -25,6 +25,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
+import { navigateTo } from '../../utils';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -93,6 +94,16 @@ function DesignPage(props) {
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+
+  useEffect(() => {
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    if (!currentDialog && rootDialog) {
+      const { search } = location;
+      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
+      return;
+    }
+  }, [dialogId, dialogs, location]);
 
   useEffect(() => {
     if (match) {

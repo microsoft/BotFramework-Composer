@@ -178,7 +178,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
         }
         styles={groupListStyle}
       />
-      <ActionButton tabIndex={1} iconProps={addIconProps} css={addButton(0)} onClick={onAdd}>
+      <ActionButton
+        tabIndex={1}
+        iconProps={addIconProps}
+        css={addButton(0)}
+        onClick={onAdd}
+        data-testid="ProjectTreeNewDialog"
+      >
         {formatMessage('New Dialog ..')}
       </ActionButton>
     </div>

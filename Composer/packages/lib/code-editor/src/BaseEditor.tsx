@@ -8,6 +8,8 @@ import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-edi
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import formatMessage from 'format-message';
+import { Diagnostic } from '@bfc/shared';
+import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 
 import { assignDefined } from './utils/common';
 
@@ -29,7 +31,7 @@ const defaultOptions = {
 };
 
 const styles = {
-  container: ({ hovered, focused, error, height }) => {
+  container: ({ hovered, focused, error, warning, height }) => {
     let borderColor = NeutralColors.gray120;
 
     if (hovered) {
@@ -38,6 +40,10 @@ const styles = {
 
     if (focused) {
       borderColor = SharedColors.cyanBlue10;
+    }
+
+    if (warning) {
+      borderColor = SharedColors.yellow10;
     }
 
     if (error) {
@@ -59,14 +65,16 @@ const styles = {
 export type OnInit = (instance: Monaco) => void;
 
 export interface BaseEditorProps extends EditorProps {
-  id?: string;
-  errorMessage?: any;
+  diagnostics?: Diagnostic[]; // indexer generic diagnostic
   helpURL?: string;
   hidePlaceholder?: boolean;
+  id?: string;
   onChange: (newValue: string) => void;
+  onInit?: OnInit;
   placeholder?: string;
   value?: string;
-  onInit?: OnInit;
+  warningMessage?: string; // warning text show below editor
+  errorMessage?: string; // error text show below editor
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
@@ -77,6 +85,8 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     hidePlaceholder,
     value,
     errorMessage,
+    warningMessage,
+    diagnostics = [],
     helpURL,
     height = '100%',
     onInit,
@@ -132,35 +142,46 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     }
   }, [onChange, editor]);
 
-  const errorHelp =
-    errorMessage &&
-    formatMessage.rich('{errorMessage}. Refer to the syntax documentation<a>here</a>.', {
-      errorMessage,
-      a: ({ children }) => (
-        <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      ),
-    });
+  const errorMsgFromDiagnostics = useMemo(() => {
+    const errors = findErrors(diagnostics);
+    return errors.length ? combineSimpleMessage(errors) : '';
+  }, [diagnostics]);
+
+  const warningMsgFromDiagnostics = useMemo(() => {
+    const warnings = findWarnings(diagnostics);
+    return warnings.length ? combineSimpleMessage(warnings) : '';
+  }, [diagnostics]);
+
+  const hasError = !!errorMessage || !!errorMsgFromDiagnostics;
+  const hasWarning = !!warningMessage || !!warningMsgFromDiagnostics;
+
+  const messageHelp = formatMessage.rich('{msg}. Refer to the syntax documentation<a>here</a>.', {
+    msg: errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics,
+    a: ({ children }) => (
+      <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    ),
+  });
 
   return (
     <React.Fragment>
       <div
-        css={styles.container({ hovered, focused, error: !!errorMessage, height })}
+        css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
         <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={options} />
       </div>
-      {!!errorHelp && (
+      {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={MessageBarType.error}
+          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
           isMultiline={false}
           dismissButtonAriaLabel={formatMessage('Close')}
           truncated
           overflowButtonAriaLabel={formatMessage('See more')}
         >
-          {errorHelp}
+          {messageHelp}
         </MessageBar>
       )}
     </React.Fragment>

@@ -7,27 +7,27 @@ import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { lgIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
+import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
 
-const { check } = lgIndexer;
+const { parse } = lgIndexer;
 
 const lspServerPath = '/lg-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles, projectId } = state;
+  const { lgFiles, locale, projectId } = state;
   const { lgImportresolver } = resolvers;
-  const { fileId } = props;
-  const file = lgFiles?.find(({ id }) => id === fileId);
+  const { dialogId } = props;
+  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
@@ -53,15 +53,9 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = template ? template.body : file.content;
     setContent(value);
-  }, [fileId, templateId, projectId]);
+  }, [file, templateId, projectId]);
 
-  useEffect(() => {
-    const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
-
-    const isInvalid = !isValid(currentDiagnostics);
-    const text = isInvalid ? combineMessage(currentDiagnostics) : '';
-    setErrorMsg(text);
-  }, [diagnostics]);
+  const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
   const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);
@@ -127,13 +121,13 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
             parameters,
             body: value,
           });
-          setDiagnostics(check(newContent, id, lgImportresolver));
+          setDiagnostics(parse(newContent, id, lgImportresolver).diagnostics);
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        const diags = check(value, id, lgImportresolver);
+        const diags = parse(value, id, lgImportresolver).diagnostics;
         setDiagnostics(diags);
         updateLgFile(value);
       }
@@ -143,7 +137,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const lgOption = {
     projectId,
-    fileId,
+    fileId: file?.id || dialogId,
     templateId: template?.name,
   };
 
@@ -161,6 +155,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       editorDidMount={editorDidMount}
       value={content}
       errorMessage={errorMsg}
+      diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,

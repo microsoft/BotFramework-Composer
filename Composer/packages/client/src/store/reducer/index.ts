@@ -4,7 +4,7 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
-import { SensitiveProperties, Diagnostic, DiagnosticSeverity, LgTemplate, LuFile, DialogInfo } from '@bfc/shared';
+import { SensitiveProperties, LuFile, DialogInfo } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
@@ -146,24 +146,23 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
+  const lgImportresolver: ImportResolverDelegate = function(source: string, id: string) {
+    const locale = getExtension(source);
     const targetFileName = getFileName(id);
-    const targetFileId = getBaseName(targetFileName);
+    let targetFileId = getBaseName(targetFileName);
+    if (locale) {
+      targetFileId += `.${locale}`;
+    }
     const targetFile = lgFiles.find(({ id }) => id === targetFileId);
     if (!targetFile) throw new Error(`file not found`);
     return { id, content: targetFile.content };
   };
 
   state.lgFiles = lgFiles.map(lgFile => {
-    const { check, parse } = lgIndexer;
+    const { parse } = lgIndexer;
     const { id, content } = lgFile;
-    const diagnostics = check(content, id, lgImportresolver);
-    let templates: LgTemplate[] = [];
-    try {
-      templates = parse(content, id);
-    } catch (err) {
-      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-    }
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
+
     return { ...lgFile, templates, diagnostics, content };
   });
   return state;
