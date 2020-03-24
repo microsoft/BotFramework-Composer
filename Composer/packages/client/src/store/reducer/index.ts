@@ -5,16 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import formatMessage from 'format-message';
 import { SensitiveProperties } from '@bfc/shared';
-import {
-  Diagnostic,
-  DiagnosticSeverity,
-  LgTemplate,
-  lgIndexer,
-  luIndexer,
-  LuFile,
-  DialogInfo,
-  dialogIndexer,
-} from '@bfc/indexers';
+import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
@@ -168,15 +159,10 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
   };
 
   state.lgFiles = lgFiles.map(lgFile => {
-    const { check, parse } = lgIndexer;
+    const { parse } = lgIndexer;
     const { id, content } = lgFile;
-    const diagnostics = check(content, id, lgImportresolver);
-    let templates: LgTemplate[] = [];
-    try {
-      templates = parse(content, id);
-    } catch (err) {
-      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-    }
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
+
     return { ...lgFile, templates, diagnostics, content };
   });
   return state;
