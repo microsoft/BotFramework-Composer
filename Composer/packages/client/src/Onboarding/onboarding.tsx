@@ -26,7 +26,7 @@ export interface IStepSet {
   title?: string;
 }
 
-export const stepSets = (projectId: string): IStepSet[] => [
+export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] => [
   {
     id: 'setUpBot',
     steps: [{ id: 'setUpYourBot', targetId: 'project' }],
@@ -35,22 +35,30 @@ export const stepSets = (projectId: string): IStepSet[] => [
   {
     id: 'basics',
     steps: [
-      { id: 'mainDialog', navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`, targetId: 'mainDialog' },
-      { id: 'trigger', navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`, targetId: 'newTrigger' },
+      {
+        id: 'mainDialog',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'mainDialog',
+      },
+      {
+        id: 'trigger',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'newTrigger',
+      },
       {
         id: 'userInput',
-        navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'navUserInput',
       },
       {
         id: 'actions',
         location: 'visualEditor',
-        navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'action',
       },
       {
         id: 'botResponses',
-        navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'navBotResponses',
       },
     ],
@@ -61,7 +69,7 @@ export const stepSets = (projectId: string): IStepSet[] => [
     steps: [
       {
         id: 'welcomeMessage',
-        navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'newTrigger',
       },
     ],
@@ -72,7 +80,7 @@ export const stepSets = (projectId: string): IStepSet[] => [
     steps: [
       {
         id: 'intentTrigger',
-        navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`,
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
         targetId: 'newTrigger',
       },
     ],
@@ -81,7 +89,11 @@ export const stepSets = (projectId: string): IStepSet[] => [
   {
     id: 'testBot',
     steps: [
-      { id: 'startBot', navigateTo: `/bot/${projectId}/dialogs/Main?selected=triggers[0]`, targetId: 'startBot' },
+      {
+        id: 'startBot',
+        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
+        targetId: 'startBot',
+      },
     ],
     title: formatMessage('Test your bot'),
   },

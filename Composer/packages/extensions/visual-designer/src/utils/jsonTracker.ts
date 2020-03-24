@@ -235,3 +235,19 @@ export async function pasteNodes(
   const newNodes = await deepCopyActions(clipboardNodes, handleLgField);
   return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
+
+export const getParentPaths = (actionPath: string): string[] => {
+  if (typeof actionPath !== 'string') return [];
+  const selectors = actionPath.split('.');
+  // exclude the path of current action
+  selectors.pop();
+  if (!selectors.length) return [];
+
+  let path = selectors[0];
+  const results = [path];
+  for (let i = 1; i < selectors.length; i++) {
+    path = `${path}.${selectors[i]}`;
+    results.push(path);
+  }
+  return results;
+};

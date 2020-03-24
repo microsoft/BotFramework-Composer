@@ -66,12 +66,12 @@ describe('updateDialog', () => {
 });
 
 describe('createFromTemplate', () => {
-  const dialogName = 'MyTestDialog';
+  const dialogName = 'mytestdialog';
   const content = JSON.stringify(seedNewDialog('Microsoft.AdaptiveDialog'), null, 2) + '\n';
 
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/${dialogName}`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
     } catch (err) {
       // ignore
     }
@@ -142,7 +142,7 @@ describe('modify non exist files', () => {
 describe('lg operations', () => {
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
     } catch (err) {
       // ignore
     }
@@ -162,7 +162,6 @@ describe('lg operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lg');
       expect(result.content).toContain(content);
     }
   });
@@ -186,7 +185,6 @@ describe('lg operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lg');
       expect(result.content).toContain(content);
     }
   });
@@ -212,7 +210,7 @@ describe('lg operations', () => {
 describe('lu operations', () => {
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
       rimraf.sync(Path.resolve(__dirname, `${botDir}/generated`));
     } catch (err) {
       // ignore
@@ -234,7 +232,6 @@ describe('lu operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('root/root.lu');
       expect(result.content).toContain(content);
     }
   });
@@ -257,7 +254,6 @@ describe('lu operations', () => {
     expect(luFiles.length).toEqual(luFilesCount + 1);
 
     expect(result).not.toBeUndefined();
-    expect(result?.relativePath).toEqual('root/root.lu');
     expect(result?.content).toContain(content);
   });
 

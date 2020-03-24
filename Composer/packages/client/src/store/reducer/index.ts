@@ -146,9 +146,13 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
+  const lgImportresolver: ImportResolverDelegate = function(source: string, id: string) {
+    const locale = getExtension(source);
     const targetFileName = getFileName(id);
-    const targetFileId = getBaseName(targetFileName);
+    let targetFileId = getBaseName(targetFileName);
+    if (locale) {
+      targetFileId += `.${locale}`;
+    }
     const targetFile = lgFiles.find(({ id }) => id === targetFileId);
     if (!targetFile) throw new Error(`file not found`);
     return { id, content: targetFile.content };

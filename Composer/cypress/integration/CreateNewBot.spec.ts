@@ -26,10 +26,10 @@ context('Creating a new bot', () => {
     cy.findByTestId('NewDialogName').type('{selectall}__TestNewProject2{enter}');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject2.Main').should('exist');
-      cy.findByText('AddToDo').should('exist');
-      cy.findByText('ClearToDos').should('exist');
-      cy.findByText('DeleteToDo').should('exist');
-      cy.findByText('ShowToDos').should('exist');
+      cy.findByText('addtodo').should('exist');
+      cy.findByText('cleartodos').should('exist');
+      cy.findByText('deletetodo').should('exist');
+      cy.findByText('showtodos').should('exist');
     });
   });
 });
