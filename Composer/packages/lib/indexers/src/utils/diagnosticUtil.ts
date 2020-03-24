@@ -32,8 +32,17 @@ export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
       const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
       msg += position;
     }
-    const [, errorInfo] = diagnostic.message.split('error message: ');
-    return msg + errorInfo;
+    if (diagnostic.message.includes('error message:')) {
+      const [, errorInfo] = diagnostic.message.split('error message: ');
+      return msg + errorInfo;
+    } else if (diagnostic.message.includes(']')) {
+      // properly handle messages containing brackets
+      const [, errorInfo] = diagnostic.message.split(']');
+      return msg + errorInfo;
+    } else {
+      // this is some other weird case, so just print the whole message
+      return msg + diagnostic.message;
+    }
   }
   return '';
 }

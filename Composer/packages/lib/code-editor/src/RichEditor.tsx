@@ -134,7 +134,7 @@ export function RichEditor(props: RichEditorProps) {
           dismissButtonAriaLabel={formatMessage('Close')}
           overflowButtonAriaLabel={formatMessage('See more')}
         >
-          {errorMsg}
+          {errorMsg || errorMsgFromDiagnostics}
           {syntaxLink}
         </MessageBar>
       )}
