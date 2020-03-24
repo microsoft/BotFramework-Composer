@@ -12,7 +12,7 @@ describe('#copyEditActions', () => {
       actions: [
         {
           $type: 'Microsoft.BeginDialog',
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
       ],
     };
@@ -29,7 +29,7 @@ describe('#copyEditActions', () => {
           $designer: {
             id: '5678',
           },
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
       ],
     });

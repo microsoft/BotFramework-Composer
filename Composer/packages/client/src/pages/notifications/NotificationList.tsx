@@ -44,7 +44,7 @@ const columns: IColumn[] = [
     },
   },
   {
-    key: 'Notification Type',
+    key: 'NotificationType',
     name: 'Type',
     className: notification.columnCell,
     fieldName: 'type',
@@ -59,7 +59,7 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'Notification Location',
+    key: 'NotificationLocation',
     name: 'Location',
     className: notification.columnCell,
     fieldName: 'location',
@@ -73,7 +73,7 @@ const columns: IColumn[] = [
     isPadded: true,
   },
   {
-    key: 'Notification Detail',
+    key: 'NotificationDetail',
     name: 'Message',
     className: notification.columnCell,
     fieldName: 'message',

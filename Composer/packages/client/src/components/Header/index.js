@@ -15,7 +15,7 @@ export const Header = props => {
       <img
         style={{ marginLeft: '9px', marginTop: '6px' }}
         alt={formatMessage('Composer Logo')}
-        ariaLabel={formatMessage('Composer Logo')}
+        aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
       />
       <span css={title}>{formatMessage('Bot Framework Composer')}</span>
