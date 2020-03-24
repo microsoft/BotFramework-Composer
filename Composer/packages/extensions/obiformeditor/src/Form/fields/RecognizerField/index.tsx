@@ -35,7 +35,7 @@ export const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props
         }
         case 'luis': {
           if (selectedFile) {
-            onChange(currentDialog.luFile);
+            onChange(`${currentDialogId}.lu`);
           } else {
             const { createLuFile } = shellApi;
 
