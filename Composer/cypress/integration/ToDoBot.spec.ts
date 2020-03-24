@@ -5,6 +5,7 @@ context('ToDo Bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(5000);
   });
 
