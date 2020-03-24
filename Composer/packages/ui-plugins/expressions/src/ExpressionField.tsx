@@ -177,12 +177,12 @@ const ExpressionField: React.FC<FieldProps> = props => {
       );
     }
 
-    const Field = resolveFieldWidget(selectedSchema || {}, uiOptions, pluginConfig);
+    const Field = resolveFieldWidget(selectedSchema, uiOptions, pluginConfig);
     return (
       <Field
         key={selectedSchema.type}
         {...props}
-        schema={selectedSchema || {}}
+        schema={selectedSchema}
         // allow object fields to render their labels
         label={selectedSchema.type !== 'object' ? false : undefined}
         css={{ label: 'ExpressionFieldValue' }}
