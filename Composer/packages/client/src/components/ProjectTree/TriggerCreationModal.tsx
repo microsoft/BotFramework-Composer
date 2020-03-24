@@ -37,7 +37,7 @@ import {
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, dialogWindow, intent, tabItem } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (
@@ -82,7 +82,8 @@ const validateForm = (
   if ($type === intentTypeKey && isLUIS && !triggerPhrases) {
     errors.triggerPhrases = formatMessage('Please input trigger phrases');
   }
-  if (data.errors.triggerPhrases) {
+  //luis grammar error
+  if (isLUIS && data.errors.triggerPhrases) {
     errors.triggerPhrases = data.errors.triggerPhrases;
   }
   return errors;
@@ -171,10 +172,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, regexEx: pattern });
   };
 
-  const onChangeRecognizerType = item => {
+  const onChangeRecognizerType = (item, e) => {
     setFormData({
       ...formData,
-      recognizerType: item,
+      recognizerType: item.props.itemKey,
     });
   };
 
@@ -224,25 +225,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             required
           />
           {formData.$type === intentTypeKey && (
-            <div css={{ display: 'flex' }}>
-              {recognizerTypes.map(r => {
-                const enable = validRecognizerTypes.includes(r.key);
-                return (
-                  <div
-                    key={r.key}
-                    tabIndex={0}
-                    css={tabItem(enable, formData.recognizerType === r.key)}
-                    onClick={() => {
-                      if (enable) {
-                        onChangeRecognizerType(r.key);
-                      }
-                    }}
-                  >
-                    {r.text}
-                  </div>
-                );
-              })}
-            </div>
+            <Pivot data-testid="triggerRecognizerType" onLinkClick={onChangeRecognizerType}>
+              {recognizerTypes.map(r => (
+                <PivotItem
+                  ariaLabel={r.text}
+                  headerText={r.text}
+                  key={r.key}
+                  itemKey={r.key}
+                  headerButtonProps={{
+                    disabled: !validRecognizerTypes.includes(r.key),
+                  }}
+                />
+              ))}
+            </Pivot>
           )}
           {showEventDropDown && (
             <Dropdown
