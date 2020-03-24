@@ -50,7 +50,7 @@ Composer is managed via yarn workspaces, producing such a folder layout.
     |- server       // composer api server
     |- extensions
       |- package.json  // put all extension as one package
-      |- obiformeditor // dialog property editor
+      |- adaptive-form // dialog property editor
     |- lib
       |- shared        // shared code
 ```

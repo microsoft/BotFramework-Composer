@@ -20,7 +20,6 @@
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@bfc/indexers": "*",
-    "@bfc/obiformeditor": "*",
     "@bfc/shared": "*",
     "@bfc/ui-plugin-expressions": "*",
     "@bfc/ui-plugin-json": "*",

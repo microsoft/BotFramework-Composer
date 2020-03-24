@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 // this is currently hard-coded here
-// import FormEditor from '@bfc/extensions/obiformeditor';
 import VisualDesigner from '@bfc/visual-designer';
 import AdaptiveForm from '@bfc/adaptive-form';
 
