@@ -153,7 +153,7 @@ export const uiSchema: { [key in SDKTypes]?: UiSchema } = {
     intent: {
       'ui:widget': 'IntentWidget',
     },
-    'ui:order': ['intent', 'condition', 'entities', '*'],
+    'ui:order': ['condition', 'entities', 'intent', '*'],
     'ui:hidden': ['actions', ...globalHidden],
   },
   [SDKTypes.OnInvokeActivity]: {

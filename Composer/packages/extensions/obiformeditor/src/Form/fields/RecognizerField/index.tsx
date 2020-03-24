@@ -14,20 +14,9 @@ import { BaseField } from '../BaseField';
 import { WidgetLabel } from '../../widgets/WidgetLabel';
 
 import './styles.css';
+import { IRecognizer, ICheckOption, IRecognizerType } from './types';
 
-interface ICheckOption {
-  checked: boolean;
-  disabled: boolean;
-  label: string;
-  id: string;
-}
 const defaultOptions: ICheckOption[] = [
-  {
-    checked: true,
-    disabled: true,
-    label: formatMessage('Value'),
-    id: 'value',
-  },
   {
     checked: false,
     disabled: false,
@@ -42,7 +31,7 @@ const defaultOptions: ICheckOption[] = [
   },
 ];
 
-const defaultRecoginzerSet = {
+const defaultRecoginzerSet: IRecognizer = {
   $type: 'Microsoft.RecognizerSet',
   recognizers: [
     {
@@ -50,19 +39,17 @@ const defaultRecoginzerSet = {
       recognizers: {
         'en-us': {
           $type: 'Microsoft.CrossTrainedRecognizerSet',
-          recognizers: [
-            {
-              $type: SDKTypes.ValueRecognizer,
-              id: 'value',
-            },
-          ],
+          recognizers: [],
         },
       },
+    },
+    {
+      $type: SDKTypes.ValueRecognizer,
+      id: 'value',
     },
   ],
 };
 
-type IRecognizer = typeof defaultRecoginzerSet;
 export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = props => {
   const { formData } = props;
 
@@ -71,9 +58,9 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     onChange,
   } = props;
 
-  let recognizers: Record<string, any>[] = [];
+  let recognizers: IRecognizerType[] = [];
   if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
-    formData.recognizers[0].recognizers['en-us'].recognizers.forEach(recog => {
+    formData.recognizers[0].recognizers?.['en-us'].recognizers.forEach(recog => {
       recognizers.push(recog);
     });
   } else {
@@ -146,7 +133,9 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
       default:
         break;
     }
-    finalRecognizerSet.recognizers[0].recognizers['en-us'].recognizers = Object.assign([], recognizers);
+    if (finalRecognizerSet.recognizers[0].recognizers) {
+      finalRecognizerSet.recognizers[0].recognizers['en-us'].recognizers = Object.assign([], recognizers);
+    }
     checkOptions.map(option => {
       if (option.id === id) {
         option.checked = !!checked;
