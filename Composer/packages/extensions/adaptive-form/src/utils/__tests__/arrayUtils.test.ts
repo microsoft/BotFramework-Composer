@@ -44,7 +44,11 @@ describe('getArrayItemProps', () => {
     it('invokes onChange with updated item', () => {
       const { onChange: onItemChange } = getArrayItemProps(value, 1, onChange);
       onItemChange(4);
-      expect(onChange).toHaveBeenCalledWith([1, 4, 3]);
+      expect(onChange).toHaveBeenCalledWith([
+        { id: '1', value: 1 },
+        { id: '2', value: 4 },
+        { id: '3', value: 3 },
+      ]);
       expect(onChange.mock.calls[0][0]).not.toBe(value);
     });
   });
@@ -53,7 +57,11 @@ describe('getArrayItemProps', () => {
     it('swaps two items', () => {
       const { onReorder } = getArrayItemProps(value, 0, onChange);
       onReorder(1);
-      expect(onChange).toHaveBeenCalledWith([2, 1, 3]);
+      expect(onChange).toHaveBeenCalledWith([
+        { id: '2', value: 2 },
+        { id: '1', value: 1 },
+        { id: '3', value: 3 },
+      ]);
       expect(onChange.mock.calls[0][0]).not.toBe(value);
     });
   });
@@ -62,7 +70,10 @@ describe('getArrayItemProps', () => {
     it('removes the item', () => {
       const { onRemove } = getArrayItemProps(value, 1, onChange);
       onRemove();
-      expect(onChange).toHaveBeenCalledWith([1, 3]);
+      expect(onChange).toHaveBeenCalledWith([
+        { id: '1', value: 1 },
+        { id: '3', value: 3 },
+      ]);
       expect(onChange.mock.calls[0][0]).not.toBe(value);
     });
   });

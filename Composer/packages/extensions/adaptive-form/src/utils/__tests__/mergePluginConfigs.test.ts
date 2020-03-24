@@ -53,14 +53,16 @@ Object {
   "recognizers": Array [
     Object {
       "displayName": [Function],
-      "handleChange": [Function],
+      "handleRecognizerChange": [Function],
       "id": "none",
+      "isSelected": [Function],
     },
     Object {
       "displayName": [Function],
       "editor": [Function],
-      "handleChange": [Function],
+      "handleRecognizerChange": [Function],
       "id": "Microsoft.RegexRecognizer",
+      "isSelected": [Function],
     },
   ],
   "roleSchema": Object {
@@ -70,6 +72,8 @@ Object {
   },
   "uiSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
+      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "helpLink": "https://aka.ms/botframework",
       "hidden": Array [
         "recognizer",
       ],
@@ -87,7 +91,11 @@ Object {
         },
       },
     },
+    "Microsoft.AttachmentInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+    },
     "Microsoft.BeginDialog": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "order": Array [
         "dialog",
         "options",
@@ -97,35 +105,48 @@ Object {
       ],
     },
     "Microsoft.CancelAllDialogs": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "order": Array [
         "dialog",
         "property",
         "*",
       ],
     },
+    "Microsoft.ChoiceInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+    },
+    "Microsoft.ConfirmInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+    },
+    "Microsoft.DateTimeInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+    },
     "Microsoft.DebugBreak": Object {
-      "label": "Debug Breack",
+      "label": [Function],
     },
     "Microsoft.DeleteProperties": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Delete Properties",
     },
     "Microsoft.DeleteProperty": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Delete a Property",
+      "label": [Function],
     },
     "Microsoft.EditActions": Object {
-      "label": "Modify active dialog",
+      "label": [Function],
     },
     "Microsoft.EditArray": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Edit an Array Property",
+      "label": [Function],
     },
     "Microsoft.EmitEvent": Object {
       "helpLink": "https://aka.ms/bfc-custom-events",
-      "label": "Emit a custom event",
+      "label": [Function],
+    },
+    "Microsoft.EndDialog": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
     },
     "Microsoft.Foreach": Object {
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "actions",
       ],
@@ -135,6 +156,7 @@ Object {
       ],
     },
     "Microsoft.ForeachPage": Object {
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "actions",
       ],
@@ -145,6 +167,7 @@ Object {
       ],
     },
     "Microsoft.HttpRequest": Object {
+      "helpLink": "https://aka.ms/bfc-using-http",
       "order": Array [
         "method",
         "url",
@@ -154,10 +177,23 @@ Object {
       ],
     },
     "Microsoft.IfCondition": Object {
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "actions",
         "elseActions",
       ],
+    },
+    "Microsoft.LogAction": Object {
+      "helpLink": "https://aka.ms/bfc-debugging-bots",
+    },
+    "Microsoft.LuisRecognizer": Object {
+      "helpLink": "https://aka.ms/BFC-Using-LU",
+    },
+    "Microsoft.MultiLanguageRecognizer": Object {
+      "helpLink": "https://aka.ms/BFC-Using-LU",
+    },
+    "Microsoft.NumberInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
     },
     "Microsoft.OAuthInput": Object {
       "order": Array [
@@ -202,9 +238,12 @@ Object {
       ],
     },
     "Microsoft.OnConversationUpdateActivity": Object {
+      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
       "hidden": Array [
         "actions",
       ],
+      "label": "Greeting",
       "order": Array [
         "condition",
         "*",
@@ -274,6 +313,11 @@ Object {
         "entities",
         "*",
       ],
+      "properties": Object {
+        "intent": Object {
+          "field": [Function],
+        },
+      },
     },
     "Microsoft.OnInvokeActivity": Object {
       "hidden": Array [
@@ -347,8 +391,12 @@ Object {
         "*",
       ],
     },
+    "Microsoft.QnAMakerDialog": Object {
+      "helpLink": "https://aka.ms/bfc-using-QnA",
+    },
     "Microsoft.Recognizer": Object {
       "field": [Function],
+      "helpLink": "https://aka.ms/BFC-Using-LU",
     },
     "Microsoft.RegexRecognizer": Object {
       "hidden": Array [
@@ -356,6 +404,7 @@ Object {
       ],
     },
     "Microsoft.RepeatDialog": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "order": Array [
         "options",
         "includeActivity",
@@ -363,6 +412,7 @@ Object {
       ],
     },
     "Microsoft.ReplaceDialog": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "order": Array [
         "dialog",
         "options",
@@ -371,6 +421,7 @@ Object {
       ],
     },
     "Microsoft.SendActivity": Object {
+      "helpLink": "https://aka.ms/bfc-send-activity",
       "order": Array [
         "activity",
         "*",
@@ -378,13 +429,17 @@ Object {
     },
     "Microsoft.SetProperties": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Set Properties",
+      "label": [Function],
     },
     "Microsoft.SetProperty": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
-      "label": "Set a Property",
+      "label": [Function],
+    },
+    "Microsoft.SkillDialog": Object {
+      "helpLink": "https://aka.ms/bfc-call-skill",
     },
     "Microsoft.SwitchCondition": Object {
+      "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "default",
       ],
@@ -395,6 +450,12 @@ Object {
           ],
         },
       },
+    },
+    "Microsoft.TextInput": Object {
+      "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+    },
+    "Microsoft.TraceActivity": Object {
+      "helpLink": "https://aka.ms/bfc-debugging-bots",
     },
   },
 }

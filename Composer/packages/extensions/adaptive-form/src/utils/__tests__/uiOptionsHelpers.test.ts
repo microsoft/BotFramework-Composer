@@ -45,8 +45,8 @@ describe('getUiLabel', () => {
 
   it('falls back to prop label, schema title, or name', () => {
     expect(getUiLabel(props)).toEqual('prop label');
-    expect(getUiLabel({ ...props, label: undefined })).toEqual('schema title');
-    expect(getUiLabel({ ...props, label: undefined, schema: { title: undefined } })).toEqual('prop name');
+    expect(getUiLabel({ ...props, label: undefined })).toEqual('Schema Title');
+    expect(getUiLabel({ ...props, label: undefined, schema: { title: undefined } })).toEqual('Prop Name');
   });
 });
 

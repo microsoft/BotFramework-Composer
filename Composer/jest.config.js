@@ -46,10 +46,11 @@ module.exports = {
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/server',
     '<rootDir>/packages/tools/language-servers/language-generation',
+    '<rootDir>/packages/ui-plugins/expressions',
     '<rootDir>/packages/ui-plugins/json',
     '<rootDir>/packages/ui-plugins/lg',
     '<rootDir>/packages/ui-plugins/luis',
+    '<rootDir>/packages/ui-plugins/prompts',
     '<rootDir>/packages/ui-plugins/select-dialog',
-    '<rootDir>/packages/ui-plugins/select-intent',
   ],
 };

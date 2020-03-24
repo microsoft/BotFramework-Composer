@@ -32,8 +32,8 @@ const createArrayItem = (value: any): ArrayItem => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: ArrayChangeHandler) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onItemChange = (newValue: any) => {
     const updated = items.map((item, i) => {
       if (index === i) {
