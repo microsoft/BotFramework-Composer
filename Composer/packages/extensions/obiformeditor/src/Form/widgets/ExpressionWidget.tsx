@@ -68,7 +68,6 @@ export const ExpressionWidget: React.FC<ExpresionWidgetProps> = props => {
         dismissButtonAriaLabel={formatMessage('Close')}
         overflowButtonAriaLabel={formatMessage('See more')}
       >
-        {label}
         {errMessage}
         {syntaxLink}
       </MessageBar>
