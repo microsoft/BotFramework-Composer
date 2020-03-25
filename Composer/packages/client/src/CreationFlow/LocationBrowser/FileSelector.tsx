@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import path from 'path';
 
-import { thisPC } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -37,6 +36,7 @@ interface FileSelectorProps {
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
+  platform: string;
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
@@ -46,6 +46,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     checkShowItem,
     onCurrentPathUpdate,
     storageFileLoadingStatus,
+    platform,
   } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
@@ -152,7 +153,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       value: '..',
       fileType: 'folder',
       iconName: 'folder',
-      filePath: diskRootPattern.test(p) || p === thisPC ? thisPC : focusedStorageFolder.parent,
+      filePath: diskRootPattern.test(p) || p === '/' ? '/' : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder]);
@@ -186,20 +187,29 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter(p => p !== '');
-  const breadcrumbItems = pathItems
-    .map((item, index) => {
-      let itemPath = getNavItemPath(pathItems, separator, 0, index);
-      // put a leading / back on the path if it started as a unix style path
-      itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
-      // add a trailing / if the last path is something like c:
-      itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
-      return {
-        text: itemPath, // displayed text
-        key: itemPath, // value returned
-        title: item, // title shown on hover
-      };
-    })
-    .reverse();
+  const breadcrumbItems = pathItems.map((item, index) => {
+    let itemPath = getNavItemPath(pathItems, separator, 0, index);
+    // put a leading / back on the path if it started as a unix style path
+    itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
+    // add a trailing / if the last path is something like c:
+    itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
+    const displayText = itemPath.startsWith('/') ? itemPath : `/${itemPath}`;
+    return {
+      text: displayText, // displayed text
+      key: itemPath, // value returned
+      title: item, // title shown on hover
+    };
+  });
+
+  if (platform === 'win32') {
+    breadcrumbItems.splice(0, 0, {
+      text: '/', // displayed text
+      key: '/', // value returned
+      title: '/', // title shown on hover
+    });
+  }
+
+  breadcrumbItems.reverse();
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };
