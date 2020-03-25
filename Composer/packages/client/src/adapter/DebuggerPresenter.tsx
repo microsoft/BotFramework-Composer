@@ -7,7 +7,7 @@ import { SelectionMode } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import formatMessage from 'format-message';
-import { DesignerData, ShellData, ShellApi } from '@bfc/shared';
+import { BaseSchema, DesignerData, MicrosoftAdaptiveDialog, ShellData, ShellApi } from '@bfc/shared';
 
 import * as model from './model';
 import * as protocol from './protocol';
@@ -144,7 +144,13 @@ const StackFramePresenter: React.FC<StackFrameProps> = props => {
   ));
 };
 
-interface StackFramesProps extends ActionsProps {
+interface EditorProps {
+  editor: {
+    tryNavigate: (range: protocol.Range) => Promise<boolean>;
+  };
+}
+
+interface StackFramesProps extends ActionsProps, EditorProps {
   stackFrames: ReadonlyArray<model.StackFrame>;
   selectionFrame: presenters.ITypedSelection<model.StackFrame>;
 }
@@ -161,9 +167,7 @@ const StackFramesPresenter: React.FC<StackFramesProps> = props => {
   ];
 
   const onItemInvoked = (item: Item) => {
-    const { designer } = protocol.extensionFor(item.remote);
-    const x: DesignerData | null = designer;
-    x;
+    props.editor.tryNavigate(item.remote);
   };
 
   return (
@@ -178,7 +182,7 @@ const StackFramesPresenter: React.FC<StackFramesProps> = props => {
   );
 };
 
-interface ThreadProps extends ActionsProps {
+interface ThreadProps extends ActionsProps, EditorProps {
   thread: model.Thread;
   selectionFrame: presenters.ITypedSelection<model.StackFrame>;
 }
@@ -191,7 +195,12 @@ const ThreadPresenter: React.FC<ThreadProps> = props => {
   }, [props.thread]);
 
   return presenters.lazyMap(props.thread.lazyStackFrames, stackFrames => (
-    <StackFramesPresenter stackFrames={stackFrames} selectionFrame={props.selectionFrame} actions={props.actions} />
+    <StackFramesPresenter
+      stackFrames={stackFrames}
+      selectionFrame={props.selectionFrame}
+      actions={props.actions}
+      editor={props.editor}
+    />
   ));
 };
 
@@ -255,12 +264,98 @@ interface DebuggerPresenterProps extends ActionsProps, ExtensionProps {
   debuggee: model.Debuggee;
 }
 
+type HasDesignerData = Required<Pick<BaseSchema, '$designer'>>;
+
+const hasDesignerData = (item: unknown): item is HasDesignerData =>
+  typeof item === 'object' && item !== null && '$designer' in item;
+
+const same = (base: HasDesignerData, data: DesignerData) => base.$designer.id === data.id;
+
+const bindAction = (path: string, item: unknown, query: DesignerData): string | null => {
+  if (typeof item === 'object' && item !== null) {
+    for (const key in item) {
+      const actions = item[key];
+      if (Array.isArray(actions)) {
+        let index = 0;
+        for (const action of actions) {
+          const pathAction = `${path}.${key}[${index}]`;
+          if (hasDesignerData(action)) {
+            if (same(action, query)) {
+              return pathAction;
+            }
+          }
+
+          const pathRecurse = bindAction(pathAction, action, query);
+          if (pathRecurse !== null) {
+            return pathRecurse;
+          }
+
+          ++index;
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
+const bind = (shellData: ShellData, query: DesignerData): string | null => {
+  const { dialogId } = shellData;
+
+  const pathDialog = dialogId;
+
+  const dialog = (shellData.data as unknown) as MicrosoftAdaptiveDialog;
+
+  if (hasDesignerData(dialog)) {
+    if (same(dialog, query)) {
+      return pathDialog;
+    }
+  }
+
+  const { triggers } = dialog;
+  let triggerIndex = 0;
+  for (const trigger of triggers) {
+    const pathTrigger = `${pathDialog}?selected=triggers[${triggerIndex}]`;
+
+    if (hasDesignerData(trigger)) {
+      if (same(trigger, query)) {
+        return pathTrigger;
+      }
+    }
+
+    const pathAction = `${pathTrigger}&focused=triggers[${triggerIndex}]`;
+    const pathRecurse = bindAction(pathAction, trigger, query);
+    if (pathRecurse !== null) {
+      return pathRecurse;
+    }
+
+    ++triggerIndex;
+  }
+
+  return null;
+};
+
 export const DebuggerPresenter: React.FC<DebuggerPresenterProps> = props => {
   useDebugValue(props, p => p);
 
   const [selectedThread, selectionThread] = presenters.useSelection<model.Thread>(t => t.remote.id);
   const [selectedFrame, selectionFrame] = presenters.useSelection<model.StackFrame>(f => f.remote.id);
   const [selectedScope, selectionScope] = presenters.useSelection<model.Scope>(s => s.remote.variablesReference);
+
+  const editor: EditorProps['editor'] = {
+    tryNavigate: async (range: protocol.Range) => {
+      const { designer } = protocol.extensionFor(range);
+      if (designer !== null) {
+        const path = bind(props, designer);
+        if (path !== null) {
+          await props.shellApi.navTo(path);
+          return true;
+        }
+      }
+
+      return false;
+    },
+  };
 
   return (
     <>
@@ -272,7 +367,12 @@ export const DebuggerPresenter: React.FC<DebuggerPresenterProps> = props => {
           {presenters.bindSelected(model.bindThread, threads, selectedThread, thread => (
             <>
               <Separator alignContent="start">Stack Frames</Separator>
-              <ThreadPresenter thread={thread} selectionFrame={selectionFrame} actions={props.actions} />
+              <ThreadPresenter
+                thread={thread}
+                selectionFrame={selectionFrame}
+                actions={props.actions}
+                editor={editor}
+              />
 
               {presenters.lazyMap(thread.lazyStackFrames, stackFrames =>
                 presenters.bindSelected(model.bindStackFrame, stackFrames, selectedFrame, frame => (

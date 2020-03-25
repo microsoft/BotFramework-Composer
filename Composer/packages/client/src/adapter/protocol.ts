@@ -198,5 +198,6 @@ interface Extension {
   designer: DesignerData;
 }
 
-export const extensionFor = (range: DP.StackFrame | DP.Breakpoint): Nullable<Extension> =>
-  (range as unknown) as Nullable<Extension>;
+export type Range = DP.StackFrame | DP.Breakpoint;
+
+export const extensionFor = (range: Range): Nullable<Extension> => (range as unknown) as Nullable<Extension>;
