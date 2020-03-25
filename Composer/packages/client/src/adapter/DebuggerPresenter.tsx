@@ -189,8 +189,15 @@ interface ThreadProps extends ActionsProps, EditorProps {
 
 const ThreadPresenter: React.FC<ThreadProps> = props => {
   useEffect(() => {
-    if (props.thread.lazyStackFrames.local === 'pending') {
-      props.actions.stackTrace(props.thread.remote.id);
+    const { thread } = props;
+    const { lazyStackFrames } = thread;
+    if (lazyStackFrames.local === 'pending') {
+      props.actions.stackTrace(thread.remote.id);
+    } else if (lazyStackFrames.local === 'success') {
+      const { item } = lazyStackFrames;
+      if (item.length > 0) {
+        const _ = props.editor.tryNavigate(item[0].remote);
+      }
     }
   }, [props.thread]);
 
