@@ -140,6 +140,7 @@ const OneOfField: React.FC<FieldProps> = props => {
       </div>
       <Field
         {...props}
+        transparentBorder={false}
         schema={selectedSchema || {}}
         // allow object fields to render their labels
         label={selectedSchema?.type === 'object' ? undefined : false}
