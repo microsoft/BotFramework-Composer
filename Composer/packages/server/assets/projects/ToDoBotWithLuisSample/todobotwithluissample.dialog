@@ -78,6 +78,7 @@
         "id": "263959"
       },
       "intent": "Add",
+      "condition": "#Add.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -96,6 +97,7 @@
         "id": "100671"
       },
       "intent": "Delete",
+      "condition": "#Delete.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -114,6 +116,7 @@
         "id": "660567"
       },
       "intent": "View",
+      "condition": "#View.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -132,6 +135,7 @@
         "id": "802923"
       },
       "intent": "UserProfile",
+      "condition": "#UserProfile.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -150,6 +154,7 @@
         "id": "732966"
       },
       "intent": "whatCanYouDo",
+      "condition": "#whatCanYouDo.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.BeginDialog",
@@ -168,6 +173,7 @@
         "id": "683937"
       },
       "intent": "cancel",
+      "condition": "#cancel.Score > 0.8",
       "actions": [
         {
           "$type": "Microsoft.ConfirmInput",
