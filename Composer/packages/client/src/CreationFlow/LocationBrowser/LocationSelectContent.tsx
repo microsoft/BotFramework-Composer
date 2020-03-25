@@ -51,6 +51,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
         focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onSelectionChanged={onSelectionChanged}
+        platform={storages[currentStorageIndex.current].platform}
       />
     </Fragment>
   );

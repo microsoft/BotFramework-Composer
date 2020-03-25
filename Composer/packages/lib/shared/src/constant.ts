@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import formatMessage from 'format-message';
 
 export const SensitiveProperties = ['MicrosoftAppPassword', 'luis.authoringKey', 'luis.endpointKey'];
 export const FieldNames = {
@@ -11,5 +10,3 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
-
-export const thisPC = formatMessage('This PC');

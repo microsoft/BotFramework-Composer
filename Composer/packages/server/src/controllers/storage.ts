@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { thisPC } from '@bfc/shared';
 
 import StorageService from '../services/storage';
 import { PluginLoader } from '../services/pluginLoader';
@@ -30,7 +29,7 @@ async function getBlob(req: Request, res: Response) {
       throw new Error('path missing from query');
     }
     const reqpath = decodeURI(req.query.path);
-    if (!Path.isAbsolute(reqpath) && reqpath !== thisPC) {
+    if (!Path.isAbsolute(reqpath)) {
       throw new Error('path must be absolute');
     }
     res.status(200).json(await StorageService.getBlob(storageId, reqpath, user));
