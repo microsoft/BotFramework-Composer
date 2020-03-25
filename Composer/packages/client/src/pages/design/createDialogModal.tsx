@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FormEvent } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -36,7 +36,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const [formData, setFormData] = useState(initialFormData);
   const [hasErrors, setErrors] = useState(true);
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     setFormData({
       ...formData,
       [field]: newValue,
@@ -47,13 +47,11 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     if (name) {
       if (!nameRegex.test(name)) {
         setErrors(true);
-        return formatMessage(
-          'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-        );
+        return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
       }
       if (dialogs.some(dialog => dialog.id === name)) {
         setErrors(true);
-        return formatMessage('Duplicaton of dialog name');
+        return formatMessage('Duplicate dialog name');
       }
     } else {
       setErrors(true);
