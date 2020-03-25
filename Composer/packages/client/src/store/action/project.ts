@@ -31,7 +31,6 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 };
 
 export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
-  console.log(`send bot status action---------  ${status}`);
   dispatch({
     type: ActionTypes.UPDATE_BOTSTATUS,
     payload: status,
