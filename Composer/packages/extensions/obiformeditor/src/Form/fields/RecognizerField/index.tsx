@@ -60,7 +60,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
 
   let recognizers: (IRecognizerType | string)[] = [];
   if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
-    formData.recognizers[0].recognizers?.['en-us'].recognizers.forEach(recog => {
+    formData.recognizers[0].recognizers?.['en-us'].recognizers?.forEach(recog => {
       recognizers.push(recog);
     });
   } else {
