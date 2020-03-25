@@ -20,7 +20,7 @@ const { parse } = luIndexer;
 
 const { luParser, sectionOperator } = sectionHandler;
 
-const NEWLINE = '\n';
+const NEWLINE = '\r\n';
 
 export function isValid(diagnostics: any[]) {
   return diagnostics.every(item => {

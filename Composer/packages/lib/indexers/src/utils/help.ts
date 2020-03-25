@@ -13,7 +13,9 @@ export function splitNewlineText(text: string): string[] {
 
 // convert lines to \r\n text
 export function buildNewlineText(lineArray: string[]): string {
-  const lineArrayEndWithRN = lineArray.map(line => {
+  if (lineArray.length < 2) return lineArray.join('');
+  const lastLine = lineArray.pop();
+  const linesWithRN = lineArray.map(line => {
     if (line.endsWith('\r\n')) {
       return line;
     } else if (line.endsWith('\r')) {
@@ -22,5 +24,6 @@ export function buildNewlineText(lineArray: string[]): string {
       return line + '\r\n';
     }
   });
-  return lineArrayEndWithRN.join('');
+  const lastLineWithRN = lastLine && lastLine.endsWith('\r') ? lastLine + '\n' : lastLine;
+  return [...linesWithRN, lastLineWithRN].join('');
 }
