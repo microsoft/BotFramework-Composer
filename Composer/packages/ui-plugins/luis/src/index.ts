@@ -16,8 +16,8 @@ const config: PluginConfig = {
         return typeof data === 'string' && data.endsWith('.lu');
       },
       handleRecognizerChange: (props, shellData) => {
-        const { luFiles, currentDialog } = shellData;
-        const luFile = luFiles.find(f => f.id === currentDialog.id);
+        const { luFiles, currentDialog, locale } = shellData;
+        const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
         if (luFile) {
           props.onChange(`${luFile.id}.lu`);
