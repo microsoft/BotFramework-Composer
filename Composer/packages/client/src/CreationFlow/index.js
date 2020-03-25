@@ -34,6 +34,7 @@ export function CreationFlow(props) {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+  const [currentPath, setCurrentPath] = useState('');
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -47,6 +48,9 @@ export function CreationFlow(props) {
     const allFilesInFolder = get(focusedStorageFolder, 'children', []);
 
     setFiles(allFilesInFolder);
+    if (Object.keys(focusedStorageFolder).length) {
+      setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
+    }
   }, [focusedStorageFolder]);
 
   useEffect(() => {
@@ -143,6 +147,7 @@ export function CreationFlow(props) {
           onOpen={openBot}
           onDismiss={handleDismiss}
           focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
           onCurrentPathUpdate={updateCurrentPath}
         />
       ),
@@ -155,6 +160,7 @@ export function CreationFlow(props) {
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
+          currentPath={currentPath}
           files={files}
         />
       ),
