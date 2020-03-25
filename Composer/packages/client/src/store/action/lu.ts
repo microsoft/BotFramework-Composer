@@ -128,6 +128,6 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       type: ActionTypes.PUBLISH_LU_FAILED,
       payload: { title: Text.LUISDEPLOYFAILURE, message: err.response.data.message },
     });
-    console.error(err.response.data.message);
+    throw new Error(err.response.data.message);
   }
 };
