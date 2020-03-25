@@ -2,9 +2,7 @@
 // Licensed under the MIT License.
 
 import React, { Fragment, useDebugValue, useEffect, useState } from 'react';
-import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DetailsList, CheckboxVisibility, IDetailsListProps } from 'office-ui-fabric-react/lib/DetailsList';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { SelectionMode } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Text } from 'office-ui-fabric-react/lib/Text';
@@ -253,11 +251,7 @@ export interface ExtensionProps extends ShellData {
   shellApi: ShellApi;
 }
 
-export interface DebuggerExternalProps {
-  onAbort?: () => void;
-}
-
-interface DebuggerPresenterProps extends ActionsProps, DebuggerExternalProps, ExtensionProps {
+interface DebuggerPresenterProps extends ActionsProps, ExtensionProps {
   debuggee: model.Debuggee;
 }
 
@@ -269,61 +263,43 @@ export const DebuggerPresenter: React.FC<DebuggerPresenterProps> = props => {
   const [selectedScope, selectionScope] = presenters.useSelection<model.Scope>(s => s.remote.variablesReference);
 
   return (
-    <Dialog
-      hidden={false}
-      type={DialogType.normal}
-      onDismiss={props.onAbort}
-      dialogContentProps={{
-        title: formatMessage('Ugly Debugger UI'),
-      }}
-      modalProps={{
-        isBlocking: false,
-        dragOptions: {
-          moveMenuItemText: formatMessage('Move'),
-          closeMenuItemText: formatMessage('Close'),
-          menu: ContextualMenu,
-        },
-      }}
-      maxWidth="70%"
-    >
-      <>
-        {presenters.lazyMap(props.debuggee.lazyThreads, threads => (
-          <>
-            <Separator alignContent="start">Threads</Separator>
-            <ThreadsPresenter threads={threads} selectionThread={selectionThread} actions={props.actions} />
+    <>
+      {presenters.lazyMap(props.debuggee.lazyThreads, threads => (
+        <>
+          <Separator alignContent="start">Threads</Separator>
+          <ThreadsPresenter threads={threads} selectionThread={selectionThread} actions={props.actions} />
 
-            {presenters.bindSelected(model.bindThread, threads, selectedThread, thread => (
-              <>
-                <Separator alignContent="start">Stack Frames</Separator>
-                <ThreadPresenter thread={thread} selectionFrame={selectionFrame} actions={props.actions} />
+          {presenters.bindSelected(model.bindThread, threads, selectedThread, thread => (
+            <>
+              <Separator alignContent="start">Stack Frames</Separator>
+              <ThreadPresenter thread={thread} selectionFrame={selectionFrame} actions={props.actions} />
 
-                {presenters.lazyMap(thread.lazyStackFrames, stackFrames =>
-                  presenters.bindSelected(model.bindStackFrame, stackFrames, selectedFrame, frame => (
-                    <>
-                      <Separator alignContent="start">Scopes</Separator>
-                      <StackFramePresenter stackFrame={frame} selectionScope={selectionScope} actions={props.actions} />
+              {presenters.lazyMap(thread.lazyStackFrames, stackFrames =>
+                presenters.bindSelected(model.bindStackFrame, stackFrames, selectedFrame, frame => (
+                  <>
+                    <Separator alignContent="start">Scopes</Separator>
+                    <StackFramePresenter stackFrame={frame} selectionScope={selectionScope} actions={props.actions} />
 
-                      {presenters.lazyMap(frame.lazyScopes, scopes =>
-                        presenters.bindSelected(model.bindScope, scopes, selectedScope, scope => (
-                          <>
-                            <Separator alignContent="start">Selected Scope {scope.remote.name}</Separator>
-                            <VariablePresenter variable={scope} actions={props.actions} />
-                          </>
-                        ))
-                      )}
-                    </>
-                  ))
-                )}
-              </>
-            ))}
+                    {presenters.lazyMap(frame.lazyScopes, scopes =>
+                      presenters.bindSelected(model.bindScope, scopes, selectedScope, scope => (
+                        <>
+                          <Separator alignContent="start">Selected Scope {scope.remote.name}</Separator>
+                          <VariablePresenter variable={scope} actions={props.actions} />
+                        </>
+                      ))
+                    )}
+                  </>
+                ))
+              )}
+            </>
+          ))}
 
-            <Separator alignContent="start">Debug Output</Separator>
-            <OutputsPresenter outputs={props.debuggee.outputs} actions={props.actions} />
-          </>
-        ))}
-        <Separator alignContent="start">Debug Spew</Separator>
-        <Text>{JSON.stringify(props, null, 4)}</Text>
-      </>
-    </Dialog>
+          <Separator alignContent="start">Debug Output</Separator>
+          <OutputsPresenter outputs={props.debuggee.outputs} actions={props.actions} />
+        </>
+      ))}
+      <Separator alignContent="start">Debug Spew</Separator>
+      <Text>{JSON.stringify(props, null, 4)}</Text>
+    </>
   );
 };
