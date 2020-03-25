@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.IO;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -77,10 +78,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
 
-            var botFile = Configuration.GetSection("bot").Get<string>();
+            var botDir = Configuration.GetSection("bot").Get<string>();
 
             // manage all bot resources
-            var resourceExplorer = new ResourceExplorer().AddFolder(botFile);
+            var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
+            var rootDialog = GetRootDialog(botDir);
 
             services.AddSingleton(userState);
             services.AddSingleton(conversationState);
@@ -113,7 +115,14 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 return adapter;
             });
 
-            services.AddSingleton<IBot, ComposerBot>();
+            services.AddSingleton<IBot>(s =>
+                new ComposerBot(
+                    s.GetService<ConversationState>(),
+                    s.GetService<UserState>(),
+                    s.GetService<ResourceExplorer>(),
+                    s.GetService<BotFrameworkClient>(),
+                    s.GetService<SkillConversationIdFactoryBase>(),
+                    rootDialog));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,6 +137,20 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                {
                    endpoints.MapControllers();
                });
+        }
+
+        private string GetRootDialog(string folderPath)
+        {
+            var dir = new DirectoryInfo(folderPath);
+            foreach (var f in dir.GetFiles())
+            {
+                if (f.Extension == ".dialog")
+                {
+                    return f.Name;
+                }
+            }
+
+            throw new Exception($"Can't locate root dialog in {dir.FullName}");
         }
     }
 }
