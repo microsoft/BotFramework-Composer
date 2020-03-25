@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FieldProps } from '@bfc/extension';
 
 import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
@@ -17,6 +17,7 @@ const schemaField = {
   `,
   field: css`
     width: 100%;
+    label: SchemaField;
   `,
 };
 
@@ -31,6 +32,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
+    transparentBorder,
   } = props;
   const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
@@ -68,12 +70,17 @@ const SchemaField: React.FC<FieldProps> = props => {
     onChange: handleChange,
   };
 
+  const Wrapper = useMemo(
+    () => (!hideError && error ? ({ children }) => <div css={schemaField.field}>{children}</div> : React.Fragment),
+    [error, hideError]
+  );
+
   return (
     <div className={className} css={schemaField.container(props.depth)}>
-      <div css={schemaField.field}>
+      <Wrapper>
         <FieldWidget {...fieldProps} />
         {!hideError && error}
-      </div>
+      </Wrapper>
     </div>
   );
 };
