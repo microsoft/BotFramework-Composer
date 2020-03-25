@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FieldProps } from '@bfc/extension';
 
 import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
@@ -42,11 +42,6 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
-  const ErrorWrapper = useMemo(
-    () => (!hideError && error ? ({ children }) => <div css={schemaField.field}>{children}</div> : React.Fragment),
-    [error, hideError]
-  );
-
   if (!schema || name.startsWith('$')) {
     return null;
   }
@@ -76,10 +71,14 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   return (
     <div className={className} css={schemaField.container(props.depth)}>
-      <ErrorWrapper>
+      {error && !hideError ? (
+        <div>
+          <FieldWidget {...fieldProps} />
+          {error}
+        </div>
+      ) : (
         <FieldWidget {...fieldProps} />
-        {!hideError && error}
-      </ErrorWrapper>
+      )}
     </div>
   );
 };
