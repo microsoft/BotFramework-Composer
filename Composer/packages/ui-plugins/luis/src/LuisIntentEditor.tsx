@@ -9,8 +9,8 @@ import { LuIntentSection } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
-  const { currentDialog, designerId, luFiles, shellApi } = useShellApi();
-  const luFile = luFiles.find(f => f.id === currentDialog.id);
+  const { currentDialog, designerId, luFiles, shellApi, locale } = useShellApi();
+  const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
   if (typeof intentName === 'object') {
