@@ -31,7 +31,7 @@ import {
   getMessageTypes,
   regexRecognizerKey,
   ValueRecognizerKey,
-  recognizerTypes,
+  recognizerTemplates,
   LuisRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
@@ -121,12 +121,27 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isValue = formData.recognizerType === ValueRecognizerKey;
   const isLUIS = formData.recognizerType === LuisRecognizerKey;
-  const validRecognizerTypes = get(
+  const currentRecognizerTypes = get(
     dialogFile,
     `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`,
     []
-  ).map(r => r.$type);
-  validRecognizerTypes.push(ValueRecognizerKey);
+  );
+
+  const generateValidRecognizerTypes = () => {
+    const res = [ValueRecognizerKey];
+    currentRecognizerTypes.forEach(element => {
+      if (element === `${dialogId}.lu`) {
+        res.push(LuisRecognizerKey);
+      }
+      if (element.$type === regexRecognizerKey) {
+        res.push(regexRecognizerKey);
+      }
+    });
+    return res;
+  };
+
+  const validRecognizerTypes = generateValidRecognizerTypes();
+
   const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(formData, isRegEx, isLUIS, regexIntents);
@@ -226,7 +241,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           />
           {formData.$type === intentTypeKey && (
             <Pivot data-testid="triggerRecognizerType" onLinkClick={onChangeRecognizerType}>
-              {recognizerTypes.map(r => (
+              {recognizerTemplates.map(r => (
                 <PivotItem
                   ariaLabel={r.text}
                   headerText={r.text}
