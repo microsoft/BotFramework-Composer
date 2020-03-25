@@ -11,7 +11,7 @@ import { ImportResolverDelegate } from 'botbuilder-lg';
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getFileName, getBaseName } from '../../utils';
+import { getExtension, getFileName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -147,13 +147,13 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     return lgFile;
   });
   const lgImportresolver: ImportResolverDelegate = function(source: string, id: string) {
-    const locale = getExtension(source);
-    const targetFileName = getFileName(id);
-    let targetFileId = getBaseName(targetFileName);
-    if (locale) {
-      targetFileId += `.${locale}`;
-    }
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
+    const sourceId = getFileName(source).replace(/\.lg$/, '');
+    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
+    const targetId = getFileName(id).replace(/\.lg$/, '');
+
+    const targetFile =
+      lgFiles.find(({ id }) => id === `${targetId}.${locale}`) || lgFiles.find(({ id }) => id === targetId);
+
     if (!targetFile) throw new Error(`file not found`);
     return { id, content: targetFile.content };
   };

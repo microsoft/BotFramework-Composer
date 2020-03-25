@@ -528,18 +528,20 @@ export class BotProject {
    *  in todosample.en-us.lg:
    *   [import](../common/common.lg)
    *
-   *  resolve to common.en-us.lg
+   *  resolve to common.en-us.lg || common.lg
    *
-   *  source = todosample.en-us  || AddToDo
-   *  id = ../common/common.lg  || common.lg || common
+   *  source =  todosample || todosample.en-us || todosample.en-us.lg || todosample.lg
+   *  id =   common || common.lg || ../common/common.lg
+   *
    */
   private _lgImportResolver = (source: string, id: string) => {
-    const locale = source.split('.').length > 1 ? source.split('.').pop() : '';
-    let targetId = Path.basename(id, '.lg');
-    if (locale) {
-      targetId += `.${locale}`;
-    }
-    const targetFile = this.lgFiles.find(({ id }) => id === targetId);
+    const sourceId = Path.basename(source, '.lg');
+    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : this.locale;
+    const targetId = Path.basename(id, '.lg');
+
+    const targetFile =
+      this.files.find(({ name }) => name === `${targetId}.${locale}.lg`) ||
+      this.files.find(({ name }) => name === `${targetId}.lg`);
     if (!targetFile) throw new Error('file not found');
     return {
       id,

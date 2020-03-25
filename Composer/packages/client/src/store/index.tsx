@@ -7,7 +7,7 @@ import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 import { LgFile, LuFile } from '@bfc/indexers';
 
 import { prepareAxios } from '../utils/auth';
-import { getFileName, getBaseName, getExtension } from '../utils/fileUtil';
+import { getFileName } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -122,13 +122,13 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     dispatch: interceptDispatch,
     resolvers: {
       lgImportresolver: function(source: string, id: string) {
-        const locale = getExtension(source);
-        const targetFileName = getFileName(id);
-        let targetFileId = getBaseName(targetFileName);
-        if (locale) {
-          targetFileId += `.${locale}`;
-        }
-        const targetFile = getState().lgFiles.find(({ id }) => id === targetFileId);
+        const sourceId = getFileName(source).replace(/\.lg$/, '');
+        const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
+        const targetId = getFileName(id).replace(/\.lg$/, '');
+
+        const targetFile =
+          getState().lgFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
+          getState().lgFiles.find(({ id }) => id === targetId);
         if (!targetFile) throw new Error(`${id} lg file not found`);
         return { id, content: targetFile.content };
       } as ImportResolverDelegate,

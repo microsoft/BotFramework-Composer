@@ -35,14 +35,18 @@ export class BotProjectService {
 
   public static lgImportResolver(source: string, id: string, projectId: string): TextFile {
     BotProjectService.initialize();
-    let targetId = Path.basename(id, '.lg');
-    if (targetId.lastIndexOf('.') === -1) {
-      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
-      targetId += `.${locale}`;
-    }
-    const targetFile = BotProjectService.currentBotProjects
-      .find(({ id }) => id === projectId)
-      ?.lgFiles.find(({ id }) => id === targetId);
+    const sourceId = Path.basename(source, '.lg');
+    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
+    const targetId = Path.basename(id, '.lg');
+
+    const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+
+    if (!project) throw new Error('project not found');
+
+    const targetFile =
+      project.lgFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
+      project.lgFiles.find(({ id }) => id === targetId);
+
     if (!targetFile) throw new Error('lg file not found');
     return {
       id,
@@ -52,14 +56,18 @@ export class BotProjectService {
 
   public static luImportResolver(source: string, id: string, projectId: string): any {
     BotProjectService.initialize();
-    let targetId = Path.basename(id, '.lu');
-    if (targetId.lastIndexOf('.') === -1) {
-      const locale = source.lastIndexOf('.') > 0 ? source.split('.').pop() : 'en-us';
-      targetId += `.${locale}`;
-    }
-    const targetFile = BotProjectService.currentBotProjects
-      .find(({ id }) => id === projectId)
-      ?.luFiles.find(({ id }) => id === targetId);
+    const sourceId = Path.basename(source, '.lu');
+    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
+    const targetId = Path.basename(id, '.lu');
+
+    const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+
+    if (!project) throw new Error('project not found');
+
+    const targetFile =
+      project.luFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
+      project.luFiles.find(({ id }) => id === targetId);
+
     if (!targetFile) throw new Error('lu file not found');
     return {
       id,
