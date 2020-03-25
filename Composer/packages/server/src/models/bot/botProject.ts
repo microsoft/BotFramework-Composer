@@ -933,10 +933,7 @@ export class BotProject {
 
   private isReferred = (LUFile: LuFile) => {
     const dialogs = this.dialogs;
-    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
-      return true;
-    }
-    return false;
+    return !!~dialogs.findIndex(dialog => dialog.luFile === Path.basename(LUFile.id, `.${this.locale}`));
   };
 
   private generateErrorMessage = (invalidLuFile: LuFile[]) => {
