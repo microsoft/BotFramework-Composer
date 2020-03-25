@@ -27,7 +27,6 @@ import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { DebuggerContainer } from '../../adapter/DebuggerContainer';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -397,7 +396,8 @@ function DesignPage(props) {
                   src={`${rootPath}/extensionContainer.html`}
                 />
               </div>
-              {debugging ? <DebuggerContainer onAbort={() => setDebugging(false)} /> : null}
+
+              {debugging ? <iframe key="Debugger" name="Debugger" src={`${rootPath}/extensionContainer.html`} /> : null}
             </Fragment>
           </Conversation>
         </div>

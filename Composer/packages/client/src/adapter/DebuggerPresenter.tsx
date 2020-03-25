@@ -9,7 +9,7 @@ import { SelectionMode } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import formatMessage from 'format-message';
-import { DesignerData } from '@bfc/shared';
+import { DesignerData, ShellData, ShellApi } from '@bfc/shared';
 
 import * as model from './model';
 import * as protocol from './protocol';
@@ -248,10 +248,16 @@ const ThreadsPresenter: React.FC<ThreadsProps> = props => {
   );
 };
 
-export interface DebuggerExternalProps {
-  onAbort: () => void;
+export interface ExtensionProps extends ShellData {
+  onChange: (newData: object, updatePath?: string) => void;
+  shellApi: ShellApi;
 }
-interface DebuggerPresenterProps extends DebuggerExternalProps, ActionsProps {
+
+export interface DebuggerExternalProps {
+  onAbort?: () => void;
+}
+
+interface DebuggerPresenterProps extends ActionsProps, DebuggerExternalProps, ExtensionProps {
   debuggee: model.Debuggee;
 }
 

@@ -25,6 +25,7 @@ const apiClient = new ApiClient();
 
 const VISUAL_EDITOR = 'VisualEditor';
 const FORM_EDITOR = 'FormEditor';
+const DEBUGGER = 'Debugger';
 
 const isEventSourceValid = event => {
   const sourceWindowName = event.source.name;
@@ -72,8 +73,9 @@ export const ShellApi: React.FC = () => {
       return getDialogData(dialogsMap, dialogId);
     } else if (sourceWindow === FORM_EDITOR && focusPath !== '') {
       return getDialogData(dialogsMap, dialogId, focused || selected || '');
+    } else if (sourceWindow === DEBUGGER && dialogId !== '') {
+      return getDialogData(dialogsMap, dialogId);
     }
-
     return '';
   }
 

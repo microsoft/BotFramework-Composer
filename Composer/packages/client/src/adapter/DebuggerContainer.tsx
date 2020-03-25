@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch: redux.Dispatch<protocol.Action>): presente
 
 const Presenter = connect(mapStateToProps, mapDispatchToProps)(presenter.DebuggerPresenter);
 
-export type DebuggerContainerProps = presenter.DebuggerExternalProps;
+export interface DebuggerContainerProps extends presenter.ExtensionProps, presenter.DebuggerExternalProps {}
 
 export const DebuggerContainer: React.FC<DebuggerContainerProps> = props => {
   const ws = useWebSocket();
@@ -86,7 +86,7 @@ export const DebuggerContainer: React.FC<DebuggerContainerProps> = props => {
 
   return (
     <Provider store={store}>
-      <Presenter onAbort={props.onAbort} />
+      <Presenter {...props} />
     </Provider>
   );
 };
