@@ -80,6 +80,17 @@ describe('resolveFieldWidget', () => {
     });
   });
 
+  describe('type: any[]', () => {
+    it('returns OneOfField', () => {
+      const schema = {
+        type: ['string', 'number', 'boolean'],
+      };
+
+      // @ts-ignore
+      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OneOfField);
+    });
+  });
+
   describe('type: string', () => {
     it('returns StringField', () => {
       const schema = {

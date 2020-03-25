@@ -36,7 +36,7 @@ export function resolveFieldWidget(
       }
     }
 
-    if (schema.oneOf && Array.isArray(schema.oneOf)) {
+    if ((schema.oneOf && Array.isArray(schema.oneOf)) || Array.isArray(schema.type)) {
       return DefaultFields.OneOfField;
     }
 

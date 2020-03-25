@@ -128,7 +128,10 @@ const ExpressionField: React.FC<FieldProps> = props => {
   const pluginConfig = usePluginConfig();
 
   const options = useMemo(() => getOptions(expressionSchema, definitions), []);
-  const initialSelectedOption = useMemo(() => getSelectedOption(value, options) || ({} as IDropdownOption), []);
+  const initialSelectedOption = useMemo(
+    () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
+    []
+  );
 
   const [
     {

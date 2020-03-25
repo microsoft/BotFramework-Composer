@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useEffect } from 'react';
-import { FieldProps, JSONSchema7 } from '@bfc/extension';
+import React, { useState, useMemo } from 'react';
+import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 import { resolveRef, resolveFieldWidget } from '../../utils';
@@ -13,44 +14,105 @@ import { usePluginConfig } from '../../hooks';
 
 import { oneOfField } from './styles';
 
-const OneOfField: React.FC<FieldProps> = props => {
-  const { schema, value } = props;
-  const [selectedSchema, setSelectedSchema] = useState<JSONSchema7 | null>(null);
-  const pluginConfig = usePluginConfig();
+const getOptions = (schema: JSONSchema7, definitions?: { [key: string]: JSONSchema7Definition }): IDropdownOption[] => {
+  const { type, oneOf } = schema;
 
-  const oneOf = schema.oneOf;
-  const options =
-    oneOf &&
-    (oneOf
+  if (type && Array.isArray(type)) {
+    const options: IDropdownOption[] = type.map(t => ({
+      key: t,
+      text: t,
+      data: { schema: { ...schema, type: t } },
+    }));
+
+    options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
+
+    return options;
+  }
+
+  if (oneOf && Array.isArray(oneOf)) {
+    return oneOf
       .map(s => {
         if (typeof s === 'object') {
-          const resolved = resolveRef(s, props.definitions);
+          const resolved = resolveRef(s, definitions);
 
           return {
-            key: resolved.type as React.ReactText,
-            text: resolved.title || resolved.type,
+            key: resolved.title?.toLowerCase() || resolved.type,
+            text: resolved.title?.toLowerCase() || resolved.type,
             data: { schema: resolved },
           } as IDropdownOption;
         }
       })
-      .filter(Boolean) as IDropdownOption[]);
+      .filter(Boolean) as IDropdownOption[];
+  }
 
-  useEffect(() => {
-    if (options) {
-      if (!value) {
-        setSelectedSchema(options[0].data.schema);
-      } else {
-        const selected = options.find(o => typeof value === o.key);
-        setSelectedSchema(selected?.data.schema || options[0].data.schema);
-      }
+  return [];
+};
+
+const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined => {
+  if (options.length === 0) {
+    return;
+  }
+
+  const valueType = Array.isArray(value) ? 'array' : typeof value;
+
+  if (valueType === 'array') {
+    const item = value[0];
+    const firstArrayOption = options.find(o => o.data.schema.type === 'array');
+
+    // if there is nothing in the array, default to the first array type
+    if (!item) {
+      return firstArrayOption;
     }
-  }, []);
+
+    // else, find the option with an item schema that matches item type
+    return (
+      options.find(o => {
+        const {
+          data: { schema },
+        } = o;
+
+        const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
+        return itemSchema && typeof item === itemSchema.type;
+      }) || firstArrayOption
+    );
+  }
+
+  // if the value if undefined, default to the first option
+  if (!value) {
+    return options[0];
+  }
+
+  // lastly, attempt to find the option based on value type
+  return options.find(({ data }) => data.schema.type === valueType) || options[0];
+};
+
+const OneOfField: React.FC<FieldProps> = props => {
+  const { schema, value, definitions } = props;
+  const pluginConfig = usePluginConfig();
+  const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
+  const initialSelectedOption = useMemo(
+    () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
+    []
+  );
+
+  const [
+    {
+      key: selectedKey,
+      data: { schema: selectedSchema },
+    },
+    setSelectedOption,
+  ] = useState<IDropdownOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
-      setSelectedSchema(option.data.schema);
+      setSelectedOption(option);
       props.onChange(undefined);
     }
+  };
+
+  const renderTypeTitle = (options?: IDropdownOption[]) => {
+    const option = options && options[0];
+    return option ? <React.Fragment>{option.text}</React.Fragment> : null;
   };
 
   const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, pluginConfig);
@@ -59,22 +121,30 @@ const OneOfField: React.FC<FieldProps> = props => {
     <React.Fragment>
       <div css={oneOfField.label}>
         <FieldLabel {...props} />
-        {options && (
+        {options && options.length > 1 && (
           <Dropdown
             id={`${props.id}-oneOf`}
             options={options}
             responsiveMode={ResponsiveMode.large}
-            selectedKey={selectedSchema?.type}
+            selectedKey={selectedKey}
             onChange={handleTypeChange}
+            onRenderTitle={renderTypeTitle}
             styles={{
               caretDownWrapper: { height: '24px', lineHeight: '24px' },
-              root: { padding: '7px 0', width: '130px' },
+              root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
               title: { height: '24px', lineHeight: '20px' },
             }}
+            ariaLabel={formatMessage('select property type')}
           />
         )}
       </div>
-      <Field {...props} schema={selectedSchema || {}} label={false} depth={props.depth - 1} />
+      <Field
+        {...props}
+        schema={selectedSchema || {}}
+        // allow object fields to render their labels
+        label={selectedSchema?.type === 'object' ? undefined : false}
+        depth={props.depth - 1}
+      />
     </React.Fragment>
   );
 };
