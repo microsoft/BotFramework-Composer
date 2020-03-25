@@ -16,8 +16,15 @@ import { RegexEditorWidget } from './RegexEditorWidget';
 import { WidgetLabel } from './WidgetLabel';
 
 function recognizerType({ content }: DialogInfo): SDKTypes[] {
-  const recognizers: IRecognizerType[] = content.recognizer.recognizers[0].recognizers?.['en-us'].recognizers || [];
-  return recognizers.map(recog => recog.$type);
+  const recognizers: (IRecognizerType | string)[] =
+    content.recognizer.recognizers[0].recognizers?.['en-us'].recognizers || [];
+  return recognizers.map(recog => {
+    if (typeof recog === 'string') {
+      return SDKTypes.LuisRecognizer;
+    } else {
+      return recog.$type;
+    }
+  });
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {

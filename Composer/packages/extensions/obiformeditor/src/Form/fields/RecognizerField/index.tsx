@@ -58,7 +58,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     onChange,
   } = props;
 
-  let recognizers: IRecognizerType[] = [];
+  let recognizers: (IRecognizerType | string)[] = [];
   if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
     formData.recognizers[0].recognizers?.['en-us'].recognizers.forEach(recog => {
       recognizers.push(recog);
@@ -73,7 +73,12 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
   const selectedFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
   const [checkOptions, setCheckOptions] = useState(
     defaultOptions.map(opt => {
-      if (recognizers.find(recog => recog.id === opt.id)) {
+      if (
+        recognizers.find(
+          recog =>
+            (typeof recog === 'string' && opt.id === 'luis') || (typeof recog === 'object' && recog.id === opt.id)
+        )
+      ) {
         opt.checked = true;
       }
       return opt;
@@ -93,10 +98,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
       case 'luis': {
         if (checked) {
           if (selectedFile) {
-            recognizers.push({
-              $type: SDKTypes.LuisRecognizer,
-              id: 'luis',
-            });
+            recognizers.push(`${currentDialogId}.lu`);
           } else {
             const { createLuFile } = shellApi;
 
@@ -108,14 +110,11 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
              * This is a hack, but dialogs will be created along with
              * lu and lg files so this code path shouldn't be executed.
              */
-            recognizers.push({
-              $type: SDKTypes.LuisRecognizer,
-              id: 'luis',
-            });
+            recognizers.push(`${currentDialogId}.lu`);
             createLuFile(currentDialogId);
           }
         } else {
-          recognizers = recognizers.filter(recog => recog.id !== 'luis');
+          recognizers = recognizers.filter(recog => typeof recog !== 'string');
         }
         break;
       }
@@ -126,7 +125,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
             id: 'regex',
           });
         } else {
-          recognizers = recognizers.filter(recog => recog.id !== 'regex');
+          recognizers = recognizers.filter(recog => !(typeof recog === 'object' && recog.id === 'regex'));
         }
         break;
       }
