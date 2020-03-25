@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useState, Fragment, useEffect, useContext, useRef } from 'react';
+import React, { useState, Fragment, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -26,7 +26,6 @@ interface FormData {
 
 interface FormDataError {
   name?: string;
-  location?: string;
 }
 
 interface Files {
@@ -37,21 +36,20 @@ interface Files {
 interface DefineConversationProps {
   onSubmit: (formData: FormData) => void;
   onDismiss: () => void;
-  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  focusedStorageFolder: StorageFolder;
+  focusedStorageFolder?: StorageFolder;
+  currentPath?: string;
   files?: Files[];
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, files } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, currentPath, files } = props;
   const { state } = useContext(StoreContext);
-  const { templateId, storages } = state;
-  const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
-  const currentStorageIndex = useRef(0);
-  const platform = storages[currentStorageIndex.current].platform;
+  const { templateId } = state;
+
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -83,10 +81,8 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
   const validateForm = (data: FormData) => {
     const errors: FormDataError = {};
-    const { name, location } = data;
-    if (location === '/' && platform === 'win32') {
-      errors.location = formatMessage('Cannot save bot here');
-    }
+    const { name } = data;
+
     if (!name || !nameRegex.test(name)) {
       errors.name = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
@@ -161,7 +157,13 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
             />
           </StackItem>
         </Stack>
-        <LocationSelectContent onCurrentPathUpdate={onCurrentPathUpdate} focusedStorageFolder={focusedStorageFolder} />
+        {focusedStorageFolder && onCurrentPathUpdate && currentPath && (
+          <LocationSelectContent
+            onCurrentPathUpdate={onCurrentPathUpdate}
+            focusedStorageFolder={focusedStorageFolder}
+            currentPath={currentPath}
+          />
+        )}
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
