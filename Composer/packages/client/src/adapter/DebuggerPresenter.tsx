@@ -9,17 +9,18 @@ import { SelectionMode } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import formatMessage from 'format-message';
+import { DesignerData } from '@bfc/shared';
 
 import * as model from './model';
 import * as protocol from './protocol';
 import * as presenters from './presenters';
 import * as actions from './actions';
 
-export type Actions = {
+export type ActionsProps = {
   actions: typeof actions;
 };
 
-interface OutputsProps extends Actions {
+interface OutputsProps extends ActionsProps {
   outputs: ReadonlyArray<model.Output>;
 }
 
@@ -52,11 +53,11 @@ const OutputsPresenter: React.FC<OutputsProps> = props => {
   );
 };
 
-interface VariablesProps extends Actions {
+interface VariablesProps extends ActionsProps {
   variables: ReadonlyArray<model.Variable>;
 }
 
-interface RowProps extends Actions {
+interface RowProps extends ActionsProps {
   variable: model.Variable;
 }
 
@@ -91,7 +92,7 @@ const VariablesPresenter: React.FC<VariablesProps> = props => {
   );
 };
 
-interface VariableProps extends Actions {
+interface VariableProps extends ActionsProps {
   variable: model.Variable | model.Scope;
 }
 
@@ -107,7 +108,7 @@ const VariablePresenter: React.FC<VariableProps> = props => {
   ));
 };
 
-interface ScopesProps extends Actions {
+interface ScopesProps extends ActionsProps {
   scopes: ReadonlyArray<model.Scope>;
   selectionScope: presenters.ITypedSelection<model.Scope>;
 }
@@ -128,7 +129,7 @@ const ScopesPresenter: React.FC<ScopesProps> = props => {
   );
 };
 
-interface StackFrameProps extends Actions {
+interface StackFrameProps extends ActionsProps {
   stackFrame: model.StackFrame;
   selectionScope: presenters.ITypedSelection<model.Scope>;
 }
@@ -145,7 +146,7 @@ const StackFramePresenter: React.FC<StackFrameProps> = props => {
   ));
 };
 
-interface StackFramesProps extends Actions {
+interface StackFramesProps extends ActionsProps {
   stackFrames: ReadonlyArray<model.StackFrame>;
   selectionFrame: presenters.ITypedSelection<model.StackFrame>;
 }
@@ -158,7 +159,14 @@ const StackFramesPresenter: React.FC<StackFramesProps> = props => {
     presenters.buildColumn<Item>('name', ({ remote }) => remote.name),
     presenters.buildColumn<Item>('item', ({ remote }) => protocol.extensionFor(remote).item),
     presenters.buildColumn<Item>('more', ({ remote }) => protocol.extensionFor(remote).more),
+    presenters.buildColumn<Item>('designer', ({ remote }) => protocol.extensionFor(remote).designer?.id),
   ];
+
+  const onItemInvoked = (item: Item) => {
+    const { designer } = protocol.extensionFor(item.remote);
+    const x: DesignerData | null = designer;
+    x;
+  };
 
   return (
     <DetailsList
@@ -166,12 +174,13 @@ const StackFramesPresenter: React.FC<StackFramesProps> = props => {
       columns={columns}
       getKey={columns[0].getKey}
       selection={props.selectionFrame}
+      onItemInvoked={onItemInvoked}
       {...detailsListAttributes}
     />
   );
 };
 
-interface ThreadProps extends Actions {
+interface ThreadProps extends ActionsProps {
   thread: model.Thread;
   selectionFrame: presenters.ITypedSelection<model.StackFrame>;
 }
@@ -188,7 +197,7 @@ const ThreadPresenter: React.FC<ThreadProps> = props => {
   ));
 };
 
-interface ThreadsProps extends Actions {
+interface ThreadsProps extends ActionsProps {
   threads: ReadonlyArray<model.Thread>;
   selectionThread: presenters.ITypedSelection<model.Thread>;
 }
@@ -239,9 +248,11 @@ const ThreadsPresenter: React.FC<ThreadsProps> = props => {
   );
 };
 
-interface DebuggerPresenterProps extends Actions {
-  debuggee: model.Debuggee;
+export interface DebuggerExternalProps {
   onAbort: () => void;
+}
+interface DebuggerPresenterProps extends DebuggerExternalProps, ActionsProps {
+  debuggee: model.Debuggee;
 }
 
 export const DebuggerPresenter: React.FC<DebuggerPresenterProps> = props => {

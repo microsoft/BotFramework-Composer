@@ -72,15 +72,13 @@ const mapStateToProps = (debuggee: model.Debuggee) => ({
   debuggee,
 });
 
-const mapDispatchToProps = (dispatch: redux.Dispatch<protocol.Action>): presenter.Actions => ({
+const mapDispatchToProps = (dispatch: redux.Dispatch<protocol.Action>): presenter.ActionsProps => ({
   actions: redux.bindActionCreators(actions, dispatch),
 });
 
 const Presenter = connect(mapStateToProps, mapDispatchToProps)(presenter.DebuggerPresenter);
 
-export type DebuggerContainerProps = {
-  onAbort: () => void;
-};
+export type DebuggerContainerProps = presenter.DebuggerExternalProps;
 
 export const DebuggerContainer: React.FC<DebuggerContainerProps> = props => {
   const ws = useWebSocket();
