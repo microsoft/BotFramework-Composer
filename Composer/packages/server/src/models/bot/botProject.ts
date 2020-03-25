@@ -931,12 +931,13 @@ export class BotProject {
     return true;
   };
 
+  private removeLocale(id: string): string {
+    return id.substring(0, id.lastIndexOf('.')) || id;
+  }
+
   private isReferred = (LUFile: LuFile) => {
     const dialogs = this.dialogs;
-    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
-      return true;
-    }
-    return false;
+    return !!~dialogs.findIndex(dialog => dialog.luFile === this.removeLocale(LUFile.id));
   };
 
   private generateErrorMessage = (invalidLuFile: LuFile[]) => {
