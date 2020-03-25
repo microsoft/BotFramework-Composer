@@ -79,6 +79,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
               justifyContent: 'center',
               marginRight: '5px',
             }}
+            aria-hidden={true}
           >
             <Icon icon={icon} color={colors.icon} size={16} />
           </div>
@@ -89,6 +90,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
             line-height: 16px;
             transform: translateY(-1px);
           `}
+          aria-label={headerContent}
         >
           {headerContent}
         </div>

@@ -75,7 +75,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
