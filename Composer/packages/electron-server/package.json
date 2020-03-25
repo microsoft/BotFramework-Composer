@@ -93,15 +93,20 @@
     "ws": "^5.0.0"
   },
   "build": {
+    "productName": "Bot Framework Composer",
     "asar": true,
+    "appId": "com.microsoft.botframework.composer",
+    "copyright": "Copyright © 2020 Microsoft Corporation",
+    "electronDownload": {
+      "version": "8.0.2"
+    },
+    "directories": {
+      "output": "dist"
+    },
     "asarUnpack": [
       "build/assets/**",
       "build/templates/**"
     ],
-    "directories": {
-      "output": "dist"
-    },
-    "appId": "com.microsoft.botframework.composer",
     "files": [
       "./build/**",
       "!data.json",
@@ -135,6 +140,18 @@
       "shortcutName": "Bot Framework Composer (preview)",
       "oneClick": false
     },
+    "linux": {
+      "artifactName": "BotFramework-Composer-${version}-${platform}-${arch}.${ext}",
+      "category": "Development",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
     "mac": {
       "artifactName": "BotFramework-Composer-${version}-mac.${ext}",
       "category": "public.app-category.developer-tools",
@@ -162,8 +179,7 @@
         }
       ]
     },
-    "electronDownload": {
-      "version": "8.0.2"
-    }
+    "publish": null,
+    "remoteBuild": false
   }
 }
