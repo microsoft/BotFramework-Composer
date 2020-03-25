@@ -395,9 +395,10 @@ function DesignPage(props) {
                   css={formEditor}
                   src={`${rootPath}/extensionContainer.html`}
                 />
+                {debugging ? (
+                  <iframe key="Debugger" name="Debugger" src={`${rootPath}/extensionContainer.html`} />
+                ) : null}
               </div>
-
-              {debugging ? <iframe key="Debugger" name="Debugger" src={`${rootPath}/extensionContainer.html`} /> : null}
             </Fragment>
           </Conversation>
         </div>
