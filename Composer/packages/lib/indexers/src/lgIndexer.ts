@@ -1,20 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  LGParser,
-  StaticChecker,
-  Diagnostic as LGDiagnostic,
-  ImportResolver,
-  ImportResolverDelegate,
-} from 'botbuilder-lg';
+import { LGParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
 
 import { getBaseName } from './utils/help';
 import { LgTemplate, LgFile, FileInfo } from './type';
-import { Diagnostic, DiagnosticSeverity, Position, Range } from './diagnostic';
+import { Diagnostic, Position, Range } from './diagnostic';
 
-const lgStaticChecker = new StaticChecker();
+const { defaultFileResolver } = LGParser;
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -27,20 +21,13 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-function check(content: string, id: string, importResolver?: ImportResolverDelegate): Diagnostic[] {
-  const resolver: ImportResolverDelegate = importResolver || ImportResolver.fileResolver;
-  let diagnostics: LGDiagnostic[] = [];
-
-  diagnostics = lgStaticChecker.checkText(content, id, resolver);
-
-  return diagnostics.map((d: LGDiagnostic) => {
-    return convertLGDiagnostic(d, id);
-  });
-}
-
-function parse(content: string, id?: string): LgTemplate[] {
-  const resource = LGParser.parse(content, id);
-  const templates = resource.templates.map(t => {
+function parse(
+  content: string,
+  id = '',
+  importResolver: ImportResolverDelegate = defaultFileResolver
+): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
+  const lgFile = LGParser.parseText(content, id, importResolver);
+  const templates = lgFile.templates.map(t => {
     return {
       name: t.name,
       body: t.body,
@@ -51,7 +38,10 @@ function parse(content: string, id?: string): LgTemplate[] {
       },
     };
   });
-  return templates;
+  const diagnostics = lgFile.diagnostics.map((d: LGDiagnostic) => {
+    return convertLGDiagnostic(d, id);
+  });
+  return { templates, diagnostics };
 }
 
 function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
@@ -61,13 +51,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      const diagnostics = check(content, id, importResolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(file.content, id);
-      } catch (err) {
-        diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-      }
+      const { templates, diagnostics } = parse(content, id, importResolver);
       lgFiles.push({ id, content, templates, diagnostics });
     }
   }
@@ -77,5 +61,4 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
 export const lgIndexer = {
   index,
   parse,
-  check,
 };

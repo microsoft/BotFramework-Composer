@@ -28,6 +28,7 @@ import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
+import { navigateTo } from '../../utils';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -137,6 +138,16 @@ function DesignPage(props) {
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
 
   const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
+
+  useEffect(() => {
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    if (!currentDialog && rootDialog) {
+      const { search } = location;
+      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
+      return;
+    }
+  }, [dialogId, dialogs, location]);
 
   useEffect(() => {
     if (match) {

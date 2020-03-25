@@ -142,6 +142,7 @@ export const FormEditor: React.FunctionComponent<FormEditorProps> = props => {
         uiSchema={dialogUiSchema}
         formContext={{
           shellApi,
+          locale: props.locale,
           dialogOptions,
           editorSchema: schemas.editor,
           rootId: props.focusPath,

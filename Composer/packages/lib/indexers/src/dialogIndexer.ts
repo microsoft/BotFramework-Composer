@@ -3,7 +3,7 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs } from '@bfc/shared';
+import { extractLgTemplateRefs, SDKTypes } from '@bfc/shared';
 
 import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
@@ -44,7 +44,7 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
       }
       // look for other $type
       switch (value.$type) {
-        case 'Microsoft.SendActivity':
+        case SDKTypes.SendActivity:
           targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $type, do here
         case 'location':
@@ -81,7 +81,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
+    if (has(value, '$type') && value.$type === SDKTypes.OnIntent) {
       const intentName = value.intent;
       intents.push({
         name: intentName,
@@ -112,7 +112,7 @@ function ExtractTriggers(dialog): ITrigger[] {
             id: `triggers[${index}]`,
             displayName: '',
             type: rule.$type,
-            isIntent: rule.$type === 'Microsoft.OnIntent',
+            isIntent: rule.$type === SDKTypes.OnIntent,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;
@@ -140,7 +140,7 @@ function ExtractReferredDialogs(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+    if (has(value, '$type') && value.$type === SDKTypes.BeginDialog) {
       const dialogName = value.dialog;
       dialogs.push(dialogName);
     }
@@ -191,16 +191,13 @@ function validate(id: string, content, schema: any): Diagnostic[] {
   }
 }
 
-function parse(id: string, content: any, schema: any, botName: string): DialogInfo {
+function parse(id: string, content: any, schema: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
-  const isRoot = id === 'Main';
 
   return {
     id,
     content,
-    isRoot,
-    displayName: isRoot ? `${botName}.Main` : id,
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
@@ -221,7 +218,12 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
-          const dialog = parse(id, dialogJson, schema, botName);
+          const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
+          const dialog = {
+            isRoot,
+            displayName: isRoot ? `${botName}.Main` : id,
+            ...parse(id, dialogJson, schema),
+          };
           dialogs.push(dialog);
         }
       } catch (e) {

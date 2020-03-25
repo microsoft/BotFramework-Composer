@@ -149,9 +149,13 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
 
 const lgImportresolver = (files: LgFile[]): ImportResolverDelegate => {
   const lgFiles = files;
-  return function(_source: string, id: string) {
+  return function(source: string, id: string) {
+    const locale = getExtension(source);
     const targetFileName = getFileName(id);
-    const targetFileId = getBaseName(targetFileName);
+    let targetFileId = getBaseName(targetFileName);
+    if (locale) {
+      targetFileId += `.${locale}`;
+    }
     const targetFile = lgFiles.find(({ id }) => id === targetFileId);
     if (!targetFile) throw new Error(`file not found`);
     return { id, content: targetFile.content };
@@ -193,15 +197,10 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
   const resolver = lgImportresolver(lgFiles);
 
   state.lgFiles = lgFiles.map(lgFile => {
-    const { check, parse } = lgIndexer;
+    const { parse } = lgIndexer;
     const { id, content } = lgFile;
-    const diagnostics = check(content, id, resolver);
-    let templates: LgTemplate[] = [];
-    try {
-      templates = parse(content, id);
-    } catch (err) {
-      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-    }
+    const { templates, diagnostics } = parse(content, id, resolver);
+
     return { ...lgFile, templates, diagnostics, content };
   });
   return state;

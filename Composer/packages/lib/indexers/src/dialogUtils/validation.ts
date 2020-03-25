@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ExpressionEngine, ReturnType } from 'botframework-expressions';
+import { ExpressionEngine, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
 
 import { Diagnostic } from '../diagnostic';

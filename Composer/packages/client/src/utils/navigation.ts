@@ -126,6 +126,5 @@ export function toUrlUtil(projectId: string, path: string): string {
 
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
-  console.log('ABOUT TO Navigate to ', mapNavPath, navigateOpts);
   navigate(mapNavPath, navigateOpts);
 }
