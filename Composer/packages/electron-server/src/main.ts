@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { resolve } from 'path';
-import { start } from '@bfc/server';
+import { join, resolve } from 'path';
 import { mkdirp } from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
-
-import settings from './settings';
+import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 
 function main() {
   console.log('Starting electron app');
@@ -29,13 +27,12 @@ function main() {
   win.show();
 }
 
-async function createTempStore() {
+async function createAppDataDir() {
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
-
-  settings.appDataPath = resolve(composerAppDataPath, 'data.json');
-  settings.runtimeFolder = resolve(__dirname, 'templates');
+  process.env.COMPOSER_APP_DATA = composerAppDataPath;
+  console.log('creating composer app data path at: ', composerAppDataPath);
 
   await mkdirp(composerAppDataPath);
 }
@@ -62,13 +59,17 @@ async function run() {
   await app.whenReady();
   console.log('App ready');
 
-  console.log('Creating temp store');
-  await createTempStore();
-  console.log(`Composer settings: ${JSON.stringify(settings, null, ' ')}`);
+  const unpackedDir = getUnpackedAsarPath();
+  process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
 
-  console.log('Starting server');
-  await start();
-  console.log('Beginning app start up');
+  console.log('Creating app data directory...');
+  await createAppDataDir();
+  console.log('Created app data directory.');
+
+  console.log('Starting server...');
+  const { start } = await import('@bfc/server');
+  await start(join(unpackedDir, 'build', 'plugins'));
+  console.log('Server started. Rendering application...');
 
   main();
 }
