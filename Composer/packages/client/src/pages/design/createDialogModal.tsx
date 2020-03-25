@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FormEvent } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -35,7 +35,8 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
+    validateForm();
     setFormData({
       ...formData,
       [field]: newValue,
@@ -43,9 +44,9 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   };
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = (data: DialogFormData) => {
+  const validateForm = () => {
     const errors: { name?: string } = {};
-    const { name } = data;
+    const { name } = formData;
 
     if (name) {
       if (!nameRegex.test(name)) {
@@ -59,14 +60,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     } else {
       errors.name = formatMessage('Please input a name');
     }
-    return errors;
+    setFormDataErrors(errors);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    const errors = validateForm(formData);
-    if (Object.keys(errors).length) {
-      setFormDataErrors(errors);
+    if (Object.keys(formDataErrors).length > 0) {
       return;
     }
 
