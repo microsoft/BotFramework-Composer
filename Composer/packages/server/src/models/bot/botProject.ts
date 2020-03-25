@@ -200,9 +200,12 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogs;
     const mainDialog = dialogs.find(item => item.isRoot);
+    if (!mainDialog) return;
+    const entryDialogId = name.trim().toLowerCase();
+    const { content, relativePath } = mainDialog;
 
-    if (mainDialog && mainDialog.content) {
-      const oldDesigner = mainDialog.content.$designer;
+    if (content) {
+      const oldDesigner = content.$designer;
 
       let newDesigner;
       if (oldDesigner && oldDesigner.id) {
@@ -215,8 +218,29 @@ export class BotProject {
         newDesigner = getNewDesigner(name, description);
       }
 
-      mainDialog.content.$designer = newDesigner;
-      await this.updateDialog(mainDialog.id, mainDialog.content);
+      content.$designer = newDesigner;
+
+      const updatedContent = this._autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+      await this._updateFile(relativePath, updatedContent);
+    }
+
+    // when create/saveAs bot, serialize entry dialog/lg/lu
+    const entryPatterns = [
+      templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
+    ];
+    for (const pattern of entryPatterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        const realFilePath = Path.join(root, filePath);
+        // skip common file, do not rename.
+        if (Path.basename(realFilePath).startsWith('common.')) continue;
+        // rename file to new botname
+        const targetFilePath = realFilePath.replace(/(.*)\/[^.]*(\..*$)/i, `$1/${entryDialogId}$2`);
+        await this.fileStorage.rename(realFilePath, targetFilePath);
+      }
     }
   };
 
@@ -893,7 +917,7 @@ export class BotProject {
    * - "dialog": 'AddTodos'
    * + "dialog": 'addtodos'
    */
-  private _autofixReferInDialog = (dialogId: string, content: string) => {
+  private _autofixReferInDialog = (dialogId: string, content: string): string => {
     try {
       const dialogJson = JSON.parse(content);
 
@@ -931,12 +955,13 @@ export class BotProject {
     return true;
   };
 
+  private removeLocale(id: string): string {
+    return id.substring(0, id.lastIndexOf('.')) || id;
+  }
+
   private isReferred = (LUFile: LuFile) => {
     const dialogs = this.dialogs;
-    if (dialogs.findIndex(dialog => dialog.luFile === LUFile.id) !== -1) {
-      return true;
-    }
-    return false;
+    return !!~dialogs.findIndex(dialog => dialog.luFile === this.removeLocale(LUFile.id));
   };
 
   private generateErrorMessage = (invalidLuFile: LuFile[]) => {

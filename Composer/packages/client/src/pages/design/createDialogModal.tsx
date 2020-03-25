@@ -24,7 +24,6 @@ interface CreateDialogModalProps {
   onDismiss: () => void;
   onCurrentPathUpdate?: (newPath?: string, storageId?: string) => void;
   focusedStorageFolder?: StorageFolder;
-  currentPath?: string;
   isOpen: boolean;
 }
 
