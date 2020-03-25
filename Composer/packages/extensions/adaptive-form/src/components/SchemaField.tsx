@@ -40,11 +40,16 @@ const SchemaField: React.FC<FieldProps> = props => {
     ...baseUIOptions,
   };
 
+  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
+
+  const ErrorWrapper = useMemo(
+    () => (!hideError && error ? ({ children }) => <div css={schemaField.field}>{children}</div> : React.Fragment),
+    [error, hideError]
+  );
+
   if (!schema || name.startsWith('$')) {
     return null;
   }
-
-  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
   const handleChange = (newValue: any) => {
     const serializedValue =
@@ -69,17 +74,12 @@ const SchemaField: React.FC<FieldProps> = props => {
     onChange: handleChange,
   };
 
-  const Wrapper = useMemo(
-    () => (!hideError && error ? ({ children }) => <div css={schemaField.field}>{children}</div> : React.Fragment),
-    [error, hideError]
-  );
-
   return (
     <div className={className} css={schemaField.container(props.depth)}>
-      <Wrapper>
+      <ErrorWrapper>
         <FieldWidget {...fieldProps} />
         {!hideError && error}
-      </Wrapper>
+      </ErrorWrapper>
     </div>
   );
 };
