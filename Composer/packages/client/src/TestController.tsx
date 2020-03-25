@@ -16,7 +16,6 @@ import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
 import { BotStatus, LuisConfig, Text } from './constants';
 import { PublishLuisDialog } from './publishDialog';
-import { DebuggerContainer } from './adapter/DebuggerContainer';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
@@ -41,10 +40,13 @@ const STATE = {
   SUCCESS: 2,
 };
 
-export const TestController: React.FC = () => {
+export interface TestControllerProps {
+  setDebugging: (debugging: boolean) => void;
+}
+
+export const TestController: React.FC<TestControllerProps> = props => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
-  const [debugging, setDebugging] = useState(false);
   const [fetchState, setFetchState] = useState(STATE.SUCCESS);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const [error, setError] = useState({ title: '', message: '' });
@@ -179,7 +181,7 @@ export const TestController: React.FC = () => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => setDebugging(true)}
+            onClick={() => props.setDebugging(true)}
           >
             {formatMessage('Debug')}
           </ActionButton>
@@ -253,7 +255,6 @@ export const TestController: React.FC = () => {
           botName={botName}
         />
       ) : null}
-      {debugging ? <DebuggerContainer onAbort={() => setDebugging(false)} /> : null}
     </Fragment>
   );
 };

@@ -27,6 +27,7 @@ import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
+import { DebuggerContainer } from '../../adapter/DebuggerContainer';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -197,6 +198,8 @@ function DesignPage(props) {
 
   const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
+  const [debugging, setDebugging] = useState(false);
+
   const toolbarItems = [
     {
       type: 'action',
@@ -260,7 +263,7 @@ function DesignPage(props) {
     },
     {
       type: 'element',
-      element: <TestController />,
+      element: <TestController setDebugging={setDebugging} />,
       align: 'right',
     },
   ];
@@ -394,6 +397,7 @@ function DesignPage(props) {
                   src={`${rootPath}/extensionContainer.html`}
                 />
               </div>
+              {debugging ? <DebuggerContainer onAbort={() => setDebugging(false)} /> : null}
             </Fragment>
           </Conversation>
         </div>
