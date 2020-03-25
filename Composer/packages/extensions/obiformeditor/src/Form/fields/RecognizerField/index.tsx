@@ -80,6 +80,8 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
         )
       ) {
         opt.checked = true;
+      } else {
+        opt.checked = false;
       }
       return opt;
     })
@@ -92,6 +94,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
       onChange(defaultRecoginzerSet);
     }
   }, [formData]);
+
   const handleChange = (id: string, checked?: boolean): void => {
     const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
     switch (id) {
