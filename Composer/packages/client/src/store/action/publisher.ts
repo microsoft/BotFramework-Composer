@@ -40,10 +40,9 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
     dispatch({
       type: ActionTypes.PUBLISH_FAILED,
       payload: {
-        error: err,
+        error: err.response.data,
       },
     });
-    throw new Error(err.response.data.message);
   }
 };
 
@@ -56,6 +55,6 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
       payload: response.data,
     });
   } catch (err) {
-    throw new Error(err.response.data.message);
+    console.error(err.response.data.message);
   }
 };

@@ -14,7 +14,7 @@ import { DiagnosticSeverity, Diagnostic } from '@bfc/indexers';
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
-import { BotStatus, LuisConfig, Text } from './constants';
+import { BotStatus, LuisConfig } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
@@ -136,29 +136,17 @@ export const TestController: React.FC = () => {
     setBotStatus(BotStatus.publishing);
     try {
       const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
-      if (luisConfig) {
-        await publishLuis(luisConfig.authoringKey, state.projectId);
-        return true;
-      } else {
-        throw new Error('Please Set Luis Config');
-      }
+      await publishLuis(luisConfig.authoringKey, state.projectId);
+      return true;
     } catch (err) {
-      setBotStatus(BotStatus.unConnected, { title: Text.LUISDEPLOYFAILURE, message: err.message });
-      setCalloutVisible(true);
       return false;
     }
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
-    try {
-      const sensitiveSettings = settingsStorage.get(botName);
-      await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
-      setBotStatus(BotStatus.connected);
-    } catch (err) {
-      setBotStatus(BotStatus.unConnected, { title: Text.CONNECTBOTFAILURE, message: err.message });
-      setCalloutVisible(true);
-    }
+    const sensitiveSettings = settingsStorage.get(botName);
+    await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
   }
 
   function handleErrorButtonClick() {
@@ -207,7 +195,7 @@ export const TestController: React.FC = () => {
             text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
             onClick={handleClick}
             id={'publishAndConnect'}
-            disabled={showError}
+            disabled={showError || publishing || reloading}
           />
         </div>
         <Callout

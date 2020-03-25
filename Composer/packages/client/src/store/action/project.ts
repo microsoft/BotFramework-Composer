@@ -30,17 +30,11 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
-export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus, error = null) => {
-  console.log('send bot status action');
+export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
+  console.log(`send bot status action---------  ${status}`);
   dispatch({
     type: ActionTypes.UPDATE_BOTSTATUS,
     payload: status,
-  });
-
-  // when update the bot status, initial the error message
-  dispatch({
-    type: ActionTypes.RELOAD_BOT_FAILURE,
-    payload: error || { title: '', message: '' },
   });
 };
 
