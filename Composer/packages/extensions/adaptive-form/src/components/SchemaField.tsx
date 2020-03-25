@@ -32,7 +32,6 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
-    transparentBorder,
   } = props;
   const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
