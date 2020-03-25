@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { FileInfo, DialogInfo, JsonWalk, VisitorFunc } from '@bfc/indexers';
+import { FileInfo, JsonWalk, VisitorFunc } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -20,7 +20,6 @@ import { LuPublisher } from './luPublisher';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
-const DIALOGFOLDER = 'ComposerDialogs';
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -76,7 +75,7 @@ export class BotProject {
     this.ref = ref;
     this.locale = 'en-us'; // default to en-us
     this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
-    this.dataDir = Path.join(this.dir, DIALOGFOLDER);
+    this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
@@ -287,7 +286,9 @@ export class BotProject {
     }
   };
 
-  private defaultDir = (id: string, fileType: string) => {
+  private defaultDir = (name: string) => {
+    const fileType = Path.extname(name);
+    const id = Path.basename(name, fileType);
     const DIALOGNAME = id;
     const LOCALE = this.locale;
     const folder = BotStructureTemplate.dialogs.folder;
@@ -572,128 +573,6 @@ export class BotProject {
       };
     }
   };
-
-  // check project stracture is valid or not, if not, try fix it.
-  private _checkProjectStructure = async () => {
-    const dialogs: DialogInfo[] = this.dialogs;
-    const files: FileInfo[] = this.files;
-
-    // ensure each dialog have a lg/lu file,
-    /**
-     * + addtodo (folder)
-     *   - addtodo.dialog
-     *   - language-understanding
-     *      /en-us/addtodo.en-us.lu  // if not exist, auto create it
-     *   - language-generation
-     *      /en-us/addtodo.en-us.lg  // if not exist, auto create it
-     */
-    // const locale = this.locale;
-    // for (const dialog of dialogs) {
-    //   const dialogId = Path.basename(dialog.id);
-    //   const dialogDir = Path.dirname(dialog.relativePath);
-    //   const targetLuFilePath = Path.join(dialogDir, `language-understanding/${locale}/${dialogId}.${locale}.lu`);
-    //   if (files.findIndex(({ relativePath }) => relativePath === targetLuFilePath) === -1) {
-    //     await this._createFile(targetLuFilePath, '');
-    //   }
-    //   const targetLgFilePath = Path.join(dialogDir, `language-generation/${locale}/${dialogId}.${locale}.lg`);
-    //   if (files.findIndex(({ relativePath }) => relativePath === targetLgFilePath) === -1) {
-    //     await this._createFile(targetLgFilePath, '');
-    //   }
-    // }
-
-    // ensure dialog referred *.lg, *.lu exist, e.g
-    /**
-     * ## AddToDo.dialog (file)
-     * {
-     *    "generator": "ToDoLuisBot.lg",  // must exist
-     *    "recognizer": "foo.lu",         // must exist
-     * }
-     */
-    for (const dialog of dialogs) {
-      const { lgFile, luFile } = dialog;
-      const lgExist = files.findIndex(({ name }) => name.startsWith(`${lgFile}.`));
-      const luExist = files.findIndex(({ name }) => name.startsWith(`${luFile}.`));
-
-      if (lgFile && lgExist === -1) {
-        throw new Error(`${dialog.id}.dialog referred generator ${lgFile} not exist`);
-      }
-      if (luFile && luExist === -1) {
-        throw new Error(`${dialog.id}.dialog referred recognizer ${luFile} not exist`);
-      }
-    }
-
-    // This two function help migration now can be disabled or removed
-    // await this._autofixTemplateInCommon();
-    // await this._autofixGeneratorInDialog();
-  };
-
-  // private _buildRNNewlineText = (lineArray: string[]): string => {
-  //   const lineArrayEndWithRN = lineArray.map(line => {
-  //     if (line.endsWith('\r\n')) {
-  //       return line;
-  //     } else if (line.endsWith('\r')) {
-  //       return line + '\n';
-  //     } else {
-  //       return line + '\r\n';
-  //     }
-  //   });
-  //   return lineArrayEndWithRN.join('');
-  // };
-
-  /**
-   * move generated lg template (like bfdactivity-123456) from common.lg into dialog.lg
-   * help migrate old version single-lg bot to multiple-lg
-   * we can disable this code after a period of time, when there is no old version bot.
-   */
-
-  // private _autofixTemplateInCommon = async () => {
-  //   const NEWLINE = '\r\n';
-  //   const dialogs: DialogInfo[] = this.dialogs;
-  //   const lgFiles: LgFile[] = this.lgFiles;
-  //   const inlineLgNamePattern = /bfd(\w+)-(\d+)/;
-  //   const commonLgFileId = `common.${this.locale}`;
-  //   const commonLgFile = lgFiles.find(({ id }) => id === commonLgFileId);
-  //   if (!commonLgFile) return;
-  //   const lineContentArray = commonLgFile.content.split('\n');
-  //   for (const dialog of dialogs) {
-  //     const { lgTemplates } = dialog;
-  //     const dialogTemplateTexts: string[] = [];
-  //     for (const lgTemplate of lgTemplates) {
-  //       const templateName = lgTemplate.name;
-  //       if (inlineLgNamePattern.test(templateName)) {
-  //         const template = commonLgFile.templates.find(({ name }) => name === templateName);
-  //         if (!template?.range) continue;
-  //         const { startLineNumber, endLineNumber } = template.range;
-  //         const lineCount = endLineNumber - startLineNumber + 1;
-  //         const templateText = this._buildRNNewlineText(
-  //           lineContentArray.splice(startLineNumber - 1, lineCount, ...Array(lineCount))
-  //         );
-  //         dialogTemplateTexts.push(templateText);
-  //       }
-  //     }
-  //     const targetLgFileId = `${dialog.id}.${this.locale}`;
-  //     const updatedContent =
-  //       (lgFiles.find(({ id }) => id === targetLgFileId)?.content || '') +
-  //       this._buildRNNewlineText(dialogTemplateTexts) +
-  //       NEWLINE;
-  //     await this.updateLgFile(targetLgFileId, updatedContent);
-  //   }
-  //   const updatedCommonContent = this._buildRNNewlineText(lineContentArray.filter(item => item !== undefined)).trim();
-  //   await this.updateLgFile(commonLgFileId, updatedCommonContent);
-  // };
-
-  /**
-   * each dialog should use it's own lg
-   * e.g ShowToDo.dialog's generator property should be `ShowToDo.lg`.
-   */
-  // private _autofixGeneratorInDialog = async () => {
-  //   const dialogs: DialogInfo[] = this.dialogs;
-  //   for (const dialog of dialogs) {
-  //     const { content, id } = dialog;
-  //     const updatedContent = { ...content, generator: `${id}.lg` };
-  //     await this.updateDialog(id, updatedContent);
-  //   }
-  // };
 
   /**
    * fix dialog referrence.

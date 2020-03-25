@@ -36,6 +36,7 @@ export const createDialogBase: ActionCreator = async (store, { id, content, lgCo
       name: `${id}.dialog`,
     },
   });
+  //TODO fix dialog referrence
   createLgFile(store, { id, content: lgContent });
   createLuFile(store, { id, content: luContent });
   navTo(store, id);

@@ -116,7 +116,7 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      return dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content, state.botName);
+      return { ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content), ...dialog };
     }
     return dialog;
   });
@@ -140,7 +140,7 @@ const createDialogCancel: ReducerFunc = state => {
 };
 
 const createDialog: ReducerFunc = (state, { id, content }) => {
-  const dialog = dialogIndexer.parse(id, content, state.schemas.sdk.content, state.botName);
+  const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, content, state.schemas.sdk.content) };
   state.dialogs.push(dialog);
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
@@ -163,15 +163,9 @@ const lgImportresolver = (files: LgFile[]): ImportResolverDelegate => {
 };
 
 const createLgFile: ReducerFunc = (state, { id, content }) => {
-  const { check, parse } = lgIndexer;
+  const { parse } = lgIndexer;
   const resolver = lgImportresolver(state.lgFiles);
-  const diagnostics = check(content, id, resolver);
-  let templates: LgTemplate[] = [];
-  try {
-    templates = parse(content, id);
-  } catch (err) {
-    diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-  }
+  const { templates, diagnostics } = parse(content, id, resolver);
   const lgFile = { id, templates, diagnostics, content };
   state.lgFiles.push(lgFile);
   return state;
