@@ -50,7 +50,7 @@ export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 export const LuisRecognizerKey: string = SDKTypes.LuisRecognizer;
 export const ValueRecognizerKey: string = SDKTypes.ValueRecognizer;
 
-export const recognizerTypes = [
+export const recognizerTemplates = [
   {
     key: ValueRecognizerKey,
     text: formatMessage('Value'),
