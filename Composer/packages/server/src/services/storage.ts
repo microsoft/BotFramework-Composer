@@ -7,6 +7,7 @@ import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
+import settings from '../settings';
 
 import { UserIdentity } from './pluginLoader';
 
@@ -70,6 +71,19 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    if (filePath === '/' && settings.platform === 'win32') {
+      return {
+        name: '',
+        parent: '/',
+        children: settings.diskNames.map(d => {
+          return {
+            name: d,
+            type: 'folder',
+            path: d,
+          };
+        }),
+      };
+    }
     const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {

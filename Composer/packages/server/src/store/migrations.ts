@@ -40,6 +40,11 @@ const migrations: Migration[] = [
     condition: data => !data.version || data.version != initData.version,
     run: data => initData,
   },
+  {
+    name: 'Platform update',
+    condition: data => get(data, 'storageConnections.0.platform') !== settings.platform,
+    run: data => set(data, 'storageConnections[0].platform', settings.platform),
+  },
 ];
 
 export function runMigrations(initialData: any): any {
