@@ -36,17 +36,18 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
 
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
-    validateForm();
-    setFormData({
+    const newData: DialogFormData = {
       ...formData,
       [field]: newValue,
-    });
+    };
+    validateForm(newData);
+    setFormData(newData);
   };
 
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = () => {
+  const validateForm = (newData: DialogFormData) => {
     const errors: { name?: string } = {};
-    const { name } = formData;
+    const { name } = newData;
 
     if (name) {
       if (!nameRegex.test(name)) {
