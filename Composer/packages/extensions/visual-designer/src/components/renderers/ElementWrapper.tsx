@@ -27,7 +27,7 @@ const nodeBorderDoubleSelectedStyle = css`
 export interface ElementWrapperProps {
   id: string;
   tab?: string;
-  ariaLabel?: string;
+  titleInHeader?: boolean;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
 }
 
@@ -35,16 +35,18 @@ function checkHasProps(node: ReactNode): node is ReactElement {
   return (node as ReactElement).props != null;
 }
 
-function extractNodeTitle(node: ReactNode): string {
+function extractNodeTitle(node: ReactNode, titleInHeader: boolean): string {
   if (node == null || typeof node !== 'object') {
     return '';
   }
   if (checkHasProps(node)) {
     const { props } = node;
-    if (props?.data != null) {
+    if (props?.header != null && titleInHeader) {
+      return props?.header?.props?.title || '';
+    } else if (props?.data != null) {
       return generateSDKTitle(props.data);
     } else if (props?.children != null) {
-      return extractNodeTitle(props.children);
+      return extractNodeTitle(props.children, titleInHeader);
     } else {
       return '';
     }
@@ -52,7 +54,7 @@ function extractNodeTitle(node: ReactNode): string {
   return '';
 }
 
-export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, children }): JSX.Element => {
+export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
@@ -72,9 +74,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, chil
     };
   };
 
-  console.log(children);
-
-  const ariaLabel = extractNodeTitle(children);
+  const ariaLabel = extractNodeTitle(children, titleInHeader ?? false);
 
   return (
     <div
