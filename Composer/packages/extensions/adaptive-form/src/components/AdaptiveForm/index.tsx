@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useShellApi, PluginConfig, FormErrors, JSONSchema7 } from '@bfc/extension';
-import isEqual from 'lodash/isEqual';
 import ErrorBoundary from 'react-error-boundary';
+import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
 
 import PluginContext from '../../PluginContext';
 import { resolveBaseSchema, getUISchema, mergePluginConfigs } from '../../utils';
@@ -14,6 +15,7 @@ import ErrorInfo from './ErrorInfo';
 
 export interface AdaptiveFormProps {
   schema?: JSONSchema7;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData?: any;
   plugins: PluginConfig[];
 }
@@ -23,10 +25,21 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   const { formData, schema, plugins } = props;
   const [localData, setLocalData] = useState(formData);
 
+  const syncData = useRef(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    debounce((shellData: any, localData: any) => {
+      if (!isEqual(shellData, localData)) {
+        setLocalData(shellData);
+      }
+    }, 300)
+  ).current;
+
   useEffect(() => {
-    if (formData?.$designer?.id !== localData?.$designer?.id) {
-      setLocalData(formData);
-    }
+    syncData(formData, localData);
+
+    return () => {
+      syncData.cancel();
+    };
   }, [formData]);
 
   const $schema = useMemo(() => {
@@ -82,6 +95,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     return null;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDataChange = (newData?: any) => {
     setLocalData(newData);
 
