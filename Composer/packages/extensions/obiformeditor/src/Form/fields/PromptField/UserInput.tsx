@@ -27,9 +27,7 @@ const getOptions = (enumSchema: JSONSchema6) => {
 };
 
 const usesLuisRecognizer = ({ content }: DialogInfo) => {
-  return content?.recognizer.recognizers[0].recognizers?.['en-us'].recognizers.find(
-    recog => recog.$type === SDKTypes.LuisRecognizer
-  );
+  return content?.recognizer.recognizers[0].recognizers?.['en-us'].recognizers.find(recog => typeof recog === 'string');
 };
 
 interface UserInputProps extends FieldProps<MicrosoftInputDialog> {

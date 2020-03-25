@@ -22,7 +22,7 @@ export interface IRecognizer {
         recognizers: {
           'en-us': {
             $type: string;
-            recognizers: IRecognizerType[];
+            recognizers: (IRecognizerType | string)[];
           };
         };
         id?: undefined;
