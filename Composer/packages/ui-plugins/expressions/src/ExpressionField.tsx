@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
 import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
@@ -195,6 +195,10 @@ const ExpressionField: React.FC<FieldProps> = props => {
   };
 
   const shouldRenderContainer = label || (options && options.length > 1);
+  const dropdownWidth = useMemo(
+    () => (options.reduce((maxLength, { text }) => Math.max(maxLength, text.length), 0) > 'expression'.length ? -1 : 0),
+    [options]
+  );
 
   return (
     <React.Fragment>
@@ -204,6 +208,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
           {options && options.length > 1 && (
             <Dropdown
               id={`${props.id}-type`}
+              dropdownWidth={dropdownWidth}
               options={options}
               responsiveMode={ResponsiveMode.large}
               selectedKey={selectedKey}
