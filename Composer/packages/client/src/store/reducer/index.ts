@@ -220,7 +220,7 @@ const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   return state;
 };
 
-const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
+const setBotLoadErrorMsg: ReducerFunc = (state, error) => {
   state.botLoadErrorMsg = error;
   return state;
 };
@@ -435,8 +435,8 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
+  // [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,

@@ -62,7 +62,7 @@ export interface State {
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: string;
+  botLoadErrorMsg: { title: string; message: string };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;

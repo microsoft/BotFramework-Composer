@@ -40,12 +40,22 @@ const defaultPublishConfig = {
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
-  const [calloutVisible, setCalloutVisible] = useState(false);
-  const [error, setError] = useState({ title: '', message: '' });
+  const [calloutVisible, setCalloutVisible] = useState(state.botLoadErrorMsg.title !== '');
+  // const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoints, botName, botStatus, dialogs, toStartBot, luFiles, settings, projectId } = state;
+  const {
+    botEndpoints,
+    botName,
+    botStatus,
+    dialogs,
+    toStartBot,
+    luFiles,
+    settings,
+    projectId,
+    botLoadErrorMsg,
+  } = state;
   const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus, setBotStatus } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
@@ -64,6 +74,10 @@ export const TestController: React.FC = () => {
       getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
+
+  useEffect(() => {
+    if (botLoadErrorMsg.title !== '') setCalloutVisible(true);
+  }, [botLoadErrorMsg]);
 
   function isLuisConfigComplete(config) {
     let complete = true;
@@ -129,9 +143,8 @@ export const TestController: React.FC = () => {
         throw new Error('Please Set Luis Config');
       }
     } catch (err) {
-      setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
+      setBotStatus(BotStatus.unConnected, { title: Text.LUISDEPLOYFAILURE, message: err.message });
       setCalloutVisible(true);
-      setBotStatus(BotStatus.unConnected);
       return false;
     }
   }
@@ -143,9 +156,8 @@ export const TestController: React.FC = () => {
       await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
       setBotStatus(BotStatus.connected);
     } catch (err) {
-      setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
+      setBotStatus(BotStatus.unConnected, { title: Text.CONNECTBOTFAILURE, message: err.message });
       setCalloutVisible(true);
-      setBotStatus(BotStatus.unConnected);
     }
   }
 
@@ -210,10 +222,10 @@ export const TestController: React.FC = () => {
         >
           <div css={calloutContainer}>
             <p css={calloutLabel} id="callout-label-id">
-              {error.title}
+              {botLoadErrorMsg.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {error.message}
+              {botLoadErrorMsg.message}
             </p>
             <Stack
               horizontal
