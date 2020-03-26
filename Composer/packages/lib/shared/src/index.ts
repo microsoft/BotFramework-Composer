@@ -15,3 +15,4 @@ export * from './constant';
 export * from './lgUtils';
 export * from './walkerUtils';
 export * from './copyUtils';
+export * from './resolverFactory';

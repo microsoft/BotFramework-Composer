@@ -4,14 +4,13 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import formatMessage from 'format-message';
-import { SensitiveProperties } from '@bfc/shared';
+import { SensitiveProperties, importResolverGenerator } from '@bfc/shared';
 import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer } from '@bfc/indexers';
-import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getFileName, getBaseName } from '../../utils';
+import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -146,18 +145,7 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-  const lgImportresolver: ImportResolverDelegate = function(source: string, id: string) {
-    const locale = getExtension(source);
-    const targetFileName = getFileName(id);
-    let targetFileId = getBaseName(targetFileName);
-    if (locale) {
-      targetFileId += `.${locale}`;
-    }
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
-    if (!targetFile) throw new Error(`file not found`);
-    return { id, content: targetFile.content };
-  };
-
+  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
   state.lgFiles = lgFiles.map(lgFile => {
     const { parse } = lgIndexer;
     const { id, content } = lgFile;
