@@ -149,8 +149,6 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
   return dialogCopy;
 }
 
-//it is possible that we cannot find a RegEx. Because it will clear all regEx when we
-//switch to another recognizer type
 export function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
   const recgIndex = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).findIndex(
@@ -192,7 +190,9 @@ export function createFocusedPath(selected: number, focused: number) {
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$type', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).some(
+    t => t.$type === regexRecognizerKey
+  );
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);

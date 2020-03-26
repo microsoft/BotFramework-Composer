@@ -42,12 +42,10 @@ import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (
   data: TriggerFormData,
-  isRegEx: boolean,
-  isLUIS: boolean,
   regExIntents: [{ intent: string; pattern: string }]
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $type, specifiedType, intent, triggerPhrases, regexEx } = data;
+  const { $type, specifiedType, intent } = data;
 
   if ($type === eventTypeKey && !specifiedType) {
     errors.specifiedType = formatMessage('Please select a event type');
@@ -71,19 +69,12 @@ const validateForm = (
     );
   }
 
-  if ($type === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
+  if ($type === intentTypeKey && regExIntents.find(ri => ri.intent === intent)) {
     errors.intent = `regEx ${intent} is already defined`;
   }
 
-  if ($type === intentTypeKey && isRegEx && !regexEx) {
-    errors.regexEx = formatMessage('Please input regEx pattern');
-  }
-
-  if ($type === intentTypeKey && isLUIS && !triggerPhrases) {
-    errors.triggerPhrases = formatMessage('Please input trigger phrases');
-  }
   //luis grammar error
-  if (isLUIS && data.errors.triggerPhrases) {
+  if (data.errors.triggerPhrases) {
     errors.triggerPhrases = data.errors.triggerPhrases;
   }
   return errors;
@@ -107,20 +98,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { dialogs, luFiles, locale, projectId } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
-  const initialFormData: TriggerFormData = {
-    errors: {},
-    $type: '',
-    recognizerType: LuisRecognizerKey,
-    specifiedType: '',
-    intent: '',
-    triggerPhrases: '',
-    regexEx: '',
-  };
-  const [formData, setFormData] = useState({ ...initialFormData, $type: intentTypeKey });
-  const isRegEx = formData.recognizerType === regexRecognizerKey;
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
-  const isValue = formData.recognizerType === ValueRecognizerKey;
-  const isLUIS = formData.recognizerType === LuisRecognizerKey;
   const currentRecognizerTypes = get(
     dialogFile,
     `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`,
@@ -142,9 +119,25 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const validRecognizerTypes = generateValidRecognizerTypes();
 
+  const firstValidType = recognizerTemplates.find(t => validRecognizerTypes.includes(t.key))?.key;
+  const initialFormData: TriggerFormData = {
+    errors: {},
+    $type: '',
+    recognizerType: firstValidType ? firstValidType : ValueRecognizerKey,
+    specifiedType: '',
+    intent: '',
+    triggerPhrases: '',
+    regexEx: '',
+  };
+  const [formData, setFormData] = useState({ ...initialFormData, $type: intentTypeKey });
+  const isRegEx = formData.recognizerType === regexRecognizerKey;
+  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
+  const isValue = formData.recognizerType === ValueRecognizerKey;
+  const isLUIS = formData.recognizerType === LuisRecognizerKey;
+
   const onClickSubmitButton = e => {
     e.preventDefault();
-    const errors = validateForm(formData, isRegEx, isLUIS, regexIntents);
+    const errors = validateForm(formData, regexIntents);
 
     if (Object.keys(errors).length) {
       setFormData({
@@ -157,7 +150,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     const content = get(luFile, 'content', '');
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const newDialog = generateNewDialog(dialogs, dialogId, formData);
-    if (formData.$type === intentTypeKey && !isRegEx) {
+    if (formData.$type === intentTypeKey && formData.triggerPhrases) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
         id: luFileId,
@@ -240,7 +233,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             required
           />
           {formData.$type === intentTypeKey && (
-            <Pivot data-testid="triggerRecognizerType" onLinkClick={onChangeRecognizerType}>
+            <Pivot
+              data-testid="triggerRecognizerType"
+              onLinkClick={onChangeRecognizerType}
+              defaultSelectedKey={formData.recognizerType}
+            >
               {recognizerTemplates.map(r => (
                 <PivotItem
                   ariaLabel={r.text}
@@ -313,7 +310,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               onChange={onChangeRegEx}
               errorMessage={formData.errors.regexEx}
               data-testid={'RegExDropDown'}
-              required
+              value={formData.regexEx}
             />
           )}
           {showTriggerPhrase && <Label>{formatMessage('Trigger phrases')}</Label>}
