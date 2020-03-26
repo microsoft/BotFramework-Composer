@@ -5,6 +5,7 @@ import fs from 'fs';
 
 import has from 'lodash/has';
 import { FileInfo, JsonWalk, VisitorFunc } from '@bfc/indexers';
+import { getNewDesigner } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -14,6 +15,7 @@ import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 
+import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
@@ -25,12 +27,6 @@ const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
-
-// interface DialogResources {
-//   dialogs: DialogInfo[];
-//   lgFiles: LgFile[];
-//   luFiles: LuFile[];
-// }
 
 // Define the project structure
 const BotStructureTemplate = {
@@ -133,7 +129,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
-    await this.luPublisher.setLuisConfig(config.luis);
+    this.luPublisher.setLuisConfig(config.luis);
   };
 
   public getSchemas = () => {
@@ -176,45 +172,45 @@ export class BotProject {
   };
 
   public updateBotInfo = async (name: string, description: string) => {
-    // const dialogs = this.dialogs;
-    // const mainDialog = dialogs.find(item => item.isRoot);
-    // if (!mainDialog) return;
-    // const entryDialogId = name.trim().toLowerCase();
-    // const { content, relativePath } = mainDialog;
-    // if (content) {
-    //   const oldDesigner = content.$designer;
-    //   let newDesigner;
-    //   if (oldDesigner && oldDesigner.id) {
-    //     newDesigner = {
-    //       ...oldDesigner,
-    //       name,
-    //       description,
-    //     };
-    //   } else {
-    //     newDesigner = getNewDesigner(name, description);
-    //   }
-    //   content.$designer = newDesigner;
-    //   const updatedContent = this._autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
-    //   await this._updateFile(relativePath, updatedContent);
-    // }
-    // // when create/saveAs bot, serialize entry dialog/lg/lu
-    // const entryPatterns = [
-    //   templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
-    //   templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
-    //   templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
-    // ];
-    // for (const pattern of entryPatterns) {
-    //   const root = this.dataDir;
-    //   const paths = await this.fileStorage.glob(pattern, root);
-    //   for (const filePath of paths.sort()) {
-    //     const realFilePath = Path.join(root, filePath);
-    //     // skip common file, do not rename.
-    //     if (Path.basename(realFilePath).startsWith('common.')) continue;
-    //     // rename file to new botname
-    //     const targetFilePath = realFilePath.replace(/(.*)\/[^.]*(\..*$)/i, `$1/${entryDialogId}$2`);
-    //     await this.fileStorage.rename(realFilePath, targetFilePath);
-    //   }
-    // }
+    const mainDialogFile = this.files.find(file => file.relativePath.includes('/') && file.name.endsWith('.dialog'));
+    if (!mainDialogFile) return;
+    const entryDialogId = name.trim().toLowerCase();
+    const { relativePath } = mainDialogFile;
+    const content = JSON.parse(mainDialogFile.content);
+    if (content) {
+      const oldDesigner = content.$designer;
+      let newDesigner;
+      if (oldDesigner && oldDesigner.id) {
+        newDesigner = {
+          ...oldDesigner,
+          name,
+          description,
+        };
+      } else {
+        newDesigner = getNewDesigner(name, description);
+      }
+      content.$designer = newDesigner;
+      const updatedContent = this._autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+      await this._updateFile(relativePath, updatedContent);
+    }
+    // when create/saveAs bot, serialize entry dialog/lg/lu
+    const entryPatterns = [
+      templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
+    ];
+    for (const pattern of entryPatterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        const realFilePath = Path.join(root, filePath);
+        // skip common file, do not rename.
+        if (Path.basename(realFilePath).startsWith('common.')) continue;
+        // rename file to new botname
+        const targetFilePath = realFilePath.replace(/(.*)\/[^.]*(\..*$)/i, `$1/${entryDialogId}$2`);
+        await this.fileStorage.rename(realFilePath, targetFilePath);
+      }
+    }
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
@@ -250,24 +246,17 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string) => {
-    // this.luPublisher.setAuthoringKey(authoringKey);
-    // const referred = this.luFiles.filter(this.isReferred);
-    // const invalidLuFile = referred.filter(file => file.diagnostics.length !== 0);
-    // if (invalidLuFile.length !== 0) {
-    //   const msg = this.generateErrorMessage(invalidLuFile);
-    //   throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
-    // }
-    // const emptyLuFiles = referred.filter(this.isLuFileEmpty);
-    // if (emptyLuFiles.length !== 0) {
-    //   const msg = emptyLuFiles.map(file => file.id).join(' ');
-    //   throw new Error(`You have the following empty LuFile(s): ` + msg);
-    // }
-    // if (referred.length > 0) {
-    //   this.luPublisher.createCrossTrainConfig(this.dialogs, referred);
-    //   await this.luPublisher.publish(referred);
-    // }
-    // return this.luFiles;
+  public publishLuis = async (authoringKey: string, fileIds: string[], crossTrainConfig: ICrossTrainConfig) => {
+    this.luPublisher.setAuthoringKey(authoringKey);
+    if (fileIds.length) {
+      const map = fileIds.reduce((result, id) => {
+        result[id] = true;
+        return result;
+      }, {});
+      const files = this.files.filter(file => map[Path.basename(file.name, '.lu')]);
+      this.luPublisher.setCrossTrainConfig(crossTrainConfig);
+      await this.luPublisher.publish(files);
+    }
   };
 
   public cloneFiles = async (locationRef: LocationRef): Promise<LocationRef> => {

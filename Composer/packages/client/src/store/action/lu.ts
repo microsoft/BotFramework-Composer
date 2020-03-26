@@ -68,13 +68,22 @@ export const removeLuIntent: ActionCreator = async (store, { projectId, file, in
 
 export const publishLuis: ActionCreator = async ({ dispatch, getState }, authoringKey, projectId) => {
   try {
-    const response = await httpClient.post(`/projects/${projectId}/luFiles/publish`, { authoringKey, projectId });
+    const { dialogs, luFiles } = getState();
+    const referred = luUtil.checkLuisPublish(luFiles, dialogs);
+    //TODO crosstrain should add locale
+    const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
+    const response = await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
+      authoringKey,
+      projectId,
+      crossTrainConfig,
+      luFiles: referred.map(file => file.id),
+    });
     luFileStatusStorage.publishAll(getState().botName);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.response.data.message);
+    throw new Error(err.message || err.response.data.message);
   }
 };

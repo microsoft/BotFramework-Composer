@@ -5,17 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import formatMessage from 'format-message';
 import { SensitiveProperties } from '@bfc/shared';
-import {
-  Diagnostic,
-  DiagnosticSeverity,
-  LgTemplate,
-  lgIndexer,
-  luIndexer,
-  LuFile,
-  DialogInfo,
-  dialogIndexer,
-  LgFile,
-} from '@bfc/indexers';
+import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer, LgFile } from '@bfc/indexers';
 import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
@@ -476,9 +466,8 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LU_FAILURE]: noOp,
   [ActionTypes.REMOVE_LU_SUCCCESS]: removeLuFile,
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,

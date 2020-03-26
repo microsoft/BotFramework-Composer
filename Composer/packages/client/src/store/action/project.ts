@@ -31,17 +31,29 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
+export const indexProject: ActionCreator = (store, data, jump) => {
+  const { files, botName, schemas, id } = data;
+  const result = indexer.index(files, botName, schemas.sdk.content);
+  store.dispatch({
+    type: ActionTypes.GET_PROJECT_SUCCESS,
+    payload: {
+      ...data,
+      ...result,
+    },
+  });
+  if (jump && files && files.length) {
+    const mainUrl = `/bot/${id}/dialogs/Main`;
+    navigateTo(mainUrl);
+    startBot(store, true);
+  } else if (jump) {
+    navigate(BASEPATH);
+  }
+};
+
 export const fetchProjectById: ActionCreator = async (store, projectId) => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    const result = indexer.index(response.data.files, response.data.botName, response.data.schemas.sdk.content);
-    store.dispatch({
-      type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        ...response.data,
-        ...result,
-      },
-    });
+    indexProject(store, response.data, false);
   } catch (err) {
     navigateTo('/home');
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error: err } });
@@ -72,30 +84,9 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
-    const data = {
-      storageId,
-      path: absolutePath,
-    };
+    const data = { storageId, path: absolutePath };
     const response = await httpClient.put(`/projects/open`, data);
-    const { files, botName, schemas } = response.data;
-    const result = indexer.index(files, botName, schemas.sdk.content);
-    const dialogs = result.dialogs;
-    const projectId = response.data.id;
-    store.dispatch({
-      type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        ...response.data,
-        ...result,
-      },
-    });
-    if (dialogs && dialogs.length > 0) {
-      // navTo(store, 'Main');
-      const mainUrl = `/bot/${projectId}/dialogs/Main`;
-      navigateTo(mainUrl);
-      startBot(store, true);
-    } else {
-      navigate(BASEPATH);
-    }
+    indexProject(store, response.data, true);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -117,23 +108,9 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
-    const data = {
-      storageId,
-      name,
-      description,
-      location,
-    };
+    const data = { storageId, name, description, location };
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
-    const dialogs = response.data.dialogs;
-    store.dispatch({
-      type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        response,
-      },
-    });
-    if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
-    }
+    indexProject(store, response.data, true);
     return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -158,17 +135,7 @@ export const createProject: ActionCreator = async (
       location,
     };
     const response = await httpClient.post(`/projects`, data);
-    const dialogs = response.data.dialogs;
-    settingStorage.remove(name);
-    store.dispatch({
-      type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        response,
-      },
-    });
-    if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
-    }
+    indexProject(store, response.data, true);
     return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

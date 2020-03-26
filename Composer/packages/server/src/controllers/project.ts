@@ -48,6 +48,7 @@ async function createProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      await currentProject.init();
       const project = currentProject.getProject();
       log('Project created successfully.');
       res.status(200).json({
@@ -106,6 +107,7 @@ async function openProject(req: Request, res: Response) {
     const id = await BotProjectService.openProject(location, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
+      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id: currentProject.id,
@@ -147,6 +149,7 @@ async function saveProjectAs(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id,
@@ -307,7 +310,11 @@ async function publishLuis(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const luFiles = await currentProject.publishLuis(req.body.authoringKey);
+      const luFiles = await currentProject.publishLuis(
+        req.body.authoringKey,
+        req.body.luFiles,
+        req.body.crossTrainConfig
+      );
       res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
