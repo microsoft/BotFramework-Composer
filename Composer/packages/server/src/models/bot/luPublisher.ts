@@ -3,7 +3,7 @@
 
 import isEqual from 'lodash/isEqual';
 import keys from 'lodash/keys';
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { LuFile, DialogInfo } from '@bfc/shared';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';

@@ -16,8 +16,8 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
-import { LuFile } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
+import { LuFile } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';

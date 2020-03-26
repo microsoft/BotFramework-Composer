@@ -1,28 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LGTemplate as LgTemplate } from 'botbuilder-lg';
-
-export interface LuIntentSection {
-  Name: string;
-  Body: string;
-  Entities?: LuEntity[];
-  Children?: LuIntentSection[];
-  range?: CodeRange;
-}
-
-export interface CodeRange {
-  startLineNumber: number;
-  endLineNumber: number;
-}
-
-export interface LuEntity {
-  Name: string;
-}
+import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
 
 export interface EditorSchema {
   content?: {
-    fieldTemplateOverrides?: any;
+    fieldTemplateOverrides: any;
     SDKOverrides?: any;
   };
 }
@@ -36,14 +20,15 @@ export interface BotSchemas {
 export interface ShellData {
   locale: string;
   botName: string;
+  currentDialog: DialogInfo;
   projectId: string;
-  currentDialog: any;
   data: {
-    $type?: string;
+    $type: string;
     [key: string]: any;
   };
+  designerId: string;
   dialogId: string;
-  dialogs: any[];
+  dialogs: DialogInfo[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -51,8 +36,9 @@ export interface ShellData {
   focusPath: string;
   clipboardActions: any[];
   hosted: boolean;
-  lgFiles: any[];
-  luFiles: any[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  // TODO: remove
   schemas: BotSchemas;
 }
 
