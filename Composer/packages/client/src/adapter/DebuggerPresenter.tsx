@@ -55,40 +55,18 @@ interface VariablesProps extends ActionsProps {
   variables: ReadonlyArray<model.Variable>;
 }
 
-interface RowProps extends ActionsProps {
-  variable: model.Variable;
-}
-
-// https://www.w3schools.com/howto/howto_js_treeview.asp
-const Row: React.FC<RowProps> = props => {
-  const { variable } = props;
-
-  const [expanded, setExpanded] = useState(false);
-
-  const style: React.CSSProperties = { cursor: 'pointer', userSelect: 'none' };
-
-  const scalar = variable.remote.variablesReference === 0;
-
-  return (
-    <li style={style}>
-      <span onClick={() => setExpanded(e => !e)}>{scalar ? '.' : expanded ? '-' : '+'}</span>
-      {variable.remote.name} = {variable.remote.value}
-      {expanded ? <VariablePresenter variable={variable} actions={props.actions} /> : null}
-    </li>
-  );
-};
-
-const VariablesPresenter: React.FC<VariablesProps> = props => {
-  const style: React.CSSProperties = { listStyleType: 'none' };
-
-  return (
-    <ul style={style}>
-      {props.variables.map(variable => (
-        <Row key={variable.remote.name} variable={variable} actions={props.actions} />
-      ))}
-    </ul>
-  );
-};
+const VariablesPresenter: React.FC<VariablesProps> = props => (
+  <presenters.TreeView>
+    {props.variables.map(variable => (
+      <presenters.TreeItem key={variable.remote.name} leaf={variable.remote.variablesReference === 0}>
+        <>
+          {variable.remote.name} = {variable.remote.value}
+        </>
+        <VariablePresenter variable={variable} actions={props.actions} />
+      </presenters.TreeItem>
+    ))}
+  </presenters.TreeView>
+);
 
 interface VariableProps extends ActionsProps {
   variable: model.Variable | model.Scope;

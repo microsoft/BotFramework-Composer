@@ -114,17 +114,38 @@ export const Button: React.FC<ButtonProps> = props => {
   );
 };
 
-export const expandable = <P extends unknown>(Component: React.FC<P>): React.FC<P> => props => {
+// https://www.w3schools.com/howto/howto_js_treeview.asp
+export interface TreeItemProps {
+  leaf: boolean;
+}
+
+export const TreeItem: React.FC<TreeItemProps> = props => {
   const [expanded, setExpanded] = useState(false);
 
-  return expanded ? (
-    <Fragment>
-      <Button iconName="CollapseContentSingle" content={formatMessage('Collapse')} onClick={() => setExpanded(false)} />
-      <Component {...props} />
-    </Fragment>
-  ) : (
-    <Fragment>
-      <Button iconName="ExploreContentSingle" content={formatMessage('Expand')} onClick={() => setExpanded(true)} />
-    </Fragment>
+  const style: React.CSSProperties = { cursor: 'pointer', userSelect: 'none' };
+
+  // https://mxstbr.blog/2017/02/react-children-deepdive/
+  return (
+    <li style={style}>
+      <span onClick={() => setExpanded(e => !e)}>{props.leaf ? '.' : expanded ? '-' : '+'}</span>
+      {React.Children.map(props.children, (child, index) => {
+        switch (index) {
+          case 0:
+            return child;
+          case 1:
+            return expanded ? child : null;
+          case 2:
+            return expanded ? null : child;
+          default:
+            throw new Error();
+        }
+      })}
+    </li>
   );
+};
+
+export const TreeView: React.FC<JSX.IntrinsicAttributes> = props => {
+  const style: React.CSSProperties = { listStyleType: 'none' };
+
+  return <ul style={style}>{props.children}</ul>;
 };
