@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 import { join, resolve } from 'path';
+
 import { mkdirp } from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
+import fixPath from 'fix-path';
+
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 
 function main() {
@@ -18,26 +21,27 @@ function main() {
     show: false,
   });
 
-  // and load the index.html of the app.
   const CONTENT_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'http://localhost:5000/';
   console.log('Loading project from: ', CONTENT_URL);
-  win.loadURL(CONTENT_URL);
 
-  win.maximize();
-  win.show();
+  setTimeout(() => {
+    win.loadURL(CONTENT_URL);
+    win.maximize();
+    win.show();
+  }, 2000);
 }
 
 async function createAppDataDir() {
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
-  process.env.COMPOSER_APP_DATA = composerAppDataPath;
+  process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   console.log('creating composer app data path at: ', composerAppDataPath);
-
   await mkdirp(composerAppDataPath);
 }
 
 async function run() {
+  fixPath();
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
