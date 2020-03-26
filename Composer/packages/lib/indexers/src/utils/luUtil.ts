@@ -14,11 +14,13 @@ import { LuIntentSection } from '@bfc/shared';
 import { LuSectionTypes } from '../type';
 import { luIndexer } from '../luIndexer';
 import { Diagnostic } from '../diagnostic';
+
+import { buildNewlineText, splitNewlineText } from './help';
 const { parse } = luIndexer;
 
 const { luParser, sectionOperator } = sectionHandler;
 
-const NEWLINE = '\n';
+const NEWLINE = '\r\n';
 
 export function isValid(diagnostics: any[]) {
   return diagnostics.every(item => {
@@ -26,7 +28,19 @@ export function isValid(diagnostics: any[]) {
   });
 }
 
-export function textFromIntent(intent: LuIntentSection | null, secondary = false, enableSections = false): string {
+export function escapeBodyText(body: string, nestedLevel = 1): string {
+  const lines = splitNewlineText(body);
+  const fixedLines = lines.map(line => {
+    // #hi  -->
+    // -\#hi
+    // eslint-disable-next-line security/detect-non-literal-regexp
+    const reg = new RegExp('^(\\s*)(#{' + nestedLevel + '})([^#])');
+    return line.replace(reg, '$1- \\$2$3');
+  });
+  return buildNewlineText(fixedLines);
+}
+
+export function textFromIntent(intent: LuIntentSection | null, nestedLevel = 1, enableSections = false): string {
   if (!intent || isEmpty(intent)) return '';
   let { Name } = intent;
   const { Body } = intent;
@@ -36,12 +50,10 @@ export function textFromIntent(intent: LuIntentSection | null, secondary = false
   }
   const textBuilder: string[] = [];
   if (Name && Body) {
-    if (secondary) {
-      textBuilder.push(`## ${Name.trim()}`);
-    } else {
-      textBuilder.push(`# ${Name.trim()}`);
-    }
-    textBuilder.push(Body);
+    textBuilder.push(`${'#'.repeat(nestedLevel)} ${Name.trim()}`);
+
+    const escapedBody = escapeBodyText(Body, nestedLevel);
+    textBuilder.push(escapedBody);
   }
   let text = textBuilder.join(NEWLINE);
   if (enableSections) {
@@ -51,21 +63,19 @@ export function textFromIntent(intent: LuIntentSection | null, secondary = false
   return text;
 }
 
-export function textFromIntents(intents: LuIntentSection[], secondary = false): string {
-  return intents.map(intent => textFromIntent(intent, secondary)).join(`${NEWLINE}${NEWLINE}`);
+export function textFromIntents(intents: LuIntentSection[], nestedLevel = 1): string {
+  return intents.map(intent => textFromIntent(intent, nestedLevel)).join(`${NEWLINE}${NEWLINE}`);
 }
 
 export function checkSection(intent: LuIntentSection, enableSections = true): Diagnostic[] {
-  const text = textFromIntent(intent, false, enableSections);
+  const text = textFromIntent(intent, 1, enableSections);
   return parse(text).diagnostics;
 }
 
-export function checkSingleSectionValid(intent: LuIntentSection, enableSections = true): boolean {
-  const text = textFromIntent(intent, false, enableSections);
-  const { Sections, Errors } = luParser.parse(text);
-  return (
-    isValid(Errors) && Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1
-  );
+export function checkIsSingleSection(intent: LuIntentSection, enableSections = true): boolean {
+  const text = textFromIntent(intent, 1, enableSections);
+  const { Sections } = luParser.parse(text);
+  return Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1;
 }
 
 function updateInSections(
@@ -102,12 +112,9 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
   let targetSectionContent;
   const updatedSectionContent = textFromIntent(intent);
   const resource = luParser.parse(content);
-  const { Sections, Errors } = resource;
-  // if has error, do nothing.
-  if (intent && checkSingleSectionValid(intent) === false) return content;
-  if (isValid(Errors) === false) return content;
+  const { Sections } = resource;
   // if intent is null, do remove
-  // if remove target not exist return origin content;
+  // and if remove target not exist return origin content;
   if (!intent || isEmpty(intent)) {
     if (intentName.includes('/')) {
       const [parrentName, childName] = intentName.split('/');
@@ -133,9 +140,9 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
 
     if (targetSection) {
       const updatedSections = updateInSections(targetSection.SimpleIntentSections, childName, intent);
-      targetSectionContent = textFromIntent({ Name: targetSection.Name, Body: textFromIntents(updatedSections, true) });
+      targetSectionContent = textFromIntent({ Name: targetSection.Name, Body: textFromIntents(updatedSections, 2) });
     } else {
-      targetSectionContent = textFromIntent({ Name: parrentName, Body: textFromIntent(intent, true) });
+      targetSectionContent = textFromIntent({ Name: parrentName, Body: textFromIntent(intent, 2) });
     }
   } else {
     targetSection = Sections.find(({ Name }) => Name === intentName);
