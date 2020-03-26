@@ -5,9 +5,9 @@ import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 import { LgFile, LuFile } from '@bfc/indexers';
+import { importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
-import { getFileName } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -121,17 +121,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     actions: boundActions,
     dispatch: interceptDispatch,
     resolvers: {
-      lgImportresolver: function(source: string, id: string) {
-        const sourceId = getFileName(source).replace(/\.lg$/, '');
-        const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
-        const targetId = getFileName(id).replace(/\.lg$/, '');
-
-        const targetFile =
-          getState().lgFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
-          getState().lgFiles.find(({ id }) => id === targetId);
-        if (!targetFile) throw new Error(`${id} lg file not found`);
-        return { id, content: targetFile.content };
-      } as ImportResolverDelegate,
+      lgImportresolver: importResolverGenerator(getState().lgFiles, '.lg'),
       lgFileResolver: function(id: string) {
         const state = getState();
         const { locale, lgFiles } = state;

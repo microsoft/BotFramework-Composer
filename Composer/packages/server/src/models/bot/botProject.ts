@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { getNewDesigner } from '@bfc/shared';
+import { getNewDesigner, importResolverGenerator } from '@bfc/shared';
 import {
   FileInfo,
   DialogInfo,
@@ -110,7 +110,7 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
     this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
@@ -119,7 +119,7 @@ export class BotProject {
   };
 
   public getIndexes = () => {
-    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
     return {
       botName: this.name,
       location: this.dir,
@@ -521,32 +521,17 @@ export class BotProject {
     return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
   }
 
-  /**
-   *  @param source current file id
-   *  @param id imported file path
-   *  for example:
-   *  in todosample.en-us.lg:
-   *   [import](../common/common.lg)
-   *
-   *  resolve to common.en-us.lg || common.lg
-   *
-   *  source =  todosample || todosample.en-us || todosample.en-us.lg || todosample.lg
-   *  id =   common || common.lg || ../common/common.lg
-   *
-   */
-  private _lgImportResolver = (source: string, id: string) => {
-    const sourceId = Path.basename(source, '.lg');
-    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : this.locale;
-    const targetId = Path.basename(id, '.lg');
+  private _getLgImportResolver = () => {
+    const lgFiles = this.files
+      .filter(({ name }) => name.endsWith('.lg'))
+      .map(({ name, content }) => {
+        return {
+          id: Path.basename(name, '.lg'),
+          content,
+        };
+      });
 
-    const targetFile =
-      this.files.find(({ name }) => name === `${targetId}.${locale}.lg`) ||
-      this.files.find(({ name }) => name === `${targetId}.lg`);
-    if (!targetFile) throw new Error('file not found');
-    return {
-      id,
-      content: targetFile.content,
-    };
+    return importResolverGenerator(lgFiles, '.lg', this.locale);
   };
 
   // re index according to file change in a certain path
@@ -558,7 +543,7 @@ export class BotProject {
         this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+        this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
         break;
       case '.lu':
         this.luFiles = luIndexer.index(this.files);

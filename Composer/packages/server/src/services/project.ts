@@ -3,7 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
-import { TextFile } from '@bfc/indexers';
+import { importResolverGenerator, ResolverResource } from '@bfc/shared';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -33,46 +33,22 @@ export class BotProjectService {
     }
   }
 
-  public static lgImportResolver(source: string, id: string, projectId: string): TextFile {
+  public static lgImportResolver(source: string, id: string, projectId: string): ResolverResource {
     BotProjectService.initialize();
-    const sourceId = Path.basename(source, '.lg');
-    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
-    const targetId = Path.basename(id, '.lg');
-
     const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
-
     if (!project) throw new Error('project not found');
 
-    const targetFile =
-      project.lgFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
-      project.lgFiles.find(({ id }) => id === targetId);
-
-    if (!targetFile) throw new Error('lg file not found');
-    return {
-      id,
-      content: targetFile.content,
-    };
+    const resolver = importResolverGenerator(project.lgFiles, '.lg');
+    return resolver(source, id);
   }
 
-  public static luImportResolver(source: string, id: string, projectId: string): any {
+  public static luImportResolver(source: string, id: string, projectId: string): ResolverResource {
     BotProjectService.initialize();
-    const sourceId = Path.basename(source, '.lu');
-    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : 'en-us';
-    const targetId = Path.basename(id, '.lu');
-
     const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
-
     if (!project) throw new Error('project not found');
 
-    const targetFile =
-      project.luFiles.find(({ id }) => id === `${targetId}.${locale}`) ||
-      project.luFiles.find(({ id }) => id === targetId);
-
-    if (!targetFile) throw new Error('lu file not found');
-    return {
-      id,
-      content: targetFile.content,
-    };
+    const resolver = importResolverGenerator(project.luFiles, '.lu');
+    return resolver(source, id);
   }
 
   public static staticMemoryResolver(projectId: string): string[] {
