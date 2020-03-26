@@ -149,3 +149,34 @@ export const TreeView: React.FC<JSX.IntrinsicAttributes> = props => {
 
   return <ul style={style}>{props.children}</ul>;
 };
+
+export interface JsonTreeProps {
+  item: unknown;
+}
+
+const isObject = (item: unknown): item is object => typeof item === 'object' && item !== null;
+const isLeaf = (item: unknown) => !(isObject(item) || Array.isArray(item));
+
+export const JsonTree: React.FC<JsonTreeProps> = props => {
+  const { item } = props;
+
+  return (
+    <TreeView>
+      {isObject(item)
+        ? Object.keys(item).map(key => (
+            <TreeItem key={key} leaf={isLeaf(item[key])}>
+              {key}
+              <JsonTree item={item[key]} />
+            </TreeItem>
+          ))
+        : Array.isArray(item)
+        ? item.map((value, key) => (
+            <TreeItem key={key} leaf={isLeaf(value)}>
+              {key}
+              <JsonTree item={value} />
+            </TreeItem>
+          ))
+        : JSON.stringify(item)}
+    </TreeView>
+  );
+};

@@ -384,7 +384,7 @@ export const DebuggerPresenter: React.FC<DebuggerPresenterProps> = props => {
         </>
       ))}
       <Separator alignContent="start">Debug Spew</Separator>
-      <Text>{JSON.stringify(props, null, 4)}</Text>
+      <presenters.JsonTree item={props.debuggee} />
     </>
   );
 };
