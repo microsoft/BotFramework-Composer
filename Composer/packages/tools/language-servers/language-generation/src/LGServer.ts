@@ -15,8 +15,9 @@ import {
   CompletionItem,
   Range,
   DiagnosticSeverity,
+  TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
@@ -83,11 +84,15 @@ export class LGServer {
           },
           hoverProvider: true,
           foldingRangeProvider: false,
+          documentOnTypeFormattingProvider: {
+            firstTriggerCharacter: '\n',
+          },
         },
       };
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onHover(params => this.hover(params));
+    this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
@@ -305,7 +310,10 @@ export class LGServer {
     return resultArr.join(' ,');
   }
 
-  private matchLineState(params: TextDocumentPositionParams): LGCursorState | undefined {
+  private matchLineState(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
@@ -317,7 +325,10 @@ export class LGServer {
         state.push(TEMPLATENAME);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
-      } else if (state[state.length - 1] === TEMPLATENAME && (line.trim() === '[' || line.trim() === '[')) {
+      } else if (
+        (state[state.length - 1] === TEMPLATENAME || templateId) &&
+        (line.trim() === '[' || line.trim() === '[]')
+      ) {
         state.push(STRUCTURELG);
       }
     }
@@ -325,7 +336,7 @@ export class LGServer {
     return state.length >= 1 ? state.pop() : undefined;
   }
 
-  private matchCardTypeState(params: TextDocumentPositionParams): string | undefined {
+  private matchCardTypeState(params: TextDocumentPositionParams, templateId: string | undefined): string | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
@@ -338,7 +349,7 @@ export class LGServer {
         state.push(TEMPLATENAME);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
-      } else if (state[state.length - 1] === TEMPLATENAME && line.trim().startsWith('[')) {
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
         state.push(STRUCTURELG);
         lastLine = line;
       } else if (state[state.length - 1] === STRUCTURELG && line.trim() === '') {
@@ -489,7 +500,9 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const lgFile = this.getLGDocument(document)?.index();
+    const lgDoc = this.getLGDocument(document);
+    const lgFile = lgDoc?.index();
+    const templateId = lgDoc?.templateId;
     if (!lgFile) {
       return Promise.resolve(null);
     }
@@ -519,7 +532,7 @@ export class LGServer {
 
     const completionPropertyResult = this.findValidMemoryVariables(params);
 
-    const curLineState = this.matchLineState(params);
+    const curLineState = this.matchLineState(params, templateId);
 
     if (curLineState === STRUCTURELG) {
       const cardTypesSuggestions: CompletionItem[] = cardTypes.map(type => {
@@ -537,7 +550,7 @@ export class LGServer {
       });
     }
 
-    const cardType = this.matchCardTypeState(params);
+    const cardType = this.matchCardTypeState(params, templateId);
     if (cardType && cardTypes.includes(cardType)) {
       let item: CompletionItem | undefined = undefined;
       if (cardType === 'CardAction') {
@@ -611,6 +624,50 @@ export class LGServer {
     } else {
       return Promise.resolve(null);
     }
+  }
+
+  protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve(null);
+    }
+
+    const edits: TextEdit[] = [];
+    const key = params.ch;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const isInStructureLGMode = this.matchStructureLG(lines);
+    if (key === '\n' && isInStructureLGMode) {
+      const deleteRange = Range.create(position.line, 0, position.line, 4);
+      const deleteItem: TextEdit = TextEdit.del(deleteRange);
+      if (document.getText(deleteRange).trim() === '') {
+        edits.push(deleteItem);
+      }
+    }
+
+    return Promise.resolve(edits);
+  }
+
+  private matchStructureLG(lines: string[]): boolean {
+    if (lines.length === 0) return false;
+    let state = ROOT;
+    const propertyDefinitionRegex = /[^=]+=.*/;
+    for (const line of lines) {
+      if (state === ROOT && line.trim().startsWith('[')) {
+        state = STRUCTURELG;
+      } else if ((state === STRUCTURELG && propertyDefinitionRegex.test(line)) || line.trim() === '') {
+        continue;
+      } else {
+        state = ROOT;
+      }
+    }
+
+    if (state === ROOT) {
+      return false;
+    }
+
+    return true;
   }
 
   protected validate(document: TextDocument): void {

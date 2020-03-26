@@ -23,6 +23,7 @@ const defaultOptions: monacoEditor.editor.IEditorConstructionOptions = {
   glyphMargin: false,
   folding: false,
   renderLineHighlight: 'none',
+  formatOnType: true,
 };
 
 export interface BaseEditorProps extends Omit<MonacoEditorProps, 'height'> {
