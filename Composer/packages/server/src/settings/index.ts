@@ -8,16 +8,7 @@ import merge from 'lodash/merge';
 import log from '../logger';
 import { Path } from '../utility/path';
 
-import {
-  botsFolder,
-  botEndpoint,
-  appDataPath,
-  environment,
-  runtimeFolder,
-  runtimeFrameworkVersion,
-  platform,
-  diskNames,
-} from './env';
+import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder, runtimeFrameworkVersion } from './env';
 
 interface Settings {
   botAdminEndpoint: string;
@@ -27,8 +18,6 @@ interface Settings {
   runtimeFrameworkVersion: string;
   botsFolder: string;
   appDataPath: string;
-  platform: string;
-  diskNames: string[];
 }
 
 const envSettings: { [env: string]: Settings } = {
@@ -40,8 +29,6 @@ const envSettings: { [env: string]: Settings } = {
     runtimeFolder,
     runtimeFrameworkVersion,
     appDataPath,
-    platform,
-    diskNames,
   },
 };
 

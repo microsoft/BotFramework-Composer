@@ -29,8 +29,8 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
   };
   const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
-  const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
-  const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);
+  const start: Position = d.Range ? new Position(d.Range.Start.Line, d.Range.Start.Character) : new Position(0, 0);
+  const end: Position = d.Range ? new Position(d.Range.End.Line, d.Range.End.Character) : new Position(0, 0);
   result.range = new Range(start, end);
 
   return result;

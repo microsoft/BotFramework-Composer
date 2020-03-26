@@ -40,7 +40,7 @@ context('Notification Page', () => {
     cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('todobotwithluissample.en-us.lu')
+      cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
         .click();
@@ -74,7 +74,7 @@ context('Notification Page', () => {
     cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('todobotwithluissample.dialog')
+      cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
         .click();

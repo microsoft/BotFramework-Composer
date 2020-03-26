@@ -15,17 +15,19 @@ interface OpenProjectProps {
   onOpen: (path: string, storage: string) => void;
   focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  currentPath: string;
   onDismiss: () => void;
 }
 
 export const OpenProject: React.FC<OpenProjectProps> = props => {
-  const { onOpen, onDismiss, focusedStorageFolder, onCurrentPathUpdate } = props;
+  const { onOpen, onDismiss, focusedStorageFolder, currentPath, onCurrentPathUpdate } = props;
 
   return (
     <div data-testid="SelectLocation">
       <LocationSelectContent
         onOpen={onOpen}
         focusedStorageFolder={focusedStorageFolder}
+        currentPath={currentPath}
         onCurrentPathUpdate={onCurrentPathUpdate}
       />
       <DialogFooter>
