@@ -7,6 +7,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
@@ -155,14 +156,13 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const hasError = !!errorMessage || !!errorMsgFromDiagnostics;
   const hasWarning = !!warningMessage || !!warningMsgFromDiagnostics;
 
-  const messageHelp = formatMessage.rich('{msg}. Refer to the syntax documentation<a>here</a>.', {
-    msg: errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics,
-    a: ({ children }) => (
-      <a key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
-        {children}
-      </a>
-    ),
-  });
+  const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
+
+  const syntaxLink = (
+    <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+      {formatMessage('Refer to the syntax documentation here.')}
+    </Link>
+  );
 
   return (
     <React.Fragment>
@@ -178,10 +178,10 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
           messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
           isMultiline={false}
           dismissButtonAriaLabel={formatMessage('Close')}
-          truncated
           overflowButtonAriaLabel={formatMessage('See more')}
         >
           {messageHelp}
+          {syntaxLink}
         </MessageBar>
       )}
     </React.Fragment>
