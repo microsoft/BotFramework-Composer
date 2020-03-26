@@ -12,7 +12,6 @@ export interface EditorSchema {
 }
 
 export interface BotSchemas {
-  editor: EditorSchema;
   sdk?: any;
   diagnostics?: any[];
 }
