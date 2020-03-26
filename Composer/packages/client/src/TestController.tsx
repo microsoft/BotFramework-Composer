@@ -41,7 +41,8 @@ const STATE = {
 };
 
 export interface TestControllerProps {
-  setDebugging: (debugging: boolean) => void;
+  debugging: boolean;
+  setDebugging: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const TestController: React.FC<TestControllerProps> = props => {
@@ -181,9 +182,9 @@ export const TestController: React.FC<TestControllerProps> = props => {
             iconProps={{
               iconName: 'OpenInNewTab',
             }}
-            onClick={() => props.setDebugging(true)}
+            onClick={() => props.setDebugging(d => !d)}
           >
-            {formatMessage('Debug')}
+            {props.debugging ? formatMessage('Stop Debug') : formatMessage('Start Debug')}
           </ActionButton>
         )}
         {fetchState !== STATE.SUCCESS && (

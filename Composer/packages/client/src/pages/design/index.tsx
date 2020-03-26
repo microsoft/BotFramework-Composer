@@ -262,7 +262,7 @@ function DesignPage(props) {
     },
     {
       type: 'element',
-      element: <TestController setDebugging={setDebugging} />,
+      element: <TestController debugging={debugging} setDebugging={setDebugging} />,
       align: 'right',
     },
   ];
