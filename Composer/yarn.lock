@@ -2714,10 +2714,10 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-lu@^1.0.1":
-  version "1.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-1.0.1.tgz#66fa53d7754f49157103ce0e402a75d4cc8d667f"
-  integrity sha1-ZvpT13VPSRVxA84OQCp11MyNZn8=
+"@microsoft/bf-lu@^4.9.0-preview.115707":
+  version "4.9.0-preview.115707"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.115707.tgz#6c5546217b8884c10f85c3e91248e0466ea57f2d"
+  integrity sha1-bFVGIXuIhMEPhcPpEkjgRm6lfy0=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
