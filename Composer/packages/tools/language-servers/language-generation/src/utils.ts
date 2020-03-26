@@ -133,3 +133,29 @@ export function updateTemplate(content: string, name: string, body: string): str
     return lgFile.updateTemplate(name, name, template.parameters, body).toString();
   }
 }
+
+export const cardTypes = [
+  'Typing',
+  'Suggestions',
+  'HeroCard',
+  'SigninCard',
+  'ThumbnailCard',
+  'AudioCard',
+  'VideoCard',
+  'AnimationCard',
+  'MediaCard',
+  'OAuthCard',
+  'Attachment',
+  'AttachmentLayout',
+  'CardAction',
+  'AdaptiveCard',
+  'Activity',
+];
+
+export const cardPropDict = {
+  CardAction: ['title', 'type', 'value'],
+  Suggestions: ['SuggestionActions'],
+  Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
+  Attachment: ['contenttype', 'content'],
+  Others: ['type', 'name', 'value'],
+};

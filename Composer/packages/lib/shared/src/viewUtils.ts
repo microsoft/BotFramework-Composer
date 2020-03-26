@@ -293,12 +293,12 @@ const truncateSDKType = $type => (typeof $type === 'string' ? $type.split('Micro
  * Title priority: $designer.name > title from sdk schema > customize title > $type suffix
  * @param customizedTitile customized title
  */
-export function generateSDKTitle(data, customizedTitile?: string) {
+export function generateSDKTitle(data, customizedTitle?: string) {
   const $type = get(data, '$type');
   const titleFrom$designer = get(data, '$designer.name');
   const titleFromShared = get(ConceptLabels, [$type, 'title']);
   const titleFrom$type = truncateSDKType($type);
-  return titleFrom$designer || customizedTitile || titleFromShared || titleFrom$type;
+  return titleFrom$designer || customizedTitle || titleFromShared || titleFrom$type;
 }
 
 export function getInputType($type: string): string {
