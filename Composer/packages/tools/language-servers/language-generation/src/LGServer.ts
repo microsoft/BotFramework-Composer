@@ -19,7 +19,7 @@ import {
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
-import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
+import { ImportResolverDelegate, Templates } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -219,7 +219,7 @@ export class LGServer {
       }
 
       const id = fileId || uri;
-      const { allTemplates, diagnostics } = LGParser.parseText(content, id, importResolver);
+      const { allTemplates, diagnostics } = Templates.parseText(content, id, importResolver);
 
       return { templates: allTemplates, diagnostics };
     };
@@ -549,7 +549,7 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = LGParser.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
+    const lgDiagnostics = Templates.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }

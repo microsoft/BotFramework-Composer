@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { LGTemplate } from 'botbuilder-lg';
+import { Template } from 'botbuilder-lg';
 import { ShellApi } from '@bfc/shared';
 
 type ShellApiFuncs =
@@ -18,7 +18,7 @@ export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> 
   focusedEvent?: string;
   focusedTab?: string;
   clipboardActions: any[];
-  getLgTemplateSync: (lgTemplateName: string) => LGTemplate | undefined;
+  getLgTemplateSync: (lgTemplateName: string) => Template | undefined;
 }
 
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>({

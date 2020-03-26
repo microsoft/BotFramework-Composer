@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { Templates, TemplatesParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
 
 import { getBaseName } from './utils/help';
 import { LgTemplate, LgFile, FileInfo } from './type';
 import { Diagnostic, Position, Range } from './diagnostic';
 
-const { defaultFileResolver } = LGParser;
+const { defaultFileResolver } = TemplatesParser;
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -26,8 +26,8 @@ function parse(
   id = '',
   importResolver: ImportResolverDelegate = defaultFileResolver
 ): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
-  const lgFile = LGParser.parseText(content, id, importResolver);
-  const templates = lgFile.templates.map(t => {
+  const lgFile = Templates.parseText(content, id, importResolver);
+  const templates = lgFile.toArray().map(t => {
     return {
       name: t.name,
       body: t.body,

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGTemplate as LgTemplate } from 'botbuilder-lg';
+import { Template as LgTemplate } from 'botbuilder-lg';
 
 export interface LuIntentSection {
   Name: string;
