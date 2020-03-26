@@ -6,6 +6,8 @@ import { mkdirp } from 'fs-extra';
 import { app, BrowserWindow } from 'electron';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 function main() {
   console.log('Starting electron app');
   // Create the browser window.
@@ -19,7 +21,7 @@ function main() {
   });
 
   // and load the index.html of the app.
-  const CONTENT_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'http://localhost:5000/';
+  const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
   console.log('Loading project from: ', CONTENT_URL);
   win.loadURL(CONTENT_URL);
 
@@ -31,7 +33,7 @@ async function createAppDataDir() {
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
-  process.env.COMPOSER_APP_DATA = composerAppDataPath;
+  process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   console.log('creating composer app data path at: ', composerAppDataPath);
 
   await mkdirp(composerAppDataPath);
@@ -59,16 +61,22 @@ async function run() {
   await app.whenReady();
   console.log('App ready');
 
-  const unpackedDir = getUnpackedAsarPath();
-  process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+  let unpackedDir; // TODO: cleanup
+  if (!isDevelopment) {
+    // only change paths if packaged electron app
+    unpackedDir = getUnpackedAsarPath();
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+  }
 
+  // only create a new data directory if packaged electron app
   console.log('Creating app data directory...');
   await createAppDataDir();
   console.log('Created app data directory.');
 
   console.log('Starting server...');
   const { start } = await import('@bfc/server');
-  await start(join(unpackedDir, 'build', 'plugins'));
+  const pluginsDir = isDevelopment ? '' : join(unpackedDir, 'build', 'plugins'); // only change the plugins location if the application is packaged
+  await start(pluginsDir);
   console.log('Server started. Rendering application...');
 
   main();
@@ -76,7 +84,7 @@ async function run() {
 
 run()
   .catch(e => {
-    console.error(e);
+    console.error('Error occurred while starting Composer Electron: ', e);
     app.quit();
   })
   .then(() => {

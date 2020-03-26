@@ -3,31 +3,23 @@
   "license": "MIT",
   "author": "Microsoft Corporation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Electron wrapper around Composer that starts up the",
   "main": "./build/main.js",
   "engines": {
     "node": ">=12"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/public/static/js/*.js'",
     "build": "tsc -p tsconfig.build.json",
-    "clean": "rimraf build",
-    "pack": "electron-builder --dir",
-    "copy-templates": "node ./scripts/copy-templates.js",
-    "dist": "electron-builder",
-    "start": "electron .",
-    "start:dev": "cross-env NODE_ENV=development electron .",
+    "clean": "rimraf build && rimraf dist",
+    "copy-plugins": "node scripts/copy-plugins.js",
+    "copy-templates": "node scripts/copy-templates.js",
+    "dist": "node scripts/electronBuilderDist.js",
+    "dist:full": "yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
+    "pack": "node scripts/electronBuilderPack.js",
+    "start": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
-  },
-  "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/server.ts",
-    "watch": [
-      "src"
-    ],
-    "ext": "ts",
-    "delay": 2
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
@@ -72,7 +64,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "cross-env": "^7.0.2",
-    "debug": "^4.1.1",
+    "debug": "4.1.1",
     "dotenv": "^8.1.0",
     "ejs": "^2.7.1",
     "express": "^4.16.4",
