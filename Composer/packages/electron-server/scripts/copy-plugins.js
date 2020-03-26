@@ -19,7 +19,7 @@ switch (process.platform) {
 
   case 'win32':
     destination = resolve(__dirname, '../dist/win-unpacked/resources/app.asar.unpacked/build/plugins');
-    console.log('[copy-plugins.js] Windows detected. Copying plugins to: ', destination);
+    console.log(`[copy-plugins.js] Windows detected. Copying plugins from ${source} to ${destination}`);
     break;
 
   default:
@@ -30,4 +30,4 @@ switch (process.platform) {
 // copy plugins from /Composer/plugins/ to pre-packaged electron app
 fs.copy(source, destination)
   .then(console.log('[copy-plugins.js] Copied plugins successfully.'))
-  .catch(console.err('[copy-plugins.js] Error while copying plugins: ', err));
+  .catch(err => console.err('[copy-plugins.js] Error while copying plugins: ', err));
