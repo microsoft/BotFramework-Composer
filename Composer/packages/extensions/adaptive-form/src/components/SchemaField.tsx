@@ -72,7 +72,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   return (
     <div className={className} css={schemaField.container(props.depth)}>
       {error && !hideError ? (
-        <div>
+        <div css={schemaField.field}>
           <FieldWidget {...fieldProps} />
           {error}
         </div>
