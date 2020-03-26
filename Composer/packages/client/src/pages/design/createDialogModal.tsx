@@ -52,12 +52,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
 
     if (name) {
       if (!nameRegex.test(name)) {
-        errors.name = formatMessage(
-          'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-        );
+        errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
       }
       if (dialogs.some(dialog => dialog.id === name)) {
-        errors.name = formatMessage('Duplicaton of dialog name');
+        errors.name = formatMessage('Duplicate dialog name');
       }
     } else {
       errors.name = formatMessage('Please input a name');
@@ -90,6 +88,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
               required
+              autoFocus
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
