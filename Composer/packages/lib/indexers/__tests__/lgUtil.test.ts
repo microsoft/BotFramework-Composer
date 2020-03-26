@@ -15,7 +15,7 @@ describe('update lg template', () => {
 
     const template = { name: 'Exit', parameters: [], body: '-Bye' };
     const newContent = updateTemplate(content, 'Exit', template);
-    const { templates }: any = Templates.parseText(newContent);
+    const templates = Templates.parseText(newContent).toArray();
     expect(templates.length).toEqual(2);
     expect(templates[0].name).toEqual('Exit');
     expect(templates[0].body).toEqual('-Bye');
@@ -31,7 +31,7 @@ describe('add lg template', () => {
 -What's up bro`;
     const template = { name: 'Hi', parameters: [], body: '-hello' };
     const newContent = addTemplate(content, template);
-    const { templates }: any = Templates.parseText(newContent);
+    const templates = Templates.parseText(newContent).toArray();
     expect(templates.length).toEqual(3);
     expect(templates[0].name).toEqual('Exit');
     expect(templates[1].name).toEqual('Greeting');
@@ -47,7 +47,7 @@ describe('add lg template', () => {
 # Greeting
 -What's up bro`;
     const newContent = removeTemplate(content, 'Greeting');
-    const { templates }: any = Templates.parseText(newContent);
+    const templates = Templates.parseText(newContent).toArray();
     expect(templates.length).toEqual(1);
     expect(templates[0].name).toEqual('Exit');
   });
