@@ -3,7 +3,8 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, LGParser } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
+import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
+import { offsetRange } from '@bfc/indexers';
 
 // state should map to tokenizer state
 export enum LGCursorState {

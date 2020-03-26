@@ -1808,16 +1808,17 @@
                     "$role": "expression",
                     "oneOf": [
                         {
+                            "title": "Array of strings",
                             "type": "array",
                             "items": [
                                 {
                                     "type": "string",
                                     "title": "string"
                                 }
-                            ],
-                            "title": "array"
+                            ]
                         },
                         {
+                            "title": "Array of choice objects",
                             "type": "array",
                             "items": [
                                 {
@@ -1845,8 +1846,7 @@
                                         }
                                     }
                                 }
-                            ],
-                            "title": "array"
+                            ]
                         },
                         {
                             "type": "string",
@@ -2280,6 +2280,7 @@
                     "$role": "expression",
                     "oneOf": [
                         {
+                            "title": "Array of confirm choices",
                             "type": "array",
                             "items": [
                                 {
@@ -2307,8 +2308,7 @@
                                     },
                                     "title": "object"
                                 }
-                            ],
-                            "title": "array"
+                            ]
                         },
                         {
                             "type": "string",

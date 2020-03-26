@@ -2,9 +2,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { Monaco } from '@monaco-editor/react';
 
-function createKeywordsProposals(range) {
+function createKeywordsProposals(monaco: Monaco, range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
   // here you could do a server side lookup
   return [
@@ -35,7 +35,7 @@ function createKeywordsProposals(range) {
   ];
 }
 
-export function registerLGLanguage(monaco: typeof monacoEditor) {
+export function registerLGLanguage(monaco: Monaco) {
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
     ignoreCase: true,
     brackets: [
@@ -165,7 +165,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         endColumn: word.endColumn,
       };
       return {
-        suggestions: createKeywordsProposals(range),
+        suggestions: createKeywordsProposals(monaco, range),
       };
     },
   });

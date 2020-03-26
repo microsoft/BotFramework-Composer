@@ -3,9 +3,9 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
+import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { SensitiveProperties, importResolverGenerator } from '@bfc/shared';
-import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer } from '@bfc/indexers';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
