@@ -12,8 +12,9 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { DialogInfo, luIndexer, combineMessage } from '@bfc/indexers';
+import { luIndexer, combineMessage } from '@bfc/indexers';
 import get from 'lodash/get';
+import { DialogInfo } from '@bfc/shared';
 import { LuEditor } from '@bfc/code-editor';
 
 import {
@@ -265,7 +266,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             <LuEditor
               onChange={onTriggerPhrasesChange}
               value={formData.triggerPhrases}
-              errorMsg={formData.errors.triggerPhrases}
+              errorMessage={formData.errors.triggerPhrases}
               hidePlaceholder={true}
               luOption={{
                 projectId,

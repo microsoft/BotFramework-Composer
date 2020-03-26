@@ -3,11 +3,10 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -30,7 +29,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
-  const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  const [luEditor, setLuEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
   const searchSectionName = querystring.parse(search).t;
@@ -57,7 +56,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
-  const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount: EditorDidMount = (_getValue, luEditor) => {
     setLuEditor(luEditor);
   };
 
@@ -157,7 +156,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={httpErrorMsg}
+      errorMessage={httpErrorMsg}
       diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{

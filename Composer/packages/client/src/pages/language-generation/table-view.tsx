@@ -15,7 +15,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
-import { LgTemplate } from '@bfc/indexers';
+import { LgTemplate } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';

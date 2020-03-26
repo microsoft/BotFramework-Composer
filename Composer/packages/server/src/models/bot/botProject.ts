@@ -4,19 +4,8 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { getNewDesigner, importResolverGenerator } from '@bfc/shared';
-import {
-  FileInfo,
-  DialogInfo,
-  LgFile,
-  LuFile,
-  dialogIndexer,
-  lgIndexer,
-  luIndexer,
-  createSingleMessage,
-  JsonWalk,
-  VisitorFunc,
-} from '@bfc/indexers';
+import { getNewDesigner, importResolverGenerator, FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage, JsonWalk, VisitorFunc } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -626,7 +615,7 @@ export class BotProject {
         /language-understanding
             /[locale]
                  [dialog].[locale].lu
-  * 
+  *
   */
   private _reformProjectStructure = async () => {
     let isOldBotStructure = false;

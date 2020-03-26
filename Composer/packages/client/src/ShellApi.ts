@@ -96,8 +96,9 @@ export const ShellApi: React.FC = () => {
       return {} as ShellData;
     }
 
+    const data = getData(sourceWindow);
     return {
-      data: getData(sourceWindow),
+      data,
       locale,
       botName,
       projectId,
@@ -108,6 +109,7 @@ export const ShellApi: React.FC = () => {
       luFiles,
       currentDialog,
       dialogId,
+      designerId: get(data, '$designer.id'),
       focusedEvent: selected,
       focusedActions: focused ? [focused] : [],
       focusedSteps: focused ? [focused] : selected ? [selected] : [],

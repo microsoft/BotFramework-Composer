@@ -4,8 +4,7 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
-import { LgFile, LuFile } from '@bfc/indexers';
-import { importResolverGenerator } from '@bfc/shared';
+import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
 

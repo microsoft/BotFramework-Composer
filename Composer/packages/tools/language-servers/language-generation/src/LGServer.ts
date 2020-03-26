@@ -18,7 +18,8 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
+import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
+import { MemoryResolver } from '@bfc/shared';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';

@@ -3,11 +3,19 @@
 
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
-import { LuIntentSection } from '@bfc/shared';
+import {
+  FileInfo,
+  LuFile,
+  LuParsed,
+  LuSectionTypes,
+  LuIntentSection,
+  Diagnostic,
+  Position,
+  Range,
+  DiagnosticSeverity,
+} from '@bfc/shared';
 
-import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
 import { getBaseName } from './utils/help';
-import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
 
 const { luParser } = sectionHandler;

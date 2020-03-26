@@ -9,13 +9,12 @@
 
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
-import { LuIntentSection } from '@bfc/shared';
+import { LuIntentSection, LuSectionTypes, Diagnostic } from '@bfc/shared';
 
-import { LuSectionTypes } from '../type';
 import { luIndexer } from '../luIndexer';
-import { Diagnostic } from '../diagnostic';
 
 import { buildNewlineText, splitNewlineText } from './help';
+
 const { parse } = luIndexer;
 
 const { luParser, sectionOperator } = sectionHandler;
