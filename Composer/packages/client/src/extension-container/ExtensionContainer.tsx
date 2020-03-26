@@ -4,10 +4,12 @@
 import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
 import { ShellData, ShellApi } from '@bfc/shared';
+import Extension from '@bfc/extension';
 
 import ApiClient from '../messenger/ApiClient';
 
 import getEditor from './EditorMap';
+import plugins from './plugins';
 
 import './extensionContainer.css';
 
@@ -56,6 +58,14 @@ const shellApi: ShellApi = {
 
   onCopy: actions => {
     return apiClient.apiCall('onCopy', actions);
+  },
+
+  lgFileResolver: (id: string) => {
+    return apiClient.apiCall('lgFileResolver', id);
+  },
+
+  luFileResolver: (id: string) => {
+    return apiClient.apiCall('lgFileResolver', id);
   },
 
   createLuFile: id => {
@@ -173,7 +183,21 @@ function ExtensionContainer() {
 
   const RealEditor = shellData.data ? getEditor() : null;
 
-  return RealEditor && <RealEditor {...shellData} onChange={shellApi.saveData} shellApi={shellApi} />;
+  return (
+    RealEditor && (
+      <Extension shell={shellApi} shellData={shellData}>
+        <RealEditor
+          key={shellData.focusPath}
+          {...shellData}
+          onChange={shellApi.saveData}
+          shellApi={shellApi}
+          formData={shellData.data}
+          plugins={plugins}
+          schema={shellData.schemas?.sdk?.content}
+        />
+      </Extension>
+    )
+  );
 }
 
 export default ExtensionContainer;

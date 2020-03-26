@@ -58,13 +58,18 @@ const BaseInputSchema: UIWidget = {
       data.$kind === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
-          renderItem={item => (
-            <BorderedDiv height={20} title={item.value}>
-              {item.value}
-            </BorderedDiv>
-          )}
+          renderItem={item => {
+            const value = typeof item === 'object' ? item.value : item;
+            return (
+              <BorderedDiv height={20} title={value}>
+                {value}
+              </BorderedDiv>
+            );
+          }}
         />
-      ) : null,
+      ) : (
+        <>{data.choices}</>
+      ),
     footer: data =>
       data.property ? (
         <>
@@ -211,8 +216,9 @@ export const uiSchema: UISchema = {
       <ListOverview
         items={data.assignments}
         itemPadding={8}
-        renderItem={item => {
-          const content = `${item.property} : ${item.value}`;
+        renderItem={({ property, value }) => {
+          const v = typeof value === 'object' ? JSON.stringify(value) : value;
+          const content = `${property} : ${v}`;
           return (
             <SingleLineDiv height={16} title={content}>
               {content}

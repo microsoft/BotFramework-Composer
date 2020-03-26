@@ -3,14 +3,21 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs, SDKTypes } from '@bfc/shared';
+import {
+  extractLgTemplateRefs,
+  SDKTypes,
+  ITrigger,
+  DialogInfo,
+  FileInfo,
+  LgTemplateJsonPath,
+  Diagnostic,
+  ReferredLuIntents,
+} from '@bfc/shared';
 
 import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath, ReferredLuIntents } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
-import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 // find out all lg templates given dialog
@@ -216,7 +223,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
-          const isRoot = id === 'Main';
+          const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
           const dialog = {
             id,
             isRoot,

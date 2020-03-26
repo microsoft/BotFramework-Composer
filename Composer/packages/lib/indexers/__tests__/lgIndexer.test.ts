@@ -5,7 +5,7 @@ import { lgIndexer } from '../src/lgIndexer';
 import { FileInfo } from '../src/type';
 import { getBaseName } from '../src/utils/help';
 
-const { parse, index, check } = lgIndexer;
+const { parse, index } = lgIndexer;
 
 describe('parse', () => {
   it('should parse lg file', () => {
@@ -14,7 +14,7 @@ describe('parse', () => {
 
 # Greeting
 -What's up bro`;
-    const templates: any = parse(content);
+    const { templates }: any = parse(content);
     expect(templates.length).toEqual(2);
     expect(templates[0].name).toEqual('Exit');
     expect(templates[1].name).toEqual('Greeting');
@@ -28,7 +28,7 @@ Thanks for using todo bot.
 
 # Greeting
 -What's up bro`;
-    const diagnostics: any = check(content, 'common');
+    const { diagnostics }: any = parse(content, 'common');
     expect(diagnostics.length).toEqual(1);
   });
 });

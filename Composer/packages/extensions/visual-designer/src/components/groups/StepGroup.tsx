@@ -51,17 +51,17 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer hidden>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
       {nodes
-        ? nodes.map((x, index) => (
-            <OffsetContainer key={`stepGroup/${x.id}/offset`} offset={x.offset}>
+        ? nodes.map((node, index) => (
+            <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
               <StepRenderer
-                key={`stepGroup/${x.id}`}
-                id={x.id}
-                data={x.data}
+                key={`stepGroup/${node.id}`}
+                id={node.id}
+                data={node.data}
                 onEvent={onEvent}
                 onResize={size => {
-                  designerCache.cacheBoundary(x.data, size);
+                  designerCache.cacheBoundary(node.data, size);
                   updateNodeBoundary(getStepKey(index), size);
                 }}
               />

@@ -10,11 +10,12 @@ import formatMessage from 'format-message';
 import { ShellData, ShellApi } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
-import { NodeRendererContext } from './store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { UISchemaContext } from './store/UISchemaContext';
 import { UISchemaProvider } from './schema/uischemaProvider';
 import { uiSchema } from './schema/uischema';
+import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -36,6 +37,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   data: inputData,
   shellApi,
   hosted,
+  lgFiles,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -70,12 +72,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  const nodeContext = {
+  const nodeContext: NodeRendererContextValue = {
     focusedId,
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
+    getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
     copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
     removeLgTemplate,
@@ -114,7 +117,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps extends ShellData {
+export interface VisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
 }

@@ -3,24 +3,14 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
+import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { SensitiveProperties } from '@bfc/shared';
-import {
-  Diagnostic,
-  DiagnosticSeverity,
-  LgTemplate,
-  lgIndexer,
-  luIndexer,
-  LuFile,
-  DialogInfo,
-  dialogIndexer,
-} from '@bfc/indexers';
-import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getFileName, getBaseName } from '../../utils';
+import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -155,24 +145,12 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-  const lgImportresolver: ImportResolverDelegate = function(_source: string, id: string) {
-    const targetFileName = getFileName(id);
-    const targetFileId = getBaseName(targetFileName);
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
-    if (!targetFile) throw new Error(`file not found`);
-    return { id, content: targetFile.content };
-  };
-
+  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
   state.lgFiles = lgFiles.map(lgFile => {
-    const { check, parse } = lgIndexer;
+    const { parse } = lgIndexer;
     const { id, content } = lgFile;
-    const diagnostics = check(content, id, lgImportresolver);
-    let templates: LgTemplate[] = [];
-    try {
-      templates = parse(content, id);
-    } catch (err) {
-      diagnostics.push(new Diagnostic(err.message, id, DiagnosticSeverity.Error));
-    }
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
+
     return { ...lgFile, templates, diagnostics, content };
   });
   return state;

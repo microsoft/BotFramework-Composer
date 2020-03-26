@@ -19,7 +19,7 @@ describe('<ProjectTree/>', () => {
     const mockFileSelect = jest.fn(() => null);
     const { findByText } = renderWithStore(<ProjectTree dialogs={dialogs} onSelect={mockFileSelect} />);
 
-    const node = await findByText('AddToDo');
+    const node = await findByText('addtodo');
     fireEvent.click(node);
     expect(mockFileSelect).toHaveBeenCalledTimes(1);
   });

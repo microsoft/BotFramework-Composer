@@ -36,6 +36,13 @@ export class DesignerCache {
     return true;
   }
 
+  uncacheBoundary(actionData: BaseSchema): boolean {
+    const key = this.getActionDataHash(actionData);
+    if (!key) return false;
+
+    return delete this.boundaryCache[key];
+  }
+
   loadBounary(actionData: BaseSchema): Boundary | undefined {
     const key = this.getActionDataHash(actionData);
     if (key) {

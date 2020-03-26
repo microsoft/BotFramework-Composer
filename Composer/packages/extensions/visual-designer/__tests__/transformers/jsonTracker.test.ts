@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { insert, deleteNode, queryNode } from '../../src/utils/jsonTracker';
+import { insert, deleteNode, queryNode, getParentPaths } from '../../src/utils/jsonTracker';
 
 describe('queryNode', () => {
   describe('can query correct result', () => {
@@ -159,5 +159,15 @@ describe('delete node flow', () => {
       expect(removedDataFn).toBeCalledWith(dialog.foo.activityNode);
       expect(result).toEqual({ foo: { bar: [{ $kind: 'firstOne' }, { $kind: 'secondOne' }] } });
     });
+  });
+});
+
+describe('getParentPaths', () => {
+  it('can generate correct parent paths.', () => {
+    expect(getParentPaths('a')).toEqual([]);
+    expect(getParentPaths('a.b')).toEqual(['a']);
+    expect(getParentPaths('a.b.c')).toEqual(['a', 'a.b']);
+    expect(getParentPaths('a.b.c.d')).toEqual(['a', 'a.b', 'a.b.c']);
+    expect(getParentPaths('triggers[0].actions[0].actions')).toEqual(['triggers[0]', 'triggers[0].actions[0]']);
   });
 });

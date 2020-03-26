@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection } from '@bfc/shared';
-
-import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
-import { CodeRange } from '../type';
+import { LuIntentSection, Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -21,6 +18,21 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
     msg += createSingleMessage(d);
     return msg;
   }, '');
+}
+
+export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
+  const diagnostic = diagnostics[0];
+  if (diagnostic) {
+    let msg = '';
+    if (diagnostic.range) {
+      const { start, end } = diagnostic.range;
+      const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
+      msg += position;
+    }
+    const [, errorInfo] = diagnostic.message.split('error message: ');
+    return msg + errorInfo;
+  }
+  return '';
 }
 
 export function offsetRange(range: Range, offset: number): Range {
@@ -71,6 +83,10 @@ export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuI
 
 export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
   return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
+}
+
+export function findWarnings(diagnostics: Diagnostic[]): Diagnostic[] {
+  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Warning);
 }
 
 export function isValid(diagnostics: Diagnostic[]): boolean {

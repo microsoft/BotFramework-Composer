@@ -1,0 +1,40 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "701087"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$type": "Microsoft.OnCustomEvent",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "activity": "CustomEvent Fired."
+        }
+      ],
+      "event": "CustomEvent",
+      "$designer": {
+        "id": "767051"
+      }
+    },
+    {
+      "$type": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "360314"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "293316"
+          },
+          "dialog": "emitanevent"
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "emitevent.lg"
+}

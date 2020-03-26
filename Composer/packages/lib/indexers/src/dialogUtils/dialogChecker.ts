@@ -2,14 +2,13 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { FieldNames } from '@bfc/shared';
+import { FieldNames, Diagnostic } from '@bfc/shared';
 import values from 'lodash/values';
 
-import { Diagnostic } from '../diagnostic';
-
 import { ExpressionType } from './validation';
-import { CheckerFunc } from './types';
 import { validate } from './validation';
+
+type CheckerFunc = (path: string, value: any, type: string, schema: any) => Diagnostic[] | null; // error msg
 
 export const createPath = (path: string, type: string): string => {
   let list = path.split('.');

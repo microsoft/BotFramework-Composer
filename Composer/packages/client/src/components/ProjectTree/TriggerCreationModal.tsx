@@ -12,8 +12,9 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { DialogInfo, luIndexer, combineMessage } from '@bfc/indexers';
+import { luIndexer, combineMessage } from '@bfc/indexers';
 import get from 'lodash/get';
+import { DialogInfo } from '@bfc/shared';
 import { LuEditor } from '@bfc/code-editor';
 
 import {
@@ -98,8 +99,8 @@ interface TriggerCreationModalProps {
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, projectId } = state;
-  const luFile = luFiles.find(lu => lu.id === dialogId);
+  const { dialogs, luFiles, locale, projectId } = state;
+  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
@@ -127,11 +128,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
 
     const content = get(luFile, 'content', '');
+    const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const newDialog = generateNewDialog(dialogs, dialogId, formData);
     if (formData.$type === intentTypeKey && !isRegEx) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
-        id: dialogId,
+        id: luFileId,
         content: newContent,
       };
       onSubmit(newDialog, updateLuFile);
@@ -264,7 +266,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             <LuEditor
               onChange={onTriggerPhrasesChange}
               value={formData.triggerPhrases}
-              errorMsg={formData.errors.triggerPhrases}
+              errorMessage={formData.errors.triggerPhrases}
               hidePlaceholder={true}
               luOption={{
                 projectId,
