@@ -110,7 +110,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const initialFormData: TriggerFormData = {
     errors: {},
     $type: '',
-    recognizerType: ValueRecognizerKey,
+    recognizerType: LuisRecognizerKey,
     specifiedType: '',
     intent: '',
     triggerPhrases: '',

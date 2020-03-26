@@ -36,10 +36,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
   return (
     <>
       <WidgetLabel label={label} />
-      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.ValueRecognizer}>
-        <PivotItem headerText={formatMessage('Value')} itemKey={SDKTypes.ValueRecognizer}>
-          <div>Intent name: {value}</div>
-        </PivotItem>
+      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.LuisRecognizer}>
         <PivotItem
           headerText={formatMessage('Luis')}
           itemKey={SDKTypes.LuisRecognizer}
@@ -57,6 +54,9 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
           }}
         >
           <RegexEditorWidget formContext={formContext} name={value} />
+        </PivotItem>
+        <PivotItem headerText={formatMessage('Value')} itemKey={SDKTypes.ValueRecognizer}>
+          <div>Intent name: {value}</div>
         </PivotItem>
       </Pivot>
     </>

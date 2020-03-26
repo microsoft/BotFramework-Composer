@@ -52,16 +52,16 @@ export const ValueRecognizerKey: string = SDKTypes.ValueRecognizer;
 
 export const recognizerTemplates = [
   {
-    key: ValueRecognizerKey,
-    text: formatMessage('Value'),
-  },
-  {
     key: LuisRecognizerKey,
     text: formatMessage('LUIS'),
   },
   {
     key: regexRecognizerKey,
     text: formatMessage('Regular Expression'),
+  },
+  {
+    key: ValueRecognizerKey,
+    text: formatMessage('Value'),
   },
 ];
 
