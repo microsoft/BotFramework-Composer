@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
 import { lgIndexer } from './lgIndexer';
@@ -9,29 +9,6 @@ import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
 
 class Indexer {
-  /**
-   *  @param source current file id
-   *  @param id imported file path
-   *  for example:
-   *  in AddToDo.lg:
-   *   [import](../common/common.lg)
-   *
-   * source = AddToDo.lg  || AddToDo
-   * id = ../common/common.lg  || common.lg || common
-   */
-  private _lgImportResolver = (files: FileInfo[]) => {
-    const lgFiles = files;
-    return (source: string, id: string) => {
-      const targetId = getBaseName(id, '.lg');
-      const targetFile = lgFiles.find(({ name }) => getBaseName(name, '.lg') === targetId);
-      if (!targetFile) throw new Error('file not found');
-      return {
-        id,
-        content: targetFile.content,
-      };
-    };
-  };
-
   private classifyFile(files: FileInfo[]) {
     return files.reduce(
       (result, file) => {
@@ -45,11 +22,22 @@ class Indexer {
     );
   }
 
-  public index(files: FileInfo[], botName: string, schema: any) {
+  private getLgImportResolver = (files: FileInfo[], locale: string) => {
+    const lgFiles = files.map(({ name, content }) => {
+      return {
+        id: getBaseName(name, '.lg'),
+        content,
+      };
+    });
+
+    return importResolverGenerator(lgFiles, '.lg', locale);
+  };
+
+  public index(files: FileInfo[], botName: string, schema: any, locale: string) {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName, schema),
-      lgFiles: lgIndexer.index(result[FileExtensions.lg], this._lgImportResolver(result[FileExtensions.lg])),
+      lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
     };
   }
