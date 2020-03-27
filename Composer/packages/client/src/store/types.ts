@@ -4,8 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate } from '@bfc/shared';
-import { DialogInfo, LgFile, LuFile, FileInfo } from '@bfc/indexers';
+import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -47,7 +46,6 @@ export interface StorageFolder extends File {
 }
 
 export interface State {
-  files: FileInfo[];
   dialogs: DialogInfo[];
   projectId: string;
   botName: string;

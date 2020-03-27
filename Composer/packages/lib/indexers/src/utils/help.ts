@@ -10,3 +10,25 @@ export function getExtension(filename: string): string | undefined {
   const re = /\.[^.]+$/;
   return re.exec(filename)?.[0];
 }
+
+// split text to lines
+export function splitNewlineText(text: string): string[] {
+  return text.split('\n');
+}
+
+// convert lines to \r\n text
+export function buildNewlineText(lineArray: string[]): string {
+  if (lineArray.length < 2) return lineArray.join('');
+  const lastLine = lineArray.pop();
+  const linesWithRN = lineArray.map(line => {
+    if (line.endsWith('\r\n')) {
+      return line;
+    } else if (line.endsWith('\r')) {
+      return line + '\n';
+    } else {
+      return line + '\r\n';
+    }
+  });
+  const lastLineWithRN = lastLine && lastLine.endsWith('\r') ? lastLine + '\n' : lastLine;
+  return [...linesWithRN, lastLineWithRN].join('');
+}

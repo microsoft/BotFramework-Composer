@@ -3,10 +3,9 @@
 
 import { LGParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
+import { LgTemplate, LgFile, FileInfo, Diagnostic, Position, Range } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
-import { LgTemplate, LgFile, FileInfo } from './type';
-import { Diagnostic, Position, Range } from './diagnostic';
 
 const { defaultFileResolver } = LGParser;
 

@@ -6,9 +6,9 @@
  * it's designed have no state, input text file, output text file.
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
-
-import { LuFile, DialogInfo, createSingleMessage } from '@bfc/indexers';
 import keys from 'lodash/keys';
+import { createSingleMessage } from '@bfc/indexers';
+import { LuFile, DialogInfo } from '@bfc/shared';
 
 import { getBaseName } from './fileUtil';
 export * from '@bfc/indexers/lib/utils/luUtil';

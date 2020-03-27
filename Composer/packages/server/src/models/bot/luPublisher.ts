@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import { FileInfo } from '@bfc/indexers';
+import { FileInfo } from '@bfc/shared';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';

@@ -4,8 +4,8 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { FileInfo, JsonWalk, VisitorFunc } from '@bfc/indexers';
-import { getNewDesigner } from '@bfc/shared';
+import { JsonWalk, VisitorFunc } from '@bfc/indexers';
+import { getNewDesigner, FileInfo } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -435,7 +435,7 @@ export class BotProject {
         /language-understanding
             /[locale]
                  [dialog].[locale].lu
-  * 
+  *
   */
   private _reformProjectStructure = async () => {
     let isOldBotStructure = false;

@@ -3,15 +3,14 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
+import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { SensitiveProperties } from '@bfc/shared';
-import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer, LgFile } from '@bfc/indexers';
-import { ImportResolverDelegate } from 'botbuilder-lg';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getFileName, getBaseName } from '../../utils';
+import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -138,25 +137,10 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const lgImportresolver = (files: LgFile[]): ImportResolverDelegate => {
-  const lgFiles = files;
-  return function(source: string, id: string) {
-    const locale = getExtension(source);
-    const targetFileName = getFileName(id);
-    let targetFileId = getBaseName(targetFileName);
-    if (locale) {
-      targetFileId += `.${locale}`;
-    }
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
-    if (!targetFile) throw new Error(`file not found`);
-    return { id, content: targetFile.content };
-  };
-};
-
 const createLgFile: ReducerFunc = (state, { id, content }) => {
   const { parse } = lgIndexer;
-  const resolver = lgImportresolver(state.lgFiles);
-  const { templates, diagnostics } = parse(content, id, resolver);
+  const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
+  const { templates, diagnostics } = parse(content, id, lgImportresolver);
   const lgFile = { id, templates, diagnostics, content };
   state.lgFiles.push(lgFile);
   return state;
@@ -178,13 +162,11 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
     }
     return lgFile;
   });
-
-  const resolver = lgImportresolver(lgFiles);
-
+  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
   state.lgFiles = lgFiles.map(lgFile => {
     const { parse } = lgIndexer;
     const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, resolver);
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
 
     return { ...lgFile, templates, diagnostics, content };
   });
