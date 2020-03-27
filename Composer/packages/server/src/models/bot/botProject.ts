@@ -4,19 +4,8 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { getNewDesigner } from '@bfc/shared';
-import {
-  FileInfo,
-  DialogInfo,
-  LgFile,
-  LuFile,
-  dialogIndexer,
-  lgIndexer,
-  luIndexer,
-  createSingleMessage,
-  JsonWalk,
-  VisitorFunc,
-} from '@bfc/indexers';
+import { getNewDesigner, importResolverGenerator, FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage, JsonWalk, VisitorFunc } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -82,9 +71,6 @@ export class BotProject {
   public defaultSDKSchema: {
     [key: string]: string;
   };
-  public defaultEditorSchema: {
-    [key: string]: string;
-  };
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
@@ -95,9 +81,6 @@ export class BotProject {
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
-    this.defaultEditorSchema = JSON.parse(
-      fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
-    );
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
@@ -110,7 +93,7 @@ export class BotProject {
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.dialogs = this.indexDialogs();
-    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
     this.luFiles = luIndexer.index(this.files);
     await this._checkProjectStructure();
     if (this.settings) {
@@ -119,7 +102,7 @@ export class BotProject {
   };
 
   public getIndexes = () => {
-    this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+    this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
     return {
       botName: this.name,
       location: this.dir,
@@ -159,22 +142,10 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
-
-    if (userEditorSchemaFile !== undefined) {
-      try {
-        editorSchema = JSON.parse(userEditorSchemaFile.content);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Attempt to parse editor schema as JSON failed');
-        diagnostics.push(`Error in editor.schema, ${error.message}`);
-      }
-    }
 
     if (userSDKSchemaFile !== undefined) {
       try {
@@ -187,9 +158,6 @@ export class BotProject {
     }
 
     return {
-      editor: {
-        content: editorSchema,
-      },
       sdk: {
         content: sdkSchema,
       },
@@ -200,9 +168,12 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const dialogs = this.dialogs;
     const mainDialog = dialogs.find(item => item.isRoot);
+    if (!mainDialog) return;
+    const entryDialogId = name.trim().toLowerCase();
+    const { content, relativePath } = mainDialog;
 
-    if (mainDialog && mainDialog.content) {
-      const oldDesigner = mainDialog.content.$designer;
+    if (content) {
+      const oldDesigner = content.$designer;
 
       let newDesigner;
       if (oldDesigner && oldDesigner.id) {
@@ -215,8 +186,29 @@ export class BotProject {
         newDesigner = getNewDesigner(name, description);
       }
 
-      mainDialog.content.$designer = newDesigner;
-      await this.updateDialog(mainDialog.id, mainDialog.content);
+      content.$designer = newDesigner;
+
+      const updatedContent = this._autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+      await this._updateFile(relativePath, updatedContent);
+    }
+
+    // when create/saveAs bot, serialize entry dialog/lg/lu
+    const entryPatterns = [
+      templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
+    ];
+    for (const pattern of entryPatterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        const realFilePath = Path.join(root, filePath);
+        // skip common file, do not rename.
+        if (Path.basename(realFilePath).startsWith('common.')) continue;
+        // rename file to new botname
+        const targetFilePath = realFilePath.replace(/(.*)\/[^.]*(\..*$)/i, `$1/${entryDialogId}$2`);
+        await this.fileStorage.rename(realFilePath, targetFilePath);
+      }
     }
   };
 
@@ -521,30 +513,17 @@ export class BotProject {
     return dialogIndexer.index(this.files, this.name, this.getSchemas().sdk.content);
   }
 
-  /**
-   *  @param source current file id
-   *  @param id imported file path
-   *  for example:
-   *  in todosample.en-us.lg:
-   *   [import](../common/common.lg)
-   *
-   *  resolve to common.en-us.lg
-   *
-   *  source = todosample.en-us  || AddToDo
-   *  id = ../common/common.lg  || common.lg || common
-   */
-  private _lgImportResolver = (source: string, id: string) => {
-    const locale = source.split('.').length > 1 ? source.split('.').pop() : '';
-    let targetId = Path.basename(id, '.lg');
-    if (locale) {
-      targetId += `.${locale}`;
-    }
-    const targetFile = this.lgFiles.find(({ id }) => id === targetId);
-    if (!targetFile) throw new Error('file not found');
-    return {
-      id,
-      content: targetFile.content,
-    };
+  private _getLgImportResolver = () => {
+    const lgFiles = this.files
+      .filter(({ name }) => name.endsWith('.lg'))
+      .map(({ name, content }) => {
+        return {
+          id: Path.basename(name, '.lg'),
+          content,
+        };
+      });
+
+    return importResolverGenerator(lgFiles, '.lg', this.locale);
   };
 
   // re index according to file change in a certain path
@@ -556,7 +535,7 @@ export class BotProject {
         this.dialogs = this.indexDialogs();
         break;
       case '.lg':
-        this.lgFiles = lgIndexer.index(this.files, this._lgImportResolver);
+        this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
         break;
       case '.lu':
         this.luFiles = luIndexer.index(this.files);
@@ -615,7 +594,7 @@ export class BotProject {
         /language-understanding
             /[locale]
                  [dialog].[locale].lu
-  * 
+  *
   */
   private _reformProjectStructure = async () => {
     let isOldBotStructure = false;
@@ -893,7 +872,7 @@ export class BotProject {
    * - "dialog": 'AddTodos'
    * + "dialog": 'addtodos'
    */
-  private _autofixReferInDialog = (dialogId: string, content: string) => {
+  private _autofixReferInDialog = (dialogId: string, content: string): string => {
     try {
       const dialogJson = JSON.parse(content);
 

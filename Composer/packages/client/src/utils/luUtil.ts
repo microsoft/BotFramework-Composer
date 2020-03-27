@@ -7,7 +7,7 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { LuFile, DialogInfo } from '@bfc/shared';
 
 import { getBaseName } from './fileUtil';
 export * from '@bfc/indexers/lib/utils/luUtil';

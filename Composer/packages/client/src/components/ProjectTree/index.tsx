@@ -16,7 +16,7 @@ import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger } from '@bfc/indexers';
+import { DialogInfo, ITrigger } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';

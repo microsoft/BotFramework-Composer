@@ -8,8 +8,7 @@
  */
 
 import { LGParser } from 'botbuilder-lg';
-
-import { LgTemplate } from '../type';
+import { LgTemplate } from '@bfc/shared';
 
 export interface Template {
   name: string;

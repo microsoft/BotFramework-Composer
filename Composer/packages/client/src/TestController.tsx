@@ -9,7 +9,7 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
-import { DiagnosticSeverity, Diagnostic } from '@bfc/indexers';
+import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
