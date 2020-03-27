@@ -9538,21 +9538,21 @@
                     "type": "string",
                     "title": "KnowledgeBase Id",
                     "description": "KnowledgeBase Id of your QnA Maker KnowledgeBase.",
-                    "default": "settings.qna.knowledgebaseid"
+                    "default": "=settings.qna.knowledgebaseid"
                 },
                 "endpointKey": {
                     "$role": "expression",
                     "type": "string",
                     "title": "Endpoint Key",
                     "description": "Endpoint key for the QnA Maker KB.",
-                    "default": "settings.qna.endpointkey"
+                    "default": "=settings.qna.endpointkey"
                 },
                 "hostname": {
                     "$role": "expression",
                     "type": "string",
                     "title": "Hostname",
                     "description": "Hostname for your QnA Maker service.",
-                    "default": "settings.qna.hostname",
+                    "default": "=settings.qna.hostname",
                     "examples": [
                         "https://yourserver.azurewebsites.net/qnamaker"
                     ]
