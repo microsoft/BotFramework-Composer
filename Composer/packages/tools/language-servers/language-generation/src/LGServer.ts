@@ -311,10 +311,7 @@ export class LGServer {
     return resultArr.join(' ,');
   }
 
-  private matchLineState(
-    params: TextDocumentPositionParams,
-    templateId: string | undefined
-  ): LGCursorState | undefined {
+  private matchLineState(params: TextDocumentPositionParams): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
@@ -326,10 +323,7 @@ export class LGServer {
         state.push(TEMPLATENAME);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
-      } else if (
-        (state[state.length - 1] === TEMPLATENAME || templateId) &&
-        (line.trim() === '[' || line.trim() === '[]')
-      ) {
+      } else if (state[state.length - 1] === TEMPLATENAME && (line.trim() === '[' || line.trim() === '[]')) {
         state.push(STRUCTURELG);
       }
     }
@@ -337,7 +331,7 @@ export class LGServer {
     return state.length >= 1 ? state.pop() : undefined;
   }
 
-  private matchCardTypeState(params: TextDocumentPositionParams, templateId: string | undefined): string | undefined {
+  private matchCardTypeState(params: TextDocumentPositionParams): string | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
@@ -350,7 +344,7 @@ export class LGServer {
         state.push(TEMPLATENAME);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
-      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+      } else if (state[state.length - 1] === TEMPLATENAME && line.trim().startsWith('[')) {
         state.push(STRUCTURELG);
         lastLine = line;
       } else if (state[state.length - 1] === STRUCTURELG && line.trim() === '') {
@@ -503,7 +497,7 @@ export class LGServer {
     const endWithDot = wordAtCurRange.endsWith('.');
     const lgDoc = this.getLGDocument(document);
     const lgFile = lgDoc?.index();
-    const templateId = lgDoc?.templateId;
+
     if (!lgFile) {
       return Promise.resolve(null);
     }
@@ -533,7 +527,7 @@ export class LGServer {
 
     const completionPropertyResult = this.findValidMemoryVariables(params);
 
-    const curLineState = this.matchLineState(params, templateId);
+    const curLineState = this.matchLineState(params);
 
     if (curLineState === STRUCTURELG) {
       const cardTypesSuggestions: CompletionItem[] = cardTypes.map(type => {
@@ -551,7 +545,7 @@ export class LGServer {
       });
     }
 
-    const cardType = this.matchCardTypeState(params, templateId);
+    const cardType = this.matchCardTypeState(params);
     if (cardType && cardTypes.includes(cardType)) {
       let item: CompletionItem | undefined = undefined;
       if (cardType === 'CardAction') {
