@@ -29,6 +29,7 @@ const defaultOptions = {
   glyphMargin: false,
   folding: false,
   renderLineHighlight: 'none',
+  formatOnType: true,
 };
 
 const styles = {
