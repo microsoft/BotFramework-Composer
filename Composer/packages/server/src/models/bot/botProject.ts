@@ -156,22 +156,21 @@ export class BotProject {
     const entryDialogId = name.trim().toLowerCase();
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
-    if (content) {
-      const oldDesigner = content.$designer;
-      let newDesigner;
-      if (oldDesigner && oldDesigner.id) {
-        newDesigner = {
-          ...oldDesigner,
-          name,
-          description,
-        };
-      } else {
-        newDesigner = getNewDesigner(name, description);
-      }
-      content.$designer = newDesigner;
-      const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
-      await this._updateFile(relativePath, updatedContent);
+    if (!content.$designer) return;
+    const oldDesigner = content.$designer;
+    let newDesigner;
+    if (oldDesigner && oldDesigner.id) {
+      newDesigner = {
+        ...oldDesigner,
+        name,
+        description,
+      };
+    } else {
+      newDesigner = getNewDesigner(name, description);
     }
+    content.$designer = newDesigner;
+    const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+    await this._updateFile(relativePath, updatedContent);
     // when create/saveAs bot, serialize entry dialog/lg/lu
     const entryPatterns = [
       templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
