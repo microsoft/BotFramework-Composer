@@ -5,7 +5,6 @@ import formatMessage from 'format-message';
 
 formatMessage.setup({ missingTranslation: 'ignore' });
 
-export * from './appschema';
 export * from './constant';
 export * from './copyUtils';
 export * from './dialogFactory';
