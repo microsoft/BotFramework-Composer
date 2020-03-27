@@ -9,6 +9,10 @@ const destination = resolve(__dirname, '../build/templates');
 console.log(`[copy-templates.js] Copying templates from ${source} to ${destination}`);
 
 // copy project templates to build directory to be packaged
-fs.copy(source, destination)
-  .then(console.log('[copy-templates.js] Copied templates successfully.'))
-  .catch(err => console.err('[copy-templates.js] Error while copying templates: ', err));
+fs.copy(source, destination, err => {
+  if (err) {
+    console.error('[copy-templates.js] Error while copying templates:');
+    return;
+  }
+  console.log('[copy-templates.js] Copied templates successfully.');
+});
