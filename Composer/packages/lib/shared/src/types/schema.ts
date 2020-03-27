@@ -50,7 +50,6 @@ export enum SDKTypes {
   HttpRequest = 'Microsoft.HttpRequest',
   IfCondition = 'Microsoft.IfCondition',
   IpEntityRecognizer = 'Microsoft.IpEntityRecognizer',
-  LanguagePolicy = 'Microsoft.LanguagePolicy',
   LogAction = 'Microsoft.LogAction',
   LuisRecognizer = 'Microsoft.LuisRecognizer',
   MentionEntityRecognizer = 'Microsoft.MentionEntityRecognizer',
@@ -102,6 +101,31 @@ export enum SDKTypes {
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
+
+  /** Kinds */
+
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKKinds {
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKRoles {
+  expression = 'expression',
+  // TODO
+  // union = 'union',
+  // union_*_ = 'union(*)',
 }
 
 export interface OBISchema extends JSONSchema6 {

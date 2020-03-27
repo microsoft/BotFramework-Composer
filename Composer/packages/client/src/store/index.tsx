@@ -4,10 +4,9 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
-import { LgFile, LuFile } from '@bfc/indexers';
+import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
-import { getFileName, getBaseName, getExtension } from '../utils/fileUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -39,7 +38,7 @@ const initialState: State = {
   templateId: 'EmptyBot',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
-  schemas: { editor: {} },
+  schemas: {},
   luFiles: [],
   actionsSeed: [],
   designPageLocation: {
@@ -121,17 +120,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     actions: boundActions,
     dispatch: interceptDispatch,
     resolvers: {
-      lgImportresolver: function(source: string, id: string) {
-        const locale = getExtension(source);
-        const targetFileName = getFileName(id);
-        let targetFileId = getBaseName(targetFileName);
-        if (locale) {
-          targetFileId += `.${locale}`;
-        }
-        const targetFile = getState().lgFiles.find(({ id }) => id === targetFileId);
-        if (!targetFile) throw new Error(`${id} lg file not found`);
-        return { id, content: targetFile.content };
-      } as ImportResolverDelegate,
+      lgImportresolver: importResolverGenerator(getState().lgFiles, '.lg'),
       lgFileResolver: function(id: string) {
         const state = getState();
         const { locale, lgFiles } = state;

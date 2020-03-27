@@ -18,6 +18,7 @@ export const dropdown: Partial<IDropdownStyles> = {
   subComponentStyles: {
     label: textFieldlabel,
     panel: {},
+    multiSelectItem: {},
   },
   // root: [
   //   {

@@ -1,7 +1,8 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "id": "114909"
+    "id": "114909",
+    "name": "deletetodo"
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
