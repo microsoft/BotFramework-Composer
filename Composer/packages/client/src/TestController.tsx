@@ -41,7 +41,6 @@ export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(state.botLoadErrorMsg.title !== '');
-  // const [error, setError] = useState({ title: '', message: '' });
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
