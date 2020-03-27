@@ -31,8 +31,8 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 };
 
 export const indexProject: ActionCreator = (store, data, jump) => {
-  const { files, botName, schemas, id } = data;
-  const result = indexer.index(files, botName, schemas.sdk.content);
+  const { files, botName, schemas, id, locale } = data;
+  const result = indexer.index(files, botName, schemas.sdk.content, locale);
   store.dispatch({
     type: ActionTypes.GET_PROJECT_SUCCESS,
     payload: {
