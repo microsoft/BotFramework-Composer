@@ -72,11 +72,12 @@ Object {
   },
   "uiSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
-      "description": "This configures a data driven dialog via a collection of events and actions.",
+      "description": [Function],
       "helpLink": "https://aka.ms/botframework",
       "hidden": Array [
         "recognizer",
       ],
+      "label": "Adaptive dialog",
       "order": Array [
         "recognizer",
         "*",
@@ -93,9 +94,11 @@ Object {
     },
     "Microsoft.AttachmentInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": "Prompt for Attachment",
     },
     "Microsoft.BeginDialog": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": "Begin a Dialog",
       "order": Array [
         "dialog",
         "options",
@@ -106,6 +109,7 @@ Object {
     },
     "Microsoft.CancelAllDialogs": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": [Function],
       "order": Array [
         "dialog",
         "property",
@@ -114,18 +118,22 @@ Object {
     },
     "Microsoft.ChoiceInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
     },
     "Microsoft.ConfirmInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
     },
     "Microsoft.DateTimeInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
     },
     "Microsoft.DebugBreak": Object {
       "label": [Function],
     },
     "Microsoft.DeleteProperties": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
+      "label": [Function],
     },
     "Microsoft.DeleteProperty": Object {
       "helpLink": "https://aka.ms/bfc-using-memory",
@@ -144,12 +152,18 @@ Object {
     },
     "Microsoft.EndDialog": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": [Function],
+    },
+    "Microsoft.EndTurn": Object {
+      "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": [Function],
     },
     "Microsoft.Foreach": Object {
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "itemsProperty",
         "*",
@@ -160,6 +174,7 @@ Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "itemsProperty",
         "pageSize",
@@ -168,6 +183,7 @@ Object {
     },
     "Microsoft.HttpRequest": Object {
       "helpLink": "https://aka.ms/bfc-using-http",
+      "label": [Function],
       "order": Array [
         "method",
         "url",
@@ -182,20 +198,19 @@ Object {
         "actions",
         "elseActions",
       ],
+      "label": [Function],
     },
     "Microsoft.LogAction": Object {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
-    },
-    "Microsoft.LuisRecognizer": Object {
-      "helpLink": "https://aka.ms/BFC-Using-LU",
-    },
-    "Microsoft.MultiLanguageRecognizer": Object {
-      "helpLink": "https://aka.ms/BFC-Using-LU",
+      "label": [Function],
     },
     "Microsoft.NumberInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
     },
     "Microsoft.OAuthInput": Object {
+      "helpLink": "https://aka.ms/bfc-using-oauth",
+      "label": [Function],
       "order": Array [
         "connectionName",
         "*",
@@ -205,19 +220,23 @@ Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnBeginDialog": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnCancelDialog": Object {
       "hidden": Array [
@@ -232,81 +251,97 @@ Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnConversationUpdateActivity": Object {
-      "description": "Handle the events fired when a user begins a new conversation with the bot.",
+      "description": [Function],
       "helpLink": "https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime",
       "hidden": Array [
         "actions",
       ],
-      "label": "Greeting",
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnCustomEvent": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnDialogEvent": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnEndOfConversationActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnError": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnEventActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnHandoffActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnIntent": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "intent",
         "condition",
@@ -318,81 +353,99 @@ Object {
           "field": [Function],
         },
       },
+      "subtitle": [Function],
     },
     "Microsoft.OnInvokeActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnMessageActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnMessageDeleteActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnMessageReactionActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnMessageUpdateActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnRepromptDialog": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnTypingActivity": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.OnUnknownIntent": Object {
       "hidden": Array [
         "actions",
       ],
+      "label": [Function],
       "order": Array [
         "condition",
         "*",
       ],
+      "subtitle": [Function],
     },
     "Microsoft.QnAMakerDialog": Object {
       "helpLink": "https://aka.ms/bfc-using-QnA",
+      "label": [Function],
     },
     "Microsoft.Recognizer": Object {
       "field": [Function],
@@ -405,6 +458,7 @@ Object {
     },
     "Microsoft.RepeatDialog": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": [Function],
       "order": Array [
         "options",
         "includeActivity",
@@ -413,6 +467,7 @@ Object {
     },
     "Microsoft.ReplaceDialog": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+      "label": [Function],
       "order": Array [
         "dialog",
         "options",
@@ -422,6 +477,7 @@ Object {
     },
     "Microsoft.SendActivity": Object {
       "helpLink": "https://aka.ms/bfc-send-activity",
+      "label": [Function],
       "order": Array [
         "activity",
         "*",
@@ -437,12 +493,14 @@ Object {
     },
     "Microsoft.SkillDialog": Object {
       "helpLink": "https://aka.ms/bfc-call-skill",
+      "label": [Function],
     },
     "Microsoft.SwitchCondition": Object {
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
         "default",
       ],
+      "label": [Function],
       "properties": Object {
         "cases": Object {
           "hidden": Array [
@@ -453,9 +511,11 @@ Object {
     },
     "Microsoft.TextInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
     },
     "Microsoft.TraceActivity": Object {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
+      "label": [Function],
     },
   },
 }
