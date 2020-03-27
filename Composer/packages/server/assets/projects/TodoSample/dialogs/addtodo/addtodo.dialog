@@ -1,7 +1,8 @@
 {
   "$type": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "id": "808722"
+    "id": "808722",
+    "name": "addtodo"
   },
   "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",

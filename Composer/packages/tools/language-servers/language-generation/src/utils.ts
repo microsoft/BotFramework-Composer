@@ -3,7 +3,8 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, LGParser } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
+import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
+import { offsetRange } from '@bfc/indexers';
 
 // state should map to tokenizer state
 export enum LGCursorState {
@@ -133,3 +134,29 @@ export function updateTemplate(content: string, name: string, body: string): str
     return lgFile.updateTemplate(name, name, template.parameters, body).toString();
   }
 }
+
+export const cardTypes = [
+  'Typing',
+  'Suggestions',
+  'HeroCard',
+  'SigninCard',
+  'ThumbnailCard',
+  'AudioCard',
+  'VideoCard',
+  'AnimationCard',
+  'MediaCard',
+  'OAuthCard',
+  'Attachment',
+  'AttachmentLayout',
+  'CardAction',
+  'AdaptiveCard',
+  'Activity',
+];
+
+export const cardPropDict = {
+  CardAction: ['title', 'type', 'value'],
+  Suggestions: ['SuggestionActions'],
+  Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
+  Attachment: ['contenttype', 'content'],
+  Others: ['type', 'name', 'value'],
+};

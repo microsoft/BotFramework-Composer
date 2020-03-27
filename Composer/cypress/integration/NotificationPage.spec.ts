@@ -40,7 +40,7 @@ context('Notification Page', () => {
     cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('todobotwithluissample.en-us.lu')
+      cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
         .click();
@@ -62,13 +62,19 @@ context('Notification Page', () => {
 
     cy.withinEditor('FormEditor', () => {
       cy.findByText('Condition').should('exist');
-      cy.get('.ObjectItem input').type('()');
+      cy.findByTestId('expression-type-dropdown-Condition')
+        .focus()
+        .type('{downarrow}')
+        .should('contain.text', 'expression');
+      cy.get('#root\\.condition')
+        .click()
+        .type('()');
     });
 
     cy.get('[data-testid="notifications-info-button"]').click();
 
     cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('todobotwithluissample.dialog')
+      cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
         .click();
