@@ -47,7 +47,7 @@ const initialState: State = {
   templateId: 'EmptyBot',
   storageFileLoadingStatus: 'success',
   lgFiles: [],
-  schemas: { editor: {} },
+  schemas: {},
   luFiles: [],
   actionsSeed: [],
   designPageLocation: {

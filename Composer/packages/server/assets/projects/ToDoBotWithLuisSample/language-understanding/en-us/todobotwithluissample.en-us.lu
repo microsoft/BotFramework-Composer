@@ -1,97 +1,5 @@
-> !# @enableSections = true
 
-> Entity definitions 
-$ itemTitle : simple
-
-> Add a Phrase List with todo variations. Mark them as interchangeable.
-$ todoItem : PhraseList interchangeable
-   - todo
-   - todos
-   - to dos
-   - todo list
-   - todos list
-   - item list
-   - items collection
-   - collection
-   - list
-
-> Add a list entity to detect list tye
-$ listType : todo = 
-- to do
-- todos
-- laundry 
-
-$ listType : shopping = 
-- shopping 
-- shop
-- shoppers
-
-$ listType : grocery = 
-- groceries
-- fruits
-- vegetables
-- household items
-- house hold items
-
-> Sample for nested section
-# CheckTodo
-## CheckUnreadTodo
-- check my unread todo
-- show my unread todos
-
-@ simple todoTitle
-
-## CheckDeletedTodo
-- check my deleted todo
-- show my deleted todos
-
-@ simple todoSubject
-
-> Help intent and related utterances.
-# Help
-- What can I say? 
-- Who are you?
-- I need help
-- Not sure what I can do
-- What do you want me to say?
-- What can you do?
-- What can you help with?
-- help please
-- What are my options?
-- well, I do not know what my todo's title is
-- I do not know
-- can you please help?
-
-> Greeting intent and related utterances
-# Greeting
-- hi
-- hello
-- hiya
-- how are you? 
-- how do you do?
-
-> Cancel intent and related utterances
-# Cancel
-- cancel
-- cancel all
-- stop that
-- do not do it
-- abort
-- please stop what you are doing
-- I changed my mind
-- cancel add todo
-- cancel that
-- I do not want to add a todo
-- No todo for me
-- Cancel this
-- cancel delete todo
-- Let's just leave it as is
-- I do not wish to delete my todo anymore
-- Keep my todos as is
-- No todo for me
-
-> Add item
-# AddItem
+# Add
 - Add todo
 - add a to do item
 - Please remind me to {itemTitle=buy milk}
@@ -145,7 +53,45 @@ $ listType : grocery =
 - create to do to {itemTitle}
 - remind me to {itemTitle}
 
-# DeleteItem
+> entity definitions
+@ ml itemTitle
+
+@ list listType = 
+	- todo :
+	      - to do
+            - todos
+            - laundry            
+      - grocery :
+            - groceries
+            - fruits
+            - vegetables
+            - household items
+            - house hold items
+      - shopping : 
+            - shopping 
+            - shop
+            - shoppers
+
+> phrase list definitions
+@ phraseList addItem(interchangeable) = 
+	- add
+	- put
+	- plus
+
+
+> 
+
+
+
+
+
+
+
+
+
+
+
+# Delete
 - Remove todo
 - Mark {itemTitle = buy milk} as complete
 - Flag {itemTitle = first one} as done
@@ -204,7 +150,26 @@ $ listType : grocery =
 - Remove {itemTitle} from my [todo] list
 - [Please] delete {itemTitle} from the list
 
-# ViewCollection
+> entity definitions
+@ ml itemTitle
+
+> phrase list definitions
+@ phraseList deleteItem(interchangeable) = 
+	- remove
+	- delete
+	- get
+	- erase
+
+
+
+
+
+
+
+
+
+
+# View
 - show my todo
 - can you please show my todos?
 - please show my todo list
@@ -222,3 +187,44 @@ $ listType : grocery =
 - can you show my todo
 - see todo
 - I would like to see my todos list
+- show all my lists
+- show my lists
+- what do i have on my list?
+
+
+# UserProfile
+- get started
+- my name is {@userName}
+- Profile
+
+@ prebuilt personName hasRoles userName
+
+
+
+
+
+# whatCanYouDo
+- what can you do?
+
+
+# cancel
+- cancel
+- cancel that
+- stop that
+- abort
+
+
+# ConfirmInput.response-107784
+- yes
+- no
+
+@ list confirmation = 
+    - yes : 
+		    - yeah
+		    - ok
+		    - yup
+    - no :
+        - nope
+        - not now
+        - not really
+        - go back               

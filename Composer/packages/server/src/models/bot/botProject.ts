@@ -61,9 +61,6 @@ export class BotProject {
   public defaultSDKSchema: {
     [key: string]: string;
   };
-  public defaultEditorSchema: {
-    [key: string]: string;
-  };
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
@@ -74,9 +71,6 @@ export class BotProject {
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
-    this.defaultEditorSchema = JSON.parse(
-      fs.readFileSync(Path.join(__dirname, '../../../schemas/editor.schema'), 'utf-8')
-    );
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
@@ -133,22 +127,10 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    let editorSchema = this.defaultEditorSchema;
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const userEditorSchemaFile = this.files.find(f => f.name === 'editor.schema');
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
-
-    if (userEditorSchemaFile !== undefined) {
-      try {
-        editorSchema = JSON.parse(userEditorSchemaFile.content);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Attempt to parse editor schema as JSON failed');
-        diagnostics.push(`Error in editor.schema, ${error.message}`);
-      }
-    }
 
     if (userSDKSchemaFile !== undefined) {
       try {
@@ -161,9 +143,6 @@ export class BotProject {
     }
 
     return {
-      editor: {
-        content: editorSchema,
-      },
       sdk: {
         content: sdkSchema,
       },
