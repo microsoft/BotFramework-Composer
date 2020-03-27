@@ -16,12 +16,12 @@ try {
   switch (process.platform) {
     case 'darwin':
       platform = 'mac';
-      unpackedAppDir = '';
+      unpackedAppDir = 'dist/mac';
       break;
 
     case 'linux':
       platform = 'linux';
-      unpackedAppDir = '';
+      unpackedAppDir = resolve(electronServerDir, 'dist/linux-unpacked');
       break;
 
     case 'win32':
