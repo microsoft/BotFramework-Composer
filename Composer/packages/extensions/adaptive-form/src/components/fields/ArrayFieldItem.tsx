@@ -37,6 +37,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     transparentBorder,
     uiOptions,
     value,
+    className,
     ...rest
   } = props;
 
@@ -81,7 +82,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
   };
 
   return (
-    <div css={arrayItem.container}>
+    <div className={className} css={arrayItem.container}>
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}
