@@ -4,9 +4,8 @@ import clonedeep from 'lodash/cloneDeep';
 
 import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
-import { ActionCreator, State } from '../types';
+import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { FileChangeType } from '../middlewares/persistence/types';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
@@ -14,24 +13,24 @@ import { ActionTypes } from './../../constants/index';
 export const updateLuFile: ActionCreator = async (store, { id, content }) => {
   luFileStatusStorage.updateFile(store.getState().botName, id);
   store.dispatch({
-    type: ActionTypes.UPDATE_LU_SUCCESS,
-    payload: { id, content, changeType: FileChangeType.UPDATE, name: `${id}.lu` },
+    type: ActionTypes.UPDATE_LU,
+    payload: { id, content },
   });
 };
 
 export const removeLuFile: ActionCreator = async (store, id) => {
   luFileStatusStorage.removeFile(store.getState().botName, id);
   store.dispatch({
-    type: ActionTypes.REMOVE_LU_SUCCCESS,
-    payload: { id, changeType: FileChangeType.DELETE, name: `${id}.lu` },
+    type: ActionTypes.REMOVE_LU,
+    payload: { id },
   });
 };
 
 export const createLuFile: ActionCreator = async (store, { id, content }) => {
   luFileStatusStorage.createFile(store.getState().botName, id);
   store.dispatch({
-    type: ActionTypes.CREATE_LU_SUCCCESS,
-    payload: { id, content, changeType: FileChangeType.CREATE, name: `${id}.lu` },
+    type: ActionTypes.CREATE_LU,
+    payload: { id, content },
   });
 };
 
@@ -47,8 +46,8 @@ export const undoableUpdateLuFile = undoable(
       return args;
     }
   },
-  updateLuFile,
-  updateLuFile
+  async (store: Store, from, to) => updateLuFile(store, ...to),
+  async (store: Store, from, to) => updateLuFile(store, ...to)
 );
 
 export const updateLuIntent: ActionCreator = async (store, { projectId, file, intentName, intent }) => {

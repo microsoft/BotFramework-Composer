@@ -5,19 +5,12 @@ import clonedeep from 'lodash/cloneDeep';
 import { ActionTypes } from '../../constants';
 import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
-import { ActionCreator, State } from '../types';
-
-import { FileChangeType } from './../middlewares/persistence/types';
+import { ActionCreator, State, Store } from '../types';
 
 export const updateLgFile: ActionCreator = async (store, { id, content }) => {
   store.dispatch({
-    type: ActionTypes.UPDATE_LG_SUCCESS,
-    payload: {
-      id,
-      content,
-      changeType: FileChangeType.UPDATE,
-      name: `${id}.lg`,
-    },
+    type: ActionTypes.UPDATE_LG,
+    payload: { id, content },
   });
 };
 
@@ -34,24 +27,18 @@ export const createLgFile: ActionCreator = async (store, { id, content }) => {
     lgInitialContent = `[import](common.lg)`;
   }
   store.dispatch({
-    type: ActionTypes.CREATE_LG_SUCCCESS,
+    type: ActionTypes.CREATE_LG,
     payload: {
       id,
       content: [lgInitialContent, content].join('\n'),
-      changeType: FileChangeType.CREATE,
-      name: `${id}.lg`,
     },
   });
 };
 
 export const removeLgFile: ActionCreator = async (store, id) => {
   store.dispatch({
-    type: ActionTypes.REMOVE_LG_SUCCCESS,
-    payload: {
-      id,
-      changeType: FileChangeType.DELETE,
-      name: `${id}.lg`,
-    },
+    type: ActionTypes.REMOVE_LG,
+    payload: { id },
   });
 };
 
@@ -66,8 +53,8 @@ export const undoableUpdateLgFile = undoable(
       return args;
     }
   },
-  updateLgFile,
-  updateLgFile
+  async (store: Store, from, to) => updateLgFile(store, ...to),
+  async (store: Store, from, to) => updateLgFile(store, ...to)
 );
 
 export const updateLgTemplate: ActionCreator = async (store, { file, projectId, templateName, template }) => {

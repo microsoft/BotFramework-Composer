@@ -3,8 +3,7 @@
 
 import fs from 'fs';
 
-import has from 'lodash/has';
-import { JsonWalk, VisitorFunc } from '@bfc/indexers';
+import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
@@ -191,7 +190,7 @@ export class BotProject {
         newDesigner = getNewDesigner(name, description);
       }
       content.$designer = newDesigner;
-      const updatedContent = this._autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+      const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
       await this._updateFile(relativePath, updatedContent);
     }
     // when create/saveAs bot, serialize entry dialog/lg/lu
@@ -298,11 +297,18 @@ export class BotProject {
     }
   };
 
+  private getLocale(id: string): string {
+    const index = id.lastIndexOf('.');
+    if (~index) return '';
+    return id.substring(index + 1);
+  }
+
   private defaultDir = (name: string) => {
     const fileType = Path.extname(name);
     const id = Path.basename(name, fileType);
-    const DIALOGNAME = id;
-    const LOCALE = this.locale;
+    const idWithoutLocale = Path.basename(id, `.${this.locale}`);
+    const DIALOGNAME = idWithoutLocale;
+    const LOCALE = this.getLocale(id) || this.locale;
     const folder = BotStructureTemplate.dialogs.folder;
     let dir = BotStructureTemplate.folder;
     if (fileType === '.dialog') {
@@ -493,7 +499,7 @@ export class BotProject {
           TemplateVariables.DIALOGNAME = dialogName;
 
           if (fileType === '.dialog') {
-            content = this._autofixReferInDialog(dialogName, content);
+            content = autofixReferInDialog(dialogName, content);
 
             targetRelativePath = templateInterpolate(
               Path.join(pathEndPoint, BotStructureTemplate.dialogs.entry),
@@ -583,41 +589,6 @@ export class BotProject {
         relativePath: Path.relative(this.dir, path),
         lastModified: stats.lastModified,
       };
-    }
-  };
-
-  /**
-   * fix dialog referrence.
-   * - "dialog": 'AddTodos'
-   * + "dialog": 'addtodos'
-   */
-  private _autofixReferInDialog = (dialogId: string, content: string): string => {
-    try {
-      const dialogJson = JSON.parse(content);
-
-      // fix dialog referrence
-      const visitor: VisitorFunc = (_path: string, value: any) => {
-        if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
-          const dialogName = value.dialog;
-          value.dialog = dialogName.toLowerCase();
-        }
-        return false;
-      };
-
-      JsonWalk('/', dialogJson, visitor);
-
-      // fix lg referrence
-      dialogJson.generator = `${dialogId}.lg`;
-
-      // fix lu referrence
-      if (typeof dialogJson.recognizer === 'string') {
-        dialogJson.recognizer = `${dialogId}.lu`;
-      }
-
-      return JSON.stringify(dialogJson, null, 2);
-    } catch (_error) {
-      // pass, content may be empty
-      return content;
     }
   };
 }

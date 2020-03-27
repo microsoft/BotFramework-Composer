@@ -28,7 +28,6 @@ import { filePersistenceMiddleware } from './middlewares/persistence';
 const { defaultFileResolver } = LGParser;
 
 const initialState: State = {
-  files: [],
   dialogs: [],
   projectId: '',
   botName: '',

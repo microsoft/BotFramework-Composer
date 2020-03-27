@@ -9,7 +9,6 @@ import { ActionCreator } from '../types';
 import { ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './publisher';
-import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
 
@@ -135,6 +134,7 @@ export const createProject: ActionCreator = async (
       location,
     };
     const response = await httpClient.post(`/projects`, data);
+    settingStorage.remove(name);
     indexProject(store, response.data, true);
     return response.data;
   } catch (err) {

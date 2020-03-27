@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { FileInfo } from '@bfc/shared';
 
-import { FileInfo } from './type';
 import { dialogIndexer } from './dialogIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';

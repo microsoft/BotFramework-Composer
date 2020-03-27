@@ -106,7 +106,7 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      return { ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content), ...dialog };
+      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
     }
     return dialog;
   });
@@ -395,26 +395,6 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
-  if (type === 'dialog') {
-    const dialog = state.dialogs.find(d => d.id === id);
-    if (dialog) {
-      dialog.lastModified = lastModified;
-    }
-  } else if (type === 'lg') {
-    const lg = state.lgFiles.find(d => d.id === id);
-    if (lg) {
-      lg.lastModified = lastModified;
-    }
-  } else if (type === 'lu') {
-    const lu = state.luFiles.find(d => d.id === id);
-    if (lu) {
-      lu.lastModified = lastModified;
-    }
-  }
-  return state;
-};
-
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -437,18 +417,12 @@ export const reducer = createReducer({
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
-  [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
-  [ActionTypes.UPDATE_LG_FAILURE]: noOp,
-  [ActionTypes.CREATE_LG_SUCCCESS]: createLgFile,
-  [ActionTypes.CREATE_LG_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LG_SUCCCESS]: removeLgFile,
-  [ActionTypes.REMOVE_LG_FAILURE]: noOp,
-  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
-  [ActionTypes.UPDATE_LU_FAILURE]: noOp,
-  [ActionTypes.CREATE_LU_SUCCCESS]: createLuFile,
-  [ActionTypes.CREATE_LU_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LU_SUCCCESS]: removeLuFile,
-  [ActionTypes.REMOVE_LU_FAILURE]: noOp,
+  [ActionTypes.UPDATE_LG]: updateLgTemplate,
+  [ActionTypes.CREATE_LG]: createLgFile,
+  [ActionTypes.REMOVE_LG]: removeLgFile,
+  [ActionTypes.UPDATE_LU]: updateLuTemplate,
+  [ActionTypes.CREATE_LU]: createLuFile,
+  [ActionTypes.REMOVE_LU]: removeLuFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
   [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
@@ -469,5 +443,4 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
-  [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
 });

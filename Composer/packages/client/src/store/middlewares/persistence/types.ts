@@ -6,3 +6,9 @@ export enum FileChangeType {
   UPDATE,
   CREATE,
 }
+
+export interface ResourceInfo {
+  name: string;
+  content: string;
+  changeType: FileChangeType;
+}

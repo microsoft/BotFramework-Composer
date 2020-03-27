@@ -25,11 +25,6 @@ interface SetErrorActionType {
   };
 }
 
-// interface CreateDialogSuccessAction {
-//   type: ActionTypes.CREATE_DIALOG_SUCCESS;
-//   payload: { response: any };
-// }
-
 // User Actions
 export interface UserTokenPayload {
   token?: string | null;
@@ -57,7 +52,6 @@ interface UserSessionExpiredAction {
 
 export type ActionType =
   | SetErrorActionType
-  //  | CreateDialogSuccessAction
   | UserLoginSuccessAction
   | UserLoginFailureAction
   | UserSessionExpiredAction

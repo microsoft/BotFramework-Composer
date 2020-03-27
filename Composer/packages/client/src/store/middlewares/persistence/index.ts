@@ -7,9 +7,7 @@ import { Store } from './../../types';
 
 export const filePersistenceMiddleware = (store: Store) => next => {
   return async (action: ActionType) => {
-    if (action.payload?.changeType) {
-      filePersistence.notify(action.payload, store.getState().projectId);
-    }
+    filePersistence.notify(store, action);
     return next(action);
   };
 };

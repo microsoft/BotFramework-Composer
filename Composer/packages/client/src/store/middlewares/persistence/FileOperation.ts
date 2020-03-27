@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo } from '@bfc/indexers';
+import { FileInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import { FileChangeType } from './../persistence/types';
+import { FileChangeType, ResourceInfo } from './../persistence/types';
 import * as client from './http';
 
 export class FileOperation {
@@ -12,8 +12,9 @@ export class FileOperation {
 
   private debouncedUpdate = debounce(async (content: string) => {
     if (this.file) {
-      await client.updateFile(this.projectId, this.file.name, content);
+      const response = await client.updateFile(this.projectId, this.file.name, content);
       this.file.content = content;
+      this.file.lastModified = response.data.lastModified;
     }
   }, 500);
 
@@ -22,21 +23,18 @@ export class FileOperation {
     this.file = file;
   }
 
-  operation(payload: any) {
-    const { changeType, content, name } = payload;
-    let strContent = content;
-    if (typeof content !== 'string') {
-      strContent = JSON.stringify(content, null, 2) + '\n';
-    }
+  operation(fileInfo: ResourceInfo) {
+    const { changeType, content, name } = fileInfo;
+
     switch (changeType) {
       case FileChangeType.CREATE:
-        this.createFile(name, strContent);
+        this.createFile(name, content);
         break;
       case FileChangeType.DELETE:
         this.removeFile();
         break;
       case FileChangeType.UPDATE:
-        this.updateFile(strContent);
+        this.updateFile(content);
         break;
     }
   }

@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { autofixReferInDialog } from '@bfc/indexers';
 
 import { ActionCreator, State } from '../types';
 import { undoable } from '../middlewares/undo';
-import { FileChangeType } from '../middlewares/persistence/types';
+import { getBaseName } from '../../utils/fileUtil';
 
 import { removeLgFile, createLgFile } from './lg';
 import { ActionTypes } from './../../constants/index';
@@ -11,78 +12,109 @@ import { navTo } from './navigation';
 import { Store } from './../types';
 import { createLuFile, removeLuFile } from './lu';
 
+interface FileResource {
+  id: string;
+  content: string;
+}
+
 export const removeDialogBase: ActionCreator = async (store, id) => {
   store.dispatch({
     type: ActionTypes.REMOVE_DIALOG,
-    payload: {
-      id,
-      changeType: FileChangeType.DELETE,
-      name: `${id}.dialog`,
-    },
+    payload: { id },
   });
-  removeLgFile(store, id);
-  removeLuFile(store, id);
-  navTo(store, 'Main');
 };
 
-//createDialog function need to create lg, lu and dialog
-export const createDialogBase: ActionCreator = async (
-  store,
-  { id, content, lgContent = '', luContent = '', locale = store.getState().locale }
-) => {
+export const createDialogBase: ActionCreator = async (store, { id, content }) => {
+  const fixedContent = autofixReferInDialog(id, content);
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG,
-    payload: {
-      id,
-      content,
-      changeType: FileChangeType.CREATE,
-      name: `${id}.dialog`,
-    },
+    payload: { id, content: fixedContent },
   });
-  createLgFile(store, { id, locale, content: lgContent });
-  createLuFile(store, { id, locale, content: luContent });
-  navTo(store, id);
 };
-
-export const removeDialog = undoable(
-  removeDialogBase,
-  (state: State, args: any[], isStackEmpty) => {
-    const id = args[0];
-    const dialog = state.dialogs.find(dialog => dialog.id === id);
-    const lg = state.lgFiles.find(lg => lg.id === id);
-    const lu = state.luFiles.find(lu => lu.id === id);
-    return [{ id, content: dialog?.content || '', lgContent: lg?.content, luContent: lu?.content }];
-  },
-  async (store: Store, { id, content, lgContent, luContent }) => {
-    await createDialogBase(store, { id, content, lgContent, luContent });
-  },
-  (store, { id }) => removeDialogBase(store, id)
-);
-
-export const createDialog = undoable(
-  createDialogBase,
-  (state: State, args: any[]) => {
-    const { id, content, lgContent, luContent } = args[0];
-    return [{ id, content, lgContent, luContent, locale: state.locale }];
-  },
-  async (store: Store, { id }) => {
-    await removeDialogBase(store, id);
-  },
-  (store, { id, content, lgContent, luContent }) => createDialogBase(store, { id, content, lgContent, luContent })
-);
 
 export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
   store.dispatch({
     type: ActionTypes.UPDATE_DIALOG,
-    payload: {
-      id,
-      content,
-      changeType: FileChangeType.UPDATE,
-      name: `${id}.dialog`,
-    },
+    payload: { id, content },
   });
-  navTo(store, id);
 };
+
+export const removeAllRelatedFiles: ActionCreator = async (store, id) => {
+  removeDialogBase(store, id);
+  //remove dialog should remove all locales lu and lg files
+  const { luFiles, lgFiles } = store.getState();
+  const luIds = luFiles.filter(file => getBaseName(file.id) === id);
+  const lgIds = lgFiles.filter(file => getBaseName(file.id) === id);
+  luIds.forEach(({ id }) => removeLuFile(store, id));
+  lgIds.forEach(({ id }) => removeLgFile(store, id));
+
+  navTo(store, 'Main');
+};
+
+export const createAllRelatedFiles: ActionCreator = async (
+  store,
+  dialog: FileResource,
+  lus?: FileResource[],
+  lgs?: FileResource[]
+) => {
+  createDialogBase(store, dialog);
+  const locale = store.getState().locale;
+  //createDialog function need to create lg, lu and dialog
+  if (!lus) {
+    createLuFile(store, { id: `${dialog.id}.${locale}`, content: '' });
+  } else {
+    lus.forEach(lu => createLuFile(store, { id: lu.id, content: lu.content }));
+  }
+
+  if (!lgs) {
+    createLgFile(store, { id: `${dialog.id}.${locale}`, content: '' });
+  } else {
+    lgs.forEach(lg => createLgFile(store, { id: lg.id, content: lg.content }));
+  }
+
+  navTo(store, dialog.id);
+};
+
+export const removeDialog = undoable(
+  removeAllRelatedFiles,
+  (state: State, args: any[], isStackEmpty) => {
+    if (isStackEmpty) return [];
+    const id = args[0];
+    const dialog = state.dialogs.find(dialog => dialog.id === id);
+    const lus = state.luFiles
+      .filter(file => getBaseName(file.id) === id)
+      .map(file => {
+        return { id: file.id, content: file.content };
+      });
+    const lgs = state.lgFiles
+      .filter(file => getBaseName(file.id) === id)
+      .map(file => {
+        return { id: file.id, content: file.content };
+      });
+    return [{ id, content: dialog?.content || '' }, lus, lgs];
+  },
+  async (store: Store, from, to) => {
+    await createAllRelatedFiles(store, ...from);
+  },
+  (store, from, to) => removeAllRelatedFiles(store, to[0].id)
+);
+
+export const createDialog = undoable(
+  createAllRelatedFiles,
+  (state: State, args: any[], isStackEmpty) => {
+    if (isStackEmpty) return [];
+    const id = args[0].id;
+    const content = args[0].content;
+    const locale = state.locale;
+    const lus = [{ id: `${id}.${locale}`, content: '' }];
+    const lgs = [{ id: `${id}.${locale}`, content: '' }];
+    return [{ id, content }, lus, lgs];
+  },
+  (store: Store, from, to) => {
+    removeAllRelatedFiles(store, from[0].id);
+  },
+  (store, from, to) => createAllRelatedFiles(store, ...to)
+);
 
 export const updateDialog: ActionCreator = undoable(
   updateDialogBase,
@@ -95,8 +127,8 @@ export const updateDialog: ActionCreator = undoable(
       return args;
     }
   },
-  updateDialogBase,
-  updateDialogBase
+  (store: Store, from, to) => updateDialogBase(store, ...to),
+  (store: Store, from, to) => updateDialogBase(store, ...to)
 );
 
 export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }) => {
