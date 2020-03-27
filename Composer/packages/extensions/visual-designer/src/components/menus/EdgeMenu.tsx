@@ -41,7 +41,8 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.$type : null),
+    (e, item) => onClick(item ? item.data.$type : null),
+    context.dialogFactory,
     filter
   );
 
