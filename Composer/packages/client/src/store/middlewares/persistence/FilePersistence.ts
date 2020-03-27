@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { FileInfo } from '@bfc/shared';
 
+import { setError } from './../../action/error';
+import { fetchProject } from './../../action/project';
 import { FileChangeType, ResourceInfo } from './types';
 import { FileOperation } from './FileOperation';
 import { ActionTypes } from './../../../constants';
@@ -71,8 +72,16 @@ class FilePersistence {
       const projectId = store.getState().projectId;
       this.attach(name, projectId);
     }
-
-    this.files[name].operation({ changeType, name, content });
+    try {
+      this.files[name].operation({ changeType, name, content });
+    } catch (err) {
+      setError(store, {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: `HANDLE ${name} ERROR`,
+      });
+      //if sync file error, do a full refresh.
+      fetchProject(store);
+    }
 
     if (changeType === FileChangeType.DELETE) {
       this.detach(name);

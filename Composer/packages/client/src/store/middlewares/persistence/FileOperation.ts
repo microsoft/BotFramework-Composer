@@ -23,24 +23,24 @@ export class FileOperation {
     this.file = file;
   }
 
-  operation(fileInfo: ResourceInfo) {
+  async operation(fileInfo: ResourceInfo) {
     const { changeType, content, name } = fileInfo;
 
     switch (changeType) {
       case FileChangeType.CREATE:
-        this.createFile(name, content);
+        await this.createFile(name, content);
         break;
       case FileChangeType.DELETE:
-        this.removeFile();
+        await this.removeFile();
         break;
       case FileChangeType.UPDATE:
-        this.updateFile(content);
+        await this.updateFile(content);
         break;
     }
   }
 
-  updateFile(content: string) {
-    this.debouncedUpdate(content);
+  async updateFile(content: string) {
+    await this.debouncedUpdate(content);
   }
 
   async removeFile() {
