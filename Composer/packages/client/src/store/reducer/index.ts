@@ -76,6 +76,7 @@ const getProjectSuccess: ReducerFunc = (state, payload) => {
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
+  state.locale = payload.locale;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   filePersistence.clear();

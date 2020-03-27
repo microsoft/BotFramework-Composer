@@ -26,7 +26,10 @@ export const removeDialogBase: ActionCreator = async (store, id) => {
 };
 
 //createDialog function need to create lg, lu and dialog
-export const createDialogBase: ActionCreator = async (store, { id, content, lgContent = '', luContent = '' }) => {
+export const createDialogBase: ActionCreator = async (
+  store,
+  { id, content, lgContent = '', luContent = '', locale = store.getState().locale }
+) => {
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG,
     payload: {
@@ -36,9 +39,8 @@ export const createDialogBase: ActionCreator = async (store, { id, content, lgCo
       name: `${id}.dialog`,
     },
   });
-  //TODO fix dialog referrence
-  createLgFile(store, { id, content: lgContent });
-  createLuFile(store, { id, content: luContent });
+  createLgFile(store, { id, locale, content: lgContent });
+  createLuFile(store, { id, locale, content: luContent });
   navTo(store, id);
 };
 
@@ -61,7 +63,7 @@ export const createDialog = undoable(
   createDialogBase,
   (state: State, args: any[]) => {
     const { id, content, lgContent, luContent } = args[0];
-    return [{ id, content, lgContent, luContent }];
+    return [{ id, content, lgContent, luContent, locale: state.locale }];
   },
   async (store: Store, { id }) => {
     await removeDialogBase(store, id);

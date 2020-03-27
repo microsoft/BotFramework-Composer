@@ -98,6 +98,7 @@ export class BotProject {
   public getProject = () => {
     return {
       botName: this.name,
+      locale: this.locale,
       files: this.files,
       location: this.dir,
       schemas: this.getSchemas(),
