@@ -3,6 +3,7 @@
 
 const fs = require('fs-extra');
 const { resolve } = require('path');
+const electronServerPackage = require('../package.json');
 
 const source = resolve(__dirname, '../../../plugins');
 console.log('[copy-plugins.js] Copying plugins from: ', source);
@@ -10,11 +11,17 @@ console.log('[copy-plugins.js] Copying plugins from: ', source);
 let destination;
 switch (process.platform) {
   case 'darwin':
-    // TODO: add mac path
+    const productName = electronServerPackage.build.productName;
+    destination = resolve(
+      __dirname,
+      `../dist/mac/${productName}.app/Contents/Resources/app.asar.unpacked/build/plugins`
+    );
+    console.log('[copy-plugins.js] Mac detected. Copying plugins to: ', destination);
     break;
 
   case 'linux':
-    // TODO: add linux path
+    destination = resolve(__dirname, '../dist/linux-unpacked/resources/app.asar.unpacked/build/plugins');
+    console.log('[copy-plugins.js] Linux detected. Copying plugins to: ', destination);
     break;
 
   case 'win32':
@@ -28,6 +35,10 @@ switch (process.platform) {
 }
 
 // copy plugins from /Composer/plugins/ to pre-packaged electron app
-fs.copy(source, destination)
-  .then(console.log('[copy-plugins.js] Copied plugins successfully.'))
-  .catch(err => console.err('[copy-plugins.js] Error while copying plugins: ', err));
+fs.copy(source, destination, err => {
+  if (err) {
+    console.err('[copy-plugins.js] Error while copying plugins: ', err);
+    return;
+  }
+  console.log('[copy-plugins.js] Copied plugins successfully.');
+});
