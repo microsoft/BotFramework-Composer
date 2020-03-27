@@ -15,7 +15,7 @@ context('Saving As', () => {
 
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestSaveAs.Main').should('exist');
-      cy.findByText('ViewCollection').should('exist');
+      cy.findByText('View').should('exist');
     });
   });
 });
