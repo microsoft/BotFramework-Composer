@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { seedNewDialog, SDKTypes, DialogInfo } from '@bfc/shared';
+import { DialogFactory, SDKTypes, DialogInfo } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -81,7 +81,7 @@ const getTabFromFragment = () => {
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -288,14 +288,14 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const seededContent = seedNewDialog(
-      SDKTypes.AdaptiveDialog,
-      { name: data.name, description: data.description },
-      {
-        generator: `${data.name}.lg`,
-      },
-      state.actionsSeed || []
-    );
+    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKTypes.AdaptiveDialog, {
+      $designer: { name: data.name, description: data.description },
+      generator: `${data.name}.lg`,
+    });
+    if (seededContent.triggers && seededContent.triggers[0]) {
+      seededContent.triggers[0].actions = state.actionsSeed;
+    }
+
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 
