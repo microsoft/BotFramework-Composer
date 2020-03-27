@@ -34,7 +34,7 @@ try {
   }
 
   // call electron-builder . --prepackaged
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --${platform} --prepackaged "${unpackedAppDir}"`;
+  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --${platform} --x64 --prepackaged "${unpackedAppDir}"`;
   console.log('[electronBuilderDist.js] Executing command: ', cmd);
 
   const proc = exec(cmd);

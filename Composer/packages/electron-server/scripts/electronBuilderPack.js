@@ -30,7 +30,7 @@ try {
   }
 
   // call electron-builder . --dir
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform}`;
+  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64`;
   console.log('[electronBuilderPack.js] Executing command: ', cmd);
 
   const proc = exec(cmd);
