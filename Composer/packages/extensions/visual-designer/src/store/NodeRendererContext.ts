@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { LGTemplate } from 'botbuilder-lg';
-import { ShellApi } from '@bfc/shared';
+import { ShellApi, DialogFactory } from '@bfc/shared';
 
 type ShellApiFuncs =
   | 'getLgTemplates'
@@ -19,6 +19,7 @@ export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> 
   focusedTab?: string;
   clipboardActions: any[];
   getLgTemplateSync: (lgTemplateName: string) => LGTemplate | undefined;
+  dialogFactory: DialogFactory;
 }
 
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
@@ -33,4 +34,5 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   removeLgTemplates: () => Promise.resolve(),
   updateLgTemplate: () => Promise.resolve(),
   removeLuIntent: () => Promise.resolve(),
+  dialogFactory: new DialogFactory(),
 });
