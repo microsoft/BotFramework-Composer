@@ -12,10 +12,13 @@ import { ErrorMessage } from './ErrorMessage';
 
 const schemaField = {
   container: (depth = 0) => css`
+    display: flex;
+    flex-direction: column;
     margin: 10px ${depth === 0 ? 18 : 0}px;
+
     label: SchemaFieldContainer;
   `,
-  field: css`
+  field: (hasError: boolean) => css`
     width: 100%;
     label: SchemaField;
   `,
@@ -32,6 +35,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
+    ...rest
   } = props;
   const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
@@ -56,7 +60,8 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
   const fieldProps = {
-    ...props,
+    ...rest,
+    name,
     uiOptions,
     enumOptions: schema.enum as string[],
     label: getUiLabel({ ...props, uiOptions }),
@@ -71,14 +76,8 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   return (
     <div className={className} css={schemaField.container(props.depth)}>
-      {error && !hideError ? (
-        <div css={schemaField.field}>
-          <FieldWidget {...fieldProps} />
-          {error}
-        </div>
-      ) : (
-        <FieldWidget {...fieldProps} />
-      )}
+      <FieldWidget {...fieldProps} />
+      {!hideError && error}
     </div>
   );
 };
