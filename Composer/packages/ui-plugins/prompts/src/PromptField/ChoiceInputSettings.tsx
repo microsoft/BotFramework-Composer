@@ -44,7 +44,7 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => {
       <SchemaField
         css={styles.choiceOptions}
         definitions={definitions}
-        depth={depth}
+        depth={depth + 1}
         id={`${id}.choiceOptions`}
         name="choiceOptions"
         schema={getSchema('choiceOptions')}
