@@ -13,13 +13,17 @@ import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 interface LocationSelectContentProps {
+  operationMode: {
+    read: boolean;
+    write: boolean;
+  };
   onOpen?: (path: string, storage: string) => void;
   focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
-  const { onOpen, focusedStorageFolder, onCurrentPathUpdate } = props;
+  const { onOpen, focusedStorageFolder, onCurrentPathUpdate, operationMode } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
   const currentStorageIndex = useRef(0);
@@ -46,12 +50,12 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   return (
     <Fragment>
       <FileSelector
+        operationMode={operationMode}
         storageFileLoadingStatus={storageFileLoadingStatus}
         checkShowItem={checkShowItem}
         focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onSelectionChanged={onSelectionChanged}
-        platform={storages[currentStorageIndex.current].platform}
       />
     </Fragment>
   );

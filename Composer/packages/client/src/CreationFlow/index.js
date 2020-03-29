@@ -4,7 +4,6 @@
 import Path from 'path';
 
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
@@ -17,7 +16,7 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  const [files, setFiles] = useState([]);
+  //const [files, setFiles] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
@@ -42,12 +41,6 @@ export function CreationFlow(props) {
       fetchFolderItemsByPath(storageId, formattedPath);
     }
   }, [storages]);
-
-  useEffect(() => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
-
-    setFiles(allFilesInFolder);
-  }, [focusedStorageFolder]);
 
   useEffect(() => {
     init();
@@ -155,7 +148,6 @@ export function CreationFlow(props) {
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
-          files={files}
         />
       ),
     },

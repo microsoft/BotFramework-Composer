@@ -24,6 +24,10 @@ export const OpenProject: React.FC<OpenProjectProps> = props => {
   return (
     <div data-testid="SelectLocation">
       <LocationSelectContent
+        operationMode={{
+          read: true,
+          write: false,
+        }}
         onOpen={onOpen}
         focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
