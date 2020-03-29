@@ -9,12 +9,13 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import get from 'lodash/get';
 
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StoreContext } from '../../store';
 import { StorageFolder } from '../../store/types';
-import get from 'lodash/get';
+
 import { name, description } from './styles';
 const MAXTRYTIMES = 10000;
 
@@ -64,7 +65,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const initalFormData: FormData = { name: getDefaultName(), description: '', location: '' };
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
-  const [disable, setDisable] = useState(!focusedStorageFolder.writable);
+  const [disable, setDisable] = useState(false);
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
