@@ -44,6 +44,7 @@ export interface File {
 export interface StorageFolder extends File {
   parent: string;
   children?: File[];
+  writable?: boolean;
 }
 
 export interface State {

@@ -31,12 +31,15 @@ import { getFileIconName, formatBytes, calculateTimeDiff } from '../../utils';
 import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
 interface FileSelectorProps {
+  operationMode: {
+    read: boolean;
+    write: boolean;
+  };
   focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
   storageFileLoadingStatus: string;
-  platform: string;
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
@@ -46,7 +49,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     checkShowItem,
     onCurrentPathUpdate,
     storageFileLoadingStatus,
-    platform,
+    operationMode,
   } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
@@ -200,14 +203,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       title: item, // title shown on hover
     };
   });
-
-  if (platform === 'win32') {
-    breadcrumbItems.splice(0, 0, {
-      text: '/', // displayed text
-      key: '/', // value returned
-      title: '/', // title shown on hover
-    });
-  }
+  breadcrumbItems.splice(0, 0, {
+    text: '/', // displayed text
+    key: '/', // value returned
+    title: '/', // title shown on hover
+  });
 
   breadcrumbItems.reverse();
   const updateLocation = (e, item?: IDropdownOption) => {
@@ -226,6 +226,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
                 options={breadcrumbItems}
                 onChange={updateLocation}
                 selectedKey={currentPath}
+                errorMessage={
+                  operationMode.write && !focusedStorageFolder.writable
+                    ? formatMessage('You do not have permission to save bots here')
+                    : ''
+                }
               />
             </StackItem>
           </Stack>

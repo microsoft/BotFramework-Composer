@@ -3,7 +3,7 @@
 
 import Path from 'path';
 
-import React, { useState, Fragment, useEffect, useContext, useRef } from 'react';
+import React, { useState, Fragment, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -14,7 +14,7 @@ import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent'
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StoreContext } from '../../store';
 import { StorageFolder } from '../../store/types';
-
+import get from 'lodash/get';
 import { name, description } from './styles';
 const MAXTRYTIMES = 10000;
 
@@ -29,29 +29,21 @@ interface FormDataError {
   location?: string;
 }
 
-interface Files {
-  name: '';
-  path: '';
-}
-
 interface DefineConversationProps {
   onSubmit: (formData: FormData) => void;
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
   focusedStorageFolder: StorageFolder;
-  files?: Files[];
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder, files } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
   const { state } = useContext(StoreContext);
-  const { templateId, storages } = state;
-  const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
-  const currentStorageIndex = useRef(0);
-  const platform = storages[currentStorageIndex.current].platform;
+  const { templateId } = state;
+  const files = get(focusedStorageFolder, 'children', []);
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -72,7 +64,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const initalFormData: FormData = { name: getDefaultName(), description: '', location: '' };
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
-  const [disable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(!focusedStorageFolder.writable);
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
@@ -83,10 +75,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const nameRegex = /^[a-zA-Z0-9-_.]+$/;
   const validateForm = (data: FormData) => {
     const errors: FormDataError = {};
-    const { name, location } = data;
-    if (location === '/' && platform === 'win32') {
-      errors.location = formatMessage('Cannot save bot here');
-    }
+    const { name } = data;
     if (!name || !nameRegex.test(name)) {
       errors.name = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
@@ -109,18 +98,19 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   };
 
   useEffect(() => {
+    const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
     updateForm('location')(null, currentPath);
-  }, [currentPath]);
+  }, [focusedStorageFolder]);
 
   useEffect(() => {
     const errors = validateForm(formData);
-    if (Object.keys(errors).length) {
+    if (Object.keys(errors).length || !focusedStorageFolder.writable) {
       setDisable(true);
     } else {
       setDisable(false);
     }
     setFormDataErrors(errors);
-  }, [files, formData.name]);
+  }, [focusedStorageFolder, formData.name]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -161,7 +151,11 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
             />
           </StackItem>
         </Stack>
-        <LocationSelectContent onCurrentPathUpdate={onCurrentPathUpdate} focusedStorageFolder={focusedStorageFolder} />
+        <LocationSelectContent
+          operationMode={{ read: true, write: true }}
+          onCurrentPathUpdate={onCurrentPathUpdate}
+          focusedStorageFolder={focusedStorageFolder}
+        />
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
