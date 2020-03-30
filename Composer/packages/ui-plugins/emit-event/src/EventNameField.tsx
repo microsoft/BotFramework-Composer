@@ -36,6 +36,7 @@ const EventNameField: React.FC<FieldProps<string>> = props => {
         allowFreeform
         onChange={handleChange}
         errorMessage={error as string}
+        useComboBoxAsMenuWidth
         styles={{
           errorMessage: { display: 'none' },
         }}
