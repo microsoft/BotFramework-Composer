@@ -34,6 +34,7 @@ const EventNameField: React.FC<FieldProps<string>> = props => {
         options={options}
         placeholder={formatMessage('Select event type or type a custom one')}
         allowFreeform
+        autoComplete="on"
         onChange={handleChange}
         errorMessage={error as string}
         useComboBoxAsMenuWidth
