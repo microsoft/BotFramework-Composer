@@ -151,7 +151,7 @@ export class BotProject {
   };
 
   public updateBotInfo = async (name: string, description: string) => {
-    const mainDialogFile = this.files.find(file => file.relativePath.includes('/') && file.name.endsWith('.dialog'));
+    const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
     if (!mainDialogFile) return;
     const entryDialogId = name.trim().toLowerCase();
     const { relativePath } = mainDialogFile;
