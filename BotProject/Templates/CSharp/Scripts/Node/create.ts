@@ -222,6 +222,10 @@ export class BotProjectDeploy {
         });
     }
 
+    private notEmptyLuisModel(file: string) {
+        return fs.readFileSync(file).length > 0
+    }
+
     public async deploy(name: string, environment: string, luisAuthoringKey?: string, luisAuthoringRegion?: string, logFile?: string, botPath?: string, language?: string) {
         if (!logFile) {
             logFile = 'deploy_log.txt'
@@ -272,7 +276,7 @@ export class BotProjectDeploy {
             const remoteBotPath = path.join(publishFolder, 'ComposerDialogs')
             const botFiles = await this.getFiles(remoteBotPath)
             const modelFiles = botFiles.filter((name) => {
-                return name.endsWith('.lu')
+                return name.endsWith('.lu') && this.notEmptyLuisModel(name)
             })
 
             const generatedFolder = path.join(remoteBotPath, 'generated')
@@ -500,19 +504,3 @@ export class BotProjectDeploy {
     }
 }
 
-const subId = '<SubScriptionID>'
-const projFolder = 'The Path to ProjFolder, this should be the root path which includes *.csproj'
-const bot = new BotProjectDeploy(subId, projFolder)
-
-
-const name = '<Repalce With Your Bot Name, This should be unique to global>'
-const environment = '<Replace With Environment>'
-const location = '<Replace With App Location, for example, westus>'
-const luisAuthoringKey = null
-const luisAuthoringRegion = null
-const appId = null
-const appPassword = '<Replace With Your Password>'
-
-bot.createAndDeploy(name, location, environment, luisAuthoringKey, luisAuthoringRegion, appId, appPassword).then(() => {
-    console.log('deployment end')
-})
