@@ -42,11 +42,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     onChange(intentName);
   };
 
-  const diagnostic = luFile && filterSectionDiagnostics(luFile.diagnostics, luIntent)[0];
-
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
+  const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
   return (
     <LuEditor
@@ -54,7 +50,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name }}
       value={luIntent.Body}
       onChange={commitChanges}
-      errorMessage={errorMsg}
+      diagnostics={diagnostics}
       options={{
         lineNumbers: 'off',
         minimap: {
