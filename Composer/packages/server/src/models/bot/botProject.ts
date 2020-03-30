@@ -142,25 +142,26 @@ export class BotProject {
   };
 
   public getSchemas = () => {
-    let sdkSchema = this.defaultSDKSchema;
+    const sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
-
-    if (userSDKSchemaFile !== undefined) {
+    const schemaFiles = this.files.filter(f => f.name.endsWith('.schema'));
+    const schemas = schemaFiles.reduce((result, s) => {
+      const name = s.name.replace('.schema', '');
       try {
-        sdkSchema = JSON.parse(userSDKSchemaFile.content);
-      } catch (error) {
+        result[name] = { content: JSON.parse(s.content) };
+        return result;
+      } catch (e) {
         // eslint-disable-next-line no-console
-        console.error('Attempt to parse sdk schema as JSON failed');
-        diagnostics.push(`Error in sdk.schema, ${error.message}`);
+        console.error(`Attempt to parse ${s.name} as JSON failed`);
+        diagnostics.push(`Error in ${s.name}, ${e.message}`);
+        return result;
       }
-    }
+    }, {});
 
     return {
-      sdk: {
-        content: sdkSchema,
-      },
+      ...schemas,
+      sdk: { content: sdkSchema },
       diagnostics,
     };
   };
