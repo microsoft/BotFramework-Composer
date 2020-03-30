@@ -92,7 +92,7 @@ the [Security TechCenter][103].
 
 [1]: ./docs/bfcomposer-intro.md
 [2]: ./docs/setup-yarn.md
-[3]: ./docs/tutorial-create-echobot.md
+[3]: ./docs/quickstart-create-bot.md
 [4]: https://aka.ms/BF-Composer-Docs
 [5]: ./toc.md
 [10]: https://stackoverflow.com/questions/tagged/botframework?tab=Newest
