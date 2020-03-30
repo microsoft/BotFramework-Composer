@@ -82,32 +82,34 @@ export const Publisher = () => {
 
   useEffect(() => {
     console.log('publish targets changed');
-    if (
-      publishTargets.filter(target => {
-        return target.statusCode === 202;
-      }).length
-    ) {
-      actions.getPublishStatus();
-      console.log('NEED TO LOAD PUBLISH STATUS');
-    }
+    // if (
+    //   publishTargets.filter(target => {
+    //     return target.statusCode === 202;
+    //   }).length
+    // ) {
+    //   actions.getPublishStatus();
+    //   console.log('NEED TO LOAD PUBLISH STATUS');
+    // }
   }, [publishTargets]);
 
   const savePublishTarget = (name, type, configuration) => {
     alert(`save ${name} ${type} ${configuration}`);
 
-    if (!settings.publishTargets) {
-      settings.publishTargets = [];
+    const newsettings = { ...settings };
+
+    if (!newsettings.publishTargets) {
+      newsettings.publishTargets = [];
     }
 
-    settings.publishTargets.push({
+    newsettings.publishTargets.push({
       name,
       type,
       configuration,
     });
 
-    actions.setSettings(state.projectId, botName, settings, absHosted ? slot : undefined);
+    actions.setSettings(state.projectId, botName, newsettings, absHosted ? slot : undefined);
 
-    updatePublishTargets(settings.publishTargets || []);
+    updatePublishTargets(newsettings.publishTargets || []);
   };
 
   const addDestination = async () => {
@@ -117,7 +119,7 @@ export const Publisher = () => {
       children: (
         <CreatePublishTarget
           targetTypes={publishTypes.map(type => {
-            return { key: type, text: type };
+            return { key: type.name, text: `${type.name} - ${type.description}` };
           })}
           onSave={savePublishTarget}
         />
@@ -144,7 +146,7 @@ export const Publisher = () => {
     <div style={styles.page}>
       <h1 style={styles.header}>Publish your bot to a remote</h1>
       <PrimaryButton text="Add Destination" onClick={addDestination} styles={styles.button} />
-      {publishTypes && publishTypes.length && <div>publish to types: {publishTypes.join(',')}</div>}
+      {publishTypes && publishTypes.length && <div>publish to types: {publishTypes.map(t => t.name).join(',')}</div>}
 
       {publishTargets.map((target, i) => {
         return (
@@ -187,9 +189,11 @@ const CreatePublishTarget = props => {
 
   const submit = () => {
     try {
+      // validate that JSON parses correctly
       JSON.parse(config);
       return props.onSave(name, targetType, config);
     } catch (err) {
+      console.error(err);
       alert('Error parsing configuration');
     }
   };

@@ -15,10 +15,12 @@ const passport = require('passport');
 export class ComposerPluginRegistration {
   public loader: PluginLoader;
   private _name: string;
+  private _description: string;
 
-  constructor(loader: PluginLoader, name: string) {
+  constructor(loader: PluginLoader, name: string, description: string) {
     this.loader = loader;
     this._name = name;
+    this._description = description;
   }
 
   public get passport() {
@@ -27,6 +29,14 @@ export class ComposerPluginRegistration {
 
   public get name(): string {
     return this._name;
+  }
+
+  public get description(): string {
+    return this._description;
+  }
+
+  public set description(val: string) {
+    this._description = val;
   }
 
   /**************************************************************************************
@@ -45,7 +55,10 @@ export class ComposerPluginRegistration {
    *************************************************************************************/
   public async addPublishMethod(plugin: Partial<PublishPlugin>) {
     console.log('registering publish method', this.name);
-    this.loader.extensions.publish[this.name] = plugin;
+    this.loader.extensions.publish[this.name] = {
+      plugin: this,
+      methods: plugin,
+    };
   }
 
   /**************************************************************************************
@@ -182,7 +195,10 @@ export class PluginLoader {
       [key: string]: any;
     };
     publish: {
-      [key: string]: Partial<PublishPlugin>;
+      [key: string]: {
+        plugin: ComposerPluginRegistration;
+        methods: Partial<PublishPlugin>;
+      };
     };
     authentication: {
       middleware?: (req, res, next) => void;
@@ -238,8 +254,8 @@ export class PluginLoader {
     });
   }
 
-  public async loadPlugin(name: string, thisPlugin: any) {
-    const pluginRegistration = new ComposerPluginRegistration(this, name);
+  public async loadPlugin(name: string, description: string, thisPlugin: any) {
+    const pluginRegistration = new ComposerPluginRegistration(this, name, description);
     if (typeof thisPlugin.default === 'function') {
       // the module exported just an init function
       thisPlugin.default.call(null, pluginRegistration);
@@ -263,7 +279,7 @@ export class PluginLoader {
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
         const thisPlugin = require(modulePath);
-        this.loadPlugin(json.name, thisPlugin);
+        this.loadPlugin(json.name, json.description, thisPlugin);
       } catch (err) {
         console.error(err);
       }
