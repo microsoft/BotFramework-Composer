@@ -15,14 +15,14 @@ export const updateLgFile: ActionCreator = async (store, { id, content }) => {
 };
 
 export const createLgFile: ActionCreator = async (store, { id, content }) => {
-  const lgFiles = store.getState().lgFiles;
+  const { lgFiles, locale } = store.getState();
   const lgFile = lgFiles.find(lg => lg.id === id);
   if (lgFile) {
     throw new Error(`${id} lg file already exist`);
   }
   // slot with common.lg import
   let lgInitialContent = '';
-  const lgCommonFile = lgFiles.find(({ id }) => id === 'common');
+  const lgCommonFile = lgFiles.find(({ id }) => id === `common.${locale}`);
   if (lgCommonFile) {
     lgInitialContent = `[import](common.lg)`;
   }
