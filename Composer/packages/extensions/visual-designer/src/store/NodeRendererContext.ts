@@ -20,6 +20,7 @@ export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> 
   clipboardActions: any[];
   getLgTemplateSync: (lgTemplateName: string) => LGTemplate | undefined;
   dialogFactory: DialogFactory;
+  schemas: any;
 }
 
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
@@ -35,4 +36,5 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   updateLgTemplate: () => Promise.resolve(),
   removeLuIntent: () => Promise.resolve(),
   dialogFactory: new DialogFactory(),
+  schemas: {},
 });

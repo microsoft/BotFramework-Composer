@@ -6,12 +6,13 @@ import { jsx, css } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
+import { createStepMenu, createStepSubmenu, DialogGroup, SDKTypes } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
@@ -24,12 +25,20 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
+const extractLabelMapsFromSchemas = (schemas: any): { label: string; types: string[] }[] => {
+  const { sdk, diagnostics, ...otherSchemas } = schemas;
+  return Object.keys(otherSchemas).map(x => ({
+    label: x,
+    types: get(otherSchemas[x], 'content.oneOf', []).map(one => one.title),
+  }));
+};
+
 const buildEdgeMenuItemsFromClipboardContext = (
-  context,
+  context: NodeRendererContextValue,
   onClick,
   filter?: (t: SDKTypes) => boolean
 ): IContextualMenu[] => {
-  const { clipboardActions } = context;
+  const { clipboardActions, schemas } = context;
   const menuItems = createStepMenu(
     [
       DialogGroup.RESPONSE,
@@ -45,6 +54,13 @@ const buildEdgeMenuItemsFromClipboardContext = (
     context.dialogFactory,
     filter
   );
+
+  const otherLabelMaps = extractLabelMapsFromSchemas(schemas);
+  otherLabelMaps.forEach(({ label, types }) => {
+    menuItems.push(
+      createStepSubmenu(label, types, (e, item) => onClick(item ? item.data.$type : null), context.dialogFactory)
+    );
+  });
 
   const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
   const menuItemCount = menuItems.length;

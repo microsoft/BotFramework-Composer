@@ -39,6 +39,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   hosted,
   lgFiles,
   schema,
+  schemas,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -86,6 +87,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
+    schemas,
   };
 
   return (
