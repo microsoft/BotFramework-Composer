@@ -15,33 +15,32 @@ import { LuEditorWidget } from './LuEditorWidget';
 import { RegexEditorWidget } from './RegexEditorWidget';
 import { WidgetLabel } from './WidgetLabel';
 
-function recognizerType({ content }: DialogInfo): SDKTypes[] {
-  const recognizers: (IRecognizerType | string)[] =
-    content.recognizer.recognizers[0].recognizers?.['en-us'].recognizers || [];
-  return recognizers.map(recog => {
-    if (typeof recog === 'string') {
-      return SDKTypes.LuisRecognizer;
-    } else {
-      return recog.$type;
-    }
-  });
+function recognizerType({ content }: DialogInfo): SDKTypes {
+  const recognizer: IRecognizerType | string = content.recognizer.recognizers[0].recognizers?.['en-us'];
+
+  if (typeof recognizer === 'string' && !!recognizer) {
+    return SDKTypes.LuisRecognizer;
+  } else if (typeof recognizer === 'object') {
+    return SDKTypes.RegexRecognizer;
+  }
+  return SDKTypes.ValueRecognizer;
 }
 
 export const IntentWidget: React.FC<BFDWidgetProps> = props => {
   const { value, formContext, label } = props;
   const { currentDialog } = formContext;
 
-  const types = recognizerType(currentDialog);
+  const type = recognizerType(currentDialog);
 
   return (
     <>
       <WidgetLabel label={label} />
-      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.LuisRecognizer}>
+      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.ValueRecognizer}>
         <PivotItem
           headerText={formatMessage('Luis')}
           itemKey={SDKTypes.LuisRecognizer}
           headerButtonProps={{
-            disabled: !types.find(type => type === SDKTypes.LuisRecognizer),
+            disabled: type !== SDKTypes.LuisRecognizer,
           }}
         >
           <LuEditorWidget formContext={formContext} name={value} height={316} />
@@ -50,7 +49,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
           headerText={formatMessage('Regex')}
           itemKey={SDKTypes.RegexRecognizer}
           headerButtonProps={{
-            disabled: !types.find(type => type === SDKTypes.RegexRecognizer),
+            disabled: type !== SDKTypes.RegexRecognizer,
           }}
         >
           <RegexEditorWidget formContext={formContext} name={value} />

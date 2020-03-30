@@ -1,35 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, ReactElement } from 'react';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
-import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { LuFile } from '@bfc/indexers';
 import { SDKTypes } from '@bfc/shared';
+import { IDropdownOption, Dropdown, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { BaseField } from '../BaseField';
-import { WidgetLabel } from '../../widgets/WidgetLabel';
 
 import './styles.css';
-import { IRecognizer, ICheckOption, IRecognizerType } from './types';
-
-const defaultOptions: ICheckOption[] = [
-  {
-    checked: false,
-    disabled: false,
-    label: 'LUIS',
-    id: 'luis',
-  },
-  {
-    checked: false,
-    disabled: false,
-    label: formatMessage('Regular Expression'),
-    id: 'regex',
-  },
-];
+import { IRecognizer, IRecognizerType } from './types';
 
 const defaultRecoginzerSet: IRecognizer = {
   $type: 'Microsoft.RecognizerSet',
@@ -37,10 +21,7 @@ const defaultRecoginzerSet: IRecognizer = {
     {
       $type: 'Microsoft.MultiLanguageRecognizer',
       recognizers: {
-        'en-us': {
-          $type: 'Microsoft.CrossTrainedRecognizerSet',
-          recognizers: [],
-        },
+        'en-us': '',
       },
     },
     {
@@ -57,51 +38,74 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
     formContext: { luFiles, shellApi, currentDialog, locale },
     onChange,
   } = props;
-
-  let recognizers: (IRecognizerType | string)[] = [];
-  if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
-    formData.recognizers[0].recognizers?.['en-us'].recognizers?.forEach(recog => {
-      recognizers.push(recog);
-    });
-  } else {
-    recognizers.push({
-      $type: SDKTypes.ValueRecognizer,
-      id: 'value',
-    });
-  }
+  const [loading, setLoading] = useState(false);
   const currentDialogId = currentDialog.id;
   const selectedFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
-  const [checkOptions, setCheckOptions] = useState(
-    defaultOptions.map(opt => {
-      if (
-        recognizers.find(
-          recog =>
-            (typeof recog === 'string' && opt.id === 'luis') || (typeof recog === 'object' && recog.id === opt.id)
-        )
-      ) {
-        opt.checked = true;
-      } else {
-        opt.checked = false;
-      }
-      return opt;
-    })
-  );
 
-  const stackTokens = { childrenGap: 10 };
+  let recognizer: IRecognizerType | string = '';
+  if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
+    recognizer = formData.recognizers[0].recognizers?.['en-us'] || {
+      $type: SDKTypes.ValueRecognizer,
+      id: 'value',
+    };
+  } else {
+    recognizer = {
+      $type: SDKTypes.ValueRecognizer,
+      id: 'value',
+    };
+  }
+  const isRegex = typeof recognizer === 'object' && recognizer.$type === SDKTypes.RegexRecognizer;
+  const options = [
+    {
+      key: 'value',
+      text: formatMessage('Value'),
+    },
+    {
+      key: 'luis',
+      text: 'LUIS',
+    },
+    {
+      key: 'regex',
+      text: formatMessage('Regular Expression'),
+    },
+  ];
 
-  useEffect(() => {
-    if (!formData) {
-      onChange(defaultRecoginzerSet);
+  const getSelectedType = (): string => {
+    if (typeof recognizer === 'string' && !!recognizer) {
+      return 'luis';
     }
-  }, [formData]);
 
-  const handleChange = (id: string, checked?: boolean): void => {
+    if (isRegex) {
+      return 'regex';
+    }
+
+    return 'value';
+  };
+
+  const onRenderTitle = (options?: IDropdownOption[]): ReactElement => {
+    if (loading || !options) {
+      return (
+        <div style={{ height: '100%', display: 'flex' }}>
+          <Spinner size={SpinnerSize.small} />
+        </div>
+      );
+    }
+
+    const selectedOption = options.find(o => o.key === getSelectedType());
+
+    if (selectedOption) {
+      return <span>{selectedOption.text}</span>;
+    }
+
+    return <span />;
+  };
+  const handleChange = (_, option?: IDropdownOption): void => {
     const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
-    switch (id) {
-      case 'luis': {
-        if (checked) {
+    if (option) {
+      switch (option.key) {
+        case 'luis': {
           if (selectedFile) {
-            recognizers.push(`${currentDialogId}.lu`);
+            recognizer = `${currentDialogId}.lu`;
           } else {
             const { createLuFile } = shellApi;
 
@@ -113,55 +117,47 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
              * This is a hack, but dialogs will be created along with
              * lu and lg files so this code path shouldn't be executed.
              */
-            recognizers.push(`${currentDialogId}.lu`);
-            createLuFile(currentDialogId);
+            setLoading(true);
+            createLuFile(currentDialogId).then(() => {
+              setTimeout(() => {
+                setTimeout(() => {
+                  setLoading(false);
+                }, 750);
+              }, 500);
+            });
+            recognizer = `${currentDialogId}.lu`;
           }
-        } else {
-          recognizers = recognizers.filter(recog => typeof recog !== 'string');
+          break;
         }
-        break;
-      }
-      case 'regex': {
-        if (checked) {
-          recognizers.push({
+        case 'regex': {
+          recognizer = {
             $type: SDKTypes.RegexRecognizer,
             id: 'regex',
-          });
-        } else {
-          recognizers = recognizers.filter(recog => !(typeof recog === 'object' && recog.id === 'regex'));
+          };
+
+          break;
         }
-        break;
+        default:
+          break;
       }
-      default:
-        break;
-    }
-    if (finalRecognizerSet.recognizers[0].recognizers) {
-      finalRecognizerSet.recognizers[0].recognizers['en-us'].recognizers = Object.assign([], recognizers);
-    }
-    checkOptions.map(option => {
-      if (option.id === id) {
-        option.checked = !!checked;
+      if (finalRecognizerSet.recognizers[0].recognizers) {
+        finalRecognizerSet.recognizers[0].recognizers['en-us'] = recognizer;
       }
-    });
-    setCheckOptions(checkOptions);
-    onChange(finalRecognizerSet);
+      onChange(finalRecognizerSet);
+    }
   };
 
   return (
     <div className="RecognizerField">
       <BaseField {...props}>
-        <Stack tokens={stackTokens}>
-          <WidgetLabel label="Recognizer"></WidgetLabel>
-          {checkOptions.map((option, index) => (
-            <Checkbox
-              label={option.label}
-              key={index}
-              defaultChecked={option.checked}
-              disabled={option.disabled}
-              onChange={(_, checked?: boolean) => handleChange(option.id, checked)}
-            />
-          ))}
-        </Stack>
+        <Dropdown
+          label={formatMessage('Recognizer Type')}
+          onChange={handleChange}
+          options={options}
+          selectedKey={getSelectedType()}
+          responsiveMode={ResponsiveMode.large}
+          onRenderTitle={onRenderTitle}
+        />
       </BaseField>
     </div>
   );

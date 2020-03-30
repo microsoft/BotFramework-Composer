@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { RegexRecognizer, SDKTypes } from '@bfc/shared';
 import { DialogInfo } from '@bfc/indexers';
 import { useState } from 'react';
 
@@ -19,9 +18,7 @@ interface RegexEditorWidgetProps {
 }
 
 function getRegexIntentPattern(currentDialog: DialogInfo, intent: string): string | null {
-  const recognizer = currentDialog.content.recognizer.recognizers[0].recognizers?.['en-us'].recognizers.find(
-    recog => recog.$type === SDKTypes.RegexRecognizer
-  ) as RegexRecognizer;
+  const recognizer = currentDialog.content.recognizer.recognizers[0].recognizers?.['en-us'];
   let pattern: string | null = null;
 
   if (!recognizer) {

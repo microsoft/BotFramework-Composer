@@ -3,13 +3,6 @@
 
 import { SDKTypes } from '@bfc/shared';
 
-export interface ICheckOption {
-  checked: boolean;
-  disabled: boolean;
-  label: string;
-  id: string;
-}
-
 export interface IRecognizerType {
   $type: SDKTypes;
   id: string;
@@ -20,10 +13,7 @@ export interface IRecognizer {
     | {
         $type: string;
         recognizers: {
-          'en-us': {
-            $type: string;
-            recognizers: (IRecognizerType | string)[];
-          };
+          'en-us': IRecognizerType | string;
         };
         id?: undefined;
       }
