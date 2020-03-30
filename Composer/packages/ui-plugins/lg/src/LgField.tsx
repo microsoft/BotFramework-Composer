@@ -62,11 +62,8 @@ const LgField: React.FC<FieldProps<string>> = props => {
     },
   };
 
-  const diagnostic = lgFile && filterTemplateDiagnostics(lgFile.diagnostics, template)[0];
+  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
-  const errorMsg = diagnostic
-    ? diagnostic.message.split('error message: ')[diagnostic.message.split('error message: ').length - 1]
-    : '';
   const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
     debounce((shellData: any, localData: any) => {
@@ -110,7 +107,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
         height={100}
         value={localValue}
         onChange={onChange}
-        errorMessage={errorMsg}
+        diagnostics={diagnostics}
         hidePlaceholder
         languageServer={{
           path: lspServerPath,

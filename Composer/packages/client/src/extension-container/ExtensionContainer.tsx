@@ -187,7 +187,6 @@ function ExtensionContainer() {
     RealEditor && (
       <Extension shell={shellApi} shellData={shellData}>
         <RealEditor
-          key={shellData.focusPath}
           {...shellData}
           onChange={shellApi.saveData}
           shellApi={shellApi}
