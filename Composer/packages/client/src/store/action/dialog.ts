@@ -26,6 +26,10 @@ export const removeDialogBase: ActionCreator = async (store, id) => {
 
 export const createDialogBase: ActionCreator = async (store, { id, content }) => {
   const fixedContent = autofixReferInDialog(id, content);
+  const onCreateDialogComplete = store.getState().onCreateDialogComplete;
+  if (typeof onCreateDialogComplete === 'function') {
+    setTimeout(() => onCreateDialogComplete(id));
+  }
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG,
     payload: { id, content: fixedContent },
@@ -71,8 +75,6 @@ export const createAllRelatedFiles: ActionCreator = async (
   } else {
     lgs.forEach(lg => createLgFile(store, { id: lg.id, content: lg.content }));
   }
-
-  navTo(store, dialog.id);
 };
 
 export const removeDialog = undoable(
@@ -131,16 +133,21 @@ export const updateDialog: ActionCreator = undoable(
   (store: Store, from, to) => updateDialogBase(store, ...to)
 );
 
-export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }) => {
+export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }, onComplete) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {
       actionsSeed: actions,
+      onComplete,
     },
   });
 };
 
 export const createDialogCancel: ActionCreator = store => {
+  const onCreateDialogComplete = store.getState().onCreateDialogComplete;
+  if (typeof onCreateDialogComplete === 'function') {
+    onCreateDialogComplete(null);
+  }
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });

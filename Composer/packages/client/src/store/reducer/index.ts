@@ -118,14 +118,16 @@ const removeDialog: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const createDialogBegin: ReducerFunc = (state, { actionsSeed }) => {
+const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
   state.showCreateDialogModal = true;
   state.actionsSeed = actionsSeed;
+  state.onCreateDialogComplete = onComplete;
   return state;
 };
 
 const createDialogCancel: ReducerFunc = state => {
   state.showCreateDialogModal = false;
+  delete state.onCreateDialogComplete;
   return state;
 };
 
@@ -134,6 +136,7 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs.push(dialog);
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
+  delete state.onCreateDialogComplete;
   return state;
 };
 
