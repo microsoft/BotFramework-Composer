@@ -32,7 +32,6 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
         responsiveMode={ResponsiveMode.large}
         selectedKey={value}
         styles={{
-          label: { fontSize: '10px', fontWeight: '400' },
           errorMessage: { display: 'none' },
         }}
         onBlur={() => onBlur && onBlur(id, value)}
