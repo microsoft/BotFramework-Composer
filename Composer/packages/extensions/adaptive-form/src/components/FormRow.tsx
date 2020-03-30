@@ -19,6 +19,7 @@ const formRow = {
   row: css`
     display: flex;
     margin: 10px 18px;
+
     label: FormRowContainer;
   `,
   property: css`
@@ -28,6 +29,13 @@ const formRow = {
     & + & {
       margin-left: 16px;
     }
+
+    label: FormRowProperty;
+  `,
+  full: css`
+    flex: 1;
+
+    label: FormRow;
   `,
 };
 
@@ -81,6 +89,7 @@ const FormRow: React.FC<FormRowProps> = props => {
     return (
       <SchemaField
         key={`${id}.${row}`}
+        css={formRow.full}
         className={className}
         definitions={definitions}
         depth={depth}
