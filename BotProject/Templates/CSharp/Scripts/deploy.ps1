@@ -3,7 +3,7 @@ Param(
 	[string] $environment,
 	[string] $luisAuthoringKey,
 	[string] $luisAuthoringRegion,
-  	[string] $language,
+	[string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
