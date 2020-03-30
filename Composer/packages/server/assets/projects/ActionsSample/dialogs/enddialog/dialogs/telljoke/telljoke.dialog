@@ -1,11 +1,11 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "323744"
   },
   "autoEndDialog": true,
   "recognizer": {
-    "$type": "Microsoft.RegexRecognizer",
+    "$kind": "Microsoft.RegexRecognizer",
     "intents": [
       {
         "intent": "CancelIntent",
@@ -15,38 +15,38 @@
   },
   "triggers": [
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "241317"
       },
       "actions": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
+          "$kind": "Microsoft.CancelAllDialogs"
         }
       ],
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "120822"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "150220"
           },
           "activity": "${bfdactivity-150220()}"
         },
         {
-          "$type": "Microsoft.EndTurn",
+          "$kind": "Microsoft.EndTurn",
           "$designer": {
             "id": "889445"
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "451180"
           },

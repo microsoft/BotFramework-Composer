@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "622543",
     "name": "GetProfile"
@@ -8,14 +8,14 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "OnBeginDialog",
         "id": "151697"
       },
       "actions": [
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "name": "Prompt for text",
             "id": "362298"
@@ -35,7 +35,7 @@
           "outputFormat": "=trim(this.value)"
         },
         {
-          "$type": "Microsoft.NumberInput",
+          "$kind": "Microsoft.NumberInput",
           "$designer": {
             "name": "Prompt for a number",
             "id": "005947"
@@ -56,7 +56,7 @@
           "defaultLocale": "en-us"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
             "id": "296924"
@@ -66,14 +66,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "Why",
         "id": "661298"
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
             "id": "567494"
@@ -81,7 +81,7 @@
           "condition": "exists(user.profile.name)",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "907674"
@@ -91,7 +91,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "558329"
@@ -104,14 +104,14 @@
       "intent": "Why"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "NoValue",
         "id": "449648"
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
             "id": "015423"
@@ -119,7 +119,7 @@
           "condition": "exists(user.profile.name)",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "074631"
@@ -127,7 +127,7 @@
               "activity": "${bfdactivity-074631()}"
             },
             {
-              "$type": "Microsoft.SetProperty",
+              "$kind": "Microsoft.SetProperty",
               "$designer": {
                 "name": "Set a Property",
                 "id": "960926"
@@ -138,7 +138,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "758791"
@@ -146,7 +146,7 @@
               "activity": "${bfdactivity-758791()}"
             },
             {
-              "$type": "Microsoft.SetProperty",
+              "$kind": "Microsoft.SetProperty",
               "$designer": {
                 "name": "Set a Property",
                 "id": "142109"
@@ -160,7 +160,7 @@
       "intent": "NoValue"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "372804",
         "name": "GetProfileInputs"
