@@ -54,23 +54,6 @@ const LUPage: React.FC<LUPageProps> = props => {
     }
   }, [dialogId, dialogs, projectId]);
 
-  useEffect(() => {
-    const handleUserKeyPress = event => {
-      const { keyCode } = event;
-      //when press esc and in edit mode
-      if (keyCode === 27 && edit) {
-        const url = `/bot/${projectId}/language-understanding/${fileId}`;
-        navigateTo(url);
-      }
-    };
-
-    document.addEventListener('keydown', handleUserKeyPress);
-
-    return () => {
-      document.removeEventListener('keydown', handleUserKeyPress);
-    };
-  });
-
   const onSelect = useCallback(
     id => {
       const url = `/bot/${projectId}/language-understanding/${id}`;

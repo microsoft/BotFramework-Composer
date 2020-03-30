@@ -46,7 +46,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const inlineMode = !!intent;
   const [content, setContent] = useState(intent?.Body || file?.content);
-
+  const currentPath = props.location?.pathname;
   useEffect(() => {
     // reset content with file.content initial state
     if (!file || isEmpty(file) || content) return;
@@ -163,6 +163,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
+      currentPath={currentPath}
     />
   );
 };

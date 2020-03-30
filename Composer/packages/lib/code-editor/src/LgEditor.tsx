@@ -111,6 +111,7 @@ export function LgEditor(props: LGLSPEditorProps) {
       language="botbuilderlg"
       options={options}
       editorDidMount={editorDidMount}
+      currentPath={props.currentPath}
     />
   );
 }

@@ -157,6 +157,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
       language="lu"
       options={options}
       editorDidMount={editorDidMount}
+      currentPath={props.currentPath}
     />
   );
 };
