@@ -65,7 +65,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
         const [dPath, dType, dProp] = d.path?.split('#') || [];
         const dParts = dProp ? dProp.split(/[[\].]+/).filter(Boolean) : [];
 
-        if (dPath === currentPath && dType === localData?.$type) {
+        if (dPath === currentPath && dType === localData?.$kind) {
           const propErr = dParts.reverse().reduce((err, prop, idx) => {
             if (idx === 0) {
               return { [prop]: d.message };

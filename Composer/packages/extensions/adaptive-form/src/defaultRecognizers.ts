@@ -19,10 +19,10 @@ const DefaultRecognizers: RecognizerSchema[] = [
     displayName: () => formatMessage('Regular Expression'),
     editor: RegexIntentField,
     isSelected: data => {
-      return typeof data === 'object' && data.$type === SDKTypes.RegexRecognizer;
+      return typeof data === 'object' && data.$kind === SDKTypes.RegexRecognizer;
     },
     handleRecognizerChange: props => {
-      props.onChange({ $type: SDKTypes.RegexRecognizer, intents: [] });
+      props.onChange({ $kind: SDKTypes.RegexRecognizer, intents: [] });
     },
   },
 ];

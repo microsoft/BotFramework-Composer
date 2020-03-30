@@ -103,10 +103,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           rawErrors={getError('style')}
         />
       )}
-      {value?.$type === SDKTypes.ChoiceInput && (
+      {value?.$kind === SDKTypes.ChoiceInput && (
         <ChoiceInputSettings {...props} value={(value as unknown) as ChoiceInput} choiceProperty="choices" />
       )}
-      {value?.$type === SDKTypes.ConfirmInput && (
+      {value?.$kind === SDKTypes.ConfirmInput && (
         <ChoiceInputSettings {...props} value={(value as unknown) as ConfirmInput} choiceProperty="confirmChoices" />
       )}
     </Fragment>

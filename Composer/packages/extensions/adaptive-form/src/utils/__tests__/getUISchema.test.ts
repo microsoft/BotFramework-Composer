@@ -11,7 +11,7 @@ describe('getUISchema', () => {
     expect(getUISchema('SomeDialog')).toEqual({});
   });
 
-  it('returns UI schema for $type', () => {
+  it('returns UI schema for $kind', () => {
     const schema: JSONSchema7 = {
       properties: {
         $kind: {

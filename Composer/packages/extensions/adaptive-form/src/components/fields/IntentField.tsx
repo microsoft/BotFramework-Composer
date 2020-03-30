@@ -14,7 +14,7 @@ export function recognizerType({ content }: DialogInfo): string | null {
   const { recognizer } = content;
 
   if (recognizer) {
-    if (typeof recognizer === 'object' && recognizer.$type === SDKTypes.RegexRecognizer) {
+    if (typeof recognizer === 'object' && recognizer.$kind === SDKTypes.RegexRecognizer) {
       return SDKTypes.RegexRecognizer;
     } else if (typeof recognizer === 'string') {
       return SDKTypes.LuisRecognizer;
