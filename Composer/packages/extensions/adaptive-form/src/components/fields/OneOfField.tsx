@@ -118,7 +118,7 @@ const OneOfField: React.FC<FieldProps> = props => {
   const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, pluginConfig);
 
   return (
-    <React.Fragment>
+    <div css={oneOfField.container}>
       <div css={oneOfField.label}>
         <FieldLabel {...props} />
         {options && options.length > 1 && (
@@ -146,7 +146,7 @@ const OneOfField: React.FC<FieldProps> = props => {
         label={selectedSchema?.type === 'object' ? undefined : false}
         depth={props.depth - 1}
       />
-    </React.Fragment>
+    </div>
   );
 };
 
