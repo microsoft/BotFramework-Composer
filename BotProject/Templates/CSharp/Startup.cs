@@ -95,7 +95,12 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
                 adapter
                   .UseStorage(storage)
-                  .UseState(userState, conversationState);               
+                  .UseState(userState, conversationState);
+                
+                if (!string.IsNullOrEmpty(settings.AppInsights.InstrumentationKey))
+                {
+                    adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(new TelemetryClient()), true));
+                }
 
                 if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
                 {
