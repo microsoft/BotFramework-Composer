@@ -12,3 +12,5 @@ export interface ResourceInfo {
   content: string;
   changeType: FileChangeType;
 }
+
+export type FileErrorHandler = (error) => void;

@@ -62,7 +62,7 @@ class FilePersistence {
     delete this.files[fileName];
   }
 
-  public notify(store: Store, action: ActionType) {
+  public async notify(store: Store, action: ActionType) {
     const getInfo = fileActionType[action.type];
     if (!getInfo) return;
 
@@ -73,19 +73,27 @@ class FilePersistence {
       this.attach(name, projectId);
     }
     try {
-      this.files[name].operation({ changeType, name, content });
+      await this.files[name].operation({ changeType, name, content }, this.handleError(store, name));
     } catch (err) {
-      setError(store, {
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: `HANDLE ${name} ERROR`,
-      });
-      //if sync file error, do a full refresh.
-      fetchProject(store);
+      this.handleError(store, name)(err);
     }
 
     if (changeType === FileChangeType.DELETE) {
       this.detach(name);
     }
+  }
+
+  private handleError(curStore: Store, name: string) {
+    const store = curStore;
+    const fileName = name;
+    return err => {
+      setError(store, {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: `HANDLE ${fileName} ERROR`,
+      });
+      //if sync file error, do a full refresh.
+      fetchProject(store);
+    };
   }
 }
 

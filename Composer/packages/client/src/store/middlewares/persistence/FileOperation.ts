@@ -3,18 +3,24 @@
 import { FileInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import { FileChangeType, ResourceInfo } from './../persistence/types';
+import { FileChangeType, ResourceInfo, FileErrorHandler } from './../persistence/types';
 import * as client from './http';
 
 export class FileOperation {
   private file: FileInfo | undefined;
   private projectId: string;
+  private errorHandler: FileErrorHandler = error => {};
 
   private debouncedUpdate = debounce(async (content: string) => {
     if (this.file) {
-      const response = await client.updateFile(this.projectId, this.file.name, content);
-      this.file.content = content;
-      this.file.lastModified = response.data.lastModified;
+      try {
+        const response = await client.updateFile(this.projectId, this.file.name, content);
+        this.file.content = content;
+        this.file.lastModified = response.data.lastModified;
+      } catch (error) {
+        //the error can't be thrown out to upper layer
+        this.errorHandler(error);
+      }
     }
   }, 500);
 
@@ -23,9 +29,9 @@ export class FileOperation {
     this.file = file;
   }
 
-  async operation(fileInfo: ResourceInfo) {
+  async operation(fileInfo: ResourceInfo, errorHandler: FileErrorHandler) {
     const { changeType, content, name } = fileInfo;
-
+    this.errorHandler = errorHandler;
     switch (changeType) {
       case FileChangeType.CREATE:
         await this.createFile(name, content);
