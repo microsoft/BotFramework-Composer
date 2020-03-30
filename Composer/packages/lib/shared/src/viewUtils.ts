@@ -9,7 +9,7 @@ import get from 'lodash/get';
 
 import { SDKTypes } from './types';
 import { ConceptLabels } from './labelMap';
-import { seedNewDialog } from './dialogFactory';
+import { DialogFactory } from './dialogFactory';
 
 export const PROMPT_TYPES = [
   SDKTypes.AttachmentInput,
@@ -157,6 +157,7 @@ export const dialogGroups: DialogGroupsMap = {
 };
 
 const menuItemHandler = (
+  factory: DialogFactory,
   handleType: (
     e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
     item: IContextualMenuItem
@@ -166,18 +167,13 @@ const menuItemHandler = (
   item: IContextualMenuItem | undefined
 ) => {
   if (item) {
+    const name =
+      ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type;
     item = {
       ...item,
-      $type: item.$type,
-      ...seedNewDialog(item.$type, {
-        name:
-          ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type,
-      }),
       data: {
-        $type: item.$type, // used by the steps field to create the item
-        ...seedNewDialog(item.$type, {
-          name:
-            ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type,
+        ...factory.create(item.$type, {
+          $designer: { name },
         }),
       },
     };
@@ -192,6 +188,7 @@ export const createStepMenu = (
     e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
     item: IContextualMenuItem
   ) => void,
+  factory: DialogFactory,
   filter?: (x: SDKTypes) => boolean
 ): IContextualMenuItem[] => {
   if (subMenu) {
@@ -203,7 +200,7 @@ export const createStepMenu = (
           key: item.types[0],
           name: conceptLabel && conceptLabel.title ? conceptLabel.title : item.types[0],
           $type: item.types[0],
-          onClick: menuItemHandler(handleType),
+          onClick: menuItemHandler(factory, handleType),
         };
       }
       const subMenu: IContextualMenuProps = {
@@ -216,7 +213,7 @@ export const createStepMenu = (
             $type: $type,
           };
         }),
-        onItemClick: menuItemHandler(handleType),
+        onItemClick: menuItemHandler(factory, handleType),
       };
 
       const menuItem: IContextualMenuItem = {
@@ -238,13 +235,13 @@ export const createStepMenu = (
         text: name,
         name: name,
         $type: item,
-        ...seedNewDialog(item, {
-          name,
+        ...factory.create(item, {
+          $designer: { name },
         }),
         data: {
           $type: item,
-          ...seedNewDialog(item, {
-            name,
+          ...factory.create(item, {
+            $designer: { name },
           }),
         },
         onClick: (e, item: IContextualMenuItem | undefined) => {

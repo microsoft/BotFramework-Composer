@@ -28,7 +28,7 @@ interface FormTitleProps {
 const FormTitle: React.FC<FormTitleProps> = props => {
   const { name, description, schema, formData, uiOptions = {} } = props;
 
-  const handleTitleChange = (e: any, newTitle?: string): void => {
+  const handleTitleChange = (_e: React.FormEvent, newTitle?: string): void => {
     if (props.onChange) {
       props.onChange({
         ...formData.$designer,

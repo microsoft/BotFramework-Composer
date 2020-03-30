@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DialogFactory } from '@bfc/shared';
+
 import { insert, deleteNode, queryNode, getParentPaths } from '../../src/utils/jsonTracker';
+
+const factory = new DialogFactory({});
 
 describe('queryNode', () => {
   describe('can query correct result', () => {
@@ -44,7 +48,7 @@ describe('insert', () => {
     });
 
     it('inserts into the correct position', () => {
-      const updated = insert(dialog, path, 1, 'newOne');
+      const updated = insert(dialog, path, 1, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
           $kind: 'firstOne',
@@ -60,7 +64,7 @@ describe('insert', () => {
     });
 
     it('inserts into front if position is less than 0', () => {
-      const updated = insert(dialog, path, -2, 'newOne');
+      const updated = insert(dialog, path, -2, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
           $kind: 'newOne',
@@ -76,7 +80,7 @@ describe('insert', () => {
     });
 
     it('inserts into end if position is greater than length', () => {
-      const updated = insert(dialog, path, 10, 'newOne');
+      const updated = insert(dialog, path, 10, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
           $kind: 'firstOne',
@@ -92,7 +96,7 @@ describe('insert', () => {
     });
 
     it('inserts at end if position is undefined', () => {
-      const updated = insert(dialog, path, undefined, 'newOne');
+      const updated = insert(dialog, path, undefined, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
           $kind: 'firstOne',
@@ -112,7 +116,7 @@ describe('insert', () => {
     it('inserts a new array with one element', () => {
       const path = 'foo.bar';
 
-      const updated = insert(dialog, path, 0, 'newOne');
+      const updated = insert(dialog, path, 0, 'newOne', factory);
 
       expect(updated.foo.bar).toEqual([{ $kind: 'newOne', $designer: { id: expect.any(String) } }]);
     });

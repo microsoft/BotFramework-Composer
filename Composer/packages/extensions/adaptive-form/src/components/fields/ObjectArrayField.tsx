@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { FieldProps } from '@bfc/extension';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
@@ -38,6 +38,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
   const [newObject, setNewObject] = useState({});
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
+  const firstNewFieldRef: React.RefObject<ITextField> = useRef(null);
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
@@ -47,7 +48,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 
-      if (Object.keys(newObject).length) {
+      if (Object.keys(newObject).length > 0) {
         const formattedData = Object.entries(newObject).reduce((obj, [key, value]) => {
           const serializeValue = uiOptions?.properties?.[key]?.serializer?.set;
           return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
@@ -55,6 +56,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
         addItem(formattedData);
         setNewObject({});
+        firstNewFieldRef.current?.focus();
       }
     }
   };
@@ -129,13 +131,14 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
               {orderedProperties
                 .filter(p => !Array.isArray(p))
                 .map((property, index, allProperties) => {
+                  const lastField = index === allProperties.length - 1;
                   if (typeof property === 'string') {
                     return (
                       <div key={index} css={objectArrayField.objectItemInputField}>
                         <TextField
                           autoComplete="off"
                           iconProps={{
-                            ...(index === allProperties.length - 1
+                            ...(lastField
                               ? {
                                   iconName: 'ReturnKey',
                                   style: {
@@ -150,6 +153,14 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                           value={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
+                          ariaLabel={
+                            lastField
+                              ? formatMessage(
+                                  'press Enter to add this item or Tab to move to the next interactive element'
+                                )
+                              : formatMessage('press Tab to advance to the next field')
+                          }
+                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>
                     );

@@ -11,7 +11,6 @@ import {
   deleteActions,
   LgTemplateRef,
   LgMetaData,
-  seedNewDialog,
   ExternalResourceHandlerAsync,
   walkLgResourcesInActionList,
 } from '@bfc/shared';
@@ -66,6 +65,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     updateLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory,
   } = useContext(NodeRendererContext);
 
   const dereferenceLg: ExternalResourceHandlerAsync<string> = async (
@@ -158,7 +158,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
         } else {
           handler = e => {
-            const dialog = insert(data, e.id, e.position, e.$kind);
+            const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
           };
@@ -166,7 +166,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.InsertEvent:
         handler = e => {
-          const dialog = insert(data, e.id, e.position, e.$kind);
+          const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
         };
@@ -232,7 +232,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
               const [, arrayPath, actionIndexStr] = indexes;
               const startIndex = parseInt(actionIndexStr);
-              const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+              const placeholderAction = dialogFactory.create(SDKTypes.BeginDialog, { dialog: newDialog });
               const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
               onChange(insertResult);
             });

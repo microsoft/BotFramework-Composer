@@ -9,7 +9,7 @@ context('Onboarding', () => {
 
     //enable onboarding setting
     cy.visitPage('Settings');
-
+    cy.wait(1000);
     cy.findByText('Onboarding').click();
     cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design Flow');

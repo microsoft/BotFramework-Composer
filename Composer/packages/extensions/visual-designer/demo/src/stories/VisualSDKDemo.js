@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seedNewDialog, SDKTypes, dialogGroups, DialogGroup } from '@bfc/shared';
+import { DialogFactory, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
@@ -15,6 +15,7 @@ export class VisualSDKDemo extends Component {
   state = {
     actions: this.seedInitialActions(),
   };
+  factory = new DialogFactory({});
 
   seedInitialActions() {
     const initialTypes = [
@@ -26,13 +27,13 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => seedNewDialog(t));
+    const initalActions = initialTypes.map(t => this.factory.create(t));
     return initalActions;
   }
 
   insertActionPreview($kind) {
     this.setState({
-      actions: [seedNewDialog($kind), ...this.state.actions],
+      actions: [this.factory.create($kind), ...this.state.actions],
     });
   }
 
