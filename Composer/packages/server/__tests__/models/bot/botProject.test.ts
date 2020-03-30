@@ -82,7 +82,7 @@ describe('createFromTemplate', () => {
 
     expect(newFile).not.toBeUndefined();
     const fileContent = ((newFile as unknown) as DialogInfo).content;
-    expect(fileContent.$type).toEqual(SDKKinds.AdaptiveDialog);
+    expect(fileContent.$kind).toEqual(SDKKinds.AdaptiveDialog);
   });
 });
 

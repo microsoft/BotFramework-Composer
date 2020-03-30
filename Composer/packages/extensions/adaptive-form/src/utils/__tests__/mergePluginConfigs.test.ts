@@ -38,13 +38,6 @@ describe('mergePluginConfigs', () => {
 
     expect(mergePluginConfigs(overrides)).toMatchInlineSnapshot(`
 Object {
-  "kindSchema": Object {
-    "Microsoft.IDialog": Object {
-      "hidden": Array [
-        "foo",
-      ],
-    },
-  },
   "recognizers": Array [
     Object {
       "displayName": [Function],

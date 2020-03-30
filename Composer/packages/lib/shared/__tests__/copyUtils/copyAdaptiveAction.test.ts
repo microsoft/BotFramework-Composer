@@ -34,18 +34,18 @@ describe('copyAdaptiveAction', () => {
     SDKKinds.ChoiceInput,
     SDKKinds.Foreach,
   ];
-  for (const $type of registeredTypes) {
-    it(`should invoke registered handler for ${$type}`, async () => {
-      await copyAdaptiveAction({ $type }, externalApi);
-      expect(CopyConstructorMap[$type]).toHaveReturnedTimes(1);
+  for (const $kind of registeredTypes) {
+    it(`should invoke registered handler for ${$kind}`, async () => {
+      await copyAdaptiveAction({ $kind }, externalApi);
+      expect(CopyConstructorMap[$kind]).toHaveReturnedTimes(1);
     });
   }
 
   it('should invoke default handler for other types', async () => {
-    await copyAdaptiveAction({ $type: SDKKinds.BeginDialog }, externalApi);
+    await copyAdaptiveAction({ $kind: SDKKinds.BeginDialog }, externalApi);
     expect(CopyConstructorMap.default).toHaveReturnedTimes(1);
 
-    await copyAdaptiveAction({ $type: SDKKinds.HttpRequest }, externalApi);
+    await copyAdaptiveAction({ $kind: SDKKinds.HttpRequest }, externalApi);
     expect(CopyConstructorMap.default).toHaveReturnedTimes(2);
   });
 });
