@@ -99,7 +99,7 @@ interface TriggerCreationModalProps {
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, locale, projectId } = state;
+  const { dialogs, luFiles, locale, projectId, schemas } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$type', '') === regexRecognizerKey;
@@ -129,7 +129,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
     const content = get(luFile, 'content', '');
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
-    const newDialog = generateNewDialog(dialogs, dialogId, formData);
+    const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$type === intentTypeKey && !isRegEx) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {

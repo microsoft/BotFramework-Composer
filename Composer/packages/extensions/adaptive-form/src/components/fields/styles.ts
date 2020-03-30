@@ -11,12 +11,16 @@ export const arrayField = {
     margin-top: 0;
     margin-bottom: 0;
     display: flex;
+
+    label: ArrayFieldField;
   `,
 
   inputFieldContainer: css`
     border-top: 1px solid ${NeutralColors.gray30};
     display: flex;
     padding: 7px 0px;
+
+    label: ArrayFieldInputFieldContainer;
   `,
 };
 
@@ -49,34 +53,17 @@ export const arrayItem = {
     & + & {
       margin-left: ${stacked ? 0 : '16px'};
     }
+
+    label: ArrayItemSchemaFieldOverride;
   `,
 };
-
-export const objectItemLabel = css`
-  display: flex;
-`;
-
-export const objectItemValueLabel = css`
-  color: ${NeutralColors.gray130};
-  flex: 1;
-  font-size: 14px;
-  margin-left: 7px;
-  & + & {
-    margin-left: 20px;
-  }
-`;
-
-export const objectItemInputField = css`
-  flex: 1;
-  & + & {
-    margin-left: 20px;
-  }
-`;
 
 export const unsupportedField = {
   container: css`
     display: flex;
     justify-content: space-between;
+
+    label: UnsupportedFieldContainer;
   `,
   link: {
     root: {
@@ -91,6 +78,8 @@ export const unsupportedField = {
     overflow-x: scroll;
     overflow-y: none;
     padding: ${hidden ? '0px' : '1rem'};
+
+    label: UnsupportedFieldDetails;
   `,
 };
 
@@ -98,9 +87,13 @@ export const openObjectField = {
   container: css`
     border-top: 1px solid ${NeutralColors.gray30};
     display: flex;
+
+    label: OpenObjectFieldContainer;
   `,
   filler: css`
     width: 32px;
+
+    label: OpenObjectFieldFiller;
   `,
   item: css`
     flex: 1;
@@ -108,6 +101,8 @@ export const openObjectField = {
     & + & {
       margin-left: 16px;
     }
+
+    label: OpenObjectFieldItem;
   `,
   label: css`
     flex: 1;
@@ -116,15 +111,21 @@ export const openObjectField = {
     & + & {
       margin-left: 16px;
     }
+
+    label: OpenObjectFieldLabel;
   `,
   labelContainer: css`
     display: flex;
+
+    label: OpenObjectFieldLabelContainer;
   `,
 };
 
 export const objectArrayField = {
   objectItemLabel: css`
     display: flex;
+
+    label: ObjectItemLabel;
   `,
 
   objectItemValueLabel: css`
@@ -135,6 +136,8 @@ export const objectArrayField = {
     & + & {
       margin-left: 20px;
     }
+
+    label: ObjectItemValueLabel;
   `,
 
   objectItemInputField: css`
@@ -142,24 +145,37 @@ export const objectArrayField = {
     & + & {
       margin-left: 20px;
     }
+
+    label: ObjectItemInputField;
   `,
 
   arrayItemField: css`
     flex: 1;
     display: flex;
     min-width: 0;
+
+    label: ArrayItemField;
   `,
 
   inputFieldContainer: css`
     border-top: 1px solid ${NeutralColors.gray30};
     display: flex;
     padding: 7px 0;
+
+    label: InputFieldContainer;
   `,
 };
 
 export const oneOfField = {
+  container: css`
+    width: 100%;
+
+    label: OneOfField;
+  `,
   label: css`
     display: flex;
     justify-content: space-between;
+
+    label: OneOfFieldLabel;
   `,
 };

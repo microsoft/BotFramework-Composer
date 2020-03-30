@@ -20,7 +20,9 @@ const config: PluginConfig = {
         const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
         if (luFile) {
-          props.onChange(`${luFile.id}.lu`);
+          // strip locale out of id so it doesn't get serialized
+          // into the .dialog file
+          props.onChange(`${luFile.id.split('.')[0]}.lu`);
         } else {
           alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
         }
