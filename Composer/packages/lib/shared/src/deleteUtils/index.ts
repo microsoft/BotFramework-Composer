@@ -9,9 +9,9 @@ import { walkAdaptiveActionList } from './walkAdaptiveActionList';
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
+  switch (action.$kind) {
     case SDKTypes.SendActivity:
     case SDKTypes.SkillDialog:
       outputTemplates.push(action.activity);
@@ -30,16 +30,16 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 // TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
+  switch (action.$kind) {
     case SDKTypes.AttachmentInput:
     case SDKTypes.ChoiceInput:
     case SDKTypes.ConfirmInput:
     case SDKTypes.DateTimeInput:
     case SDKTypes.NumberInput:
     case SDKTypes.TextInput: {
-      const [, promptType] = action.$type.split('.');
+      const [, promptType] = action.$kind.split('.');
       const intentName = `${promptType}.response-${action?.$designer?.id}`;
       promptType && intentName && outputTemplates.push(intentName);
       break;

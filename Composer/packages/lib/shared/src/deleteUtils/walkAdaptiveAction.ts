@@ -8,7 +8,7 @@ import { walkSwitchCondition } from './walkSwitchCondition';
 import { walkActionWithChildren } from './walkActionWithChildren';
 import { AdaptiveActionVisitor } from './AdaptiveActionVisitor';
 
-const WalkerMap: { [$type: string]: (input, visitor: AdaptiveActionVisitor) => void } = {
+const WalkerMap: { [$kind: string]: (input, visitor: AdaptiveActionVisitor) => void } = {
   [SDKTypes.IfCondition]: walkIfCondition,
   [SDKTypes.SwitchCondition]: walkSwitchCondition,
   [SDKTypes.Foreach]: walkActionWithChildren,
@@ -22,12 +22,12 @@ export const walkAdaptiveAction = (input, visit: (action: MicrosoftIDialog) => v
     return;
   }
 
-  if (!input || !input.$type) {
+  if (!input || !input.$kind) {
     return;
   }
 
-  if (WalkerMap[input.$type]) {
-    WalkerMap[input.$type](input, visit);
+  if (WalkerMap[input.$kind]) {
+    WalkerMap[input.$kind](input, visit);
   } else {
     visit(input);
   }

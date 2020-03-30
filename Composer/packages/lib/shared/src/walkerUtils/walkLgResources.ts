@@ -11,13 +11,13 @@ type LgFieldHandler = ExternalResourceHandler<string>;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
   const onFound = (fieldName: string) => {
     action[fieldName] && handleLgField(get(action, '$designer.id'), action, fieldName, action[fieldName]);
   };
 
-  switch (action.$type) {
+  switch (action.$kind) {
     case SDKTypes.SendActivity:
     case SDKTypes.SkillDialog:
       onFound('activity');

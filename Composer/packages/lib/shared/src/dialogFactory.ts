@@ -37,29 +37,29 @@ export function getNewDesigner(name: string, description: string) {
 
 const initialDialogShape = () => ({
   [SDKTypes.AdaptiveDialog]: {
-    $type: SDKTypes.AdaptiveDialog,
+    $kind: SDKTypes.AdaptiveDialog,
     triggers: [
       {
-        $type: SDKTypes.OnBeginDialog,
+        $kind: SDKTypes.OnBeginDialog,
         ...getNewDesigner('BeginDialog', ''),
       },
     ],
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    $type: SDKTypes.OnConversationUpdateActivity,
+    $kind: SDKTypes.OnConversationUpdateActivity,
     actions: [
       {
-        $type: SDKTypes.Foreach,
+        $kind: SDKTypes.Foreach,
         ...getNewDesigner('Loop: for each item', ''),
         itemsProperty: 'turn.Activity.membersAdded',
         actions: [
           {
-            $type: SDKTypes.IfCondition,
+            $kind: SDKTypes.IfCondition,
             ...getNewDesigner('Branch: if/else', ''),
             condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
             actions: [
               {
-                $type: SDKTypes.SendActivity,
+                $kind: SDKTypes.SendActivity,
                 ...getNewDesigner('Send a response', ''),
                 activity: '',
               },
@@ -149,7 +149,7 @@ class DialogFactory {
   }
 
   public create(
-    $type: SDKTypes,
+    $kind: SDKTypes,
     overrides: {
       $designer?: Partial<DesignerAttributes>;
       [key: string]: any;
@@ -160,19 +160,19 @@ class DialogFactory {
     }
 
     const { $designer, ...propertyOverrides } = overrides;
-    const defaultProperties = initialDialogShape()[$type] || {};
+    const defaultProperties = initialDialogShape()[$kind] || {};
 
     return merge(
-      { $type, $designer: merge({ id: generateUniqueId(6) }, $designer) },
-      this.seedDefaults($type),
+      { $kind, $designer: merge({ id: generateUniqueId(6) }, $designer) },
+      this.seedDefaults($kind),
       defaultProperties,
       propertyOverrides
     );
   }
 
-  private seedDefaults($type: SDKTypes) {
-    if (!this.schema?.definitions?.[$type]) return {};
-    const def = this.schema.definitions[$type];
+  private seedDefaults($kind: SDKTypes) {
+    if (!this.schema?.definitions?.[$kind]) return {};
+    const def = this.schema.definitions[$kind];
 
     if (def && typeof def === 'object' && def.properties) {
       return assignDefaults(def.properties);

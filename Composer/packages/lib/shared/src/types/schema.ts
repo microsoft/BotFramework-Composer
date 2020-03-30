@@ -131,7 +131,7 @@ export enum SDKRoles {
 export interface OBISchema extends JSONSchema6 {
   $schema?: string;
   $role?: string;
-  $type?: SDKTypes;
+  $kind?: SDKTypes;
   $copy?: string;
   $id?: string;
   $designer?: {

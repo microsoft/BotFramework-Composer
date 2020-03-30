@@ -15,7 +15,7 @@ export function checkProperty(property: string): boolean {
 // find all properties from specific type
 export function getProperties(value: any): string[] {
   let properties: string[] = [];
-  switch (value.$type) {
+  switch (value.$kind) {
     case SDKTypes.NumberInput:
     case SDKTypes.TextInput:
     case SDKTypes.ConfirmInput:
@@ -48,7 +48,7 @@ function ExtractMemoryPaths(dialog): string[] {
   let properties: string[] = [];
 
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    if (has(value, '$type')) {
+    if (has(value, '$kind')) {
       properties = [...properties, ...getProperties(value)];
     }
     return false;

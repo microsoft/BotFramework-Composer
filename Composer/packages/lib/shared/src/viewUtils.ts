@@ -168,11 +168,11 @@ const menuItemHandler = (
 ) => {
   if (item) {
     const name =
-      ConceptLabels[item.$type] && ConceptLabels[item.$type].title ? ConceptLabels[item.$type].title : item.$type;
+      ConceptLabels[item.$kind] && ConceptLabels[item.$kind].title ? ConceptLabels[item.$kind].title : item.$kind;
     item = {
       ...item,
       data: {
-        ...factory.create(item.$type, {
+        ...factory.create(item.$kind, {
           $designer: { name },
         }),
       },
@@ -199,18 +199,18 @@ export const createStepMenu = (
         return {
           key: item.types[0],
           name: conceptLabel && conceptLabel.title ? conceptLabel.title : item.types[0],
-          $type: item.types[0],
+          $kind: item.types[0],
           onClick: menuItemHandler(factory, handleType),
         };
       }
       const subMenu: IContextualMenuProps = {
-        items: item.types.filter(filter || (() => true)).map($type => {
-          const conceptLabel = ConceptLabels[$type];
+        items: item.types.filter(filter || (() => true)).map($kind => {
+          const conceptLabel = ConceptLabels[$kind];
 
           return {
-            key: $type,
-            name: conceptLabel && conceptLabel.title ? conceptLabel.title : $type,
-            $type: $type,
+            key: $kind,
+            name: conceptLabel && conceptLabel.title ? conceptLabel.title : $kind,
+            $kind: $kind,
           };
         }),
         onItemClick: menuItemHandler(factory, handleType),
@@ -234,12 +234,12 @@ export const createStepMenu = (
         key: item,
         text: name,
         name: name,
-        $type: item,
+        $kind: item,
         ...factory.create(item, {
           $designer: { name },
         }),
         data: {
-          $type: item,
+          $kind: item,
           ...factory.create(item, {
             $designer: { name },
           }),
@@ -284,21 +284,21 @@ export function getDialogGroupByType(type) {
   return dialogType;
 }
 
-const truncateSDKType = $type => (typeof $type === 'string' ? $type.split('Microsoft.')[1] : '');
+const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.split('Microsoft.')[1] : '');
 
 /**
- * Title priority: $designer.name > title from sdk schema > customize title > $type suffix
+ * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix
  * @param customizedTitile customized title
  */
 export function generateSDKTitle(data, customizedTitle?: string) {
-  const $type = get(data, '$type');
+  const $kind = get(data, '$kind');
   const titleFrom$designer = get(data, '$designer.name');
-  const titleFromShared = get(ConceptLabels, [$type, 'title']);
-  const titleFrom$type = truncateSDKType($type);
-  return titleFrom$designer || customizedTitle || titleFromShared || titleFrom$type;
+  const titleFromShared = get(ConceptLabels, [$kind, 'title']);
+  const titleFrom$kind = truncateSDKType($kind);
+  return titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
 }
 
-export function getInputType($type: string): string {
-  if (!$type) return '';
-  return $type.replace(/Microsoft.(.*)Input/, '$1');
+export function getInputType($kind: string): string {
+  if (!$kind) return '';
+  return $kind.replace(/Microsoft.(.*)Input/, '$1');
 }
