@@ -105,7 +105,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorInfo}>
+    <ErrorBoundary FallbackComponent={ErrorInfo} key={focusPath}>
       <div key={localData?.$designer?.id}>
         <PluginContext.Provider value={pluginConfig}>
           <FormTitle
