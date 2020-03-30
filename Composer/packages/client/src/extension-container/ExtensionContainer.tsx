@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { initializeIcons } from '@uifabric/icons';
 import { ShellData, ShellApi } from '@bfc/shared';
-import Extension from '@bfc/extension';
+import Extension, { JSONSchema7 } from '@bfc/extension';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -193,7 +193,11 @@ function ExtensionContainer() {
           shellApi={shellApi}
           formData={shellData.data}
           plugins={plugins}
-          schema={shellData.schemas?.sdk?.content}
+          schema={mergeSchema(
+            Object.values(shellData.schemas)
+              .filter(x => typeof x === 'object' && !!x.content)
+              .map(x => x.content)
+          )}
         />
       </Extension>
     )
@@ -201,3 +205,22 @@ function ExtensionContainer() {
 }
 
 export default ExtensionContainer;
+
+const mergeSchema = (inputSchemas: any[]): JSONSchema7 => {
+  if (!Array.isArray(inputSchemas) || !inputSchemas.length) return {};
+
+  const mergedSchema = inputSchemas.reduce(
+    (result, currSchema) => {
+      const { oneOf, definitions } = currSchema;
+      Array.isArray(oneOf) && result.oneOf.push(...oneOf);
+      result.definitions = {
+        ...result.definitions,
+        ...definitions,
+      };
+
+      return result;
+    },
+    { ...inputSchemas[0].content, oneOf: [], definitions: {} }
+  );
+  return mergedSchema;
+};
