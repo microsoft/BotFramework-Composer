@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import has from 'lodash/has';
 
 import { VisitorFunc, JsonWalk } from '../utils/jsonWalk';
@@ -16,22 +16,22 @@ export function checkProperty(property: string): boolean {
 export function getProperties(value: any): string[] {
   let properties: string[] = [];
   switch (value.$kind) {
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.SetProperty:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.SetProperty:
       properties = [value.property];
       break;
-    case SDKTypes.OAuthInput:
+    case SDKKinds.OAuthInput:
       properties = [value.tokenProperty];
       break;
-    case SDKTypes.SetProperties:
+    case SDKKinds.SetProperties:
       properties = value.assignments?.map(assignment => assignment.property);
       break;
-    case SDKTypes.HttpRequest:
+    case SDKKinds.HttpRequest:
       properties = [value.resultProperty];
       break;
   }

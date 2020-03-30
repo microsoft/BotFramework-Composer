@@ -7,17 +7,17 @@ import {
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
 import get from 'lodash/get';
 
-import { SDKTypes } from './types';
+import { SDKKinds } from './types';
 import { ConceptLabels } from './labelMap';
 import { DialogFactory } from './dialogFactory';
 
 export const PROMPT_TYPES = [
-  SDKTypes.AttachmentInput,
-  SDKTypes.ChoiceInput,
-  SDKTypes.ConfirmInput,
-  SDKTypes.DateTimeInput,
-  SDKTypes.NumberInput,
-  SDKTypes.TextInput,
+  SDKKinds.AttachmentInput,
+  SDKKinds.ChoiceInput,
+  SDKKinds.ConfirmInput,
+  SDKKinds.DateTimeInput,
+  SDKKinds.NumberInput,
+  SDKKinds.TextInput,
 ];
 
 export enum DialogGroup {
@@ -39,120 +39,120 @@ export enum DialogGroup {
 
 export interface DialogGroupItem {
   label: string;
-  types: SDKTypes[];
+  types: SDKKinds[];
 }
 export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 
 export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
     label: 'Send Messages',
-    types: [SDKTypes.SendActivity],
+    types: [SDKKinds.SendActivity],
   },
   [DialogGroup.INPUT]: {
     label: 'Ask a question',
     types: [
-      SDKTypes.TextInput,
-      SDKTypes.NumberInput,
-      SDKTypes.ConfirmInput,
-      SDKTypes.ChoiceInput,
-      SDKTypes.AttachmentInput,
-      SDKTypes.DateTimeInput,
-      SDKTypes.OAuthInput,
+      SDKKinds.TextInput,
+      SDKKinds.NumberInput,
+      SDKKinds.ConfirmInput,
+      SDKKinds.ChoiceInput,
+      SDKKinds.AttachmentInput,
+      SDKKinds.DateTimeInput,
+      SDKKinds.OAuthInput,
     ],
   },
   [DialogGroup.BRANCHING]: {
     label: 'Create a condition',
-    types: [SDKTypes.IfCondition, SDKTypes.SwitchCondition, SDKTypes.Foreach, SDKTypes.ForeachPage],
+    types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition, SDKKinds.Foreach, SDKKinds.ForeachPage],
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
     types: [
-      SDKTypes.SetProperty,
-      SDKTypes.SetProperties,
-      SDKTypes.DeleteProperty,
-      SDKTypes.DeleteProperties,
-      SDKTypes.EditArray,
+      SDKKinds.SetProperty,
+      SDKKinds.SetProperties,
+      SDKKinds.DeleteProperty,
+      SDKKinds.DeleteProperties,
+      SDKKinds.EditArray,
     ],
   },
   [DialogGroup.STEP]: {
     label: 'Dialog management',
     types: [
-      SDKTypes.BeginDialog,
-      SDKTypes.EndDialog,
-      SDKTypes.CancelAllDialogs,
-      SDKTypes.EndTurn,
-      SDKTypes.RepeatDialog,
-      SDKTypes.ReplaceDialog,
+      SDKKinds.BeginDialog,
+      SDKKinds.EndDialog,
+      SDKKinds.CancelAllDialogs,
+      SDKKinds.EndTurn,
+      SDKKinds.RepeatDialog,
+      SDKKinds.ReplaceDialog,
     ],
   },
   [DialogGroup.CODE]: {
     label: 'Access external resources',
     types: [
-      SDKTypes.SkillDialog,
-      SDKTypes.HttpRequest,
-      SDKTypes.EmitEvent,
-      SDKTypes.OAuthInput,
-      SDKTypes.QnAMakerDialog,
-      //  SDKTypes.CodeStep
+      SDKKinds.SkillDialog,
+      SDKKinds.HttpRequest,
+      SDKKinds.EmitEvent,
+      SDKKinds.OAuthInput,
+      SDKKinds.QnAMakerDialog,
+      //  SDKKinds.CodeStep
     ],
   },
   [DialogGroup.LOG]: {
     label: 'Debugging options',
-    types: [/* SDKTypes.DebugBreak, */ SDKTypes.LogAction, SDKTypes.TraceActivity],
+    types: [/* SDKKinds.DebugBreak, */ SDKKinds.LogAction, SDKKinds.TraceActivity],
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
     types: [
-      SDKTypes.OnIntent,
-      SDKTypes.OnUnknownIntent,
-      SDKTypes.OnDialogEvent,
-      SDKTypes.OnActivity,
-      SDKTypes.OnMessageEventActivity,
-      SDKTypes.OnCustomEvent,
+      SDKKinds.OnIntent,
+      SDKKinds.OnUnknownIntent,
+      SDKKinds.OnDialogEvent,
+      SDKKinds.OnActivity,
+      SDKKinds.OnMessageEventActivity,
+      SDKKinds.OnCustomEvent,
     ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: 'OnDialogEvents Types',
-    types: [SDKTypes.OnBeginDialog, SDKTypes.OnCancelDialog, SDKTypes.OnError, SDKTypes.OnRepromptDialog],
+    types: [SDKKinds.OnBeginDialog, SDKKinds.OnCancelDialog, SDKKinds.OnError, SDKKinds.OnRepromptDialog],
   },
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
     types: [
-      SDKTypes.OnActivity,
-      SDKTypes.OnConversationUpdateActivity,
-      SDKTypes.OnEndOfConversationActivity,
-      SDKTypes.OnEventActivity,
-      SDKTypes.OnHandoffActivity,
-      SDKTypes.OnInvokeActivity,
-      SDKTypes.OnTypingActivity,
+      SDKKinds.OnActivity,
+      SDKKinds.OnConversationUpdateActivity,
+      SDKKinds.OnEndOfConversationActivity,
+      SDKKinds.OnEventActivity,
+      SDKKinds.OnHandoffActivity,
+      SDKKinds.OnInvokeActivity,
+      SDKKinds.OnTypingActivity,
     ],
   },
   [DialogGroup.MESSAGE_EVENTS]: {
     label: 'Message events',
     types: [
-      SDKTypes.OnMessageActivity,
-      SDKTypes.OnMessageDeleteActivity,
-      SDKTypes.OnMessageReactionActivity,
-      SDKTypes.OnMessageUpdateActivity,
+      SDKKinds.OnMessageActivity,
+      SDKKinds.OnMessageDeleteActivity,
+      SDKKinds.OnMessageReactionActivity,
+      SDKKinds.OnMessageUpdateActivity,
     ],
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',
-    types: [SDKTypes.LuisRecognizer, /* SDKTypes.MultiLanguageRecognizers, */ SDKTypes.RegexRecognizer],
+    types: [SDKKinds.LuisRecognizer, /* SDKKinds.MultiLanguageRecognizers, */ SDKKinds.RegexRecognizer],
   },
   [DialogGroup.SELECTOR]: {
     label: 'Selectors',
     types: [
-      SDKTypes.ConditionalSelector,
-      SDKTypes.FirstSelector,
-      SDKTypes.MostSpecificSelector,
-      SDKTypes.RandomSelector,
-      SDKTypes.TrueSelector,
+      SDKKinds.ConditionalSelector,
+      SDKKinds.FirstSelector,
+      SDKKinds.MostSpecificSelector,
+      SDKKinds.RandomSelector,
+      SDKKinds.TrueSelector,
     ],
   },
   [DialogGroup.OTHER]: {
     label: 'Other',
-    types: [SDKTypes.AdaptiveDialog, SDKTypes.LanguagePolicy, SDKTypes.QnAMakerDialog],
+    types: [SDKKinds.AdaptiveDialog, SDKKinds.LanguagePolicy, SDKKinds.QnAMakerDialog],
   },
 };
 
@@ -189,7 +189,7 @@ export const createStepMenu = (
     item: IContextualMenuItem
   ) => void,
   factory: DialogFactory,
-  filter?: (x: SDKTypes) => boolean
+  filter?: (x: SDKKinds) => boolean
 ): IContextualMenuItem[] => {
   if (subMenu) {
     const stepMenuItems = stepLabels.map(x => {

@@ -5,7 +5,7 @@ import has from 'lodash/has';
 import uniq from 'lodash/uniq';
 import {
   extractLgTemplateRefs,
-  SDKTypes,
+  SDKKinds,
   ITrigger,
   DialogInfo,
   FileInfo,
@@ -50,7 +50,7 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
       }
       // look for other $kind
       switch (value.$kind) {
-        case SDKTypes.SendActivity:
+        case SDKKinds.SendActivity:
           targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $kind, do here
         case 'location':
@@ -87,7 +87,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$kind') && value.$kind === SDKTypes.OnIntent) {
+    if (has(value, '$kind') && value.$kind === SDKKinds.OnIntent) {
       const intentName = value.intent;
       intents.push({
         name: intentName,
@@ -118,7 +118,7 @@ function ExtractTriggers(dialog): ITrigger[] {
             id: `triggers[${index}]`,
             displayName: '',
             type: rule.$kind,
-            isIntent: rule.$kind === SDKTypes.OnIntent,
+            isIntent: rule.$kind === SDKKinds.OnIntent,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;
@@ -146,7 +146,7 @@ function ExtractReferredDialogs(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$kind') && value.$kind === SDKTypes.BeginDialog) {
+    if (has(value, '$kind') && value.$kind === SDKKinds.BeginDialog) {
       const dialogName = value.dialog;
       dialogs.push(dialogName);
     }

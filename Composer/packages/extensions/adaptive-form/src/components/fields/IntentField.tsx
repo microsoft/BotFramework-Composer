@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { DialogInfo, SDKTypes } from '@bfc/shared';
+import { DialogInfo, SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { usePluginConfig } from '../../hooks';
@@ -14,10 +14,10 @@ export function recognizerType({ content }: DialogInfo): string | null {
   const { recognizer } = content;
 
   if (recognizer) {
-    if (typeof recognizer === 'object' && recognizer.$kind === SDKTypes.RegexRecognizer) {
-      return SDKTypes.RegexRecognizer;
+    if (typeof recognizer === 'object' && recognizer.$kind === SDKKinds.RegexRecognizer) {
+      return SDKKinds.RegexRecognizer;
     } else if (typeof recognizer === 'string') {
-      return SDKTypes.LuisRecognizer;
+      return SDKKinds.LuisRecognizer;
     }
   }
 

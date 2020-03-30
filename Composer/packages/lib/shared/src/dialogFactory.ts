@@ -8,7 +8,7 @@ import { DesignerData } from './types/sdk';
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
-import { SDKTypes } from './types';
+import { SDKKinds } from './types';
 import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
 import { generateUniqueId } from './generateUniqueId';
 
@@ -36,30 +36,30 @@ export function getNewDesigner(name: string, description: string) {
 }
 
 const initialDialogShape = () => ({
-  [SDKTypes.AdaptiveDialog]: {
-    $kind: SDKTypes.AdaptiveDialog,
+  [SDKKinds.AdaptiveDialog]: {
+    $kind: SDKKinds.AdaptiveDialog,
     triggers: [
       {
-        $kind: SDKTypes.OnBeginDialog,
+        $kind: SDKKinds.OnBeginDialog,
         ...getNewDesigner('BeginDialog', ''),
       },
     ],
   },
-  [SDKTypes.OnConversationUpdateActivity]: {
-    $kind: SDKTypes.OnConversationUpdateActivity,
+  [SDKKinds.OnConversationUpdateActivity]: {
+    $kind: SDKKinds.OnConversationUpdateActivity,
     actions: [
       {
-        $kind: SDKTypes.Foreach,
+        $kind: SDKKinds.Foreach,
         ...getNewDesigner('Loop: for each item', ''),
         itemsProperty: 'turn.Activity.membersAdded',
         actions: [
           {
-            $kind: SDKTypes.IfCondition,
+            $kind: SDKKinds.IfCondition,
             ...getNewDesigner('Branch: if/else', ''),
             condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
             actions: [
               {
-                $kind: SDKTypes.SendActivity,
+                $kind: SDKKinds.SendActivity,
                 ...getNewDesigner('Send a response', ''),
                 activity: '',
               },
@@ -69,15 +69,15 @@ const initialDialogShape = () => ({
       },
     ],
   },
-  [SDKTypes.SendActivity]: {
+  [SDKKinds.SendActivity]: {
     activity: '',
   },
-  [SDKTypes.AttachmentInput]: initialInputDialog,
-  [SDKTypes.ChoiceInput]: initialInputDialog,
-  [SDKTypes.ConfirmInput]: initialInputDialog,
-  [SDKTypes.DateTimeInput]: initialInputDialog,
-  [SDKTypes.NumberInput]: initialInputDialog,
-  [SDKTypes.TextInput]: initialInputDialog,
+  [SDKKinds.AttachmentInput]: initialInputDialog,
+  [SDKKinds.ChoiceInput]: initialInputDialog,
+  [SDKKinds.ConfirmInput]: initialInputDialog,
+  [SDKKinds.DateTimeInput]: initialInputDialog,
+  [SDKKinds.NumberInput]: initialInputDialog,
+  [SDKKinds.TextInput]: initialInputDialog,
 });
 
 export const getDesignerId = (data?: DesignerData) => {
@@ -149,7 +149,7 @@ class DialogFactory {
   }
 
   public create(
-    $kind: SDKTypes,
+    $kind: SDKKinds,
     overrides: {
       $designer?: Partial<DesignerAttributes>;
       [key: string]: any;
@@ -170,7 +170,7 @@ class DialogFactory {
     );
   }
 
-  private seedDefaults($kind: SDKTypes) {
+  private seedDefaults($kind: SDKKinds) {
     if (!this.schema?.definitions?.[$kind]) return {};
     const def = this.schema.definitions[$kind];
 

@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import {
-  SDKTypes,
+  SDKKinds,
   deleteAction,
   deleteActions,
   LgTemplateRef,
@@ -232,7 +232,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
               const [, arrayPath, actionIndexStr] = indexes;
               const startIndex = parseInt(actionIndexStr);
-              const placeholderAction = dialogFactory.create(SDKTypes.BeginDialog, { dialog: newDialog });
+              const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialog });
               const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
               onChange(insertResult);
             });

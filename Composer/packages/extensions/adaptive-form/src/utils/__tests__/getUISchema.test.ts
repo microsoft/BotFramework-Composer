@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { UISchema, JSONSchema7 } from '@bfc/extension';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 import { getUISchema } from '../getUISchema';
 
@@ -15,7 +15,7 @@ describe('getUISchema', () => {
     const schema: JSONSchema7 = {
       properties: {
         $kind: {
-          const: SDKTypes.AdaptiveDialog,
+          const: SDKKinds.AdaptiveDialog,
         },
       },
     };
@@ -26,13 +26,13 @@ describe('getUISchema', () => {
     const schema: JSONSchema7 = {
       properties: {
         $kind: {
-          const: SDKTypes.AdaptiveDialog,
+          const: SDKKinds.AdaptiveDialog,
         },
       },
     };
 
     const uiSchema: UISchema = {
-      [SDKTypes.AdaptiveDialog]: {
+      [SDKKinds.AdaptiveDialog]: {
         order: ['*', 'recognizer'],
         label: 'First Label',
       },

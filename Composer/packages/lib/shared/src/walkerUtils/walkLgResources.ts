@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import { ExternalResourceHandler } from '../copyUtils/ExternalApi';
 import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
 import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
-import { SDKTypes } from '../types';
+import { SDKKinds } from '../types';
 
 type LgFieldHandler = ExternalResourceHandler<string>;
 
@@ -18,16 +18,16 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   };
 
   switch (action.$kind) {
-    case SDKTypes.SendActivity:
-    case SDKTypes.SkillDialog:
+    case SDKKinds.SendActivity:
+    case SDKKinds.SkillDialog:
       onFound('activity');
       break;
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
       onFound('prompt');
       onFound('unrecognizedPrompt');
       onFound('invalidPrompt');

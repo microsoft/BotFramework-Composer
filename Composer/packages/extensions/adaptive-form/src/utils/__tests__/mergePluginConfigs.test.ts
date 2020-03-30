@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes, SDKRoles, SDKKinds } from '@bfc/shared';
+import { SDKKinds, SDKRoles } from '@bfc/shared';
 
 import { mergePluginConfigs } from '../mergePluginConfigs';
 import DefaultUISchema from '../../defaultUiSchema';
@@ -20,7 +20,7 @@ describe('mergePluginConfigs', () => {
   it('merges overrides into the defaults', () => {
     const overrides = {
       uiSchema: {
-        [SDKTypes.AdaptiveDialog]: {
+        [SDKKinds.AdaptiveDialog]: {
           hidden: ['recognizer'],
           properties: {
             triggers: {
@@ -32,11 +32,6 @@ describe('mergePluginConfigs', () => {
       roleSchema: {
         [SDKRoles.expression]: {
           label: 'expression label',
-        },
-      },
-      kindSchema: {
-        [SDKKinds.IDialog]: {
-          hidden: ['foo'],
         },
       },
     };

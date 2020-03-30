@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -39,11 +39,11 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-export const eventTypeKey: string = SDKTypes.OnDialogEvent;
-export const intentTypeKey: string = SDKTypes.OnIntent;
-export const activityTypeKey: string = SDKTypes.OnActivity;
-export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
-export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
+export const eventTypeKey: string = SDKKinds.OnDialogEvent;
+export const intentTypeKey: string = SDKKinds.OnIntent;
+export const activityTypeKey: string = SDKKinds.OnActivity;
+export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
+export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -61,7 +61,7 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
-  const newStep = factory.create(data.$kind as SDKTypes, optionalAttributes);
+  const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
 
