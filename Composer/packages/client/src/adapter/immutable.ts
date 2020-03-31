@@ -3,8 +3,6 @@
 
 import * as redux from 'redux';
 
-import * as values from './values';
-
 export const map = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<ReadonlyArray<S>, A> => (
   sources,
   action
@@ -27,20 +25,6 @@ export const map = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redu
   }
 
   return targets != undefined ? targets : sources;
-};
-
-export const sort = <S, A extends redux.Action>(
-  inner: redux.Reducer<ReadonlyArray<S>, A>,
-  compare: values.Compare<S>
-): redux.Reducer<ReadonlyArray<S>, A> => (sources, action) => {
-  const targets = inner(sources, action);
-  if (!values.isSorted(targets, compare)) {
-    const sorted = Array.from(targets);
-    sorted.sort(compare);
-    return sorted;
-  }
-
-  return targets;
 };
 
 export type PartialReducerMap<S, A extends redux.Action> = Partial<redux.ReducersMapObject<S, A>>;
@@ -81,32 +65,4 @@ export const combineSeries = <S, A extends redux.Action>(
   }
 
   return state;
-};
-
-export const optimize = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<S, A> => (
-  source,
-  action
-) => {
-  const target = inner(source, action);
-  if (source === undefined) {
-    return target;
-  }
-
-  if (source !== target && values.deepEquals(source, target)) {
-    return source;
-  }
-
-  return target;
-};
-
-export const validate = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<S, A> => (
-  source,
-  action
-) => {
-  const target = inner(source, action);
-  if (!Object.is(source, target) && values.deepEquals(source, target)) {
-    throw new Error();
-  }
-
-  return target;
 };

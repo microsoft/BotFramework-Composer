@@ -225,9 +225,7 @@ export const outputs: redux.Reducer<ReadonlyArray<model.Output>, Action> = (stat
   return state;
 };
 
-export const state = immutable.optimize(
-  redux.combineReducers<model.Debuggee, Action>({
-    lazyThreads,
-    outputs,
-  })
-);
+export const state = redux.combineReducers<model.Debuggee, Action>({
+  lazyThreads,
+  outputs,
+});
