@@ -7,7 +7,11 @@ import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { createStepMenu, createStepSubmenu, DialogGroup, SDKTypes } from '@bfc/shared';
-import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import {
+  IContextualMenu,
+  ContextualMenuItemType,
+  IContextualMenuItem,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import get from 'lodash/get';
 
@@ -25,12 +29,19 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
-const extractLabelMapsFromSchemas = (schemas: any): { label: string; types: string[] }[] => {
-  const { sdk, diagnostics, ...otherSchemas } = schemas;
-  return Object.keys(otherSchemas).map(x => ({
-    label: x,
-    types: get(otherSchemas[x], 'content.oneOf', []).map(one => one.title),
-  }));
+const buildSubMenuFromSchemas = (schemas: any, handleType, factory): IContextualMenuItem[] => {
+  const { sdk, diagnostics, visual, ...otherSchemas } = schemas;
+
+  return Object.keys(otherSchemas).map(x => {
+    const subitems: IContextualMenuItem[] = get(otherSchemas[x], 'content.oneOf', []).map(
+      ({ title: $type, label }) => ({
+        key: $type,
+        name: label || $type,
+        $type,
+      })
+    );
+    return createStepSubmenu(x, subitems, handleType, factory);
+  });
 };
 
 const buildEdgeMenuItemsFromClipboardContext = (
@@ -55,12 +66,9 @@ const buildEdgeMenuItemsFromClipboardContext = (
     filter
   );
 
-  const otherLabelMaps = extractLabelMapsFromSchemas(schemas);
-  otherLabelMaps.forEach(({ label, types }) => {
-    menuItems.push(
-      createStepSubmenu(label, types, (e, item) => onClick(item ? item.data.$type : null), context.dialogFactory)
-    );
-  });
+  menuItems.push(
+    ...buildSubMenuFromSchemas(schemas, (e, item) => onClick(item ? item.data.$type : null), context.dialogFactory)
+  );
 
   const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
   const menuItemCount = menuItems.length;
