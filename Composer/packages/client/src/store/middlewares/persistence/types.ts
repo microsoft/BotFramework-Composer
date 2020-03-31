@@ -7,6 +7,12 @@ export enum FileChangeType {
   CREATE,
 }
 
+export enum FileExtensions {
+  Dialog = '.dialog',
+  Lu = '.lu',
+  Lg = '.lg',
+}
+
 export interface ResourceInfo {
   name: string;
   content: string;

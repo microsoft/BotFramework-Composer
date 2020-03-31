@@ -1,56 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { FileInfo } from '@bfc/shared';
+import keys from 'lodash/keys';
 
-import { setError } from './../../action/error';
-import { fetchProject } from './../../action/project';
-import { FileChangeType, ResourceInfo } from './types';
+import { FileExtensions } from './types';
+import { FileChangeType } from './types';
 import { FileOperation } from './FileOperation';
-import { ActionTypes } from './../../../constants';
-import { ActionType } from './../../action/types';
-import { Store } from './../../types';
-
-function getDialogInfo(type: FileChangeType) {
-  const changeType = type;
-  return ({ id, content }): ResourceInfo => {
-    return { name: `${id}.dialog`, content: JSON.stringify(content, null, 2) + '\n', changeType };
-  };
-}
-
-function getLuInfo(type: FileChangeType) {
-  const changeType = type;
-  return ({ id, content }): ResourceInfo => {
-    return { name: `${id}.lu`, content, changeType };
-  };
-}
-
-function getLgInfo(type: FileChangeType) {
-  const changeType = type;
-  return ({ id, content }): ResourceInfo => {
-    return { name: `${id}.lg`, content, changeType };
-  };
-}
-
-const fileActionType = {
-  [ActionTypes.CREATE_DIALOG]: getDialogInfo(FileChangeType.CREATE),
-  [ActionTypes.UPDATE_DIALOG]: getDialogInfo(FileChangeType.UPDATE),
-  [ActionTypes.REMOVE_DIALOG]: getDialogInfo(FileChangeType.DELETE),
-  [ActionTypes.UPDATE_LG]: getLgInfo(FileChangeType.UPDATE),
-  [ActionTypes.CREATE_LG]: getLgInfo(FileChangeType.CREATE),
-  [ActionTypes.REMOVE_LG]: getLgInfo(FileChangeType.DELETE),
-  [ActionTypes.UPDATE_LU]: getLuInfo(FileChangeType.UPDATE),
-  [ActionTypes.CREATE_LU]: getLuInfo(FileChangeType.CREATE),
-  [ActionTypes.REMOVE_LU]: getLuInfo(FileChangeType.DELETE),
-};
 
 class FilePersistence {
   private files: { [fileName: string]: FileOperation };
-
+  private _projectId = '';
   constructor() {
     this.files = {};
   }
 
+  public set projectId(v: string) {
+    this._projectId = v;
+  }
+
+  public get projectId(): string {
+    return this._projectId;
+  }
+
   public clear() {
+    keys(this.files).forEach(key => {
+      this.files[key].flush();
+    });
     this.files = {};
   }
 
@@ -62,20 +37,22 @@ class FilePersistence {
     delete this.files[fileName];
   }
 
-  public async notify(store: Store, action: ActionType) {
-    const getInfo = fileActionType[action.type];
-    if (!getInfo) return;
+  public async notify(changeType: FileChangeType, id: string, fileType: FileExtensions, content: string) {
+    const name = `${id}${fileType}`;
 
-    const { changeType, name, content } = getInfo(action.payload);
+    if (fileType === FileExtensions.Dialog) {
+      content = JSON.stringify(content, null, 2) + '\n';
+    }
 
     if (changeType === FileChangeType.CREATE) {
-      const projectId = store.getState().projectId;
-      this.attach(name, projectId);
+      this.attach(name, this.projectId);
+      this.files;
     }
+
     try {
-      await this.files[name].operation({ changeType, name, content }, this.handleError(store, name));
+      await this.files[name].operation({ changeType, name, content }, this.handleError(name));
     } catch (err) {
-      this.handleError(store, name)(err);
+      this.handleError(name)(err);
     }
 
     if (changeType === FileChangeType.DELETE) {
@@ -83,16 +60,9 @@ class FilePersistence {
     }
   }
 
-  private handleError(curStore: Store, name: string) {
-    const store = curStore;
-    const fileName = name;
+  private handleError(name: string) {
     return err => {
-      setError(store, {
-        message: err.response && err.response.data.message ? err.response.data.message : err,
-        summary: `HANDLE ${fileName} ERROR`,
-      });
-      //if sync file error, do a full refresh.
-      fetchProject(store);
+      console.log(err);
     };
   }
 }

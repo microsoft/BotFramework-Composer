@@ -23,7 +23,6 @@ import {
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
-import { filePersistenceMiddleware } from './middlewares/persistence';
 
 const { defaultFileResolver } = LGParser;
 
@@ -126,7 +125,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     return stateRef.current;
   };
 
-  const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware, filePersistenceMiddleware);
+  const interceptDispatch = applyMiddleware({ dispatch, getState }, undoActionsMiddleware);
   // @ts-ignore some actions are not action creators and cannot be cast as such (e.g. textFromTemplates in lg.ts)
   const boundActions = bindActions({ dispatch: interceptDispatch, getState }, actions);
   const value = {

@@ -59,4 +59,8 @@ export class FileOperation {
   async createFile(name: string, content: string) {
     this.file = await client.createFile(this.projectId, name, content);
   }
+
+  flush() {
+    this.debouncedUpdate.flush();
+  }
 }

@@ -11,7 +11,6 @@ import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, content }) => {
-  luFileStatusStorage.updateFile(store.getState().botName, id);
   store.dispatch({
     type: ActionTypes.UPDATE_LU,
     payload: { id, content },
@@ -19,7 +18,6 @@ export const updateLuFile: ActionCreator = async (store, { id, content }) => {
 };
 
 export const removeLuFile: ActionCreator = async (store, id) => {
-  luFileStatusStorage.removeFile(store.getState().botName, id);
   store.dispatch({
     type: ActionTypes.REMOVE_LU,
     payload: { id },
@@ -27,7 +25,6 @@ export const removeLuFile: ActionCreator = async (store, id) => {
 };
 
 export const createLuFile: ActionCreator = async (store, { id, content }) => {
-  luFileStatusStorage.createFile(store.getState().botName, id);
   store.dispatch({
     type: ActionTypes.CREATE_LU,
     payload: { id, content },

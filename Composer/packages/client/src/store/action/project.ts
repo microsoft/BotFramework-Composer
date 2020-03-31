@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import { navigate } from '@reach/router';
-import { indexer } from '@bfc/indexers';
 
 import { ActionCreator } from '../types';
 
 import { ActionTypes, BASEPATH } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './publisher';
+import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
 
@@ -30,29 +30,16 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
-export const indexProject: ActionCreator = (store, data, jump) => {
-  const { files, botName, schemas, id, locale } = data;
-  const result = indexer.index(files, botName, schemas.sdk.content, locale);
-  store.dispatch({
-    type: ActionTypes.GET_PROJECT_SUCCESS,
-    payload: {
-      ...data,
-      ...result,
-    },
-  });
-  if (jump && files && files.length) {
-    const mainUrl = `/bot/${id}/dialogs/Main`;
-    navigateTo(mainUrl);
-    startBot(store, true);
-  } else if (jump) {
-    navigate(BASEPATH);
-  }
-};
-
 export const fetchProjectById: ActionCreator = async (store, projectId) => {
   try {
     const response = await httpClient.get(`/projects/${projectId}`);
-    indexProject(store, response.data, false);
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    return response.data;
   } catch (err) {
     navigateTo('/home');
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error: err } });
@@ -83,9 +70,27 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
-    const data = { storageId, path: absolutePath };
+    const data = {
+      storageId,
+      path: absolutePath,
+    };
     const response = await httpClient.put(`/projects/open`, data);
-    indexProject(store, response.data, true);
+    const dialogs = response.data.dialogs;
+    const projectId = response.data.id;
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    if (dialogs && dialogs.length > 0) {
+      // navTo(store, 'Main');
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+      navigateTo(mainUrl);
+      startBot(store, true);
+    } else {
+      navigate(BASEPATH);
+    }
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -107,9 +112,23 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
-    const data = { storageId, name, description, location };
+    const data = {
+      storageId,
+      name,
+      description,
+      location,
+    };
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
-    indexProject(store, response.data, true);
+    const dialogs = response.data.dialogs;
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    if (dialogs && dialogs.length > 0) {
+      navTo(store, 'Main');
+    }
     return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
@@ -134,8 +153,17 @@ export const createProject: ActionCreator = async (
       location,
     };
     const response = await httpClient.post(`/projects`, data);
+    const dialogs = response.data.dialogs;
     settingStorage.remove(name);
-    indexProject(store, response.data, true);
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+    if (dialogs && dialogs.length > 0) {
+      navTo(store, 'Main');
+    }
     return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });

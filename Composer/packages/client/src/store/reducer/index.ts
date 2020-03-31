@@ -3,18 +3,19 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { dialogIndexer, lgIndexer, luIndexer } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
+import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension } from '../../utils';
+import { getExtension, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import filePersistence from '../middlewares/persistence/FilePersistence';
+import { FileChangeType, FileExtensions } from '../middlewares/persistence/types';
 
 import createReducer from './createReducer';
 
@@ -63,8 +64,9 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
   return updateLuFilesStatus(botName, luFiles);
 };
 
-const getProjectSuccess: ReducerFunc = (state, payload) => {
-  const { files, dialogs, botName, luFiles, botEnvironment, location, lgFiles, schemas, settings, id } = payload;
+const getProjectSuccess: ReducerFunc = (state, { response }) => {
+  const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
+  const { dialogs, luFiles, lgFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
@@ -75,10 +77,11 @@ const getProjectSuccess: ReducerFunc = (state, payload) => {
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
-  state.locale = payload.locale;
+  state.locale = locale;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   filePersistence.clear();
+  filePersistence.projectId = id;
   files.forEach(file => {
     filePersistence.attach(file.name, id, file);
   });
@@ -103,57 +106,42 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
   return state;
 };
 
-const updateDialog: ReducerFunc = (state, { id, content }) => {
-  state.dialogs = state.dialogs.map(dialog => {
-    if (dialog.id === id) {
-      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
-    }
-    return dialog;
-  });
-  return state;
-};
-
-const removeDialog: ReducerFunc = (state, { id }) => {
-  state.dialogs = state.dialogs.filter(dialog => dialog.id !== id);
-  return state;
-};
-
-const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
-  state.showCreateDialogModal = true;
-  state.actionsSeed = actionsSeed;
-  state.onCreateDialogComplete = onComplete;
-  return state;
-};
-
-const createDialogCancel: ReducerFunc = state => {
-  state.showCreateDialogModal = false;
-  delete state.onCreateDialogComplete;
-  return state;
-};
-
-const createDialog: ReducerFunc = (state, { id, content }) => {
-  const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, content, state.schemas.sdk.content) };
-  state.dialogs.push(dialog);
-  state.showCreateDialogModal = false;
-  state.actionsSeed = [];
-  delete state.onCreateDialogComplete;
-  return state;
-};
-
 const createLgFile: ReducerFunc = (state, { id, content }) => {
+  const { lgFiles, locale } = state;
+  id = `${id}.${locale}`;
+  if (lgFiles.find(lg => lg.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`lg file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+  // slot with common.lg import
+  let lgInitialContent = '';
+  const lgCommonFile = lgFiles.find(({ id }) => id === `common.${locale}`);
+  if (lgCommonFile) {
+    lgInitialContent = `[import](common.lg)`;
+  }
+  content = [lgInitialContent, content].join('\n');
+
   const { parse } = lgIndexer;
   const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
   const { templates, diagnostics } = parse(content, id, lgImportresolver);
   const lgFile = { id, templates, diagnostics, content };
   state.lgFiles.push(lgFile);
+  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Lg, content);
   return state;
 };
 
 const removeLgFile: ReducerFunc = (state, { id }) => {
-  const index = state.lgFiles.findIndex(file => file.id === id);
-  if (~index) {
-    state.lgFiles.splice(index, 1);
-  }
+  state.lgFiles = state.lgFiles.reduce((result: LgFile[], file) => {
+    if (getBaseName(file.id) === id || file.id === id) {
+      filePersistence.notify(FileChangeType.DELETE, file.id, FileExtensions.Lg, '');
+    } else {
+      result.push(file);
+    }
+    return result;
+  }, []);
   return state;
 };
 
@@ -173,21 +161,37 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
 
     return { ...lgFile, templates, diagnostics, content };
   });
+  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Lg, content);
   return state;
 };
 
 const createLuFile: ReducerFunc = (state, { id, content }) => {
+  const { luFiles } = state;
+  if (luFiles.find(lu => lu.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`lu file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
   const { parse } = luIndexer;
   const luFile = { id, content, ...parse(content, id) };
   state.luFiles.push(luFile);
+  luFileStatusStorage.createFile(state.botName, id);
+  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Lu, content);
   return state;
 };
 
 const removeLuFile: ReducerFunc = (state, { id }) => {
-  const index = state.luFiles.findIndex(file => file.id === id);
-  if (~index) {
-    state.luFiles.splice(index, 1);
-  }
+  state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
+    if (getBaseName(file.id) === id || file.id === id) {
+      filePersistence.notify(FileChangeType.DELETE, file.id, FileExtensions.Lu, '');
+    } else {
+      result.push(file);
+    }
+    return result;
+  }, []);
   return state;
 };
 
@@ -209,10 +213,63 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
       return { ...luFile, intents, diagnostics, content };
     })
   );
+  luFileStatusStorage.updateFile(state.botName, id);
+  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Lu, content);
+  return state;
+};
+
+const updateDialog: ReducerFunc = (state, { id, content }) => {
+  state.dialogs = state.dialogs.map(dialog => {
+    if (dialog.id === id) {
+      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
+    }
+    return dialog;
+  });
+  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Dialog, content);
+  return state;
+};
+
+const removeDialog: ReducerFunc = (state, { id }) => {
+  state.dialogs = state.dialogs.filter(dialog => dialog.id !== id);
+  //remove dialog should remove all locales lu and lg files
+  state = removeLgFile(state, { id });
+  state = removeLuFile(state, { id });
+  filePersistence.notify(FileChangeType.DELETE, id, FileExtensions.Dialog, '');
+  return state;
+};
+
+const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
+  state.showCreateDialogModal = true;
+  state.actionsSeed = actionsSeed;
+  state.onCreateDialogComplete = onComplete;
+  return state;
+};
+
+const createDialogCancel: ReducerFunc = state => {
+  state.showCreateDialogModal = false;
+  delete state.onCreateDialogComplete;
+  return state;
+};
+
+const createDialog: ReducerFunc = (state, { id, content }) => {
+  const fixedContent = autofixReferInDialog(id, content);
+  const dialog = {
+    isRoot: false,
+    displayName: id,
+    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+  };
+  state.dialogs.push(dialog);
+  state = createLgFile(state, { id, content: '' });
+  state = createLuFile(state, { id, content: '' });
+  state.showCreateDialogModal = false;
+  state.actionsSeed = [];
+  delete state.onCreateDialogComplete;
+  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Dialog, fixedContent);
   return state;
 };
 
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
+  state.focusedStorageFolder = response.data;
   return (state.storages = response.data);
 };
 
