@@ -35,7 +35,7 @@ export const IntentWidget: React.FC<BFDWidgetProps> = props => {
   return (
     <>
       <WidgetLabel label={label} />
-      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={SDKTypes.ValueRecognizer}>
+      <Pivot linkSize={PivotLinkSize.large} styles={tabs} defaultSelectedKey={type}>
         <PivotItem
           headerText={formatMessage('Luis')}
           itemKey={SDKTypes.LuisRecognizer}
