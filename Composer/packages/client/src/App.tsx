@@ -28,7 +28,7 @@ const Onboarding = React.lazy(() => import('./Onboarding'));
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (projectId: string) => {
+const topLinks = (projectId: string, openedDialogId: string) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -39,7 +39,7 @@ const topLinks = (projectId: string) => {
       disabled: false,
     },
     {
-      to: `/bot/${projectId}/dialogs/Main`,
+      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design Flow'),
       exact: false,
@@ -116,10 +116,11 @@ const bottomLinks = [
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, projectId, creationFlowStatus, locale } = state;
+  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation } = state;
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
+  const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
       <Header botName={`${botName}(${locale})`} />
@@ -139,7 +140,7 @@ export const App: React.FC = () => {
             />
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
-              {topLinks(projectId).map((link, index) => {
+              {topLinks(projectId, openedDialogId).map((link, index) => {
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
