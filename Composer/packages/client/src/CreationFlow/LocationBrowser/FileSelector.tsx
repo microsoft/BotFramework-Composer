@@ -31,8 +31,11 @@ import { getFileIconName, formatBytes, calculateTimeDiff } from '../../utils';
 import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
 
 interface FileSelectorProps {
+  operationMode: {
+    read: boolean;
+    write: boolean;
+  };
   focusedStorageFolder: StorageFolder;
-  currentPath: string;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
@@ -44,11 +47,12 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     onSelectionChanged,
     focusedStorageFolder,
     checkShowItem,
-    currentPath,
     onCurrentPathUpdate,
     storageFileLoadingStatus,
+    operationMode,
   } = props;
   // for detail file list in open panel
+  const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const tableColums = [
     {
       key: 'column1',
@@ -127,7 +131,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       isPadded: true,
     },
   ];
-
+  const diskRootPattern = /[a-zA-Z]:\/$/;
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
     const files = focusedStorageFolder.children.reduce((result, file) => {
@@ -146,12 +150,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       return result;
     }, [] as any[]);
     // add parent folder
+    const p = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
     files.unshift({
       name: '..',
       value: '..',
       fileType: 'folder',
       iconName: 'folder',
-      filePath: focusedStorageFolder.parent,
+      filePath: diskRootPattern.test(p) || p === '/' ? '/' : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder]);
@@ -185,24 +190,26 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter(p => p !== '');
+  const breadcrumbItems = pathItems.map((item, index) => {
+    let itemPath = getNavItemPath(pathItems, separator, 0, index);
+    // put a leading / back on the path if it started as a unix style path
+    itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
+    // add a trailing / if the last path is something like c:
+    itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
+    const displayText = itemPath.startsWith('/') ? itemPath : `/${itemPath}`;
+    return {
+      text: displayText, // displayed text
+      key: itemPath, // value returned
+      title: item, // title shown on hover
+    };
+  });
+  breadcrumbItems.splice(0, 0, {
+    text: '/', // displayed text
+    key: '/', // value returned
+    title: '/', // title shown on hover
+  });
 
-  const breadcrumbItems = pathItems
-    .map((item, index) => {
-      let itemPath = getNavItemPath(pathItems, separator, 0, index);
-
-      // put a leading / back on the path if it started as a unix style path
-      itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
-      // add a trailing / if the last path is something like c:
-      itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
-
-      return {
-        text: itemPath, // displayed text
-        key: itemPath, // value returned
-        title: item, // title shown on hover
-      };
-    })
-    .reverse();
-
+  breadcrumbItems.reverse();
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };
@@ -219,6 +226,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
                 options={breadcrumbItems}
                 onChange={updateLocation}
                 selectedKey={currentPath}
+                errorMessage={
+                  operationMode.write && !focusedStorageFolder.writable
+                    ? formatMessage('You do not have permission to save bots here')
+                    : ''
+                }
               />
             </StackItem>
           </Stack>
