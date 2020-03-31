@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeIcons } from '@uifabric/icons';
 import { ShellData, ShellApi } from '@bfc/shared';
 import Extension, { JSONSchema7 } from '@bfc/extension';
+import get from 'lodash/get';
+import cloneDeep from 'lodash/cloneDeep';
 
 import ApiClient from '../messenger/ApiClient';
 
@@ -194,9 +196,11 @@ function ExtensionContainer() {
           formData={shellData.data}
           plugins={plugins}
           schema={mergeSchema(
-            Object.values(shellData.schemas)
-              .filter(x => typeof x === 'object' && !!x.content)
-              .map(x => x.content)
+            get(shellData.schemas, 'sdk.content'),
+            Object.keys(shellData.schemas)
+              .filter(k => k !== 'sdk' && k !== 'visual' && k !== 'diagnostics')
+              .filter(k => !!get(shellData.schemas, [k, 'content']))
+              .map(k => get(shellData.schemas, [k, 'content']))
           )}
         />
       </Extension>
@@ -206,21 +210,19 @@ function ExtensionContainer() {
 
 export default ExtensionContainer;
 
-const mergeSchema = (inputSchemas: any[]): JSONSchema7 => {
-  if (!Array.isArray(inputSchemas) || !inputSchemas.length) return {};
+const mergeSchema = (builtinSchema, otherSchemas: any[]): JSONSchema7 => {
+  if (!Array.isArray(otherSchemas) || !otherSchemas.length) return builtinSchema;
 
-  const mergedSchema = inputSchemas.reduce(
-    (result, currSchema) => {
-      const { oneOf, definitions } = currSchema;
-      Array.isArray(oneOf) && result.oneOf.push(...oneOf);
-      result.definitions = {
-        ...result.definitions,
-        ...definitions,
-      };
+  const mergedSchema = otherSchemas.reduce((result, currSchema) => {
+    const { oneOf, definitions } = currSchema;
+    Array.isArray(oneOf) && result.oneOf.push(...oneOf);
+    result.definitions = {
+      ...result.definitions,
+      ...definitions,
+    };
 
-      return result;
-    },
-    { ...inputSchemas[0].content, oneOf: [], definitions: {} }
-  );
+    return result;
+  }, cloneDeep(builtinSchema));
+
   return mergedSchema;
 };
