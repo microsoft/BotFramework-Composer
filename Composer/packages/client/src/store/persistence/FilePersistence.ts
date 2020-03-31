@@ -62,6 +62,7 @@ class FilePersistence {
 
   private handleError(name: string) {
     return err => {
+      //Todo error handling
       console.log(err);
     };
   }

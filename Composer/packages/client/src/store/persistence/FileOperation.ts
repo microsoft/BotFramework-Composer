@@ -3,7 +3,7 @@
 import { FileInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import { FileChangeType, ResourceInfo, FileErrorHandler } from './../persistence/types';
+import { FileChangeType, ResourceInfo, FileErrorHandler } from './types';
 import * as client from './http';
 
 export class FileOperation {

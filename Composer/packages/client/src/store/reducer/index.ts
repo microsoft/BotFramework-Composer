@@ -14,8 +14,8 @@ import { getExtension, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
-import filePersistence from '../middlewares/persistence/FilePersistence';
-import { FileChangeType, FileExtensions } from '../middlewares/persistence/types';
+import filePersistence from '../persistence/FilePersistence';
+import { FileChangeType, FileExtensions } from '../persistence/types';
 
 import createReducer from './createReducer';
 
@@ -166,7 +166,8 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
 };
 
 const createLuFile: ReducerFunc = (state, { id, content }) => {
-  const { luFiles } = state;
+  const { luFiles, locale } = state;
+  id = `${id}.${locale}`;
   if (luFiles.find(lu => lu.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`lu file already exist`)}`,

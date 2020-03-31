@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import httpClient from '../../../utils/httpUtil';
+import httpClient from '../../utils/httpUtil';
 
 export const createFile = async (projectId: string, name: string, content: string) => {
   const response = await httpClient.post(`/projects/${projectId}/files`, {
@@ -12,8 +12,7 @@ export const createFile = async (projectId: string, name: string, content: strin
 };
 
 export const deleteFile = async (projectId: string, name: string) => {
-  const response = await httpClient.delete(`/projects/${projectId}/files/${name}`);
-  console.log(response);
+  await httpClient.delete(`/projects/${projectId}/files/${name}`);
 };
 
 export const updateFile = async (projectId: string, name: string, content: string) => {
