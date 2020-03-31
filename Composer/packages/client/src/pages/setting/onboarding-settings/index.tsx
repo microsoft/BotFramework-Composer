@@ -72,7 +72,7 @@ export const OnboardingSettings = () => {
               font-size: 24px;
               background: ${NeutralColors.gray20};
               color: black;
-              padding: 8px;
+              padding: 4px;
             `}
           >
             <FontIcon iconName={'SplitObject'} />
