@@ -56,10 +56,6 @@ const LgField: React.FC<FieldProps<string>> = props => {
     name: lgName,
     parameters: [],
     body: getInitialTemplate(name, value),
-    range: {
-      startLineNumber: 0,
-      endLineNumber: 2,
-    },
   };
 
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];

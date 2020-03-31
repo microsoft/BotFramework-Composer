@@ -28,7 +28,7 @@ export function importResolverGenerator(
    *
    *  would resolve to common.en-us.lg || common.lg
    *
-   *  source =  todosample || todosample.en-us || todosample.en-us.lg || todosample.lg
+   *  source =  todosample || todosample.en-us || todosample.en-us.lg || todosample.lg  || .
    *  resourceId =   common || common.lg || ../common/common.lg
    *
    */
@@ -36,7 +36,7 @@ export function importResolverGenerator(
     // eslint-disable-next-line security/detect-non-literal-regexp
     const extReg = new RegExp(ext + '$');
     const sourceId = getFileName(source).replace(extReg, '');
-    const locale = sourceId.split('.').length > 1 ? sourceId.split('.').pop() : defaultLocale;
+    const locale = /\w\.\w/.test(sourceId) ? sourceId.split('.').pop() : defaultLocale;
     const targetId = getFileName(resourceId).replace(extReg, '');
 
     const targetFile =
