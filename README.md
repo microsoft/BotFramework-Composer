@@ -90,11 +90,11 @@ email to ensure we received your original message. Further information, includin
 [MSRC PGP][102] key, can be found in
 the [Security TechCenter][103].
 
-[1]: ./docs/bfcomposer-intro.md
-[2]: ./docs/setup-yarn.md
-[3]: ./docs/quickstart-create-bot.md
+[1]: https://aka.ms/bf-composer-docs-introduction
+[2]: https://aka.ms/bf-composer-docs-setup-yarn
+[3]: https://aka.ms/bf-composer-docs-create-first-bot
 [4]: https://aka.ms/BF-Composer-Docs
-[5]: ./toc.md
+[5]: https://aka.ms/bf-composer-docs-welcome-page
 [10]: https://stackoverflow.com/questions/tagged/botframework?tab=Newest
 [11]: https://github.com/microsoft/BotFramework-Composer/issues/new?assignees=&labels=Type%3A+suggestion%2C+Needs-triage&template=bot-framework-composer-feature-request.md&title=
 [12]: https://github.com/microsoft/BotFramework-Composer/issues/new?assignees=&labels=Needs-triage%2C+Type%3A+bug&template=bot-framework-composer-bug.md&title=
