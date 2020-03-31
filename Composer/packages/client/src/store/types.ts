@@ -118,6 +118,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
+  publishTargets?: any;
   [key: string]: any;
 }
 

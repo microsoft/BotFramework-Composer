@@ -15,7 +15,14 @@ const defaultPublishConfig = {
 const DEFAULT_RUNTIME = 'CSharp';
 export const PublishController = {
   getTypes: async (req, res) => {
-    res.json(Object.keys(pluginLoader.extensions.publish));
+    res.json(
+      Object.keys(pluginLoader.extensions.publish).map(i => {
+        return {
+          name: pluginLoader.extensions.publish[i].plugin.name,
+          description: pluginLoader.extensions.publish[i].plugin.description,
+        };
+      })
+    );
   },
   publish: async (req, res) => {
     const target = req.params.target;
@@ -25,7 +32,9 @@ export const PublishController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
-    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
+    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+
+    const configs = allTargets.filter(t => t.name === target);
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
 
@@ -36,9 +45,14 @@ export const PublishController = {
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
 
-    if (config && pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].publish) {
+    if (
+      config &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.publish
+    ) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].publish;
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.publish;
 
       try {
         // call the method
@@ -67,12 +81,19 @@ export const PublishController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
-    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
+    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+
+    const configs = allTargets.filter(t => t.name === target);
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
-    if (pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].getStatus) {
+    if (
+      config &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.getStatus
+    ) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].getStatus;
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.getStatus;
 
       // call the method
       const results = await pluginMethod.call(null, projectId, {});

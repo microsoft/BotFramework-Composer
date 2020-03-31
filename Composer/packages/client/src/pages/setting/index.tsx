@@ -33,7 +33,7 @@ const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings, url: '' },
   { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
   { key: '/setting/onboarding-settings', name: settingLabels.onboarding, url: '' },
-  // { key: '/setting/publish', name: settingLabels.publish, url: '' },
+  { key: '/setting/publish', name: settingLabels.publish, url: '' },
 
   // { key: 'services', name: formatMessage('Services') },
   // { key: 'composer-configuration', name: formatMessage('Composer configuration'), disabled: true },
