@@ -3,5 +3,5 @@
 import get from 'lodash/get';
 
 export function getAdaptiveType(data: any) {
-  return get(data, '$type');
+  return get(data, '$kind');
 }

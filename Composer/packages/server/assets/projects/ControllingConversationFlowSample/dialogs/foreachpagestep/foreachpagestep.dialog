@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "847208"
   },
@@ -7,13 +7,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "455902"
       },
       "actions": [
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "834603"
           },
@@ -22,7 +22,7 @@
           "value": "=10000+1000+100+10+1"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "048190"
           },
@@ -31,7 +31,7 @@
           "value": "=200*200"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "434590"
           },
@@ -40,14 +40,14 @@
           "value": "=888888/4"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "623448"
           },
           "activity": "${bfdactivity-623448()}"
         },
         {
-          "$type": "Microsoft.ForeachPage",
+          "$kind": "Microsoft.ForeachPage",
           "$designer": {
             "id": "993283"
           },
@@ -55,11 +55,11 @@
           "itemsProperty": "dialog.ids",
           "actions": [
             {
-              "$type": "Microsoft.Foreach",
+              "$kind": "Microsoft.Foreach",
               "itemsProperty": "dialog.foreach.page",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "636747",
                     "name": "Send a response"

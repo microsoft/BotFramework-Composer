@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKTypes } from '../types';
+import { MicrosoftIDialog, SDKKinds } from '../types';
 
 import { walkAdaptiveAction } from './walkAdaptiveAction';
 import { walkAdaptiveActionList } from './walkAdaptiveActionList';
@@ -9,19 +9,19 @@ import { walkAdaptiveActionList } from './walkAdaptiveActionList';
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
-    case SDKTypes.SendActivity:
-    case SDKTypes.SkillDialog:
+  switch (action.$kind) {
+    case SDKKinds.SendActivity:
+    case SDKKinds.SkillDialog:
       outputTemplates.push(action.activity);
       break;
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
       outputTemplates.push(action.prompt, action.unrecognizedPrompt, action.invalidPrompt, action.defaultValueResponse);
       break;
   }
@@ -30,16 +30,16 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 // TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput: {
-      const [, promptType] = action.$type.split('.');
+  switch (action.$kind) {
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput: {
+      const [, promptType] = action.$kind.split('.');
       const intentName = `${promptType}.response-${action?.$designer?.id}`;
       promptType && intentName && outputTemplates.push(intentName);
       break;

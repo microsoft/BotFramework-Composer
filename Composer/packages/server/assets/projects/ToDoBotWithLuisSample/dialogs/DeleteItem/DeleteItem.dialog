@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "name": "DeleteItem",
     "id": "715675"
@@ -8,14 +8,14 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog",
         "id": "479346"
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperties",
+          "$kind": "Microsoft.SetProperties",
           "$designer": {
             "id": "419199",
             "name": "Set properties"
@@ -32,7 +32,7 @@
           ]
         },
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "461607",
             "name": "AskForListType"
@@ -77,7 +77,7 @@
           }
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "074106",
             "name": "Branch: if/else"
@@ -85,7 +85,7 @@
           "condition": "count(user.lists[dialog.listType]) == 0",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "555579",
                 "name": "Send a response"
@@ -93,7 +93,7 @@
               "activity": "${bfdactivity-555579()}"
             },
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "121384",
                 "name": "Send a response"
@@ -103,7 +103,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "803801",
                 "name": "Branch: if/else"
@@ -111,7 +111,7 @@
               "condition": "$itemTitle == null",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "534454",
                     "name": "Send a response"
@@ -121,7 +121,7 @@
               ]
             },
             {
-              "$type": "Microsoft.ChoiceInput",
+              "$kind": "Microsoft.ChoiceInput",
               "$designer": {
                 "id": "702637",
                 "name": "Multiple choice"
@@ -147,7 +147,7 @@
               }
             },
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "728630",
                 "name": "Send a response"
@@ -155,7 +155,7 @@
               "activity": "${bfdactivity-728630()}"
             },
             {
-              "$type": "Microsoft.EditArray",
+              "$kind": "Microsoft.EditArray",
               "$designer": {
                 "id": "747071",
                 "name": "Edit an Array property"
@@ -165,7 +165,7 @@
               "value": "=dialog.itemTitle"
             },
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "015149",
                 "name": "Send a response"

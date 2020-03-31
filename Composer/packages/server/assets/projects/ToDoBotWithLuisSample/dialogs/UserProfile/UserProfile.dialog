@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "name": "UserProfile",
     "id": "732608"
@@ -8,14 +8,14 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog",
         "id": "479346"
       },
       "actions": [
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "267073",
             "name": "AskForName"
@@ -28,7 +28,7 @@
           "allowInterruptions": "!@userName && !@personName"
         },
         {
-          "$type": "Microsoft.NumberInput",
+          "$kind": "Microsoft.NumberInput",
           "$designer": {
             "id": "826115",
             "name": "Number input"
@@ -49,7 +49,7 @@
           "defaultValueResponse": "${bfddefaultValueResponse-826115()}"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "744717",
             "name": "Send a response"
@@ -59,14 +59,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "993953"
       },
       "intent": "Cancel",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "210613",
             "name": "Send a response"
@@ -74,7 +74,7 @@
           "activity": "${bfdactivity-210613()}"
         },
         {
-          "$type": "Microsoft.EndDialog",
+          "$kind": "Microsoft.EndDialog",
           "$designer": {
             "id": "632724",
             "name": "End this dialog"
@@ -83,14 +83,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "660586"
       },
       "intent": "Why",
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "796427",
             "name": "Branch: if/else"
@@ -98,7 +98,7 @@
           "condition": "user.name == null",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "351007",
                 "name": "Send a response"
@@ -108,7 +108,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "090448",
                 "name": "Branch: if/else"
@@ -116,7 +116,7 @@
               "condition": "user.age == null",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "977137",
                     "name": "Send a response"
@@ -128,7 +128,7 @@
           ]
         },
         {
-          "$type": "Microsoft.SetProperty",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
             "id": "957864",
             "name": "Set a property"
@@ -139,14 +139,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "887328"
       },
       "intent": "NoValue",
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "914072",
             "name": "Branch: if/else"
@@ -154,7 +154,7 @@
           "condition": "user.name == null",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "304840",
                 "name": "Send a response"
@@ -162,7 +162,7 @@
               "activity": "${bfdactivity-304840()}"
             },
             {
-              "$type": "Microsoft.SetProperty",
+              "$kind": "Microsoft.SetProperty",
               "$designer": {
                 "id": "023051",
                 "name": "Set a property"
@@ -173,7 +173,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "524800",
                 "name": "Branch: if/else"
@@ -181,7 +181,7 @@
               "condition": "user.age == null",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "991655",
                     "name": "Send a response"
@@ -189,7 +189,7 @@
                   "activity": "${bfdactivity-991655()}"
                 },
                 {
-                  "$type": "Microsoft.SetProperty",
+                  "$kind": "Microsoft.SetProperty",
                   "$designer": {
                     "id": "874049",
                     "name": "Set a property"
@@ -202,7 +202,7 @@
           ]
         },
         {
-          "$type": "Microsoft.SetProperty",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
             "id": "376791",
             "name": "Set a property"

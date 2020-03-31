@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "$designer": {
       "name": "ToDoBotWithLuisSample-17",
@@ -11,14 +11,14 @@
   "recognizer": "todobotwithluissample.lu",
   "triggers": [
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720",
         "name": "WelcomeUser"
       },
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -26,7 +26,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -34,7 +34,7 @@
               "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "202664",
                     "name": "Send a response"
@@ -46,7 +46,7 @@
           ]
         },
         {
-          "$type": "Microsoft.SetProperties",
+          "$kind": "Microsoft.SetProperties",
           "$designer": {
             "id": "987914",
             "name": "Set properties"
@@ -73,7 +73,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "263959"
       },
@@ -81,7 +81,7 @@
       "condition": "#Add.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "361215",
             "name": "Begin a new dialog"
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "100671"
       },
@@ -100,7 +100,7 @@
       "condition": "#Delete.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "901183",
             "name": "Begin a new dialog"
@@ -111,7 +111,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "660567"
       },
@@ -119,7 +119,7 @@
       "condition": "#View.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "994400",
             "name": "Begin a new dialog"
@@ -130,7 +130,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "802923"
       },
@@ -138,7 +138,7 @@
       "condition": "#UserProfile.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "187925",
             "name": "Begin a new dialog"
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "732966"
       },
@@ -157,7 +157,7 @@
       "condition": "#whatCanYouDo.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "623941",
             "name": "Begin a new dialog"
@@ -168,7 +168,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "683937"
       },
@@ -176,7 +176,7 @@
       "condition": "#cancel.Score > 0.8",
       "actions": [
         {
-          "$type": "Microsoft.ConfirmInput",
+          "$kind": "Microsoft.ConfirmInput",
           "$designer": {
             "id": "107784",
             "name": "Confirmation"
@@ -196,7 +196,7 @@
           }
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "487483",
             "name": "Branch: if/else"
@@ -204,7 +204,7 @@
           "condition": "turn.cancelOutcome == true || turn.cancelOutcome == \"yes\"",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "140076",
                 "name": "Send a response"
@@ -212,7 +212,7 @@
               "activity": "${bfdactivity-140076()}"
             },
             {
-              "$type": "Microsoft.CancelAllDialogs",
+              "$kind": "Microsoft.CancelAllDialogs",
               "$designer": {
                 "id": "803782",
                 "name": "Cancel all dialogs"
@@ -221,7 +221,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "272233",
                 "name": "Send a response"
@@ -233,13 +233,13 @@
       ]
     },
     {
-      "$type": "Microsoft.OnUnknownIntent",
+      "$kind": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "303881"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "037398",
             "name": "Send a response"
