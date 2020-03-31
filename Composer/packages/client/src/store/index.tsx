@@ -41,7 +41,7 @@ const initialState: State = {
   storages: [],
   focusedStorageFolder: {} as StorageFolder,
   botStatus: BotStatus.unConnected,
-  botLoadErrorMsg: '',
+  botLoadErrorMsg: { title: '', message: '' },
   creationFlowStatus: CreationFlowStatus.CLOSE,
   templateId: 'EmptyBot',
   storageFileLoadingStatus: 'success',

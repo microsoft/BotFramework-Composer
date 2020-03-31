@@ -16,6 +16,7 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import filePersistence from '../middlewares/persistence/FilePersistence';
 import { FileChangeType, FileExtensions } from '../middlewares/persistence/types';
+import { Text } from '../../constants';
 
 import createReducer from './createReducer';
 
@@ -268,6 +269,12 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
+const setLuFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = payload;
+  return state;
+};
+
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   state.focusedStorageFolder = response.data;
   return (state.storages = response.data);
@@ -300,7 +307,7 @@ const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   return state;
 };
 
-const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
+const setBotLoadErrorMsg: ReducerFunc = (state, error) => {
   state.botLoadErrorMsg = error;
   return state;
 };
@@ -421,17 +428,21 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, payload) => {
+const publishFailure: ReducerFunc = (state, { error }) => {
   state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
   return state;
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
     state.botStatus = BotStatus.connected;
-  } else {
-    state.botStatus = BotStatus.unConnected;
   }
+  return state;
+};
+
+const setBotStatus: ReducerFunc = (state, payload) => {
+  state.botStatus = payload;
   return state;
 };
 

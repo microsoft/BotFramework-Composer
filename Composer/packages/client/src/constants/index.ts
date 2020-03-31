@@ -53,6 +53,7 @@ export enum ActionTypes {
   CREATE_LU = 'CREATE_LU',
   REMOVE_LU = 'REMOVE_LU',
   PUBLISH_LU_SUCCCESS = 'PUBLISH_LU_SUCCCESS',
+  PUBLISH_LU_FAILED = 'PUBLISH_LU_FAILED',
   SAVE_TEMPLATE_ID = 'SAVE_TEMPLATE_ID',
   GET_STORAGE_SUCCESS = 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE = 'GET_STORAGE_FAILURE',
@@ -60,7 +61,7 @@ export enum ActionTypes {
   GET_STORAGEFILE_SUCCESS = 'GET_STORAGEFILE_SUCCESS',
   SET_CREATION_FLOW_STATUS = 'SET_CREATION_FLOW_STATUS',
   SET_DESIGN_PAGE_LOCATION = 'SET_DESIGN_PAGE_LOCATION',
-  RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
+  RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
   GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
@@ -134,6 +135,8 @@ export const OpenStatus = {
 export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
+  publishing = 'publishing',
+  reloading = 'loading',
 }
 
 export enum CreationFlowStatus {

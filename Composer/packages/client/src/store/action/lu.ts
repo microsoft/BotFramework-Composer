@@ -6,6 +6,7 @@ import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { Text } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
@@ -80,6 +81,10 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       payload: { response },
     });
   } catch (err) {
-    throw new Error(err.message || err.response.data.message);
+    dispatch({
+      type: ActionTypes.PUBLISH_LU_FAILED,
+      payload: { title: Text.LUISDEPLOYFAILURE, message: err.response.data.message },
+    });
+    throw new Error(err.response.data.message);
   }
 };
