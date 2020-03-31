@@ -7,12 +7,12 @@ import { ObiTypes } from '../../src/constants/ObiTypes';
 test('should return NULL when input is not SwitchCondition', () => {
   expect(transformSwitchCondition(null, '')).toBeNull();
   expect(transformSwitchCondition({}, '')).toBeNull();
-  expect(transformSwitchCondition({ $type: 'wrong' }, '')).toBeNull();
+  expect(transformSwitchCondition({ $kind: 'wrong' }, '')).toBeNull();
 });
 
 test('should return correct schema when input empty cases', () => {
   const json = {
-    $type: ObiTypes.SwitchCondition,
+    $kind: ObiTypes.SwitchCondition,
     condition: 'a==b',
     cases: [],
     default: [],
@@ -35,15 +35,15 @@ test('should return correct schema when input empty cases', () => {
 
 test('should return correct schema when input empty cases', () => {
   const json = {
-    $type: ObiTypes.SwitchCondition,
+    $kind: ObiTypes.SwitchCondition,
     condition: 'a==b',
     cases: [
       {
         value: '1',
-        actions: [{ $type: ObiTypes.SendActivity }],
+        actions: [{ $kind: ObiTypes.SendActivity }],
       },
     ],
-    default: [{ $type: ObiTypes.SendActivity }],
+    default: [{ $kind: ObiTypes.SendActivity }],
   };
 
   const result: any = transformSwitchCondition(json, 'actions[0]');

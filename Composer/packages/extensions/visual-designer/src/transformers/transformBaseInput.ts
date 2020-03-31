@@ -11,18 +11,18 @@ export function transformBaseInput(
   return {
     botAsks: new IndexedNode(jsonpath, {
       ...input,
-      _type: input.$type,
-      $type: ObiTypes.BotAsks,
+      _type: input.$kind,
+      $kind: ObiTypes.BotAsks,
     }),
     userAnswers: new IndexedNode(jsonpath, {
       ...input,
-      _type: input.$type,
-      $type: input.$type === ObiTypes.ChoiceInput ? ObiTypes.ChoiceInputDetail : ObiTypes.UserAnswers,
+      _type: input.$kind,
+      $kind: input.$kind === ObiTypes.ChoiceInput ? ObiTypes.ChoiceInputDetail : ObiTypes.UserAnswers,
     }),
     invalidPrompt: new IndexedNode(jsonpath, {
       ...input,
-      _type: input.$type,
-      $type: ObiTypes.InvalidPromptBrick,
+      _type: input.$kind,
+      $kind: ObiTypes.InvalidPromptBrick,
     }),
   };
 }

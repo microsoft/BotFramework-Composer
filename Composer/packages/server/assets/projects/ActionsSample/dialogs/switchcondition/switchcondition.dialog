@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "039096"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "851391"
       },
       "actions": [
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "property": "user.style",
           "prompt": "Please select a value from below:",
           "maxTurnCount": 3,
@@ -48,14 +48,14 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "160914"
           },
           "activity": "${bfdactivity-160914()}"
         },
         {
-          "$type": "Microsoft.SwitchCondition",
+          "$kind": "Microsoft.SwitchCondition",
           "$designer": {
             "id": "448444"
           },
@@ -65,7 +65,7 @@
               "value": "Test1",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "576002"
                   },
@@ -77,7 +77,7 @@
               "value": "Test2",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "677412"
                   },
@@ -89,7 +89,7 @@
               "value": "Test3",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "700082"
                   },

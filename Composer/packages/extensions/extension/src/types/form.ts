@@ -11,8 +11,6 @@ declare module 'json-schema' {
     $id?: string;
     $kind?: string;
     $role?: string;
-    /** @deprecated */
-    $type?: string;
     $designer?: {
       id: string;
       [key: string]: any;

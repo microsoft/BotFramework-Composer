@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import { SDKTypes, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
+import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -30,7 +30,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const intentName = `${promptType}.response-${designerId}`;
 
   const type = recognizerType(currentDialog);
-  const Editor: any = type === SDKTypes.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
+  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
@@ -70,7 +70,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
         onChange={onChange('value')}
         rawErrors={getError('value')}
       />
-      {Editor && kind !== SDKTypes.AttachmentInput && (
+      {Editor && kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
           <Editor {...props} onChange={() => {}} />
@@ -103,10 +103,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           rawErrors={getError('style')}
         />
       )}
-      {value?.$type === SDKTypes.ChoiceInput && (
+      {value?.$kind === SDKKinds.ChoiceInput && (
         <ChoiceInputSettings {...props} value={(value as unknown) as ChoiceInput} choiceProperty="choices" />
       )}
-      {value?.$type === SDKTypes.ConfirmInput && (
+      {value?.$kind === SDKKinds.ConfirmInput && (
         <ChoiceInputSettings {...props} value={(value as unknown) as ConfirmInput} choiceProperty="confirmChoices" />
       )}
     </Fragment>

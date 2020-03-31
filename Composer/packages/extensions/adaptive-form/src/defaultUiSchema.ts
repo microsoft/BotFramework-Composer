@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { UISchema } from '@bfc/extension';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { RecognizerField, IntentField } from './components/fields';
@@ -12,7 +12,7 @@ const triggerUiSchema = {
 };
 
 const DefaultUISchema: UISchema = {
-  [SDKTypes.AdaptiveDialog]: {
+  [SDKKinds.AdaptiveDialog]: {
     label: 'Adaptive dialog',
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/botframework',
@@ -28,118 +28,118 @@ const DefaultUISchema: UISchema = {
       },
     },
   },
-  [SDKTypes.AttachmentInput]: {
+  [SDKKinds.AttachmentInput]: {
     label: 'Prompt for Attachment',
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.BeginDialog]: {
+  [SDKKinds.BeginDialog]: {
     label: 'Begin a Dialog',
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
   },
-  [SDKTypes.OnCancelDialog]: {
+  [SDKKinds.OnCancelDialog]: {
     label: () => formatMessage('Dialog cancelled'),
     subtitle: () => formatMessage('Cancel dialog event'),
   },
-  [SDKTypes.CancelAllDialogs]: {
+  [SDKKinds.CancelAllDialogs]: {
     label: () => formatMessage('Cancel All Dialogs'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['dialog', 'property', '*'],
   },
-  [SDKTypes.ChoiceInput]: {
+  [SDKKinds.ChoiceInput]: {
     label: () => formatMessage('Prompt with multi-choice'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.ConfirmInput]: {
+  [SDKKinds.ConfirmInput]: {
     label: () => formatMessage('Prompt for confirmation'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.DateTimeInput]: {
+  [SDKKinds.DateTimeInput]: {
     label: () => formatMessage('Prompt for a date'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.DebugBreak]: { label: () => formatMessage('Debug Break') },
-  [SDKTypes.DeleteProperties]: {
+  [SDKKinds.DebugBreak]: { label: () => formatMessage('Debug Break') },
+  [SDKKinds.DeleteProperties]: {
     label: () => formatMessage('Delete Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.DeleteProperty]: {
+  [SDKKinds.DeleteProperty]: {
     label: () => formatMessage('Delete a Property'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.DeleteProperties]: {
+  [SDKKinds.DeleteProperties]: {
     label: () => formatMessage('Delete Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.EditActions]: { label: () => formatMessage('Modify active dialog') },
-  [SDKTypes.EditArray]: {
+  [SDKKinds.EditActions]: { label: () => formatMessage('Modify active dialog') },
+  [SDKKinds.EditArray]: {
     label: () => formatMessage('Edit an Array Property'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.EmitEvent]: {
+  [SDKKinds.EmitEvent]: {
     label: () => formatMessage('Emit a custom event'),
     helpLink: 'https://aka.ms/bfc-custom-events',
   },
-  [SDKTypes.EndDialog]: {
+  [SDKKinds.EndDialog]: {
     label: () => formatMessage('End Dialog'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
-  [SDKTypes.EndTurn]: {
+  [SDKKinds.EndTurn]: {
     label: () => formatMessage('End Turn'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
-  [SDKTypes.Foreach]: {
+  [SDKKinds.Foreach]: {
     label: () => formatMessage('Loop: For Each'),
     order: ['itemsProperty', '*'],
     hidden: ['actions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
   },
-  [SDKTypes.ForeachPage]: {
+  [SDKKinds.ForeachPage]: {
     label: () => formatMessage('Loop: For Each Page'),
     order: ['itemsProperty', 'pageSize', '*'],
     hidden: ['actions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
   },
-  [SDKTypes.HttpRequest]: {
+  [SDKKinds.HttpRequest]: {
     label: () => formatMessage('HTTP Request'),
     order: ['method', 'url', 'body', 'headers', '*'],
     helpLink: 'https://aka.ms/bfc-using-http',
   },
-  [SDKTypes.IfCondition]: {
+  [SDKKinds.IfCondition]: {
     label: () => formatMessage('Branch: If/Else'),
     hidden: ['actions', 'elseActions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
   },
-  [SDKTypes.LogAction]: {
+  [SDKKinds.LogAction]: {
     label: () => formatMessage('Log to console'),
     helpLink: 'https://aka.ms/bfc-debugging-bots',
   },
-  [SDKTypes.NumberInput]: {
+  [SDKKinds.NumberInput]: {
     label: () => formatMessage('Prompt for a number'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.OAuthInput]: {
+  [SDKKinds.OAuthInput]: {
     label: () => formatMessage('OAuth Login'),
     helpLink: 'https://aka.ms/bfc-using-oauth',
     order: ['connectionName', '*'],
   },
-  [SDKTypes.OnActivity]: {
+  [SDKKinds.OnActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Activities'),
     subtitle: () => formatMessage('Activity recieved'),
   },
-  [SDKTypes.OnBeginDialog]: {
+  [SDKKinds.OnBeginDialog]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog started'),
     subtitle: () => formatMessage('Begin dialog event'),
   },
-  [SDKTypes.OnCancelDialog]: { ...triggerUiSchema },
-  [SDKTypes.OnCondition]: {
+  [SDKKinds.OnCancelDialog]: { ...triggerUiSchema },
+  [SDKKinds.OnCondition]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handle a condition'),
     subtitle: () => formatMessage('Condition'),
   },
-  [SDKTypes.OnConversationUpdateActivity]: {
+  [SDKKinds.OnConversationUpdateActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Greeting'),
     subtitle: () => formatMessage('ConversationUpdate activity'),
@@ -147,37 +147,37 @@ const DefaultUISchema: UISchema = {
     helpLink:
       'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
   },
-  [SDKTypes.OnCustomEvent]: {
+  [SDKKinds.OnCustomEvent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handle an Event'),
     subtitle: () => formatMessage('Custom event'),
   },
-  [SDKTypes.OnDialogEvent]: {
+  [SDKKinds.OnDialogEvent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog events'),
     subtitle: () => formatMessage('Dialog event'),
   },
-  [SDKTypes.OnEndOfConversationActivity]: {
+  [SDKKinds.OnEndOfConversationActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Conversation ended'),
     subtitle: () => formatMessage('EndOfConversation activity'),
   },
-  [SDKTypes.OnError]: {
+  [SDKKinds.OnError]: {
     ...triggerUiSchema,
     label: () => formatMessage('Error occurred'),
     subtitle: () => formatMessage('Error event'),
   },
-  [SDKTypes.OnEventActivity]: {
+  [SDKKinds.OnEventActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Event received'),
     subtitle: () => formatMessage('Event activity'),
   },
-  [SDKTypes.OnHandoffActivity]: {
+  [SDKKinds.OnHandoffActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handover to human'),
     subtitle: () => formatMessage('Handoff activity'),
   },
-  [SDKTypes.OnIntent]: {
+  [SDKKinds.OnIntent]: {
     label: () => formatMessage('Intent recognized'),
     subtitle: () => formatMessage('Intent recognized'),
     order: ['intent', 'condition', 'entities', '*'],
@@ -188,95 +188,95 @@ const DefaultUISchema: UISchema = {
       },
     },
   },
-  [SDKTypes.OnInvokeActivity]: {
+  [SDKKinds.OnInvokeActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Conversation invoked'),
     subtitle: () => formatMessage('Invoke activity'),
   },
-  [SDKTypes.OnMessageActivity]: {
+  [SDKKinds.OnMessageActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message recieved'),
     subtitle: () => formatMessage('Message recieved activity'),
   },
-  [SDKTypes.OnMessageDeleteActivity]: {
+  [SDKKinds.OnMessageDeleteActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message deleted'),
     subtitle: () => formatMessage('Message deleted activity'),
   },
-  [SDKTypes.OnMessageReactionActivity]: {
+  [SDKKinds.OnMessageReactionActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message reaction'),
     subtitle: () => formatMessage('Message reaction activity'),
   },
-  [SDKTypes.OnMessageUpdateActivity]: {
+  [SDKKinds.OnMessageUpdateActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message updated'),
     subtitle: () => formatMessage('Message updated activity'),
   },
-  [SDKTypes.OnRepromptDialog]: {
+  [SDKKinds.OnRepromptDialog]: {
     ...triggerUiSchema,
     label: () => formatMessage('Re-prompt for input'),
     subtitle: () => formatMessage('Reprompt dialog event'),
   },
-  [SDKTypes.OnTypingActivity]: {
+  [SDKKinds.OnTypingActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('User is typing'),
     subtitle: () => formatMessage('Typing activity'),
   },
-  [SDKTypes.OnUnknownIntent]: {
+  [SDKKinds.OnUnknownIntent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Unknown intent'),
     subtitle: () => formatMessage('Unknown intent recognized'),
   },
-  [SDKTypes.QnAMakerDialog]: {
+  [SDKKinds.QnAMakerDialog]: {
     label: () => formatMessage('QnAMakerDialog'),
     helpLink: 'https://aka.ms/bfc-using-QnA',
   },
-  [SDKTypes.Recognizer]: {
+  [SDKKinds.Recognizer]: {
     field: RecognizerField,
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },
-  [SDKTypes.RegexRecognizer]: {
+  [SDKKinds.RegexRecognizer]: {
     hidden: ['entities'],
   },
-  [SDKTypes.RepeatDialog]: {
+  [SDKKinds.RepeatDialog]: {
     label: () => formatMessage('Repeat this Dialog'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['options', 'includeActivity', '*'],
   },
-  [SDKTypes.ReplaceDialog]: {
+  [SDKKinds.ReplaceDialog]: {
     label: () => formatMessage('Replace this Dialog'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['dialog', 'options', 'includeActivity', '*'],
   },
-  [SDKTypes.SendActivity]: {
+  [SDKKinds.SendActivity]: {
     label: () => formatMessage('Send an Activity'),
     helpLink: 'https://aka.ms/bfc-send-activity',
     order: ['activity', '*'],
   },
-  [SDKTypes.SetProperty]: {
+  [SDKKinds.SetProperty]: {
     label: () => formatMessage('Set a Property'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.SetProperties]: {
+  [SDKKinds.SetProperties]: {
     label: () => formatMessage('Set Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKTypes.SkillDialog]: {
+  [SDKKinds.SkillDialog]: {
     label: () => formatMessage('Call a remote skill'),
     helpLink: 'https://aka.ms/bfc-call-skill',
   },
-  [SDKTypes.SwitchCondition]: {
+  [SDKKinds.SwitchCondition]: {
     label: () => formatMessage('Branch: Switch'),
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
     hidden: ['default'],
     properties: { cases: { hidden: ['actions'] } },
   },
-  [SDKTypes.TextInput]: {
+  [SDKKinds.TextInput]: {
     label: () => formatMessage('Prompt for text'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
-  [SDKTypes.TraceActivity]: {
+  [SDKKinds.TraceActivity]: {
     label: () => formatMessage('Emit a trace event'),
     helpLink: 'https://aka.ms/bfc-debugging-bots',
   },
