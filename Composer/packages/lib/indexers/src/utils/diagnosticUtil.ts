@@ -48,7 +48,7 @@ export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange
 }
 
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
-  if (!range) return diagnostics;
+  if (!range) return [];
   const filteredDiags = diagnostics.filter(d => {
     return d.range && isDiagnosticWithInRange(d, range);
   });
