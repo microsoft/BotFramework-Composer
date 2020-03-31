@@ -52,7 +52,10 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     operationMode,
   } = props;
   // for detail file list in open panel
-  const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+  const currentPath =
+    Object.keys(focusedStorageFolder).length > 0
+      ? path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
+      : '';
   const tableColums = [
     {
       key: 'column1',
