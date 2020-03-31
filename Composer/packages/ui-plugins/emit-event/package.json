@@ -1,5 +1,5 @@
 {
-  "name": "plugin-name",
+  "name": "@bfc/ui-plugin-emit-event",
   "version": "0.0.0",
   "private": true,
   "description": "",
