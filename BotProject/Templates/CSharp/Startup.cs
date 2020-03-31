@@ -136,7 +136,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseWebSockets();
-            
+            app.UseNamedPipes();
+
             app.UseRouting()
                .UseEndpoints(endpoints =>
                {
