@@ -8,6 +8,7 @@ import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -25,8 +26,6 @@ const emotionCache = createCache({
   // @ts-ignore
   nonce: window.__nonce__,
 });
-
-const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
@@ -89,6 +88,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     dialogFactory: new DialogFactory(schema),
     schemas,
   };
+
+  const visualEditorSchemaProvider = new UISchemaProvider(uiSchema, get(schemas, 'visual.content', {}));
 
   return (
     <CacheProvider value={emotionCache}>

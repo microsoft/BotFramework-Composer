@@ -37,3 +37,11 @@ export interface WidgetContainerProps {
 export type UIWidgetProp = Value | PropGenerator | UIWidget;
 type Value = string | number | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
+
+export interface WidgetGeneratorV1 {
+  header?: string;
+  body?: string;
+  footer?: string;
+  color?: string;
+  icon?: string;
+}

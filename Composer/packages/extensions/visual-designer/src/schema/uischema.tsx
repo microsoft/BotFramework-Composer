@@ -20,7 +20,7 @@ import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/st
 import { ListOverview } from '../components/common/ListOverview';
 import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
-import { UISchema, UIWidget } from './uischema.types';
+import { UISchema, UIWidget, WidgetGeneratorV1 } from './uischema.types';
 
 const BaseInputSchema: UIWidget = {
   'ui:widget': PromptWidget,
@@ -321,4 +321,42 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
+};
+
+function ColorLuminance(hex, lum) {
+  // validate hex string
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
+  if (hex.length < 6) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  lum = lum || 0;
+
+  // convert to decimal and change luminosity
+  let rgb = '#',
+    c,
+    i;
+  for (i = 0; i < 3; i++) {
+    c = parseInt(hex.substr(i * 2, 2), 16);
+    c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+    rgb += ('00' + c).substr(c.length);
+  }
+
+  return rgb;
+}
+
+export const genWidgetSchema = (config: WidgetGeneratorV1): UIWidget => {
+  return {
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+      title: data => config.header || data.title,
+      icon: config.icon || 'None',
+      colors: {
+        theme: config.color || ObiColors.AzureGray3,
+        icon: ColorLuminance(config.color, -0.5) || ObiColors.AzureGray2,
+      },
+    },
+    body: data => (config.body ? <SingleLineDiv>{data[config.body]}</SingleLineDiv> : null),
+    footer: data => (config.footer ? <SingleLineDiv>{data[config.footer]}</SingleLineDiv> : null),
+  };
 };
