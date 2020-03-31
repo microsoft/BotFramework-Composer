@@ -4,12 +4,6 @@
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 
-export const Root = css`
-  display: flex;
-  height: calc(100vh - 50px);
-  flex-direction: column;
-`;
-
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -37,32 +31,21 @@ export const ContentStyle = css`
   }
 `;
 
-export const contentEditor = css`
+export const TableView = css`
   flex: 4;
   margin: 20px;
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
+  fontsize: 16px;
 `;
 
-export const listRoot = css`
-  position: relative;
-  overflow-y: auto;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+export const ActionButton = css`
+  font-size: 16px;
+  margin: 15px;
 `;
 
-export const tableView = css`
-  position: relative;
-  flex-grow: 1;
-`;
-
-export const detailList = css`
-  overflow-x: hidden;
-`;
-
-export const formCell = css`
+export const TableCell = css`
   white-space: pre-wrap;
   font-size: 14px;
   textarea,

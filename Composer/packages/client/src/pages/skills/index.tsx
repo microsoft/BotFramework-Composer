@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
 
-import { Root, ContentHeaderStyle, HeaderText } from './styles';
+import { ContentHeaderStyle, HeaderText } from './styles';
 import SkillList from './SkillList';
 
 const Skills: React.FC<RouteComponentProps> = () => {
@@ -23,13 +23,13 @@ const Skills: React.FC<RouteComponentProps> = () => {
   ];
 
   return (
-    <div css={Root} data-testid="skills-page">
+    <div data-testid="skills-page">
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
 
-      <SkillList items={[]}></SkillList>
+      <SkillList skills={[]}></SkillList>
     </div>
   );
 };
