@@ -7,7 +7,7 @@ import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } fr
 import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { ActionTypes, FileTypes, BotStatus } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
@@ -16,7 +16,6 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import filePersistence from '../middlewares/persistence/FilePersistence';
 import { FileChangeType, FileExtensions } from '../middlewares/persistence/types';
-import { Text } from '../../constants';
 
 import createReducer from './createReducer';
 
@@ -495,7 +494,8 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
-  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
+  [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,
@@ -514,4 +514,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
+  [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
 });
