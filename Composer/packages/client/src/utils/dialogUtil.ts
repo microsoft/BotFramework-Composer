@@ -49,7 +49,6 @@ export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
 export const LuisRecognizerKey: string = SDKTypes.LuisRecognizer;
 export const ValueRecognizerKey: string = SDKTypes.ValueRecognizer;
-
 export const recognizerTemplates = [
   {
     key: LuisRecognizerKey,
@@ -168,9 +167,8 @@ export function createFocusedPath(selected: number, focused: number) {
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`, []).some(
-    t => t.$type === regexRecognizerKey
-  );
+  const isRegEx =
+    get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].$type`, '') === regexRecognizerKey;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);

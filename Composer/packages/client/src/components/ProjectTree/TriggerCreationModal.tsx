@@ -42,7 +42,9 @@ import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (
   data: TriggerFormData,
-  regExIntents: [{ intent: string; pattern: string }]
+  regExIntents: [{ intent: string; pattern: string }],
+  isLUIS: boolean,
+  isRegEx: boolean
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
   const { $type, specifiedType, intent } = data;
@@ -63,13 +65,13 @@ const validateForm = (
     errors.$type = formatMessage('Please select a trigger type');
   }
 
-  if ($type === intentTypeKey && (!intent || !nameRegex.test(intent))) {
+  if ($type === intentTypeKey && isLUIS && (!intent || !nameRegex.test(intent))) {
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
   }
 
-  if ($type === intentTypeKey && regExIntents.find(ri => ri.intent === intent)) {
+  if ($type === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
     errors.intent = `regEx ${intent} is already defined`;
   }
 
@@ -98,22 +100,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const { dialogs, luFiles, locale, projectId } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
-  const currentRecognizerTypes = get(
-    dialogFile,
-    `content.recognizer.recognizers[0].recognizers['en-us'].recognizers`,
-    []
-  );
+  const currentRecognizerType = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '');
 
   const generateValidRecognizerTypes = () => {
     const res = [ValueRecognizerKey];
-    currentRecognizerTypes.forEach(element => {
-      if (element === `${dialogId}.lu`) {
-        res.push(LuisRecognizerKey);
-      }
-      if (element.$type === regexRecognizerKey) {
-        res.push(regexRecognizerKey);
-      }
-    });
+    if (currentRecognizerType === `${dialogId}.lu`) {
+      res.push(LuisRecognizerKey);
+    }
+    if (currentRecognizerType.$type === regexRecognizerKey) {
+      res.push(regexRecognizerKey);
+    }
     return res;
   };
 
@@ -130,14 +126,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     regexEx: '',
   };
   const [formData, setFormData] = useState({ ...initialFormData, $type: intentTypeKey });
-  const isRegEx = formData.recognizerType === regexRecognizerKey;
-  const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
-  const isValue = formData.recognizerType === ValueRecognizerKey;
-  const isLUIS = formData.recognizerType === LuisRecognizerKey;
+  const regexIntents = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us'].intents`, []);
+  const isRegEx =
+    get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us'].$type`, '') === regexRecognizerKey;
+  const isLUIS = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '') === `${dialogId}.lu`;
 
   const onClickSubmitButton = e => {
     e.preventDefault();
-    const errors = validateForm(formData, regexIntents);
+    const errors = validateForm(formData, regexIntents, isLUIS, isRegEx);
 
     if (Object.keys(errors).length) {
       setFormData({
@@ -200,8 +196,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const messageTypes: IDropdownOption[] = getMessageTypes();
   const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
   const showIntentName = formData.$type === intentTypeKey;
-  const showRegExField = formData.$type === intentTypeKey && isRegEx;
-  const showTriggerPhrase = formData.$type === intentTypeKey && isLUIS;
+  const showRegExField = formData.$type === intentTypeKey && formData.recognizerType === regexRecognizerKey;
+  const showTriggerPhrase = formData.$type === intentTypeKey && formData.recognizerType === LuisRecognizerKey;
   const showEventDropDown = formData.$type === eventTypeKey;
   const showActivityDropDown = formData.$type === activityTypeKey;
   const showMessageDropDown = formData.$type === messageTypeKey;
@@ -290,9 +286,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
           {showIntentName && (
             <TextField
               label={
-                isValue
+                formData.recognizerType === ValueRecognizerKey
                   ? formatMessage('What is the name of this trigger')
-                  : isRegEx
+                  : formData.recognizerType === regexRecognizerKey
                   ? formatMessage('What is the name of this trigger (RegEx)')
                   : formatMessage('What is the name of this trigger (Luis)')
               }
