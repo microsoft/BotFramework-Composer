@@ -138,6 +138,7 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
           break;
         }
         default:
+          recognizer = '';
           break;
       }
       if (finalRecognizerSet.recognizers[0].recognizers) {
