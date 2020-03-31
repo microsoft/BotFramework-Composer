@@ -9,7 +9,7 @@ import { LuIntentSection } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
-  const { currentDialog, designerId, luFiles, shellApi, locale } = useShellApi();
+  const { currentDialog, designerId, luFiles, shellApi, locale, projectId } = useShellApi();
   const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
@@ -47,7 +47,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   return (
     <LuEditor
       height={150}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name }}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
       value={luIntent.Body}
       onChange={commitChanges}
       diagnostics={diagnostics}
