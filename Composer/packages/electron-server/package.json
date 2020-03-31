@@ -76,7 +76,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "./build/public/composerfavicon.ico",
+      "icon": "resources/composerIcon.ico",
       "artifactName": "BotFramework-Composer-${version}-windows-setup.${ext}"
     },
     "nsis": {
@@ -106,6 +106,7 @@
     "mac": {
       "artifactName": "BotFramework-Composer-${version}-mac.${ext}",
       "category": "public.app-category.developer-tools",
+      "icon": "resources/composerIcon.icns",
       "target": [
         {
           "target": "dmg",
