@@ -2,19 +2,16 @@
 // Licensed under the MIT License.
 
 import * as redux from 'redux';
+export const some = <T>(sources: ReadonlyArray<T> | undefined): ReadonlyArray<T> =>
+  sources !== undefined ? sources : [];
 
-export const map = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<ReadonlyArray<S>, A> => (
-  sources,
-  action
-) => {
-  if (sources === undefined) {
-    return [];
-  }
+export type Mapper<T> = (item: T) => T;
 
-  let targets: Array<S> | undefined = undefined;
+export const map = <T>(selector: Mapper<T>): Mapper<ReadonlyArray<T>> => sources => {
+  let targets: Array<T> | undefined = undefined;
   for (let index = 0; index < sources.length; ++index) {
     const source = sources[index];
-    const target = inner(source, action);
+    const target = selector(source);
     if (targets !== undefined || source !== target) {
       if (targets === undefined) {
         targets = sources.slice();

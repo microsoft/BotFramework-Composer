@@ -8,6 +8,11 @@ import * as immutable from './immutable';
 import * as lazy from './lazy';
 import * as model from './model';
 
+export const map = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<ReadonlyArray<S>, A> => (
+  source,
+  action
+) => immutable.map<S>(item => inner(item, action))(immutable.some(source));
+
 type Action = protocol.Action;
 
 export interface HasChildVariables {
@@ -51,12 +56,12 @@ export const hasChildVariables = <S extends model.Thing<HasChildVariables> & mod
 export const variable: redux.Reducer<model.Variable, Action> = (state, action) =>
   hasChildVariables<model.Variable>(state, action);
 
-export const variables: redux.Reducer<ReadonlyArray<model.Variable>, Action> = immutable.map(variable);
+export const variables: redux.Reducer<ReadonlyArray<model.Variable>, Action> = map(variable);
 
 export const scope: redux.Reducer<model.Scope, Action> = (state, action) =>
   hasChildVariables<model.Scope>(state, action);
 
-export const scopes: redux.Reducer<ReadonlyArray<model.Scope>, Action> = immutable.map(scope);
+export const scopes: redux.Reducer<ReadonlyArray<model.Scope>, Action> = map(scope);
 
 export const stackFrame: redux.Reducer<model.StackFrame, Action> = (state, action) => {
   if (state === undefined) {
@@ -89,7 +94,7 @@ export const stackFrame: redux.Reducer<model.StackFrame, Action> = (state, actio
   })(state, action);
 };
 
-export const stackFrames = immutable.map(stackFrame);
+export const stackFrames = map(stackFrame);
 
 const threadEvent: redux.Reducer<model.Thread, Action> = (state, action) => {
   if (state === undefined) {
@@ -181,7 +186,7 @@ export const threads: redux.Reducer<ReadonlyArray<model.Thread>, Action> = (stat
     }
   }
 
-  return immutable.map(thread)(state, action);
+  return map(thread)(state, action);
 };
 
 export const lazyThreads: redux.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>>, Action> = (state, action) =>
