@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Callout } from 'office-ui-fabric-react/lib/Callout';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { StoreContext } from '../../../store';
 
@@ -30,53 +31,61 @@ export const OnboardingSettings = () => {
     showCallout(complete);
   }, [complete, onboardingSetComplete]);
 
-  const toggleRef = useRef(null);
-
   return (
     <div css={onboardingSettings}>
       <h1 css={onboardingTitle}>{formatMessage('Onboarding')}</h1>
       <p>{formatMessage('Enabling Onboarding will restart the product tour.')}</p>
-      <div ref={toggleRef}>
-        <Toggle
-          data-testid="onboardingToggle"
-          checked={!complete}
-          label={formatMessage('Onboarding')}
-          offText={formatMessage('Disabled')}
-          onChange={onChange}
-          onText={formatMessage('Enabled')}
-        />
-        <Callout
-          isBeakVisible={false}
-          hidden={!calloutIsShown}
-          role="status"
-          aria-live="assertive"
-          target={toggleRef.current}
-          directionalHint={DirectionalHint.bottomLeftEdge}
+      <Toggle
+        id={'onboardingToggle'}
+        data-testid="onboardingToggle"
+        checked={!complete}
+        onChange={onChange}
+        label={formatMessage('Onboarding')}
+        offText={formatMessage('Disabled')}
+        onText={formatMessage('Enabled')}
+      />
+      <TeachingBubble
+        calloutProps={{
+          hidden: !calloutIsShown,
+          role: 'status',
+          directionalHint: DirectionalHint.rightCenter,
+          isBeakVisible: false,
+        }}
+        target={'#onboardingToggle'}
+        styles={{
+          bodyContent: {
+            padding: '0px',
+          },
+          body: {
+            margin: '0px',
+          },
+        }}
+      >
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+          `}
         >
           <div
             css={css`
-              margin: 16px;
-              display: flex;
-              justify-content: space-around;
-              align-items: center;
+              font-size: 24px;
+              background: ${NeutralColors.gray20};
+              color: black;
+              padding: 8px;
             `}
           >
-            <Icon
-              styles={{
-                root: [
-                  {
-                    fontSize: '24px',
-                    marginRight: '8px',
-                    color: '#88f',
-                  },
-                ],
-              }}
-              iconName="SplitObject"
-            />
+            <FontIcon iconName={'SplitObject'} />
+          </div>
+          <div
+            css={css`
+              padding-left: 8px;
+            `}
+          >
             {formatMessage('Please return to Design View to start the Onboarding tutorial.')}
           </div>
-        </Callout>
-      </div>
+        </div>
+      </TeachingBubble>
       <Link href="https://aka.ms/bfc-onboarding" target="_blank" rel="noopener noreferrer">
         {formatMessage('Learn more')}
       </Link>
