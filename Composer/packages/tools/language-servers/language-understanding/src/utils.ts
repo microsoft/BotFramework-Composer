@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
+import { offsetRange } from '@bfc/indexers';
+import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic } from '@bfc/shared';
 
 export interface LUOption {
+  projectId: string;
   fileId: string;
   sectionId: string;
 }
@@ -17,6 +19,7 @@ export interface Template {
 
 export interface LUDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   sectionId?: string;
   index: () => any;

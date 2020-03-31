@@ -50,7 +50,6 @@ export enum SDKTypes {
   HttpRequest = 'Microsoft.HttpRequest',
   IfCondition = 'Microsoft.IfCondition',
   IpEntityRecognizer = 'Microsoft.IpEntityRecognizer',
-  LanguagePolicy = 'Microsoft.LanguagePolicy',
   LogAction = 'Microsoft.LogAction',
   LuisRecognizer = 'Microsoft.LuisRecognizer',
   MentionEntityRecognizer = 'Microsoft.MentionEntityRecognizer',
@@ -73,6 +72,7 @@ export enum SDKTypes {
   OnHandoffActivity = 'Microsoft.OnHandoffActivity',
   OnIntent = 'Microsoft.OnIntent',
   OnInvokeActivity = 'Microsoft.OnInvokeActivity',
+  OnMessageEventActivity = 'Microsoft.OnMessageEventActivity',
   OnMessageActivity = 'Microsoft.OnMessageActivity',
   OnMessageDeleteActivity = 'Microsoft.OnMessageDeleteActivity',
   OnMessageReactionActivity = 'Microsoft.OnMessageReactionActivity',
@@ -92,6 +92,7 @@ export enum SDKTypes {
   SendActivity = 'Microsoft.SendActivity',
   SetProperty = 'Microsoft.SetProperty',
   SetProperties = 'Microsoft.SetProperties',
+  SkillDialog = 'Microsoft.SkillDialog',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',
@@ -100,6 +101,31 @@ export enum SDKTypes {
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
+
+  /** Kinds */
+
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKKinds {
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  Recognizer = 'Microsoft.Recognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKRoles {
+  expression = 'expression',
+  // TODO
+  // union = 'union',
+  // union_*_ = 'union(*)',
 }
 
 export interface OBISchema extends JSONSchema6 {

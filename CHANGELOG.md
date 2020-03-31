@@ -2,6 +2,99 @@
 
 ## Releases
 
+### 03-18-2020
+
+#### Added
+
+- feat: enable composer to call a remote skill ([#2233](https://github.com/microsoft/BotFramework-Composer/pull/2233)) ([@luhan2017](https://github.com/luhan2017))
+- feat: Move ([#2206](https://github.com/microsoft/BotFramework-Composer/pull/2206)) ([@cwhitten](https://github.com/cwhitten))
+- feat: add luis authoring region in deployment script ([#2229](https://github.com/microsoft/BotFramework-Composer/pull/2229)) ([@zidaneymar](https://github.com/zidaneymar))
+- feat: add default alwaysPrompt value in OAuthInput step ([#2266](https://github.com/microsoft/BotFramework-Composer/pull/2266)) ([@alanlong9278](https://github.com/alanlong9278))
+
+#### Fixed
+
+- a11y: #2109 Improve UX and accessibility of deploy dialogs ([#2294](https://github.com/microsoft/BotFramework-Composer/pull/2294)) ([@corinagum](https://github.com/corinagum))
+- fix: ErrorMessage can not be displayed in two expression field ([#2278](https://github.com/microsoft/BotFramework-Composer/pull/2278)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: Some editting bugs in Lu editor ([#2285](https://github.com/microsoft/BotFramework-Composer/pull/2285)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: composer crashed when delete the dialog ([#2290](https://github.com/microsoft/BotFramework-Composer/pull/2290)) ([@lei9444](https://github.com/lei9444))
+- fix: use ':' instead of '=' for prefix ([#2275](https://github.com/microsoft/BotFramework-Composer/pull/2275)) ([@alanlong9278](https://github.com/alanlong9278))
+- a11y: #2133 add labels to Learn more links ([#2205](https://github.com/microsoft/BotFramework-Composer/pull/2205)) ([@corinagum](https://github.com/corinagum))
+- a11y: Accessibility in lg/lu page ([#2265](https://github.com/microsoft/BotFramework-Composer/pull/2265)) ([@zhixzhan](https://github.com/zhixzhan))
+- fix: schema mismatch for message received ([#2248](https://github.com/microsoft/BotFramework-Composer/pull/2248)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: add luis publish status in client ([#2256](https://github.com/microsoft/BotFramework-Composer/pull/2256)) ([@lei9444](https://github.com/lei9444))
+- a11y: Accessibility issue ([#2197](https://github.com/microsoft/BotFramework-Composer/pull/2197)) ([@liweitian](https://github.com/liweitian))
+- a11y: add ariaLabel props to EditableField and TextFields ([#2259](https://github.com/microsoft/BotFramework-Composer/pull/2259)) ([@beyackle](https://github.com/beyackle))
+- fix: beenUsed status in lg all up view ([#2245](https://github.com/microsoft/BotFramework-Composer/pull/2245)) ([@zhixzhan](https://github.com/zhixzhan))
+- a11y: adjust id numbers in dialog samples ([#2239](https://github.com/microsoft/BotFramework-Composer/pull/2239)) ([@beyackle](https://github.com/beyackle))
+- a11y: make dialog name required ([#2295](https://github.com/microsoft/BotFramework-Composer/pull/2295)) ([@beyackle](https://github.com/beyackle))
+- a11y: replace h4 with h1 ([#2271](https://github.com/microsoft/BotFramework-Composer/pull/2271)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: sync oauth input property in form editor ([#2246](https://github.com/microsoft/BotFramework-Composer/pull/2246)) ([@alanlong9278](https://github.com/alanlong9278))
+- a11y: add SR labels to Bot Responses "used" column ([#2263](https://github.com/microsoft/BotFramework-Composer/pull/2263)) ([@beyackle](https://github.com/beyackle))
+- fix: reset bot connection status when loading a new bot ([#2255](https://github.com/microsoft/BotFramework-Composer/pull/2255)) ([@VanyLaw](https://github.com/VanyLaw))
+
+#### Changed
+
+- chore: update to 4.8 sdk release ([#2296](https://github.com/microsoft/BotFramework-Composer/pull/2296)) ([@luhan2017](https://github.com/luhan2017))
+- refactor: support lg templates cross-file copy during Visual Editor copy / paste ([#2236](https://github.com/microsoft/BotFramework-Composer/pull/2236)) ([@yeze322](https://github.com/yeze322))
+
+#### Other
+
+- chore: update bug issue template to create correct label ([#2303](https://github.com/microsoft/BotFramework-Composer/pull/2303)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: change templates to use $type over $kind ([#2302](https://github.com/microsoft/BotFramework-Composer/pull/2302)) ([@cwhitten](https://github.com/cwhitten))
+- chore: merge stable into master ([#2223](https://github.com/microsoft/BotFramework-Composer/pull/2223)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: deploy to publish ([#2227](https://github.com/microsoft/BotFramework-Composer/pull/2227)) ([@cwhitten](https://github.com/cwhitten))
+
+### 03-09-2020
+
+#### Added
+
+- feat: Remove input LU when deconstructing prompts ([#2180](https://github.com/microsoft/BotFramework-Composer/pull/2180)) ([@tdurnford](https://github.com/tdurnford))
+- feat: Add cross train before luis publish ([#2069](https://github.com/microsoft/BotFramework-Composer/pull/2069)) ([@cwhitten](https://github.com/cwhitten))
+- feat: Added inline lu to prompts ([#2159](https://github.com/microsoft/BotFramework-Composer/pull/2159)) ([@cwhitten](https://github.com/cwhitten))
+- feat: implement new action design to improve readability ([#2136](https://github.com/microsoft/BotFramework-Composer/pull/2136)) ([@cwhitten](https://github.com/cwhitten))
+- feat: repaint ui for setProperties in visual editor ([#2017](https://github.com/microsoft/BotFramework-Composer/pull/2017)) ([@alanlong9278](https://github.com/alanlong9278))
+- feat: Update package and schema to 200216 ([#1997](https://github.com/microsoft/BotFramework-Composer/pull/1997)) ([@luhan2017](https://github.com/luhan2017))
+- feat: update new trigger modal according to design ([#1786](https://github.com/microsoft/BotFramework-Composer/pull/1786)) ([@liweitian](https://github.com/liweitian))
+- feat: display 6 actions as contentless node ([#2108](https://github.com/microsoft/BotFramework-Composer/pull/2108)) ([@yeze322](https://github.com/yeze322))
+- feat: support multi-line node block in Visual Editor ([#2005](https://github.com/microsoft/BotFramework-Composer/pull/2005)) ([@yeze322](https://github.com/yeze322))
+- feat: add more help links ([#2070](https://github.com/microsoft/BotFramework-Composer/pull/2070)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- feat: support inline LU section editing ([#1994](https://github.com/microsoft/BotFramework-Composer/pull/1994)) ([@zhixzhan](https://github.com/zhixzhan))
+
+#### Fixed
+
+- fix: trigger creation bug ([#2151](https://github.com/microsoft/BotFramework-Composer/pull/2151)) ([@liweitian](https://github.com/liweitian))
+- fix: lu build bug when training empty intents ([#2201](https://github.com/microsoft/BotFramework-Composer/pull/2201)) ([@lei9444](https://github.com/lei9444))
+- fix: use nightly build to replace the private bf-lu package ([#2190](https://github.com/microsoft/BotFramework-Composer/pull/2190)) ([@lei9444](https://github.com/lei9444))
+- fix: Moved value field to user tab and removed inline lu from attachment input ([#2194](https://github.com/microsoft/BotFramework-Composer/pull/2194)) ([@tdurnford](https://github.com/tdurnford))
+- fix: load schema files when loading bot project ([#2170](https://github.com/microsoft/BotFramework-Composer/pull/2170)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- fix: deployment script, decouple debugging and deployment settings ([#2153](https://github.com/microsoft/BotFramework-Composer/pull/2153)) ([@zidaneymar](https://github.com/zidaneymar))
+- fix: Double scroll bars in dialog's properties pane ([#2163](https://github.com/microsoft/BotFramework-Composer/pull/2163)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: lg template display wrong in visual & form editor ([#2191](https://github.com/microsoft/BotFramework-Composer/pull/2191)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: remove edit button in lu all up view ([#2146](https://github.com/microsoft/BotFramework-Composer/pull/2146)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: Use header tag for trigger in visual editor ([#2128](https://github.com/microsoft/BotFramework-Composer/pull/2128)) ([@cwhitten](https://github.com/cwhitten))
+- fix: update lu format link ([#2107](https://github.com/microsoft/BotFramework-Composer/pull/2107)) ([@liweitian](https://github.com/liweitian))
+- fix: resolve known bugs in LU LSP. ([#2098](https://github.com/microsoft/BotFramework-Composer/pull/2098)) ([@cosmicshuai](https://github.com/cosmicshuai))
+- fix: no longer show duplicate lg error notifications ([#2100](https://github.com/microsoft/BotFramework-Composer/pull/2100)) ([@zhixzhan](https://github.com/zhixzhan))
+- fix: replace animated screenshots with a static screenshot ([#2045](https://github.com/microsoft/BotFramework-Composer/pull/2045)) ([@benbrown](https://github.com/benbrown))
+- fix: support copy actions across dialogs ([#2198](https://github.com/microsoft/BotFramework-Composer/pull/2198)) ([@yeze322](https://github.com/yeze322))
+- fix: Default ActivityProcessed to true (bool) ([#2189](https://github.com/microsoft/BotFramework-Composer/pull/2189)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: add name for nodeMenu, arrow and endNode ([#2131](https://github.com/microsoft/BotFramework-Composer/pull/2131)) ([@cwhitten](https://github.com/cwhitten))
+- a11y: add role, name, posinset for paste in edgeMenu ([#2126](https://github.com/microsoft/BotFramework-Composer/pull/2126)) ([@alanlong9278](https://github.com/alanlong9278))
+- fix: fix 'sort()' function of steps and cases in visual editor ([#2166](https://github.com/microsoft/BotFramework-Composer/pull/2166)) ([@yeze322](https://github.com/yeze322))
+
+#### Changed
+
+- style: fix hover state nodes ui ([#2065](https://github.com/microsoft/BotFramework-Composer/pull/2065)) ([@alanlong9278](https://github.com/alanlong9278))
+
+#### Other
+
+- ci: add a11y pr title prefix for accessibility prs ([#2171](https://github.com/microsoft/BotFramework-Composer/pull/2171)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- docs: update docs to fix LU file format link ([#2071](https://github.com/microsoft/BotFramework-Composer/pull/2071)) ([@vishwacsena](https://github.com/vishwacsena))
+- chore: merge stable release into master ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- docs: clarify setup ([#2145](https://github.com/microsoft/BotFramework-Composer/pull/2145)) ([@DaraOladapo](https://github.com/DaraOladapo))
+- docs: update dotnet requirement in setup docs ([#2160](https://github.com/microsoft/BotFramework-Composer/pull/2160)) ([@vkacherov](https://github.com/vkacherov))
+- samples: Update HttpRequest sample ([#2161](https://github.com/microsoft/BotFramework-Composer/pull/2161)) ([@luhan2017](https://github.com/luhan2017))
+
 ### 02-21-2020
 
 #### Added

@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 
@@ -28,6 +29,7 @@ export const root = css`
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   .ms-List-cell {
     min-height: 36px;
   }
@@ -44,6 +46,10 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
   &: hover {
     color: #545454;
     background: #f2f2f2;
+
+    .dialog-more-btn {
+      visibility: visible;
+    }
   }
   &:focus {
     outline: none;
@@ -93,6 +99,13 @@ export const moreMenu: Partial<ICalloutContentStyles> = {
   },
 };
 
+export const menuStyle: Partial<IContextualMenuStyles> = {
+  subComponentStyles: {
+    menuItem: {},
+    callout: moreMenu,
+  },
+};
+
 export const overflowSet = css`
   width: 100%;
   height: 100%;
@@ -100,11 +113,6 @@ export const overflowSet = css`
   box-sizing: border-box;
   line-height: 36px;
   justify-content: space-between;
-  & : hover {
-    .dialog-more-btn {
-      visibility: visible;
-    }
-  }
 `;
 
 export const addButton = (depth: number) => css`

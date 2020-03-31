@@ -171,8 +171,12 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Conversation invoked'),
     subtitle: formatMessage('Invoke activity'),
   },
-  [SDKTypes.OnMessageActivity]: {
+  [SDKTypes.OnMessageEventActivity]: {
     title: formatMessage('Message events'),
+    subtitle: formatMessage('Message activity'),
+  },
+  [SDKTypes.OnMessageActivity]: {
+    title: formatMessage('Message received'),
     subtitle: formatMessage('Message recieved activity'),
   },
   [SDKTypes.OnMessageDeleteActivity]: {
@@ -223,6 +227,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKTypes.SetProperties]: {
     title: formatMessage('Set properties'),
+  },
+  [SDKTypes.SkillDialog]: {
+    title: formatMessage('Begin a skill dialog'),
+    description: formatMessage('Begin a remote skill dialog.'),
   },
   [SDKTypes.SwitchCondition]: {
     title: formatMessage('Branch: switch (multiple options)'),

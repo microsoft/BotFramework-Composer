@@ -1,7 +1,8 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
+using System.IO;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,33 +17,45 @@ using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
+using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             this.HostingEnvironment = env;
             this.Configuration = configuration;
         }
 
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddSingleton<IConfiguration>(this.Configuration);
 
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
+            services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
+
+            // Register AuthConfiguration to enable custom claim validation.
+            services.AddSingleton<AuthenticationConfiguration>();
+
+            // Register the skills client and skills request handler.
+            services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
+            services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
+            services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
             // Load settings
             var settings = new BotSettings();
@@ -53,7 +66,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             // Configure storage for deployment
             if (!string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
             {
-                storage = new CosmosDbStorage(settings.CosmosDb);
+                storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }
             else
             {
@@ -65,12 +78,15 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
 
-            var botFile = Configuration.GetSection("bot").Get<string>();
+            var botDir = Configuration.GetSection("bot").Get<string>();
 
             // manage all bot resources
-            var resourceExplorer = new ResourceExplorer().AddFolder(botFile);
+            var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
+            var rootDialog = GetRootDialog(botDir);
 
-            var credentials = new MicrosoftAppCredentials(this.Configuration["MicrosoftAppId"], this.Configuration["MicrosoftAppPassword"]);
+            services.AddSingleton(userState);
+            services.AddSingleton(conversationState);
+            services.AddSingleton(resourceExplorer);
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
             {
@@ -99,7 +115,14 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 return adapter;
             });
 
-            services.AddSingleton<IBot, ComposerBot>((sp) => new ComposerBot("Main.dialog", conversationState, userState, resourceExplorer, DebugSupport.SourceMap));
+            services.AddSingleton<IBot>(s =>
+                new ComposerBot(
+                    s.GetService<ConversationState>(),
+                    s.GetService<UserState>(),
+                    s.GetService<ResourceExplorer>(),
+                    s.GetService<BotFrameworkClient>(),
+                    s.GetService<SkillConversationIdFactoryBase>(),
+                    rootDialog));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,9 +131,26 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseWebSockets();
+            
+            app.UseRouting()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapControllers();
+               });
+        }
 
-            //app.UseHttpsRedirection();
-            app.UseMvc();
+        private string GetRootDialog(string folderPath)
+        {
+            var dir = new DirectoryInfo(folderPath);
+            foreach (var f in dir.GetFiles())
+            {
+                if (f.Extension == ".dialog")
+                {
+                    return f.Name;
+                }
+            }
+
+            throw new Exception($"Can't locate root dialog in {dir.FullName}");
         }
     }
 }

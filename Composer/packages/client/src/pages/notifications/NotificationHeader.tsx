@@ -11,10 +11,16 @@ import { notificationHeader, notificationHeaderText, dropdownStyles } from './st
 
 const createOptions = (): IDropdownOption[] => {
   const defaultOptions: IDropdownOption[] = [
-    { key: formatMessage('Show All Notifications'), text: formatMessage('All'), data: '', isSelected: true },
+    {
+      key: formatMessage('Show All Notifications'),
+      text: formatMessage('All'),
+      ariaLabel: formatMessage('Show All Notifications'),
+      data: '',
+      isSelected: true,
+    },
   ];
   DiagnosticSeverity.forEach(item => {
-    return defaultOptions.push({ key: item, text: item, data: item });
+    return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Notifications` });
   });
   return defaultOptions;
 };
@@ -28,7 +34,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
 
   return (
     <div css={notificationHeader}>
-      <div css={notificationHeaderText}>{formatMessage('Notifications')}</div>
+      <h1 css={notificationHeaderText}>{formatMessage('Notifications')}</h1>
       <Dropdown
         onChange={(event, option) => {
           if (option) onChange(option.data);
@@ -36,6 +42,7 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
         options={createOptions()}
         styles={dropdownStyles}
         data-testid="notifications-dropdown"
+        ariaLabel={formatMessage('Notification type')}
       />
     </div>
   );

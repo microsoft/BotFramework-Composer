@@ -3,21 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { getNewDesigner, seedNewDialog } from '@bfc/shared';
+import { DialogFactory, SDKTypes, DialogInfo } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
-import { BASEPATH, DialogDeleting } from '../../constants';
+import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal } from '../../components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -26,7 +25,7 @@ import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import grayComposerIcon from '../../images/grayComposerIcon.svg';
+import { navigateTo } from '../../utils';
 
 import { CreateDialogModal } from './createDialogModal';
 import {
@@ -35,19 +34,11 @@ import {
   deleteDialogContent,
   editorContainer,
   editorWrapper,
-  formEditor,
-  middleTriggerContainer,
-  middleTriggerElements,
   pageRoot,
-  triggerButton,
-  visualEditor,
   visualPanel,
 } from './styles';
-
-const addIconProps = {
-  iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
-};
+import { VisualEditor } from './VisualEditor';
+import { PropertyEditor } from './PropertyEditor';
 
 function onRenderContent(subTitle, style) {
   return (
@@ -65,33 +56,6 @@ function onRenderBreadcrumbItem(item, render) {
       {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
       {render(item)}
     </span>
-  );
-}
-
-function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
-  return (
-    <div css={middleTriggerContainer}>
-      <div css={middleTriggerElements}>
-        {isTriggerEmpty ? (
-          <Fragment>
-            {formatMessage(`This dialog has no trigger yet.`)}
-            <ActionButton
-              data-testid="MiddleAddNewTriggerButton"
-              iconProps={addIconProps}
-              css={triggerButton}
-              onClick={onClickAddTrigger}
-            >
-              {formatMessage('New Trigger ..')}
-            </ActionButton>
-          </Fragment>
-        ) : (
-          <div>
-            <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
-            {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
 
@@ -115,11 +79,9 @@ const getTabFromFragment = () => {
   }
 };
 
-const rootPath = BASEPATH.replace(/\/+$/g, '');
-
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -128,21 +90,28 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
-    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
-  const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
 
-  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
+  useEffect(() => {
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    if (!currentDialog && rootDialog) {
+      const { search } = location;
+      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
+      return;
+    }
+  }, [dialogId, dialogs, location]);
 
   useEffect(() => {
     if (match) {
-      const { dialogId } = match;
+      const { dialogId, projectId } = match;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
+        projectId: projectId,
         selected: params.get('selected'),
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
@@ -157,12 +126,6 @@ function DesignPage(props) {
     }
   }, [location]);
 
-  useEffect(() => {
-    const dialog = dialogs.find(d => d.id === dialogId);
-    const visible = get(dialog, 'triggers', []).length === 0;
-    setTriggerButtonVisibility(visible);
-  }, [dialogs, dialogId]);
-
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -171,18 +134,23 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog, luFile) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
+      projectId,
       content: dialog.content,
     };
-    const luFilePayload = {
-      id: luFile.id,
-      content: luFile.content,
-    };
+    if (luFile) {
+      const luFilePayload = {
+        id: luFile.id,
+        content: luFile.content,
+        projectId,
+      };
+      actions.updateLuFile(luFilePayload);
+    }
+
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateLuFile(luFilePayload);
     actions.updateDialog(dialogPayload);
   };
 
@@ -253,6 +221,18 @@ function DesignPage(props) {
     },
     {
       type: 'action',
+      text: formatMessage('Move'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Share',
+        },
+        onClick: () => VisualEditorAPI.moveSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
@@ -308,8 +288,14 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const content = { ...getNewDesigner(data.name, data.description), generator: `${data.name}.lg` };
-    const seededContent = seedNewDialog('Microsoft.AdaptiveDialog', content.$designer, content);
+    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKTypes.AdaptiveDialog, {
+      $designer: { name: data.name, description: data.description },
+      generator: `${data.name}.lg`,
+    });
+    if (seededContent.triggers && seededContent.triggers[0]) {
+      seededContent.triggers[0].actions = state.actionsSeed;
+    }
+
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 
@@ -334,14 +320,14 @@ function DesignPage(props) {
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id);
+      await removeDialog(id, projectId);
     }
   }
 
   async function handleDeleteTrigger(id, index) {
     const content = deleteTrigger(dialogs, id, index);
     if (content) {
-      await updateDialog({ id, content });
+      await updateDialog({ id, projectId, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -381,23 +367,9 @@ function DesignPage(props) {
               <div css={editorWrapper}>
                 <div css={visualPanel}>
                   {breadcrumbItems}
-                  <iframe
-                    id="VisualEditor"
-                    key="VisualEditor"
-                    name="VisualEditor"
-                    css={visualEditor}
-                    hidden={triggerButtonVisible || !selected}
-                    src={`${rootPath}/extensionContainer.html`}
-                    ref={addRef}
-                  />
-                  {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 </div>
-                <iframe
-                  key="FormEditor"
-                  name="FormEditor"
-                  css={formEditor}
-                  src={`${rootPath}/extensionContainer.html`}
-                />
+                <PropertyEditor />
               </div>
             </Fragment>
           </Conversation>

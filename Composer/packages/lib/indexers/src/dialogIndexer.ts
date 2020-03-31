@@ -3,16 +3,23 @@
 
 import has from 'lodash/has';
 import uniq from 'lodash/uniq';
-import { extractLgTemplateRefs } from '@bfc/shared';
+import {
+  extractLgTemplateRefs,
+  SDKTypes,
+  ITrigger,
+  DialogInfo,
+  FileInfo,
+  LgTemplateJsonPath,
+  Diagnostic,
+  ReferredLuIntents,
+} from '@bfc/shared';
 
 import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
-import { ITrigger, DialogInfo, FileInfo, LgTemplateJsonPath, ReferredLuIntents } from './type';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
-import { Diagnostic } from './diagnostic';
 import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
-
+import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -43,7 +50,7 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
       }
       // look for other $type
       switch (value.$type) {
-        case 'Microsoft.SendActivity':
+        case SDKTypes.SendActivity:
           targets.push({ value: value.activity, path: path });
           break; // if we want stop at some $type, do here
         case 'location':
@@ -80,7 +87,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.OnIntent') {
+    if (has(value, '$type') && value.$type === SDKTypes.OnIntent) {
       const intentName = value.intent;
       intents.push({
         name: intentName,
@@ -95,7 +102,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
 
 // find out all triggers given dialog
 function ExtractTriggers(dialog): ITrigger[] {
-  const trigers: ITrigger[] = [];
+  const triggers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
    * @param value , current node value    *
@@ -111,14 +118,14 @@ function ExtractTriggers(dialog): ITrigger[] {
             id: `triggers[${index}]`,
             displayName: '',
             type: rule.$type,
-            isIntent: rule.$type === 'Microsoft.OnIntent',
+            isIntent: rule.$type === SDKTypes.OnIntent,
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;
           } else if (trigger.isIntent && has(rule, 'intent')) {
             trigger.displayName = rule.intent;
           }
-          trigers.push(trigger);
+          triggers.push(trigger);
         }
       });
       return true;
@@ -126,7 +133,7 @@ function ExtractTriggers(dialog): ITrigger[] {
     return false;
   };
   JsonWalk('$', dialog, visitor);
-  return trigers;
+  return triggers;
 }
 
 // find out all referred dialog
@@ -139,7 +146,7 @@ function ExtractReferredDialogs(dialog): string[] {
    * */
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
     // it's a valid schema dialog node.
-    if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+    if (has(value, '$type') && value.$type === SDKTypes.BeginDialog) {
       const dialogName = value.dialog;
       dialogs.push(dialogName);
     }
@@ -204,6 +211,7 @@ function parse(id: string, content: any, schema: any) {
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
+    intentTriggers: ExtractIntentTriggers(content),
   };
 }
 
@@ -215,13 +223,14 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
-          const isRoot = id === 'Main';
+          const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
           const dialog = {
             id,
             isRoot,
             displayName: isRoot ? `${botName}.Main` : id,
             content: dialogJson,
             relativePath: file.relativePath,
+            lastModified: file.lastModified,
             ...parse(id, dialogJson, schema),
           };
           dialogs.push(dialog);

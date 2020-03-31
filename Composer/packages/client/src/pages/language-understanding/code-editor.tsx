@@ -3,12 +3,11 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import { luIndexer, combineMessage, isValid, filterTemplateDiagnostics } from '@bfc/indexers';
+import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
@@ -20,17 +19,17 @@ const { parse } = luIndexer;
 const lspServerPath = '/lu-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
-  fileId: string;
+  dialogId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
-  const { luFiles } = state;
-  const { fileId } = props;
-  const file = luFiles?.find(({ id }) => id === fileId);
+  const { luFiles, locale, projectId } = state;
+  const { dialogId } = props;
+  const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [httpErrorMsg, setHttpErrorMsg] = useState('');
-  const [luEditor, setLuEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  const [luEditor, setLuEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
   const searchSectionName = querystring.parse(search).t;
@@ -43,7 +42,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
-  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : undefined;
+  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
 
   const inlineMode = !!intent;
   const [content, setContent] = useState(intent?.Body || file?.content);
@@ -53,20 +52,16 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     if (!file || isEmpty(file) || content) return;
     const value = intent ? intent.Body : file.content;
     setContent(value);
-  }, [file, sectionId]);
+  }, [file, sectionId, projectId]);
 
-  const errorMsg = useMemo(() => {
-    const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
-    const isInvalid = !isValid(currentDiagnostics);
-    return isInvalid ? combineMessage(diagnostics) : httpErrorMsg;
-  }, [diagnostics, httpErrorMsg]);
+  const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
-  const editorDidMount = (luEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount: EditorDidMount = (_getValue, luEditor) => {
     setLuEditor(luEditor);
   };
 
   useEffect(() => {
-    if (luEditor && line !== undefined) {
+    if (luEditor) {
       window.requestAnimationFrame(() => {
         luEditor.revealLine(line);
         luEditor.focus();
@@ -81,6 +76,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         if (!file || !intent) return;
         const { Name } = intent;
         const payload = {
+          projectId,
           file,
           intentName: Name,
           intent: {
@@ -90,7 +86,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         };
         actions.updateLuIntent(payload);
       }, 500),
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const updateLuFile = useMemo(
@@ -99,12 +95,13 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         if (!file) return;
         const { id } = file;
         const payload = {
+          projectId,
           id,
           content,
         };
         actions.updateLuFile(payload);
       }, 500),
-    [file]
+    [file, projectId]
   );
 
   const updateDiagnostics = useMemo(
@@ -131,7 +128,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           setDiagnostics(diagnostics);
         }
       }, 1000),
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const _onChange = useCallback(
@@ -145,11 +142,12 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         updateLuFile(value);
       }
     },
-    [file, intent]
+    [file, intent, projectId]
   );
 
   const luOption = {
-    fileId,
+    projectId,
+    fileId: file?.id || dialogId,
     sectionId: intent?.Name,
   };
 
@@ -158,7 +156,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
+      errorMessage={httpErrorMsg}
+      diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{
         path: lspServerPath,

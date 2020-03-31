@@ -7,14 +7,15 @@ import createCache from '@emotion/cache';
 import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { ShellData, ShellApi } from '@bfc/shared';
+import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
-import { NodeRendererContext } from './store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { UISchemaContext } from './store/UISchemaContext';
 import { UISchemaProvider } from './schema/uischemaProvider';
 import { uiSchema } from './schema/uischema';
+import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -36,6 +37,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   data: inputData,
   shellApi,
   hosted,
+  lgFiles,
+  schema,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -57,27 +60,32 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     onSelect,
     onCopy,
     saveData,
+    createDialog,
     updateLgTemplate,
     getLgTemplates,
     copyLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
     undo,
     redo,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  const nodeContext = {
+  const nodeContext: NodeRendererContextValue = {
     focusedId,
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
+    getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
-    copyLgTemplate,
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
     removeLgTemplate,
     removeLgTemplates,
+    removeLuIntent,
+    dialogFactory: new DialogFactory(schema),
   };
 
   return (
@@ -95,6 +103,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
+                onCreateDialog={createDialog}
                 onOpen={x => navTo(x)}
                 onChange={x => saveData(x)}
                 onSelect={onSelect}
@@ -110,9 +119,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps extends ShellData {
+export interface VisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
+  schema: any;
 }
 
 VisualDesigner.defaultProps = {

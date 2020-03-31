@@ -1,7 +1,7 @@
 /// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-declare module '@bfcomposer/bf-lu/lib/parser' {
+declare module '@microsoft/bf-lu/lib/parser/composerindex' {
   namespace parser {
     function parseFile(fileContent: any, log: any, locale: any): any;
     function validateLUISBlob(LUISJSONBlob: any): any;

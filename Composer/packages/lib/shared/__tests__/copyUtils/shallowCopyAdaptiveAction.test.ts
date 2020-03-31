@@ -8,13 +8,13 @@ describe('shallowCopyAdaptiveAction', () => {
   it('can copy BeginDialog', () => {
     const beginDialog = {
       $type: 'Microsoft.BeginDialog',
-      dialog: 'AddToDo',
+      dialog: 'addtodo',
     };
 
     expect(shallowCopyAdaptiveAction(beginDialog, externalApi)).toEqual({
       $type: 'Microsoft.BeginDialog',
       $designer: { id: '5678' },
-      dialog: 'AddToDo',
+      dialog: 'addtodo',
     });
   });
 });

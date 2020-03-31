@@ -28,8 +28,14 @@ export const titleStyle: any = {
   fontSize: '18px',
   lineHeight: '24px',
   fontWeight: 600,
+  display: 'flex',
 };
 
+export const titleContentStyle = {
+  fontSize: '18px',
+  fontWeight: 600,
+  margin: '0px',
+};
 export const subtitleStyle: any = {
   whiteSpace: 'nowrap',
   color: ObiColors.LightGray,

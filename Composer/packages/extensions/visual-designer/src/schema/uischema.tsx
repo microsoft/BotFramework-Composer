@@ -58,13 +58,18 @@ const BaseInputSchema: UIWidget = {
       data.$type === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
-          renderItem={item => (
-            <BorderedDiv height={20} title={item.value}>
-              {item.value}
-            </BorderedDiv>
-          )}
+          renderItem={item => {
+            const value = typeof item === 'object' ? item.value : item;
+            return (
+              <BorderedDiv height={20} title={value}>
+                {value}
+              </BorderedDiv>
+            );
+          }}
         />
-      ) : null,
+      ) : (
+        <>{data.choices}</>
+      ),
     footer: data =>
       data.property ? (
         <>
@@ -152,6 +157,25 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
+  [SDKTypes.SkillDialog]: {
+    'ui:widget': CardTemplate,
+    header: {
+      'ui:widget': ActionHeader,
+    },
+    body: data => (
+      <SingleLineDiv>
+        <FixedInfo>Host </FixedInfo>
+        {data.skillEndpoint || '?'}
+      </SingleLineDiv>
+    ),
+    footer: data =>
+      data.resultProperty ? (
+        <>
+          {data.resultProperty}
+          <FixedInfo> = Result</FixedInfo>
+        </>
+      ) : null,
+  },
   [SDKTypes.ReplaceDialog]: {
     'ui:widget': ActionCard,
     content: {
@@ -184,7 +208,7 @@ export const uiSchema: UISchema = {
   },
   [SDKTypes.SetProperty]: {
     'ui:widget': ActionCard,
-    content: data => `${data.property || '?'} = ${data.value || '?'}`,
+    content: data => `${data.property || '?'} : ${data.value || '?'}`,
   },
   [SDKTypes.SetProperties]: {
     'ui:widget': ActionCard,
@@ -192,8 +216,9 @@ export const uiSchema: UISchema = {
       <ListOverview
         items={data.assignments}
         itemPadding={8}
-        renderItem={item => {
-          const content = `${item.property} = ${item.value}`;
+        renderItem={({ property, value }) => {
+          const v = typeof value === 'object' ? JSON.stringify(value) : value;
+          const content = `${property} : ${v}`;
           return (
             <SingleLineDiv height={16} title={content}>
               {content}

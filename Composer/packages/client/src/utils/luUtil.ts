@@ -7,12 +7,15 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { LuFile, DialogInfo } from '@bfc/shared';
+
+import { getBaseName } from './fileUtil';
 export * from '@bfc/indexers/lib/utils/luUtil';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter(file => {
-    if (dialogs.findIndex(dialog => dialog.luFile === file.id) !== -1) {
+    const idWithOutLocale = getBaseName(file.id);
+    if (dialogs.findIndex(dialog => dialog.luFile === idWithOutLocale) !== -1) {
       return true;
     }
     return false;

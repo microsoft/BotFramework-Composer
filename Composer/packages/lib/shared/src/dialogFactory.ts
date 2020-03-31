@@ -1,28 +1,41 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import nanoid from 'nanoid/generate';
+import { JSONSchema7 } from 'json-schema';
+import merge from 'lodash/merge';
 
 import { DesignerData } from './types/sdk';
-import { appschema } from './appschema';
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
 import { SDKTypes } from './types';
+import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
+import { generateUniqueId } from './generateUniqueId';
+
 interface DesignerAttributes {
   name: string;
   description: string;
 }
 
 const initialInputDialog = {
-  allowInterruptions: 'false',
+  allowInterruptions: false,
   prompt: '',
   unrecognizedPrompt: '',
   invalidPrompt: '',
   defaultValueResponse: '',
 };
 
-const initialDialogShape = {
+export function getNewDesigner(name: string, description: string) {
+  return {
+    $designer: {
+      name,
+      description,
+      id: generateUniqueId(6),
+    },
+  };
+}
+
+const initialDialogShape = () => ({
   [SDKTypes.AdaptiveDialog]: {
     $type: SDKTypes.AdaptiveDialog,
     triggers: [
@@ -33,7 +46,7 @@ const initialDialogShape = {
     ],
   },
   [SDKTypes.OnConversationUpdateActivity]: {
-    $type: 'Microsoft.OnConversationUpdateActivity',
+    $type: SDKTypes.OnConversationUpdateActivity,
     actions: [
       {
         $type: SDKTypes.Foreach,
@@ -65,25 +78,51 @@ const initialDialogShape = {
   [SDKTypes.DateTimeInput]: initialInputDialog,
   [SDKTypes.NumberInput]: initialInputDialog,
   [SDKTypes.TextInput]: initialInputDialog,
-};
-
-export function getNewDesigner(name: string, description: string) {
-  return {
-    $designer: {
-      name,
-      description,
-      id: nanoid('1234567890', 6),
-    },
-  };
-}
+});
 
 export const getDesignerId = (data?: DesignerData) => {
   const newDesigner: DesignerData = {
     ...data,
-    id: nanoid('1234567890', 6),
+    id: generateUniqueId(6),
   };
 
   return newDesigner;
+};
+
+export const deepCopyAction = async (data, copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
+  return await copyAdaptiveAction(data, {
+    getDesignerId,
+    transformLgField: copyLgTemplate,
+  });
+};
+
+export const deepCopyActions = async (actions: any[], copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
+  // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
+  //        so we have to call them sequentially
+  // TODO: copy them parralleled via Promise.all() after optimizing lg api.
+  const copiedActions: any[] = [];
+  for (const action of actions) {
+    // Deep copy nodes with external resources
+    const copy = await deepCopyAction(action, copyLgTemplate);
+    copiedActions.push(copy);
+  }
+  return copiedActions;
+};
+
+export const deleteAction = (
+  data: MicrosoftIDialog,
+  deleteLgTemplates: (templates: string[]) => any,
+  deleteLuIntents: (luIntents: string[]) => any
+) => {
+  return deleteAdaptiveAction(data, deleteLgTemplates, deleteLuIntents);
+};
+
+export const deleteActions = (
+  inputs: MicrosoftIDialog[],
+  deleteLgTemplates: (templates: string[]) => any,
+  deleteLuIntents: (luIntents: string[]) => any
+) => {
+  return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
 const assignDefaults = (data: {}, currentSeed = {}) => {
@@ -102,43 +141,45 @@ const assignDefaults = (data: {}, currentSeed = {}) => {
   return Object.keys(currentSeed).length > 0 ? currentSeed : undefined;
 };
 
-export const seedDefaults = (type: string) => {
-  if (!appschema.definitions[type]) return {};
-  const { properties } = appschema.definitions[type];
-  return assignDefaults(properties);
-};
+class DialogFactory {
+  private schema: JSONSchema7 | undefined;
 
-export const deepCopyAction = async (
-  data,
-  copyLgTemplateToNewNode: (lgTemplateName: string, newNodeId: string) => Promise<string>
-) => {
-  return await copyAdaptiveAction(data, {
-    getDesignerId,
-    copyLgTemplate: copyLgTemplateToNewNode,
-  });
-};
+  public constructor(schema?: JSONSchema7) {
+    this.schema = schema;
+  }
 
-export const deleteAction = (data: MicrosoftIDialog, deleteLgTemplates: (templates: string[]) => any) => {
-  return deleteAdaptiveAction(data, deleteLgTemplates);
-};
+  public create(
+    $type: SDKTypes,
+    overrides: {
+      $designer?: Partial<DesignerAttributes>;
+      [key: string]: any;
+    } = {}
+  ) {
+    if (!this.schema) {
+      throw new Error('DialogFactory missing schema.');
+    }
 
-export const deleteActions = (inputs: MicrosoftIDialog[], deleteLgTemplates: (templates: string[]) => any) => {
-  return deleteAdaptiveActionList(inputs, deleteLgTemplates);
-};
+    const { $designer, ...propertyOverrides } = overrides;
+    const defaultProperties = initialDialogShape()[$type] || {};
 
-export const seedNewDialog = (
-  $type: string,
-  designerAttributes: Partial<DesignerAttributes> = {},
-  optionalAttributes: object = {}
-): object => {
-  return {
-    $type,
-    $designer: {
-      id: nanoid('1234567890', 6),
-      ...designerAttributes,
-    },
-    ...seedDefaults($type),
-    ...(initialDialogShape[$type] || {}),
-    ...optionalAttributes,
-  };
-};
+    return merge(
+      { $type, $designer: merge({ id: generateUniqueId(6) }, $designer) },
+      this.seedDefaults($type),
+      defaultProperties,
+      propertyOverrides
+    );
+  }
+
+  private seedDefaults($type: SDKTypes) {
+    if (!this.schema?.definitions?.[$type]) return {};
+    const def = this.schema.definitions[$type];
+
+    if (def && typeof def === 'object' && def.properties) {
+      return assignDefaults(def.properties);
+    }
+
+    return {};
+  }
+}
+
+export { DialogFactory };
