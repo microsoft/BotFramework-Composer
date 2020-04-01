@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import has from 'lodash/has';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 import { VisitorFunc, JsonWalk } from './jsonWalk';
 
@@ -17,7 +17,7 @@ export function autofixReferInDialog(dialogId: string, content: string): string 
 
     // fix dialog referrence
     const visitor: VisitorFunc = (_path: string, value: any) => {
-      if (has(value, '$type') && value.$type === SDKTypes.BeginDialog) {
+      if (has(value, '$type') && value.$type === SDKKinds.BeginDialog) {
         const dialogName = value.dialog;
         value.dialog = dialogName.toLowerCase();
       }
