@@ -8,10 +8,10 @@ import * as immutable from './immutable';
 import * as lazy from './lazy';
 import * as model from './model';
 
-export const map = <S, A extends redux.Action>(inner: redux.Reducer<S, A>): redux.Reducer<ReadonlyArray<S>, A> => (
-  source,
-  action
-) => immutable.map<S>(item => inner(item, action))(immutable.some(source));
+export const map = <S, A extends protocol.Action>(
+  inner: protocol.Reducer<S, A>
+): protocol.Reducer<ReadonlyArray<S>, A> => (source, action) =>
+  immutable.map<S>(item => inner(item, action))(immutable.some(source));
 
 type Action = protocol.Action;
 
@@ -53,24 +53,24 @@ export const hasChildVariables = <S extends model.Thing<HasChildVariables> & mod
   }
 };
 
-export const variable: redux.Reducer<model.Variable, Action> = (state, action) =>
+export const variable: protocol.Reducer<model.Variable, Action> = (state, action) =>
   hasChildVariables<model.Variable>(state, action);
 
-export const variables: redux.Reducer<ReadonlyArray<model.Variable>, Action> = map(variable);
+export const variables: protocol.Reducer<ReadonlyArray<model.Variable>, Action> = map(variable);
 
-export const scope: redux.Reducer<model.Scope, Action> = (state, action) =>
+export const scope: protocol.Reducer<model.Scope, Action> = (state, action) =>
   hasChildVariables<model.Scope>(state, action);
 
-export const scopes: redux.Reducer<ReadonlyArray<model.Scope>, Action> = map(scope);
+export const scopes: protocol.Reducer<ReadonlyArray<model.Scope>, Action> = map(scope);
 
-export const stackFrame: redux.Reducer<model.StackFrame, Action> = (state, action) => {
+export const stackFrame: protocol.Reducer<model.StackFrame, Action> = (state, action) => {
   if (state === undefined) {
     throw new Error();
   }
 
   const { remote } = state;
 
-  const lazyScopes: redux.Reducer<lazy.Lazy<ReadonlyArray<model.Scope>>, Action> = (state, action) =>
+  const lazyScopes: protocol.Reducer<lazy.Lazy<ReadonlyArray<model.Scope>>, Action> = (state, action) =>
     lazy.recurse(
       state,
       action,
@@ -96,7 +96,7 @@ export const stackFrame: redux.Reducer<model.StackFrame, Action> = (state, actio
 
 export const stackFrames = map(stackFrame);
 
-const threadEvent: redux.Reducer<model.Thread, Action> = (state, action) => {
+const threadEvent: protocol.Reducer<model.Thread, Action> = (state, action) => {
   if (state === undefined) {
     throw new Error();
   }
@@ -121,14 +121,14 @@ const threadEvent: redux.Reducer<model.Thread, Action> = (state, action) => {
   return state;
 };
 
-export const thread: redux.Reducer<model.Thread, Action> = (state, action) => {
+export const thread: protocol.Reducer<model.Thread, Action> = (state, action) => {
   if (state === undefined) {
     throw new Error();
   }
 
   const { remote } = state;
 
-  const lazyStackFrames: redux.Reducer<lazy.Lazy<ReadonlyArray<model.StackFrame>>, Action> = (state, action) =>
+  const lazyStackFrames: protocol.Reducer<lazy.Lazy<ReadonlyArray<model.StackFrame>>, Action> = (state, action) =>
     lazy.recurse(
       state,
       action,
@@ -157,7 +157,7 @@ export const thread: redux.Reducer<model.Thread, Action> = (state, action) => {
   return reducer(state, action);
 };
 
-export const threads: redux.Reducer<ReadonlyArray<model.Thread>, Action> = (state, action) => {
+export const threads: protocol.Reducer<ReadonlyArray<model.Thread>, Action> = (state, action) => {
   if (state === undefined) {
     return [];
   }
@@ -189,7 +189,7 @@ export const threads: redux.Reducer<ReadonlyArray<model.Thread>, Action> = (stat
   return map(thread)(state, action);
 };
 
-export const lazyThreads: redux.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>>, Action> = (state, action) =>
+export const lazyThreads: protocol.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>>, Action> = (state, action) =>
   lazy.recurse(
     state,
     action,
@@ -217,7 +217,7 @@ export const lazyThreads: redux.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>>, 
     threads
   );
 
-export const outputs: redux.Reducer<ReadonlyArray<model.Output>, Action> = (state, action) => {
+export const outputs: protocol.Reducer<ReadonlyArray<model.Output>, Action> = (state, action) => {
   if (state === undefined) {
     return [];
   }
