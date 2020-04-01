@@ -65,9 +65,7 @@ const resolveModule = (resolveFn, filePath) => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build/public'), // resolveApp('../server/build/public'),
-  appDist: resolveApp('dist'),
-  appDistElectron: resolveApp('../electron-server/dist'),
+  appBuild: resolveApp('build/public'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   extensionContainerHtml: resolveApp('public/extensionContainer.html'),
