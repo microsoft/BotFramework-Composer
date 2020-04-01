@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "892616",
     "name": "Actions"
@@ -7,7 +7,7 @@
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
   "recognizer": {
-    "$type": "Microsoft.RegexRecognizer",
+    "$kind": "Microsoft.RegexRecognizer",
     "intents": [
       {
         "intent": "Actions",
@@ -69,13 +69,13 @@
   },
   "triggers": [
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "764307"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "actions",
           "$designer": {
             "id": "124654"
@@ -85,168 +85,168 @@
       "intent": "Actions"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "691722"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "endturn"
         }
       ],
       "intent": "EndTurn"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "343907"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "ifcondition"
         }
       ],
       "intent": "IfCondition"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "608729"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "enddialog"
         }
       ],
       "intent": "EndDialog"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "818726"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "editarray"
         }
       ],
       "intent": "EditArray"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "894760"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "httprequest"
         }
       ],
       "intent": "HttpRequest"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "273555"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "switchcondition"
         }
       ],
       "intent": "SwitchCondition"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "277723"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "repeatdialog"
         }
       ],
       "intent": "RepeatDialog"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "226996"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "traceandlog"
         }
       ],
       "intent": "TraceAndLog"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "602168"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "editactions"
         }
       ],
       "intent": "EditActions"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "413376"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "replacedialog"
         }
       ],
       "intent": "ReplaceDialog"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "173056"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "emitevent"
         }
       ],
       "intent": "EmitEvent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "242117"
       },
       "actions": [
         {
-          "$type": "Microsoft.EndDialog"
+          "$kind": "Microsoft.EndDialog"
         }
       ],
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.OnUnknownIntent",
+      "$kind": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "560915"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "640616"
           },
@@ -255,14 +255,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Greeting (ConversationUpdate)",
         "id": "954390"
       },
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -270,7 +270,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -278,7 +278,7 @@
               "condition": "=string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "640617",
                     "name": "Send a response"

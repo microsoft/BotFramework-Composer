@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { DialogFactory, SDKTypes, DialogInfo } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
 import { VisualEditorAPI } from '../../messenger/FrameAPI';
 import { TestController } from '../../TestController';
@@ -288,7 +288,7 @@ function DesignPage(props) {
   }, [dialogs, breadcrumb]);
 
   async function onSubmit(data: { name: string; description: string }) {
-    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKTypes.AdaptiveDialog, {
+    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
     });

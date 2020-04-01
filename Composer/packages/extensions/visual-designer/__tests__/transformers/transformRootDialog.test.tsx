@@ -13,7 +13,7 @@ test('should return safely when input null value', () => {
 test('should parse stepGroup when input TodoBotMain with steps', () => {
   const jsonWithSteps = {
     ...TodoBotMain,
-    actions: [{ $type: 'any' }],
+    actions: [{ $kind: 'any' }],
   };
   const result = transformRootDialog(jsonWithSteps);
   if (!result) throw new Error('transformRootDialog got null result.');

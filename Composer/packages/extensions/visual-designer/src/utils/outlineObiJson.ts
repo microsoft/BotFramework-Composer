@@ -16,11 +16,11 @@ export function outlineObiJson(input: any) {
 
   const outline: any = {};
   let childrenKeys = DEFAULT_CHILDREN_KEYS;
-  if (input.$type && childrenMap[input.$type]) {
-    childrenKeys = childrenMap[input.$type];
+  if (input.$kind && childrenMap[input.$kind]) {
+    childrenKeys = childrenMap[input.$kind];
   }
 
-  outline.$type = input.$type;
+  outline.$kind = input.$kind;
 
   for (const childrenKey of childrenKeys) {
     const children = input[childrenKey];
