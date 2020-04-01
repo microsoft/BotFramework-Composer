@@ -59,3 +59,20 @@ export const deepEquals = (one: unknown, two: unknown): boolean => {
     return same;
   }
 };
+
+type ForIn<T> = Extract<keyof T, string>;
+type ForInValue<T> = Exclude<T[ForIn<T>], undefined>;
+
+export const mapObject = <T, R>(
+  sources: T,
+  mapper: (source: ForInValue<T>, key: ForIn<T>) => R
+): Record<keyof T, R> => {
+  const targets: Partial<Record<keyof T, R>> = {};
+  for (const key in sources) {
+    const source = sources[key];
+    const target = mapper((source as unknown) as ForInValue<T>, key);
+    targets[key] = target;
+  }
+
+  return targets as Record<keyof T, R>;
+};
