@@ -19,7 +19,7 @@ export function resolvePropSchema(
   let propSchema: JSONSchema7 = schema.properties;
 
   for (const part of pathParts) {
-    propSchema = resolveRef((propSchema?.properties || propSchema)?.[part], definitions);
+    propSchema = resolveRef(propSchema?.[part], definitions);
   }
 
   return propSchema;
