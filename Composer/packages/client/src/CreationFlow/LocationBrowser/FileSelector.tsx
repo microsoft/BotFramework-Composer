@@ -206,12 +206,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       title: item, // title shown on hover
     };
   });
-  breadcrumbItems.splice(0, 0, {
-    text: '/', // displayed text
-    key: '/', // value returned
-    title: '/', // title shown on hover
-  });
-
+  if (currentPath) {
+    breadcrumbItems.splice(0, 0, {
+      text: '/', // displayed text
+      key: '/', // value returned
+      title: '/', // title shown on hover
+    });
+  }
   breadcrumbItems.reverse();
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
