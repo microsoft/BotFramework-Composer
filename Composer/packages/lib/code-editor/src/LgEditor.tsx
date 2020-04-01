@@ -15,6 +15,7 @@ const LG_HELP =
   'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 const placeholder = `> To learn more about the LG file format, read the documentation at
 > ${LG_HELP}`;
+const LANGUAGE_NAME = 'botbuilderlg';
 
 export interface LGOption {
   projectId?: string;
@@ -63,7 +64,9 @@ export function LgEditor(props: LGLSPEditorProps) {
   const lgServer = languageServer || defaultLGServer;
 
   const onInit: OnInit = monaco => {
-    registerLGLanguage(monaco);
+    if (!monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) {
+      registerLGLanguage(monaco);
+    }
 
     if (typeof onInitProp === 'function') {
       onInitProp(monaco);
@@ -82,7 +85,7 @@ export function LgEditor(props: LGLSPEditorProps) {
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
-          const languageClient = createLanguageClient('LG Language Client', ['botbuilderlg'], connection);
+          const languageClient = createLanguageClient('LG Language Client', [LANGUAGE_NAME], connection);
           if (!window.monacoLGEditorInstance) {
             window.monacoLGEditorInstance = languageClient;
           }
@@ -108,7 +111,7 @@ export function LgEditor(props: LGLSPEditorProps) {
       {...restProps}
       onInit={onInit}
       theme="lgtheme"
-      language="botbuilderlg"
+      language={LANGUAGE_NAME}
       options={options}
       editorDidMount={editorDidMount}
     />
