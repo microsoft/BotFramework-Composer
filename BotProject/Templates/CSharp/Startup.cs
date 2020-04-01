@@ -89,6 +89,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 HostContext.Current.Set<IConfiguration>(Configuration);
 
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+
                 if (!string.IsNullOrEmpty(settings?.ApplicationInsights?.InstrumentationKey))
                 {
                     var telemetryConfig = new TelemetryConfiguration(settings?.ApplicationInsights?.InstrumentationKey);
@@ -135,7 +136,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseStaticFiles();
             app.UseWebSockets();
             app.UseNamedPipes();
-
             app.UseRouting()
                .UseEndpoints(endpoints =>
                {

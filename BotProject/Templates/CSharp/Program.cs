@@ -42,11 +42,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 }
 
-                if (!env.IsDevelopment())
-                {
-                    builder.AddUserSecrets<Startup>();
-                }
-
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);
             })
