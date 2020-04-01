@@ -82,7 +82,7 @@ export const stackFrame: protocol.Reducer<model.StackFrame, Action> = (state, ac
       scopes
     );
 
-  return immutable.combinePartial<model.StackFrame, Action>({
+  return immutable.combineFull<model.StackFrame, Action>({
     lazyScopes,
   })(state, action);
 };
@@ -142,7 +142,7 @@ export const thread: protocol.Reducer<model.Thread, Action> = (state, action) =>
 
   const reducer = immutable.combineSeries(
     threadEvent,
-    immutable.combinePartial<model.Thread, Action>({
+    immutable.combineFull<model.Thread, Action>({
       lazyStackFrames,
     })
   );

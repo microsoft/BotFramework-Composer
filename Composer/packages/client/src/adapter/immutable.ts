@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as redux from 'redux';
+export type ReducerNull<S, A> = (state: S | undefined, action: A) => S;
+export type ReducerFull<S, A> = (state: S, action: A) => S;
 
-export type Reducer<S, A> = (state: S | undefined, action: A) => S;
-
-export const map = <S, A>(reducer: Reducer<S, A>): Reducer<ReadonlyArray<S>, A> => (sources, action) => {
+export const map = <S, A>(reducer: ReducerNull<S, A>): ReducerNull<ReadonlyArray<S>, A> => (sources, action) => {
   if (sources === undefined) {
     sources = [];
   }
@@ -26,22 +25,22 @@ export const map = <S, A>(reducer: Reducer<S, A>): Reducer<ReadonlyArray<S>, A> 
   return targets != undefined ? targets : sources;
 };
 
-export type PartialReducerMap<S, A extends redux.Action> = Partial<redux.ReducersMapObject<S, A>>;
+export type ReducerByKeyNull<S, A> = {
+  [K in keyof S]: ReducerNull<S[K], A>;
+};
 
-export const combinePartial = <S, A extends redux.Action>(
-  reducersByKey: PartialReducerMap<S, A>
-): redux.Reducer<S, A> => (sources, action) => {
-  if (sources === undefined) {
-    throw new Error();
-  }
+export type ReducerByKeyFull<S, A> = {
+  [K in keyof S]?: ReducerNull<S[K], A>;
+};
 
-  let targets: S | undefined = undefined;
-  for (const key in sources) {
+export const combineFull = <S, A>(reducerByKey: ReducerByKeyFull<S, A>): ReducerFull<S, A> => (sources, action) => {
+  let targets = sources;
+  for (const key in reducerByKey) {
     const source = sources[key];
-    const reducer = reducersByKey[key];
+    const reducer = reducerByKey[key];
     const target = reducer !== undefined ? reducer(source, action) : source;
-    if (targets !== undefined || source !== target) {
-      if (targets === undefined) {
+    if (source !== target) {
+      if (sources === targets) {
         targets = { ...sources };
       }
 
@@ -49,51 +48,36 @@ export const combinePartial = <S, A extends redux.Action>(
     }
   }
 
-  return targets !== undefined ? targets : sources;
+  return targets;
 };
 
-export type ReducerByKey<S, A> = {
-  [K in keyof S]: Reducer<S[K], A>;
-};
+export const combine = <S, A>(reducerByKey: ReducerByKeyNull<S, A>): ReducerNull<S, A> => {
+  const full = combineFull(reducerByKey);
 
-export const combine = <S, A>(reducerByKey: ReducerByKey<S, A>): Reducer<S, A> => (sources, action) => {
-  if (sources !== undefined) {
-    let targets = sources;
-    for (const key in reducerByKey) {
-      const source = sources[key];
-      const reducer = reducerByKey[key];
-      const target = reducer(source, action);
-      if (source !== target) {
-        if (sources === targets) {
-          targets = { ...sources };
-        }
-
-        targets[key] = target;
-      }
+  return (sources, action) => {
+    if (sources !== undefined) {
+      return full(sources, action);
     }
 
-    return targets;
-  }
+    const targets: Partial<S> = {};
+    for (const key in reducerByKey) {
+      const reducer = reducerByKey[key];
+      const target = reducer(undefined, action);
+      targets[key] = target;
+    }
 
-  const targets: Partial<S> = {};
-  for (const key in reducerByKey) {
-    const reducer = reducerByKey[key];
-    const target = reducer(undefined, action);
-    targets[key] = target;
-  }
-
-  return targets as S;
+    return targets as S;
+  };
 };
 
-export const combineSeries = <S, A extends redux.Action>(
-  ...reducers: Array<redux.Reducer<S, A>>
-): redux.Reducer<S, A> => (state, action) => {
+export const combineSeries = <S, A>(
+  reducer: ReducerNull<S, A>,
+  ...reducers: Array<ReducerFull<S, A>>
+): ReducerNull<S, A> => (state, action) => {
+  state = reducer(state, action);
+
   for (const reducer of reducers) {
     state = reducer(state, action);
-  }
-
-  if (state === undefined) {
-    throw new Error();
   }
 
   return state;
