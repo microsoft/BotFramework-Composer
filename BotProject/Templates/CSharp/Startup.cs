@@ -4,25 +4,19 @@
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
@@ -56,6 +50,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
+
             services.AddApplicationInsightsTelemetry();
 
             // Load settings
@@ -94,14 +89,16 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 HostContext.Current.Set<IConfiguration>(Configuration);
 
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+                if (!string.IsNullOrEmpty(settings?.ApplicationInsights?.InstrumentationKey))
+                {
+                    var telemetryConfig = new TelemetryConfiguration(settings?.ApplicationInsights?.InstrumentationKey);
+                    var telemetryClient = new TelemetryClient(telemetryConfig);
+                    adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(telemetryClient), true));
+                }
+
                 adapter
                   .UseStorage(storage)
                   .UseState(userState, conversationState);
-
-                if (!string.IsNullOrEmpty(settings?.AppInsights?.InstrumentationKey))
-                {
-                    adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(new TelemetryClient()), true));
-                }
 
                 if (!string.IsNullOrEmpty(settings?.BlobStorage?.ConnectionString) && !string.IsNullOrEmpty(settings?.BlobStorage?.Container))
                 {

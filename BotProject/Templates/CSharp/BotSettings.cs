@@ -16,7 +16,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
         public CosmosDbPartitionedStorageOptions CosmosDb { get; set; }
 
-        public TelemetryConfiguration AppInsights { get; set; }
+        public TelemetryConfiguration ApplicationInsights { get; set; }
 
         public class BlobStorageConfiguration
         {
