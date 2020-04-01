@@ -37,7 +37,7 @@ export const PublishController = {
     const configs = allTargets.filter(t => t.name === target);
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
-
+    console.log(method);
     // append config from client(like sensitive settings)
     config.configuration = {
       ...config.configuration,
@@ -82,10 +82,10 @@ export const PublishController = {
 
     // find publish config by name.
     const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
-
     const configs = allTargets.filter(t => t.name === target);
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
+    console.log(method);
     if (
       config &&
       pluginLoader.extensions.publish[method] &&

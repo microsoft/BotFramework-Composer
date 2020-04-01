@@ -81,6 +81,13 @@ const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
+      to: `/bot/${projectId}/publish`,
+      iconName: 'CloudUpload',
+      labelName: formatMessage('Publish'),
+      exact: true,
+      disabled: !botLoaded,
+    },
+    {
       to: `/bot/${projectId}/setting/`,
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
