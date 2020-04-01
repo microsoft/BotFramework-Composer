@@ -71,3 +71,24 @@ export interface ShellApi {
   undo: any;
   redo: any;
 }
+
+export interface SyncShellApi {
+  saveData: <T = any>(newData: T, updatePath?: string) => void;
+  navTo: (path: string, rest?: any) => void;
+  onFocusSteps: (stepIds: string[], focusedTab?: string) => void;
+  onFocusEvent: (eventId: string) => void;
+  onSelect: (ids: string[]) => void;
+  getLgTemplates: (id: string) => LgTemplate[];
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
+  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
+  removeLgTemplate: (id: string, templateName: string) => Promise<void>;
+  removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
+  updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  removeLuIntent: (id: string, intentName: string) => void;
+  createDialog: (actions: any) => Promise<string | null>;
+  addCoachMarkRef: (ref: { [key: string]: any }) => void;
+  onCopy: (clipboardActions: any[]) => void;
+  undo: () => void;
+  redo: () => void;
+}
