@@ -1,0 +1,1 @@
+{"version":3,"file":"TextWidget.d.ts","sourceRoot":"","sources":["../../../src/Form/widgets/TextWidget.tsx"],"names":[],"mappings":";AAQA,OAAO,EAAE,cAAc,EAAE,MAAM,UAAU,CAAC;AAa1C,UAAU,gBAAiB,SAAQ,cAAc;IAC/C,gBAAgB,CAAC,EAAE,OAAO,CAAC;IAC3B,UAAU,CAAC,EAAE,CAAC,GAAG,CAAC,EAAE,GAAG,CAAC,OAAO,GAAG,MAAM,KAAK,IAAI,CAAC;CACnD;AAED,wBAAgB,UAAU,CAAC,KAAK,EAAE,gBAAgB,eAkHjD;yBAlHe,UAAU"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"ToggleEditor.d.ts","sourceRoot":"","sources":["../../../../src/Form/fields/RecognizerField/ToggleEditor.tsx"],"names":[],"mappings":"AAGA,OAAc,EAAY,SAAS,EAAE,MAAM,OAAO,CAAC;AAKnD,UAAU,iBAAiB;IACzB,MAAM,EAAE,OAAO,CAAC;IAChB,KAAK,EAAE,MAAM,CAAC;IACd,QAAQ,EAAE,MAAM,SAAS,CAAC;CAC3B;AAED,MAAM,CAAC,OAAO,UAAU,YAAY,CAAC,KAAK,EAAE,iBAAiB,sBAoB5D"}
