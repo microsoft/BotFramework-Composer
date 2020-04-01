@@ -153,7 +153,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       return result;
     }, [] as any[]);
     // add parent folder
-    // const p = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
     files.unshift({
       name: '..',
       value: '..',
