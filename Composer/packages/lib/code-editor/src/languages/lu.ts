@@ -3,8 +3,13 @@
 
 import { Monaco } from '@monaco-editor/react';
 
+const LANGUAGE_NAME = 'lu';
+
 export function registerLULanguage(monaco: Monaco) {
-  monaco.languages.setMonarchTokensProvider('lu', {
+  // return if we've already registered this language to the editor
+  if (monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) return;
+
+  monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     tokenizer: {
       root: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
@@ -52,13 +57,13 @@ export function registerLULanguage(monaco: Monaco) {
   });
 
   monaco.languages.register({
-    id: 'lu',
+    id: LANGUAGE_NAME,
     extensions: ['.lu'],
     aliases: ['LU', 'language-understanding'],
     mimetypes: ['application/lu'],
   });
 
-  monaco.languages.setLanguageConfiguration('lu', {
+  monaco.languages.setLanguageConfiguration(LANGUAGE_NAME, {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -66,7 +71,7 @@ export function registerLULanguage(monaco: Monaco) {
     ],
   });
 
-  monaco.editor.defineTheme('lu', {
+  monaco.editor.defineTheme(LANGUAGE_NAME, {
     base: 'vs',
     inherit: false,
     colors: {},
