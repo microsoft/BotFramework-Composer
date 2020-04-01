@@ -66,7 +66,7 @@ describe('createFromTemplate', () => {
 
     expect(file).not.toBeUndefined();
     const fileContent = JSON.parse(file.content);
-    expect(fileContent.$type).toEqual(SDKKinds.AdaptiveDialog);
+    expect(fileContent.$kind).toEqual(SDKKinds.AdaptiveDialog);
   });
 });
 
