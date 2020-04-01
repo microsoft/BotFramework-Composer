@@ -95,6 +95,8 @@ export type ResponseAction<C extends Command = Command> = MessageAction<'respons
 
 export type Action = OpenAction | EventAction | RequestAction | ResponseAction;
 
+export type Reducer<S, A extends Action = Action> = (state: S | undefined, action: A) => S;
+
 export const isOpenAction = (action: Action): action is OpenAction => action.type === 'open';
 
 export const isEventAction = <E extends Event>(action: Action, from: From, event?: E): action is EventAction<E> => {

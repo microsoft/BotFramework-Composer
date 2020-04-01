@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { DebugProtocol as DP } from 'vscode-debugprotocol';
-import * as redux from 'redux';
 
 import * as protocol from './protocol';
 
@@ -64,7 +63,7 @@ const handleResponse = <S, C extends protocol.Command>(
   action: protocol.Action,
   command: C,
   filter: (request: protocol.Request<C>) => boolean,
-  typed: redux.Reducer<S, protocol.ResponseAction<C>>
+  typed: protocol.Reducer<S, protocol.ResponseAction<C>>
 ): Lazy<S> => {
   if (protocol.isResponseAction(action, 'server', command)) {
     const { request, message: response } = action;
@@ -89,7 +88,7 @@ const handleResponse = <S, C extends protocol.Command>(
 const handleSuccess = <S, C extends protocol.Command>(
   state: Lazy<S>,
   action: protocol.Action,
-  other: redux.Reducer<S, protocol.Action>
+  other: protocol.Reducer<S, protocol.Action>
 ): Lazy<S> => {
   if (state.local === 'success') {
     const item = other(state.item, action);
@@ -106,8 +105,8 @@ export const recurse = <S, C extends protocol.Command>(
   action: protocol.Action,
   command: C,
   filter: (request: protocol.Request<C>) => boolean,
-  typed: redux.Reducer<S, protocol.ResponseAction<C>>,
-  other: redux.Reducer<S, protocol.Action>
+  typed: protocol.Reducer<S, protocol.ResponseAction<C>>,
+  other: protocol.Reducer<S, protocol.Action>
 ): Lazy<S> => {
   state = handleMissing(state);
   state = handleRequest(state, action, command, filter);
