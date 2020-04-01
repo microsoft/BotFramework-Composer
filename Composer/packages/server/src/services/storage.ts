@@ -7,6 +7,7 @@ import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
+import settings from '../settings';
 
 import { UserIdentity } from './pluginLoader';
 
@@ -70,6 +71,20 @@ class StorageService {
   // return connent for file
   // return children for dir
   public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    if (filePath === '/' && settings.platform === 'win32') {
+      return {
+        name: '',
+        parent: '/',
+        children: settings.diskNames.map(d => {
+          return {
+            name: d,
+            type: 'folder',
+            path: d,
+            writable: false,
+          };
+        }),
+      };
+    }
     const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
@@ -79,10 +94,17 @@ class StorageService {
       // TODO: fix this behavior and the upper layer interface accordingly
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
+      let writable = true;
+      try {
+        fs.accessSync(filePath, fs.constants.W_OK);
+      } catch (err) {
+        writable = false;
+      }
       return {
         name: Path.basename(filePath),
         parent: Path.dirname(filePath),
         children: await this.getChildren(storageClient, filePath),
+        writable: writable,
       };
     }
   };
@@ -103,10 +125,14 @@ class StorageService {
   };
 
   private isBotFolder = async (storage: IFileStorage, path: string) => {
-    // locate Main.dialog
+    // locate new structure bot:
+    const dialogFiles = await storage.glob('*.dialog', path);
+    const isNewBot = dialogFiles.length > 0;
+
+    // locate old structire bot: Main.dialog
     const mainPath = Path.join(path, 'Main', 'Main.dialog');
-    const isbot = await storage.exists(mainPath);
-    return isbot;
+    const isOldBot = await storage.exists(mainPath);
+    return isNewBot || isOldBot;
   };
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {

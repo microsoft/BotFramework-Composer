@@ -22,7 +22,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private readonly IStatePropertyAccessor<DialogState> dialogState;
         private readonly string rootDialogFile;
 
-        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, string rootDialog)
         {
             HostContext.Current.Set(skillClient);
             HostContext.Current.Set(conversationIdFactory);
@@ -30,7 +30,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.resourceExplorer = resourceExplorer;
-            this.rootDialogFile = "Main.dialog";
+            this.rootDialogFile = rootDialog;
             LoadRootDialogAsync();
         }
         

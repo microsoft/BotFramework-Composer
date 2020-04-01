@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seedNewDialog, SDKTypes, dialogGroups, DialogGroup } from '@bfc/shared';
+import { DialogFactory, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
@@ -15,6 +15,7 @@ export class VisualSDKDemo extends Component {
   state = {
     actions: this.seedInitialActions(),
   };
+  factory = new DialogFactory({});
 
   seedInitialActions() {
     const initialTypes = [
@@ -26,13 +27,13 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => seedNewDialog(t));
+    const initalActions = initialTypes.map(t => this.factory.create(t));
     return initalActions;
   }
 
-  insertActionPreview($type) {
+  insertActionPreview($kind) {
     this.setState({
-      actions: [seedNewDialog($type), ...this.state.actions],
+      actions: [this.factory.create($kind), ...this.state.actions],
     });
   }
 
@@ -61,7 +62,7 @@ export class VisualSDKDemo extends Component {
           />
         </div>
         <div className="action-preview--visual" style={{ marginLeft: 20 }}>
-          {renderUIWidget(uiSchemaPrivider.get(action.$type), {
+          {renderUIWidget(uiSchemaPrivider.get(action.$kind), {
             id: `actions[${index}]`,
             data: action,
             onEvent: () => null,
@@ -74,8 +75,8 @@ export class VisualSDKDemo extends Component {
   renderActionFactory() {
     return (
       <div style={{ width: '100%', height: 100, margin: 20 }}>
-        <h3>Create action by $type</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.insertActionPreview($type)} />
+        <h3>Create action by $kind</h3>
+        <EdgeMenu id="visual-sdk-demo" onClick={$kind => this.insertActionPreview($kind)} />
       </div>
     );
   }

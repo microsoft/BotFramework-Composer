@@ -12,7 +12,7 @@ export function transformObiRules(input, parentPath = ''): { stepGroup: IndexedN
   const prefix = parentPath ? parentPath + '.' : '';
   const steps = input[ObiFieldNames.Actions] || [];
   const stepGroup = new IndexedNode(`${prefix}${ObiFieldNames.Actions}`, {
-    $type: ObiTypes.StepGroup,
+    $kind: ObiTypes.StepGroup,
     children: steps.map(x => normalizeObiStep(x)),
   });
   return {

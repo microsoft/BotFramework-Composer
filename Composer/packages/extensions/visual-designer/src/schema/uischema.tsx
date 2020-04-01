@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes, getInputType } from '@bfc/shared';
+import { SDKKinds, getInputType } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
@@ -28,7 +28,7 @@ const BaseInputSchema: UIWidget = {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
-      title: data => `Bot Asks (${getInputType(data.$type)})`,
+      title: data => `Bot Asks (${getInputType(data.$kind)})`,
       icon: ElementIcon.MessageBot,
       colors: {
         theme: ObiColors.BlueMagenta20,
@@ -45,7 +45,7 @@ const BaseInputSchema: UIWidget = {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
-      title: data => `User Input (${getInputType(data.$type)})`,
+      title: data => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: ElementIcon.User,
       menu: 'none',
@@ -55,20 +55,25 @@ const BaseInputSchema: UIWidget = {
       },
     },
     body: data =>
-      data.$type === SDKTypes.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
+      data.$kind === SDKKinds.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
-          renderItem={item => (
-            <BorderedDiv height={20} title={item.value}>
-              {item.value}
-            </BorderedDiv>
-          )}
+          renderItem={item => {
+            const value = typeof item === 'object' ? item.value : item;
+            return (
+              <BorderedDiv height={20} title={value}>
+                {value}
+              </BorderedDiv>
+            );
+          }}
         />
-      ) : null,
+      ) : (
+        <>{data.choices}</>
+      ),
     footer: data =>
       data.property ? (
         <>
-          {data.property} <FixedInfo>= Input({getInputType(data.$type)})</FixedInfo>
+          {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
         </>
       ) : null,
   },
@@ -78,28 +83,28 @@ export const uiSchema: UISchema = {
   default: {
     'ui:widget': ActionCard,
   },
-  [SDKTypes.IfCondition]: {
+  [SDKKinds.IfCondition]: {
     'ui:widget': IfConditionWidget,
     judgement: {
       'ui:widget': ActionCard,
       content: data => data.condition,
     },
   },
-  [SDKTypes.SwitchCondition]: {
+  [SDKKinds.SwitchCondition]: {
     'ui:widget': SwitchConditionWidget,
     judgement: {
       'ui:widget': ActionCard,
       content: data => data.condition,
     },
   },
-  [SDKTypes.Foreach]: {
+  [SDKKinds.Foreach]: {
     'ui:widget': ForeachWidget,
     loop: {
       'ui:widget': ActionCard,
       content: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
     },
   },
-  [SDKTypes.ForeachPage]: {
+  [SDKKinds.ForeachPage]: {
     'ui:widget': ForeachWidget,
     loop: {
       'ui:widget': ActionCard,
@@ -110,7 +115,7 @@ export const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.SendActivity]: {
+  [SDKKinds.SendActivity]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
@@ -125,13 +130,13 @@ export const uiSchema: UISchema = {
       field: 'activity',
     },
   },
-  [SDKTypes.AttachmentInput]: BaseInputSchema,
-  [SDKTypes.ConfirmInput]: BaseInputSchema,
-  [SDKTypes.DateTimeInput]: BaseInputSchema,
-  [SDKTypes.NumberInput]: BaseInputSchema,
-  [SDKTypes.TextInput]: BaseInputSchema,
-  [SDKTypes.ChoiceInput]: BaseInputSchema,
-  [SDKTypes.BeginDialog]: {
+  [SDKKinds.AttachmentInput]: BaseInputSchema,
+  [SDKKinds.ConfirmInput]: BaseInputSchema,
+  [SDKKinds.DateTimeInput]: BaseInputSchema,
+  [SDKKinds.NumberInput]: BaseInputSchema,
+  [SDKKinds.TextInput]: BaseInputSchema,
+  [SDKKinds.ChoiceInput]: BaseInputSchema,
+  [SDKKinds.BeginDialog]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
@@ -152,7 +157,7 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
-  [SDKTypes.SkillDialog]: {
+  [SDKKinds.SkillDialog]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
@@ -171,7 +176,7 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
-  [SDKTypes.ReplaceDialog]: {
+  [SDKKinds.ReplaceDialog]: {
     'ui:widget': ActionCard,
     content: {
       'ui:widget': DialogRef,
@@ -183,7 +188,7 @@ export const uiSchema: UISchema = {
       ),
     },
   },
-  [SDKTypes.EditArray]: {
+  [SDKKinds.EditArray]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
@@ -201,18 +206,19 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
-  [SDKTypes.SetProperty]: {
+  [SDKKinds.SetProperty]: {
     'ui:widget': ActionCard,
     content: data => `${data.property || '?'} : ${data.value || '?'}`,
   },
-  [SDKTypes.SetProperties]: {
+  [SDKKinds.SetProperties]: {
     'ui:widget': ActionCard,
     content: data => (
       <ListOverview
         items={data.assignments}
         itemPadding={8}
-        renderItem={item => {
-          const content = `${item.property} : ${item.value}`;
+        renderItem={({ property, value }) => {
+          const v = typeof value === 'object' ? JSON.stringify(value) : value;
+          const content = `${property} : ${v}`;
           return (
             <SingleLineDiv height={16} title={content}>
               {content}
@@ -222,11 +228,11 @@ export const uiSchema: UISchema = {
       />
     ),
   },
-  [SDKTypes.DeleteProperty]: {
+  [SDKKinds.DeleteProperty]: {
     'ui:widget': ActionCard,
     content: data => data.property,
   },
-  [SDKTypes.DeleteProperties]: {
+  [SDKKinds.DeleteProperties]: {
     'ui:widget': ActionCard,
     content: data => (
       <ListOverview
@@ -240,13 +246,13 @@ export const uiSchema: UISchema = {
       />
     ),
   },
-  [SDKTypes.EndDialog]: {
+  [SDKKinds.EndDialog]: {
     'ui:widget': ActionHeader,
   },
-  [SDKTypes.RepeatDialog]: {
+  [SDKKinds.RepeatDialog]: {
     'ui:widget': ActionHeader,
   },
-  [SDKTypes.CancelAllDialogs]: {
+  [SDKKinds.CancelAllDialogs]: {
     'ui:widget': ActionCard,
     content: data =>
       data.eventName ? (
@@ -256,10 +262,10 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
-  [SDKTypes.EndTurn]: {
+  [SDKKinds.EndTurn]: {
     'ui:widget': ActionHeader,
   },
-  [SDKTypes.EmitEvent]: {
+  [SDKKinds.EmitEvent]: {
     'ui:widget': ActionCard,
     content: data => (
       <>
@@ -268,7 +274,7 @@ export const uiSchema: UISchema = {
       </>
     ),
   },
-  [SDKTypes.HttpRequest]: {
+  [SDKKinds.HttpRequest]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,
@@ -287,21 +293,21 @@ export const uiSchema: UISchema = {
         </>
       ) : null,
   },
-  [SDKTypes.TraceActivity]: {
+  [SDKKinds.TraceActivity]: {
     'ui:widget': ActionHeader,
   },
-  [SDKTypes.LogAction]: {
+  [SDKKinds.LogAction]: {
     'ui:widget': ActionHeader,
   },
-  [SDKTypes.EditActions]: {
+  [SDKKinds.EditActions]: {
     'ui:widget': ActionCard,
     content: data => data.changeType,
   },
-  [SDKTypes.QnAMakerDialog]: {
+  [SDKKinds.QnAMakerDialog]: {
     'ui:widget': ActionCard,
     content: data => data.hostname,
   },
-  [SDKTypes.OAuthInput]: {
+  [SDKKinds.OAuthInput]: {
     'ui:widget': CardTemplate,
     header: {
       'ui:widget': ActionHeader,

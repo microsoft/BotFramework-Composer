@@ -2,16 +2,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { Monaco } from '@monaco-editor/react';
 
-function createKeywordsProposals(range) {
+function createKeywordsProposals(monaco: Monaco, range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
   // here you could do a server side lookup
   return [
     {
-      label: 'IF',
+      label: 'IF/ELSEIF/ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['IF: ${}', '- ELSEIF: ${}', '    -', '- ELSE:', '    -'].join('\r\n'),
+      insertText: ['IF: ${ expr }', '    -', '- ELSEIF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
+      range: range,
+    },
+    {
+      label: 'IF/ELSE',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: ['IF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
       range: range,
     },
     {
@@ -29,13 +35,13 @@ function createKeywordsProposals(range) {
     {
       label: 'SWITCH',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['SWITCH: ${}', '- CASE: ${}', '    -', '- DEFAULT:', '    -'].join('\r\n'),
+      insertText: ['SWITCH: ${ expr }', '- CASE: ${ expr }', '    -', '- DEFAULT:', '    -'].join('\r\n'),
       range: range,
     },
   ];
 }
 
-export function registerLGLanguage(monaco: typeof monacoEditor) {
+export function registerLGLanguage(monaco: Monaco) {
   monaco.languages.setMonarchTokensProvider('botbuilderlg', {
     ignoreCase: true,
     brackets: [
@@ -164,8 +170,9 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         startColumn: word.startColumn,
         endColumn: word.endColumn,
       };
+
       return {
-        suggestions: createKeywordsProposals(range),
+        suggestions: createKeywordsProposals(monaco, range),
       };
     },
   });

@@ -7,40 +7,40 @@ import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 describe('#copyIfCondition', () => {
   it('can copy normal input', async () => {
     const ifCondition = {
-      $type: 'Microsoft.IfCondition',
+      $kind: 'Microsoft.IfCondition',
       condition: 'a == b',
       actions: [
         {
-          $type: 'Microsoft.BeginDialog',
-          dialog: 'AddToDo',
+          $kind: 'Microsoft.BeginDialog',
+          dialog: 'addtodo',
         },
       ],
       elseActions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           activity: '[bfdactivity-1234]',
         },
       ],
     };
 
     expect(await copyIfCondition(ifCondition, externalApi)).toEqual({
-      $type: 'Microsoft.IfCondition',
+      $kind: 'Microsoft.IfCondition',
       $designer: {
         id: '5678',
       },
       condition: 'a == b',
       actions: [
         {
-          $type: 'Microsoft.BeginDialog',
+          $kind: 'Microsoft.BeginDialog',
           $designer: {
             id: '5678',
           },
-          dialog: 'AddToDo',
+          dialog: 'addtodo',
         },
       ],
       elseActions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           $designer: {
             id: '5678',
           },

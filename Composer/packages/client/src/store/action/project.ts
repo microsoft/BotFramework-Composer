@@ -5,7 +5,7 @@ import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { ActionTypes, BASEPATH } from './../../constants/index';
+import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { startBot } from './publisher';
 import { navTo } from './navigation';
@@ -27,6 +27,13 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
     payload: {
       templateId,
     },
+  });
+};
+
+export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
+  dispatch({
+    type: ActionTypes.UPDATE_BOTSTATUS,
+    payload: status,
   });
 };
 

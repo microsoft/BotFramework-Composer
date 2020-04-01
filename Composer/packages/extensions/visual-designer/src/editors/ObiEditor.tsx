@@ -6,15 +6,15 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import {
+  SDKKinds,
   deleteAction,
   deleteActions,
   LgTemplateRef,
   LgMetaData,
-  seedNewDialog,
   ExternalResourceHandlerAsync,
   walkLgResourcesInActionList,
 } from '@bfc/shared';
-import { SDKTypes } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -29,6 +29,7 @@ import {
   appendNodesAfter,
   pasteNodes,
   deleteNodes,
+  getParentPaths,
   insertAction,
 } from '../utils/jsonTracker';
 import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
@@ -36,6 +37,7 @@ import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
+import { designerCache } from '../store/DesignerCache';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -63,6 +65,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     updateLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory,
   } = useContext(NodeRendererContext);
 
   const dereferenceLg: ExternalResourceHandlerAsync<string> = async (
@@ -102,6 +105,19 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
+  const trackActionChange = (actionPath: string) => {
+    const affectedPaths = getParentPaths(actionPath);
+    for (const path of affectedPaths) {
+      const json = get(data, path);
+      designerCache.uncacheBoundary(json);
+    }
+  };
+
+  const trackActionListChange = (actionPaths: string[]) => {
+    if (!Array.isArray(actionPaths)) return;
+    actionPaths.forEach(x => trackActionChange(x));
+  };
+
   const deleteLuIntents = (luIntents: string[]) => {
     return Promise.all(luIntents.map(intent => removeLuIntent(path, intent)));
   };
@@ -126,13 +142,15 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = ({ caller, callee }) => onOpen(callee, caller);
         break;
       case NodeEventTypes.Delete:
+        trackActionChange(eventData.id);
         handler = e => {
           onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
           onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
-        if (eventData.$type === 'PASTE') {
+        trackActionChange(eventData.id);
+        if (eventData.$kind === 'PASTE') {
           handler = e => {
             pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
@@ -140,7 +158,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
         } else {
           handler = e => {
-            const dialog = insert(data, e.id, e.position, e.$type);
+            const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
           };
@@ -148,7 +166,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.InsertEvent:
         handler = e => {
-          const dialog = insert(data, e.id, e.position, e.$type);
+          const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
         };
@@ -159,6 +177,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.CutSelection:
+        trackActionListChange(eventData.actionIds);
         handler = e => {
           cutNodes(data, e.actionIds, dereferenceLg, nodes =>
             deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
@@ -213,7 +232,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
               const [, arrayPath, actionIndexStr] = indexes;
               const startIndex = parseInt(actionIndexStr);
-              const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+              const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialog });
               const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
               onChange(insertResult);
             });
@@ -221,6 +240,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.DeleteSelection:
+        trackActionListChange(eventData.actionIds);
         handler = e => {
           const dialog = deleteNodes(data, e.actionIds, nodes =>
             deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
@@ -230,6 +250,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.AppendSelection:
+        trackActionListChange(eventData.target);
         handler = e => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;

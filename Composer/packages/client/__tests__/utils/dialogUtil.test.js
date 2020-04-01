@@ -7,20 +7,20 @@ const dialogsMap = {
   Dialog1: {
     steps: [
       {
-        $type: 'Step1',
+        $kind: 'Step1',
       },
       {
-        $type: 'Step2',
+        $kind: 'Step2',
       },
     ],
   },
   'Dialog2.main': {
     steps: [
       {
-        $type: 'Step3',
+        $kind: 'Step3',
       },
       {
-        $type: 'Step4',
+        $kind: 'Step4',
       },
     ],
   },
@@ -56,6 +56,6 @@ describe('setDialogData', () => {
 
   it('returns updated dialog data at a path', () => {
     const result = setDialogData(dialogsMap, 'Dialog2.main', 'steps[1]', { new: 'data' });
-    expect(result).toEqual({ steps: [{ $type: 'Step3' }, { new: 'data' }] });
+    expect(result).toEqual({ steps: [{ $kind: 'Step3' }, { new: 'data' }] });
   });
 });
