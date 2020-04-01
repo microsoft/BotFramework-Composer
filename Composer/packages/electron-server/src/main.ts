@@ -27,7 +27,7 @@ function main() {
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
   console.log('Loading project from: ', CONTENT_URL);
 
-  // TODO: why is the timeout here?
+  // TODO: get rid of this timeout
   setTimeout(() => {
     win.loadURL(CONTENT_URL);
     win.maximize();
