@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "QnAMakerAction",
@@ -10,13 +10,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog"
       },
       "actions": [
         {
-          "$type": "Microsoft.QnAMakerDialog",
+          "$kind": "Microsoft.QnAMakerDialog",
           "$designer": {
             "id": "878804",
             "name": "Connect to QnA Knowledgebase"

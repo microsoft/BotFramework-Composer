@@ -10,8 +10,8 @@ test('should return safely when input null value', () => {
 
 test('should parse single rule correctly with empty parentPath', () => {
   const json = {
-    $type: 'Microsoft.IntentRule',
-    actions: [{ $type: 'any' }],
+    $kind: 'Microsoft.IntentRule',
+    actions: [{ $kind: 'any' }],
   };
   const result = transformObiRules(json, '');
   if (!result) throw new Error('transformObiRules got a wrong result');
@@ -23,8 +23,8 @@ test('should parse single rule correctly with empty parentPath', () => {
 
 test('should parse single rule correctly with real parentPath', () => {
   const json = {
-    $type: 'Microsoft.IntentRule',
-    actions: [{ $type: 'any' }],
+    $kind: 'Microsoft.IntentRule',
+    actions: [{ $kind: 'any' }],
   };
   const result = transformObiRules(json, 'events[0]');
   if (!result) throw new Error('transformObiRules got a wrong result');

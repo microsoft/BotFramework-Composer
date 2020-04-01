@@ -41,7 +41,7 @@ function createItem(trigger: ITrigger, index: number) {
   return {
     ...trigger,
     index,
-    displayName: trigger.displayName || getFriendlyName({ $type: trigger.type }),
+    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
   };
 }
 

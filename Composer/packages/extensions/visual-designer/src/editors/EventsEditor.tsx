@@ -14,7 +14,7 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
   const ruleCount = data.children.length;
   const title = `Events (${ruleCount})`;
 
-  const onClick = $type => onEvent(NodeEventTypes.Insert, { id, $type, position: ruleCount });
+  const onClick = $kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: ruleCount });
 
   return (
     <Panel

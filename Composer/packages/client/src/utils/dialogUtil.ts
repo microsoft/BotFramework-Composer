@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -19,7 +19,7 @@ interface DialogsMap {
 
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
-  $type: string;
+  $kind: string;
   specifiedType: string;
   intent: string;
   triggerPhrases: string;
@@ -27,7 +27,7 @@ export interface TriggerFormData {
 }
 
 export interface TriggerFormDataErrors {
-  $type?: string;
+  $kind?: string;
   intent?: string;
   specifiedType?: string;
   triggerPhrases?: string;
@@ -39,11 +39,11 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   return cloneDeep(dialog);
 }
 
-export const eventTypeKey: string = SDKTypes.OnDialogEvent;
-export const intentTypeKey: string = SDKTypes.OnIntent;
-export const activityTypeKey: string = SDKTypes.OnActivity;
-export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
-export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
+export const eventTypeKey: string = SDKKinds.OnDialogEvent;
+export const intentTypeKey: string = SDKKinds.OnIntent;
+export const activityTypeKey: string = SDKKinds.OnActivity;
+export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
+export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -56,12 +56,12 @@ function insert(content, path: string, position: number | undefined, data: any) 
 function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
   const optionalAttributes: { intent?: string; event?: string } = {};
   if (data.specifiedType) {
-    data.$type = data.specifiedType;
+    data.$kind = data.specifiedType;
   }
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
-  const newStep = factory.create(data.$type as SDKTypes, optionalAttributes);
+  const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
 
@@ -133,7 +133,7 @@ export function createSelectedPath(selected: number) {
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$type', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
@@ -231,11 +231,11 @@ export function getFriendlyName(data) {
     return `${get(data, 'intent')}`;
   }
 
-  if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
-    return ConceptLabels[data.$type].title;
+  if (ConceptLabels[data.$kind] && ConceptLabels[data.$kind].title) {
+    return ConceptLabels[data.$kind].title;
   }
 
-  return data.$type;
+  return data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {

@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "937757",
     "description": "This is a bot that demonstrates the ability to send different Cards to users."
@@ -8,10 +8,10 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnUnknownIntent",
+      "$kind": "Microsoft.OnUnknownIntent",
       "actions": [
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "359223"
           },
@@ -65,7 +65,7 @@
           }
         },
         {
-          "$type": "Microsoft.SwitchCondition",
+          "$kind": "Microsoft.SwitchCondition",
           "$designer": {
             "id": "304837"
           },
@@ -75,7 +75,7 @@
               "value": "HeroCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "159442"
@@ -88,7 +88,7 @@
               "value": "HeroCardWithMemory",
               "actions": [
                 {
-                  "$type": "Microsoft.TextInput",
+                  "$kind": "Microsoft.TextInput",
                   "$designer": {
                     "id": "735465",
                     "name": "Text input"
@@ -100,7 +100,7 @@
                   "allowInterruptions": "false"
                 },
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "167246",
                     "name": "Send an Activity"
@@ -113,7 +113,7 @@
               "value": "ThumbnailCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "762914"
@@ -126,7 +126,7 @@
               "value": "SigninCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "241579"
@@ -139,7 +139,7 @@
               "value": "AnimationCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "901582"
@@ -152,7 +152,7 @@
               "value": "VideoCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "553859"
@@ -165,7 +165,7 @@
               "value": "AudioCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "190928"
@@ -178,7 +178,7 @@
               "value": "AdaptiveCard",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "806895"
@@ -191,7 +191,7 @@
               "value": "AllCards",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "name": "Send an Activity",
                     "id": "997450"
@@ -203,7 +203,7 @@
           ]
         },
         {
-          "$type": "Microsoft.RepeatDialog",
+          "$kind": "Microsoft.RepeatDialog",
           "$designer": {
             "id": "831626"
           }
@@ -214,10 +214,10 @@
       }
     },
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -225,7 +225,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -233,7 +233,7 @@
               "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "729500",
                     "name": "Send a response"

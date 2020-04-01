@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { UISchema } from '@bfc/extension';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import { EditableField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
@@ -28,7 +28,7 @@ const choiceSchema = {
 };
 
 const uiSchema: UISchema = {
-  [SDKTypes.AttachmentInput]: {
+  [SDKKinds.AttachmentInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
@@ -41,7 +41,7 @@ const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.ChoiceInput]: {
+  [SDKKinds.ChoiceInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
@@ -58,7 +58,7 @@ const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.ConfirmInput]: {
+  [SDKKinds.ConfirmInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
@@ -75,7 +75,7 @@ const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.DateTimeInput]: {
+  [SDKKinds.DateTimeInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
@@ -88,7 +88,7 @@ const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.NumberInput]: {
+  [SDKKinds.NumberInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
@@ -101,7 +101,7 @@ const uiSchema: UISchema = {
       },
     },
   },
-  [SDKTypes.TextInput]: {
+  [SDKKinds.TextInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {

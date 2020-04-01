@@ -13,12 +13,12 @@ describe('copySendActivity', () => {
 
   it('can copy SendActivity', async () => {
     const sendActivity = {
-      $type: 'Microsoft.SendActivity',
+      $kind: 'Microsoft.SendActivity',
       activity: '[bfdactivity-1234]',
     };
 
     expect(await copySendActivity(sendActivity, externalApiWithLgCopy)).toEqual({
-      $type: 'Microsoft.SendActivity',
+      $kind: 'Microsoft.SendActivity',
       $designer: { id: '5678' },
       activity: '[bfdactivity-1234](copy)',
     });

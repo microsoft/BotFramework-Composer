@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "808722",
     "name": "addtodo"
@@ -8,13 +8,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "335456"
       },
       "actions": [
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "298897"
           },
@@ -26,7 +26,7 @@
           "allowInterruptions": "true"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "567087"
           },
@@ -35,7 +35,7 @@
           "value": "=dialog.todo"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "116673"
           },

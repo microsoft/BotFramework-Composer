@@ -1,19 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKTypes } from '../types';
+import { MicrosoftIDialog, SDKKinds } from '../types';
 
 import { walkIfCondition } from './walkIfCondition';
 import { walkSwitchCondition } from './walkSwitchCondition';
 import { walkActionWithChildren } from './walkActionWithChildren';
 import { AdaptiveActionVisitor } from './AdaptiveActionVisitor';
 
-const WalkerMap: { [$type: string]: (input, visitor: AdaptiveActionVisitor) => void } = {
-  [SDKTypes.IfCondition]: walkIfCondition,
-  [SDKTypes.SwitchCondition]: walkSwitchCondition,
-  [SDKTypes.Foreach]: walkActionWithChildren,
-  [SDKTypes.ForeachPage]: walkActionWithChildren,
-  [SDKTypes.EditActions]: walkActionWithChildren,
+const WalkerMap: { [$kind: string]: (input, visitor: AdaptiveActionVisitor) => void } = {
+  [SDKKinds.IfCondition]: walkIfCondition,
+  [SDKKinds.SwitchCondition]: walkSwitchCondition,
+  [SDKKinds.Foreach]: walkActionWithChildren,
+  [SDKKinds.ForeachPage]: walkActionWithChildren,
+  [SDKKinds.EditActions]: walkActionWithChildren,
 };
 
 export const walkAdaptiveAction = (input, visit: (action: MicrosoftIDialog) => void): void => {
@@ -22,12 +22,12 @@ export const walkAdaptiveAction = (input, visit: (action: MicrosoftIDialog) => v
     return;
   }
 
-  if (!input || !input.$type) {
+  if (!input || !input.$kind) {
     return;
   }
 
-  if (WalkerMap[input.$type]) {
-    WalkerMap[input.$type](input, visit);
+  if (WalkerMap[input.$kind]) {
+    WalkerMap[input.$kind](input, visit);
   } else {
     visit(input);
   }
