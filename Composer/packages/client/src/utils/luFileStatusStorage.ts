@@ -25,6 +25,7 @@ class LuFileStatusStorage {
   }
 
   public updateFileStatus(botName: string, fileId: string, value = false) {
+    if (!botName) return;
     if (!this._all[botName]) {
       this._all[botName] = {};
     }
@@ -35,7 +36,7 @@ class LuFileStatusStorage {
   }
 
   public removeFileStatus(botName: string, fileId: string) {
-    if (this._all[botName]) return;
+    if (!botName) return;
     if (typeof this._all[botName][fileId] !== 'undefined') {
       delete this._all[botName][fileId];
       this.storage.set(KEY, this._all);
@@ -47,6 +48,7 @@ class LuFileStatusStorage {
   }
 
   public publishAll(botName: string) {
+    if (!botName) return;
     keys(this._all[botName]).forEach(key => {
       this._all[botName][key] = true;
     });

@@ -43,6 +43,7 @@ class FilePersistence {
   }
 
   public async notify(changeType: FileChangeType, id: string, fileType: FileExtensions, content: any) {
+    if (!this.projectId) return;
     const name = `${id}${fileType}`;
 
     if (fileType === FileExtensions.Dialog) {
