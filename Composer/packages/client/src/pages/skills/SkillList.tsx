@@ -22,7 +22,7 @@ import formatMessage from 'format-message';
 
 import SkillForm from './SkillForm';
 import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
-import { ISkill, ISkillByAppConfig, ISkillByManifestUrl } from './types';
+import { ISkill, ISkillByAppConfig, ISkillByManifestUrl, ISkillFormData } from './types';
 
 export interface ISkillListProps {
   skills: ISkill[];
@@ -74,60 +74,95 @@ const columns: IColumn[] = [
       return <div css={TableCell}>{item.description}</div>;
     },
   },
-  {
-    key: 'buttons',
-    name: '',
-    minWidth: 100,
-    maxWidth: 100,
-    fieldName: 'buttons',
-    data: 'string',
-    onRender: (item, index) => {
-      return (
-        <div>
-          <Stack tokens={{ childrenGap: 8 }} horizontal>
-            <IconButton
-              iconProps={{
-                iconName: 'Edit',
-              }}
-              title="Edit"
-              ariaLabel="Edit"
-            />
-            <IconButton
-              iconProps={{
-                iconName: 'Delete',
-              }}
-              title="Delete"
-              ariaLabel="Delete"
-            />
-          </Stack>
-        </div>
-      );
-    },
-  },
 ];
 
-const SkillList: React.FC<ISkillListProps> = props => {
-  const { skills } = props;
-  const [formIsOpen, setFormIsOpen] = useState(true);
-  const [formData, setFormData] = useState({});
-  const builtInSkills = new Array(2).fill({
-    name: 'production',
+// const builtInSkills = new Array(2).fill({
+//   name: 'production',
+//   protocol: 'BotFrameworkV3',
+//   description: 'Production endpoint for the Email Skill',
+//   endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+//   msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
+// });
+
+const builtInSkills = [
+  {
+    name: 'productionByConfig',
     protocol: 'BotFrameworkV3',
     description: 'Production endpoint for the Email Skill',
     endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
     msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-  });
+  },
+  {
+    name: 'production',
+    manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+    protocol: 'BotFrameworkV3',
+    description: 'Production endpoint for the Email Skill',
+    endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
+    msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
+  },
+];
 
-  skills.push(...builtInSkills);
+const SkillList: React.FC<ISkillListProps> = props => {
+  let { skills } = props;
+  const [editIsOpen, setEditIsOpen] = useState(false);
+  const [formData, setFormData] = useState<ISkillFormData | null>(null);
+
+  skills = builtInSkills;
 
   const onSubmitForm = (formData: ISkillByAppConfig | ISkillByManifestUrl) => {
     console.log(formData);
   };
 
   const onDismissForm = () => {
-    setFormData({});
-    setFormIsOpen(false);
+    setFormData(null);
+    setEditIsOpen(false);
   };
+
+  const onItemEdit = item => {
+    // console.log(item);
+    const { manifestUrl, name, msAppId, endpointUrl } = item;
+    setFormData({ manifestUrl, name, msAppId, endpointUrl });
+    setEditIsOpen(true);
+  };
+
+  const onItemDelete = item => {
+    console.log(item);
+  };
+
+  const getColumns = useCallback(() => {
+    return columns.concat({
+      key: 'buttons',
+      name: '',
+      minWidth: 100,
+      maxWidth: 100,
+      fieldName: 'buttons',
+      data: 'string',
+      onRender: item => {
+        return (
+          <div>
+            <Stack tokens={{ childrenGap: 8 }} horizontal>
+              <IconButton
+                iconProps={{
+                  iconName: 'Edit',
+                }}
+                onClick={() => onItemEdit(item)}
+                title="Edit"
+                ariaLabel="Edit"
+              />
+              <IconButton
+                iconProps={{
+                  iconName: 'Delete',
+                }}
+                onClick={() => onItemDelete(item)}
+                title="Delete"
+                ariaLabel="Delete"
+              />
+            </Stack>
+          </div>
+        );
+      },
+    });
+  }, [formData]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -146,14 +181,14 @@ const SkillList: React.FC<ISkillListProps> = props => {
     // do not allow add template in particular dialog lg, it suppose to be auto generated in form.
     return (
       <div css={ActionButton} data-testid="add-skill">
-        {formIsOpen ? (
+        {editIsOpen ? (
           <SkillForm skills={skills} formData={formData} onSubmit={onSubmitForm} onDismiss={onDismissForm}></SkillForm>
         ) : (
-          <Link onClick={() => setFormIsOpen(true)}>Connect to a new skill</Link>
+          <Link onClick={() => setEditIsOpen(true)}>Connect to a new skill</Link>
         )}
       </div>
     );
-  }, [formIsOpen]);
+  }, [editIsOpen, formData]);
 
   return (
     <div css={ContentStyle} data-testid="skill-list">
@@ -162,7 +197,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
           <DetailsList
             items={skills}
             styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
-            columns={columns}
+            columns={getColumns()}
             selectionMode={SelectionMode.single}
             layoutMode={DetailsListLayoutMode.justified}
             isHeaderVisible={true}

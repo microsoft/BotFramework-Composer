@@ -40,11 +40,6 @@ export const TableView = css`
   fontsize: 16px;
 `;
 
-export const ActionButton = css`
-  font-size: 16px;
-  margin: 15px;
-`;
-
 export const TableCell = css`
   white-space: pre-wrap;
   font-size: 14px;
@@ -52,4 +47,47 @@ export const TableCell = css`
   input {
     border: 1px solid #dddddd;
   }
+`;
+
+export const ChoiceGroupAlignHorizontal = css`
+  .ms-ChoiceFieldGroup-flexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .ms-ChoiceField-wrapper {
+    margin-right: 2rem;
+  }
+`;
+
+export const FormFieldManifestUrl = css`
+  width: 40rem;
+`;
+
+export const FormFieldAlignHorizontal = css`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
+
+export const FormFieldName = css`
+  width: 10rem;
+  margin-right: 1rem;
+`;
+
+export const FormFieldAppId = css`
+  width: 20rem;
+`;
+
+export const FormFieldEndpoint = css`
+  width: 40rem;
+`;
+
+export const ActionButton = css`
+  font-size: ${FontSizes.large};
+  margin: 1rem;
+`;
+
+export const MarginLeftSmall = css`
+  margin-left: ${FontSizes.small};
 `;
