@@ -7,12 +7,12 @@ import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 describe('shallowCopyAdaptiveAction', () => {
   it('can copy BeginDialog', () => {
     const beginDialog = {
-      $type: 'Microsoft.BeginDialog',
+      $kind: 'Microsoft.BeginDialog',
       dialog: 'addtodo',
     };
 
     expect(shallowCopyAdaptiveAction(beginDialog, externalApi)).toEqual({
-      $type: 'Microsoft.BeginDialog',
+      $kind: 'Microsoft.BeginDialog',
       $designer: { id: '5678' },
       dialog: 'addtodo',
     });

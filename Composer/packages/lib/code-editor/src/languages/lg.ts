@@ -9,9 +9,15 @@ function createKeywordsProposals(monaco: Monaco, range) {
   // here you could do a server side lookup
   return [
     {
-      label: 'IF',
+      label: 'IF/ELSEIF/ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['IF: ${}', '- ELSEIF: ${}', '    -', '- ELSE:', '    -'].join('\r\n'),
+      insertText: ['IF: ${ expr }', '    -', '- ELSEIF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
+      range: range,
+    },
+    {
+      label: 'IF/ELSE',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: ['IF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
       range: range,
     },
     {
@@ -29,7 +35,7 @@ function createKeywordsProposals(monaco: Monaco, range) {
     {
       label: 'SWITCH',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['SWITCH: ${}', '- CASE: ${}', '    -', '- DEFAULT:', '    -'].join('\r\n'),
+      insertText: ['SWITCH: ${ expr }', '- CASE: ${ expr }', '    -', '- DEFAULT:', '    -'].join('\r\n'),
       range: range,
     },
   ];
@@ -164,6 +170,7 @@ export function registerLGLanguage(monaco: Monaco) {
         startColumn: word.startColumn,
         endColumn: word.endColumn,
       };
+
       return {
         suggestions: createKeywordsProposals(monaco, range),
       };

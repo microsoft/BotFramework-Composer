@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { UISchema } from '@bfc/extension';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 import { JsonField } from './JsonField';
 
 const uiSchema: UISchema = {
-  [SDKTypes.HttpRequest]: {
+  [SDKKinds.HttpRequest]: {
     properties: {
       body: {
         field: JsonField,

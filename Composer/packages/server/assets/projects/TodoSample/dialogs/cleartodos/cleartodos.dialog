@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "316336",
     "name": "cleartodos"
@@ -8,13 +8,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "480162"
       },
       "actions": [
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "832307"
           },
@@ -23,14 +23,14 @@
           "resultProperty": "dialog.cleared"
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "983761"
           },
           "condition": "dialog.cleared",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "832300"
               },
@@ -39,7 +39,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "983700"
               },

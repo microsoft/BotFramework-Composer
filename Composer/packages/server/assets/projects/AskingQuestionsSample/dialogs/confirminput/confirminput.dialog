@@ -1,18 +1,18 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "556076"
   },
   "autoEndDialog": true,
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "030235"
       },
       "actions": [
         {
-          "$type": "Microsoft.ConfirmInput",
+          "$kind": "Microsoft.ConfirmInput",
           "$designer": {
             "id": "647929"
           },
@@ -32,7 +32,7 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "458458"
           },

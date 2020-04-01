@@ -5,23 +5,23 @@ import { checkProperty, getProperties } from '../../src/dialogUtils/extractMemor
 
 const data = [
   {
-    $type: 'Microsoft.NumberInput',
+    $kind: 'Microsoft.NumberInput',
     property: 'user.a',
   },
   {
-    $type: 'Microsoft.SetProperty',
+    $kind: 'Microsoft.SetProperty',
     property: 'user.b',
   },
   {
-    $type: 'Microsoft.OAuthInput',
+    $kind: 'Microsoft.OAuthInput',
     tokenProperty: 'user.c',
   },
   {
-    $type: 'Microsoft.HttpRequest',
+    $kind: 'Microsoft.HttpRequest',
     resultProperty: 'user.d',
   },
   {
-    $type: 'Microsoft.SetProperties',
+    $kind: 'Microsoft.SetProperties',
     assignments: [{ property: 'user.e' }, { property: 'user.f' }],
   },
 ];

@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "395991"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "356862"
       },
       "actions": [
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "076427"
           },
@@ -22,7 +22,7 @@
           "value": "=10000+1000+100+10+1"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "162360"
           },
@@ -31,7 +31,7 @@
           "value": "=200*200"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "changeType": "Push",
           "itemsProperty": "user.ids",
           "value": "=888888/4",
@@ -40,34 +40,34 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "666135"
           },
           "activity": "${bfdactivity-666135()}"
         },
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "995811"
           },
           "itemsProperty": "user.ids",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "activity": "${dialog.foreach.index}: ${dialog.foreach.value}"
             }
           ]
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "763672"
           },
           "activity": "${bfdactivity-763672()}"
         },
         {
-          "$type": "Microsoft.ForeachPage",
+          "$kind": "Microsoft.ForeachPage",
           "$designer": {
             "id": "087387"
           },
@@ -75,11 +75,11 @@
           "itemsProperty": "user.ids",
           "actions": [
             {
-              "$type": "Microsoft.Foreach",
+              "$kind": "Microsoft.Foreach",
               "itemsProperty": "dialog.foreach.page",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "activity": "${dialog.foreach.index}: ${dialog.foreach.value}"
                 }
               ],
