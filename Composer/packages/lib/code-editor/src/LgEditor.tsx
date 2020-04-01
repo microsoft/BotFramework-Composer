@@ -67,7 +67,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   const monacoRef = useRef<Monaco>();
   const onInit: OnInit = monaco => {
     registerLGLanguage(monaco);
-
+    monacoRef.current = monaco;
     if (typeof onInitProp === 'function') {
       onInitProp(monaco);
     }
