@@ -3,7 +3,7 @@
   "license": "MIT",
   "author": "Microsoft Corporation",
   "version": "1.0.0",
-  "description": "Electron wrapper around Composer that starts up the",
+  "description": "Electron wrapper around Composer that launches Composer as a desktop application.",
   "main": "./build/main.js",
   "engines": {
     "node": ">=12"
