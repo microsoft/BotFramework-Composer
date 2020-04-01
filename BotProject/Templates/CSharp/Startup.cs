@@ -56,6 +56,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
+            services.AddApplicationInsightsTelemetry();
 
             // Load settings
             var settings = new BotSettings();
@@ -64,7 +65,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             IStorage storage = null;
 
             // Configure storage for deployment
-            if (!string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            if (!string.IsNullOrEmpty(settings?.CosmosDb?.AuthKey))
             {
                 storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }
@@ -96,13 +97,13 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 adapter
                   .UseStorage(storage)
                   .UseState(userState, conversationState);
-                
-                if (!string.IsNullOrEmpty(settings.AppInsights.InstrumentationKey))
+
+                if (!string.IsNullOrEmpty(settings?.AppInsights?.InstrumentationKey))
                 {
                     adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(new TelemetryClient()), true));
                 }
 
-                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
+                if (!string.IsNullOrEmpty(settings?.BlobStorage?.ConnectionString) && !string.IsNullOrEmpty(settings?.BlobStorage?.Container))
                 {
                     adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
                 }
