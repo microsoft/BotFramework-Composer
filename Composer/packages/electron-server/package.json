@@ -76,6 +76,15 @@
     "files": [
       "build"
     ],
+    "protocols": [
+      {
+        "name": "Bot Framework Composer",
+        "role": "Viewer",
+        "schemes": [
+          "bfcomposer"
+        ]
+      }
+    ],
     "win": {
       "target": "nsis",
       "icon": "resources/composerIcon.ico",
