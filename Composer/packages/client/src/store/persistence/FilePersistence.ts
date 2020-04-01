@@ -3,13 +3,16 @@
 import { FileInfo } from '@bfc/shared';
 import keys from 'lodash/keys';
 
-import { FileExtensions } from './types';
-import { FileChangeType } from './types';
+import { setError, fetchProject } from '../action';
+
+import { Store } from './../types';
+import { FileExtensions, FileChangeType } from './types';
 import { FileOperation } from './FileOperation';
 
 class FilePersistence {
   private _files: { [fileName: string]: FileOperation };
   private _projectId = '';
+  private _handleError = name => error => {};
 
   constructor() {
     this._files = {};
@@ -56,9 +59,9 @@ class FilePersistence {
     }
 
     try {
-      await this._files[name].operation({ changeType, name, content }, this.handleError(name));
+      await this._files[name].operation({ changeType, name, content }, this._handleError(name));
     } catch (err) {
-      this.handleError(name)(err);
+      this._handleError(name)(err);
     }
 
     if (changeType === FileChangeType.DELETE) {
@@ -66,10 +69,16 @@ class FilePersistence {
     }
   }
 
-  private handleError(name: string) {
-    return err => {
-      //Todo error handling
-      console.log(err);
+  public registerHandleError(store: Store) {
+    const curStore = store;
+    this._handleError = name => err => {
+      //TODO: error handling now if sync file error, do a full refresh.
+      const fileName = name;
+      setError(curStore, {
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: `HANDLE ${fileName} ERROR`,
+      });
+      fetchProject(curStore);
     };
   }
 }

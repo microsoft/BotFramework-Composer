@@ -23,6 +23,7 @@ import {
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
+import filePersistence from './persistence/FilePersistence';
 
 const { defaultFileResolver } = LGParser;
 
@@ -105,6 +106,7 @@ interface StoreProviderProps {
 }
 
 const prepareAxiosWithStore = once(prepareAxios);
+
 export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) => {
   let dispatch: React.Dispatch<ActionType> = () => {};
   const middlewareApi: MiddlewareApi = {
@@ -150,6 +152,6 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
   };
 
   prepareAxiosWithStore({ dispatch, getState });
-
+  filePersistence.registerHandleError({ dispatch, getState });
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };
