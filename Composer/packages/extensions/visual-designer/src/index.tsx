@@ -7,7 +7,7 @@ import createCache from '@emotion/cache';
 import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { ShellData, ShellApi } from '@bfc/shared';
+import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -38,6 +38,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   shellApi,
   hosted,
   lgFiles,
+  schema,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -84,6 +85,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory: new DialogFactory(schema),
   };
 
   return (
@@ -120,13 +122,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
 export interface VisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
+  schema: any;
 }
 
 VisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
-  data: { $type: '' },
+  data: { $kind: '' },
   shellApi: ({
     navTo: () => {},
     onFocusEvent: () => {},

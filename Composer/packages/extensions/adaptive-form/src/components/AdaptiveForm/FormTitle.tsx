@@ -46,7 +46,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
   };
 
   const getSubTitle = (): string => {
-    return uiSubtitle || uiLabel || formData.$type;
+    return uiSubtitle || uiLabel || formData.$kind;
   };
 
   const getDescription = (): string => {

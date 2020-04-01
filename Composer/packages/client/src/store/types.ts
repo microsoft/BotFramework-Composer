@@ -43,6 +43,7 @@ export interface File {
 export interface StorageFolder extends File {
   parent: string;
   children?: File[];
+  writable?: boolean;
 }
 
 export interface State {
@@ -61,7 +62,7 @@ export interface State {
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: string;
+  botLoadErrorMsg: { title: string; message: string };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;

@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "122121"
   },
@@ -7,13 +7,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "050101"
       },
       "actions": [
         {
-          "$type": "Microsoft.CancelAllDialogs"
+          "$kind": "Microsoft.CancelAllDialogs"
         }
       ]
     }
