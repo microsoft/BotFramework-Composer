@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import path from 'path';
-
 import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect, useMemo } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
@@ -13,7 +11,6 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
-import { navigate } from '@reach/router';
 
 import { assignDefined } from './utils/common';
 
@@ -80,7 +77,6 @@ export interface BaseEditorProps extends EditorProps {
   value?: string;
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
-  currentPath?: string;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
@@ -158,13 +154,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     return warnings.length ? combineSimpleMessage(warnings) : '';
   }, [diagnostics]);
 
-  const handleClickEsc = event => {
-    const { key } = event;
-    if (key === 'Escape' && props.currentPath) {
-      navigate(path.resolve(props.currentPath, '../'));
-    }
-  };
-
   const hasError = !!errorMessage || !!errorMsgFromDiagnostics;
   const hasWarning = !!warningMessage || !!warningMsgFromDiagnostics;
 
@@ -182,7 +171,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        onKeyDown={handleClickEsc}
       >
         <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={options} />
       </div>
