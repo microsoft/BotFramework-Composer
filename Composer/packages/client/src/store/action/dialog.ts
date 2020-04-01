@@ -6,7 +6,7 @@ import { undoable } from '../middlewares/undo';
 import { ActionTypes } from './../../constants/index';
 import { Store } from './../types';
 
-export const removeDialog: ActionCreator = async (store, id) => {
+export const removeDialog: ActionCreator = (store, id) => {
   store.dispatch({
     type: ActionTypes.REMOVE_DIALOG,
     payload: { id },
@@ -22,6 +22,7 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
     type: ActionTypes.CREATE_DIALOG,
     payload: { id, content },
   });
+  return id;
 };
 
 export const updateDialogBase: ActionCreator = async (store, { id, content }) => {

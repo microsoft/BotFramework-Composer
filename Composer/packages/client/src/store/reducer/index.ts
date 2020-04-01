@@ -83,7 +83,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   filePersistence.clear();
   filePersistence.projectId = id;
   files.forEach(file => {
-    filePersistence.attach(file.name, id, file);
+    filePersistence.attach(file.name, file);
   });
   return state;
 };

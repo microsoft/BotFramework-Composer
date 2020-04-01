@@ -7,7 +7,7 @@ import { FileChangeType, ResourceInfo, FileErrorHandler } from './types';
 import * as client from './http';
 
 export class FileOperation {
-  private file: FileInfo | undefined;
+  public file: FileInfo | undefined;
   private projectId: string;
   private errorHandler: FileErrorHandler = error => {};
 

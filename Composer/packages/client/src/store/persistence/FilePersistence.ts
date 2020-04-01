@@ -8,10 +8,11 @@ import { FileChangeType } from './types';
 import { FileOperation } from './FileOperation';
 
 class FilePersistence {
-  private files: { [fileName: string]: FileOperation };
+  private _files: { [fileName: string]: FileOperation };
   private _projectId = '';
+
   constructor() {
-    this.files = {};
+    this._files = {};
   }
 
   public set projectId(v: string) {
@@ -22,22 +23,26 @@ class FilePersistence {
     return this._projectId;
   }
 
-  public clear() {
-    keys(this.files).forEach(key => {
-      this.files[key].flush();
-    });
-    this.files = {};
+  public get files(): { [fileName: string]: FileOperation } {
+    return this._files;
   }
 
-  public attach(name: string, projectId: string, file?: FileInfo) {
-    this.files[name] = new FileOperation(projectId, file);
+  public clear() {
+    keys(this._files).forEach(key => {
+      this._files[key].flush();
+    });
+    this._files = {};
+  }
+
+  public attach(name: string, file?: FileInfo) {
+    this._files[name] = new FileOperation(this._projectId, file);
   }
 
   public detach(fileName: string) {
-    delete this.files[fileName];
+    if (this._files[fileName]) delete this._files[fileName];
   }
 
-  public async notify(changeType: FileChangeType, id: string, fileType: FileExtensions, content: string) {
+  public async notify(changeType: FileChangeType, id: string, fileType: FileExtensions, content: any) {
     const name = `${id}${fileType}`;
 
     if (fileType === FileExtensions.Dialog) {
@@ -45,12 +50,12 @@ class FilePersistence {
     }
 
     if (changeType === FileChangeType.CREATE) {
-      this.attach(name, this.projectId);
-      this.files;
+      this.attach(name);
+      this._files;
     }
 
     try {
-      await this.files[name].operation({ changeType, name, content }, this.handleError(name));
+      await this._files[name].operation({ changeType, name, content }, this.handleError(name));
     } catch (err) {
       this.handleError(name)(err);
     }
