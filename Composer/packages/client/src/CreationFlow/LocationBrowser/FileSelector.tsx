@@ -153,13 +153,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       return result;
     }, [] as any[]);
     // add parent folder
-    const p = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+    // const p = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
     files.unshift({
       name: '..',
       value: '..',
       fileType: 'folder',
       iconName: 'folder',
-      filePath: diskRootPattern.test(p) || p === '/' ? '/' : focusedStorageFolder.parent,
+      filePath: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder]);

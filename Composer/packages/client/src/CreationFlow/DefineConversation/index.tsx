@@ -99,7 +99,14 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     const currentPath = Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '');
+=======
+    const currentPath =
+      Object.keys(focusedStorageFolder).length > 0
+        ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
+        : '';
+>>>>>>> fix permission issue and underfined props
     updateForm('location')(null, currentPath);
   }, [focusedStorageFolder]);
 
