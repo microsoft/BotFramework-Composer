@@ -61,10 +61,13 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
 
   //map all referred lu files
   luFiles.forEach(file => {
-    countMap[file.id] = 0;
+    countMap[getBaseName(file.id)] = 0;
   });
 
+  let rootId = '';
   dialogs.forEach(dialog => {
+    if (dialog.isRoot) rootId = dialog.id;
+
     const { intentTriggers } = dialog;
     const fileId = createConfigId(dialog.id);
     if (intentTriggers.length) {
@@ -96,7 +99,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     verbose: true,
   };
   crossTrainConfig.rootIds = keys(countMap)
-    .filter(key => (countMap[key] === 0 || key === 'Main') && triggerRules[createConfigId(key)])
+    .filter(key => (countMap[key] === 0 || key === rootId) && triggerRules[createConfigId(key)])
     .map(item => createConfigId(item));
   crossTrainConfig.triggerRules = triggerRules;
   return crossTrainConfig;
