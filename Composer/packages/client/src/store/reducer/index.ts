@@ -276,7 +276,6 @@ const setLuFailure: ReducerFunc = (state, payload) => {
 };
 
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
-  state.focusedStorageFolder = response.data;
   return (state.storages = response.data);
 };
 
