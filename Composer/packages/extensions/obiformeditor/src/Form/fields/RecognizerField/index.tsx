@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, useEffect } from 'react';
 import formatMessage from 'format-message';
 import cloneDeep from 'lodash/cloneDeep';
 import { FieldProps } from '@bfcomposer/react-jsonschema-form';
@@ -54,6 +54,12 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
       id: 'value',
     };
   }
+
+  useEffect(() => {
+    if (typeof recognizer === 'object' && recognizer.$type === SDKTypes.ValueRecognizer) {
+      onChange(defaultRecoginzerSet);
+    }
+  }, [recognizer]);
   const isRegex = typeof recognizer === 'object' && recognizer.$type === SDKTypes.RegexRecognizer;
   const options = [
     {
