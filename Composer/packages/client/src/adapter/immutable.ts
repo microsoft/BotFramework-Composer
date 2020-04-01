@@ -2,16 +2,17 @@
 // Licensed under the MIT License.
 
 import * as redux from 'redux';
-export const some = <T>(sources: ReadonlyArray<T> | undefined): ReadonlyArray<T> =>
+
+export const some = <S>(sources: ReadonlyArray<S> | undefined): ReadonlyArray<S> =>
   sources !== undefined ? sources : [];
 
-export type Mapper<T> = (item: T) => T;
+export type Reducer<S, A> = (state: S, action: A) => S;
 
-export const map = <T>(selector: Mapper<T>): Mapper<ReadonlyArray<T>> => sources => {
-  let targets: Array<T> | undefined = undefined;
+export const map = <S, A>(reducer: Reducer<S, A>): Reducer<ReadonlyArray<S>, A> => (sources, action) => {
+  let targets: Array<S> | undefined = undefined;
   for (let index = 0; index < sources.length; ++index) {
     const source = sources[index];
-    const target = selector(source);
+    const target = reducer(source, action);
     if (targets !== undefined || source !== target) {
       if (targets === undefined) {
         targets = sources.slice();

@@ -11,7 +11,7 @@ import * as model from './model';
 export const map = <S, A extends protocol.Action>(
   inner: protocol.Reducer<S, A>
 ): protocol.Reducer<ReadonlyArray<S>, A> => (source, action) =>
-  immutable.map<S>(item => inner(item, action))(immutable.some(source));
+  immutable.map<S, A>(inner)(immutable.some(source), action);
 
 type Action = protocol.Action;
 
