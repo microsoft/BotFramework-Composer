@@ -150,7 +150,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'Main', content: '' },
+      body: { id: 'bot1', content: '' },
     } as Request;
     await ProjectController.updateDialog(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -186,7 +186,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'common', content: '' },
+      body: { id: 'common.en-us', content: '' },
     } as Request;
     await ProjectController.updateLgFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -223,7 +223,7 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'b', content: '' },
+      body: { id: 'b.en-us', content: '' },
     } as Request;
     await ProjectController.updateLuFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);

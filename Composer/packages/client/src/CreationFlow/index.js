@@ -4,7 +4,6 @@
 import Path from 'path';
 
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
@@ -17,7 +16,7 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  const [files, setFiles] = useState([]);
+  //const [files, setFiles] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
@@ -34,7 +33,6 @@ export function CreationFlow(props) {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  const [currentPath, setCurrentPath] = useState('');
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -43,15 +41,6 @@ export function CreationFlow(props) {
       fetchFolderItemsByPath(storageId, formattedPath);
     }
   }, [storages]);
-
-  useEffect(() => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
-
-    setFiles(allFilesInFolder);
-    if (Object.keys(focusedStorageFolder).length) {
-      setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
-    }
-  }, [focusedStorageFolder]);
 
   useEffect(() => {
     init();
@@ -147,7 +136,6 @@ export function CreationFlow(props) {
           onOpen={openBot}
           onDismiss={handleDismiss}
           focusedStorageFolder={focusedStorageFolder}
-          currentPath={currentPath}
           onCurrentPathUpdate={updateCurrentPath}
         />
       ),
@@ -160,8 +148,6 @@ export function CreationFlow(props) {
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
-          currentPath={currentPath}
-          files={files}
         />
       ),
     },

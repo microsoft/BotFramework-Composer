@@ -125,7 +125,7 @@ describe('lg lsp server', () => {
     await send(payload, [
       response => {
         expect(response.method).toEqual('textDocument/publishDiagnostics');
-        expect(response.params.diagnostics.length).toEqual(0);
+        expect(response.params.diagnostics.length).toEqual(1);
       },
     ]);
   });

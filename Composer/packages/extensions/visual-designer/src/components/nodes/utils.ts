@@ -3,15 +3,15 @@
 
 import { ObiTypes } from '../../constants/ObiTypes';
 
-export function getUserAnswersTitle($type: string): string {
-  if (!$type) return '';
+export function getUserAnswersTitle($kind: string): string {
+  if (!$kind) return '';
 
-  if ($type === ObiTypes.ChoiceInput) {
+  if ($kind === ObiTypes.ChoiceInput) {
     return 'ChoiceInput';
   }
 
-  if ($type.includes('Input')) {
-    return `User Answers (${$type.replace(/Microsoft.(.*)Input/, '$1')})`;
+  if ($kind.includes('Input')) {
+    return `User Answers (${$kind.replace(/Microsoft.(.*)Input/, '$1')})`;
   }
 
   return '';

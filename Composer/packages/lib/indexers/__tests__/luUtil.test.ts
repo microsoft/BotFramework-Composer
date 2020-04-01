@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
 import { updateIntent, addIntent, removeIntent } from '../src/utils/luUtil';
 
@@ -17,6 +17,19 @@ describe('LU Section CRUD test', () => {
 - show my emails
 `;
 
+  const fileContentError1 = `# Greeting
+> not start with  -
+hi
+- hello
+
+# CheckEmail
+- check my email
+- show my emails
+
+# Foo
+> nothing in body
+`;
+
   it('parse section test', () => {
     const luresource = luParser.parse(fileContent);
     const { Sections, Errors, Content } = luresource;
@@ -30,6 +43,17 @@ describe('LU Section CRUD test', () => {
     expect(luresource.Sections[0].UtteranceAndEntitiesMap.length).toEqual(2);
     expect(luresource.Sections[0].UtteranceAndEntitiesMap[0].utterance).toEqual('hi');
     expect(luresource.Sections[0].UtteranceAndEntitiesMap[1].utterance).toEqual('hello');
+  });
+
+  it('parse section with syntax error test', () => {
+    const luresource = luParser.parse(fileContentError1);
+    const { Sections, Errors, Content } = luresource;
+
+    expect(Content).toEqual(fileContentError1);
+    expect(Errors.length).toEqual(2);
+    expect(Sections.length).toEqual(3);
+    expect(Sections[0].Errors.length).toEqual(1);
+    expect(Sections[2].Errors.length).toEqual(1);
   });
 
   it('add simpleIntentSection test', () => {
@@ -79,7 +103,7 @@ describe('LU Section CRUD test', () => {
     expect(luresource.Sections[1].UtteranceAndEntitiesMap[2].utterance).toEqual('check my mail box please');
   });
 
-  it('update section with invalid lu syntax', () => {
+  it('update section with syntax error: missing -', () => {
     const intentName = 'CheckEmail';
 
     const validFileContent = `#CheckEmail
@@ -93,10 +117,31 @@ describe('LU Section CRUD test', () => {
 `,
     };
 
-    const invalidFileContent = `#CheckEmail
-- check my email
+    const invalidIntent = {
+      Name: 'CheckEmail',
+      Body: `check my email
 - show my emails
-@`;
+`,
+    };
+
+    // when intent invalid, after update can still be parsed
+    const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
+    const updatedContent2Parsed = luParser.parse(updatedContent2);
+    expect(updatedContent2Parsed.Sections.length).toEqual(1);
+    expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
+    // when file invalid, update with valid intent should fix error.
+    const updatedContent3 = updateIntent(updatedContent2, intentName, validIntent);
+    const updatedContent3Parsed = luParser.parse(updatedContent3);
+    expect(updatedContent3Parsed.Sections.length).toEqual(1);
+    expect(updatedContent3Parsed.Errors.length).toEqual(0);
+  });
+
+  it('update section with syntax error: end with empty entity @', () => {
+    const intentName = 'CheckEmail';
+
+    const validFileContent = `#CheckEmail
+- check my email
+- show my emails`;
 
     const invalidIntent = {
       Name: 'CheckEmail',
@@ -105,23 +150,39 @@ describe('LU Section CRUD test', () => {
 @`,
     };
 
-    const invalidIntent4 = {
+    // when intent invalid, after update can still be parsed
+    const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
+    const updatedContent2Parsed = luParser.parse(updatedContent2);
+    expect(updatedContent2Parsed.Errors.length).toBeGreaterThan(0);
+    // TODO: update back should fix error.
+    // const updatedContent3 = updateIntent(updatedContent2, intentName, validIntent);
+    // expect(updatedContent3).toEqual(validFileContent);
+  });
+
+  it('update section with syntax error: include # IntentName in body', () => {
+    const intentName = 'CheckEmail';
+
+    const validFileContent = `#CheckEmail
+- check my email
+- show my emails`;
+
+    const invalidIntent = {
       Name: 'CheckEmail',
       Body: `- check my email
 - show my emails
 
 # UnexpectedIntentDefination
-- unexpected intent body
 `,
     };
-    // intent invalid
+    // should auto escape # to \#
     const updatedContent2 = updateIntent(validFileContent, intentName, invalidIntent);
-    expect(updatedContent2).toEqual(validFileContent);
-    const updatedContent4 = updateIntent(validFileContent, intentName, invalidIntent4);
-    expect(updatedContent4).toEqual(validFileContent);
-    // file invalid
-    const updatedContent3 = updateIntent(invalidFileContent, intentName, validIntent);
-    expect(updatedContent3).toEqual(invalidFileContent);
+    const { Sections, Errors } = luParser.parse(updatedContent2);
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(1);
+    expect(Sections[0].Errors.length).toEqual(0);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(Sections[0].UtteranceAndEntitiesMap.length).toEqual(3);
+    expect(Sections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# UnexpectedIntentDefination');
   });
 
   it('delete section test', () => {
@@ -294,6 +355,80 @@ describe('LU Nested Section CRUD test', () => {
     expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[1].utterance).toEqual(
       'please show my unread todos'
     );
+  });
+
+  it('update nestedIntentSection and escape # in body', () => {
+    const intentName = 'CheckTodo/CheckUnreadTodo';
+    const intent = {
+      Name: 'CheckMyUnreadTodo',
+      Body: `- please check my unread todo
+- please show my unread todos
+# Oops
+## Oops
+@ simple todoTitle
+@ simple todoContent
+`,
+    };
+
+    const fileContentUpdated = updateIntent(fileContent, intentName, intent);
+    const luresource = luParser.parse(fileContentUpdated);
+    const { Sections, Errors } = luresource;
+
+    expect(Errors.length).toEqual(0);
+    expect(Sections.length).toEqual(2);
+    expect(Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+    expect(Sections[1].Name).toEqual('CheckTodo');
+    expect(Sections[1].SimpleIntentSections.length).toEqual(2);
+    expect(Sections[1].SimpleIntentSections[0].Name).toEqual('CheckMyUnreadTodo');
+    expect(Sections[1].SimpleIntentSections[0].SectionType).toEqual(luSectionTypes.SIMPLEINTENTSECTION);
+    expect(Sections[1].SimpleIntentSections[0].Errors.length).toEqual(0);
+    expect(Sections[1].SimpleIntentSections[0].Entities.length).toEqual(2);
+    expect(Sections[1].SimpleIntentSections[0].Entities[1].Name).toEqual('todoContent');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap.length).toEqual(4);
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[0].utterance).toEqual(
+      'please check my unread todo'
+    );
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[2].utterance).toEqual('\\# Oops');
+    expect(Sections[1].SimpleIntentSections[0].UtteranceAndEntitiesMap[3].utterance).toEqual('\\## Oops');
+  });
+
+  it('update nestedIntentSection with # ## ### in body', () => {
+    const intentName = 'CheckTodo';
+    const intentBody1 = `# Oops
+## Oops
+### Oops
+`;
+
+    const fileContentUpdated1 = updateIntent(fileContent, intentName, { Name: intentName, Body: intentBody1 });
+    const luresource1 = luParser.parse(fileContentUpdated1);
+    expect(luresource1.Sections.length).toBeGreaterThan(0);
+    expect(luresource1.Errors.length).toBeGreaterThan(0);
+
+    const intentBody2 = `## Oops
+    ### Oops
+    `;
+    const fileContentUpdated2 = updateIntent(fileContent, intentName, { Name: intentName, Body: intentBody2 });
+    const luresource2 = luParser.parse(fileContentUpdated2);
+    expect(luresource2.Sections.length).toEqual(2);
+    expect(luresource2.Errors.length).toBeGreaterThan(0);
+    expect(luresource2.Sections[0].SectionType).toEqual(luSectionTypes.MODELINFOSECTION);
+    expect(luresource2.Sections[1].SectionType).toEqual(luSectionTypes.NESTEDINTENTSECTION);
+
+    // if nestedSection not enable
+    const fileContent3 = `# Greeting
+- hi
+
+# CheckTodo
+- please check my todo
+`;
+    const intentBody3 = `## Oops
+### Oops
+`;
+    const fileContentUpdated3 = updateIntent(fileContent3, intentName, { Name: intentName, Body: intentBody3 });
+    const luresource3 = luParser.parse(fileContentUpdated3);
+    expect(luresource3.Sections.length).toBeGreaterThan(0);
+    expect(luresource3.Errors.length).toBeGreaterThan(0);
   });
 
   /**
