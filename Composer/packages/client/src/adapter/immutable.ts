@@ -3,12 +3,13 @@
 
 import * as redux from 'redux';
 
-export const some = <S>(sources: ReadonlyArray<S> | undefined): ReadonlyArray<S> =>
-  sources !== undefined ? sources : [];
-
-export type Reducer<S, A> = (state: S, action: A) => S;
+export type Reducer<S, A> = (state: S | undefined, action: A) => S;
 
 export const map = <S, A>(reducer: Reducer<S, A>): Reducer<ReadonlyArray<S>, A> => (sources, action) => {
+  if (sources === undefined) {
+    sources = [];
+  }
+
   let targets: Array<S> | undefined = undefined;
   for (let index = 0; index < sources.length; ++index) {
     const source = sources[index];
@@ -49,6 +50,39 @@ export const combinePartial = <S, A extends redux.Action>(
   }
 
   return targets !== undefined ? targets : sources;
+};
+
+export type ReducerByKey<S, A> = {
+  [K in keyof S]: Reducer<S[K], A>;
+};
+
+export const combine = <S, A>(reducerByKey: ReducerByKey<S, A>): Reducer<S, A> => (sources, action) => {
+  if (sources !== undefined) {
+    let targets = sources;
+    for (const key in reducerByKey) {
+      const source = sources[key];
+      const reducer = reducerByKey[key];
+      const target = reducer(source, action);
+      if (source !== target) {
+        if (sources === targets) {
+          targets = { ...sources };
+        }
+
+        targets[key] = target;
+      }
+    }
+
+    return targets;
+  }
+
+  const targets: Partial<S> = {};
+  for (const key in reducerByKey) {
+    const reducer = reducerByKey[key];
+    const target = reducer(undefined, action);
+    targets[key] = target;
+  }
+
+  return targets as S;
 };
 
 export const combineSeries = <S, A extends redux.Action>(

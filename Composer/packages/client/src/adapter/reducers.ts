@@ -1,17 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as redux from 'redux';
-
 import * as protocol from './protocol';
 import * as immutable from './immutable';
 import * as lazy from './lazy';
 import * as model from './model';
-
-export const map = <S, A extends protocol.Action>(
-  inner: protocol.Reducer<S, A>
-): protocol.Reducer<ReadonlyArray<S>, A> => (source, action) =>
-  immutable.map<S, A>(inner)(immutable.some(source), action);
 
 type Action = protocol.Action;
 
@@ -56,12 +49,12 @@ export const hasChildVariables = <S extends model.Thing<HasChildVariables> & mod
 export const variable: protocol.Reducer<model.Variable, Action> = (state, action) =>
   hasChildVariables<model.Variable>(state, action);
 
-export const variables: protocol.Reducer<ReadonlyArray<model.Variable>, Action> = map(variable);
+export const variables: protocol.Reducer<ReadonlyArray<model.Variable>, Action> = immutable.map(variable);
 
 export const scope: protocol.Reducer<model.Scope, Action> = (state, action) =>
   hasChildVariables<model.Scope>(state, action);
 
-export const scopes: protocol.Reducer<ReadonlyArray<model.Scope>, Action> = map(scope);
+export const scopes: protocol.Reducer<ReadonlyArray<model.Scope>, Action> = immutable.map(scope);
 
 export const stackFrame: protocol.Reducer<model.StackFrame, Action> = (state, action) => {
   if (state === undefined) {
@@ -94,7 +87,7 @@ export const stackFrame: protocol.Reducer<model.StackFrame, Action> = (state, ac
   })(state, action);
 };
 
-export const stackFrames = map(stackFrame);
+export const stackFrames = immutable.map(stackFrame);
 
 const threadEvent: protocol.Reducer<model.Thread, Action> = (state, action) => {
   if (state === undefined) {
@@ -186,7 +179,7 @@ export const threads: protocol.Reducer<ReadonlyArray<model.Thread>, Action> = (s
     }
   }
 
-  return map(thread)(state, action);
+  return immutable.map(thread)(state, action);
 };
 
 export const lazyThreads: protocol.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>>, Action> = (state, action) =>
@@ -230,7 +223,7 @@ export const outputs: protocol.Reducer<ReadonlyArray<model.Output>, Action> = (s
   return state;
 };
 
-export const state = redux.combineReducers<model.Debuggee, Action>({
+export const state: protocol.Reducer<model.Debuggee, Action> = immutable.combine<model.Debuggee, Action>({
   lazyThreads,
   outputs,
 });
