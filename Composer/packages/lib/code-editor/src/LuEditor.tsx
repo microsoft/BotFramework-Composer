@@ -92,7 +92,9 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
   const luServer = languageServer || defaultLUServer;
 
   const onInit: OnInit = monaco => {
-    registerLULanguage(monaco);
+    if (!monaco.languages.getLanguages().some(lang => lang.id === 'lu')) {
+      registerLULanguage(monaco);
+    }
     monacoRef.current = monaco;
 
     if (typeof onInitProp === 'function') {
