@@ -18,30 +18,30 @@ import {
 describe('measureJsonBoundary', () => {
   const boundary = new Boundary();
 
-  it('should return an empty boundary when json is null or json.$type is null', () => {
+  it('should return an empty boundary when json is null or json.$kind is null', () => {
     expect(measureJsonBoundary(null)).toEqual(boundary);
     expect(measureJsonBoundary({ a: 1 })).toEqual(boundary);
   });
-  it('should return boundary whose size is determined by the json.$type', () => {
-    expect(measureJsonBoundary({ $type: ObiTypes.ChoiceDiamond })).toEqual(
+  it('should return boundary whose size is determined by the json.$kind', () => {
+    expect(measureJsonBoundary({ $kind: ObiTypes.ChoiceDiamond })).toEqual(
       new Boundary(DiamondSize.width, DiamondSize.height)
     );
-    expect(measureJsonBoundary({ $type: ObiTypes.ConditionNode })).toEqual(
+    expect(measureJsonBoundary({ $kind: ObiTypes.ConditionNode })).toEqual(
       new Boundary(InitNodeSize.width, InitNodeSize.height)
     );
-    expect(measureJsonBoundary({ $type: ObiTypes.LoopIndicator })).toEqual(
+    expect(measureJsonBoundary({ $kind: ObiTypes.LoopIndicator })).toEqual(
       new Boundary(LoopIconSize.width, LoopIconSize.height)
     );
-    expect(measureJsonBoundary({ $type: ObiTypes.LogAction })).toEqual(new Boundary(StandardNodeWidth, HeaderHeight));
+    expect(measureJsonBoundary({ $kind: ObiTypes.LogAction })).toEqual(new Boundary(StandardNodeWidth, HeaderHeight));
   });
-  it("should return boundary whose size is determined by the data's choices when json.$type is choiceInput", () => {
+  it("should return boundary whose size is determined by the data's choices when json.$kind is choiceInput", () => {
     const data1: { [key: string]: any } = {
-      $type: ObiTypes.ChoiceInputDetail,
+      $kind: ObiTypes.ChoiceInputDetail,
       choices: [{ value: '1' }],
     };
 
     const data2: { [key: string]: any } = {
-      $type: ObiTypes.ChoiceInputDetail,
+      $kind: ObiTypes.ChoiceInputDetail,
       choices: [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }],
     };
     expect(measureJsonBoundary(data1)).toEqual(

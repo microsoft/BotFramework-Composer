@@ -11,7 +11,7 @@ export interface DesignerData {
 
 export interface BaseSchema {
   /** Defines the valid properties for the component you are configuring (from a dialog .schema file) */
-  $type: string;
+  $kind: string;
   /** Inline id for reuse of an inline definition */
   $id?: string;
   /** Copy the definition by id from a .dialog file. */
@@ -177,7 +177,7 @@ export interface LuisRecognizer extends BaseSchema {
 }
 
 interface IntentPattern {
-  $type: 'Microsoft.IntentPattern';
+  $kind: 'Microsoft.IntentPattern';
   intent: string;
   pattern: string;
 }

@@ -13,7 +13,7 @@ describe('shallowCopyAdaptiveAction', () => {
 
   it('can copy TextInput', async () => {
     const promptText = {
-      $type: 'Microsoft.TextInput',
+      $kind: 'Microsoft.TextInput',
       $designer: {
         id: '844184',
         name: 'Prompt for text',
@@ -29,7 +29,7 @@ describe('shallowCopyAdaptiveAction', () => {
     };
 
     expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
-      $type: 'Microsoft.TextInput',
+      $kind: 'Microsoft.TextInput',
       $designer: {
         id: '5678',
       },

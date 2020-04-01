@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "937757"
   },
@@ -7,13 +7,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnUnknownIntent",
+      "$kind": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "807187"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "551445"
           },
@@ -22,14 +22,14 @@
       ]
     },
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "name": "Greeting (ConversationUpdate)",
         "id": "452701"
       },
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -37,7 +37,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -45,7 +45,7 @@
               "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "576166",
                     "name": "Send a response"
@@ -59,10 +59,10 @@
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "actions": [
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "289770"
           },
@@ -112,7 +112,7 @@
           }
         },
         {
-          "$type": "Microsoft.SwitchCondition",
+          "$kind": "Microsoft.SwitchCondition",
           "$designer": {
             "id": "981997"
           },
@@ -122,7 +122,7 @@
               "value": "Simple Text",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "256544"
                   },
@@ -134,7 +134,7 @@
               "value": "Text With Memory",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "598449"
                   },
@@ -146,7 +146,7 @@
               "value": "LGWithParam",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "078497"
                   },
@@ -158,7 +158,7 @@
               "value": "LGComposition",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "349641"
                   },
@@ -170,7 +170,7 @@
               "value": "Structured LG",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "302012",
                     "name": "Begin a new dialog"
@@ -183,7 +183,7 @@
               "value": "MultiLineText",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "053737",
                     "name": "Begin a new dialog"
@@ -196,7 +196,7 @@
               "value": "IfElseCondition",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "542800",
                     "name": "Begin a new dialog"
@@ -209,7 +209,7 @@
               "value": "SwitchCondition",
               "actions": [
                 {
-                  "$type": "Microsoft.BeginDialog",
+                  "$kind": "Microsoft.BeginDialog",
                   "$designer": {
                     "id": "469376",
                     "name": "Begin a new dialog"
@@ -221,7 +221,7 @@
           ]
         },
         {
-          "$type": "Microsoft.RepeatDialog",
+          "$kind": "Microsoft.RepeatDialog",
           "$designer": {
             "id": "938048"
           }

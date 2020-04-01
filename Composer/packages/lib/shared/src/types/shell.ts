@@ -22,7 +22,7 @@ export interface ShellData {
   currentDialog: DialogInfo;
   projectId: string;
   data: {
-    $type: string;
+    $kind: string;
     [key: string]: any;
   };
   designerId: string;
