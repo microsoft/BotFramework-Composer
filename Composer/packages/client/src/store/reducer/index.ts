@@ -58,9 +58,10 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
 };
 
 const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
-  getReferredFiles(luFiles, dialogs).forEach(luFile => {
-    luFileStatusStorage.checkFileStatus(botName, luFile.id);
-  });
+  luFileStatusStorage.checkFileStatus(
+    botName,
+    getReferredFiles(luFiles, dialogs).map(file => file.id)
+  );
   return updateLuFilesStatus(botName, luFiles);
 };
 
@@ -179,7 +180,7 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   const { parse } = luIndexer;
   const luFile = { id, content, ...parse(content, id) };
   state.luFiles.push(luFile);
-  luFileStatusStorage.createFile(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.botName, id);
   filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Lu, content);
   return state;
 };
@@ -187,6 +188,7 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
 const removeLuFile: ReducerFunc = (state, { id }) => {
   state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
     if (getBaseName(file.id) === id || file.id === id) {
+      luFileStatusStorage.removeFileStatus(state.botName, id);
       filePersistence.notify(FileChangeType.DELETE, file.id, FileExtensions.Lu, '');
     } else {
       result.push(file);
@@ -214,7 +216,7 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
       return { ...luFile, intents, diagnostics, content };
     })
   );
-  luFileStatusStorage.updateFile(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.botName, id);
   filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Lu, content);
   return state;
 };

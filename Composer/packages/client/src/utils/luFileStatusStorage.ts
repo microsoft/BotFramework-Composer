@@ -10,6 +10,7 @@ interface ILuFileStatus {
   [fileId: string]: boolean;
 }
 
+// add luis publish status to local storage
 class LuFileStatusStorage {
   private storage: ClientStorage;
   private _all: { [botName: string]: ILuFileStatus };
@@ -23,29 +24,26 @@ class LuFileStatusStorage {
     return this._all[botName] || {};
   }
 
-  public updateFile(botName: string, fileId: string) {
+  public updateFileStatus(botName: string, fileId: string, value = false) {
     if (!this._all[botName]) {
       this._all[botName] = {};
     }
-    this._all[botName][fileId] = false;
-    this.storage.set(KEY, this._all);
+    if (this._all[botName][fileId] !== value) {
+      this._all[botName][fileId] = value;
+      this.storage.set(KEY, this._all);
+    }
   }
 
-  public removeFile(botName: string, fileId: string) {
-    if (typeof this._all[botName]?.[fileId] !== 'undefined') {
+  public removeFileStatus(botName: string, fileId: string) {
+    if (this._all[botName]) return;
+    if (typeof this._all[botName][fileId] !== 'undefined') {
       delete this._all[botName][fileId];
       this.storage.set(KEY, this._all);
     }
   }
 
-  public createFile(botName: string, fileId: string) {
-    this.updateFile(botName, fileId);
-  }
-
-  public checkFileStatus(botName: string, fileId: string) {
-    if (this._all === {} || typeof this._all[botName]?.[fileId] === 'undefined') {
-      this.updateFile(botName, fileId);
-    }
+  public checkFileStatus(botName: string, fileIds: string[]) {
+    fileIds.forEach(id => this.updateFileStatus(botName, id, false));
   }
 
   public publishAll(botName: string) {
@@ -53,6 +51,13 @@ class LuFileStatusStorage {
       this._all[botName][key] = true;
     });
     this.storage.set(KEY, this._all);
+  }
+
+  public removeAllStatuses(botName: string) {
+    if (this._all[botName]) {
+      delete this._all[botName];
+      this.storage.set(KEY, this._all);
+    }
   }
 }
 
