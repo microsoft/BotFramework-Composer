@@ -14,8 +14,7 @@ This package is a wrapper that will spin up the Composer web application inside 
 ### Run from Source (Development)
 
 1. Run `yarn start` in the `/Composer/packages/client` directory.
-2. Run `yarn start` or `yarn start:dev` in the `/Composer/packages/server` directory.
-3. Run `yarn start` in the `/Composer/packages/electron-server` directory.
+2. Run `yarn start` in the `/Composer/packages/electron-server` directory.
 
 ### Build a packaged executable
 

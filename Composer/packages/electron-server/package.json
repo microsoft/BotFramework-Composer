@@ -71,10 +71,12 @@
     },
     "asarUnpack": [
       "build/assets",
-      "build/templates"
+      "build/templates",
+      "resources/composerIcon_1024x1024.png"
     ],
     "files": [
-      "build"
+      "build",
+      "resources/composerIcon_1024x1024.png"
     ],
     "protocols": [
       {

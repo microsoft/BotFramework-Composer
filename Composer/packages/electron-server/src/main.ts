@@ -14,14 +14,20 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 function main() {
   console.log('Starting electron app');
   // Create the browser window.
-  const win = new BrowserWindow({
+  const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
     },
     show: false,
-  });
+  };
+  if (process.platform === 'linux' && !isDevelopment) {
+    // workaround for broken .AppImage icons since electron-builder@21.0.1 removed .AppImage desktop integration
+    // (https://github.com/electron-userland/electron-builder/releases/tag/v21.0.1)
+    browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
+  }
+  const win = new BrowserWindow(browserWindowOptions);
 
   // and load the index.html of the app.
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
