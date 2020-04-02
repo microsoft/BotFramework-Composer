@@ -13,10 +13,4 @@ export enum FileExtensions {
   Lg = '.lg',
 }
 
-export interface ResourceInfo {
-  name: string;
-  content: string;
-  changeType: FileChangeType;
-}
-
 export type FileErrorHandler = (error) => void;

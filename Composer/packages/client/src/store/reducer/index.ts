@@ -4,7 +4,7 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
@@ -14,8 +14,6 @@ import { getExtension, getBaseName } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
-import filePersistence from '../persistence/FilePersistence';
-import { FileChangeType, FileExtensions } from '../persistence/types';
 
 import createReducer from './createReducer';
 
@@ -81,11 +79,6 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.locale = locale;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
-  filePersistence.clear();
-  filePersistence.projectId = id;
-  files.forEach(file => {
-    filePersistence.attach(file.name, file);
-  });
   return state;
 };
 
@@ -130,19 +123,11 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
   const { templates, diagnostics } = parse(content, id, lgImportresolver);
   const lgFile = { id, templates, diagnostics, content };
   state.lgFiles.push(lgFile);
-  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Lg, content);
   return state;
 };
 
 const removeLgFile: ReducerFunc = (state, { id }) => {
-  state.lgFiles = state.lgFiles.reduce((result: LgFile[], file) => {
-    if (getBaseName(file.id) === id || file.id === id) {
-      filePersistence.notify(FileChangeType.DELETE, file.id, FileExtensions.Lg, '');
-    } else {
-      result.push(file);
-    }
-    return result;
-  }, []);
+  state.lgFiles = state.lgFiles.filter(file => getBaseName(file.id) !== id && file.id !== id);
   return state;
 };
 
@@ -162,7 +147,6 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
 
     return { ...lgFile, templates, diagnostics, content };
   });
-  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Lg, content);
   return state;
 };
 
@@ -181,7 +165,6 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   const luFile = { id, content, ...parse(content, id) };
   state.luFiles.push(luFile);
   luFileStatusStorage.updateFileStatus(state.botName, id);
-  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Lu, content);
   return state;
 };
 
@@ -189,7 +172,6 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
   state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
     if (getBaseName(file.id) === id || file.id === id) {
       luFileStatusStorage.removeFileStatus(state.botName, id);
-      filePersistence.notify(FileChangeType.DELETE, file.id, FileExtensions.Lu, '');
     } else {
       result.push(file);
     }
@@ -217,7 +199,6 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
     })
   );
   luFileStatusStorage.updateFileStatus(state.botName, id);
-  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Lu, content);
   return state;
 };
 
@@ -228,7 +209,6 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
     }
     return dialog;
   });
-  filePersistence.notify(FileChangeType.UPDATE, id, FileExtensions.Dialog, content);
   return state;
 };
 
@@ -237,7 +217,6 @@ const removeDialog: ReducerFunc = (state, { id }) => {
   //remove dialog should remove all locales lu and lg files
   state = removeLgFile(state, { id });
   state = removeLuFile(state, { id });
-  filePersistence.notify(FileChangeType.DELETE, id, FileExtensions.Dialog, '');
   return state;
 };
 
@@ -267,7 +246,6 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
-  filePersistence.notify(FileChangeType.CREATE, id, FileExtensions.Dialog, fixedContent);
   return state;
 };
 

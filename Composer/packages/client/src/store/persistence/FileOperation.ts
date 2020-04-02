@@ -3,7 +3,7 @@
 import { FileInfo } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import { FileChangeType, ResourceInfo, FileErrorHandler } from './types';
+import { FileErrorHandler } from './types';
 import * as client from './http';
 
 export class FileOperation {
@@ -29,23 +29,8 @@ export class FileOperation {
     this.file = file;
   }
 
-  async operation(fileInfo: ResourceInfo, errorHandler: FileErrorHandler) {
-    const { changeType, content, name } = fileInfo;
+  async updateFile(content: string, errorHandler: FileErrorHandler) {
     this.errorHandler = errorHandler;
-    switch (changeType) {
-      case FileChangeType.CREATE:
-        await this.createFile(name, content);
-        break;
-      case FileChangeType.DELETE:
-        await this.removeFile();
-        break;
-      case FileChangeType.UPDATE:
-        await this.updateFile(content);
-        break;
-    }
-  }
-
-  async updateFile(content: string) {
     await this.debouncedUpdate(content);
   }
 
