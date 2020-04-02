@@ -73,10 +73,12 @@ export const visualPanel = css`
   position: relative;
 `;
 
-export const visualEditor = css`
+export const visualEditor = (hidden: boolean) => css`
   border: 0px;
   flex: 1;
   background-color: #f6f6f6;
+
+  display: ${hidden ? 'none' : 'block'};
 `;
 
 export const formEditor = css`

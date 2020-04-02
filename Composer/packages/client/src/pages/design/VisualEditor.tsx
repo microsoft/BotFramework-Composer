@@ -3,18 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useCallback, useState, useEffect } from 'react';
+import React, { useContext, useCallback, useState, useEffect, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
+import VisualDesigner from '@bfc/visual-designer';
+import Extension from '@bfc/extension';
 
+import { isAbsHosted } from '../../utils/envUtil';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
-import { BASEPATH } from '../../constants';
+import { useShellApi } from '../../useShellApi';
+import { getDialogData } from '../../utils';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
-
-const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 const addIconProps = {
   iconName: 'CircleAddition',
@@ -53,12 +55,47 @@ interface VisualEditorProps {
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = props => {
+  const shellApi = useShellApi('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { state, actions } = useContext(StoreContext);
-  const { designPageLocation, dialogs } = state;
   const { onboardingAddCoachMarkRef } = actions;
-  const { selected, dialogId } = designPageLocation;
+  const { locale, botName, projectId, dialogs, focusPath, schemas, lgFiles, luFiles, designPageLocation } = state;
+  const { dialogId, selected, focused, promptTab } = designPageLocation;
+
+  const dialogsMap = useMemo(() => {
+    return dialogs.reduce((result, dialog) => {
+      result[dialog.id] = dialog.content;
+      return result;
+    }, {});
+  }, [dialogs]);
+
+  const currentDialog = dialogs.find(d => d.id === dialogId);
+  const data = getDialogData(dialogsMap, dialogId);
+
+  // @ts-ignore
+  const shellData: ShellData = currentDialog
+    ? {
+        data,
+        locale,
+        botName,
+        projectId,
+        dialogs,
+        dialogId,
+        focusPath,
+        schemas,
+        lgFiles,
+        luFiles,
+        currentDialog,
+        designerId: get(data, '$designer.id'),
+        focusedEvent: selected,
+        focusedActions: focused ? [focused] : [],
+        focusedSteps: focused ? [focused] : selected ? [selected] : [],
+        focusedTab: promptTab,
+        clipboardActions: state.clipboardActions,
+        hosted: isAbsHosted(),
+      }
+    : {};
 
   const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
@@ -70,16 +107,20 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
 
   return (
     <React.Fragment>
-      <iframe
-        id="VisualEditor"
-        key="VisualEditor"
-        name="VisualEditor"
-        css={visualEditor}
-        hidden={triggerButtonVisible || !selected}
-        src={`${rootPath}/extensionContainer.html`}
+      <div
+        css={visualEditor(triggerButtonVisible || !selected)}
+        aria-label={formatMessage('visual editor')}
         ref={addRef}
-        title={formatMessage('visual editor')}
-      />
+      >
+        <Extension shell={shellApi as any} shellData={shellData}>
+          <VisualDesigner
+            {...shellData}
+            onChange={shellApi.saveData}
+            shellApi={shellApi as any}
+            schema={schemas.sdk?.content}
+          />
+        </Extension>
+      </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>
   );
