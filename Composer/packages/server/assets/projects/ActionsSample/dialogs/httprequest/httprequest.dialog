@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "351884"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "898827"
       },
       "actions": [
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "738240"
           },
@@ -24,14 +24,14 @@
           "allowInterruptions": "true"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "229784"
           },
           "activity": "${bfdactivity-229784()}"
         },
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "665408"
           },
@@ -42,7 +42,7 @@
           "allowInterruptions": "false"
         },
         {
-          "$type": "Microsoft.HttpRequest",
+          "$kind": "Microsoft.HttpRequest",
           "$designer": {
             "id": "845107"
           },
@@ -73,14 +73,14 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "200761"
           },
           "activity": "${bfdactivity-200761()}"
         },
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "797897"
           },
@@ -91,7 +91,7 @@
           "allowInterruptions": "false"
         },
         {
-          "$type": "Microsoft.HttpRequest",
+          "$kind": "Microsoft.HttpRequest",
           "$designer": {
             "id": "705959"
           },
@@ -100,7 +100,7 @@
           "resultProperty": "user.getResponse"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "212615"
           },

@@ -12,23 +12,23 @@ export function transformIfCondtion(
   input,
   jsonpath: string
 ): { condition: IndexedNode; choice: IndexedNode; ifGroup: IndexedNode; elseGroup: IndexedNode } | null {
-  if (!input || input.$type !== ObiTypes.IfCondition) return null;
+  if (!input || input.$kind !== ObiTypes.IfCondition) return null;
 
   const result = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
-      $type: ObiTypes.ConditionNode,
+      $kind: ObiTypes.ConditionNode,
     }),
     choice: new IndexedNode(`${jsonpath}`, {
-      $type: ObiTypes.ChoiceDiamond,
+      $kind: ObiTypes.ChoiceDiamond,
       text: input.condition,
     }),
     ifGroup: new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
-      $type: ObiTypes.StepGroup,
+      $kind: ObiTypes.StepGroup,
       children: input[IfBranchKey] || [],
     }),
     elseGroup: new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
-      $type: ObiTypes.StepGroup,
+      $kind: ObiTypes.StepGroup,
       children: input[ElseBranchKey] || [],
     }),
   };

@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "708197"
   },
@@ -7,20 +7,20 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "475044"
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "719500"
           },
           "condition": "user.name == null",
           "actions": [
             {
-              "$type": "Microsoft.TextInput",
+              "$kind": "Microsoft.TextInput",
               "$designer": {
                 "id": "719594"
               },
@@ -33,7 +33,7 @@
           ]
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "485963"
           },

@@ -4,6 +4,8 @@
 
 import { Monaco } from '@monaco-editor/react';
 
+const LANGUAGE_NAME = 'botbuilderlg';
+
 function createKeywordsProposals(monaco: Monaco, range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
   // here you could do a server side lookup
@@ -42,7 +44,10 @@ function createKeywordsProposals(monaco: Monaco, range) {
 }
 
 export function registerLGLanguage(monaco: Monaco) {
-  monaco.languages.setMonarchTokensProvider('botbuilderlg', {
+  // return if we've already registered this language to the editor
+  if (monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) return;
+
+  monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     ignoreCase: true,
     brackets: [
       { open: '{', close: '}', token: 'delimiter.curly' },
@@ -120,13 +125,13 @@ export function registerLGLanguage(monaco: Monaco) {
   });
 
   monaco.languages.register({
-    id: 'botbuilderlg',
+    id: LANGUAGE_NAME,
     extensions: ['.lg'],
     aliases: ['LG', 'language-generation'],
     mimetypes: ['application/lg'],
   });
 
-  monaco.languages.setLanguageConfiguration('botbuilderlg', {
+  monaco.languages.setLanguageConfiguration(LANGUAGE_NAME, {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -150,7 +155,7 @@ export function registerLGLanguage(monaco: Monaco) {
     ],
   });
 
-  monaco.languages.registerCompletionItemProvider('botbuilderlg', {
+  monaco.languages.registerCompletionItemProvider(LANGUAGE_NAME, {
     provideCompletionItems: function(model, position) {
       const lineText = model.getValueInRange({
         startLineNumber: position.lineNumber,

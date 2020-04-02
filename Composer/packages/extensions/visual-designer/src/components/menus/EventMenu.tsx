@@ -18,7 +18,7 @@ export const EventMenu: React.FC<EventMenuProps> = ({ label, onClick, ...rest })
   const eventMenuItems = createStepMenu(
     [DialogGroup.EVENTS],
     false,
-    (e, item): any => onClick(item ? item.data.$type : null),
+    (e, item): any => onClick(item ? item.data.$kind : null),
     dialogFactory
   );
 
