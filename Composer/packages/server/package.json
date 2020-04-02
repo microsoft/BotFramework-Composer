@@ -57,7 +57,6 @@
   "dependencies": {
     "@azure/ms-rest-js": "^1.8.7",
     "@bfc/indexers": "*",
-    "@bfc/client": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
