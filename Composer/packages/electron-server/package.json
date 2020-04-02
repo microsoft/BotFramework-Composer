@@ -18,7 +18,7 @@
     "pack": "node scripts/electronBuilderPack.js",
     "start": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
     "start:electron:dev": "cross-env ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron"

@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app } from 'electron';
 import { join, dirname } from 'path';
+
+import { app } from 'electron';
 
 /* Returns the path to the application's unpacked asar contents */
 export function getUnpackedAsarPath(): string {
