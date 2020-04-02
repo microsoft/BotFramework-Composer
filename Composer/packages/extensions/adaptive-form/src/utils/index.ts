@@ -7,6 +7,6 @@ export * from './getUISchema';
 export * from './mergePluginConfigs';
 export * from './resolveBaseSchema';
 export * from './resolveFieldWidget';
-export * from './resolvePropertySchema';
+export * from './resolvePropSchema';
 export * from './resolveRef';
 export * from './uiOptionsHelpers';
