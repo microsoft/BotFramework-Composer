@@ -9,17 +9,17 @@ const factory = new DialogFactory({});
 
 describe('queryNode', () => {
   describe('can query correct result', () => {
-    const dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    const dialog = { foo: { bar: [{ $kind: 'firstOne' }, { $kind: 'secondOne' }] } };
     it('when data not exists.', () => {
       expect(queryNode({}, 'foo.bar[0]')).toEqual(null);
     });
 
     it('when data locates in an object.', () => {
-      expect(queryNode(dialog, 'foo.bar')).toEqual([{ $type: 'firstOne' }, { $type: 'secondOne' }]);
+      expect(queryNode(dialog, 'foo.bar')).toEqual([{ $kind: 'firstOne' }, { $kind: 'secondOne' }]);
     });
 
     it('when data locates in an array.', () => {
-      expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $type: 'firstOne' });
+      expect(queryNode(dialog, 'foo.bar[0]')).toEqual({ $kind: 'firstOne' });
     });
   });
 
@@ -44,21 +44,21 @@ describe('insert', () => {
 
   describe('when data already exists', () => {
     beforeEach(() => {
-      dialog.foo.bar = [{ $type: 'firstOne' }, { $type: 'secondOne' }];
+      dialog.foo.bar = [{ $kind: 'firstOne' }, { $kind: 'secondOne' }];
     });
 
     it('inserts into the correct position', () => {
       const updated = insert(dialog, path, 1, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
-          $type: 'firstOne',
+          $kind: 'firstOne',
         },
         {
-          $type: 'newOne',
+          $kind: 'newOne',
           $designer: { id: expect.any(String) },
         },
         {
-          $type: 'secondOne',
+          $kind: 'secondOne',
         },
       ]);
     });
@@ -67,14 +67,14 @@ describe('insert', () => {
       const updated = insert(dialog, path, -2, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
-          $type: 'newOne',
+          $kind: 'newOne',
           $designer: { id: expect.any(String) },
         },
         {
-          $type: 'firstOne',
+          $kind: 'firstOne',
         },
         {
-          $type: 'secondOne',
+          $kind: 'secondOne',
         },
       ]);
     });
@@ -83,13 +83,13 @@ describe('insert', () => {
       const updated = insert(dialog, path, 10, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
-          $type: 'firstOne',
+          $kind: 'firstOne',
         },
         {
-          $type: 'secondOne',
+          $kind: 'secondOne',
         },
         {
-          $type: 'newOne',
+          $kind: 'newOne',
           $designer: { id: expect.any(String) },
         },
       ]);
@@ -99,13 +99,13 @@ describe('insert', () => {
       const updated = insert(dialog, path, undefined, 'newOne', factory);
       expect(updated.foo.bar).toEqual([
         {
-          $type: 'firstOne',
+          $kind: 'firstOne',
         },
         {
-          $type: 'secondOne',
+          $kind: 'secondOne',
         },
         {
-          $type: 'newOne',
+          $kind: 'newOne',
           $designer: { id: expect.any(String) },
         },
       ]);
@@ -118,7 +118,7 @@ describe('insert', () => {
 
       const updated = insert(dialog, path, 0, 'newOne', factory);
 
-      expect(updated.foo.bar).toEqual([{ $type: 'newOne', $designer: { id: expect.any(String) } }]);
+      expect(updated.foo.bar).toEqual([{ $kind: 'newOne', $designer: { id: expect.any(String) } }]);
     });
   });
 });
@@ -126,7 +126,7 @@ describe('insert', () => {
 describe('delete node flow', () => {
   let dialog, path, removedDataFn;
   beforeEach(() => {
-    dialog = { foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } };
+    dialog = { foo: { bar: [{ $kind: 'firstOne' }, { $kind: 'secondOne' }] } };
     removedDataFn = jest.fn();
   });
 
@@ -145,7 +145,7 @@ describe('delete node flow', () => {
       path = 'foo.bar[0]';
       const result = deleteNode(dialog, path, removedDataFn);
 
-      expect(result).toEqual({ foo: { bar: [{ $type: 'secondOne' }] } });
+      expect(result).toEqual({ foo: { bar: [{ $kind: 'secondOne' }] } });
       expect(removedDataFn).toBeCalledWith(dialog.foo.bar[0]);
     });
     it("should delete node successfully when targetNode's currentKey type is string", () => {
@@ -155,13 +155,13 @@ describe('delete node flow', () => {
       expect(result).toEqual({ foo: {} });
       expect(removedDataFn).toBeCalledWith(dialog.foo.bar);
     });
-    it("removeLgTemplate function should be called when targetNode's $type is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
-      dialog.foo.activityNode = { $type: 'Microsoft.SendActivity', activity: '[bfdactivity-a]' };
+    it("removeLgTemplate function should be called when targetNode's $kind is 'Microsoft.SendActivity' && activity includes '[bfdactivity-'", () => {
+      dialog.foo.activityNode = { $kind: 'Microsoft.SendActivity', activity: '[bfdactivity-a]' };
       path = 'foo.activityNode';
       const result = deleteNode(dialog, path, removedDataFn);
 
       expect(removedDataFn).toBeCalledWith(dialog.foo.activityNode);
-      expect(result).toEqual({ foo: { bar: [{ $type: 'firstOne' }, { $type: 'secondOne' }] } });
+      expect(result).toEqual({ foo: { bar: [{ $kind: 'firstOne' }, { $kind: 'secondOne' }] } });
     });
   });
 });

@@ -7,12 +7,12 @@ import { ObiTypes } from '../../src/constants/ObiTypes';
 test('should return NULL when input is invalid', () => {
   expect(transformForeach(null, '')).toBeNull();
   expect(transformForeach({}, '')).toBeNull();
-  expect(transformForeach({ $type: 'wrong' }, '')).toBeNull();
+  expect(transformForeach({ $kind: 'wrong' }, '')).toBeNull();
 });
 
 test('should return correct schema when input a Foreach schema', () => {
   const json = {
-    $type: 'Microsoft.Foreach',
+    $kind: 'Microsoft.Foreach',
     listProperty: 'users.todo',
     steps: [],
   };
@@ -26,26 +26,26 @@ test('should return correct schema when input a Foreach schema', () => {
 
   expect(foreachDetail).toBeDefined();
   expect(foreachDetail.id).toEqual('actions[0]');
-  expect(foreachDetail.json.$type).toEqual(ObiTypes.ForeachDetail);
+  expect(foreachDetail.json.$kind).toEqual(ObiTypes.ForeachDetail);
   expect(foreachDetail.json.listProperty).toEqual(json.listProperty);
 
   expect(stepGroup).toBeDefined();
   expect(stepGroup.id).toEqual('actions[0].actions');
-  expect(stepGroup.json.$type).toEqual(ObiTypes.StepGroup);
+  expect(stepGroup.json.$kind).toEqual(ObiTypes.StepGroup);
   expect(stepGroup.json.children.length).toEqual(0);
 
   expect(loopBegin).toBeDefined();
   expect(loopBegin.id).toEqual('actions[0]');
-  expect(loopBegin.json.$type).toEqual(ObiTypes.LoopIndicator);
+  expect(loopBegin.json.$kind).toEqual(ObiTypes.LoopIndicator);
 
   expect(loopEnd).toBeDefined();
   expect(loopEnd.id).toEqual('actions[0]');
-  expect(loopEnd.json.$type).toEqual(ObiTypes.LoopIndicator);
+  expect(loopEnd.json.$kind).toEqual(ObiTypes.LoopIndicator);
 });
 
 test('should return correct schema when input a ForeachPage schema', () => {
   const json = {
-    $type: 'Microsoft.ForeachPage',
+    $kind: 'Microsoft.ForeachPage',
     listProperty: 'users.todo',
     pageSize: 2,
     actions: [],
@@ -60,19 +60,19 @@ test('should return correct schema when input a ForeachPage schema', () => {
 
   expect(foreachDetail).toBeDefined();
   expect(foreachDetail.id).toEqual('actions[0]');
-  expect(foreachDetail.json.$type).toEqual(ObiTypes.ForeachPageDetail);
+  expect(foreachDetail.json.$kind).toEqual(ObiTypes.ForeachPageDetail);
   expect(foreachDetail.json.listProperty).toEqual(json.listProperty);
 
   expect(stepGroup).toBeDefined();
   expect(stepGroup.id).toEqual('actions[0].actions');
-  expect(stepGroup.json.$type).toEqual(ObiTypes.StepGroup);
+  expect(stepGroup.json.$kind).toEqual(ObiTypes.StepGroup);
   expect(stepGroup.json.children.length).toEqual(0);
 
   expect(loopBegin).toBeDefined();
   expect(loopBegin.id).toEqual('actions[0]');
-  expect(loopBegin.json.$type).toEqual(ObiTypes.LoopIndicator);
+  expect(loopBegin.json.$kind).toEqual(ObiTypes.LoopIndicator);
 
   expect(loopEnd).toBeDefined();
   expect(loopEnd.id).toEqual('actions[0]');
-  expect(loopEnd.json.$type).toEqual(ObiTypes.LoopIndicator);
+  expect(loopEnd.json.$kind).toEqual(ObiTypes.LoopIndicator);
 });

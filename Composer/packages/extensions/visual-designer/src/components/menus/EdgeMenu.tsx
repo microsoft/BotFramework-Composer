@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
+import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
@@ -27,7 +27,7 @@ interface EdgeMenuProps {
 const buildEdgeMenuItemsFromClipboardContext = (
   context,
   onClick,
-  filter?: (t: SDKTypes) => boolean
+  filter?: (t: SDKKinds) => boolean
 ): IContextualMenu[] => {
   const { clipboardActions } = context;
   const menuItems = createStepMenu(
@@ -41,7 +41,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.data.$type : null),
+    (e, item) => onClick(item ? item.data.$kind : null),
     context.dialogFactory,
     filter
   );
@@ -149,7 +149,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         menuItems={buildEdgeMenuItemsFromClipboardContext(
           nodeContext,
           onClick,
-          selfHosted ? x => x !== SDKTypes.LogAction : undefined
+          selfHosted ? x => x !== SDKKinds.LogAction : undefined
         )}
         label={formatMessage('Add')}
         {...rest}

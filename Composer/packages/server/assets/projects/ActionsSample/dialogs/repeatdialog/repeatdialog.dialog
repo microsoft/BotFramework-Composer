@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "869987"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "099628"
       },
       "actions": [
         {
-          "$type": "Microsoft.ConfirmInput",
+          "$kind": "Microsoft.ConfirmInput",
           "$designer": {
             "id": "841600"
           },
@@ -33,14 +33,14 @@
           }
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "365292"
           },
           "condition": "user.confirmed",
           "actions": [
             {
-              "$type": "Microsoft.RepeatDialog",
+              "$kind": "Microsoft.RepeatDialog",
               "$designer": {
                 "id": "221664"
               }
@@ -48,7 +48,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.EndDialog",
+              "$kind": "Microsoft.EndDialog",
               "$designer": {
                 "id": "573415"
               }

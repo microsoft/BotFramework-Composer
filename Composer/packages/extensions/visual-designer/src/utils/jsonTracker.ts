@@ -151,8 +151,8 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $type, factory: DialogFactory) {
-  const newStep = factory.create($type);
+export function insert(inputDialog, path, position, $kind, factory: DialogFactory) {
+  const newStep = factory.create($kind);
   return insertAction(inputDialog, path, position, newStep);
 }
 

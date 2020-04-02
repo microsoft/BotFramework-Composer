@@ -157,7 +157,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   return (
     <LgEditor
       options={{
-        lineNumbers: 'on' as 'on',
+        lineNumbers: 'on',
         minimap: {
           enabled: true,
         },

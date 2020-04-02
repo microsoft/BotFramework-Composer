@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "name": "AddItem",
     "id": "225905"
@@ -8,14 +8,14 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog",
         "id": "479346"
       },
       "actions": [
         {
-          "$type": "Microsoft.SetProperties",
+          "$kind": "Microsoft.SetProperties",
           "$designer": {
             "id": "811190",
             "name": "Set properties"
@@ -32,7 +32,7 @@
           ]
         },
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "id": "282825",
             "name": "AskForTitle"
@@ -44,7 +44,7 @@
           "allowInterruptions": "!@itemTitle && #_Interruption.Score >= 0.9"
         },
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "878594",
             "name": "AskForListType"
@@ -89,7 +89,7 @@
           }
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "id": "733511",
             "name": "Edit an Array property"
@@ -99,7 +99,7 @@
           "value": "=$itemTitle"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "139532",
             "name": "Send a response"

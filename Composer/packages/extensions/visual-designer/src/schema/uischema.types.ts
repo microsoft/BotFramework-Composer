@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FC, ComponentClass } from 'react';
-import { BaseSchema, SDKTypes } from '@bfc/shared';
+import { BaseSchema, SDKKinds } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
@@ -12,7 +12,7 @@ export enum UISchemaBuiltinKeys {
 
 /** schema */
 export type UISchema = {
-  [key in SDKTypes | UISchemaBuiltinKeys]?: UIWidget;
+  [key in SDKKinds | UISchemaBuiltinKeys]?: UIWidget;
 };
 
 /** widget */

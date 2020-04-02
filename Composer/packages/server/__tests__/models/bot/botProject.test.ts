@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import rimraf from 'rimraf';
-import { DialogFactory, DialogInfo, SDKTypes } from '@bfc/shared';
+import { DialogFactory, DialogInfo, SDKKinds } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -66,7 +66,7 @@ describe('updateDialog', () => {
 
 describe('createFromTemplate', () => {
   const dialogName = 'mytestdialog';
-  const content = JSON.stringify(new DialogFactory({}).create(SDKTypes.AdaptiveDialog), null, 2) + '\n';
+  const content = JSON.stringify(new DialogFactory({}).create(SDKKinds.AdaptiveDialog), null, 2) + '\n';
 
   afterEach(() => {
     try {
@@ -82,7 +82,7 @@ describe('createFromTemplate', () => {
 
     expect(newFile).not.toBeUndefined();
     const fileContent = ((newFile as unknown) as DialogInfo).content;
-    expect(fileContent.$type).toEqual(SDKTypes.AdaptiveDialog);
+    expect(fileContent.$kind).toEqual(SDKKinds.AdaptiveDialog);
   });
 });
 
