@@ -165,8 +165,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     </Link>
   );
 
-  console.log(options);
-
   return (
     <React.Fragment>
       <div
