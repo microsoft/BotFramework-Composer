@@ -3,19 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useCallback, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
-import { Nav } from 'office-ui-fabric-react/lib/Nav';
+import { Nav, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
-import { NavItem } from './components/NavItem';
 import { BASEPATH } from './constants';
 import Routes from './router';
 import { StoreContext } from './store';
-import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
+import { main, sideBar, content, globalNav, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
 import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -23,6 +22,15 @@ import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { useLocation } from './utils/hooks';
+import { BoundAction } from './store/types';
+
+type InternalNavLink = {
+  to: string;
+  iconName: string;
+  labelName: string;
+  exact: boolean;
+  disabled: boolean;
+};
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -30,7 +38,7 @@ const Onboarding = React.lazy(() => import('./Onboarding'));
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (projectId: string, openedDialogId: string) => {
+const topLinks = (projectId: string, openedDialogId: string): InternalNavLink[] => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -98,7 +106,7 @@ const topLinks = (projectId: string, openedDialogId: string) => {
   return links;
 };
 
-const bottomLinks = [
+const bottomLinkList: InternalNavLink[] = [
   // {
   //   to: '/help',
   //   iconName: 'unknown',
@@ -124,12 +132,47 @@ function matchPrefix(path: string, links: { to: string }[]) {
   return undefined;
 }
 
+const mapNavItemTo = (x: string) => resolveToBasePath(BASEPATH, x);
+
+function makeNavIcon(currentKey: string | undefined, ref: BoundAction) {
+  return (link: InternalNavLink) => {
+    const addRef = useCallback(ref => ref({ [`nav${link.labelName.replace(' ', '')}`]: ref }), []);
+
+    const navLink: INavLink = {
+      name: link.labelName,
+      url: mapNavItemTo(link.to),
+      iconProps: {
+        iconName: link.iconName,
+        styles: {
+          root: {
+            fontSize: '20px',
+          },
+        },
+        componentRef: addRef,
+      },
+      key: link.to,
+      disabled: link.disabled,
+    };
+
+    // once aria-current is more supported, we can uncomment this
+    // if (currentKey != null && currentKey === link.to) navLink.ariaCurrent = 'page';
+
+    // simulate the behavior instead for now
+    if (currentKey != null && currentKey === link.to) navLink.ariaLabel = link.labelName + '; current page';
+
+    return navLink;
+  };
+}
+
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
   const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation } = state;
   const { setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+
+  const {
+    actions: { onboardingAddCoachMarkRef },
+  } = useContext(StoreContext);
 
   const {
     location: { pathname },
@@ -139,7 +182,8 @@ export const App: React.FC = () => {
 
   const topLinkList = topLinks(projectId, openedDialogId);
 
-  console.log(pathname, topLinkList);
+  const selectedKey = matchPrefix(pathname, topLinkList);
+
   return (
     <Fragment>
       <Header botName={`${botName}(${locale})`} />
@@ -160,49 +204,18 @@ export const App: React.FC = () => {
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
               <Nav
-                selectedKey={matchPrefix(pathname, topLinkList)}
-                groups={[
-                  {
-                    links: topLinkList.map((link, index) => {
-                      return {
-                        name: link.labelName,
-                        url: mapNavItemTo(link.to),
-                        icon: link.iconName,
-                        key: link.to,
-                        disabled: link.disabled,
-                      };
-                    }),
+                styles={{
+                  root: {
+                    marginLeft: '6px',
                   },
+                }}
+                selectedKey={selectedKey}
+                groups={[
+                  { links: topLinkList.map(makeNavIcon(selectedKey, onboardingAddCoachMarkRef)) },
+                  { links: bottomLinkList.map(makeNavIcon(selectedKey, onboardingAddCoachMarkRef)) },
                 ]}
               />
-              {/*topLinks(projectId, openedDialogId).map((link, index) => {
-                return (
-                  <NavItem
-                    key={'NavLeftBar' + index}
-                    to={mapNavItemTo(link.to)}
-                    iconName={link.iconName}
-                    labelName={link.labelName}
-                    exact={link.exact}
-                    disabled={link.disabled}
-                  />
-                );
-              })*/}
             </FocusZone>
-          </div>
-          <div css={leftNavBottom}>
-            <div css={divider(sideBarExpand)} />{' '}
-            {bottomLinks.map((link, index) => {
-              return (
-                <NavItem
-                  key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
-                  iconName={link.iconName}
-                  labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
-                />
-              );
-            })}
           </div>
         </nav>
         <div css={rightPanel}>

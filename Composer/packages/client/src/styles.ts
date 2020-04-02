@@ -29,12 +29,6 @@ export const dividerTop = css`
   margin: 0 auto;
 `;
 
-export const divider = isExpand => css`
-  width: ${isExpand ? '85%' : '40%'};
-  border-bottom: 1px solid ${NeutralColors.gray40};
-  margin: 0 auto;
-`;
-
 export const globalNav = css`
   height: 44px;
   width: 48px;
@@ -59,10 +53,6 @@ export const content = css`
 export const showDesign = show => css`
   display: ${show ? 'block' : 'none'} !important;
   height: 100%;
-`;
-
-export const leftNavBottom = () => css`
-  height: 90px;
 `;
 
 export const rightPanel = () => css`
