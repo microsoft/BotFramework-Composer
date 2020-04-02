@@ -37,7 +37,7 @@ module.exports = {
   setupFilesAfterEnv: [path.resolve(__dirname, './__tests__/setupTests.ts')],
   globals: {
     'ts-jest': {
-      tsConfig: path.resolve(__dirname, './tsconfig.json'),
+      tsConfig: path.resolve(__dirname, './__tests__/tsconfig.json'),
       diagnostics: false,
     },
   },

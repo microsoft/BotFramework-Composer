@@ -294,7 +294,7 @@ module.exports = function(webpackEnv) {
               loader: require.resolve('ts-loader'),
               options: PnpWebpackPlugin.tsLoaderOptions({
                 transpileOnly: isEnvDevelopment,
-                configFile: path.resolve(__dirname, '../tsconfig.build.json'),
+                configFile: path.resolve(__dirname, '../tsconfig.json'),
               }),
             },
             // Process application JS with Babel.
