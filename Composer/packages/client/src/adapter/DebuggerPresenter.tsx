@@ -5,7 +5,6 @@ import React, { Fragment, useDebugValue, useEffect, useState } from 'react';
 import { DetailsList, CheckboxVisibility, IDetailsListProps } from 'office-ui-fabric-react/lib/DetailsList';
 import { SelectionMode } from 'office-ui-fabric-react/lib/Selection';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
-import { Text } from 'office-ui-fabric-react/lib/Text';
 import formatMessage from 'format-message';
 import { BaseSchema, DesignerData, MicrosoftAdaptiveDialog, ShellData, ShellApi } from '@bfc/shared';
 
@@ -256,6 +255,7 @@ const hasDesignerData = (item: unknown): item is HasDesignerData =>
 
 const same = (base: HasDesignerData, data: DesignerData) => base.$designer.id === data.id;
 
+// TODO: enhance shell API to allow navigation by $designer.id
 const bindAction = (path: string, item: unknown, query: DesignerData): string | null => {
   if (typeof item === 'object' && item !== null) {
     for (const key in item) {
@@ -284,6 +284,7 @@ const bindAction = (path: string, item: unknown, query: DesignerData): string | 
   return null;
 };
 
+// TODO: enhance shell API to allow navigation by $designer.id
 const bind = (shellData: ShellData, query: DesignerData): string | null => {
   const { dialogId } = shellData;
 
