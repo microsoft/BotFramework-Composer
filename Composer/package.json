@@ -9,11 +9,11 @@
     "node": ">=12"
   },
   "workspaces": [
-    "packages/client",
     "packages/server",
     "packages/electron-server",
     "packages/extensions",
     "packages/extensions/*",
+    "packages/client",
     "packages/lib",
     "packages/lib/*",
     "packages/tools",
