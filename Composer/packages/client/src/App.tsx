@@ -134,9 +134,9 @@ function matchPrefix(path: string, links: { to: string }[]) {
 
 const mapNavItemTo = (x: string) => resolveToBasePath(BASEPATH, x);
 
-function makeNavIcon(currentKey: string | undefined, ref: BoundAction) {
+function makeNavIcon(currentKey: string | undefined, refAction: BoundAction) {
   return (link: InternalNavLink) => {
-    const addRef = useCallback(ref => ref({ [`nav${link.labelName.replace(' ', '')}`]: ref }), []);
+    const addRef = useCallback(ref => refAction({ [`nav${link.labelName.replace(' ', '')}`]: ref }), []);
 
     const navLink: INavLink = {
       name: link.labelName,
@@ -146,6 +146,7 @@ function makeNavIcon(currentKey: string | undefined, ref: BoundAction) {
         styles: {
           root: {
             fontSize: '20px',
+            color: link.disabled ? '#999' : '#000', // TODO: we should get these from the theme
           },
         },
         componentRef: addRef,
