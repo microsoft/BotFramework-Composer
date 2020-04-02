@@ -11,16 +11,11 @@ export function resolvePropSchema(
     [k: string]: JSONSchema7Definition;
   } = {}
 ): JSONSchema7 | undefined {
-  if (!schema.properties) {
+  const propSchema = schema.properties?.[path];
+
+  if (!propSchema || typeof propSchema !== 'object') {
     return;
   }
 
-  const pathParts = path.split('.');
-  let propSchema: JSONSchema7 = schema.properties;
-
-  for (const part of pathParts) {
-    propSchema = resolveRef((propSchema?.properties || propSchema)?.[part], definitions);
-  }
-
-  return propSchema;
+  return resolveRef(propSchema, definitions);
 }
