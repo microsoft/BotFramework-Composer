@@ -12,6 +12,7 @@ import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
@@ -348,7 +349,7 @@ function DesignPage(props) {
   }
 
   if (!dialogId) {
-    return <React.Fragment>no dialog</React.Fragment>;
+    return <LoadingSpinner />;
   }
 
   return (
