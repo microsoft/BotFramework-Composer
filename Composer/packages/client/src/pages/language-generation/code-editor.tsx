@@ -4,9 +4,9 @@
 /* eslint-disable react/display-name */
 import path from 'path';
 
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useCallback, useRef } from 'react';
 import { LgEditor, EditorDidMount } from '@bfc/code-editor';
-import { KeyCode } from 'monaco-editor';
+import { Monaco } from '@monaco-editor/react';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
@@ -47,7 +47,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
-
+  const monacoRef = useRef<Monaco>();
   const inlineMode = !!template;
   const [content, setContent] = useState(template?.body || file?.content);
   const currentPath = props.location?.pathname;
@@ -60,10 +60,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
+  const onInit = (monaco: Monaco) => {
+    monacoRef.current = monaco;
+  };
+
   const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);
-    if (lgEditor && currentPath) {
-      lgEditor.addCommand(KeyCode.Escape, function() {
+    const m = monacoRef.current;
+    if (lgEditor && m && currentPath) {
+      lgEditor.addCommand(m.KeyCode.Escape, function() {
         navigate(path.resolve(currentPath, '../'));
       });
     }
@@ -169,6 +174,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
+      onInit={onInit}
     />
   );
 };

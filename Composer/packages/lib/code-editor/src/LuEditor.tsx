@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import React, { useRef } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';

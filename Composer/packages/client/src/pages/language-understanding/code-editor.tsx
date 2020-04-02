@@ -4,12 +4,12 @@
 /* eslint-disable react/display-name */
 import path from 'path';
 
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useCallback, useRef } from 'react';
 import { LuEditor, EditorDidMount } from '@bfc/code-editor';
+import { Monaco } from '@monaco-editor/react';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { KeyCode } from 'monaco-editor';
 import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -46,7 +46,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
-
+  const monacoRef = useRef<Monaco>();
   const inlineMode = !!intent;
   const [content, setContent] = useState(intent?.Body || file?.content);
   const currentPath = props.location?.pathname;
@@ -59,10 +59,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
 
+  const onInit = (monaco: Monaco) => {
+    monacoRef.current = monaco;
+  };
+
   const editorDidMount: EditorDidMount = (_getValue, luEditor) => {
     setLuEditor(luEditor);
-    if (luEditor && currentPath) {
-      luEditor.addCommand(KeyCode.Escape, function() {
+    const m = monacoRef.current;
+    if (luEditor && m && currentPath) {
+      luEditor.addCommand(m.KeyCode.Escape, function() {
         navigate(path.resolve(currentPath, '../'));
       });
     }
@@ -171,6 +176,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
+      onInit={onInit}
     />
   );
 };

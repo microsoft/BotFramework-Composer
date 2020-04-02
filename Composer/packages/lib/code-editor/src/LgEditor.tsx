@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
-import { EditorDidMount, Monaco } from '@monaco-editor/react';
+import { EditorDidMount } from '@monaco-editor/react';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -61,10 +61,10 @@ export function LgEditor(props: LGLSPEditorProps) {
 
   const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
-  const monacoRef = useRef<Monaco>();
+
   const onInit: OnInit = monaco => {
     registerLGLanguage(monaco);
-    monacoRef.current = monaco;
+
     if (typeof onInitProp === 'function') {
       onInitProp(monaco);
     }
