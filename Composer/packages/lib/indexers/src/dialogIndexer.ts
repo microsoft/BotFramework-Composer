@@ -194,7 +194,7 @@ function parse(id: string, content: any, schema: any) {
   const luFile =
     typeof content.recognizer === 'string'
       ? content.recognizer
-      : content.recognizer?.recognizers[0]?.recognizers?.['en-us'] === 'string' || '';
+      : content.recognizer?.recognizers[0]?.recognizers?.['en-us'] || '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
 
   return {
