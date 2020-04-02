@@ -76,6 +76,7 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
         css={visualEditor(triggerButtonVisible || !selected)}
         aria-label={formatMessage('visual editor')}
         ref={addRef}
+        data-testid="VisualEditor"
       >
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
           <VisualDesigner

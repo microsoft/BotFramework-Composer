@@ -15,9 +15,9 @@ import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath } from './utils/navigation';
 import { isAbsHosted } from './utils/envUtil';
 
-const FORM_EDITOR = 'FormEditor';
+const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'VisualEditor' | 'FormEditor';
+type EventSource = 'VisualEditor' | 'PropertyEditor';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
@@ -238,7 +238,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
   const currentDialog = dialogs.find(d => d.id === dialogId);
   const editorData =
-    source === 'FormEditor'
+    source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
       : getDialogData(dialogsMap, dialogId);
 

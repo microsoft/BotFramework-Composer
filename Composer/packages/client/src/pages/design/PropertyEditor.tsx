@@ -14,10 +14,10 @@ import plugins from '../../plugins';
 import { formEditor } from './styles';
 
 const PropertyEditor: React.FC = () => {
-  const { api: shellApi, data: shellData } = useShell('FormEditor');
+  const { api: shellApi, data: shellData } = useShell('PropertyEditor');
 
   return (
-    <div css={formEditor} aria-label={formatMessage('form editor')}>
+    <div css={formEditor} aria-label={formatMessage('form editor')} data-testid="PropertyEditor">
       <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
         <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
       </Extension>

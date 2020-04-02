@@ -27,7 +27,7 @@ const initialState: State = {
   locale: 'en-us',
   botEndpoints: {},
   remoteEndpoints: {},
-  focusPath: '', // the data path for FormEditor
+  focusPath: '', // the data path for PropertyEditor
   recentProjects: [],
   templateProjects: [],
   storages: [],
