@@ -99,7 +99,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
-  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
+  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);

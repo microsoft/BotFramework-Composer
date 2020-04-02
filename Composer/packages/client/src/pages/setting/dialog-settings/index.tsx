@@ -6,10 +6,10 @@ import { jsx } from '@emotion/core';
 import { useState, useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
@@ -34,13 +34,11 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const [value, setValue] = useState(visibleSettings);
   const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
 
   const changeEditing = (_, on) => {
     setEditing(on);
-    console.log(on);
     actions.setEditDialogSettings(projectId, on, absHosted ? slot : undefined);
   };
 
@@ -64,13 +62,11 @@ export const DialogSettings = () => {
     }
   };
 
-  const handleChange = (result, commit) => {
-    setValue(result);
-    console.log('on change');
-    if (commit && editing) {
+  const handleChange = debounce(result => {
+    if (editing) {
       saveChangeResult(result);
     }
-  };
+  }, 200);
 
   const hostedControl = () => (
     <div css={hostedControls}>
@@ -96,9 +92,6 @@ export const DialogSettings = () => {
   const toggle = () => (
     <div css={hostedToggle}>
       <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-      {/* {absHosted && (
-        <DefaultButton disabled={!editing} text={formatMessage('Save')} onClick={() => handleChange(value, true)} />
-      )} */}
     </div>
   );
 
@@ -108,7 +101,7 @@ export const DialogSettings = () => {
       {toggle()}
       <div css={settingsEditor}>
         <JsonEditor
-          onChange={x => handleChange(x, true)}
+          onChange={x => handleChange(x)}
           options={{ readOnly: !editing }}
           value={visibleSettings}
           obfuscate={!editing}
