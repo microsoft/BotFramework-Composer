@@ -20,7 +20,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
-
+const Publish = React.lazy(() => import('./pages/publish'));
 const Routes = props => {
   return (
     <div css={data}>
@@ -44,6 +44,7 @@ const Routes = props => {
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
+            <Publish path="publish" />
           </ProjectRouter>
           <Home path="home" />
           <About path="about" />
