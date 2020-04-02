@@ -18,6 +18,9 @@ import {
   ISkillByAppConfig,
   ISkillByManifestUrl,
   ISkillType,
+  SkillAppIdRegex,
+  SkillNameRegex,
+  SkillUrlRegex,
 } from './types';
 import {
   ChoiceGroupAlignHorizontal,
@@ -30,9 +33,9 @@ import {
 } from './styles';
 
 export interface ISkillFormProps {
-  formData: ISkillFormData | null;
+  editIndex?: number;
   skills: ISkill[];
-  onSubmit: (skillFormData: ISkillByAppConfig | ISkillByManifestUrl) => void;
+  onSubmit: (skillFormData: ISkillByAppConfig | ISkillByManifestUrl, editIndex: number) => void;
   onDismiss: () => void;
 }
 
@@ -49,26 +52,21 @@ const addOptions: IChoiceGroupOption[] = [
 ];
 
 const SkillForm: React.FC<ISkillFormProps> = props => {
-  const { formData: propFormData, skills, onSubmit, onDismiss } = props;
-  const initialFormData = assignDefined(defaultFormData, propFormData);
-
+  const { editIndex = -1, skills, onSubmit, onDismiss } = props;
+  const isModify = editIndex >= 0 && editIndex < skills.length;
+  const originFormData = skills[editIndex];
+  const initialFormData = isModify ? assignDefined(defaultFormData, originFormData) : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
-  const isEdit = !!propFormData;
-
-  const defaultOptionSelectedKey = propFormData?.manifestUrl ? ISkillType.URL : ISkillType.APPConfig;
+  const defaultOptionSelectedKey = !isModify || originFormData?.manifestUrl ? ISkillType.URL : ISkillType.APPConfig;
 
   const [optionSelectedKey, setOptionSelectedKey] = React.useState<string>(defaultOptionSelectedKey);
 
   useEffect(() => {
     setOptionSelectedKey(defaultOptionSelectedKey);
     setFormData(initialFormData);
-  }, [propFormData]);
-
-  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const appIdRegex = /^[a-zA-Z0-9-_.]+$/;
-  const urlRegex = /^http[s]?:\/\/\w+/;
+  }, [editIndex]);
 
   const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
     const errors: ISkillFormDataErrors = {};
@@ -76,7 +74,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
 
     if (optionSelectedKey === ISkillType.URL) {
       if (manifestUrl) {
-        if (!urlRegex.test(manifestUrl)) {
+        if (!SkillUrlRegex.test(manifestUrl)) {
           errors.manifestUrl = formatMessage('Url should start with http[s]://');
         }
       } else {
@@ -84,10 +82,10 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       }
     } else if (optionSelectedKey === ISkillType.APPConfig) {
       if (name) {
-        if (!nameRegex.test(name)) {
+        if (!SkillNameRegex.test(name)) {
           errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
-        if (skills.some(item => item.id === name)) {
+        if (!isModify && skills.some(item => item.id === name)) {
           errors.name = formatMessage('Duplicate dialog name');
         }
       } else {
@@ -95,10 +93,10 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       }
 
       if (msAppId) {
-        if (!appIdRegex.test(msAppId)) {
+        if (!SkillAppIdRegex.test(msAppId)) {
           errors.msAppId = formatMessage('Not a valid App Id');
         }
-        if (skills.some(item => item.msAppId === msAppId)) {
+        if (!isModify && skills.some(item => item.msAppId === msAppId)) {
           errors.msAppId = formatMessage('Duplicate App Id');
         }
       } else {
@@ -106,7 +104,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       }
 
       if (endpointUrl) {
-        if (!urlRegex.test(endpointUrl)) {
+        if (!SkillUrlRegex.test(endpointUrl)) {
           errors.endpointUrl = formatMessage('Url should start with http[s]://');
         }
       } else {
@@ -135,7 +133,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     }
     const newFormData = { ...formData } as ISkillByAppConfig | ISkillByManifestUrl;
 
-    onSubmit(newFormData);
+    onSubmit(newFormData, editIndex);
   };
 
   const onAddOptionsChange = useCallback((_e, option) => {
@@ -149,7 +147,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       <Stack tokens={{ childrenGap: '3rem' }}>
         <StackItem grow={0}>
           <ChoiceGroup
-            disabled={isEdit}
+            disabled={isModify}
             css={ChoiceGroupAlignHorizontal}
             data-testid={'add-by-choice'}
             selectedKey={optionSelectedKey}

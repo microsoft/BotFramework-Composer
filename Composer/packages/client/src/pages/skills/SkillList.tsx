@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import get from 'lodash/get';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -20,12 +21,14 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 
+import { StoreContext } from '../../store';
+
 import SkillForm from './SkillForm';
 import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
 import { ISkill, ISkillByAppConfig, ISkillByManifestUrl, ISkillFormData } from './types';
 
 export interface ISkillListProps {
-  skills: ISkill[];
+  // skills: ISkill[];
 }
 
 const columns: IColumn[] = [
@@ -84,6 +87,12 @@ const columns: IColumn[] = [
 //   msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
 // });
 
+// "skill": [{
+//   "name": "production",
+//   "endpointUrl": "https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages",
+//   "msAppId": "79432da8-0f7e-4a16-8c23-ddbba30ae85d"
+// }]
+
 const builtInSkills = [
   {
     name: 'productionByConfig',
@@ -102,32 +111,47 @@ const builtInSkills = [
   },
 ];
 
-const SkillList: React.FC<ISkillListProps> = props => {
-  let { skills } = props;
-  const [editIsOpen, setEditIsOpen] = useState(false);
-  const [formData, setFormData] = useState<ISkillFormData | null>(null);
+const SkillList: React.FC<ISkillListProps> = () => {
+  const { actions, state } = useContext(StoreContext);
+  const { settings, projectId } = state;
 
-  skills = builtInSkills;
+  const skills = get(settings, 'skill', []);
+  const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
 
-  const onSubmitForm = (formData: ISkillByAppConfig | ISkillByManifestUrl) => {
-    console.log(formData);
-  };
+  const onSubmitForm = useCallback(
+    (submitFormData: ISkillByAppConfig | ISkillByManifestUrl, editIndex: number) => {
+      console.log(submitFormData);
+      const payload = {
+        projectId,
+        targetId: editIndex,
+        skillData: submitFormData,
+      };
+      actions.updateSkill(payload);
+      setEditIndex(undefined);
+    },
+    [projectId]
+  );
 
-  const onDismissForm = () => {
-    setFormData(null);
-    setEditIsOpen(false);
-  };
+  const onDismissForm = useCallback(() => {
+    setEditIndex(undefined);
+  }, []);
 
-  const onItemEdit = item => {
-    // console.log(item);
-    const { manifestUrl, name, msAppId, endpointUrl } = item;
-    setFormData({ manifestUrl, name, msAppId, endpointUrl });
-    setEditIsOpen(true);
-  };
+  const onItemEdit = useCallback(index => {
+    setEditIndex(index);
+  }, []);
 
-  const onItemDelete = item => {
-    console.log(item);
-  };
+  const onItemDelete = useCallback(
+    index => {
+      console.log(index);
+      const payload = {
+        projectId,
+        targetId: index,
+        skillData: null,
+      };
+      actions.updateSkill(payload);
+    },
+    [projectId]
+  );
 
   const getColumns = useCallback(() => {
     return columns.concat({
@@ -137,7 +161,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
       maxWidth: 100,
       fieldName: 'buttons',
       data: 'string',
-      onRender: item => {
+      onRender: (_item, index) => {
         return (
           <div>
             <Stack tokens={{ childrenGap: 8 }} horizontal>
@@ -145,7 +169,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 iconProps={{
                   iconName: 'Edit',
                 }}
-                onClick={() => onItemEdit(item)}
+                onClick={() => onItemEdit(index)}
                 title="Edit"
                 ariaLabel="Edit"
               />
@@ -153,7 +177,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 iconProps={{
                   iconName: 'Delete',
                 }}
-                onClick={() => onItemDelete(item)}
+                onClick={() => onItemDelete(index)}
                 title="Delete"
                 ariaLabel="Delete"
               />
@@ -162,7 +186,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
         );
       },
     });
-  }, [formData]);
+  }, [projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -181,14 +205,19 @@ const SkillList: React.FC<ISkillListProps> = props => {
     // do not allow add template in particular dialog lg, it suppose to be auto generated in form.
     return (
       <div css={ActionButton} data-testid="add-skill">
-        {editIsOpen ? (
-          <SkillForm skills={skills} formData={formData} onSubmit={onSubmitForm} onDismiss={onDismissForm}></SkillForm>
+        {typeof editIndex === 'number' ? (
+          <SkillForm
+            skills={skills}
+            editIndex={editIndex}
+            onSubmit={onSubmitForm}
+            onDismiss={onDismissForm}
+          ></SkillForm>
         ) : (
-          <Link onClick={() => setEditIsOpen(true)}>Connect to a new skill</Link>
+          <Link onClick={() => setEditIndex(-1)}>Connect to a new skill</Link>
         )}
       </div>
     );
-  }, [editIsOpen, formData]);
+  }, [editIndex, skills]);
 
   return (
     <div css={ContentStyle} data-testid="skill-list">

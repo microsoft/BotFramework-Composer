@@ -38,3 +38,7 @@ export enum ISkillType {
   URL = 'url',
   APPConfig = 'appConfig',
 }
+
+export const SkillNameRegex = /^[a-zA-Z0-9-_.\s]+$/;
+export const SkillAppIdRegex = /^[a-zA-Z0-9-_.]+$/;
+export const SkillUrlRegex = /^http[s]?:\/\/\w+/;
