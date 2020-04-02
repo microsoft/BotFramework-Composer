@@ -191,7 +191,6 @@ export const DeployWizardStepCreate = props => {
               data-testid="displayname"
               componentRef={nameRef}
               required
-              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -209,7 +208,6 @@ export const DeployWizardStepCreate = props => {
               data-testid="displayname"
               componentRef={environmentRef}
               required
-              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -228,7 +226,6 @@ export const DeployWizardStepCreate = props => {
               data-testid="appsecret"
               componentRef={appSecretRef}
               required
-              aria-required
               autoComplete={'off'}
               maxLength={16}
             />
@@ -255,7 +252,6 @@ export const DeployWizardStepCreate = props => {
               data-testid="region"
               componentRef={regionRef}
               required
-              aria-required
               autoComplete={'on'}
             />
           </StackItem>

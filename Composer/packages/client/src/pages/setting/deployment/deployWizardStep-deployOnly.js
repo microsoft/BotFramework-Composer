@@ -136,7 +136,6 @@ export const DeployWizardStepDeploy = props => {
               data-testid="displayname"
               componentRef={nameRef}
               required
-              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -154,7 +153,6 @@ export const DeployWizardStepDeploy = props => {
               data-testid="displayname"
               componentRef={environmentRef}
               required
-              aria-required
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
