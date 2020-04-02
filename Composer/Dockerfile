@@ -24,6 +24,7 @@ FROM node:12-alpine as composerbasic
 WORKDIR /app/Composer
 COPY --from=build /src/Composer/yarn.lock .
 COPY --from=build /src/Composer/package.json .
+COPY --from=build /src/Composer/packages/client ./packages/client
 COPY --from=build /src/Composer/packages/server ./packages/server
 COPY --from=build /src/Composer/packages/lib ./packages/lib
 COPY --from=build /src/Composer/packages/tools ./packages/tools
