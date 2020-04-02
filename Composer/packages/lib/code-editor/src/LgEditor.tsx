@@ -1,13 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import path from 'path';
 
 import React, { useRef } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
-import { navigate } from '@reach/router';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
@@ -34,7 +32,6 @@ export interface LGLSPEditorProps extends BaseEditorProps {
         path: string;
       }
     | string;
-  currentPath?: string;
 }
 
 const defaultLGServer = {
@@ -74,14 +71,6 @@ export function LgEditor(props: LGLSPEditorProps) {
   };
 
   const editorDidMount: EditorDidMount = (_getValue, editor) => {
-    const m = monacoRef.current;
-    const currentPath = props.currentPath;
-    if (m && currentPath) {
-      editor.addCommand(m.KeyCode.Escape, function() {
-        navigate(path.resolve(currentPath, '../'));
-      });
-    }
-
     if (!window.monacoServiceInstance) {
       window.monacoServiceInstance = MonacoServices.install(editor as any);
     }

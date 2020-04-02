@@ -2,14 +2,18 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
+import path from 'path';
+
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
 import { LgEditor, EditorDidMount } from '@bfc/code-editor';
+import { KeyCode } from 'monaco-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
+import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
@@ -31,7 +35,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
-
   const search = props.location?.search ?? '';
   const searchTemplateName = querystring.parse(search).t;
   const templateId = Array.isArray(searchTemplateName)
@@ -59,6 +62,11 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);
+    if (lgEditor && currentPath) {
+      lgEditor.addCommand(KeyCode.Escape, function() {
+        navigate(path.resolve(currentPath, '../'));
+      });
+    }
   };
 
   useEffect(() => {
@@ -161,7 +169,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
-      currentPath={currentPath}
     />
   );
 };
