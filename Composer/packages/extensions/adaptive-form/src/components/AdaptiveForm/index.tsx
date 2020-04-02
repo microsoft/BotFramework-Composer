@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useShellApi, PluginConfig, FormErrors, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, FormErrors, JSONSchema7 } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -17,12 +17,11 @@ export interface AdaptiveFormProps {
   schema?: JSONSchema7;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData?: any;
-  plugins: PluginConfig[];
 }
 
 export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(props) {
-  const { shellApi, focusedSteps, currentDialog, focusPath } = useShellApi();
-  const { formData, schema, plugins } = props;
+  const { shellApi, focusedSteps, currentDialog, focusPath, plugins } = useShellApi();
+  const { formData, schema } = props;
   const [localData, setLocalData] = useState(formData);
 
   const syncData = useRef(

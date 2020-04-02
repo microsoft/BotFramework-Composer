@@ -81,7 +81,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     updateLgTemplate,
     getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
-    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => undefined),
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,

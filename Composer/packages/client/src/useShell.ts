@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useContext, useMemo } from 'react';
-import { SyncShellApi } from '@bfc/shared';
+import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
@@ -13,21 +13,33 @@ import { StoreContext } from './store';
 import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath } from './utils/navigation';
+import { isAbsHosted } from './utils/envUtil';
 
 // const VISUAL_EDITOR = 'VisualEditor';
 const FORM_EDITOR = 'FormEditor';
 
 type EventSource = 'VisualEditor' | 'FormEditor';
 
-export function useShellApi(source: EventSource): SyncShellApi {
+export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
   const { lgFileResolver, luFileResolver } = resolvers;
-  const { dialogs, schemas, designPageLocation, focusPath, breadcrumb, projectId } = state;
+  const {
+    botName,
+    breadcrumb,
+    designPageLocation,
+    dialogs,
+    focusPath,
+    lgFiles,
+    locale,
+    luFiles,
+    projectId,
+    schemas,
+  } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgTemplate = actions.updateLgTemplate;
 
-  const { dialogId, selected, focused } = designPageLocation;
+  const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
     return dialogs.reduce((result, dialog) => {
@@ -44,10 +56,11 @@ export function useShellApi(source: EventSource): SyncShellApi {
     return file.templates;
   }
 
-  async function updateLgTemplateHandler(id, templateName, template) {
+  async function updateLgTemplateHandler(id: string, templateName: string, templateBody: string) {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
+    const template = { name: templateName, body: templateBody, parameters: [] };
 
     const projectId = state.projectId;
 
@@ -177,7 +190,7 @@ export function useShellApi(source: EventSource): SyncShellApi {
     }
   }, [schemas, projectId]);
 
-  return {
+  const api: ShellApi = {
     saveData: (newData, updatePath) => {
       let dataPath = '';
       if (source === FORM_EDITOR) {
@@ -222,5 +235,39 @@ export function useShellApi(source: EventSource): SyncShellApi {
     undo: actions.undo,
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
+  };
+
+  const currentDialog = dialogs.find(d => d.id === dialogId);
+  const editorData =
+    source === 'FormEditor'
+      ? getDialogData(dialogsMap, dialogId, focused || selected || '')
+      : getDialogData(dialogsMap, dialogId);
+
+  const data: ShellData = currentDialog
+    ? {
+        data: editorData,
+        locale,
+        botName,
+        projectId,
+        dialogs,
+        dialogId,
+        focusPath,
+        schemas,
+        lgFiles,
+        luFiles,
+        currentDialog,
+        designerId: get(editorData, '$designer.id'),
+        focusedEvent: selected,
+        focusedActions: focused ? [focused] : [],
+        focusedSteps: focused ? [focused] : selected ? [selected] : [],
+        focusedTab: promptTab,
+        clipboardActions: state.clipboardActions,
+        hosted: !!isAbsHosted(),
+      }
+    : ({} as ShellData);
+
+  return {
+    api,
+    data,
   };
 }
