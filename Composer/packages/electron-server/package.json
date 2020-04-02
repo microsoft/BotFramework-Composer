@@ -54,7 +54,6 @@
   },
   "dependencies": {
     "@bfc/server": "*",
-    "@bfc/client": "*",
     "debug": "4.1.1",
     "fix-path": "^3.0.0",
     "lodash": "^4.17.15"
