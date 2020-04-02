@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "name": "ViewItem",
     "id": "944085"
@@ -8,14 +8,14 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "name": "BeginDialog",
         "id": "479346"
       },
       "actions": [
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "308464",
             "name": "AskForListType"
@@ -67,7 +67,7 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "996807",
             "name": "Send a response"

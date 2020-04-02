@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "179150",
     "name": "Interrupt"
@@ -10,14 +10,14 @@
   "generator": "interruptionsample.lg",
   "triggers": [
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720",
         "name": "Welcome user"
       },
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -25,7 +25,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -33,7 +33,7 @@
               "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "753396",
                     "name": "Send a response"
@@ -47,7 +47,7 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "GetStarted",
         "id": "629539"
@@ -55,7 +55,7 @@
       "condition": "turn.recognized.score > 0.7",
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "name": "Begin a Dialog",
             "id": "190862"
@@ -66,14 +66,14 @@
       "intent": "GetStarted"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "ResetProfile",
         "id": "921175"
       },
       "actions": [
         {
-          "$type": "Microsoft.EditActions",
+          "$kind": "Microsoft.EditActions",
           "$designer": {
             "name": "Modify active dialog",
             "id": "216094"
@@ -81,7 +81,7 @@
           "changeType": "ReplaceSequence",
           "actions": [
             {
-              "$type": "Microsoft.DeleteProperty",
+              "$kind": "Microsoft.DeleteProperty",
               "$designer": {
                 "name": "Delete a Property",
                 "id": "924743"
@@ -89,7 +89,7 @@
               "property": "user.profile"
             },
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "032735"
@@ -102,14 +102,14 @@
       "intent": "ResetProfile"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "Cancel",
         "id": "870441"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
             "id": "650736"
@@ -117,7 +117,7 @@
           "activity": "${bfdactivity-650736()}"
         },
         {
-          "$type": "Microsoft.CancelAllDialogs",
+          "$kind": "Microsoft.CancelAllDialogs",
           "$designer": {
             "name": "Cancel All Dialogs",
             "id": "362033"
@@ -127,14 +127,14 @@
       "intent": "Cancel"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "ShowProfile",
         "id": "171791"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
             "id": "031899"
@@ -142,7 +142,7 @@
           "activity": "${bfdactivity-031899()}"
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "name": "Branch: If/Else",
             "id": "848138"
@@ -150,7 +150,7 @@
           "condition": "user.profile != null && (user.profile.name != null || user.profile.age != null)",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "309274"
@@ -160,7 +160,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "name": "Send an Activity",
                 "id": "912837"
@@ -173,14 +173,14 @@
       "intent": "ShowProfile"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "name": "Help",
         "id": "160085"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "name": "Send an Activity",
             "id": "924700"

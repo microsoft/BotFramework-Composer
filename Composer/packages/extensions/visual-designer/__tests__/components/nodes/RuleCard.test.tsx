@@ -53,7 +53,7 @@ describe('<RuleCard />', () => {
         data = {
           actions: [
             {
-              $type: 'Microsoft.BeginDialog',
+              $kind: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',
             },
           ],
@@ -128,7 +128,7 @@ describe('<RuleCard />', () => {
         data = {
           actions: [
             {
-              $type: 'Microsoft.BeginDialog',
+              $kind: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',
             },
           ],

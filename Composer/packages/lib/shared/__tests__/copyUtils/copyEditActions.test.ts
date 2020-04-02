@@ -7,25 +7,25 @@ import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
 describe('#copyEditActions', () => {
   it('can copy EditActions', async () => {
     const editActions = {
-      $type: 'Microsoft.EditActions',
+      $kind: 'Microsoft.EditActions',
       changeType: 'InsertActions',
       actions: [
         {
-          $type: 'Microsoft.BeginDialog',
+          $kind: 'Microsoft.BeginDialog',
           dialog: 'addtodo',
         },
       ],
     };
 
     expect(await copyEditActions(editActions, externalApi)).toEqual({
-      $type: 'Microsoft.EditActions',
+      $kind: 'Microsoft.EditActions',
       $designer: {
         id: '5678',
       },
       changeType: 'InsertActions',
       actions: [
         {
-          $type: 'Microsoft.BeginDialog',
+          $kind: 'Microsoft.BeginDialog',
           $designer: {
             id: '5678',
           },
