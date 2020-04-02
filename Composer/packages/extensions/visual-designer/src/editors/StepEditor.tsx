@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
@@ -35,10 +35,12 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
+      addCoachMarkRef={addCoachMarkRef}
     />
   ) : (
     <StepGroup
       id={id}
+      addCoachMarkRef={addCoachMarkRef}
       data={data}
       onEvent={onEvent}
       onResize={boundary => {
@@ -58,10 +60,8 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
   const editorAxisX = editorWidth / 2;
 
-  const addRef = useCallback(action => addCoachMarkRef({ action }), []);
-
   return (
-    <div ref={addRef} className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
+    <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
       <SVGContainer>
         {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
         {drawSVGEdge(

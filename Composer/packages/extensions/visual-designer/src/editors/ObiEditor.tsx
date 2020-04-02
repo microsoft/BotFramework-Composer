@@ -461,5 +461,5 @@ interface ObiEditorProps {
   onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
-  addCoachMarkRef?: (_: any) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }

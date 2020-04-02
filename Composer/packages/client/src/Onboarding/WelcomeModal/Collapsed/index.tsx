@@ -20,18 +20,20 @@ const CollapsedWelcomeModal = () => {
   return (
     <div css={content}>
       <div>{formatMessage('Welcome')}</div>
-      <IconButton
-        iconProps={{ iconName: 'FullScreen' }}
-        onClick={toggleMinimized}
-        styles={buttonStyles}
-        title="Expand"
-      />
-      <IconButton
-        iconProps={{ iconName: 'ChromeClose' }}
-        onClick={exit}
-        styles={{ ...buttonStyles, icon: { color: palette.white, fontSize: '12px' } }}
-        title="Close"
-      />
+      <div>
+        <IconButton
+          iconProps={{ iconName: 'FullScreen' }}
+          onClick={toggleMinimized}
+          styles={buttonStyles}
+          title="Expand"
+        />
+        <IconButton
+          iconProps={{ iconName: 'ChromeClose' }}
+          onClick={exit}
+          styles={{ ...buttonStyles, icon: { color: palette.white, fontSize: '12px' } }}
+          title="Close"
+        />
+      </div>
     </div>
   );
 };
