@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useCallback, useContext } from 'react';
 import { Link } from '@reach/router';
 import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
 import { useLocation } from '../../utils/hooks';
@@ -27,6 +28,8 @@ export interface INavItemProps {
   disabled: boolean;
 }
 
+const SELECTED = formatMessage('Selected');
+
 export const NavItem: React.FC<INavItemProps> = props => {
   const {
     actions: { onboardingAddCoachMarkRef },
@@ -46,10 +49,10 @@ export const NavItem: React.FC<INavItemProps> = props => {
       css={link(active, disabled)}
       data-testid={'LeftNav-CommandBarButton' + labelName}
       aria-disabled={disabled}
-      aria-label={labelName}
+      aria-label={labelName + (active ? ';' + SELECTED : '')}
       ref={addRef}
     >
-      <div css={outer} aria-hidden="true" tabIndex={-1}>
+      <div css={outer} tabIndex={-1}>
         <CommandBarButton
           iconProps={{
             iconName,

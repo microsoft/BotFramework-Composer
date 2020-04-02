@@ -7,6 +7,7 @@ import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'rea
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
+import { Nav } from 'office-ui-fabric-react/lib/Nav';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -21,6 +22,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import { useLocation } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -113,6 +115,15 @@ const bottomLinks = [
   },
 ];
 
+function matchPrefix(path: string, links: { to: string }[]) {
+  for (const link of links) {
+    if (path.startsWith(link.to)) {
+      return link.to;
+    }
+  }
+  return undefined;
+}
+
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
@@ -120,7 +131,15 @@ export const App: React.FC = () => {
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
+  const {
+    location: { pathname },
+  } = useLocation();
+
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
+
+  const topLinkList = topLinks(projectId, openedDialogId);
+
+  console.log(pathname, topLinkList);
   return (
     <Fragment>
       <Header botName={`${botName}(${locale})`} />
@@ -140,7 +159,23 @@ export const App: React.FC = () => {
             />
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
-              {topLinks(projectId, openedDialogId).map((link, index) => {
+              <Nav
+                selectedKey={matchPrefix(pathname, topLinkList)}
+                groups={[
+                  {
+                    links: topLinkList.map((link, index) => {
+                      return {
+                        name: link.labelName,
+                        url: mapNavItemTo(link.to),
+                        icon: link.iconName,
+                        key: link.to,
+                        disabled: link.disabled,
+                      };
+                    }),
+                  },
+                ]}
+              />
+              {/*topLinks(projectId, openedDialogId).map((link, index) => {
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
@@ -151,7 +186,7 @@ export const App: React.FC = () => {
                     disabled={link.disabled}
                   />
                 );
-              })}
+              })*/}
             </FocusZone>
           </div>
           <div css={leftNavBottom}>
