@@ -1,12 +1,53 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DebugProtocol as DP } from 'vscode-debugprotocol';
+
 import * as protocol from './protocol';
 import * as immutable from './immutable';
 import * as lazy from './lazy';
 import * as model from './model';
+import * as values from './values';
 
 type Action = protocol.Action;
+
+const remotes = <Remote, State extends model.Thing<Remote>>(
+  key: (remote: Remote) => PropertyKey,
+  make: (remote: Remote) => State
+): immutable.MapperNull<ReadonlyArray<Remote>, ReadonlyArray<State>> => (remotes, states) =>
+  immutable.mapType<Remote, State>(remote => {
+    const stateOld = states !== undefined ? states.find(s => key(s.remote) === key(remote)) : undefined;
+
+    if (stateOld === undefined) {
+      return make(remote);
+    }
+
+    if (values.deepEquals(stateOld.remote, remote)) {
+      return stateOld;
+    }
+
+    return { ...stateOld, remote };
+  })(remotes, states);
+
+const remoteVariables = remotes<DP.Variable, model.Variable>(
+  remote => remote.name,
+  remote => ({ remote, lazyVariables: lazy.pending() })
+);
+
+const remoteScopes = remotes<DP.Scope, model.Scope>(
+  remote => remote.name,
+  remote => ({ remote, lazyVariables: lazy.pending() })
+);
+
+const remoteFrames = remotes<DP.StackFrame, model.StackFrame>(
+  remote => remote.id,
+  remote => ({ remote, lazyScopes: lazy.pending() })
+);
+
+const remoteThreads = remotes<DP.Thread, model.Thread>(
+  remote => remote.id,
+  remote => ({ remote, lazyStackFrames: lazy.pending(), stopped: false })
+);
 
 export interface HasChildVariables {
   variablesReference: number;
@@ -25,16 +66,7 @@ export const hasChildVariables = <S extends model.Thing<HasChildVariables> & mod
     action,
     'variables',
     request => state.remote.variablesReference === request.arguments.variablesReference,
-    (state, action) => {
-      const {
-        message: { body },
-      } = action;
-
-      return body.variables.map<model.Variable>(remote => {
-        const existing = model.bindVariable(state, remote);
-        return existing !== undefined ? { ...existing, remote } : { remote, lazyVariables: lazy.pending() };
-      });
-    },
+    (state, action) => remoteVariables(action.message.body.variables, state),
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     variables
   );
@@ -69,16 +101,7 @@ export const stackFrame: protocol.Reducer<model.StackFrame, Action> = (state, ac
       action,
       'scopes',
       request => request.arguments.frameId === remote.id,
-      (state, action) => {
-        const {
-          message: { body },
-        } = action;
-
-        return body.scopes.map<model.Scope>(remote => {
-          const existing = model.bindScope(state, remote);
-          return existing !== undefined ? { ...existing, remote } : { remote, lazyVariables: lazy.pending() };
-        });
-      },
+      (state, action) => remoteScopes(action.message.body.scopes, state),
       scopes
     );
 
@@ -127,16 +150,7 @@ export const thread: protocol.Reducer<model.Thread, Action> = (state, action) =>
       action,
       'stackTrace',
       request => request.arguments.threadId === remote.id,
-      (state, action) => {
-        const {
-          message: { body },
-        } = action;
-
-        return body.stackFrames.map<model.StackFrame>(remote => {
-          const existing = model.bindStackFrame(state, remote);
-          return existing !== undefined ? { ...existing, remote } : { remote, lazyScopes: lazy.pending() };
-        });
-      },
+      (state, action) => remoteFrames(action.message.body.stackFrames, state),
       stackFrames
     );
 
@@ -188,25 +202,7 @@ export const lazyThreads: protocol.Reducer<lazy.Lazy<ReadonlyArray<model.Thread>
     action,
     'threads',
     () => true,
-    (state, action) => {
-      if (state === undefined) {
-        state = [];
-      }
-
-      const {
-        message: { body },
-      } = action;
-
-      // TODO: move to immutable.map, but need to add/remove threads as needed and preserve existing lazy stack trace trees
-      return body.threads.map<model.Thread>(remote => {
-        const existing = model.bindThread(state, remote);
-        if (existing !== undefined) {
-          return { ...existing, remote };
-        } else {
-          return { remote, lazyStackFrames: lazy.pending(), stopped: false };
-        }
-      });
-    },
+    (state, action) => remoteThreads(action.message.body.threads, state),
     threads
   );
 

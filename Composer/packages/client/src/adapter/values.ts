@@ -1,20 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export type Compare<T> = (one: T, two: T) => number;
-
-export const isSorted = <T>(items: ReadonlyArray<T>, compare: Compare<T>): boolean => {
-  for (let index = 0; index + 1 < items.length; ++index) {
-    const one = items[index + 0];
-    const two = items[index + 1];
-    if (compare(one, two) > 0) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
 export const deepEquals = (one: unknown, two: unknown): boolean => {
   const same = Object.is(one, two);
   if (same) {

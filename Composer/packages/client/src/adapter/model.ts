@@ -33,8 +33,6 @@ export interface Debuggee {
   readonly outputs: ReadonlyArray<Output>;
 }
 
-// type Key<T> = (item: T) => string | number;
-
 export type Bind<State extends Thing<Remote>, Remote> = (
   state: ReadonlyArray<State> | undefined,
   remote: Remote

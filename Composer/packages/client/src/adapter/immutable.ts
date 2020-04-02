@@ -1,6 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export type MapperNull<S, T> = (source: S, target: T | undefined) => T;
+
+export const mapType = <S, T>(mapper: MapperNull<S, T>): MapperNull<ReadonlyArray<S>, ReadonlyArray<T>> => (
+  sources,
+  targetsOld
+) => {
+  if (sources === undefined) {
+    sources = [];
+  }
+
+  if (targetsOld === undefined) {
+    targetsOld = [];
+  }
+
+  let targetsNew: Array<T> | undefined;
+  for (let index = 0; index < sources.length; ++index) {
+    const source = sources[index];
+    const targetOld = index < targetsOld.length ? targetsOld[index] : undefined;
+    const targetNew = mapper(source, targetOld);
+    if (targetsNew !== undefined || targetOld !== targetNew) {
+      if (targetsNew === undefined) {
+        targetsNew = targetsOld.slice();
+      }
+
+      targetsNew[index] = targetNew;
+    }
+  }
+
+  return targetsNew != undefined ? targetsNew : targetsOld;
+};
+
 export type ReducerNull<S, A> = (state: S | undefined, action: A) => S;
 export type ReducerFull<S, A> = (state: S, action: A) => S;
 
