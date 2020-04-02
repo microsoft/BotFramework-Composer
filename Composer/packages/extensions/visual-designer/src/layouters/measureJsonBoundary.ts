@@ -99,14 +99,14 @@ function measureBaseInputBoundary(data): Boundary {
 
 export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
-  if (!json || !json.$type) return boundary;
+  if (!json || !json.$kind) return boundary;
 
   const cachedBoundary = designerCache.loadBounary(json);
   if (cachedBoundary) {
     return cachedBoundary;
   }
 
-  switch (json.$type) {
+  switch (json.$kind) {
     case ObiTypes.ChoiceDiamond:
       boundary = new Boundary(DiamondSize.width, DiamondSize.height);
       break;

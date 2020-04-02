@@ -12,7 +12,7 @@ export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
   id: string;
 
-  /** Declarative json with a $type field. */
+  /** Declarative json with a $kind field. */
   data: BaseSchema;
 
   /** Handle UI events */

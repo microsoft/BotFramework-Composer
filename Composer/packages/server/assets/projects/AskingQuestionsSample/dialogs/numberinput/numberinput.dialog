@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "183119"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "272503"
       },
       "actions": [
         {
-          "$type": "Microsoft.NumberInput",
+          "$kind": "Microsoft.NumberInput",
           "$designer": {
             "id": "416094"
           },
@@ -26,14 +26,14 @@
           "defaultLocale": "en-us"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "303304"
           },
           "activity": "${bfdactivity-303304()}"
         },
         {
-          "$type": "Microsoft.NumberInput",
+          "$kind": "Microsoft.NumberInput",
           "$designer": {
             "id": "890316"
           },
@@ -45,14 +45,14 @@
           "defaultLocale": "en-us"
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "622462"
           },
           "condition": "(user.result - 4.4) < 0.0000001",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "284482"
               },
@@ -61,7 +61,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "id": "172233"
               },

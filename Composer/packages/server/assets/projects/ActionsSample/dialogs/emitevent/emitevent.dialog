@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "701087"
   },
@@ -7,10 +7,10 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnCustomEvent",
+      "$kind": "Microsoft.OnCustomEvent",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "activity": "CustomEvent Fired."
         }
       ],
@@ -20,13 +20,13 @@
       }
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "360314"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "$designer": {
             "id": "293316"
           },

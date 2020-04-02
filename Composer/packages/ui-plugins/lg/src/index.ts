@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import { PluginConfig } from '@bfc/extension';
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 import { LgField } from './LgField';
 
 const config: PluginConfig = {
   uiSchema: {
-    [SDKTypes.SendActivity]: {
+    [SDKKinds.SendActivity]: {
       properties: {
         activity: {
           label: 'Language Generation',
@@ -18,7 +18,7 @@ const config: PluginConfig = {
         },
       },
     },
-    [SDKTypes.IActivityTemplate]: {
+    [SDKKinds.IActivityTemplate]: {
       field: LgField,
     },
   },
