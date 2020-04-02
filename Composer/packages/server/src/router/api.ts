@@ -28,6 +28,7 @@ router.get('/projects/:projectId/settings', ProjectController.getDefaultSlotEnvS
 router.post('/projects/:projectId/settings', ProjectController.updateDefaultSlotEnvSettings);
 router.get('/projects/:projectId/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
 router.post('/projects/:projectId/settings/:slot', ProjectController.updateEnvSettings);
+router.post('/projects/:projectId/skills', ProjectController.updateSkill);
 router.post('/projects/:projectId/luFiles', ProjectController.createLuFile);
 router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);

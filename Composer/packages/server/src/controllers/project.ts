@@ -357,6 +357,27 @@ async function getEnvSettings(req: Request, res: Response) {
   }
 }
 
+async function updateSkill(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const skills = await currentProject.updateSkill(req.body.skills);
+      res.status(200).json(skills);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -463,6 +484,7 @@ export const ProjectController = {
   getDefaultSlotEnvSettings,
   updateEnvSettings,
   updateDefaultSlotEnvSettings,
+  updateSkill,
   updateLuFile,
   createLuFile,
   removeLuFile,

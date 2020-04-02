@@ -18,6 +18,7 @@ import log from '../../logger';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
+import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
@@ -139,6 +140,15 @@ export class BotProject {
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
     await this.luPublisher.setLuisConfig(config.luis);
+  };
+
+  // update skill in settings
+  public updateSkill = async (config: any[]) => {
+    const settings = await this.getEnvSettings('', false);
+    const skill = await extractSkillManifestUrl(config);
+    settings.skill = skill;
+    await this.settingManager.set('', settings);
+    return skill;
   };
 
   public getSchemas = () => {

@@ -119,7 +119,12 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       ...formData,
       [field]: newValue,
     };
-    setFormDataErrors(validateForm(newData));
+
+    // only update current field error
+    const errors = { ...formDataErrors };
+    const currentErrors = validateForm(newData);
+    errors[field] = currentErrors[field];
+    setFormDataErrors(errors);
     setFormData(newData);
   };
 

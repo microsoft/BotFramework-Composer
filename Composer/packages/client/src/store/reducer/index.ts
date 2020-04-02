@@ -272,6 +272,11 @@ const setDesignPageLocation: ReducerFunc = (
   return state;
 };
 
+const updateSkill: ReducerFunc = (state, { skill }) => {
+  state.settings.skill = skill;
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -424,6 +429,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
+  [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,

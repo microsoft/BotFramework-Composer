@@ -4,16 +4,22 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import formatMessage from 'format-message';
+import get from 'lodash/get';
 
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
+import { StoreContext } from '../../store';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import SkillList from './SkillList';
 
 const Skills: React.FC<RouteComponentProps> = () => {
+  const { state } = useContext(StoreContext);
+
+  const { settings, projectId } = state;
+  const skills = get(settings, 'skill', []);
   const toolbarItems = [
     {
       type: 'element',
@@ -29,7 +35,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
 
-      <SkillList skills={[]}></SkillList>
+      <SkillList skills={skills} projectId={projectId}></SkillList>
     </div>
   );
 };

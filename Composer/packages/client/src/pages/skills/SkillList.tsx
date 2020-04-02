@@ -3,7 +3,6 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import get from 'lodash/get';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -11,7 +10,7 @@ import {
   CheckboxVisibility,
   IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -25,10 +24,11 @@ import { StoreContext } from '../../store';
 
 import SkillForm from './SkillForm';
 import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
-import { ISkill, ISkillByAppConfig, ISkillByManifestUrl, ISkillFormData } from './types';
+import { ISkill, ISkillByAppConfig, ISkillByManifestUrl } from './types';
 
 export interface ISkillListProps {
-  // skills: ISkill[];
+  skills: ISkill[];
+  projectId: string;
 }
 
 const columns: IColumn[] = [
@@ -79,48 +79,14 @@ const columns: IColumn[] = [
   },
 ];
 
-// const builtInSkills = new Array(2).fill({
-//   name: 'production',
-//   protocol: 'BotFrameworkV3',
-//   description: 'Production endpoint for the Email Skill',
-//   endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-//   msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-// });
+const SkillList: React.FC<ISkillListProps> = props => {
+  const { actions } = useContext(StoreContext);
 
-// "skill": [{
-//   "name": "production",
-//   "endpointUrl": "https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages",
-//   "msAppId": "79432da8-0f7e-4a16-8c23-ddbba30ae85d"
-// }]
-
-const builtInSkills = [
-  {
-    name: 'productionByConfig',
-    protocol: 'BotFrameworkV3',
-    description: 'Production endpoint for the Email Skill',
-    endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-    msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-  },
-  {
-    name: 'production',
-    manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-    protocol: 'BotFrameworkV3',
-    description: 'Production endpoint for the Email Skill',
-    endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-    msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-  },
-];
-
-const SkillList: React.FC<ISkillListProps> = () => {
-  const { actions, state } = useContext(StoreContext);
-  const { settings, projectId } = state;
-
-  const skills = get(settings, 'skill', []);
+  const { skills, projectId } = props;
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
 
   const onSubmitForm = useCallback(
     (submitFormData: ISkillByAppConfig | ISkillByManifestUrl, editIndex: number) => {
-      console.log(submitFormData);
       const payload = {
         projectId,
         targetId: editIndex,
@@ -142,7 +108,6 @@ const SkillList: React.FC<ISkillListProps> = () => {
 
   const onItemDelete = useCallback(
     index => {
-      console.log(index);
       const payload = {
         projectId,
         targetId: index,
