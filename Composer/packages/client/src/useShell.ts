@@ -15,7 +15,6 @@ import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { getFocusPath } from './utils/navigation';
 import { isAbsHosted } from './utils/envUtil';
 
-// const VISUAL_EDITOR = 'VisualEditor';
 const FORM_EDITOR = 'FormEditor';
 
 type EventSource = 'VisualEditor' | 'FormEditor';
