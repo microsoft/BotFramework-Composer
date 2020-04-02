@@ -40,6 +40,7 @@ export const DialogSettings = () => {
 
   const changeEditing = (_, on) => {
     setEditing(on);
+    console.log(on);
     actions.setEditDialogSettings(projectId, on, absHosted ? slot : undefined);
   };
 
@@ -65,7 +66,8 @@ export const DialogSettings = () => {
 
   const handleChange = (result, commit) => {
     setValue(result);
-    if (commit || !absHosted) {
+    console.log('on change');
+    if (commit && editing) {
       saveChangeResult(result);
     }
   };
@@ -94,9 +96,9 @@ export const DialogSettings = () => {
   const toggle = () => (
     <div css={hostedToggle}>
       <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-      {absHosted && (
+      {/* {absHosted && (
         <DefaultButton disabled={!editing} text={formatMessage('Save')} onClick={() => handleChange(value, true)} />
-      )}
+      )} */}
     </div>
   );
 
@@ -106,7 +108,7 @@ export const DialogSettings = () => {
       {toggle()}
       <div css={settingsEditor}>
         <JsonEditor
-          onChange={x => handleChange(x, false)}
+          onChange={x => handleChange(x, true)}
           options={{ readOnly: !editing }}
           value={visibleSettings}
           obfuscate={!editing}
