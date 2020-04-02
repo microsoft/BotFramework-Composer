@@ -22,7 +22,7 @@ type EventSource = 'VisualEditor' | 'FormEditor';
 export function useShellApi(source: EventSource): SyncShellApi {
   const { state, actions, resolvers } = useContext(StoreContext);
   const { lgFileResolver, luFileResolver } = resolvers;
-  const { dialogs, schemas, designPageLocation, focusPath, breadcrumb, projectId, locale } = state;
+  const { dialogs, schemas, designPageLocation, focusPath, breadcrumb, projectId } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgTemplate = actions.updateLgTemplate;

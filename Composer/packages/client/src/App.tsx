@@ -20,11 +20,11 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
-import { LoadingSpinner } from './components/LoadingSpinner';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
+
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
@@ -180,7 +180,7 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
-        <Suspense fallback={<LoadingSpinner />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
       </div>
     </Fragment>
   );
