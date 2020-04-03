@@ -6,24 +6,34 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { NeutralColors, CommunicationColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
-export const link = (active, disabled) => css`
-  display: block;
+export const link = (active: boolean, disabled: boolean) => css`
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: #4f4f4f;
+  color: ${disabled ? '#999' : '#4f4f4f'};
   position: relative;
 
-  ${disabled && `pointer-events: none;`}
-  ${!disabled &&
-    `&::after {
-      content: '';
-      position: absolute;
-      top: 0px;
-      right: 1px;
-      bottom: 0px;
-      left: 1px;
-    }
+  width: 220px;
 
-    &:hover {
+  :link {
+    text-decoration: none;
+  }
+  :visited {
+    text-decoration: none;
+  }
+
+  ${active
+    ? `background-color: ${NeutralColors.white};
+ 
+     border-left: 3px solid ${CommunicationColors.primary};
+    `
+    : `
+     background-color: transparent;
+    `}
+
+  ${disabled
+    ? `pointer-events: none;`
+    : `&:hover {
       background-color: ${NeutralColors.gray50};
     }
 
@@ -38,46 +48,16 @@ export const link = (active, disabled) => css`
         outline: rgb(102, 102, 102) solid 1px;
       }
     }
-
-    ${active &&
-      `background-color: ${NeutralColors.white};
-
-      &::after {
-        border-left: 3px solid ${CommunicationColors.primary};
-      }`}
   `}
 `;
 
-export const outer = css`
-  display: flex;
-  width: 220px;
-  background-color: transparent;
-`;
-
-export const commandBarButton = active =>
+export const icon = (active: boolean, disabled: boolean) =>
   ({
     root: {
-      color: active ? '#000' : '#4f4f4f',
-      height: '36px',
-      width: '220px',
-      fontSize: `${FontSizes.size14}`,
-      paddingLeft: '0px',
-      paddingRight: '0px',
-      marginLeft: '0px',
-      backgroundColor: 'transparent',
-    },
-    rootDisabled: {
-      backgroundColor: 'transparent',
-    },
-    icon: {
-      color: active ? '#000' : '#4f4f4f',
-      padding: '0 16px',
+      color: active ? '#000' : disabled ? '#999' : '#4f4f4f',
+      padding: '8px 12px',
       marginLeft: '0px',
       boxSizing: 'border-box',
-      fontSize: `${FontSizes.size16}`,
-    },
-    textContainer: {
-      textAlign: 'left',
-      zIndex: 1,
+      fontSize: `${FontSizes.size24}`,
     },
   } as IButtonStyles);
