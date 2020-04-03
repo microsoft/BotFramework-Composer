@@ -3,7 +3,7 @@
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
 import cloneDeep from 'lodash/cloneDeep';
 
-const globalHiddenProperties = ['$type', '$id', '$copy', '$designer', 'id'];
+const globalHiddenProperties = ['$kind', '$id', '$copy', '$designer', 'id'];
 
 type OrderConfig = (string | [string, string])[];
 

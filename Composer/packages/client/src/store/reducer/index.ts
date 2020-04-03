@@ -14,6 +14,7 @@ import { getExtension } from '../../utils';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import { Text } from '../../constants';
 
 import createReducer from './createReducer';
 
@@ -177,6 +178,12 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
+const setLuFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = payload;
+  return state;
+};
+
 const getStoragesSuccess: ReducerFunc = (state, { response }) => {
   return (state.storages = response.data);
 };
@@ -208,7 +215,7 @@ const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   return state;
 };
 
-const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
+const setBotLoadErrorMsg: ReducerFunc = (state, error) => {
   state.botLoadErrorMsg = error;
   return state;
 };
@@ -334,17 +341,21 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, payload) => {
+const publishFailure: ReducerFunc = (state, { error }) => {
   state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
   return state;
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
     state.botStatus = BotStatus.connected;
-  } else {
-    state.botStatus = BotStatus.unConnected;
   }
+  return state;
+};
+
+const setBotStatus: ReducerFunc = (state, payload) => {
+  state.botStatus = payload;
   return state;
 };
 
@@ -423,8 +434,8 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
   [ActionTypes.REMOVE_LU_FAILURE]: noOp,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
+  [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,
@@ -445,4 +456,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
+  [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
 });

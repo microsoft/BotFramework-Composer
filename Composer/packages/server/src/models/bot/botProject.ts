@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { getNewDesigner, importResolverGenerator, FileInfo, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { getNewDesigner, importResolverGenerator, FileInfo, DialogInfo, LgFile, LuFile, SDKKinds } from '@bfc/shared';
 import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage, JsonWalk, VisitorFunc } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
@@ -888,7 +888,7 @@ export class BotProject {
 
       // fix dialog referrence
       const visitor: VisitorFunc = (_path: string, value: any) => {
-        if (has(value, '$type') && value.$type === 'Microsoft.BeginDialog') {
+        if (has(value, '$kind') && value.$kind === SDKKinds.BeginDialog) {
           const dialogName = value.dialog;
           value.dialog = dialogName.toLowerCase();
         }

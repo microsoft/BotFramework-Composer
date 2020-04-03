@@ -12,21 +12,21 @@ test('should return safely when input null value', () => {
 test('should transform string as BeginDialog', () => {
   const result = transformStepGroup(
     {
-      $type: ObiTypes.StepGroup,
+      $kind: ObiTypes.StepGroup,
       children: ['CalleeDialog'],
     },
     ''
   );
   expect(result[0].json).toEqual({
-    $type: ObiTypes.BeginDialog,
+    $kind: ObiTypes.BeginDialog,
     dialog: 'CalleeDialog',
   });
 });
 
 test('should parse child step correctly with parentPath', () => {
   const json = {
-    $type: ObiTypes.StepGroup,
-    children: [{ $type: 'any' }, { $type: 'any' }],
+    $kind: ObiTypes.StepGroup,
+    children: [{ $kind: 'any' }, { $kind: 'any' }],
   };
   const result = transformStepGroup(json, 'steps');
   expect(result).toBeTruthy();

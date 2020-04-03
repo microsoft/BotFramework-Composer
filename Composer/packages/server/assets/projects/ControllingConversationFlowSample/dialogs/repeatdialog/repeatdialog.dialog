@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "607738"
   },
@@ -7,13 +7,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "695225"
       },
       "actions": [
         {
-          "$type": "Microsoft.ConfirmInput",
+          "$kind": "Microsoft.ConfirmInput",
           "$designer": {
             "id": "841600"
           },
@@ -33,14 +33,14 @@
           }
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "365292"
           },
           "condition": "user.confirmed",
           "actions": [
             {
-              "$type": "Microsoft.RepeatDialog",
+              "$kind": "Microsoft.RepeatDialog",
               "$designer": {
                 "id": "221664"
               }
@@ -48,7 +48,7 @@
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.EndDialog",
+              "$kind": "Microsoft.EndDialog",
               "$designer": {
                 "id": "573415"
               }

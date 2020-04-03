@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "$designer": {
     "name": "EmitAnEvent",
@@ -9,7 +9,7 @@
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
   "recognizer": {
-    "$type": "Microsoft.RegexRecognizer",
+    "$kind": "Microsoft.RegexRecognizer",
     "intents": [
       {
         "intent": "EmitEvent",
@@ -23,34 +23,34 @@
   },
   "triggers": [
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "intent": "EmitEvent",
       "actions": [
         {
-          "$type": "Microsoft.EmitEvent",
+          "$kind": "Microsoft.EmitEvent",
           "eventName": "CustomEvent",
           "bubbleEvent": true
         }
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "intent": "CowboyIntent",
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "activity": "Yippee ki-yay!"
         }
       ]
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "140685"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "576334",
             "name": "Send a response"
