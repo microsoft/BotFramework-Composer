@@ -9,6 +9,7 @@ beforeEach(() => {
 });
 
 after(() => {
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(500);
   cy.exec('yarn test:integration:clean');
 });

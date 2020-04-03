@@ -130,7 +130,7 @@ const Home: React.FC<RouteComponentProps> = () => {
       <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage}>
-          <div css={home.title}>{formatMessage(`Bot Framework Composer`)}</div>
+          <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
               'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'

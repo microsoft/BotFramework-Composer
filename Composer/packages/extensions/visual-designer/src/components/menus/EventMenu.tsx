@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStepMenu, DialogGroup } from '@bfc/shared';
+
+import { NodeRendererContext } from '../../store/NodeRendererContext';
 
 import { IconMenu } from './IconMenu';
 
@@ -12,8 +14,12 @@ interface EventMenuProps {
 }
 
 export const EventMenu: React.FC<EventMenuProps> = ({ label, onClick, ...rest }): JSX.Element => {
-  const eventMenuItems = createStepMenu([DialogGroup.EVENTS], false, (e, item): any =>
-    onClick(item ? item.$type : null)
+  const { dialogFactory } = useContext(NodeRendererContext);
+  const eventMenuItems = createStepMenu(
+    [DialogGroup.EVENTS],
+    false,
+    (e, item): any => onClick(item ? item.data.$kind : null),
+    dialogFactory
   );
 
   return (

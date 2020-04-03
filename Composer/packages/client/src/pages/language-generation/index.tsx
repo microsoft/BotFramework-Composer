@@ -28,15 +28,15 @@ import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  dialogId?: string;
 }
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
 
   const path = props.location?.pathname ?? '';
-  const { fileId = '' } = props;
+  const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
@@ -58,27 +58,27 @@ const LGPage: React.FC<LGPageProps> = props => {
   }, [dialogs]);
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && dialogs.length && fileId !== 'common') {
-      navigateTo('/language-generation/common');
+    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    if (!activeDialog && dialogs.length && dialogId !== 'common') {
+      navigateTo(`/bot/${projectId}/language-generation/common`);
     }
-  }, [fileId, dialogs]);
+  }, [dialogId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {
-      const url = `/language-generation/${id}`;
+      const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-generation/${fileId}`;
+      let url = `/bot/${projectId}/language-generation/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [dialogId, projectId]
   );
 
   const toolbarItems = [
@@ -93,7 +93,7 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
+        <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
         <div css={flexContent}>
           <Toggle
             className={'toggleEditMode'}
@@ -108,13 +108,13 @@ const LGPage: React.FC<LGPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
+          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
         </div>
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
             <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
-              <TableView path="/" fileId={fileId} />
+              <CodeEditor path="/edit/*" dialogId={dialogId} />
+              <TableView path="/" dialogId={dialogId} />
             </Router>
           </Suspense>
         </div>

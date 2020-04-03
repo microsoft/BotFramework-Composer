@@ -3,8 +3,8 @@
 
 import React from 'react';
 
-export const SVGContainer = ({ children }) => (
-  <svg width="100" height="100" overflow="visible">
+export const SVGContainer = ({ children, hidden = false }) => (
+  <svg width="100" height="100" overflow="visible" aria-hidden={hidden}>
     {children}
   </svg>
 );

@@ -56,7 +56,7 @@ export const notificationHeaderText = css`
 
 export const root = css`
   display: flex;
-  height: 100%;
+  height: calc(100vh - 50px);
   flex-direction: column;
 `;
 

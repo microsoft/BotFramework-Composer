@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import os from 'os';
+import childProcess from 'child_process';
 
 import { Path } from '../utility/path';
 
@@ -13,6 +15,24 @@ if (folder && folder.endsWith(':')) {
   folder = folder + '/';
 }
 
+let names: string[] = [];
+const getDiskNames = text => {
+  names = text
+    .split('\r\r\n')
+    .filter(token => token.indexOf(':') > -1)
+    .map(token => token.trim().replace(/\\/g, '/'));
+  return names;
+};
+if (os.platform() === 'win32') {
+  try {
+    const stdout = childProcess.execSync(`wmic volume get name`).toString();
+    names = getDiskNames(stdout);
+  } catch (err) {
+    console.log(err);
+  }
+}
+export const diskNames = names;
+export const platform = os.platform();
 export const environment = process.env.NODE_ENV || 'development';
 export const botsFolder = folder;
 export const botEndpoint = process.env.BOT_ENDPOINT || 'http://localhost:3979';

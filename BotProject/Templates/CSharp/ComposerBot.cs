@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System.Threading;
@@ -20,10 +20,9 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private DialogManager dialogManager;
         private readonly ConversationState conversationState;
         private readonly IStatePropertyAccessor<DialogState> dialogState;
-        private readonly ISourceMap sourceMap;
         private readonly string rootDialogFile;
 
-        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, string rootDialog)
         {
             HostContext.Current.Set(skillClient);
             HostContext.Current.Set(conversationIdFactory);
@@ -31,7 +30,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.resourceExplorer = resourceExplorer;
-            this.rootDialogFile = "Main.dialog";
+            this.rootDialogFile = rootDialog;
             LoadRootDialogAsync();
         }
         

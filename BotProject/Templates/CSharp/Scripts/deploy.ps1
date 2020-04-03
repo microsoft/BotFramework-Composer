@@ -3,6 +3,7 @@ Param(
 	[string] $environment,
 	[string] $luisAuthoringKey,
 	[string] $luisAuthoringRegion,
+	[string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
@@ -31,6 +32,9 @@ if (-not $environment) {
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
 }
 
+if (-not $language) {
+	$language = "en-us"
+}
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -107,10 +111,13 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	# Generate Luconfig.json file
 	$luconfigjson = @{
 		"name"            = $name;
-		"defaultLanguage" = "en-us";
+		"defaultLanguage" = $language;
 		"models"          = $noneEmptyModels
 	}
 	
+	$luString = $noneEmptyModels | Out-String
+	Write-Host $luString
+
 	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
 
 	# Execute bf luis:build command
@@ -123,7 +130,7 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 			New-Item -ItemType Directory -Force -Path generated
 		}
 		
-		bf luis:build --in .\ --botName $name --authoringKey $luisAuthoringKey --dialog --out .\generated --suffix $customizedEnv -f --region $luisAuthoringRegion
+		bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json) --botName $name --authoringKey $luisAuthoringKey --dialog --out .\generated --suffix $customizedEnv -f --region $luisAuthoringRegion
 	}
 	else {
 		Write-Host "bf luis:build does not exist, use the following command to install:"

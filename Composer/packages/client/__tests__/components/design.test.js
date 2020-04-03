@@ -19,7 +19,7 @@ jest.mock('@bfc/code-editor', () => {
 
 describe('<ProjectTree/>', () => {
   it('should render the ProjectTree', async () => {
-    const dialogId = 'Main';
+    const dialogId = 'todobot';
     const selected = 'triggers[0]';
     const handleSelect = jest.fn(() => {});
     const handleAddDialog = jest.fn(() => {});
@@ -38,7 +38,7 @@ describe('<ProjectTree/>', () => {
         openNewTriggerModal={openNewTriggerModal}
       />
     );
-    const node = await findByText('AddToDo');
+    const node = await findByText('addtodo');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
@@ -64,7 +64,7 @@ describe('<ProjectTree/>', () => {
     });
     const handleSubmit = jest.fn(() => {});
     const { getByText } = render(
-      <TriggerCreationModal dialogId={'Main'} isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
+      <TriggerCreationModal dialogId={'todobot'} isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
     );
     const cancelButton = getByText('Cancel');
     fireEvent.click(cancelButton);

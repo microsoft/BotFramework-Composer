@@ -4,8 +4,7 @@
 import fs from 'fs';
 
 import rimraf from 'rimraf';
-import { seedNewDialog } from '@bfc/shared';
-import { DialogInfo } from '@bfc/indexers';
+import { DialogFactory, DialogInfo, SDKKinds } from '@bfc/shared';
 
 import { Path } from '../../../src/utility/path';
 import { BotProject } from '../../../src/models/bot/botProject';
@@ -56,7 +55,8 @@ describe('updateDialog', () => {
   it('should update a file at a path', async () => {
     const initValue = { old: 'value' };
     const newValue = { new: 'value' };
-    const { dialogs } = await proj.updateDialog('a', newValue);
+    await proj.updateDialog('a', newValue);
+    const dialogs = proj.dialogs;
     const aDialog = dialogs.find((f: { id: string }) => f.id === 'a');
     // @ts-ignore
     expect(aDialog.content).toEqual(newValue);
@@ -65,12 +65,12 @@ describe('updateDialog', () => {
 });
 
 describe('createFromTemplate', () => {
-  const dialogName = 'MyTestDialog';
-  const content = JSON.stringify(seedNewDialog('Microsoft.AdaptiveDialog'), null, 2) + '\n';
+  const dialogName = 'mytestdialog';
+  const content = JSON.stringify(new DialogFactory({}).create(SDKKinds.AdaptiveDialog), null, 2) + '\n';
 
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/${dialogName}`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/${dialogName}`));
     } catch (err) {
       // ignore
     }
@@ -82,7 +82,7 @@ describe('createFromTemplate', () => {
 
     expect(newFile).not.toBeUndefined();
     const fileContent = ((newFile as unknown) as DialogInfo).content;
-    expect(fileContent.$type).toEqual('Microsoft.AdaptiveDialog');
+    expect(fileContent.$kind).toEqual(SDKKinds.AdaptiveDialog);
   });
 });
 
@@ -141,7 +141,7 @@ describe('modify non exist files', () => {
 describe('lg operations', () => {
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
     } catch (err) {
       // ignore
     }
@@ -161,7 +161,6 @@ describe('lg operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toContain(content);
     }
   });
@@ -176,7 +175,8 @@ describe('lg operations', () => {
     await proj.createLgFile(id, content);
 
     content = '# hello \n - hello2';
-    const lgFiles = await proj.updateLgFile(id, content);
+    await proj.updateLgFile(id, content);
+    const lgFiles = proj.lgFiles;
     const result = lgFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
@@ -184,7 +184,6 @@ describe('lg operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lg');
       expect(result.content).toContain(content);
     }
   });
@@ -210,8 +209,8 @@ describe('lg operations', () => {
 describe('lu operations', () => {
   afterEach(() => {
     try {
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/root`));
-      rimraf.sync(Path.resolve(__dirname, `${botDir}/ComposerDialogs/generated`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/dialogs/root`));
+      rimraf.sync(Path.resolve(__dirname, `${botDir}/generated`));
     } catch (err) {
       // ignore
     }
@@ -232,7 +231,6 @@ describe('lu operations', () => {
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
-      expect(result.relativePath).toEqual('ComposerDialogs/root/root.lu');
       expect(result.content).toContain(content);
     }
   });
@@ -247,14 +245,14 @@ describe('lu operations', () => {
     await proj.createLuFile(id, content);
     content = '## hello \n - hello2';
 
-    const luFiles = await proj.updateLuFile(id, content);
+    await proj.updateLuFile(id, content);
+    const luFiles = proj.luFiles;
     const result = luFiles.find(f => f.id === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
     expect(luFiles.length).toEqual(luFilesCount + 1);
 
     expect(result).not.toBeUndefined();
-    expect(result?.relativePath).toEqual('ComposerDialogs/root/root.lu');
     expect(result?.content).toContain(content);
   });
 
@@ -265,7 +263,8 @@ describe('lu operations', () => {
 
     content = 'hello \n hello3';
 
-    const luFiles = await proj.updateLuFile(id, content);
+    await proj.updateLuFile(id, content);
+    const luFiles = proj.luFiles;
     const result = luFiles.find(f => f.id === id);
     expect(result?.diagnostics?.length).toBeGreaterThan(0);
   });

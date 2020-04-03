@@ -1,0 +1,33 @@
+[import](common.lg)
+
+# bfdprompt-267073()
+- Hi, what is your name? You can  \n - state your name \n - say things like 'my name is <your name>' \n - ask 'why do you need my name' \n - say 'I'm not going to give you my name'. 
+
+# bfdactivity-744717()
+- Thanks. I have ${user.name} as your name and ${user.age} as your age.
+
+# bfdprompt-826115()
+- Hello ${user.name}, how old are you?
+
+# bfdinvalidPrompt-826115()
+- Sorry ${this.value} does not work. I'm expecting a value between 1-150. What is your age?
+
+# bfddefaultValueResponse-826115()
+- Sorry, this is not working :(. For now, I'm going to set your age to 30.
+
+# bfdactivity-210613()
+- Sure, cancelling user profile...
+
+# bfdactivity-351007()
+- I need your name to address you correctly! \n You can say things like 'My name is <your name>' to introduce yourself to me.
+
+# bfdactivity-977137()
+- I just like to know your age .. no good reason! \n Try saying "I'm <your age> years old"
+
+# bfdactivity-304840()
+- No worries. I'm going to set your name to 'Human'. \n You can say "My name is <your name>" to re-introduce yourself to me.
+
+# bfdactivity-991655()
+- No worries. I'm just going to assume you are 30!
+
+

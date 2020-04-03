@@ -4,7 +4,6 @@
 import Path from 'path';
 
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import get from 'lodash/get';
 
 import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
 
@@ -17,7 +16,7 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  const [bots, setBots] = useState([]);
+  //const [files, setFiles] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
@@ -34,7 +33,6 @@ export function CreationFlow(props) {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-  const [currentPath, setCurrentPath] = useState('');
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -43,21 +41,6 @@ export function CreationFlow(props) {
       fetchFolderItemsByPath(storageId, formattedPath);
     }
   }, [storages]);
-
-  useEffect(() => {
-    const allFilesInFolder = get(focusedStorageFolder, 'children', []);
-
-    const botsInCurrentFolder = allFilesInFolder.filter(file => {
-      if (file.type === FileTypes.BOT) {
-        return file;
-      }
-    });
-
-    setBots(botsInCurrentFolder);
-    if (Object.keys(focusedStorageFolder).length) {
-      setCurrentPath(Path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
-    }
-  }, [focusedStorageFolder]);
 
   useEffect(() => {
     init();
@@ -105,7 +88,7 @@ export function CreationFlow(props) {
 
   const openBot = async botFolder => {
     await openBotProject(botFolder);
-    navigateTo('/dialogs/Main');
+    // navigateTo(`/bot/${state.projectId}/dialogs/Main`);
     handleDismiss();
   };
 
@@ -114,7 +97,7 @@ export function CreationFlow(props) {
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(formData.name, formData.description, formData.location);
+    await saveProjectAs(state.projectId, formData.name, formData.description, formData.location);
   };
 
   const handleSubmit = formData => {
@@ -123,11 +106,11 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        navigateTo('/dialogs/Main');
+        //navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
-        navigateTo('/dialogs/Main');
+        navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       default:
         setStep(Steps.NONE);
@@ -153,7 +136,6 @@ export function CreationFlow(props) {
           onOpen={openBot}
           onDismiss={handleDismiss}
           focusedStorageFolder={focusedStorageFolder}
-          currentPath={currentPath}
           onCurrentPathUpdate={updateCurrentPath}
         />
       ),
@@ -166,8 +148,6 @@ export function CreationFlow(props) {
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
-          currentPath={currentPath}
-          bots={bots}
         />
       ),
     },

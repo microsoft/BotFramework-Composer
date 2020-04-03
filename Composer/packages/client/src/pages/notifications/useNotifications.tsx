@@ -11,7 +11,7 @@ import { Notification, DialogNotification, LuNotification, LgNotification } from
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, lgFiles } = state;
+  const { dialogs, luFiles, lgFiles, projectId } = state;
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
     dialogs.forEach(dialog => {
@@ -28,29 +28,25 @@ export default function useNotifications(filter?: string) {
     });
     lgFiles.forEach(lgFile => {
       const lgTemplates = get(lgFile, 'templates', []);
-      lgFile.diagnostics
-        // only report diagnostics belong to itself.
-        .filter(({ source, message }) => message.includes(`source: ${source}`))
-        .map(diagnostic => {
-          const mappedTemplate = lgTemplates.find(
-            t =>
-              get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-              get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
-          );
-          const id = lgFile.id;
-          const location = `${lgFile.id}.lg`;
-          let lgTemplateName = '';
-          if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
-            //should navigate to design page
-            lgTemplateName = mappedTemplate.name;
-          }
-          notifactions.push(new LgNotification(id, lgTemplateName, location, diagnostic, dialogs));
-        });
+      lgFile.diagnostics.map(diagnostic => {
+        const mappedTemplate = lgTemplates.find(
+          t =>
+            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
+            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+        );
+        const id = lgFile.id;
+        const location = `${lgFile.id}.lg`;
+        let lgTemplateName = '';
+        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
+          //should navigate to design page
+          lgTemplateName = mappedTemplate.name;
+        }
+        notifactions.push(new LgNotification(id, lgTemplateName, location, diagnostic, dialogs));
+      });
     });
     return notifactions;
-  }, [dialogs, luFiles, lgFiles]);
+  }, [dialogs, luFiles, lgFiles, projectId]);
 
   const notifications: Notification[] = filter ? memoized.filter(x => x.severity === filter) : memoized;
-
   return notifications;
 }
