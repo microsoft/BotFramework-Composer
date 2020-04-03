@@ -355,7 +355,7 @@ function DesignPage(props) {
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           openNewTriggerModal={openNewTriggerModal}
