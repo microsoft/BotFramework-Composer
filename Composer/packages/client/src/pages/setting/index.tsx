@@ -11,7 +11,6 @@ import { RouteComponentProps } from '@reach/router';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
-import { isAbsHosted } from '../../utils/envUtil';
 import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
@@ -27,11 +26,8 @@ const settingLabels = {
   onboarding: formatMessage('Onboarding'),
 };
 
-const absHosted = isAbsHosted();
-
 const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings, url: '' },
-  //{ key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
   { key: '/setting/onboarding-settings', name: settingLabels.onboarding, url: '' },
   //{ key: '/setting/publish', name: settingLabels.publish, url: '' },
 

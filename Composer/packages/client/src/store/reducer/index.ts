@@ -323,8 +323,10 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
-const setPublishTypes: ReducerFunc = (state, { response }) => {
-  state.publishTypes = response;
+const setPublishTypes: ReducerFunc = (state, { typelist }) => {
+  const types: string[] = [];
+  typelist.map(item => types.push(item.name));
+  state.publishTypes = types;
   return state;
 };
 
@@ -346,6 +348,11 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
     state.botStatus = BotStatus.connected;
   }
+  return state;
+};
+
+const getPublishHistory: ReducerFunc = (state, payload) => {
+  state.publishHistory = payload;
   return state;
 };
 
@@ -444,6 +451,7 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
   [ActionTypes.PUBLISH_FAILED]: publishFailure,
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,

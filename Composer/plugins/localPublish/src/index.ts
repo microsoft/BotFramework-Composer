@@ -67,7 +67,20 @@ class LocalPublisher {
       };
     }
   };
-  history = async config => { };
+  history = async (botId: string) => {
+    const result = [];
+    const files = await readDir(this.getHistoryDir(botId));
+    console.log(files);
+    files.map(item => {
+      result.push({
+        time: 'now',
+        status: 'success',
+        message: 'test',
+        comment: 'test',
+      });
+    });
+    return result;
+  };
   rollback = async (config, versionId) => { };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
