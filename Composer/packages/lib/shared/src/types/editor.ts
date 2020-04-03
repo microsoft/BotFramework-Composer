@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface CodeEditorOptions {
+export interface CodeEditorSettings {
   lineNumbers: boolean;
   wordWrap: boolean;
 }

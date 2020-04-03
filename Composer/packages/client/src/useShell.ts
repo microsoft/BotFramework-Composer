@@ -33,6 +33,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     luFiles,
     projectId,
     schemas,
+    codeEditorSettings,
   } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -256,6 +257,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         lgFiles,
         luFiles,
         currentDialog,
+        codeEditorSettings,
         designerId: get(editorData, '$designer.id'),
         focusedEvent: selected,
         focusedActions: focused ? [focused] : [],

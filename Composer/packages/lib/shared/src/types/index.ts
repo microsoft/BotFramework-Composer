@@ -3,6 +3,7 @@
 
 export * from './diagnostic';
 export * from './dialogUtils';
+export * from './editor';
 export * from './indexers';
 export * from './schema';
 export * from './sdk';

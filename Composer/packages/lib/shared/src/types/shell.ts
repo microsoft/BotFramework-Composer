@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { CodeEditorSettings } from './editor';
 
 export interface EditorSchema {
   content?: {
@@ -37,6 +38,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  codeEditorSettings: CodeEditorSettings;
   // TODO: remove
   schemas: BotSchemas;
 }

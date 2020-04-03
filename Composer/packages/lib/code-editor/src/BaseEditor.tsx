@@ -13,9 +13,9 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
+import { CodeEditorSettings } from '@bfc/shared';
 
 import { assignDefined } from './utils/common';
-import { CodeEditorOptions } from './types';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
@@ -109,7 +109,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
-  const [configOptions, setConfigOptions] = useState<CodeEditorOptions>({
+  const [configOptions, setConfigOptions] = useState<CodeEditorSettings>({
     lineNumbers: false,
     wordWrap: false,
   });

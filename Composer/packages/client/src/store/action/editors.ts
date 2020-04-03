@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { CodeEditorOptions } from '@bfc/code-editor';
+import { CodeEditorSettings } from '@bfc/shared';
 
 import { ActionCreator } from '../types';
 
@@ -31,7 +31,7 @@ export const setVisualEditorClipboard: ActionCreator = ({ dispatch }, clipboardA
   });
 };
 
-export const setCodeEditorOptions: ActionCreator = ({ dispatch }, options: CodeEditorOptions) => {
+export const setCodeEditorOptions: ActionCreator = ({ dispatch }, options: CodeEditorSettings) => {
   dispatch({
     type: ActionTypes.SET_CODE_EDITOR_OPTIONS,
     payload: options,
