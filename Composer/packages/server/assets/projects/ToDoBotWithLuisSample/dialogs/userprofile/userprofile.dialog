@@ -213,6 +213,6 @@
       ]
     }
   ],
-  "generator": "UserProfile.lg",
-  "recognizer": "UserProfile.lu"
+  "generator": "userprofile.lg",
+  "recognizer": "userprofile.lu"
 }
