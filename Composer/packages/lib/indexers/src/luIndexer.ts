@@ -97,10 +97,10 @@ function index(files: FileInfo[]): LuFile[] {
   const filtered = files.filter(file => file.name.endsWith(FileExtensions.Lu));
 
   const luFiles = filtered.map(file => {
-    const { name, content, relativePath } = file;
+    const { name, content } = file;
     const id = getBaseName(name);
     const { intents, diagnostics } = parse(content, id);
-    return { id, relativePath, content, intents, diagnostics, lastModified: file.lastModified };
+    return { id, content, intents, diagnostics };
   });
 
   return luFiles;
