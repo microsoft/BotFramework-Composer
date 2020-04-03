@@ -4,7 +4,6 @@ import { DialogInfo, LgFile, LuFile } from '@bfc/shared';
 
 import { ActionTypes } from './../../../src/constants';
 import filePersistence from './../../../src/store/persistence/FilePersistence';
-import { FileChangeType } from './../../../src/store/persistence/types';
 import { State } from './../../../src/store/types';
 
 jest.mock('axios', () => {
