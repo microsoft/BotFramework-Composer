@@ -109,6 +109,6 @@
       ]
     }
   ],
-  "generator": "AddItem.lg",
-  "recognizer": "AddItem.lu"
+  "generator": "additem.lg",
+  "recognizer": "additem.lu"
 }
