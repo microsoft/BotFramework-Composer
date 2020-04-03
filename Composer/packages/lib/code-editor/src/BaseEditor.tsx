@@ -3,16 +3,19 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
 
 import { assignDefined } from './utils/common';
+import { CodeEditorOptions } from './types';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
@@ -62,6 +65,13 @@ const styles = {
       height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error ? 32 : 0}px);
     `;
   },
+  settings: css`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: -26px;
+    margin-bottom: 5px;
+  `,
 };
 
 export type OnInit = (instance: Monaco) => void;
@@ -94,11 +104,15 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     onInit,
     ...rest
   } = props;
-  const options = assignDefined(defaultOptions, props.options);
+  const [editorOptions, setEditorOptions] = useState(assignDefined(defaultOptions, props.options));
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
+  const [configOptions, setConfigOptions] = useState<CodeEditorOptions>({
+    lineNumbers: false,
+    wordWrap: false,
+  });
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
@@ -165,14 +179,95 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     </Link>
   );
 
+  useEffect(() => {
+    if (editor) {
+      console.log('[BFC] updating options:', editorOptions);
+      setEditorOptions(current => ({
+        ...current,
+        lineNumbers: configOptions.lineNumbers ? 'on' : 'off',
+        wordWrap: configOptions.wordWrap ? 'on' : 'off',
+        lineNumbersMinChars: configOptions.lineNumbers ? 3 : editorOptions.lineNumbersMinChars,
+        lineDecorationsWidth: configOptions.lineNumbers ? 10 : editorOptions.lineDecorationsWidth,
+      }));
+    }
+  }, [configOptions]);
+
+  const handleOptionsChange = useCallback(
+    (_ev, item?: IContextualMenuItem) => {
+      if (item) {
+        setConfigOptions(current => ({
+          ...current,
+          [item.key]: !current[item.key],
+        }));
+      }
+    },
+    [editorOptions]
+  );
+
+  const optionsMenuItems: IContextualMenuItem[] = useMemo(
+    () => [
+      {
+        key: 'lineNumbers',
+        text: formatMessage('Show/hide line numbers'),
+        canCheck: true,
+        isChecked: configOptions.lineNumbers,
+        onClick: handleOptionsChange,
+      },
+      {
+        key: 'wordWrap',
+        text: formatMessage('Toggle word wrap'),
+        canCheck: true,
+        isChecked: configOptions.wordWrap,
+        onClick: handleOptionsChange,
+      },
+    ],
+    [editorOptions, handleOptionsChange]
+  );
+
   return (
     <React.Fragment>
+      <div css={styles.settings}>
+        <IconButton
+          menuProps={{ items: optionsMenuItems, shouldFocusOnMount: true }}
+          iconProps={{ iconName: 'Settings' }}
+          styles={{
+            root: {
+              fontSize: '12px',
+              minWidth: 0,
+              margin: 0,
+              padding: '5px',
+              height: 'auto',
+              color: '#323130',
+              background: 'transparent',
+            },
+            rootHovered: {
+              color: '#323130',
+              background: 'transparent',
+            },
+            rootChecked: {
+              color: '#323130',
+              background: 'transparent',
+            },
+            rootPressed: {
+              color: '#323130',
+              background: 'transparent',
+            },
+            rootExpanded: {
+              color: '#323130',
+              background: 'transparent',
+            },
+            menuIcon: {
+              display: 'none',
+            },
+          }}
+        />
+      </div>
       <div
         css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={options} />
+        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
