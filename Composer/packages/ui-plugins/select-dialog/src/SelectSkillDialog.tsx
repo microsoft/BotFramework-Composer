@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 
 import ComboBoxField, { ADD_DIALOG } from './ComboBoxField';
 
-export const SelectDialog: React.FC<FieldProps> = props => {
+export const SelectSkillDialog: React.FC<FieldProps> = props => {
   const { value = '', onChange } = props;
 
   const {

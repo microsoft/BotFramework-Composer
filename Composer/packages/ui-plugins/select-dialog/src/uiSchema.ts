@@ -4,6 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { SelectDialog } from './SelectDialog';
+import { SelectSkillDialog } from './SelectSkillDialog';
 
 const uiSchema: UISchema = {
   [SDKKinds.BeginDialog]: {
@@ -17,6 +18,14 @@ const uiSchema: UISchema = {
     properties: {
       dialog: {
         field: SelectDialog,
+      },
+    },
+  },
+  [SDKKinds.SkillDialog]: {
+    hidden: ['botId'],
+    properties: {
+      skillHostEndpoint: {
+        field: SelectSkillDialog,
       },
     },
   },
