@@ -118,14 +118,14 @@ export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) 
   return dispatch;
 };
 
-export const wrapedReducer = (state: State, action: ActionType) => {
+export const wrappedReducer = (state: State, action: ActionType) => {
   const currentState = reducer(state, action);
   filePersistence.notify(state, currentState, action);
   return currentState;
 };
 
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
-  const [state, dispatch] = useReducer(wrapedReducer, initialState);
+  const [state, dispatch] = useReducer(wrappedReducer, initialState);
   const stateRef = useRef<State>(initialState);
 
   stateRef.current = state;

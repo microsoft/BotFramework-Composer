@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo, LuFile, LgFile } from '@bfc/shared';
+import { FileInfo } from '@bfc/shared';
 import keys from 'lodash/keys';
 
 import { Store, State } from '../types';
