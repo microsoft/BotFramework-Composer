@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { DialogInfo, LgFile, LuFile } from '@bfc/shared';
+
+import { ActionTypes } from './../../../src/constants';
 import filePersistence from './../../../src/store/persistence/FilePersistence';
-import { FileChangeType, FileExtensions } from './../../../src/store/persistence/types';
+import { FileChangeType } from './../../../src/store/persistence/types';
+import { State } from './../../../src/store/types';
 
 jest.mock('axios', () => {
   return {
@@ -49,9 +53,21 @@ describe('test persistence layer', () => {
   });
 
   it('test notify update', async () => {
-    filePersistence.notify(FileChangeType.UPDATE, 'a', FileExtensions.Dialog, { a: 'a' });
-    filePersistence.notify(FileChangeType.UPDATE, 'a.en-us', FileExtensions.Lu, 'a');
-    filePersistence.notify(FileChangeType.UPDATE, 'a.en-us', FileExtensions.Lg, 'a');
+    const state1 = {
+      dialogs: [{ id: 'a', content: {} }] as DialogInfo[],
+      lgFiles: [{ id: 'a.en-us', content: '' }] as LgFile[],
+      luFiles: [{ id: 'a.en-us', content: '' }] as LuFile[],
+    } as State;
+
+    const state2 = {
+      dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
+      luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
+    } as State;
+
+    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
+    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
+    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
     await new Promise(res =>
       setTimeout(() => {
         const dialog = filePersistence.files['a.dialog'].file;
@@ -70,14 +86,33 @@ describe('test persistence layer', () => {
           expect(lu.content).toBe('a');
         }
         res();
-      }, 501)
+      }, 601)
     );
   });
 
   it('test notify create', async () => {
-    await filePersistence.notify(FileChangeType.CREATE, 'b', FileExtensions.Dialog, { b: 'b' });
-    await filePersistence.notify(FileChangeType.CREATE, 'b.en-us', FileExtensions.Lu, 'b');
-    await filePersistence.notify(FileChangeType.CREATE, 'b.en-us', FileExtensions.Lg, 'b');
+    const state1 = {
+      dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
+      luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
+    } as State;
+
+    const state2 = {
+      dialogs: [
+        { id: 'a', content: { a: 'a' } },
+        { id: 'b', content: { b: 'b' } },
+      ] as DialogInfo[],
+      lgFiles: [
+        { id: 'a.en-us', content: 'a' },
+        { id: 'b.en-us', content: 'b' },
+      ] as LgFile[],
+      luFiles: [
+        { id: 'a.en-us', content: 'a' },
+        { id: 'b.en-us', content: 'b' },
+      ] as LuFile[],
+    } as State;
+
+    await filePersistence.notify(state1, state2, { type: ActionTypes.CREATE_DIALOG, payload: { id: 'b' } });
     const dialog = filePersistence.files['b.dialog'].file;
     const lg = filePersistence.files['b.en-us.lg'].file;
     const lu = filePersistence.files['b.en-us.lu'].file;
@@ -96,9 +131,28 @@ describe('test persistence layer', () => {
   });
 
   it('test notify remove', async () => {
-    await filePersistence.notify(FileChangeType.DELETE, 'b', FileExtensions.Dialog, '');
-    await filePersistence.notify(FileChangeType.DELETE, 'b.en-us', FileExtensions.Lu, '');
-    await filePersistence.notify(FileChangeType.DELETE, 'b.en-us', FileExtensions.Lg, '');
+    const state1 = {
+      dialogs: [
+        { id: 'a', content: { a: 'a' } },
+        { id: 'b', content: { b: 'b' } },
+      ] as DialogInfo[],
+      lgFiles: [
+        { id: 'a.en-us', content: 'a' },
+        { id: 'b.en-us', content: 'b' },
+      ] as LgFile[],
+      luFiles: [
+        { id: 'a.en-us', content: 'a' },
+        { id: 'b.en-us', content: 'b' },
+      ] as LuFile[],
+    } as State;
+
+    const state2 = {
+      dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
+      luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
+    } as State;
+
+    await filePersistence.notify(state1, state2, { type: ActionTypes.REMOVE_DIALOG, payload: { id: 'b' } });
     const dialog = filePersistence.files['b.dialog'];
     const lg = filePersistence.files['b.en-us.lg'];
     const lu = filePersistence.files['b.en-us.lu'];

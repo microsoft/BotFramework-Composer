@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, LuFile, LgFile } from '@bfc/shared';
 import keys from 'lodash/keys';
 
 import { Store, State } from '../types';
@@ -10,7 +10,7 @@ import { ActionType } from '../action/types';
 import { getBaseName } from '../../utils';
 
 import { FileOperation } from './FileOperation';
-import { FileChangeType, FileExtensions } from './types';
+import { FileChangeType, FileExtensions, ResourceInfo } from './types';
 
 const fileChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Dialog },
@@ -95,37 +95,37 @@ class FilePersistence {
 
   public async operate({ changeType, fileType }, id: string, state: State) {
     if (changeType === FileChangeType.DELETE) {
-      keys(this._files).forEach(fileName => {
-        const fileId = getBaseName(fileName);
-        if (fileId === id || (getBaseName(fileId) === id && fileType === FileExtensions.Dialog)) {
-          this.doRemove(fileName);
-        }
-      });
+      await Promise.all(
+        keys(this._files)
+          .filter(fileName => {
+            const fileId = getBaseName(fileName);
+            return fileId === id || (getBaseName(fileId) === id && fileType === FileExtensions.Dialog);
+          })
+          .map(async fileName => await this.doRemove(fileName))
+      );
     } else {
       const { dialogs, luFiles, lgFiles } = state;
-      dialogs
-        .filter(d => d.id === id)
-        .forEach(d => {
-          this.doUpdate(`${id}.dialog`, JSON.stringify(d.content, null, 2) + '\n');
-        });
-      luFiles
-        .filter(
-          lu =>
-            (getBaseName(lu.id) === id && changeType === FileChangeType.CREATE && fileType === FileExtensions.Dialog) ||
-            lu.id === id
-        )
-        .forEach(lu => {
-          this.doUpdate(`${lu.id}.lu`, lu.content);
-        });
-      lgFiles
-        .filter(
-          lg =>
-            (getBaseName(lg.id) === id && changeType === FileChangeType.CREATE && fileType === FileExtensions.Dialog) ||
-            lg.id === id
-        )
-        .forEach(lg => {
-          this.doUpdate(`${lg.id}.lg`, lg.content);
-        });
+      if (fileType === FileExtensions.Dialog) {
+        const dialog = dialogs.find(d => d.id === id);
+        if (!dialog) return;
+        await this.doUpdate(`${id}.dialog`, JSON.stringify(dialog.content, null, 2) + '\n');
+        if (changeType === FileChangeType.CREATE) {
+          await this._doCreateForOtherFile(luFiles, FileExtensions.Lu, id);
+          await this._doCreateForOtherFile(lgFiles, FileExtensions.Lg, id);
+        }
+      }
+
+      if (fileType === FileExtensions.Lg) {
+        const lg = lgFiles.find(d => d.id === id);
+        if (!lg) return;
+        await this.doUpdate(`${id}.lg`, lg.content);
+      }
+
+      if (fileType === FileExtensions.Lu) {
+        const lu = luFiles.find(d => d.id === id);
+        if (!lu) return;
+        await this.doUpdate(`${id}.lu`, lu.content);
+      }
     }
   }
 
@@ -151,6 +151,15 @@ class FilePersistence {
       });
       fetchProject(curStore);
     };
+  }
+
+  // if create dialog, the lg and lu are created together
+  private async _doCreateForOtherFile(files: ResourceInfo[], extension: string, targetId: string) {
+    await Promise.all(
+      files
+        .filter(file => getBaseName(file.id) === targetId)
+        .map(async file => await this.doUpdate(`${file.id}${extension}`, file.content))
+    );
   }
 }
 
