@@ -48,11 +48,8 @@ const LgField: React.FC<FieldProps<string>> = props => {
     [lgName, lgFileId]
   );
 
-  const hasTemplate = useMemo(() => lgFile?.templates.find(t => t.name === lgName), []);
-  const template = (hasTemplate &&
-    lgFile?.templates.find(template => {
-      return template.name === lgName;
-    })) || {
+  const hasTemplate = useMemo(() => lgFile?.templates.find(t => t.name === lgName), [lgFile, lgName]);
+  const template = hasTemplate || {
     name: lgName,
     parameters: [],
     body: getInitialTemplate(name, value),
@@ -75,9 +72,9 @@ const LgField: React.FC<FieldProps<string>> = props => {
   useEffect(() => {
     // create the lg template if the schema porvides a default value
     if (template.body && !hasTemplate) {
-      onChange(template.body);
+      shellApi.updateLgTemplate(lgFileId, template.name, template.body);
     }
-  }, []);
+  }, [lgFileId, template, hasTemplate]);
 
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
