@@ -4,19 +4,12 @@
 context('Onboarding', () => {
   beforeEach(() => {
     window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: false }));
-
-    cy.visit(`${Cypress.env('COMPOSER_URL')}/home`);
-    cy.findByTestId('homePage-ToolBar-New').within(() => {
-      cy.findByText('New').click();
-    });
-
-    cy.findByTestId('Create from template').click({ force: true });
-    cy.findByTestId('TodoSample').click();
-    cy.findByTestId('NextStepButton').click();
-    cy.findByTestId('NewDialogName').type('{selectall}__TestOnboarding{enter}');
+    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.createBot('TodoSample', 'Onboarding');
 
     //enable onboarding setting
     cy.visitPage('Settings');
+    cy.wait(1000);
     cy.findByText('Onboarding').click();
     cy.findByTestId('onboardingToggle').click();
     cy.visitPage('Design Flow');
@@ -34,9 +27,11 @@ context('Onboarding', () => {
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingNextSet').click();
+
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingNextSet').click();
+
     cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingDone').click();

@@ -8,7 +8,7 @@ export function normalizeObiStep(data) {
   // Grammar sugar provide by OBI runtime.
   if (typeof data === 'string') {
     step = {
-      $type: ObiTypes.BeginDialog,
+      $kind: ObiTypes.BeginDialog,
       dialog: step,
     };
   }

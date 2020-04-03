@@ -4,8 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate } from '@bfc/shared';
-import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
+import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -22,6 +21,7 @@ export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
 interface StateError {
+  status?: number;
   summary: string;
   message: string;
 }
@@ -43,14 +43,17 @@ export interface File {
 export interface StorageFolder extends File {
   parent: string;
   children?: File[];
+  writable?: boolean;
 }
 
 export interface State {
   dialogs: DialogInfo[];
+  projectId: string;
   botName: string;
   location: string;
   botEnvironment: string;
-  botEndpoint: string;
+  locale: string;
+  botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
   /** the data path for FormEditor */
   focusPath: string;
@@ -59,7 +62,7 @@ export interface State {
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: string;
+  botLoadErrorMsg: { title: string; message: string };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
@@ -91,6 +94,8 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
+  publishTypes: string[];
+  publishTargets: any[];
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
@@ -117,6 +122,7 @@ export interface DialogSetting {
 }
 
 export interface DesignPageLocation {
+  projectId: string;
   dialogId: string;
   selected: string;
   focused: string;

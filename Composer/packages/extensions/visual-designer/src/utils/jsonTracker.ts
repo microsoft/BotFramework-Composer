@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { seedNewDialog, deepCopyActions, generateSDKTitle, ExternalResourceHandlerAsync } from '@bfc/shared';
+import { DialogFactory, deepCopyActions, ExternalResourceHandlerAsync } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -151,11 +151,8 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $type) {
-  const newStep = {
-    $type,
-    ...seedNewDialog($type, { name: generateSDKTitle({ $type }) }),
-  };
+export function insert(inputDialog, path, position, $kind, factory: DialogFactory) {
+  const newStep = factory.create($kind);
   return insertAction(inputDialog, path, position, newStep);
 }
 
@@ -235,3 +232,19 @@ export async function pasteNodes(
   const newNodes = await deepCopyActions(clipboardNodes, handleLgField);
   return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
+
+export const getParentPaths = (actionPath: string): string[] => {
+  if (typeof actionPath !== 'string') return [];
+  const selectors = actionPath.split('.');
+  // exclude the path of current action
+  selectors.pop();
+  if (!selectors.length) return [];
+
+  let path = selectors[0];
+  const results = [path];
+  for (let i = 1; i < selectors.length; i++) {
+    path = `${path}.${selectors[i]}`;
+    results.push(path);
+  }
+  return results;
+};

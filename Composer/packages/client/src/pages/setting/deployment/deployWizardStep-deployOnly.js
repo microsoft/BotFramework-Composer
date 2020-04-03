@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import React, { Fragment, useContext, useCallback, useEffect, useRef, useState } from 'react';
 import formatMessage from 'format-message';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -20,11 +22,11 @@ import { regionOptions } from './luisRegions.js';
 export const DeployWizardStepDeploy = props => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
-  const { botName, location } = state;
+  const { botName, projectId } = state;
   const [disable, setDisable] = useState(false);
   const [formData, setFormData] = useState({
     name: botName,
-    location: location,
+    location: path.join(process.env.LOCAL_PUBLISH_PATH, projectId).replace(/\\/g, '/'), // use plugin localtion to support deployment,
     secret: '',
     environment: '',
     region: regionOptions[0].key,
