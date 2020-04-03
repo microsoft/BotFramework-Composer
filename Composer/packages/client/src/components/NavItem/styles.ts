@@ -15,13 +15,6 @@ export const link = (active: boolean, disabled: boolean) => css`
 
   width: 220px;
 
-  :link {
-    text-decoration: none;
-  }
-  :visited {
-    text-decoration: none;
-  }
-
   ${active
     ? `background-color: ${NeutralColors.white};
  
