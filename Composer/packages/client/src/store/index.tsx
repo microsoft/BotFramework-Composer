@@ -7,6 +7,7 @@ import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
+import storage from '../utils/storage';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -77,6 +78,10 @@ const initialState: State = {
   clipboardActions: [],
   publishTypes: [],
   publishTargets: [],
+  codeEditorOptions: storage.get('codeEditorOptions', {
+    lineNumbers: false,
+    wordWrap: false,
+  }),
 };
 
 interface StoreContextValue {

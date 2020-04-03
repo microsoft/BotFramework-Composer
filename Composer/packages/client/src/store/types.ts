@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { CodeEditorOptions } from '@bfc/code-editor';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -96,6 +97,7 @@ export interface State {
   clipboardActions: any[];
   publishTypes: string[];
   publishTargets: any[];
+  codeEditorOptions: CodeEditorOptions;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

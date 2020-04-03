@@ -11,6 +11,7 @@ import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
+import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -445,6 +446,12 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
+const setCodeEditorOptions: ReducerFunc = (state, options) => {
+  storage.set('codeEditorOptions', options);
+  state.codeEditorOptions = options;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -495,4 +502,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_CODE_EDITOR_OPTIONS]: setCodeEditorOptions,
 });
