@@ -1,10 +1,10 @@
 [import](common.lg)
-[import](ViewItem.lg)
+[import](viewitem.lg)
 
 # bfdprompt-461607()
 - What list would you like to delete an item from?
 
-> This LG template is defined in ViewItem. You can refer to this with an import statement (see line #2)
+> This LG template is defined in viewitem. You can refer to this with an import statement (see line #2)
 
 # bfdactivity-555579()
 - ${showLists()}
