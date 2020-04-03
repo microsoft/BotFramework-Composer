@@ -177,6 +177,6 @@
       ]
     }
   ],
-  "generator": "DeleteItem.lg",
-  "recognizer": "DeleteItem.lu"
+  "generator": "deleteitem.lg",
+  "recognizer": "deleteitem.lu"
 }
