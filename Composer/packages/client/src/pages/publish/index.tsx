@@ -33,6 +33,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [selectedTarget, setSelectedTarget] = useState();
+  const [publishTarget, setPublishTarget] = useState([]);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -70,7 +71,10 @@ const Publish: React.FC<RouteComponentProps> = () => {
   useEffect(() => {
     // load up the list of all publish targets
     actions.getPublishTargetTypes();
-  }, []);
+    if (settings.publishTargets) {
+      setPublishTarget(settings.publishTargets);
+    }
+  }, [settings]);
 
   useEffect(() => {
     // get selected target publish history
@@ -110,9 +114,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const closePublishDialog = () => {
     setPublishDialogHidden(true);
   };
+
   const savePublishTarget = (name, type, configuration) => {
     console.log(`save ${name} ${type} ${configuration}`);
-
     actions.setSettings(
       projectId,
       botName,
@@ -124,7 +128,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
             type,
             configuration,
           },
-        ].concat(settings.publishTargets),
+        ].concat(publishTarget),
       },
       undefined
     );
@@ -132,9 +136,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   const publish = async comment => {
     // publish to remote
-    if (selectPublishTarget) {
+    if (selectedTarget) {
       const sensitiveSettings = settingsStorage.get(botName);
-      await actions.publishToTarget(projectId, { ...selectPublishTarget, sensitiveSettings });
+      await actions.publishToTarget(projectId, { ...selectedTarget, sensitiveSettings });
     }
   };
 
@@ -155,13 +159,13 @@ const Publish: React.FC<RouteComponentProps> = () => {
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
-          {!settings.publishTargets || settings.publishTargets.length < 1 ? (
-            <div>This bot does not have a profile to publish yet</div>
-          ) : (
+          {publishTarget.length > 0 ? (
             <Fragment>
               <div css={targetListTiTle}>All profiles</div>
               <TargetList list={settings.publishTargets} onSelect={setSelectedTarget} selectedTarget={selectedTarget} />
             </Fragment>
+          ) : (
+            <div>This bot does not have a profile to publish yet</div>
           )}
         </div>
         <div css={contentEditor}>
@@ -209,8 +213,8 @@ const PublishDialog = props => {
     subText: 'You are about to publish your bot to the target below. Do you want to proceed?',
   };
   const submit = async () => {
-    await props.onSubmit(comment);
     props.onDismiss();
+    await props.onSubmit(comment);
   };
   return props.target ? (
     <Dialog hidden={props.hidden} onDismiss={props.onDismiss} dialogContentProps={publishDialogProps}>
