@@ -236,34 +236,37 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
   };
 
-  const currentDialog = dialogs.find(d => d.id === dialogId);
-  const editorData =
-    source === 'PropertyEditor'
+  const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs]);
+  const editorData = useMemo(() => {
+    return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
       : getDialogData(dialogsMap, dialogId);
+  }, [source, dialogsMap, dialogId, focused, selected]);
 
-  const data: ShellData = currentDialog
-    ? {
-        data: editorData,
-        locale,
-        botName,
-        projectId,
-        dialogs,
-        dialogId,
-        focusPath,
-        schemas,
-        lgFiles,
-        luFiles,
-        currentDialog,
-        designerId: get(editorData, '$designer.id'),
-        focusedEvent: selected,
-        focusedActions: focused ? [focused] : [],
-        focusedSteps: focused ? [focused] : selected ? [selected] : [],
-        focusedTab: promptTab,
-        clipboardActions: state.clipboardActions,
-        hosted: !!isAbsHosted(),
-      }
-    : ({} as ShellData);
+  const data: ShellData = useMemo(() => {
+    return currentDialog
+      ? {
+          data: editorData,
+          locale,
+          botName,
+          projectId,
+          dialogs,
+          dialogId,
+          focusPath,
+          schemas,
+          lgFiles,
+          luFiles,
+          currentDialog,
+          designerId: get(editorData, '$designer.id'),
+          focusedEvent: selected,
+          focusedActions: focused ? [focused] : [],
+          focusedSteps: focused ? [focused] : selected ? [selected] : [],
+          focusedTab: promptTab,
+          clipboardActions: state.clipboardActions,
+          hosted: !!isAbsHosted(),
+        }
+      : ({} as ShellData);
+  }, [focusPath, lgFiles, luFiles, currentDialog]);
 
   return {
     api,

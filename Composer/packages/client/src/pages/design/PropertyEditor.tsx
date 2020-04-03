@@ -17,7 +17,12 @@ const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');
 
   return (
-    <div css={formEditor} aria-label={formatMessage('form editor')} data-testid="PropertyEditor">
+    <div
+      css={formEditor}
+      aria-label={formatMessage('form editor')}
+      data-testid="PropertyEditor"
+      key={shellData.focusPath}
+    >
       <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
         <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
       </Extension>

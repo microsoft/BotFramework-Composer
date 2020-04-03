@@ -104,29 +104,27 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorInfo} key={focusPath}>
-      <div key={localData?.$designer?.id}>
-        <PluginContext.Provider value={pluginConfig}>
-          <FormTitle
-            formData={localData}
-            id={localData.$designer?.id || 'unknown'}
-            schema={$schema}
-            onChange={$designer => handleDataChange({ ...localData, $designer })}
-            uiOptions={$uiSchema}
-          />
-          <SchemaField
-            definitions={schema?.definitions}
-            depth={-1}
-            id="root"
-            name="root"
-            rawErrors={errors}
-            schema={$schema}
-            uiOptions={$uiSchema}
-            value={localData}
-            onChange={handleDataChange}
-          />
-        </PluginContext.Provider>
-      </div>
+    <ErrorBoundary FallbackComponent={ErrorInfo}>
+      <PluginContext.Provider value={pluginConfig}>
+        <FormTitle
+          formData={localData}
+          id={localData.$designer?.id || 'unknown'}
+          schema={$schema}
+          onChange={$designer => handleDataChange({ ...localData, $designer })}
+          uiOptions={$uiSchema}
+        />
+        <SchemaField
+          definitions={schema?.definitions}
+          depth={-1}
+          id="root"
+          name="root"
+          rawErrors={errors}
+          schema={$schema}
+          uiOptions={$uiSchema}
+          value={localData}
+          onChange={handleDataChange}
+        />
+      </PluginContext.Provider>
     </ErrorBoundary>
   );
 };
