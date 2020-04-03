@@ -13,7 +13,7 @@ import { TestController } from '../../TestController';
 import { StoreContext } from '../../store';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
-import SkillList from './SkillList';
+import SkillList from './skill-list';
 
 const Skills: React.FC<RouteComponentProps> = () => {
   const { state } = useContext(StoreContext);

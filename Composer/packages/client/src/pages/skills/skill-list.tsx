@@ -22,9 +22,9 @@ import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
 
-import SkillForm from './SkillForm';
+import SkillForm from './skill-form';
 import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
-import { ISkill, ISkillByAppConfig, ISkillByManifestUrl } from './types';
+import { ISkill, ISkillFormData } from './types';
 
 export interface ISkillListProps {
   skills: ISkill[];
@@ -86,7 +86,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
 
   const onSubmitForm = useCallback(
-    (submitFormData: ISkillByAppConfig | ISkillByManifestUrl, editIndex: number) => {
+    (submitFormData: ISkillFormData, editIndex: number) => {
       const payload = {
         projectId,
         targetId: editIndex,

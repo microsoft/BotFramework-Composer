@@ -15,8 +15,6 @@ import {
   ISkill,
   ISkillFormData,
   ISkillFormDataErrors,
-  ISkillByAppConfig,
-  ISkillByManifestUrl,
   ISkillType,
   SkillAppIdRegex,
   SkillNameRegex,
@@ -35,7 +33,7 @@ import {
 export interface ISkillFormProps {
   editIndex?: number;
   skills: ISkill[];
-  onSubmit: (skillFormData: ISkillByAppConfig | ISkillByManifestUrl, editIndex: number) => void;
+  onSubmit: (skillFormData: ISkillFormData, editIndex: number) => void;
   onDismiss: () => void;
 }
 
@@ -55,7 +53,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
   const { editIndex = -1, skills, onSubmit, onDismiss } = props;
   const isModify = editIndex >= 0 && editIndex < skills.length;
   const originFormData = skills[editIndex];
-  const initialFormData = isModify ? assignDefined(defaultFormData, originFormData) : { ...defaultFormData };
+  const initialFormData = originFormData ? assignDefined(defaultFormData, originFormData) : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
@@ -136,7 +134,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     if (Object.keys(errors).length > 0) {
       return;
     }
-    const newFormData = { ...formData } as ISkillByAppConfig | ISkillByManifestUrl;
+    const newFormData = { ...formData };
 
     onSubmit(newFormData, editIndex);
   };
