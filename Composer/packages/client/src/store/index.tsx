@@ -67,7 +67,7 @@ const initialState: State = {
   },
   clipboardActions: [],
   publishTypes: [],
-  publishTargets: [],
+  publishHistory: [],
 };
 
 interface StoreContextValue {

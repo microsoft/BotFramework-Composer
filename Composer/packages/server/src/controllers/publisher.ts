@@ -109,7 +109,37 @@ export const PublishController = {
     }
   },
   history: async (req, res) => {
-    // TODO
+    const target = req.params.target;
+    const user = await PluginLoader.getUserFromRequest(req);
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    // find publish config by name.
+    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+    const configs = allTargets.filter(t => t.name === target);
+    const config = configs.length ? configs[0] : undefined;
+    const method = config ? config.type : undefined;
+    if (
+      config &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.history
+    ) {
+      // get the externally defined method
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.history;
+
+      // call the method
+      const results = await pluginMethod.call(null, projectId, {});
+      res.json({
+        target: target,
+        results: results,
+      });
+    } else {
+      res.status(400).json({
+        statusCode: '400',
+        message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+      });
+    }
   },
   rollback: async (req, res) => {
     // TODO

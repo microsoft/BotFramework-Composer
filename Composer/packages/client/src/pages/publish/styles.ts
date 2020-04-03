@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors } from '@uifabric/fluent-theme';
+import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
@@ -33,4 +35,72 @@ export const contentEditor = css`
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
+`;
+
+export const targetListTiTle = css`
+  height: 32px;
+  font-size: ${FontSizes.medium};
+  padding-left: 16px;
+  padding-top: 6px;
+  padding-right: 0;
+  font-weight: 600;
+`;
+export const targetListItemNotSelected: IButtonStyles = {
+  root: {
+    background: NeutralColors.white,
+    fontWeight: FontWeights.semilight,
+    height: '32px',
+    fontSize: FontSizes.small,
+    paddingLeft: '16px',
+    paddingRight: 0,
+    border: 0,
+    textAlign: 'left',
+    marginLeft: 0,
+    marginRight: 0,
+  },
+};
+export const targetListItemSelected: IButtonStyles = {
+  root: {
+    background: NeutralColors.gray20,
+    fontWeight: FontWeights.semibold,
+    height: '32px',
+    fontSize: FontSizes.small,
+    paddingLeft: '16px',
+    paddingRight: 0,
+    border: 0,
+    textAlign: 'left',
+    marginLeft: 0,
+    marginRight: 0,
+  },
+};
+// export const targetListItem = css`
+//   height: 32px;
+//   font-size: ${FontSizes.small};
+//   padding-left: 16px;
+//   padding-right: 0;
+//   border: 0;
+//   text-align: left;
+//   margin-left: 0;
+//   margin-right: 0;
+// `;
+export const select = css`
+  background: ${NeutralColors.gray20};
+  fontweight: ${FontWeights.semibold};
+`;
+
+export const listRoot = css`
+  position: relative;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const tableView = css`
+  position: relative;
+  flex-grow: 1;
+`;
+
+export const detailList = css`
+  overflow-x: hidden;
 `;

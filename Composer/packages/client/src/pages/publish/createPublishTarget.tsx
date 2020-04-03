@@ -8,32 +8,33 @@ import formatMessage from 'format-message';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 export const CreatePublishTarget = props => {
-  let targetType = '';
-  let config = '';
-  let name = '';
+  const [targetType, setTargetType] = useState('');
+  const [name, setName] = useState('');
+  const [config, setConfig] = useState('{}');
   const updateType = (e, type) => {
     // console.log('UPDATE TYPE', type);
-    targetType = type.key;
+    setTargetType(type.key);
   };
   const updateConfig = (e, newConfig) => {
     // console.log('UPDATE CONFIG', config);
     // todo: attempt json parse and only allow submit if json is valid
-    config = newConfig;
+    setConfig(newConfig);
   };
   const updateName = (e, newName) => {
-    name = newName;
+    setName(newName);
   };
 
   const submit = () => {
     try {
       JSON.parse(config);
-      return props.onSave(name, targetType, config);
+      props.onSave(name, targetType, config);
+      props.onCancel();
     } catch (err) {
-      alert('Error parsing configuration');
+      console.log(err);
     }
   };
 
