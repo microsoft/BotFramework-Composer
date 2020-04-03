@@ -114,8 +114,13 @@ const SkillList: React.FC<ISkillListProps> = props => {
         skillData: null,
       };
       actions.updateSkill(payload);
+
+      // close form, if delete is current opened
+      if (index === editIndex) {
+        setEditIndex(undefined);
+      }
     },
-    [projectId]
+    [projectId, editIndex]
   );
 
   const getColumns = useCallback(() => {
@@ -151,7 +156,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
         );
       },
     });
-  }, [projectId]);
+  }, [projectId, editIndex]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
