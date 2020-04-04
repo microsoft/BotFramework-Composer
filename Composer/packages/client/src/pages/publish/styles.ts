@@ -16,7 +16,9 @@ export const ContentHeaderStyle = css`
 export const HeaderText = css`
   font-size: ${FontSizes.xLarge};
   font-weight: ${FontWeights.semibold};
+  margin-right: 10px;
 `;
+
 export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
@@ -37,6 +39,23 @@ export const contentEditor = css`
   overflow: visible;
 `;
 
+export const publishDialogText = css`
+  background-color: #ddf3db;
+  margin-bottom: 10px;
+  font-size: medium;
+  padding: 7px;
+`;
+
+export const historyPanelTitle = css`
+  font-size: ${FontSizes.xLarge};
+  font-weight: 600;
+  margin-right: 10px;
+`;
+
+export const historyPanelSub = css`
+  font-size: ${FontSizes.small};
+`;
+
 export const targetListTiTle = css`
   height: 32px;
   font-size: ${FontSizes.medium};
@@ -45,6 +64,7 @@ export const targetListTiTle = css`
   padding-right: 0;
   font-weight: 600;
 `;
+
 export const targetListItemNotSelected: IButtonStyles = {
   root: {
     background: NeutralColors.white,
@@ -73,16 +93,7 @@ export const targetListItemSelected: IButtonStyles = {
     marginRight: 0,
   },
 };
-// export const targetListItem = css`
-//   height: 32px;
-//   font-size: ${FontSizes.small};
-//   padding-left: 16px;
-//   padding-right: 0;
-//   border: 0;
-//   text-align: left;
-//   margin-left: 0;
-//   margin-right: 0;
-// `;
+
 export const select = css`
   background: ${NeutralColors.gray20};
   fontweight: ${FontWeights.semibold};

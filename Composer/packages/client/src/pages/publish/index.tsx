@@ -23,6 +23,9 @@ import {
   targetListTiTle,
   targetListItemSelected,
   targetListItemNotSelected,
+  historyPanelTitle,
+  historyPanelSub,
+  publishDialogText,
 } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
@@ -171,8 +174,8 @@ const Publish: React.FC<RouteComponentProps> = () => {
         <div css={contentEditor}>
           {selectedTarget ? (
             <Fragment>
-              <div>{selectedTarget.name}</div>
-              <div>{publishTypes.find(item => item === selectedTarget.type)}</div>
+              <span css={historyPanelTitle}>{selectedTarget.name}</span>
+              <span css={historyPanelSub}>{publishTypes.find(item => item === selectedTarget.type)}</span>
               {publishHistory.length > 0 ? (
                 <PublishStatusList items={publishHistory} onItemClick={item => console.log(item)} />
               ) : (
@@ -219,7 +222,7 @@ const PublishDialog = props => {
   return props.target ? (
     <Dialog hidden={props.hidden} onDismiss={props.onDismiss} dialogContentProps={publishDialogProps}>
       <Fragment>
-        <div>{props.target.name}</div>
+        <div css={publishDialogText}>{props.target.name}</div>
         <form onSubmit={submit}>
           <TextField
             placeholder="Provide a bried description of this publish. It will appear on the publish history list"
@@ -231,7 +234,7 @@ const PublishDialog = props => {
         </form>
         <DialogFooter>
           <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Save')} />
+          <PrimaryButton onClick={submit} text={formatMessage('Okay')} />
         </DialogFooter>
       </Fragment>
     </Dialog>
