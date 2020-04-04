@@ -82,7 +82,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       path: absolutePath,
     };
     const response = await httpClient.put(`/projects/open`, data);
-    const dialogs = response.data.dialogs;
+    const files = response.data.files;
     const projectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -90,7 +90,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
+    if (files && files.length > 0) {
       // navTo(store, 'Main');
       const mainUrl = `/bot/${projectId}/dialogs/Main`;
       navigateTo(mainUrl);
@@ -126,14 +126,14 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
       location,
     };
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
-    const dialogs = response.data.dialogs;
+    const files = response.data.files;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
+    if (files && files.length > 0) {
       navTo(store, 'Main');
     }
     return response.data;
@@ -160,7 +160,7 @@ export const createProject: ActionCreator = async (
       location,
     };
     const response = await httpClient.post(`/projects`, data);
-    const dialogs = response.data.dialogs;
+    const files = response.data.files;
     settingStorage.remove(name);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -168,7 +168,7 @@ export const createProject: ActionCreator = async (
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
+    if (files && files.length > 0) {
       navTo(store, 'Main');
     }
     return response.data;
