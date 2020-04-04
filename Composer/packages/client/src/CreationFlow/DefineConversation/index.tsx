@@ -99,7 +99,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   };
 
   useEffect(() => {
-    const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+    const currentPath = Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '');
     updateForm('location')(null, currentPath);
   }, [focusedStorageFolder]);
 
