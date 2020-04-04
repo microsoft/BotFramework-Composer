@@ -13,7 +13,7 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { BaseField } from '../BaseField';
 
 import './styles.css';
-import { IRecognizer, IRecognizerType } from './types';
+import { IRecognizer, IRecognizerType, ICrossTrainedRecognizerSet } from './types';
 
 const defaultRecoginzerSet: IRecognizer = {
   $type: 'Microsoft.RecognizerSet',
@@ -31,6 +31,11 @@ const defaultRecoginzerSet: IRecognizer = {
   ],
 };
 
+const defaultCrossTrainedRecoginzerSet: ICrossTrainedRecognizerSet = {
+  $type: SDKTypes.CrossTrainedRecognizerSet,
+  recognizers: [],
+};
+
 export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = props => {
   const { formData } = props;
 
@@ -40,9 +45,10 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
   } = props;
   const [loading, setLoading] = useState(false);
   const currentDialogId = currentDialog.id;
-  const selectedFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
+  const selectedLuFile: LuFile | void = luFiles.find(f => f.id === `${currentDialogId}.${locale}`);
+  // const selectedQnAFile: QnAFile | void = QnAFiles.find(f => f.id === `${currentDialogId}.${locale}`);
 
-  let recognizer: IRecognizerType | string = '';
+  let recognizer: IRecognizerType | string | ICrossTrainedRecognizerSet = '';
   if (typeof formData === 'object' && formData.$type === 'Microsoft.RecognizerSet') {
     recognizer = formData.recognizers[0].recognizers?.['en-us'] || {
       $type: SDKTypes.ValueRecognizer,
@@ -56,31 +62,51 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
   }
 
   useEffect(() => {
-    if (typeof recognizer === 'object' && recognizer.$type === SDKTypes.ValueRecognizer) {
+    if (
+      typeof recognizer === 'object' &&
+      !(recognizer instanceof Array) &&
+      recognizer.$type === SDKTypes.ValueRecognizer
+    ) {
       onChange(defaultRecoginzerSet);
     }
   }, [recognizer]);
-  const isRegex = typeof recognizer === 'object' && recognizer.$type === SDKTypes.RegexRecognizer;
+  const isRegex =
+    typeof recognizer === 'object' && !(recognizer instanceof Array) && recognizer.$type === SDKTypes.RegexRecognizer;
   const options = [
     {
       key: 'value',
       text: formatMessage('Value'),
     },
     {
+      key: 'regex',
+      text: formatMessage('Regular Expression'),
+    },
+    {
       key: 'luis',
       text: 'LUIS',
     },
     {
-      key: 'regex',
-      text: formatMessage('Regular Expression'),
+      key: 'qna',
+      text: 'QnA',
+    },
+    {
+      key: 'luisQna',
+      text: formatMessage('Luis + QnA'),
     },
   ];
 
   const getSelectedType = (): string => {
-    if (typeof recognizer === 'string' && !!recognizer) {
-      return 'luis';
+    if (typeof recognizer === 'string') {
+      if (recognizer === `${currentDialogId}.lu`) {
+        return 'luis';
+      } else if (recognizer === `${currentDialogId}.qna`) {
+        return 'qna';
+      }
     }
 
+    if (typeof recognizer === 'object' && recognizer.$type === SDKTypes.CrossTrainedRecognizerSet) {
+      return 'luisQna';
+    }
     if (isRegex) {
       return 'regex';
     }
@@ -105,34 +131,70 @@ export const RecognizerField: React.FC<FieldProps<IRecognizer | undefined>> = pr
 
     return <span />;
   };
+
+  const selectLuisType = () => {
+    if (!selectedLuFile) {
+      const { createLuFile } = shellApi;
+
+      /**
+       * The setTimeouts are used to get around the
+       * 1. allows the store to update with the luFile creation
+       * 2. allows the debounced onChange to be invoked
+       *
+       * This is a hack, but dialogs will be created along with
+       * lu and lg files so this code path shouldn't be executed.
+       */
+      setLoading(true);
+      createLuFile(currentDialogId).then(() => {
+        setTimeout(() => {
+          setTimeout(() => {
+            setLoading(false);
+          }, 750);
+        }, 500);
+      });
+    }
+  };
+  // const selectQnAType = () => {
+  //   if (!selectedQnAFile) {
+  //     const { createQnAFile } = shellApi;
+
+  //     /**
+  //      * The setTimeouts are used to get around the
+  //      * 1. allows the store to update with the luFile creation
+  //      * 2. allows the debounced onChange to be invoked
+  //      *
+  //      * This is a hack, but dialogs will be created along with
+  //      * lu and lg files so this code path shouldn't be executed.
+  //      */
+  //     setLoading(true);
+  //     createQnAFile(currentDialogId).then(() => {
+  //       setTimeout(() => {
+  //         setTimeout(() => {
+  //           setLoading(false);
+  //         }, 750);
+  //       }, 500);
+  //     });
+  //   }
+  // };
   const handleChange = (_, option?: IDropdownOption): void => {
     const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
     if (option) {
       switch (option.key) {
         case 'luis': {
-          if (selectedFile) {
-            recognizer = `${currentDialogId}.lu`;
-          } else {
-            const { createLuFile } = shellApi;
-
-            /**
-             * The setTimeouts are used to get around the
-             * 1. allows the store to update with the luFile creation
-             * 2. allows the debounced onChange to be invoked
-             *
-             * This is a hack, but dialogs will be created along with
-             * lu and lg files so this code path shouldn't be executed.
-             */
-            setLoading(true);
-            createLuFile(currentDialogId).then(() => {
-              setTimeout(() => {
-                setTimeout(() => {
-                  setLoading(false);
-                }, 750);
-              }, 500);
-            });
-            recognizer = `${currentDialogId}.lu`;
-          }
+          selectLuisType();
+          recognizer = `${currentDialogId}.lu`;
+          break;
+        }
+        case 'qna': {
+          // selectQnAType();
+          recognizer = `${currentDialogId}.qna`;
+          break;
+        }
+        case 'luisQna': {
+          selectLuisType();
+          // selectQnAType();
+          recognizer = cloneDeep(defaultCrossTrainedRecoginzerSet);
+          recognizer.recognizers = [`${currentDialogId}.lu`, `${currentDialogId}.qna`];
           break;
         }
         case 'regex': {

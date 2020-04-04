@@ -191,10 +191,13 @@ function validate(id: string, content, schema: any): Diagnostic[] {
 }
 
 function parse(id: string, content: any, schema: any) {
-  const luFile =
-    typeof content.recognizer === 'string'
-      ? content.recognizer
-      : content.recognizer?.recognizers[0]?.recognizers?.['en-us'] || '';
+  const recognizer =
+    content.recognizer === 'string' ? content.recognizer : content.recognizer?.recognizers[0]?.recognizers?.['en-us'];
+  const luFile = !recognizer
+    ? ''
+    : typeof recognizer === 'string'
+    ? recognizer
+    : recognizer?.recognizers?.find(recog => recog.includes('.lu'));
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
 
   return {
