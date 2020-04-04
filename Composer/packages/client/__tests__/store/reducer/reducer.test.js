@@ -6,39 +6,12 @@ import { reducer } from '../../../src/store/reducer/index';
 
 const mockResponse = {
   data: {
-    dialogs: ['test dialogs'],
-    lgFiles: ['test lgFiles'],
-    luFiles: ['test luFiles'],
+    files: ['test files'],
     schemas: 'test schemas',
   },
 };
 
 describe('test all reducer handlers', () => {
-  it('test getProjectSuccess reducer', () => {
-    const result = reducer({}, { type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response: mockResponse } });
-    expect(result.dialogs[0]).toBe('test dialogs');
-    expect(result.lgFiles[0]).toBe('test lgFiles');
-    expect(result.schemas).toBe('test schemas');
-  });
-  it('test createDialogSuccess reducer', () => {
-    const result = reducer({}, { type: ActionTypes.CREATE_DIALOG_SUCCESS, payload: { response: mockResponse } });
-    expect(result.dialogs[0]).toBe('test dialogs');
-  });
-  it('test updateLgTemplate reducer', () => {
-    const result = reducer(
-      { lgFiles: [{ id: 'common.lg', content: 'test lgFiles' }] },
-      {
-        type: ActionTypes.UPDATE_LG_SUCCESS,
-        payload: {
-          id: 'common.lg',
-          content: ` # bfdactivity-003038
-        - You said '\${turn.activity.text}'`,
-        },
-      }
-    );
-    expect(result.lgFiles[0].templates.length).toBe(1);
-  });
-
   it('test getStorageFileSuccess reducer', () => {
     const mockStorageFile = {
       data: {
@@ -62,5 +35,69 @@ describe('test all reducer handlers', () => {
     expect(result.storageFileLoadingStatus).toBe('success');
     expect(result.focusedStorageFolder).toEqual(expect.objectContaining({ children: expect.any(Array) }));
     expect(result.focusedStorageFolder.children).toHaveLength(2);
+  });
+
+  it('remove lg file', () => {
+    const result = reducer(
+      { lgFiles: [{ id: '1' }, { id: '2' }] },
+      { type: ActionTypes.REMOVE_LG, payload: { id: '1' } }
+    );
+    expect(result.lgFiles.length).toBe(1);
+    expect(result.lgFiles[0].id).toBe('2');
+  });
+
+  it('create lg file', () => {
+    const result = reducer(
+      { lgFiles: [{ id: '1' }, { id: '2' }], locale: 'en-us' },
+      { type: ActionTypes.CREATE_LG, payload: { id: '3', content: '' } }
+    );
+    expect(result.lgFiles.length).toBe(3);
+    expect(result.lgFiles[2].id).toBe('3.en-us');
+  });
+
+  it('update lg file', () => {
+    const result = reducer(
+      { lgFiles: [{ id: '1', content: 'old' }, { id: '2' }] },
+      { type: ActionTypes.UPDATE_LG, payload: { id: '1', content: 'new' } }
+    );
+    expect(result.lgFiles.length).toBe(2);
+    expect(result.lgFiles[0].content).toBe('new');
+  });
+
+  it('remove dialog file', () => {
+    const result = reducer(
+      { dialogs: [{ id: '1' }, { id: '2' }], lgFiles: [{ id: '1' }], luFiles: [{ id: '1' }] },
+      { type: ActionTypes.REMOVE_DIALOG, payload: { id: '1' } }
+    );
+    expect(result.dialogs.length).toBe(1);
+    expect(result.dialogs[0].id).toBe('2');
+    expect(result.luFiles.length).toBe(0);
+    expect(result.lgFiles.length).toBe(0);
+  });
+
+  it('create dialog file', () => {
+    const result = reducer(
+      {
+        dialogs: [{ id: '1' }, { id: '2' }],
+        locale: 'en-us',
+        lgFiles: [],
+        luFiles: [],
+        schemas: { sdk: { content: {} } },
+      },
+      { type: ActionTypes.CREATE_DIALOG, payload: { id: '3', content: '' } }
+    );
+    expect(result.dialogs.length).toBe(3);
+    expect(result.dialogs[2].id).toBe('3');
+    expect(result.luFiles.length).toBe(1);
+    expect(result.lgFiles.length).toBe(1);
+  });
+
+  it('update dialog file', () => {
+    const result = reducer(
+      { dialogs: [{ id: '1', content: 'old' }, { id: '2' }], schemas: { sdk: { content: {} } } },
+      { type: ActionTypes.UPDATE_DIALOG, payload: { id: '1', content: 'new' } }
+    );
+    expect(result.dialogs.length).toBe(2);
+    expect(result.dialogs[0].content).toBe('new');
   });
 });
