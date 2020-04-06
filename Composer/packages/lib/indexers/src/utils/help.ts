@@ -6,6 +6,11 @@ export function getBaseName(filename: string, sep?: string): string | any {
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
 
+export function getExtension(filename: string): string | undefined {
+  const re = /\.[^.]+$/;
+  return re.exec(filename)?.[0];
+}
+
 // split text to lines
 export function splitNewlineText(text: string): string[] {
   return text.split('\n');
