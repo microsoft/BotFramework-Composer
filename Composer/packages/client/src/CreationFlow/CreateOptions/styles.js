@@ -18,7 +18,7 @@ export const templateItem = (checked, disabled) => css`
   width: 80px;
   margin: 5px;
   background: #ebebeb;
-  color: ${disabled ? '#A19F9D' : '#0078d4'};
+  color: ${disabled ? '#A19F9D' : '#000'};
   font-size: 13px;
   box-sizing: border-box;
   border-top: 6px solid ${disabled ? '#A19F9D' : '#50e6ff'};
