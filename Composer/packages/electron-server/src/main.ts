@@ -13,12 +13,13 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 function main() {
   console.log('Starting electron app');
+
   // Create the browser window.
   const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
     },
     show: false,
   };
