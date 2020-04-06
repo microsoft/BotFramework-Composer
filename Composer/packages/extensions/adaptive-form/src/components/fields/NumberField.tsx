@@ -3,6 +3,7 @@
 import React from 'react';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -45,6 +46,8 @@ export const NumberField: React.FC<FieldProps> = function NumberField(props) {
         onDecrement={updateValue(-step)}
         onIncrement={updateValue(step)}
         onValidate={updateValue(0)}
+        incrementButtonAriaLabel={formatMessage('increment')}
+        decrementButtonAriaLabel={formatMessage('decrement')}
       />
     </>
   );
