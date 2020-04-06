@@ -106,10 +106,6 @@ pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).
     }
   });
 
-  app.get(`${BASEURL}/extensionContainer.html`, function(req, res) {
-    res.render(path.resolve(__dirname, './public/extensionContainer.ejs'), { __nonce__: req.__nonce__ });
-  });
-
   app.get('*', function(req, res) {
     res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
   });

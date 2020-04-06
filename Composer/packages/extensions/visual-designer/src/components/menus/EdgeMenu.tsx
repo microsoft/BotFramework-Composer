@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
@@ -22,6 +22,7 @@ import { IconMenu } from './IconMenu';
 interface EdgeMenuProps {
   id: string;
   onClick: (item: string | null) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
 const buildEdgeMenuItemsFromClipboardContext = (
@@ -100,7 +101,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
   return menuItems;
 };
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
   const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -113,8 +114,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     };
   };
 
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef && addCoachMarkRef({ action }), []);
+
   return (
     <div
+      ref={addRef}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
