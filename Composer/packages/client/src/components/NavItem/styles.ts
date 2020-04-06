@@ -49,8 +49,10 @@ export const icon = (active: boolean, disabled: boolean) =>
     root: {
       color: active ? '#000' : disabled ? '#999' : '#4f4f4f',
       padding: '8px 12px',
-      marginLeft: '0px',
+      marginLeft: '4px',
+      marginRight: '12px',
       boxSizing: 'border-box',
-      fontSize: `${FontSizes.size24}`,
+      fontSize: `${FontSizes.size16}`,
+      width: '40px',
     },
   } as IButtonStyles);
