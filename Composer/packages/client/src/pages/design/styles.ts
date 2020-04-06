@@ -79,6 +79,7 @@ export const visualEditor = (hidden: boolean) => css`
   background-color: #f6f6f6;
 
   display: ${hidden ? 'none' : 'block'};
+  position: relative;
 `;
 
 export const formEditor = css`

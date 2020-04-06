@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, CacheProvider } from '@emotion/core';
+import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
@@ -25,6 +25,16 @@ const emotionCache = createCache({
   // @ts-ignore
   nonce: window.__nonce__,
 });
+
+const styles = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  overflow: scroll;
+`;
 
 const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
 
@@ -93,7 +103,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
           <UISchemaContext.Provider value={visualEditorSchemaProvider}>
-            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+            <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
                 key={dialogId}
                 path={dialogId}
