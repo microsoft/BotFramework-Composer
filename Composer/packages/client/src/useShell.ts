@@ -236,7 +236,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
   };
 
-  const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs]);
+  const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')
