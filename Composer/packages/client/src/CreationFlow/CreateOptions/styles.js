@@ -13,6 +13,12 @@ export const choiceGroup = {
   },
 };
 
+export const choiceGroupRoot = css`
+  .ms-ChoiceField-wrapper {
+    width: 100%;
+  }
+`;
+
 export const templateItem = (checked, disabled) => css`
   height: 70px;
   width: 80px;
@@ -46,4 +52,17 @@ export const placeholder = css`
   line-height: 30px;
   height: 30px;
   padding-left: 5px;
+`;
+
+export const detailListContainer = css`
+  width: 100%;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+`;
+
+export const listHeader = css`
+  margin-top: 10px;
+  margin-bottom: 0;
 `;

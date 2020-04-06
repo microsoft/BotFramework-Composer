@@ -12,6 +12,7 @@ export interface Stat {
   isDir: boolean;
   isFile: boolean;
   lastModified: string;
+  createdTime: string;
   size: string;
 }
 
