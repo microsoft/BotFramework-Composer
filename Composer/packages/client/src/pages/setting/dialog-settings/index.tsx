@@ -8,13 +8,12 @@ import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
 
-import { hostedSettings, hostedControls, hostedControlsTitle, hostedToggle, slotChoice, settingsEditor } from './style';
+import { hostedSettings, hostedControls, hostedControlsTitle, slotChoice, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -34,13 +33,8 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const [editing, setEditing] = useState(false);
+  const editing = true;
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-
-  const changeEditing = (_, on) => {
-    setEditing(on);
-    actions.setEditDialogSettings(projectId, on, absHosted ? slot : undefined);
-  };
 
   const slots = [
     { key: 'production', text: hostControlLabels.productionSlot, checked: slot === 'production' },
@@ -89,16 +83,9 @@ export const DialogSettings = () => {
     </div>
   );
 
-  const toggle = () => (
-    <div css={hostedToggle}>
-      <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-    </div>
-  );
-
   return botName ? (
     <div css={hostedSettings}>
       {hostedControl()}
-      {toggle()}
       <div css={settingsEditor}>
         <JsonEditor
           onChange={x => handleChange(x)}
