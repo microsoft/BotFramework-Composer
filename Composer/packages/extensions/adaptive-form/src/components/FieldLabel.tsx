@@ -44,7 +44,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
       }}
     >
       <IconButton
-        aria-labelledby={`${id}-description`}
+        aria-label={title + ':' + description}
         iconProps={{
           iconName: 'Unknown',
         }}

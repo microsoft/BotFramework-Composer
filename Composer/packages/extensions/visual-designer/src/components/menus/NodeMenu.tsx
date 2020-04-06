@@ -12,6 +12,7 @@ import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
+import formatMessage from 'format-message';
 
 const declareElementAttributes = (id: string) => {
   return {
@@ -61,6 +62,7 @@ export const NodeMenu = ({ id, onEvent }) => {
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
+        label={formatMessage('node menu')}
       />
     </div>
   );
