@@ -11,6 +11,7 @@ interface EditableFieldProps extends FieldProps {
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
+  ariaLabel: string;
 }
 
 const EditableField: React.FC<EditableFieldProps> = props => {
@@ -26,6 +27,7 @@ const EditableField: React.FC<EditableFieldProps> = props => {
     error,
     className,
     transparentBorder,
+    ariaLabel,
   } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
@@ -93,6 +95,7 @@ const EditableField: React.FC<EditableFieldProps> = props => {
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
+        ariaLabel={ariaLabel}
       />
     </div>
   );

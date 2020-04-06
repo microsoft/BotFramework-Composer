@@ -46,8 +46,9 @@ export const NumberField: React.FC<FieldProps> = function NumberField(props) {
         onDecrement={updateValue(-step)}
         onIncrement={updateValue(step)}
         onValidate={updateValue(0)}
-        incrementButtonAriaLabel={formatMessage('increment')}
-        decrementButtonAriaLabel={formatMessage('decrement')}
+        label={label || formatMessage('numeric field')}
+        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
+        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
       />
     </>
   );
