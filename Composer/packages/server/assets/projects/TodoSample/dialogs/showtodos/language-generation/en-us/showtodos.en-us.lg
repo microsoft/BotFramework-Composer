@@ -1,8 +1,7 @@
 [import](common.lg)
 
+# bfdactivity-339580()
+- You have no todos.
 
-# bfdactivity-339580
--You have no todos.
-
-# bfdactivity-662084
--${ShowTodo()}
+# bfdactivity-662084()
+- ${ShowTodo()}
