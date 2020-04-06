@@ -29,8 +29,8 @@ try {
       throw new Error('Platform detected is not Mac, Linux, or Windows.');
   }
 
-  // call electron-builder . --dir
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64`;
+  // call electron-builder . --dir --config electron-builder-config.json
+  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --dir --${platform} --x64 --config electron-builder-config.json`;
   console.log('[electronBuilderPack.js] Executing command: ', cmd);
 
   const proc = exec(cmd);

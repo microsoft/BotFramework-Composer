@@ -33,8 +33,8 @@ try {
       throw new Error('Platform detected is not Mac, Linux, or Windows.');
   }
 
-  // call electron-builder . --prepackaged
-  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --${platform} --x64 --prepackaged "${unpackedAppDir}"`;
+  // call electron-builder . --prepackaged --config electron-builder-config.json
+  const cmd = `"${electronBuilderBinary}" "${electronServerDir}" --${platform} --x64 --prepackaged "${unpackedAppDir}" --config electron-builder-config.json`;
   console.log('[electronBuilderDist.js] Executing command: ', cmd);
 
   const proc = exec(cmd);
