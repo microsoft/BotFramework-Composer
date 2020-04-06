@@ -36,7 +36,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale } = useShellApi();
 
-  const singleLgRefMatched = value && value.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
+  const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
