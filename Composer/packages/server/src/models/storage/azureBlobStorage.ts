@@ -18,6 +18,7 @@ export class AzureBlobStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
     const names = path.split('/').filter(i => i.length);
     let lastModified = '';
+    let createdTime = '';
     let isFile = false;
     let size = '';
     if (names.length > 1) {
@@ -30,6 +31,7 @@ export class AzureBlobStorage implements IFileStorage {
             reject(err);
           } else {
             lastModified = data.lastModified;
+            createdTime = data.creationTime;
             size = data.contentLength;
             resolve(data.exists ? true : false);
           }
@@ -49,6 +51,7 @@ export class AzureBlobStorage implements IFileStorage {
               } else {
                 if (data.entries.length <= 0) reject(new Error('path is not exists'));
                 lastModified = '';
+                createdTime = '';
                 size = '';
                 resolve(true);
               }
@@ -61,6 +64,7 @@ export class AzureBlobStorage implements IFileStorage {
       isDir: !isFile,
       isFile: isFile,
       lastModified: lastModified,
+      createdTime: createdTime,
       size: size,
     };
   }

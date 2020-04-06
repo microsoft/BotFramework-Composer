@@ -47,21 +47,8 @@ export function CreateOptions(props) {
     );
   }
 
-  function TemplateItem(props) {
-    const { checked, text, key, disabled } = props;
-    return (
-      <div key={key} css={templateItem(checked, disabled)}>
-        <div style={{ marginLeft: '5px' }}>{text}</div>
-      </div>
-    );
-  }
-
   const handleChange = (event, option) => {
     setOption(option.key);
-  };
-
-  const handleItemChange = (event, option) => {
-    setTemplate(option.key);
   };
 
   const handleJumpToNext = () => {
@@ -85,7 +72,6 @@ export function CreateOptions(props) {
       onRender: item => {
         return <span aria-label={item.name}>{item.name}</span>;
       },
-      //isPadded: true,
     },
     {
       key: 'column2',
@@ -96,7 +82,6 @@ export function CreateOptions(props) {
       isResizable: true,
       data: 'string',
       onRender: item => item.description,
-      //isPadded: true,
     },
     {
       key: 'column3',
@@ -107,7 +92,6 @@ export function CreateOptions(props) {
       isResizable: true,
       data: 'number',
       onRender: item => new Date(item.createdTime).toLocaleDateString(),
-      //isPadded: true,
     },
   ];
 
