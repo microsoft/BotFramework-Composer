@@ -31,11 +31,18 @@ export const CreatePublishTarget = props => {
   const submit = () => {
     try {
       JSON.parse(config);
-      props.onSave(name, targetType, config);
-      props.onCancel();
     } catch (err) {
+      // configuration json is invalid
       console.log(err);
+      return;
     }
+
+    try {
+      props.onSave(name, targetType, config);
+    } catch (err) {
+      // name is taken
+    }
+    props.onCancel();
   };
 
   return (

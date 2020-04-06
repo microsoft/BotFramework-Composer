@@ -10,7 +10,7 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-import settingsStorage from '../../utils/dialogSettingStorage';
+// import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 
@@ -120,6 +120,16 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   const savePublishTarget = (name, type, configuration) => {
     console.log(`save ${name} ${type} ${configuration}`);
+
+    // is this name already in the publish targets list?
+    const exists =
+      settings.publishTargets?.filter(t => {
+        return t.name.toLowerCase() === name.toLowerCase();
+      }).length > 0;
+    if (exists) {
+      throw new Error(formatMessage('A profile with that name already exists.'));
+    }
+
     actions.setSettings(
       projectId,
       botName,
@@ -140,8 +150,12 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const publish = async comment => {
     // publish to remote
     if (selectedTarget) {
-      const sensitiveSettings = settingsStorage.get(botName);
-      await actions.publishToTarget(projectId, { ...selectedTarget, sensitiveSettings });
+      // const sensitiveSettings = settingsStorage.get(botName);
+      // BEN COMMENT - APR 6 -
+      // TODO: Why are we sending settings down via HTTP? These are all available inside the bot project.
+      // should only send the publishing metatadata (comment).
+      // await actions.publishToTarget(projectId, { ...selectedTarget, sensitiveSettings });
+      await actions.publishToTarget(projectId, selectedTarget, { comment: comment });
     }
   };
 
@@ -225,7 +239,7 @@ const PublishDialog = props => {
         <div css={publishDialogText}>{props.target.name}</div>
         <form onSubmit={submit}>
           <TextField
-            placeholder="Provide a bried description of this publish. It will appear on the publish history list"
+            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
             label={formatMessage('Comment')}
             // styles={styles.textarea}
             onChange={(e, newvalue) => setComment(newvalue || '')}

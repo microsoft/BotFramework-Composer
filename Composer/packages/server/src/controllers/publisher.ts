@@ -27,26 +27,28 @@ export const PublishController = {
   publish: async (req, res) => {
     const target = req.params.target;
     const user = await PluginLoader.getUserFromRequest(req);
-    const sensitiveSetting = req.body;
+    // const sensitiveSetting = req.body;
+    const metadata = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
     const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
 
-    const configs = allTargets.filter(t => t.name === target);
-    const config = configs.length ? configs[0] : undefined;
-    const method = config ? config.type : undefined;
-    console.log(method);
+    const profiles = allTargets.filter(t => t.name === target);
+    const profile = profiles.length ? profiles[0] : undefined;
+    const method = profile ? profile.type : undefined;
+
     // append config from client(like sensitive settings)
-    config.configuration = {
-      ...config.configuration,
-      settings: merge({}, currentProject.settings, sensitiveSetting),
+    const configuration = {
+      name: profile.name,
+      ...JSON.parse(profile.configuration),
+      settings: merge({}, currentProject.settings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
 
     if (
-      config &&
+      profile &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.publish
@@ -56,7 +58,7 @@ export const PublishController = {
 
       try {
         // call the method
-        const results = await pluginMethod.call(null, config.configuration, currentProject, user);
+        const results = await pluginMethod.call(null, configuration, currentProject, metadata, user);
         res.json({
           target: target,
           results: results,
@@ -82,12 +84,14 @@ export const PublishController = {
 
     // find publish config by name.
     const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
-    const configs = allTargets.filter(t => t.name === target);
-    const config = configs.length ? configs[0] : undefined;
-    const method = config ? config.type : undefined;
+
+    const profiles = allTargets.filter(t => t.name === target);
+    const profile = profiles.length ? profiles[0] : undefined;
+
+    const method = profile ? profile.type : undefined;
     console.log(method);
     if (
-      config &&
+      profile &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.getStatus
@@ -95,8 +99,13 @@ export const PublishController = {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.getStatus;
 
+      const configuration = {
+        name: profile.name,
+        ...JSON.parse(profile.configuration),
+      };
+
       // call the method
-      const results = await pluginMethod.call(null, projectId, {});
+      const results = await pluginMethod.call(null, projectId, configuration);
       res.json({
         target: target,
         results: results,
@@ -116,11 +125,18 @@ export const PublishController = {
 
     // find publish config by name.
     const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
-    const configs = allTargets.filter(t => t.name === target);
-    const config = configs.length ? configs[0] : undefined;
-    const method = config ? config.type : undefined;
+    const profiles = allTargets.filter(t => t.name === target);
+    const profile = profiles.length ? profiles[0] : undefined;
+
+    const method = profile ? profile.type : undefined;
+
+    const configuration = {
+      name: profile.name,
+      ...JSON.parse(profile.configuration),
+    };
+
     if (
-      config &&
+      profile &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.history
@@ -129,7 +145,7 @@ export const PublishController = {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.history;
 
       // call the method
-      const results = await pluginMethod.call(null, projectId, {});
+      const results = await pluginMethod.call(null, projectId, configuration);
       res.json({
         target: target,
         results: results,

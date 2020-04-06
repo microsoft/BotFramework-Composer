@@ -39,14 +39,14 @@ class LocalPublisher {
 
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, user) => {
-    const { settings, templatePath } = config;
+  publish = async (config: PublishConfig, project, metadata, user) => {
+    const { templatePath } = config;
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
     await this.initBot(botId);
     await this.saveContent(botId, version, project.dataDir, user);
-    const url = await this.setBot(botId, version, settings, project.dataDir);
+    const url = await this.setBot(botId, version, project.settings, project.dataDir);
     return {
       status: 200,
       result: {
@@ -56,7 +56,7 @@ class LocalPublisher {
       },
     };
   };
-  getStatus = async (botId: string) => {
+  getStatus = async (botId: string, config: PublishConfig) => {
     if (LocalPublisher.runningBots[botId]) {
       return {
         botStatus: 'connected',
@@ -67,7 +67,7 @@ class LocalPublisher {
       };
     }
   };
-  history = async (botId: string) => {
+  history = async (botId: string, config: PublishConfig) => {
     const result = [];
     const files = await readDir(this.getHistoryDir(botId));
     console.log(files);
