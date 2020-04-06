@@ -81,6 +81,7 @@ export function CreateOptions(props) {
   return (
     <Fragment>
       <ChoiceGroup
+        label={formatMessage('Choose how to create your bot')}
         defaultSelectedKey="Create from scratch"
         options={[
           {
