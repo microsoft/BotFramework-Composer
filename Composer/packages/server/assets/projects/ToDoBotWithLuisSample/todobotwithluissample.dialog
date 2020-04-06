@@ -87,7 +87,7 @@
             "name": "Begin a new dialog"
           },
           "activityProcessed": true,
-          "dialog": "AddItem"
+          "dialog": "additem"
         }
       ]
     },
@@ -106,7 +106,7 @@
             "name": "Begin a new dialog"
           },
           "activityProcessed": true,
-          "dialog": "DeleteItem"
+          "dialog": "deleteitem"
         }
       ]
     },
@@ -125,7 +125,7 @@
             "name": "Begin a new dialog"
           },
           "activityProcessed": true,
-          "dialog": "ViewItem"
+          "dialog": "viewitem"
         }
       ]
     },
@@ -144,7 +144,7 @@
             "name": "Begin a new dialog"
           },
           "activityProcessed": true,
-          "dialog": "UserProfile"
+          "dialog": "userprofile"
         }
       ]
     },
@@ -163,7 +163,7 @@
             "name": "Begin a new dialog"
           },
           "activityProcessed": true,
-          "dialog": "Help"
+          "dialog": "help"
         }
       ]
     },
