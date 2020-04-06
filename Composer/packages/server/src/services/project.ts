@@ -37,8 +37,14 @@ export class BotProjectService {
     BotProjectService.initialize();
     const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
     if (!project) throw new Error('project not found');
-
-    const resolver = importResolverGenerator(project.lgFiles, '.lg');
+    const resource = project.files.reduce((result: ResolverResource[], file) => {
+      const { name, content } = file;
+      if (name.endsWith('.lg')) {
+        result.push({ id: Path.basename(name, '.lg'), content });
+      }
+      return result;
+    }, []);
+    const resolver = importResolverGenerator(resource, '.lg');
     return resolver(source, id);
   }
 
@@ -46,8 +52,14 @@ export class BotProjectService {
     BotProjectService.initialize();
     const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
     if (!project) throw new Error('project not found');
-
-    const resolver = importResolverGenerator(project.luFiles, '.lu');
+    const resource = project.files.reduce((result: ResolverResource[], file) => {
+      const { name, content } = file;
+      if (name.endsWith('.lu')) {
+        result.push({ id: Path.basename(name, '.lu'), content });
+      }
+      return result;
+    }, []);
+    const resolver = importResolverGenerator(resource, '.lu');
     return resolver(source, id);
   }
 
@@ -172,8 +184,8 @@ export class BotProjectService {
         throw new Error(`file not exist ${path}`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user);
+      await project.init();
       project.id = projectId;
-      await project.index();
       // update current indexed bot projects
       BotProjectService.updateCurrentProjects(project);
       return project;
@@ -228,8 +240,7 @@ export class BotProjectService {
   ): Promise<string> => {
     BotProjectService.initialize();
     if (typeof sourceProject !== 'undefined') {
-      const newCurrentProject = await sourceProject.copyTo(locationRef, user);
-      await newCurrentProject.index();
+      await sourceProject.copyTo(locationRef, user);
       const projectId = await BotProjectService.generateProjectId(locationRef.path);
       BotProjectService.addRecentProject(locationRef.path);
       return projectId;
