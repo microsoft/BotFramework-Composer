@@ -34,7 +34,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, codeEditorSettings } = useShellApi();
 
   const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
@@ -109,6 +109,8 @@ const LgField: React.FC<FieldProps<string>> = props => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        editorSettings={codeEditorSettings}
+        onChangeSettings={shellApi.updateCodeEditorSettings}
       />
     </React.Fragment>
   );

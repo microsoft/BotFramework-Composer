@@ -446,9 +446,10 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const setCodeEditorOptions: ReducerFunc = (state, options) => {
-  storage.set('codeEditorOptions', options);
-  state.codeEditorOptions = options;
+const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+  const newSettings = { ...state.codeEditorSettings, ...settings };
+  storage.set('codeEditorSettings', newSettings);
+  state.codeEditorSettings = newSettings;
   return state;
 };
 
@@ -502,5 +503,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
-  [ActionTypes.SET_CODE_EDITOR_OPTIONS]: setCodeEditorOptions,
+  [ActionTypes.SET_CODE_EDITOR_SETTINGS]: setCodeEditorSettings,
 });

@@ -62,4 +62,5 @@ export interface ShellApi {
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
+  updateCodeEditorSettings: (settings: Partial<CodeEditorSettings>) => void;
 }

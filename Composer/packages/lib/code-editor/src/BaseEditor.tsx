@@ -20,6 +20,7 @@ import { assignDefined } from './utils/common';
 const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
+  wordWrapColumn: 120,
   fontFamily: 'Segoe UI',
   fontSize: 14,
   lineNumbers: 'off',
@@ -74,6 +75,16 @@ const styles = {
   `,
 };
 
+const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSettings> = {}) => {
+  return {
+    ...baseOptions,
+    lineNumbers: overrides.lineNumbers ? 'on' : 'off',
+    wordWrap: overrides.wordWrap ? 'on' : 'off',
+    lineNumbersMinChars: overrides.lineNumbers ? 3 : baseOptions.lineNumbersMinChars,
+    lineDecorationsWidth: overrides.lineNumbers ? 10 : baseOptions.lineDecorationsWidth,
+  };
+};
+
 export type OnInit = (instance: Monaco) => void;
 
 export interface BaseEditorProps extends EditorProps {
@@ -87,6 +98,8 @@ export interface BaseEditorProps extends EditorProps {
   value?: string;
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
+  editorSettings?: Partial<CodeEditorSettings>;
+  onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
@@ -102,17 +115,16 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     helpURL,
     height = '100%',
     onInit,
+    editorSettings,
+    onChangeSettings,
     ...rest
   } = props;
-  const [editorOptions, setEditorOptions] = useState(assignDefined(defaultOptions, props.options));
+  const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
+  const [editorOptions, setEditorOptions] = useState(mergeEditorSettings(baseOptions, editorSettings));
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
-  const [configOptions, setConfigOptions] = useState<CodeEditorSettings>({
-    lineNumbers: false,
-    wordWrap: false,
-  });
   const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
@@ -180,25 +192,19 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   );
 
   useEffect(() => {
-    if (editor) {
+    if (editor && editorSettings) {
       console.log('[BFC] updating options:', editorOptions);
-      setEditorOptions(current => ({
-        ...current,
-        lineNumbers: configOptions.lineNumbers ? 'on' : 'off',
-        wordWrap: configOptions.wordWrap ? 'on' : 'off',
-        lineNumbersMinChars: configOptions.lineNumbers ? 3 : editorOptions.lineNumbersMinChars,
-        lineDecorationsWidth: configOptions.lineNumbers ? 10 : editorOptions.lineDecorationsWidth,
-      }));
+      setEditorOptions(mergeEditorSettings(baseOptions, editorSettings));
     }
-  }, [configOptions]);
+  }, [editorSettings]);
 
   const handleOptionsChange = useCallback(
     (_ev, item?: IContextualMenuItem) => {
-      if (item) {
-        setConfigOptions(current => ({
-          ...current,
-          [item.key]: !current[item.key],
-        }));
+      if (item && onChangeSettings) {
+        onChangeSettings({
+          ...editorSettings,
+          [item.key]: !editorSettings?.[item.key],
+        });
       }
     },
     [editorOptions]
@@ -210,14 +216,14 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         key: 'lineNumbers',
         text: formatMessage('Show/hide line numbers'),
         canCheck: true,
-        isChecked: configOptions.lineNumbers,
+        isChecked: editorSettings?.lineNumbers,
         onClick: handleOptionsChange,
       },
       {
         key: 'wordWrap',
         text: formatMessage('Toggle word wrap'),
         canCheck: true,
-        isChecked: configOptions.wordWrap,
+        isChecked: editorSettings?.wordWrap,
         onClick: handleOptionsChange,
       },
     ],
@@ -226,42 +232,44 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
   return (
     <React.Fragment>
-      <div css={styles.settings}>
-        <IconButton
-          menuProps={{ items: optionsMenuItems, shouldFocusOnMount: true }}
-          iconProps={{ iconName: 'Settings' }}
-          styles={{
-            root: {
-              fontSize: '12px',
-              minWidth: 0,
-              margin: 0,
-              padding: '5px',
-              height: 'auto',
-              color: '#323130',
-              background: 'transparent',
-            },
-            rootHovered: {
-              color: '#323130',
-              background: 'transparent',
-            },
-            rootChecked: {
-              color: '#323130',
-              background: 'transparent',
-            },
-            rootPressed: {
-              color: '#323130',
-              background: 'transparent',
-            },
-            rootExpanded: {
-              color: '#323130',
-              background: 'transparent',
-            },
-            menuIcon: {
-              display: 'none',
-            },
-          }}
-        />
-      </div>
+      {onChangeSettings && (
+        <div css={styles.settings}>
+          <IconButton
+            menuProps={{ items: optionsMenuItems, shouldFocusOnMount: true }}
+            iconProps={{ iconName: 'Settings' }}
+            styles={{
+              root: {
+                fontSize: '12px',
+                minWidth: 0,
+                margin: 0,
+                padding: '5px',
+                height: 'auto',
+                color: '#323130',
+                background: 'transparent',
+              },
+              rootHovered: {
+                color: '#323130',
+                background: 'transparent',
+              },
+              rootChecked: {
+                color: '#323130',
+                background: 'transparent',
+              },
+              rootPressed: {
+                color: '#323130',
+                background: 'transparent',
+              },
+              rootExpanded: {
+                color: '#323130',
+                background: 'transparent',
+              },
+              menuIcon: {
+                display: 'none',
+              },
+            }}
+          />
+        </div>
+      )}
       <div
         css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
         onMouseEnter={() => setHovered(true)}
