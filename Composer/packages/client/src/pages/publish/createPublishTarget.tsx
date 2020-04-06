@@ -33,6 +33,7 @@ export const CreatePublishTarget = props => {
       JSON.parse(config);
     } catch (err) {
       // configuration json is invalid
+      alert('JSON IS INVALID');
       console.log(err);
       return;
     }
@@ -41,6 +42,8 @@ export const CreatePublishTarget = props => {
       props.onSave(name, targetType, config);
     } catch (err) {
       // name is taken
+      alert('NAME IS TAKEN');
+      return;
     }
     props.onCancel();
   };
