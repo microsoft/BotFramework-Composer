@@ -94,7 +94,13 @@ const FieldLabel: React.FC<FieldLabelProps> = props => {
         },
       }}
     >
-      {label}
+      <div
+        style={{
+          marginRight: '4px',
+        }}
+      >
+        {label}
+      </div>
       <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
     </Label>
   );
