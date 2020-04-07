@@ -3,7 +3,7 @@
 
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
-import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
+import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
@@ -26,7 +26,7 @@ import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
 import filePersistence from './persistence/FilePersistence';
 
-const { defaultFileResolver } = LGParser;
+const { defaultFileResolver } = TemplatesParser;
 
 const initialState: State = {
   dialogs: [],
