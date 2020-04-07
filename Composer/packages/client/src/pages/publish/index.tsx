@@ -95,6 +95,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
           targetTypes={publishTypes.map(type => {
             return { key: type, text: type };
           })}
+          targets={settings.publishTargets}
           onSave={savePublishTarget}
           onCancel={closeAddDialog}
         />
@@ -120,15 +121,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   const savePublishTarget = (name, type, configuration) => {
     console.log(`save ${name} ${type} ${configuration}`);
-
-    // is this name already in the publish targets list?
-    const exists =
-      settings.publishTargets?.filter(t => {
-        return t.name.toLowerCase() === name.toLowerCase();
-      }).length > 0;
-    if (exists) {
-      throw new Error(formatMessage('A profile with that name already exists.'));
-    }
 
     actions.setSettings(
       projectId,
@@ -161,7 +153,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   return (
     <div>
-      <Dialog hidden={addDialogHidden} onDismiss={closeAddDialog} dialogContentProps={dialogProps}>
+      <Dialog hidden={addDialogHidden} onDismiss={closeAddDialog} dialogContentProps={dialogProps} minWidth={350}>
         {dialogProps.children}
       </Dialog>
       <PublishDialog
@@ -193,7 +185,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
               {publishHistory.length > 0 ? (
                 <PublishStatusList items={publishHistory} onItemClick={item => console.log(item)} />
               ) : (
-                <div>No publish History</div>
+                <div css={historyPanelSub} style={{ paddingTop: '16px' }}>
+                  No publish History
+                </div>
               )}
             </Fragment>
           ) : null}

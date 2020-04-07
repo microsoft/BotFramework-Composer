@@ -115,3 +115,10 @@ export const tableView = css`
 export const detailList = css`
   overflow-x: hidden;
 `;
+
+export const label = css`
+  font-size: 14px;
+  font-weight: 600;
+  color: #323130;
+  padding: 5px 0px;
+`;

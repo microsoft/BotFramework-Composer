@@ -10,41 +10,52 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { JsonEditor } from '@bfc/code-editor';
+
+import { label } from './styles';
 
 export const CreatePublishTarget = props => {
   const [targetType, setTargetType] = useState('');
   const [name, setName] = useState('');
-  const [config, setConfig] = useState('{}');
+  const [config, setConfig] = useState({});
+  const [errorMessage, setErrorMsg] = useState('');
   const updateType = (e, type) => {
     // console.log('UPDATE TYPE', type);
     setTargetType(type.key);
   };
-  const updateConfig = (e, newConfig) => {
-    // console.log('UPDATE CONFIG', config);
-    // todo: attempt json parse and only allow submit if json is valid
+  const updateConfig = newConfig => {
     setConfig(newConfig);
   };
   const updateName = (e, newName) => {
+    setErrorMsg('');
     setName(newName);
+    isNameValid(newName);
+  };
+
+  const isNameValid = newName => {
+    if (!newName || newName.trim() === '') {
+      setErrorMsg(formatMessage('Must have a name'));
+    } else {
+      const exists =
+        props.targets?.filter(t => {
+          return t.name.toLowerCase() === newName?.toLowerCase();
+        }).length > 0;
+      if (exists) {
+        setErrorMsg(formatMessage('A profile with that name already exists.'));
+      }
+    }
+  };
+
+  const isDisable = () => {
+    if (!targetType || !name || errorMessage) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const submit = () => {
-    try {
-      JSON.parse(config);
-    } catch (err) {
-      // configuration json is invalid
-      alert('JSON IS INVALID');
-      console.log(err);
-      return;
-    }
-
-    try {
-      props.onSave(name, targetType, config);
-    } catch (err) {
-      // name is taken
-      alert('NAME IS TAKEN');
-      return;
-    }
+    props.onSave(name, targetType, JSON.stringify(config, null, 2) || '{}');
     props.onCancel();
   };
 
@@ -54,8 +65,8 @@ export const CreatePublishTarget = props => {
         <TextField
           placeholder="My Publish Target"
           label={formatMessage('Name')}
-          // styles={styles.input}
           onChange={updateName}
+          errorMessage={errorMessage}
         />
         <Dropdown
           placeholder={formatMessage('Choose One')}
@@ -63,16 +74,12 @@ export const CreatePublishTarget = props => {
           options={props.targetTypes}
           onChange={updateType}
         />
-        <TextField
-          label={formatMessage('Paste Configuration')}
-          // styles={styles.textarea}
-          onChange={updateConfig}
-          multiline={true}
-        />
+        <div css={label}>{formatMessage('Paste Configuration')}</div>
+        <JsonEditor onChange={updateConfig} height={200} value={config} />
       </form>
       <DialogFooter>
         <DefaultButton onClick={props.onCancel} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={submit} text={formatMessage('Save')} />
+        <PrimaryButton onClick={submit} disabled={isDisable()} text={formatMessage('Save')} />
       </DialogFooter>
     </Fragment>
   );
