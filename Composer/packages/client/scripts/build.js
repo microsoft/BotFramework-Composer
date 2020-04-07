@@ -14,8 +14,6 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
-const path = require('path');
-
 const chalk = require('react-dev-utils/chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
@@ -63,8 +61,6 @@ checkBrowsers(paths.appPath, isInteractive)
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
-    // Merge with the public folder
-    copyPublicFolder();
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -93,6 +89,8 @@ checkBrowsers(paths.appPath, isInteractive)
         );
         console.log();
       }
+      // Merge with the public folder
+      copyPublicFolder();
     },
     err => {
       console.log(chalk.red('Failed to compile.\n'));
@@ -165,6 +163,7 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
+  // copy to build/public folder
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
     filter: file => ![paths.appHtml, paths.extensionContainerHtml].includes(file),

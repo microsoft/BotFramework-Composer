@@ -26,96 +26,99 @@ import pluginLoader from './services/pluginLoader';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-const app: Express = express();
-app.set('view engine', 'ejs');
-app.set('view options', { delimiter: '?' });
-app.use(compression());
+export async function start(pluginDir?: string) {
+  const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
+  const app: Express = express();
+  app.set('view engine', 'ejs');
+  app.set('view options', { delimiter: '?' });
+  app.use(compression());
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: 'bot-framework-composer' }));
-app.use(pluginLoader.passport.initialize());
-app.use(pluginLoader.passport.session());
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(session({ secret: 'bot-framework-composer' }));
+  app.use(pluginLoader.passport.initialize());
+  app.use(pluginLoader.passport.session());
 
-// make sure plugin has access to our express...
-pluginLoader.useExpress(app);
+  // make sure plugin has access to our express...
+  pluginLoader.useExpress(app);
 
-// load all the plugins that exist in the folder
-pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).then(() => {
-  const { login, authorize } = getAuthProvider();
+  // load all the plugins that exist in the folder
+  pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
+  pluginLoader.loadPluginsFromFolder(pluginDir).then(() => {
+    const { login, authorize } = getAuthProvider();
 
-  const CS_POLICIES = [
-    "default-src 'none';",
-    "font-src 'self' https:;",
-    "img-src 'self' data:;",
-    "base-uri 'none';",
-    "connect-src 'self';",
-    "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
-    "worker-src 'self';",
-    "form-action 'none';",
-    "frame-ancestors 'self';",
-    "manifest-src 'self';",
-    'upgrade-insecure-requests;',
-  ];
+    const CS_POLICIES = [
+      "default-src 'none';",
+      "font-src 'self' https:;",
+      "img-src 'self' data:;",
+      "base-uri 'none';",
+      "connect-src 'self';",
+      "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
+      "worker-src 'self';",
+      "form-action 'none';",
+      "frame-ancestors 'self';",
+      "manifest-src 'self';",
+      'upgrade-insecure-requests;',
+    ];
 
-  app.all('*', function(req: Request, res: Response, next: NextFunction) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    app.all('*', function(req: Request, res: Response, next: NextFunction) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-    if (process.env.ENABLE_CSP === 'true') {
-      req.__nonce__ = crypto.randomBytes(16).toString('base64');
-      res.header(
-        'Content-Security-Policy',
-        CS_POLICIES.concat([
-          `script-src 'self' 'nonce-${req.__nonce__}';`,
-          // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
-          "style-src 'self' 'unsafe-inline'",
-          // `style-src 'self' 'nonce-${req.__nonce__}';`,
-        ]).join(' ')
-      );
-    }
+      if (process.env.ENABLE_CSP === 'true') {
+        req.__nonce__ = crypto.randomBytes(16).toString('base64');
+        res.header(
+          'Content-Security-Policy',
+          CS_POLICIES.concat([
+            `script-src 'self' 'nonce-${req.__nonce__}';`,
+            // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
+            "style-src 'self' 'unsafe-inline'",
+            // `style-src 'self' 'nonce-${req.__nonce__}';`,
+          ]).join(' ')
+        );
+      }
 
-    next();
-  });
-
-  app.use(`${BASEURL}/`, express.static(path.join(__dirname, './public'), { immutable: true, maxAge: 31536000 }));
-  app.use(morgan('dev'));
-
-  app.get(`${BASEURL}/test`, function(req: Request, res: Response) {
-    res.send('fortest');
-  });
-
-  // only register the login route if the auth provider defines one
-  if (login) {
-    app.get(`${BASEURL}/api/login`, login);
-  } else {
-    // register the route so that client that requires_auth knows not try repeatedly
-    app.get(`${BASEURL}/api/login`, (req, res) => {
-      res.redirect(`${BASEURL}#error=${encodeURIComponent('NoSupport')}`);
+      next();
     });
-  }
 
-  // always authorize all api routes, it will be a no-op if no auth provider set
-  app.use(`${BASEURL}/api`, authorize, apiRouter);
+    app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));
+    app.use(morgan('dev'));
 
-  app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
-    if (err) {
-      log(err);
-      res.status(500).json({ message: err.message });
+    // only register the login route if the auth provider defines one
+    if (login) {
+      app.get(`${BASEURL}/api/login`, login);
+    } else {
+      // register the route so that client that requires_auth knows not try repeatedly
+      app.get(`${BASEURL}/api/login`, (req, res) => {
+        res.redirect(`${BASEURL}#error=${encodeURIComponent('NoSupport')}`);
+      });
     }
-  });
 
-  app.get('*', function(req, res) {
-    res.render(path.resolve(__dirname, './public/index.ejs'), { __nonce__: req.__nonce__ });
+    // always authorize all api routes, it will be a no-op if no auth provider set
+    app.use(`${BASEURL}/api`, authorize, apiRouter);
+
+    app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
+      if (err) {
+        log(err);
+        res.status(500).json({ message: err.message });
+      }
+    });
+
+    app.get('*', function(req, res) {
+      res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
+    });
   });
 
   const port = process.env.PORT || 5000;
-  const server = app.listen(port, () => {
-    if (process.env.NODE_ENV === 'production') {
-      // eslint-disable-next-line no-console
-      console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
-    }
+  let server;
+  await new Promise(resolve => {
+    server = app.listen(port, () => {
+      if (process.env.NODE_ENV === 'production') {
+        log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+      }
+      resolve();
+    });
   });
 
   const wss: ws.Server = new ws.Server({
@@ -162,4 +165,4 @@ pluginLoader.loadPluginsFromFolder(path.resolve(__dirname, '../../../plugins')).
       });
     }
   });
-});
+}
