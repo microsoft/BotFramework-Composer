@@ -8,7 +8,6 @@ import { app, BrowserWindow } from 'electron';
 import fixPath from 'fix-path';
 
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
-
 import log from './utility/logger';
 const error = log.extend('error');
 
