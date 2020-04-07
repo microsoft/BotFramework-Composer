@@ -34,6 +34,7 @@ function getFileLocale(fileName: string) {
   return getExtension(getBaseName(fileName));
 }
 
+//replace the dialogId with luFile's name
 function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
   const { rootIds, triggerRules } = config;
   config.rootIds = rootIds.reduce((result: string[], id: string) => {
