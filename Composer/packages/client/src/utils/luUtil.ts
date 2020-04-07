@@ -10,7 +10,8 @@ import keys from 'lodash/keys';
 import { createSingleMessage } from '@bfc/indexers';
 import { LuFile, DialogInfo } from '@bfc/shared';
 
-import { getBaseName } from './fileUtil';
+import { getBaseName, getExtension } from './fileUtil';
+
 export * from '@bfc/indexers/lib/utils/luUtil';
 
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
@@ -24,6 +25,38 @@ function createConfigId(fileId) {
   return `${fileId}.lu`;
 }
 
+function getLuFilesByDialogId(dialogId: string, luFiles: LuFile[]) {
+  return luFiles.filter(lu => getBaseName(lu.id) === dialogId).map(lu => createConfigId(lu.id));
+}
+
+function getFileLocale(fileName: string) {
+  //file name = 'a.en-us.lu'
+  return getExtension(getBaseName(fileName));
+}
+
+function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
+  const { rootIds, triggerRules } = config;
+  config.rootIds = rootIds.reduce((result: string[], id: string) => {
+    return [...result, ...getLuFilesByDialogId(id, luFiles)];
+  }, []);
+  config.triggerRules = keys(triggerRules).reduce((result, key) => {
+    const fileNames = getLuFilesByDialogId(key, luFiles);
+    return {
+      ...result,
+      ...fileNames.reduce((result, name) => {
+        const locale = getFileLocale(name);
+        const triggers = triggerRules[key];
+        keys(triggers).forEach(id => {
+          if (!result[name]) result[name] = {};
+          result[name][`${id}.${locale}.lu`] = triggers[id];
+        });
+        return result;
+      }, {}),
+    };
+  }, {});
+  return config;
+}
+
 interface ICrossTrainConfig {
   rootIds: string[];
   triggerRules: { [key: string]: any };
@@ -31,21 +64,21 @@ interface ICrossTrainConfig {
   verbose: boolean;
 }
 
-//generate the cross-train config
+//generate the cross-train config without locale
 /* the config is like
   {
       rootIds: [
-        'main.lu',
+        'main.en-us.lu',
         'main.fr-fr.lu'
       ],
       triggerRules: {
-        'main.lu': {
-          'dia1.lu': 'dia1_trigger',
-          'dia2.lu': 'dia2_trigger'
+        'main.en-us.lu': {
+          'dia1.en-us.lu': 'dia1_trigger',
+          'dia2.en-us.lu': 'dia2_trigger'
         },
-        'dia2.lu': {
-          'dia3.lu': 'dia3_trigger',
-          'dia4.lu': 'dia4_trigger'
+        'dia2.en-us.lu': {
+          'dia3.en-us.lu': 'dia3_trigger',
+          'dia4.en-us.lu': 'dia4_trigger'
         },
         'main.fr-fr.lu': {
           'dia1.fr-fr.lu': 'dia1_trigger'
@@ -69,7 +102,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     if (dialog.isRoot) rootId = dialog.id;
 
     const { intentTriggers } = dialog;
-    const fileId = createConfigId(dialog.id);
+    const fileId = dialog.id;
     if (intentTriggers.length) {
       //find the trigger's dialog that use a recognizer
       intentTriggers.forEach(item => {
@@ -82,8 +115,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
         });
         if (used.length) {
           const result = used.reduce((result, temp) => {
-            const id = createConfigId(temp);
-            result[id] = item.intent;
+            result[temp] = item.intent;
             return result;
           }, {});
           triggerRules[fileId] = { ...triggerRules[fileId], ...result };
@@ -98,11 +130,9 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap)
-    .filter(key => (countMap[key] === 0 || key === rootId) && triggerRules[createConfigId(key)])
-    .map(item => createConfigId(item));
+  crossTrainConfig.rootIds = keys(countMap).filter(key => (countMap[key] === 0 || key === rootId) && triggerRules[key]);
   crossTrainConfig.triggerRules = triggerRules;
-  return crossTrainConfig;
+  return addLocaleToConfig(crossTrainConfig, luFiles);
 }
 
 function generateErrorMessage(invalidLuFile: LuFile[]) {
