@@ -403,9 +403,10 @@ const setPublishTypes: ReducerFunc = (state, { typelist }) => {
 
 const publishSuccess: ReducerFunc = (state, payload) => {
   console.log('Got publish status from remote', payload);
-  state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
-  state.botStatus = BotStatus.connected;
-
+  if (payload.endpointURL) {
+    state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
+    state.botStatus = BotStatus.connected;
+  }
   return state;
 };
 
@@ -416,8 +417,9 @@ const publishFailure: ReducerFunc = (state, { error }) => {
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
-  if (payload.results?.botStatus === 'connected') {
+  if (payload.endpointURL) {
     state.botStatus = BotStatus.connected;
+    state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
   }
   return state;
 };

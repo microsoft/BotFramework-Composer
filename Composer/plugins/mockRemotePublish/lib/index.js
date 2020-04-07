@@ -22,7 +22,7 @@ class LocalPublisher {
         this.finishPublish = (botId, profileName, jobId) => __awaiter(this, void 0, void 0, function* () {
             setTimeout(() => {
                 this.data[botId][profileName].forEach(element => {
-                    if (element.result.jobId == jobId) {
+                    if (element.result.id == jobId) {
                         element.status = 200;
                         element.result.message = 'Success';
                     }
@@ -39,22 +39,22 @@ class LocalPublisher {
                 this.data[project.id][profileName] = [];
             }
             console.log('PUBLISHING CONFIG', config);
-            const publish = {
+            const response = {
                 status: 202,
                 result: {
-                    status: 202,
                     time: new Date(),
                     message: 'Accepted for publishing.',
-                    jobId: new uuid_1.v4(),
+                    id: new uuid_1.v4(),
                     comment: metadata.comment,
                 },
             };
-            this.data[project.id][profileName].push(publish);
-            this.finishPublish(project.id, profileName, publish.result.jobId);
-            return publish;
+            this.data[project.id][profileName].push(response);
+            this.finishPublish(project.id, profileName, response.result.id);
+            return response;
         });
-        this.getStatus = (botId, config) => __awaiter(this, void 0, void 0, function* () {
+        this.getStatus = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             const profileName = config.name;
+            const botId = project.id;
             if (this.data[botId] && this.data[botId][profileName]) {
                 // return latest status
                 return this.data[botId][profileName][this.data[botId].length - 1];
@@ -63,14 +63,14 @@ class LocalPublisher {
                 return {
                     status: 200,
                     result: {
-                        status: 200,
                         message: 'Ready',
-                    },
+                    }
                 };
             }
         });
-        this.history = (botId, config) => __awaiter(this, void 0, void 0, function* () {
+        this.history = (config, project, user) => __awaiter(this, void 0, void 0, function* () {
             const profileName = config.name;
+            const botId = project.id;
             const result = [];
             if (this.data[botId] && this.data[botId][profileName]) {
                 this.data[botId][profileName].map(item => {
@@ -80,7 +80,7 @@ class LocalPublisher {
             // return in reverse chrono
             return result.reverse();
         });
-        this.rollback = (botId, versionId, config) => __awaiter(this, void 0, void 0, function* () { });
+        this.rollback = (config, project, rollbackToVersion, user) => __awaiter(this, void 0, void 0, function* () { });
         this.data = {};
     }
 }

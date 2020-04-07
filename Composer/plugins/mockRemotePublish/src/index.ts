@@ -24,7 +24,7 @@ class LocalPublisher {
   finishPublish = async (botId, profileName, jobId) => {
     setTimeout(() => {
       this.data[botId][profileName].forEach(element => {
-        if (element.result.jobId == jobId) {
+        if (element.result.id == jobId) {
           element.status = 200;
           element.result.message = 'Success';
         }
@@ -45,25 +45,25 @@ class LocalPublisher {
 
     console.log('PUBLISHING CONFIG', config);
 
-    const publish = {
+    const response = {
       status: 202,
       result: {
-        status: 202,
         time: new Date(),
         message: 'Accepted for publishing.',
-        jobId: new uuid(),
+        id: new uuid(),
         comment: metadata.comment,
       },
     };
 
-    this.data[project.id][profileName].push(publish);
+    this.data[project.id][profileName].push(response);
 
-    this.finishPublish(project.id, profileName, publish.result.jobId);
+    this.finishPublish(project.id, profileName, response.result.id);
 
-    return publish;
+    return response;
   };
-  getStatus = async (botId: string, config: PublishConfig) => {
+  getStatus = async (config: PublishConfig, project, user) => {
     const profileName = config.name;
+    const botId = project.id;
 
     if (this.data[botId] && this.data[botId][profileName]) {
       // return latest status
@@ -72,14 +72,14 @@ class LocalPublisher {
       return {
         status: 200,
         result: {
-          status: 200,
           message: 'Ready',
-        },
+        }
       };
     }
   };
-  history = async (botId: string, config: PublishConfig) => {
+  history = async (config: PublishConfig, project, user) => {
     const profileName = config.name;
+    const botId = project.id;
     const result = [];
     if (this.data[botId] && this.data[botId][profileName]) {
       this.data[botId][profileName].map(item => {
@@ -89,11 +89,10 @@ class LocalPublisher {
         });
       });
     }
-
     // return in reverse chrono
     return result.reverse();
   };
-  rollback = async (botId, versionId, config: PublishConfig) => {};
+  rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {};
 }
 
 const publisher = new LocalPublisher();

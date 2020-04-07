@@ -186,7 +186,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
                 <PublishStatusList items={publishHistory} onItemClick={item => console.log(item)} />
               ) : (
                 <div css={historyPanelSub} style={{ paddingTop: '16px' }}>
-                  No publish History
+                  No publish history
                 </div>
               )}
             </Fragment>

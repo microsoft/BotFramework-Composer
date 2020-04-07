@@ -53,7 +53,7 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(plugin: Partial<PublishPlugin>) {
+  public async addPublishMethod(plugin: PublishPlugin) {
     console.log('registering publish method', this.name);
     this.loader.extensions.publish[this.name] = {
       plugin: this,
@@ -177,11 +177,25 @@ export class ComposerPluginRegistration {
   }
 }
 
+interface PublishResult {
+  message: string;
+  comment?: string;
+  id?: string;
+  time?: Date;
+  endpointURL?: string;
+  status?: number;
+}
+
+interface PublishResponse {
+  status: number;
+  result: PublishResult;
+}
+
 interface PublishPlugin {
-  publish: any;
-  getStatus?: any;
-  getHistory?: any;
-  rollback?: any;
+  publish: (config: any, project: any, metadata: any, user: any) => Promise<PublishResponse>;
+  getStatus?: (config: any, project: any, user: any) => Promise<PublishResponse>;
+  getHistory?: (config: any, project: any, user: any) => Promise<PublishResult[]>;
+  rollback?: (config: any, project: any, rollbackToVersion: string, user: any) => Promise<PublishResponse>;
   [key: string]: any;
 }
 
@@ -197,7 +211,7 @@ export class PluginLoader {
     publish: {
       [key: string]: {
         plugin: ComposerPluginRegistration;
-        methods: Partial<PublishPlugin>;
+        methods: PublishPlugin;
       };
     };
     authentication: {

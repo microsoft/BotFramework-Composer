@@ -65,7 +65,7 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
     console.log(response.data);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,
-      payload: response.data.results,
+      payload: response.data,
     });
   } catch (error) {
     console.error(error);
