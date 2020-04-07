@@ -43,7 +43,13 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
+export const StepGroup: FunctionComponent<NodeProps> = ({
+  id,
+  addCoachMarkRef,
+  data,
+  onEvent,
+  onResize,
+}: NodeProps): JSX.Element => {
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
 
@@ -76,6 +82,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
           onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
           data-testid="StepGroupAdd"
           id={`${id}[0]`}
+          addCoachMarkRef={addCoachMarkRef}
         />
       </OffsetContainer>
       {nodes

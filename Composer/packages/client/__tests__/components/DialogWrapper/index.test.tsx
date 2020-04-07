@@ -3,7 +3,8 @@
 
 import React from 'react';
 import { render } from 'react-testing-library';
-import { DialogWrapper } from '@src/components/DialogWrapper';
+
+import { DialogWrapper } from '../../../src/components/DialogWrapper';
 
 describe('<DialogWrapper />', () => {
   const props = {
