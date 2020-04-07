@@ -34,12 +34,9 @@ function main() {
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
   console.log('Loading project from: ', CONTENT_URL);
 
-  // TODO: get rid of this timeout
-  setTimeout(() => {
-    win.loadURL(CONTENT_URL);
-    win.maximize();
-    win.show();
-  }, 2000);
+  win.loadURL(CONTENT_URL);
+  win.maximize();
+  win.show();
 }
 
 async function createAppDataDir() {
