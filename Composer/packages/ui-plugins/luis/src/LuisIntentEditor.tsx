@@ -51,17 +51,15 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
   return (
-    <div css={{ marginTop: '-26px' }}>
-      <LuEditor
-        height={150}
-        luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
-        value={luIntent.Body}
-        onChange={commitChanges}
-        diagnostics={diagnostics}
-        editorSettings={userSettings.codeEditor}
-        onChangeSettings={handleSettingsChange}
-      />
-    </div>
+    <LuEditor
+      height={150}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
+      value={luIntent.Body}
+      onChange={commitChanges}
+      diagnostics={diagnostics}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
+    />
   );
 };
 

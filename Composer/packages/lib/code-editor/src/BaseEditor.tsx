@@ -3,12 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Editor, { EditorDidMount, EditorProps, Monaco, monaco } from '@monaco-editor/react';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
@@ -27,6 +25,7 @@ const defaultOptions = {
   quickSuggestions: false,
   minimap: {
     enabled: false,
+    maxColumn: 0,
   },
   lineDecorationsWidth: 10,
   lineNumbersMinChars: 3,
@@ -56,6 +55,12 @@ const styles = {
       borderColor = SharedColors.red20;
     }
 
+    let heightAdj = 0;
+
+    if (error) {
+      heightAdj += 32;
+    }
+
     return css`
       border-width: ${focused ? '2px' : '1px'};
       padding: ${focused ? 0 : '1px'};
@@ -63,7 +68,9 @@ const styles = {
       border-color: ${borderColor};
       transition: border-color 0.1s linear;
       box-sizing: border-box;
-      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error ? 32 : 0}px);
+      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
+
+      label: BaseEditor;
     `;
   },
   settings: css`
@@ -71,6 +78,8 @@ const styles = {
     width: 100%;
     justify-content: flex-end;
     margin-bottom: 5px;
+
+    label: BaseEditorSettings;
   `,
 };
 
@@ -81,6 +90,7 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     wordWrap: overrides.wordWrap ? 'on' : 'off',
     minimap: {
       enabled: overrides.minimap,
+      maxColumn: overrides.minimap ? 120 : 0,
     },
   };
 };
@@ -116,7 +126,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     height = '100%',
     onInit,
     editorSettings,
-    onChangeSettings,
     ...rest
   } = props;
   const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
@@ -197,88 +206,16 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     }
   }, [editorSettings]);
 
-  const handleOptionsChange = useCallback(
-    (_ev, item?: IContextualMenuItem) => {
-      if (item && onChangeSettings) {
-        onChangeSettings({
-          ...editorSettings,
-          [item.key]: !editorSettings?.[item.key],
-        });
-      }
-    },
-    [editorOptions]
-  );
-
-  const optionsMenuItems: IContextualMenuItem[] = useMemo(
-    () => [
-      {
-        key: 'lineNumbers',
-        text: formatMessage('Toggle line numbers'),
-        canCheck: true,
-        isChecked: editorSettings?.lineNumbers,
-        onClick: handleOptionsChange,
-      },
-      {
-        key: 'wordWrap',
-        text: formatMessage('Toggle word wrap'),
-        canCheck: true,
-        isChecked: editorSettings?.wordWrap,
-        onClick: handleOptionsChange,
-      },
-      {
-        key: 'minimap',
-        text: formatMessage('Toggle minimap'),
-        canCheck: true,
-        isChecked: editorSettings?.minimap,
-        onClick: handleOptionsChange,
-      },
-    ],
-    [editorOptions, handleOptionsChange]
-  );
-
   return (
     <React.Fragment>
-      {onChangeSettings && (
-        <div css={styles.settings}>
-          <IconButton
-            menuProps={{ items: optionsMenuItems, shouldFocusOnMount: true }}
-            iconProps={{ iconName: 'Settings' }}
-            ariaLabel={formatMessage('Editor Settings')}
-            styles={{
-              root: {
-                fontSize: '12px',
-                minWidth: 0,
-                margin: 0,
-                padding: '5px',
-                height: 'auto',
-                color: '#323130',
-                background: 'transparent',
-              },
-              rootHovered: {
-                color: '#323130',
-                background: 'transparent',
-              },
-              rootChecked: {
-                color: '#323130',
-                background: 'transparent',
-              },
-              rootPressed: {
-                color: '#323130',
-                background: 'transparent',
-              },
-              rootExpanded: {
-                color: '#323130',
-                background: 'transparent',
-              },
-              menuIcon: {
-                display: 'none',
-              },
-            }}
-          />
-        </div>
-      )}
       <div
-        css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
+        css={styles.container({
+          hovered,
+          focused,
+          error: hasError,
+          warning: hasWarning,
+          height,
+        })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
