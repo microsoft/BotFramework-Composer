@@ -7,14 +7,15 @@ import React, { useContext, useCallback, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
+import VisualDesigner from '@bfc/visual-designer';
+import Extension from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
-import { BASEPATH } from '../../constants';
+import { useShell } from '../../useShell';
+import plugins from '../../plugins';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
-
-const rootPath = BASEPATH.replace(/\/+$/g, '');
 
 const addIconProps = {
   iconName: 'CircleAddition',
@@ -53,12 +54,13 @@ interface VisualEditorProps {
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = props => {
+  const { api: shellApi, data: shellData } = useShell('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { state, actions } = useContext(StoreContext);
-  const { designPageLocation, dialogs } = state;
   const { onboardingAddCoachMarkRef } = actions;
-  const { selected, dialogId } = designPageLocation;
+  const { dialogs, schemas, designPageLocation } = state;
+  const { dialogId, selected } = designPageLocation;
 
   const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
 
@@ -70,16 +72,21 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
 
   return (
     <React.Fragment>
-      <iframe
-        id="VisualEditor"
-        key="VisualEditor"
-        name="VisualEditor"
-        css={visualEditor}
-        hidden={triggerButtonVisible || !selected}
-        src={`${rootPath}/extensionContainer.html`}
+      <div
+        css={visualEditor(triggerButtonVisible || !selected)}
+        aria-label={formatMessage('visual editor')}
         ref={addRef}
-        title={formatMessage('visual editor')}
-      />
+        data-testid="VisualEditor"
+      >
+        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+          <VisualDesigner
+            {...shellData}
+            onChange={shellApi.saveData}
+            shellApi={shellApi as any}
+            schema={schemas.sdk?.content}
+          />
+        </Extension>
+      </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>
   );
