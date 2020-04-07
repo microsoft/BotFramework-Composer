@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
@@ -55,9 +55,13 @@ export const DialogSettings = () => {
     }
   };
 
-  const handleChange = debounce(result => {
-    saveChangeResult(result);
-  }, 200);
+  const handleChange = useMemo(
+    () =>
+      debounce((result: any) => {
+        saveChangeResult(result);
+      }, 200),
+    [visibleSettings]
+  );
 
   const hostedControl = () => (
     <div css={hostedControls}>
