@@ -5,7 +5,7 @@ export interface EditorProps {
   id: string;
   data: any;
   onEvent: (action, id) => object | void;
-  addCoachMarkRef?: (_: any) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
 export const defaultEditorProps = {

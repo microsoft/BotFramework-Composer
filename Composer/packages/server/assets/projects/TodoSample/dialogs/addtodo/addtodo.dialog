@@ -19,7 +19,7 @@
             "id": "298897"
           },
           "property": "dialog.todo",
-          "prompt": "OK, please enter the title of your todo.",
+          "prompt": "${bfdprompt-298897()}",
           "maxTurnCount": 3,
           "value": "=@title",
           "alwaysPrompt": false,
