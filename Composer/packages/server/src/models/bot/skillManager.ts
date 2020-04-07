@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import * as msRest from '@azure/ms-rest-js';
+import { Skill } from '@bfc/shared';
 
 // http client for fetch skill data from manifest url
 const clientOptions: msRest.ServiceClientOptions = {
@@ -12,11 +13,11 @@ const token = process.env.ACCESS_TOKEN || 'token';
 const creds = new msRest.TokenCredentials(token);
 const client = new msRest.ServiceClient(creds, clientOptions);
 
-export const extractSkillManifestUrl = async (skills: any[]): Promise<any[]> => {
-  const skillsParsed: any[] = [];
+export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> => {
+  const skillsParsed: Skill[] = [];
   for (const skill of skills) {
-    const { manifestUrl, name } = skill;
-    if (manifestUrl && !name) {
+    const { manifestUrl } = skill;
+    if (manifestUrl) {
       const req: msRest.RequestPrepareOptions = {
         url: manifestUrl,
         method: 'GET',
@@ -31,6 +32,7 @@ export const extractSkillManifestUrl = async (skills: any[]): Promise<any[]> => 
           name: resBody?.name || '',
           description: resBody?.description || '',
           endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
+          protocol: get(resBody, 'endpoints[0].protocol', ''),
           msAppId: get(resBody, 'endpoints[0].msAppId', ''),
         });
         continue;

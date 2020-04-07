@@ -4,7 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -69,6 +69,7 @@ export interface State {
   schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  skills: Skill[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];

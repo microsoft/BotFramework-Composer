@@ -6,7 +6,6 @@ import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
 import React, { useContext } from 'react';
 import formatMessage from 'format-message';
-import get from 'lodash/get';
 
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../TestController';
@@ -18,8 +17,7 @@ import SkillList from './skill-list';
 const Skills: React.FC<RouteComponentProps> = () => {
   const { state } = useContext(StoreContext);
 
-  const { settings, projectId } = state;
-  const skills = get(settings, 'skill', []);
+  const { skills, projectId } = state;
   const toolbarItems = [
     {
       type: 'element',

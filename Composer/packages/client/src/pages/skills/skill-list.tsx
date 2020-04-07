@@ -19,6 +19,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+import { Skill } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 
@@ -27,7 +28,7 @@ import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
 import { ISkill, ISkillFormData } from './types';
 
 export interface ISkillListProps {
-  skills: ISkill[];
+  skills: Skill[];
   projectId: string;
 }
 

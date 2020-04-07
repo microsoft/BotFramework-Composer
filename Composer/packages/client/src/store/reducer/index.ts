@@ -70,6 +70,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
   state.botName = botName;
   state.location = response.data.location;
+  state.skills = response.data.skills;
   state.lgFiles = response.data.lgFiles;
   state.schemas = response.data.schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
@@ -279,8 +280,8 @@ const setDesignPageLocation: ReducerFunc = (
   return state;
 };
 
-const updateSkill: ReducerFunc = (state, { skill }) => {
-  state.settings.skill = skill;
+const updateSkill: ReducerFunc = (state, { skills }) => {
+  state.skills = skills;
   return state;
 };
 

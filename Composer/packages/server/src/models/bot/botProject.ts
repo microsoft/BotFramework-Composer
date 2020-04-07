@@ -4,7 +4,16 @@
 import fs from 'fs';
 
 import has from 'lodash/has';
-import { getNewDesigner, importResolverGenerator, FileInfo, DialogInfo, LgFile, LuFile, SDKKinds } from '@bfc/shared';
+import {
+  getNewDesigner,
+  importResolverGenerator,
+  FileInfo,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  Skill,
+  SDKKinds,
+} from '@bfc/shared';
 import { dialogIndexer, lgIndexer, luIndexer, createSingleMessage, JsonWalk, VisitorFunc } from '@bfc/indexers';
 
 import { Path } from '../../utility/path';
@@ -68,6 +77,7 @@ export class BotProject {
   public dialogs: DialogInfo[] = [];
   public luFiles: LuFile[] = [];
   public lgFiles: LgFile[] = [];
+  public skills: Skill[] = [];
   public luPublisher: LuPublisher;
   public defaultSDKSchema: {
     [key: string]: string;
@@ -93,6 +103,7 @@ export class BotProject {
 
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
+    this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.dialogs = this.indexDialogs();
     this.lgFiles = lgIndexer.index(this.files, this._getLgImportResolver());
     this.luFiles = luIndexer.index(this.files);
@@ -110,6 +121,7 @@ export class BotProject {
       dialogs: this.dialogs,
       lgFiles: this.lgFiles,
       luFiles: this.luFiles,
+      skills: this.skills,
       schemas: this.getSchemas(),
       settings: this.settings,
     };
@@ -143,12 +155,15 @@ export class BotProject {
   };
 
   // update skill in settings
-  public updateSkill = async (config: any[]) => {
+  public updateSkill = async (config: Skill[]) => {
     const settings = await this.getEnvSettings('', false);
-    const skill = await extractSkillManifestUrl(config);
-    settings.skill = skill;
+    settings.skill = config.map(({ manifestUrl }) => {
+      return { manifestUrl };
+    });
     await this.settingManager.set('', settings);
-    return skill;
+    const skills = await extractSkillManifestUrl(config);
+    this.skills = skills;
+    return skills;
   };
 
   public getSchemas = () => {
