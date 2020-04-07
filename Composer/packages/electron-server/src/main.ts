@@ -9,10 +9,13 @@ import fixPath from 'fix-path';
 
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 
+import log from './utility/logger';
+const error = log.extend('error');
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 function main() {
-  console.log('Starting electron app');
+  log('Starting electron app');
 
   // Create the browser window.
   const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
@@ -32,7 +35,7 @@ function main() {
 
   // and load the index.html of the app.
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
-  console.log('Loading project from: ', CONTENT_URL);
+  log('Loading project from: ', CONTENT_URL);
 
   win.loadURL(CONTENT_URL);
   win.maximize();
@@ -44,7 +47,7 @@ async function createAppDataDir() {
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
-  console.log('creating composer app data path at: ', composerAppDataPath);
+  log('creating composer app data path at: ', composerAppDataPath);
   await mkdirp(composerAppDataPath);
 }
 
@@ -67,9 +70,9 @@ async function run() {
     }
   });
 
-  console.log('Waiting for app to be ready...');
+  log('Waiting for app to be ready...');
   await app.whenReady();
-  console.log('App ready');
+  log('App ready');
 
   let pluginsDir = ''; // let this be assigned by start() if in development
   if (!isDevelopment) {
@@ -80,23 +83,23 @@ async function run() {
   }
 
   // only create a new data directory if packaged electron app
-  console.log('Creating app data directory...');
+  log('Creating app data directory...');
   await createAppDataDir();
-  console.log('Created app data directory.');
+  log('Created app data directory.');
 
-  console.log('Starting server...');
+  log('Starting server...');
   const { start } = await import('@bfc/server');
   await start(pluginsDir);
-  console.log('Server started. Rendering application...');
+  log('Server started. Rendering application...');
 
   main();
 }
 
 run()
   .catch(e => {
-    console.error('Error occurred while starting Composer Electron: ', e);
+    error('Error occurred while starting Composer Electron: ', e);
     app.quit();
   })
   .then(() => {
-    console.log('Run completed');
+    log('Run completed');
   });
