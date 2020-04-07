@@ -8,12 +8,12 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
 import { openObjectField } from './styles';
 import { EditableField } from './EditableField';
-import formatMessage from 'format-message';
 
 const ObjectItem = ({
   name: originalName,
