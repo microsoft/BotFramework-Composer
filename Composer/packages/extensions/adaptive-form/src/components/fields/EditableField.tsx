@@ -11,7 +11,7 @@ interface EditableFieldProps extends FieldProps {
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
-  ariaLabel: string;
+  ariaLabel?: string;
 }
 
 const EditableField: React.FC<EditableFieldProps> = props => {
