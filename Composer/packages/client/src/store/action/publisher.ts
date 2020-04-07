@@ -34,7 +34,10 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
     const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, metadata);
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
-      payload: response.data,
+      payload: {
+        ...response.data,
+        target: target,
+      },
     });
   } catch (err) {
     dispatch({
@@ -52,7 +55,10 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
     const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
     dispatch({
       type: ActionTypes.GET_PUBLISH_STATUS,
-      payload: response.data,
+      payload: {
+        ...response.data,
+        target: target,
+      },
     });
   } catch (err) {
     console.error(err.response.data.message);
@@ -65,7 +71,10 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
     console.log(response.data);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,
-      payload: response.data,
+      payload: {
+        history: response.data,
+        target: target,
+      },
     });
   } catch (error) {
     console.error(error);

@@ -402,11 +402,17 @@ const setPublishTypes: ReducerFunc = (state, { typelist }) => {
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
-  console.log('Got publish status from remote', payload);
-  if (payload.endpointURL) {
+  if (payload.target.name === 'default' && payload.endpointURL) {
     state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
     state.botStatus = BotStatus.connected;
   }
+
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[payload.target.name]) {
+    state.publishHistory[payload.target.name] = [];
+  }
+  state.publishHistory[payload.target.name].unshift(payload);
+
   return state;
 };
 
@@ -417,15 +423,26 @@ const publishFailure: ReducerFunc = (state, { error }) => {
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
-  if (payload.endpointURL) {
+  // the action below only applies to when a bot is being started using the "start bot" button
+  // a check should be added to this that ensures this ONLY applies to the "default" profile.
+  if (payload.target.name === 'default' && payload.endpointURL) {
     state.botStatus = BotStatus.connected;
     state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
+  }
+
+  // if no history exists, create one with the latest status
+  // otherwise, replace the latest publish history with this one
+  if (!state.publishHistory[payload.target.name]) {
+    state.publishHistory[payload.target.name] = [payload];
+  } else {
+    // TODO: this should only happen if they actually represent the same item...
+    state.publishHistory[payload.target.name][0] = payload;
   }
   return state;
 };
 
 const getPublishHistory: ReducerFunc = (state, payload) => {
-  state.publishHistory = payload;
+  state.publishHistory[payload.target.name] = payload.history;
   return state;
 };
 

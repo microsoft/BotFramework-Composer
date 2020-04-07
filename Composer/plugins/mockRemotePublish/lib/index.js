@@ -56,8 +56,10 @@ class LocalPublisher {
             const profileName = config.name;
             const botId = project.id;
             if (this.data[botId] && this.data[botId][profileName]) {
+                const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
+                console.log('RETURNING MOST RECENT ITEM FROM HISTORY...', response);
                 // return latest status
-                return this.data[botId][profileName][this.data[botId].length - 1];
+                return response;
             }
             else {
                 return {

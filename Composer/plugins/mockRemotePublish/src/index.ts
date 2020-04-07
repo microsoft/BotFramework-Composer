@@ -66,8 +66,9 @@ class LocalPublisher {
     const botId = project.id;
 
     if (this.data[botId] && this.data[botId][profileName]) {
+      const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
       // return latest status
-      return this.data[botId][profileName][this.data[botId].length - 1];
+      return response;
     } else {
       return {
         status: 200,

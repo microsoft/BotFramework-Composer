@@ -95,7 +95,9 @@ export interface State {
   };
   clipboardActions: any[];
   publishTypes: string[];
-  publishHistory: any[];
+  publishHistory: {
+    [key: string]: any[];
+  };
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
