@@ -30,10 +30,3 @@ export const setVisualEditorClipboard: ActionCreator = ({ dispatch }, clipboardA
     },
   });
 };
-
-export const setCodeEditorSettings: ActionCreator = ({ dispatch }, settings: Partial<CodeEditorSettings>) => {
-  dispatch({
-    type: ActionTypes.SET_CODE_EDITOR_SETTINGS,
-    payload: settings,
-  });
-};

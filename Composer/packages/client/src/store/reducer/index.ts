@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -447,9 +448,9 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
 };
 
 const setCodeEditorSettings: ReducerFunc = (state, settings) => {
-  const newSettings = { ...state.codeEditorSettings, ...settings };
-  storage.set('codeEditorSettings', newSettings);
-  state.codeEditorSettings = newSettings;
+  const newSettings = merge(state.userSettings, settings);
+  storage.set('userSettings', newSettings);
+  state.userSettings = newSettings;
   return state;
 };
 
@@ -503,5 +504,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
-  [ActionTypes.SET_CODE_EDITOR_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
 });

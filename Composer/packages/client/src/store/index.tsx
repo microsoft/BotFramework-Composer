@@ -78,9 +78,14 @@ const initialState: State = {
   clipboardActions: [],
   publishTypes: [],
   publishTargets: [],
-  codeEditorSettings: storage.get('codeEditorSettings', {
-    lineNumbers: false,
-    wordWrap: false,
+  userSettings: storage.get('userSettings', {
+    codeEditor: {
+      lineNumbers: false,
+      wordWrap: false,
+    },
+    propertyEditor: {
+      width: 400,
+    },
   }),
 };
 

@@ -3,7 +3,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
-import { CodeEditorSettings } from './editor';
+import { UserSettings } from './settings';
+
+/** Recursively marks all properties as optional. */
+type AllPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
+};
 
 export interface EditorSchema {
   content?: {
@@ -38,7 +43,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  codeEditorSettings: CodeEditorSettings;
+  userSettings: UserSettings;
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -62,5 +67,5 @@ export interface ShellApi {
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
-  updateCodeEditorSettings: (settings: Partial<CodeEditorSettings>) => void;
+  updateUserSettings: (settings: AllPartial<UserSettings>) => void;
 }

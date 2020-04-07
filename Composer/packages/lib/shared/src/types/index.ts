@@ -3,9 +3,9 @@
 
 export * from './diagnostic';
 export * from './dialogUtils';
-export * from './editor';
 export * from './indexers';
 export * from './schema';
 export * from './sdk';
+export * from './settings';
 export * from './server';
 export * from './shell';

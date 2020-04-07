@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
-  const { currentDialog, designerId, luFiles, shellApi, locale, projectId, codeEditorSettings } = useShellApi();
+  const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
   const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
@@ -42,6 +42,10 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     onChange(intentName);
   };
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    shellApi.updateUserSettings({ codeEditor: settings });
+  };
+
   const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
   return (
@@ -51,8 +55,8 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
       value={luIntent.Body}
       onChange={commitChanges}
       diagnostics={diagnostics}
-      editorSettings={codeEditorSettings}
-      onChangeSettings={shellApi.updateCodeEditorSettings}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };

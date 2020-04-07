@@ -33,7 +33,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     luFiles,
     projectId,
     schemas,
-    codeEditorSettings,
+    userSettings,
   } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -235,7 +235,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     undo: actions.undo,
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
-    updateCodeEditorSettings: actions.setCodeEditorSettings,
+    updateUserSettings: actions.setUserSettings,
   };
 
   const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
@@ -258,7 +258,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         lgFiles,
         luFiles,
         currentDialog,
-        codeEditorSettings,
+        userSettings,
         designerId: get(editorData, '$designer.id'),
         focusedEvent: selected,
         focusedActions: focused ? [focused] : [],

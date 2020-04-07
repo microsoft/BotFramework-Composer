@@ -193,7 +193,6 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
   useEffect(() => {
     if (editor && editorSettings) {
-      console.log('[BFC] updating options:', editorOptions);
       setEditorOptions(mergeEditorSettings(baseOptions, editorSettings));
     }
   }, [editorSettings]);
