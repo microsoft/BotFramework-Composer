@@ -31,7 +31,7 @@ export function CreateOptions(props) {
   const selection = new Selection({
     onSelectionChanged: () => {
       const t = selection.getSelection()[0];
-      if (t && option === 'Create from template') {
+      if (t) {
         setTemplate(t.id);
       }
     },

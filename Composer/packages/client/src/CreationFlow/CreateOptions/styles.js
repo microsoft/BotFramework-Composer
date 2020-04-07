@@ -68,48 +68,20 @@ export const listHeader = css`
 `;
 
 export const rowDetails = disabled => {
-  // root: {
-  //   background: NeutralColors.green,
-  //   color: NeutralColors.gray80,
-  // },
-  // '.ms-DetailsRow-cell': {
-  //   '&:hover': {
-  //     background: NeutralColors.white,
-  //     color: NeutralColors.gray80,
-  //   },
-  // },
-  // cell: {
-  //   '&:hover': {
-  //     background: NeutralColors.white,
-  //     color: NeutralColors.gray80,
-  //   },
-  // },
-  // fields: {
-  //   '&:hover': {
-  //     background: NeutralColors.white,
-  //     color: NeutralColors.gray80,
-  //   },
-  // },
   return {
-    root: css`
-      background: ${NeutralColors.red};
-      color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
-      :hover {
-        background: ${NeutralColors.white};
-        color: ${NeutralColors.gray80};
-      }
-    `,
-    '.ms-DetailsRow-cell:hover': {
-      background: NeutralColors.white,
-      color: NeutralColors.gray80,
+    root: {
+      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      selectors: {
+        ':hover': {
+          background: disabled ? NeutralColors.white : NeutralColors.gray30,
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+        },
+        // '.ms-DetailsRow.is-selected': {
+        //   background: disabled ? NeutralColors.white : NeutralColors.gray30,
+        //   color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+        // },
+      },
     },
-    cell: css`
-      color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
-      .ms-DetailsRow-cell:hover {
-        background: ${NeutralColors.white};
-        color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
-      }
-    `,
   };
 };
 
@@ -117,6 +89,12 @@ export const rowTitle = disabled => {
   return {
     cellTitle: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+      selectors: {
+        ':hover': {
+          background: disabled ? NeutralColors.white : NeutralColors.gray30,
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+        },
+      },
     },
   };
 };
