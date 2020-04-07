@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { RichEditor } from '../../src';
+import { BaseEditor } from '../../src';
 
 const LU_HELP = 'https://aka.ms/lu-file-format';
 
@@ -28,7 +28,7 @@ export default function App() {
         <button onClick={() => setShowError(!showError)}>Toggle Error</button>
         <button onClick={() => setShowWarning(!showWarning)}>Toggle Warning</button>
       </div>
-      <RichEditor
+      <BaseEditor
         onChange={newVal => setValue(newVal)}
         value={value}
         placeholder={placeholder}
