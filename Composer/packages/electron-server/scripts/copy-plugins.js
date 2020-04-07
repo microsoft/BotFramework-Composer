@@ -3,7 +3,7 @@
 
 const fs = require('fs-extra');
 const { resolve } = require('path');
-const electronServerPackage = require('../package.json');
+const electronBuildConfig = require('../electron-builder-config.json');
 
 const source = resolve(__dirname, '../../../plugins');
 console.log('[copy-plugins.js] Copying plugins from: ', source);
@@ -11,7 +11,7 @@ console.log('[copy-plugins.js] Copying plugins from: ', source);
 let destination;
 switch (process.platform) {
   case 'darwin':
-    const productName = electronServerPackage.build.productName;
+    const productName = electronBuildConfig.productName;
     destination = resolve(
       __dirname,
       `../dist/mac/${productName}.app/Contents/Resources/app.asar.unpacked/build/plugins`
