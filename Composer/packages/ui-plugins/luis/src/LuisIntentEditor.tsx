@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
@@ -49,15 +51,17 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
   return (
-    <LuEditor
-      height={150}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
-      value={luIntent.Body}
-      onChange={commitChanges}
-      diagnostics={diagnostics}
-      editorSettings={userSettings.codeEditor}
-      onChangeSettings={handleSettingsChange}
-    />
+    <div css={{ marginTop: '-26px' }}>
+      <LuEditor
+        height={150}
+        luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
+        value={luIntent.Body}
+        onChange={commitChanges}
+        diagnostics={diagnostics}
+        editorSettings={userSettings.codeEditor}
+        onChangeSettings={handleSettingsChange}
+      />
+    </div>
   );
 };
 

@@ -67,7 +67,7 @@ export const loginUser: ActionCreator = async store => {
   }
 };
 
-export const setUserSettings: ActionCreator = ({ dispatch }, settings: Partial<UserSettings>) => {
+export const updateUserSettings: ActionCreator = ({ dispatch }, settings: Partial<UserSettings>) => {
   dispatch({
     type: ActionTypes.SET_USER_SETTINGS,
     payload: settings,

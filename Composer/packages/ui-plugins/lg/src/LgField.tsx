@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
@@ -103,19 +105,21 @@ const LgField: React.FC<FieldProps<string>> = props => {
   return (
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
-      <LgEditor
-        height={100}
-        value={localValue}
-        onChange={onChange}
-        diagnostics={diagnostics}
-        hidePlaceholder
-        languageServer={{
-          path: lspServerPath,
-        }}
-        lgOption={lgOption}
-        editorSettings={userSettings.codeEditor}
-        onChangeSettings={handleSettingsChange}
-      />
+      <div css={{ marginTop: '-16px' }}>
+        <LgEditor
+          height={100}
+          value={localValue}
+          onChange={onChange}
+          diagnostics={diagnostics}
+          hidePlaceholder
+          languageServer={{
+            path: lspServerPath,
+          }}
+          lgOption={lgOption}
+          editorSettings={userSettings.codeEditor}
+          onChangeSettings={handleSettingsChange}
+        />
+      </div>
     </React.Fragment>
   );
 };

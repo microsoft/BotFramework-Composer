@@ -29,7 +29,7 @@ const defaultOptions = {
     enabled: false,
   },
   lineDecorationsWidth: 10,
-  lineNumbersMinChars: 0,
+  lineNumbersMinChars: 3,
   glyphMargin: false,
   folding: false,
   renderLineHighlight: 'none',
@@ -70,7 +70,6 @@ const styles = {
     display: flex;
     width: 100%;
     justify-content: flex-end;
-    margin-top: -26px;
     margin-bottom: 5px;
   `,
 };
@@ -80,8 +79,6 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     ...baseOptions,
     lineNumbers: overrides.lineNumbers ? 'on' : 'off',
     wordWrap: overrides.wordWrap ? 'on' : 'off',
-    lineNumbersMinChars: overrides.lineNumbers ? 3 : baseOptions.lineNumbersMinChars,
-    lineDecorationsWidth: overrides.lineNumbers ? 10 : baseOptions.lineDecorationsWidth,
   };
 };
 
@@ -236,6 +233,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
           <IconButton
             menuProps={{ items: optionsMenuItems, shouldFocusOnMount: true }}
             iconProps={{ iconName: 'Settings' }}
+            ariaLabel={formatMessage('Editor Settings')}
             styles={{
               root: {
                 fontSize: '12px',

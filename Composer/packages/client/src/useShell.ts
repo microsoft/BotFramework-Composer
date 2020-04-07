@@ -235,7 +235,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     undo: actions.undo,
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
-    updateUserSettings: actions.setUserSettings,
+    updateUserSettings: actions.updateUserSettings,
   };
 
   const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
