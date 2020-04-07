@@ -25,7 +25,7 @@
     "@reach/router": "^1.2.1",
     "adaptive-expressions": "^4.8.0-preview-110700",
     "axios": "^0.18.0",
-    "botbuilder-lg": "^4.9.0-preview-115821",
+    "botbuilder-lg": "^4.9.0-preview-117748",
     "format-message": "^6.2.3",
     "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",
