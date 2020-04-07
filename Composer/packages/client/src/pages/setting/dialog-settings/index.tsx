@@ -33,7 +33,6 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const editing = true;
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
 
   const slots = [
@@ -43,7 +42,7 @@ export const DialogSettings = () => {
 
   const changeSlot = (_, option) => {
     setSlot(option.key);
-    actions.setDialogSettingsSlot(projectId, editing, option.key);
+    actions.setDialogSettingsSlot(projectId, option.key);
   };
 
   const saveChangeResult = result => {
@@ -57,9 +56,7 @@ export const DialogSettings = () => {
   };
 
   const handleChange = debounce(result => {
-    if (editing) {
-      saveChangeResult(result);
-    }
+    saveChangeResult(result);
   }, 200);
 
   const hostedControl = () => (
@@ -87,12 +84,7 @@ export const DialogSettings = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor
-          onChange={x => handleChange(x)}
-          options={{ readOnly: !editing }}
-          value={visibleSettings}
-          obfuscate={!editing}
-        />
+        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} />
       </div>
     </div>
   ) : (

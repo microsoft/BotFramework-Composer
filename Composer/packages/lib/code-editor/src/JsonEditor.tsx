@@ -2,40 +2,24 @@
 // Licensed under the MIT License.
 import React, { useState } from 'react';
 
-import * as utils from './utils';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | 'errorMessage' | 'onChange'> {
   onChange: (jsonData: any) => void;
   value?: object;
-  obfuscate?: boolean;
   schema?: any;
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
-  const {
-    options: additionalOptions,
-    value: initialValue,
-    onChange,
-    obfuscate,
-    onInit: onInitProp,
-    schema,
-    id,
-    ...rest
-  } = props;
+  const { options: additionalOptions, value: initialValue, onChange, onInit: onInitProp, schema, id, ...rest } = props;
 
   const [parseError, setParseError] = useState<string>('');
   const options = {
     quickSuggestions: true,
     folding: false,
-    readOnly: obfuscate,
+    readOnly: false,
     ...additionalOptions,
   };
-
-  const value = (() => {
-    const result = obfuscate ? utils.obfuscate(initialValue) : initialValue;
-    return JSON.stringify(result, null, 2);
-  })();
 
   const onInit: OnInit = monaco => {
     const disposable = monaco.editor.onDidCreateModel(model => {
@@ -94,12 +78,11 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
 
   return (
     <BaseEditor
-      key={obfuscate ? 'notedit' : 'edit'}
       id={id}
       helpURL="https://www.json.org"
       language="json"
       options={options}
-      value={value}
+      value={JSON.stringify(initialValue, null, 2)}
       onChange={handleChange}
       errorMessage={parseError}
       onInit={onInit}
