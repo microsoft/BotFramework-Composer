@@ -115,8 +115,7 @@ export async function start(pluginDir?: string) {
   await new Promise(resolve => {
     server = app.listen(port, () => {
       if (process.env.NODE_ENV === 'production') {
-        // eslint-disable-next-line no-console
-        console.log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+        log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
       }
       resolve();
     });
