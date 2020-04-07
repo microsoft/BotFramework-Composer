@@ -15,16 +15,13 @@ export const undoActionsMiddleware = (store: Store) => next => {
       for (const stack of undoStacks) {
         await stack.undo(store);
       }
-      return;
     } else if (action.type === ActionTypes.REDO && undoHistory.canRedo()) {
       const redoStacks = undoHistory.redo();
       for (const stack of redoStacks) {
         await stack.redo(store);
       }
-      return;
     } else if (action.type === ActionTypes.HISTORY_CLEAR) {
       undoHistory.clear();
-      return;
     }
     return next(action);
   };

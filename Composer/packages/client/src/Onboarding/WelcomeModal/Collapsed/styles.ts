@@ -10,11 +10,8 @@ export const content = css`
   color: ${palette.white};
   display: flex;
   padding: 10px;
-
-  div {
-    padding: 5px 0;
-    margin-right: 40px;
-  }
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const buttonStyles: IButtonStyles = {

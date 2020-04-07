@@ -13,9 +13,8 @@
     "umd"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:css && yarn build:ts",
+    "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build tsconfig.build.json",
-    "build:css": "copyfiles --up 1 \"src/**/*.css\" \"src/**/*.scss\" lib",
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
@@ -36,8 +36,8 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale } = useShellApi();
 
-  const singleLgRefMatched = value && value.match(`@\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`);
-  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name.trim(), designerId || '').toString();
+  const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
+  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
 
@@ -48,9 +48,9 @@ const LgField: React.FC<FieldProps<string>> = props => {
     [lgName, lgFileId]
   );
 
-  const hasTemplate = useMemo(() => lgFile?.templates.find(t => t.name === lgName), []);
-  const template = (hasTemplate &&
-    lgFile?.templates.find(template => {
+  const template = (lgFile &&
+    lgFile.templates &&
+    lgFile.templates.find(template => {
       return template.name === lgName;
     })) || {
     name: lgName,
@@ -58,29 +58,9 @@ const LgField: React.FC<FieldProps<string>> = props => {
     body: getInitialTemplate(name, value),
   };
 
-  const [localValue, setLocalValue] = useState(template.body);
-  const onChange = (body: string) => {
-    setLocalValue(body);
-    if (designerId) {
-      if (body) {
-        updateLgTemplate(body);
-        props.onChange(new LgTemplateRef(lgName).toString());
-      } else {
-        shellApi.removeLgTemplate(lgFileId, lgName);
-        props.onChange();
-      }
-    }
-  };
-
-  useEffect(() => {
-    // create the lg template if the schema porvides a default value
-    if (template.body && !hasTemplate) {
-      onChange(template.body);
-    }
-  }, []);
-
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
+  const [localValue, setLocalValue] = useState(template.body);
   const sync = useRef(
     debounce((shellData: any, localData: any) => {
       if (!isEqual(shellData, localData)) {
@@ -101,6 +81,19 @@ const LgField: React.FC<FieldProps<string>> = props => {
     projectId,
     fileId: lgFileId,
     templateId: lgName,
+  };
+
+  const onChange = (body: string) => {
+    setLocalValue(body);
+    if (designerId) {
+      if (body) {
+        updateLgTemplate(body);
+        props.onChange(new LgTemplateRef(lgName).toString());
+      } else {
+        shellApi.removeLgTemplate(lgFileId, lgName);
+        props.onChange();
+      }
+    }
   };
 
   return (

@@ -55,7 +55,7 @@ export interface State {
   locale: string;
   botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
-  /** the data path for FormEditor */
+  /** the data path for PropertyEditor */
   focusPath: string;
   templateProjects: ProjectTemplate[];
   recentProjects: any[];

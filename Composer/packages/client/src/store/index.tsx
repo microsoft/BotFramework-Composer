@@ -12,9 +12,18 @@ import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc, StorageFolder } from './types';
+import {
+  State,
+  ActionHandlers,
+  BoundActionHandlers,
+  MiddlewareApi,
+  MiddlewareFunc,
+  StorageFolder,
+  Store,
+} from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
+import filePersistence from './persistence/FilePersistence';
 
 const { defaultFileResolver } = LGParser;
 
@@ -27,7 +36,7 @@ const initialState: State = {
   locale: 'en-us',
   botEndpoints: {},
   remoteEndpoints: {},
-  focusPath: '', // the data path for FormEditor
+  focusPath: '', // the data path for PropertyEditor
   recentProjects: [],
   templateProjects: [],
   storages: [],
@@ -98,14 +107,26 @@ interface StoreProviderProps {
 }
 
 const prepareAxiosWithStore = once(prepareAxios);
-export const applyMiddleware = (middlewareApi: MiddlewareApi, ...middlewares: MiddlewareFunc[]) => {
+
+export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) => {
+  let dispatch: React.Dispatch<ActionType> = () => {};
+  const middlewareApi: MiddlewareApi = {
+    getState: store.getState,
+    dispatch: (...args) => dispatch(...args),
+  };
   const chain = middlewares.map(middleware => middleware(middlewareApi));
-  const dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(middlewareApi.dispatch);
+  dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(store.dispatch);
   return dispatch;
 };
 
+export const wrappedReducer = (state: State, action: ActionType) => {
+  const currentState = reducer(state, action);
+  filePersistence.notify(state, currentState, action);
+  return currentState;
+};
+
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(wrappedReducer, initialState);
   const stateRef = useRef<State>(initialState);
 
   stateRef.current = state;
@@ -138,6 +159,6 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
   };
 
   prepareAxiosWithStore({ dispatch, getState });
-
+  filePersistence.registerHandleError({ dispatch, getState });
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

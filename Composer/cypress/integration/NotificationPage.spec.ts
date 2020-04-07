@@ -60,7 +60,7 @@ context('Notification Page', () => {
       cy.findByText('WelcomeUser').should('exist');
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition')
         .focus()
