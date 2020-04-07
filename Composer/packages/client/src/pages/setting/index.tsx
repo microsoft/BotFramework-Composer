@@ -22,7 +22,7 @@ import { title, fileList, contentEditor } from './styles';
 
 const absHosted = isAbsHosted();
 
-const SettingPage: React.FC<RouteComponentProps<{ subpage: string }>> = props => {
+const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
   const { state } = useContext(StoreContext);
   const { projectId } = state;
   const makeProjectLink = (id: string, path: string) => {
@@ -38,7 +38,11 @@ const SettingPage: React.FC<RouteComponentProps<{ subpage: string }>> = props =>
 
   const links: INavLink[] = [
     { key: 'dialog-settings', name: settingLabels.settings, url: '' },
-    { key: `${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
+    {
+      key: `${absHosted ? 'remote-publish' : 'deployment'}`,
+      name: settingLabels.publish,
+      url: '',
+    },
     { key: 'preferences', name: settingLabels.preferences, url: '' },
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
@@ -66,7 +70,7 @@ const SettingPage: React.FC<RouteComponentProps<{ subpage: string }>> = props =>
           <div css={fileList}>
             <Tree variant="large">
               <Nav
-                initialSelectedKey={props.subpage}
+                initialSelectedKey={props['*'] || 'dialog-settings'}
                 onRenderGroupHeader={_onRenderGroupHeader}
                 groups={[
                   {

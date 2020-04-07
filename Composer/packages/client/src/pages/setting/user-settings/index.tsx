@@ -11,12 +11,13 @@ import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
 
 import { container, title, description, link, section } from './styles';
 
-export const UserSettings = () => {
+export const UserSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
   const {
