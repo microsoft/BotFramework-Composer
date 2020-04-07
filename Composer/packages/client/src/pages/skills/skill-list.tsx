@@ -25,7 +25,7 @@ import { StoreContext } from '../../store';
 
 import SkillForm from './skill-form';
 import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
-import { ISkill, ISkillFormData } from './types';
+import { ISkillFormData } from './types';
 
 export interface ISkillListProps {
   skills: Skill[];
@@ -41,7 +41,7 @@ const columns: IColumn[] = [
     maxWidth: 150,
     isResizable: true,
     data: 'string',
-    onRender: (item: ISkill) => {
+    onRender: (item: Skill) => {
       return <div css={TableCell}>{item.name}</div>;
     },
   },
@@ -52,7 +52,7 @@ const columns: IColumn[] = [
     minWidth: 200,
     isResizable: true,
     data: 'string',
-    onRender: (item: ISkill) => {
+    onRender: (item: Skill) => {
       return <div css={TableCell}>{item.msAppId}</div>;
     },
   },
@@ -63,7 +63,7 @@ const columns: IColumn[] = [
     minWidth: 300,
     isResizable: true,
     data: 'string',
-    onRender: (item: ISkill) => {
+    onRender: (item: Skill) => {
       return <div css={TableCell}>{item.endpointUrl}</div>;
     },
   },
@@ -74,7 +74,7 @@ const columns: IColumn[] = [
     minWidth: 300,
     isResizable: true,
     data: 'string',
-    onRender: (item: ISkill) => {
+    onRender: (item: Skill) => {
       return <div css={TableCell}>{item.description}</div>;
     },
   },
