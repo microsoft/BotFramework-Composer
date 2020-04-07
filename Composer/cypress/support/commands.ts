@@ -9,7 +9,7 @@ Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
     cy.findByText('New').click();
   });
   cy.findByTestId('Create from template').click({ force: true });
-  cy.findByTestId(`${bobotId}`).click();
+  cy.findByTestId(`${bobotId}`).click({ force: true });
   cy.findByTestId('NextStepButton').click();
   cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName || bobotId}{enter}`);
   // eslint-disable-next-line cypress/no-unnecessary-waiting

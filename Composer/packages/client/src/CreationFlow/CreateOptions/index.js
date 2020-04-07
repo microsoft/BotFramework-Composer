@@ -111,7 +111,9 @@ export function CreateOptions(props) {
   };
   const onRenderRow = props => {
     if (props) {
-      return <DetailsRow {...props} styles={rowDetails(disabled)} />;
+      return (
+        <DetailsRow {...props} styles={rowDetails(disabled)} data-testid={props.item.id} tabIndex={props.itemIndex} />
+      );
     }
     return null;
   };

@@ -21,7 +21,7 @@ context('Creating a new bot', () => {
 
   it('can create a bot from the ToDo template', () => {
     cy.findByTestId('Create from template').click();
-    cy.findByTestId('TodoSample').click();
+    cy.findByTestId('TodoSample').click({ force: true });
     cy.findByTestId('NextStepButton').click();
     cy.findByTestId('NewDialogName').type('{selectall}__TestNewProject2{enter}');
     cy.findByTestId('ProjectTree').within(() => {
