@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
@@ -12,7 +13,6 @@ import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
-import formatMessage from 'format-message';
 
 const declareElementAttributes = (id: string) => {
   return {
