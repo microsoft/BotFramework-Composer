@@ -9,7 +9,6 @@ export interface CodeEditorSettings {
 
 export interface UserSettings {
   codeEditor: CodeEditorSettings;
-  propertyEditor: {
-    width: number;
-  };
+  propertyEditorWidth: number;
+  dialogNavWidth: number;
 }

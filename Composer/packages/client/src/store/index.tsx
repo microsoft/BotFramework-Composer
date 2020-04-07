@@ -84,9 +84,8 @@ const initialState: State = {
       wordWrap: false,
       minimap: false,
     },
-    propertyEditor: {
-      width: 400,
-    },
+    propertyEditorWidth: 400,
+    dialogNavWidth: 180,
   }),
 };
 

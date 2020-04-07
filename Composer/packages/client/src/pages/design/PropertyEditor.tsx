@@ -16,10 +16,10 @@ import { formEditor } from './styles';
 
 const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');
-  const currentWidth = shellData?.userSettings?.propertyEditor?.width || 400;
+  const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;
 
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    shellApi.updateUserSettings({ propertyEditor: { width: currentWidth + d.width } });
+    shellApi.updateUserSettings({ propertyEditorWidth: currentWidth + d.width });
   };
 
   return (
