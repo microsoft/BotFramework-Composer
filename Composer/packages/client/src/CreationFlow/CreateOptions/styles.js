@@ -72,14 +72,14 @@ export const rowDetails = disabled => {
     root: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
       selectors: {
-        ':hover': {
+        '&:hover': {
           background: disabled ? NeutralColors.white : NeutralColors.gray30,
           color: disabled ? NeutralColors.gray80 : NeutralColors.black,
         },
-        // '.ms-DetailsRow.is-selected': {
-        //   background: disabled ? NeutralColors.white : NeutralColors.gray30,
-        //   color: disabled ? NeutralColors.gray80 : NeutralColors.black,
-        // },
+        '&.ms-DetailsRow.is-selected': {
+          background: disabled ? NeutralColors.white : NeutralColors.gray30,
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+        },
       },
     },
   };
