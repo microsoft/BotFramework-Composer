@@ -1,7 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { CodeEditorSettings } from '@bfc/shared';
-
 import { ActionCreator } from '../types';
 
 import { ActionTypes } from './../../constants';
