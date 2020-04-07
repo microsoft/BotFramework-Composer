@@ -19,7 +19,7 @@
             "id": "870620"
           },
           "property": "dialog.todo",
-          "prompt": "OK, please enter the title of the todo you want to remove.",
+          "prompt": "${bfdprompt-870620()}",
           "maxTurnCount": 3,
           "value": "=@title",
           "alwaysPrompt": false,
