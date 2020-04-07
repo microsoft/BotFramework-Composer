@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-
+import { NeutralColors } from '@uifabric/fluent-theme';
 export const choiceGroup = {
   flexContainer: {
     width: '100%',
@@ -66,3 +66,57 @@ export const listHeader = css`
   margin-top: 10px;
   margin-bottom: 0;
 `;
+
+export const rowDetails = disabled => {
+  // root: {
+  //   background: NeutralColors.green,
+  //   color: NeutralColors.gray80,
+  // },
+  // '.ms-DetailsRow-cell': {
+  //   '&:hover': {
+  //     background: NeutralColors.white,
+  //     color: NeutralColors.gray80,
+  //   },
+  // },
+  // cell: {
+  //   '&:hover': {
+  //     background: NeutralColors.white,
+  //     color: NeutralColors.gray80,
+  //   },
+  // },
+  // fields: {
+  //   '&:hover': {
+  //     background: NeutralColors.white,
+  //     color: NeutralColors.gray80,
+  //   },
+  // },
+  return {
+    root: css`
+      background: ${NeutralColors.red};
+      color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
+      :hover {
+        background: ${NeutralColors.white};
+        color: ${NeutralColors.gray80};
+      }
+    `,
+    '.ms-DetailsRow-cell:hover': {
+      background: NeutralColors.white,
+      color: NeutralColors.gray80,
+    },
+    cell: css`
+      color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
+      .ms-DetailsRow-cell:hover {
+        background: ${NeutralColors.white};
+        color: ${disabled ? NeutralColors.gray80 : NeutralColors.black};
+      }
+    `,
+  };
+};
+
+export const rowTitle = disabled => {
+  return {
+    cellTitle: {
+      color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+    },
+  };
+};

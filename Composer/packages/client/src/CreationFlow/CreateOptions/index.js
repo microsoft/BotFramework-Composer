@@ -3,14 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import {
   DetailsList,
@@ -21,10 +20,11 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 
-import { detailListContainer, listHeader, templateItem, optionRoot, optionIcon } from './styles';
+import { detailListContainer, listHeader, rowDetails, rowTitle, optionRoot, optionIcon } from './styles';
 
 export function CreateOptions(props) {
   const [option, setOption] = useState('CreateFromScratch');
+  const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
   const emptyBotKey = templates[1].id;
   const [template, setTemplate] = useState(emptyBotKey);
@@ -49,6 +49,11 @@ export function CreateOptions(props) {
 
   const handleChange = (event, option) => {
     setOption(option.key);
+    if (option.key === 'CreateFromTemplate') {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   };
 
   const handleJumpToNext = () => {
@@ -66,12 +71,10 @@ export function CreateOptions(props) {
       fieldName: 'name',
       minWidth: 150,
       maxWidth: 200,
-      isRowHeader: true,
-      isResizable: true,
+      isResizable: !disabled,
       data: 'string',
-      onRender: item => {
-        return <span aria-label={item.name}>{item.name}</span>;
-      },
+      styles: rowTitle(disabled),
+      onRender: item => item.name,
     },
     {
       key: 'column2',
@@ -79,8 +82,9 @@ export function CreateOptions(props) {
       fieldName: 'dateModifiedValue',
       minWidth: 200,
       maxWidth: 450,
-      isResizable: true,
+      isResizable: !disabled,
       data: 'string',
+      styles: rowTitle(disabled),
       onRender: item => item.description,
     },
     {
@@ -89,8 +93,9 @@ export function CreateOptions(props) {
       fieldName: 'dateCreatedTime',
       minWidth: 60,
       maxWidth: 70,
-      isResizable: true,
+      isResizable: !disabled,
       data: 'number',
+      styles: rowTitle(disabled),
       onRender: item => new Date(item.createdTime).toLocaleDateString(),
     },
   ];
@@ -100,21 +105,13 @@ export function CreateOptions(props) {
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
   };
-  //to add customer disable
   const onRenderRow = props => {
-    //console.log(props);
-    // if (option === 'create from template') {
-    //   console.log(option);
-    // }
-    const customStyles = {};
     if (props) {
-      customStyles.root = { backgroundColor: 'white' };
-      return <DetailsRow {...props} styles={customStyles} />;
+      return <DetailsRow {...props} styles={rowDetails(disabled)} />;
     }
     return null;
   };
@@ -150,7 +147,7 @@ export function CreateOptions(props) {
             getKey={item => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             isHeaderVisible={true}
-            selectionMode={SelectionMode.single}
+            selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
             checkboxVisibility={CheckboxVisibility.hidden}
             onRenderDetailsHeader={onRenderDetailsHeader}
             onRenderRow={onRenderRow}
