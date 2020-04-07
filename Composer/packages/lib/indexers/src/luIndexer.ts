@@ -3,11 +3,19 @@
 
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
-import { LuIntentSection } from '@bfc/shared';
+import {
+  FileInfo,
+  LuFile,
+  LuParsed,
+  LuSectionTypes,
+  LuIntentSection,
+  Diagnostic,
+  Position,
+  Range,
+  DiagnosticSeverity,
+} from '@bfc/shared';
 
-import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
 import { getBaseName } from './utils/help';
-import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
 
 const { luParser } = sectionHandler;
@@ -21,8 +29,8 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
   };
   const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
-  const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
-  const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);
+  const start: Position = d.Range ? new Position(d.Range.Start.Line, d.Range.Start.Character) : new Position(0, 0);
+  const end: Position = d.Range ? new Position(d.Range.End.Line, d.Range.End.Character) : new Position(0, 0);
   result.range = new Range(start, end);
 
   return result;
@@ -89,10 +97,10 @@ function index(files: FileInfo[]): LuFile[] {
   const filtered = files.filter(file => file.name.endsWith(FileExtensions.Lu));
 
   const luFiles = filtered.map(file => {
-    const { name, content, relativePath } = file;
+    const { name, content } = file;
     const id = getBaseName(name);
     const { intents, diagnostics } = parse(content, id);
-    return { id, relativePath, content, intents, diagnostics, lastModified: file.lastModified };
+    return { id, content, intents, diagnostics };
   });
 
   return luFiles;

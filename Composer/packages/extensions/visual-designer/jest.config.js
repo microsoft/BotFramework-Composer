@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 const path = require('path');
+
 module.exports = {
+  displayName: 'visual-designer',
   preset: 'ts-jest/presets/js-with-babel',
   testPathIgnorePatterns: ['"/node_modules/(?!office-ui-fabric-react).+\\.js$"', '/node_modules/', '/jestMocks/'],
   moduleNameMapper: {

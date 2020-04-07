@@ -1,11 +1,11 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "714288"
   },
   "autoEndDialog": false,
   "recognizer": {
-    "$type": "Microsoft.RegexRecognizer",
+    "$kind": "Microsoft.RegexRecognizer",
     "intents": [
       {
         "intent": "JokeIntent",
@@ -19,46 +19,46 @@
   },
   "triggers": [
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "563828"
       },
       "actions": [
         {
-          "$type": "Microsoft.ReplaceDialog",
+          "$kind": "Microsoft.ReplaceDialog",
           "dialog": "telljokedialog"
         }
       ],
       "intent": "JokeIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "473201"
       },
       "actions": [
         {
-          "$type": "Microsoft.ReplaceDialog",
+          "$kind": "Microsoft.ReplaceDialog",
           "dialog": "fortunetellerdialog"
         }
       ],
       "intent": "FortuneTellerIntent"
     },
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "644475"
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "646692"
           },
           "condition": "user.name == null",
           "actions": [
             {
-              "$type": "Microsoft.TextInput",
+              "$kind": "Microsoft.TextInput",
               "$designer": {
                 "id": "823146"
               },
@@ -71,7 +71,7 @@
           ]
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "120128"
           },

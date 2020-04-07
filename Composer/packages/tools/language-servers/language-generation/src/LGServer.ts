@@ -15,10 +15,12 @@ import {
   CompletionItem,
   Range,
   DiagnosticSeverity,
+  TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { filterTemplateDiagnostics, isValid, MemoryResolver } from '@bfc/indexers';
+import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
+import { MemoryResolver } from '@bfc/shared';
 import { ImportResolverDelegate, Templates } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
@@ -31,12 +33,14 @@ import {
   LGOption,
   LGCursorState,
   updateTemplate,
+  cardTypes,
+  cardPropDict,
 } from './utils';
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE } = LGCursorState;
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
@@ -77,15 +81,19 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.'],
+            triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
+          documentOnTypeFormattingProvider: {
+            firstTriggerCharacter: '\n',
+          },
         },
       };
     });
     this.connection.onCompletion(params => this.completion(params));
     this.connection.onHover(params => this.hover(params));
+    this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
@@ -303,6 +311,58 @@ export class LGServer {
     return resultArr.join(' ,');
   }
 
+  private matchLineState(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): LGCursorState | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if (
+        (state[state.length - 1] === TEMPLATENAME || templateId) &&
+        (line.trim() === '[' || line.trim() === '[]')
+      ) {
+        state.push(STRUCTURELG);
+      }
+    }
+
+    return state.length >= 1 ? state.pop() : undefined;
+  }
+
+  private matchCardTypeState(params: TextDocumentPositionParams, templateId: string | undefined): string | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    let lastLine = '';
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+        state.push(STRUCTURELG);
+        lastLine = line;
+      } else if (state[state.length - 1] === STRUCTURELG && line.trim() === '') {
+        return lastLine.trim().substring(1);
+      } else {
+        state.push(ROOT);
+      }
+    }
+
+    return undefined;
+  }
+
   private matchState(params: TextDocumentPositionParams): LGCursorState | undefined {
     const state: LGCursorState[] = [];
     const document = this.documents.get(params.textDocument.uri);
@@ -441,7 +501,9 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const lgFile = this.getLGDocument(document)?.index();
+    const lgDoc = this.getLGDocument(document);
+    const lgFile = lgDoc?.index();
+    const templateId = lgDoc?.templateId;
     if (!lgFile) {
       return Promise.resolve(null);
     }
@@ -471,6 +533,82 @@ export class LGServer {
 
     const completionPropertyResult = this.findValidMemoryVariables(params);
 
+    const curLineState = this.matchLineState(params, templateId);
+
+    if (curLineState === STRUCTURELG) {
+      const cardTypesSuggestions: CompletionItem[] = cardTypes.map(type => {
+        return {
+          label: type,
+          kind: CompletionItemKind.Keyword,
+          insertText: type,
+          documentation: `Suggestion for Card or Activity: ${type}`,
+        };
+      });
+
+      return Promise.resolve({
+        isIncomplete: true,
+        items: cardTypesSuggestions,
+      });
+    }
+
+    const cardType = this.matchCardTypeState(params, templateId);
+    if (cardType && cardTypes.includes(cardType)) {
+      let item: CompletionItem | undefined = undefined;
+      if (cardType === 'CardAction') {
+        let insertStr = '';
+        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        item = {
+          label: `Properties for ${cardType}`,
+          kind: CompletionItemKind.Keyword,
+          insertText: insertStr,
+          documentation: `Suggested properties for Card: ${cardType}`,
+        };
+      } else if (cardType === 'Suggestions') {
+        let insertStr = '';
+        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        item = {
+          label: `Properties for ${cardType}`,
+          kind: CompletionItemKind.Keyword,
+          insertText: insertStr,
+          documentation: `Suggested properties for Card: ${cardType}`,
+        };
+      } else if (cardType === 'Attachment') {
+        let insertStr = '';
+        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        item = {
+          label: `Properties for ${cardType}`,
+          kind: CompletionItemKind.Keyword,
+          insertText: insertStr,
+          documentation: `Suggested properties for Card: ${cardType}`,
+        };
+      } else if (cardType.endsWith('Card')) {
+        let insertStr = '';
+        insertStr = cardPropDict.Cards.map(u => `\t${u} = `).join('\r\n');
+        item = {
+          label: `Properties for ${cardType}`,
+          kind: CompletionItemKind.Keyword,
+          insertText: insertStr,
+          documentation: `Suggested properties for Card: ${cardType}`,
+        };
+      } else {
+        let insertStr = '';
+        insertStr = cardPropDict.Others.map(u => `\t${u} = `).join('\r\n');
+        item = {
+          label: `Properties for ${cardType}`,
+          kind: CompletionItemKind.Keyword,
+          insertText: insertStr,
+          documentation: `Suggested properties for Card: ${cardType}`,
+        };
+      }
+
+      if (item) {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: [item],
+        });
+      }
+    }
+
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
       if (endWithDot) {
@@ -487,6 +625,50 @@ export class LGServer {
     } else {
       return Promise.resolve(null);
     }
+  }
+
+  protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve(null);
+    }
+
+    const edits: TextEdit[] = [];
+    const key = params.ch;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const isInStructureLGMode = this.matchStructureLG(lines);
+    if (key === '\n' && isInStructureLGMode) {
+      const deleteRange = Range.create(position.line, 0, position.line, 4);
+      const deleteItem: TextEdit = TextEdit.del(deleteRange);
+      if (document.getText(deleteRange).trim() === '') {
+        edits.push(deleteItem);
+      }
+    }
+
+    return Promise.resolve(edits);
+  }
+
+  private matchStructureLG(lines: string[]): boolean {
+    if (lines.length === 0) return false;
+    let state = ROOT;
+    const propertyDefinitionRegex = /[^=]+=.*/;
+    for (const line of lines) {
+      if (state === ROOT && line.trim().startsWith('[')) {
+        state = STRUCTURELG;
+      } else if ((state === STRUCTURELG && propertyDefinitionRegex.test(line)) || line.trim() === '') {
+        continue;
+      } else {
+        state = ROOT;
+      }
+    }
+
+    if (state === ROOT) {
+      return false;
+    }
+
+    return true;
   }
 
   protected validate(document: TextDocument): void {

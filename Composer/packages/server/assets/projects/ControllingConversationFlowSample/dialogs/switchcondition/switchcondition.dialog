@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "122121"
   },
@@ -7,13 +7,13 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "050101"
       },
       "actions": [
         {
-          "$type": "Microsoft.ChoiceInput",
+          "$kind": "Microsoft.ChoiceInput",
           "$designer": {
             "id": "699003"
           },
@@ -49,14 +49,14 @@
           }
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "097130"
           },
           "activity": "${bfdactivity-097130()}"
         },
         {
-          "$type": "Microsoft.SwitchCondition",
+          "$kind": "Microsoft.SwitchCondition",
           "$designer": {
             "id": "088447"
           },
@@ -66,7 +66,7 @@
               "value": "Susan",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "040464"
                   },
@@ -78,7 +78,7 @@
               "value": "Nick",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "230206"
                   },
@@ -90,7 +90,7 @@
               "value": "Tom",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "604251"
                   },

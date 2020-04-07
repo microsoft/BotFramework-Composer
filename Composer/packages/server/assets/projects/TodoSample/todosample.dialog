@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "288769",
     "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
@@ -39,13 +39,13 @@
   "generator": "todosample.lg",
   "triggers": [
     {
-      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$kind": "Microsoft.OnConversationUpdateActivity",
       "$designer": {
         "id": "376720"
       },
       "actions": [
         {
-          "$type": "Microsoft.Foreach",
+          "$kind": "Microsoft.Foreach",
           "$designer": {
             "id": "518944",
             "name": "Loop: for each item"
@@ -53,7 +53,7 @@
           "itemsProperty": "turn.Activity.membersAdded",
           "actions": [
             {
-              "$type": "Microsoft.IfCondition",
+              "$kind": "Microsoft.IfCondition",
               "$designer": {
                 "id": "641773",
                 "name": "Branch: if/else"
@@ -61,7 +61,7 @@
               "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
               "actions": [
                 {
-                  "$type": "Microsoft.SendActivity",
+                  "$kind": "Microsoft.SendActivity",
                   "$designer": {
                     "id": "157674",
                     "name": "Send a response"
@@ -75,26 +75,26 @@
       ]
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "064505"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "addtodo"
         }
       ],
       "intent": "AddIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "114961"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "deletetodo",
           "$designer": {
             "id": "978613"
@@ -104,26 +104,26 @@
       "intent": "DeleteIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "088050"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "cleartodos"
         }
       ],
       "intent": "ClearIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "633942"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "696707"
           },
@@ -133,45 +133,45 @@
       "intent": "HelpIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "794124"
       },
       "actions": [
         {
-          "$type": "Microsoft.BeginDialog",
+          "$kind": "Microsoft.BeginDialog",
           "dialog": "showtodos"
         }
       ],
       "intent": "ShowIntent"
     },
     {
-      "$type": "Microsoft.OnIntent",
+      "$kind": "Microsoft.OnIntent",
       "$designer": {
         "id": "179728"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "677440"
           },
           "activity": "ok."
         },
         {
-          "$type": "Microsoft.EndDialog"
+          "$kind": "Microsoft.EndDialog"
         }
       ],
       "intent": "CancelIntent"
     },
     {
-      "$type": "Microsoft.OnUnknownIntent",
+      "$kind": "Microsoft.OnUnknownIntent",
       "$designer": {
         "id": "677447"
       },
       "actions": [
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "677448"
           },

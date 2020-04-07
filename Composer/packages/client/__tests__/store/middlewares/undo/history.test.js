@@ -5,10 +5,10 @@ import undoHistory from './../../../../src/store/middlewares/undo/history';
 
 describe('test undo history', () => {
   it('test undo history', async () => {
-    const mockStack1Undo = jest.fn((store, args) => args);
-    const mockStack1Redo = jest.fn((store, args) => args);
-    const mockStack2Undo = jest.fn((store, args) => args);
-    const mockStack2Redo = jest.fn((store, args) => args);
+    const mockStack1Undo = jest.fn((store, from, to) => to[0]);
+    const mockStack1Redo = jest.fn((store, from, to) => to[0]);
+    const mockStack2Undo = jest.fn((store, from, to) => to[0]);
+    const mockStack2Redo = jest.fn((store, from, to) => to[0]);
     const stack1 = undoHistory.createStack(mockStack1Undo, mockStack1Redo);
     const stack2 = undoHistory.createStack(mockStack2Undo, mockStack2Redo);
     stack1.add(['t0']);

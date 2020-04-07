@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+
 import { jsx } from '@emotion/core';
 import { Fragment, useContext, useRef } from 'react';
 
@@ -12,19 +13,20 @@ import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 interface LocationSelectContentProps {
+  operationMode: {
+    read: boolean;
+    write: boolean;
+  };
   onOpen?: (path: string, storage: string) => void;
   focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
-  currentPath: string;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
-  const { onOpen, focusedStorageFolder, onCurrentPathUpdate, currentPath } = props;
+  const { onOpen, focusedStorageFolder, onCurrentPathUpdate, operationMode } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
-
   const currentStorageIndex = useRef(0);
-
   const onSelectionChanged = item => {
     if (item) {
       const type = item.fileType;
@@ -48,9 +50,9 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   return (
     <Fragment>
       <FileSelector
+        operationMode={operationMode}
         storageFileLoadingStatus={storageFileLoadingStatus}
         checkShowItem={checkShowItem}
-        currentPath={currentPath}
         focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onSelectionChanged={onSelectionChanged}

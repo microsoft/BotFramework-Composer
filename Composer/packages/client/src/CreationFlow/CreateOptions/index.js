@@ -56,7 +56,7 @@ export function CreateOptions(props) {
           required={true}
         />
         <div css={placeholder}>
-          {checked && template ? template.description : formatMessage("Select a template to see it's description.")}
+          {checked && template ? template.description : formatMessage('Select a template to see its description.')}
         </div>
       </Fragment>
     );
@@ -81,6 +81,7 @@ export function CreateOptions(props) {
   return (
     <Fragment>
       <ChoiceGroup
+        label={formatMessage('Choose how to create your bot')}
         defaultSelectedKey="Create from scratch"
         options={[
           {

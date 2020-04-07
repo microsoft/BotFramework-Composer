@@ -9,12 +9,12 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import formatMessage from 'format-message';
-import { DiagnosticSeverity, Diagnostic } from '@bfc/indexers';
+import { DiagnosticSeverity, Diagnostic } from '@bfc/shared';
 
 import settingsStorage from './utils/dialogSettingStorage';
 import { StoreContext } from './store';
 import { bot, botButton, calloutLabel, calloutDescription, calloutContainer, errorButton, errorCount } from './styles';
-import { BotStatus, LuisConfig, Text } from './constants';
+import { BotStatus, LuisConfig } from './constants';
 import { PublishLuisDialog } from './publishDialog';
 import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
@@ -34,26 +34,31 @@ const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAp
   document.body.appendChild(i);
 };
 
-const STATE = {
-  PUBLISHING: 0,
-  RELOADING: 1,
-  SUCCESS: 2,
-};
 const defaultPublishConfig = {
   name: 'default',
 };
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
-  const [fetchState, setFetchState] = useState(STATE.SUCCESS);
-  const [calloutVisible, setCalloutVisible] = useState(false);
-  const [error, setError] = useState({ title: '', message: '' });
+  const [calloutVisible, setCalloutVisible] = useState(state.botLoadErrorMsg.title !== '');
   const [luisPublishSucceed, setLuisPublishSucceed] = useState(true);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoints, botName, botStatus, dialogs, toStartBot, luFiles, settings, projectId } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus } = actions;
+  const {
+    botEndpoints,
+    botName,
+    botStatus,
+    dialogs,
+    toStartBot,
+    luFiles,
+    settings,
+    projectId,
+    botLoadErrorMsg,
+  } = state;
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, startBot, getPublishStatus, setBotStatus } = actions;
   const connected = botStatus === BotStatus.connected;
+  const publishing = botStatus === BotStatus.publishing;
+  const reloading = botStatus === BotStatus.reloading;
   const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter(n => n.severity === 'Error').length;
   const showError = errorLength > 0;
@@ -68,6 +73,10 @@ export const TestController: React.FC = () => {
       getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
+
+  useEffect(() => {
+    if (botLoadErrorMsg.title !== '') setCalloutVisible(true);
+  }, [botLoadErrorMsg]);
 
   function isLuisConfigComplete(config) {
     let complete = true;
@@ -123,35 +132,20 @@ export const TestController: React.FC = () => {
   }
 
   async function handlePublish() {
-    setFetchState(STATE.PUBLISHING);
+    setBotStatus(BotStatus.publishing);
     try {
       const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
-      if (luisConfig) {
-        await publishLuis(luisConfig.authoringKey, state.projectId);
-        return true;
-      } else {
-        throw new Error('Please Set Luis Config');
-      }
+      await publishLuis(luisConfig.authoringKey, state.projectId);
+      return true;
     } catch (err) {
-      setError({ title: Text.LUISDEPLOYFAILURE, message: err.message });
-      setCalloutVisible(true);
       return false;
-    } finally {
-      setFetchState(STATE.SUCCESS);
     }
   }
 
   async function handleLoadBot() {
-    setFetchState(STATE.RELOADING);
-    try {
-      const sensitiveSettings = settingsStorage.get(botName);
-      await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
-    } catch (err) {
-      setError({ title: Text.CONNECTBOTFAILURE, message: err.message });
-      setCalloutVisible(true);
-    } finally {
-      setFetchState(STATE.SUCCESS);
-    }
+    setBotStatus(BotStatus.reloading);
+    const sensitiveSettings = settingsStorage.get(botName);
+    await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
   }
 
   function handleErrorButtonClick() {
@@ -161,7 +155,7 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        {connected && !showError && fetchState === STATE.SUCCESS && (
+        {connected && !showError && (
           <ActionButton
             iconProps={{
               iconName: 'OpenInNewTab',
@@ -180,10 +174,10 @@ export const TestController: React.FC = () => {
             {formatMessage('Test in Emulator')}
           </ActionButton>
         )}
-        {fetchState !== STATE.SUCCESS && (
+        {(publishing || reloading) && (
           <Spinner
             size={SpinnerSize.small}
-            label={fetchState === STATE.PUBLISHING ? formatMessage('Publishing') : formatMessage('Reloading')}
+            label={publishing ? formatMessage('Publishing') : formatMessage('Reloading')}
             ariaLive="assertive"
             labelPosition="left"
           />
@@ -200,7 +194,7 @@ export const TestController: React.FC = () => {
             text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
             onClick={handleClick}
             id={'publishAndConnect'}
-            disabled={showError}
+            disabled={showError || publishing || reloading}
           />
         </div>
         <Callout
@@ -215,10 +209,10 @@ export const TestController: React.FC = () => {
         >
           <div css={calloutContainer}>
             <p css={calloutLabel} id="callout-label-id">
-              {error.title}
+              {botLoadErrorMsg.title}
             </p>
             <p css={calloutDescription} id="callout-description-id">
-              {error.message}
+              {botLoadErrorMsg.message}
             </p>
             <Stack
               horizontal

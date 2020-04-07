@@ -3,10 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKTypes } from '@bfc/shared';
+import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
@@ -22,12 +22,13 @@ import { IconMenu } from './IconMenu';
 interface EdgeMenuProps {
   id: string;
   onClick: (item: string | null) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
 const buildEdgeMenuItemsFromClipboardContext = (
   context,
   onClick,
-  filter?: (t: SDKTypes) => boolean
+  filter?: (t: SDKKinds) => boolean
 ): IContextualMenu[] => {
   const { clipboardActions } = context;
   const menuItems = createStepMenu(
@@ -41,7 +42,8 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.$type : null),
+    (e, item) => onClick(item ? item.data.$kind : null),
+    context.dialogFactory,
     filter
   );
 
@@ -99,7 +101,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
   return menuItems;
 };
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
   const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -112,8 +114,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     };
   };
 
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef && addCoachMarkRef({ action }), []);
+
   return (
     <div
+      ref={addRef}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
@@ -148,7 +153,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         menuItems={buildEdgeMenuItemsFromClipboardContext(
           nodeContext,
           onClick,
-          selfHosted ? x => x !== SDKTypes.LogAction : undefined
+          selfHosted ? x => x !== SDKKinds.LogAction : undefined
         )}
         label={formatMessage('Add')}
         {...rest}

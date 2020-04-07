@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "031360"
   },
@@ -7,13 +7,13 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "309212"
       },
       "actions": [
         {
-          "$type": "Microsoft.DateTimeInput",
+          "$kind": "Microsoft.DateTimeInput",
           "$designer": {
             "id": "996821"
           },
@@ -26,7 +26,7 @@
           "defaultLocale": "en-us"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "828009"
           },

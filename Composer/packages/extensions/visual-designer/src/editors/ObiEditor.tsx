@@ -6,12 +6,11 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import {
-  SDKTypes,
+  SDKKinds,
   deleteAction,
   deleteActions,
   LgTemplateRef,
   LgMetaData,
-  seedNewDialog,
   ExternalResourceHandlerAsync,
   walkLgResourcesInActionList,
 } from '@bfc/shared';
@@ -66,6 +65,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     updateLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory,
   } = useContext(NodeRendererContext);
 
   const dereferenceLg: ExternalResourceHandlerAsync<string> = async (
@@ -150,7 +150,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Insert:
         trackActionChange(eventData.id);
-        if (eventData.$type === 'PASTE') {
+        if (eventData.$kind === 'PASTE') {
           handler = e => {
             pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
@@ -158,7 +158,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
         } else {
           handler = e => {
-            const dialog = insert(data, e.id, e.position, e.$type);
+            const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
           };
@@ -166,7 +166,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.InsertEvent:
         handler = e => {
-          const dialog = insert(data, e.id, e.position, e.$type);
+          const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
         };
@@ -232,7 +232,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
               const [, arrayPath, actionIndexStr] = indexes;
               const startIndex = parseInt(actionIndexStr);
-              const placeholderAction = seedNewDialog(SDKTypes.BeginDialog, undefined, { dialog: newDialog });
+              const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialog });
               const insertResult = insertAction(deleteResult, arrayPath, startIndex, placeholderAction);
               onChange(insertResult);
             });
@@ -455,11 +455,11 @@ interface ObiEditorProps {
   focusedEvent: string;
   onFocusEvent: (eventId: string) => any;
   onClipboardChange: (actions: any[]) => void;
-  onCreateDialog: (actions: any[]) => Promise<string>;
+  onCreateDialog: (actions: any[]) => Promise<string | null>;
   onOpen: (calleeDialog: string, callerId: string) => any;
   onChange: (newDialog: any) => any;
   onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
-  addCoachMarkRef?: (_: any) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }

@@ -5,6 +5,7 @@ context('ToDo Bot', () => {
   before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(5000);
   });
 
@@ -12,7 +13,7 @@ context('ToDo Bot', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample.Main').click();
     });
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('__TestTodoSample').should('exist');
     });
   });
@@ -22,7 +23,7 @@ context('ToDo Bot', () => {
       cy.findByText('addtodo').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('addtodo').should('exist');
     });
   });
@@ -32,7 +33,7 @@ context('ToDo Bot', () => {
       cy.findByText('cleartodos').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('cleartodos').should('exist');
     });
   });
@@ -42,7 +43,7 @@ context('ToDo Bot', () => {
       cy.findByText('deletetodo').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('deletetodo').should('exist');
     });
   });
@@ -52,7 +53,7 @@ context('ToDo Bot', () => {
       cy.findByText('showtodos').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('showtodos').should('exist');
     });
   });

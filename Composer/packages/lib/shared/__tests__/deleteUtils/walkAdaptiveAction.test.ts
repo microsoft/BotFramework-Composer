@@ -6,7 +6,7 @@ import { walkAdaptiveAction } from '../../src/deleteUtils/walkAdaptiveAction';
 describe('walkAdaptiveAction', () => {
   it('can walk single action', () => {
     const action = {
-      $type: 'Microsoft.SendActivity',
+      $kind: 'Microsoft.SendActivity',
       activity: 'hello',
     };
     const spy = jest.fn();

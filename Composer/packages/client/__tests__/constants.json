@@ -4,13 +4,13 @@
       "isRoot": false,
       "displayName": "addtodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "808722"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "335456"
                   },
@@ -32,13 +32,13 @@
       "isRoot": false,
       "displayName": "cleartodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "316336"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "480162"
                   },
@@ -63,7 +63,7 @@
       "isRoot": false,
       "displayName": "deletetodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "114909"
           },
@@ -71,7 +71,7 @@
           "$schema": "../../app.schema",
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "768658"
                   },
@@ -93,21 +93,21 @@
       "isRoot": true,
       "displayName": "ToDoBot.Main",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "288769",
               "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnConversationUpdateActivity",
+                  "$kind": "Microsoft.OnConversationUpdateActivity",
                   "$designer": {
                       "id": "376720"
                   },
                   "steps": []
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "064505"
                   },
@@ -115,7 +115,7 @@
                   "intent": "AddIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "114961"
                   },
@@ -123,7 +123,7 @@
                   "intent": "DeleteIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "088050"
                   },
@@ -131,7 +131,7 @@
                   "intent": "ClearIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "633942"
                   },
@@ -139,7 +139,7 @@
                   "intent": "HelpIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "794124"
                   },
@@ -147,7 +147,7 @@
                   "intent": "ShowIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "179728"
                   },
@@ -155,7 +155,7 @@
                   "intent": "CancelIntent"
               },
               {
-                  "$type": "Microsoft.OnUnknownIntent",
+                  "$kind": "Microsoft.OnUnknownIntent",
                   "$designer": {
                       "id": "677447"
                   },
@@ -220,13 +220,13 @@
       "isRoot": false,
       "displayName": "showtodos",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "709692"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "783343"
                   },

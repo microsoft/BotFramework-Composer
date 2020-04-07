@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection } from '@bfc/shared';
-
-import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
-import { CodeRange } from '../type';
+import { LuIntentSection, Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -51,7 +48,7 @@ export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange
 }
 
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
-  if (!range) return diagnostics;
+  if (!range) return [];
   const filteredDiags = diagnostics.filter(d => {
     return d.range && isDiagnosticWithInRange(d, range);
   });

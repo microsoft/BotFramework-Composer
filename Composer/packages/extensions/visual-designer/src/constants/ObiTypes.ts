@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 
 enum VirtualElementTypes {
   RuleGroup = 'VisualSDK.RuleGroup',
@@ -18,6 +18,6 @@ enum VirtualElementTypes {
 }
 
 export const ObiTypes = {
-  ...SDKTypes,
+  ...SDKKinds,
   ...VirtualElementTypes,
 };
