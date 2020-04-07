@@ -13,7 +13,7 @@ import { DialogSettings } from './dialog-settings';
 import { Services } from './services';
 import { Deployment } from './deployment';
 import { ComposerConfiguration } from './composer-configuration/index';
-import { OnboardingSettings } from './onboarding-settings';
+import { UserSettings } from './user-settings';
 import { PublishingStaging } from './publishing-staging/index';
 import { RemotePublish } from './remote-publish/index';
 import { Publisher } from './publisher/index';
@@ -25,15 +25,15 @@ const Routes = () => {
 
   return (
     <ErrorBoundary>
-      <Router basepath={mapNavTo(`/bot/${state.projectId}/setting`)}>
-        <Redirect from="*" to={mapNavTo(`/bot/${state.projectId}/setting/dialog-settings`)} noThrow />
+      <Router basepath={mapNavTo(`/bot/${state.projectId}/settings`)}>
+        <Redirect from="*" to={mapNavTo(`/bot/${state.projectId}/settings/dialog-settings`)} noThrow />
         <Deployment path="deployment" />
         <DialogSettings path="dialog-settings" />
         <RemotePublish path="remote-publish" />
         <Publisher path="publish" />
         <Services path="services" />
         <ComposerConfiguration path="composer-configuration" />
-        <OnboardingSettings path="onboarding-settings" />
+        <UserSettings path="preferences" />
         <PublishingStaging path="publishing-staging" />
       </Router>
     </ErrorBoundary>
