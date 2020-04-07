@@ -4,6 +4,7 @@
 export interface CodeEditorSettings {
   lineNumbers: boolean;
   wordWrap: boolean;
+  minimap: boolean;
 }
 
 export interface UserSettings {

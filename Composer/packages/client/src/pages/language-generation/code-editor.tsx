@@ -148,11 +148,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LgEditor
-      options={{
-        minimap: {
-          enabled: true,
-        },
-      }}
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}

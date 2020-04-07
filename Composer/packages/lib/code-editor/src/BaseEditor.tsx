@@ -79,6 +79,9 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     ...baseOptions,
     lineNumbers: overrides.lineNumbers ? 'on' : 'off',
     wordWrap: overrides.wordWrap ? 'on' : 'off',
+    minimap: {
+      enabled: overrides.minimap,
+    },
   };
 };
 
@@ -210,7 +213,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     () => [
       {
         key: 'lineNumbers',
-        text: formatMessage('Show/hide line numbers'),
+        text: formatMessage('Toggle line numbers'),
         canCheck: true,
         isChecked: editorSettings?.lineNumbers,
         onClick: handleOptionsChange,
@@ -220,6 +223,13 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         text: formatMessage('Toggle word wrap'),
         canCheck: true,
         isChecked: editorSettings?.wordWrap,
+        onClick: handleOptionsChange,
+      },
+      {
+        key: 'minimap',
+        text: formatMessage('Toggle minimap'),
+        canCheck: true,
+        isChecked: editorSettings?.minimap,
         onClick: handleOptionsChange,
       },
     ],

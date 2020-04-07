@@ -82,6 +82,7 @@ const initialState: State = {
     codeEditor: {
       lineNumbers: false,
       wordWrap: false,
+      minimap: false,
     },
     propertyEditor: {
       width: 400,
