@@ -8,6 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
+  IGroup,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -18,6 +19,7 @@ import { listRoot, tableView, detailList } from './styles';
 
 export interface IStatusListProps {
   items: IStatus[];
+  groups: IGroup[];
   onItemClick: (item: IStatus) => void;
 }
 export enum PublishStatus {
@@ -110,7 +112,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const PublishStatusList: React.FC<IStatusListProps> = props => {
-  const { items, onItemClick } = props;
+  const { items, onItemClick, groups } = props;
 
   const selection = new Selection({
     onSelectionChanged: () => {
@@ -128,6 +130,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
           css={detailList}
           items={items}
           columns={columns}
+          groups={groups}
           selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
@@ -135,6 +138,9 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
           isHeaderVisible={true}
           checkboxVisibility={CheckboxVisibility.hidden}
           onRenderDetailsHeader={onRenderDetailsHeader}
+          groupProps={{
+            showEmptyGroups: true,
+          }}
         />
       </div>
     </div>

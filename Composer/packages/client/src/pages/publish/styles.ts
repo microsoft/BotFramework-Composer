@@ -33,7 +33,6 @@ export const ContentStyle = css`
 `;
 export const contentEditor = css`
   flex: 4;
-  margin: 20px;
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;

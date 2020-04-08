@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect, Fragment, useMemo } from 'react';
+import { useState, useContext, useEffect, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
@@ -14,7 +14,6 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { openInEmulator } from '../../utils';
-import { BotStatus } from '../../constants';
 
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -26,20 +25,19 @@ import {
   targetListTiTle,
   targetListItemSelected,
   targetListItemNotSelected,
-  historyPanelTitle,
-  historyPanelSub,
 } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
 
 const Publish: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { settings, botName, publishTypes, projectId, publishHistory, botStatus, botEndpoints } = state;
+  const { settings, botName, publishTypes, projectId, publishHistory } = state;
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
   const [selectedTarget, setSelectedTarget] = useState();
+  const [groups, setGroups] = useState();
   const [publishTarget, setPublishTarget] = useState<any[]>([]);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
@@ -127,6 +125,15 @@ const Publish: React.FC<RouteComponentProps> = () => {
   useEffect(() => {
     if (selectedTarget && publishHistory[selectedTarget.name]) {
       setThisPublishHistory(publishHistory[selectedTarget.name]);
+      setGroups([
+        {
+          key: selectedTarget.name,
+          name: selectedTarget.name,
+          startIndex: 0,
+          count: publishHistory[selectedTarget.name].length,
+          level: 0,
+        },
+      ]);
     }
   }, [publishHistory]);
 
@@ -141,6 +148,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       // we still poll for the results IF we see that a publish has happened previously
       actions.getPublishStatus(projectId, selectedTarget);
     }
+    console.log(thisPublishHistory);
   }, [thisPublishHistory]);
 
   useEffect(() => {
@@ -260,7 +268,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       <LogDialog hidden={!showLog} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{formatMessage('Publish Profiles')}</h1>
+        <h1 css={HeaderText}>{selectedTarget ? selectedTarget.name : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
@@ -274,19 +282,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
           )}
         </div>
         <div css={contentEditor}>
-          {selectedTarget ? (
-            <Fragment>
-              <span css={historyPanelTitle}>{selectedTarget.name}</span>
-              <span css={historyPanelSub}>{publishTypes.find(item => item === selectedTarget.type)}</span>
-              {selectedTarget && thisPublishHistory.length > 0 ? (
-                <PublishStatusList items={thisPublishHistory} onItemClick={item => console.log(item)} />
-              ) : (
-                <div css={historyPanelSub} style={{ paddingTop: '16px' }}>
-                  No publish history
-                </div>
-              )}
-            </Fragment>
-          ) : null}
+          <Fragment>
+            <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={item => console.log(item)} />
+          </Fragment>
         </div>
       </div>
     </div>
