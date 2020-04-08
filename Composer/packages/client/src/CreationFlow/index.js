@@ -126,7 +126,14 @@ export function CreationFlow(props) {
   const steps = {
     [Steps.CREATE]: {
       ...DialogCreationCopy.CREATE_NEW_BOT,
-      children: <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />,
+      children: (
+        <CreateOptions
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onNext={handleCreateNext}
+          saveTemplateId={saveTemplateId}
+        />
+      ),
     },
     [Steps.LOCATION]: {
       ...DialogCreationCopy.SELECT_LOCATION,
