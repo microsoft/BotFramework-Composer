@@ -16,29 +16,27 @@ const client = new msRest.ServiceClient(creds, clientOptions);
 export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> => {
   const skillsParsed: Skill[] = [];
   for (const skill of skills) {
-    const { manifestUrl, endpointUrl } = skill;
-    if (manifestUrl && !endpointUrl) {
+    const { manifestUrl } = skill;
+    try {
       const req: msRest.RequestPrepareOptions = {
         url: manifestUrl,
         method: 'GET',
       };
 
-      try {
-        const res: msRest.HttpOperationResponse = await client.sendRequest(req);
+      const res: msRest.HttpOperationResponse = await client.sendRequest(req);
 
-        const resBody = typeof res.bodyAsText === 'string' && JSON.parse(res.bodyAsText);
-        skillsParsed.push({
-          manifestUrl,
-          name: resBody?.name || '',
-          description: resBody?.description || '',
-          endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
-          protocol: get(resBody, 'endpoints[0].protocol', ''),
-          msAppId: get(resBody, 'endpoints[0].msAppId', ''),
-        });
-        continue;
-      } catch (error) {
-        // pass
-      }
+      const resBody = typeof res.bodyAsText === 'string' && JSON.parse(res.bodyAsText);
+      skillsParsed.push({
+        manifestUrl,
+        name: resBody?.name || '',
+        description: resBody?.description || '',
+        endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
+        protocol: get(resBody, 'endpoints[0].protocol', ''),
+        msAppId: get(resBody, 'endpoints[0].msAppId', ''),
+      });
+      continue;
+    } catch (error) {
+      // pass
     }
     skillsParsed.push(skill);
   }

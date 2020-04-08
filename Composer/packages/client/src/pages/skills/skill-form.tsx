@@ -27,7 +27,9 @@ const defaultFormData = {
 const SkillForm: React.FC<ISkillFormProps> = props => {
   const { editIndex = -1, skills, onSubmit, onDismiss } = props;
   const originFormData = skills[editIndex];
-  const initialFormData = originFormData ? assignDefined(defaultFormData, originFormData) : { ...defaultFormData };
+  const initialFormData = originFormData
+    ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl })
+    : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
@@ -46,8 +48,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
       }
 
       const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
-
-      if ((!isModify && duplicatedItemIndex !== -1) || (isModify && duplicatedItemIndex !== editIndex)) {
+      if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
         errors.manifestUrl = formatMessage('Duplicate manifestUrl');
       }
     } else {
