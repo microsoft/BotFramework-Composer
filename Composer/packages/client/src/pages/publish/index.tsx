@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect, Fragment } from 'react';
+import { useState, useContext, useEffect, Fragment, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
@@ -13,6 +13,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
+import { openInEmulator } from '../../utils';
+import { BotStatus } from '../../constants';
 
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -32,7 +34,7 @@ import { PublishStatusList } from './publishStatusList';
 
 const Publish: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { settings, botName, publishTypes, projectId, publishHistory } = state;
+  const { settings, botName, publishTypes, projectId, publishHistory, botStatus, botEndpoints } = state;
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
@@ -83,12 +85,33 @@ const Publish: React.FC<RouteComponentProps> = () => {
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Log',
     },
+    {
+      type: 'action',
+      text: formatMessage('Test in Emulator'),
+      align: 'left',
+      disabled: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? false : true,
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenInNewTab',
+        },
+        onClick: async () => {
+          return Promise.resolve(
+            openInEmulator(
+              thisPublishHistory[0].endpoint,
+              settings.MicrosoftAppId && settings.MicrosoftAppPassword
+                ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+                : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+            )
+          );
+        },
+      },
+    },
   ];
 
   useEffect(() => {
     // load up the list of all publish targets
     actions.getPublishTargetTypes();
-    if (settings.publishTargets) {
+    if (settings.publishTargets?.length > 0) {
       setPublishTarget(settings.publishTargets);
     }
   }, [settings]);

@@ -20,19 +20,7 @@ import { OpenAlertModal, DialogStyle } from './components/Modal';
 import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
 import useNotifications from './pages/notifications/useNotifications';
-import { navigateTo } from './utils';
-
-const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
-  // this creates a temporary hidden iframe to fire off the bfemulator protocol
-  // and start up the emulator
-  const i = document.createElement('iframe');
-  i.style.display = 'none';
-  i.onload = () => i.parentNode && i.parentNode.removeChild(i);
-  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
-    authSettings.MicrosoftAppId
-  }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
-  document.body.appendChild(i);
-};
+import { navigateTo, openInEmulator } from './utils';
 
 const defaultPublishConfig = {
   name: 'default',
