@@ -49,7 +49,7 @@ export const icon = (active: boolean, disabled: boolean) =>
     root: {
       color: active ? '#000' : disabled ? '#999' : '#4f4f4f',
       padding: '8px 12px',
-      marginLeft: '4px',
+      marginLeft: active ? '1px' : '4px',
       marginRight: '12px',
       boxSizing: 'border-box',
       fontSize: `${FontSizes.size16}`,
