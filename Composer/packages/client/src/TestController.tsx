@@ -145,7 +145,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(botName);
-    await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
+    await publishToTarget(state.projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function handleErrorButtonClick() {

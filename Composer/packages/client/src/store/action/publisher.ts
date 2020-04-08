@@ -29,9 +29,12 @@ export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, target, metadata) => {
+export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, target, metadata, sensitiveSettings) => {
   try {
-    const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, metadata);
+    const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
+      metadata,
+      sensitiveSettings,
+    });
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {

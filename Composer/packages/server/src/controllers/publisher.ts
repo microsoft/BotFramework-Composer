@@ -28,8 +28,7 @@ export const PublishController = {
   publish: async (req, res) => {
     const target = req.params.target;
     const user = await PluginLoader.getUserFromRequest(req);
-    // const sensitiveSetting = req.body;
-    const metadata = req.body;
+    const { metadata, sensitiveSettings } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -44,7 +43,7 @@ export const PublishController = {
     const configuration = {
       name: profile.name,
       ...JSON.parse(profile.configuration),
-      settings: merge({}, currentProject.settings),
+      settings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
 

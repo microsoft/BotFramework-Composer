@@ -6,14 +6,15 @@ import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-// import settingsStorage from '../../utils/dialogSettingStorage';
+import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 
+import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
 import {
   ContentHeaderStyle,
@@ -25,7 +26,6 @@ import {
   targetListItemNotSelected,
   historyPanelTitle,
   historyPanelSub,
-  publishDialogText,
 } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
@@ -34,10 +34,11 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
   const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
   const [selectedTarget, setSelectedTarget] = useState();
-  const [publishTarget, setPublishTarget] = useState([]);
+  const [publishTarget, setPublishTarget] = useState<any[]>([]);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -68,7 +69,19 @@ const Publish: React.FC<RouteComponentProps> = () => {
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Publish',
-      disabled: false,
+      disabled: selectedTarget ? false : true,
+    },
+    {
+      type: 'action',
+      text: formatMessage('Log'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'ClipboardList',
+        },
+        onClick: () => setLogDialogStatus(true),
+      },
+      align: 'left',
+      dataTestid: 'publishPage-ToolBar-Log',
     },
   ];
 
@@ -150,6 +163,10 @@ const Publish: React.FC<RouteComponentProps> = () => {
     setPublishDialogHidden(true);
   };
 
+  const setLogDialogStatus = (status: boolean) => {
+    setShowLog(status);
+  };
+
   const savePublishTarget = (name, type, configuration) => {
     console.log(`save ${name} ${type} ${configuration}`);
 
@@ -173,15 +190,8 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const publish = async comment => {
     // publish to remote
     if (selectedTarget) {
-      // const sensitiveSettings = settingsStorage.get(botName);
-      // BEN COMMENT - APR 6 -
-      // TODO: Why are we sending settings down via HTTP? These are all available inside the bot project.
-      // should only send the publishing metatadata (comment).
-      // BEN COMMENT - APR 7 -
-      // sensitiveSettings DOES need to be passed, because these are stored in the browser and NOT on disk.
-      // this should be added as a 4th distinct parameter to the publish API call.
-      // await actions.publishToTarget(projectId, { ...selectedTarget, sensitiveSettings });
-      await actions.publishToTarget(projectId, selectedTarget, { comment: comment });
+      const sensitiveSettings = settingsStorage.get(botName);
+      await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
       // update the target with a lastPublished date
       const updatedPublishTargets = settings.publishTargets.map(profile => {
@@ -209,7 +219,13 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   return (
     <div>
-      <Dialog hidden={addDialogHidden} onDismiss={closeAddDialog} dialogContentProps={dialogProps} minWidth={350}>
+      <Dialog
+        hidden={addDialogHidden}
+        onDismiss={closeAddDialog}
+        dialogContentProps={dialogProps}
+        modalProps={{ isBlocking: true }}
+        minWidth={350}
+      >
         {dialogProps.children}
       </Dialog>
       <PublishDialog
@@ -218,6 +234,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
         onSubmit={publish}
         target={selectedTarget}
       />
+      <LogDialog hidden={!showLog} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Publish Profiles')}</h1>
@@ -272,35 +289,20 @@ const TargetList = props => {
     );
   });
 };
-const PublishDialog = props => {
-  const [comment, setComment] = useState('');
-  const publishDialogProps = {
-    title: 'Publish',
-    type: DialogType.normal,
-    subText: 'You are about to publish your bot to the target below. Do you want to proceed?',
+
+const LogDialog = props => {
+  const logDialogProps = {
+    title: 'Publish Log',
   };
-  const submit = async () => {
-    props.onDismiss();
-    await props.onSubmit(comment);
-  };
-  return props.target ? (
-    <Dialog hidden={props.hidden} onDismiss={props.onDismiss} dialogContentProps={publishDialogProps}>
-      <Fragment>
-        <div css={publishDialogText}>{props.target.name}</div>
-        <form onSubmit={submit}>
-          <TextField
-            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
-            label={formatMessage('Comment')}
-            // styles={styles.textarea}
-            onChange={(e, newvalue) => setComment(newvalue || '')}
-            multiline={true}
-          />
-        </form>
-        <DialogFooter>
-          <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Okay')} />
-        </DialogFooter>
-      </Fragment>
+  return (
+    <Dialog
+      hidden={props.hidden}
+      onDismiss={props.onDismiss}
+      dialogContentProps={logDialogProps}
+      modalProps={{ isBlocking: true }}
+      minWidth={450}
+    >
+      <TextField placeholder="log message" multiline={true} style={{ minHeight: 300 }} />
     </Dialog>
-  ) : null;
+  );
 };
