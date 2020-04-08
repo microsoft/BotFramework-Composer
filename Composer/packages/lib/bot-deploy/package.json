@@ -2,13 +2,12 @@
   "name": "botframeworkdeploy",
   "version": "1.0.0",
   "description": "typescript version of bot deployment",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "create": "tsc create.ts && node create.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "^1.0.0",
     "@azure/arm-deploymentmanager": "^3.0.0",
@@ -18,7 +17,7 @@
     "@azure/graph": "^5.0.1",
     "@azure/ms-rest-browserauth": "^0.1.4",
     "@azure/ms-rest-nodeauth": "^3.0.3",
-    "@microsoft/bf-lu": "^4.9.0-preview.114058",
+    "@microsoft/bf-lu": "^4.8.0",
     "@microsoft/bf-luis-cli": "^4.8.0",
     "@types/archiver": "^3.1.0",
     "@types/fs-extra": "^8.1.0",
