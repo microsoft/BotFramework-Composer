@@ -7,6 +7,7 @@ import { useState, useContext } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
+import { getBaseName } from '../../utils/fileUtil';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
@@ -24,7 +25,8 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const notifications = useNotifications(filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
-      let url = `/bot/${projectId}/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
+      const dialogId = getBaseName(item.id);
+      let url = `/bot/${projectId}/language-generation/${dialogId}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
       if (item.dialogPath) {
         url = toUrlUtil(projectId, item.dialogPath);
@@ -32,9 +34,10 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       navigateTo(url);
     },
     [NotificationType.LU]: (item: INotification) => {
-      let uri = `/bot/${projectId}/language-understanding/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
+      const dialogId = getBaseName(item.id);
+      let uri = `/bot/${projectId}/language-understanding/${dialogId}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       if (item.dialogPath) {
-        uri = convertPathToUrl(item.id, item.dialogPath);
+        uri = convertPathToUrl(projectId, dialogId, item.dialogPath);
       }
       navigateTo(uri);
     },
