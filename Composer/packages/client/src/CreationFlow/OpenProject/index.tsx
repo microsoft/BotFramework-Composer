@@ -8,18 +8,16 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
-import { StorageFolder } from '../../store/types';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 
 interface OpenProjectProps {
   onOpen: (path: string, storage: string) => void;
-  focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onDismiss: () => void;
 }
 
 export const OpenProject: React.FC<OpenProjectProps> = props => {
-  const { onOpen, onDismiss, focusedStorageFolder, onCurrentPathUpdate } = props;
+  const { onOpen, onDismiss, onCurrentPathUpdate } = props;
 
   return (
     <div data-testid="SelectLocation">
@@ -29,7 +27,6 @@ export const OpenProject: React.FC<OpenProjectProps> = props => {
           write: false,
         }}
         onOpen={onOpen}
-        focusedStorageFolder={focusedStorageFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
       />
       <DialogFooter>
