@@ -32,8 +32,9 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    // find publish config by name.
-    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+    // deal with publishTargets not exist in settings
+    const publishTargets = currentProject.settings?.publishTargets || [];
+    const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter(t => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
@@ -87,8 +88,8 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    // find publish config by name.
-    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+    const publishTargets = currentProject.settings?.publishTargets || [];
+    const allTargets = [defaultPublishConfig, ...publishTargets];
 
     const profiles = allTargets.filter(t => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
@@ -134,8 +135,9 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    // find publish config by name.
-    const allTargets = [defaultPublishConfig, ...currentProject.settings?.publishTargets];
+    const publishTargets = currentProject.settings?.publishTargets || [];
+    const allTargets = [defaultPublishConfig, ...publishTargets];
+
     const profiles = allTargets.filter(t => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
 

@@ -40,13 +40,13 @@ class LocalPublisher {
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user) => {
-    const { templatePath } = config;
+    const { templatePath, settings } = config;
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
     await this.initBot(botId);
     await this.saveContent(botId, version, project.dataDir, user);
-    const url = await this.setBot(botId, version, project.settings, project.dataDir);
+    const url = await this.setBot(botId, version, settings, project.dataDir);
     return {
       status: 200,
       result: {
