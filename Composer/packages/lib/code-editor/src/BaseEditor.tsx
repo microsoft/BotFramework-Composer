@@ -11,8 +11,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
-
-import { assignDefined } from './utils/common';
+import { assignDefined } from '@bfc/shared';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
