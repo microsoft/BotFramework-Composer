@@ -23,14 +23,6 @@ export const hostedControls = css`
   }
 `;
 
-export const hostedToggle = css`
-  display: flex;
-
-  & > * {
-    margin-right: 2rem;
-  }
-`;
-
 export const slotChoice = css`
   max-width: 40ch;
 `;
