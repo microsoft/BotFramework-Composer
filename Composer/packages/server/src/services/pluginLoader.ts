@@ -180,6 +180,7 @@ export class ComposerPluginRegistration {
 interface PublishResult {
   message: string;
   comment?: string;
+  log?: string;
   id?: string;
   time?: Date;
   endpointURL?: string;

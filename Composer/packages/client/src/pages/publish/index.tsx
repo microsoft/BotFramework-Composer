@@ -13,7 +13,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-import { openInEmulator } from '../../utils';
+// import { openInEmulator } from '../../utils';
 
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -37,6 +37,8 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
   const [selectedTarget, setSelectedTarget] = useState();
+  const [selectedVersion, setSelectedVersion] = useState();
+
   const [groups, setGroups] = useState();
   const [publishTarget, setPublishTarget] = useState<any[]>([]);
   const [dialogProps, setDialogProps] = useState({
@@ -81,29 +83,30 @@ const Publish: React.FC<RouteComponentProps> = () => {
         onClick: () => setLogDialogStatus(true),
       },
       align: 'left',
+      disabled: selectedVersion ? false : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
-    {
-      type: 'action',
-      text: formatMessage('Test in Emulator'),
-      align: 'left',
-      disabled: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? false : true,
-      buttonProps: {
-        iconProps: {
-          iconName: 'OpenInNewTab',
-        },
-        onClick: async () => {
-          return Promise.resolve(
-            openInEmulator(
-              thisPublishHistory[0].endpoint,
-              settings.MicrosoftAppId && settings.MicrosoftAppPassword
-                ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-                : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-            )
-          );
-        },
-      },
-    },
+    // {
+    //   type: 'action',
+    //   text: formatMessage('Test in Emulator'),
+    //   align: 'left',
+    //   disabled: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? false : true,
+    //   buttonProps: {
+    //     iconProps: {
+    //       iconName: 'OpenInNewTab',
+    //     },
+    //     onClick: async () => {
+    //       return Promise.resolve(
+    //         openInEmulator(
+    //           thisPublishHistory[0].endpoint,
+    //           settings.MicrosoftAppId && settings.MicrosoftAppPassword
+    //             ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+    //             : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+    //         )
+    //       );
+    //     },
+    //   },
+    // },
   ];
 
   useEffect(() => {
@@ -118,6 +121,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
     // get selected target publish history
     if (selectedTarget) {
       actions.getPublishHistory(projectId, selectedTarget);
+      setSelectedVersion(undefined);
     }
   }, [selectedTarget]);
 
@@ -265,7 +269,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
         onSubmit={publish}
         target={selectedTarget}
       />
-      <LogDialog hidden={!showLog} onDismiss={() => setLogDialogStatus(false)} />
+      <LogDialog hidden={!showLog} version={selectedVersion} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTarget.name : formatMessage('Publish Profiles')}</h1>
@@ -283,7 +287,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
         </div>
         <div css={contentEditor}>
           <Fragment>
-            <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={item => console.log(item)} />
+            <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={setSelectedVersion} />
           </Fragment>
         </div>
       </div>
@@ -323,7 +327,12 @@ const LogDialog = props => {
       modalProps={{ isBlocking: true }}
       minWidth={450}
     >
-      <TextField placeholder="log message" multiline={true} style={{ minHeight: 300 }} />
+      <TextField
+        value={props && props.version ? props.version.log : ''}
+        placeholder="Log Output"
+        multiline={true}
+        style={{ minHeight: 300 }}
+      />
     </Dialog>
   );
 };
