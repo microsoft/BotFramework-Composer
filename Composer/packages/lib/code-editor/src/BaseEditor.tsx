@@ -58,7 +58,7 @@ const styles = {
       border-color: ${borderColor};
       transition: border-color 0.1s linear;
       box-sizing: border-box;
-      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error ? 32 : 0}px);
+      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error || warning ? 32 : 0}px);
     `;
   },
 };
