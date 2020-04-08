@@ -16,8 +16,8 @@ const client = new msRest.ServiceClient(creds, clientOptions);
 export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> => {
   const skillsParsed: Skill[] = [];
   for (const skill of skills) {
-    const { manifestUrl } = skill;
-    if (manifestUrl) {
+    const { manifestUrl, endpointUrl } = skill;
+    if (manifestUrl && !endpointUrl) {
       const req: msRest.RequestPrepareOptions = {
         url: manifestUrl,
         method: 'GET',

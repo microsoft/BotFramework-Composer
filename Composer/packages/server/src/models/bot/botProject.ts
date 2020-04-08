@@ -133,11 +133,13 @@ export class BotProject {
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
     const settings = await this.getEnvSettings('', false);
-    settings.skill = config.map(({ manifestUrl }) => {
-      return { manifestUrl };
+    const skills = await extractSkillManifestUrl(config);
+
+    settings.skill = skills.map(({ manifestUrl, name }) => {
+      return { manifestUrl, name };
     });
     await this.settingManager.set('', settings);
-    const skills = await extractSkillManifestUrl(config);
+
     this.skills = skills;
     return skills;
   };

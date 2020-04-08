@@ -46,6 +46,6 @@ export interface DialogSetting {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
   luis: ILuisConfig;
-  skill: { manifestUrl: string }[];
+  skill: { manifestUrl: string; name: string }[];
   [key: string]: any;
 }

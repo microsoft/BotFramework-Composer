@@ -45,7 +45,9 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
         errors.manifestUrl = formatMessage('Url should start with http[s]://');
       }
 
-      if (!isModify && skills.some(item => item.manifestUrl === manifestUrl)) {
+      const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+
+      if ((!isModify && duplicatedItemIndex !== -1) || (isModify && duplicatedItemIndex !== editIndex)) {
         errors.manifestUrl = formatMessage('Duplicate manifestUrl');
       }
     } else {
