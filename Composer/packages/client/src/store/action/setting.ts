@@ -48,15 +48,9 @@ export const setSettings: ActionCreator = async (
   }
 };
 
-export const setDialogSettingsSlot = async (
-  { dispatch },
-  projectId: string,
-  editing: boolean,
-  slot?: BotEnvironments
-) => {
+export const setDialogSettingsSlot = async ({ dispatch }, projectId: string, slot?: BotEnvironments) => {
   const suffix = slot ? `/${slot}` : '';
-  const query = editing ? '' : '?obfuscate=true';
-  const url = `/projects/${projectId}/settings${suffix}${query}`;
+  const url = `/projects/${projectId}/settings${suffix}`;
 
   try {
     const response = await httpClient.get(url);
@@ -75,17 +69,5 @@ export const setDialogSettingsSlot = async (
         summary: 'DLG SETTINGS ERROR',
       },
     });
-  }
-};
-
-export const setEditDialogSettings: ActionCreator = async (
-  store,
-  projectId: string,
-  editing: boolean,
-  slot?: BotEnvironments
-) => {
-  if (editing) {
-    // fetch the real settings for editing
-    await setDialogSettingsSlot(store, projectId, editing, slot);
   }
 };
