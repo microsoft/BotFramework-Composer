@@ -35,7 +35,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
-  const [thisPublishHistory, setThisPublishHistory] = useState([]);
+  const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
   const [selectedTarget, setSelectedTarget] = useState();
   const [publishTarget, setPublishTarget] = useState([]);
   const [dialogProps, setDialogProps] = useState({
