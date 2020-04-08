@@ -12,8 +12,7 @@ Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
   cy.findByTestId(`${bobotId}`).click({ force: true });
   cy.findByTestId('NextStepButton').click();
   cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName || bobotId}{enter}`);
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
+  cy.url().should('match', /\/bot\/.*\/dialogs/);
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {
@@ -22,8 +21,6 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
 
 Cypress.Commands.add('visitPage', page => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(3000);
 });
 
 Cypress.on('uncaught:exception', err => {

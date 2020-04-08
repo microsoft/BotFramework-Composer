@@ -9,6 +9,7 @@ context('Saving As', () => {
 
   it('can create a new bot from an existing bot', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
+    cy.url().should('contain', 'home');
     cy.findByText('Save as').click();
 
     cy.findByTestId('NewDialogName').type('{selectall}__TestSaveAs{enter}');

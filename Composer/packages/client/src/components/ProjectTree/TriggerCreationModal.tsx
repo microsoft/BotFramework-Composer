@@ -273,17 +273,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
                 fileId: dialogId,
                 sectionId: formData.intent || 'newSection',
               }}
-              options={{
-                lineNumbers: 'off',
-                minimap: {
-                  enabled: false,
-                },
-                lineDecorationsWidth: 10,
-                lineNumbersMinChars: 0,
-                glyphMargin: false,
-                folding: false,
-                renderLineHighlight: 'none',
-              }}
               height={150}
             />
           )}

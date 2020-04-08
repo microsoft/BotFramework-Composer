@@ -11,20 +11,22 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
-import { assignDefined } from '@bfc/shared';
+import { CodeEditorSettings, assignDefined } from '@bfc/shared';
 
 const defaultOptions = {
   scrollBeyondLastLine: false,
   wordWrap: 'off',
+  wordWrapColumn: 120,
   fontFamily: 'Segoe UI',
   fontSize: 14,
   lineNumbers: 'off',
   quickSuggestions: false,
   minimap: {
     enabled: false,
+    maxColumn: 0,
   },
   lineDecorationsWidth: 10,
-  lineNumbersMinChars: 0,
+  lineNumbersMinChars: 3,
   glyphMargin: false,
   folding: false,
   renderLineHighlight: 'none',
@@ -51,6 +53,12 @@ const styles = {
       borderColor = SharedColors.red20;
     }
 
+    let heightAdj = 0;
+
+    if (error || warning) {
+      heightAdj += 32;
+    }
+
     return css`
       border-width: ${focused ? '2px' : '1px'};
       padding: ${focused ? 0 : '1px'};
@@ -58,9 +66,31 @@ const styles = {
       border-color: ${borderColor};
       transition: border-color 0.1s linear;
       box-sizing: border-box;
-      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${error || warning ? 32 : 0}px);
+      height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
+
+      label: BaseEditor;
     `;
   },
+  settings: css`
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+
+    label: BaseEditorSettings;
+  `,
+};
+
+const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSettings> = {}) => {
+  return {
+    ...baseOptions,
+    lineNumbers: overrides.lineNumbers ? 'on' : 'off',
+    wordWrap: overrides.wordWrap ? 'on' : 'off',
+    minimap: {
+      enabled: overrides.minimap,
+      maxColumn: overrides.minimap ? 120 : 0,
+    },
+  };
 };
 
 export type OnInit = (instance: Monaco) => void;
@@ -76,6 +106,8 @@ export interface BaseEditorProps extends EditorProps {
   value?: string;
   warningMessage?: string; // warning text show below editor
   errorMessage?: string; // error text show below editor
+  editorSettings?: Partial<CodeEditorSettings>;
+  onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
 const BaseEditor: React.FC<BaseEditorProps> = props => {
@@ -91,9 +123,11 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     helpURL,
     height = '100%',
     onInit,
+    editorSettings,
     ...rest
   } = props;
-  const options = assignDefined(defaultOptions, props.options);
+  const baseOptions = useMemo(() => assignDefined(defaultOptions, props.options), [props.options]);
+  const [editorOptions, setEditorOptions] = useState(mergeEditorSettings(baseOptions, editorSettings));
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -164,14 +198,26 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     </Link>
   );
 
+  useEffect(() => {
+    if (editor && editorSettings) {
+      setEditorOptions(mergeEditorSettings(baseOptions, editorSettings));
+    }
+  }, [editorSettings]);
+
   return (
     <React.Fragment>
       <div
-        css={styles.container({ hovered, focused, error: hasError, warning: hasWarning, height })}
+        css={styles.container({
+          hovered,
+          focused,
+          error: hasError,
+          warning: hasWarning,
+          height,
+        })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={options} />
+        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
