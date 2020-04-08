@@ -57,7 +57,7 @@ const styles = {
 
     let heightAdj = 0;
 
-    if (error) {
+    if (error || warning) {
       heightAdj += 32;
     }
 
