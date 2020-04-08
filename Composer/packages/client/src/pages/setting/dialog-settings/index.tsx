@@ -60,7 +60,7 @@ export const DialogSettings = () => {
       debounce((result: any) => {
         saveChangeResult(result);
       }, 200),
-    [visibleSettings]
+    [projectId]
   );
 
   const hostedControl = () => (
