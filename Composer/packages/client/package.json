@@ -1,6 +1,7 @@
 {
   "name": "@bfc/client",
   "license": "MIT",
+  "main": "build/public/index.ejs",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -9,6 +10,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "clean": "rimraf build",
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
@@ -37,7 +39,7 @@
     "@uifabric/styling": "^7.10.4",
     "adaptive-expressions": "^4.8.0-preview-110700",
     "axios": "^0.18.0",
-    "botbuilder-lg": "^4.8.0-preview-109324",
+    "botbuilder-lg": "^4.9.0-preview-117748",
     "format-message": "^6.2.3",
     "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",
@@ -104,6 +106,7 @@
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
     "react-testing-library": "^6.0.1",
+    "rimraf": "2.6.3",
     "style-loader": "1.0.0",
     "terser-webpack-plugin": "2.2.1",
     "url-loader": "2.2.0",

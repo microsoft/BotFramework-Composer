@@ -112,7 +112,7 @@ describe('lg lsp server', () => {
       [
         response => {
           expect(response.id).toEqual(2);
-          expect(response.result.contents[0]).toEqual('-Good evening');
+          expect(response.result.contents[0]).toContain('-Good evening');
         },
       ]
     );
