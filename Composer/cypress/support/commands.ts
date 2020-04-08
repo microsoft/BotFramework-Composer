@@ -12,6 +12,7 @@ Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
   cy.findByTestId(`${bobotId}`).click();
   cy.findByTestId('NextStepButton').click();
   cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName || bobotId}{enter}`);
+  cy.url().should('match', /\/bot\/.*\/dialogs/);
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {
