@@ -95,7 +95,7 @@ class LocalPublisher {
     // return in reverse chrono
     return result.reverse();
   };
-  rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {};
+  // rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {};
 }
 
 const publisher = new LocalPublisher();

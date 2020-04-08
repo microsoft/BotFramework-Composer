@@ -21,6 +21,12 @@ export const PublishController = {
         return {
           name: pluginLoader.extensions.publish[i].plugin.name,
           description: pluginLoader.extensions.publish[i].plugin.description,
+          features: {
+            history: pluginLoader.extensions.publish[i].methods.history ? true : false,
+            publish: pluginLoader.extensions.publish[i].methods.publish ? true : false,
+            status: pluginLoader.extensions.publish[i].methods.getStatus ? true : false,
+            rollback: pluginLoader.extensions.publish[i].methods.rollback ? true : false,
+          },
         };
       })
     );

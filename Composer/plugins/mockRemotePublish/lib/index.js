@@ -83,7 +83,6 @@ class LocalPublisher {
             // return in reverse chrono
             return result.reverse();
         });
-        this.rollback = (config, project, rollbackToVersion, user) => __awaiter(this, void 0, void 0, function* () { });
         this.data = {};
     }
 }
