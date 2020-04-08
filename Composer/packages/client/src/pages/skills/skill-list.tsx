@@ -60,7 +60,7 @@ const columns: IColumn[] = [
     key: 'endpointUrl',
     name: formatMessage('Skill Endpoint'),
     fieldName: 'endpointUrl',
-    minWidth: 300,
+    minWidth: 400,
     isResizable: true,
     data: 'string',
     onRender: (item: Skill) => {
