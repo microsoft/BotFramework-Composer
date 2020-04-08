@@ -25,6 +25,7 @@ class LocalPublisher {
                     if (element.result.id == jobId) {
                         element.status = 200;
                         element.result.message = 'Success';
+                        element.result.log = element.result.log + '\nPublish succeeded!';
                     }
                 });
             }, 10000);
@@ -44,6 +45,7 @@ class LocalPublisher {
                 result: {
                     time: new Date(),
                     message: 'Accepted for publishing.',
+                    log: 'Publish starting...',
                     id: new uuid_1.v4(),
                     comment: metadata.comment,
                 },
@@ -57,7 +59,6 @@ class LocalPublisher {
             const botId = project.id;
             if (this.data[botId] && this.data[botId][profileName]) {
                 const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
-                console.log('RETURNING MOST RECENT ITEM FROM HISTORY...', response);
                 // return latest status
                 return response;
             }

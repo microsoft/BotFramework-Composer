@@ -27,6 +27,7 @@ class LocalPublisher {
         if (element.result.id == jobId) {
           element.status = 200;
           element.result.message = 'Success';
+          element.result.log = element.result.log + '\nPublish succeeded!';
         }
       });
     }, 10000);
@@ -50,6 +51,7 @@ class LocalPublisher {
       result: {
         time: new Date(),
         message: 'Accepted for publishing.',
+        log: 'Publish starting...',
         id: new uuid(),
         comment: metadata.comment,
       },
