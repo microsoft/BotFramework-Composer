@@ -65,12 +65,10 @@ const resolveModule = (resolveFn, filePath) => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('../server/build/public'),
+  appBuild: resolveApp('build/public'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
-  extensionContainerHtml: resolveApp('public/extensionContainer.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),
-  extensionIndexJs: resolveModule(resolveApp, 'src/extension-container/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appTsConfig: resolveApp('tsconfig.json'),

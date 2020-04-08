@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -12,7 +12,7 @@ import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
-import { VisualEditorAPI } from '../../messenger/FrameAPI';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
@@ -27,6 +27,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 
+import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
 import {
   breadcrumbClass,
@@ -347,8 +348,12 @@ function DesignPage(props) {
     }
   }
 
+  if (!dialogId) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <Fragment>
+    <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
@@ -363,7 +368,7 @@ function DesignPage(props) {
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation css={editorContainer}>
-            <Fragment>
+            <React.Fragment>
               <div css={editorWrapper}>
                 <div css={visualPanel}>
                   {breadcrumbItems}
@@ -371,7 +376,7 @@ function DesignPage(props) {
                 </div>
                 <PropertyEditor />
               </div>
-            </Fragment>
+            </React.Fragment>
           </Conversation>
         </div>
       </div>
@@ -390,7 +395,7 @@ function DesignPage(props) {
           onSubmit={onTriggerCreationSubmit}
         />
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 

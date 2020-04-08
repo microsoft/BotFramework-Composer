@@ -2,17 +2,17 @@
 // Licensed under the MIT License.
 
 import { useContext } from 'react';
-import { LGTemplate } from 'botbuilder-lg';
+import { Template } from 'botbuilder-lg';
 import { LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { normalizeLgTemplate } from '../utils/normalizeLgTemplate';
 
-export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): LGTemplate | undefined => {
+export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): Template | undefined => {
   if (!Array.isArray(lgFiles)) return;
 
-  const allTemplates: LGTemplate[] = [];
+  const allTemplates: Template[] = [];
   for (const file of lgFiles) {
     const templates = get(file, 'templates');
     if (Array.isArray(templates)) {

@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { mergeStyleSets, FontSizes, FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { mergeStyleSets, FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 
 export const pageRoot = css`
   height: 100%;
@@ -33,7 +33,7 @@ export const projectHeader = css`
   font-weight: bold;
   padding: 7px 10px;
   line-height: 14px;
-  font-size: ${FontSizes.medium};
+  font-size: ${FontSizes.size14};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,10 +73,13 @@ export const visualPanel = css`
   position: relative;
 `;
 
-export const visualEditor = css`
+export const visualEditor = (hidden: boolean) => css`
   border: 0px;
   flex: 1;
   background-color: #f6f6f6;
+
+  display: ${hidden ? 'none' : 'block'};
+  position: relative;
 `;
 
 export const formEditor = css`
@@ -84,6 +87,7 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
+  overflow: auto;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
@@ -94,7 +98,7 @@ export const breadcrumbClass = mergeStyleSets({
   itemLink: {
     selectors: {
       '.ms-TooltipHost': {
-        fontSize: FontSizes.large,
+        fontSize: FontSizes.size18,
         fontWeight: FontWeights.regular,
       },
     },
@@ -102,7 +106,7 @@ export const breadcrumbClass = mergeStyleSets({
     padding: '4px 8px',
   },
   chevron: {
-    fontSize: FontSizes.mini,
+    fontSize: FontSizes.size10,
   },
 });
 

@@ -9,10 +9,11 @@
     "node": ">=12"
   },
   "workspaces": [
-    "packages/client",
     "packages/server",
+    "packages/electron-server",
     "packages/extensions",
     "packages/extensions/*",
+    "packages/client",
     "packages/lib",
     "packages/lib/*",
     "packages/tools",
@@ -22,9 +23,10 @@
   ],
   "scripts": {
     "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod && yarn build:plugins",
-    "build:prod": "yarn build:dev && yarn build:server && yarn build:client",
+    "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:lib": "yarn workspace @bfc/libs build:all",
+    "build:electron": "yarn workspace @bfc/electron-server build",
     "build:extensions": "wsrun -lt -p @bfc/extension @bfc/adaptive-form @bfc/visual-designer @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",

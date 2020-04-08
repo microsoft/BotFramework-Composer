@@ -3,17 +3,16 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
-import { ElementInterval, TriggerSize, TerminatorSize, InitNodeSize } from '../constants/ElementSizes';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
-import { useWindowDimensions } from '../hooks/useWindowDimensions';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
@@ -36,10 +35,12 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
+      addCoachMarkRef={addCoachMarkRef}
     />
   ) : (
     <StepGroup
       id={id}
+      addCoachMarkRef={addCoachMarkRef}
       data={data}
       onEvent={onEvent}
       onResize={boundary => {
@@ -58,17 +59,6 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
     ) * 2;
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
   const editorAxisX = editorWidth / 2;
-
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-    addCoachMarkRef({
-      action: {
-        x: (width + editorWidth) / 2,
-        y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
-      },
-    });
-  }, [width]);
 
   return (
     <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>

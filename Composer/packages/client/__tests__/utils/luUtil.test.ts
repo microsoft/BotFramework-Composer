@@ -52,10 +52,10 @@ describe('getReferredFiles', () => {
     const luFiles = [{ id: 'main.en-us' }, { id: 'dia1.en-us' }, { id: 'dia2.en-us' }, { id: 'dia3.en-us' }];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
     expect(config.rootIds.length).toEqual(1);
-    expect(config.rootIds[0]).toEqual('main.lu');
-    expect(config.triggerRules['main.lu']['dia1.lu']).toEqual('dia1_trigger');
-    expect(config.triggerRules['dia1.lu']['dia3.lu']).toEqual('dia3_trigger');
-    expect(config.triggerRules['dia1.lu']['dia4.lu']).toBeUndefined();
+    expect(config.rootIds[0]).toEqual('main.en-us.lu');
+    expect(config.triggerRules['main.en-us.lu']['dia1.en-us.lu']).toEqual('dia1_trigger');
+    expect(config.triggerRules['dia1.en-us.lu']['dia3.en-us.lu']).toEqual('dia3_trigger');
+    expect(config.triggerRules['dia1.en-us.lu']['dia4.en-us.lu']).toBeUndefined();
   });
 
   it('check the lu files before publish', () => {
