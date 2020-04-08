@@ -25,6 +25,7 @@ const settingLabels = {
   publish: formatMessage('Publish'),
   settings: formatMessage('Settings'),
   onboarding: formatMessage('Onboarding'),
+  runtime: formatMessage('Runtime Settings'),
 };
 
 const absHosted = isAbsHosted();
@@ -33,6 +34,7 @@ const links = [
   { key: '/setting/dialog-settings', name: settingLabels.settings, url: '' },
   { key: `/setting/${absHosted ? 'remote-publish' : 'deployment'}`, name: settingLabels.publish, url: '' },
   { key: '/setting/onboarding-settings', name: settingLabels.onboarding, url: '' },
+  { key: '/setting/runtime', name: settingLabels.runtime, url: '' },
   // { key: '/setting/publish', name: settingLabels.publish, url: '' },
 
   // { key: 'services', name: formatMessage('Services') },

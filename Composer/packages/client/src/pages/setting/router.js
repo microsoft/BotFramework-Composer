@@ -16,7 +16,7 @@ import { ComposerConfiguration } from './composer-configuration/index';
 import { OnboardingSettings } from './onboarding-settings';
 import { PublishingStaging } from './publishing-staging/index';
 import { RemotePublish } from './remote-publish/index';
-import { Publisher } from './publisher/index';
+import { RuntimeSettings } from './runtime-settings/index';
 
 const mapNavTo = x => resolveToBasePath(BASEPATH, x);
 
@@ -30,7 +30,7 @@ const Routes = () => {
         <Deployment path="deployment" />
         <DialogSettings path="dialog-settings" />
         <RemotePublish path="remote-publish" />
-        <Publisher path="publish" />
+        <RuntimeSettings path="runtime" />
         <Services path="services" />
         <ComposerConfiguration path="composer-configuration" />
         <OnboardingSettings path="onboarding-settings" />
