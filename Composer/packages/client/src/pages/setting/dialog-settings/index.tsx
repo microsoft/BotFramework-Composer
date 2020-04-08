@@ -3,18 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
 
-import { hostedSettings, hostedControls, hostedControlsTitle, hostedToggle, slotChoice, settingsEditor } from './style';
+import { hostedSettings, hostedControls, hostedControlsTitle, slotChoice, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -34,14 +33,7 @@ export const DialogSettings = () => {
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
   const visibleSettings = absHosted ? settings : origSettings;
-  const [value, setValue] = useState(visibleSettings);
-  const [editing, setEditing] = useState(false);
   const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
-
-  const changeEditing = (_, on) => {
-    setEditing(on);
-    actions.setEditDialogSettings(projectId, on, absHosted ? slot : undefined);
-  };
 
   const slots = [
     { key: 'production', text: hostControlLabels.productionSlot, checked: slot === 'production' },
@@ -50,7 +42,7 @@ export const DialogSettings = () => {
 
   const changeSlot = (_, option) => {
     setSlot(option.key);
-    actions.setDialogSettingsSlot(projectId, editing, option.key);
+    actions.setDialogSettingsSlot(projectId, option.key);
   };
 
   const saveChangeResult = result => {
@@ -63,12 +55,13 @@ export const DialogSettings = () => {
     }
   };
 
-  const handleChange = (result, commit) => {
-    setValue(result);
-    if (commit || !absHosted) {
-      saveChangeResult(result);
-    }
-  };
+  const handleChange = useMemo(
+    () =>
+      debounce((result: any) => {
+        saveChangeResult(result);
+      }, 200),
+    [projectId]
+  );
 
   const hostedControl = () => (
     <div css={hostedControls}>
@@ -91,26 +84,11 @@ export const DialogSettings = () => {
     </div>
   );
 
-  const toggle = () => (
-    <div css={hostedToggle}>
-      <Toggle label={hostControlLabels.showKeys} inlineLabel onChange={changeEditing} defaultChecked={editing} />
-      {absHosted && (
-        <DefaultButton disabled={!editing} text={formatMessage('Save')} onClick={() => handleChange(value, true)} />
-      )}
-    </div>
-  );
-
   return botName ? (
     <div css={hostedSettings}>
       {hostedControl()}
-      {toggle()}
       <div css={settingsEditor}>
-        <JsonEditor
-          onChange={x => handleChange(x, false)}
-          options={{ readOnly: !editing }}
-          value={visibleSettings}
-          obfuscate={!editing}
-        />
+        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} />
       </div>
     </div>
   ) : (

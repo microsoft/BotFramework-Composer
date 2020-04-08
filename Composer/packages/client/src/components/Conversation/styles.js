@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 export const container = css`
   width: 100%;
   background-color: #ffffff;
-  height: 870px;
+  height: 100%;
   overflow: auto;
   position: relative;
 `;
