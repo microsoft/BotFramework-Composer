@@ -8,7 +8,6 @@ import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -28,7 +27,7 @@ import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../store/types';
 import { getFileIconName, formatBytes, calculateTimeDiff } from '../../utils';
 
-import { dropdown, loading, detailListContainer, detailListClass, fileSelectorContainer } from './styles';
+import { dropdown, detailListContainer, detailListClass } from './styles';
 
 interface FileSelectorProps {
   operationMode: {
@@ -39,23 +38,12 @@ interface FileSelectorProps {
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onSelectionChanged: (file: any) => void;
   checkShowItem: (file: File) => boolean;
-  storageFileLoadingStatus: string;
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
-  const {
-    onSelectionChanged,
-    focusedStorageFolder,
-    checkShowItem,
-    onCurrentPathUpdate,
-    storageFileLoadingStatus,
-    operationMode,
-  } = props;
+  const { onSelectionChanged, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
   // for detail file list in open panel
-  const currentPath =
-    Object.keys(focusedStorageFolder).length > 0
-      ? path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
-      : '';
+  const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const tableColums = [
     {
       key: 'column1',
@@ -218,51 +206,39 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
   };
 
   return (
-    <div css={fileSelectorContainer}>
-      {storageFileLoadingStatus === 'success' && (
-        <Fragment>
-          <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
-            <StackItem grow={0} styles={wizardStyles.halfstack}>
-              <Dropdown
-                label={formatMessage('Location')}
-                styles={dropdown}
-                options={breadcrumbItems}
-                onChange={updateLocation}
-                selectedKey={currentPath}
-                errorMessage={
-                  operationMode.write && !focusedStorageFolder.writable
-                    ? formatMessage('You do not have permission to save bots here')
-                    : ''
-                }
-              />
-            </StackItem>
-          </Stack>
-          <div data-is-scrollable="true" css={detailListContainer}>
-            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-              <DetailsList
-                items={storageFiles}
-                compact={false}
-                columns={tableColums}
-                getKey={item => item.name}
-                layoutMode={DetailsListLayoutMode.justified}
-                onRenderDetailsHeader={onRenderDetailsHeader}
-                isHeaderVisible={true}
-                selection={selection}
-                selectionMode={SelectionMode.single}
-                checkboxVisibility={CheckboxVisibility.hidden}
-              />
-            </ScrollablePane>
-          </div>
-        </Fragment>
-      )}
-      {storageFileLoadingStatus === 'pending' && (
-        <div>
-          <Spinner size={SpinnerSize.medium} css={loading} />
-        </div>
-      )}
-      {storageFileLoadingStatus === 'failure' && (
-        <div css={loading}>{formatMessage('Can not connect the storage.')}</div>
-      )}
-    </div>
+    <Fragment>
+      <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <StackItem grow={0} styles={wizardStyles.halfstack}>
+          <Dropdown
+            label={formatMessage('Location')}
+            styles={dropdown}
+            options={breadcrumbItems}
+            onChange={updateLocation}
+            selectedKey={currentPath}
+            errorMessage={
+              operationMode.write && !focusedStorageFolder.writable
+                ? formatMessage('You do not have permission to save bots here')
+                : ''
+            }
+          />
+        </StackItem>
+      </Stack>
+      <div data-is-scrollable="true" css={detailListContainer}>
+        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+          <DetailsList
+            items={storageFiles}
+            compact={false}
+            columns={tableColums}
+            getKey={item => item.name}
+            layoutMode={DetailsListLayoutMode.justified}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            isHeaderVisible={true}
+            selection={selection}
+            selectionMode={SelectionMode.single}
+            checkboxVisibility={CheckboxVisibility.hidden}
+          />
+        </ScrollablePane>
+      </div>
+    </Fragment>
   );
 };
