@@ -344,6 +344,9 @@ const setDesignPageLocation: ReducerFunc = (
 
 const updateSkill: ReducerFunc = (state, { skills }) => {
   state.skills = skills;
+  state.settings.skill = skills.map(({ manifestUrl }) => {
+    return { manifestUrl };
+  });
   return state;
 };
 
