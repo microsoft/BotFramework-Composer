@@ -66,7 +66,7 @@ export function CreateOptions(props) {
 
   const tableColums = [
     {
-      key: 'column1',
+      key: 'name',
       name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 150,
@@ -77,7 +77,7 @@ export function CreateOptions(props) {
       onRender: item => item.name,
     },
     {
-      key: 'column2',
+      key: 'description',
       name: formatMessage('Description'),
       fieldName: 'dateModifiedValue',
       minWidth: 200,
@@ -86,17 +86,6 @@ export function CreateOptions(props) {
       data: 'string',
       styles: rowTitle(disabled),
       onRender: item => item.description,
-    },
-    {
-      key: 'column3',
-      name: formatMessage('Created'),
-      fieldName: 'dateCreatedTime',
-      minWidth: 60,
-      maxWidth: 70,
-      isResizable: !disabled,
-      data: 'number',
-      styles: rowTitle(disabled),
-      onRender: item => new Date(item.createdTime).toLocaleDateString(),
     },
   ];
 

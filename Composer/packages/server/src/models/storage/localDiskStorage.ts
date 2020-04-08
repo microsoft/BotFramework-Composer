@@ -25,7 +25,6 @@ export class LocalDiskStorage implements IFileStorage {
       isDir: fstat.isDirectory(),
       isFile: fstat.isFile(),
       lastModified: fstat.mtime.toString(),
-      createdTime: fstat.ctime.toString(),
       size: fstat.isFile() ? fstat.size.toString() : '',
     };
   }

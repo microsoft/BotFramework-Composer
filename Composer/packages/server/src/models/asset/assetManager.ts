@@ -119,7 +119,7 @@ export class AssetManager {
         const absPath = Path.join(path, name);
         const folder = await this.templateStorage.stat(absPath);
         if (folder.isDir) {
-          const base = { id: name, createdTime: folder.createdTime, ...templateData };
+          const base = { id: name, ...templateData };
           this.projectTemplates.push({ ...base, path: absPath });
           output.push(base);
         }
