@@ -5126,14 +5126,6 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-core@4.8.0-preview-109324:
-  version "4.8.0-preview-109324"
-  resolved "https://registry.yarnpkg.com/botbuilder-core/-/botbuilder-core-4.8.0-preview-109324.tgz#b4c6080bfc85520f923bafb8ce2ca42563402464"
-  integrity sha512-P5VpfDWnb1dAnapOfNm4tSO94ApE3EE/F7dARBEjrMpPfhaqY8uDhDOh+BUy9wYYXqNSBOpIdnVo5TAAmfi9Sg==
-  dependencies:
-    assert "^1.4.1"
-    botframework-schema "4.8.0-preview-109324"
-    
 botbuilder-lg@^4.9.0-preview-117748:
   version "4.9.0-preview-117748"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.9.0-preview-117748.tgz#818ebe001584d09c9d1021b57c48348f2d4c41f8"
