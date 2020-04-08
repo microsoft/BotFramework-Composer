@@ -155,7 +155,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
   ] = useState<IDropdownOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if (option) {
+    if (option && option.key !== selectedKey) {
       setSelectedOption(option);
       props.onChange(undefined);
     }
