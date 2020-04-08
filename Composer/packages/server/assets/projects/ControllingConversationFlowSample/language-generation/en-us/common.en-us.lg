@@ -1,7 +1,7 @@
 # help
 [Activity
     Text = ${helpText()}
-	SuggestedActions = IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog|ForeachWithBreakAndContinue
+	SuggestedActions = IfCondition|SwitchCondition|ForeachStep|ForeachPageStep|Cancel|Endturn|RepeatDialog|ForeachWithBreakAndContinue|GotoAction
 ]
 
 # helpText
