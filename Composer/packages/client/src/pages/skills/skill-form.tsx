@@ -31,6 +31,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
+  const isModify = editIndex >= 0 && editIndex < skills.length;
   useEffect(() => {
     setFormData(initialFormData);
   }, [editIndex]);
@@ -42,6 +43,10 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     if (manifestUrl) {
       if (!SkillUrlRegex.test(manifestUrl)) {
         errors.manifestUrl = formatMessage('Url should start with http[s]://');
+      }
+
+      if (!isModify && skills.some(item => item.manifestUrl === manifestUrl)) {
+        errors.manifestUrl = formatMessage('Duplicate manifestUrl');
       }
     } else {
       errors.manifestUrl = formatMessage('Please input a valid skill manifest url');
