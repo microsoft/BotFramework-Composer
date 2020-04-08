@@ -73,6 +73,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = location;
   state.lgFiles = lgFiles;
+  state.skills = response.data.skills;
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
@@ -341,6 +342,14 @@ const setDesignPageLocation: ReducerFunc = (
   return state;
 };
 
+const updateSkill: ReducerFunc = (state, { skills }) => {
+  state.skills = skills;
+  state.settings.skill = skills.map(({ manifestUrl, name }) => {
+    return { manifestUrl, name };
+  });
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -471,6 +480,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
+  [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
