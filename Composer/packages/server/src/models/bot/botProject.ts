@@ -4,7 +4,7 @@
 import fs from 'fs';
 
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -18,6 +18,7 @@ import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
+import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
@@ -61,6 +62,7 @@ export class BotProject {
   public defaultSDKSchema: {
     [key: string]: string;
   };
+  public skills: Skill[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
@@ -82,6 +84,7 @@ export class BotProject {
 
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
+    this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.files = await this._getFiles();
     if (this.settings) {
       this.luPublisher.setLuisConfig(this.settings.luis);
@@ -95,6 +98,7 @@ export class BotProject {
       files: this.files,
       location: this.dir,
       schemas: this.getSchemas(),
+      skills: this.skills,
       settings: this.settings,
     };
   };
@@ -124,6 +128,20 @@ export class BotProject {
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
     this.luPublisher.setLuisConfig(config.luis);
+  };
+
+  // update skill in settings
+  public updateSkill = async (config: Skill[]) => {
+    const settings = await this.getEnvSettings('', false);
+    const skills = await extractSkillManifestUrl(config);
+
+    settings.skill = skills.map(({ manifestUrl, name }) => {
+      return { manifestUrl, name };
+    });
+    await this.settingManager.set('', settings);
+
+    this.skills = skills;
+    return skills;
   };
 
   public getSchemas = () => {

@@ -50,6 +50,7 @@ const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  skills: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
