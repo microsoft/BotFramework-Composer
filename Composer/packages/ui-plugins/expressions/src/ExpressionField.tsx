@@ -9,6 +9,7 @@ import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bf
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
+import isNumber from 'lodash/isNumber';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -23,6 +24,18 @@ const styles = {
   field: css`
     min-height: 66px;
   `,
+};
+
+const getValueType = (value: any) => {
+  if (Array.isArray(value)) {
+    return 'array';
+  }
+
+  if (isNumber(value)) {
+    return Number.isInteger(value) ? 'integer' : 'number';
+  }
+
+  return typeof value;
 };
 
 const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
@@ -81,7 +94,7 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
 
 const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined => {
   const expressionOption = options.find(({ key }) => key === 'expression');
-  const valueType = Array.isArray(value) ? 'array' : typeof value;
+  const valueType = getValueType(value);
 
   // if its an array, we know it's not an expression
   if (valueType === 'array') {
@@ -107,7 +120,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
   }
 
   // if the value if undefined, either default to expression or the first option
-  if (!value) {
+  if (typeof value === 'undefined' || value === null) {
     return options.length > 2 ? expressionOption : options[0];
     // else if the value is a string and starts with '=' it is an expression
   } else if (
