@@ -6,6 +6,7 @@ import formatMessage from 'format-message';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { RouteComponentProps } from '@reach/router';
 
 import { DeployWizard } from './deployWizard.js';
 import { styles } from './styles';
@@ -20,7 +21,7 @@ const instructions = {
   helpLink: 'https://aka.ms/bfc-publishing-your-bot',
 };
 
-export const Deployment = () => {
+export const Deployment: React.FC<RouteComponentProps> = () => {
   const [wizardOpen, setWizardOpen] = useState(false);
   const [step, setStep] = useState(0);
 

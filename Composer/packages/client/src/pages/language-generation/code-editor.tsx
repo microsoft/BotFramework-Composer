@@ -10,6 +10,7 @@ import isEmpty from 'lodash/isEmpty';
 import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
+import { CodeEditorSettings } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
@@ -24,7 +25,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles, locale, projectId } = state;
+  const { lgFiles, locale, projectId, userSettings } = state;
   const { lgImportresolver } = resolvers;
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
@@ -135,6 +136,10 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     [file, template, projectId]
   );
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    actions.updateUserSettings({ codeEditor: settings });
+  };
+
   const lgOption = {
     projectId,
     fileId: file?.id || dialogId,
@@ -143,14 +148,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LgEditor
-      options={{
-        lineNumbers: 'on',
-        minimap: {
-          enabled: true,
-        },
-        lineDecorationsWidth: undefined,
-        lineNumbersMinChars: undefined,
-      }}
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
@@ -161,6 +158,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };

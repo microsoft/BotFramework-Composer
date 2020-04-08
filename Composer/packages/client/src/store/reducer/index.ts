@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -11,6 +12,7 @@ import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
+import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -445,6 +447,13 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
+const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+  const newSettings = merge(state.userSettings, settings);
+  storage.set('userSettings', newSettings);
+  state.userSettings = newSettings;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -496,4 +505,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
 });
