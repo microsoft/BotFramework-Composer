@@ -25,7 +25,8 @@ export const searchBox = {
   },
 };
 export const root = css`
-  width: 180px;
+  width: 100%;
+  height: 100%;
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
@@ -43,7 +44,7 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
   color: #545454;
   background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
-  &: hover {
+  &:hover {
     color: #545454;
     background: #f2f2f2;
 
@@ -70,7 +71,6 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 
 export const itemText = (depth: number) => css`
   padding-left: ${depth * 16}px;
-  width: ${depth === 0 ? 130 : 120}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

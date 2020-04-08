@@ -8,6 +8,7 @@ import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { RouteComponentProps } from '@reach/router';
 import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../../store';
@@ -26,7 +27,7 @@ const hostControlLabels = {
   learnMore: formatMessage('Learn more.'),
 };
 
-export const DialogSettings = () => {
+export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings: origSettings, botEnvironment, projectId } = state;
   const absHosted = isAbsHosted();

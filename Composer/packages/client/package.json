@@ -48,6 +48,7 @@
     "office-ui-fabric-react": "^7.88.1",
     "prop-types": "^15.7.2",
     "query-string": "^6.8.2",
+    "re-resizable": "^6.3.2",
     "react": "16.13.0",
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",

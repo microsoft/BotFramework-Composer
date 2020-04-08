@@ -76,6 +76,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
+        styles={{ item: { width: '100%' } }}
       />
     </div>
   );

@@ -15,7 +15,7 @@ export const styles = {
   header: {
     marginTop: '0',
     fontSize: FontSizes.size20,
-    fontWeight: FontWeights.semibold,
+    fontWeight: FontWeights.semibold as number,
   },
   halfstack: {
     root: [
@@ -33,7 +33,7 @@ export const styles = {
   },
   dialog: {
     title: {
-      fontWeight: FontWeights.bold,
+      fontWeight: FontWeights.bold as number,
       fontSize: FontSizes.size20,
       paddingTop: '14px',
       paddingBottom: '11px',
@@ -53,7 +53,7 @@ export const styles = {
       label: {
         root: [
           {
-            fontWeight: FontWeights.semibold,
+            fontWeight: FontWeights.semibold as number,
           },
         ],
       },
@@ -69,7 +69,7 @@ export const styles = {
       label: {
         root: [
           {
-            fontWeight: FontWeights.semibold,
+            fontWeight: FontWeights.semibold as number,
           },
         ],
       },

@@ -12,7 +12,7 @@ context('Luis Deploy', () => {
 
   it('can deploy luis success', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-    cy.wait(1000);
+    cy.url().should('contain', 'language-understanding/all');
     cy.route({
       method: 'POST',
       url: 'api/projects/*/luFiles/publish',
