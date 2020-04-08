@@ -181,23 +181,14 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
 };
 
 const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
-  const luFiles = state.luFiles.map(luFile => {
+  state.luFiles = state.luFiles.map(luFile => {
     if (luFile.id === id) {
-      luFile.content = content;
-      return luFile;
+      const { intents, diagnostics } = luIndexer.parse(content, id);
+      return { ...luFile, intents, diagnostics, content };
     }
     return luFile;
   });
 
-  state.luFiles = updateLuFilesStatus(
-    state.botName,
-    luFiles.map(luFile => {
-      const { parse } = luIndexer;
-      const { id, content } = luFile;
-      const { intents, diagnostics } = parse(content, id);
-      return { ...luFile, intents, diagnostics, content };
-    })
-  );
   luFileStatusStorage.updateFileStatus(state.botName, id);
   return state;
 };
