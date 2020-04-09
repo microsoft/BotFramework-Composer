@@ -30,7 +30,6 @@ import { navigateTo } from '../../utils';
 import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
 import { AddSkillDialog } from './addSkillDialogModal';
-
 import {
   breadcrumbClass,
   contentWrapper,
