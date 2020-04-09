@@ -10,12 +10,12 @@ import { uiSchema } from '../../../src/schema/uischema';
 import './story.css';
 
 const uiSchemaPrivider = new UISchemaProvider(uiSchema);
+const actionFactory = new DialogFactory({});
 
 export class VisualSDKDemo extends Component {
   state = {
     actions: this.seedInitialActions(),
   };
-  factory = new DialogFactory({});
 
   seedInitialActions() {
     const initialTypes = [
@@ -27,7 +27,7 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => this.factory.create(t));
+    const initalActions = initialTypes.map(t => actionFactory.create(t));
     return initalActions;
   }
 
