@@ -88,7 +88,14 @@ const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/setting/`,
+      to: `/bot/${projectId}/skills`,
+      iconName: 'PlugDisconnected',
+      labelName: formatMessage('Skills'),
+      exact: true,
+      disabled: !botLoaded,
+    },
+    {
+      to: `/bot/${projectId}/settings/`,
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
       exact: false,

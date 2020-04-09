@@ -7,25 +7,17 @@ import { useState, useContext, useEffect, Fragment } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-// import { openInEmulator } from '../../utils';
+import { openInEmulator } from '../../utils';
 
+import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
-import {
-  ContentHeaderStyle,
-  HeaderText,
-  ContentStyle,
-  contentEditor,
-  targetListTiTle,
-  targetListItemSelected,
-  targetListItemNotSelected,
-} from './styles';
+import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
 
@@ -75,7 +67,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
     },
     {
       type: 'action',
-      text: formatMessage('Log'),
+      text: formatMessage('See Log'),
       buttonProps: {
         iconProps: {
           iconName: 'ClipboardList',
@@ -86,40 +78,49 @@ const Publish: React.FC<RouteComponentProps> = () => {
       disabled: selectedVersion ? false : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
-    // {
-    //   type: 'action',
-    //   text: formatMessage('Test in Emulator'),
-    //   align: 'left',
-    //   disabled: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? false : true,
-    //   buttonProps: {
-    //     iconProps: {
-    //       iconName: 'OpenInNewTab',
-    //     },
-    //     onClick: async () => {
-    //       return Promise.resolve(
-    //         openInEmulator(
-    //           thisPublishHistory[0].endpoint,
-    //           settings.MicrosoftAppId && settings.MicrosoftAppPassword
-    //             ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-    //             : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-    //         )
-    //       );
-    //     },
-    //   },
-    // },
+    {
+      type: 'action',
+      text: formatMessage('Test in Emulator'),
+      align: 'left',
+      buttonProps: {
+        iconProps: {
+          iconName: 'OpenInNewTab',
+        },
+        style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
+        onClick: async () => {
+          return Promise.resolve(
+            openInEmulator(
+              thisPublishHistory[0].endpoint,
+              settings.MicrosoftAppId && settings.MicrosoftAppPassword
+                ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+                : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+            )
+          );
+        },
+      },
+    },
   ];
 
   useEffect(() => {
-    // load up the list of all publish targets
-    actions.getPublishTargetTypes();
+    if (projectId) {
+      // load up the list of all publish targets
+      actions.getPublishTargetTypes();
+    }
+  }, [projectId]);
+
+  useEffect(() => {
     if (settings.publishTargets?.length > 0) {
       setPublishTarget(settings.publishTargets);
     }
-  }, [settings]);
+  }, [settings.publishTargets]);
 
   useEffect(() => {
     // get selected target publish history
-    if (selectedTarget) {
+    if (selectedTarget && selectedTarget.type === 'all') {
+      for (const target of publishTarget) {
+        actions.getPublishHistory(projectId, target);
+      }
+    } else if (selectedTarget && selectedTarget.type !== 'no') {
       actions.getPublishHistory(projectId, selectedTarget);
       setSelectedVersion(undefined);
     }
@@ -127,7 +128,24 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   // once history is loaded, display it
   useEffect(() => {
-    if (selectedTarget && publishHistory[selectedTarget.name]) {
+    if (selectedTarget?.type === 'all') {
+      let histories: any[] = [];
+      const _groups: any[] = [];
+      let startIndex = 0;
+      for (const name in publishHistory) {
+        histories = histories.concat(publishHistory[name]);
+        _groups.push({
+          key: name,
+          name: name,
+          startIndex: startIndex,
+          count: publishHistory[name].length,
+          level: 0,
+        });
+        startIndex += publishHistory[name].length;
+      }
+      setThisPublishHistory(histories);
+      setGroups(_groups);
+    } else if (selectedTarget && publishHistory[selectedTarget.name]) {
       setThisPublishHistory(publishHistory[selectedTarget.name]);
       setGroups([
         {
@@ -152,7 +170,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
       // we still poll for the results IF we see that a publish has happened previously
       actions.getPublishStatus(projectId, selectedTarget);
     }
-    console.log(thisPublishHistory);
   }, [thisPublishHistory]);
 
   useEffect(() => {
@@ -204,19 +221,21 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   const savePublishTarget = (name, type, configuration) => {
     console.log(`save ${name} ${type} ${configuration}`);
-
+    const _target = publishTarget.concat([
+      {
+        name,
+        type,
+        configuration,
+      },
+    ]);
+    console.log(_target);
+    setPublishTarget(_target);
     actions.setSettings(
       projectId,
       botName,
       {
         ...settings,
-        publishTargets: [
-          {
-            name,
-            type,
-            configuration,
-          },
-        ].concat(publishTarget),
+        publishTargets: _target,
       },
       undefined
     );
@@ -229,7 +248,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
       // update the target with a lastPublished date
-      const updatedPublishTargets = settings.publishTargets.map(profile => {
+      const updatedPublishTargets = publishTarget.map(profile => {
         if (profile.name === selectedTarget.name) {
           return {
             ...profile,
@@ -272,18 +291,15 @@ const Publish: React.FC<RouteComponentProps> = () => {
       <LogDialog hidden={!showLog} version={selectedVersion} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>{selectedTarget ? selectedTarget.name : formatMessage('Publish Profiles')}</h1>
+        <h1 css={HeaderText}>
+          {selectedTarget && selectedTarget.type !== 'no' && selectedTarget.type !== 'all'
+            ? selectedTarget.name
+            : formatMessage('Publish Profiles')}
+        </h1>
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
-          {publishTarget.length > 0 ? (
-            <Fragment>
-              <div css={targetListTiTle}>All profiles</div>
-              <TargetList list={settings.publishTargets} onSelect={setSelectedTarget} selectedTarget={selectedTarget} />
-            </Fragment>
-          ) : (
-            <div>This bot does not have a profile to publish yet</div>
-          )}
+          <TargetList list={publishTarget} onSelect={setSelectedTarget} selectedTarget={selectedTarget} />
         </div>
         <div css={contentEditor}>
           <Fragment>
@@ -295,25 +311,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
   );
 };
 export default Publish;
-
-const TargetList = props => {
-  return props.list.map(target => {
-    return (
-      <DefaultButton
-        key={target.name}
-        onClick={() => props.onSelect(target)}
-        styles={
-          props.selectedTarget && props.selectedTarget.name === target.name
-            ? targetListItemSelected
-            : targetListItemNotSelected
-        }
-        text={target.name}
-        ariaLabel={formatMessage('Publish Target')}
-        ariaHidden={false}
-      />
-    );
-  });
-};
 
 const LogDialog = props => {
   const logDialogProps = {

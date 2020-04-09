@@ -15,5 +15,5 @@ export * from './promptTabs';
 export * from './types';
 export * from './viewUtils';
 export * from './walkerUtils';
-export * from './copyUtils';
 export * from './resolverFactory';
+export * from './functionUtils';

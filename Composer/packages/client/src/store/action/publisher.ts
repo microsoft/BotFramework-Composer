@@ -71,7 +71,6 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
 export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {
     const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
-    console.log(response.data);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,
       payload: {

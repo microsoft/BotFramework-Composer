@@ -20,7 +20,7 @@ import { listRoot, tableView, detailList } from './styles';
 export interface IStatusListProps {
   items: IStatus[];
   groups: IGroup[];
-  onItemClick: (item: IStatus) => void;
+  onItemClick: (item: IStatus | null) => void;
 }
 export enum PublishStatus {
   Success,
@@ -117,8 +117,10 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
   const selection = new Selection({
     onSelectionChanged: () => {
       const items = selection.getSelection();
-      if (items.length) {
+      if (items.length > 0) {
         onItemClick(items[0] as IStatus);
+      } else {
+        onItemClick(null);
       }
     },
   });

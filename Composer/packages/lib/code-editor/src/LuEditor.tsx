@@ -77,9 +77,6 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
   const options = {
     quickSuggestions: true,
     formatOnType: true,
-    lineNumbers: 'on' as const,
-    lineDecorationsWidth: undefined,
-    glyphMargin: true,
     autoClosingBrackets: 'always' as const,
     autoIndent: 'full' as const,
     lightbulb: {
