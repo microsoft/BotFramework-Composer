@@ -21,10 +21,8 @@ import { isAbsHosted } from './utils/envUtil';
 import { getReferredFiles } from './utils/luUtil';
 import useNotifications from './pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from './utils';
+import { DefaultPublishConfig } from './constants';
 
-const defaultPublishConfig = {
-  name: 'default',
-};
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
@@ -58,7 +56,7 @@ export const TestController: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishStatus(projectId, defaultPublishConfig);
+      getPublishStatus(projectId, DefaultPublishConfig);
     }
   }, [projectId]);
 
@@ -133,7 +131,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(botName);
-    await publishToTarget(state.projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
+    await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function handleErrorButtonClick() {

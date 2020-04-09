@@ -13,6 +13,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { openInEmulator } from '../../utils';
+import { DefaultPublishConfig } from '../../constants';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -32,7 +33,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const [selectedVersion, setSelectedVersion] = useState();
 
   const [groups, setGroups] = useState();
-  const [publishTarget, setPublishTarget] = useState<any[]>([]);
+  const [publishTarget, setPublishTarget] = useState<any[]>([DefaultPublishConfig]);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -110,7 +111,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     if (settings.publishTargets?.length > 0) {
-      setPublishTarget(settings.publishTargets);
+      setPublishTarget([DefaultPublishConfig].concat(settings.publishTargets));
     }
   }, [settings.publishTargets]);
 
@@ -143,8 +144,8 @@ const Publish: React.FC<RouteComponentProps> = () => {
         });
         startIndex += publishHistory[name].length;
       }
-      setThisPublishHistory(histories);
       setGroups(_groups);
+      setThisPublishHistory(histories);
     } else if (selectedTarget && publishHistory[selectedTarget.name]) {
       setThisPublishHistory(publishHistory[selectedTarget.name]);
       setGroups([

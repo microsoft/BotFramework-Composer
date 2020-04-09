@@ -210,3 +210,8 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+
+export const DefaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+};
