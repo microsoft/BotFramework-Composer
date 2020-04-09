@@ -23,11 +23,11 @@ import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 import { UISchema, UIWidget } from './uischema.types';
 
 const BaseInputSchema: UIWidget = {
-  'ui:widget': PromptWidget,
+  widget: PromptWidget,
   botAsks: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
       title: data => `Bot Asks (${getInputType(data.$kind)})`,
       icon: ElementIcon.MessageBot,
       colors: {
@@ -36,15 +36,15 @@ const BaseInputSchema: UIWidget = {
       },
     },
     body: {
-      'ui:widget': ActivityRenderer,
+      widget: ActivityRenderer,
       field: 'prompt',
       defaultContent: '<prompt>',
     },
   },
   userInput: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
       title: data => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: ElementIcon.User,
@@ -81,33 +81,33 @@ const BaseInputSchema: UIWidget = {
 
 export const uiSchema: UISchema = {
   default: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
   },
   [SDKKinds.IfCondition]: {
-    'ui:widget': IfConditionWidget,
+    widget: IfConditionWidget,
     judgement: {
-      'ui:widget': ActionCard,
+      widget: ActionCard,
       content: data => data.condition,
     },
   },
   [SDKKinds.SwitchCondition]: {
-    'ui:widget': SwitchConditionWidget,
+    widget: SwitchConditionWidget,
     judgement: {
-      'ui:widget': ActionCard,
+      widget: ActionCard,
       content: data => data.condition,
     },
   },
   [SDKKinds.Foreach]: {
-    'ui:widget': ForeachWidget,
+    widget: ForeachWidget,
     loop: {
-      'ui:widget': ActionCard,
+      widget: ActionCard,
       content: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
     },
   },
   [SDKKinds.ForeachPage]: {
-    'ui:widget': ForeachWidget,
+    widget: ForeachWidget,
     loop: {
-      'ui:widget': ActionCard,
+      widget: ActionCard,
       content: data => {
         const pageSizeString = get(data, 'pageSize', '?');
         const propString = get(data, 'itemsProperty', '?');
@@ -116,9 +116,9 @@ export const uiSchema: UISchema = {
     },
   },
   [SDKKinds.SendActivity]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
       icon: ElementIcon.MessageBot,
       colors: {
         theme: ObiColors.BlueMagenta20,
@@ -126,7 +126,7 @@ export const uiSchema: UISchema = {
       },
     },
     body: {
-      'ui:widget': ActivityRenderer,
+      widget: ActivityRenderer,
       field: 'activity',
     },
   },
@@ -137,12 +137,12 @@ export const uiSchema: UISchema = {
   [SDKKinds.TextInput]: BaseInputSchema,
   [SDKKinds.ChoiceInput]: BaseInputSchema,
   [SDKKinds.BeginDialog]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
     },
     body: {
-      'ui:widget': DialogRef,
+      widget: DialogRef,
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
@@ -158,9 +158,9 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.SkillDialog]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
     },
     body: data => (
       <SingleLineDiv>
@@ -177,9 +177,9 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.ReplaceDialog]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: {
-      'ui:widget': DialogRef,
+      widget: DialogRef,
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
@@ -189,9 +189,9 @@ export const uiSchema: UISchema = {
     },
   },
   [SDKKinds.EditArray]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
     },
     body: data => (
       <>
@@ -207,11 +207,11 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.SetProperty]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => `${data.property || '?'} : ${data.value || '?'}`,
   },
   [SDKKinds.SetProperties]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => (
       <ListOverview
         items={data.assignments}
@@ -229,11 +229,11 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.DeleteProperty]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => data.property,
   },
   [SDKKinds.DeleteProperties]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => (
       <ListOverview
         items={data.properties}
@@ -247,13 +247,13 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.EndDialog]: {
-    'ui:widget': ActionHeader,
+    widget: ActionHeader,
   },
   [SDKKinds.RepeatDialog]: {
-    'ui:widget': ActionHeader,
+    widget: ActionHeader,
   },
   [SDKKinds.CancelAllDialogs]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data =>
       data.eventName ? (
         <>
@@ -263,10 +263,10 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.EndTurn]: {
-    'ui:widget': ActionHeader,
+    widget: ActionHeader,
   },
   [SDKKinds.EmitEvent]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => (
       <>
         {data.eventName || '?'}
@@ -275,9 +275,9 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.HttpRequest]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
     },
     body: data => (
       <SingleLineDiv>
@@ -294,23 +294,23 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.TraceActivity]: {
-    'ui:widget': ActionHeader,
+    widget: ActionHeader,
   },
   [SDKKinds.LogAction]: {
-    'ui:widget': ActionHeader,
+    widget: ActionHeader,
   },
   [SDKKinds.EditActions]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => data.changeType,
   },
   [SDKKinds.QnAMakerDialog]: {
-    'ui:widget': ActionCard,
+    widget: ActionCard,
     content: data => data.hostname,
   },
   [SDKKinds.OAuthInput]: {
-    'ui:widget': CardTemplate,
+    widget: CardTemplate,
     header: {
-      'ui:widget': ActionHeader,
+      widget: ActionHeader,
     },
     body: data => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
     footer: data =>

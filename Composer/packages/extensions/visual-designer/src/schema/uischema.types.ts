@@ -16,7 +16,7 @@ export type UISchema = {
 };
 
 /** widget */
-export const UI_WIDGET_KEY = 'ui:widget';
+export const UI_WIDGET_KEY = 'widget';
 
 export interface UIWidget {
   [UI_WIDGET_KEY]: WidgetComponent<any>;
