@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import React from 'react';
+import { SDKKinds } from '@bfc/shared';
 
 import { UIOptions } from './uiSchema';
 
@@ -55,3 +56,29 @@ export interface FieldProps<T = any> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FieldWidget<T = any> = React.FC<FieldProps<T>>;
+
+export interface IRecognizerType {
+  $kind: SDKKinds;
+  id: string;
+}
+export interface ICrossTrainedRecognizerSet {
+  $kind: SDKKinds;
+  recognizers: string[];
+}
+export interface IRecognizer {
+  $kind: SDKKinds;
+  recognizers: (
+    | {
+        $kind: SDKKinds;
+        recognizers: {
+          'en-us': IRecognizerType | string | ICrossTrainedRecognizerSet;
+        };
+        id?: undefined;
+      }
+    | {
+        $kind: SDKKinds;
+        id: string;
+        recognizers?: undefined;
+      }
+  )[];
+}

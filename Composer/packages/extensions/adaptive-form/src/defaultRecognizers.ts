@@ -9,9 +9,11 @@ import { RegexIntentField } from './components/fields/RegexIntentField';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
-    id: 'none',
-    displayName: () => formatMessage('None'),
-    isSelected: data => data === undefined,
+    id: 'value',
+    displayName: () => formatMessage('Value'),
+    isSelected: data => {
+      return typeof data === 'object' && data.$kind === SDKKinds.ValueRecognizer;
+    },
     handleRecognizerChange: props => props.onChange(undefined),
   },
   {
@@ -21,8 +23,8 @@ const DefaultRecognizers: RecognizerSchema[] = [
     isSelected: data => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
     },
-    handleRecognizerChange: props => {
-      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
+    handleRecognizerChange: (props, shellData, shellAPi, fallback) => {
+      fallback({ $kind: SDKKinds.RegexRecognizer, intents: [] });
     },
   },
 ];

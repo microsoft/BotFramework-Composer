@@ -84,6 +84,14 @@ export interface LuFile {
   intents: LuIntentSection[];
   [key: string]: any;
 }
+export interface QnaFile {
+  id: string;
+  content: string;
+  diagnostics: Diagnostic[];
+  intents: LuIntentSection[];
+  [key: string]: any;
+}
+
 export interface CodeRange {
   startLineNumber: number;
   endLineNumber: number;

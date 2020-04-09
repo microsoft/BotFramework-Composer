@@ -2,29 +2,62 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useMemo } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension';
-import { MicrosoftIRecognizer } from '@bfc/shared';
+import React, { useContext, useMemo, useEffect } from 'react';
+import { FieldProps, useShellApi, IRecognizer, ICrossTrainedRecognizerSet, IRecognizerType } from '@bfc/extension';
+import { SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
+import cloneDeep from 'lodash/cloneDeep';
 
 import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
 
-const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
-  const { value, id, label, description, uiOptions } = props;
+const defaultRecoginzerSet: IRecognizer = {
+  $kind: SDKKinds.RecognizerSet,
+  recognizers: [
+    {
+      $kind: SDKKinds.MultiLanguageRecognizer,
+      recognizers: {
+        'en-us': '',
+      },
+    },
+    {
+      $kind: SDKKinds.ValueRecognizer,
+      id: 'value',
+    },
+  ],
+};
+
+const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
+  const { value, id, label, description, uiOptions, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = useContext(PluginContext);
-
+  let recognizer: IRecognizerType | string | ICrossTrainedRecognizerSet = '';
+  if (typeof value === 'object' && value.$kind === SDKKinds.RecognizerSet) {
+    recognizer = value.recognizers[0].recognizers?.['en-us'] || {
+      $kind: SDKKinds.ValueRecognizer,
+      id: 'value',
+    };
+  } else {
+    recognizer = {
+      $kind: SDKKinds.ValueRecognizer,
+      id: 'value',
+    };
+  }
+  useEffect(() => {
+    if (typeof recognizer === 'object' && recognizer.$kind === SDKKinds.ValueRecognizer) {
+      onChange(defaultRecoginzerSet);
+    }
+  }, [recognizer]);
   const options = useMemo(() => {
     return recognizers.map(r => ({
       key: r.id,
-      text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
+      text: typeof r.displayName === 'function' ? r.displayName(recognizer) : r.displayName,
     }));
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
-    const selected = recognizers.filter(r => r.isSelected(value)).map(r => r.id);
+    const selected = recognizers.filter(r => r.isSelected(recognizer)).map(r => r.id);
 
     if (selected.length !== 1) {
       console.error(
@@ -41,9 +74,16 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
       const handler = recognizers.find(r => r.id === option.key)?.handleRecognizerChange;
+      const fallback = (data: string | object) => {
+        const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
+        if (finalRecognizerSet.recognizers[0].recognizers) {
+          finalRecognizerSet.recognizers[0].recognizers['en-us'] = recognizer;
+        }
+        onChange(finalRecognizerSet);
+      };
 
       if (handler) {
-        handler(props, shellData, shellApi);
+        handler(props, shellData, shellApi, fallback);
       }
     }
   };

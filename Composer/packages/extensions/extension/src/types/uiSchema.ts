@@ -59,5 +59,10 @@ export type RecognizerSchema = {
   /** A function invoked with the form data to determine if this is the currently selected recognizer */
   isSelected: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
-  handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  handleRecognizerChange: (
+    fieldProps: FieldProps,
+    shellData: ShellData,
+    shellApi: ShellApi,
+    fallback: Function
+  ) => void;
 };
