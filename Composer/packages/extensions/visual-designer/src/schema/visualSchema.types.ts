@@ -15,11 +15,13 @@ export type VisualSchema = {
   [key in SDKKinds | VisualSchemaBuiltinKeys]?: VisualWidget;
 };
 
-/** widget */
-export const UI_WIDGET_KEY = 'widget';
-
 export interface VisualWidget {
-  [UI_WIDGET_KEY]: WidgetComponent<any> | string;
+  /** Widget implementation (React Class) or Widget name (string) */
+  widget: WidgetComponent<any> | string;
+
+  /** If set to true, output widget will be borderless (usually applied to IfCondition, SwitchCondition) */
+  nowrap?: boolean;
+
   [propKey: string]: UIWidgetProp;
 }
 
@@ -35,5 +37,5 @@ export interface WidgetContainerProps {
 }
 
 export type UIWidgetProp = Value | PropGenerator | VisualWidget;
-type Value = string | number | { [key: string]: any };
+type Value = string | number | boolean | undefined | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;

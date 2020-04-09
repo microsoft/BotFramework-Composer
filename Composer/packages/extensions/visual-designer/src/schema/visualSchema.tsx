@@ -15,6 +15,7 @@ import { VisualSchema, VisualWidget } from './visualSchema.types';
 
 const BaseInputSchema: VisualWidget = {
   widget: 'PromptWidget',
+  nowrap: true,
   botAsks: {
     widget: 'ActionCard',
     header: {
@@ -76,6 +77,7 @@ export const visualSchema: VisualSchema = {
   },
   [SDKKinds.IfCondition]: {
     widget: 'IfConditionWidget',
+    nowrap: true,
     judgement: {
       widget: 'ActionCard',
       body: data => data.condition,
@@ -83,6 +85,7 @@ export const visualSchema: VisualSchema = {
   },
   [SDKKinds.SwitchCondition]: {
     widget: 'SwitchConditionWidget',
+    nowrap: true,
     judgement: {
       widget: 'ActionCard',
       body: data => data.condition,
@@ -90,6 +93,7 @@ export const visualSchema: VisualSchema = {
   },
   [SDKKinds.Foreach]: {
     widget: 'ForeachWidget',
+    nowrap: true,
     loop: {
       widget: 'ActionCard',
       body: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
@@ -97,6 +101,7 @@ export const visualSchema: VisualSchema = {
   },
   [SDKKinds.ForeachPage]: {
     widget: 'ForeachWidget',
+    nowrap: true,
     loop: {
       widget: 'ActionCard',
       body: data => {

@@ -7,7 +7,7 @@ import { BaseSchema } from '@bfc/shared';
 import { Boundary } from '../models/Boundary';
 import * as BuiltInWidgets from '../widgets';
 
-import { VisualWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './visualSchema.types';
+import { VisualWidget, UIWidgetProp, WidgetEventHandler } from './visualSchema.types';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
@@ -24,16 +24,16 @@ export interface UIWidgetContext {
 }
 
 const parseWidgetSchema = (widgetSchema: VisualWidget) => {
-  const { [UI_WIDGET_KEY]: widgetValue, ...props } = widgetSchema;
-  if (typeof widgetValue === 'string') {
-    const widgetName = widgetValue;
+  const { widget, ...props } = widgetSchema;
+  if (typeof widget === 'string') {
+    const widgetName = widget;
     return {
       Widget: BuiltInWidgets[widgetName] || (() => <></>),
       props,
     };
   }
   return {
-    Widget: widgetValue,
+    Widget: widget,
     props,
   };
 };
@@ -45,7 +45,8 @@ const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) =
     return element;
   }
 
-  if (typeof rawPropValue === 'object' && rawPropValue[UI_WIDGET_KEY]) {
+  // handle recursive widget def
+  if (typeof rawPropValue === 'object' && rawPropValue.widget) {
     const widgetSchema = rawPropValue as VisualWidget;
     return renderUIWidget(widgetSchema, context);
   }
