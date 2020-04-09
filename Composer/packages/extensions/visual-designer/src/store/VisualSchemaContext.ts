@@ -4,8 +4,8 @@
 import React from 'react';
 
 import { VisualSchemaProvider } from '../schema/visualSchemaProvider';
-import { visualSchema } from '../schema/visualSchema';
+import { defaultVisualSchema } from '../schema/defaultVisualSchema';
 
-const defaultProvider = new VisualSchemaProvider(visualSchema);
+const defaultProvider = new VisualSchemaProvider(defaultVisualSchema);
 
 export const VisualSchemaContext = React.createContext<VisualSchemaProvider>(defaultProvider);

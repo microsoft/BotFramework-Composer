@@ -70,7 +70,7 @@ const BaseInputSchema: VisualWidget = {
   },
 };
 
-export const visualSchema: VisualSchema = {
+export const defaultVisualSchema: VisualSchema = {
   default: {
     widget: 'ActionHeader',
   },

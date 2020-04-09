@@ -14,7 +14,7 @@ import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRende
 import { SelfHostContext } from './store/SelfHostContext';
 import { VisualSchemaContext } from './store/VisualSchemaContext';
 import { VisualSchemaProvider } from './schema/visualSchemaProvider';
-import { visualSchema } from './schema/visualSchema';
+import { defaultVisualSchema } from './schema/defaultVisualSchema';
 import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 
 formatMessage.setup({
@@ -36,7 +36,7 @@ const styles = css`
   overflow: scroll;
 `;
 
-const visualEditorSchemaProvider = new VisualSchemaProvider(visualSchema);
+const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema);
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
