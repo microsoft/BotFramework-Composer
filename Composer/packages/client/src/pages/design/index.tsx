@@ -13,7 +13,7 @@ import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';

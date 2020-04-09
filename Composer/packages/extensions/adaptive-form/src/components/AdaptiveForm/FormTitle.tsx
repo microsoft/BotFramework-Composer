@@ -83,6 +83,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
           uiOptions={{}}
           value={getTitle()}
           onChange={handleTitleChange}
+          ariaLabel={formatMessage('form title')}
         />
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>

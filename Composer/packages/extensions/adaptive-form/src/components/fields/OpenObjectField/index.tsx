@@ -7,6 +7,7 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
 
@@ -88,7 +89,7 @@ const OpenObjectField: React.FC<FieldProps<{
           <div css={styles.item}>
             <TextField
               autoComplete="off"
-              placeholder={'Add a new key'}
+              placeholder={formatMessage('Add a new key')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
@@ -104,7 +105,7 @@ const OpenObjectField: React.FC<FieldProps<{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
-              placeholder={'Add a new value'}
+              placeholder={formatMessage('Add a new value')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
@@ -114,7 +115,7 @@ const OpenObjectField: React.FC<FieldProps<{
             />
           </div>
           <IconButton
-            ariaLabel={'Edit Property'}
+            ariaLabel={formatMessage('Edit Property')}
             disabled={true}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{

@@ -7,7 +7,6 @@ import { ActionCreator } from '../types';
 
 import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
-import { startBot } from './publisher';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
@@ -33,7 +32,7 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
   dispatch({
     type: ActionTypes.UPDATE_BOTSTATUS,
-    payload: status,
+    payload: { status },
   });
 };
 
@@ -94,7 +93,6 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       // navTo(store, 'Main');
       const mainUrl = `/bot/${projectId}/dialogs/Main`;
       navigateTo(mainUrl);
-      startBot(store, true);
     } else {
       navigate(BASEPATH);
     }
