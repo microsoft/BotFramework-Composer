@@ -4,8 +4,9 @@
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { ComboBoxField } from '@bfc/ui-plugin-select-dialog';
 import formatMessage from 'format-message';
+
+import { ComboBoxField } from './ComboBoxField';
 
 const ADD_DIALOG = 'ADD_DIALOG';
 

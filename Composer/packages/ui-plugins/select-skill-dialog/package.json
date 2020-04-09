@@ -22,7 +22,6 @@
   "peerDependencies": {
     "@bfc/extension": "*",
     "@bfc/adaptive-form": "*",
-    "@bfc/ui-plugin-select-dialog": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
