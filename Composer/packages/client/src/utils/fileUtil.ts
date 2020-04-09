@@ -45,7 +45,7 @@ export function getFileIconName(file: File) {
       return docType;
     }
 
-    return FileTypes.UNKNOW;
+    return FileTypes.UNKNOWN;
   }
 }
 
