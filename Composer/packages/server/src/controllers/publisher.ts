@@ -177,6 +177,61 @@ export const PublishController = {
     });
   },
   rollback: async (req, res) => {
-    // TODO
+    const target = req.params.target;
+    const user = await PluginLoader.getUserFromRequest(req);
+    const { rollbackToVersion, sensitiveSettings } = req.body;
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    // deal with publishTargets not exist in settings
+    const publishTargets = currentProject.settings?.publishTargets || [];
+    const allTargets = [defaultPublishConfig, ...publishTargets];
+
+    const profiles = allTargets.filter(t => t.name === target);
+    const profile = profiles.length ? profiles[0] : undefined;
+    const method = profile ? profile.type : undefined;
+
+    // append config from client(like sensitive settings)
+    const configuration = {
+      name: profile.name,
+      ...JSON.parse(profile.configuration),
+      settings: merge({}, currentProject.settings, sensitiveSettings),
+      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+    };
+
+    if (
+      profile &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.rollback
+    ) {
+      // get the externally defined method
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.rollback;
+      if (typeof pluginMethod === 'function') {
+        try {
+          // call the method
+          const results = await pluginMethod.call(null, configuration, currentProject, rollbackToVersion, user);
+
+          // copy status into payload for ease of access in client
+          const response = {
+            ...results.result,
+            status: results.status,
+          };
+
+          // set status and return value as json
+          return res.status(results.status).json(response);
+        } catch (err) {
+          return res.status(400).json({
+            statusCode: '400',
+            message: err.message,
+          });
+        }
+      }
+    }
+
+    res.status(400).json({
+      statusCode: '400',
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+    });
   },
 };
