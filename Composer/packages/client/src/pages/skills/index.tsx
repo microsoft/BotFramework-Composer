@@ -8,7 +8,7 @@ import React, { useContext } from 'react';
 import formatMessage from 'format-message';
 
 import { ToolBar } from '../../components/ToolBar/index';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
