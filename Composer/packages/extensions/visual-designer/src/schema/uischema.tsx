@@ -81,7 +81,7 @@ const BaseInputSchema: UIWidget = {
 
 export const uiSchema: UISchema = {
   default: {
-    widget: ActionCard,
+    widget: ActionHeader,
   },
   [SDKKinds.IfCondition]: {
     widget: IfConditionWidget,
