@@ -5,6 +5,7 @@ import React from 'react';
 import { BaseSchema } from '@bfc/shared';
 
 import { Boundary } from '../models/Boundary';
+import * as BuiltInWidgets from '../widgets';
 
 import { UIWidget, UI_WIDGET_KEY, UIWidgetProp, WidgetEventHandler } from './uischema.types';
 
@@ -23,9 +24,16 @@ export interface UIWidgetContext {
 }
 
 const parseWidgetSchema = (widgetSchema: UIWidget) => {
-  const { [UI_WIDGET_KEY]: Widget, ...props } = widgetSchema;
+  const { [UI_WIDGET_KEY]: widgetValue, ...props } = widgetSchema;
+  if (typeof widgetValue === 'string') {
+    const widgetName = widgetValue;
+    return {
+      Widget: BuiltInWidgets[widgetName] || (() => <></>),
+      props,
+    };
+  }
   return {
-    Widget,
+    Widget: widgetValue,
     props,
   };
 };

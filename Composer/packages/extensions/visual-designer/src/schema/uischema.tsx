@@ -6,14 +6,6 @@ import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
 
-import { ActionCard } from '../widgets/ActionCard';
-import { ActivityRenderer } from '../widgets/ActivityRenderer';
-import { DialogRef } from '../widgets/DialogRef';
-import { PromptWidget } from '../widgets/PromptWidget';
-import { IfConditionWidget } from '../widgets/IfConditionWidget';
-import { SwitchConditionWidget } from '../widgets/SwitchConditionWidget';
-import { ForeachWidget } from '../widgets/ForeachWidget';
-import { ActionHeader } from '../widgets/ActionHeader';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/styledComponents';
@@ -22,11 +14,11 @@ import { ListOverview } from '../components/common/ListOverview';
 import { UISchema, UIWidget } from './uischema.types';
 
 const BaseInputSchema: UIWidget = {
-  widget: PromptWidget,
+  widget: 'PromptWidget',
   botAsks: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     header: {
-      widget: ActionHeader,
+      widget: 'ActionHeader',
       title: data => `Bot Asks (${getInputType(data.$kind)})`,
       icon: ElementIcon.MessageBot,
       colors: {
@@ -35,15 +27,15 @@ const BaseInputSchema: UIWidget = {
       },
     },
     body: {
-      widget: ActivityRenderer,
+      widget: 'ActivityRenderer',
       field: 'prompt',
       defaultContent: '<prompt>',
     },
   },
   userInput: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     header: {
-      widget: ActionHeader,
+      widget: 'ActionHeader',
       title: data => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: ElementIcon.User,
@@ -80,33 +72,33 @@ const BaseInputSchema: UIWidget = {
 
 export const uiSchema: UISchema = {
   default: {
-    widget: ActionHeader,
+    widget: 'ActionHeader',
   },
   [SDKKinds.IfCondition]: {
-    widget: IfConditionWidget,
+    widget: 'IfConditionWidget',
     judgement: {
-      widget: ActionCard,
+      widget: 'ActionCard',
       body: data => data.condition,
     },
   },
   [SDKKinds.SwitchCondition]: {
-    widget: SwitchConditionWidget,
+    widget: 'SwitchConditionWidget',
     judgement: {
-      widget: ActionCard,
+      widget: 'ActionCard',
       body: data => data.condition,
     },
   },
   [SDKKinds.Foreach]: {
-    widget: ForeachWidget,
+    widget: 'ForeachWidget',
     loop: {
-      widget: ActionCard,
+      widget: 'ActionCard',
       body: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
     },
   },
   [SDKKinds.ForeachPage]: {
-    widget: ForeachWidget,
+    widget: 'ForeachWidget',
     loop: {
-      widget: ActionCard,
+      widget: 'ActionCard',
       body: data => {
         const pageSizeString = get(data, 'pageSize', '?');
         const propString = get(data, 'itemsProperty', '?');
@@ -115,9 +107,9 @@ export const uiSchema: UISchema = {
     },
   },
   [SDKKinds.SendActivity]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     header: {
-      widget: ActionHeader,
+      widget: 'ActionHeader',
       icon: ElementIcon.MessageBot,
       colors: {
         theme: ObiColors.BlueMagenta20,
@@ -125,7 +117,7 @@ export const uiSchema: UISchema = {
       },
     },
     body: {
-      widget: ActivityRenderer,
+      widget: 'ActivityRenderer',
       field: 'activity',
     },
   },
@@ -136,9 +128,9 @@ export const uiSchema: UISchema = {
   [SDKKinds.TextInput]: BaseInputSchema,
   [SDKKinds.ChoiceInput]: BaseInputSchema,
   [SDKKinds.BeginDialog]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: {
-      widget: DialogRef,
+      widget: 'DialogRef',
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
@@ -154,7 +146,7 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.SkillDialog]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <SingleLineDiv>
         <FixedInfo>Host </FixedInfo>
@@ -170,9 +162,9 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.ReplaceDialog]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: {
-      widget: DialogRef,
+      widget: 'DialogRef',
       dialog: data => data.dialog,
       getRefContent: data => dialogRef => (
         <>
@@ -182,7 +174,7 @@ export const uiSchema: UISchema = {
     },
   },
   [SDKKinds.EditArray]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <>
         <FixedInfo>{data.changeType || '?'}</FixedInfo> {data.itemsProperty || '?'}
@@ -197,11 +189,11 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.SetProperty]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => `${data.property || '?'} : ${data.value || '?'}`,
   },
   [SDKKinds.SetProperties]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <ListOverview
         items={data.assignments}
@@ -219,11 +211,11 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.DeleteProperty]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => data.property,
   },
   [SDKKinds.DeleteProperties]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <ListOverview
         items={data.properties}
@@ -237,7 +229,7 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.CancelAllDialogs]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data =>
       data.eventName ? (
         <>
@@ -247,7 +239,7 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.EmitEvent]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <>
         {data.eventName || '?'}
@@ -256,7 +248,7 @@ export const uiSchema: UISchema = {
     ),
   },
   [SDKKinds.HttpRequest]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => (
       <SingleLineDiv>
         <FixedInfo>{data.method} </FixedInfo>
@@ -272,15 +264,15 @@ export const uiSchema: UISchema = {
       ) : null,
   },
   [SDKKinds.EditActions]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => data.changeType,
   },
   [SDKKinds.QnAMakerDialog]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => data.hostname,
   },
   [SDKKinds.OAuthInput]: {
-    widget: ActionCard,
+    widget: 'ActionCard',
     body: data => <SingleLineDiv>{data.connectionName}</SingleLineDiv>,
     footer: data =>
       data.tokenProperty ? (

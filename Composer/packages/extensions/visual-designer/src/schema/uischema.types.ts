@@ -19,7 +19,7 @@ export type UISchema = {
 export const UI_WIDGET_KEY = 'widget';
 
 export interface UIWidget {
-  [UI_WIDGET_KEY]: WidgetComponent<any>;
+  [UI_WIDGET_KEY]: WidgetComponent<any> | string;
   [propKey: string]: UIWidgetProp;
 }
 
