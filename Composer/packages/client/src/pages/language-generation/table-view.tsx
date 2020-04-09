@@ -170,6 +170,7 @@ const TableView: React.FC<TableViewProps> = props => {
                 items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+              ariaLabel={formatMessage('actions')}
             />
           );
         },
