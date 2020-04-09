@@ -4,28 +4,22 @@
 import React, { useState } from 'react';
 import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldProps, useShellApi } from '@bfc/extension';
+import { ComboBoxField } from '@bfc/ui-plugin-select-dialog';
 import formatMessage from 'format-message';
 
-import ComboBoxField, { ADD_DIALOG } from './ComboBoxField';
+const ADD_DIALOG = 'ADD_DIALOG';
 
 export const SelectSkillDialog: React.FC<FieldProps> = props => {
-  const { value = '', onChange } = props;
-
-  const {
-    currentDialog: { id: currentDialogId },
-    dialogs,
-    shellApi,
-  } = useShellApi();
-  const { createDialog, navTo } = shellApi;
+  const { value, onChange } = props;
+  const { shellApi, skills = [] } = useShellApi();
+  const { addSkillDialog } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
 
-  const options: IComboBoxOption[] = dialogs
-    .filter(({ id }) => id !== currentDialogId)
-    .map(({ displayName, id }) => ({
-      key: id,
-      text: displayName,
-      isSelected: value === displayName,
-    }));
+  const options: IComboBoxOption[] = skills.map(({ name, manifestUrl }) => ({
+    key: manifestUrl,
+    text: name,
+    isSelected: value === manifestUrl,
+  }));
 
   options.push(
     {
@@ -33,7 +27,7 @@ export const SelectSkillDialog: React.FC<FieldProps> = props => {
       itemType: SelectableOptionMenuItemType.Divider,
       text: '',
     },
-    { key: ADD_DIALOG, text: formatMessage('Create a new dialog') }
+    { key: ADD_DIALOG, text: formatMessage('Add a new Skill Dialog') }
   );
 
   if (comboboxTitle) {
@@ -43,17 +37,15 @@ export const SelectSkillDialog: React.FC<FieldProps> = props => {
   const handleChange = (_, option) => {
     if (option) {
       if (option.key === ADD_DIALOG) {
-        setComboboxTitle(formatMessage('Create a new dialog'));
-        createDialog([]).then(newDialog => {
-          if (newDialog) {
-            onChange(newDialog);
-            setTimeout(() => navTo(newDialog), 500);
-          } else {
-            setComboboxTitle(null);
+        setComboboxTitle(formatMessage('Add a new Skill Dialog'));
+        addSkillDialog().then(newSkill => {
+          if (newSkill && newSkill?.manifestUrl) {
+            onChange({ key: newSkill.manifestUrl });
           }
+          setComboboxTitle(null);
         });
       } else {
-        onChange(option.key);
+        onChange(option);
       }
     } else {
       onChange(null);

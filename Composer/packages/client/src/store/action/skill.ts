@@ -9,7 +9,7 @@ import { setError } from './error';
 
 export const updateSkill: ActionCreator = async (store, { projectId, targetId, skillData }) => {
   const state = store.getState();
-  const { skills: originSkills } = state;
+  const { onAddSkillDialogComplete, skills: originSkills } = state;
   const skills = [...originSkills];
 
   // add
@@ -32,6 +32,11 @@ export const updateSkill: ActionCreator = async (store, { projectId, targetId, s
   try {
     const response = await httpClient.post(`/projects/${projectId}/skills/`, { skills });
 
+    if (typeof onAddSkillDialogComplete === 'function') {
+      const skill = response.data.find(({ manifestUrl }) => manifestUrl === skillData.manifestUrl);
+      skill && onAddSkillDialogComplete(skill);
+    }
+
     store.dispatch({
       type: ActionTypes.UPDATE_SKILL_SUCCESS,
       payload: {
@@ -45,4 +50,36 @@ export const updateSkill: ActionCreator = async (store, { projectId, targetId, s
       summary: 'UPDATE SKILL ERROR',
     });
   }
+};
+
+export const addSkillDialogBegin: ActionCreator = ({ dispatch }, onComplete) => {
+  dispatch({
+    type: ActionTypes.ADD_SKILL_DIALOG_BEGIN,
+    payload: {
+      onComplete,
+    },
+  });
+};
+
+export const addSkillDialogCancel: ActionCreator = ({ dispatch, getState }) => {
+  const { onAddSkillDialogComplete } = getState();
+
+  if (typeof onAddSkillDialogComplete === 'function') {
+    onAddSkillDialogComplete(null);
+  }
+
+  dispatch({
+    type: ActionTypes.ADD_SKILL_DIALOG_END,
+  });
+};
+
+export const addSkillDialogSuccess: ActionCreator = ({ dispatch, getState }) => {
+  const { onAddSkillDialogComplete } = getState();
+  if (typeof onAddSkillDialogComplete === 'function') {
+    onAddSkillDialogComplete(null);
+  }
+
+  dispatch({
+    type: ActionTypes.ADD_SKILL_DIALOG_END,
+  });
 };

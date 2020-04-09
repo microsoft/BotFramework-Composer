@@ -5,8 +5,6 @@ import { PluginConfig } from '@bfc/extension';
 
 import uiSchema from './uiSchema';
 
-export * from './ComboBoxField';
-
 const config: PluginConfig = {
   uiSchema,
 };
