@@ -68,9 +68,6 @@ export interface ShellApi {
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
-<<<<<<< HEAD
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
-=======
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
->>>>>>> Added select skill dialog ui plugin
 }
