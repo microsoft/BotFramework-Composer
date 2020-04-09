@@ -4,8 +4,8 @@
 import React from 'react';
 
 import { UISchemaProvider } from '../schema/uischemaProvider';
-import { uiSchema } from '../schema/uischema';
+import { visualSchema } from '../schema/visualSchema';
 
-const defaultProvider = new UISchemaProvider(uiSchema);
+const defaultProvider = new UISchemaProvider(visualSchema);
 
 export const UISchemaContext = React.createContext<UISchemaProvider>(defaultProvider);

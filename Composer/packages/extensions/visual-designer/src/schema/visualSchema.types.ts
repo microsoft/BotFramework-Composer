@@ -6,19 +6,19 @@ import { BaseSchema, SDKKinds } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
-export enum UISchemaBuiltinKeys {
+export enum VisualSchemaBuiltinKeys {
   default = 'default',
 }
 
 /** schema */
-export type UISchema = {
-  [key in SDKKinds | UISchemaBuiltinKeys]?: UIWidget;
+export type VisualSchema = {
+  [key in SDKKinds | VisualSchemaBuiltinKeys]?: VisualWidget;
 };
 
 /** widget */
 export const UI_WIDGET_KEY = 'widget';
 
-export interface UIWidget {
+export interface VisualWidget {
   [UI_WIDGET_KEY]: WidgetComponent<any> | string;
   [propKey: string]: UIWidgetProp;
 }
@@ -34,6 +34,6 @@ export interface WidgetContainerProps {
   [propKey: string]: any;
 }
 
-export type UIWidgetProp = Value | PropGenerator | UIWidget;
+export type UIWidgetProp = Value | PropGenerator | VisualWidget;
 type Value = string | number | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;

@@ -11,9 +11,9 @@ import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/styledComponents';
 import { ListOverview } from '../components/common/ListOverview';
 
-import { UISchema, UIWidget } from './uischema.types';
+import { VisualSchema, VisualWidget } from './visualSchema.types';
 
-const BaseInputSchema: UIWidget = {
+const BaseInputSchema: VisualWidget = {
   widget: 'PromptWidget',
   botAsks: {
     widget: 'ActionCard',
@@ -70,7 +70,7 @@ const BaseInputSchema: UIWidget = {
   },
 };
 
-export const uiSchema: UISchema = {
+export const visualSchema: VisualSchema = {
   default: {
     widget: 'ActionHeader',
   },

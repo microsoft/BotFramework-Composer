@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import get from 'lodash/get';
 
 import { LinkBtn } from '../components/elements/styledComponents';
-import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
+import { WidgetContainerProps, WidgetComponent } from '../schema/visualSchema.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
 export interface DialogRefCardProps extends WidgetContainerProps {

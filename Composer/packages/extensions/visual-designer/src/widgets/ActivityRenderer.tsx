@@ -5,7 +5,7 @@ import React from 'react';
 import get from 'lodash/get';
 
 import { useLgTemplate } from '../hooks/useLgTemplate';
-import { WidgetContainerProps } from '../schema/uischema.types';
+import { WidgetContainerProps } from '../schema/visualSchema.types';
 
 export interface ActivityRenderer extends WidgetContainerProps {
   /** indicates which field contains lg activity. ('activity', 'prompt', 'invalidPropmt'...) */

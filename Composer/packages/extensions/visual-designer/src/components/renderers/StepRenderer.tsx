@@ -8,8 +8,8 @@ import { SDKKinds } from '@bfc/shared';
 import get from 'lodash/get';
 
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { renderUIWidget } from '../../schema/uischemaRenderer';
-import { UISchemaContext } from '../../store/UISchemaContext';
+import { renderUIWidget } from '../../schema/visualSchemaRenderer';
+import { VisualSchemaContext } from '../../store/VisualSchemaContext';
 
 import { ElementWrapper } from './ElementWrapper';
 import { ElementMeasurer } from './ElementMeasurer';
@@ -29,7 +29,7 @@ const TypesWithoutWrapper = [
 ];
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  const schemaProvider = useContext(UISchemaContext);
+  const schemaProvider = useContext(VisualSchemaContext);
 
   const $kind = get(data, '$kind', '');
   const widgetSchema = schemaProvider.get($kind);

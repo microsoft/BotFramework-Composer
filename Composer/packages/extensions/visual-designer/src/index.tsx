@@ -12,9 +12,9 @@ import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
-import { UISchemaContext } from './store/UISchemaContext';
-import { UISchemaProvider } from './schema/uischemaProvider';
-import { uiSchema } from './schema/uischema';
+import { VisualSchemaContext } from './store/VisualSchemaContext';
+import { VisualSchemaProvider } from './schema/visualSchemaProvider';
+import { visualSchema } from './schema/visualSchema';
 import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 
 formatMessage.setup({
@@ -36,7 +36,7 @@ const styles = css`
   overflow: scroll;
 `;
 
-const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
+const visualEditorSchemaProvider = new VisualSchemaProvider(visualSchema);
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
   dialogId,
@@ -102,7 +102,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <UISchemaContext.Provider value={visualEditorSchemaProvider}>
+          <VisualSchemaContext.Provider value={visualEditorSchemaProvider}>
             <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
                 key={dialogId}
@@ -122,7 +122,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 addCoachMarkRef={addCoachMarkRef}
               />
             </div>
-          </UISchemaContext.Provider>
+          </VisualSchemaContext.Provider>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>

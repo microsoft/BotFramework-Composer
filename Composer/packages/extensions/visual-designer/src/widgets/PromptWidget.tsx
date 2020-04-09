@@ -11,7 +11,7 @@ import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
-import { WidgetContainerProps } from '../schema/uischema.types';
+import { WidgetContainerProps } from '../schema/visualSchema.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
 import { renderEdge } from '../components/lib/EdgeUtil';

@@ -5,11 +5,11 @@ import get from 'lodash/get';
 
 import { VisualWidget, VisualSchema } from './visualSchema.types';
 
-export class UISchemaProvider {
+export class VisualSchemaProvider {
   schema: VisualSchema;
 
-  constructor(uiSchema: VisualSchema) {
-    this.schema = uiSchema;
+  constructor(visualSchema: VisualSchema) {
+    this.schema = visualSchema;
   }
 
   get = ($kind: string): VisualWidget => {

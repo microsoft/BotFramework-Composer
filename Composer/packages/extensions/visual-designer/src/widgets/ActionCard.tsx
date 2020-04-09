@@ -3,7 +3,7 @@
 
 import React, { ReactNode } from 'react';
 
-import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
+import { WidgetContainerProps, WidgetComponent } from '../schema/visualSchema.types';
 import { CardTemplate } from '../components/nodes/templates/CardTemplate';
 
 import { ActionHeader } from './ActionHeader';
