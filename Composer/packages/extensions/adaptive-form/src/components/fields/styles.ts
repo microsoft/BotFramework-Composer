@@ -4,6 +4,7 @@
 import { css } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { FontSizes } from '@uifabric/styling';
+import { IPivotStyles } from 'office-ui-fabric-react/lib/Pivot';
 
 export const arrayField = {
   field: css`
@@ -178,4 +179,20 @@ export const oneOfField = {
 
     label: OneOfFieldLabel;
   `,
+};
+
+export const tabs: Partial<IPivotStyles> = {
+  root: {
+    display: 'flex',
+    padding: '0 18px',
+  },
+  link: {
+    flex: 1,
+  },
+  linkIsSelected: {
+    flex: 1,
+  },
+  itemContainer: {
+    padding: '12px 12px',
+  },
 };

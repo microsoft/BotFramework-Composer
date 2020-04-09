@@ -4,11 +4,14 @@
 import { PluginConfig } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
+import { QnaIntentEditor } from './QnaIntentEditor';
+
 const config: PluginConfig = {
   recognizers: [
     {
       id: SDKKinds.QnaRecognizer,
       displayName: 'QNA',
+      editor: QnaIntentEditor,
       isSelected: data => {
         return typeof data === 'string' && data.endsWith('.qna');
       },

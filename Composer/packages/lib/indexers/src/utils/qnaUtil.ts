@@ -20,8 +20,8 @@ export function contentParse(content: string): QnaIntentSection[] {
       .substring(0, text.trim().length - 3)
       .split('```');
     intentSections.push({
-      Name: name,
-      Body: body,
+      Name: name.replace(NEWLINE, '').trim(),
+      Body: body.trim(),
     });
   });
   return intentSections;
@@ -30,7 +30,7 @@ export function contentParse(content: string): QnaIntentSection[] {
 function generateContent(intentSections: QnaIntentSection[]): string {
   const intentTexts: string[] = [];
   intentSections.forEach(section => {
-    intentTexts.push(`# ${section.Name} ${NEWLINE} ` + '```' + section.Body + NEWLINE + '```' + NEWLINE);
+    intentTexts.push(`# ${section.Name} ${NEWLINE} ` + '```' + NEWLINE + section.Body + NEWLINE + '```' + NEWLINE);
   });
   return intentTexts.join(NEWLINE);
 }

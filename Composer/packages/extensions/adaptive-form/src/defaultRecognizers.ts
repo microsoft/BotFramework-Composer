@@ -14,7 +14,9 @@ const DefaultRecognizers: RecognizerSchema[] = [
     isSelected: data => {
       return typeof data === 'object' && data.$kind === SDKKinds.ValueRecognizer;
     },
-    handleRecognizerChange: props => props.onChange(undefined),
+    handleRecognizerChange: (props, shellData, shellAPi, fallback) => {
+      fallback('');
+    },
   },
   {
     id: SDKKinds.RegexRecognizer,
@@ -24,7 +26,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
     },
     handleRecognizerChange: (props, shellData, shellAPi, fallback) => {
-      fallback({ $kind: SDKKinds.RegexRecognizer, intents: [] });
+      fallback({ $kind: SDKKinds.RegexRecognizer, intents: [], id: SDKKinds.RegexRecognizer });
     },
   },
 ];

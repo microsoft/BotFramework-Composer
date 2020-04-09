@@ -128,6 +128,16 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     return await updateLuFile({ id, projectId, content });
   }
 
+  async function removeLuIntentHandler(id, intentName) {
+    const file = luFileResolver(id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const content = luUtil.removeIntent(file.content, intentName);
+
+    return await updateLuFile({ id, projectId, content });
+  }
+
   async function updateQnaIntentHandler(id, intentName, intent) {
     const file = qnaFileResolver(id);
     if (!file) throw new Error(`qna file ${id} not found`);
@@ -138,16 +148,15 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     return await updateQnaFile({ id, projectId, content });
   }
 
-  async function removeLuIntentHandler(id, intentName) {
-    const file = luFileResolver(id);
+  async function removeQnaIntentHandler(id, intentName) {
+    const file = qnaFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
     const content = qnaUtil.removeIntent(file.content, intentName);
 
-    return await updateLuFile({ id, projectId, content });
+    return await updateQnaFile({ id, projectId, content });
   }
-
   async function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find(dialog => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
@@ -232,6 +241,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     removeLgTemplates: removeLgTemplatesHandler,
     updateLuIntent: updateLuIntentHandler,
     updateQnaIntent: updateQnaIntentHandler,
+    removeQnaIntent: removeQnaIntentHandler,
     updateRegExIntent: updateRegExIntentHandler,
     removeLuIntent: removeLuIntentHandler,
     navTo,

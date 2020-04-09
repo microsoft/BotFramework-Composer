@@ -79,13 +79,13 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
 function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
-  insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
+  insert(dialogCopy.content, `recognizer.recognizers[0].recognizers['en-us'].intents`, undefined, regex);
   return dialogCopy;
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   let dialogCopy = cloneDeep(dialog);
-  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const regexIntents = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].intents`, []);
   const targetIntent = regexIntents.find(ri => ri.intent === intent);
   if (!targetIntent) {
     dialogCopy = createRegExIntent(dialog, intent, pattern);
@@ -99,7 +99,7 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 //switch to another recognizer type
 function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const regexIntents = get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].intents`, []);
   const index = regexIntents.findIndex(ri => ri.intent === intent);
   if (index > -1) {
     regexIntents.splice(index, 1);

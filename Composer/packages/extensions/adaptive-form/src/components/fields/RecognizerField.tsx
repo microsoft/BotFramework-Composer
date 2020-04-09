@@ -36,12 +36,12 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
   if (typeof value === 'object' && value.$kind === SDKKinds.RecognizerSet) {
     recognizer = value.recognizers[0].recognizers?.['en-us'] || {
       $kind: SDKKinds.ValueRecognizer,
-      id: 'value',
+      id: SDKKinds.ValueRecognizer,
     };
   } else {
     recognizer = {
       $kind: SDKKinds.ValueRecognizer,
-      id: 'value',
+      id: SDKKinds.ValueRecognizer,
     };
   }
   useEffect(() => {

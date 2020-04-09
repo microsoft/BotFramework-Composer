@@ -64,6 +64,7 @@ export interface ShellApi {
   updateQnaIntent: (id: string, intentName: string, intent: QnaIntentSection | null) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
+  removeQnaIntent: (id: string, intentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
