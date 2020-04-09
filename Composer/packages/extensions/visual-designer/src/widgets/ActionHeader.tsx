@@ -14,7 +14,7 @@ import { Icon } from '../components/decorations/icon';
 import { StandardFontCSS, TruncatedCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
-  title: string;
+  title?: string;
   disableSDKTitle?: boolean;
   icon?: string;
   menu?: JSX.Element | 'none';
@@ -45,7 +45,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   id,
   data,
   onEvent,
-  title,
+  title = '',
   disableSDKTitle,
   icon,
   menu,
