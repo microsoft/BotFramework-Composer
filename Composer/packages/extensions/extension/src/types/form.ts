@@ -60,6 +60,7 @@ export type FieldWidget<T = any> = React.FC<FieldProps<T>>;
 export interface IRecognizerType {
   $kind: SDKKinds;
   id: string;
+  intents?: any[];
 }
 export interface ICrossTrainedRecognizerSet {
   $kind: SDKKinds;

@@ -42,6 +42,7 @@ const BotStructureTemplate = {
     entry: '${DIALOGNAME}.dialog',
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    qna: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.qna',
   },
 };
 
@@ -319,6 +320,11 @@ export class BotProject {
       });
     } else if (fileType === '.lu') {
       dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.lu)), {
+        DIALOGNAME,
+        LOCALE,
+      });
+    } else if (fileType === '.qna') {
+      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.qna)), {
         DIALOGNAME,
         LOCALE,
       });

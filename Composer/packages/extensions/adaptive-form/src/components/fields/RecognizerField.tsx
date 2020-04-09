@@ -74,10 +74,10 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
       const handler = recognizers.find(r => r.id === option.key)?.handleRecognizerChange;
-      const fallback = (data: string | object) => {
+      const fallback = (data: string | IRecognizerType | ICrossTrainedRecognizerSet) => {
         const finalRecognizerSet = cloneDeep(defaultRecoginzerSet);
         if (finalRecognizerSet.recognizers[0].recognizers) {
-          finalRecognizerSet.recognizers[0].recognizers['en-us'] = recognizer;
+          finalRecognizerSet.recognizers[0].recognizers['en-us'] = data;
         }
         onChange(finalRecognizerSet);
       };

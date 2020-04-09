@@ -84,11 +84,16 @@ export interface LuFile {
   intents: LuIntentSection[];
   [key: string]: any;
 }
+
+export interface QnaIntentSection {
+  Name: string;
+  Body: string;
+}
+
 export interface QnaFile {
   id: string;
   content: string;
-  diagnostics: Diagnostic[];
-  intents: LuIntentSection[];
+  intents: QnaIntentSection[];
   [key: string]: any;
 }
 

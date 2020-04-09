@@ -4,7 +4,7 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
+import { LgFile, LuFile, importResolverGenerator, QnaFile } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
@@ -51,6 +51,7 @@ const initialState: State = {
   schemas: {},
   luFiles: [],
   skills: [],
+  qnaFiles: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
@@ -98,6 +99,7 @@ interface StoreContextValue {
     lgImportresolver: ImportResolverDelegate;
     lgFileResolver: (id: string) => LgFile | undefined;
     luFileResolver: (id: string) => LuFile | undefined;
+    qnaFileResolver: (id: string) => QnaFile | undefined;
   };
 }
 
@@ -109,6 +111,7 @@ export const StoreContext = React.createContext<StoreContextValue>({
     lgImportresolver: defaultFileResolver,
     lgFileResolver: () => undefined,
     luFileResolver: () => undefined,
+    qnaFileResolver: () => undefined,
   },
 });
 
@@ -164,6 +167,12 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
         const { locale, luFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
         return luFiles.find(({ id }) => id === fileId);
+      },
+      qnaFileResolver: function(id: string) {
+        const state = getState();
+        const { locale, qnaFiles } = state;
+        const fileId = id.includes('.') ? id : `${id}.${locale}`;
+        return qnaFiles.find(({ id }) => id === fileId);
       },
     },
   };

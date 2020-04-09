@@ -5,6 +5,7 @@ import { useEffect, useContext, useMemo } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
+import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import * as lgUtil from './utils/lgUtil';
 import * as luUtil from './utils/luUtil';
@@ -21,7 +22,7 @@ type EventSource = 'VisualEditor' | 'PropertyEditor';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
-  const { lgFileResolver, luFileResolver } = resolvers;
+  const { lgFileResolver, luFileResolver, qnaFileResolver } = resolvers;
   const {
     botName,
     breadcrumb,
@@ -31,12 +32,14 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     lgFiles,
     locale,
     luFiles,
+    qnaFiles,
     projectId,
     schemas,
     userSettings,
   } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
+  const updateQnaFile = actions.updateQnaFile;
   const updateLgTemplate = actions.updateLgTemplate;
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
@@ -125,12 +128,22 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     return await updateLuFile({ id, projectId, content });
   }
 
+  async function updateQnaIntentHandler(id, intentName, intent) {
+    const file = qnaFileResolver(id);
+    if (!file) throw new Error(`qna file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const content = qnaUtil.updateIntent(file.content, intentName, intent);
+
+    return await updateQnaFile({ id, projectId, content });
+  }
+
   async function removeLuIntentHandler(id, intentName) {
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = luUtil.removeIntent(file.content, intentName);
+    const content = qnaUtil.removeIntent(file.content, intentName);
 
     return await updateLuFile({ id, projectId, content });
   }
@@ -218,6 +231,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     removeLgTemplate: removeLgTemplateHandler,
     removeLgTemplates: removeLgTemplatesHandler,
     updateLuIntent: updateLuIntentHandler,
+    updateQnaIntent: updateQnaIntentHandler,
     updateRegExIntent: updateRegExIntentHandler,
     removeLuIntent: removeLuIntentHandler,
     navTo,
@@ -257,6 +271,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: get(editorData, '$designer.id'),

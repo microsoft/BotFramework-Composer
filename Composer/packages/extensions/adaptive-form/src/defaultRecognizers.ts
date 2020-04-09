@@ -9,7 +9,7 @@ import { RegexIntentField } from './components/fields/RegexIntentField';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
-    id: 'value',
+    id: SDKKinds.ValueRecognizer,
     displayName: () => formatMessage('Value'),
     isSelected: data => {
       return typeof data === 'object' && data.$kind === SDKKinds.ValueRecognizer;

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnaFile, LuIntentSection, LgTemplate, QnaIntentSection } from './indexers';
 import { UserSettings } from './settings';
 
 /** Recursively marks all properties as optional. */
@@ -44,6 +44,7 @@ export interface ShellData {
   lgFiles: LgFile[];
   luFiles: LuFile[];
   userSettings: UserSettings;
+  qnaFiles: QnaFile[];
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -60,6 +61,7 @@ export interface ShellApi {
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
+  updateQnaIntent: (id: string, intentName: string, intent: QnaIntentSection | null) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;

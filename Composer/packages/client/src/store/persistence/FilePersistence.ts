@@ -22,6 +22,9 @@ const fileChangeType = {
   [ActionTypes.UPDATE_LU]: { changeType: FileChangeType.UPDATE, fileType: FileExtensions.Lu },
   [ActionTypes.CREATE_LU]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Lu },
   [ActionTypes.REMOVE_LU]: { changeType: FileChangeType.DELETE, fileType: FileExtensions.Lu },
+  [ActionTypes.UPDATE_QNA]: { changeType: FileChangeType.UPDATE, fileType: FileExtensions.Qna },
+  [ActionTypes.CREATE_QNA]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Qna },
+  [ActionTypes.REMOVE_QNA]: { changeType: FileChangeType.DELETE, fileType: FileExtensions.Qna },
 };
 
 class FilePersistence {
@@ -104,7 +107,7 @@ class FilePersistence {
           .map(async fileName => await this.doRemove(fileName))
       );
     } else {
-      const { dialogs, luFiles, lgFiles } = state;
+      const { dialogs, luFiles, lgFiles, qnaFiles } = state;
       if (fileType === FileExtensions.Dialog) {
         const dialog = dialogs.find(d => d.id === id);
         if (!dialog) return;
@@ -112,6 +115,7 @@ class FilePersistence {
         if (changeType === FileChangeType.CREATE) {
           await this._doCreateForOtherFile(luFiles, FileExtensions.Lu, id);
           await this._doCreateForOtherFile(lgFiles, FileExtensions.Lg, id);
+          await this._doCreateForOtherFile(qnaFiles, FileExtensions.Qna, id);
         }
       }
 
@@ -125,6 +129,11 @@ class FilePersistence {
         const lu = luFiles.find(d => d.id === id);
         if (!lu) return;
         await this.doUpdate(`${id}.lu`, lu.content);
+      }
+      if (fileType === FileExtensions.Qna) {
+        const qna = qnaFiles.find(d => d.id === id);
+        if (!qna) return;
+        await this.doUpdate(`${id}.qna`, qna.content);
       }
     }
   }

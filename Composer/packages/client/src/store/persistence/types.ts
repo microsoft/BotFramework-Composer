@@ -11,6 +11,7 @@ export enum FileExtensions {
   Dialog = '.dialog',
   Lu = '.lu',
   Lg = '.lg',
+  Qna = '.qna',
 }
 
 export interface ResourceInfo {

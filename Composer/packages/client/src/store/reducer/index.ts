@@ -7,6 +7,7 @@ import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
+import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -153,6 +154,38 @@ const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
+const createQnaFile: ReducerFunc = (state, { id, content }) => {
+  const { qnaFiles, locale } = state;
+  id = `${id}.${locale}`;
+  if (qnaFiles.find(qna => qna.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`qna file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
+  const qnaFile = { id, content, intents: qnaUtil.contentParse(content) };
+  state.qnaFiles.push(qnaFile);
+  return state;
+};
+
+const removeQnaFile: ReducerFunc = (state, { id }) => {
+  state.qnaFiles = state.qnaFiles.filter(file => getBaseName(file.id) !== id && file.id !== id);
+  return state;
+};
+
+const updateQnaTemplate: ReducerFunc = (state, { id, content }) => {
+  state.qnaFiles = state.qnaFiles.map(qnaFile => {
+    if (qnaFile.id === id) {
+      const intents = qnaUtil.contentParse(content);
+      return { ...qnaFile, intents, content };
+    }
+    return qnaFile;
+  });
+
+  return state;
+};
 const createLuFile: ReducerFunc = (state, { id, content }) => {
   const { luFiles, locale } = state;
   id = `${id}.${locale}`;
@@ -237,6 +270,7 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
+  state = createQnaFile(state, { id, content: '' });
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
@@ -482,6 +516,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU]: updateLuTemplate,
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
+  [ActionTypes.UPDATE_QNA]: updateQnaTemplate,
+  [ActionTypes.CREATE_QNA]: createQnaFile,
+  [ActionTypes.REMOVE_QNA]: removeQnaFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
   [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
