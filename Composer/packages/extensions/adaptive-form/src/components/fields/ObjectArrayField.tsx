@@ -158,7 +158,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                               ? formatMessage(
                                   'press Enter to add this item or Tab to move to the next interactive element'
                                 )
-                              : formatMessage('press Tab to advance to the next field')
+                              : formatMessage('press Enter to add this name and advance to the next row, or press Tab to advance to the value field')
                           }
                           componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
