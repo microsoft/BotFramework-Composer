@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 
@@ -29,6 +29,7 @@ const OpenObjectField: React.FC<FieldProps<{
 
   const [name, setName] = useState<string>('');
   const [newValue, setNewValue] = useState<string>('');
+  const fieldRef = useRef<ITextField>(null);
 
   const handleKeyDown = event => {
     if (event.key.toLowerCase() === 'enter') {
@@ -38,7 +39,10 @@ const OpenObjectField: React.FC<FieldProps<{
         onChange({ ...value, [name]: newValue });
         setName('');
         setNewValue('');
-        // send focus to new item
+
+        if (fieldRef.current) {
+          fieldRef.current.focus();
+        }
       }
     }
   };
@@ -96,6 +100,7 @@ const OpenObjectField: React.FC<FieldProps<{
               value={name}
               onChange={(_, newValue) => setName(newValue || '')}
               onKeyDown={handleKeyDown}
+              componentRef={fieldRef}
             />
           </div>
           <div css={styles.item}>
