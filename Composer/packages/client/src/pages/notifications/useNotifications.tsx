@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import get from 'lodash/get';
-import { LgNamePattern } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 
@@ -17,31 +15,19 @@ export default function useNotifications(filter?: string) {
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
         const location = `${dialog.id}.dialog`;
-        notifactions.push(new DialogNotification(dialog.id, location, diagnostic));
+        notifactions.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredFiles(luFiles, dialogs).forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
         const location = `${lufile.id}.lu`;
-        notifactions.push(new LuNotification(lufile.id, location, diagnostic, lufile, dialogs));
+        notifactions.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach(lgFile => {
-      const lgTemplates = get(lgFile, 'templates', []);
       lgFile.diagnostics.map(diagnostic => {
-        const mappedTemplate = lgTemplates.find(
-          t =>
-            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
-        );
-        const id = lgFile.id;
         const location = `${lgFile.id}.lg`;
-        let lgTemplateName = '';
-        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
-          //should navigate to design page
-          lgTemplateName = mappedTemplate.name;
-        }
-        notifactions.push(new LgNotification(id, lgTemplateName, location, diagnostic, dialogs));
+        notifactions.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     return notifactions;

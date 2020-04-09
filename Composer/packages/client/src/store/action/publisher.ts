@@ -6,15 +6,6 @@ import { ActionCreator } from '../types';
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
-export const startBot: ActionCreator = ({ dispatch }, toStartBot) => {
-  dispatch({
-    type: ActionTypes.TO_START_BOT,
-    payload: {
-      toStartBot,
-    },
-  });
-};
-
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
