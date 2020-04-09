@@ -5,6 +5,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -47,9 +48,9 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         onChange={handleChange}
         styles={{
           root: { width: '100%' },
-          label: { fontSize: '10px', fontWeight: '400' },
           errorMessage: { display: 'none' },
         }}
+        ariaLabel={label || formatMessage('boolean field')}
       />
     </React.Fragment>
   );
