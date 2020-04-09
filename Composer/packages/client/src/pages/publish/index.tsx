@@ -13,7 +13,6 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { openInEmulator } from '../../utils';
-import { DefaultPublishConfig } from '../../constants';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -33,7 +32,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const [selectedVersion, setSelectedVersion] = useState();
 
   const [groups, setGroups] = useState();
-  const [publishTarget, setPublishTarget] = useState<any[]>([DefaultPublishConfig]);
+  const [publishTarget, setPublishTarget] = useState<any[]>([]);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -111,7 +110,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     if (settings.publishTargets?.length > 0) {
-      setPublishTarget([DefaultPublishConfig].concat(settings.publishTargets));
+      setPublishTarget(settings.publishTargets);
     }
   }, [settings.publishTargets]);
 
