@@ -3,14 +3,14 @@
 
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
-import { LgEditor } from '@bfc/code-editor';
+import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { editor } from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
 import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
+import { CodeEditorSettings } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import * as lgUtil from '../../utils/lgUtil';
@@ -25,13 +25,13 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
-  const { lgFiles, locale, projectId } = state;
+  const { lgFiles, locale, projectId, userSettings } = state;
   const { lgImportresolver } = resolvers;
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
   const [errorMsg, setErrorMsg] = useState('');
-  const [lgEditor, setLgEditor] = useState<editor.IStandaloneCodeEditor | null>(null);
+  const [lgEditor, setLgEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
   const searchTemplateName = querystring.parse(search).t;
@@ -58,7 +58,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
 
-  const editorDidMount = (lgEditor: editor.IStandaloneCodeEditor) => {
+  const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);
   };
 
@@ -136,6 +136,10 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     [file, template, projectId]
   );
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    actions.updateUserSettings({ codeEditor: settings });
+  };
+
   const lgOption = {
     projectId,
     fileId: file?.id || dialogId,
@@ -144,25 +148,18 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LgEditor
-      // typescript is unable to reconcile 'on' as part of a union type
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      options={{
-        lineNumbers: 'on',
-        minimap: 'on',
-        lineDecorationsWidth: undefined,
-        lineNumbersMinChars: false,
-      }}
       hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
-      errorMsg={errorMsg}
+      errorMessage={errorMsg}
       diagnostics={currentDiagnostics}
       lgOption={lgOption}
       languageServer={{
         path: lspServerPath,
       }}
       onChange={_onChange}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };

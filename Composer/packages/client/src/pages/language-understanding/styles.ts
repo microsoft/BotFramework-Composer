@@ -53,16 +53,12 @@ export const contentEditor = css`
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
+
+  label: ContentEditor;
 `;
 
 export const codeEditorContainer = css`
   width: 100%;
-`;
-
-export const codeEditor = css`
-  border: 1px solid #dddddd;
-  padding-bottom: 10px;
-  height: calc(100% - 20px);
 `;
 
 export const formCell = css`

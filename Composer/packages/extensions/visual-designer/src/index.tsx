@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, CacheProvider } from '@emotion/core';
+import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { ShellData, ShellApi } from '@bfc/shared';
+import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -26,6 +26,16 @@ const emotionCache = createCache({
   nonce: window.__nonce__,
 });
 
+const styles = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  overflow: scroll;
+`;
+
 const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
 
 const VisualDesigner: React.FC<VisualDesignerProps> = ({
@@ -38,6 +48,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   shellApi,
   hosted,
   lgFiles,
+  schema,
 }): JSX.Element => {
   const dataCache = useRef({});
 
@@ -80,10 +91,11 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     updateLgTemplate,
     getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
-    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => undefined),
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory: new DialogFactory(schema),
   };
 
   return (
@@ -91,7 +103,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
           <UISchemaContext.Provider value={visualEditorSchemaProvider}>
-            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+            <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
                 key={dialogId}
                 path={dialogId}
@@ -117,16 +129,17 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
   );
 };
 
-interface VisualDesignerProps extends ShellData {
+export interface VisualDesignerProps extends ShellData {
   onChange: (newData: object, updatePath?: string) => void;
   shellApi: ShellApi;
+  schema: any;
 }
 
 VisualDesigner.defaultProps = {
   dialogId: '',
   focusedEvent: '',
   focusedSteps: [],
-  data: { $type: '' },
+  data: { $kind: '' },
   shellApi: ({
     navTo: () => {},
     onFocusEvent: () => {},

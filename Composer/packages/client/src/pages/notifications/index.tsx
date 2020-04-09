@@ -32,7 +32,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       navigateTo(url);
     },
     [NotificationType.LU]: (item: INotification) => {
-      let uri = `/bot/${projectId}/language-understanding/${item.id}`;
+      let uri = `/bot/${projectId}/language-understanding/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
       if (item.dialogPath) {
         uri = convertPathToUrl(item.id, item.dialogPath);
       }

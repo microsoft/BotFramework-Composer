@@ -3,15 +3,16 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import merge from 'lodash/merge';
+import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
+import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { SensitiveProperties } from '@bfc/shared';
-import { lgIndexer, luIndexer, LuFile, DialogInfo, dialogIndexer } from '@bfc/indexers';
-import { ImportResolverDelegate } from 'botbuilder-lg';
 
-import { ActionTypes, FileTypes, BotStatus } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getFileName, getBaseName } from '../../utils';
+import { getExtension, getBaseName } from '../../utils';
+import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -57,23 +58,28 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
 };
 
 const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
-  getReferredFiles(luFiles, dialogs).forEach(luFile => {
-    luFileStatusStorage.checkFileStatus(botName, luFile.id);
-  });
+  luFileStatusStorage.checkFileStatus(
+    botName,
+    getReferredFiles(luFiles, dialogs).map(file => file.id)
+  );
   return updateLuFilesStatus(botName, luFiles);
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  const { dialogs, botName, luFiles, id } = response.data;
+  const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
+  const { dialogs, luFiles, lgFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
-  state.botEnvironment = response.data.botEnvironment || state.botEnvironment;
+  state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
-  state.location = response.data.location;
-  state.lgFiles = response.data.lgFiles;
-  state.schemas = response.data.schemas;
+  state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
+  state.location = location;
+  state.lgFiles = lgFiles;
+  state.skills = response.data.skills;
+  state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
-  state.settings = response.data.settings;
+  state.settings = settings;
+  state.locale = locale;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
@@ -97,21 +103,114 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
   return state;
 };
 
+const createLgFile: ReducerFunc = (state, { id, content }) => {
+  const { lgFiles, locale } = state;
+  id = `${id}.${locale}`;
+  if (lgFiles.find(lg => lg.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`lg file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+  // slot with common.lg import
+  let lgInitialContent = '';
+  const lgCommonFile = lgFiles.find(({ id }) => id === `common.${locale}`);
+  if (lgCommonFile) {
+    lgInitialContent = `[import](common.lg)`;
+  }
+  content = [lgInitialContent, content].join('\n');
+
+  const { parse } = lgIndexer;
+  const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
+  const { templates, diagnostics } = parse(content, id, lgImportresolver);
+  const lgFile = { id, templates, diagnostics, content };
+  state.lgFiles.push(lgFile);
+  return state;
+};
+
+const removeLgFile: ReducerFunc = (state, { id }) => {
+  state.lgFiles = state.lgFiles.filter(file => getBaseName(file.id) !== id && file.id !== id);
+  return state;
+};
+
+const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
+  const lgFiles = state.lgFiles.map(lgFile => {
+    if (lgFile.id === id) {
+      lgFile.content = content;
+      return lgFile;
+    }
+    return lgFile;
+  });
+  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
+  state.lgFiles = lgFiles.map(lgFile => {
+    const { parse } = lgIndexer;
+    const { id, content } = lgFile;
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
+
+    return { ...lgFile, templates, diagnostics, content };
+  });
+  return state;
+};
+
+const createLuFile: ReducerFunc = (state, { id, content }) => {
+  const { luFiles, locale } = state;
+  id = `${id}.${locale}`;
+  if (luFiles.find(lu => lu.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`lu file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
+  const { parse } = luIndexer;
+  const luFile = { id, content, ...parse(content, id) };
+  state.luFiles.push(luFile);
+  luFileStatusStorage.updateFileStatus(state.botName, id);
+  return state;
+};
+
+const removeLuFile: ReducerFunc = (state, { id }) => {
+  state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
+    if (getBaseName(file.id) === id || file.id === id) {
+      luFileStatusStorage.removeFileStatus(state.botName, id);
+    } else {
+      result.push(file);
+    }
+    return result;
+  }, []);
+  return state;
+};
+
+const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
+  state.luFiles = state.luFiles.map(luFile => {
+    if (luFile.id === id) {
+      const { intents, diagnostics } = luIndexer.parse(content, id);
+      return { ...luFile, intents, diagnostics, content };
+    }
+    return luFile;
+  });
+
+  luFileStatusStorage.updateFileStatus(state.botName, id);
+  return state;
+};
+
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
-      const result = dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content);
-      return { ...dialog, ...result };
+      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
     }
     return dialog;
   });
   return state;
 };
 
-const removeDialog: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
-  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
-  state.lgFiles = response.data.lgFiles;
+const removeDialog: ReducerFunc = (state, { id }) => {
+  state.dialogs = state.dialogs.filter(dialog => dialog.id !== id);
+  //remove dialog should remove all locales lu and lg files
+  state = removeLgFile(state, { id });
+  state = removeLuFile(state, { id });
   return state;
 };
 
@@ -128,64 +227,25 @@ const createDialogCancel: ReducerFunc = state => {
   return state;
 };
 
-const createDialogSuccess: ReducerFunc = (state, { response }) => {
-  state.dialogs = response.data.dialogs;
-  state.luFiles = updateLuFilesStatus(state.botName, response.data.luFiles);
-  state.lgFiles = response.data.lgFiles;
+const createDialog: ReducerFunc = (state, { id, content }) => {
+  const fixedContent = autofixReferInDialog(id, content);
+  const dialog = {
+    isRoot: false,
+    displayName: id,
+    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+  };
+  state.dialogs.push(dialog);
+  state = createLgFile(state, { id, content: '' });
+  state = createLuFile(state, { id, content: '' });
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
-  const lgFiles = state.lgFiles.map(lgFile => {
-    if (lgFile.id === id) {
-      lgFile.content = content;
-      return lgFile;
-    }
-    return lgFile;
-  });
-  const lgImportresolver: ImportResolverDelegate = function(source: string, id: string) {
-    const locale = getExtension(source);
-    const targetFileName = getFileName(id);
-    let targetFileId = getBaseName(targetFileName);
-    if (locale) {
-      targetFileId += `.${locale}`;
-    }
-    const targetFile = lgFiles.find(({ id }) => id === targetFileId);
-    if (!targetFile) throw new Error(`file not found`);
-    return { id, content: targetFile.content };
-  };
-
-  state.lgFiles = lgFiles.map(lgFile => {
-    const { parse } = lgIndexer;
-    const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, lgImportresolver);
-
-    return { ...lgFile, templates, diagnostics, content };
-  });
-  return state;
-};
-
-const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
-  const luFiles = state.luFiles.map(luFile => {
-    if (luFile.id === id) {
-      luFile.content = content;
-      return luFile;
-    }
-    return luFile;
-  });
-
-  state.luFiles = updateLuFilesStatus(
-    state.botName,
-    luFiles.map(luFile => {
-      const { parse } = luIndexer;
-      const { id, content } = luFile;
-      const { intents, diagnostics } = parse(content, id);
-      return { ...luFile, intents, diagnostics, content };
-    })
-  );
+const setLuFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = payload;
   return state;
 };
 
@@ -220,7 +280,7 @@ const setStorageFileFetchingStatus: ReducerFunc = (state, { status }) => {
   return state;
 };
 
-const setBotLoadErrorMsg: ReducerFunc = (state, { error }) => {
+const setBotLoadErrorMsg: ReducerFunc = (state, error) => {
   state.botLoadErrorMsg = error;
   return state;
 };
@@ -284,6 +344,14 @@ const setDesignPageLocation: ReducerFunc = (
   return state;
 };
 
+const updateSkill: ReducerFunc = (state, { skills }) => {
+  state.skills = skills;
+  state.settings.skill = skills.map(({ manifestUrl, name }) => {
+    return { manifestUrl, name };
+  });
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -341,17 +409,21 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, payload) => {
+const publishFailure: ReducerFunc = (state, { error }) => {
   state.botStatus = BotStatus.unConnected;
+  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
   return state;
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
   if (payload.results?.botStatus === 'connected') {
     state.botStatus = BotStatus.connected;
-  } else {
-    state.botStatus = BotStatus.unConnected;
   }
+  return state;
+};
+
+const setBotStatus: ReducerFunc = (state, payload) => {
+  state.botStatus = payload;
   return state;
 };
 
@@ -375,23 +447,10 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const updateTimestamp: ReducerFunc = (state, { id, type, lastModified }) => {
-  if (type === 'dialog') {
-    const dialog = state.dialogs.find(d => d.id === id);
-    if (dialog) {
-      dialog.lastModified = lastModified;
-    }
-  } else if (type === 'lg') {
-    const lg = state.lgFiles.find(d => d.id === id);
-    if (lg) {
-      lg.lastModified = lastModified;
-    }
-  } else if (type === 'lu') {
-    const lu = state.luFiles.find(d => d.id === id);
-    if (lu) {
-      lu.lastModified = lastModified;
-    }
-  }
+const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+  const newSettings = merge(state.userSettings, settings);
+  storage.set('userSettings', newSettings);
+  state.userSettings = newSettings;
   return state;
 };
 
@@ -408,7 +467,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
   [ActionTypes.CREATE_DIALOG_CANCEL]: createDialogCancel,
-  [ActionTypes.CREATE_DIALOG_SUCCESS]: createDialogSuccess,
+  [ActionTypes.CREATE_DIALOG]: createDialog,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG]: removeDialog,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
@@ -417,25 +476,20 @@ export const reducer = createReducer({
   [ActionTypes.GET_STORAGEFILE_SUCCESS]: getStorageFileSuccess,
   [ActionTypes.SET_CREATION_FLOW_STATUS]: setCreationFlowStatus,
   [ActionTypes.SAVE_TEMPLATE_ID]: saveTemplateId,
-  [ActionTypes.UPDATE_LG_SUCCESS]: updateLgTemplate,
-  [ActionTypes.UPDATE_LG_FAILURE]: noOp,
-  [ActionTypes.CREATE_LG_SUCCCESS]: updateLgTemplate,
-  [ActionTypes.CREATE_LG_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LG_SUCCCESS]: updateLgTemplate,
-  [ActionTypes.REMOVE_LG_FAILURE]: noOp,
-  [ActionTypes.UPDATE_LU_SUCCESS]: updateLuTemplate,
-  [ActionTypes.UPDATE_LU_FAILURE]: noOp,
-  [ActionTypes.CREATE_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.CREATE_LU_FAILURE]: noOp,
-  [ActionTypes.REMOVE_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.REMOVE_LU_FAILURE]: noOp,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: updateLuTemplate,
-  [ActionTypes.RELOAD_BOT_SUCCESS]: setBotLoadErrorMsg,
-  // [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
+  [ActionTypes.UPDATE_LG]: updateLgTemplate,
+  [ActionTypes.CREATE_LG]: createLgFile,
+  [ActionTypes.REMOVE_LG]: removeLgFile,
+  [ActionTypes.UPDATE_LU]: updateLuTemplate,
+  [ActionTypes.CREATE_LU]: createLuFile,
+  [ActionTypes.REMOVE_LU]: removeLuFile,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
+  [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
+  [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
+  [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
@@ -450,5 +504,6 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
-  [ActionTypes.UPDATE_TIMESTAMP]: updateTimestamp,
+  [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
 });

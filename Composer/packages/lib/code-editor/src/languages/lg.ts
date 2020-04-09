@@ -2,16 +2,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { Monaco } from '@monaco-editor/react';
 
-function createKeywordsProposals(range) {
+const LANGUAGE_NAME = 'botbuilderlg';
+
+function createKeywordsProposals(monaco: Monaco, range) {
   // returning a static list of proposals, not even looking at the prefix (filtering is done by the Monaco editor),
   // here you could do a server side lookup
   return [
     {
-      label: 'IF',
+      label: 'IF/ELSEIF/ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['IF: ${}', '- ELSEIF: ${}', '    -', '- ELSE:', '    -'].join('\r\n'),
+      insertText: ['IF: ${ expr }', '    -', '- ELSEIF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
+      range: range,
+    },
+    {
+      label: 'IF/ELSE',
+      kind: monaco.languages.CompletionItemKind.Keyword,
+      insertText: ['IF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
       range: range,
     },
     {
@@ -29,14 +37,17 @@ function createKeywordsProposals(range) {
     {
       label: 'SWITCH',
       kind: monaco.languages.CompletionItemKind.Keyword,
-      insertText: ['SWITCH: ${}', '- CASE: ${}', '    -', '- DEFAULT:', '    -'].join('\r\n'),
+      insertText: ['SWITCH: ${ expr }', '- CASE: ${ expr }', '    -', '- DEFAULT:', '    -'].join('\r\n'),
       range: range,
     },
   ];
 }
 
-export function registerLGLanguage(monaco: typeof monacoEditor) {
-  monaco.languages.setMonarchTokensProvider('botbuilderlg', {
+export function registerLGLanguage(monaco: Monaco) {
+  // return if we've already registered this language to the editor
+  if (monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) return;
+
+  monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     ignoreCase: true,
     brackets: [
       { open: '{', close: '}', token: 'delimiter.curly' },
@@ -114,13 +125,13 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
   });
 
   monaco.languages.register({
-    id: 'botbuilderlg',
+    id: LANGUAGE_NAME,
     extensions: ['.lg'],
     aliases: ['LG', 'language-generation'],
     mimetypes: ['application/lg'],
   });
 
-  monaco.languages.setLanguageConfiguration('botbuilderlg', {
+  monaco.languages.setLanguageConfiguration(LANGUAGE_NAME, {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -144,7 +155,7 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
     ],
   });
 
-  monaco.languages.registerCompletionItemProvider('botbuilderlg', {
+  monaco.languages.registerCompletionItemProvider(LANGUAGE_NAME, {
     provideCompletionItems: function(model, position) {
       const lineText = model.getValueInRange({
         startLineNumber: position.lineNumber,
@@ -164,8 +175,9 @@ export function registerLGLanguage(monaco: typeof monacoEditor) {
         startColumn: word.startColumn,
         endColumn: word.endColumn,
       };
+
       return {
-        suggestions: createKeywordsProposals(range),
+        suggestions: createKeywordsProposals(monaco, range),
       };
     },
   });

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKTypes } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import has from 'lodash/has';
 
 import { VisitorFunc, JsonWalk } from '../utils/jsonWalk';
@@ -15,23 +15,23 @@ export function checkProperty(property: string): boolean {
 // find all properties from specific type
 export function getProperties(value: any): string[] {
   let properties: string[] = [];
-  switch (value.$type) {
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.SetProperty:
+  switch (value.$kind) {
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.SetProperty:
       properties = [value.property];
       break;
-    case SDKTypes.OAuthInput:
+    case SDKKinds.OAuthInput:
       properties = [value.tokenProperty];
       break;
-    case SDKTypes.SetProperties:
+    case SDKKinds.SetProperties:
       properties = value.assignments?.map(assignment => assignment.property);
       break;
-    case SDKTypes.HttpRequest:
+    case SDKKinds.HttpRequest:
       properties = [value.resultProperty];
       break;
   }
@@ -48,7 +48,7 @@ function ExtractMemoryPaths(dialog): string[] {
   let properties: string[] = [];
 
   const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    if (has(value, '$type')) {
+    if (has(value, '$kind')) {
       properties = [...properties, ...getProperties(value)];
     }
     return false;

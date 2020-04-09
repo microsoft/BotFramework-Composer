@@ -11,9 +11,9 @@ export async function copyAdaptiveAction(data: MicrosoftIDialog, externalApi: Ex
     return data;
   }
 
-  if (!data || !data.$type) return {};
+  if (!data || !data.$kind) return {};
 
-  const copier = CopyConstructorMap[data.$type] || CopyConstructorMap.default;
+  const copier = CopyConstructorMap[data.$kind] || CopyConstructorMap.default;
 
   return await copier(data, externalApi);
 }

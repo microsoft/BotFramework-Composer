@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import isEqual from 'lodash/isEqual';
-import keys from 'lodash/keys';
-import { LuFile, DialogInfo } from '@bfc/indexers';
+import { FileInfo } from '@bfc/shared';
 
 import { Path } from './../../utility/path';
 import { IFileStorage } from './../storage/interface';
@@ -18,7 +17,7 @@ const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
 
-interface ICrossTrainConfig {
+export interface ICrossTrainConfig {
   rootIds: string[];
   triggerRules: { [key: string]: any };
   intentName: string;
@@ -32,7 +31,7 @@ export class LuPublisher {
   public interuptionFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
-  public crossTrainMapRule: ICrossTrainConfig = {
+  public crossTrainConfig: ICrossTrainConfig = {
     rootIds: [],
     triggerRules: {},
     intentName: '_Interruption',
@@ -51,14 +50,14 @@ export class LuPublisher {
     this.storage = storage;
   }
 
-  public publish = async (luFiles: LuFile[]) => {
+  public publish = async (files: FileInfo[]) => {
     try {
       await this._createGeneratedDir();
 
       //do cross train before publish
-      await this._crossTrain(luFiles);
+      await this._crossTrain(files);
 
-      await this._runBuild(luFiles);
+      await this._runBuild(files);
       //remove the cross train result
       await this._cleanCrossTrain();
     } catch (error) {
@@ -80,73 +79,9 @@ export class LuPublisher {
     }
   };
 
-  //generate the cross-train config
-  /* the config is like
-  {
-      rootIds: [
-        'main.lu',
-        'main.fr-fr.lu'
-      ],
-      triggerRules: {
-        'main.lu': {
-          'dia1.lu': 'dia1_trigger',
-          'dia2.lu': 'dia2_trigger'
-        },
-        'dia2.lu': {
-          'dia3.lu': 'dia3_trigger',
-          'dia4.lu': 'dia4_trigger'
-        },
-        'main.fr-fr.lu': {
-          'dia1.fr-fr.lu': 'dia1_trigger'
-        }
-      },
-      intentName: '_Interruption',
-      verbose: true
-    }
-  */
-  public createCrossTrainConfig = (dialogs: DialogInfo[], luFiles: LuFile[]) => {
-    const triggerRules = {};
-    const countMap = {};
-
-    //map all referred lu files
-    luFiles.forEach(file => {
-      countMap[file.id] = 0;
-    });
-
-    dialogs.forEach(dialog => {
-      const { intentTriggers } = dialog;
-      const fileId = this._createConfigId(dialog.id);
-      if (intentTriggers.length) {
-        //find the trigger's dialog that use a recognizer
-        intentTriggers.forEach(item => {
-          const used = item.dialogs.filter(dialog => {
-            if (typeof countMap[dialog] === 'number') {
-              countMap[dialog]++;
-              return true;
-            }
-            return false;
-          });
-          if (used.length) {
-            const result = used.reduce((result, temp) => {
-              const id = this._createConfigId(temp);
-              result[id] = item.intent;
-              return result;
-            }, {});
-            triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-          }
-        });
-      }
-    });
-
-    this.crossTrainMapRule.rootIds = keys(countMap)
-      .filter(key => (countMap[key] === 0 || key === 'Main') && triggerRules[this._createConfigId(key)])
-      .map(item => this._createConfigId(item));
-    this.crossTrainMapRule.triggerRules = triggerRules;
+  public setCrossTrainConfig = (crossTrainConfig: ICrossTrainConfig) => {
+    if (crossTrainConfig) this.crossTrainConfig = crossTrainConfig;
   };
-
-  private _createConfigId(fileId) {
-    return `${fileId}.lu`;
-  }
 
   private async _createGeneratedDir() {
     // clear previous folder
@@ -155,16 +90,16 @@ export class LuPublisher {
   }
 
   private _needCrossTrain() {
-    return !!this.crossTrainMapRule.rootIds.length;
+    return !!this.crossTrainConfig.rootIds.length;
   }
 
-  private async _crossTrain(luFiles: LuFile[]) {
+  private async _crossTrain(files: FileInfo[]) {
     if (!this._needCrossTrain()) return;
-    const luContents = luFiles.map(file => {
-      return { content: file.content, id: this._createConfigId(file.id) };
+    const luContents = files.map(file => {
+      return { content: file.content, id: file.name };
     });
 
-    const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainMapRule);
+    const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig);
 
     await this._writeFiles(result.luResult);
   }
@@ -180,8 +115,8 @@ export class LuPublisher {
     }
   }
 
-  private async _runBuild(luFiles: LuFile[]) {
-    const config = await this._getConfig(luFiles);
+  private async _runBuild(files: FileInfo[]) {
+    const config = await this._getConfig(files);
     if (config.models.length === 0) {
       throw new Error('No luis file exist');
     }
@@ -217,7 +152,7 @@ export class LuPublisher {
     }
   }
 
-  private _getConfig = async (luFiles: LuFile[]) => {
+  private _getConfig = async (files: FileInfo[]) => {
     if (!this.config) {
       throw new Error('Please complete your Luis settings');
     }
@@ -239,8 +174,8 @@ export class LuPublisher {
     }
 
     //add the lu file that are not in interuption folder.
-    luFiles.forEach(file => {
-      if (!~paths.indexOf(`${file.id}.lu`)) {
+    files.forEach(file => {
+      if (!~paths.indexOf(file.name)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
     });

@@ -2,29 +2,31 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import formatMessage from 'format-message';
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useRef } from 'react';
+import { useContext, useRef } from 'react';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { CreationFlowStatus } from '../../constants';
-import { StorageFolder } from '../../store/types';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
+import { loading, fileSelectorContainer } from './styles';
 interface LocationSelectContentProps {
+  operationMode: {
+    read: boolean;
+    write: boolean;
+  };
   onOpen?: (path: string, storage: string) => void;
-  focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
-  currentPath: string;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
-  const { onOpen, focusedStorageFolder, onCurrentPathUpdate, currentPath } = props;
+  const { onOpen, onCurrentPathUpdate, operationMode } = props;
   const { state } = useContext(StoreContext);
-  const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
-
+  const { storages, storageFileLoadingStatus, creationFlowStatus, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
-
   const onSelectionChanged = item => {
     if (item) {
       const type = item.fileType;
@@ -46,15 +48,24 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   };
 
   return (
-    <Fragment>
-      <FileSelector
-        storageFileLoadingStatus={storageFileLoadingStatus}
-        checkShowItem={checkShowItem}
-        currentPath={currentPath}
-        focusedStorageFolder={focusedStorageFolder}
-        onCurrentPathUpdate={onCurrentPathUpdate}
-        onSelectionChanged={onSelectionChanged}
-      />
-    </Fragment>
+    <div css={fileSelectorContainer}>
+      {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
+        <FileSelector
+          operationMode={operationMode}
+          checkShowItem={checkShowItem}
+          focusedStorageFolder={focusedStorageFolder}
+          onCurrentPathUpdate={onCurrentPathUpdate}
+          onSelectionChanged={onSelectionChanged}
+        />
+      )}
+      {storageFileLoadingStatus === 'pending' && (
+        <div>
+          <Spinner size={SpinnerSize.medium} css={loading} />
+        </div>
+      )}
+      {storageFileLoadingStatus === 'failure' && (
+        <div css={loading}>{formatMessage('Can not connect the storage.')}</div>
+      )}
+    </div>
   );
 };

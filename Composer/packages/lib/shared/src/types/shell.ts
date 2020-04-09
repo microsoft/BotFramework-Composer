@@ -1,34 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { LGTemplate as LgTemplate } from 'botbuilder-lg';
+import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { UserSettings } from './settings';
 
-export interface LuIntentSection {
-  Name: string;
-  Body: string;
-  Entities?: LuEntity[];
-  Children?: LuIntentSection[];
-  range?: CodeRange;
-}
-
-export interface CodeRange {
-  startLineNumber: number;
-  endLineNumber: number;
-}
-
-export interface LuEntity {
-  Name: string;
-}
+/** Recursively marks all properties as optional. */
+type AllPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
+};
 
 export interface EditorSchema {
   content?: {
-    fieldTemplateOverrides?: any;
+    fieldTemplateOverrides: any;
     SDKOverrides?: any;
   };
 }
 
 export interface BotSchemas {
-  editor: EditorSchema;
   sdk?: any;
   diagnostics?: any[];
 }
@@ -36,14 +25,15 @@ export interface BotSchemas {
 export interface ShellData {
   locale: string;
   botName: string;
+  currentDialog: DialogInfo;
   projectId: string;
-  currentDialog: any;
   data: {
-    $type?: string;
+    $kind: string;
     [key: string]: any;
   };
+  designerId: string;
   dialogId: string;
-  dialogs: any[];
+  dialogs: DialogInfo[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -51,38 +41,31 @@ export interface ShellData {
   focusPath: string;
   clipboardActions: any[];
   hosted: boolean;
-  lgFiles: any[];
-  luFiles: any[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  userSettings: UserSettings;
+  // TODO: remove
   schemas: BotSchemas;
 }
 
 export interface ShellApi {
-  getState: <T = any>() => Promise<T>;
-  saveData: <T = any>(newData: T, updatePath?: string) => Promise<void>;
-  navTo: (path: string, rest?: any) => Promise<void>;
-  onFocusSteps: (stepIds: string[], focusedTab?: string) => Promise<void>;
-  onFocusEvent: (eventId: string) => Promise<void>;
-  onSelect: (ids: string[]) => Promise<void>;
-  createLuFile: (id: string) => Promise<void>;
-  updateLuFile: (luFile: { id: string; content: string }) => Promise<void>;
-  updateLgFile: (id: string, content: string) => Promise<void>;
-  lgFileResolver: (id: string) => Promise<any>;
-  luFileResolver: (id: string) => Promise<any>;
-  getLgTemplates: (id: string) => Promise<LgTemplate[]>;
-  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<string>;
-  createLgTemplate: (id: string, template: Partial<LgTemplate>, position: number) => Promise<void>;
+  saveData: <T = any>(newData: T, updatePath?: string) => void;
+  navTo: (path: string, rest?: any) => void;
+  onFocusSteps: (stepIds: string[], focusedTab?: string) => void;
+  onFocusEvent: (eventId: string) => void;
+  onSelect: (ids: string[]) => void;
+  getLgTemplates: (id: string) => LgTemplate[];
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
-  addLuIntent: (id: string, intent: LuIntentSection | null) => Promise<void>;
-  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
-  updateRegExIntent: (id: string, intentName: string, pattern: string) => Promise<void>;
-  removeLuIntent: (id: string, intentName: string) => Promise<void>;
-  createDialog: (actions: any) => Promise<string>;
-  validateExpression: (expression?: string) => Promise<boolean>;
-  // TODO: fix these types
-  addCoachMarkRef: any;
-  onCopy: any;
-  undo: any;
-  redo: any;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
+  updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  removeLuIntent: (id: string, intentName: string) => void;
+  createDialog: (actions: any) => Promise<string | null>;
+  addCoachMarkRef: (ref: { [key: string]: any }) => void;
+  onCopy: (clipboardActions: any[]) => void;
+  undo: () => void;
+  redo: () => void;
+  updateUserSettings: (settings: AllPartial<UserSettings>) => void;
 }

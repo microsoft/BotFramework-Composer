@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LGParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
+import { Templates, TemplatesParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
+import { LgTemplate, LgFile, FileInfo, Diagnostic, Position, Range } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
-import { LgTemplate, LgFile, FileInfo } from './type';
-import { Diagnostic, Position, Range } from './diagnostic';
 
-const { defaultFileResolver } = LGParser;
+const { defaultFileResolver } = TemplatesParser;
 
 // NOTE: LGDiagnostic is defined in PascalCase which should be corrected
 function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
@@ -26,8 +25,8 @@ function parse(
   id = '',
   importResolver: ImportResolverDelegate = defaultFileResolver
 ): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
-  const lgFile = LGParser.parseText(content, id, importResolver);
-  const templates = lgFile.templates.map(t => {
+  const lgFile = Templates.parseText(content, id, importResolver);
+  const templates = lgFile.toArray().map(t => {
     return {
       name: t.name,
       body: t.body,
@@ -48,11 +47,11 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
   if (files.length === 0) return [];
   const lgFiles: LgFile[] = [];
   for (const file of files) {
-    const { name, relativePath, content } = file;
+    const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
       const { templates, diagnostics } = parse(content, id, importResolver);
-      lgFiles.push({ id, content, relativePath, templates, diagnostics, lastModified: file.lastModified });
+      lgFiles.push({ id, content, templates, diagnostics });
     }
   }
   return lgFiles;

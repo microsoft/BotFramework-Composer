@@ -4,8 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate } from '@bfc/shared';
-import { DialogInfo, LgFile, LuFile } from '@bfc/indexers';
+import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -44,6 +43,7 @@ export interface File {
 export interface StorageFolder extends File {
   parent: string;
   children?: File[];
+  writable?: boolean;
 }
 
 export interface State {
@@ -55,20 +55,21 @@ export interface State {
   locale: string;
   botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
-  /** the data path for FormEditor */
+  /** the data path for PropertyEditor */
   focusPath: string;
   templateProjects: ProjectTemplate[];
   recentProjects: any[];
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: string;
+  botLoadErrorMsg: { title: string; message: string };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
   schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  skills: Skill[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];
@@ -96,6 +97,7 @@ export interface State {
   clipboardActions: any[];
   publishTypes: string[];
   publishTargets: any[];
+  userSettings: UserSettings;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

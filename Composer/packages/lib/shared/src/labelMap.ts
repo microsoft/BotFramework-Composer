@@ -3,7 +3,7 @@
 
 import formatMessage from 'format-message';
 
-import { SDKTypes } from './types';
+import { SDKKinds } from './types';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -15,7 +15,7 @@ interface LabelOverride {
   description?: string | false;
 }
 
-type ConceptLabelKey = SDKTypes | 'Activity';
+type ConceptLabelKey = SDKKinds | 'Activity';
 
 /**
  * These labels will be used when rendering the EdgeMenu
@@ -28,220 +28,220 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     ),
     title: formatMessage('Language Generation'),
   },
-  [SDKTypes.AdaptiveDialog]: {
+  [SDKKinds.AdaptiveDialog]: {
     title: formatMessage('Adaptive dialog'),
   },
-  [SDKTypes.AttachmentInput]: {
+  [SDKKinds.AttachmentInput]: {
     title: formatMessage('File or attachment'),
   },
-  [SDKTypes.BeginDialog]: {
+  [SDKKinds.BeginDialog]: {
     title: formatMessage('Begin a new dialog'),
   },
-  [SDKTypes.CancelAllDialogs]: {
+  [SDKKinds.CancelAllDialogs]: {
     title: formatMessage('Cancel all dialogs'),
   },
-  [SDKTypes.ChoiceInput]: {
+  [SDKKinds.ChoiceInput]: {
     title: formatMessage('Multiple choice'),
   },
-  [SDKTypes.ConditionalSelector]: {
+  [SDKKinds.ConditionalSelector]: {
     title: formatMessage('ConditionalSelector'),
   },
-  [SDKTypes.ConfirmInput]: {
+  [SDKKinds.ConfirmInput]: {
     title: formatMessage('Confirmation'),
   },
-  [SDKTypes.DateTimeInput]: {
+  [SDKKinds.DateTimeInput]: {
     title: formatMessage('Date or time'),
   },
-  [SDKTypes.DebugBreak]: {
+  [SDKKinds.DebugBreak]: {
     title: formatMessage('Debug Break'),
   },
-  [SDKTypes.DeleteProperty]: {
+  [SDKKinds.DeleteProperty]: {
     title: formatMessage('Delete a property'),
   },
-  [SDKTypes.DeleteProperties]: {
+  [SDKKinds.DeleteProperties]: {
     title: formatMessage('Delete properties'),
   },
-  [SDKTypes.EditActions]: {
+  [SDKKinds.EditActions]: {
     title: formatMessage('Modify this dialog'),
   },
-  [SDKTypes.EditArray]: {
+  [SDKKinds.EditArray]: {
     title: formatMessage('Edit an Array property'),
   },
-  [SDKTypes.EmitEvent]: {
+  [SDKKinds.EmitEvent]: {
     title: formatMessage('Emit a custom event'),
   },
-  [SDKTypes.EndDialog]: {
+  [SDKKinds.EndDialog]: {
     title: formatMessage('End this dialog'),
   },
-  [SDKTypes.EndTurn]: {
+  [SDKKinds.EndTurn]: {
     title: formatMessage('End dialog turn'),
   },
-  [SDKTypes.FirstSelector]: {
+  [SDKKinds.FirstSelector]: {
     title: formatMessage('FirstSelector'),
   },
-  [SDKTypes.Foreach]: {
+  [SDKKinds.Foreach]: {
     title: formatMessage('Loop: for each item'),
   },
-  [SDKTypes.ForeachPage]: {
+  [SDKKinds.ForeachPage]: {
     title: formatMessage('Loop: for each page (multiple items)'),
   },
-  [SDKTypes.HttpRequest]: {
+  [SDKKinds.HttpRequest]: {
     title: formatMessage('Send an HTTP request'),
   },
-  [SDKTypes.IfCondition]: {
+  [SDKKinds.IfCondition]: {
     title: formatMessage('Branch: if/else'),
   },
-  [SDKTypes.LanguagePolicy]: {
+  [SDKKinds.LanguagePolicy]: {
     title: formatMessage('LanguagePolicy'),
   },
-  [SDKTypes.LogAction]: {
+  [SDKKinds.LogAction]: {
     title: formatMessage('Log to console'),
   },
-  [SDKTypes.LuisRecognizer]: {
+  [SDKKinds.LuisRecognizer]: {
     description: formatMessage(
       "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
-  [SDKTypes.MostSpecificSelector]: {
+  [SDKKinds.MostSpecificSelector]: {
     title: formatMessage('MostSpecificSelector'),
   },
-  [SDKTypes.MultiLanguageRecognizer]: {
+  [SDKKinds.MultiLanguageRecognizer]: {
     description: formatMessage(
       "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
-  [SDKTypes.NumberInput]: {
+  [SDKKinds.NumberInput]: {
     title: formatMessage('Number input'),
   },
-  [SDKTypes.OAuthInput]: {
+  [SDKKinds.OAuthInput]: {
     title: formatMessage('OAuth login'),
   },
-  [SDKTypes.OnActivity]: {
+  [SDKKinds.OnActivity]: {
     title: formatMessage('Activities'),
     subtitle: formatMessage('Activity recieved'),
   },
-  [SDKTypes.OnBeginDialog]: {
+  [SDKKinds.OnBeginDialog]: {
     title: formatMessage('Dialog started'),
     subtitle: formatMessage('Begin dialog event'),
   },
-  [SDKTypes.OnCancelDialog]: {
+  [SDKKinds.OnCancelDialog]: {
     title: formatMessage('Dialog cancelled'),
     subtitle: formatMessage('Cancel dialog event'),
   },
-  [SDKTypes.OnCondition]: {
+  [SDKKinds.OnCondition]: {
     title: formatMessage('Handle a Condition'),
   },
-  [SDKTypes.OnConversationUpdateActivity]: {
+  [SDKKinds.OnConversationUpdateActivity]: {
     title: formatMessage('Greeting'),
     subtitle: formatMessage('ConversationUpdate activity'),
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
-  [SDKTypes.OnCustomEvent]: {
+  [SDKKinds.OnCustomEvent]: {
     title: formatMessage('Custom event'),
     subtitle: formatMessage('Custom event'),
   },
-  [SDKTypes.OnDialogEvent]: {
+  [SDKKinds.OnDialogEvent]: {
     title: formatMessage('Dialog events'),
     subtitle: formatMessage('Dialog events'),
   },
-  [SDKTypes.OnEndOfConversationActivity]: {
+  [SDKKinds.OnEndOfConversationActivity]: {
     title: formatMessage('Conversation ended'),
     subtitle: formatMessage('EndOfConversation activity'),
   },
-  [SDKTypes.OnError]: {
+  [SDKKinds.OnError]: {
     title: formatMessage('Error occurred'),
     subtitle: formatMessage('Error event'),
   },
-  [SDKTypes.OnEventActivity]: {
+  [SDKKinds.OnEventActivity]: {
     title: formatMessage('Event received'),
     subtitle: formatMessage('Event activity'),
   },
-  [SDKTypes.OnHandoffActivity]: {
+  [SDKKinds.OnHandoffActivity]: {
     title: formatMessage('Handover to human'),
     subtitle: formatMessage('Handoff activity'),
   },
-  [SDKTypes.OnIntent]: {
+  [SDKKinds.OnIntent]: {
     title: formatMessage('Intent recognized'),
     subtitle: formatMessage('Intent recognized'),
   },
-  [SDKTypes.OnInvokeActivity]: {
+  [SDKKinds.OnInvokeActivity]: {
     title: formatMessage('Conversation invoked'),
     subtitle: formatMessage('Invoke activity'),
   },
-  [SDKTypes.OnMessageEventActivity]: {
+  [SDKKinds.OnMessageEventActivity]: {
     title: formatMessage('Message events'),
     subtitle: formatMessage('Message activity'),
   },
-  [SDKTypes.OnMessageActivity]: {
+  [SDKKinds.OnMessageActivity]: {
     title: formatMessage('Message received'),
     subtitle: formatMessage('Message recieved activity'),
   },
-  [SDKTypes.OnMessageDeleteActivity]: {
+  [SDKKinds.OnMessageDeleteActivity]: {
     title: formatMessage('Message deleted'),
     subtitle: formatMessage('Message deleted activity'),
   },
-  [SDKTypes.OnMessageReactionActivity]: {
+  [SDKKinds.OnMessageReactionActivity]: {
     title: formatMessage('Message reaction'),
     subtitle: formatMessage('Message reaction activity'),
   },
-  [SDKTypes.OnMessageUpdateActivity]: {
+  [SDKKinds.OnMessageUpdateActivity]: {
     title: formatMessage('Message updated'),
     subtitle: formatMessage('Message updated activity'),
   },
-  [SDKTypes.OnRepromptDialog]: {
+  [SDKKinds.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
     subtitle: formatMessage('Reprompt dialog event'),
   },
-  [SDKTypes.OnTypingActivity]: {
+  [SDKKinds.OnTypingActivity]: {
     title: formatMessage('User is typing'),
     subtitle: formatMessage('Typing activity'),
   },
-  [SDKTypes.OnUnknownIntent]: {
+  [SDKKinds.OnUnknownIntent]: {
     title: formatMessage('Unknown intent'),
     subtitle: formatMessage('Unknown intent recognized'),
   },
-  [SDKTypes.QnAMakerDialog]: {
+  [SDKKinds.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
   },
-  [SDKTypes.RandomSelector]: {
+  [SDKKinds.RandomSelector]: {
     title: formatMessage('RandomSelector'),
   },
-  [SDKTypes.RegexRecognizer]: {
+  [SDKKinds.RegexRecognizer]: {
     description: false,
     title: false,
   },
-  [SDKTypes.RepeatDialog]: {
+  [SDKKinds.RepeatDialog]: {
     title: formatMessage('Repeat this dialog'),
   },
-  [SDKTypes.ReplaceDialog]: {
+  [SDKKinds.ReplaceDialog]: {
     title: formatMessage('Replace this dialog'),
   },
-  [SDKTypes.SendActivity]: {
+  [SDKKinds.SendActivity]: {
     title: formatMessage('Send a response'),
   },
-  [SDKTypes.SetProperty]: {
+  [SDKKinds.SetProperty]: {
     title: formatMessage('Set a property'),
   },
-  [SDKTypes.SetProperties]: {
+  [SDKKinds.SetProperties]: {
     title: formatMessage('Set properties'),
   },
-  [SDKTypes.SkillDialog]: {
+  [SDKKinds.SkillDialog]: {
     title: formatMessage('Begin a skill dialog'),
     description: formatMessage('Begin a remote skill dialog.'),
   },
-  [SDKTypes.SwitchCondition]: {
+  [SDKKinds.SwitchCondition]: {
     title: formatMessage('Branch: switch (multiple options)'),
   },
-  [SDKTypes.TextInput]: {
+  [SDKKinds.TextInput]: {
     title: formatMessage('Text input'),
   },
-  [SDKTypes.TraceActivity]: {
+  [SDKKinds.TraceActivity]: {
     title: formatMessage('Emit a trace event'),
   },
-  [SDKTypes.TrueSelector]: {
+  [SDKKinds.TrueSelector]: {
     title: formatMessage('TrueSelector'),
   },
 };

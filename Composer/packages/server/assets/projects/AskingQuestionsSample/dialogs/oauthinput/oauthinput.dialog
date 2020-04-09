@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "295682"
   },
@@ -7,20 +7,20 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "823674"
       },
       "actions": [
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "id": "245482"
           },
           "condition": "user.token == null",
           "actions": [
             {
-              "$type": "Microsoft.OAuthInput",
+              "$kind": "Microsoft.OAuthInput",
               "$designer": {
                 "id": "199270"
               },
@@ -32,7 +32,7 @@
           ]
         },
         {
-          "$type": "Microsoft.HttpRequest",
+          "$kind": "Microsoft.HttpRequest",
           "$designer": {
             "id": "518974"
           },
@@ -44,7 +44,7 @@
           "resultProperty": "user.getGraphEmails"
         },
         {
-          "$type": "Microsoft.SendActivity",
+          "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "991558"
           },

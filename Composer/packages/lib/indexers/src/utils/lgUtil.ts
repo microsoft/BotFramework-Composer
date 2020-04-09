@@ -7,9 +7,8 @@
  *
  */
 
-import { LGParser } from 'botbuilder-lg';
-
-import { LgTemplate } from '../type';
+import { Templates } from 'botbuilder-lg';
+import { LgTemplate } from '@bfc/shared';
 
 export interface Template {
   name: string;
@@ -35,9 +34,9 @@ export function updateTemplate(
   templateName: string,
   { name, parameters = [], body }: LgTemplate
 ): string {
-  const resource = LGParser.parseText(content);
+  const resource = Templates.parseText(content);
   // add if not exist
-  if (resource.templates.findIndex(t => t.name === templateName) === -1) {
+  if (resource.toArray().findIndex(t => t.name === templateName) === -1) {
     return resource.addTemplate(name, parameters, body).toString();
   } else {
     return resource.updateTemplate(templateName, name, parameters, body).toString();
@@ -46,7 +45,7 @@ export function updateTemplate(
 
 // if name exist, throw error.
 export function addTemplate(content: string, { name, parameters = [], body }: LgTemplate): string {
-  const resource = LGParser.parseText(content);
+  const resource = Templates.parseText(content);
   return resource.addTemplate(name, parameters, body).toString();
 }
 
@@ -55,16 +54,16 @@ export function addTemplateAnyway(
   content: string,
   { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate
 ): string {
-  const resource = LGParser.parseText(content);
-  const newName = increaseNameUtilNotExist(resource.templates, name);
+  const resource = Templates.parseText(content);
+  const newName = increaseNameUtilNotExist(resource.toArray(), name);
 
   return resource.addTemplate(newName, parameters, body).toString();
 }
 
 // if toTemplateName exist, throw error.
 export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): string {
-  const resource = LGParser.parseText(content);
-  const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
+  const resource = Templates.parseText(content);
+  const fromTemplate = resource.toArray().find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error('fromTemplateName no exist');
   }
@@ -74,8 +73,8 @@ export function copyTemplate(content: string, fromTemplateName: string, toTempla
 
 // if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
 export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): string {
-  const resource = LGParser.parseText(content);
-  const fromTemplate = resource.templates.find(t => t.name === fromTemplateName);
+  const resource = Templates.parseText(content);
+  const fromTemplate = resource.toArray().find(t => t.name === fromTemplateName);
   if (!fromTemplate) {
     return resource.toString();
   }
@@ -83,19 +82,19 @@ export function copyTemplateAnyway(content: string, fromTemplateName: string, to
   let newName = toTemplateName;
   if (!newName) {
     const copyName = `${fromTemplate.name}_Copy`;
-    newName = increaseNameUtilNotExist(resource.templates, copyName);
+    newName = increaseNameUtilNotExist(resource.toArray(), copyName);
   }
   const { parameters, body } = fromTemplate;
   return resource.addTemplate(newName, parameters, body).toString();
 }
 
 export function removeTemplate(content: string, templateName: string): string {
-  const resource = LGParser.parseText(content);
+  const resource = Templates.parseText(content);
   return resource.deleteTemplate(templateName).toString();
 }
 
 export function removeTemplates(content: string, templateNames: string[]): string {
-  let resource = LGParser.parseText(content);
+  let resource = Templates.parseText(content);
   templateNames.forEach(templateName => {
     resource = resource.deleteTemplate(templateName);
   });
@@ -128,7 +127,7 @@ export function textFromTemplates(templates: LgTemplate[]): string {
 export function checkSingleLgTemplate(template: LgTemplate) {
   const content = textFromTemplates([template]);
 
-  if (LGParser.parseText(content).templates.length !== 1) {
+  if (Templates.parseText(content).toArray().length !== 1) {
     throw new Error('Not a single template');
   }
 }
