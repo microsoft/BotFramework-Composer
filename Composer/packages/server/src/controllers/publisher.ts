@@ -8,6 +8,7 @@ import merge from 'lodash/merge';
 import { pluginLoader, PluginLoader } from '../services/pluginLoader';
 import { BotProjectService } from '../services/project';
 import { runtimeFolder } from '../settings/env';
+
 const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
@@ -17,18 +18,20 @@ const DEFAULT_RUNTIME = 'CSharp';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
-      Object.keys(pluginLoader.extensions.publish).map(i => {
-        return {
-          name: pluginLoader.extensions.publish[i].plugin.name,
-          description: pluginLoader.extensions.publish[i].plugin.description,
-          features: {
-            history: pluginLoader.extensions.publish[i].methods.history ? true : false,
-            publish: pluginLoader.extensions.publish[i].methods.publish ? true : false,
-            status: pluginLoader.extensions.publish[i].methods.getStatus ? true : false,
-            rollback: pluginLoader.extensions.publish[i].methods.rollback ? true : false,
-          },
-        };
-      })
+      Object.keys(pluginLoader.extensions.publish)
+        .filter(i => pluginLoader.extensions.publish[i].plugin.name !== defaultPublishConfig.type)
+        .map(i => {
+          return {
+            name: pluginLoader.extensions.publish[i].plugin.name,
+            description: pluginLoader.extensions.publish[i].plugin.description,
+            features: {
+              history: pluginLoader.extensions.publish[i].methods.history ? true : false,
+              publish: pluginLoader.extensions.publish[i].methods.publish ? true : false,
+              status: pluginLoader.extensions.publish[i].methods.getStatus ? true : false,
+              rollback: pluginLoader.extensions.publish[i].methods.rollback ? true : false,
+            },
+          };
+        })
     );
   },
   publish: async (req, res) => {
