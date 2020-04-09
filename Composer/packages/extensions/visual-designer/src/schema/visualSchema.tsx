@@ -5,13 +5,12 @@ import { SDKKinds, getInputType } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
+import { VisualSchema, VisualWidget } from '@bfc/extension';
 
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { ObiColors } from '../constants/ElementColors';
 import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/styledComponents';
 import { ListOverview } from '../components/common/ListOverview';
-
-import { VisualSchema, VisualWidget } from './visualSchema.types';
 
 const BaseInputSchema: VisualWidget = {
   widget: 'PromptWidget',

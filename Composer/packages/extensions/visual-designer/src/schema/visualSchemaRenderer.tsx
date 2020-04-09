@@ -3,11 +3,10 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
+import { VisualWidget, UIWidgetProp, WidgetEventHandler } from '@bfc/extension';
 
 import { Boundary } from '../models/Boundary';
 import * as BuiltInWidgets from '../widgets';
-
-import { VisualWidget, UIWidgetProp, WidgetEventHandler } from './visualSchema.types';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */

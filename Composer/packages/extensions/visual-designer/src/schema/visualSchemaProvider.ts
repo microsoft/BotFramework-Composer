@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-
-import { VisualWidget, VisualSchema } from './visualSchema.types';
+import { VisualWidget, VisualSchema } from '@bfc/extension';
 
 export class VisualSchemaProvider {
   schema: VisualSchema;

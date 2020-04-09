@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
+import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
 
-import { WidgetComponent, WidgetContainerProps } from '../schema/visualSchema.types';
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';

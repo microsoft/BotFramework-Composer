@@ -4,8 +4,6 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKKinds } from '@bfc/shared';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-
 export enum VisualSchemaBuiltinKeys {
   default = 'default',
 }
@@ -27,7 +25,7 @@ export interface VisualWidget {
 
 export type WidgetComponent<T extends WidgetContainerProps> = FC<T> | ComponentClass<T, any>;
 
-export type WidgetEventHandler = (eventName: NodeEventTypes, eventData?: any) => void;
+export type WidgetEventHandler = (eventName: string, eventData?: any) => void;
 
 export interface WidgetContainerProps {
   id: string;

@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
@@ -14,7 +15,6 @@ import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/visualSchema.types';
 import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
