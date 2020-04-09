@@ -34,7 +34,7 @@ export const updateSkill: ActionCreator = async (store, { projectId, targetId, s
 
     if (typeof onAddSkillDialogComplete === 'function') {
       const skill = response.data.find(({ manifestUrl }) => manifestUrl === skillData.manifestUrl);
-      skill && onAddSkillDialogComplete(skill);
+      onAddSkillDialogComplete(skill ? skill : null);
     }
 
     store.dispatch({
