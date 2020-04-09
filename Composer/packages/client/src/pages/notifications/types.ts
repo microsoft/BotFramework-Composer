@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
-import { Diagnostic, DialogInfo, LuFile } from '@bfc/shared';
+import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shared';
+import get from 'lodash/get';
 
 import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils';
@@ -60,17 +61,24 @@ export class LgNotification extends Notification {
   constructor(
     projectId: string,
     id: string,
-    lgTemplateName: string,
     location: string,
     diagnostic: Diagnostic,
+    lgFile: LgFile,
     dialogs: DialogInfo[]
   ) {
     super(projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
-    this.dialogPath = this.findDialogPath(dialogs, lgTemplateName);
+    this.dialogPath = this.findDialogPath(lgFile, dialogs, diagnostic);
   }
-  private findDialogPath(dialogs: DialogInfo[], lgTemplateName: string) {
-    if (lgTemplateName) {
+  private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
+    const mappedTemplate = lgFile.templates.find(
+      t =>
+        get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
+        get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
+    );
+    if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
+      //should navigate to design page
+      const lgTemplateName = mappedTemplate.name;
       const dialog = dialogs.find(d => d.lgFile === this.resourceId);
       const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';

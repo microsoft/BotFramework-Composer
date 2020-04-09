@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import { useContext, useMemo } from 'react';
-import get from 'lodash/get';
-import { LgNamePattern } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 
@@ -27,21 +25,9 @@ export default function useNotifications(filter?: string) {
       });
     });
     lgFiles.forEach(lgFile => {
-      const lgTemplates = get(lgFile, 'templates', []);
       lgFile.diagnostics.map(diagnostic => {
-        const mappedTemplate = lgTemplates.find(
-          t =>
-            get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
-            get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
-        );
-        const id = lgFile.id;
         const location = `${lgFile.id}.lg`;
-        let lgTemplateName = '';
-        if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
-          //should navigate to design page
-          lgTemplateName = mappedTemplate.name;
-        }
-        notifactions.push(new LgNotification(projectId, id, lgTemplateName, location, diagnostic, dialogs));
+        notifactions.push(new LgNotification(projectId, lgFile.id, location, diagnostic, lgFile, dialogs));
       });
     });
     return notifactions;
