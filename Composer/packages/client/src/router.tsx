@@ -20,6 +20,7 @@ const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
+const Skills = React.lazy(() => import('./pages/skills'));
 
 const Routes = props => {
   return (
@@ -40,10 +41,11 @@ const Routes = props => {
           />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
           <ProjectRouter path="/bot/:projectId">
-            <SettingPage path="setting/*" />
+            <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
+            <Skills path="skills/*" />
           </ProjectRouter>
           <Home path="home" />
           <About path="about" />

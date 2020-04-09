@@ -7,6 +7,7 @@ import React from 'react';
 import AdaptiveForm from '@bfc/adaptive-form';
 import Extension from '@bfc/extension';
 import formatMessage from 'format-message';
+import { Resizable, ResizeCallback } from 're-resizable';
 
 import { useShell } from '../../useShell';
 import plugins from '../../plugins';
@@ -15,18 +16,33 @@ import { formEditor } from './styles';
 
 const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');
+  const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;
+
+  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
+    shellApi.updateUserSettings({ propertyEditorWidth: currentWidth + d.width });
+  };
 
   return (
-    <div
-      css={formEditor}
-      aria-label={formatMessage('form editor')}
-      data-testid="PropertyEditor"
-      key={shellData.focusPath}
+    <Resizable
+      size={{ width: currentWidth, height: 'auto' }}
+      minWidth={400}
+      maxWidth={800}
+      enable={{
+        left: true,
+      }}
+      onResizeStop={handleResize}
     >
-      <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
-        <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
-      </Extension>
-    </div>
+      <div
+        css={formEditor}
+        aria-label={formatMessage('form editor')}
+        data-testid="PropertyEditor"
+        key={shellData.focusPath}
+      >
+        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+          <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
+        </Extension>
+      </div>
+    </Resizable>
   );
 };
 
