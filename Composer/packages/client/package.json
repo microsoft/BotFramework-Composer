@@ -28,6 +28,8 @@
     "@bfc/ui-plugin-json": "*",
     "@bfc/ui-plugin-lg": "*",
     "@bfc/ui-plugin-luis": "*",
+    "@bfc/ui-plugin-qna": "*",
+    "@bfc/ui-plugin-cross-trained": "*",
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/visual-designer": "*",
