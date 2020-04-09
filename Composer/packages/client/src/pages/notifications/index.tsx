@@ -3,11 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-
-import { StoreContext } from '../../store';
-import { getBaseName } from '../../utils/fileUtil';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
@@ -19,32 +16,31 @@ import { navigateTo } from './../../utils';
 import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
-  const { state } = useContext(StoreContext);
-  const { projectId } = state;
   const [filter, setFilter] = useState('');
   const notifications = useNotifications(filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
-      const dialogId = getBaseName(item.id);
-      let url = `/bot/${projectId}/language-generation/${dialogId}/edit#L=${item.diagnostic.range?.start.line || 0}`;
+      const { projectId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
-      if (item.dialogPath) {
-        url = toUrlUtil(projectId, item.dialogPath);
+      if (dialogPath) {
+        uri = toUrlUtil(projectId, dialogPath);
       }
-      navigateTo(url);
+      navigateTo(uri);
     },
     [NotificationType.LU]: (item: INotification) => {
-      const dialogId = getBaseName(item.id);
-      let uri = `/bot/${projectId}/language-understanding/${dialogId}/edit#L=${item.diagnostic.range?.start.line || 0}`;
-      if (item.dialogPath) {
-        uri = convertPathToUrl(projectId, dialogId, item.dialogPath);
+      const { projectId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      if (dialogPath) {
+        uri = convertPathToUrl(projectId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const uri = convertPathToUrl(projectId, item.id, item.dialogPath);
+      const { projectId, id, dialogPath } = item;
+      const uri = convertPathToUrl(projectId, id, dialogPath);
       navigateTo(uri);
     },
   };

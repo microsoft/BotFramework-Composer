@@ -17,13 +17,13 @@ export default function useNotifications(filter?: string) {
     dialogs.forEach(dialog => {
       dialog.diagnostics.map(diagnostic => {
         const location = `${dialog.id}.dialog`;
-        notifactions.push(new DialogNotification(dialog.id, location, diagnostic));
+        notifactions.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
     getReferredFiles(luFiles, dialogs).forEach(lufile => {
       lufile.diagnostics.map(diagnostic => {
         const location = `${lufile.id}.lu`;
-        notifactions.push(new LuNotification(lufile.id, location, diagnostic, lufile, dialogs));
+        notifactions.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));
       });
     });
     lgFiles.forEach(lgFile => {
@@ -41,7 +41,7 @@ export default function useNotifications(filter?: string) {
           //should navigate to design page
           lgTemplateName = mappedTemplate.name;
         }
-        notifactions.push(new LgNotification(id, lgTemplateName, location, diagnostic, dialogs));
+        notifactions.push(new LgNotification(projectId, id, lgTemplateName, location, diagnostic, dialogs));
       });
     });
     return notifactions;

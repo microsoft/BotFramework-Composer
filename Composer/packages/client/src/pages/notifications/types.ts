@@ -3,6 +3,7 @@
 import { createSingleMessage, isDiagnosticWithInRange } from '@bfc/indexers';
 import { Diagnostic, DialogInfo, LuFile } from '@bfc/shared';
 
+import { getBaseName } from '../../utils/fileUtil';
 import { replaceDialogDiagnosticLabel } from '../../utils';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
@@ -14,6 +15,7 @@ export enum NotificationType {
 }
 
 export interface INotification {
+  projectId: string;
   id: string;
   severity: string;
   type: NotificationType;
@@ -21,9 +23,11 @@ export interface INotification {
   message: string;
   diagnostic: any;
   dialogPath?: string; //the data path in dialog
+  resourceId: string; // id without locale
 }
 
 export abstract class Notification implements INotification {
+  projectId: string;
   id: string;
   severity: string;
   type = NotificationType.GENERAL;
@@ -31,8 +35,11 @@ export abstract class Notification implements INotification {
   message = '';
   diagnostic: Diagnostic;
   dialogPath?: string;
-  constructor(id: string, location: string, diagnostic: Diagnostic) {
+  resourceId: string;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    this.projectId = projectId;
     this.id = id;
+    this.resourceId = getBaseName(id);
     this.severity = DiagnosticSeverity[diagnostic.severity] || '';
     this.diagnostic = diagnostic;
     this.location = location;
@@ -41,8 +48,8 @@ export abstract class Notification implements INotification {
 
 export class DialogNotification extends Notification {
   type = NotificationType.DIALOG;
-  constructor(id: string, location: string, diagnostic: Diagnostic) {
-    super(id, location, diagnostic);
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
     this.message = `In ${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
     this.dialogPath = diagnostic.path;
   }
@@ -50,14 +57,21 @@ export class DialogNotification extends Notification {
 
 export class LgNotification extends Notification {
   type = NotificationType.LG;
-  constructor(id: string, lgTemplateName: string, location: string, diagnostic: Diagnostic, dialogs: DialogInfo[]) {
-    super(id, location, diagnostic);
+  constructor(
+    projectId: string,
+    id: string,
+    lgTemplateName: string,
+    location: string,
+    diagnostic: Diagnostic,
+    dialogs: DialogInfo[]
+  ) {
+    super(projectId, id, location, diagnostic);
     this.message = createSingleMessage(diagnostic);
-    this.dialogPath = this.findDialogPath(dialogs, id, lgTemplateName);
+    this.dialogPath = this.findDialogPath(dialogs, lgTemplateName);
   }
-  private findDialogPath(dialogs: DialogInfo[], id: string, lgTemplateName: string) {
+  private findDialogPath(dialogs: DialogInfo[], lgTemplateName: string) {
     if (lgTemplateName) {
-      const dialog = dialogs.find(d => d.lgFile === id);
+      const dialog = dialogs.find(d => d.lgFile === this.resourceId);
       const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';
       return path;
@@ -67,8 +81,15 @@ export class LgNotification extends Notification {
 
 export class LuNotification extends Notification {
   type = NotificationType.LU;
-  constructor(id: string, location: string, diagnostic: Diagnostic, luFile: LuFile, dialogs: DialogInfo[]) {
-    super(id, location, diagnostic);
+  constructor(
+    projectId: string,
+    id: string,
+    location: string,
+    diagnostic: Diagnostic,
+    luFile: LuFile,
+    dialogs: DialogInfo[]
+  ) {
+    super(projectId, id, location, diagnostic);
     this.dialogPath = this.findDialogPath(luFile, dialogs, diagnostic);
     this.message = createSingleMessage(diagnostic);
   }
@@ -80,6 +101,7 @@ export class LuNotification extends Notification {
       return isDiagnosticWithInRange(d, range);
     })?.Name;
 
-    return dialogs.find(dialog => dialog.id === luFile.id)?.referredLuIntents.find(lu => lu.name === intentName)?.path;
+    return dialogs.find(dialog => dialog.id === this.resourceId)?.referredLuIntents.find(lu => lu.name === intentName)
+      ?.path;
   }
 }
