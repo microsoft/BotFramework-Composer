@@ -117,7 +117,8 @@ export class AssetManager {
         const templateData = templates[name];
         if (!templateData) continue;
         const absPath = Path.join(path, name);
-        if ((await this.templateStorage.stat(absPath)).isDir) {
+        const folder = await this.templateStorage.stat(absPath);
+        if (folder.isDir) {
           const base = { id: name, ...templateData };
           this.projectTemplates.push({ ...base, path: absPath });
           output.push(base);

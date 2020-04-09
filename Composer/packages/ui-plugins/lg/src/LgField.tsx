@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -34,7 +36,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
 
   const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
@@ -96,11 +98,15 @@ const LgField: React.FC<FieldProps<string>> = props => {
     }
   };
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    shellApi.updateUserSettings({ codeEditor: settings });
+  };
+
   return (
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
       <LgEditor
-        height={100}
+        height={125}
         value={localValue}
         onChange={onChange}
         diagnostics={diagnostics}
@@ -109,6 +115,8 @@ const LgField: React.FC<FieldProps<string>> = props => {
           path: lspServerPath,
         }}
         lgOption={lgOption}
+        editorSettings={userSettings.codeEditor}
+        onChangeSettings={handleSettingsChange}
       />
     </React.Fragment>
   );

@@ -9,6 +9,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from './../../../store';
 import { styles } from './styles';
@@ -19,21 +20,30 @@ const DateWidget = props => {
   const timestamp = new Date(date);
   const now = new Date();
 
-  const minutesAgo = parseInt((now.getTime() - timestamp.getTime()) / 60000);
+  const minutesAgo = Math.floor((now.getTime() - timestamp.getTime()) / 60000);
 
   if (minutesAgo < 60) {
     return <TimeAgo date={date} />;
   } else {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
     const formattedDate = timestamp.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' });
     return <span>{formattedDate}</span>;
   }
 };
 
-export const RemotePublish = () => {
+interface DialogProps {
+  title: string;
+  subText: any;
+  type?: DialogType;
+  children?: any;
+}
+
+export const RemotePublish: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const [dialogHidden, setDialogHidden] = useState(true);
   const [publishAction, setPublishAction] = useState('');
-  const [dialogProps, setDialogProps] = useState({
+  const [dialogProps, setDialogProps] = useState<DialogProps>({
     title: 'Title',
     subText: 'Sub Text',
     type: DialogType.normal,
