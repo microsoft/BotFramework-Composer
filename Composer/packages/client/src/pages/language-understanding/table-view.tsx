@@ -142,7 +142,7 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           const id = item.dialogId;
           return (
-            <div key={id} onClick={() => navigateTo(`/dialogs/${id}`)}>
+            <div key={id} onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}>
               <Link>{id}</Link>
             </div>
           );
