@@ -397,9 +397,9 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
 };
 
 const setPublishTypes: ReducerFunc = (state, { typelist }) => {
-  const types: string[] = [];
-  typelist.map(item => types.push(item.name));
-  state.publishTypes = types;
+  // const types: string[] = [];
+  // typelist.map(item => types.push(item.name));
+  state.publishTypes = typelist;
   return state;
 };
 

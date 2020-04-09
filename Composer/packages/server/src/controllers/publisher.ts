@@ -182,7 +182,7 @@ export const PublishController = {
   rollback: async (req, res) => {
     const target = req.params.target;
     const user = await PluginLoader.getUserFromRequest(req);
-    const { rollbackToVersion, sensitiveSettings } = req.body;
+    const { version, sensitiveSettings } = req.body;
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
@@ -213,7 +213,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         try {
           // call the method
-          const results = await pluginMethod.call(null, configuration, currentProject, rollbackToVersion, user);
+          const results = await pluginMethod.call(null, configuration, currentProject, version, user);
 
           // copy status into payload for ease of access in client
           const response = {

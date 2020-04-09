@@ -46,7 +46,7 @@ class LocalPublisher {
                     time: new Date(),
                     message: 'Accepted for publishing.',
                     log: 'Publish starting...',
-                    id: new uuid_1.v4(),
+                    id: uuid_1.v4(),
                     comment: metadata.comment,
                 },
             };
@@ -82,6 +82,30 @@ class LocalPublisher {
             }
             // return in reverse chrono
             return result.reverse();
+        });
+        this.rollback = (config, project, rollbackToVersion, user) => __awaiter(this, void 0, void 0, function* () {
+            console.log('ROLLBACK TO', project.id, rollbackToVersion);
+            const profileName = config.name;
+            const botId = project.id;
+            console.log('eval list', this.data[botId][profileName]);
+            const matched = this.data[botId][profileName].filter(item => {
+                console.log('comparing ', item.result.id, rollbackToVersion);
+                return item.result.id === rollbackToVersion;
+            });
+            if (matched.length && matched[0].status === 200) {
+                const rollback = Object.assign(Object.assign({}, matched[0]), { result: Object.assign({}, matched[0].result) });
+                rollback.result.id = uuid_1.v4();
+                this.data[botId][profileName].push(rollback);
+                return rollback;
+            }
+            else {
+                return {
+                    status: 500,
+                    result: {
+                        message: 'No matching published version found in history',
+                    }
+                };
+            }
         });
         this.data = {};
     }

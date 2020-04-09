@@ -52,6 +52,29 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
   }
 };
 
+export const rollbackToVersion: ActionCreator = async ({ dispatch }, projectId, target, version, sensitiveSettings) => {
+  try {
+    const response = await httpClient.post(`/publish/${projectId}/rollback/${target.name}`, {
+      version,
+      sensitiveSettings,
+    });
+    dispatch({
+      type: ActionTypes.PUBLISH_SUCCESS,
+      payload: {
+        ...response.data,
+        target: target,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.PUBLISH_FAILED,
+      payload: {
+        error: err.response.data,
+      },
+    });
+  }
+};
+
 // get bot status from target publisher
 export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {

@@ -38,6 +38,21 @@ const Publish: React.FC<RouteComponentProps> = () => {
     type: DialogType.normal,
     children: {},
   });
+
+  const isRollbackSupported = (target, version): boolean => {
+    if (version.id && version.status === 200) {
+      const type = publishTypes.filter(t => t.name == target.type)[0];
+      if (type.features.rollback) {
+        return true;
+      } else {
+        console.log('rollback not supported on', type);
+      }
+    } else {
+      console.log('no rollback to version without id or non 200 status');
+    }
+    return false;
+  };
+
   const toolbarItems = [
     {
       type: 'action',
@@ -76,6 +91,19 @@ const Publish: React.FC<RouteComponentProps> = () => {
       },
       align: 'left',
       disabled: selectedVersion ? false : true,
+      dataTestid: 'publishPage-ToolBar-Log',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Rollback'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'ClipboardList',
+        },
+        onClick: () => rollbackToVersion(selectedVersion),
+      },
+      align: 'left',
+      disabled: selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
     {
@@ -179,7 +207,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       children: (
         <CreatePublishTarget
           targetTypes={publishTypes.map(type => {
-            return { key: type, text: type };
+            return { key: type.name, text: type.name };
           })}
           targets={settings.publishTargets}
           onSave={savePublishTarget}
@@ -188,6 +216,12 @@ const Publish: React.FC<RouteComponentProps> = () => {
       ),
     });
   }, [publishTypes]);
+
+  const rollbackToVersion = version => {
+    const sensitiveSettings = settingsStorage.get(botName);
+    console.log('ROLLBACK TO ', version);
+    actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
+  };
 
   const getUpdatedStatus = target => {
     if (target) {

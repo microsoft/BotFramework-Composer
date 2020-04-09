@@ -95,7 +95,18 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
-  publishTypes: string[];
+  publishTypes: [
+    {
+      name: string;
+      description: string;
+      features: {
+        history: boolean;
+        publish: boolean;
+        rollback: boolean;
+        status: boolean;
+      };
+    }
+  ];
   publishHistory: {
     [key: string]: any[];
   };

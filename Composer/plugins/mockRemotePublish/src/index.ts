@@ -52,7 +52,7 @@ class LocalPublisher {
         time: new Date(),
         message: 'Accepted for publishing.',
         log: 'Publish starting...',
-        id: new uuid(),
+        id: uuid(),
         comment: metadata.comment,
       },
     };
@@ -95,7 +95,29 @@ class LocalPublisher {
     // return in reverse chrono
     return result.reverse();
   };
-  // rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {};
+  rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {
+    console.log('ROLLBACK TO', project.id, rollbackToVersion);
+    const profileName = config.name;
+    const botId = project.id;
+    console.log('eval list', this.data[botId][profileName]);
+    const matched = this.data[botId][profileName].filter(item => {
+      console.log('comparing ', item.result.id, rollbackToVersion);
+      return item.result.id === rollbackToVersion;
+    });
+    if (matched.length && matched[0].status === 200) {
+      const rollback = { ...matched[0], result: { ...matched[0].result } };
+      rollback.result.id = uuid();
+      this.data[botId][profileName].push(rollback);
+      return rollback;
+    } else {
+      return {
+        status: 500,
+        result: {
+          message: 'No matching published version found in history',
+        }
+      };
+    }
+  };
 }
 
 const publisher = new LocalPublisher();
