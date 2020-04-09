@@ -5,4 +5,5 @@ export enum FileExtensions {
   Dialog = '.dialog',
   Lu = '.lu',
   lg = '.lg',
+  Qna = '.qna',
 }

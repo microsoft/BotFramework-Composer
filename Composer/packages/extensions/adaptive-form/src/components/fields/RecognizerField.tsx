@@ -45,7 +45,7 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
     };
   }
   useEffect(() => {
-    if (typeof recognizer === 'object' && recognizer.$kind === SDKKinds.ValueRecognizer) {
+    if (!recognizer) {
       onChange(defaultRecoginzerSet);
     }
   }, [recognizer]);

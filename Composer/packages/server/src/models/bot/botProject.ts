@@ -195,6 +195,7 @@ export class BotProject {
       templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.qna, { LOCALE: '*', DIALOGNAME: '*' }),
     ];
     for (const pattern of entryPatterns) {
       const root = this.dataDir;
@@ -411,7 +412,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.qna'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

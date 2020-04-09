@@ -296,7 +296,6 @@ function DesignPage(props) {
     if (seededContent.triggers && seededContent.triggers[0]) {
       seededContent.triggers[0].actions = state.actionsSeed;
     }
-
     await actions.createDialog({ id: data.name, content: seededContent });
   }
 

@@ -68,7 +68,7 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
-  const { dialogs, luFiles, lgFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, qnaFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
@@ -79,6 +79,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.skills = response.data.skills;
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
+  state.qnaFiles = qnaFiles;
   state.settings = settings;
   state.locale = locale;
   refreshLocalStorage(botName, state.settings);
