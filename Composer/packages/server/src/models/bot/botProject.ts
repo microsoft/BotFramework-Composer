@@ -283,7 +283,16 @@ export class BotProject {
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    await this._removeEmptyFolder(dirPath);
+    await this._removeEmptyFolderFromBottomToUp(dirPath);
+  };
+
+  private _removeEmptyFolderFromBottomToUp = async (folderPath: string) => {
+    let currentFolder = folderPath;
+    //make sure the folder to delete is in current project
+    while (currentFolder.startsWith(this.dataDir)) {
+      await this._removeEmptyFolder(currentFolder);
+      currentFolder = Path.dirname(currentFolder);
+    }
   };
 
   private _removeEmptyFolder = async (folderPath: string) => {
