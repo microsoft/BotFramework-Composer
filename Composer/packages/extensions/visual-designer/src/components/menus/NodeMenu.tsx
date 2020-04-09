@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
@@ -61,6 +62,7 @@ export const NodeMenu = ({ id, onEvent }) => {
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
+        label={formatMessage('node menu')}
       />
     </div>
   );
