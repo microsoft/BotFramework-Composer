@@ -18,7 +18,6 @@ export const Loading: React.FC<ILoadingProps> = props => {
   const reloading = botStatus === BotStatus.reloading;
 
   if (!publishing && !reloading) return null;
-  console.log(botStatus);
   return (
     <Spinner
       size={SpinnerSize.small}
