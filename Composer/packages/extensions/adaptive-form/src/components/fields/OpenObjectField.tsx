@@ -8,6 +8,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -36,7 +37,7 @@ const ObjectItem = ({
 
   const handleBlur = () => {
     if (name !== originalName && Object.keys(formData).includes(name)) {
-      setErrorMessage('Keys must be unique');
+      setErrorMessage(formatMessage('Keys must be unique'));
     } else {
       handleNameChange(name);
       setErrorMessage('');
@@ -52,7 +53,7 @@ const ObjectItem = ({
           error={errorMessage}
           id={`${name}.key`}
           name="key"
-          placeholder={'Add a new key'}
+          placeholder={formatMessage('Add a new key')}
           schema={{}}
           styles={{
             errorMessage: { display: 'block', paddingTop: 0 },
@@ -62,6 +63,7 @@ const ObjectItem = ({
           value={name}
           onBlur={handleBlur}
           onChange={newValue => setName(newValue || '')}
+          ariaLabel={formatMessage('key')}
         />
       </div>
       <div css={openObjectField.item}>
@@ -78,6 +80,7 @@ const ObjectItem = ({
           uiOptions={{}}
           value={value}
           onChange={handleValueChange}
+          ariaLabel={formatMessage('value')}
         />
       </div>
       <IconButton
