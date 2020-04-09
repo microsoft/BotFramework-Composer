@@ -41,12 +41,7 @@ export const NavItem: React.FC<INavItemProps> = props => {
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   const activeArea = (
-    <div
-      css={link(active, disabled)}
-      aria-hidden="true"
-      tabIndex={-1}
-      aria-disabled={disabled}
-    >
+    <div css={link(active, disabled)} aria-hidden="true" tabIndex={-1} aria-disabled={disabled}>
       <Icon data-testid={'LeftNav-CommandBarButton' + labelName} iconName={iconName} styles={icon(active, disabled)} />
       {labelName}
     </div>
