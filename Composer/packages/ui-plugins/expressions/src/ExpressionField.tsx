@@ -5,11 +5,10 @@
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
-import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
+import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig, getValueType } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import isNumber from 'lodash/isNumber';
 
 import { ExpressionEditor } from './ExpressionEditor';
 
@@ -24,18 +23,6 @@ const styles = {
   field: css`
     min-height: 66px;
   `,
-};
-
-const getValueType = (value: any) => {
-  if (Array.isArray(value)) {
-    return 'array';
-  }
-
-  if (isNumber(value)) {
-    return Number.isInteger(value) ? 'integer' : 'number';
-  }
-
-  return typeof value;
 };
 
 const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {

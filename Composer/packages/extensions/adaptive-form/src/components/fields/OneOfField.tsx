@@ -7,25 +7,12 @@ import React, { useState, useMemo } from 'react';
 import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
-import isNumber from 'lodash/isNumber';
 
 import { FieldLabel } from '../FieldLabel';
-import { resolveRef, resolveFieldWidget } from '../../utils';
+import { resolveRef, resolveFieldWidget, getValueType } from '../../utils';
 import { usePluginConfig } from '../../hooks';
 
 import { oneOfField } from './styles';
-
-const getValueType = (value: any) => {
-  if (Array.isArray(value)) {
-    return 'array';
-  }
-
-  if (isNumber(value)) {
-    return Number.isInteger(value) ? 'integer' : 'number';
-  }
-
-  return typeof value;
-};
 
 const getOptions = (schema: JSONSchema7, definitions?: { [key: string]: JSONSchema7Definition }): IDropdownOption[] => {
   const { type, oneOf } = schema;
