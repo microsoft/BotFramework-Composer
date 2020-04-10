@@ -67,7 +67,6 @@ export enum ActionTypes {
   GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
-  TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
   EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
   EDITOR_CLIPBOARD = 'EDITOR_CLIPBOARD',
@@ -126,7 +125,7 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   BOT: 'bot',
-  UNKNOW: 'unknow',
+  UNKNOWN: 'unknown',
 };
 
 export const OpenStatus = {
@@ -140,7 +139,10 @@ export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
   publishing = 'publishing',
+  published = 'published',
   reloading = 'loading',
+  pending = 'pending',
+  failed = 'failed',
 }
 
 export enum CreationFlowStatus {
