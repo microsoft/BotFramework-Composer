@@ -8,15 +8,15 @@ import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react';
-
 import { StoreContext } from '../../../store';
-
+import { EjectModal } from './ejectModal';
 import { runtimeSettings, runtimeControls, runtimeControlsTitle, runtimeToggle, settingsEditor } from './style';
 
 export const RuntimeSettings = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings, projectId } = state;
   const [formDataErrors, setFormDataErrors] = useState({ customRuntimeCommand: '', customRuntimePath: '' });
+  const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
   const changeEnabled = (_, on) => {
     actions.setSettings(projectId, botName, { ...settings, enableCustomRuntime: on });
@@ -48,10 +48,24 @@ export const RuntimeSettings = () => {
         label={formatMessage('Use custom runtime')}
         inlineLabel
         onChange={changeEnabled}
-        defaultChecked={settings.enableCustomRuntime}
+        checked={settings.enableCustomRuntime}
       />
     </div>
   );
+
+  const showEjectModal = () => {
+    setEjectModalVisible(true);
+  };
+  const closeEjectModal = () => {
+    setEjectModalVisible(false);
+  };
+
+  const ejectRuntime = template => {
+    console.log('EJECT RUNTIME USING TEMPLATE', template);
+
+    changeEnabled(null, true);
+    closeEjectModal();
+  };
 
   return botName ? (
     <div css={runtimeSettings}>
@@ -67,7 +81,7 @@ export const RuntimeSettings = () => {
           data-testid="runtimeCodeLocation"
           disabled={!settings.enableCustomRuntime}
         />
-        or <Link>Get a new copy of the runtime code</Link>
+        or <Link onClick={showEjectModal}>Get a new copy of the runtime code</Link>
         <TextField
           label={formatMessage('Start command')}
           value={settings.customRuntimeCommand}
@@ -78,6 +92,7 @@ export const RuntimeSettings = () => {
           disabled={!settings.enableCustomRuntime}
         />
       </div>
+      <EjectModal hidden={!ejectModalVisible} closeModal={closeEjectModal} ejectRuntime={ejectRuntime} />
     </div>
   ) : (
     <div>{formatMessage('Data loading...')}</div>
