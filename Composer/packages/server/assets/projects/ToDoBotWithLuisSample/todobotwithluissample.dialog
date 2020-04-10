@@ -39,7 +39,7 @@
                     "id": "202664",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-202664()}"
+                  "activity": "${bfdactivity_202664()}"
                 }
               ]
             }
@@ -181,7 +181,7 @@
             "id": "107784",
             "name": "Confirmation"
           },
-          "prompt": "${bfdprompt-107784()}",
+          "prompt": "${bfdprompt_107784()}",
           "maxTurnCount": "3",
           "property": "turn.cancelOutcome",
           "value": "=@confirmation",
@@ -209,7 +209,7 @@
                 "id": "140076",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-140076()}"
+              "activity": "${bfdactivity_140076()}"
             },
             {
               "$kind": "Microsoft.CancelAllDialogs",
@@ -226,7 +226,7 @@
                 "id": "272233",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-272233()}"
+              "activity": "${bfdactivity_272233()}"
             }
           ]
         }
@@ -244,7 +244,7 @@
             "id": "037398",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-037398()}"
+          "activity": "${bfdactivity_037398()}"
         }
       ]
     }

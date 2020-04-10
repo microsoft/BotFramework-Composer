@@ -1,31 +1,31 @@
 [import](common.lg)
 
-# bfdactivity-753396
+# bfdactivity_753396
 - Hello, I'm the interruption demo bot! \n \[Suggestions=Get started | Reset profile]
 
-# bfdactivity-032735
+# bfdactivity_032735
 [Activity
     Text = I've reset your profile.
 	SuggestedActions = Get started
 ]
 
-# bfdactivity-650736
+# bfdactivity_650736
 - Sure, I've cancelled that.
 
-# bfdactivity-031899
+# bfdactivity_031899
 - ${user.profile.name}
 
-# bfdactivity-309274
+# bfdactivity_309274
 - ```
 Here's what I know about you -
 - ${NameReadBack()}
 - ${AgeReadBack()}
 ```
 
-# bfdactivity-912837
+# bfdactivity_912837
 - I do not know much about you. I'd love to know more .. \n \[Suggestions=Get started]
 
-# bfdactivity-924700
+# bfdactivity_924700
 [Activity
     Text = Hello, I'm the interruption sample bot!
 	SuggestedActions = Get started | Reset profile | Cancel | Show profile

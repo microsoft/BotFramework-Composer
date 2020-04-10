@@ -20,7 +20,7 @@
             "id": "308464",
             "name": "AskForListType"
           },
-          "prompt": "${bfdprompt-308464()}",
+          "prompt": "${bfdprompt_308464()}",
           "maxTurnCount": "3",
           "property": "dialog.listType",
           "value": "=@listType",
@@ -72,7 +72,7 @@
             "id": "996807",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-996807()}"
+          "activity": "${bfdactivity_996807()}"
         }
       ]
     }

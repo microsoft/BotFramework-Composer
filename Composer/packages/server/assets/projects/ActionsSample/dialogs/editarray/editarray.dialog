@@ -44,7 +44,7 @@
           "$designer": {
             "id": "666135"
           },
-          "activity": "${bfdactivity-666135()}"
+          "activity": "${bfdactivity_666135()}"
         },
         {
           "$kind": "Microsoft.Foreach",
@@ -64,7 +64,7 @@
           "$designer": {
             "id": "763672"
           },
-          "activity": "${bfdactivity-763672()}"
+          "activity": "${bfdactivity_763672()}"
         },
         {
           "$kind": "Microsoft.ForeachPage",

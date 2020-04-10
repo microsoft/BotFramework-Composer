@@ -20,7 +20,7 @@
             "id": "267073",
             "name": "AskForName"
           },
-          "prompt": "${bfdprompt-267073()}",
+          "prompt": "${bfdprompt_267073()}",
           "maxTurnCount": "3",
           "property": "user.name",
           "value": "=coalesce(@userName, @personName)",
@@ -33,8 +33,8 @@
             "id": "826115",
             "name": "Number input"
           },
-          "prompt": "${bfdprompt-826115()}",
-          "invalidPrompt": "${bfdinvalidPrompt-826115()}",
+          "prompt": "${bfdprompt_826115()}",
+          "invalidPrompt": "${bfdinvalidPrompt_826115()}",
           "maxTurnCount": "3",
           "validations": [
             "int(this.value) >= 1",
@@ -46,7 +46,7 @@
           "alwaysPrompt": "true",
           "allowInterruptions": "!@userAge && !@age && !@number",
           "defaultLocale": "en-us",
-          "defaultValueResponse": "${bfddefaultValueResponse-826115()}"
+          "defaultValueResponse": "${bfddefaultValueResponse_826115()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
@@ -54,7 +54,7 @@
             "id": "744717",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-744717()}"
+          "activity": "${bfdactivity_744717()}"
         }
       ]
     },
@@ -71,7 +71,7 @@
             "id": "210613",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-210613()}"
+          "activity": "${bfdactivity_210613()}"
         },
         {
           "$kind": "Microsoft.EndDialog",
@@ -103,7 +103,7 @@
                 "id": "351007",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-351007()}"
+              "activity": "${bfdactivity_351007()}"
             }
           ],
           "elseActions": [
@@ -121,7 +121,7 @@
                     "id": "977137",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-977137()}"
+                  "activity": "${bfdactivity_977137()}"
                 }
               ]
             }
@@ -159,7 +159,7 @@
                 "id": "304840",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-304840()}"
+              "activity": "${bfdactivity_304840()}"
             },
             {
               "$kind": "Microsoft.SetProperty",
@@ -186,7 +186,7 @@
                     "id": "991655",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-991655()}"
+                  "activity": "${bfdactivity_991655()}"
                 },
                 {
                   "$kind": "Microsoft.SetProperty",

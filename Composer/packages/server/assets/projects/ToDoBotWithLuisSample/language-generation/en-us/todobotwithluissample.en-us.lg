@@ -1,6 +1,6 @@
 [import](common.lg)
 
-# bfdactivity-202664()
+# bfdactivity_202664()
 [Activity
     Text = Hi, how can I help today?
     SuggestedActions = Add | Show | Delete | Profile
@@ -9,17 +9,17 @@
 # foo
 - test
 
-# bfdactivity-269411()
+# bfdactivity_269411()
 - ${@answer}
 
-# bfdprompt-107784()
+# bfdprompt_107784()
 - Are you sure you want to cancel?
 
-# bfdactivity-140076()
+# bfdactivity_140076()
 - Sure, cancelling all dialogs.
 
-# bfdactivity-272233()
+# bfdactivity_272233()
 - No worries.
 
-# bfdactivity-037398()
+# bfdactivity_037398()
 - Sorry, not sure what you mean. Can you rephrase? 

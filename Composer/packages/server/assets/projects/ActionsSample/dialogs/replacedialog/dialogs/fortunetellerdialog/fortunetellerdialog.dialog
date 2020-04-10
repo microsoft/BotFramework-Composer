@@ -17,21 +17,21 @@
           "$designer": {
             "id": "554030"
           },
-          "activity": "${bfdactivity-554030()}"
+          "activity": "${bfdactivity_554030()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "302405"
           },
-          "activity": "${bfdactivity-302405()}"
+          "activity": "${bfdactivity_302405()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "322106"
           },
-          "activity": "${bfdactivity-322106()}"
+          "activity": "${bfdactivity_322106()}"
         }
       ]
     }
