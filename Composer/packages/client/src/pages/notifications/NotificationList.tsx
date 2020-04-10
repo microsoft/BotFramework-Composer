@@ -12,7 +12,6 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
@@ -109,15 +108,6 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
     return Math.ceil(items.length / itemCount) || 1;
   }, [items]);
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const items = selection.getSelection();
-      if (items.length) {
-        onItemClick(items[0] as INotification);
-      }
-    },
-  });
-
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
@@ -128,7 +118,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
             css={detailList}
             items={showItems}
             columns={columns}
-            selection={selection}
+            onItemInvoked={onItemClick}
             selectionMode={SelectionMode.single}
             setKey="none"
             layoutMode={DetailsListLayoutMode.justified}
