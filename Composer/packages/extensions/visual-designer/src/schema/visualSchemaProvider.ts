@@ -7,8 +7,13 @@ import { VisualWidget, VisualSchema } from '@bfc/extension';
 export class VisualSchemaProvider {
   schema: VisualSchema;
 
-  constructor(visualSchema: VisualSchema) {
-    this.schema = visualSchema;
+  constructor(...schemas: VisualSchema[]) {
+    this.schema = this.mergeSchemas(schemas);
+  }
+
+  private mergeSchemas(orderedSchemas: VisualSchema[]): VisualSchema {
+    if (!Array.isArray(orderedSchemas) || !orderedSchemas.length) return {};
+    return Object.assign({}, ...orderedSchemas);
   }
 
   get = ($kind: string): VisualWidget => {

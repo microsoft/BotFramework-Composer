@@ -8,7 +8,7 @@ import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, JSONSchema7, VisualSchema } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -37,13 +37,11 @@ const styles = css`
   overflow: scroll;
 `;
 
-const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema);
-
 export interface VisualDesignerProps {
   schema?: JSONSchema7;
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { shellApi, ...shellData } = useShellApi();
+  const { shellApi, plugins, ...shellData } = useShellApi();
   const {
     dialogId,
     focusedEvent,
@@ -102,6 +100,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
   };
+
+  const visualSchemaFromPlugins = plugins.map(x => x.visualSchema).filter(x => x !== undefined) as VisualSchema[];
+  const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema, ...visualSchemaFromPlugins);
 
   return (
     <CacheProvider value={emotionCache}>
