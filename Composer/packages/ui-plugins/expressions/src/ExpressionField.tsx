@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
 import { FieldProps, JSONSchema7 } from '@bfc/extension';
-import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
+import { FieldLabel, resolveRef, resolveFieldWidget, usePluginConfig, getValueType } from '@bfc/adaptive-form';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
@@ -81,7 +81,7 @@ const getOptions = (schema: JSONSchema7, definitions): IDropdownOption[] => {
 
 const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined => {
   const expressionOption = options.find(({ key }) => key === 'expression');
-  const valueType = Array.isArray(value) ? 'array' : typeof value;
+  const valueType = getValueType(value);
 
   // if its an array, we know it's not an expression
   if (valueType === 'array') {
@@ -107,7 +107,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
   }
 
   // if the value if undefined, either default to expression or the first option
-  if (!value) {
+  if (typeof value === 'undefined' || value === null) {
     return options.length > 2 ? expressionOption : options[0];
     // else if the value is a string and starts with '=' it is an expression
   } else if (
@@ -123,7 +123,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
-  const { id, value = '', label, description, schema, uiOptions, definitions } = props;
+  const { id, value, label, description, schema, uiOptions, definitions } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
 
@@ -142,7 +142,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
   ] = useState<IDropdownOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if (option) {
+    if (option && option.key !== selectedKey) {
       setSelectedOption(option);
       props.onChange(undefined);
     }
