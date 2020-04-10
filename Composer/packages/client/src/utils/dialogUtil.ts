@@ -7,6 +7,7 @@ import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import { ExpressionEngine } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -18,12 +19,14 @@ interface DialogsMap {
 }
 
 export interface TriggerFormData {
+  recognizerType: string;
   errors: TriggerFormDataErrors;
   $kind: string;
   specifiedType: string;
   intent: string;
   triggerPhrases: string;
   regexEx: string;
+  qnaPhrase: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -44,6 +47,29 @@ export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+
+export const LuisRecognizerKey: string = SDKKinds.LuisRecognizer;
+export const ValueRecognizerKey: string = SDKKinds.ValueRecognizer;
+export const QnARecognizerKey: string = SDKKinds.QnaRecognizer;
+export const CrossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
+export const recognizerTemplates = [
+  {
+    key: LuisRecognizerKey,
+    text: formatMessage('LUIS'),
+  },
+  {
+    key: QnARecognizerKey,
+    text: formatMessage('QnA'),
+  },
+  {
+    key: regexRecognizerKey,
+    text: formatMessage('Regular Expression'),
+  },
+  {
+    key: ValueRecognizerKey,
+    text: formatMessage('Value'),
+  },
+];
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -133,7 +159,8 @@ export function createSelectedPath(selected: number) {
 export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  const isRegEx =
+    get(dialogCopy, `content.recognizer.recognizers[0].recognizers['en-us'].$kind`, '') === regexRecognizerKey;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
