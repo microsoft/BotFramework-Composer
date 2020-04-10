@@ -81,7 +81,7 @@ export class BotProject {
 
   public init = async () => {
     await this._reformProjectStructure();
-
+    await this._replaceDashInTemplateName();
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
@@ -546,6 +546,91 @@ export class BotProject {
 
       await this.ensureDirExists(Path.dirname(absolutePath));
       await this.fileStorage.writeFile(absolutePath, content);
+    }
+  };
+
+  private _replaceDashInTemplateName = async () => {
+    const files: { [key: string]: string }[] = [];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.json'];
+    for (const pattern of patterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        let fileChanged = false;
+        const realFilePath: string = Path.join(root, filePath);
+        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+          let content: string = await this.fileStorage.readFile(realFilePath);
+          const fileType = Path.extname(filePath);
+          const newContentLines: string[] = [];
+          if (fileType === '.lg') {
+            const templateNamePattern = /^\s*#\s*.*/;
+            const templateBodyLinePattern = /^\s*-.*/;
+            const lines = content.split('\n');
+            for (const line of lines) {
+              if (templateNamePattern.test(line) && line.includes('-')) {
+                newContentLines.push(line.replace('-', '_'));
+                fileChanged = true;
+              } else if (templateBodyLinePattern.test(line) && line.includes('bfdactivity-')) {
+                newContentLines.push(line.replace('bfdactivity-', 'bfdactivity_'));
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileType === '.dialog') {
+            const lines = content.split('\n');
+            const callingTempaltePattern = /^\s*"[\w]+":\s*"\$\{.*\}"/;
+            for (const line of lines) {
+              if (callingTempaltePattern.test(line) && line.includes('-')) {
+                newContentLines.push(line.replace('-', '_'));
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileType === '.json') {
+            const lines = content.split('\n');
+            const activityInJson = /^\s*"activity":\s*"\[.*\]"/;
+            for (const line of lines) {
+              if (activityInJson.test(line) && line.includes('-')) {
+                newContentLines.push(line.replace('-', '_'));
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileChanged) {
+            files.push({ realFilePath, content });
+          }
+        }
+      }
+    }
+
+    for (const file of files) {
+      const { realFilePath, content } = file;
+      await this.fileStorage.removeFile(realFilePath);
+
+      try {
+        const dirPath = Path.dirname(realFilePath);
+        await this.fileStorage.rmDir(dirPath);
+      } catch (_error) {
+        // pass , dir may not empty
+      }
+
+      await this.ensureDirExists(Path.dirname(realFilePath));
+      await this.fileStorage.writeFile(realFilePath, content);
     }
   };
 

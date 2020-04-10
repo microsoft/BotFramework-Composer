@@ -15,10 +15,10 @@ describe('LgMetaData', () => {
   it('can generate correct output strings', () => {
     const instance = new LgMetaData('activity', '123456');
 
-    expect(instance.toString()).toEqual('bfdactivity-123456');
+    expect(instance.toString()).toEqual('bfdactivity_123456');
   });
 
   it('can construct instance via `parse()` method', () => {
-    expect(LgMetaData.parse('bfdactivity-123456')).toBeInstanceOf(LgMetaData);
+    expect(LgMetaData.parse('bfdactivity_123456')).toBeInstanceOf(LgMetaData);
   });
 });

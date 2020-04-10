@@ -11,7 +11,7 @@ describe('parseLgTemplateName', () => {
   });
 
   it('should return LgMetaData when inputs are valid', () => {
-    const result = parseLgTemplateName('bfdactivity-123456');
+    const result = parseLgTemplateName('bfdactivity_123456');
     expect(result).toBeInstanceOf(LgMetaData);
     expect((result as LgMetaData).designerId).toEqual('123456');
     expect((result as LgMetaData).type).toEqual('activity');

@@ -18,7 +18,7 @@ describe('#copyIfCondition', () => {
       elseActions: [
         {
           $kind: 'Microsoft.SendActivity',
-          activity: '[bfdactivity-1234]',
+          activity: '[bfdactivity_1234]',
         },
       ],
     };
@@ -44,7 +44,7 @@ describe('#copyIfCondition', () => {
           $designer: {
             id: '5678',
           },
-          activity: '[bfdactivity-1234]',
+          activity: '[bfdactivity_1234]',
         },
       ],
     });
