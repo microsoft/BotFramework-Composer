@@ -13,6 +13,8 @@ import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 import { loading, fileSelectorContainer } from './styles';
+import { File } from '../../store/types';
+
 interface LocationSelectContentProps {
   operationMode: {
     read: boolean;
@@ -27,11 +29,10 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
-  const onFileChosen = item => {
+  const onFileChosen = (item: File) => {
     if (item) {
-      const type = item.fileType;
+      const {type, path} = item;
       const storageId = storages[currentStorageIndex.current].id;
-      const path = item.filePath;
       if (type === FileTypes.FOLDER) {
         onCurrentPathUpdate(path, storageId);
       } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
