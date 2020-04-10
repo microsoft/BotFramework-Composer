@@ -6,7 +6,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from './BeginSkillDialogField';
-import { SelectSkillDialog } from './SelectSkillDialog';
+import { SelectSkillDialog } from './SelectSkillDialogField';
 
 const uiSchema: UISchema = {
   [SDKKinds.SkillDialog]: {
