@@ -5,11 +5,11 @@ import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
 import { renderUIWidget } from '../../../src/schema/visualSchemaRenderer';
 import { VisualSchemaProvider } from '../../../src/schema/visualSchemaProvider';
-import { visualSchema } from '../../../src/schema/visualSchema';
+import { defaultVisualSchema } from '../../../src/schema/defaultVisualSchema';
 
 import './story.css';
 
-const uiSchemaPrivider = new VisualSchemaProvider(visualSchema);
+const uiSchemaPrivider = new VisualSchemaProvider(defaultVisualSchema);
 const actionFactory = new DialogFactory({});
 
 export class VisualSDKDemo extends Component {
