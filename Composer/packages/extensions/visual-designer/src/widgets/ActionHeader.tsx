@@ -5,13 +5,13 @@
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
+import { StandardFontCSS, TruncatedCSS } from '@bfc/visual-designer-elements';
 
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
-import { StandardFontCSS, TruncatedCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;

@@ -1,73 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SDKKinds, getInputType } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
 import { VisualSchema, VisualWidget } from '@bfc/extension';
-
-import { ElementIcon } from '../utils/obiPropertyResolver';
-import { ObiColors } from '../constants/ElementColors';
-import { SingleLineDiv, BorderedDiv, FixedInfo } from '../components/elements/styledComponents';
-import { ListOverview } from '../components/common/ListOverview';
+import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/visual-designer-elements';
 
 const BaseInputSchema: VisualWidget = {
-  widget: 'PromptWidget',
-  nowrap: true,
-  botAsks: {
-    widget: 'ActionCard',
-    header: {
-      widget: 'ActionHeader',
-      title: data => `Bot Asks (${getInputType(data.$kind)})`,
-      icon: ElementIcon.MessageBot,
-      colors: {
-        theme: ObiColors.BlueMagenta20,
-        icon: ObiColors.BlueMagenta30,
-      },
-    },
-    body: {
-      widget: 'ActivityRenderer',
-      field: 'prompt',
-      defaultContent: '<prompt>',
-    },
-  },
-  userInput: {
-    widget: 'ActionCard',
-    header: {
-      widget: 'ActionHeader',
-      title: data => `User Input (${getInputType(data.$kind)})`,
-      disableSDKTitle: true,
-      icon: ElementIcon.User,
-      menu: 'none',
-      colors: {
-        theme: ObiColors.LightBlue,
-        icon: ObiColors.AzureBlue,
-      },
-    },
-    body: data =>
-      data.$kind === SDKKinds.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
-        <ListOverview
-          items={data.choices}
-          renderItem={item => {
-            const value = typeof item === 'object' ? item.value : item;
-            return (
-              <BorderedDiv height={20} title={value}>
-                {value}
-              </BorderedDiv>
-            );
-          }}
-        />
-      ) : (
-        <>{data.choices}</>
-      ),
-    footer: data =>
-      data.property ? (
-        <>
-          {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
-        </>
-      ) : null,
-  },
+  widget: 'ActionCard',
+  body: data => data.prompt,
 };
 
 export const defaultVisualSchema: VisualSchema = {

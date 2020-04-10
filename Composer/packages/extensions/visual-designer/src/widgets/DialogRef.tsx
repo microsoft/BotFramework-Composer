@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import get from 'lodash/get';
 import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
+import { LinkBtn } from '@bfc/visual-designer-elements';
 
-import { LinkBtn } from '../components/elements/styledComponents';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
 export interface DialogRefCardProps extends WidgetContainerProps {

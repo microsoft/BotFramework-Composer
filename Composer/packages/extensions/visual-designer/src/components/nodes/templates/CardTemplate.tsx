@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { FC, ReactNode } from 'react';
+import { TextDiv } from '@bfc/visual-designer-elements';
 
 import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
 import { ObiColors } from '../../../constants/ElementColors';
 import { ArrowLine } from '../../lib/ArrowLine';
-import { TextDiv } from '../../elements/styledComponents';
 
 const containerCSS = css`
   font-size: 12px;
