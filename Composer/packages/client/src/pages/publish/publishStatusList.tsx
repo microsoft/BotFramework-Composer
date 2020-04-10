@@ -16,6 +16,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import moment from 'moment';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -45,7 +46,22 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: IStatus) => {
-      return <span>{item.time}</span>;
+      return <span>{moment(item.time).format('h:mm a')}</span>;
+    },
+    isPadded: true,
+  },
+  {
+    key: 'PublishDate',
+    name: 'Date',
+    className: 'publishdate',
+    fieldName: 'date',
+    minWidth: 70,
+    maxWidth: 90,
+    isRowHeader: true,
+    isResizable: true,
+    data: 'string',
+    onRender: (item: IStatus) => {
+      return <span>{moment(item.time).format('DD-MM-YYYY')}</span>;
     },
     isPadded: true,
   },
