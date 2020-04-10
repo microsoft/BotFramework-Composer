@@ -112,18 +112,7 @@ export const defaultVisualSchema: VisualSchema = {
   },
   [SDKKinds.SendActivity]: {
     widget: 'ActionCard',
-    header: {
-      widget: 'ActionHeader',
-      icon: ElementIcon.MessageBot,
-      colors: {
-        theme: ObiColors.BlueMagenta20,
-        icon: ObiColors.BlueMagenta30,
-      },
-    },
-    body: {
-      widget: 'ActivityRenderer',
-      field: 'activity',
-    },
+    body: data => data.activity,
   },
   [SDKKinds.AttachmentInput]: BaseInputSchema,
   [SDKKinds.ConfirmInput]: BaseInputSchema,
