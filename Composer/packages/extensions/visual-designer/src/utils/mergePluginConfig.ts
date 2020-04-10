@@ -7,9 +7,10 @@ import { defaultVisualSchema } from '../schema/defaultVisualSchema';
 import { defaultVisualWidgets } from '../schema/defaultVisualWidgets';
 
 export const mergePluginConfig = (...plugins: PluginConfig[]): Required<VisualEditorConfig> => {
-  // const visualConfigs = plugins.map(x => x.visual).filter(x => !!x);
+  const externalWidgets = plugins.map(x => x.visual?.widgets).filter(x => !!x);
+  const externalSchema = plugins.map(x => x.visual?.schema).filter(x => !!x);
   return {
-    widgets: defaultVisualWidgets,
-    schema: defaultVisualSchema,
+    widgets: Object.assign({}, defaultVisualWidgets, ...externalWidgets),
+    schema: Object.assign({}, defaultVisualSchema, ...externalSchema),
   };
 };
