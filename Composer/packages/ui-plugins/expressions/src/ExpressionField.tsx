@@ -136,7 +136,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
-  const { id, value = '', label, description, schema, uiOptions, definitions } = props;
+  const { id, value, label, description, schema, uiOptions, definitions } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
 
