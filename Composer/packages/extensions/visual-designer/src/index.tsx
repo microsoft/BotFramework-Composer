@@ -8,7 +8,7 @@ import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi, JSONSchema7 } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -39,7 +39,10 @@ const styles = css`
 
 const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema);
 
-const VisualDesigner: React.FC = (): JSX.Element => {
+export interface VisualDesignerProps {
+  schema?: JSONSchema7;
+}
+const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
   const { shellApi, ...shellData } = useShellApi();
   const {
     dialogId,
@@ -50,7 +53,6 @@ const VisualDesigner: React.FC = (): JSX.Element => {
     data: inputData,
     hosted,
     lgFiles,
-    schemas,
   } = shellData;
 
   const dataCache = useRef({});
@@ -98,7 +100,7 @@ const VisualDesigner: React.FC = (): JSX.Element => {
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
-    dialogFactory: new DialogFactory(schemas.sdk?.content),
+    dialogFactory: new DialogFactory(schema),
   };
 
   return (

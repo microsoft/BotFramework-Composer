@@ -79,7 +79,7 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
         data-testid="VisualEditor"
       >
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
-          <VisualDesigner />
+          <VisualDesigner schema={schemas.sdk?.content} />
         </Extension>
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
