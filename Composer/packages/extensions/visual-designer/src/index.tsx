@@ -7,7 +7,8 @@ import createCache from '@emotion/cache';
 import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { ShellData, ShellApi, DialogFactory } from '@bfc/shared';
+import { DialogFactory } from '@bfc/shared';
+import { useShellApi } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -38,18 +39,20 @@ const styles = css`
 
 const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema);
 
-const VisualDesigner: React.FC<VisualDesignerProps> = ({
-  dialogId,
-  focusedEvent,
-  focusedActions,
-  focusedTab,
-  clipboardActions,
-  data: inputData,
-  shellApi,
-  hosted,
-  lgFiles,
-  schema,
-}): JSX.Element => {
+const VisualDesigner: React.FC = (): JSX.Element => {
+  const { shellApi, ...shellData } = useShellApi();
+  const {
+    dialogId,
+    focusedEvent,
+    focusedActions,
+    focusedTab,
+    clipboardActions,
+    data: inputData,
+    hosted,
+    lgFiles,
+    schemas,
+  } = shellData;
+
   const dataCache = useRef({});
 
   /**
@@ -95,7 +98,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
-    dialogFactory: new DialogFactory(schema),
+    dialogFactory: new DialogFactory(schemas.sdk?.content),
   };
 
   return (
@@ -127,27 +130,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
       </NodeRendererContext.Provider>
     </CacheProvider>
   );
-};
-
-export interface VisualDesignerProps extends ShellData {
-  onChange: (newData: object, updatePath?: string) => void;
-  shellApi: ShellApi;
-  schema: any;
-}
-
-VisualDesigner.defaultProps = {
-  dialogId: '',
-  focusedEvent: '',
-  focusedSteps: [],
-  data: { $kind: '' },
-  shellApi: ({
-    navTo: () => {},
-    onFocusEvent: () => {},
-    onFocusSteps: () => {},
-    onSelect: () => {},
-    saveData: () => {},
-    addCoachMarkRef: () => {},
-  } as unknown) as ShellApi,
 };
 
 export default VisualDesigner;
