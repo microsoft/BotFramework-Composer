@@ -24,7 +24,7 @@ const config: PluginConfig = {
           // into the .dialog file
           fallback(`${qnaFile.id.split('.')[0]}.qna`);
         } else {
-          alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
+          alert(`NO QNA FILE WITH NAME ${currentDialog.id}`);
         }
       },
     },
