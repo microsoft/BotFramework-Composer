@@ -12,5 +12,5 @@ import { LgTemplateName } from '../models/stringTypes';
  */
 export default function buildLgTemplateNameFromLgMetaData(lgMetaData: LgMetaData): LgTemplateName {
   const { type, designerId } = lgMetaData;
-  return `bfd${type}-${designerId}`;
+  return `bfd${type}_${designerId}`;
 }
