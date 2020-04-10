@@ -271,6 +271,11 @@ const publisher = new LocalPublisher();
 export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
+  await composer.addRuntimeTemplate({
+    name: 'csharp',
+    path: '/some/path',
+    startCommand: 'dotnet start',
+  });
 };
 
 // stop all the runningBot when process exit

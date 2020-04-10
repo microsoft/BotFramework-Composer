@@ -49,6 +49,13 @@ export class ComposerPluginRegistration {
   }
 
   /**************************************************************************************
+   * Runtime Templates
+   *************************************************************************************/
+  public async addRuntimeTemplate(plugin: RuntimeTemplate) {
+    this.loader.extensions.runtimeTemplates.push(plugin);
+  }
+
+  /**************************************************************************************
    * Express/web related features
    *************************************************************************************/
   public addWebMiddleware(middleware: (req, res, next) => void) {
@@ -172,6 +179,12 @@ interface PublishPlugin {
   [key: string]: any;
 }
 
+export interface RuntimeTemplate {
+  name: string; // name of runtime template to display in interface
+  path: string; // path to runtime template on disk
+  startCommand: string; // command used to start runtime
+}
+
 export class PluginLoader {
   private _passport;
   private _webserver: Express | undefined;
@@ -191,6 +204,7 @@ export class PluginLoader {
       allowedUrls: string[];
       [key: string]: any;
     };
+    runtimeTemplates: RuntimeTemplate[];
   };
 
   constructor() {
@@ -204,6 +218,7 @@ export class PluginLoader {
       authentication: {
         allowedUrls: [this.loginUri],
       },
+      runtimeTemplates: [],
     };
     this._passport = passport;
   }

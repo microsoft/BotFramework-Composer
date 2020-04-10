@@ -420,6 +420,11 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setRuntimeTemplates: ReducerFunc = (state, payload) => {
+  state.runtimeTemplates = payload;
+  return state;
+};
+
 const setBotStatus: ReducerFunc = (state, payload) => {
   state.botStatus = payload;
   return state;
@@ -496,4 +501,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
 });
