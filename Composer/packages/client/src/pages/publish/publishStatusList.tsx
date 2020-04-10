@@ -16,7 +16,6 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
-import { useMemo } from 'react';
 
 import { listRoot, tableView, detailList } from './styles';
 

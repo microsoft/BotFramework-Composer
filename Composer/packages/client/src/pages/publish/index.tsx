@@ -147,6 +147,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   }, [settings.publishTargets]);
 
   useEffect(() => {
+    setSelectedVersion(undefined);
     // get selected target publish history
     if (selectedTarget && selectedTarget.type === 'all') {
       for (const target of publishTarget) {
@@ -154,7 +155,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
       }
     } else if (selectedTarget && selectedTarget.type !== 'no') {
       actions.getPublishHistory(projectId, selectedTarget);
-      setSelectedVersion(undefined);
     }
   }, [selectedTarget]);
 
@@ -196,7 +196,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   // check history to see if a 202 is found
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
-    if (selectedTarget && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
+    if (selectedTarget?.type !== 'all' && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
       console.log('Found a 202, will query for updates...');
       getUpdatedStatus(selectedTarget);
     } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
@@ -338,6 +338,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
         <div css={contentEditor}>
           <Fragment>
             <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={setSelectedVersion} />
+            {selectedTarget && (!thisPublishHistory || thisPublishHistory.length === 0) ? (
+              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+            ) : null}
           </Fragment>
         </div>
       </div>
