@@ -86,7 +86,8 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  overflow: auto;
+  overflow-y: scroll;
+  height: 100%;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
@@ -121,6 +122,7 @@ export const middleTriggerContainer = css`
   width: 100%;
   margin-top: 55px;
   height: calc(100% - 48px);
+  min-height: 285px;
   position: absolute;
 `;
 

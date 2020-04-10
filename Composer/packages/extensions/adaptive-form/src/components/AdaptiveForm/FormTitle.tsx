@@ -28,7 +28,7 @@ interface FormTitleProps {
 const FormTitle: React.FC<FormTitleProps> = props => {
   const { name, description, schema, formData, uiOptions = {} } = props;
 
-  const handleTitleChange = (_e: React.FormEvent, newTitle?: string): void => {
+  const handleTitleChange = (newTitle?: string): void => {
     if (props.onChange) {
       props.onChange({
         ...formData.$designer,
@@ -83,6 +83,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
           uiOptions={{}}
           value={getTitle()}
           onChange={handleTitleChange}
+          ariaLabel={formatMessage('form title')}
         />
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>

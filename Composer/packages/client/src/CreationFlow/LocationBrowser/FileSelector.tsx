@@ -7,7 +7,6 @@ import path from 'path';
 import { jsx } from '@emotion/core';
 import { useMemo } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -36,15 +35,15 @@ interface FileSelectorProps {
   };
   focusedStorageFolder: StorageFolder;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
-  onSelectionChanged: (file: any) => void;
+  onFileChosen: (file: any) => void;
   checkShowItem: (file: File) => boolean;
 }
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
-  const { onSelectionChanged, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
+  const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
-  const tableColums = [
+  const tableColumns = [
     {
       key: 'column1',
       name: formatMessage('File Type'),
@@ -76,7 +75,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
               iconName="Robot"
             />
           );
-        } else if (iconName === FileTypes.UNKNOW) {
+        } else if (iconName === FileTypes.UNKNOWN) {
           return (
             <Icon
               style={{
@@ -161,15 +160,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     );
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const file = selection.getSelection()[0];
-      // selected item will be cleaned when folder path changed file will be undefine
-      // when no item selected.
-      onSelectionChanged(file);
-    },
-  });
-
   function getNavItemPath(array, separator, start, end) {
     if (end === 0) return array[0];
     if (!start) start = 0;
@@ -228,12 +218,12 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           <DetailsList
             items={storageFiles}
             compact={false}
-            columns={tableColums}
+            columns={tableColumns}
             getKey={item => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             onRenderDetailsHeader={onRenderDetailsHeader}
             isHeaderVisible={true}
-            selection={selection}
+            onItemInvoked={onFileChosen}
             selectionMode={SelectionMode.single}
             checkboxVisibility={CheckboxVisibility.hidden}
           />

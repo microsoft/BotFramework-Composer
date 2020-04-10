@@ -127,7 +127,7 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   BOT: 'bot',
-  UNKNOW: 'unknow',
+  UNKNOWN: 'unknown',
 };
 
 export const OpenStatus = {
