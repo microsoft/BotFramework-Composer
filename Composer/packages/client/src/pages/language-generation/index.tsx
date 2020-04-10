@@ -21,10 +21,10 @@ import {
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
 import { NavLinks } from '../../components/NavLinks';
+import { TestController } from '../../components/TestController';
 
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
-import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {

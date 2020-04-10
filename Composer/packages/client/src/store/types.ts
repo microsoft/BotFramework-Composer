@@ -89,7 +89,6 @@ export interface State {
   settings: DialogSetting;
   actionsSeed: any;
   onCreateDialogComplete?: (dialogId: string | null) => void;
-  toStartBot: boolean;
   currentUser: {
     token: string | null;
     email?: string;

@@ -243,8 +243,13 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const setLuFailure: ReducerFunc = (state, payload) => {
-  state.botStatus = BotStatus.unConnected;
+const publishLuisSuccess: ReducerFunc = state => {
+  state.botStatus = BotStatus.published;
+  return state;
+};
+
+const publishLuisFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.failed;
   state.botLoadErrorMsg = payload;
   return state;
 };
@@ -419,7 +424,7 @@ const publishSuccess: ReducerFunc = (state, payload) => {
 };
 
 const publishFailure: ReducerFunc = (state, { error }) => {
-  state.botStatus = BotStatus.unConnected;
+  state.botStatus = BotStatus.failed;
   state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
   return state;
 };
@@ -449,7 +454,7 @@ const getPublishHistory: ReducerFunc = (state, payload) => {
 };
 
 const setBotStatus: ReducerFunc = (state, payload) => {
-  state.botStatus = payload;
+  state.botStatus = payload.status;
   return state;
 };
 
@@ -508,12 +513,11 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU]: updateLuTemplate,
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
-  [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
+  [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
-  [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
   [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
