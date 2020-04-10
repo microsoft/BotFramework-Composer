@@ -8,15 +8,15 @@ import React, { useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7, VisualSchema } from '@bfc/extension';
+import { useShellApi, JSONSchema7 } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { VisualSchemaContext } from './store/VisualSchemaContext';
 import { VisualSchemaProvider } from './schema/visualSchemaProvider';
-import { defaultVisualSchema } from './schema/defaultVisualSchema';
 import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
+import { mergePluginConfig } from './utils/mergePluginConfig';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -101,14 +101,18 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     dialogFactory: new DialogFactory(schema),
   };
 
-  const visualSchemaFromPlugins = plugins.map(x => x.visualSchema).filter(x => x !== undefined) as VisualSchema[];
-  const visualEditorSchemaProvider = new VisualSchemaProvider(defaultVisualSchema, ...visualSchemaFromPlugins);
+  const visualEditorConfig = mergePluginConfig(...plugins);
 
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <VisualSchemaContext.Provider value={visualEditorSchemaProvider}>
+          <VisualSchemaContext.Provider
+            value={{
+              widgets: visualEditorConfig.widgets,
+              schemaProvider: new VisualSchemaProvider(visualEditorConfig.schema),
+            }}
+          >
             <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
                 key={dialogId}

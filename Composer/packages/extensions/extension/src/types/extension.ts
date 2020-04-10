@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { UISchema, RoleSchema, RecognizerSchema } from './uiSchema';
-import { VisualSchema } from './visualSchema';
+import { VisualEditorConfig } from './visualSchema';
 
 export interface PluginConfig {
   uiSchema?: UISchema;
-  visualSchema?: VisualSchema;
   roleSchema?: RoleSchema;
   recognizers?: RecognizerSchema[];
+  visual?: VisualEditorConfig;
 }

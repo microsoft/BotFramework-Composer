@@ -14,12 +14,12 @@ import { ElementWrapper } from './ElementWrapper';
 import { ElementMeasurer } from './ElementMeasurer';
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  const schemaProvider = useContext(VisualSchemaContext);
+  const { widgets, schemaProvider } = useContext(VisualSchemaContext);
 
   const $kind = get(data, '$kind', '');
   const widgetSchema = schemaProvider.get($kind);
 
-  const content = renderUIWidget(widgetSchema, { id, data, onEvent, onResize });
+  const content = renderUIWidget(widgetSchema, widgets, { id, data, onEvent, onResize });
   if (widgetSchema.nowrap) {
     return content;
   }

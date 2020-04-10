@@ -3,10 +3,9 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { VisualWidget, UIWidgetProp, WidgetEventHandler } from '@bfc/extension';
+import { VisualWidget, VisualEditorWidgetMap, UIWidgetProp, WidgetEventHandler } from '@bfc/extension';
 
 import { Boundary } from '../models/Boundary';
-import * as BuiltInWidgets from '../widgets';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */
@@ -22,38 +21,42 @@ export interface UIWidgetContext {
   onResize: (boundary: Boundary) => void;
 }
 
-const parseWidgetSchema = (widgetSchema: VisualWidget) => {
-  const { widget, ...props } = widgetSchema;
-  if (typeof widget === 'string') {
-    const widgetName = widget;
+export const renderUIWidget = (
+  widgetSchema: VisualWidget,
+  widgetMap: VisualEditorWidgetMap,
+  context: UIWidgetContext
+): JSX.Element => {
+  const parseWidgetSchema = (widgetSchema: VisualWidget) => {
+    const { widget, ...props } = widgetSchema;
+    if (typeof widget === 'string') {
+      const widgetName = widget;
+      return {
+        Widget: widgetMap[widgetName] || (() => <></>),
+        props,
+      };
+    }
     return {
-      Widget: BuiltInWidgets[widgetName] || (() => <></>),
+      Widget: widget,
       props,
     };
-  }
-  return {
-    Widget: widget,
-    props,
   };
-};
 
-const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) => {
-  if (typeof rawPropValue === 'function') {
-    const dataTransformer = rawPropValue;
-    const element = dataTransformer(context.data);
-    return element;
-  }
+  const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) => {
+    if (typeof rawPropValue === 'function') {
+      const dataTransformer = rawPropValue;
+      const element = dataTransformer(context.data);
+      return element;
+    }
 
-  // handle recursive widget def
-  if (typeof rawPropValue === 'object' && rawPropValue.widget) {
-    const widgetSchema = rawPropValue as VisualWidget;
-    return renderUIWidget(widgetSchema, context);
-  }
+    // handle recursive widget def
+    if (typeof rawPropValue === 'object' && rawPropValue.widget) {
+      const widgetSchema = rawPropValue as VisualWidget;
+      return renderUIWidget(widgetSchema, widgetMap, context);
+    }
 
-  return rawPropValue;
-};
+    return rawPropValue;
+  };
 
-export const renderUIWidget = (widgetSchema: VisualWidget, context: UIWidgetContext): JSX.Element => {
   const { Widget, props: rawProps } = parseWidgetSchema(widgetSchema);
   const widgetProps = Object.keys(rawProps).reduce((props, propName) => {
     const propValue = rawProps[propName];

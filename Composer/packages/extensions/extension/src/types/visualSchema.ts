@@ -4,6 +4,12 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKKinds } from '@bfc/shared';
 
+export interface VisualEditorConfig {
+  widgets?: VisualEditorWidgetMap;
+  schema?: VisualSchema;
+}
+
+export type VisualEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum VisualSchemaBuiltinKeys {
   default = 'default',
 }
@@ -15,7 +21,7 @@ export type VisualSchema = {
 
 export interface VisualWidget {
   /** Widget implementation (React Class) or Widget name (string) */
-  widget: WidgetComponent<any> | string;
+  widget: string;
 
   /** If set to true, output widget will be borderless (usually applied to IfCondition, SwitchCondition) */
   nowrap?: boolean;
