@@ -68,7 +68,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           schema={{}}
           styles={{
             errorMessage: { display: 'block', paddingTop: 0 },
-            root: { margin: '7px 0 7px 0' },
+            root: { margin: '7px 0' },
           }}
           uiOptions={{}}
           value={name}
@@ -86,7 +86,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           placeholder={initialValue || formatMessage('Add a new value')}
           schema={{}}
           styles={{
-            root: { margin: '7px 0 7px 0' },
+            root: { margin: '7px 0' },
           }}
           uiOptions={{}}
           value={value}
