@@ -96,6 +96,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     <OverflowSet
       // @ts-ignore
       styles={{ position: 'absolute', top: 0 }}
+      aria-lable="icon menu"
       vertical
       overflowItems={menuItems}
       onRenderOverflowButton={_onRenderOverflowButton}

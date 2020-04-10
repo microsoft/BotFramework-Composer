@@ -36,7 +36,6 @@ export const NodeMenu = ({ id, onEvent }) => {
 
   return (
     <div
-      data-name="nodeMenu"
       css={{
         marginRight: '1px',
       }}
@@ -62,7 +61,7 @@ export const NodeMenu = ({ id, onEvent }) => {
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
-        label={formatMessage('node menu')}
+        label={formatMessage('node')}
       />
     </div>
   );
