@@ -86,7 +86,8 @@ export const formEditor = css`
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  overflow: auto;
+  overflow-y: scroll;
+  height: 100%;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
