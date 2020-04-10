@@ -46,9 +46,9 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
 
   const handleBlur = useCallback(() => {
     if (!name || name === '') {
-      setErrorMessage('Key cannot be blank');
+      setErrorMessage(formatMessage('Key cannot be blank'));
     } else if (name !== originalName && Object.keys(formData).includes(name)) {
-      setErrorMessage('Keys must be unique');
+      setErrorMessage(formatMessage('Keys must be unique'));
     } else {
       onNameChange(name);
       setErrorMessage('');
