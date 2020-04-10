@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
-import { StandardFontCSS, TruncatedCSS } from '@bfc/visual-designer-elements';
+import { StandardFontCSS, TruncatedCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';

@@ -1,8 +1,8 @@
 {
-  "name": "@bfc/visual-designer-elements",
+  "name": "@bfc/ui-shared",
   "version": "0.0.0",
   "private": true,
-  "description": "Visual Editor's UI lib.",
+  "description": "Shared UI elements across editor and plugins such as components, styles, colors.",
   "main": "lib/index.js",
   "files": [
     "lib"

@@ -4,7 +4,7 @@
 import React from 'react';
 import { VisualWidget } from '@bfc/extension';
 import { SDKKinds, getInputType } from '@bfc/shared';
-import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/visual-designer-elements';
+import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 
 const BaseInputSchema: VisualWidget = {
   widget: 'PromptWidget',

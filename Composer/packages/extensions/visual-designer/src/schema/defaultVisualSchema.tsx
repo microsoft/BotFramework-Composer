@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
 import { VisualSchema, VisualWidget } from '@bfc/extension';
-import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/visual-designer-elements';
+import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/ui-shared';
 
 const BaseInputSchema: VisualWidget = {
   widget: 'ActionCard',
