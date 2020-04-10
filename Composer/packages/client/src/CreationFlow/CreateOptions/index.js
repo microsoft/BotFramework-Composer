@@ -113,12 +113,14 @@ export function CreateOptions(props) {
         defaultSelectedKey="CreateFromScratch"
         options={[
           {
+            ariaLabel: 'Create from scratch',
             key: 'CreateFromScratch',
             'data-testid': 'Create from scratch',
             text: formatMessage('Create from scratch'),
             onRenderField: SelectOption,
           },
           {
+            ariaLabel: 'Create from template',
             key: 'CreateFromTemplate',
             'data-testid': 'Create from template',
             text: formatMessage('Create from template'),
