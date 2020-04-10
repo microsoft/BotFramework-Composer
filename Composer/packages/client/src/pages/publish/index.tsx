@@ -42,13 +42,11 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const isRollbackSupported = (target, version): boolean => {
     if (version.id && version.status === 200) {
       const type = publishTypes.filter(t => t.name == target.type)[0];
-      if (type.features.rollback) {
-        return true;
-      } else {
-        console.log('rollback not supported on', type);
+      if (type) {
+        if (type.features.rollback) {
+          return true;
+        }
       }
-    } else {
-      console.log('no rollback to version without id or non 200 status');
     }
     return false;
   };
@@ -103,30 +101,34 @@ const Publish: React.FC<RouteComponentProps> = () => {
         onClick: () => rollbackToVersion(selectedVersion),
       },
       align: 'left',
-      disabled: selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
+      disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
-    {
-      type: 'action',
-      text: formatMessage('Test in Emulator'),
-      align: 'left',
-      buttonProps: {
-        iconProps: {
-          iconName: 'OpenInNewTab',
-        },
-        style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
-        onClick: async () => {
-          return Promise.resolve(
-            openInEmulator(
-              thisPublishHistory[0].endpoint,
-              settings.MicrosoftAppId && settings.MicrosoftAppPassword
-                ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-                : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-            )
-          );
-        },
-      },
-    },
+    // BEN COMMENT April 9
+    // I do not think test in emulator belongs here. Publishing does not necessarily result in an emulator-friendly link being present
+    // and it is much more complex than the local scenario.  I also think including this button on this page will create confusion around the
+    // other "Start bot" button
+    // {
+    //   type: 'action',
+    //   text: formatMessage('Test in Emulator'),
+    //   align: 'left',
+    //   buttonProps: {
+    //     iconProps: {
+    //       iconName: 'OpenInNewTab',
+    //     },
+    //     style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
+    //     onClick: async () => {
+    //       return Promise.resolve(
+    //         openInEmulator(
+    //           thisPublishHistory[0].endpoint,
+    //           settings.MicrosoftAppId && settings.MicrosoftAppPassword
+    //             ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+    //             : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+    //         )
+    //       );
+    //     },
+    //   },
+    // },
   ];
 
   useEffect(() => {
@@ -219,7 +221,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
 
   const rollbackToVersion = version => {
     const sensitiveSettings = settingsStorage.get(botName);
-    console.log('ROLLBACK TO ', version);
     actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
   };
 
@@ -254,7 +255,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
   };
 
   const savePublishTarget = (name, type, configuration) => {
-    console.log(`save ${name} ${type} ${configuration}`);
     const _target = publishTarget.concat([
       {
         name,
@@ -262,7 +262,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
         configuration,
       },
     ]);
-    console.log(_target);
     setPublishTarget(_target);
     actions.setSettings(
       projectId,
