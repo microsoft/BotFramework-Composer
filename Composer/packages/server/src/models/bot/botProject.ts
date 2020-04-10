@@ -298,7 +298,11 @@ export class BotProject {
   private _removeEmptyFolder = async (folderPath: string) => {
     const files = await this.fileStorage.readDir(folderPath);
     if (files.length === 0) {
-      await this.fileStorage.rmDir(folderPath);
+      try {
+        await this.fileStorage.rmDir(folderPath);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -393,7 +397,6 @@ export class BotProject {
 
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
-
     this.files.splice(index, 1);
   };
 
