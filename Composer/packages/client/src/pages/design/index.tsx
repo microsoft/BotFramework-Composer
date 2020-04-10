@@ -16,7 +16,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { TriggerCreationModal, OtherFilePayLoad } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -135,19 +135,28 @@ function DesignPage(props) {
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, otherFile?: OtherFilePayLoad) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
       content: dialog.content,
     };
-    if (luFile) {
+    if (otherFile && otherFile.luFile) {
       const luFilePayload = {
-        id: luFile.id,
-        content: luFile.content,
+        id: otherFile.luFile.id,
+        content: otherFile.luFile.content,
         projectId,
       };
       actions.updateLuFile(luFilePayload);
+    }
+
+    if (otherFile && otherFile.qnaFile) {
+      const qnaFilePayload = {
+        id: otherFile.qnaFile.id,
+        content: otherFile.qnaFile.content,
+        projectId,
+      };
+      actions.updateQnaFile(qnaFilePayload);
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
