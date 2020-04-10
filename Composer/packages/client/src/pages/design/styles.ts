@@ -121,6 +121,7 @@ export const middleTriggerContainer = css`
   width: 100%;
   margin-top: 55px;
   height: calc(100% - 48px);
+  min-height: 285px;
   position: absolute;
 `;
 
