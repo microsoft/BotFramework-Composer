@@ -8,12 +8,12 @@ import { useContext, useRef } from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { CreationFlowStatus } from '../../constants';
+import { File } from '../../store/types';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 import { loading, fileSelectorContainer } from './styles';
-import { File } from '../../store/types';
 
 interface LocationSelectContentProps {
   operationMode: {
@@ -31,7 +31,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   const currentStorageIndex = useRef(0);
   const onFileChosen = (item: File) => {
     if (item) {
-      const {type, path} = item;
+      const { type, path } = item;
       const storageId = storages[currentStorageIndex.current].id;
       if (type === FileTypes.FOLDER) {
         onCurrentPathUpdate(path, storageId);

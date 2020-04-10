@@ -41,35 +41,23 @@ interface FileSelectorProps {
 }
 
 type SortState = {
-  key: string,
-  descending: boolean
+  key: string;
+  descending: boolean;
 };
 
 const _renderIcon = (file: File) => {
   const iconName = getFileIconName(file);
   if (iconName === FileTypes.FOLDER) {
-    return (
-      <Icon style={{ fontSize: '16px' }}
-        iconName="OpenFolderHorizontal"
-      />
-    );
+    return <Icon style={{ fontSize: '16px' }} iconName="OpenFolderHorizontal" />;
   } else if (iconName === FileTypes.BOT) {
-    return (
-      <Icon style={{ fontSize: '16px' }}
-        iconName="Robot"
-      />
-    );
+    return <Icon style={{ fontSize: '16px' }} iconName="Robot" />;
   } else if (iconName === FileTypes.UNKNOWN) {
-    return (
-      <Icon style={{ fontSize: '16px' }}
-        iconName="Page"
-      />
-    );
+    return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
   }
   // fallback for other possible file types
   const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
   return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
-}
+};
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
   const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
@@ -88,7 +76,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: _renderIcon
+      onRender: _renderIcon,
     },
     {
       key: 'name',
@@ -120,8 +108,8 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       isPadded: true,
     },
   ];
-  
-  const [currentSort, setSort] = useState<SortState>({key: tableColumns[0].key, descending: true});
+
+  const [currentSort, setSort] = useState<SortState>({ key: tableColumns[0].key, descending: true });
   console.log(currentSort);
 
   const diskRootPattern = /[a-zA-Z]:\/$/;
@@ -132,19 +120,17 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       if (check(file)) {
         result.push(file);
       }
-      result.sort(
-        (f1, f2) => {
-          // NOTE: bringing in Moment for this is not very efficient, but will
-          // work for now until we can read file modification dates in as
-          // numeric timestamps instead of preformatted strings
-          const {key} = currentSort;
-          const v1 = (key === 'lastModified') ? moment( f1[key] ) : f1[key];
-          const v2 = (key === 'lastModified') ? moment( f2[key] ) : f2[key];
-          if (v1 < v2) return currentSort.descending ? 1 : -1;
-          if (v1 > v2) return currentSort.descending ? -1 : 1;
-          return 0;
-        }
-      ) 
+      result.sort((f1, f2) => {
+        // NOTE: bringing in Moment for this is not very efficient, but will
+        // work for now until we can read file modification dates in as
+        // numeric timestamps instead of preformatted strings
+        const { key } = currentSort;
+        const v1 = key === 'lastModified' ? moment(f1[key]) : f1[key];
+        const v2 = key === 'lastModified' ? moment(f2[key]) : f2[key];
+        if (v1 < v2) return currentSort.descending ? 1 : -1;
+        if (v1 > v2) return currentSort.descending ? -1 : 1;
+        return 0;
+      });
       return result;
     }, [] as File[]);
     // add parent folder
@@ -202,7 +188,6 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };
 
-
   return (
     <Fragment>
       <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
@@ -226,13 +211,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           <DetailsList
             items={storageFiles}
             compact={false}
-            columns={tableColumns.map(
-              (col) => ({
-                ...col,
-                isSorted: col.key === currentSort.key,
-                isSortedDescending: currentSort.descending
-              })
-            )}
+            columns={tableColumns.map(col => ({
+              ...col,
+              isSorted: col.key === currentSort.key,
+              isSortedDescending: currentSort.descending,
+            }))}
             getKey={item => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             onRenderDetailsHeader={onRenderDetailsHeader}
@@ -244,11 +227,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
               if (clickedColumn == null) return;
               if (clickedColumn.key === currentSort.key) {
                 clickedColumn.isSortedDescending = !currentSort.descending;
-                setSort({key: currentSort.key, descending: !currentSort.descending});
+                setSort({ key: currentSort.key, descending: !currentSort.descending });
               } else {
                 clickedColumn.isSorted = true;
                 clickedColumn.isSortedDescending = false;
-                setSort({key: clickedColumn.key, descending: false});
+                setSort({ key: clickedColumn.key, descending: false });
               }
             }}
           />
