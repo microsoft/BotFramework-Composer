@@ -12,7 +12,6 @@ const allItems = { name: 'All Profiles', type: 'all', configuration: '', id: 'al
 const noItem = { name: 'No Publish Profiles', type: 'no', configuration: '', id: 'no' };
 export const TargetList = props => {
   const targets = useMemo(() => {
-    console.log(props.list);
     if (props.list?.length > 0) {
       return [allItems, ...props.list];
     } else {

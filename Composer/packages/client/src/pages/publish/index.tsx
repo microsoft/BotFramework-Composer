@@ -42,7 +42,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const isRollbackSupported = (target, version): boolean => {
     if (version.id && version.status === 200) {
       const type = publishTypes.filter(t => t.name == target.type)[0];
-      if (type.features.rollback) {
+      if (type?.features?.rollback) {
         return true;
       } else {
         console.log('rollback not supported on', type);
@@ -164,16 +164,18 @@ const Publish: React.FC<RouteComponentProps> = () => {
       let histories: any[] = [];
       const _groups: any[] = [];
       let startIndex = 0;
-      for (const name in publishHistory) {
-        histories = histories.concat(publishHistory[name]);
-        _groups.push({
-          key: name,
-          name: name,
-          startIndex: startIndex,
-          count: publishHistory[name].length,
-          level: 0,
-        });
-        startIndex += publishHistory[name].length;
+      for (const target of publishTarget) {
+        if (publishHistory[target.name]) {
+          histories = histories.concat(publishHistory[target.name]);
+          _groups.push({
+            key: target.name,
+            name: target.name,
+            startIndex: startIndex,
+            count: publishHistory[target.name].length,
+            level: 0,
+          });
+          startIndex += publishHistory[target.name].length;
+        }
       }
       setGroups(_groups);
       setThisPublishHistory(histories);
@@ -197,7 +199,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
     if (selectedTarget && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
       console.log('Found a 202, will query for updates...');
       getUpdatedStatus(selectedTarget);
-    } else if (selectedTarget && selectedTarget.lastPublished && !thisPublishHistory.length) {
+    } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
       // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
       // we still poll for the results IF we see that a publish has happened previously
       actions.getPublishStatus(projectId, selectedTarget);
@@ -258,7 +260,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
   };
 
   const savePublishTarget = (name, type, configuration) => {
-    console.log(`save ${name} ${type} ${configuration}`);
     const _target = publishTarget.concat([
       {
         name,
@@ -266,7 +267,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
         configuration,
       },
     ]);
-    console.log(_target);
     setPublishTarget(_target);
     actions.setSettings(
       projectId,

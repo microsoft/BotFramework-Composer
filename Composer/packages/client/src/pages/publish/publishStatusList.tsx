@@ -14,6 +14,9 @@ import {
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { useMemo } from 'react';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -22,16 +25,11 @@ export interface IStatusListProps {
   groups: IGroup[];
   onItemClick: (item: IStatus | null) => void;
 }
-export enum PublishStatus {
-  Success,
-  Loading,
-  Failure,
-}
 
 export interface IStatus {
-  // id: string;
+  id: string;
   time: string;
-  status: PublishStatus;
+  status: number;
   message: string;
   comment: string;
 }
@@ -62,7 +60,13 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: IStatus) => {
-      return <span>{item.status}</span>;
+      if (item.status === 200) {
+        return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
+      } else if (item.status === 202) {
+        return <Spinner size={SpinnerSize.small} ariaLive="assertive" labelPosition="left" />;
+      } else {
+        return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
+      }
     },
     isPadded: true,
   },
