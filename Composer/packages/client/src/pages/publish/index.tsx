@@ -53,6 +53,10 @@ const Publish: React.FC<RouteComponentProps> = () => {
     return false;
   };
 
+  const isProfileSelected = () => {
+    return selectedTarget && selectedTarget.type !== 'all' && selectedTarget.type !== 'no';
+  };
+
   const toolbarItems = [
     {
       type: 'action',
@@ -78,7 +82,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Publish',
-      disabled: selectedTarget ? false : true,
+      disabled: isProfileSelected() ? false : true,
     },
     {
       type: 'action',
@@ -325,11 +329,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       <LogDialog hidden={!showLog} version={selectedVersion} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>
-          {selectedTarget && selectedTarget.type !== 'no' && selectedTarget.type !== 'all'
-            ? selectedTarget.name
-            : formatMessage('Publish Profiles')}
-        </h1>
+        <h1 css={HeaderText}>{isProfileSelected() ? selectedTarget.name : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>

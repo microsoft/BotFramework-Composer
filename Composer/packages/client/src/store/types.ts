@@ -46,6 +46,17 @@ export interface StorageFolder extends File {
   writable?: boolean;
 }
 
+export interface PublishType {
+  name: string;
+  description: string;
+  features: {
+    history: boolean;
+    publish: boolean;
+    rollback: boolean;
+    status: boolean;
+  };
+}
+
 export interface State {
   dialogs: DialogInfo[];
   projectId: string;
@@ -95,18 +106,7 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
-  publishTypes: [
-    {
-      name: string;
-      description: string;
-      features: {
-        history: boolean;
-        publish: boolean;
-        rollback: boolean;
-        status: boolean;
-      };
-    }
-  ];
+  publishTypes: PublishType[];
   publishHistory: {
     [key: string]: any[];
   };
