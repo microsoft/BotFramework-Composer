@@ -104,7 +104,6 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
 
     const method = profile ? profile.type : undefined;
-    console.log(method);
     if (
       profile &&
       pluginLoader.extensions.publish[method] &&

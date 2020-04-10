@@ -12,7 +12,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-import { openInEmulator } from '../../utils';
+// import { openInEmulator } from '../../utils';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -42,13 +42,15 @@ const Publish: React.FC<RouteComponentProps> = () => {
   const isRollbackSupported = (target, version): boolean => {
     if (version.id && version.status === 200) {
       const type = publishTypes.filter(t => t.name == target.type)[0];
-      if (type) {
-        if (type.features.rollback) {
-          return true;
-        }
+      if (type?.features?.rollback) {
+        return true;
       }
     }
     return false;
+  };
+
+  const isProfileSelected = () => {
+    return selectedTarget && selectedTarget.type !== 'all' && selectedTarget.type !== 'no';
   };
 
   const toolbarItems = [
@@ -76,7 +78,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Publish',
-      disabled: selectedTarget ? false : true,
+      disabled: isProfileSelected() ? false : true,
     },
     {
       type: 'action',
@@ -145,6 +147,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
   }, [settings.publishTargets]);
 
   useEffect(() => {
+    setSelectedVersion(undefined);
     // get selected target publish history
     if (selectedTarget && selectedTarget.type === 'all') {
       for (const target of publishTarget) {
@@ -152,7 +155,6 @@ const Publish: React.FC<RouteComponentProps> = () => {
       }
     } else if (selectedTarget && selectedTarget.type !== 'no') {
       actions.getPublishHistory(projectId, selectedTarget);
-      setSelectedVersion(undefined);
     }
   }, [selectedTarget]);
 
@@ -162,16 +164,18 @@ const Publish: React.FC<RouteComponentProps> = () => {
       let histories: any[] = [];
       const _groups: any[] = [];
       let startIndex = 0;
-      for (const name in publishHistory) {
-        histories = histories.concat(publishHistory[name]);
-        _groups.push({
-          key: name,
-          name: name,
-          startIndex: startIndex,
-          count: publishHistory[name].length,
-          level: 0,
-        });
-        startIndex += publishHistory[name].length;
+      for (const target of publishTarget) {
+        if (publishHistory[target.name]) {
+          histories = histories.concat(publishHistory[target.name]);
+          _groups.push({
+            key: target.name,
+            name: target.name,
+            startIndex: startIndex,
+            count: publishHistory[target.name].length,
+            level: 0,
+          });
+          startIndex += publishHistory[target.name].length;
+        }
       }
       setGroups(_groups);
       setThisPublishHistory(histories);
@@ -192,10 +196,10 @@ const Publish: React.FC<RouteComponentProps> = () => {
   // check history to see if a 202 is found
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
-    if (selectedTarget && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
+    if (selectedTarget?.type !== 'all' && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
       console.log('Found a 202, will query for updates...');
       getUpdatedStatus(selectedTarget);
-    } else if (selectedTarget && selectedTarget.lastPublished && !thisPublishHistory.length) {
+    } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
       // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
       // we still poll for the results IF we see that a publish has happened previously
       actions.getPublishStatus(projectId, selectedTarget);
@@ -324,11 +328,7 @@ const Publish: React.FC<RouteComponentProps> = () => {
       <LogDialog hidden={!showLog} version={selectedVersion} onDismiss={() => setLogDialogStatus(false)} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
-        <h1 css={HeaderText}>
-          {selectedTarget && selectedTarget.type !== 'no' && selectedTarget.type !== 'all'
-            ? selectedTarget.name
-            : formatMessage('Publish Profiles')}
-        </h1>
+        <h1 css={HeaderText}>{isProfileSelected() ? selectedTarget.name : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
@@ -337,6 +337,9 @@ const Publish: React.FC<RouteComponentProps> = () => {
         <div css={contentEditor}>
           <Fragment>
             <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={setSelectedVersion} />
+            {selectedTarget && (!thisPublishHistory || thisPublishHistory.length === 0) ? (
+              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+            ) : null}
           </Fragment>
         </div>
       </div>

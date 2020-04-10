@@ -27,7 +27,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
-  const onSelectionChanged = item => {
+  const onFileChosen = item => {
     if (item) {
       const type = item.fileType;
       const storageId = storages[currentStorageIndex.current].id;
@@ -55,7 +55,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
           checkShowItem={checkShowItem}
           focusedStorageFolder={focusedStorageFolder}
           onCurrentPathUpdate={onCurrentPathUpdate}
-          onSelectionChanged={onSelectionChanged}
+          onFileChosen={onFileChosen}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (

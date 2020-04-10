@@ -50,7 +50,7 @@ class LocalPublisher {
     return {
       status: 200,
       result: {
-        id: new uuid(),
+        id: uuid(),
         version: version,
         endpointURL: url,
       },
