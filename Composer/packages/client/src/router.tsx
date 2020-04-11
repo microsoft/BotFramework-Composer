@@ -40,13 +40,14 @@ const Routes = props => {
             to="/bot/:projectId/language-understanding/all"
             noThrow
           />
+          <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
           <ProjectRouter path="/bot/:projectId">
             <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
-            <Publish path="publish" />
+            <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
           </ProjectRouter>
           <Home path="home" />

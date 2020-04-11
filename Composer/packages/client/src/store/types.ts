@@ -57,6 +57,12 @@ export interface PublishType {
   };
 }
 
+export interface PublishTarget {
+  name: string;
+  type: PublishType;
+  configuration: any;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   projectId: string;
@@ -132,7 +138,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
-  publishTargets?: any;
+  publishTargets?: PublishTarget[];
   [key: string]: any;
 }
 
