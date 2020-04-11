@@ -13,7 +13,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-import { openInEmulator, navigateTo } from '../../utils';
+import { navigateTo } from '../../utils';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -119,30 +119,34 @@ const Publish: React.FC<PublishPageProps> = props => {
         onClick: () => rollbackToVersion(selectedVersion),
       },
       align: 'left',
-      disabled: selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
+      disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
-    {
-      type: 'action',
-      text: formatMessage('Test in Emulator'),
-      align: 'left',
-      buttonProps: {
-        iconProps: {
-          iconName: 'OpenInNewTab',
-        },
-        style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
-        onClick: async () => {
-          return Promise.resolve(
-            openInEmulator(
-              thisPublishHistory[0].endpoint,
-              settings.MicrosoftAppId && settings.MicrosoftAppPassword
-                ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-                : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-            )
-          );
-        },
-      },
-    },
+    // BEN COMMENT April 9
+    // I do not think test in emulator belongs here. Publishing does not necessarily result in an emulator-friendly link being present
+    // and it is much more complex than the local scenario.  I also think including this button on this page will create confusion around the
+    // other "Start bot" button
+    // {
+    //   type: 'action',
+    //   text: formatMessage('Test in Emulator'),
+    //   align: 'left',
+    //   buttonProps: {
+    //     iconProps: {
+    //       iconName: 'OpenInNewTab',
+    //     },
+    //     style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
+    //     onClick: async () => {
+    //       return Promise.resolve(
+    //         openInEmulator(
+    //           thisPublishHistory[0].endpoint,
+    //           settings.MicrosoftAppId && settings.MicrosoftAppPassword
+    //             ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
+    //             : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
+    //         )
+    //       );
+    //     },
+    //   },
+    // },
   ];
 
   const onSelectTarget = useCallback(
