@@ -3,25 +3,57 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import formatMessage from 'format-message';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Fragment } from 'react';
+import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 
-import { targetListItemSelected, targetListItemNotSelected } from './styles';
+import { overflowSet, targetSelected } from './styles';
 
 export const TargetList = props => {
+  const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
+    return (
+      <IconButton
+        role="menuitem"
+        title="More options"
+        menuIconProps={{ iconName: 'MoreVertical' }}
+        menuProps={{ items: overflowItems! }}
+      />
+    );
+  };
+  const onRenderItem = (item: IOverflowSetItemProps) => {
+    const { name, key } = item;
+    return <div key={key}>{name}</div>;
+  };
+
   return (
     <Fragment>
       {props.list.map((target, index) => {
         return (
-          <DefaultButton
-            key={index}
-            onClick={() => props.onSelect(target)}
-            styles={props.selectedTarget === target.name ? targetListItemSelected : targetListItemNotSelected}
-            text={target.name}
-            ariaLabel={formatMessage('Publish Target')}
-            ariaHidden={false}
-          />
+          <div key={index} style={{ cursor: 'pointer' }} onClick={() => props.onSelect(target)}>
+            <OverflowSet
+              css={props.selectedTarget === target.name ? targetSelected : overflowSet}
+              items={[
+                {
+                  name: target.name,
+                  key: target.name,
+                },
+              ]}
+              overflowItems={[
+                {
+                  key: 'delete',
+                  name: 'Delete',
+                  onClick: () => props.onDelete(index),
+                },
+                {
+                  key: 'edit',
+                  name: 'Edit',
+                  onClick: () => props.onEdit(index),
+                },
+              ]}
+              onRenderItem={onRenderItem}
+              onRenderOverflowButton={onRenderOverflowButton}
+            />
+          </div>
         );
       })}
     </Fragment>

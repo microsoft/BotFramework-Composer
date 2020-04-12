@@ -78,7 +78,11 @@ const columns: IColumn[] = [
       if (item.status === 200) {
         return <Icon iconName="Accept" style={{ color: 'green', fontWeight: 600 }} />;
       } else if (item.status === 202) {
-        return <Spinner size={SpinnerSize.small} ariaLive="assertive" labelPosition="left" />;
+        return (
+          <div style={{ display: 'flex' }}>
+            <Spinner size={SpinnerSize.small} />
+          </div>
+        );
       } else {
         return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
       }

@@ -44,8 +44,6 @@ class LocalPublisher {
       this.data[project.id][profileName] = [];
     }
 
-    console.log('PUBLISHING CONFIG', config);
-
     const response = {
       status: 202,
       result: {
@@ -70,13 +68,14 @@ class LocalPublisher {
     if (this.data[botId] && this.data[botId][profileName]) {
       const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
       // return latest status
+      console.log(response);
       return response;
     } else {
       return {
-        status: 200,
+        status: 404,
         result: {
-          message: 'Ready',
-        }
+          message: 'bot not published',
+        },
       };
     }
   };
@@ -114,7 +113,7 @@ class LocalPublisher {
         status: 500,
         result: {
           message: 'No matching published version found in history',
-        }
+        },
       };
     }
   };

@@ -8,7 +8,6 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -18,14 +17,7 @@ import { navigateTo } from '../../utils';
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
-import {
-  ContentHeaderStyle,
-  HeaderText,
-  ContentStyle,
-  contentEditor,
-  targetListItemSelected,
-  targetListItemNotSelected,
-} from './styles';
+import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
 
@@ -262,7 +254,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       console.log('ROLLBACK TO ', version);
       actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
-    [projectId]
+    [projectId, selectedTarget]
   );
 
   const savePublishTarget = useMemo(
@@ -284,7 +276,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         undefined
       );
     },
-    [projectId]
+    [projectId, settings.publishTargets]
   );
 
   const publish = useMemo(
@@ -317,7 +309,25 @@ const Publish: React.FC<PublishPageProps> = props => {
         );
       }
     },
-    [projectId]
+    [projectId, selectedTarget, settings.publishTargets]
+  );
+
+  const onDelete = useMemo(
+    () => (index: number) => {
+      if (settings.publishTargets && settings.publishTargets.length > index) {
+        const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+        actions.setSettings(
+          projectId,
+          botName,
+          {
+            ...settings,
+            publishTargets: _target,
+          },
+          undefined
+        );
+      }
+    },
+    [settings.publishTargets, projectId, botName]
   );
 
   return (
@@ -344,26 +354,31 @@ const Publish: React.FC<PublishPageProps> = props => {
       </div>
       <div css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
-          <DefaultButton
+          <div
             key={'_all'}
             onClick={() => {
               setSelectedTarget(undefined);
               onSelectTarget('all');
             }}
-            text={formatMessage('All profiles')}
-            styles={selectedTargetName === 'all' ? targetListItemSelected : targetListItemNotSelected}
-          />
-          {settings && settings.publishTargets ? (
+            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
+            style={{
+              height: '36px',
+              cursor: 'pointer',
+            }}
+          >
+            {formatMessage('All profiles')}
+          </div>
+          {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
               onSelect={item => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
+              onEdit={item => console.log(item)}
+              onDelete={index => onDelete(index)}
               selectedTarget={selectedTargetName}
             />
-          ) : (
-            <div>No publish target</div>
           )}
         </div>
         <div css={contentEditor}>

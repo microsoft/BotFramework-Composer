@@ -3,7 +3,6 @@
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { NeutralColors } from '@uifabric/fluent-theme';
-import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
@@ -64,40 +63,6 @@ export const targetListTiTle = css`
   font-weight: 600;
 `;
 
-export const targetListItemNotSelected: IButtonStyles = {
-  root: {
-    background: NeutralColors.white,
-    fontWeight: FontWeights.semilight,
-    height: '32px',
-    fontSize: FontSizes.small,
-    paddingLeft: '16px',
-    paddingRight: 0,
-    border: 0,
-    textAlign: 'left',
-    marginLeft: 0,
-    marginRight: 0,
-  },
-};
-export const targetListItemSelected: IButtonStyles = {
-  root: {
-    background: NeutralColors.gray20,
-    fontWeight: FontWeights.semibold,
-    height: '32px',
-    fontSize: FontSizes.small,
-    paddingLeft: '16px',
-    paddingRight: 0,
-    border: 0,
-    textAlign: 'left',
-    marginLeft: 0,
-    marginRight: 0,
-  },
-};
-
-export const select = css`
-  background: ${NeutralColors.gray20};
-  fontweight: ${FontWeights.semibold};
-`;
-
 export const listRoot = css`
   position: relative;
   overflow-y: auto;
@@ -120,4 +85,32 @@ export const label = css`
   font-weight: 600;
   color: #323130;
   padding: 5px 0px;
+`;
+
+export const overflowSet = css`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  line-height: 36px;
+  padding-left: 16px;
+  background: ${NeutralColors.white};
+  font-weight: ${FontWeights.semibold};
+  font-size: ${FontSizes.small};
+  &:hover {
+    background: ${NeutralColors.gray20};
+    font-weight: ${FontWeights.bold};
+  }
+`;
+
+export const targetSelected = css`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  line-height: 36px;
+  padding-left: 16px;
+  background: ${NeutralColors.gray20};
+  font-weight: ${FontWeights.bold};
+  font-size: ${FontSizes.small};
 `;
