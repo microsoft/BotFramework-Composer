@@ -1,5 +1,5 @@
 
-# TextInput.response-282825
+# TextInput_Response_282825
 - Please remind me to {itemTitle=buy milk}
 - Please remember that I need to {itemTitle=buy milk}
 - I need you to remember that {itemTitle=my wife's birthday is Jan 9th}
@@ -55,7 +55,7 @@
 
 
 
-# ChoiceInput.response-878594
+# ChoiceInput_Response_878594
 - todo list
 - shopping list
 - how about the to do list?

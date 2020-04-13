@@ -18,7 +18,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   if (typeof intentName === 'object') {
     const { $kind }: any = schema?.properties || {};
     const [, promptType] = $kind.const.split('.');
-    promptType && (intentName = `${promptType}.response-${designerId}`);
+    promptType && (intentName = `${promptType}_Response_${designerId}`);
   }
 
   const [luIntent, setLuIntent] = useState<LuIntentSection>(

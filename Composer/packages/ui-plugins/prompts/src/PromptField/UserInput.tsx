@@ -27,7 +27,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
 
   const { const: kind } = (schema?.properties?.['$kind'] as any) || {};
   const [, promptType] = ((kind as string) || '').split('.');
-  const intentName = `${promptType}.response-${designerId}`;
+  const intentName = `${promptType}_Response_${designerId}`;
 
   const type = recognizerType(currentDialog);
   const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
