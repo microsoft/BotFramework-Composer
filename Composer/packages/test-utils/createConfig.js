@@ -3,18 +3,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const mergeConfig = require('./mergeConfig');
-const baseConfig = require('./base/jest.config');
+const nodeConfig = require('./node/jest.config');
 const reactConfig = require('./react/jest.config');
 
 const TYPES = {
-  base: baseConfig,
+  node: nodeConfig,
   react: reactConfig,
 };
 
 /**
  *
  * @param {string} name
- * @param {("base"|"react")} type
+ * @param {("node"|"react")} type
  * @param {object} jestOverrides
  */
 function createConfig(name, type, jestOverrides = {}) {

@@ -9,8 +9,8 @@ const baseConfig = require('../base/jest.config');
 
 module.exports = mergeConfig(baseConfig, {
   transform: {
-    '^.+\\.jsx$': path.resolve(__dirname, 'preprocess.js'),
-    '^.+\\.tsx$': path.resolve(__dirname, 'preprocess.js'),
+    '^.+\\.jsx?$': path.resolve(__dirname, 'preprocess.js'),
+    '^.+\\.tsx?$': path.resolve(__dirname, 'preprocess.js'),
   },
 
   moduleNameMapper: {
