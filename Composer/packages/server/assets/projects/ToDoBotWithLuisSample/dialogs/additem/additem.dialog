@@ -37,7 +37,7 @@
             "id": "282825",
             "name": "AskForTitle"
           },
-          "prompt": "${bfdprompt_282825()}",
+          "prompt": "${TextInput_Prompt_282825()}",
           "maxTurnCount": "3",
           "property": "dialog.itemTitle",
           "value": "=coalesce(@itemTitle, $itemTitle)",
@@ -49,7 +49,7 @@
             "id": "878594",
             "name": "AskForListType"
           },
-          "prompt": "${bfdprompt_878594()}",
+          "prompt": "${TextInput_Prompt_878594()}",
           "maxTurnCount": "3",
           "property": "dialog.listType",
           "value": "=@listType",

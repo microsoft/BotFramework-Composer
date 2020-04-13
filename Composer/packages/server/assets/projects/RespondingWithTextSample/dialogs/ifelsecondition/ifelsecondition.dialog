@@ -20,7 +20,7 @@
             "id": "383595",
             "name": "Multiple choice"
           },
-          "prompt": "${bfdprompt_383595()}",
+          "prompt": "${TextInput_Prompt_383595()}",
           "maxTurnCount": 3,
           "property": "user.timeofday",
           "alwaysPrompt": false,

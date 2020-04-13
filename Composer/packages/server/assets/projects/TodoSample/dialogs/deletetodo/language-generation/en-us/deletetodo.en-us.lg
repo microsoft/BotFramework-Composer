@@ -6,5 +6,5 @@
 # SendActivity_549600()
 - ${dialog.todo} is not in the Todo List
 
-# bfdprompt_870620()
+# TextInput_Prompt_870620()
 - OK, please enter the title of the todo you want to remove.

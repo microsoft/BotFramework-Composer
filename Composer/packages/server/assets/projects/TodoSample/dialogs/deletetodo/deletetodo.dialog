@@ -19,7 +19,7 @@
             "id": "870620"
           },
           "property": "dialog.todo",
-          "prompt": "${bfdprompt_870620()}",
+          "prompt": "${TextInput_Prompt_870620()}",
           "maxTurnCount": 3,
           "value": "=@title",
           "alwaysPrompt": false,

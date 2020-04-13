@@ -181,7 +181,7 @@
             "id": "107784",
             "name": "Confirmation"
           },
-          "prompt": "${bfdprompt_107784()}",
+          "prompt": "${TextInput_Prompt_107784()}",
           "maxTurnCount": "3",
           "property": "turn.cancelOutcome",
           "value": "=@confirmation",

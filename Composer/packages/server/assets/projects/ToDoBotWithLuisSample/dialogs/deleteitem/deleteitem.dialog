@@ -37,7 +37,7 @@
             "id": "461607",
             "name": "AskForListType"
           },
-          "prompt": "${bfdprompt_461607()}",
+          "prompt": "${TextInput_Prompt_461607()}",
           "maxTurnCount": "3",
           "property": "$listType",
           "value": "=@listType",
@@ -126,7 +126,7 @@
                 "id": "702637",
                 "name": "Multiple choice"
               },
-              "prompt": "${bfdprompt_702637()}",
+              "prompt": "${TextInput_Prompt_702637()}",
               "maxTurnCount": "3",
               "property": "$itemTitle",
               "value": "=coalesce(@itemTitle, $itemTitle, if(@number, user.lists[dialog.listType][int(@number) - 1], null))",

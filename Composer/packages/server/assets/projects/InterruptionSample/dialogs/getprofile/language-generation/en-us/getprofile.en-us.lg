@@ -24,13 +24,13 @@
 # SendActivity_758791
 - No worries. I'll set your name as 'Human' for now.
 
-# bfdinvalidPrompt_362298
+# TextInput_InvalidPrompt_362298
 [Activity
     Text = Sorry, '${this.value}' does not work. I'm looking for 2-150 characters. What is your name?
 	SuggestedActions = Why? | No name | Cancel | Reset profile
 ]
 
-# bfdinvalidPrompt_005947
+# TextInput_InvalidPrompt_005947
 [Activity
     Text = Sorry, ${this.value} does not work. I'm looking for a value between 1-150. What is your age?
 	SuggestedActions = Why? | Reset profile | Cancel | No age

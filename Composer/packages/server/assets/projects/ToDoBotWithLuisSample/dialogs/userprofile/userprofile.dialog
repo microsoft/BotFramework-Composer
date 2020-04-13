@@ -20,7 +20,7 @@
             "id": "267073",
             "name": "AskForName"
           },
-          "prompt": "${bfdprompt_267073()}",
+          "prompt": "${TextInput_Prompt_267073()}",
           "maxTurnCount": "3",
           "property": "user.name",
           "value": "=coalesce(@userName, @personName)",
@@ -33,8 +33,8 @@
             "id": "826115",
             "name": "Number input"
           },
-          "prompt": "${bfdprompt_826115()}",
-          "invalidPrompt": "${bfdinvalidPrompt_826115()}",
+          "prompt": "${TextInput_Prompt_826115()}",
+          "invalidPrompt": "${TextInput_InvalidPrompt_826115()}",
           "maxTurnCount": "3",
           "validations": [
             "int(this.value) >= 1",
@@ -46,7 +46,7 @@
           "alwaysPrompt": "true",
           "allowInterruptions": "!@userAge && !@age && !@number",
           "defaultLocale": "en-us",
-          "defaultValueResponse": "${bfddefaultValueResponse_826115()}"
+          "defaultValueResponse": "${TextInput_DefaultValueResponse_826115()}"
         },
         {
           "$kind": "Microsoft.SendActivity",

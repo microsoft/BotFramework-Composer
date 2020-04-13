@@ -22,10 +22,10 @@ describe('shallowCopyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdprompt_1234]',
-      invalidPrompt: '[bfdinvalidPrompt_1234]',
-      unrecognizedPrompt: '[bfdunrecognizedPrompt_1234]',
-      defaultValueResponse: '[bfddefaultValueResponse_1234]',
+      prompt: '[TextInput_Prompt_1234]',
+      invalidPrompt: '[TextInput_InvalidPrompt_1234]',
+      unrecognizedPrompt: '[TextInput_UnrecognizedPrompt_1234]',
+      defaultValueResponse: '[TextInput_DefaultValueResponse_1234]',
     };
 
     expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
@@ -37,10 +37,10 @@ describe('shallowCopyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdprompt_1234](copy)',
-      invalidPrompt: '[bfdinvalidPrompt_1234](copy)',
-      unrecognizedPrompt: '[bfdunrecognizedPrompt_1234](copy)',
-      defaultValueResponse: '[bfddefaultValueResponse_1234](copy)',
+      prompt: '[TextInput_Prompt_1234](copy)',
+      invalidPrompt: '[TextInput_InvalidPrompt_1234](copy)',
+      unrecognizedPrompt: '[TextInput_UnrecognizedPrompt_1234](copy)',
+      defaultValueResponse: '[TextInput_DefaultValueResponse_1234](copy)',
     });
   });
 });

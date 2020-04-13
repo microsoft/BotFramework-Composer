@@ -21,7 +21,7 @@
             "id": "362298"
           },
           "prompt": "What is your name? \\n \\[Suggestions=Why? | No name | Cancel | Reset profile\\]",
-          "invalidPrompt": "${bfdinvalidPrompt_362298()}",
+          "invalidPrompt": "${TextInput_InvalidPrompt_362298()}",
           "maxTurnCount": 3,
           "validations": [
             "length(this.value) <= 150",
@@ -42,7 +42,7 @@
           },
           "prompt": "Hello ${user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
           "unrecognizedPrompt": "Hello ${user.profile.name}, how old are you? \\n \\[Suggestions=Why? | Reset profile | Cancel | No age\\]",
-          "invalidPrompt": "${bfdinvalidPrompt_005947()}",
+          "invalidPrompt": "${TextInput_InvalidPrompt_005947()}",
           "maxTurnCount": 3,
           "validations": [
             "int(this.value) >= 1",

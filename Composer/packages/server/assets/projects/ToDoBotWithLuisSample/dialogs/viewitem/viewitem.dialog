@@ -20,7 +20,7 @@
             "id": "308464",
             "name": "AskForListType"
           },
-          "prompt": "${bfdprompt_308464()}",
+          "prompt": "${TextInput_Prompt_308464()}",
           "maxTurnCount": "3",
           "property": "dialog.listType",
           "value": "=@listType",

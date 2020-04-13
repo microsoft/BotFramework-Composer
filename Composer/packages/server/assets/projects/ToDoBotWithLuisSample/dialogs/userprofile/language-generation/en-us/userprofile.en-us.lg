@@ -1,18 +1,18 @@
 [import](common.lg)
 
-# bfdprompt_267073()
+# TextInput_Prompt_267073()
 - Hi, what is your name? You can  \n - state your name \n - say things like 'my name is <your name>' \n - ask 'why do you need my name' \n - say 'I'm not going to give you my name'. 
 
 # SendActivity_744717()
 - Thanks. I have ${user.name} as your name and ${user.age} as your age.
 
-# bfdprompt_826115()
+# TextInput_Prompt_826115()
 - Hello ${user.name}, how old are you?
 
-# bfdinvalidPrompt_826115()
+# TextInput_InvalidPrompt_826115()
 - Sorry ${this.value} does not work. I'm expecting a value between 1-150. What is your age?
 
-# bfddefaultValueResponse_826115()
+# TextInput_DefaultValueResponse_826115()
 - Sorry, this is not working :(. For now, I'm going to set your age to 30.
 
 # SendActivity_210613()

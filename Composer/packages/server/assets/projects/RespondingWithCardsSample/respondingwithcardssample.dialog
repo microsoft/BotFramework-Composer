@@ -93,7 +93,7 @@
                     "id": "735465",
                     "name": "Text input"
                   },
-                  "prompt": "${bfdprompt_735465()}",
+                  "prompt": "${TextInput_Prompt_735465()}",
                   "maxTurnCount": 3,
                   "property": "user.name",
                   "alwaysPrompt": false,

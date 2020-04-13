@@ -1,6 +1,6 @@
 [import](common.lg)
 
-# bfdprompt_308464()
+# TextInput_Prompt_308464()
 - What list would you like to see?
 
 # SendActivity_996807()

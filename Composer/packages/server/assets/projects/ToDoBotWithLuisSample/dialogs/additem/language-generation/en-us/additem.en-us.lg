@@ -1,9 +1,9 @@
 [import](common.lg)
 
-# bfdprompt_282825()
+# TextInput_Prompt_282825()
 - What would you like to add?
 
-# bfdprompt_878594()
+# TextInput_Prompt_878594()
 - Pick a list to add the item to..
 
 # SendActivity_139532()
