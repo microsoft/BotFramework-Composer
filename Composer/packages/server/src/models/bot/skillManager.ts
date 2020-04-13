@@ -5,9 +5,11 @@ import get from 'lodash/get';
 import * as msRest from '@azure/ms-rest-js';
 import { Skill } from '@bfc/shared';
 
+import log from './../../logger';
+
 // http client for fetch skill data from manifest url
 const clientOptions: msRest.ServiceClientOptions = {
-  requestPolicyFactories: [msRest.logPolicy()],
+  requestPolicyFactories: [msRest.logPolicy(log)],
 };
 const token = process.env.ACCESS_TOKEN || 'token';
 const creds = new msRest.TokenCredentials(token);

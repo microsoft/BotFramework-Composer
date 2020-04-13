@@ -46,6 +46,10 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     return designerName || uiLabel || schema.title || startCase(name);
   };
 
+  const getHelpLinkLabel = (): string => {
+    return (uiLabel || schema.title || startCase(name) || '').toLowerCase();
+  };
+
   const getSubTitle = (): string => {
     return uiSubtitle || uiLabel || formData.$kind;
   };
@@ -93,7 +97,12 @@ const FormTitle: React.FC<FormTitleProps> = props => {
             <React.Fragment>
               <br />
               <br />
-              <Link href={uiOptions?.helpLink} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={uiOptions?.helpLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
+              >
                 {formatMessage('Learn more')}
               </Link>
             </React.Fragment>
