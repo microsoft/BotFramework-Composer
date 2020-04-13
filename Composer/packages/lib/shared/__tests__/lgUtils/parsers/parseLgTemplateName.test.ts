@@ -14,6 +14,6 @@ describe('parseLgTemplateName', () => {
     const result = parseLgTemplateName('SendActivity_1Xkg4a');
     expect(result).toBeInstanceOf(LgMetaData);
     expect((result as LgMetaData).designerId).toEqual('1Xkg4a');
-    expect((result as LgMetaData).type).toEqual('activity');
+    expect((result as LgMetaData).type).toEqual('SendActivity');
   });
 });

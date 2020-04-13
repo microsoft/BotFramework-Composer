@@ -35,6 +35,6 @@ export type LgTemplateName = string;
   'greeting' in '[greeting(1)]'
 
   4. LgMetaData (Composer-only, can be converted to LgTemplateName)
-  'SendActivity_1234' => { type: 'activity', designerId: '1234' } // LgMetaData
+  'SendActivity_1234' => { type: 'SendActivity', designerId: '1234' } // LgMetaData
   'greeting' => NO meta data since its not created by Composer
 */

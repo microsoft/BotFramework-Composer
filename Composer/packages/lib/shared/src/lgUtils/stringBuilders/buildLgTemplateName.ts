@@ -5,7 +5,7 @@ import LgMetaData from '../models/LgMetaData';
 import { LgTemplateName } from '../models/stringTypes';
 
 /**
- * { type: 'activity', designerId: '1234' } => 'SendActivity_1234'
+ * { type: 'SendActivity', designerId: '1234' } => 'SendActivity_1234'
  *
  * @param lgMetaData input metadata
  * @returns toString() result of the input object.

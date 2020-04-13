@@ -5,15 +5,15 @@ import { LgMetaData } from '../../../src';
 
 describe('LgMetaData', () => {
   it('can construct an instance via constructor', () => {
-    const instance = new LgMetaData('activity', '1Xkg4a');
+    const instance = new LgMetaData('SendActivity', '1Xkg4a');
 
-    expect(instance.type).toEqual('activity');
+    expect(instance.type).toEqual('SendActivity');
     expect(instance.designerId).toEqual('1Xkg4a');
     expect(instance.toString).toBeDefined();
   });
 
   it('can generate correct output strings', () => {
-    const instance = new LgMetaData('activity', '1Xkg4a');
+    const instance = new LgMetaData('SendActivity', '1Xkg4a');
 
     expect(instance.toString()).toEqual('SendActivity_1Xkg4a');
   });
