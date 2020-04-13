@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
 import { StoreProvider } from '../src/store';

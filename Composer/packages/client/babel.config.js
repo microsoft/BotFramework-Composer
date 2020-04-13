@@ -11,21 +11,5 @@ module.exports = {
         ],
       ],
     },
-    test: {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: 'commonjs',
-            targets: {
-              node: 'current',
-            },
-          },
-        ],
-        '@babel/preset-react',
-        '@emotion/babel-preset-css-prop',
-      ],
-      plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime'],
-    },
   },
 };

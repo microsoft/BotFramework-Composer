@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { render, fireEvent } from '@testing-library/react';
 
 import SkillList from '../../src/pages/skills/skill-list';
 import SkillForm from '../../src/pages/skills/skill-form';

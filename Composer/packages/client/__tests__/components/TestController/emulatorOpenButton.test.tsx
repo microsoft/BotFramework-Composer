@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { render, fireEvent } from '@testing-library/react';
 
 import { EmulatorOpenButton } from '../../../src/components/TestController/emulatorOpenButton';
 import { BotStatus } from '../../../src/constants/index';

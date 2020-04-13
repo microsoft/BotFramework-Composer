@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 import formatMessage from 'format-message';
 
 import { NotificationList } from '../../src/pages/notifications/NotificationList';

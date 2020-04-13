@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByText } from 'react-testing-library';
+import { render, fireEvent, getByText } from '@testing-library/react';
 
 import { ErrorCallout } from '../../../src/components/TestController/errorCallout';
 

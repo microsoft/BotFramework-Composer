@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 
 import { Loading } from '../../../src/components/TestController/loading';
 import { BotStatus } from '../../../src/constants';

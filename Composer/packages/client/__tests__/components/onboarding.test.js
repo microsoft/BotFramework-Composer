@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 
 import OnboardingContext from '../../src/Onboarding/context';
 import { StoreContext } from '../../src/store';
