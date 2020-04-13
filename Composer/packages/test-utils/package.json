@@ -1,6 +1,7 @@
 {
   "name": "@bfc/test-utils",
   "version": "0.0.0",
+  "private": true,
   "description": "",
   "main": "createConfig.js",
   "scripts": {

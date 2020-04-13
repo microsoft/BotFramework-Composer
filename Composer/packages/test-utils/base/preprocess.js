@@ -4,7 +4,7 @@
 module.exports = require('babel-jest').createTransformer({
   presets: [
     [
-      '@babel/preset-env',
+      require.resolve('@babel/preset-env'),
       {
         modules: 'commonjs',
         targets: {
@@ -12,12 +12,12 @@ module.exports = require('babel-jest').createTransformer({
         },
       },
     ],
-    '@babel/preset-typescript',
+    require.resolve('@babel/preset-typescript'),
   ],
   plugins: [
-    '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-transform-runtime',
-    '@babel/plugin-proposal-optional-chaining',
-    '@babel/plugin-proposal-nullish-coalescing-operator',
+    require.resolve('@babel/plugin-proposal-class-properties'),
+    require.resolve('@babel/plugin-transform-runtime'),
+    require.resolve('@babel/plugin-proposal-optional-chaining'),
+    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
   ],
 });
