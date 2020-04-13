@@ -1,18 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import isEqual from 'lodash/isEqual';
 import { FileInfo } from '@bfc/shared';
+import isEqual from 'lodash/isEqual';
 
-import { Path } from './../../utility/path';
-import { IFileStorage } from './../storage/interface';
+import { Path } from '../../utility/path';
+import { IFileStorage } from '../storage/interface';
+import log from '../../logger';
+
+import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 import { ILuisConfig } from './interface';
-import log from './../../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
@@ -104,6 +110,23 @@ export class LuPublisher {
     await this._writeFiles(result.luResult);
   }
 
+  private _doBootstrapSampling(luObject: any) {
+    const sampler = new ComposerBootstrapSampler(luObject.utterances);
+    luObject.utterances = sampler.getSampledUtterances();
+    return luObject;
+  }
+
+  private async _downSampling(luContents: any) {
+    return await Promise.all(
+      luContents.map(async luContent => {
+        const result = await LuisBuilder.fromLUAsync(luContent.content);
+        const sampledResult = this._doBootstrapSampling(result);
+        const content = luisToLuContent(sampledResult);
+        return { ...luContent, content };
+      })
+    );
+  }
+
   private async _writeFiles(crossTrainResult) {
     if (!(await this.storage.exists(this.interuptionFolderPath))) {
       await this.storage.mkDir(this.interuptionFolderPath);
@@ -121,6 +144,7 @@ export class LuPublisher {
       throw new Error('No luis file exist');
     }
     const loadResult = await this._loadLuConatents(config.models);
+    loadResult.luContents = await this._downSampling(loadResult.luContents);
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
