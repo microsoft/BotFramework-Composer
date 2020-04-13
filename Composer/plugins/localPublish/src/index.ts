@@ -273,7 +273,7 @@ export default async (composer: any): Promise<void> => {
   await composer.addPublishMethod(publisher);
   await composer.addRuntimeTemplate({
     name: 'csharp',
-    path: '/some/path',
+    path: __dirname + '/../template/',
     startCommand: 'dotnet start',
   });
 };

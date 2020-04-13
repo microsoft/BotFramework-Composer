@@ -14,6 +14,25 @@ export const getRuntimeTemplates: ActionCreator = async ({ dispatch }) => {
       payload: response.data,
     });
   } catch (err) {
-    // dispatch({ type: ActionTypes.GET_PUBLISH_TYPES_FAILURE, payload: null, error: err });
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
+  }
+};
+
+export const ejectRuntime: ActionCreator = async ({ dispatch }, projectId, name) => {
+  try {
+    const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
+    console.log(response);
+    // dispatch({
+    //   type: ActionTypes.EJECT_SUCCESS,
+    //   payload: response.data,
+    // });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
   }
 };

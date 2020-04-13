@@ -60,9 +60,9 @@ export const RuntimeSettings = () => {
     setEjectModalVisible(false);
   };
 
-  const ejectRuntime = template => {
+  const ejectRuntime = async template => {
     console.log('EJECT RUNTIME USING TEMPLATE', template);
-
+    await actions.ejectRuntime(projectId, template.name);
     changeEnabled(null, true);
     closeEjectModal();
   };
