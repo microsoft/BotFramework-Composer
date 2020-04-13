@@ -46,7 +46,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
     >
       <div tabIndex={0}>
         <Icon
-          aria-label={title+'; '+description}
+          aria-label={title + '; ' + description}
           iconName={'Unknown'}
           styles={{
             root: {
@@ -82,17 +82,19 @@ const FieldLabel: React.FC<FieldLabelProps> = props => {
   }
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center'
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
       <Label
         htmlFor={id}
         styles={{
           root: {
             fontWeight: '400',
             marginLeft: inline ? '4px' : '0',
-            marginRight: '4px'
+            marginRight: '4px',
           },
         }}
       >
