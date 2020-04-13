@@ -31,6 +31,18 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     .UseLuisConfigAdaptor()
                     .UseLuisSettings();
 
+                try
+                {
+                    foreach (string filePath in Directory.GetFiles($"ComposerDialogs", "generated/qnamaker.settings.*.json"))
+                    {
+                        builder.AddJsonFile(filePath, optional: true, reloadOnChange: true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message);
+                }
+
                 if (env.IsDevelopment())
                 {
                     // Local Debug
