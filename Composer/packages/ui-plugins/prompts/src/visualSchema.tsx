@@ -21,7 +21,7 @@ const BaseInputSchema: VisualWidget = {
       },
     },
     body: {
-      widget: 'ActivityRenderer',
+      widget: 'LgWidget',
       field: 'prompt',
       defaultContent: '<prompt>',
     },

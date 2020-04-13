@@ -5,7 +5,6 @@ import { VisualEditorWidgetMap } from '@bfc/extension';
 
 import {
   ActionCard,
-  ActivityRenderer,
   DialogRef,
   PromptWidget,
   IfConditionWidget,
@@ -16,7 +15,6 @@ import {
 
 export const defaultVisualWidgets: VisualEditorWidgetMap = {
   ActionCard,
-  ActivityRenderer,
   DialogRef,
   PromptWidget,
   IfConditionWidget,

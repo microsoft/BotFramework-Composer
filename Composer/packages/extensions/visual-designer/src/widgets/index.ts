@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 export { ActionCard } from './ActionCard';
-export { ActivityRenderer } from './ActivityRenderer';
 export { DialogRef } from './DialogRef';
 export { PromptWidget } from './PromptWidget';
 export { IfConditionWidget } from './IfConditionWidget';

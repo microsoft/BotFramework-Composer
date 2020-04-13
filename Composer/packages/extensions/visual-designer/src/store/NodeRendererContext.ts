@@ -18,7 +18,6 @@ export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> 
   focusedEvent?: string;
   focusedTab?: string;
   clipboardActions: any[];
-  getLgTemplateSync: (lgTemplateName: string) => Template | undefined;
   dialogFactory: DialogFactory;
 }
 
@@ -27,7 +26,6 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   focusedEvent: '',
   focusedTab: '',
   clipboardActions: [],
-  getLgTemplateSync: () => undefined,
   getLgTemplates: () => [],
   copyLgTemplate: () => Promise.resolve(),
   removeLgTemplate: () => Promise.resolve(),

@@ -15,7 +15,6 @@ import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRende
 import { SelfHostContext } from './store/SelfHostContext';
 import { VisualSchemaContext } from './store/VisualSchemaContext';
 import { VisualSchemaProvider } from './schema/visualSchemaProvider';
-import { queryLgTemplateFromFiles } from './hooks/useLgTemplate';
 import { mergePluginConfig } from './utils/mergePluginConfig';
 
 formatMessage.setup({
@@ -92,7 +91,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
-    getLgTemplateSync: (name: string) => queryLgTemplateFromFiles(name, lgFiles),
     getLgTemplates,
     copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => undefined),
     removeLgTemplate,
