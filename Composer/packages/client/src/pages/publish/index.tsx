@@ -34,6 +34,7 @@ const Publish: React.FC<PublishPageProps> = props => {
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
+
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
   const [groups, setGroups] = useState();
@@ -153,8 +154,8 @@ const Publish: React.FC<PublishPageProps> = props => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
-      setTimeout(() => {
-        actions.getPublishStatus(projectId, target);
+      setTimeout(async () => {
+        await actions.getPublishStatus(projectId, target);
       }, 10000);
     }
   };
@@ -216,7 +217,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         },
       ]);
     }
-  }, [publishHistory]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {
@@ -229,7 +230,29 @@ const Publish: React.FC<PublishPageProps> = props => {
       // we still poll for the results IF we see that a publish has happened previously
       actions.getPublishStatus(projectId, selectedTarget);
     }
-  }, [thisPublishHistory]);
+  }, [thisPublishHistory, selectedTargetName]);
+
+  const savePublishTarget = useMemo(
+    () => async (name, type, configuration) => {
+      const _target = (settings.publishTargets || []).concat([
+        {
+          name,
+          type,
+          configuration,
+        },
+      ]);
+      await actions.setSettings(
+        projectId,
+        botName,
+        {
+          ...settings,
+          publishTargets: _target,
+        },
+        undefined
+      );
+    },
+    [settings.publishTargets, projectId, botName]
+  );
 
   useEffect(() => {
     setDialogProps({
@@ -246,37 +269,15 @@ const Publish: React.FC<PublishPageProps> = props => {
         />
       ),
     });
-  }, [publishTypes]);
+  }, [publishTypes, savePublishTarget]);
 
   const rollbackToVersion = useMemo(
-    () => version => {
+    () => async version => {
       const sensitiveSettings = settingsStorage.get(botName);
       console.log('ROLLBACK TO ', version);
-      actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
+      await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
-  );
-
-  const savePublishTarget = useMemo(
-    () => (name, type, configuration) => {
-      const _target = (settings.publishTargets || []).concat([
-        {
-          name,
-          type,
-          configuration,
-        },
-      ]);
-      actions.setSettings(
-        projectId,
-        botName,
-        {
-          ...settings,
-          publishTargets: _target,
-        },
-        undefined
-      );
-    },
-    [projectId, settings.publishTargets]
   );
 
   const publish = useMemo(
@@ -298,7 +299,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           }
         });
 
-        actions.setSettings(
+        await actions.setSettings(
           projectId,
           botName,
           {
@@ -313,10 +314,10 @@ const Publish: React.FC<PublishPageProps> = props => {
   );
 
   const onDelete = useMemo(
-    () => (index: number) => {
+    () => async (index: number) => {
       if (settings.publishTargets && settings.publishTargets.length > index) {
         const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-        actions.setSettings(
+        await actions.setSettings(
           projectId,
           botName,
           {
@@ -376,7 +377,7 @@ const Publish: React.FC<PublishPageProps> = props => {
                 onSelectTarget(item.name);
               }}
               onEdit={item => console.log(item)}
-              onDelete={index => onDelete(index)}
+              onDelete={async index => await onDelete(index)}
               selectedTarget={selectedTargetName}
             />
           )}

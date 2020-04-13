@@ -54,8 +54,8 @@ export const CreatePublishTarget = props => {
     }
   };
 
-  const submit = () => {
-    props.onSave(name, targetType, JSON.stringify(config, null, 2) || '{}');
+  const submit = async () => {
+    await props.onSave(name, targetType, JSON.stringify(config, null, 2) || '{}');
     props.onCancel();
   };
 
