@@ -11,7 +11,7 @@ import { SelectSkillDialog } from './SelectSkillDialogField';
 const uiSchema: UISchema = {
   [SDKKinds.SkillDialog]: {
     order: ['skillAppId', '*', 'resultProperty', 'disabled', 'activityProcessed'],
-    hidden: ['skillEndpoint'],
+    hidden: ['botId', 'skillEndpoint', 'skillAppId', 'skillHostEndpoint'],
     field: BeginSkillDialogField,
     properties: {
       id: {

@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import startCase from 'lodash/startCase';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
@@ -92,9 +93,9 @@ const FormTitle: React.FC<FormTitleProps> = props => {
             <React.Fragment>
               <br />
               <br />
-              <a href={uiOptions?.helpLink} target="_blank" rel="noopener noreferrer">
+              <Link href={uiOptions?.helpLink} target="_blank" rel="noopener noreferrer">
                 {formatMessage('Learn more')}
-              </a>
+              </Link>
             </React.Fragment>
           )}
         </p>

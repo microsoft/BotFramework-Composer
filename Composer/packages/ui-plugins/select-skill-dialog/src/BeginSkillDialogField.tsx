@@ -3,11 +3,13 @@
 
 import React, { useMemo } from 'react';
 import { FieldProps, JSONSchema7, useShellApi } from '@bfc/extension';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
+import formatMessage from 'format-message';
 
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
   const { depth, id, schema, uiOptions, value, onChange } = props;
-  const { skills = [] } = useShellApi();
+  const { projectId, skills = [] } = useShellApi();
 
   const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
   const endpointOptions = useMemo(() => (manifest?.endpoints || []).map(({ name }) => name), [manifest]);
@@ -60,6 +62,9 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         value={value?.skillEndpoint}
         onChange={handleEndpointChange}
       />
+      <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
+        {formatMessage('Open Skills page for configuration details')}
+      </Link>
       <ObjectField {...props} />
     </React.Fragment>
   );
