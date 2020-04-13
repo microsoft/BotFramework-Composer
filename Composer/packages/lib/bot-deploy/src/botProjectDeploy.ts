@@ -18,6 +18,7 @@ import * as rp from 'request-promise';
 import * as util from 'util';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import archiver = require('archiver');
+import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 const exec = util.promisify(require('child_process').exec);
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
 const { promisify } = require('util');
@@ -95,7 +96,10 @@ export class BotProjectDeploy {
     location: string,
     resourceGroupName: string
   ): Promise<ResourceGroupsCreateOrUpdateResponse> {
-    this.logger(`> Creating resource group ...`);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Creating resource group ...`,
+    });
     const param = {
       location: location,
     } as ResourceGroup;
@@ -111,7 +115,10 @@ export class BotProjectDeploy {
     deployName: string,
     templateParam: any
   ): Promise<DeploymentsValidateResponse> {
-    this.logger('> Validating Azure deployment ...');
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: '> Validating Azure deployment ...',
+    });
     const templateFile = await this.readTemplateFile(templatePath);
     const deployParam = {
       properties: {
@@ -131,7 +138,10 @@ export class BotProjectDeploy {
     deployName: string,
     templateParam: any
   ): Promise<DeploymentsCreateOrUpdateResponse> {
-    this.logger(`> Deploying Azure services (this could take a while)...`);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Deploying Azure services (this could take a while)...`,
+    });
     const templateFile = await this.readTemplateFile(templatePath);
     const deployParam = {
       properties: {
@@ -231,7 +241,10 @@ export class BotProjectDeploy {
       const localBotPath = path.join(projFolder, 'ComposerDialogs');
 
       if (botPath) {
-        this.logger(`Publishing dialogs from external bot project: ${botPath}`);
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Publishing dialogs from external bot project: ${botPath}`,
+        });
         fs.copy(
           botPath,
           remoteBotPath,
@@ -284,7 +297,6 @@ export class BotProjectDeploy {
     environment: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
-    logFile?: string,
     botPath?: string,
     language?: string
   ) {
@@ -329,7 +341,12 @@ export class BotProjectDeploy {
       if (!(await fs.pathExists(this.generatedFolder))) {
         await fs.mkdir(this.generatedFolder);
       }
-      let builder = new luBuild.Builder(msg => this.logger(msg));
+      let builder = new luBuild.Builder(msg =>
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: msg,
+        })
+      );
 
       const loadResult = await builder.loadContents(
         modelFiles,
@@ -352,7 +369,10 @@ export class BotProjectDeploy {
       );
       await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
 
-      this.logger(`lubuild succeed`);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `lubuild succeed`,
+      });
 
       const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
         filename.includes('luis.settings')
@@ -388,7 +408,10 @@ export class BotProjectDeploy {
 
       for (let k in luisAppIds) {
         const luisAppId = luisAppIds[k];
-        this.logger(`Assigning to luis app id: ${luisAppIds}`);
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Assigning to luis app id: ${luisAppIds}`,
+        });
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
         const options = {
           body: account,
@@ -396,17 +419,35 @@ export class BotProjectDeploy {
           headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
         const response = await rp.post(luisAssignEndpoint, options);
-        this.logger(response);
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: response,
+        });
       }
-      this.logger('Luis Publish Success! ...');
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Luis Publish Success! ...',
+      });
     }
-    this.logger('Packing up the bot service ...');
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Packing up the bot service ...',
+    });
     await this.zipDirectory(this.publishFolder, this.zipPath);
-    this.logger('Packing Service Success!');
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Packing Service Success!',
+    });
 
-    this.logger('Publishing to Azure ...');
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Publishing to Azure ...',
+    });
     await this.deployZip(webClient, this.zipPath, name, environment);
-    this.logger('Publish To Azure Success!');
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
+      message: 'Publish To Azure Success!',
+    });
   }
 
   private getAccount(accounts: any, filter: string) {
@@ -418,7 +459,10 @@ export class BotProjectDeploy {
   }
 
   private async deployZip(webSiteClient: WebSiteManagementClient, zipPath: string, name: string, env: string) {
-    this.logger('Retrieve publishing details ...');
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Retrieve publishing details ...',
+    });
     const userName = `${name}-${env}`;
     const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
 
@@ -426,7 +470,10 @@ export class BotProjectDeploy {
       publishingUserName: userName,
       publishingPassword: userPwd,
     });
-    this.logger(updateRes);
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: updateRes,
+    });
 
     const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/zipdeploy`;
 
@@ -443,7 +490,10 @@ export class BotProjectDeploy {
       },
     } as rp.RequestPromiseOptions;
     const response = await rp.post(publishEndpoint, options);
-    this.logger(response);
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: response,
+    });
   }
 
   public async create(
@@ -466,7 +516,10 @@ export class BotProjectDeploy {
     });
 
     if (!fs.existsSync(this.deploymentSettingsPath)) {
-      this.logger(`! Could not find an 'appsettings.deployment.json' file in the current directory.`);
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `! Could not find an 'appsettings.deployment.json' file in the current directory.`,
+      });
       return;
     }
 
@@ -475,16 +528,28 @@ export class BotProjectDeploy {
 
     if (!appId) {
       if (!appPassword) {
-        this.logger(`App password is required`);
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_INFO,
+          message: `App password is required`,
+        });
         return;
       }
-      this.logger('> Creating App Registration ...');
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: '> Creating App Registration ...',
+      });
       const appCreated = await this.createApp(graphClient, name, appPassword);
-      this.logger(appCreated);
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: appCreated,
+      });
       appId = appCreated.appId;
     }
 
-    this.logger(`> Create App Id Success! ID: ${appId}`);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Create App Id Success! ID: ${appId}`,
+    });
 
     var shouldCreateAuthoringResource = true;
     if (luisAuthoringKey) {
@@ -498,7 +563,10 @@ export class BotProjectDeploy {
     const client = new ResourceManagementClient(this.creds, this.subId);
 
     const rpres = await this.createResourceGroup(client, location, resourceGroupName);
-    this.logger(rpres);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: rpres,
+    });
 
     const deploymentTemplateParam = this.getDeploymentTemplateParam(
       appId,
@@ -507,7 +575,10 @@ export class BotProjectDeploy {
       name,
       shouldCreateAuthoringResource
     );
-    this.logger(deploymentTemplateParam);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: deploymentTemplateParam,
+    });
 
     const validation = await this.validateDeployment(
       client,
@@ -517,12 +588,24 @@ export class BotProjectDeploy {
       timeStamp,
       deploymentTemplateParam
     );
-    this.logger(validation);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: validation,
+    });
 
     if (validation.error) {
-      this.logger(`! Template is not valid with provided parameters. Review the log for more information.`);
-      this.logger(`! Error: ${validation.error.message}`);
-      this.logger(`+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`);
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Template is not valid with provided parameters. Review the log for more information.`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Error: ${validation.error.message}`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
       return false;
     }
 
@@ -534,12 +617,24 @@ export class BotProjectDeploy {
       timeStamp,
       deploymentTemplateParam
     );
-    this.logger(deployment);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: deployment,
+    });
 
     if (deployment._response.status != 200) {
-      this.logger(`! Template is not valid with provided parameters. Review the log for more information.`);
-      this.logger(`! Error: ${validation.error}`);
-      this.logger(`+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`);
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Template is not valid with provided parameters. Review the log for more information.`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Error: ${validation.error}`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
       return false;
     }
 
@@ -551,7 +646,10 @@ export class BotProjectDeploy {
       appId,
       appPassword
     );
-    this.logger(updateResult);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: updateResult,
+    });
 
     if (!updateResult) {
       const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
@@ -561,25 +659,39 @@ export class BotProjectDeploy {
           failedOperations.forEach(operation => {
             switch (operation?.properties?.statusMessage.error.code) {
               case 'MissingRegistrationForLocation':
-                this.logger(
-                  `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}. This resource is not avaliable in the location provided.`
-                );
+                this.logger({
+                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}. This resource is not avaliable in the location provided.`,
+                });
                 break;
               default:
-                this.logger(
-                  `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}.`
-                );
-                this.logger(`! Code: ${operation?.properties?.statusMessage.error.code}.`);
-                this.logger(`! Message: ${operation?.properties?.statusMessage.error.message}.`);
+                this.logger({
+                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}.`,
+                });
+                this.logger({
+                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                  message: `! Code: ${operation?.properties?.statusMessage.error.code}.`,
+                });
+                this.logger({
+                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
+                  message: `! Message: ${operation?.properties?.statusMessage.error.message}.`,
+                });
                 break;
             }
           });
         }
       } else {
-        this.logger(`! Deployment failed. Please refer to the log file for more information.`);
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: `! Deployment failed. Please refer to the log file for more information.`,
+        });
       }
     }
-    this.logger(`+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`);
+    this.logger({
+      status: BotProjectDeployLoggerType.PROVISION_SUCCESS,
+      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+    });
   }
 
   public async createAndDeploy(
@@ -588,8 +700,7 @@ export class BotProjectDeploy {
     environment: string,
     appPassword: string,
     luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
-    appId?: string
+    luisAuthoringRegion?: string
   ) {
     await this.create(name, location, environment, appPassword, luisAuthoringKey);
     await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
