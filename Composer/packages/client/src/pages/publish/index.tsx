@@ -17,6 +17,7 @@ import { navigateTo } from '../../utils';
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
 import { ToolBar } from './../../components/ToolBar/index';
+import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList } from './publishStatusList';
@@ -32,6 +33,8 @@ const Publish: React.FC<PublishPageProps> = props => {
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const [editDialogHidden, setEditDialogHidden] = useState(true);
+
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
@@ -44,6 +47,12 @@ const Publish: React.FC<PublishPageProps> = props => {
     type: DialogType.normal,
     children: {},
   });
+  const [editDialogProps, setEditDialogProps] = useState({
+    title: 'Title',
+    type: DialogType.normal,
+    children: {},
+  });
+  const [editTarget, setEditTarget] = useState();
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -115,31 +124,6 @@ const Publish: React.FC<PublishPageProps> = props => {
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
-    // BEN COMMENT April 9
-    // I do not think test in emulator belongs here. Publishing does not necessarily result in an emulator-friendly link being present
-    // and it is much more complex than the local scenario.  I also think including this button on this page will create confusion around the
-    // other "Start bot" button
-    // {
-    //   type: 'action',
-    //   text: formatMessage('Test in Emulator'),
-    //   align: 'left',
-    //   buttonProps: {
-    //     iconProps: {
-    //       iconName: 'OpenInNewTab',
-    //     },
-    //     style: { display: thisPublishHistory?.length > 0 && thisPublishHistory[0].status === 200 ? 'block' : 'none' },
-    //     onClick: async () => {
-    //       return Promise.resolve(
-    //         openInEmulator(
-    //           thisPublishHistory[0].endpoint,
-    //           settings.MicrosoftAppId && settings.MicrosoftAppPassword
-    //             ? { MicrosoftAppId: settings.MicrosoftAppId, MicrosoftAppPassword: settings.MicrosoftAppPassword }
-    //             : { MicrosoftAppPassword: '', MicrosoftAppId: '' }
-    //         )
-    //       );
-    //     },
-    //   },
-    // },
   ];
 
   const onSelectTarget = useCallback(
@@ -223,7 +207,6 @@ const Publish: React.FC<PublishPageProps> = props => {
   useEffect(() => {
     // most recent item is a 202, which means we should poll for updates...
     if (selectedTargetName !== 'all' && thisPublishHistory.length && thisPublishHistory[0].status === 202) {
-      console.log('Found a 202, will query for updates...');
       getUpdatedStatus(selectedTarget);
     } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
       // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
@@ -254,6 +237,29 @@ const Publish: React.FC<PublishPageProps> = props => {
     [settings.publishTargets, projectId, botName]
   );
 
+  const updatePublishTarget = useMemo(
+    () => async (name, type, configuration) => {
+      const _targets = settings.publishTargets ? [...settings.publishTargets] : [];
+
+      _targets[editTarget.index] = {
+        name,
+        type,
+        configuration,
+      };
+
+      await actions.setSettings(
+        projectId,
+        botName,
+        {
+          ...settings,
+          publishTargets: _targets,
+        },
+        undefined
+      );
+    },
+    [settings.publishTargets, projectId, botName, editTarget]
+  );
+
   useEffect(() => {
     setDialogProps({
       title: 'Add a publish target',
@@ -271,10 +277,27 @@ const Publish: React.FC<PublishPageProps> = props => {
     });
   }, [publishTypes, savePublishTarget]);
 
+  useEffect(() => {
+    setEditDialogProps({
+      title: 'Edit a publish target',
+      type: DialogType.normal,
+      children: (
+        <CreatePublishTarget
+          targetTypes={publishTypes.map(type => {
+            return { key: type.name, text: type.name };
+          })}
+          current={editTarget ? editTarget.item : null}
+          targets={settings.publishTargets?.filter(item => editTarget && item.name != editTarget.item.name)}
+          onSave={updatePublishTarget}
+          onCancel={() => setEditDialogHidden(true)}
+        />
+      ),
+    });
+  }, [editTarget, publishTypes, updatePublishTarget]);
+
   const rollbackToVersion = useMemo(
     () => async version => {
       const sensitiveSettings = settingsStorage.get(botName);
-      console.log('ROLLBACK TO ', version);
       await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
@@ -313,22 +336,39 @@ const Publish: React.FC<PublishPageProps> = props => {
     [projectId, selectedTarget, settings.publishTargets]
   );
 
+  const onEdit = async (index: number, item: any) => {
+    const newItem = { item: item, index: index };
+    setEditTarget(newItem);
+    setEditDialogHidden(false);
+  };
+
   const onDelete = useMemo(
     () => async (index: number) => {
-      if (settings.publishTargets && settings.publishTargets.length > index) {
-        const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-        await actions.setSettings(
-          projectId,
-          botName,
-          {
-            ...settings,
-            publishTargets: _target,
-          },
-          undefined
-        );
-        // redirect to all profiles
-        setSelectedTarget(undefined);
-        onSelectTarget('all');
+      const result = await OpenConfirmModal(
+        formatMessage('This will delete the profile. Do you wish to continue?'),
+        null,
+        {
+          confirmBtnText: formatMessage('Yes'),
+          cancelBtnText: formatMessage('Cancel'),
+        }
+      );
+
+      if (result) {
+        if (settings.publishTargets && settings.publishTargets.length > index) {
+          const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+          await actions.setSettings(
+            projectId,
+            botName,
+            {
+              ...settings,
+              publishTargets: _target,
+            },
+            undefined
+          );
+          // redirect to all profiles
+          setSelectedTarget(undefined);
+          onSelectTarget('all');
+        }
       }
     },
     [settings.publishTargets, projectId, botName]
@@ -344,6 +384,15 @@ const Publish: React.FC<PublishPageProps> = props => {
         minWidth={350}
       >
         {dialogProps.children}
+      </Dialog>
+      <Dialog
+        hidden={editDialogHidden}
+        onDismiss={() => setEditDialogHidden(true)}
+        dialogContentProps={editDialogProps}
+        modalProps={{ isBlocking: true }}
+        minWidth={350}
+      >
+        {editDialogProps.children}
       </Dialog>
       <PublishDialog
         hidden={publishDialogHidden}
@@ -379,7 +428,7 @@ const Publish: React.FC<PublishPageProps> = props => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
-              onEdit={item => console.log(item)}
+              onEdit={async (item, target) => await onEdit(item, target)}
               onDelete={async index => await onDelete(index)}
               selectedTarget={selectedTargetName}
             />

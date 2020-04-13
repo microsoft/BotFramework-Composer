@@ -42,12 +42,12 @@ export const TargetList = props => {
                 {
                   key: 'delete',
                   name: 'Delete',
-                  onClick: () => props.onDelete(index),
+                  onClick: () => props.onDelete(index, target),
                 },
                 {
                   key: 'edit',
                   name: 'Edit',
-                  onClick: () => props.onEdit(index),
+                  onClick: () => props.onEdit(index, target),
                 },
               ]}
               onRenderItem={onRenderItem}

@@ -15,17 +15,18 @@ import { JsonEditor } from '@bfc/code-editor';
 import { label } from './styles';
 
 export const CreatePublishTarget = props => {
-  const [targetType, setTargetType] = useState('');
-  const [name, setName] = useState('');
-  const [config, setConfig] = useState({});
+  const [targetType, setTargetType] = useState(props.current ? props.current.type : '');
+  const [name, setName] = useState(props.current ? props.current.name : '');
+  const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : {});
   const [errorMessage, setErrorMsg] = useState('');
+
   const updateType = (e, type) => {
-    // console.log('UPDATE TYPE', type);
     setTargetType(type.key);
   };
   const updateConfig = newConfig => {
     setConfig(newConfig);
   };
+
   const updateName = (e, newName) => {
     setErrorMsg('');
     setName(newName);
@@ -64,6 +65,7 @@ export const CreatePublishTarget = props => {
       <form onSubmit={submit}>
         <TextField
           placeholder="My Publish Target"
+          defaultValue={props.current ? props.current.name : null}
           label={formatMessage('Name')}
           onChange={updateName}
           errorMessage={errorMessage}
@@ -72,6 +74,7 @@ export const CreatePublishTarget = props => {
           placeholder={formatMessage('Choose One')}
           label={formatMessage('Publish Destination Type')}
           options={props.targetTypes}
+          defaultSelectedKey={props.current ? props.current.type : null}
           onChange={updateType}
         />
         <div css={label}>{formatMessage('Paste Configuration')}</div>
