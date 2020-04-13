@@ -15,9 +15,9 @@ const TYPES = {
  *
  * @param {string} name
  * @param {("base"|"react")} type
- * @param {JestConfig} overrides
+ * @param {object} jestOverrides
  */
-function createConfig(name, type, overrides = {}) {
+function createConfig(name, type, jestOverrides = {}) {
   const config = TYPES[type];
 
   if (!config) {
@@ -26,7 +26,7 @@ function createConfig(name, type, overrides = {}) {
 
   return mergeConfig(config, {
     displayName: name,
-    ...overrides,
+    ...jestOverrides,
   });
 }
 

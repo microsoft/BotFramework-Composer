@@ -7,13 +7,11 @@ const isArray = require('lodash/isArray');
 
 /**
  *
- * @param {JestConfiguration} base
- * @param  {...JestConfiguration} overrides
- * @param {object} options
- * @param {boolean} options.override
+ * @param {object} base
+ * @param {object} jestOverrides
  */
-function mergeConfig(base, ...overrides) {
-  return mergeWith({}, base, ...overrides, (objValue, srcValue) => {
+function mergeConfig(base, jestOverrides = {}) {
+  return mergeWith({}, base, jestOverrides, (objValue, srcValue) => {
     if (isArray(objValue)) {
       return objValue.concat(srcValue);
     }
