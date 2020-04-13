@@ -125,16 +125,15 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
     };
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
     const files = response.data.files;
+    const newProjectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        response,
-      },
+      payload: { response },
     });
     if (files && files.length > 0) {
-      navTo(store, 'Main');
+      const mainUrl = `/bot/${newProjectId}/dialogs/Main`;
+      navigateTo(mainUrl);
     }
-    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
