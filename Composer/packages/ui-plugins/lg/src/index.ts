@@ -3,6 +3,7 @@
 
 import { PluginConfig } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
+import { VisualEditorColors as Colors } from '@bfc/ui-shared';
 
 import { LgField } from './LgField';
 import { LgWidget } from './LgWidget';
@@ -34,8 +35,8 @@ const config: PluginConfig = {
           widget: 'ActionHeader',
           icon: 'MessageBot',
           colors: {
-            theme: '#EEEAF4',
-            icon: '#5C2E91',
+            theme: Colors.BlueMagenta20,
+            icon: Colors.BlueMagenta30,
           },
         },
         body: {
