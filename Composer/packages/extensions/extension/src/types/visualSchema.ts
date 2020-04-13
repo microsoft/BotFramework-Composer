@@ -21,7 +21,7 @@ export type VisualSchema = {
 
 export interface VisualWidget {
   /** Widget implementation (React Class) or Widget name (string) */
-  widget: string;
+  widget: string | WidgetComponent<any>;
 
   /** If set to true, output widget will be borderless (usually applied to IfCondition, SwitchCondition) */
   nowrap?: boolean;
