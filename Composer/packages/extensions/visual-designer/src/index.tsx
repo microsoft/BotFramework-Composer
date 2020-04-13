@@ -41,16 +41,7 @@ export interface VisualDesignerProps {
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
   const { shellApi, plugins, ...shellData } = useShellApi();
-  const {
-    dialogId,
-    focusedEvent,
-    focusedActions,
-    focusedTab,
-    clipboardActions,
-    data: inputData,
-    hosted,
-    lgFiles,
-  } = shellData;
+  const { dialogId, focusedEvent, focusedActions, focusedTab, clipboardActions, data: inputData, hosted } = shellData;
 
   const dataCache = useRef({});
 

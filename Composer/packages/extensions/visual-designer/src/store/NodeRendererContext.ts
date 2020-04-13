@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { Template } from 'botbuilder-lg';
 import { ShellApi, DialogFactory } from '@bfc/shared';
 
 type ShellApiFuncs =
