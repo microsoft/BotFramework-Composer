@@ -6,7 +6,7 @@
 # bfdprompt_878594()
 - Pick a list to add the item to..
 
-# bfdactivity_139532()
+# SendActivity_139532()
 - Sure. I've added **${dialog.itemTitle}** to **${dialog.listType}** list. You have ${count(user.lists[dialog.listType])} items in your list.
 
 

@@ -1,7 +1,7 @@
 [import](common.lg)
 
-# bfdactivity_164444()
+# SendActivity_164444()
 -Your age is ${user.age} which satisified the condition that was evaluated
 
-# bfdactivity_619321()
+# SendActivity_619321()
 -Your age is ${user.age} which did not satisfy the condition that we evaluated

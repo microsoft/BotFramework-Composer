@@ -1,34 +1,34 @@
 [import](common.lg)
 
-# bfdactivity_159442
+# SendActivity_159442
 -${HeroCard()}
 
 # bfdprompt_735465
 - What is your name?
 
-# bfdactivity_167246
+# SendActivity_167246
 - ${HeroCardWithMemory(user.name)}
 
-# bfdactivity_762914
+# SendActivity_762914
 -${ThumbnailCard()}
 
-# bfdactivity_241579
+# SendActivity_241579
 -${SigninCard()}
 
-# bfdactivity_901582
+# SendActivity_901582
 -${AnimationCard()}
 
-# bfdactivity_553859
+# SendActivity_553859
 -${VideoCard()}
 
-# bfdactivity_190928
+# SendActivity_190928
 -${AudioCard()}
 
-# bfdactivity_806895
+# SendActivity_806895
 -${AdaptiveCard()}
 
-# bfdactivity_997450
+# SendActivity_997450
 -${AllCards()}
 
-# bfdactivity_729500
+# SendActivity_729500
 -Welcome to Card Samples Bot.

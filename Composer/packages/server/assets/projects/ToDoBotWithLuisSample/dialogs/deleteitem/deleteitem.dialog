@@ -90,7 +90,7 @@
                 "id": "555579",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_555579()}"
+              "activity": "${SendActivity_555579()}"
             },
             {
               "$kind": "Microsoft.SendActivity",
@@ -98,7 +98,7 @@
                 "id": "121384",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_121384()}"
+              "activity": "${SendActivity_121384()}"
             }
           ],
           "elseActions": [
@@ -116,7 +116,7 @@
                     "id": "534454",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_534454()}"
+                  "activity": "${SendActivity_534454()}"
                 }
               ]
             },
@@ -152,7 +152,7 @@
                 "id": "728630",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_728630()}"
+              "activity": "${SendActivity_728630()}"
             },
             {
               "$kind": "Microsoft.EditArray",
@@ -170,7 +170,7 @@
                 "id": "015149",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_015149()}"
+              "activity": "${SendActivity_015149()}"
             }
           ]
         }

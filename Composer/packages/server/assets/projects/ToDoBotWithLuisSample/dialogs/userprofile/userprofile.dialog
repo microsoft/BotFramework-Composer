@@ -54,7 +54,7 @@
             "id": "744717",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity_744717()}"
+          "activity": "${SendActivity_744717()}"
         }
       ]
     },
@@ -71,7 +71,7 @@
             "id": "210613",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity_210613()}"
+          "activity": "${SendActivity_210613()}"
         },
         {
           "$kind": "Microsoft.EndDialog",
@@ -103,7 +103,7 @@
                 "id": "351007",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_351007()}"
+              "activity": "${SendActivity_351007()}"
             }
           ],
           "elseActions": [
@@ -121,7 +121,7 @@
                     "id": "977137",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_977137()}"
+                  "activity": "${SendActivity_977137()}"
                 }
               ]
             }
@@ -159,7 +159,7 @@
                 "id": "304840",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_304840()}"
+              "activity": "${SendActivity_304840()}"
             },
             {
               "$kind": "Microsoft.SetProperty",
@@ -186,7 +186,7 @@
                     "id": "991655",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_991655()}"
+                  "activity": "${SendActivity_991655()}"
                 },
                 {
                   "$kind": "Microsoft.SetProperty",

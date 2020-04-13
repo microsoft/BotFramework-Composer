@@ -69,31 +69,31 @@ const lgContent = `# Hello
 -I can help you yes I can
 -Help, we don't need no stinkin' help!
 
-# bfdactivity_116673
+# SendActivity_116673
 -Successfully added a todo named {dialog.todo}
 
-# bfdactivity_832307
+# SendActivity_832307
 -Successfully cleared items in the Todo List.
 
-# bfdactivity_983761
+# SendActivity_983761
 -You don't have any items in the Todo List.
 
-# bfdactivity_725469
+# SendActivity_725469
 -Successfully removed a todo named {dialog.todo}
 
-# bfdactivity_549615
+# SendActivity_549615
 -{dialog.todo} is not in the Todo List
 
-# bfdactivity_339580
+# SendActivity_339580
 -You have no todos.
 
-# bfdactivity_662084
+# SendActivity_662084
 -[ShowTodo]
 
-# bfdactivity_696707
+# SendActivity_696707
 -[help]
 
-# bfdactivity_157674
+# SendActivity_157674
 - Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 `;
 

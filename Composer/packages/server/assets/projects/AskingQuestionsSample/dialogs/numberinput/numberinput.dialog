@@ -30,7 +30,7 @@
           "$designer": {
             "id": "303304"
           },
-          "activity": "${bfdactivity_303304()}"
+          "activity": "${SendActivity_303304()}"
         },
         {
           "$kind": "Microsoft.NumberInput",
@@ -56,7 +56,7 @@
               "$designer": {
                 "id": "284482"
               },
-              "activity": "${bfdactivity_284482()}"
+              "activity": "${SendActivity_284482()}"
             }
           ],
           "elseActions": [
@@ -65,7 +65,7 @@
               "$designer": {
                 "id": "172233"
               },
-              "activity": "${bfdactivity_172233()}"
+              "activity": "${SendActivity_172233()}"
             }
           ]
         }

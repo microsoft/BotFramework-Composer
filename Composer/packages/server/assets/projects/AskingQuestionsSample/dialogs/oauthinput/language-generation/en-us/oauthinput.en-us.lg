@@ -1,6 +1,6 @@
 [import](common.lg)
 
-# bfdactivity_991558
+# SendActivity_991558
 -${ShowEmailSummary(user)}
 
 # ShowEmailSummary(user)

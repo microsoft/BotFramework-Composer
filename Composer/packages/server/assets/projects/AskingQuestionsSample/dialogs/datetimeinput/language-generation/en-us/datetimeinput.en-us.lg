@@ -1,4 +1,4 @@
 [import](common.lg)
 
-# bfdactivity_828009
+# SendActivity_828009
 -You entered: ${user.date[0].value}

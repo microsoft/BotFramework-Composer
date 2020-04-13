@@ -1,13 +1,13 @@
 [import](common.lg)
 
-# bfdactivity_097130()
+# SendActivity_097130()
 -You selected ${user.name}
 
-# bfdactivity_040464()
+# SendActivity_040464()
 -This is the logic inside the "Susan" switch block.
 
-# bfdactivity_230206()
+# SendActivity_230206()
 -This is the logic inside the "Nick" switch block.
 
-# bfdactivity_604251
+# SendActivity_604251
 -This is the logic inside the "Tom" switch block.

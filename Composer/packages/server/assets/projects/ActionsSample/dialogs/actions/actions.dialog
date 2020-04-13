@@ -18,21 +18,21 @@
           "$designer": {
             "id": "522200"
           },
-          "activity": "${bfdactivity_522200()}"
+          "activity": "${SendActivity_522200()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "350559"
           },
-          "activity": "${bfdactivity_350559()}"
+          "activity": "${SendActivity_350559()}"
         },
         {
           "$kind": "Microsoft.SendActivity",
           "$designer": {
             "id": "309397"
           },
-          "activity": "${bfdactivity_309397()}"
+          "activity": "${SendActivity_309397()}"
         },
         {
           "$kind": "Microsoft.SetProperty",
@@ -47,7 +47,7 @@
           "$designer": {
             "id": "797905"
           },
-          "activity": "${bfdactivity_797905()}"
+          "activity": "${SendActivity_797905()}"
         },
         {
           "$kind": "Microsoft.DeleteProperty",
@@ -68,7 +68,7 @@
               "$designer": {
                 "id": "166131"
               },
-              "activity": "${bfdactivity_166131()}"
+              "activity": "${SendActivity_166131()}"
             }
           ],
           "elseActions": [
@@ -77,7 +77,7 @@
               "$designer": {
                 "id": "643043"
               },
-              "activity": "${bfdactivity_643043()}"
+              "activity": "${SendActivity_643043()}"
             }
           ]
         }

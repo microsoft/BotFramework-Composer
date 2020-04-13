@@ -1,10 +1,10 @@
 [import](common.lg)
 
-# bfdactivity_303304
+# SendActivity_303304
 -Hello, your age is ${user.age}!
 
-# bfdactivity_284482
+# SendActivity_284482
 -2 * 2.2 equals ${user.result}, that's right!
 
-# bfdactivity_172233
+# SendActivity_172233
 -2 * 2.2 equals ${user.result}, that's wrong!

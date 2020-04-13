@@ -1,7 +1,7 @@
 [import](common.lg)
 
-# bfdactivity_623448()
+# SendActivity_623448()
 -Pushed dialog.ids into a list
 
-# bfdactivity_636747()
+# SendActivity_636747()
 - ${dialog.foreach.index}: ${dialog.foreach.value}

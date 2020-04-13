@@ -66,7 +66,7 @@
                     "id": "157674",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_157674()}"
+                  "activity": "${SendActivity_157674()}"
                 }
               ]
             }
@@ -127,7 +127,7 @@
           "$designer": {
             "id": "696707"
           },
-          "activity": "${bfdactivity_696707()}"
+          "activity": "${SendActivity_696707()}"
         }
       ],
       "intent": "HelpIntent"

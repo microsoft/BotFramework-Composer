@@ -571,7 +571,7 @@ export class BotProject {
                 newContentLines.push(line.replace('-', '_'));
                 fileChanged = true;
               } else if (templateBodyLinePattern.test(line) && line.includes('bfdactivity-')) {
-                newContentLines.push(line.replace('bfdactivity-', 'bfdactivity_'));
+                newContentLines.push(line.replace('bfdactivity-', 'SendActivity_'));
                 fileChanged = true;
               } else {
                 newContentLines.push(line);

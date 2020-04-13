@@ -1,9 +1,9 @@
 [import](common.lg)
 
-# bfdactivity_725469
+# SendActivity_725469
 -Successfully removed a todo named ${dialog.todo}
 
-# bfdactivity_549615
+# SendActivity_549615
 -${dialog.todo} is not in the Todo List
 
 # bfdprompt_870620()

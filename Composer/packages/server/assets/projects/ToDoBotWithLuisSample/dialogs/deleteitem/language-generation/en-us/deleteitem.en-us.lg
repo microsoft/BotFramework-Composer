@@ -6,22 +6,22 @@
 
 > This LG template is defined in viewitem. You can refer to this with an import statement (see line #2)
 
-# bfdactivity_555579()
+# SendActivity_555579()
 - ${showLists()}
 
-# bfdactivity_534454()
+# SendActivity_534454()
 - ${showLists()}
 
 # bfdprompt_702637()
 - What would you like to delete? \n Give me the item number or exact item text
 
-# bfdactivity_728630()
+# SendActivity_728630()
 - Sure, deleting ${dialog.itemTitle} from ${dialog.listType}
 
-# bfdactivity_015149()
+# SendActivity_015149()
 - ${showLists()}
 
-# bfdactivity_121384()
+# SendActivity_121384()
 - Nothing to delete...
 
 

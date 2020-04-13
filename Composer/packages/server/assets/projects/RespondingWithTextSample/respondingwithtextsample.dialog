@@ -17,7 +17,7 @@
           "$designer": {
             "id": "551445"
           },
-          "activity": "${bfdactivity_551445()}"
+          "activity": "${SendActivity_551445()}"
         }
       ]
     },
@@ -50,7 +50,7 @@
                     "id": "576166",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_576166()}"
+                  "activity": "${SendActivity_576166()}"
                 }
               ]
             }

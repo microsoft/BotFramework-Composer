@@ -53,7 +53,7 @@
           "$designer": {
             "id": "097130"
           },
-          "activity": "${bfdactivity_097130()}"
+          "activity": "${SendActivity_097130()}"
         },
         {
           "$kind": "Microsoft.SwitchCondition",
@@ -70,7 +70,7 @@
                   "$designer": {
                     "id": "040464"
                   },
-                  "activity": "${bfdactivity_040464()}"
+                  "activity": "${SendActivity_040464()}"
                 }
               ]
             },
@@ -82,7 +82,7 @@
                   "$designer": {
                     "id": "230206"
                   },
-                  "activity": "${bfdactivity_230206()}"
+                  "activity": "${SendActivity_230206()}"
                 }
               ]
             },
@@ -94,7 +94,7 @@
                   "$designer": {
                     "id": "604251"
                   },
-                  "activity": "${bfdactivity_604251()}"
+                  "activity": "${SendActivity_604251()}"
                 }
               ]
             }

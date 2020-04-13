@@ -39,7 +39,7 @@
                     "id": "202664",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity_202664()}"
+                  "activity": "${SendActivity_202664()}"
                 }
               ]
             }
@@ -209,7 +209,7 @@
                 "id": "140076",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_140076()}"
+              "activity": "${SendActivity_140076()}"
             },
             {
               "$kind": "Microsoft.CancelAllDialogs",
@@ -226,7 +226,7 @@
                 "id": "272233",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity_272233()}"
+              "activity": "${SendActivity_272233()}"
             }
           ]
         }
@@ -244,7 +244,7 @@
             "id": "037398",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity_037398()}"
+          "activity": "${SendActivity_037398()}"
         }
       ]
     }

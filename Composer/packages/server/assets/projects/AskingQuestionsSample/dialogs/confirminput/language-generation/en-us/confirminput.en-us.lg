@@ -1,4 +1,4 @@
 [import](common.lg)
 
-# bfdactivity_458458
+# SendActivity_458458
 -confirmation: ${user.confirmed}

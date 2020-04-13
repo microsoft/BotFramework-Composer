@@ -1,19 +1,19 @@
 [import](common.lg)
 
-# bfdactivity_522200
+# SendActivity_522200
 -Step 1
 
-# bfdactivity_350559
+# SendActivity_350559
 -Step 2
 
-# bfdactivity_309397
+# SendActivity_309397
 -Step 3
 
-# bfdactivity_797905
+# SendActivity_797905
 -user.age is set to ${user.age}
 
-# bfdactivity_166131
+# SendActivity_166131
 -user.age is set to ${user.age}
 
-# bfdactivity_643043
+# SendActivity_643043
 -user.age is set to null

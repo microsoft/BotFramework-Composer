@@ -37,11 +37,11 @@ describe('LgTemplateRef#', () => {
     });
 
     it('should return LgTemplateRef when inputs are valid', () => {
-      const a = LgTemplateRef.parse('${bfdactivity_1Xkg4a()}');
-      expect(a).toEqual(new LgTemplateRef('bfdactivity_1Xkg4a'));
+      const a = LgTemplateRef.parse('${SendActivity_1Xkg4a()}');
+      expect(a).toEqual(new LgTemplateRef('SendActivity_1Xkg4a'));
 
-      const a2 = LgTemplateRef.parse('${bfdactivity_1Xkg4a()}');
-      expect(a2).toEqual(new LgTemplateRef('bfdactivity_1Xkg4a'));
+      const a2 = LgTemplateRef.parse('${SendActivity_1Xkg4a()}');
+      expect(a2).toEqual(new LgTemplateRef('SendActivity_1Xkg4a'));
 
       const b = LgTemplateRef.parse('${greeting(1,2)}');
       expect(b).toEqual(new LgTemplateRef('greeting', ['1', '2']));

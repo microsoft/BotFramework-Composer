@@ -104,7 +104,7 @@
             "id": "139532",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity_139532()}"
+          "activity": "${SendActivity_139532()}"
         }
       ]
     }

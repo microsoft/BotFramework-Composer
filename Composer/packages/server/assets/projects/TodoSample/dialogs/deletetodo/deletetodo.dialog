@@ -47,7 +47,7 @@
               "$designer": {
                 "id": "725469"
               },
-              "activity": "${bfdactivity_725469()}"
+              "activity": "${SendActivity_725469()}"
             }
           ],
           "elseActions": [
@@ -56,7 +56,7 @@
               "$designer": {
                 "id": "549600"
               },
-              "activity": "${bfdactivity_549600()}"
+              "activity": "${SendActivity_549600()}"
             }
           ]
         }
