@@ -3,6 +3,7 @@
 import React from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -37,6 +38,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
         onBlur={() => onBlur && onBlur(id, value)}
         onChange={handleChange}
         onFocus={() => onFocus && onFocus(id, value)}
+        ariaLabel={label || formatMessage('selection field')}
       />
     </>
   );
