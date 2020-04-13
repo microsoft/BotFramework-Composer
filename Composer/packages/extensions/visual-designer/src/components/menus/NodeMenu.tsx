@@ -61,7 +61,7 @@ export const NodeMenu = ({ id, onEvent }) => {
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
-        label={formatMessage('node')}
+        label={formatMessage('node menu')}
       />
     </div>
   );
