@@ -39,10 +39,7 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
       id: SDKKinds.ValueRecognizer,
     };
   } else {
-    recognizer = {
-      $kind: SDKKinds.ValueRecognizer,
-      id: SDKKinds.ValueRecognizer,
-    };
+    recognizer = '';
   }
   useEffect(() => {
     if (!recognizer) {
