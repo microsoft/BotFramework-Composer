@@ -8,6 +8,7 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
+import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 import { ILuisConfig } from './interface';
 
@@ -110,9 +111,11 @@ export class LuPublisher {
     await this._writeFiles(result.luResult);
   }
 
-  private _doBootstrapSampling(luObject: any) {
-    const sampler = new ComposerBootstrapSampler(luObject.utterances);
-    luObject.utterances = sampler.getSampledUtterances();
+  private _doSampling(luObject: any) {
+    const bootstrapSampler = new ComposerBootstrapSampler(luObject.utterances);
+    luObject.utterances = bootstrapSampler.getSampledUtterances();
+    const reservoirSampler = new ComposerReservoirSampler(luObject.utterances);
+    luObject.utterances = reservoirSampler.getSampledUtterances();
     return luObject;
   }
 
@@ -120,7 +123,7 @@ export class LuPublisher {
     return await Promise.all(
       luContents.map(async luContent => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
-        const sampledResult = this._doBootstrapSampling(result);
+        const sampledResult = this._doSampling(result);
         const content = luisToLuContent(sampledResult);
         return { ...luContent, content };
       })

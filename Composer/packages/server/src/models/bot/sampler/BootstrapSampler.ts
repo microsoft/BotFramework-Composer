@@ -4,7 +4,7 @@ import keys from 'lodash/keys';
 import { Utility } from '@microsoft/bf-dispatcher/lib/utility/Utility';
 import { BootstrapSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampler/BootstrapSampler';
 
-interface IUtterance {
+export interface IUtterance {
   text: string;
   intent: string;
   entities: any[];
