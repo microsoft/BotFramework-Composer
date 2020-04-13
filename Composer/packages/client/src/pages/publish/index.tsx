@@ -326,6 +326,9 @@ const Publish: React.FC<PublishPageProps> = props => {
           },
           undefined
         );
+        // redirect to all profiles
+        setSelectedTarget(undefined);
+        onSelectTarget('all');
       }
     },
     [settings.publishTargets, projectId, botName]
@@ -384,7 +387,12 @@ const Publish: React.FC<PublishPageProps> = props => {
         </div>
         <div css={contentEditor}>
           <Fragment>
-            <PublishStatusList items={thisPublishHistory} groups={groups} onItemClick={setSelectedVersion} />
+            <PublishStatusList
+              items={thisPublishHistory}
+              groups={groups}
+              onItemClick={setSelectedVersion}
+              updateItems={setThisPublishHistory}
+            />
             {!thisPublishHistory || thisPublishHistory.length === 0 ? (
               <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
             ) : null}
