@@ -36,7 +36,12 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
             </h3>
             <p>{description}</p>
             {helpLink && (
-              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={helpLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={formatMessage('Learn more about {title}', { title: title.toLowerCase() })}
+              >
                 {formatMessage('Learn more')}
               </Link>
             )}
