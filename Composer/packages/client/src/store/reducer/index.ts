@@ -448,6 +448,16 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const getPublishStatusFailed: ReducerFunc = (state, payload) => {
+  if (!state.publishHistory[payload.target.name] && payload.status !== 404) {
+    state.publishHistory[payload.target.name] = [payload];
+  } else if (payload.status !== 404) {
+    // TODO: this should only happen if they actually represent the same item...
+    state.publishHistory[payload.target.name][0] = payload;
+  }
+  return state;
+};
+
 const getPublishHistory: ReducerFunc = (state, payload) => {
   state.publishHistory[payload.target.name] = payload.history;
   return state;
@@ -529,6 +539,8 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
   [ActionTypes.PUBLISH_FAILED]: publishFailure,
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatusFailed,
+
   [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,

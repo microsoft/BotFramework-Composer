@@ -16,7 +16,10 @@ export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
       },
     });
   } catch (err) {
-    // dispatch({ type: ActionTypes.GET_PUBLISH_TYPES_FAILURE, payload: null, error: err });
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
   }
 };
 
@@ -78,7 +81,13 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
       },
     });
   } catch (err) {
-    console.error(err.response.data.message);
+    dispatch({
+      type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
+      payload: {
+        ...err.response.data,
+        target: target,
+      },
+    });
   }
 };
 
@@ -92,7 +101,10 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
         target: target,
       },
     });
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
   }
 };

@@ -87,7 +87,7 @@ const Publish: React.FC<PublishPageProps> = props => {
     },
     {
       type: 'action',
-      text: formatMessage('Publish to selected target'),
+      text: formatMessage('Publish to selected profile'),
       buttonProps: {
         iconProps: {
           iconName: 'CloudUpload',
@@ -262,7 +262,7 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   useEffect(() => {
     setDialogProps({
-      title: 'Add a publish target',
+      title: 'Add a publish profile',
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
@@ -279,7 +279,7 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   useEffect(() => {
     setEditDialogProps({
-      title: 'Edit a publish target',
+      title: 'Edit a publish profile',
       type: DialogType.normal,
       children: (
         <CreatePublishTarget

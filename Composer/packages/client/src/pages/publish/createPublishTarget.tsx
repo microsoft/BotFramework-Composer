@@ -64,7 +64,7 @@ export const CreatePublishTarget = props => {
     <Fragment>
       <form onSubmit={submit}>
         <TextField
-          placeholder="My Publish Target"
+          placeholder="My Publish Profile"
           defaultValue={props.current ? props.current.name : null}
           label={formatMessage('Name')}
           onChange={updateName}

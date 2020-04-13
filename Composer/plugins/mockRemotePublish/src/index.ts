@@ -55,6 +55,11 @@ class LocalPublisher {
       },
     };
 
+    if (metadata.comment==="500") {
+      response.status = 500;
+      response.result.message = 'Failed';
+    }
+
     this.data[project.id][profileName].push(response);
 
     this.finishPublish(project.id, profileName, response.result.id);
@@ -68,7 +73,6 @@ class LocalPublisher {
     if (this.data[botId] && this.data[botId][profileName]) {
       const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
       // return latest status
-      console.log(response);
       return response;
     } else {
       return {
