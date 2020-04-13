@@ -36,7 +36,6 @@ export const NodeMenu = ({ id, onEvent }) => {
 
   return (
     <div
-      data-name="nodeMenu"
       css={{
         marginRight: '1px',
       }}
