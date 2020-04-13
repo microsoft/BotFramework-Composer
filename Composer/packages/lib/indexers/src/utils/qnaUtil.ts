@@ -12,7 +12,7 @@ import { QnaIntentSection } from '@bfc/shared';
 const NEWLINE = '\r\n';
 
 export function contentParse(content: string): QnaIntentSection[] {
-  const intentTexts = content.split('#').filter(intentText => intentText.trim() !== '');
+  const intentTexts = content.split('# ?').filter(intentText => intentText.trim() !== '');
   const intentSections: QnaIntentSection[] = [];
   intentTexts.forEach(text => {
     const [name, body] = text
@@ -30,7 +30,7 @@ export function contentParse(content: string): QnaIntentSection[] {
 function generateContent(intentSections: QnaIntentSection[]): string {
   const intentTexts: string[] = [];
   intentSections.forEach(section => {
-    intentTexts.push(`# ${section.Name} ${NEWLINE} ` + '```' + NEWLINE + section.Body + NEWLINE + '```' + NEWLINE);
+    intentTexts.push(`# ? ${section.Name} ${NEWLINE} ` + '```' + NEWLINE + section.Body + NEWLINE + '```' + NEWLINE);
   });
   return intentTexts.join(NEWLINE);
 }
