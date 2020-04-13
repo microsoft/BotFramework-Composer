@@ -4,7 +4,7 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill } from '@bfc/shared';
+import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -78,7 +78,6 @@ export interface State {
   settings: DialogSetting;
   actionsSeed: any;
   onCreateDialogComplete?: (dialogId: string | null) => void;
-  toStartBot: boolean;
   currentUser: {
     token: string | null;
     email?: string;
@@ -98,6 +97,7 @@ export interface State {
   publishTypes: string[];
   publishTargets: any[];
   runtimeTemplates: any[];
+  userSettings: UserSettings;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

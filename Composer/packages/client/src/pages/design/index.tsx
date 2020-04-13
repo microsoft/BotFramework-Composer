@@ -13,7 +13,7 @@ import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
@@ -368,15 +368,13 @@ function DesignPage(props) {
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation css={editorContainer}>
-            <React.Fragment>
-              <div css={editorWrapper}>
-                <div css={visualPanel}>
-                  {breadcrumbItems}
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                </div>
-                <PropertyEditor />
+            <div css={editorWrapper}>
+              <div css={visualPanel}>
+                {breadcrumbItems}
+                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
               </div>
-            </React.Fragment>
+              <PropertyEditor />
+            </div>
           </Conversation>
         </div>
       </div>

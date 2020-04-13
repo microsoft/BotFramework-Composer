@@ -10,6 +10,7 @@ import isEmpty from 'lodash/isEmpty';
 import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
+import { CodeEditorSettings } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import * as luUtil from '../../utils/luUtil';
@@ -24,7 +25,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
-  const { luFiles, locale, projectId } = state;
+  const { luFiles, locale, projectId, userSettings } = state;
   const { dialogId } = props;
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
@@ -151,6 +152,10 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     sectionId: intent?.Name,
   };
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    actions.updateUserSettings({ codeEditor: settings });
+  };
+
   return (
     <LuEditor
       hidePlaceholder={inlineMode}
@@ -163,6 +168,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         path: lspServerPath,
       }}
       onChange={_onChange}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };
