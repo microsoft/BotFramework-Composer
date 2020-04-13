@@ -39,10 +39,10 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
             </ActionButton>
           </React.Fragment>
         ) : (
-          <div>
+          <React.Fragment>
             <img alt={formatMessage('bot framework composer icon gray')} src={grayComposerIcon} />
             {formatMessage('Select a trigger on the left')} <br /> {formatMessage('navigation to see actions')}
-          </div>
+          </React.Fragment>
         )}
       </div>
     </div>
