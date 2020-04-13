@@ -6,14 +6,16 @@ import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
-import * as lgUtil from './utils/lgUtil';
-import * as luUtil from './utils/luUtil';
-import { updateRegExIntent } from './utils/dialogUtil';
-import { StoreContext } from './store';
-import { getDialogData, setDialogData, sanitizeDialogData } from './utils';
-import { OpenAlertModal, DialogStyle } from './components/Modal';
-import { getFocusPath } from './utils/navigation';
-import { isAbsHosted } from './utils/envUtil';
+import * as lgUtil from '../utils/lgUtil';
+import * as luUtil from '../utils/luUtil';
+import { updateRegExIntent } from '../utils/dialogUtil';
+import { StoreContext } from '../store';
+import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
+import { OpenAlertModal, DialogStyle } from '../components/Modal';
+import { getFocusPath } from '../utils/navigation';
+import { isAbsHosted } from '../utils/envUtil';
+
+import { useLgApi } from './lgApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -35,6 +37,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     schemas,
     userSettings,
   } = state;
+  const lgApi = useLgApi();
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
   const updateLgTemplate = actions.updateLgTemplate;
@@ -212,11 +215,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         actions.navTo(dialogId);
       }
     },
-    getLgTemplates,
-    updateLgTemplate: updateLgTemplateHandler,
-    copyLgTemplate: copyLgTemplateHandler,
-    removeLgTemplate: removeLgTemplateHandler,
-    removeLgTemplates: removeLgTemplatesHandler,
+    ...lgApi,
     updateLuIntent: updateLuIntentHandler,
     updateRegExIntent: updateRegExIntentHandler,
     removeLuIntent: removeLuIntentHandler,
