@@ -13,7 +13,7 @@ import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal, OtherFilePayLoad } from '../../components/ProjectTree/TriggerCreationModal';
@@ -29,6 +29,7 @@ import { navigateTo } from '../../utils';
 
 import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
+import { AddSkillDialog } from './addSkillDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -297,7 +298,11 @@ function DesignPage(props) {
     );
   }, [dialogs, breadcrumb]);
 
-  async function onSubmit(data: { name: string; description: string }) {
+  async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+    await actions.updateSkill({ projectId, targetId: -1, skillData });
+  }
+
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -376,15 +381,13 @@ function DesignPage(props) {
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation css={editorContainer}>
-            <React.Fragment>
-              <div css={editorWrapper}>
-                <div css={visualPanel}>
-                  {breadcrumbItems}
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                </div>
-                <PropertyEditor />
+            <div css={editorWrapper}>
+              <div css={visualPanel}>
+                {breadcrumbItems}
+                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
               </div>
-            </React.Fragment>
+              <PropertyEditor />
+            </div>
           </Conversation>
         </div>
       </div>
@@ -392,7 +395,14 @@ function DesignPage(props) {
         <CreateDialogModal
           isOpen={state.showCreateDialogModal}
           onDismiss={() => actions.createDialogCancel()}
-          onSubmit={onSubmit}
+          onSubmit={handleCreateDialogSubmit}
+        />
+      )}
+      {state.showAddSkillDialogModal && (
+        <AddSkillDialog
+          isOpen={state.showAddSkillDialogModal}
+          onDismiss={() => actions.addSkillDialogCancel()}
+          onSubmit={handleAddSkillDialogSubmit}
         />
       )}
       {triggerModalVisible && (

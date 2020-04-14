@@ -84,44 +84,6 @@ export const unsupportedField = {
   `,
 };
 
-export const openObjectField = {
-  container: css`
-    border-top: 1px solid ${NeutralColors.gray30};
-    display: flex;
-
-    label: OpenObjectFieldContainer;
-  `,
-  filler: css`
-    width: 32px;
-
-    label: OpenObjectFieldFiller;
-  `,
-  item: css`
-    flex: 1;
-
-    & + & {
-      margin-left: 16px;
-    }
-
-    label: OpenObjectFieldItem;
-  `,
-  label: css`
-    flex: 1;
-    padding-left: 8px;
-
-    & + & {
-      margin-left: 16px;
-    }
-
-    label: OpenObjectFieldLabel;
-  `,
-  labelContainer: css`
-    display: flex;
-
-    label: OpenObjectFieldLabelContainer;
-  `,
-};
-
 export const objectArrayField = {
   objectItemLabel: css`
     display: flex;

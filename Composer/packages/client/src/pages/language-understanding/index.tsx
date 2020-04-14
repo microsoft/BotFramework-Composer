@@ -13,7 +13,7 @@ import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 import { NavLinks } from '../../components/NavLinks';
 import { dialogItemSelected, dialogItemNotSelected } from '../../components/NavLinks/styles';
 

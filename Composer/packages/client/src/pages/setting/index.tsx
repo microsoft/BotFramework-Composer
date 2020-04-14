@@ -15,7 +15,7 @@ import { isAbsHosted } from '../../utils/envUtil';
 import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
-import { TestController } from '../../TestController';
+import { TestController } from '../../components/TestController';
 
 import Routes from './router';
 import { title, fileList, contentEditor } from './styles';

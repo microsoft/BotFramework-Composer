@@ -62,9 +62,9 @@ const initialState: State = {
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
+  showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
-  toStartBot: false,
   currentUser: {
     token: null,
     sessionExpired: false,

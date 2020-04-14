@@ -70,7 +70,6 @@ export enum ActionTypes {
   GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
-  TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
   EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
   EDITOR_CLIPBOARD = 'EDITOR_CLIPBOARD',
@@ -89,6 +88,8 @@ export enum ActionTypes {
   UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
 
   SET_USER_SETTINGS = 'SET_USER_SETTINGS',
+  ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
+  ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
 }
 
 export const Tips = {
@@ -129,7 +130,7 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   BOT: 'bot',
-  UNKNOW: 'unknow',
+  UNKNOWN: 'unknown',
 };
 
 export const OpenStatus = {
@@ -143,7 +144,10 @@ export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
   publishing = 'publishing',
+  published = 'published',
   reloading = 'loading',
+  pending = 'pending',
+  failed = 'failed',
 }
 
 export enum CreationFlowStatus {
@@ -190,6 +194,13 @@ export const DialogDeleting = {
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
   ),
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+};
+
+export const addSkillDialog = {
+  SKILL_MANIFEST_FORM: {
+    title: formatMessage('Add a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
 };
 
 export const SupportedFileTypes = [

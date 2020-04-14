@@ -45,6 +45,7 @@ export interface ShellData {
   luFiles: LuFile[];
   userSettings: UserSettings;
   qnaFiles: QnaFile[];
+  skills: any[];
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -71,4 +72,5 @@ export interface ShellApi {
   undo: () => void;
   redo: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
+  addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
 }

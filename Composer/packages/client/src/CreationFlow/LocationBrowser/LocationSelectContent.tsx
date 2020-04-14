@@ -8,11 +8,13 @@ import { useContext, useRef } from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
 import { CreationFlowStatus } from '../../constants';
+import { File } from '../../store/types';
 
 import { FileSelector } from './FileSelector';
 import { StoreContext } from './../../store';
 import { FileTypes } from './../../constants';
 import { loading, fileSelectorContainer } from './styles';
+
 interface LocationSelectContentProps {
   operationMode: {
     read: boolean;
@@ -27,11 +29,10 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
-  const onSelectionChanged = item => {
+  const onFileChosen = (item: File) => {
     if (item) {
-      const type = item.fileType;
+      const { type, path } = item;
       const storageId = storages[currentStorageIndex.current].id;
-      const path = item.filePath;
       if (type === FileTypes.FOLDER) {
         onCurrentPathUpdate(path, storageId);
       } else if (type === FileTypes.BOT && creationFlowStatus === CreationFlowStatus.OPEN) {
@@ -55,7 +56,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
           checkShowItem={checkShowItem}
           focusedStorageFolder={focusedStorageFolder}
           onCurrentPathUpdate={onCurrentPathUpdate}
-          onSelectionChanged={onSelectionChanged}
+          onFileChosen={onFileChosen}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (

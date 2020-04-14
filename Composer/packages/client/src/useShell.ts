@@ -36,6 +36,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     projectId,
     schemas,
     userSettings,
+    skills,
   } = state;
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
@@ -256,6 +257,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         });
       });
     },
+    addSkillDialog: () => {
+      return new Promise(resolve => {
+        actions.addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+          resolve(newSkill);
+        });
+      });
+    },
     undo: actions.undo,
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
@@ -291,6 +299,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         focusedTab: promptTab,
         clipboardActions: state.clipboardActions,
         hosted: !!isAbsHosted(),
+        skills,
       }
     : ({} as ShellData);
 

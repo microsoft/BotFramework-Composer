@@ -85,11 +85,12 @@ export interface State {
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
+  showAddSkillDialogModal: boolean;
   isEnvSettingUpdated: boolean;
   settings: DialogSetting;
   actionsSeed: any;
   onCreateDialogComplete?: (dialogId: string | null) => void;
-  toStartBot: boolean;
+  onAddSkillDialogComplete?: (dialogId: string | null) => void;
   currentUser: {
     token: string | null;
     email?: string;
