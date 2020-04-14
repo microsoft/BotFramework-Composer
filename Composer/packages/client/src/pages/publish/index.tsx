@@ -271,11 +271,12 @@ const Publish: React.FC<PublishPageProps> = props => {
           })}
           targets={settings.publishTargets}
           onSave={savePublishTarget}
+          current={null}
           onCancel={() => setAddDialogHidden(true)}
         />
       ),
     });
-  }, [publishTypes, savePublishTarget]);
+  }, [publishTypes, savePublishTarget, settings.publishTargets]);
 
   useEffect(() => {
     setEditDialogProps({
