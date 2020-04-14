@@ -28,7 +28,7 @@ export interface INotificationListProps {
 
 const itemCount = 10;
 
-const columns: IColumn[] = [
+const columns = (onItemClick: (item: INotification) => void) => [
   {
     key: 'Icon',
     name: '',
@@ -39,7 +39,11 @@ const columns: IColumn[] = [
     maxWidth: 30,
     onRender: (item: INotification) => {
       const icon = icons[item.severity];
-      return <FontIcon iconName={icon.iconName} css={typeIcon(icon)} />;
+      return (
+        <div onClick={() => onItemClick(item)}>
+          <FontIcon iconName={icon.iconName} css={typeIcon(icon)} />
+        </div>
+      );
     },
   },
   {
@@ -117,7 +121,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
           <DetailsList
             css={detailList}
             items={showItems}
-            columns={columns}
+            columns={columns(onItemClick)}
             onItemInvoked={onItemClick}
             selectionMode={SelectionMode.single}
             setKey="none"
