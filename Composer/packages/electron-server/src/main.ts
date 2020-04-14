@@ -4,24 +4,30 @@
 import { join, resolve } from 'path';
 
 import { mkdirp } from 'fs-extra';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import fixPath from 'fix-path';
 
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import log from './utility/logger';
 const error = log.extend('error');
 
+import { AppUpdater } from './appUpdater';
+import { UpdateInfo } from 'electron-updater';
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-function main() {
+let mainWindow: BrowserWindow;
+async function main() {
   log('Starting electron app');
 
   // Create the browser window.
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
-    width: 800,
-    height: 600,
+    width: width * 0.75,
+    height: height * 0.9,
     webPreferences: {
       nodeIntegration: false,
+      preload: join(__dirname, 'preload.js'),
     },
     show: false,
   };
@@ -30,15 +36,14 @@ function main() {
     // (https://github.com/electron-userland/electron-builder/releases/tag/v21.0.1)
     browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
   }
-  const win = new BrowserWindow(browserWindowOptions);
+  mainWindow = new BrowserWindow(browserWindowOptions);
 
   // and load the index.html of the app.
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
   log('Loading project from: ', CONTENT_URL);
 
-  win.loadURL(CONTENT_URL);
-  win.maximize();
-  win.show();
+  await mainWindow.loadURL(CONTENT_URL);
+  mainWindow.show();
 }
 
 async function createAppDataDir() {
@@ -48,6 +53,30 @@ async function createAppDataDir() {
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   log('creating composer app data path at: ', composerAppDataPath);
   await mkdirp(composerAppDataPath);
+}
+
+function initializeAppUpdater() {
+  const appUpdater = new AppUpdater();
+  appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+    mainWindow.webContents.send('app-update', 'update-available', updateInfo);
+  });
+  appUpdater.on('progress', progress => {
+    mainWindow.webContents.send('app-update', 'progress', progress);
+  });
+  appUpdater.on('update-not-available', () => {
+    mainWindow.webContents.send('app-update', 'update-not-available');
+  });
+  appUpdater.on('update-downloaded', () => {
+    mainWindow.webContents.send('app-update', 'update-downloaded');
+  });
+  appUpdater.on('error', err => {
+    mainWindow.webContents.send('app-update', 'error', err);
+  });
+  ipcMain.on('app-update', (name, payload) => {
+    console.log('got app update from client: ', name, payload);
+    appUpdater.downloadUpdate();
+  });
+  appUpdater.checkForUpdates();
 }
 
 async function run() {
@@ -91,7 +120,9 @@ async function run() {
   await start(pluginsDir);
   log('Server started. Rendering application...');
 
-  main();
+  await main();
+
+  initializeAppUpdater();
 }
 
 run()

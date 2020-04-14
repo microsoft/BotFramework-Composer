@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useState, Fragment, Suspense, useEffect } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
@@ -20,6 +20,7 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
+import { AppUpdater } from './components/AppUpdater';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -202,6 +203,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        <AppUpdater />
       </div>
     </Fragment>
   );

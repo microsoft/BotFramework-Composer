@@ -19,16 +19,17 @@ export class AppUpdater extends EventEmitter {
     autoUpdater.autoDownload = settings.autoDownload;
     autoUpdater.setFeedURL({
       provider: 'github',
-      repo: 'BotFramework-Composer',
-      owner: 'microsoft',
+      repo: 'One-Off-File-Distribution', // 'BotFramework-Composer',
+      owner: 'tonyanziano', //'microsoft',
+      private: true,
     });
 
     autoUpdater.on('error', this.onError);
-    autoUpdater.on('checking-for-update', this.onCheckingForUpdate);
-    autoUpdater.on('update-available', this.onUpdateAvailable);
-    autoUpdater.on('update-not-available', this.onUpdateNotAvailable);
-    autoUpdater.on('download-progress', this.onDownloadProgress);
-    autoUpdater.on('update-downloaded', this.onUpdateDownloaded);
+    autoUpdater.on('checking-for-update', this.onCheckingForUpdate.bind(this));
+    autoUpdater.on('update-available', this.onUpdateAvailable.bind(this));
+    autoUpdater.on('update-not-available', this.onUpdateNotAvailable.bind(this));
+    autoUpdater.on('download-progress', this.onDownloadProgress.bind(this));
+    autoUpdater.on('update-downloaded', this.onUpdateDownloaded.bind(this));
     logger('Initialized');
   }
 
@@ -38,9 +39,18 @@ export class AppUpdater extends EventEmitter {
     }
   }
 
+  public downloadUpdate() {
+    autoUpdater.downloadUpdate();
+  }
+
+  public quitAndInstall() {
+    autoUpdater.quitAndInstall();
+  }
+
   private onError(err: Error) {
     this.checkingForUpdate = false;
     logger('Got error while checking for updates: ', err);
+    this.emit('error', err);
   }
 
   private onCheckingForUpdate() {
@@ -51,20 +61,25 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     this.checkingForUpdate = false;
+    console.log('update available');
     log('Update available: %O', updateInfo);
+    this.emit('update-available', updateInfo);
   }
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     this.checkingForUpdate = false;
     log('Update not available: %O', updateInfo);
+    this.emit('update-not-available');
   }
 
-  private onDownloadProgress(progress: any, ...other) {
-    log('Got update progress: %O %O', progress, other);
+  private onDownloadProgress(progress: any) {
+    log('Got update progress: %O', progress);
+    this.emit('progress', progress);
   }
 
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     this.checkingForUpdate = false;
     log('Update downloaded: %O', updateInfo);
+    this.emit('update-downloaded');
   }
 }

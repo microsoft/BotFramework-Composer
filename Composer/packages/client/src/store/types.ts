@@ -6,7 +6,7 @@
 import React from 'react';
 import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
 
-import { CreationFlowStatus, BotStatus } from '../constants';
+import { AppUpdaterStatus, CreationFlowStatus, BotStatus } from '../constants';
 
 import { ActionType } from './action/types';
 
@@ -100,6 +100,7 @@ export interface State {
   publishTargets: any[];
   userSettings: UserSettings;
   announcement: string | undefined;
+  appUpdate: AppUpdateState;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
@@ -131,4 +132,12 @@ export interface DesignPageLocation {
   selected: string;
   focused: string;
   promptTab?: PromptTab;
+}
+
+export interface AppUpdateState {
+  downloadSizeInBytes?: number;
+  error?: any;
+  progressPercent?: number;
+  status: AppUpdaterStatus;
+  version?: string;
 }
