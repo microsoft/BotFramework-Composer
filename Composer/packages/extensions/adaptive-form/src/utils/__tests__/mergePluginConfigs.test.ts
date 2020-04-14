@@ -38,26 +38,6 @@ describe('mergePluginConfigs', () => {
 
     expect(mergePluginConfigs(overrides)).toMatchInlineSnapshot(`
 Object {
-  "recognizers": Array [
-    Object {
-      "displayName": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "none",
-      "isSelected": [Function],
-    },
-    Object {
-      "displayName": [Function],
-      "editor": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "Microsoft.RegexRecognizer",
-      "isSelected": [Function],
-    },
-  ],
-  "roleSchema": Object {
-    "expression": Object {
-      "label": "expression label",
-    },
-  },
   "formSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
       "description": [Function],
@@ -504,6 +484,26 @@ Object {
     "Microsoft.TraceActivity": Object {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
       "label": [Function],
+    },
+  },
+  "recognizers": Array [
+    Object {
+      "displayName": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "none",
+      "isSelected": [Function],
+    },
+    Object {
+      "displayName": [Function],
+      "editor": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "Microsoft.RegexRecognizer",
+      "isSelected": [Function],
+    },
+  ],
+  "roleSchema": Object {
+    "expression": Object {
+      "label": "expression label",
     },
   },
 }
