@@ -3,11 +3,13 @@
 
 import { PluginConfig } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
+import { VisualEditorColors as Colors } from '@bfc/ui-shared';
 
 import { LgField } from './LgField';
+import { LgWidget } from './LgWidget';
 
 const config: PluginConfig = {
-  uiSchema: {
+  formSchema: {
     [SDKKinds.SendActivity]: {
       properties: {
         activity: {
@@ -20,6 +22,28 @@ const config: PluginConfig = {
     },
     [SDKKinds.IActivityTemplate]: {
       field: LgField,
+    },
+  },
+  visualSchema: {
+    widgets: {
+      LgWidget: LgWidget,
+    },
+    schema: {
+      [SDKKinds.SendActivity]: {
+        widget: 'ActionCard',
+        header: {
+          widget: 'ActionHeader',
+          icon: 'MessageBot',
+          colors: {
+            theme: Colors.BlueMagenta20,
+            icon: Colors.BlueMagenta30,
+          },
+        },
+        body: {
+          widget: 'LgWidget',
+          field: 'activity',
+        },
+      },
     },
   },
 };
