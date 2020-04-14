@@ -9,7 +9,7 @@ import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-reac
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
-import { resolveRef, resolveFieldWidget } from '../../utils';
+import { resolveRef, resolveFieldWidget, getValueType } from '../../utils';
 import { usePluginConfig } from '../../hooks';
 
 import { oneOfField } from './styles';
@@ -53,7 +53,7 @@ const getSelectedOption = (value: any | undefined, options: IDropdownOption[]): 
     return;
   }
 
-  const valueType = Array.isArray(value) ? 'array' : typeof value;
+  const valueType = getValueType(value);
 
   if (valueType === 'array') {
     const item = value[0];

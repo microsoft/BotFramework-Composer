@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -12,8 +12,8 @@ import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
-import { VisualEditorAPI } from '../../messenger/FrameAPI';
-import { TestController } from '../../TestController';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
@@ -27,6 +27,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 
+import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
 import {
   breadcrumbClass,
@@ -347,15 +348,19 @@ function DesignPage(props) {
     }
   }
 
+  if (!dialogId) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <Fragment>
+    <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           openNewTriggerModal={openNewTriggerModal}
@@ -363,15 +368,13 @@ function DesignPage(props) {
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}
           <Conversation css={editorContainer}>
-            <Fragment>
-              <div css={editorWrapper}>
-                <div css={visualPanel}>
-                  {breadcrumbItems}
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                </div>
-                <PropertyEditor />
+            <div css={editorWrapper}>
+              <div css={visualPanel}>
+                {breadcrumbItems}
+                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
               </div>
-            </Fragment>
+              <PropertyEditor />
+            </div>
           </Conversation>
         </div>
       </div>
@@ -390,7 +393,7 @@ function DesignPage(props) {
           onSubmit={onTriggerCreationSubmit}
         />
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 

@@ -9,7 +9,6 @@ import createCache from '@emotion/cache';
 import './index.css';
 
 import { App } from './App';
-import { ShellApi } from './ShellApi';
 import { StoreProvider } from './store';
 
 formatMessage.setup({
@@ -25,7 +24,6 @@ ReactDOM.render(
   <CacheProvider value={emotionCache}>
     <StoreProvider>
       <App />
-      <ShellApi />
     </StoreProvider>
   </CacheProvider>,
   document.getElementById('root')

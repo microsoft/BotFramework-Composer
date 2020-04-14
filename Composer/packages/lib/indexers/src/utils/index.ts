@@ -3,3 +3,4 @@
 
 export * from './diagnosticUtil';
 export * from './jsonWalk';
+export * from './dialogCheckUtil';

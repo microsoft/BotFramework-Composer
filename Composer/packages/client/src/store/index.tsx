@@ -3,20 +3,30 @@
 
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
-import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
+import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
+import storage from '../utils/storage';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
 import { CreationFlowStatus, BotStatus } from './../constants';
-import { State, ActionHandlers, BoundActionHandlers, MiddlewareApi, MiddlewareFunc, StorageFolder } from './types';
+import {
+  State,
+  ActionHandlers,
+  BoundActionHandlers,
+  MiddlewareApi,
+  MiddlewareFunc,
+  StorageFolder,
+  Store,
+} from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
+import filePersistence from './persistence/FilePersistence';
 
-const { defaultFileResolver } = LGParser;
+const { defaultFileResolver } = TemplatesParser;
 
 const initialState: State = {
   dialogs: [],
@@ -27,7 +37,7 @@ const initialState: State = {
   locale: 'en-us',
   botEndpoints: {},
   remoteEndpoints: {},
-  focusPath: '', // the data path for FormEditor
+  focusPath: '', // the data path for PropertyEditor
   recentProjects: [],
   templateProjects: [],
   storages: [],
@@ -40,6 +50,7 @@ const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  skills: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
@@ -52,7 +63,6 @@ const initialState: State = {
   showCreateDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
-  toStartBot: false,
   currentUser: {
     token: null,
     sessionExpired: false,
@@ -68,6 +78,15 @@ const initialState: State = {
   clipboardActions: [],
   publishTypes: [],
   publishTargets: [],
+  userSettings: storage.get('userSettings', {
+    codeEditor: {
+      lineNumbers: false,
+      wordWrap: false,
+      minimap: false,
+    },
+    propertyEditorWidth: 400,
+    dialogNavWidth: 180,
+  }),
 };
 
 interface StoreContextValue {
@@ -97,14 +116,26 @@ interface StoreProviderProps {
 }
 
 const prepareAxiosWithStore = once(prepareAxios);
-export const applyMiddleware = (middlewareApi: MiddlewareApi, ...middlewares: MiddlewareFunc[]) => {
+
+export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) => {
+  let dispatch: React.Dispatch<ActionType> = () => {};
+  const middlewareApi: MiddlewareApi = {
+    getState: store.getState,
+    dispatch: (...args) => dispatch(...args),
+  };
   const chain = middlewares.map(middleware => middleware(middlewareApi));
-  const dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(middlewareApi.dispatch);
+  dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(store.dispatch);
   return dispatch;
 };
 
+export const wrappedReducer = (state: State, action: ActionType) => {
+  const currentState = reducer(state, action);
+  filePersistence.notify(state, currentState, action);
+  return currentState;
+};
+
 export const StoreProvider: React.FC<StoreProviderProps> = props => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(wrappedReducer, initialState);
   const stateRef = useRef<State>(initialState);
 
   stateRef.current = state;
@@ -137,6 +168,6 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
   };
 
   prepareAxiosWithStore({ dispatch, getState });
-
+  filePersistence.registerHandleError({ dispatch, getState });
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

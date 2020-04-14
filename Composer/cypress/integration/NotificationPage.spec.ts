@@ -43,7 +43,7 @@ context('Notification Page', () => {
       cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
     cy.findAllByText('__TestToDoBotWithLuisSample.Main').should('exist');
@@ -60,7 +60,7 @@ context('Notification Page', () => {
       cy.findByText('WelcomeUser').should('exist');
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition')
         .focus()
@@ -77,7 +77,7 @@ context('Notification Page', () => {
       cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
     cy.findAllByText('WelcomeUser').should('exist');

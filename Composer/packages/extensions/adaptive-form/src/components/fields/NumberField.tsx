@@ -3,6 +3,7 @@
 import React from 'react';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 import { FieldProps } from '@bfc/extension';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -16,12 +17,17 @@ const getFloat = (value: string, step: number) => {
   return parseFloat(fixed);
 };
 
-export const NumberField: React.FC<FieldProps> = function NumberField(props) {
+const NumberField: React.FC<FieldProps> = props => {
   const { description, disabled, id, label, onChange, readonly, schema, value, uiOptions } = props;
 
   const { type } = schema;
 
   const updateValue = (step: number) => (value: string) => {
+    if (value === '') {
+      onChange(0);
+      return;
+    }
+
     // if the number is a float, we need to convert to a fixed decimal place
     // in order to avoid floating point math rounding errors (ex. 1.2000000001)
     // ex. if step = 0.01, we fix to 2 decimals
@@ -31,21 +37,28 @@ export const NumberField: React.FC<FieldProps> = function NumberField(props) {
   };
 
   const step = type === 'integer' ? 1 : 0.1;
+  const displayValue = typeof value === 'number' ? value.toString() : '';
 
   return (
     <>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
       <SpinButton
+        id={id}
         disabled={Boolean(schema.const) || readonly || disabled}
         step={step}
         styles={{
           labelWrapper: { display: 'none' },
         }}
-        value={value}
+        value={displayValue}
         onDecrement={updateValue(-step)}
         onIncrement={updateValue(step)}
         onValidate={updateValue(0)}
+        label={label || formatMessage('numeric field')}
+        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
+        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
       />
     </>
   );
 };
+
+export { NumberField };
