@@ -40,7 +40,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   const pluginConfig = usePluginConfig();
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions = {
-    ...getUISchema(schema, pluginConfig.uiSchema),
+    ...getUISchema(schema, pluginConfig.formSchema),
     ...baseUIOptions,
   };
 
