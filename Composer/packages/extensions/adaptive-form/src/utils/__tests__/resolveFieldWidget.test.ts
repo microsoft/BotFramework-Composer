@@ -34,7 +34,7 @@ describe('resolveFieldWidget', () => {
             field: DefaultFields.StringField,
           },
         },
-        uiSchema: {},
+        formSchema: {},
         recognizers: [],
       };
 
@@ -51,7 +51,7 @@ describe('resolveFieldWidget', () => {
 
       const globalSchema = {
         roleSchema: {},
-        uiSchema: {
+        formSchema: {
           'Microsoft.Recognizer': {
             field: DefaultFields.RecognizerField,
           },
