@@ -3441,8 +3441,8 @@
 
 "@types/nanoid@^2.1.0":
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@types/nanoid/-/nanoid-2.1.0.tgz#41edfda78986e9127d0dc14de982de766f994020"
-  integrity sha512-xdkn/oRTA0GSNPLIKZgHWqDTWZsVrieKomxJBOQUK9YDD+zfSgmwD5t4WJYra5S7XyhTw7tfvwznW+pFexaepQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/nanoid/-/@types/nanoid-2.1.0.tgz#41edfda78986e9127d0dc14de982de766f994020"
+  integrity sha1-Qe39p4mG6RJ9DcFN6YLedm+ZQCA=
   dependencies:
     "@types/node" "*"
 
@@ -13261,10 +13261,15 @@ nan@^2.12.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
-nanoid@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.6.tgz#0665418f692e54cf44f34d4010761f3240a03314"
-  integrity sha512-2NDzpiuEy3+H0AVtdt8LoFi7PnqkOnIzYmJQp7xsEU6VexLluHQwKREuiz57XaQC5006seIadPrIZJhyS2n7aw==
+nanoid-dictionary@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/nanoid-dictionary/-/nanoid-dictionary-3.0.0.tgz#e4ad77e528792095662a7be1855ce31448d0687c"
+  integrity sha1-5K135Sh5IJVmKnvhhVzjFEjQaHw=
+
+nanoid@^3.1.3:
+  version "3.1.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/nanoid/-/nanoid-3.1.3.tgz#b2bcfcfda4b4d6838bc22a0c8dd3c0a17a204c20"
+  integrity sha1-srz8/aS01oOLwioMjdPAoXogTCA=
 
 nanomatch@^1.2.9:
   version "1.2.13"

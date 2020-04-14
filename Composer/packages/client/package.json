@@ -44,7 +44,6 @@
     "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
-    "nanoid": "^2.1.6",
     "office-ui-fabric-react": "^7.88.1",
     "prop-types": "^15.7.2",
     "query-string": "^6.8.2",
