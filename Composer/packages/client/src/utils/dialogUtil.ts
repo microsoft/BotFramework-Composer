@@ -81,12 +81,15 @@ function insert(content, path: string, position: number | undefined, data: any) 
 }
 
 function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
-  const optionalAttributes: { intent?: string; event?: string } = {};
+  const optionalAttributes: { intent?: string; event?: string; $designer?: {} } = {};
   if (data.specifiedType) {
     data.$kind = data.specifiedType;
   }
   if (data.intent) {
     optionalAttributes.intent = data.intent;
+  }
+  if (data.qnaQuestion) {
+    optionalAttributes.$designer = { name: data.qnaQuestion };
   }
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
