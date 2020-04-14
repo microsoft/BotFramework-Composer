@@ -5,7 +5,7 @@
 import path from 'path';
 
 import { jsx } from '@emotion/core';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -20,11 +20,12 @@ import formatMessage from 'format-message';
 import { Fragment } from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import moment from 'moment';
 
 import { FileTypes } from '../../constants/index';
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../store/types';
-import { getFileIconName, formatBytes, calculateTimeDiff } from '../../utils';
+import { getFileIconName, calculateTimeDiff } from '../../utils';
 
 import { dropdown, detailListContainer, detailListClass } from './styles';
 
@@ -39,116 +40,108 @@ interface FileSelectorProps {
   checkShowItem: (file: File) => boolean;
 }
 
+type SortState = {
+  key: string;
+  descending: boolean;
+};
+
+const _renderIcon = (file: File) => {
+  const iconName = getFileIconName(file);
+  if (iconName === FileTypes.FOLDER) {
+    return <Icon style={{ fontSize: '16px' }} iconName="OpenFolderHorizontal" />;
+  } else if (iconName === FileTypes.BOT) {
+    return <Icon style={{ fontSize: '16px' }} iconName="Robot" />;
+  } else if (iconName === FileTypes.UNKNOWN) {
+    return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
+  }
+  // fallback for other possible file types
+  const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
+  return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
+};
+
 export const FileSelector: React.FC<FileSelectorProps> = props => {
   const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+
   const tableColumns = [
     {
-      key: 'column1',
+      key: 'type',
       name: formatMessage('File Type'),
       className: detailListClass.fileIconCell,
       iconClassName: detailListClass.fileIconHeaderIcon,
-      ariaLabel: formatMessage('Column operations for File type, Press to sort on File type'),
+      ariaLabel: formatMessage('Click to sort by file type'),
       iconName: 'Page',
       isIconOnly: true,
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: item => {
-        const iconName = item.iconName;
-        if (iconName === FileTypes.FOLDER) {
-          return (
-            <Icon
-              style={{
-                fontSize: '16px',
-              }}
-              iconName="OpenFolderHorizontal"
-            />
-          );
-        } else if (iconName === FileTypes.BOT) {
-          return (
-            <Icon
-              style={{
-                fontSize: '16px',
-              }}
-              iconName="Robot"
-            />
-          );
-        } else if (iconName === FileTypes.UNKNOWN) {
-          return (
-            <Icon
-              style={{
-                fontSize: '16px',
-              }}
-              iconName="Page"
-            />
-          );
-        }
-        const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
-        return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
-      },
+      onRender: _renderIcon,
     },
     {
-      key: 'column2',
+      key: 'name',
       name: formatMessage('Name'),
       fieldName: 'name',
       minWidth: 150,
       maxWidth: 200,
       isRowHeader: true,
       isResizable: true,
-      isSorted: true,
-      isSortedDescending: false,
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: item => {
+      onRender: (item: File) => {
         return <span aria-label={item.name}>{item.name}</span>;
       },
       isPadded: true,
     },
     {
-      key: 'column3',
+      key: 'lastModified',
       name: formatMessage('Date Modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 60,
       maxWidth: 70,
       isResizable: true,
       data: 'number',
-      onRender: item => {
+      onRender: (item: File) => {
         return <span>{calculateTimeDiff(item.lastModified)}</span>;
       },
       isPadded: true,
     },
   ];
+
+  const [currentSort, setSort] = useState<SortState>({ key: tableColumns[0].key, descending: true });
+  console.log(currentSort);
+
   const diskRootPattern = /[a-zA-Z]:\/$/;
   const storageFiles = useMemo(() => {
     if (!focusedStorageFolder.children) return [];
     const files = focusedStorageFolder.children.reduce((result, file) => {
       const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
       if (check(file)) {
-        result.push({
-          name: file.name,
-          value: file.name,
-          fileType: file.type,
-          iconName: getFileIconName(file),
-          lastModified: file.lastModified,
-          fileSize: file.size ? formatBytes(file.size) : '',
-          filePath: file.path,
-        });
+        result.push(file);
       }
+      result.sort((f1, f2) => {
+        // NOTE: bringing in Moment for this is not very efficient, but will
+        // work for now until we can read file modification dates in as
+        // numeric timestamps instead of preformatted strings
+        const { key } = currentSort;
+        const v1 = key === 'lastModified' ? moment(f1[key]) : f1[key];
+        const v2 = key === 'lastModified' ? moment(f2[key]) : f2[key];
+        if (v1 < v2) return currentSort.descending ? 1 : -1;
+        if (v1 > v2) return currentSort.descending ? -1 : 1;
+        return 0;
+      });
       return result;
-    }, [] as any[]);
+    }, [] as File[]);
     // add parent folder
     files.unshift({
       name: '..',
-      value: '..',
-      fileType: 'folder',
-      iconName: 'folder',
-      filePath: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent,
+      type: 'folder',
+      path: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent,
     });
     return files;
-  }, [focusedStorageFolder]);
+  }, [focusedStorageFolder, currentSort.key, currentSort.descending]);
+
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
@@ -218,7 +211,11 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           <DetailsList
             items={storageFiles}
             compact={false}
-            columns={tableColumns}
+            columns={tableColumns.map(col => ({
+              ...col,
+              isSorted: col.key === currentSort.key,
+              isSortedDescending: currentSort.descending,
+            }))}
             getKey={item => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             onRenderDetailsHeader={onRenderDetailsHeader}
@@ -226,6 +223,17 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
             onItemInvoked={onFileChosen}
             selectionMode={SelectionMode.single}
             checkboxVisibility={CheckboxVisibility.hidden}
+            onColumnHeaderClick={(_, clickedColumn) => {
+              if (clickedColumn == null) return;
+              if (clickedColumn.key === currentSort.key) {
+                clickedColumn.isSortedDescending = !currentSort.descending;
+                setSort({ key: currentSort.key, descending: !currentSort.descending });
+              } else {
+                clickedColumn.isSorted = true;
+                clickedColumn.isSortedDescending = false;
+                setSort({ key: clickedColumn.key, descending: false });
+              }
+            }}
           />
         </ScrollablePane>
       </div>
