@@ -6,9 +6,10 @@ const testingLib = require('@testing-library/react');
 
 const createConfig = require('./createConfig');
 
-Object.keys(testingLib).forEach(n => {
-  module.exports[n] = testingLib[n];
-});
+module.exports = testingLib;
+
+// Object.keys(testingLib).forEach(n => {
+//   module.exports[n] = testingLib[n];
+// });
 
 module.exports.createConfig = createConfig;
-module.exports = createConfig;

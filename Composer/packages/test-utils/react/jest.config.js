@@ -7,10 +7,24 @@ const path = require('path');
 const mergeConfig = require('../mergeConfig');
 const baseConfig = require('../base/jest.config');
 
+const babelConfig = {
+  presets: [
+    require.resolve('@babel/preset-env'),
+    require.resolve('@babel/preset-react'),
+    require.resolve('@babel/preset-typescript'),
+  ],
+  plugins: [
+    require.resolve('@babel/plugin-proposal-class-properties'),
+    require.resolve('@babel/plugin-transform-runtime'),
+    require.resolve('@babel/plugin-proposal-optional-chaining'),
+    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
+  ],
+};
+
 module.exports = mergeConfig(baseConfig, {
   transform: {
-    '^.+\\.jsx?$': path.resolve(__dirname, 'preprocess.js'),
-    '^.+\\.tsx?$': path.resolve(__dirname, 'preprocess.js'),
+    '^.+\\.jsx?$': [require.resolve('babel-jest'), babelConfig],
+    '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig],
   },
 
   moduleNameMapper: {

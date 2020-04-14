@@ -11,23 +11,28 @@ const TYPES = {
   react: reactConfig,
 };
 
-/**
- *
- * @param {string} name
- * @param {("node"|"react")} type
- * @param {object} jestOverrides
- */
-function createConfig(name, type, jestOverrides = {}) {
+function createConfig(name, type, jestOverrides = {}, babelOverrides = {}) {
   const config = TYPES[type];
 
   if (!config) {
     throw new Error(`Unsupported jest configuration. Choose between ${Object.keys(TYPES).join(' | ')}`);
   }
 
-  return mergeConfig(config, {
-    displayName: name,
-    ...jestOverrides,
-  });
+  const jestConfig = mergeConfig(
+    { ...config },
+    {
+      displayName: name,
+      ...jestOverrides,
+    }
+  );
+
+  if (Object.keys(babelOverrides).length > 0 && Object.keys(jestConfig.transform).length > 0) {
+    Object.keys(jestConfig.transform).forEach(t => {
+      mergeConfig(jestConfig.transform[t][1], babelOverrides);
+    });
+  }
+
+  return jestConfig;
 }
 
 module.exports = createConfig;
