@@ -270,9 +270,9 @@ const Publish: React.FC<PublishPageProps> = props => {
             return { key: type.name, text: type.name };
           })}
           targets={settings.publishTargets}
-          onSave={savePublishTarget}
+          updateSettings={savePublishTarget}
           current={null}
-          onCancel={() => setAddDialogHidden(true)}
+          closeDialog={() => setAddDialogHidden(true)}
         />
       ),
     });
@@ -289,8 +289,8 @@ const Publish: React.FC<PublishPageProps> = props => {
           })}
           current={editTarget ? editTarget.item : null}
           targets={settings.publishTargets?.filter(item => editTarget && item.name != editTarget.item.name)}
-          onSave={updatePublishTarget}
-          onCancel={() => setEditDialogHidden(true)}
+          updateSettings={updatePublishTarget}
+          closeDialog={() => setEditDialogHidden(true)}
         />
       ),
     });
@@ -376,7 +376,7 @@ const Publish: React.FC<PublishPageProps> = props => {
   );
 
   return (
-    <div>
+    <Fragment>
       <Dialog
         hidden={addDialogHidden}
         onDismiss={() => setAddDialogHidden(true)}
@@ -449,7 +449,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           </Fragment>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
@@ -459,19 +459,21 @@ const LogDialog = props => {
     title: 'Publish Log',
   };
   return (
-    <Dialog
-      hidden={props.hidden}
-      onDismiss={props.onDismiss}
-      dialogContentProps={logDialogProps}
-      modalProps={{ isBlocking: true }}
-      minWidth={450}
-    >
-      <TextField
-        value={props && props.version ? props.version.log : ''}
-        placeholder="Log Output"
-        multiline={true}
-        style={{ minHeight: 300 }}
-      />
-    </Dialog>
+    !props.hidden && (
+      <Dialog
+        hidden={props.hidden}
+        onDismiss={props.onDismiss}
+        dialogContentProps={logDialogProps}
+        modalProps={{ isBlocking: true }}
+        minWidth={450}
+      >
+        <TextField
+          value={props && props.version ? props.version.log : ''}
+          placeholder="Log Output"
+          multiline={true}
+          style={{ minHeight: 300 }}
+        />
+      </Dialog>
+    )
   );
 };

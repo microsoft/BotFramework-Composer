@@ -418,15 +418,13 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
 };
 
 const setPublishTypes: ReducerFunc = (state, { typelist }) => {
-  // const types: string[] = [];
-  // typelist.map(item => types.push(item.name));
   state.publishTypes = typelist;
   return state;
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
   if (payload.target.name === 'default' && payload.endpointURL) {
-    state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
     state.botStatus = BotStatus.connected;
   }
 
@@ -450,7 +448,7 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   // a check should be added to this that ensures this ONLY applies to the "default" profile.
   if (payload.target.name === 'default' && payload.endpointURL) {
     state.botStatus = BotStatus.connected;
-    state.botEndpoints[state.projectId] = `${payload.endpointURL || 'http://localhost:3979'}/api/messages`;
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
   }
 
   // if no history exists, create one with the latest status

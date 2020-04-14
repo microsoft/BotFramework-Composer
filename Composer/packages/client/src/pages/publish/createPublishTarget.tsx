@@ -3,7 +3,6 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-// import { useState, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -56,8 +55,8 @@ export const CreatePublishTarget = props => {
   };
 
   const submit = async () => {
-    await props.onSave(name, targetType, JSON.stringify(config, null, 2) || '{}');
-    props.onCancel();
+    await props.updateSettings(name, targetType, JSON.stringify(config, null, 2) || '{}');
+    props.closeDialog();
   };
 
   return (
@@ -81,7 +80,7 @@ export const CreatePublishTarget = props => {
         <JsonEditor onChange={updateConfig} height={200} value={config} />
       </form>
       <DialogFooter>
-        <DefaultButton onClick={props.onCancel} text={formatMessage('Cancel')} />
+        <DefaultButton onClick={props.closeDialog} text={formatMessage('Cancel')} />
         <PrimaryButton onClick={submit} disabled={isDisable()} text={formatMessage('Save')} />
       </DialogFooter>
     </Fragment>
