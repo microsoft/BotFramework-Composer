@@ -22,6 +22,7 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.RESPONSE].types,
       ...dialogGroups[DialogGroup.INPUT].types,
       ...dialogGroups[DialogGroup.BRANCHING].types,
+      ...dialogGroups[DialogGroup.LOOPING].types,
       ...dialogGroups[DialogGroup.MEMORY].types,
       ...dialogGroups[DialogGroup.STEP].types,
       ...dialogGroups[DialogGroup.CODE].types,
