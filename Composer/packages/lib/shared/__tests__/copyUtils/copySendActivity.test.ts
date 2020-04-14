@@ -3,7 +3,7 @@
 
 import { copySendActivity } from '../../src/copyUtils/copySendActivity';
 import { ExternalApi } from '../../src/copyUtils/ExternalApi';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('copySendActivity', () => {
   const externalApiWithLgCopy: ExternalApi = {

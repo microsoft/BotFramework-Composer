@@ -3,7 +3,7 @@
 
 import { copyInputDialog } from '../../src/copyUtils/copyInputDialog';
 import { ExternalApi } from '../../src/copyUtils/ExternalApi';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('shallowCopyAdaptiveAction', () => {
   const externalApiWithLgCopy: ExternalApi = {
