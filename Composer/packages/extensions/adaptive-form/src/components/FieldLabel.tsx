@@ -16,7 +16,7 @@ interface DescriptionCalloutProps {
 }
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = function DescriptionCallout(props) {
-  const { description, title, id, helpLink } = props;
+  const { description, title, helpLink } = props;
 
   if (!description) {
     return null;
@@ -26,7 +26,6 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
     <TooltipHost
       delay={TooltipDelay.zero}
       directionalHint={DirectionalHint.bottomAutoEdge}
-      id={`${id}-description`}
       styles={{ root: { display: 'inline-block' } }}
       tooltipProps={{
         styles: { root: { width: '288px', padding: '17px 28px' } },
@@ -52,7 +51,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
     >
       <div tabIndex={0}>
         <Icon
-          aria-labelledby={`${id}-description`}
+          aria-label={title + '; ' + description}
           iconName={'Unknown'}
           styles={{
             root: {
@@ -88,26 +87,26 @@ const FieldLabel: React.FC<FieldLabelProps> = props => {
   }
 
   return (
-    <Label
-      htmlFor={id}
-      styles={{
-        root: {
-          fontWeight: '400',
-          display: 'flex',
-          alignItems: 'center',
-          marginLeft: inline ? '4px' : '0',
-        },
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
-      <div
-        style={{
-          marginRight: '4px',
+      <Label
+        htmlFor={id}
+        styles={{
+          root: {
+            fontWeight: '400',
+            marginLeft: inline ? '4px' : '0',
+            marginRight: '4px',
+          },
         }}
       >
         {label}
-      </div>
+      </Label>
       <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
-    </Label>
+    </div>
   );
 };
 
