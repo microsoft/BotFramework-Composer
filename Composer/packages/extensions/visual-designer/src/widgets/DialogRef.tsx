@@ -4,9 +4,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import get from 'lodash/get';
+import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
+import { LinkBtn } from '@bfc/ui-shared';
 
-import { LinkBtn } from '../components/elements/styledComponents';
-import { WidgetContainerProps, WidgetComponent } from '../schema/uischema.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
