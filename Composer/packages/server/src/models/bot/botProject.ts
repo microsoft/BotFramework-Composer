@@ -552,6 +552,24 @@ export class BotProject {
   private _replaceDashInTemplateName = async () => {
     const files: { [key: string]: string }[] = [];
     const patterns = ['**/*.dialog', '**/*.lg', '**/*.json'];
+    const replacers = [
+      (line: string) => {
+        return line.replace('bfdactivity-', 'SendActivity_');
+      },
+      (line: string) => {
+        return line.replace('bfdprompt-', 'TextInput_Prompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdinvalidPrompt-', 'TextInput_InvalidPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdunrecognizedPrompt-', 'TextInput_UnrecognizedPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfddefaultValueResponse-', 'TextInput_DefaultValueResponse_');
+      },
+    ];
+
     for (const pattern of patterns) {
       const root = this.dataDir;
       const paths = await this.fileStorage.glob(pattern, root);
@@ -567,11 +585,23 @@ export class BotProject {
             const templateBodyLinePattern = /^\s*-.*/;
             const lines = content.split('\n');
             for (const line of lines) {
+              // lg name line
               if (templateNamePattern.test(line) && line.includes('-')) {
-                newContentLines.push(line.replace('-', '_'));
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+                newContentLines.push(newLine);
                 fileChanged = true;
-              } else if (templateBodyLinePattern.test(line) && line.includes('bfdactivity-')) {
-                newContentLines.push(line.replace('bfdactivity-', 'SendActivity_'));
+
+                // lg body line
+              } else if (templateBodyLinePattern.test(line) && line.includes('@{')) {
+                let newContentLine = line;
+                replacers.map(replacer => {
+                  newContentLine = replacer(newContentLine);
+                });
+                newContentLines.push(newContentLine);
                 fileChanged = true;
               } else {
                 newContentLines.push(line);
@@ -586,7 +616,12 @@ export class BotProject {
             const callingTempaltePattern = /^\s*"[\w]+":\s*"\$\{.*\}"/;
             for (const line of lines) {
               if (callingTempaltePattern.test(line) && line.includes('-')) {
-                newContentLines.push(line.replace('-', '_'));
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+                newContentLines.push(newLine);
                 fileChanged = true;
               } else {
                 newContentLines.push(line);
@@ -596,12 +631,19 @@ export class BotProject {
             content = newContentLines.join('\n');
           }
 
-          if (fileType === '.json') {
+          // card
+          if (fileType === '.json' && Path.basename(filePath) !== 'appsettings.json') {
             const lines = content.split('\n');
             const activityInJson = /^\s*"activity":\s*"\[.*\]"/;
             for (const line of lines) {
               if (activityInJson.test(line) && line.includes('-')) {
-                newContentLines.push(line.replace('-', '_'));
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+
+                newContentLines.push(newLine);
                 fileChanged = true;
               } else {
                 newContentLines.push(line);
