@@ -14,7 +14,6 @@ import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
@@ -23,7 +22,7 @@ import { LuFile } from '@bfc/shared';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 
-import { formCell, luPhraseCell, iconClass } from './styles';
+import { formCell, luPhraseCell } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -149,23 +148,23 @@ const TableView: React.FC<TableViewProps> = props => {
           );
         },
       },
-      {
-        key: 'beenUsed',
-        name: formatMessage('Been used'),
-        fieldName: 'beenUsed',
-        minWidth: 100,
-        maxWidth: 100,
-        isResizable: true,
-        isCollapsable: true,
-        data: 'string',
-        onRender: item => {
-          return item.used ? (
-            <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
-          ) : (
-            <div />
-          );
-        },
-      },
+      // {
+      //   key: 'beenUsed',
+      //   name: formatMessage('Been used'),
+      //   fieldName: 'beenUsed',
+      //   minWidth: 100,
+      //   maxWidth: 100,
+      //   isResizable: true,
+      //   isCollapsable: true,
+      //   data: 'string',
+      //   onRender: item => {
+      //     return item.used ? (
+      //       <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
+      //     ) : (
+      //       <div />
+      //     );
+      //   },
+      // },
       {
         key: 'buttons',
         name: '',
