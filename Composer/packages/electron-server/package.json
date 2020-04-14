@@ -9,19 +9,21 @@
     "node": ">=12"
   },
   "scripts": {
+    "test:watch": "jest --watch",
+    "test": "jest",
     "build": "tsc -p tsconfig.build.json",
     "clean": "rimraf build && rimraf dist",
     "copy-plugins": "node scripts/copy-plugins.js",
     "copy-templates": "node scripts/copy-templates.js",
     "dist": "node scripts/electronBuilderDist.js",
-    "dist:full": "yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
+    "dist:full": "cross-env PLATFORM_OVERRIDE=win32 yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
     "pack": "node scripts/electronBuilderPack.js",
     "start": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
-    "start:electron:dev": "cross-env ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron"
+    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:5000/ npm run start:electron"
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
@@ -33,6 +35,7 @@
     "@types/form-data": "^2.2.1",
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
+    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/lodash": "^4.14.146",
     "@types/lru-cache": "^5.1.0",
@@ -55,6 +58,7 @@
     "@bfc/server": "*",
     "debug": "4.1.1",
     "fix-path": "^3.0.0",
+    "jest": "^25.3.0",
     "lodash": "^4.17.15"
   }
 }
