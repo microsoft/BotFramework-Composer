@@ -1,5 +1,5 @@
 const path = require('path');
 
-const createConfig = require('@bfc/test-utils');
+const { createConfig } = require('@bfc/test-utils');
 
 module.exports = createConfig('visual-designer', 'react');

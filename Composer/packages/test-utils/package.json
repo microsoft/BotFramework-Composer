@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "description": "",
-  "main": "createConfig.js",
+  "main": "index.js",
+  "types": "types.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +23,8 @@
     "babel-jest": "^25.3.0",
     "jest": "^25.3.0",
     "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1"
   }
 }
