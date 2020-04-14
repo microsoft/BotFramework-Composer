@@ -7,7 +7,6 @@ import { ActionCreator } from '../types';
 
 import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
-import { startBot } from './publisher';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
@@ -33,7 +32,7 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
 export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
   dispatch({
     type: ActionTypes.UPDATE_BOTSTATUS,
-    payload: status,
+    payload: { status },
   });
 };
 
@@ -94,7 +93,6 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       // navTo(store, 'Main');
       const mainUrl = `/bot/${projectId}/dialogs/Main`;
       navigateTo(mainUrl);
-      startBot(store, true);
     } else {
       navigate(BASEPATH);
     }
@@ -127,16 +125,15 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
     };
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
     const files = response.data.files;
+    const newProjectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: {
-        response,
-      },
+      payload: { response },
     });
     if (files && files.length > 0) {
-      navTo(store, 'Main');
+      const mainUrl = `/bot/${newProjectId}/dialogs/Main`;
+      navigateTo(mainUrl);
     }
-    return response.data;
   } catch (err) {
     store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }

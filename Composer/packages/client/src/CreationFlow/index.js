@@ -5,7 +5,7 @@ import Path from 'path';
 
 import React, { useState, useEffect, useContext, useRef } from 'react';
 
-import { CreationFlowStatus, DialogCreationCopy, Steps, FileTypes } from '../constants';
+import { CreationFlowStatus, DialogCreationCopy, Steps } from '../constants';
 
 import { CreateOptions } from './CreateOptions/index';
 import { DefineConversation } from './DefineConversation/index';
@@ -16,7 +16,6 @@ import { navigateTo } from './../utils/navigation';
 
 export function CreationFlow(props) {
   const { state, actions } = useContext(StoreContext);
-  //const [files, setFiles] = useState([]);
   const [step, setStep] = useState();
   // eslint-disable-next-line react/prop-types
   const { creationFlowStatus, setCreationFlowStatus } = props;
@@ -29,7 +28,7 @@ export function CreationFlow(props) {
     fetchStorages,
     fetchFolderItemsByPath,
   } = actions;
-  const { templateId, templateProjects, focusedStorageFolder, storages } = state;
+  const { templateId, templateProjects, storages } = state;
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -88,7 +87,6 @@ export function CreationFlow(props) {
 
   const openBot = async botFolder => {
     await openBotProject(botFolder);
-    // navigateTo(`/bot/${state.projectId}/dialogs/Main`);
     handleDismiss();
   };
 
@@ -106,11 +104,9 @@ export function CreationFlow(props) {
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
       case CreationFlowStatus.NEW:
         handleCreateNew(formData);
-        //navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
-        navigateTo(`/bot/${state.projectId}/dialogs/Main`);
         break;
       default:
         setStep(Steps.NONE);
@@ -127,28 +123,23 @@ export function CreationFlow(props) {
   const steps = {
     [Steps.CREATE]: {
       ...DialogCreationCopy.CREATE_NEW_BOT,
-      children: <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />,
+      children: (
+        <CreateOptions
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onNext={handleCreateNext}
+          saveTemplateId={saveTemplateId}
+        />
+      ),
     },
     [Steps.LOCATION]: {
       ...DialogCreationCopy.SELECT_LOCATION,
-      children: (
-        <OpenProject
-          onOpen={openBot}
-          onDismiss={handleDismiss}
-          focusedStorageFolder={focusedStorageFolder}
-          onCurrentPathUpdate={updateCurrentPath}
-        />
-      ),
+      children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} />,
     },
     [Steps.DEFINE]: {
       ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
-        <DefineConversation
-          onSubmit={handleSubmit}
-          onDismiss={handleDismiss}
-          onCurrentPathUpdate={updateCurrentPath}
-          focusedStorageFolder={focusedStorageFolder}
-        />
+        <DefineConversation onSubmit={handleSubmit} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} />
       ),
     },
   };

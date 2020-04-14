@@ -3,6 +3,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { UserSettings } from './settings';
+
+/** Recursively marks all properties as optional. */
+type AllPartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[] ? AllPartial<U>[] : T[P] extends object ? AllPartial<T[P]> : T[P];
+};
 
 export interface EditorSchema {
   content?: {
@@ -37,6 +43,8 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  userSettings: UserSettings;
+  skills: any[];
   // TODO: remove
   schemas: BotSchemas;
 }
@@ -60,4 +68,6 @@ export interface ShellApi {
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
+  updateUserSettings: (settings: AllPartial<UserSettings>) => void;
+  addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
 }

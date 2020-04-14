@@ -83,11 +83,11 @@ export const visualEditor = (hidden: boolean) => css`
 `;
 
 export const formEditor = css`
-  max-width: 400px;
   flex: 1;
   border: 0px;
   transition: width 0.2s ease-in-out;
-  overflow: auto;
+  overflow-y: scroll;
+  height: 100%;
 `;
 
 export const breadcrumbClass = mergeStyleSets({
@@ -122,6 +122,7 @@ export const middleTriggerContainer = css`
   width: 100%;
   margin-top: 55px;
   height: calc(100% - 48px);
+  min-height: 285px;
   position: absolute;
 `;
 
@@ -188,5 +189,9 @@ export const name = {
 };
 
 export const description = {
+  subComponentStyles: textFieldlabel,
+};
+
+export const manifestUrl = {
   subComponentStyles: textFieldlabel,
 };

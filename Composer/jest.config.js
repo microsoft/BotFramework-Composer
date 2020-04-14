@@ -52,5 +52,6 @@ module.exports = {
     '<rootDir>/packages/ui-plugins/luis',
     '<rootDir>/packages/ui-plugins/prompts',
     '<rootDir>/packages/ui-plugins/select-dialog',
+    '<rootDir>/packages/ui-plugins/select-skill-dialog',
   ],
 };

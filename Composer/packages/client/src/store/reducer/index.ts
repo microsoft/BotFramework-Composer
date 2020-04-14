@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
@@ -11,6 +12,7 @@ import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
+import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -73,6 +75,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
   state.location = location;
   state.lgFiles = lgFiles;
+  state.skills = response.data.skills;
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
@@ -240,8 +243,13 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const setLuFailure: ReducerFunc = (state, payload) => {
-  state.botStatus = BotStatus.unConnected;
+const publishLuisSuccess: ReducerFunc = state => {
+  state.botStatus = BotStatus.published;
+  return state;
+};
+
+const publishLuisFailure: ReducerFunc = (state, payload) => {
+  state.botStatus = BotStatus.failed;
   state.botLoadErrorMsg = payload;
   return state;
 };
@@ -341,6 +349,30 @@ const setDesignPageLocation: ReducerFunc = (
   return state;
 };
 
+const updateSkill: ReducerFunc = (state, { skills }) => {
+  state.skills = skills;
+  state.settings.skill = skills.map(({ manifestUrl, name }) => {
+    return { manifestUrl, name };
+  });
+
+  state.showAddSkillDialogModal = false;
+  delete state.onAddSkillDialogComplete;
+
+  return state;
+};
+
+const addSkillDialogBegin: ReducerFunc = (state, { onComplete }) => {
+  state.showAddSkillDialogModal = true;
+  state.onAddSkillDialogComplete = onComplete;
+  return state;
+};
+
+const addSkillDialogCancel: ReducerFunc = state => {
+  state.showAddSkillDialogModal = false;
+  delete state.onAddSkillDialogComplete;
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -391,15 +423,13 @@ const setPublishTypes: ReducerFunc = (state, { response }) => {
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
-  console.log('Got publish status from remote', payload);
   state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
   state.botStatus = BotStatus.connected;
-
   return state;
 };
 
 const publishFailure: ReducerFunc = (state, { error }) => {
-  state.botStatus = BotStatus.unConnected;
+  state.botStatus = BotStatus.failed;
   state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
   return state;
 };
@@ -412,7 +442,7 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
 };
 
 const setBotStatus: ReducerFunc = (state, payload) => {
-  state.botStatus = payload;
+  state.botStatus = payload.status;
   return state;
 };
 
@@ -433,6 +463,13 @@ const onboardingSetComplete: ReducerFunc = (state, { complete }) => {
 
 const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   state.clipboardActions = clipboardActions;
+  return state;
+};
+
+const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+  const newSettings = merge(state.userSettings, settings);
+  storage.set('userSettings', newSettings);
+  state.userSettings = newSettings;
   return state;
 };
 
@@ -464,13 +501,15 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU]: updateLuTemplate,
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: noOp,
-  [ActionTypes.PUBLISH_LU_FAILED]: setLuFailure,
+  [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
+  [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
-  [ActionTypes.TO_START_BOT]: noOp,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
+  [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
+  [ActionTypes.ADD_SKILL_DIALOG_BEGIN]: addSkillDialogBegin,
+  [ActionTypes.ADD_SKILL_DIALOG_END]: addSkillDialogCancel,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
@@ -486,4 +525,5 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
 });

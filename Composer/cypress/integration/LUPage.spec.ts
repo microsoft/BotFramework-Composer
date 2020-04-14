@@ -9,7 +9,6 @@ context('LU Page', () => {
 
   it('can open language understanding page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-    cy.wait(1000);
     // left nav tree
     cy.contains('__TestToDoBotWithLuisSample.Main');
     cy.contains('All');

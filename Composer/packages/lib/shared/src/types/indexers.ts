@@ -108,6 +108,16 @@ export interface LgFile {
   templates: LgTemplate[];
 }
 
+export interface Skill {
+  manifestUrl: string;
+  name: string;
+  protocol: string;
+  description: string;
+  endpoints: { [key: string]: any }[];
+  endpointUrl: string;
+  msAppId: string;
+}
+
 export interface TextFile {
   id: string;
   content: string;

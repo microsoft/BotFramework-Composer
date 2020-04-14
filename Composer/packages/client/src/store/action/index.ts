@@ -11,6 +11,8 @@ export * from './onboarding';
 export * from './project';
 export * from './publisher';
 export * from './setting';
+export * from './skill';
 export * from './storage';
 export * from './user';
+export * from './skill';
 export * from '../middlewares/undo/actions';

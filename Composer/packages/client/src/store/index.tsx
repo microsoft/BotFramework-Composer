@@ -7,6 +7,7 @@ import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
 
 import { prepareAxios } from '../utils/auth';
+import storage from '../utils/storage';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -49,6 +50,7 @@ const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  skills: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
@@ -59,9 +61,9 @@ const initialState: State = {
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
+  showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
-  toStartBot: false,
   currentUser: {
     token: null,
     sessionExpired: false,
@@ -77,6 +79,15 @@ const initialState: State = {
   clipboardActions: [],
   publishTypes: [],
   publishTargets: [],
+  userSettings: storage.get('userSettings', {
+    codeEditor: {
+      lineNumbers: false,
+      wordWrap: false,
+      minimap: false,
+    },
+    propertyEditorWidth: 400,
+    dialogNavWidth: 180,
+  }),
 };
 
 interface StoreContextValue {
