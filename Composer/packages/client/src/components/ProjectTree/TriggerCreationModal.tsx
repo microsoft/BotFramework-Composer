@@ -24,6 +24,7 @@ import {
   TriggerFormData,
   TriggerFormDataErrors,
   eventTypeKey,
+  qnaMatchKey,
   intentTypeKey,
   activityTypeKey,
   messageTypeKey,
@@ -36,6 +37,7 @@ import {
   recognizerTemplates,
   LuisRecognizerKey,
   CrossTrainedRecognizerSetKey,
+  chooseIntentKey,
 } from '../../utils/dialogUtil';
 import { addIntent as luAddIntent } from '../../utils/luUtil';
 import { addIntent as qnaAddIntent } from '../../utils/qnaUtil';
@@ -50,7 +52,7 @@ const validateForm = (
   isRegEx: boolean
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $kind, specifiedType, intent } = data;
+  const { $kind, specifiedType, intent, qnaAnswer, qnaQuestion } = data;
 
   if ($kind === eventTypeKey && !specifiedType) {
     errors.specifiedType = formatMessage('Please select a event type');
@@ -72,6 +74,14 @@ const validateForm = (
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
+  }
+
+  if ($kind === qnaMatchKey && !qnaAnswer) {
+    errors.qnaAnswer = formatMessage('Please input QnA answer');
+  }
+
+  if ($kind === qnaMatchKey && !qnaQuestion) {
+    errors.qnaQuestion = formatMessage('Please input QnA question');
   }
 
   if ($kind === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
@@ -126,13 +136,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     if (currentRecognizerType.$kind === regexRecognizerKey) {
       res.push(regexRecognizerKey);
     }
-    if (currentRecognizerType.$kind === QnARecognizerKey) {
-      res.push(QnARecognizerKey);
-    }
-    if (currentRecognizerType.$kind === CrossTrainedRecognizerSetKey) {
-      res.push(LuisRecognizerKey);
-      res.push(QnARecognizerKey);
-    }
     return res;
   };
 
@@ -147,13 +150,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     intent: '',
     triggerPhrases: '',
     regexEx: '',
-    qnaPhrase: '',
+    qnaQuestion: '',
+    qnaAnswer: '',
+    sideEffectTriggerType: '',
   };
   const [formData, setFormData] = useState({ ...initialFormData, $kind: intentTypeKey });
   const regexIntents = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us'].intents`, []);
   const isRegEx =
     get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us'].$kind`, '') === regexRecognizerKey;
   const isLUIS = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '') === `${dialogId}.lu`;
+  const isQnA = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '') === `${dialogId}.qna`;
+  const isCrossTrain =
+    get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us'].$kind`, '') ===
+    CrossTrainedRecognizerSetKey;
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -171,7 +180,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     const qnaContent = get(qnaFile, 'content', '');
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const qnaFileId = qnaFile?.id || `${dialogId}.${locale}`;
+    console.log(formData);
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
+    console.log(newDialog);
     if (formData.$kind === intentTypeKey) {
       const otherFilePayLoad: OtherFilePayLoad = {};
       if (formData.triggerPhrases) {
@@ -182,16 +193,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
         };
         otherFilePayLoad.luFile = updateLuFile;
       }
-
-      if (formData.qnaPhrase) {
-        const newContent = qnaAddIntent(qnaContent, { Name: formData.intent, Body: formData.qnaPhrase });
-        const updateQnaFile = {
-          id: qnaFileId,
-          content: newContent,
-        };
-        otherFilePayLoad.qnaFile = updateQnaFile;
-      }
-
+      onSubmit(newDialog, otherFilePayLoad);
+    } else if (formData.$kind === qnaMatchKey) {
+      const otherFilePayLoad: OtherFilePayLoad = {};
+      const newContent = qnaAddIntent(qnaContent, { Name: formData.qnaQuestion, Body: formData.qnaAnswer });
+      const updateQnaFile = {
+        id: qnaFileId,
+        content: newContent,
+      };
+      otherFilePayLoad.qnaFile = updateQnaFile;
       onSubmit(newDialog, otherFilePayLoad);
     } else {
       onSubmit(newDialog);
@@ -200,7 +210,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    const data = { ...initialFormData, $kind: option.key };
+    console.log(option.key === qnaMatchKey && isCrossTrain);
+    const data = {
+      ...initialFormData,
+      $kind: option.key,
+      sideEffectTriggerType: option.key === qnaMatchKey && isCrossTrain ? chooseIntentKey : '',
+    };
     setFormData(data);
   };
 
@@ -231,22 +246,28 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
-  const onChangeQnAPhrase = (e, body) => {
-    setFormData({ ...formData, qnaPhrase: body });
+  const onChangeQnaQuestion = (e, question) => {
+    setFormData({ ...formData, qnaQuestion: question });
+  };
+
+  const onChangeQnaAnswer = (e, answer) => {
+    setFormData({ ...formData, qnaAnswer: answer });
   };
 
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
-  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+  if (!isCrossTrain && !isQnA) {
+    triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== qnaMatchKey);
+  }
   const showIntentName = formData.$kind === intentTypeKey;
   const showRegExField = formData.$kind === intentTypeKey && formData.recognizerType === regexRecognizerKey;
   const showTriggerPhrase = formData.$kind === intentTypeKey && formData.recognizerType === LuisRecognizerKey;
-  const showQnAPhrase = formData.recognizerType === QnARecognizerKey;
   const showEventDropDown = formData.$kind === eventTypeKey;
   const showActivityDropDown = formData.$kind === activityTypeKey;
   const showMessageDropDown = formData.$kind === messageTypeKey;
-
+  const showQnASection = formData.$kind === qnaMatchKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -363,12 +384,23 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               height={150}
             />
           )}
-          {showQnAPhrase && (
+          {showQnASection && (
             <TextField
-              label={formatMessage('QnA Phrase')}
-              onChange={onChangeQnAPhrase}
-              data-testid={'QnAPhraseField'}
-              value={formData.qnaPhrase}
+              label={formatMessage('Please input QnA question')}
+              onChange={onChangeQnaQuestion}
+              errorMessage={formData.errors.qnaQuestion}
+              data-testid={'qnaQuestion'}
+              value={formData.qnaQuestion}
+              multiline
+            />
+          )}
+          {showQnASection && (
+            <TextField
+              label={formatMessage('Please input QnA answer')}
+              onChange={onChangeQnaAnswer}
+              errorMessage={formData.errors.qnaAnswer}
+              data-testid={'qnaAnswer'}
+              value={formData.qnaAnswer}
               multiline
             />
           )}

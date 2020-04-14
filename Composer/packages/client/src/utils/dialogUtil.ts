@@ -26,7 +26,9 @@ export interface TriggerFormData {
   intent: string;
   triggerPhrases: string;
   regexEx: string;
-  qnaPhrase: string;
+  qnaAnswer: string;
+  qnaQuestion: string;
+  sideEffectTriggerType: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -35,6 +37,8 @@ export interface TriggerFormDataErrors {
   specifiedType?: string;
   triggerPhrases?: string;
   regexEx?: string;
+  qnaAnswer?: string;
+  qnaQuestion?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -47,19 +51,16 @@ export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-
+export const qnaMatchKey: string = SDKKinds.OnQnAMatch;
 export const LuisRecognizerKey: string = SDKKinds.LuisRecognizer;
 export const ValueRecognizerKey: string = SDKKinds.ValueRecognizer;
 export const QnARecognizerKey: string = SDKKinds.QnaRecognizer;
 export const CrossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
+export const chooseIntentKey: string = SDKKinds.OnChooseIntent;
 export const recognizerTemplates = [
   {
     key: LuisRecognizerKey,
     text: formatMessage('LUIS'),
-  },
-  {
-    key: QnARecognizerKey,
-    text: formatMessage('QnA'),
   },
   {
     key: regexRecognizerKey,
@@ -144,7 +145,21 @@ export function generateNewDialog(
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
   const factory = new DialogFactory(schema);
   let updatedDialog = createTrigger(dialog, data, factory);
-
+  if (data.sideEffectTriggerType) {
+    const sideEffectData = {
+      recognizerType: '',
+      errors: {},
+      $kind: data.sideEffectTriggerType,
+      specifiedType: '',
+      intent: '',
+      triggerPhrases: '',
+      regexEx: '',
+      qnaAnswer: '',
+      qnaQuestion: '',
+      sideEffectTriggerType: '',
+    };
+    updatedDialog = createTrigger(updatedDialog, sideEffectData, factory);
+  }
   //add regex expression
   if (data.regexEx) {
     updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regexEx);

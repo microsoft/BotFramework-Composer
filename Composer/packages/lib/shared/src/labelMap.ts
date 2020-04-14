@@ -191,6 +191,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Message updated'),
     subtitle: formatMessage('Message updated activity'),
   },
+  [SDKKinds.OnQnAMatch]: {
+    title: formatMessage('QnA recognized'),
+    subtitle: formatMessage('QnA recognized'),
+  },
   [SDKKinds.OnRepromptDialog]: {
     title: formatMessage('Re-prompt for input'),
     subtitle: formatMessage('Reprompt dialog event'),

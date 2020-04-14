@@ -109,6 +109,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnActivity,
       SDKKinds.OnMessageEventActivity,
       SDKKinds.OnCustomEvent,
+      SDKKinds.OnQnAMatch,
     ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
