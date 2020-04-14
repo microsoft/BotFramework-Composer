@@ -7,7 +7,6 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
