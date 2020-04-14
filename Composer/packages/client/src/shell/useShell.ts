@@ -6,7 +6,6 @@ import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
-import * as lgUtil from '../utils/lgUtil';
 import * as luUtil from '../utils/luUtil';
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
@@ -23,7 +22,7 @@ type EventSource = 'VisualEditor' | 'PropertyEditor';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
-  const { lgFileResolver, luFileResolver } = resolvers;
+  const { luFileResolver } = resolvers;
   const {
     botName,
     breadcrumb,
@@ -40,7 +39,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const lgApi = useLgApi();
   const updateDialog = actions.updateDialog;
   const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
-  const updateLgTemplate = actions.updateLgTemplate;
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -50,73 +48,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       return result;
     }, {});
   }, [dialogs]);
-
-  function getLgTemplates(id) {
-    if (id === undefined) throw new Error('must have a file id');
-    const focusedDialogId = focusPath.split('#').shift() || id;
-    const file = lgFileResolver(focusedDialogId);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    return file.templates;
-  }
-
-  async function updateLgTemplateHandler(id: string, templateName: string, templateBody: string) {
-    const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateName) throw new Error(`templateName is missing or empty`);
-    const template = { name: templateName, body: templateBody, parameters: [] };
-
-    const projectId = state.projectId;
-
-    lgUtil.checkSingleLgTemplate(template);
-
-    await updateLgTemplate({
-      file,
-      projectId,
-      templateName,
-      template,
-    });
-  }
-
-  async function copyLgTemplateHandler(id, fromTemplateName, toTemplateName) {
-    const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
-
-    const projectId = state.projectId;
-
-    return actions.copyLgTemplate({
-      file,
-      projectId,
-      fromTemplateName,
-      toTemplateName,
-    });
-  }
-
-  async function removeLgTemplateHandler(id, templateName) {
-    const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateName) throw new Error(`templateName is missing or empty`);
-    const projectId = state.projectId;
-
-    return actions.removeLgTemplate({
-      file,
-      projectId,
-      templateName,
-    });
-  }
-
-  async function removeLgTemplatesHandler(id, templateNames) {
-    const file = lgFileResolver(id);
-    if (!file) throw new Error(`lg file ${id} not found`);
-    if (!templateNames) throw new Error(`templateName is missing or empty`);
-    const projectId = state.projectId;
-
-    return actions.removeLgTemplates({
-      file,
-      projectId,
-      templateNames,
-    });
-  }
 
   async function updateLuIntentHandler(id, intentName, intent) {
     const file = luFileResolver(id);
