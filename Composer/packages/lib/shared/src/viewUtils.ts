@@ -83,6 +83,8 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.EndTurn,
       SDKKinds.RepeatDialog,
       SDKKinds.ReplaceDialog,
+      SDKKinds.ContinueLoop,
+      SDKKinds.BreakLoop,
     ],
   },
   [DialogGroup.CODE]: {
