@@ -24,7 +24,7 @@ const config: PluginConfig = {
       field: LgField,
     },
   },
-  visual: {
+  visualSchema: {
     widgets: {
       LgWidget: LgWidget,
     },

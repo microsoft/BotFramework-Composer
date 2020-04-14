@@ -8,5 +8,5 @@ export interface PluginConfig {
   uiSchema?: UISchema;
   roleSchema?: RoleSchema;
   recognizers?: RecognizerSchema[];
-  visual?: FlowEditorConfig;
+  visualSchema?: FlowEditorConfig;
 }

@@ -8,7 +8,7 @@ import flowSchema from './flowSchema';
 
 const config: PluginConfig = {
   uiSchema,
-  visual: {
+  visualSchema: {
     schema: flowSchema,
   },
 };
