@@ -459,21 +459,19 @@ const LogDialog = props => {
     title: 'Publish Log',
   };
   return (
-    !props.hidden && (
-      <Dialog
-        hidden={props.hidden}
-        onDismiss={props.onDismiss}
-        dialogContentProps={logDialogProps}
-        modalProps={{ isBlocking: true }}
-        minWidth={450}
-      >
-        <TextField
-          value={props && props.version ? props.version.log : ''}
-          placeholder="Log Output"
-          multiline={true}
-          style={{ minHeight: 300 }}
-        />
-      </Dialog>
-    )
+    <Dialog
+      hidden={props.hidden}
+      onDismiss={props.onDismiss}
+      dialogContentProps={logDialogProps}
+      modalProps={{ isBlocking: true }}
+      minWidth={450}
+    >
+      <TextField
+        value={props && props.version ? props.version.log : ''}
+        placeholder="Log Output"
+        multiline={true}
+        style={{ minHeight: 300 }}
+      />
+    </Dialog>
   );
 };
