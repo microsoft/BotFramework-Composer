@@ -28,6 +28,7 @@ export enum DialogGroup {
   STEP = 'STEP',
   CODE = 'CODE',
   LOG = 'LOG',
+  LOOPING = 'LOOPING',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
   MESSAGE_EVENTS = 'MESSAGE_EVENTS',
@@ -62,7 +63,11 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.BRANCHING]: {
     label: 'Create a condition',
-    types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition, SDKKinds.Foreach, SDKKinds.ForeachPage],
+    types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition],
+  },
+  [DialogGroup.LOOPING]: {
+    label: 'Looping',
+    types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop],
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
@@ -83,8 +88,6 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.EndTurn,
       SDKKinds.RepeatDialog,
       SDKKinds.ReplaceDialog,
-      SDKKinds.ContinueLoop,
-      SDKKinds.BreakLoop,
     ],
   },
   [DialogGroup.CODE]: {
@@ -267,6 +270,7 @@ export function getDialogGroupByType(type) {
         case DialogGroup.INPUT:
         case DialogGroup.RESPONSE:
         case DialogGroup.BRANCHING:
+        case DialogGroup.LOOPING:
         case DialogGroup.EVENTS:
         case DialogGroup.ADVANCED_EVENTS:
           dialogType = key;
