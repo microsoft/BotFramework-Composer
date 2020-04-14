@@ -354,6 +354,22 @@ const updateSkill: ReducerFunc = (state, { skills }) => {
   state.settings.skill = skills.map(({ manifestUrl, name }) => {
     return { manifestUrl, name };
   });
+
+  state.showAddSkillDialogModal = false;
+  delete state.onAddSkillDialogComplete;
+
+  return state;
+};
+
+const addSkillDialogBegin: ReducerFunc = (state, { onComplete }) => {
+  state.showAddSkillDialogModal = true;
+  state.onAddSkillDialogComplete = onComplete;
+  return state;
+};
+
+const addSkillDialogCancel: ReducerFunc = state => {
+  state.showAddSkillDialogModal = false;
+  delete state.onAddSkillDialogComplete;
   return state;
 };
 
@@ -497,6 +513,8 @@ export const reducer = createReducer({
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,
   [ActionTypes.EDITOR_RESET_VISUAL]: noOp,
   [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
+  [ActionTypes.ADD_SKILL_DIALOG_BEGIN]: addSkillDialogBegin,
+  [ActionTypes.ADD_SKILL_DIALOG_END]: addSkillDialogCancel,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,

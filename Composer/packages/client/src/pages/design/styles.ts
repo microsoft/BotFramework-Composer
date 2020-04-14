@@ -191,3 +191,7 @@ export const name = {
 export const description = {
   subComponentStyles: textFieldlabel,
 };
+
+export const manifestUrl = {
+  subComponentStyles: textFieldlabel,
+};

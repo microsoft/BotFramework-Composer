@@ -12,6 +12,7 @@ export * from './project';
 export * from './publisher';
 export * from './eject';
 export * from './setting';
+export * from './skill';
 export * from './storage';
 export * from './user';
 export * from './skill';
