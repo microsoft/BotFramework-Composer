@@ -4307,10 +4307,10 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.9.0-preview-117748:
-  version "4.9.0-preview-117748"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-117748.tgz#19373501962f88e23dbbaa5c8affa901a0a91b3a"
-  integrity sha1-GTc1AZYviOI9u6pciv+pAaCpGzo=
+adaptive-expressions@4.9.0-preview-119754:
+  version "4.9.0-preview-119754"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-119754.tgz#d27e04ecc1b1a9a1ce751b11bfe6267592a66e79"
+  integrity sha1-0n4E7MGxqaHOdRsRv+YmdZKmbnk=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     "@types/lru-cache" "^5.1.0"
@@ -4323,10 +4323,10 @@ adaptive-expressions@4.9.0-preview-117748:
     moment "2.24.0"
     moment-timezone "^0.5.25"
 
-adaptive-expressions@4.9.0-preview-119754:
-  version "4.9.0-preview-119754"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-119754.tgz#d27e04ecc1b1a9a1ce751b11bfe6267592a66e79"
-  integrity sha1-0n4E7MGxqaHOdRsRv+YmdZKmbnk=
+adaptive-expressions@^4.8.0-preview-110700:
+  version "4.8.0-rc2-preview"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.8.0-rc2-preview.tgz#a533cdb1a5b2415f6b5b906f7eaa80133ca8981f"
+  integrity sha1-pTPNsaWyQV9rW5BvfqqAEzyomB8=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     "@types/lru-cache" "^5.1.0"
