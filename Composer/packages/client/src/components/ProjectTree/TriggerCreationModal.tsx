@@ -268,7 +268,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               onChange={onTriggerPhrasesChange}
               value={formData.triggerPhrases}
               errorMessage={formData.errors.triggerPhrases}
-              hidePlaceholder={true}
               luOption={{
                 projectId,
                 fileId: dialogId,

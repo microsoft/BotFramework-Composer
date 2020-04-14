@@ -13,7 +13,13 @@ import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 const LU_HELP = 'https://aka.ms/lu-file-format';
 const placeholder = `> To learn more about the LU file format, read the documentation at
-> ${LU_HELP}`;
+> ${LU_HELP}
+> add some example phrases to trigger this intent:
+> - please tell me the weather
+> - what is the weather like in {city=Seattle}
+> entity definitions: 
+> @ ml city
+`;
 
 export interface LUOption {
   projectId?: string;
