@@ -9,7 +9,7 @@ import { LgField } from './LgField';
 import { LgWidget } from './LgWidget';
 
 const config: PluginConfig = {
-  uiSchema: {
+  formSchema: {
     [SDKKinds.SendActivity]: {
       properties: {
         activity: {
