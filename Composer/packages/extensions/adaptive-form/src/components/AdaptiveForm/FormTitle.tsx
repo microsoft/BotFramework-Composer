@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import startCase from 'lodash/startCase';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
@@ -28,7 +29,7 @@ interface FormTitleProps {
 const FormTitle: React.FC<FormTitleProps> = props => {
   const { name, description, schema, formData, uiOptions = {} } = props;
 
-  const handleTitleChange = (_e: React.FormEvent, newTitle?: string): void => {
+  const handleTitleChange = (newTitle?: string): void => {
     if (props.onChange) {
       props.onChange({
         ...formData.$designer,
@@ -43,6 +44,10 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     const designerName = formData.$designer?.name;
 
     return designerName || uiLabel || schema.title || startCase(name);
+  };
+
+  const getHelpLinkLabel = (): string => {
+    return (uiLabel || schema.title || startCase(name) || '').toLowerCase();
   };
 
   const getSubTitle = (): string => {
@@ -92,9 +97,14 @@ const FormTitle: React.FC<FormTitleProps> = props => {
             <React.Fragment>
               <br />
               <br />
-              <a href={uiOptions?.helpLink} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={uiOptions?.helpLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
+              >
                 {formatMessage('Learn more')}
-              </a>
+              </Link>
             </React.Fragment>
           )}
         </p>

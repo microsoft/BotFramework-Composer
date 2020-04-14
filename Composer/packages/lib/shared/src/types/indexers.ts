@@ -113,6 +113,7 @@ export interface Skill {
   name: string;
   protocol: string;
   description: string;
+  endpoints: { [key: string]: any }[];
   endpointUrl: string;
   msAppId: string;
 }
