@@ -106,7 +106,7 @@ export const helpLink = css`
 `;
 
 export const icon = {
-  icon: {
+  root: {
     color: '#0078d4',
     fontSize: '20px',
     paddingBottom: '6px',
