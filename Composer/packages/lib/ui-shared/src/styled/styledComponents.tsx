@@ -5,18 +5,18 @@ import { css } from '@emotion/core';
 import styled from '@emotion/styled';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 
-import { ObiColors } from '../../constants/ElementColors';
+import { VisualEditorColors as Colors } from '../constants/VisualEditorColors';
 
 import { DivProps } from './styledComponents.types';
 import { StandardFontCSS, TruncatedCSS, MultilineCSS } from './sharedCSS';
 
 const dynamicStyle = props =>
   css`
-    color: ${props.color || ObiColors.Black};
+    color: ${props.color || Colors.Black};
   `;
 
 export const LinkBtn = styled(Link)(props => ({
-  color: props.color || ObiColors.AzureBlue,
+  color: props.color || Colors.AzureBlue,
 }));
 
 export const Span = styled.span`
@@ -32,7 +32,7 @@ export const BorderedDiv = styled.div<DivProps>(
     box-sizing: border-box;
   `,
   props => ({
-    color: props.color || ObiColors.Black,
+    color: props.color || Colors.Black,
     width: props.width,
     height: props.height,
   })

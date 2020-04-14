@@ -11,7 +11,7 @@ import DefaultRecognizers from '../../defaultRecognizers';
 describe('mergePluginConfigs', () => {
   it('returns default ui schema when no overrides', () => {
     expect(mergePluginConfigs()).toEqual({
-      uiSchema: DefaultUISchema,
+      formSchema: DefaultUISchema,
       roleSchema: DefaultRoleSchema,
       recognizers: DefaultRecognizers,
     });
@@ -19,7 +19,7 @@ describe('mergePluginConfigs', () => {
 
   it('merges overrides into the defaults', () => {
     const overrides = {
-      uiSchema: {
+      formSchema: {
         [SDKKinds.AdaptiveDialog]: {
           hidden: ['recognizer'],
           properties: {
@@ -38,27 +38,7 @@ describe('mergePluginConfigs', () => {
 
     expect(mergePluginConfigs(overrides)).toMatchInlineSnapshot(`
 Object {
-  "recognizers": Array [
-    Object {
-      "displayName": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "none",
-      "isSelected": [Function],
-    },
-    Object {
-      "displayName": [Function],
-      "editor": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "Microsoft.RegexRecognizer",
-      "isSelected": [Function],
-    },
-  ],
-  "roleSchema": Object {
-    "expression": Object {
-      "label": "expression label",
-    },
-  },
-  "uiSchema": Object {
+  "formSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
       "description": [Function],
       "helpLink": "https://aka.ms/botframework",
@@ -504,6 +484,26 @@ Object {
     "Microsoft.TraceActivity": Object {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
       "label": [Function],
+    },
+  },
+  "recognizers": Array [
+    Object {
+      "displayName": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "none",
+      "isSelected": [Function],
+    },
+    Object {
+      "displayName": [Function],
+      "editor": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "Microsoft.RegexRecognizer",
+      "isSelected": [Function],
+    },
+  ],
+  "roleSchema": Object {
+    "expression": Object {
+      "label": "expression label",
     },
   },
 }

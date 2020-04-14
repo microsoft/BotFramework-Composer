@@ -3,19 +3,19 @@ import { DialogFactory, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
-import { renderUIWidget } from '../../../src/schema/uischemaRenderer';
-import { UISchemaProvider } from '../../../src/schema/uischemaProvider';
-import { uiSchema } from '../../../src/schema/uischema';
+import { renderUIWidget } from '../../../src/schema/flowSchemaRenderer';
+import { FlowSchemaProvider } from '../../../src/schema/flowSchemaProvider';
+import { defaultFlowSchema } from '../../../src/schema/defaultFlowSchema';
 
 import './story.css';
 
-const uiSchemaPrivider = new UISchemaProvider(uiSchema);
+const uiSchemaPrivider = new FlowSchemaProvider(defaultFlowSchema);
+const actionFactory = new DialogFactory({});
 
 export class VisualSDKDemo extends Component {
   state = {
     actions: this.seedInitialActions(),
   };
-  factory = new DialogFactory({});
 
   seedInitialActions() {
     const initialTypes = [
@@ -27,7 +27,7 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => this.factory.create(t));
+    const initalActions = initialTypes.map(t => actionFactory.create(t));
     return initalActions;
   }
 
