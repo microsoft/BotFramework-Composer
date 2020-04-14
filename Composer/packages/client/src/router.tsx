@@ -6,12 +6,12 @@ import { jsx } from '@emotion/core';
 import React, { Fragment, useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect } from '@reach/router';
 
+import { resolveToBasePath } from './utils/fileUtil';
 import { About } from './pages/about';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
-import { resolveToBasePath } from './utils/fileUtil';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
 const Home = React.lazy(() => import('./pages/home'));
@@ -22,6 +22,7 @@ const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
 const Publish = React.lazy(() => import('./pages/publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
+const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/index'));
 
 const Routes = props => {
   return (
@@ -42,6 +43,7 @@ const Routes = props => {
           />
           <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
+          <Redirect from="/bot/:projectId" to="/bot/:projectId/dialogs/Main" noThrow />
           <ProjectRouter path="/bot/:projectId">
             <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
@@ -50,7 +52,7 @@ const Routes = props => {
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
           </ProjectRouter>
-          <Home path="home" />
+          <BotCreationFlowRouter path="/home/*"></BotCreationFlowRouter>
           <About path="about" />
           <NotFound default />
         </Router>

@@ -7,12 +7,12 @@ import { jsx } from '@emotion/core';
 import { useContext, useRef } from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-import { CreationFlowStatus } from '../../constants';
-import { File } from '../../store/types';
+import { CreationFlowStatus } from '../../../constants';
+import { File } from '../../../store/types';
+import { StoreContext } from '../../../store';
+import { FileTypes } from '../../../constants';
 
 import { FileSelector } from './FileSelector';
-import { StoreContext } from './../../store';
-import { FileTypes } from './../../constants';
 import { loading, fileSelectorContainer } from './styles';
 
 interface LocationSelectContentProps {

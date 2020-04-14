@@ -2,18 +2,20 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+
 import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment } from 'react';
-import formatMessage from 'format-message';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { useState, useContext, Fragment } from 'react';
+import formatMessage from 'format-message';
+import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../../utils';
+import { StoreContext } from '../../../store';
 
 import { choice, option, itemIcon, itemText, itemRoot, error } from './styles';
-import { StoreContext } from './../../store';
+
 export function SelectLocation(props) {
   const { actions } = useContext(StoreContext);
   const [selected, setSelected] = useState(null);
@@ -64,12 +66,12 @@ export function SelectLocation(props) {
             styles: option,
           };
         })}
-        onChange={(e, option) => {
+        onChange={(e, option: any) => {
           setErrorMessage('');
           setSelected(option.path);
         }}
         required={true}
-        styles={choice}
+        styles={choice as any}
         data-testid="SelectLocation"
       />
       <DialogFooter>

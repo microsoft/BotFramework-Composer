@@ -85,8 +85,34 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const getProjectFailure: ReducerFunc = (state, { error }) => {
-  setError(state, error);
+const setError: ReducerFunc = (state, payload) => {
+  // if the error originated at the server and the server included message, use it...
+  if (payload && payload.status && payload.status === 409) {
+    state.error = {
+      status: 409,
+      message: formatMessage(
+        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
+      ),
+      summary: formatMessage('Modification Rejected'),
+    };
+  } else {
+    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+      state.error = payload.response.data;
+    } else {
+      state.error = payload;
+    }
+  }
+
+  if (state.error) {
+    // warn this error out to the console.
+    console.error('ERROR', state.error);
+  }
+
+  return state;
+};
+
+const getProjectFailure: ReducerFunc = (state, payload) => {
+  setError(state, payload.error);
   return state;
 };
 
@@ -300,32 +326,6 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
     return state;
   }
   state.templateId = templateId;
-  return state;
-};
-
-const setError: ReducerFunc = (state, payload) => {
-  // if the error originated at the server and the server included message, use it...
-  if (payload && payload.status && payload.status === 409) {
-    state.error = {
-      status: 409,
-      message: formatMessage(
-        'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
-      ),
-      summary: formatMessage('Modification Rejected'),
-    };
-  } else {
-    if (payload && payload.response && payload.response.data && payload.response.data.message) {
-      state.error = payload.response.data;
-    } else {
-      state.error = payload;
-    }
-  }
-
-  if (state.error) {
-    // warn this error out to the console.
-    console.error('ERROR', state.error);
-  }
-
   return state;
 };
 

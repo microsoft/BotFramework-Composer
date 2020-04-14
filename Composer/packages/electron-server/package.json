@@ -59,6 +59,7 @@
     "debug": "4.1.1",
     "electron-updater": "4.2.5",
     "fix-path": "^3.0.0",
+    "jest": "^25.3.0",
     "lodash": "^4.17.15"
   }
 }

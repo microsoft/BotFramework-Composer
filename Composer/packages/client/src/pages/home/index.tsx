@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
+import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -17,7 +18,6 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
-
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -70,9 +70,23 @@ const Home: React.FC<RouteComponentProps> = () => {
     }
   };
 
-  const onClickTemplate = id => {
+  const onClickTemplate = (id: string, urlParams?: URLSearchParams) => {
+    const createParams: any = {};
+    if (urlParams) {
+      if (urlParams.get('schemaUrl')) {
+        createParams.schemaUrl = urlParams.get('schemaUrl');
+      }
+      if (urlParams.get('name')) {
+        createParams.name = urlParams.get('name');
+      }
+
+      if (urlParams.get('description')) {
+        createParams.description = urlParams.get('description');
+      }
+    }
     saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE, createParams);
+    navigate(`home/create/template/${id}`);
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
@@ -87,7 +101,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.NEW);
+          navigate(`home/createProject`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
@@ -100,7 +117,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'OpenFolderHorizontal',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.OPEN);
+          navigate(`home/openProject`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
@@ -113,7 +133,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'Save',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.SAVEAS);
+          navigate(`./home/saveProject/${state.projectId}`);
+        },
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -144,6 +167,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
+                  navigate('./home/createProject');
                 }}
               />
             </div>
