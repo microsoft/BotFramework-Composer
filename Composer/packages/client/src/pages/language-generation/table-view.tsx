@@ -17,6 +17,7 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { Async } from 'office-ui-fabric-react/lib/Utilities';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
@@ -41,6 +42,16 @@ const TableView: React.FC<TableViewProps> = props => {
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [announcement, setAnnouncement] = useState<string|undefined>();
+
+  const _async = new Async();
+
+  const announce = (message: string) => {
+    setAnnouncement(message);
+    _async.setTimeout( ()=> {
+      setAnnouncement(undefined);
+    }, 2000);
+  }
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -112,6 +123,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
+            announce('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -119,6 +131,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
+            announce('item copied');
             onCopyTemplate(index);
           },
         },
@@ -236,6 +249,16 @@ const TableView: React.FC<TableViewProps> = props => {
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+        <div
+          role='region'
+          aria-live='assertive'
+          style={{
+            position: 'absolute',
+            left: '-9999px'
+          }}  
+        >
+          {announcement}
+        </div>
         <DetailsList
           componentRef={listRef}
           items={templates}
