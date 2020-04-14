@@ -35,18 +35,20 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 };
 
 const LgField: React.FC<FieldProps<string>> = props => {
-  const { label, id, description, value, name, uiOptions, schema } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
-
-  const { $kind }: any = schema?.properties || {};
-  const [, schemaType] = $kind.const.split('.');
+  const { label, id, description, value, name, uiOptions } = props;
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
 
   let lgType = name;
-  if (schemaType !== 'SendActivity' && name !== 'activity') {
-    const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
-    lgType = `${schemaType}_${nameCapitalized}`;
+  const kind = data?.$kind;
+  if (kind) {
+    const [, schemaType] = kind.split('.');
+    if (schemaType === 'SendActivity') {
+      lgType = schemaType;
+    } else {
+      const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
+      lgType = `${schemaType}_${nameCapitalized}`;
+    }
   }
-
   const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(lgType, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
