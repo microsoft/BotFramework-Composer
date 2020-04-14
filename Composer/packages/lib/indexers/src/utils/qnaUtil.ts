@@ -20,7 +20,7 @@ export function contentParse(content: string): QnaIntentSection[] {
       .substring(0, text.trim().length - 3)
       .split('```');
     intentSections.push({
-      Name: name.replace(NEWLINE, '').trim(),
+      Name: `- ${name}`.trim(),
       Body: body.trim(),
     });
   });
@@ -30,7 +30,8 @@ export function contentParse(content: string): QnaIntentSection[] {
 function generateContent(intentSections: QnaIntentSection[]): string {
   const intentTexts: string[] = [];
   intentSections.forEach(section => {
-    intentTexts.push(`# ? ${section.Name} ${NEWLINE} ` + '```' + NEWLINE + section.Body + NEWLINE + '```' + NEWLINE);
+    const name = '# ? ' + section.Name.replace('-', '').trim();
+    intentTexts.push(`${name} ${NEWLINE} ` + '```' + NEWLINE + section.Body + NEWLINE + '```' + NEWLINE);
   });
   return intentTexts.join(NEWLINE);
 }
@@ -44,7 +45,9 @@ export function updateIntent(content: string, intentName: string, intent: QnaInt
   let sections = contentParse(content);
   // if intent is null, do remove
   // and if remove target not exist return origin content;
-  const targetSection = sections.find(({ Name }) => Name === intentName);
+  const targetSection = sections.find(
+    ({ Name }) => Name.replace('-', '').trim() === intentName.replace('-', '').trim()
+  );
   if (!intent || isEmpty(intent)) {
     if (targetSection) {
       sections = sections.filter(section => section.Name !== targetSection.Name);
@@ -54,6 +57,7 @@ export function updateIntent(content: string, intentName: string, intent: QnaInt
     if (targetSection) {
       sections.map(section => {
         if (section.Name === targetSection.Name) {
+          section.Name = intent.Name;
           section.Body = intent.Body;
         }
         return section;

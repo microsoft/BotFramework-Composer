@@ -34,8 +34,10 @@ const IntentField: React.FC<FieldProps> = props => {
   const { recognizers } = usePluginConfig();
   const type = recognizerType(currentDialog);
 
-  const handleChange = () => {
-    onChange(value);
+  const handleChange = newValue => {
+    if (newValue) {
+      onChange(newValue);
+    }
   };
 
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });

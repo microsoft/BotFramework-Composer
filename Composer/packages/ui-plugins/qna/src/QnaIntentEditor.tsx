@@ -5,7 +5,9 @@
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { Label } from 'office-ui-fabric-react/lib/Label';
 import { FieldProps, useShellApi } from '@bfc/extension';
+import formatMessage from 'format-message';
 import { QnaIntentSection } from '@bfc/shared';
 
 const QnaIntentEditor: React.FC<FieldProps<string>> = props => {
@@ -27,18 +29,55 @@ const QnaIntentEditor: React.FC<FieldProps<string>> = props => {
     return null;
   }
 
-  const commitChanges = (_, newValue) => {
+  const commitChanges = (property, newValue) => {
     if (!intentName) {
       return;
     }
 
-    const newIntent = { Name: intentName, Body: newValue };
+    const newIntent = { ...qnaIntent, [property]: newValue };
     setQnaIntent(newIntent);
     shellApi.updateQnaIntent(qnaFile.id, intentName, newIntent);
-    onChange(intentName);
+    onChange(newIntent.Name);
   };
 
-  return <TextField value={qnaIntent.Body} multiline rows={10} resizable={false} onChange={commitChanges} />;
+  return (
+    <React.Fragment>
+      <Label
+        styles={{
+          root: {
+            fontWeight: '400',
+            marginRight: '4px',
+          },
+        }}
+      >
+        {formatMessage('questions(prefix with `- `)')}
+      </Label>
+      <TextField
+        value={qnaIntent.Name}
+        multiline
+        rows={10}
+        resizable={false}
+        onChange={(_, newValue) => commitChanges('Name', newValue)}
+      />
+      <Label
+        styles={{
+          root: {
+            fontWeight: '400',
+            marginRight: '4px',
+          },
+        }}
+      >
+        {formatMessage('answer')}
+      </Label>
+      <TextField
+        value={qnaIntent.Body}
+        multiline
+        rows={10}
+        resizable={false}
+        onChange={(_, newValue) => commitChanges('Body', newValue)}
+      />
+    </React.Fragment>
+  );
 };
 
 export { QnaIntentEditor };
