@@ -2,13 +2,20 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights, FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
   margin-left: 15px;
 `;
+
+export const iconClass = mergeStyles({
+  fontSize: FontSizes.medium,
+  height: 50,
+  width: 50,
+  margin: '0 25px',
+});
 
 export const flexContentSpaceBetween = css`
   display: flex;
