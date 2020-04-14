@@ -3,5 +3,5 @@
 
 export * from './extension';
 export * from './form';
-export * from './uiSchema';
+export * from './formSchema';
 export * from './flowSchema';

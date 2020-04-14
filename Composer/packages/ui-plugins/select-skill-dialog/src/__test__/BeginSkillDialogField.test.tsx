@@ -9,7 +9,7 @@ import { Extension } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { BeginSkillDialogField } from '../BeginSkillDialogField';
-import uiSchema from '../uiSchema';
+import formSchema from '../formSchema';
 
 import { schema, skills } from './constants';
 
@@ -22,7 +22,7 @@ const renderBeginSkillDialog = ({ value = {}, onChange } = {}) => {
     depth: 1,
     id: 'select.skillDialog',
     schema: schema?.[SDKKinds.SkillDialog] || {},
-    uiOptions: uiSchema?.[SDKKinds.SkillDialog] || {},
+    uiOptions: formSchema?.[SDKKinds.SkillDialog] || {},
     value,
     onChange,
   };

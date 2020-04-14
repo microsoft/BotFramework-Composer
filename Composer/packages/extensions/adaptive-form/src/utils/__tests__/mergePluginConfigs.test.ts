@@ -11,7 +11,7 @@ import DefaultRecognizers from '../../defaultRecognizers';
 describe('mergePluginConfigs', () => {
   it('returns default ui schema when no overrides', () => {
     expect(mergePluginConfigs()).toEqual({
-      uiSchema: DefaultUISchema,
+      formSchema: DefaultUISchema,
       roleSchema: DefaultRoleSchema,
       recognizers: DefaultRecognizers,
     });
@@ -19,7 +19,7 @@ describe('mergePluginConfigs', () => {
 
   it('merges overrides into the defaults', () => {
     const overrides = {
-      uiSchema: {
+      formSchema: {
         [SDKKinds.AdaptiveDialog]: {
           hidden: ['recognizer'],
           properties: {
@@ -58,7 +58,7 @@ Object {
       "label": "expression label",
     },
   },
-  "uiSchema": Object {
+  "formSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
       "description": [Function],
       "helpLink": "https://aka.ms/botframework",

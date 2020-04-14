@@ -5,7 +5,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { JsonField } from './JsonField';
 
-const uiSchema: UISchema = {
+const formSchema: UISchema = {
   [SDKKinds.HttpRequest]: {
     properties: {
       body: {
@@ -15,4 +15,4 @@ const uiSchema: UISchema = {
   },
 };
 
-export default uiSchema;
+export default formSchema;
