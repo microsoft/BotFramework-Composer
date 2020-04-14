@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { VisualEditorWidgetMap } from '@bfc/extension';
+import { FlowEditorWidgetMap } from '@bfc/extension';
 
 import {
   ActionCard,
@@ -13,7 +13,7 @@ import {
   ActionHeader,
 } from '../widgets';
 
-export const defaultVisualWidgets: VisualEditorWidgetMap = {
+export const defaultFlowWidgets: FlowEditorWidgetMap = {
   ActionCard,
   DialogRef,
   PromptWidget,

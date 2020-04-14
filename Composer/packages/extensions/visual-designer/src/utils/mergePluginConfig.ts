@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, VisualEditorConfig } from '@bfc/extension';
+import { PluginConfig, FlowEditorConfig } from '@bfc/extension';
 
-import { defaultVisualSchema } from '../schema/defaultVisualSchema';
-import { defaultVisualWidgets } from '../schema/defaultVisualWidgets';
+import { defaultFlowSchema } from '../schema/defaultFlowSchema';
+import { defaultFlowWidgets } from '../schema/defaultFlowWidgets';
 
-export const mergePluginConfig = (...plugins: PluginConfig[]): Required<VisualEditorConfig> => {
+export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEditorConfig> => {
   const externalWidgets = plugins.map(x => x.visual?.widgets).filter(x => !!x);
   const externalSchema = plugins.map(x => x.visual?.schema).filter(x => !!x);
   return {
-    widgets: Object.assign({}, defaultVisualWidgets, ...externalWidgets),
-    schema: Object.assign({}, defaultVisualSchema, ...externalSchema),
+    widgets: Object.assign({}, defaultFlowWidgets, ...externalWidgets),
+    schema: Object.assign({}, defaultFlowSchema, ...externalSchema),
   };
 };

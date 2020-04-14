@@ -3,13 +3,13 @@ import { DialogFactory, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
-import { renderUIWidget } from '../../../src/schema/visualSchemaRenderer';
-import { VisualSchemaProvider } from '../../../src/schema/visualSchemaProvider';
-import { defaultVisualSchema } from '../../../src/schema/defaultVisualSchema';
+import { renderUIWidget } from '../../../src/schema/flowSchemaRenderer';
+import { FlowSchemaProvider } from '../../../src/schema/flowSchemaProvider';
+import { defaultFlowSchema } from '../../../src/schema/defaultFlowSchema';
 
 import './story.css';
 
-const uiSchemaPrivider = new VisualSchemaProvider(defaultVisualSchema);
+const uiSchemaPrivider = new FlowSchemaProvider(defaultFlowSchema);
 const actionFactory = new DialogFactory({});
 
 export class VisualSDKDemo extends Component {

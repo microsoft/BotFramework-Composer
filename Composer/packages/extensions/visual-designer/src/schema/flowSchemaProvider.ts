@@ -2,21 +2,21 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { VisualWidget, VisualSchema } from '@bfc/extension';
+import { FlowWidget, FlowSchema } from '@bfc/extension';
 
-export class VisualSchemaProvider {
-  schema: VisualSchema;
+export class FlowSchemaProvider {
+  schema: FlowSchema;
 
-  constructor(...schemas: VisualSchema[]) {
+  constructor(...schemas: FlowSchema[]) {
     this.schema = this.mergeSchemas(schemas);
   }
 
-  private mergeSchemas(orderedSchemas: VisualSchema[]): VisualSchema {
+  private mergeSchemas(orderedSchemas: FlowSchema[]): FlowSchema {
     if (!Array.isArray(orderedSchemas) || !orderedSchemas.length) return {};
     return Object.assign({}, ...orderedSchemas);
   }
 
-  get = ($kind: string): VisualWidget => {
+  get = ($kind: string): FlowWidget => {
     return get(this.schema, $kind, this.schema.default);
   };
 }

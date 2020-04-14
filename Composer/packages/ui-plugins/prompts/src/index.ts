@@ -4,12 +4,12 @@
 import { PluginConfig } from '@bfc/extension';
 
 import uiSchema from './uiSchema';
-import visualSchema from './visualSchema';
+import flowSchema from './flowSchema';
 
 const config: PluginConfig = {
   uiSchema,
   visual: {
-    schema: visualSchema,
+    schema: flowSchema,
   },
 };
 

@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { VisualWidget } from '@bfc/extension';
+import { FlowWidget } from '@bfc/extension';
 import { SDKKinds, getInputType } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 
-const BaseInputSchema: VisualWidget = {
+const BaseInputSchema: FlowWidget = {
   widget: 'PromptWidget',
   nowrap: true,
   botAsks: {

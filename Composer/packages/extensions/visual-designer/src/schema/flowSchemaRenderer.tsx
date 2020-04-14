@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { VisualWidget, VisualEditorWidgetMap, UIWidgetProp, WidgetEventHandler } from '@bfc/extension';
+import { FlowWidget, FlowEditorWidgetMap, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension';
 
 import { Boundary } from '../models/Boundary';
 
@@ -22,11 +22,11 @@ export interface UIWidgetContext {
 }
 
 export const renderUIWidget = (
-  widgetSchema: VisualWidget,
-  widgetMap: VisualEditorWidgetMap,
+  widgetSchema: FlowWidget,
+  widgetMap: FlowEditorWidgetMap,
   context: UIWidgetContext
 ): JSX.Element => {
-  const parseWidgetSchema = (widgetSchema: VisualWidget) => {
+  const parseWidgetSchema = (widgetSchema: FlowWidget) => {
     const { widget, ...props } = widgetSchema;
     if (typeof widget === 'string') {
       const widgetName = widget;
@@ -41,7 +41,7 @@ export const renderUIWidget = (
     };
   };
 
-  const buildWidgetProp = (rawPropValue: UIWidgetProp, context: UIWidgetContext) => {
+  const buildWidgetProp = (rawPropValue: FlowWidgetProp, context: UIWidgetContext) => {
     if (typeof rawPropValue === 'function') {
       const dataTransformer = rawPropValue;
       const element = dataTransformer(context.data);
@@ -50,7 +50,7 @@ export const renderUIWidget = (
 
     // handle recursive widget def
     if (typeof rawPropValue === 'object' && rawPropValue.widget) {
-      const widgetSchema = rawPropValue as VisualWidget;
+      const widgetSchema = rawPropValue as FlowWidget;
       return renderUIWidget(widgetSchema, widgetMap, context);
     }
 

@@ -5,15 +5,15 @@ import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
-import { VisualSchema, VisualWidget } from '@bfc/extension';
+import { FlowSchema, FlowWidget } from '@bfc/extension';
 import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/ui-shared';
 
-const BaseInputSchema: VisualWidget = {
+const BaseInputSchema: FlowWidget = {
   widget: 'ActionCard',
   body: data => data.prompt,
 };
 
-export const defaultVisualSchema: VisualSchema = {
+export const defaultFlowSchema: FlowSchema = {
   default: {
     widget: 'ActionHeader',
   },

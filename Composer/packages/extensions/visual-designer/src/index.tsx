@@ -13,8 +13,8 @@ import { useShellApi, JSONSchema7 } from '@bfc/extension';
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
-import { VisualSchemaContext } from './store/VisualSchemaContext';
-import { VisualSchemaProvider } from './schema/visualSchemaProvider';
+import { FlowSchemaContext } from './store/FlowSchemaContext';
+import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
 
 formatMessage.setup({
@@ -96,10 +96,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <VisualSchemaContext.Provider
+          <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new VisualSchemaProvider(visualEditorConfig.schema),
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
             }}
           >
             <div data-testid="visualdesigner-container" css={styles}>
@@ -121,7 +121,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 addCoachMarkRef={addCoachMarkRef}
               />
             </div>
-          </VisualSchemaContext.Provider>
+          </FlowSchemaContext.Provider>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>

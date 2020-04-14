@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { UISchema, RoleSchema, RecognizerSchema } from './uiSchema';
-import { VisualEditorConfig } from './visualSchema';
+import { FlowEditorConfig } from './flowSchema';
 
 export interface PluginConfig {
   uiSchema?: UISchema;
   roleSchema?: RoleSchema;
   recognizers?: RecognizerSchema[];
-  visual?: VisualEditorConfig;
+  visual?: FlowEditorConfig;
 }

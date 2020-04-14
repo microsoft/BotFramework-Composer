@@ -4,29 +4,29 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKKinds } from '@bfc/shared';
 
-export interface VisualEditorConfig {
-  widgets?: VisualEditorWidgetMap;
-  schema?: VisualSchema;
+export interface FlowEditorConfig {
+  widgets?: FlowEditorWidgetMap;
+  schema?: FlowSchema;
 }
 
-export type VisualEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
-export enum VisualSchemaBuiltinKeys {
+export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
+export enum FlowSchemaBuiltinKeys {
   default = 'default',
 }
 
 /** schema */
-export type VisualSchema = {
-  [key in SDKKinds | VisualSchemaBuiltinKeys]?: VisualWidget;
+export type FlowSchema = {
+  [key in SDKKinds | FlowSchemaBuiltinKeys]?: FlowWidget;
 };
 
-export interface VisualWidget {
+export interface FlowWidget {
   /** Widget implementation (React Class) or Widget name (string) */
   widget: string | WidgetComponent<any>;
 
   /** If set to true, output widget will be borderless (usually applied to IfCondition, SwitchCondition) */
   nowrap?: boolean;
 
-  [propKey: string]: UIWidgetProp;
+  [propKey: string]: FlowWidgetProp;
 }
 
 export type WidgetComponent<T extends WidgetContainerProps> = FC<T> | ComponentClass<T, any>;
@@ -40,6 +40,6 @@ export interface WidgetContainerProps {
   [propKey: string]: any;
 }
 
-export type UIWidgetProp = Value | PropGenerator | VisualWidget;
+export type FlowWidgetProp = Value | PropGenerator | FlowWidget;
 type Value = string | number | boolean | undefined | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
