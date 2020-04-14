@@ -66,7 +66,7 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       css={{ position: 'relative', width: editorWidth, height: editorHeight }}
       aria-label="step-editor"
     >
-      <SVGContainer>
+      <SVGContainer width={editorWidth} height={editorHeight}>
         {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
         {drawSVGEdge(
           'editor-edge__tail',

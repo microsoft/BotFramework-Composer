@@ -57,7 +57,9 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer hidden>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height} hidden>
+        {Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}
+      </SVGContainer>
       {nodes
         ? nodes.map((node, index) => (
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>

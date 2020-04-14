@@ -97,7 +97,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
           </OffsetContainer>
         ))}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        {Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}
+      </SVGContainer>
     </div>
   );
 };
