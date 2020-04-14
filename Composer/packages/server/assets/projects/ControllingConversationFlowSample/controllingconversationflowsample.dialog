@@ -2,7 +2,7 @@
   "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "id": "864790",
-    "name": "ControllingConversationFlowSample"
+    "description": "This is a bot that demonstrated the ability to control conversation flow using Adaptive Dialogs."
   },
   "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
