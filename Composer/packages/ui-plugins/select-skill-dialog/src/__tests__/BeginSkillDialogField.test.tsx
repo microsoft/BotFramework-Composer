@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { cleanup, fireEvent, getAllByRole, render } from 'react-testing-library';
+import { fireEvent, getAllByRole, render } from '@testing-library/react';
 import { Extension } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
@@ -12,8 +12,6 @@ import { BeginSkillDialogField } from '../BeginSkillDialogField';
 import formSchema from '../formSchema';
 
 import { schema, skills } from './constants';
-
-const flushPromises = () => Promise.resolve();
 
 const renderBeginSkillDialog = ({ value = {}, onChange } = {}) => {
   const addSkillDialog = jest.fn().mockResolvedValue({ manifestUrl: 'https://' });
@@ -43,8 +41,6 @@ const renderBeginSkillDialog = ({ value = {}, onChange } = {}) => {
 };
 
 describe('Begin Skill Dialog', () => {
-  afterEach(cleanup);
-
   beforeEach(() => {
     jest.useFakeTimers();
   });

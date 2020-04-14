@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { cleanup, fireEvent, getAllByRole, render } from 'react-testing-library';
+import { cleanup, fireEvent, getAllByRole, render } from '@testing-library/react';
 import { Extension } from '@bfc/extension';
 
 import { SelectDialog } from '../SelectDialog';
@@ -73,14 +73,14 @@ describe('Select Dialog', () => {
     const combobox = await findByRole('combobox');
     fireEvent.click(combobox);
 
-    const [dialog] = await getAllByRole(baseElement, 'option');
+    const [dialog] = getAllByRole(baseElement, 'option');
     fireEvent.click(dialog);
 
     expect(onChange).toHaveBeenCalledWith('dialog2');
   });
 
   it('should display label', async () => {
-    const { findByText } = await renderSelectDialog();
+    const { findByText } = renderSelectDialog();
     await findByText('Dialog name');
   });
 });
