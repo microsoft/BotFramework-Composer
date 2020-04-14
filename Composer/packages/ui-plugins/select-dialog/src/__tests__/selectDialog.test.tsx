@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { cleanup, fireEvent, getAllByRole, render } from '@testing-library/react';
+import { cleanup, fireEvent, getAllByRole, render } from '@bfc/test-utils';
 import { Extension } from '@bfc/extension';
 
 import { SelectDialog } from '../SelectDialog';

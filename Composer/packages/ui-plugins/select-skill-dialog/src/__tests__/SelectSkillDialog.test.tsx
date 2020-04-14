@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { fireEvent, getAllByRole, render, act } from '@testing-library/react';
+import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
 import { Extension } from '@bfc/extension';
 
 import { SelectSkillDialog } from '../SelectSkillDialogField';
