@@ -100,6 +100,10 @@ export interface State {
   publishTargets: any[];
   runtimeTemplates: any[];
   userSettings: UserSettings;
+  runtimeSettings: {
+    path: string;
+    startCommand: string;
+  };
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import path from 'path';
+
 import { pluginLoader, PluginLoader } from '../services/pluginLoader';
 import { BotProjectService } from '../services/project';
 import { copyDir } from '../utility/storage';
@@ -13,19 +15,26 @@ export const EjectController = {
     const user = await PluginLoader.getUserFromRequest(req);
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
-    console.log('eject!', currentProject.id, req.params.template);
 
-    let source = pluginLoader.extensions.runtimeTemplates.filter(i => i.name === req.params.template);
-
+    const source = pluginLoader.extensions.runtimeTemplates.filter(i => i.key === req.params.template);
     if (source.length) {
       const template = source[0];
-      console.log('SOURCE OF TEMPLATE', source[0]);
-      // TODO: ensure that it does not already exist before copying!!
-      const fileStorage = new LocalDiskStorage();
-      await copyDir(template.path, fileStorage, currentProject.dir + '/runtime', currentProject.fileStorage);
-      res.json({
-        message: 'success',
-      });
+      const runtimePath = path.join(currentProject.dir, 'runtime');
+      if (!(await currentProject.fileStorage.exists(runtimePath))) {
+        const fileStorage = new LocalDiskStorage();
+        await copyDir(template.path, fileStorage, runtimePath, currentProject.fileStorage);
+        res.json({
+          settings: {
+            path: runtimePath,
+            startCommand: template.startCommand,
+          },
+          message: 'success',
+        });
+      } else {
+        res.status(500).json({
+          message: 'A runtime folder already exists in this project.',
+        });
+      }
     } else {
       res.status(404).json({ message: 'template not found' });
     }

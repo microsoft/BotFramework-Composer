@@ -24,15 +24,16 @@ export const getRuntimeTemplates: ActionCreator = async ({ dispatch }) => {
 export const ejectRuntime: ActionCreator = async ({ dispatch }, projectId, name) => {
   try {
     const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
-    console.log(response);
-    // dispatch({
-    //   type: ActionTypes.EJECT_SUCCESS,
-    //   payload: response.data,
-    // });
+    dispatch({
+      type: ActionTypes.EJECT_SUCCESS,
+      payload: response.data,
+    });
+    return true;
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
       payload: err,
     });
+    return false;
   }
 };

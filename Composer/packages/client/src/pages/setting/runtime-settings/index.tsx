@@ -3,18 +3,27 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Link } from 'office-ui-fabric-react';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+
 import { StoreContext } from '../../../store';
+
 import { EjectModal } from './ejectModal';
-import { runtimeSettings, runtimeControls, runtimeControlsTitle, runtimeToggle, settingsEditor } from './style';
+import {
+  breathingSpace,
+  runtimeSettingsStyle,
+  runtimeControls,
+  runtimeControlsTitle,
+  runtimeToggle,
+  controlGroup,
+} from './style';
 
 export const RuntimeSettings = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings, projectId } = state;
+  const { botName, settings, projectId, location, runtimeSettings } = state;
   const [formDataErrors, setFormDataErrors] = useState({ customRuntimeCommand: '', customRuntimePath: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
@@ -38,7 +47,7 @@ export const RuntimeSettings = () => {
   const header = () => (
     <div css={runtimeControls}>
       <h1 css={runtimeControlsTitle}>{formatMessage('Bot runtime settings')}</h1>
-      <p>{formatMessage('Configure Composer to start your bot using your customized runtime code.')}</p>
+      <p>{formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}</p>
     </div>
   );
 
@@ -61,17 +70,26 @@ export const RuntimeSettings = () => {
   };
 
   const ejectRuntime = async template => {
-    console.log('EJECT RUNTIME USING TEMPLATE', template);
-    await actions.ejectRuntime(projectId, template.name);
-    changeEnabled(null, true);
+    await actions.ejectRuntime(projectId, template.key);
     closeEjectModal();
   };
 
+  useEffect(() => {
+    if (runtimeSettings.path) {
+      changeEnabled(null, true);
+      actions.setSettings(projectId, botName, {
+        ...settings,
+        customRuntimePath: location + '/runtime',
+        customRuntimeCommand: runtimeSettings.startCommand,
+      });
+    }
+  }, [runtimeSettings]);
+
   return botName ? (
-    <div css={runtimeSettings}>
+    <div css={runtimeSettingsStyle}>
       {header()}
       {toggle()}
-      <div css={settingsEditor}>
+      <div css={controlGroup}>
         <TextField
           label={formatMessage('Runtime code location')}
           value={settings.customRuntimePath}
@@ -81,7 +99,11 @@ export const RuntimeSettings = () => {
           data-testid="runtimeCodeLocation"
           disabled={!settings.enableCustomRuntime}
         />
-        or <Link onClick={showEjectModal}>Get a new copy of the runtime code</Link>
+        {formatMessage('Or: ')}
+        <Link onClick={showEjectModal} disabled={!settings.enableCustomRuntime} css={breathingSpace}>
+          {formatMessage('Get a new copy of the runtime code')}
+        </Link>
+
         <TextField
           label={formatMessage('Start command')}
           value={settings.customRuntimeCommand}

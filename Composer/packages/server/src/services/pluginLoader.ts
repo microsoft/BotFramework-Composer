@@ -180,6 +180,7 @@ interface PublishPlugin {
 }
 
 export interface RuntimeTemplate {
+  key: string; // internal use key
   name: string; // name of runtime template to display in interface
   path: string; // path to runtime template on disk
   startCommand: string; // command used to start runtime

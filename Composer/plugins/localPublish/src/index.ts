@@ -272,7 +272,8 @@ export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
   await composer.addRuntimeTemplate({
-    name: 'csharp',
+    key: 'csharp',
+    name: 'C#',
     path: __dirname + '/../template/',
     startCommand: 'dotnet start',
   });

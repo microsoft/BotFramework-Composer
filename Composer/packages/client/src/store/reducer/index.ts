@@ -11,6 +11,7 @@ import formatMessage from 'format-message';
 import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
+import { setSettings } from '../action/setting';
 import { getExtension, getBaseName } from '../../utils';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
@@ -478,6 +479,11 @@ const setCodeEditorSettings: ReducerFunc = (state, settings) => {
   return state;
 };
 
+const ejectSuccess: ReducerFunc = (state, payload) => {
+  state.runtimeSettings = payload.settings;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -532,4 +538,5 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
   [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
   [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
 });
