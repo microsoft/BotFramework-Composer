@@ -42,7 +42,6 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   position: relative;
-  padding-top: 20px;
   overflow: hidden;
   flex-grow: 1;
 `;

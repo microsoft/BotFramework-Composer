@@ -4,17 +4,17 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
+import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
+import { StandardFontCSS, TruncatedCSS } from '@bfc/ui-shared';
 
-import { WidgetComponent, WidgetContainerProps } from '../schema/uischema.types';
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { ObiColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
-import { StandardFontCSS, TruncatedCSS } from '../components/elements/sharedCSS';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
-  title: string;
+  title?: string;
   disableSDKTitle?: boolean;
   icon?: string;
   menu?: JSX.Element | 'none';
@@ -45,7 +45,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   id,
   data,
   onEvent,
-  title,
+  title = '',
   disableSDKTitle,
   icon,
   menu,

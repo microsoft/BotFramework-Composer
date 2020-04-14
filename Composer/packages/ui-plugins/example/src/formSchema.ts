@@ -2,6 +2,6 @@
 // Licensed under the MIT License.
 import { UISchema } from '@bfc/extension';
 
-const uiSchema: UISchema = {};
+const formSchema: UISchema = {};
 
-export default uiSchema;
+export default formSchema;
