@@ -41,16 +41,16 @@ const TableView: React.FC<TableViewProps> = props => {
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const [announcement, setAnnouncement] = useState<string|undefined>();
+  const [announcement, setAnnouncement] = useState<string | undefined>();
 
   const _async = new Async();
 
   const announce = (message: string) => {
     setAnnouncement(message);
-    _async.setTimeout( ()=> {
+    _async.setTimeout(() => {
       setAnnouncement(undefined);
     }, 2000);
-  }
+  };
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -247,12 +247,12 @@ const TableView: React.FC<TableViewProps> = props => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <div
-          role='region'
-          aria-live='assertive'
+          role="region"
+          aria-live="assertive"
           style={{
             position: 'absolute',
-            left: '-9999px'
-          }}  
+            left: '-9999px',
+          }}
         >
           {announcement}
         </div>
