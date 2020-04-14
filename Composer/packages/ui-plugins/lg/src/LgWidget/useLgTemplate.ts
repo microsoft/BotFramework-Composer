@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext } from 'react';
 import { Template } from 'botbuilder-lg';
 import { LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
+import { useShellApi } from '@bfc/extension';
 
-import { NodeRendererContext } from '../store/NodeRendererContext';
-import { normalizeLgTemplate } from '../utils/normalizeLgTemplate';
+import { normalizeLgTemplate } from './normalizeLgTemplate';
 
 export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): Template | undefined => {
   if (!Array.isArray(lgFiles)) return;
@@ -25,7 +24,7 @@ export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): 
 };
 
 export const useLgTemplate = (str?: string) => {
-  const { getLgTemplateSync } = useContext(NodeRendererContext);
+  const { lgFiles } = useShellApi();
 
   const lgTemplateRef = LgTemplateRef.parse(str || '');
   const templateId = lgTemplateRef ? lgTemplateRef.name : '';
@@ -33,6 +32,6 @@ export const useLgTemplate = (str?: string) => {
   // fallback to input string
   if (!templateId) return str;
 
-  const lgTemplate = getLgTemplateSync(templateId);
+  const lgTemplate = queryLgTemplateFromFiles(templateId, lgFiles);
   return lgTemplate ? normalizeLgTemplate(lgTemplate) : '';
 };
