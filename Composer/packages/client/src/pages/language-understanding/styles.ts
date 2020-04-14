@@ -46,6 +46,7 @@ export const ContentStyle = css`
   display: flex;
   border-top: 1px solid #dddddd;
   flex: 1;
+  height: calc(100% - 165px);
   position: relative;
   nav {
     ul {
