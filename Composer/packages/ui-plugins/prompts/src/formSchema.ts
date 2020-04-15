@@ -27,7 +27,7 @@ const choiceSchema = {
   },
 };
 
-const uiSchema: UISchema = {
+const formSchema: UISchema = {
   [SDKKinds.AttachmentInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
@@ -116,4 +116,4 @@ const uiSchema: UISchema = {
   },
 };
 
-export default uiSchema;
+export default formSchema;

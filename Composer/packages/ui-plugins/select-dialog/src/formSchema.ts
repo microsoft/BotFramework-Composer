@@ -6,7 +6,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { SelectDialog } from './SelectDialog';
 
-const uiSchema: UISchema = {
+const formSchema: UISchema = {
   [SDKKinds.BeginDialog]: {
     properties: {
       dialog: {
@@ -23,4 +23,4 @@ const uiSchema: UISchema = {
   },
 };
 
-export default uiSchema;
+export default formSchema;
