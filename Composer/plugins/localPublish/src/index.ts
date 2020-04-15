@@ -299,8 +299,8 @@ export default async (composer: any): Promise<void> => {
   await composer.addRuntimeTemplate({
     key: 'csharp',
     name: 'C#',
-    path: __dirname + '/../template/',
-    startCommand: 'dotnet start',
+    path: __dirname + '/../../../../BotProject/Templates/CSharp',
+    startCommand: 'dotnet',
   });
 };
 
