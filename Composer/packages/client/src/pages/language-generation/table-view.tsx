@@ -36,20 +36,20 @@ const TableView: React.FC<TableViewProps> = props => {
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
+  const setMessage = useRef(debounce(actions.setMessage, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
-  const [announcement, setAnnouncement] = useState<string | undefined>();
 
   const _async = new Async();
 
   const announce = (message: string) => {
-    setAnnouncement(message);
+    setMessage(message);
     _async.setTimeout(() => {
-      setAnnouncement(undefined);
+      setMessage(undefined);
     }, 2000);
   };
 
@@ -205,11 +205,11 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <div css={formCell}>
-              <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
+              <FontIcon iconName="Accept" aria-label={formatMessage('Used') + ';'} className={iconClass} />
             </div>
           ) : (
-            <div aria-label={formatMessage('Unused')} />
-          );
+              <div aria-label={formatMessage('Unused') + ';'} />
+            );
         },
       };
       tableColums.splice(2, 0, beenUsedColumn);
@@ -249,16 +249,6 @@ const TableView: React.FC<TableViewProps> = props => {
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <div
-          role="region"
-          aria-live="assertive"
-          style={{
-            position: 'absolute',
-            left: '-9999px',
-          }}
-        >
-          {announcement}
-        </div>
         <DetailsList
           componentRef={listRef}
           items={templates}

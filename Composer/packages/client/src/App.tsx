@@ -123,13 +123,24 @@ const bottomLinks = [
 export const App: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation } = state;
+
+  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation, announcement } = state;
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
+      <div
+        role="region"
+        aria-live="assertive"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+        }}
+      >
+        {announcement}
+      </div>
       <Header botName={`${botName}(${locale})`} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
