@@ -8,6 +8,7 @@ const mergeConfig = require('../mergeConfig');
 const baseConfig = require('../base/jest.config');
 
 const babelConfig = {
+  configFile: false,
   presets: [
     require.resolve('@babel/preset-env'),
     require.resolve('@babel/preset-react'),
