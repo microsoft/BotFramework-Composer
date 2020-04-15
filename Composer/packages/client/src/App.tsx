@@ -132,11 +132,14 @@ export const App: React.FC = () => {
   return (
     <Fragment>
       <div
-        role="region"
+        role="alert"
         aria-live="assertive"
         style={{
+          display: 'block',
           position: 'absolute',
-          left: '-9999px',
+          top: '-9999px',
+          height: '1px',
+          width: '1px',
         }}
       >
         {announcement}
