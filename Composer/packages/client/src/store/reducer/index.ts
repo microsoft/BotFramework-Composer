@@ -437,9 +437,16 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error }) => {
-  state.botStatus = BotStatus.failed;
-  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+const publishFailure: ReducerFunc = (state, { error, target }) => {
+  if (target.name === 'default') {
+    state.botStatus = BotStatus.failed;
+    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+  }
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[target.name]) {
+    state.publishHistory[target.name] = [];
+  }
+  state.publishHistory[target.name].unshift(error);
   return state;
 };
 
@@ -461,16 +468,6 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   }
   return state;
 };
-
-// const getPublishStatusFailed: ReducerFunc = (state, payload) => {
-//   if (!state.publishHistory[payload.target.name] && payload.status !== 404) {
-//     state.publishHistory[payload.target.name] = [payload];
-//   } else if (payload.status !== 404) {
-//     // TODO: this should only happen if they actually represent the same item...
-//     state.publishHistory[payload.target.name][0] = payload;
-//   }
-//   return state;
-// };
 
 const getPublishHistory: ReducerFunc = (state, payload) => {
   state.publishHistory[payload.target.name] = payload.history;

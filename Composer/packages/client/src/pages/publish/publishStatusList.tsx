@@ -168,7 +168,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
 
   useEffect(() => {
     if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
-      console.log(items[selectIndex]);
       onItemClick(items[selectIndex]);
     } else {
       onItemClick(null);

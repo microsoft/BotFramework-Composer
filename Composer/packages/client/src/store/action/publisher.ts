@@ -41,6 +41,7 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
       type: ActionTypes.PUBLISH_FAILED,
       payload: {
         error: err.response.data,
+        target: target,
       },
     });
   }
@@ -64,6 +65,7 @@ export const rollbackToVersion: ActionCreator = async ({ dispatch }, projectId, 
       type: ActionTypes.PUBLISH_FAILED,
       payload: {
         error: err.response.data,
+        target: target,
       },
     });
   }

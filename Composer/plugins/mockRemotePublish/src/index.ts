@@ -24,13 +24,13 @@ class LocalPublisher {
   finishPublish = async (botId, profileName, jobId) => {
     setTimeout(() => {
       this.data[botId][profileName].forEach(element => {
-        if (element.result.id == jobId) {
+        if (element.result.id == jobId && element.status !== 500) {
           element.status = 200;
           element.result.message = 'Success';
           element.result.log = element.result.log + '\nPublish succeeded!';
         }
       });
-    }, 10000);
+    }, 5000);
   };
 
   // config include botId and version, project is content(ComposerDialogs)
@@ -55,7 +55,7 @@ class LocalPublisher {
       },
     };
 
-    if (metadata.comment==="500") {
+    if (metadata.comment === '500') {
       response.status = 500;
       response.result.message = 'Failed';
     }
