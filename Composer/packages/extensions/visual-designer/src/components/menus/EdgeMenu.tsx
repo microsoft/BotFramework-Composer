@@ -36,6 +36,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.RESPONSE,
       DialogGroup.INPUT,
       DialogGroup.BRANCHING,
+      DialogGroup.LOOPING,
       DialogGroup.STEP,
       DialogGroup.MEMORY,
       DialogGroup.CODE,
