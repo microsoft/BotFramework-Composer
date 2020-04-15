@@ -8,7 +8,7 @@ import { SDKKinds } from '@bfc/shared';
 import { BeginSkillDialogField } from './BeginSkillDialogField';
 import { SelectSkillDialog } from './SelectSkillDialogField';
 
-const uiSchema: UISchema = {
+const formSchema: UISchema = {
   [SDKKinds.SkillDialog]: {
     order: ['skillAppId', '*', 'resultProperty', 'disabled', 'activityProcessed'],
     hidden: ['botId', 'skillEndpoint', 'skillAppId', 'skillHostEndpoint'],
@@ -23,4 +23,4 @@ const uiSchema: UISchema = {
   },
 };
 
-export default uiSchema;
+export default formSchema;

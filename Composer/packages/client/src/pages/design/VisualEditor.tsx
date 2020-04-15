@@ -12,7 +12,7 @@ import Extension from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
-import { useShell } from '../../useShell';
+import { useShell } from '../../shell';
 import plugins from '../../plugins';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
@@ -79,12 +79,7 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
         data-testid="VisualEditor"
       >
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
-          <VisualDesigner
-            {...shellData}
-            onChange={shellApi.saveData}
-            shellApi={shellApi as any}
-            schema={schemas.sdk?.content}
-          />
+          <VisualDesigner schema={schemas.sdk?.content} />
         </Extension>
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}

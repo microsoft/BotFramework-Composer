@@ -3,7 +3,7 @@
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import React from 'react';
 
-import { UIOptions } from './uiSchema';
+import { UIOptions } from './formSchema';
 
 declare module 'json-schema' {
   interface JSONSchema7 {

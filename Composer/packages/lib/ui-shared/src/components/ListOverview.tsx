@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import { FC } from 'react';
 
-import { SingleLineDiv } from '../elements/styledComponents';
+import { SingleLineDiv } from '../styled/styledComponents';
 
 export interface ListOverviewProps<T> {
   items: T[];
