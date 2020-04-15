@@ -165,11 +165,15 @@ class LocalPublisher {
 
   private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
     const botDir = settings.enableCustomRuntime === true ? settings.customRuntimePath : this.getBotRuntimeDir(botId);
-    const startCommand = settings.enableCustomRuntime === true ? settings.customRuntimeCommand : 'dotnet';
+    const commandAndArgs =
+      settings.enableCustomRuntime === true ? settings.customRuntimeCommand.split(/\s+/) : ['dotnet', 'run'];
+    const startCommand = commandAndArgs.shift(); // take the 0th item off the array, leaving just the args
     return new Promise((resolve, reject) => {
       const process = spawn(
         startCommand,
-        [`bin/Debug/netcoreapp3.1/BotProject.dll`, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
+        // why would we need to point to the specific DLL?
+        // `bin/Debug/netcoreapp3.1/BotProject.dll`,
+        [...commandAndArgs, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
         {
           cwd: botDir,
           stdio: ['ignore', 'pipe', 'pipe'],
@@ -303,7 +307,7 @@ export default async (composer: any): Promise<void> => {
     key: 'csharp',
     name: 'C#',
     path: __dirname + '/../../../../BotProject/Templates/CSharp',
-    startCommand: 'dotnet',
+    startCommand: 'dotnet run',
   });
 };
 
