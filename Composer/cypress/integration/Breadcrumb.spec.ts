@@ -58,7 +58,7 @@ context('breadcrumb', () => {
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.findByTestId('RuleEditor').within(() => {
-        cy.findByText('Send a response').click();
+        cy.findByText('Send a response').click({ force: true });
       });
     });
 

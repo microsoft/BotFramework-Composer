@@ -13,7 +13,7 @@ interface OffsetContainerProps {
 
 export class OffsetContainer extends React.Component<OffsetContainerProps, object> {
   render(): ReactNode {
-    const { offset, children } = this.props;
+    const { offset, children, ...otherProps } = this.props;
     if (!offset) return children;
 
     return (
@@ -27,7 +27,7 @@ export class OffsetContainer extends React.Component<OffsetContainerProps, objec
             transitionProperty: 'left, right, top, bottom',
           },
         ]}
-        {...this.props}
+        {...otherProps}
       >
         {children}
       </div>
