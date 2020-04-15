@@ -13,9 +13,7 @@ import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
 
 const stat = promisify(fs.stat);
-const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
-const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(rimraf);
@@ -81,7 +79,9 @@ class LocalPublisher {
 
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);
 
-  private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId), 'ComposerDialogs');
+  private getBotRuntimeDir = (botId: string) => path.resolve(this.getBotDir(botId), 'runtime');
+
+  private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId));
 
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
 
@@ -110,20 +110,24 @@ class LocalPublisher {
     const isExist = await this.botExist(botId);
     if (!isExist) {
       const botDir = this.getBotDir(botId);
+      const runtimeDir = this.getBotRuntimeDir(botId);
       // create bot dir
       await mkDir(botDir, { recursive: true });
-      // copy runtime template in folder
-      await this.copyDir(this.templatePath, botDir);
-      // unzip runtime template to bot folder
-      // const zip = new AdmZip(this.templatePath);
-      // zip.extractAllTo(botDir, true);
+      await mkDir(runtimeDir, { recursive: true });
 
       // create ComposerDialogs and histroy folder
       mkDir(this.getBotAssetsDir(botId), { recursive: true });
       mkDir(this.getHistoryDir(botId), { recursive: true });
+
+      // copy runtime template in folder
+      await this.copyDir(this.templatePath, runtimeDir);
+      // unzip runtime template to bot folder
+      // const zip = new AdmZip(this.templatePath);
+      // zip.extractAllTo(botDir, true);
+
       try {
-        execSync('dotnet user-secrets init', { cwd: botDir });
-        execSync('dotnet build', { cwd: botDir });
+        execSync('dotnet user-secrets init', { cwd: runtimeDir });
+        execSync('dotnet build', { cwd: runtimeDir });
       } catch (error) {
         // delete the folder to make sure build again.
         rmDir(botDir);
@@ -163,7 +167,7 @@ class LocalPublisher {
   };
 
   private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
-    const botDir = settings.enableCustomRuntime === true ? settings.customRuntimePath : this.getBotDir(botId);
+    const botDir = settings.enableCustomRuntime === true ? settings.customRuntimePath : this.getBotRuntimeDir(botId);
     const startCommand = settings.enableCustomRuntime === true ? settings.customRuntimeCommand : 'dotnet';
     return new Promise((resolve, reject) => {
       const process = spawn(
