@@ -60,11 +60,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         const type = publishTypes?.filter(t => t.name === target.type)[0];
         if (type?.features?.rollback) {
           return true;
-        } else {
-          console.log('rollback not supported on', type);
         }
-      } else {
-        console.log('no rollback to version without id or non 200 status');
       }
       return false;
     },
@@ -264,7 +260,7 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   useEffect(() => {
     setDialogProps({
-      title: 'Add a publish profile',
+      title: formatMessage('Add a publish profile'),
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
@@ -282,7 +278,7 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   useEffect(() => {
     setEditDialogProps({
-      title: 'Edit a publish profile',
+      title: formatMessage('Edit a publish profile'),
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
