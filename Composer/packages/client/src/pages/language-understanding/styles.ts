@@ -12,9 +12,6 @@ export const actionButton = css`
 
 export const iconClass = mergeStyles({
   fontSize: FontSizes.medium,
-  height: 50,
-  width: 50,
-  margin: '0 25px',
 });
 
 export const flexContentSpaceBetween = css`
@@ -72,10 +69,7 @@ export const codeEditorContainer = css`
 export const formCell = css`
   white-space: pre-wrap;
   font-size: 14px;
-  textarea,
-  input {
-    border: 1px solid #dddddd;
-  }
+  line-height: 28px;
 `;
 
 export const luPhraseCell = css`
