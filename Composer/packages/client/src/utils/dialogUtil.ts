@@ -26,8 +26,6 @@ export interface TriggerFormData {
   intent: string;
   triggerPhrases: string;
   regexEx: string;
-  qnaAnswer: string;
-  qnaQuestion: string;
   sideEffectTriggerType: string;
 }
 
@@ -37,8 +35,6 @@ export interface TriggerFormDataErrors {
   specifiedType?: string;
   triggerPhrases?: string;
   regexEx?: string;
-  qnaAnswer?: string;
-  qnaQuestion?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -87,9 +83,6 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
   }
   if (data.intent) {
     optionalAttributes.intent = data.intent;
-  }
-  if (data.qnaQuestion) {
-    optionalAttributes.$designer = { name: data.qnaQuestion };
   }
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
