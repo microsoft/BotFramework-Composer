@@ -36,6 +36,14 @@
       {
         "intent": "RepeatDialog",
         "pattern": "RepeatDialog|07"
+      },
+      {
+        "intent": "ForeachWithBreakAndContinue",
+        "pattern": "ForeachWithBreakAndContinue|08"
+      },
+      {
+        "intent": "GotoAction",
+        "pattern": "GotoAction|09"
       }
     ]
   },
@@ -194,6 +202,38 @@
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "B9q55b"
+      },
+      "intent": "ForeachWithBreakAndContinue",
+      "actions": [
+        {
+          "$kind": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "h1y4y_"
+          },
+          "dialog": "foreachwithbreakandcontinue"
+        }
+      ]
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "7yeKNd"
+      },
+      "intent": "GotoAction",
+      "actions": [
+        {
+          "$kind": "Microsoft.BeginDialog",
+          "$designer": {
+            "id": "jYHDqw"
+          },
+          "dialog": "gotoaction"
         }
       ]
     }

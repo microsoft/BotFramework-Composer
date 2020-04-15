@@ -52,7 +52,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUISchema($schema, pluginConfig.uiSchema);
+    return getUISchema($schema, pluginConfig.formSchema);
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
