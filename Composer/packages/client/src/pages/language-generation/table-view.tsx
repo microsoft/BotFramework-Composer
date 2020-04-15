@@ -12,7 +12,6 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
@@ -22,7 +21,7 @@ import { Async } from 'office-ui-fabric-react/lib/Utilities';
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
-import { actionButton, formCell, iconClass } from '../language-understanding/styles';
+import { actionButton, formCell } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -43,15 +42,6 @@ const TableView: React.FC<TableViewProps> = props => {
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
-
-  const _async = new Async();
-
-  const announce = (message: string) => {
-    setMessage(message);
-    _async.setTimeout(() => {
-      setMessage(undefined);
-    }, 2000);
-  };
 
   const _async = new Async();
 
@@ -215,8 +205,8 @@ const TableView: React.FC<TableViewProps> = props => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
           ) : (
-              <div aria-label={formatMessage('Unused') + ';'} />
-            );
+            <div aria-label={formatMessage('Unused') + ';'} />
+          );
         },
       };
       tableColums.splice(2, 0, beenUsedColumn);
