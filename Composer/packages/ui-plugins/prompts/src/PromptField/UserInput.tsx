@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput } from '@bfc/shared';
+import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData } from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -27,7 +27,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
 
   const { const: kind } = (schema?.properties?.['$kind'] as any) || {};
   const [, promptType] = ((kind as string) || '').split('.');
-  const intentName = `${promptType}_Response_${designerId}`;
+  const intentName = new LuMetaData(`${promptType}_Response`, designerId).toString();
 
   const type = recognizerType(currentDialog);
   const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
