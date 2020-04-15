@@ -463,8 +463,16 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   if (!state.publishHistory[payload.target.name] && payload.status !== 404) {
     state.publishHistory[payload.target.name] = [payload];
   } else if (payload.status !== 404) {
-    // TODO: this should only happen if they actually represent the same item...
-    state.publishHistory[payload.target.name][0] = payload;
+    // make sure this status payload represents the same item as item 0 (most of the time)
+    // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
+    if (
+      state.publishHistory[payload.target.name].length &&
+      state.publishHistory[payload.target.name][0].id === payload.id
+    ) {
+      state.publishHistory[payload.target.name][0] = payload;
+    } else {
+      state.publishHistory[payload.target.name].unshift(payload);
+    }
   }
   return state;
 };

@@ -161,7 +161,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         actions.getPublishHistory(projectId, _selected);
       }
     }
-  }, [selectedTargetName]);
+  }, [settings.publishTargets, selectedTargetName]);
 
   // once history is loaded, display it
   useEffect(() => {
@@ -393,13 +393,10 @@ const Publish: React.FC<PublishPageProps> = props => {
       >
         {editDialogProps.children}
       </Dialog>
-      <PublishDialog
-        hidden={publishDialogHidden}
-        onDismiss={() => setPublishDialogHidden(true)}
-        onSubmit={publish}
-        target={selectedTarget}
-      />
-      <LogDialog hidden={!showLog} version={selectedVersion} onDismiss={() => setShowLog(false)} />
+      {!publishDialogHidden && (
+        <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
+      )}
+      {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
@@ -458,7 +455,7 @@ const LogDialog = props => {
   };
   return (
     <Dialog
-      hidden={props.hidden}
+      hidden={false}
       onDismiss={props.onDismiss}
       dialogContentProps={logDialogProps}
       modalProps={{ isBlocking: true }}

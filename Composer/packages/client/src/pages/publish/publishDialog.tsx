@@ -24,7 +24,7 @@ export const PublishDialog = props => {
   };
   return props.target ? (
     <Dialog
-      hidden={props.hidden}
+      hidden={false}
       onDismiss={props.onDismiss}
       dialogContentProps={publishDialogProps}
       modalProps={{ isBlocking: true }}

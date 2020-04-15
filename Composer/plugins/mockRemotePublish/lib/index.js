@@ -22,13 +22,13 @@ class LocalPublisher {
         this.finishPublish = (botId, profileName, jobId) => __awaiter(this, void 0, void 0, function* () {
             setTimeout(() => {
                 this.data[botId][profileName].forEach(element => {
-                    if (element.result.id == jobId) {
+                    if (element.result.id == jobId && element.status !== 500) {
                         element.status = 200;
                         element.result.message = 'Success';
                         element.result.log = element.result.log + '\nPublish succeeded!';
                     }
                 });
-            }, 10000);
+            }, 5000);
         });
         // config include botId and version, project is content(ComposerDialogs)
         this.publish = (config, project, metadata, user) => __awaiter(this, void 0, void 0, function* () {
@@ -49,7 +49,7 @@ class LocalPublisher {
                     comment: metadata.comment,
                 },
             };
-            if (metadata.comment === "500") {
+            if (metadata.comment === '500') {
                 response.status = 500;
                 response.result.message = 'Failed';
             }
@@ -63,7 +63,6 @@ class LocalPublisher {
             if (this.data[botId] && this.data[botId][profileName]) {
                 const response = this.data[botId][profileName][this.data[botId][profileName].length - 1];
                 // return latest status
-                response.status = 500;
                 return response;
             }
             else {
