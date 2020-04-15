@@ -8,7 +8,7 @@
  */
 import keys from 'lodash/keys';
 import { createSingleMessage } from '@bfc/indexers';
-import { LuFile, DialogInfo } from '@bfc/shared';
+import { LuFile, DialogInfo, DiagnosticSeverity } from '@bfc/shared';
 
 import { getBaseName, getExtension } from './fileUtil';
 
@@ -157,7 +157,9 @@ function isLuFileEmpty(file: LuFile) {
 
 export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
   const referred = getReferredFiles(luFiles, dialogs);
-  const invalidLuFile = referred.filter(file => file.diagnostics.length !== 0);
+  const invalidLuFile = referred.filter(
+    file => file.diagnostics.filter(n => n.severity === DiagnosticSeverity.Error).length !== 0
+  );
   if (invalidLuFile.length !== 0) {
     const msg = generateErrorMessage(invalidLuFile);
     throw new Error(`The Following LuFile(s) are invalid: \n` + msg);

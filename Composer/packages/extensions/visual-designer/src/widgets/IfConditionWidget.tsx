@@ -16,9 +16,9 @@ import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -105,7 +105,9 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           </OffsetContainer>
         );
       })}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
     </div>
   );
 };
