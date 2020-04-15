@@ -148,19 +148,23 @@ const TableView: React.FC<TableViewProps> = props => {
           );
         },
       },
-      {
-        key: 'beenUsed',
-        name: formatMessage('Been used'),
-        fieldName: 'beenUsed',
-        minWidth: 100,
-        maxWidth: 100,
-        isResizable: true,
-        isCollapsable: true,
-        data: 'string',
-        onRender: item => {
-          return item.used ? <IconButton iconProps={{ iconName: 'Accept' }} /> : <div />;
-        },
-      },
+      // {
+      //   key: 'beenUsed',
+      //   name: formatMessage('Been used'),
+      //   fieldName: 'beenUsed',
+      //   minWidth: 100,
+      //   maxWidth: 100,
+      //   isResizable: true,
+      //   isCollapsable: true,
+      //   data: 'string',
+      //   onRender: item => {
+      //     return item.used ? (
+      //       <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
+      //     ) : (
+      //       <div />
+      //     );
+      //   },
+      // },
       {
         key: 'buttons',
         name: '',
