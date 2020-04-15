@@ -10,7 +10,7 @@ import { DialogSettings } from './dialog-settings';
 import { RemotePublish } from './remote-publish';
 import { Deployment } from './deployment';
 import { UserSettings } from './user-settings';
-import { RuntimeSettings } from './runtime-settings/index';
+import { RuntimeSettings } from './runtime-settings';
 
 const Routes = () => {
   return (

@@ -14,7 +14,7 @@ import { StoreContext } from '../../../store';
 import { modalControlGroup } from './style';
 
 export const EjectModal = props => {
-  const [availableRuntimeTemplates, setRuntimeTemplates] = useState([]);
+  const [availableRuntimeTemplates, setRuntimeTemplates] = useState();
   const [selectedTemplate, setSelectedTemplate] = useState();
   const { state, actions } = useContext(StoreContext);
   const { runtimeTemplates } = state;

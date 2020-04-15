@@ -11,7 +11,6 @@ import formatMessage from 'format-message';
 import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { setSettings } from '../action/setting';
 import { getExtension, getBaseName } from '../../utils';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';

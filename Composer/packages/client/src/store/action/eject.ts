@@ -28,12 +28,10 @@ export const ejectRuntime: ActionCreator = async ({ dispatch }, projectId, name)
       type: ActionTypes.EJECT_SUCCESS,
       payload: response.data,
     });
-    return true;
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
       payload: err,
     });
-    return false;
   }
 };

@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
 
@@ -21,7 +22,7 @@ import {
   controlGroup,
 } from './style';
 
-export const RuntimeSettings = () => {
+export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings, projectId, location, runtimeSettings } = state;
   const [formDataErrors, setFormDataErrors] = useState({ customRuntimeCommand: '', customRuntimePath: '' });
