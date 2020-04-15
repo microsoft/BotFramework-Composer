@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
@@ -76,32 +76,14 @@ export const About: React.FC<RouteComponentProps> = () => {
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
-            <IconButton
-              styles={about.icon}
-              ariaLabel={formatMessage('Terms of User Button')}
-              iconProps={{ iconName: 'BlockedSite' }}
-              tabIndex={-1}
-            />
-            <Link
-              href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
-              tabIndex={-1}
-              target={'_blank'}
-            >
+            <Icon styles={about.icon} iconName={'BlockedSite'} tabIndex={-1} />
+            <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'} target={'_blank'}>
               <div css={about.link}>{formatMessage(`Terms of Use`)} </div>
             </Link>
           </div>
           <div css={about.linkRow}>
-            <IconButton
-              styles={about.icon}
-              ariaLabel={formatMessage('Privacy button')}
-              iconProps={{ iconName: 'Lock' }}
-              tabIndex={-1}
-            />
-            <Link
-              href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
-              tabIndex={-1}
-              target={'_blank'}
-            >
+            <Icon styles={about.icon} ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} />
+            <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'} target={'_blank'}>
               <div css={about.link}>{formatMessage(`Privacy`)}</div>
             </Link>
           </div>
