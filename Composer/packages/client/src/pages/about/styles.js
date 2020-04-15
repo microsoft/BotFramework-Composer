@@ -87,6 +87,8 @@ export const linkTitle = css`
 export const linkRow = css`
   display: flex;
   width: 400px;
+  align-items: center;
+  padding-bottom: 6px;
 `;
 
 export const link = css`
@@ -109,6 +111,5 @@ export const icon = {
   root: {
     color: '#0078d4',
     fontSize: '20px',
-    paddingBottom: '6px',
   },
 };
