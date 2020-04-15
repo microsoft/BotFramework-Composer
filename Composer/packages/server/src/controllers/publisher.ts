@@ -151,11 +151,6 @@ export const PublishController = {
 
     const method = profile ? profile.type : undefined;
 
-    const configuration = {
-      name: profile.name,
-      ...JSON.parse(profile.configuration),
-    };
-
     if (
       profile &&
       pluginLoader.extensions.publish[method] &&
@@ -165,6 +160,11 @@ export const PublishController = {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.history;
       if (typeof pluginMethod === 'function') {
+        const configuration = {
+          name: profile.name,
+          ...JSON.parse(profile.configuration),
+        };
+
         // call the method
         const results = await pluginMethod.call(null, configuration, currentProject, user);
 

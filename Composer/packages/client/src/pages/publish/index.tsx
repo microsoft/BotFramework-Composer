@@ -155,18 +155,17 @@ const Publish: React.FC<PublishPageProps> = props => {
   useEffect(() => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
       const _selected = settings.publishTargets.find(item => item.name === selectedTargetName);
-
       setSelectedTarget(_selected);
       // load publish histories
       if (selectedTargetName === 'all') {
         for (const target of settings.publishTargets) {
           actions.getPublishHistory(projectId, target);
         }
-      } else if (selectedTargetName !== 'no' && _selected) {
+      } else if (_selected) {
         actions.getPublishHistory(projectId, _selected);
       }
     }
-  }, [selectedTargetName, settings.publishTargets]);
+  }, [selectedTargetName]);
 
   // once history is loaded, display it
   useEffect(() => {
