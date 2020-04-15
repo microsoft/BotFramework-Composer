@@ -12,7 +12,7 @@ import Extension from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
-import { useShell } from '../../useShell';
+import { useShell } from '../../shell';
 import plugins from '../../plugins';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
