@@ -15,10 +15,10 @@ import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum SwitchNodes {
   Switch = 'switchNode',
@@ -115,7 +115,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
         </OffsetContainer>
       ))}
       <SVGContainer width={boundary.width} height={boundary.height}>
-        {Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}
+        <FlowEdges edges={edges} />
       </SVGContainer>
     </div>
   );

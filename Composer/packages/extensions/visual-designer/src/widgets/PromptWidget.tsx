@@ -14,12 +14,12 @@ import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',
@@ -92,7 +92,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <SVGContainer width={boundary.width} height={boundary.height}>
-        {Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}
+        <FlowEdges edges={edges} />
       </SVGContainer>
     </div>
   );
