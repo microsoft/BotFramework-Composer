@@ -111,19 +111,21 @@ export class LuPublisher {
     await this._writeFiles(result.luResult);
   }
 
-  private _doSampling(luObject: any) {
+  private _doDownSampling(luObject: any) {
+    //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(luObject.utterances);
     luObject.utterances = bootstrapSampler.getSampledUtterances();
+    //if detect the utterances>15000, use reservoir sampling to down size
     const reservoirSampler = new ComposerReservoirSampler(luObject.utterances);
     luObject.utterances = reservoirSampler.getSampledUtterances();
     return luObject;
   }
 
-  private async _downSampling(luContents: any) {
+  private async _downSizeUtterances(luContents: any) {
     return await Promise.all(
       luContents.map(async luContent => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
-        const sampledResult = this._doSampling(result);
+        const sampledResult = this._doDownSampling(result);
         const content = luisToLuContent(sampledResult);
         return { ...luContent, content };
       })
@@ -147,7 +149,7 @@ export class LuPublisher {
       throw new Error('No luis file exist');
     }
     const loadResult = await this._loadLuConatents(config.models);
-    loadResult.luContents = await this._downSampling(loadResult.luContents);
+    loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
