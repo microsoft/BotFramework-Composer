@@ -20,7 +20,7 @@ describe('<Home/>', () => {
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
     const link = queryByLabelText('a');
-    fireEvent.click(link);
+    fireEvent.dblclick(link);
     expect(onSelectionChanged.mock.results[0].value).toBe('path1');
   });
 
