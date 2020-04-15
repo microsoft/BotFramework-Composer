@@ -115,15 +115,12 @@ class LocalPublisher {
       await mkDir(botDir, { recursive: true });
       await mkDir(runtimeDir, { recursive: true });
 
-      // create ComposerDialogs and histroy folder
+      // create ComposerDialogs and history folder
       mkDir(this.getBotAssetsDir(botId), { recursive: true });
       mkDir(this.getHistoryDir(botId), { recursive: true });
 
       // copy runtime template in folder
       await this.copyDir(this.templatePath, runtimeDir);
-      // unzip runtime template to bot folder
-      // const zip = new AdmZip(this.templatePath);
-      // zip.extractAllTo(botDir, true);
 
       try {
         execSync('dotnet user-secrets init', { cwd: runtimeDir });
@@ -138,7 +135,7 @@ class LocalPublisher {
 
   private saveContent = async (botId: string, version: string, srcDir: string, user: any) => {
     const dstPath = this.getDownloadPath(botId, version);
-    const zipFilePath = await this.zipBot(dstPath, srcDir);
+    await this.zipBot(dstPath, srcDir);
   };
 
   // start bot in current version
@@ -298,8 +295,10 @@ class LocalPublisher {
 
 const publisher = new LocalPublisher();
 export default async (composer: any): Promise<void> => {
-  // pass in the custom storage class that will override the default
+  // register this publishing method with Composer
   await composer.addPublishMethod(publisher);
+
+  // register the bundled c# runtime used by the local publisher with the eject feature
   await composer.addRuntimeTemplate({
     key: 'csharp',
     name: 'C#',
