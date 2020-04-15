@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
@@ -14,11 +15,10 @@ import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/uischema.types';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -97,7 +97,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
           </OffsetContainer>
         ))}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
     </div>
   );
 };

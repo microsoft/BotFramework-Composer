@@ -20,7 +20,7 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div css={itemText(item.depth)}>
+    <div role="cell" css={itemText(item.depth)}>
       {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
       {item.displayName}
     </div>
@@ -32,6 +32,7 @@ const onRenderOverflowButton = (isRoot: boolean) => {
   return overflowItems => {
     return showIcon ? (
       <IconButton
+        role="cell"
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
         styles={moreButton}
@@ -46,6 +47,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
+      role="presentation"
       tabIndex={1}
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
@@ -58,6 +60,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
       }}
     >
       <OverflowSet
+        role="row"
         items={[
           {
             key: link.id,

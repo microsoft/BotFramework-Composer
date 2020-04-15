@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
@@ -14,11 +15,10 @@ import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -105,7 +105,9 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           </OffsetContainer>
         );
       })}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
     </div>
   );
 };

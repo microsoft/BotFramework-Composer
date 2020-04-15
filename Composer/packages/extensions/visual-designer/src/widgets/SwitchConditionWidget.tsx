@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
@@ -14,11 +15,10 @@ import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/uischema.types';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum SwitchNodes {
   Switch = 'switchNode',
@@ -114,7 +114,9 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           />
         </OffsetContainer>
       ))}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
     </div>
   );
 };
