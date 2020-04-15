@@ -88,6 +88,7 @@ const initialState: State = {
     propertyEditorWidth: 400,
     dialogNavWidth: 180,
   }),
+  announcement: undefined,
 };
 
 interface StoreContextValue {
