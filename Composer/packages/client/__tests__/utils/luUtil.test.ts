@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuFile, DialogInfo, Diagnostic } from '@bfc/shared';
+import { LuFile, DialogInfo, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 
 import { getReferredFiles, checkLuisPublish, createCrossTrainConfig } from '../../src/utils/luUtil';
 
@@ -71,7 +71,7 @@ describe('getReferredFiles', () => {
 
     expect(referred[0].id).toEqual('a.en-us');
 
-    luFiles[0].diagnostics = [{ message: 'wrong' }] as Diagnostic[];
+    luFiles[0].diagnostics = [{ message: 'wrong', severity: DiagnosticSeverity.Error }] as Diagnostic[];
     expect(() => {
       checkLuisPublish(luFiles, dialogs);
     }).toThrowError(/wrong/);

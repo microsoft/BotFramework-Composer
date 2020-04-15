@@ -30,6 +30,7 @@
     "@bfc/ui-plugin-luis": "*",
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
+    "@bfc/ui-plugin-select-skill-dialog": "*",
     "@bfc/visual-designer": "*",
     "@emotion/core": "^10.0.7",
     "@microsoft/bf-lu": "4.9.0-preview.115707",

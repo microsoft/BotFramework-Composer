@@ -29,6 +29,7 @@ import { navigateTo } from '../../utils';
 
 import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
+import { AddSkillDialog } from './addSkillDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -288,7 +289,11 @@ function DesignPage(props) {
     );
   }, [dialogs, breadcrumb]);
 
-  async function onSubmit(data: { name: string; description: string }) {
+  async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+    await actions.updateSkill({ projectId, targetId: -1, skillData });
+  }
+
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -382,7 +387,14 @@ function DesignPage(props) {
         <CreateDialogModal
           isOpen={state.showCreateDialogModal}
           onDismiss={() => actions.createDialogCancel()}
-          onSubmit={onSubmit}
+          onSubmit={handleCreateDialogSubmit}
+        />
+      )}
+      {state.showAddSkillDialogModal && (
+        <AddSkillDialog
+          isOpen={state.showAddSkillDialogModal}
+          onDismiss={() => actions.addSkillDialogCancel()}
+          onSubmit={handleAddSkillDialogSubmit}
         />
       )}
       {triggerModalVisible && (

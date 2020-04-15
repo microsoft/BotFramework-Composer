@@ -2,26 +2,15 @@
 // Licensed under the MIT License.
 
 import React, { useState } from 'react';
-import { ComboBox, IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
-import { FieldLabel } from '@bfc/adaptive-form';
+import { IComboBoxOption, SelectableOptionMenuItemType } from 'office-ui-fabric-react/lib/ComboBox';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { ISelectableOption } from 'office-ui-fabric-react/lib/utilities/selectableOption';
-import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import formatMessage from 'format-message';
 
-const ADD_DIALOG = 'ADD_DIALOG';
+import ComboBoxField, { ADD_DIALOG } from './ComboBoxField';
 
-export const SelectDialog: React.FC<FieldProps> = ({
-  description,
-  id,
-  label,
-  onBlur,
-  onChange,
-  onFocus,
-  value = '',
-  uiOptions,
-}) => {
+export const SelectDialog: React.FC<FieldProps> = props => {
+  const { value = '', onChange } = props;
+
   const {
     currentDialog: { id: currentDialogId },
     dialogs,
@@ -29,6 +18,7 @@ export const SelectDialog: React.FC<FieldProps> = ({
   } = useShellApi();
   const { createDialog, navTo } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
+
   const options: IComboBoxOption[] = dialogs
     .filter(({ id }) => id !== currentDialogId)
     .map(({ displayName, id }) => ({
@@ -70,32 +60,5 @@ export const SelectDialog: React.FC<FieldProps> = ({
     }
   };
 
-  const onRenderOption: IRenderFunction<ISelectableOption> = option =>
-    option ? (
-      <div>
-        <Icon
-          aria-hidden="true"
-          iconName={option.key === ADD_DIALOG ? 'Add' : 'OpenSource'}
-          style={{ marginRight: '8px' }}
-        />
-        <span>{option.text}</span>
-      </div>
-    ) : null;
-
-  return (
-    <React.Fragment>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
-      <ComboBox
-        autoComplete="off"
-        id={id}
-        options={options}
-        selectedKey={comboboxTitle ? 'customTitle' : value}
-        useComboBoxAsMenuWidth
-        onBlur={() => onBlur && onBlur(id, value)}
-        onFocus={() => onFocus && onFocus(id, value)}
-        onItemClick={handleChange}
-        onRenderOption={onRenderOption}
-      />
-    </React.Fragment>
-  );
+  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} options={options} onChange={handleChange} />;
 };
