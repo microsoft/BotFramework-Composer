@@ -49,10 +49,6 @@ module.exports = {
         use: [
           {
             loader: 'style-loader',
-            options: {
-              hmr: true,
-              sourceMap: true,
-            },
           },
           { loader: 'css-loader', options: { importLoaders: 1 } },
           {
@@ -73,10 +69,6 @@ module.exports = {
         use: [
           {
             loader: 'style-loader',
-            options: {
-              hmr: true,
-              sourceMap: true,
-            },
           },
           { loader: 'css-loader', options: { importLoaders: 1 } },
           {

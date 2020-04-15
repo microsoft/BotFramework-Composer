@@ -9,7 +9,7 @@ import Extension from '@bfc/extension';
 import formatMessage from 'format-message';
 import { Resizable, ResizeCallback } from 're-resizable';
 
-import { useShell } from '../../useShell';
+import { useShell } from '../../shell';
 import plugins from '../../plugins';
 
 import { formEditor } from './styles';
