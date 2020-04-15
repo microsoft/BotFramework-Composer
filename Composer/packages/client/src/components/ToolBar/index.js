@@ -4,7 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
+import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
@@ -25,6 +26,7 @@ function itemList(action, index) {
     );
   }
 }
+
 // support ActionButton or React Elements, the display order is array index.
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
@@ -42,7 +44,25 @@ export function ToolBar(props) {
   }
   return (
     <div css={headerSub} {...rest}>
-      <div css={leftActions}>{left.map(itemList)}</div>
+      <div css={leftActions}>
+        {left.map(itemList)}{' '}
+        <CommandButton
+          css={actionButton}
+          iconProps={{ iconName: 'OpenInNewWindow' }}
+          text={formatMessage('Export')}
+          menuProps={{
+            items: [
+              {
+                key: 'zipexport',
+                text: formatMessage('Export to .zip'),
+                onClick: () => {
+                  console.log('export');
+                },
+              },
+            ],
+          }}
+        />
+      </div>
       <div css={rightActions}>{right.map(itemList)}</div>
     </div>
   );
