@@ -104,6 +104,7 @@ export interface State {
     path: string;
     startCommand: string;
   };
+  announcement: string | undefined;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

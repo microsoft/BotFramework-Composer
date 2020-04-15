@@ -93,6 +93,7 @@ const initialState: State = {
     path: '',
     startCommand: '',
   },
+  announcement: undefined,
 };
 
 interface StoreContextValue {
