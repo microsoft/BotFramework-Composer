@@ -49,7 +49,8 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const PublishStatusList: React.FC<IStatusListProps> = props => {
   const { items, onItemClick, groups } = props;
-  const [selectIndex, setSelectedItem] = useState();
+  const [selectIndex, setSelectedIndex] = useState();
+  const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
       column.isSortedDescending = !column.isSortedDescending;
@@ -85,8 +86,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
-      isSorted: true,
-      isSortedDescending: true,
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
@@ -156,14 +155,20 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onSelectionChanged: () => {
         const selectedIndexs = selection.getSelectedIndices();
         if (selectedIndexs.length > 0) {
-          setSelectedItem(selectedIndexs[0]);
+          setSelectedIndex(selectedIndexs[0]);
         }
       },
     });
   }, [items, groups]);
 
   useEffect(() => {
-    if (items && items.length > selectIndex) {
+    // init the selected publish status after switch to another target
+    setSelectedIndex(null);
+  }, [groups]);
+
+  useEffect(() => {
+    if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
+      console.log(items[selectIndex]);
       onItemClick(items[selectIndex]);
     } else {
       onItemClick(null);
@@ -176,12 +181,25 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
         <DetailsList
           css={detailList}
           items={items}
-          columns={columns}
+          columns={columns.map(col => ({
+            ...col,
+            isSorted: col.key === currentSort.key,
+            isSortedDescending: currentSort.descending,
+          }))}
           groups={groups}
           selection={selection}
           selectionMode={SelectionMode.single}
           getKey={item => item.id}
           setKey="none"
+          onColumnHeaderClick={(_, clickedCol) => {
+            if (!clickedCol) return;
+            if (clickedCol.key === currentSort.key) {
+              clickedCol.isSortedDescending = !currentSort.descending;
+              setSort({ key: clickedCol.key, descending: !currentSort.descending });
+            } else {
+              clickedCol.isSorted = false;
+            }
+          }}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible={true}
           checkboxVisibility={CheckboxVisibility.hidden}

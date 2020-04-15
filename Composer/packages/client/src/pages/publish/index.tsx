@@ -233,6 +233,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         },
         undefined
       );
+      onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
   );
@@ -256,6 +257,8 @@ const Publish: React.FC<PublishPageProps> = props => {
         },
         undefined
       );
+
+      onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName, editTarget]
   );
