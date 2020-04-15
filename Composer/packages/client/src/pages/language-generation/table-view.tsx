@@ -12,16 +12,16 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { Async } from 'office-ui-fabric-react/lib/Utilities';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
-import { actionButton, formCell, iconClass } from '../language-understanding/styles';
+import { actionButton, formCell } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -35,12 +35,22 @@ const TableView: React.FC<TableViewProps> = props => {
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
+  const setMessage = useRef(debounce(actions.setMessage, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
+
+  const _async = new Async();
+
+  const announce = (message: string) => {
+    setMessage(message);
+    _async.setTimeout(() => {
+      setMessage(undefined);
+    }, 2000);
+  };
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -112,6 +122,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
+            announce('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -119,6 +130,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
+            announce('item copied');
             onCopyTemplate(index);
           },
         },
@@ -191,11 +203,9 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
-            <div css={formCell}>
-              <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
-            </div>
+            <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
           ) : (
-            <div aria-label={formatMessage('Unused')} />
+            <div aria-label={formatMessage('Unused') + ';'} />
           );
         },
       };
