@@ -5,9 +5,9 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { BotStatus } from './../../constants';
-import { TooltipHost } from 'office-ui-fabric-react';
 
 interface IEmulatorOpenButtonProps {
   botEndpoint: string;
